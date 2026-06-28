@@ -7,9 +7,9 @@ Current verified release: 0.4.11.
 Current release tag: v0.4.11.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20917074`.
-Current verified main: `38910def` (`Sync STATUS current state during handoff refresh (#1615)`).
-Latest substantive work: PR #1615 (`Sync STATUS current state during handoff refresh (#1615)`).
-Post-merge handoff status: PASS/NOOP after PR #1615 administrative refresh.
+Current verified main: `221cecdb` (`Centralize GUI transfer carrier contract (#1617)`).
+Latest substantive work: PR #1617 (`Centralize GUI transfer carrier contract (#1617)`).
+Post-merge handoff status: PASS/NOOP after PR #1617 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -397,6 +397,6 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
 - Portability closeout: in progress; all tracked shell scripts removed in Slice 6, pending final gates and PR merge.
 - Portability closeout: legacy `ns` and `ns-menu` entrypoints removed; no tracked shell scripts remain, pending final gates and PR merge.
-## Operational documentation refresh state after PR #1615
+## Operational documentation refresh state after PR #1617
 
-Current administrative handoff refresh state is `38910def` (`Sync STATUS current state during handoff refresh (#1615)`). Continue next only after this post-PR1615 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `221cecdb` (`Centralize GUI transfer carrier contract (#1617)`). Continue next only after this post-PR1617 refresh is committed and merged; the next substantive slice must be created from fresh main.
