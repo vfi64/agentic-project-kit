@@ -18,6 +18,7 @@ REQUIRED_STANDARD_GATE_COMMANDS: tuple[tuple[str, ...], ...] = (
     ("audit-ns-legacy-references",),
     ("audit-absolute-path-portability",),
     ("audit-doc-currency",),
+    ("audit-status-current-state",),
     ("audit-planning-docs-consolidation",),
     ("audit-program-redundancy",),
     ("release-publish", "--version", "{version}", "--dry-run"),

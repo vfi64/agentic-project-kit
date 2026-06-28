@@ -168,10 +168,31 @@ rules:
     - agentic-kit workflow status --explain
     - agentic-kit workflow cleanup
     - agentic-kit workflow fail-report
+    - agentic-kit audit-status-current-state
     - agentic-kit patterns list
     - agentic-kit patterns show
     - agentic-kit slice gate --kind planning-doc
     - agentic-kit workflow-guard check
+- id: status-current-state-audit-coverage
+  description: Status current-state audit must remain discoverable as the deterministic
+    guard for STATUS, generated handoff validation, release-status, and origin/main
+    drift.
+  documents:
+  - path: README.md
+    terms:
+    - Status current-state audit
+    - agentic-kit audit-status-current-state
+    - Current verified main
+    - handoff validation report
+    - origin/main
+  - path: docs/TEST_GATES.md
+    terms:
+    - Status Current-State Audit Gate
+    - agentic-kit audit-status-current-state
+    - docs/STATUS.md
+    - validation_report.json
+    - release-status
+    - origin/main
 - id: pattern-advisor-readme-coverage
   description: Read-only Pattern Advisor MVP commands and boundaries must remain visible.
   documents:

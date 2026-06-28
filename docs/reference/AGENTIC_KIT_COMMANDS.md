@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `190`
+- Command count: `191`
 
 ## Commands
 
@@ -86,6 +86,16 @@ Audit source for risky bug/redundancy patterns.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
+### `agentic-kit audit-status-current-state`
+
+Audit STATUS.md current-state claims against handoff, release, and origin/main state.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `max_origin_lag` | `TyperOption` | --max-origin-lag | `False` | `3` | Maximum commits the validated substantive safe-state may trail origin/main. |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit boot check`

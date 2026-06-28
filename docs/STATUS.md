@@ -7,10 +7,10 @@ Current verified release: 0.4.11.
 Current release tag: v0.4.11.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20917074`.
-Current verified main: `0f40567b` (`Refresh handoff state after PR1519 (#1520)`).
-Latest substantive release/DOC hardening: PR #1519 (`Add deterministic release notes generator`).
-Post-merge handoff status: PASS/NOOP after PR #1519 administrative refresh PR #1520.
-Next safe step: continue release-/documentation-current-state hardening before GUI implementation.
+Current verified main: `7756f0fb` (`Add transfer test plan (#1611)`).
+Latest substantive transfer hardening: PR #1611 (`Add transfer test plan`).
+Post-merge handoff status: PASS/NOOP after PR #1611 administrative refresh PR #1612.
+Next safe step: continue v0.4.12 pre-GUI hardening with audit-status-current-state and follow-up transfer/GUI gates.
 
 ## Historical State Snapshots
 
