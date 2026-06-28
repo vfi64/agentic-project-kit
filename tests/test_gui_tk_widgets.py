@@ -40,6 +40,8 @@ def test_communication_mode_explanation_file_transfer() -> None:
 
     assert "Normal mode" in text
     assert "g/go" in text
+    assert "Example:" in text
+    assert "agentic-kit transfer continue --json" in text
 
 
 def test_communication_mode_explanation_remote() -> None:
@@ -47,6 +49,8 @@ def test_communication_mode_explanation_remote() -> None:
 
     assert "PR/CI/GitHub" in text
     assert "bounded wrappers" in text
+    assert "Example:" in text
+    assert "agentic-kit transfer patch-cycle-status --json" in text
 
 
 def test_communication_mode_explanation_copy_paste() -> None:
@@ -54,6 +58,8 @@ def test_communication_mode_explanation_copy_paste() -> None:
 
     assert "Recovery fallback" in text
     assert "Not the normal" in text
+    assert "Example:" in text
+    assert "complete recovery block" in text
 
 
 def test_communication_mode_option_values_are_deterministic() -> None:

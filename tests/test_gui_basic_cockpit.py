@@ -21,6 +21,7 @@ from agentic_project_kit.gui_cockpit import (
     ordered_action_views,
     recommended_recovery_action_id,
 )
+from agentic_project_kit.gui_communication_modes import communication_mode_definitions
 from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperStatus
 from agentic_project_kit.gui_task_editor import CANONICAL_TRANSFER_INBOX_PATH, task_editor_visible_for_mode
 from agentic_project_kit.gui_presenter import build_basic_no_window_presenter_result
@@ -130,6 +131,21 @@ def test_basic_cockpit_modes_keep_file_transfer_as_default_and_copy_paste_as_fal
     assert modes["remote"].is_default is False
     assert modes["copy_paste"].is_default is False
     assert modes["copy_paste"].role == "Recovery/Fallback"
+
+
+def test_basic_cockpit_modes_are_built_from_shared_definitions() -> None:
+    view_model = build_basic_cockpit_view_model(gatekeeper_status=_status())
+    definitions = communication_mode_definitions()
+
+    assert [mode.mode_id for mode in view_model.communication_modes] == [
+        definition.mode_id for definition in definitions
+    ]
+    assert [mode.label for mode in view_model.communication_modes] == [
+        definition.label for definition in definitions
+    ]
+    assert [mode.safety_note for mode in view_model.communication_modes] == [
+        definition.safety_note for definition in definitions
+    ]
 
 
 def test_basic_cockpit_view_model_carries_access_level() -> None:
