@@ -8,6 +8,7 @@ from agentic_project_kit.gui_cockpit_common import THEME
 from agentic_project_kit.gui_tk_widgets import (
     access_level_option_values,
     attach_tooltip,
+    communication_mode_example,
     communication_mode_explanation,
     communication_mode_option_values,
     selected_communication_mode_option,
@@ -131,6 +132,19 @@ class CockpitSidebarMixin:
             font=THEME.small_font,
             wraplength=255,
         ).pack(fill=tk.X, pady=(7, 0))
+        self.mode_example_var = tk.StringVar(
+            value=communication_mode_example(self.basic_view.communication_mode)
+        )
+        tk.Label(
+            sidebar,
+            textvariable=self.mode_example_var,
+            anchor=tk.W,
+            justify=tk.LEFT,
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+            wraplength=255,
+        ).pack(fill=tk.X, pady=(5, 0))
         mode_select.bind("<<ComboboxSelected>>", self.update_mode_explanation)
 
         tk.Frame(sidebar, height=18, bg=THEME.color_panel_bg).pack(fill=tk.X)
@@ -255,6 +269,7 @@ class CockpitSidebarMixin:
     def update_mode_explanation(self, _event: object | None = None) -> None:
         selected = self.current_communication_mode()
         self.mode_explanation_var.set(communication_mode_explanation(selected))
+        self.mode_example_var.set(communication_mode_example(selected))
         self.refresh_task_editor_buttons()
 
     def current_communication_mode(self) -> str:

@@ -4,6 +4,7 @@ from typing import Any
 
 from agentic_project_kit.access_levels import ACCESS_LEVEL_ORDER
 from agentic_project_kit.gui_communication_modes import (
+    communication_mode_example as shared_communication_mode_example,
     communication_mode_explanation as shared_communication_mode_explanation,
 )
 from agentic_project_kit.gui_viewmodel import CommunicationModeViewModel
@@ -35,6 +36,10 @@ def traffic_light_state_label(state: str) -> str:
 
 def communication_mode_explanation(mode: str) -> str:
     return shared_communication_mode_explanation(mode)
+
+
+def communication_mode_example(mode: str) -> str:
+    return shared_communication_mode_example(mode)
 
 
 def communication_mode_option_label(mode: CommunicationModeViewModel) -> str:

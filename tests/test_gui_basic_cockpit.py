@@ -161,6 +161,15 @@ def test_basic_cockpit_modes_are_built_from_shared_definitions() -> None:
     ]
 
 
+def test_sidebar_renders_separate_communication_mode_example() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit_sidebar.py").read_text(encoding="utf-8")
+
+    assert "mode_explanation_var" in source
+    assert "mode_example_var" in source
+    assert "communication_mode_example" in source
+    assert "self.mode_example_var.set(communication_mode_example(selected))" in source
+
+
 def test_basic_cockpit_view_model_carries_access_level() -> None:
     view_model = build_basic_cockpit_view_model(gatekeeper_status=_status(), access_level="advanced")
 

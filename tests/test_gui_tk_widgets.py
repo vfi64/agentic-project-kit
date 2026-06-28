@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from agentic_project_kit.gui_tk_widgets import (
     attach_tooltip,
+    communication_mode_example,
     communication_mode_explanation,
     communication_mode_option_label,
     communication_mode_option_values,
@@ -9,6 +10,7 @@ from agentic_project_kit.gui_tk_widgets import (
     traffic_light_fill,
     traffic_light_state_label,
 )
+from agentic_project_kit.gui_communication_modes import communication_mode_definitions
 from agentic_project_kit.gui_viewmodel import CommunicationModeViewModel
 
 
@@ -37,29 +39,41 @@ def test_traffic_light_state_label_names_wait_for_d2() -> None:
 
 def test_communication_mode_explanation_file_transfer() -> None:
     text = communication_mode_explanation("file_transfer")
+    example = communication_mode_example("file_transfer")
 
     assert "Normal mode" in text
     assert "g/go" in text
-    assert "Example:" in text
-    assert "agentic-kit transfer continue --json" in text
+    assert "Example:" not in text
+    assert "Example:" in example
+    assert "agentic-kit transfer continue --json" in example
 
 
 def test_communication_mode_explanation_remote() -> None:
     text = communication_mode_explanation("remote")
+    example = communication_mode_example("remote")
 
     assert "PR/CI/GitHub" in text
     assert "bounded wrappers" in text
-    assert "Example:" in text
-    assert "agentic-kit transfer patch-cycle-status --json" in text
+    assert "Example:" not in text
+    assert "Example:" in example
+    assert "agentic-kit transfer patch-cycle-status --json" in example
 
 
 def test_communication_mode_explanation_copy_paste() -> None:
     text = communication_mode_explanation("copy_paste")
+    example = communication_mode_example("copy_paste")
 
     assert "Recovery fallback" in text
     assert "Not the normal" in text
-    assert "Example:" in text
-    assert "complete recovery block" in text
+    assert "Example:" not in text
+    assert "Example:" in example
+    assert "complete recovery block" in example
+
+
+def test_communication_mode_example_exists_for_each_mode() -> None:
+    for definition in communication_mode_definitions():
+        assert communication_mode_example(definition.mode_id) == definition.example
+        assert communication_mode_example(definition.mode_id).startswith("Example:")
 
 
 def test_communication_mode_option_values_are_deterministic() -> None:
