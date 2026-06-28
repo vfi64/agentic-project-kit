@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4be2253af9494ae7246205ff99e0f9c3794f65d2
-  short: 4be2253a
-  subject: Refresh handoff state after PR1608 (#1609)
+  full: 7756f0fb2f58910072ae3478398f1ee99f07bd6e
+  short: 7756f0fb
+  subject: Add transfer test plan (#1611)
 last_substantive_work_state:
-  full: 4be2253af9494ae7246205ff99e0f9c3794f65d2
-  short: 4be2253a
-  subject: Refresh handoff state after PR1608 (#1609)
+  full: 7756f0fb2f58910072ae3478398f1ee99f07bd6e
+  short: 7756f0fb
+  subject: Add transfer test plan (#1611)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
