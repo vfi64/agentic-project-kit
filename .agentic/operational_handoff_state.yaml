@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 674e365a4d6bbe56f751f8189c65afbcc6dccbbf
-  short: 674e365a
-  subject: Make GUI tooltip attachment idempotent (#1619)
+  full: f7d3fe0e6045419a5efb6ea11ed189eafe28a7bc
+  short: f7d3fe0e
+  subject: Extract cockpit action view logic (#1621)
 last_substantive_work_state:
-  full: 674e365a4d6bbe56f751f8189c65afbcc6dccbbf
-  short: 674e365a
-  subject: Make GUI tooltip attachment idempotent (#1619)
+  full: f7d3fe0e6045419a5efb6ea11ed189eafe28a7bc
+  short: f7d3fe0e
+  subject: Extract cockpit action view logic (#1621)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
