@@ -33,6 +33,19 @@ from agentic_project_kit.gui_tkinter_shell import (
 from agentic_project_kit.gui_viewmodel import build_basic_cockpit_view_model
 
 
+COCKPIT_SOURCE_PATHS = (
+    Path("src/agentic_project_kit/gui_cockpit.py"),
+    Path("src/agentic_project_kit/gui_cockpit_header.py"),
+    Path("src/agentic_project_kit/gui_cockpit_sidebar.py"),
+    Path("src/agentic_project_kit/gui_cockpit_actions.py"),
+    Path("src/agentic_project_kit/gui_cockpit_task.py"),
+)
+
+
+def _cockpit_sources() -> str:
+    return "\n".join(path.read_text(encoding="utf-8") for path in COCKPIT_SOURCE_PATHS)
+
+
 def _status(
     *,
     git_dirty: bool = False,
@@ -427,7 +440,7 @@ def test_action_tree_shows_short_description_column() -> None:
 
 
 def test_action_cards_have_scrollbar_and_four_visible_rows() -> None:
-    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    source = _cockpit_sources()
 
     assert action_tree_visible_rows() == 4
     assert "ttk.Scrollbar" in source
@@ -438,7 +451,7 @@ def test_action_cards_have_scrollbar_and_four_visible_rows() -> None:
 
 
 def test_cockpit_output_has_copy_button() -> None:
-    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    source = _cockpit_sources()
 
     assert "text=\"Copy\"" in source
     assert "def copy_output" in source
@@ -446,7 +459,7 @@ def test_cockpit_output_has_copy_button() -> None:
 
 
 def test_d2_pending_status_detail_has_tooltip() -> None:
-    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    source = _cockpit_sources()
 
     assert "d2 means a communication-rule refresh is pending" in source
     assert "RULE_REFRESH_ACK" in source
@@ -457,7 +470,7 @@ def test_basic_cockpit_header_text() -> None:
 
 
 def test_cockpit_has_access_level_selector() -> None:
-    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    source = _cockpit_sources()
 
     assert "Access level" in source
     assert "access_level_option_values()" in source
@@ -473,7 +486,7 @@ def test_changing_access_level_rebuilds_action_table() -> None:
 
 
 def test_task_send_uses_publish_and_success_status_mentions_gui_transfer_branch() -> None:
-    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    source = _cockpit_sources()
 
     assert '"--publish"' in source
     assert "Task carrier published to gui-transfer-tasks as mode" in source
@@ -488,7 +501,7 @@ def test_task_send_uses_publish_and_success_status_mentions_gui_transfer_branch(
 
 
 def test_task_editor_exposes_terminal_and_transfer_continue_buttons() -> None:
-    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    source = _cockpit_sources()
     task_editor_source = Path("src/agentic_project_kit/gui_task_editor.py").read_text(encoding="utf-8")
 
     assert 'text="Open local terminal"' in source
@@ -509,7 +522,7 @@ def test_action_cards_use_single_tooltip_source_per_card() -> None:
 
 
 def test_cockpit_builds_work_cycle_bar_above_body() -> None:
-    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    source = _cockpit_sources()
 
     assert "self._build_header(shell)\n        self._build_work_cycle_bar(shell)\n\n        body =" in source
     assert "WORK CYCLE" in source
@@ -528,7 +541,7 @@ def test_work_cycle_bar_exposes_human_phase_labels() -> None:
 
 
 def test_work_cycle_finish_requires_dry_run_before_execute() -> None:
-    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    source = _cockpit_sources()
 
     assert "preview_work_finish" in source
     assert "confirm_work_finish" in source
@@ -540,7 +553,7 @@ def test_work_cycle_finish_requires_dry_run_before_execute() -> None:
 
 
 def test_work_cycle_uses_existing_work_wrappers_not_direct_remote_mutation() -> None:
-    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    source = _cockpit_sources()
 
     assert '"work", "start"' in source
     assert '"work", "check"' in source
