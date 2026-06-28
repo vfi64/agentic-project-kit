@@ -111,6 +111,48 @@
           "param_type": "TyperOption",
           "required": false,
           "secondary_opts": []
+        },
+        {
+          "default": 86400,
+          "help": "Retention age in seconds for age-gated modes.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "ttl_seconds",
+          "opts": [
+            "--ttl-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "ISO date/datetime cutoff. Overrides --ttl-seconds for age-gated modes.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "older_than",
+          "opts": [
+            "--older-than"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [

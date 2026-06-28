@@ -14,6 +14,7 @@ from agentic_project_kit.documentation_registry import (
     REQUIRED_CLASS_RULE_FIELDS,
     build_documentation_registry_summary,
     check_documentation_registry,
+    find_unregistered_document_candidates,
     load_documentation_registry,
 )
 from agentic_project_kit.documentation_system_audit import build_documentation_system_audit
@@ -213,6 +214,23 @@ def test_docs_registry_cli_writes_json_report(tmp_path: Path) -> None:
     assert payload["broad_migration_allowed"] is False
     assert payload["class_counts"]["operational/automation"] >= 4
     assert payload["owner_counts"]["maintainers"] >= 1
+    assert payload["registration_policy"]["status"] == "inventory_only"
+    assert payload["registration_policy"]["mutation_allowed"] is False
+    assert "unregistered_candidate_count" in payload
+
+
+def test_documentation_registry_lists_unregistered_candidates_without_mutating(tmp_path: Path) -> None:
+    _write_registry(tmp_path)
+    _write(tmp_path / "docs" / "new-plan.md", "# New plan\n")
+    _write(tmp_path / "docs" / "reports" / "terminal" / "generated.md", "# Generated\n")
+
+    candidates = find_unregistered_document_candidates(tmp_path)
+    summary = build_documentation_registry_summary(tmp_path)
+
+    assert "docs/new-plan.md" in candidates
+    assert "docs/reports/terminal/generated.md" not in candidates
+    assert "docs/new-plan.md" in summary["unregistered_candidates"]
+    assert summary["registration_policy"]["mutation_allowed"] is False
 
 
 def test_docs_audit_cli_runs_with_documentation_registry() -> None:

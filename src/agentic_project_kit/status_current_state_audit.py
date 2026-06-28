@@ -277,8 +277,8 @@ def _current_state_block(status_text: str) -> str:
 
 
 def _current_verified_main(current_block: str) -> str | None:
-    match = re.search(r"^Current verified main:\s*`?([0-9a-f]{7,40})`?", current_block, re.MULTILINE)
-    return match.group(1) if match else None
+    markers = re.findall(r"^Current verified main:\s*`?([0-9a-f]{7,40})`?", current_block, re.MULTILINE)
+    return markers[0] if markers else None
 
 
 def _string_or_none(value: object) -> str | None:
@@ -323,6 +323,24 @@ def _audit_status_main_marker(
     live_text = status_text.split("## Historical State Snapshots", 1)[0]
     live_markers = re.findall(r"^Current verified main:\s*`?([0-9a-f]{7,40})`?", live_text, re.MULTILINE)
     current_block_markers = re.findall(r"^Current verified main:\s*`?([0-9a-f]{7,40})`?", current_block, re.MULTILINE)
+    live_unique = sorted(set(live_markers))
+    current_block_unique = sorted(set(current_block_markers))
+    _finding(
+        findings,
+        blockers,
+        "docs/STATUS.md",
+        "status_live_area_current_verified_main_values_consistent",
+        len(live_unique) <= 1,
+        f"live_values={live_unique}",
+    )
+    _finding(
+        findings,
+        blockers,
+        "docs/STATUS.md",
+        "status_current_block_current_verified_main_values_consistent",
+        len(current_block_unique) <= 1,
+        f"current_block_values={current_block_unique}",
+    )
     _finding(
         findings,
         blockers,

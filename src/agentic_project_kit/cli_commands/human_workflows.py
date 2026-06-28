@@ -187,7 +187,18 @@ def work_recover_command(json_output: bool = typer.Option(False, "--json", help=
         _run_step("conflict-status", _agentic("transfer", "conflict-status", "--json"), allowed_returncodes={0, 2}),
         _run_step("patch-cycle-status", _agentic("transfer", "patch-cycle-status", "--include-ci", "--json"), allowed_returncodes={0, 2}),
     ]
-    payload = _payload("work-recover", steps)
+    payload = _payload(
+        "work-recover",
+        steps,
+        extra={
+            "destructive_actions_allowed": False,
+            "discard_all_available": False,
+            "discard_all_next_action": (
+                "Use a separate explicitly destructive workflow; work recover never "
+                "runs reset, clean, checkout, or broad restore over product files."
+            ),
+        },
+    )
     _emit(payload, json_output=json_output)
     _exit_if_blocked(payload)
 

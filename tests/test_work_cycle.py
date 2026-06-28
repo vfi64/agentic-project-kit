@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from agentic_project_kit.work_cycle import (
     ChangedPath,
+    build_branch_selection_options,
     build_work_cycle_views,
     build_work_finish_args,
     changed_paths_from_status,
@@ -127,6 +128,17 @@ def test_humanize_unknown_blocker_has_generic_line() -> None:
 def test_slugify_work_title_hides_branch_concept_behind_safe_name() -> None:
     assert slugify_work_title("Fix GUI workflow guidance!") == "codex/fix-gui-workflow-guidance"
     assert slugify_work_title("") == "codex/work-slice"
+
+
+def test_build_branch_selection_options_keeps_release_branch_explicit() -> None:
+    options = build_branch_selection_options("Fix GUI workflow guidance", release_version="0.4.12")
+    by_id = {option.option_id: option for option in options}
+
+    assert by_id["patch"].branch == "codex/fix-gui-workflow-guidance"
+    assert by_id["patch"].safe_default is True
+    assert by_id["docs"].branch == "docs/fix-gui-workflow-guidance"
+    assert by_id["release"].branch == "release/prepare-v0.4.12"
+    assert by_id["release"].safe_default is False
 
 
 def test_changed_paths_from_status_ignores_known_volatile_carriers() -> None:

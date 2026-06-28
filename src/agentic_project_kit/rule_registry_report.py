@@ -128,6 +128,14 @@ def build_rule_registry_report(root: Path | str = ".") -> dict[str, Any]:
     report = {
         "schema_version": 1,
         "status": status,
+        "auto_registration_policy": {
+            "status": "inventory_only",
+            "mutation_allowed": False,
+            "next_step": (
+                "Review followups and add rule-registry entries with direct evidence "
+                "through an explicit protected-file patch."
+            ),
+        },
         "summary": {
             "active_mechanism_count": active_count,
             "coverage_counts": by_coverage,
