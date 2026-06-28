@@ -93,6 +93,16 @@ roadmap:
       plus reserved .agentic/ governance area. Do not start implementation
       before that architecture is reviewed.
   milestones:
+    - id: historical-v0.4.10-anchor
+      title: Preserve v0.4.10 consolidation history anchor
+      status: done
+      target_release: v0.4.10
+      order: 0
+    - id: historical-v0.5.0-anchor
+      title: Preserve v0.5.0 GUI gatekeeper planning anchor
+      status: superseded
+      target_release: v0.5.0
+      order: 0
     - id: transfer-test-plan
       title: Specify transfer tests for remote, transfer-file, and copy-paste modes
       status: planned
