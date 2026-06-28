@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `2fe6f274398c2e16bcaa346d49ac51b5db0e0524` (`2fe6f274`)
-- Handoff freshness marker: `2fe6f274`
-- Branch at generation: `docs/post-pr1606-handoff-refresh`
+- HEAD: `cea654b45997b5848331d758045a7d468d116238` (`cea654b4`)
+- Handoff freshness marker: `cea654b4`
+- Branch at generation: `docs/post-pr1608-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -68,9 +68,16 @@ Wenn der Bootstrap grün ist:
 
 Source: `docs/planning/project_direction.yaml`.
 
-- `project-direction` (active): Unify strategy, roadmap, and ideas into a machine-readable source for v0.4.10
-- `docs-reconciliation` (active): Reconcile docs/planning, docs/plans, docs/roadmap, docs/strategy, and docs/workflow for v0.4.10
-- `release-v0.4.10` (planned): Prepare and publish v0.4.10 for v0.4.10
-- `gui-gatekeeper` (planned): Start deterministic GUI gatekeeper for v0.5.0
+- `transfer-test-plan` (planned): Specify transfer tests for remote, transfer-file, and copy-paste modes for v0.4.12
+- `audit-status-current-state` (planned): Add current-state drift audit with STATUS.md consistency checks for v0.4.12
+- `send-read-ref-consistency` (planned): Test that g/go reads the gui-transfer-tasks carrier ref for v0.4.12
+- `tooltip-idempotence` (planned): Make GUI tooltip attachment idempotent for v0.4.12
+- `gui-modularization-smoke-tests` (planned): Add GUI smoke tests before modularizing large GUI files for v0.4.12
+- `guided-work-cycle-bar` (planned): Add guided work-cycle bar over existing work wrappers for v0.4.12
+- `communication-mode-examples` (planned): Add communication-mode explanations with examples for v0.4.12
+- `wrapper-live-status` (planned): Add bounded live status for pr-create-complete for v0.4.12
+- `artifact-gc-extension` (planned): Extend artifact-gc instead of adding duplicate log-GC commands for v0.4.12
+- `documentation-auto-registration` (planned): Plan documentation auto-registration for post-v0.4.12
+- `rule-auto-registration-inventory` (planned): Inventory rule auto-registration prerequisites for post-v0.4.12
 
 ### RESULT: PASS ###
