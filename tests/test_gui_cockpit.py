@@ -1,4 +1,6 @@
+import inspect
 from pathlib import Path
+import subprocess
 
 from agentic_project_kit.cockpit import BOUNDED, READ_ONLY, CockpitAction, CockpitActionResult
 from agentic_project_kit.gui_cockpit import (
@@ -31,6 +33,47 @@ COCKPIT_SOURCE_PATHS = (
 
 def _cockpit_sources() -> str:
     return "\n".join(path.read_text(encoding="utf-8") for path in COCKPIT_SOURCE_PATHS)
+
+
+class _FakeVar:
+    def __init__(self, value: str) -> None:
+        self.value = value
+
+    def get(self) -> str:
+        return self.value
+
+    def set(self, value: str) -> None:
+        self.value = value
+
+
+class _FakeButton:
+    def __init__(self) -> None:
+        self.state = "disabled"
+
+    def configure(self, **kwargs: object) -> None:
+        if "state" in kwargs:
+            self.state = str(kwargs["state"])
+
+
+class _GcHarness(CockpitActionsMixin):
+    def __init__(self) -> None:
+        self.gc_cutoff_var = _FakeVar("2026-06-28T21:00:00Z")
+        self.gc_confirm_delete_button = _FakeButton()
+        self.pending_gc_preview = None
+        self.calls: list[tuple[str, ...]] = []
+        self.output: list[str] = []
+
+    def _agentic_command(self, *parts: str) -> subprocess.CompletedProcess[str]:
+        self.calls.append(parts)
+        payload = (
+            '{"candidate_count": 1, "dry_run": true, "result_status": "PASS"}'
+            if "--execute" not in parts
+            else '{"candidate_count": 1, "dry_run": false, "result_status": "PASS"}'
+        )
+        return subprocess.CompletedProcess(parts, 0, payload, "")
+
+    def write_output(self, text: str) -> None:
+        self.output.append(text)
 
 
 def test_gui_action_views_reuse_cockpit_action_metadata() -> None:
@@ -203,6 +246,62 @@ def test_cockpit_build_methods_live_in_focused_modules() -> None:
     assert CockpitGui._build_action_cards is CockpitActionsMixin._build_action_cards
     assert CockpitGui._build_task_editor is CockpitTaskMixin._build_task_editor
     assert CockpitGui._build_output_panel is CockpitTaskMixin._build_output_panel
+
+
+def test_gc_button_runs_dry_run_first() -> None:
+    gui = _GcHarness()
+
+    gui.preview_log_cleanup()
+
+    assert gui.calls == [
+        (
+            "artifact-gc",
+            "--tmp-logs",
+            "--local-tmp",
+            "--older-than",
+            "2026-06-28T21:00:00Z",
+            "--json",
+        )
+    ]
+    assert "--execute" not in gui.calls[0]
+    assert gui.gc_confirm_delete_button.state == "normal"
+
+
+def test_gc_confirm_only_after_preview() -> None:
+    gui = _GcHarness()
+
+    gui.confirm_log_cleanup()
+    assert gui.calls == []
+
+    gui.preview_log_cleanup()
+    gui.confirm_log_cleanup()
+
+    assert gui.calls[1] == (
+        "artifact-gc",
+        "--tmp-logs",
+        "--local-tmp",
+        "--older-than",
+        "2026-06-28T21:00:00Z",
+        "--execute",
+        "--json",
+    )
+    assert gui.gc_confirm_delete_button.state == "disabled"
+
+
+def test_gc_button_uses_local_modes_only() -> None:
+    source = inspect.getsource(CockpitActionsMixin._gc_command_args)
+
+    assert '"--tmp-logs"' in source
+    assert '"--local-tmp"' in source
+    assert "remote" not in source.lower()
+
+
+def test_gc_button_tooltip_states_local_only() -> None:
+    source = inspect.getsource(CockpitActionsMixin._build_action_cards)
+
+    assert "Clean up logs" in source
+    assert "Deletes local log files only" in source
+    assert "Never touches the remote repository" in source
 
 
 def test_gui_output_uses_readable_large_font_and_panel_height() -> None:
