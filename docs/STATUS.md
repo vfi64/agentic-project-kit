@@ -7,9 +7,9 @@ Current verified release: 0.4.11.
 Current release tag: v0.4.11.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20917074`.
-Current verified main: `b92cbdbc` (`Add shared communication mode examples (#1625)`).
-Latest substantive work: PR #1625 (`Add shared communication mode examples (#1625)`).
-Post-merge handoff status: PASS/NOOP after PR #1625 administrative refresh.
+Current verified main: `015d01f5` (`Add pr-create-complete live status (#1627)`).
+Latest substantive work: PR #1627 (`Add pr-create-complete live status (#1627)`).
+Post-merge handoff status: PASS/NOOP after PR #1627 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -397,6 +397,6 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
 - Portability closeout: in progress; all tracked shell scripts removed in Slice 6, pending final gates and PR merge.
 - Portability closeout: legacy `ns` and `ns-menu` entrypoints removed; no tracked shell scripts remain, pending final gates and PR merge.
-## Operational documentation refresh state after PR #1625
+## Operational documentation refresh state after PR #1627
 
-Current administrative handoff refresh state is `b92cbdbc` (`Add shared communication mode examples (#1625)`). Continue next only after this post-PR1625 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `015d01f5` (`Add pr-create-complete live status (#1627)`). Continue next only after this post-PR1627 refresh is committed and merged; the next substantive slice must be created from fresh main.
