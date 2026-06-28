@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
+import json
 from typing import Any
 
 from agentic_project_kit.cockpit import READ_ONLY, run_cockpit_action
@@ -68,6 +70,110 @@ class CockpitActionsMixin:
         run_button = ttk.Button(button_row, text="Run read-only", command=self.run_selected_read_only)
         attach_tooltip(run_button, "Run only selected read-only cockpit actions through the shared cockpit layer.")
         run_button.pack(side=tk.LEFT, padx=(0, 9))
+
+        maintenance_row = tk.Frame(parent, bg=THEME.color_panel_bg)
+        maintenance_row.pack(fill=tk.X, pady=(0, 15))
+        tk.Label(
+            maintenance_row,
+            text="Log cutoff",
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+        ).pack(side=tk.LEFT, padx=(0, 6))
+        self.gc_cutoff_var = tk.StringVar(value=self._default_gc_cutoff())
+        cutoff_entry = ttk.Entry(maintenance_row, textvariable=self.gc_cutoff_var, width=24)
+        attach_tooltip(cutoff_entry, "ISO cutoff for local tmp log cleanup. Default is now.")
+        cutoff_entry.pack(side=tk.LEFT, padx=(0, 9))
+        gc_button = ttk.Button(maintenance_row, text="Clean up logs", command=self.preview_log_cleanup)
+        attach_tooltip(
+            gc_button,
+            "Dry-run local artifact-gc for repository tmp logs only. Never touches the remote repository.",
+        )
+        gc_button.pack(side=tk.LEFT, padx=(0, 9))
+        self.gc_confirm_delete_button = ttk.Button(
+            maintenance_row,
+            text="Confirm delete",
+            command=self.confirm_log_cleanup,
+            state=tk.DISABLED,
+        )
+        attach_tooltip(
+            self.gc_confirm_delete_button,
+            "Deletes local log files only after a successful preview. Never touches the remote repository.",
+        )
+        self.gc_confirm_delete_button.pack(side=tk.LEFT, padx=(0, 9))
+        self.pending_gc_preview = None
+
+    def _default_gc_cutoff(self) -> str:
+        return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+    def _gc_cutoff_value(self) -> str:
+        cutoff_var = getattr(self, "gc_cutoff_var", None)
+        value = cutoff_var.get().strip() if cutoff_var is not None else ""
+        if value:
+            return value
+        value = self._default_gc_cutoff()
+        if cutoff_var is not None:
+            cutoff_var.set(value)
+        return value
+
+    def _gc_command_args(self, *, cutoff: str, execute: bool) -> tuple[str, ...]:
+        args = (
+            "artifact-gc",
+            "--tmp-logs",
+            "--local-tmp",
+            "--older-than",
+            cutoff,
+        )
+        if execute:
+            return (*args, "--execute", "--json")
+        return (*args, "--json")
+
+    def _write_gc_result(self, completed: Any) -> dict[str, object] | None:
+        output = completed.stdout or completed.stderr
+        self.write_output("\n" + output + "\n")
+        if not completed.stdout:
+            return None
+        try:
+            payload = json.loads(completed.stdout)
+        except ValueError:
+            return None
+        return payload if isinstance(payload, dict) else None
+
+    def _disable_confirm_delete(self) -> None:
+        self.pending_gc_preview = None
+        button = getattr(self, "gc_confirm_delete_button", None)
+        if button is not None:
+            button.configure(state="disabled")
+
+    def preview_log_cleanup(self) -> None:
+        cutoff = self._gc_cutoff_value()
+        args = self._gc_command_args(cutoff=cutoff, execute=False)
+        completed = self._agentic_command(*args)
+        payload = self._write_gc_result(completed)
+        candidate_count = int(payload.get("candidate_count", 0)) if payload else 0
+        if completed.returncode == 0 and candidate_count > 0:
+            self.pending_gc_preview = {
+                "cutoff": cutoff,
+                "args": args,
+                "candidate_count": candidate_count,
+            }
+            if self.gc_confirm_delete_button is not None:
+                self.gc_confirm_delete_button.configure(state="normal")
+            return
+        self._disable_confirm_delete()
+
+    def confirm_log_cleanup(self) -> None:
+        if not self.pending_gc_preview:
+            self.write_output("\nRun Clean up logs first. Confirm is enabled only after a dry-run preview.\n")
+            return
+        cutoff = self._gc_cutoff_value()
+        if self.pending_gc_preview.get("cutoff") != cutoff:
+            self.write_output("\nLog cleanup cutoff changed after the preview. Run Clean up logs again before confirming.\n")
+            self._disable_confirm_delete()
+            return
+        completed = self._agentic_command(*self._gc_command_args(cutoff=cutoff, execute=True))
+        self._write_gc_result(completed)
+        self._disable_confirm_delete()
 
 
     def selected_action_id(self) -> str | None:
