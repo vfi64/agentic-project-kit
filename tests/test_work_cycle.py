@@ -71,6 +71,16 @@ def test_build_work_cycle_views_enables_recovery_only_when_current() -> None:
     assert recovery.is_available is True
 
 
+def test_build_work_cycle_views_disables_finish_until_finish_phase() -> None:
+    changes_views = {view.phase_id: view for view in build_work_cycle_views("changes")}
+    finish_views = {view.phase_id: view for view in build_work_cycle_views("finish")}
+
+    assert changes_views["check"].is_available is True
+    assert changes_views["finish"].is_available is False
+    assert finish_views["finish"].is_available is True
+    assert finish_views["start"].is_available is False
+
+
 def test_humanize_pass_result_has_done_headline() -> None:
     message = humanize_work_result(
         {"result_status": "PASS", "action": "work-check", "next_action": "Workflow completed."}
@@ -103,6 +113,7 @@ def test_humanize_blocked_result_lists_human_blockers() -> None:
     assert "Code style needs cleanup." in message.blockers_human
     assert "Some tests are failing; the code needs fixing." in message.blockers_human
     assert "task editor" in message.suggested_next
+    assert "Doctor" not in message.suggested_next
 
 
 def test_humanize_unknown_blocker_has_generic_line() -> None:

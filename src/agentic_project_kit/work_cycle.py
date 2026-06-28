@@ -65,6 +65,14 @@ _PHASE_DEFINITIONS: tuple[tuple[WorkPhase, str, str, str], ...] = (
     ),
 )
 
+_AVAILABLE_PHASES_BY_CURRENT: dict[WorkPhase, frozenset[WorkPhase]] = {
+    "start": frozenset({"start"}),
+    "changes": frozenset({"changes", "check"}),
+    "check": frozenset({"changes", "check"}),
+    "finish": frozenset({"check", "finish"}),
+    "recover": frozenset({"recover"}),
+}
+
 
 BLOCKER_EXPLANATIONS: dict[str, str] = {
     "repo-status": "The repository state needs attention.",
@@ -117,8 +125,8 @@ def derive_work_phase(
 
 def build_work_cycle_views(current: WorkPhase) -> tuple[WorkCyclePhaseView, ...]:
     views: list[WorkCyclePhaseView] = []
+    available_phases = _AVAILABLE_PHASES_BY_CURRENT[current]
     for phase_id, label, command_hint, tooltip in _PHASE_DEFINITIONS:
-        is_recovery = phase_id == "recover"
         views.append(
             WorkCyclePhaseView(
                 phase_id=phase_id,
@@ -126,7 +134,7 @@ def build_work_cycle_views(current: WorkPhase) -> tuple[WorkCyclePhaseView, ...]
                 command_hint=command_hint,
                 tooltip=tooltip,
                 is_current=phase_id == current,
-                is_available=not is_recovery or current == "recover",
+                is_available=phase_id in available_phases,
             )
         )
     return tuple(views)
