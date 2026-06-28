@@ -2,6 +2,7 @@ from pathlib import Path
 
 from agentic_project_kit.cockpit import BOUNDED, READ_ONLY, CockpitAction, CockpitActionResult
 from agentic_project_kit.gui_cockpit import (
+    CockpitGui,
     HEADER_TEXT,
     THEME,
     action_tree_columns,
@@ -13,6 +14,23 @@ from agentic_project_kit.gui_cockpit import (
     format_action_result,
     main,
 )
+from agentic_project_kit.gui_cockpit_actions import CockpitActionsMixin
+from agentic_project_kit.gui_cockpit_header import CockpitHeaderMixin
+from agentic_project_kit.gui_cockpit_sidebar import CockpitSidebarMixin
+from agentic_project_kit.gui_cockpit_task import CockpitTaskMixin
+
+
+COCKPIT_SOURCE_PATHS = (
+    Path("src/agentic_project_kit/gui_cockpit.py"),
+    Path("src/agentic_project_kit/gui_cockpit_header.py"),
+    Path("src/agentic_project_kit/gui_cockpit_sidebar.py"),
+    Path("src/agentic_project_kit/gui_cockpit_actions.py"),
+    Path("src/agentic_project_kit/gui_cockpit_task.py"),
+)
+
+
+def _cockpit_sources() -> str:
+    return "\n".join(path.read_text(encoding="utf-8") for path in COCKPIT_SOURCE_PATHS)
 
 
 def test_gui_action_views_reuse_cockpit_action_metadata() -> None:
@@ -105,8 +123,7 @@ def test_gui_module_main_is_importable_without_starting_tk() -> None:
 
 
 def test_basic_cockpit_window_uses_option_menu_traffic_light_and_tooltips() -> None:
-    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
-    init_source = source[source.index("class CockpitGui") :]
+    init_source = _cockpit_sources()
 
     assert "ttk.Combobox" in init_source
     assert "create_oval" in init_source
@@ -163,13 +180,29 @@ def test_gui_basic_cockpit_header_text_is_project_specific() -> None:
 
 
 def test_gui_action_cards_are_four_rows_and_scrollable() -> None:
-    source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    source = _cockpit_sources()
 
     assert action_tree_visible_rows() == 4
     assert "ttk.Scrollbar" in source
     assert "yscrollcommand" in source
     assert "action_card_container" in source
     assert "ttk.Treeview" not in source
+
+
+def test_cockpit_gui_composes_focused_mixins() -> None:
+    assert issubclass(CockpitGui, CockpitHeaderMixin)
+    assert issubclass(CockpitGui, CockpitSidebarMixin)
+    assert issubclass(CockpitGui, CockpitActionsMixin)
+    assert issubclass(CockpitGui, CockpitTaskMixin)
+
+
+def test_cockpit_build_methods_live_in_focused_modules() -> None:
+    assert CockpitGui._build_header is CockpitHeaderMixin._build_header
+    assert CockpitGui._build_work_cycle_bar is CockpitHeaderMixin._build_work_cycle_bar
+    assert CockpitGui._build_sidebar is CockpitSidebarMixin._build_sidebar
+    assert CockpitGui._build_action_cards is CockpitActionsMixin._build_action_cards
+    assert CockpitGui._build_task_editor is CockpitTaskMixin._build_task_editor
+    assert CockpitGui._build_output_panel is CockpitTaskMixin._build_output_panel
 
 
 def test_gui_output_uses_readable_large_font_and_panel_height() -> None:
