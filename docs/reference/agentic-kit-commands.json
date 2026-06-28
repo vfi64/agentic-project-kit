@@ -367,6 +367,59 @@
       "qualified_name": "agentic-kit audit-program-redundancy"
     },
     {
+      "group": "root",
+      "help": "Audit STATUS.md current-state claims against handoff, release, and origin/main state.",
+      "name": "audit-status-current-state",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 3,
+          "help": "Maximum commits the validated substantive safe-state may trail origin/main.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "max_origin_lag",
+          "opts": [
+            "--max-origin-lag"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "audit-status-current-state"
+      ],
+      "qualified_name": "agentic-kit audit-status-current-state"
+    },
+    {
       "group": "boot",
       "help": "",
       "name": "check",

@@ -422,6 +422,10 @@ The hard checks currently cover version mismatches, stale current-state wording,
 
 Future repair tools should stay bounded to mechanical edits and must not rewrite semantics.
 
+## Status current-state audit
+
+`agentic-kit audit-status-current-state` checks that the live `docs/STATUS.md` Current verified main pointer, the generated handoff validation report, `release-status`, and `origin/main` describe one coherent state. It permits a bounded administrative handoff-refresh lag, but blocks stale or contradictory current-state claims before they can guide a successor LLM.
+
 
 ## Documentation system audit
 

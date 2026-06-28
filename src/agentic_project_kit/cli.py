@@ -37,6 +37,7 @@ from agentic_project_kit.cli_commands.removed_ns_commands import register_remove
 from agentic_project_kit.cli_commands.ns_legacy_audit import audit_ns_legacy_references_command
 from agentic_project_kit.cli_commands.absolute_path_audit import audit_absolute_path_portability_command
 from agentic_project_kit.cli_commands.doc_currency_audit import audit_doc_currency_command
+from agentic_project_kit.cli_commands.status_current_state_audit import audit_status_current_state_command
 from agentic_project_kit.cli_commands.planning_docs_audit import audit_planning_docs_consolidation_command
 from agentic_project_kit.cli_commands.program_redundancy_audit import audit_program_redundancy_command
 from agentic_project_kit.cli_commands.gui_readiness_gate import gui_readiness_gate_command
@@ -61,6 +62,7 @@ app.command("gui-readiness-gate")(gui_readiness_gate_command)
 app.command("audit-program-redundancy")(audit_program_redundancy_command)
 app.command("audit-planning-docs-consolidation")(audit_planning_docs_consolidation_command)
 app.command("audit-doc-currency")(audit_doc_currency_command)
+app.command("audit-status-current-state")(audit_status_current_state_command)
 app.command("audit-absolute-path-portability")(audit_absolute_path_portability_command)
 app.command("audit-ns-legacy-references")(audit_ns_legacy_references_command)
 
