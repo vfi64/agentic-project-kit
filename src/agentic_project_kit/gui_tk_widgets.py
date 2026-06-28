@@ -108,9 +108,17 @@ class TkTooltip:
         self.window.destroy()
         self.window = None
 
+    def update_text(self, text: str) -> None:
+        self.text = text
+
 
 def attach_tooltip(widget: Any, text: str) -> Any:
     existing = getattr(widget, "_agentic_tooltip", None)
+    if isinstance(existing, TkTooltip):
+        existing.hide()
+        existing.update_text(text)
+        widget._agentic_tooltip_text = text
+        return widget
     if existing is not None and hasattr(existing, "hide"):
         existing.hide()
     widget._agentic_tooltip_text = text

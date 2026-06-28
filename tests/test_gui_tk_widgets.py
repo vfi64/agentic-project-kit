@@ -15,9 +15,11 @@ from agentic_project_kit.gui_viewmodel import CommunicationModeViewModel
 class FakeWidget:
     def __init__(self) -> None:
         self.bound_events: dict[str, object] = {}
+        self.bind_counts: dict[str, int] = {}
 
     def bind(self, event: str, callback: object) -> None:
         self.bound_events[event] = callback
+        self.bind_counts[event] = self.bind_counts.get(event, 0) + 1
 
 
 def test_traffic_light_fill_maps_supported_colors() -> None:
@@ -79,11 +81,23 @@ def test_attach_tooltip_records_text_and_binds_hover_events() -> None:
     assert "<Leave>" in widget.bound_events
 
 
-def test_attach_tooltip_replaces_existing_tooltip() -> None:
+def test_attach_tooltip_reuses_existing_tooltip_and_updates_text() -> None:
     widget = FakeWidget()
     first = attach_tooltip(widget, "First")._agentic_tooltip
 
     attach_tooltip(widget, "Second")
 
     assert widget._agentic_tooltip_text == "Second"
-    assert widget._agentic_tooltip is not first
+    assert widget._agentic_tooltip is first
+    assert widget._agentic_tooltip.text == "Second"
+
+
+def test_repeated_attach_tooltip_binds_hover_events_once() -> None:
+    widget = FakeWidget()
+
+    attach_tooltip(widget, "First")
+    attach_tooltip(widget, "Second")
+    attach_tooltip(widget, "Third")
+
+    assert widget.bind_counts["<Enter>"] == 1
+    assert widget.bind_counts["<Leave>"] == 1
