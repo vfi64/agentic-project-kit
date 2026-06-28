@@ -84,5 +84,8 @@ def communication_mode_definition(mode: str) -> CommunicationModeDefinition:
 
 
 def communication_mode_explanation(mode: str) -> str:
-    definition = communication_mode_definition(mode)
-    return f"{definition.explanation}\nExample: {definition.example.removeprefix('Example: ')}"
+    return communication_mode_definition(mode).explanation
+
+
+def communication_mode_example(mode: str) -> str:
+    return communication_mode_definition(mode).example
