@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b92cbdbcb124f05d61d64775180d63b9224ad080
-  short: b92cbdbc
-  subject: Add shared communication mode examples (#1625)
+  full: 015d01f5cbe69e7f3880e58b1b039a6b42775cb5
+  short: 015d01f5
+  subject: Add pr-create-complete live status (#1627)
 last_substantive_work_state:
-  full: b92cbdbcb124f05d61d64775180d63b9224ad080
-  short: b92cbdbc
-  subject: Add shared communication mode examples (#1625)
+  full: 015d01f5cbe69e7f3880e58b1b039a6b42775cb5
+  short: 015d01f5
+  subject: Add pr-create-complete live status (#1627)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
