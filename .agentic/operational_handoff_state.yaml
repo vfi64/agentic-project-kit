@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a6592e9a3785ebf8612ab8bce5498736770aa4f0
-  short: a6592e9a
-  subject: Add local artifact GC cockpit button (#1633)
+  full: a18840de93e62747328449af3fc8f2f366517caf
+  short: a18840de
+  subject: Separate communication mode examples in cockpit (#1635)
 last_substantive_work_state:
-  full: a6592e9a3785ebf8612ab8bce5498736770aa4f0
-  short: a6592e9a
-  subject: Add local artifact GC cockpit button (#1633)
+  full: a18840de93e62747328449af3fc8f2f366517caf
+  short: a18840de
+  subject: Separate communication mode examples in cockpit (#1635)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
