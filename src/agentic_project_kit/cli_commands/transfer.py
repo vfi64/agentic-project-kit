@@ -71,6 +71,7 @@ from agentic_project_kit.transfer_uplink import (
     write_transfer_report_from_repo_result,
 )
 from agentic_project_kit.transfer_workflow_next import run_workflow_next
+from agentic_project_kit import wrapper_live_status
 
 transfer_app = typer.Typer(help="Inspect and apply repo-backed text transfer orders.")
 
@@ -2044,6 +2045,7 @@ def pr_complete_command(
     if not skip_llm_context_gate:
         _require_fresh_llm_context_or_exit(max_age_minutes=60, json_output=json_output)
 
+    import os
     import re
     import subprocess
     from datetime import datetime, timezone
@@ -2051,6 +2053,33 @@ def pr_complete_command(
     resolved_head_sha = _resolve_expected_head_sha_alias(expected_head_sha)
     agentic_kit = "./.venv/bin/agentic-kit"
     steps: list[dict[str, object]] = []
+
+    live_status_parent = os.environ.get("AGENTIC_KIT_WRAPPER_LIVE_STATUS_PARENT", "")
+
+    def update_parent_live_status(
+        phase: wrapper_live_status.WrapperPhase,
+        *,
+        result_status: str = "RUNNING",
+        step: str = "",
+        failed_step: str = "",
+    ) -> None:
+        if live_status_parent != "pr-create-complete":
+            return
+        wrapper_live_status.write_wrapper_live_status(
+            Path("."),
+            wrapper="pr-create-complete",
+            phase=phase,
+            result_status=result_status,
+            base=os.environ.get("AGENTIC_KIT_WRAPPER_LIVE_STATUS_BASE", main_branch),
+            head=os.environ.get("AGENTIC_KIT_WRAPPER_LIVE_STATUS_HEAD", ""),
+            expected_head_sha=os.environ.get(
+                "AGENTIC_KIT_WRAPPER_LIVE_STATUS_EXPECTED_HEAD_SHA",
+                resolved_head_sha,
+            ),
+            pr_number=pr_number,
+            blockers=[failed_step] if failed_step else [],
+            step=step,
+        )
 
     def run_step(name: str, argv: list[str]) -> int:
         completed = subprocess.run(argv, text=True, capture_output=True)
@@ -2317,6 +2346,12 @@ def pr_complete_command(
 
     failed_step = None
     for name, argv in step_plan:
+        if name == "pr-wait-ci":
+            update_parent_live_status("waiting_ci", step=name)
+        elif name == "pr-merge-safe":
+            update_parent_live_status("merging", step=name)
+        else:
+            update_parent_live_status("post_merge", step=name)
         step_returncode = run_step(name, argv)
         if step_returncode != 0:
             if name == "pr-wait-ci" and pr_status_allows_wait_ci_fallback():
@@ -2334,6 +2369,12 @@ def pr_complete_command(
             failed_step = followup_blocker or "post-merge-complete_followup_failed"
 
     result_status = "PASS" if failed_step is None else "BLOCKED"
+    update_parent_live_status(
+        "done" if result_status == "PASS" else "blocked",
+        result_status=result_status,
+        step="pr-complete",
+        failed_step=failed_step or "",
+    )
     final_signal = "d" if result_status == "PASS" else "f"
     if failed_step is None:
         if post_merge_complete_followup_required:
@@ -2702,6 +2743,7 @@ def pr_create_complete_command(
         allow_rule_carrier_publish=True,
     )
 
+    import os
     import re
     import subprocess
     from datetime import datetime, timezone
@@ -2711,9 +2753,40 @@ def pr_create_complete_command(
     agentic_kit = "./.venv/bin/agentic-kit"
     steps: list[dict[str, object]] = []
     blockers: list[str] = []
+    resolved_head = "" if head == "current" else head
+    expected_head_sha = ""
+    pr_number: int | None = None
 
-    def run_step(name: str, argv: list[str]) -> subprocess.CompletedProcess[str]:
-        completed = subprocess.run(argv, text=True, capture_output=True)
+    def update_live_status(
+        phase: wrapper_live_status.WrapperPhase,
+        *,
+        result_status: str = "RUNNING",
+        step: str = "",
+        message: str = "",
+    ) -> None:
+        wrapper_live_status.write_wrapper_live_status(
+            Path("."),
+            wrapper="pr-create-complete",
+            phase=phase,
+            result_status=result_status,
+            base=base,
+            head=resolved_head,
+            expected_head_sha=expected_head_sha,
+            pr_number=pr_number,
+            blockers=blockers,
+            step=step,
+            message=message,
+        )
+
+    update_live_status("starting", step="start")
+
+    def run_step(
+        name: str,
+        argv: list[str],
+        *,
+        env: dict[str, str] | None = None,
+    ) -> subprocess.CompletedProcess[str]:
+        completed = subprocess.run(argv, text=True, capture_output=True, env=env)
         step_payload_status = ""
         try:
             from agentic_project_kit.release_process_guardrails import (
@@ -2840,9 +2913,9 @@ def pr_create_complete_command(
     if not re.fullmatch(r"[0-9a-fA-F]{40}", expected_head_sha):
         blockers.append("current_head_sha_invalid")
 
-    pr_number: int | None = None
     inner_post_merge_followup_verified = False
     if not blockers:
+        update_live_status("creating_pr", step="pr-create")
         create_result = run_step(
             "pr-create",
             [
@@ -2892,6 +2965,7 @@ def pr_create_complete_command(
                 blockers.append("existing_pr_number_not_found")
 
     if pr_number is not None and not blockers:
+        update_live_status("waiting_ci", step="pr-complete")
         complete_argv = [
             agentic_kit,
             "transfer",
@@ -2909,7 +2983,16 @@ def pr_create_complete_command(
         if skip_llm_context_gate:
             complete_argv.append("--skip-llm-context-gate")
         complete_argv.append("--json")
-        complete_result = run_step("pr-complete", complete_argv)
+        child_env = os.environ.copy()
+        child_env.update(
+            {
+                "AGENTIC_KIT_WRAPPER_LIVE_STATUS_PARENT": "pr-create-complete",
+                "AGENTIC_KIT_WRAPPER_LIVE_STATUS_BASE": base,
+                "AGENTIC_KIT_WRAPPER_LIVE_STATUS_HEAD": resolved_head,
+                "AGENTIC_KIT_WRAPPER_LIVE_STATUS_EXPECTED_HEAD_SHA": expected_head_sha,
+            }
+        )
+        complete_result = run_step("pr-complete", complete_argv, env=child_env)
         inner_post_merge_followup_verified = post_merge_complete_verified_by_inner_pr_complete(
             complete_result.stdout
         )
@@ -2929,6 +3012,7 @@ def pr_create_complete_command(
         # a successful merge. The outer pr-create-complete wrapper must not run it
         # a second time, because a successful admin-refresh PR can make the repeated
         # closeout look like a new failure even though the lifecycle is already done.
+        update_live_status("post_merge", step="outer-post-merge-followup")
         post_merge_steps = [
             ("post-pr-sync-main-after-complete", [agentic_kit, "transfer", "sync-main"]),
             ("post-pr-post-merge-check", [agentic_kit, "transfer", "post-merge-check"]),
@@ -2951,6 +3035,11 @@ def pr_create_complete_command(
         outer_followup_false_red_cleared = True
 
     result_status = "PASS" if not blockers else "BLOCKED"
+    update_live_status(
+        "done" if result_status == "PASS" else "blocked",
+        result_status=result_status,
+        step="complete",
+    )
     final_signal = "d" if result_status == "PASS" else "f"
     if result_status == "PASS" and inner_post_merge_followup_verified:
         next_action = (
