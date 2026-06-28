@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7756f0fb2f58910072ae3478398f1ee99f07bd6e
-  short: 7756f0fb
-  subject: Add transfer test plan (#1611)
+  full: 3a6816201c207af4b9e46141e2aa7e04fddc3fd5
+  short: 3a681620
+  subject: Add status current-state audit (#1613)
 last_substantive_work_state:
-  full: 7756f0fb2f58910072ae3478398f1ee99f07bd6e
-  short: 7756f0fb
-  subject: Add transfer test plan (#1611)
+  full: 3a6816201c207af4b9e46141e2aa7e04fddc3fd5
+  short: 3a681620
+  subject: Add status current-state audit (#1613)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
