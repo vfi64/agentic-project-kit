@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 2fe6f274398c2e16bcaa346d49ac51b5db0e0524
-  short: 2fe6f274
-  subject: Add guided work-cycle bar to cockpit (#1606)
+  full: 4be2253af9494ae7246205ff99e0f9c3794f65d2
+  short: 4be2253a
+  subject: Refresh handoff state after PR1608 (#1609)
 last_substantive_work_state:
-  full: 2fe6f274398c2e16bcaa346d49ac51b5db0e0524
-  short: 2fe6f274
-  subject: Add guided work-cycle bar to cockpit (#1606)
+  full: 4be2253af9494ae7246205ff99e0f9c3794f65d2
+  short: 4be2253a
+  subject: Refresh handoff state after PR1608 (#1609)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
