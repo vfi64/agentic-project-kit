@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import subprocess
 from pathlib import Path
 
@@ -152,6 +153,223 @@ def test_transfer_pr_create_complete_orchestrates_create_and_complete(monkeypatc
     assert "0123456789abcdef0123456789abcdef01234567" in calls[3]
     assert "--skip-llm-context-gate" in calls[3]
     assert "--json" in calls[3]
+
+
+def test_transfer_pr_create_complete_writes_final_live_status(monkeypatch, tmp_path: Path) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "0123456789abcdef0123456789abcdef01234567\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                '{"stdout":"https://github.com/vfi64/agentic-project-kit/pull/123\\n"}\n',
+                "",
+            )
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]:
+            return subprocess.CompletedProcess(command, 0, "completed\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile"]:
+            return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}\n', "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
+        lambda capability: None,
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
+        lambda **kwargs: None,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "pr-create-complete",
+            "--title",
+            "Demo",
+            "--body",
+            "Body",
+            "--base",
+            "main",
+            "--head",
+            "current",
+            "--skip-llm-context-gate",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0
+    status = json.loads(Path("tmp/current-wrapper-status.json").read_text(encoding="utf-8"))
+    assert status["wrapper"] == "pr-create-complete"
+    assert status["phase"] == "done"
+    assert status["result_status"] == "PASS"
+    assert status["safe_to_interrupt"] is True
+    assert status["base"] == "main"
+    assert status["head"] == "feature/demo"
+    assert status["expected_head_sha"] == "0123456789abcdef0123456789abcdef01234567"
+    assert status["pr_number"] == 123
+
+
+def test_transfer_pr_create_complete_writes_blocked_live_status(monkeypatch, tmp_path: Path) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "not-a-sha\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
+        lambda capability: None,
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
+        lambda **kwargs: None,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "pr-create-complete",
+            "--title",
+            "Demo",
+            "--base",
+            "main",
+            "--head",
+            "current",
+            "--skip-llm-context-gate",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 2
+    status = json.loads(Path("tmp/current-wrapper-status.json").read_text(encoding="utf-8"))
+    assert status["phase"] == "blocked"
+    assert status["result_status"] == "BLOCKED"
+    assert status["safe_to_interrupt"] is True
+    assert status["blockers"] == ["current_branch_missing", "current_head_sha_invalid"]
+
+
+def test_transfer_pr_create_complete_passes_live_status_context_to_pr_complete(monkeypatch) -> None:
+    pr_complete_env: dict[str, str] = {}
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "0123456789abcdef0123456789abcdef01234567\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                '{"stdout":"https://github.com/vfi64/agentic-project-kit/pull/123\\n"}\n',
+                "",
+            )
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]:
+            pr_complete_env.update(kwargs.get("env") or {})
+            return subprocess.CompletedProcess(command, 0, "completed\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile"]:
+            return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}\n', "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
+        lambda capability: None,
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
+        lambda **kwargs: None,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "pr-create-complete",
+            "--title",
+            "Demo",
+            "--base",
+            "main",
+            "--head",
+            "current",
+            "--skip-llm-context-gate",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert pr_complete_env["AGENTIC_KIT_WRAPPER_LIVE_STATUS_PARENT"] == "pr-create-complete"
+    assert pr_complete_env["AGENTIC_KIT_WRAPPER_LIVE_STATUS_BASE"] == "main"
+    assert pr_complete_env["AGENTIC_KIT_WRAPPER_LIVE_STATUS_HEAD"] == "feature/demo"
+    assert (
+        pr_complete_env["AGENTIC_KIT_WRAPPER_LIVE_STATUS_EXPECTED_HEAD_SHA"]
+        == "0123456789abcdef0123456789abcdef01234567"
+    )
+
+
+def test_transfer_pr_complete_updates_parent_live_phases_when_wrapped(monkeypatch) -> None:
+    phases: list[tuple[str, bool, str]] = []
+
+    def fake_write_status(root, **kwargs):
+        phases.append(
+            (
+                kwargs["phase"],
+                kwargs["safe_to_interrupt"]
+                if kwargs.get("safe_to_interrupt") is not None
+                else kwargs["phase"] in {"starting", "waiting_ci", "done", "blocked"},
+                kwargs.get("step", ""),
+            )
+        )
+        return {}
+
+    def fake_run(argv, *args, **kwargs):
+        return subprocess.CompletedProcess(list(argv), 0, "ok\n", "")
+
+    monkeypatch.setenv("AGENTIC_KIT_WRAPPER_LIVE_STATUS_PARENT", "pr-create-complete")
+    monkeypatch.setenv("AGENTIC_KIT_WRAPPER_LIVE_STATUS_BASE", "main")
+    monkeypatch.setenv("AGENTIC_KIT_WRAPPER_LIVE_STATUS_HEAD", "feature/demo")
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.wrapper_live_status.write_wrapper_live_status",
+        fake_write_status,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "pr-complete",
+            "123",
+            "--expected-head-sha",
+            "0123456789abcdef0123456789abcdef01234567",
+            "--skip-llm-context-gate",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert phases == [
+        ("waiting_ci", True, "pr-wait-ci"),
+        ("merging", False, "pr-merge-safe"),
+        ("post_merge", False, "main-switch"),
+        ("post_merge", False, "main-pull"),
+        ("post_merge", False, "rules-acknowledge"),
+        ("post_merge", False, "post-merge-complete"),
+        ("done", True, "pr-complete"),
+    ]
 
 
 def test_transfer_pr_create_complete_uses_existing_pr_when_create_fails(monkeypatch) -> None:
