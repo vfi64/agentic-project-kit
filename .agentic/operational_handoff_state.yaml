@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 38910def89511ca35df85182628e5043e30472b5
-  short: 38910def
-  subject: Sync STATUS current state during handoff refresh (#1615)
+  full: 221cecdb84b6f2c7bedf6ce39733b983add48cba
+  short: 221cecdb
+  subject: Centralize GUI transfer carrier contract (#1617)
 last_substantive_work_state:
-  full: 38910def89511ca35df85182628e5043e30472b5
-  short: 38910def
-  subject: Sync STATUS current state during handoff refresh (#1615)
+  full: 221cecdb84b6f2c7bedf6ce39733b983add48cba
+  short: 221cecdb
+  subject: Centralize GUI transfer carrier contract (#1617)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
