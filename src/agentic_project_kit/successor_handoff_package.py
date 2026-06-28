@@ -877,7 +877,7 @@ def render_execution_contract_projection(contract: dict[str, object]) -> str:
         "",
         f"- scope: `{general_contract.get('scope', 'UNKNOWN')}`",
         "- agentic-kit wrappers are the authoritative control plane.",
-        "- Use the rule system, command reference, documentation registry, project direction authority, gates, evidence logs, report-retention GC, and successor handoff package as active subsystems.",
+        "- Use the rule system, command reference, documentation registry, project direction authority, the `agentic-kit project-direction` command, the `agentic-kit docs-reconciliation` command, gates, evidence logs, report-retention GC, and successor handoff package as active subsystems.",
         "- GC is technical retention, not semantic documentation migration.",
         "- Historical `ns` migration documents are not active rule locations.",
         "",

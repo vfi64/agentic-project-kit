@@ -8,7 +8,7 @@ Read first: `execution_contract.json`, `successor_context.yaml`, `validation_rep
 
 - scope: `durable-agentic-kit-operating-model`
 - agentic-kit wrappers are the authoritative control plane.
-- Use the rule system, command reference, documentation registry, project direction authority, gates, evidence logs, report-retention GC, and successor handoff package as active subsystems.
+- Use the rule system, command reference, documentation registry, project direction authority, the `agentic-kit project-direction` command, the `agentic-kit docs-reconciliation` command, gates, evidence logs, report-retention GC, and successor handoff package as active subsystems.
 - GC is technical retention, not semantic documentation migration.
 - Historical `ns` migration documents are not active rule locations.
 
@@ -38,9 +38,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `main`
-- head_matches_origin_main: `True`
-- worktree_clean: `True`
+- branch: `docs/post-pr1608-handoff-refresh`
+- head_matches_origin_main: `False`
+- worktree_clean: `False`
 - open_tasks_source: `docs/planning/project_direction.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -254,15 +254,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "main",
+    "branch": "docs/post-pr1608-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "ab5c8554908a7655ca8440e89ec561930f3a8859",
-    "head_matches_origin_main": true,
-    "head_short": "ab5c8554",
+    "head": "cea654b45997b5848331d758045a7d468d116238",
+    "head_matches_origin_main": false,
+    "head_short": "cea654b4",
     "local_path": "cd /path/to/agentic-project-kit",
     "origin_main": "ab5c8554908a7655ca8440e89ec561930f3a8859",
     "origin_main_short": "ab5c8554",
-    "worktree_clean": true
+    "worktree_clean": false
   }
 }
 ```
