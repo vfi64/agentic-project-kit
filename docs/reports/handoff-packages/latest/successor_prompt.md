@@ -38,9 +38,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1606-handoff-refresh`
+- branch: `main`
 - head_matches_origin_main: `True`
-- worktree_clean: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/project_direction.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -149,36 +149,99 @@ Wenn der Bootstrap grün ist:
         "docs/planning/project_direction.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "project-direction",
-      "status": "active",
-      "summary": "Unify strategy, roadmap, and ideas into a machine-readable source for v0.4.10"
-    },
-    {
-      "files": [
-        "docs/planning/project_direction.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "docs-reconciliation",
-      "status": "active",
-      "summary": "Reconcile docs/planning, docs/plans, docs/roadmap, docs/strategy, and docs/workflow for v0.4.10"
-    },
-    {
-      "files": [
-        "docs/planning/project_direction.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "release-v0.4.10",
+      "id": "transfer-test-plan",
       "status": "planned",
-      "summary": "Prepare and publish v0.4.10 for v0.4.10"
+      "summary": "Specify transfer tests for remote, transfer-file, and copy-paste modes for v0.4.12"
     },
     {
       "files": [
         "docs/planning/project_direction.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "gui-gatekeeper",
+      "id": "audit-status-current-state",
       "status": "planned",
-      "summary": "Start deterministic GUI gatekeeper for v0.5.0"
+      "summary": "Add current-state drift audit with STATUS.md consistency checks for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/project_direction.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "send-read-ref-consistency",
+      "status": "planned",
+      "summary": "Test that g/go reads the gui-transfer-tasks carrier ref for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/project_direction.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "tooltip-idempotence",
+      "status": "planned",
+      "summary": "Make GUI tooltip attachment idempotent for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/project_direction.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "gui-modularization-smoke-tests",
+      "status": "planned",
+      "summary": "Add GUI smoke tests before modularizing large GUI files for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/project_direction.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "guided-work-cycle-bar",
+      "status": "planned",
+      "summary": "Add guided work-cycle bar over existing work wrappers for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/project_direction.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "communication-mode-examples",
+      "status": "planned",
+      "summary": "Add communication-mode explanations with examples for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/project_direction.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "wrapper-live-status",
+      "status": "planned",
+      "summary": "Add bounded live status for pr-create-complete for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/project_direction.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "artifact-gc-extension",
+      "status": "planned",
+      "summary": "Extend artifact-gc instead of adding duplicate log-GC commands for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/project_direction.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "documentation-auto-registration",
+      "status": "planned",
+      "summary": "Plan documentation auto-registration for post-v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/project_direction.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "rule-auto-registration-inventory",
+      "status": "planned",
+      "summary": "Inventory rule auto-registration prerequisites for post-v0.4.12"
     }
   ],
   "recent_lessons": [
@@ -191,15 +254,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1606-handoff-refresh",
+    "branch": "main",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "2fe6f274398c2e16bcaa346d49ac51b5db0e0524",
+    "head": "ab5c8554908a7655ca8440e89ec561930f3a8859",
     "head_matches_origin_main": true,
-    "head_short": "2fe6f274",
+    "head_short": "ab5c8554",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "2fe6f274398c2e16bcaa346d49ac51b5db0e0524",
-    "origin_main_short": "2fe6f274",
-    "worktree_clean": false
+    "origin_main": "ab5c8554908a7655ca8440e89ec561930f3a8859",
+    "origin_main_short": "ab5c8554",
+    "worktree_clean": true
   }
 }
 ```
