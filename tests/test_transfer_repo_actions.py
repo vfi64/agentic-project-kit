@@ -2391,6 +2391,39 @@ last_substantive_work_state:
     assert "Updated operational handoff docs:" in result.stdout
 
 
+def test_admin_refresh_updates_status_current_state_block() -> None:
+    status = "\n".join(
+        [
+            "> STATUS boundary.",
+            "",
+            "## Current State",
+            "",
+            "Current version: 0.4.11",
+            "Current verified release: 0.4.11.",
+            "Current verified main: `old1234` (`Old subject (#1)`).",
+            "Latest substantive transfer hardening: PR #1 (`Old subject (#1)`).",
+            "Post-merge handoff status: PASS/NOOP after PR #1 administrative refresh PR #2.",
+            "Next safe step: continue old work.",
+            "",
+            "## Historical State Snapshots",
+            "",
+            "Current verified main: `history1` (`Historical`).",
+        ]
+    )
+
+    updated = transfer_repo_actions._refresh_status_current_state_block(
+        status,
+        after_pr=1613,
+        short="3a681620",
+        subject="Add status current-state audit (#1613)",
+    )
+
+    assert "Current verified main: `3a681620` (`Add status current-state audit (#1613)`)." in updated
+    assert "Latest substantive work: PR #1613 (`Add status current-state audit (#1613)`)." in updated
+    assert "Post-merge handoff status: PASS/NOOP after PR #1613 administrative refresh." in updated
+    assert "Next safe step: continue from fresh main with the next planned governed slice." in updated
+    assert "Current verified main: `history1` (`Historical`)." in updated
+
 
 
 def test_admin_refresh_replaces_existing_operational_refresh_marker(tmp_path: Path, monkeypatch) -> None:

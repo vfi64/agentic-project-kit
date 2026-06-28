@@ -1285,6 +1285,35 @@ def _admin_refresh_successor_prompt_path(after_pr: int) -> str:
     return f"docs/reports/terminal/post-pr{after_pr}-successor-chat-handoff.md"
 
 
+def _refresh_status_current_state_block(text: str, *, after_pr: int, short: str, subject: str) -> str:
+    match = re.search(r"(?ms)^## Current State\s*(.*?)(?=^## |\Z)", text)
+    if not match:
+        return text
+
+    block = match.group(0)
+    replacements = (
+        (
+            r"^Current verified main:.*$",
+            f"Current verified main: `{short}` (`{subject}`).",
+        ),
+        (
+            r"^Latest substantive .*$",
+            f"Latest substantive work: PR #{after_pr} (`{subject}`).",
+        ),
+        (
+            r"^Post-merge handoff status:.*$",
+            f"Post-merge handoff status: PASS/NOOP after PR #{after_pr} administrative refresh.",
+        ),
+        (
+            r"^Next safe step:.*$",
+            "Next safe step: continue from fresh main with the next planned governed slice.",
+        ),
+    )
+    for pattern, replacement in replacements:
+        block = re.sub(pattern, replacement, block, count=1, flags=re.MULTILINE)
+    return text[: match.start()] + block + text[match.end() :]
+
+
 def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProcess[str]:
     command = ["admin-refresh-operational-handoff-docs", "--after-pr", str(after_pr)]
     try:
@@ -1363,6 +1392,13 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
             if not file_path.exists():
                 continue
             current = file_path.read_text(encoding="utf-8").replace("\\n", "\n")
+            if file_name == "docs/STATUS.md":
+                current = _refresh_status_current_state_block(
+                    current,
+                    after_pr=after_pr,
+                    short=short,
+                    subject=subject,
+                )
             refreshed = operational_refresh_marker_pattern.sub("", current).rstrip() + marker
             if refreshed != current:
                 file_path.write_text(refreshed, encoding="utf-8")
