@@ -24,8 +24,8 @@ def test_project_direction_text_output_contains_sections() -> None:
     assert "Strategy" in rendered
     assert "Roadmap" in rendered
     assert "Ideas" in rendered
-    assert "v0.4.10" in rendered
-    assert "v0.5.0" in rendered
+    assert "v0.4.12" in rendered
+    assert "post-v0.4.12-external-operating-model" in rendered
 
 
 def test_project_direction_json_section_output() -> None:
