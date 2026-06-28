@@ -22,8 +22,9 @@ from agentic_project_kit.gui_cockpit import (
     recommended_recovery_action_id,
 )
 from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperStatus
-from agentic_project_kit.gui_task_editor import CANONICAL_TRANSFER_INBOX_PATH
+from agentic_project_kit.gui_task_editor import CANONICAL_TRANSFER_INBOX_PATH, task_editor_visible_for_mode
 from agentic_project_kit.gui_presenter import build_basic_no_window_presenter_result
+from agentic_project_kit.gui_tk_widgets import attach_tooltip
 from agentic_project_kit.gui_tkinter_shell import (
     build_tkinter_shell_spec,
     run_basic_cockpit_button,
@@ -75,6 +76,14 @@ def _button(
         wrapper_command=("agentic-kit", "test"),
         gui_gate="test_gate",
     )
+
+
+class _TooltipSmokeWidget:
+    def __init__(self) -> None:
+        self.bind_counts: dict[str, int] = {}
+
+    def bind(self, event: str, callback: object) -> None:
+        self.bind_counts[event] = self.bind_counts.get(event, 0) + 1
 
 
 def test_basic_cockpit_traffic_light_states_are_deterministic() -> None:
@@ -237,6 +246,25 @@ def test_basic_no_window_presenter_and_tkinter_smoke_expose_basic_state() -> Non
     assert "communication_mode=file_transfer" in presenter.rendered
     assert shell.traffic_light_state == "READY"
     assert shell.basic_button_count == len(basic_gui_buttons())
+
+
+def test_cockpit_smoke_contract_covers_actions_transfer_task_editor_and_tooltips() -> None:
+    view_model = build_basic_cockpit_view_model(gatekeeper_status=_status())
+    presenter = build_basic_no_window_presenter_result(gatekeeper_status=_status())
+    shell = build_tkinter_shell_spec(_status())
+    action_views = ordered_action_views(build_gui_action_views())
+    widget = _TooltipSmokeWidget()
+
+    attach_tooltip(widget, "First")
+    attach_tooltip(widget, "Second")
+
+    assert presenter.ok is True
+    assert shell.action_count > 0
+    assert action_views
+    assert any(action.action_id == "gate.doctor" for action in action_views)
+    assert view_model.communication_mode == "file_transfer"
+    assert task_editor_visible_for_mode(view_model.communication_mode)
+    assert widget.bind_counts == {"<Enter>": 1, "<Leave>": 1}
 
 
 def test_basic_cockpit_summary_is_stable_for_entrypoint_output() -> None:
