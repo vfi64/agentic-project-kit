@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a18840de93e62747328449af3fc8f2f366517caf
-  short: a18840de
-  subject: Separate communication mode examples in cockpit (#1635)
+  full: 21bc5fbc022b71684bdfb38a05e60bc5a4e81640
+  short: 21bc5fbc
+  subject: Harden wrapper live-status interrupt policy (#1637)
 last_substantive_work_state:
-  full: a18840de93e62747328449af3fc8f2f366517caf
-  short: a18840de
-  subject: Separate communication mode examples in cockpit (#1635)
+  full: 21bc5fbc022b71684bdfb38a05e60bc5a4e81640
+  short: 21bc5fbc
+  subject: Harden wrapper live-status interrupt policy (#1637)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
