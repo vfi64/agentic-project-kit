@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a430876454a4578a31dafbd885b0400697bd95e7
-  short: a4308764
-  subject: Add reviewed documentation registry registration command (#1639)
+  full: 5bf515840b3e5fc1167d76ce152a3fde572b374d
+  short: 5bf51584
+  subject: Add register subcommand to rule-registry (#1641)
 last_substantive_work_state:
-  full: a430876454a4578a31dafbd885b0400697bd95e7
-  short: a4308764
-  subject: Add reviewed documentation registry registration command (#1639)
+  full: 5bf515840b3e5fc1167d76ce152a3fde572b374d
+  short: 5bf51584
+  subject: Add register subcommand to rule-registry (#1641)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
