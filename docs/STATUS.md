@@ -7,9 +7,9 @@ Current verified release: 0.4.11.
 Current release tag: v0.4.11.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20917074`.
-Current verified main: `5850cade` (`Detect conflicting verified-main HEAD lines (#1647)`).
-Latest substantive work: PR #1647 (`Detect conflicting verified-main HEAD lines (#1647)`).
-Post-merge handoff status: PASS/NOOP after PR #1647 administrative refresh.
+Current verified main: `d9469c00` (`Publish final remote-next report projection`).
+Latest substantive work: PR #1649 (`Publish final remote-next report projection`).
+Post-merge handoff status: PASS/NOOP after PR #1649 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -397,6 +397,6 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
 - Portability closeout: in progress; all tracked shell scripts removed in Slice 6, pending final gates and PR merge.
 - Portability closeout: legacy `ns` and `ns-menu` entrypoints removed; no tracked shell scripts remain, pending final gates and PR merge.
-## Operational documentation refresh state after PR #1647
+## Operational documentation refresh state after PR #1649
 
-Current administrative handoff refresh state is `5850cade` (`Detect conflicting verified-main HEAD lines (#1647)`). Continue next only after this post-PR1647 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `d9469c00` (`Publish final remote-next report projection`). Continue next only after this post-PR1649 refresh is committed and merged; the next substantive slice must be created from fresh main.
