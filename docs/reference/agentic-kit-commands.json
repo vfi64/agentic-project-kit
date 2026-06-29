@@ -72,6 +72,20 @@
         },
         {
           "default": false,
+          "help": "Collect expired untracked files and empty directories under repository-local tmp/.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "local_tmp_contents",
+          "opts": [
+            "--local-tmp-contents"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
           "help": "Collect expired docs/reports/transfer_runs files.",
           "is_flag": true,
           "metavar": null,

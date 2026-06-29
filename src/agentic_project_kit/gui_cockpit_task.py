@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from pathlib import Path
 import subprocess
 from typing import Any
 
@@ -142,6 +143,144 @@ class CockpitTaskMixin:
         ).pack(fill=tk.X, pady=(7, 0))
         self.refresh_task_editor_buttons()
 
+    def _build_file_browser(self, parent: Any) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        browser_frame = tk.Frame(
+            parent,
+            bg=THEME.color_panel_bg,
+            highlightbackground=THEME.color_border,
+            highlightthickness=1,
+            padx=THEME.section_padding,
+            pady=8,
+        )
+        browser_frame.pack(fill=tk.X, pady=(0, 10))
+        header = tk.Frame(browser_frame, bg=THEME.color_panel_bg)
+        header.pack(fill=tk.X, pady=(0, 6))
+        tk.Label(
+            header,
+            text="COPY / PASTE FILES",
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.section_font,
+            anchor=tk.W,
+        ).pack(side=tk.LEFT)
+        tk.Label(
+            header,
+            text="read-only local browser",
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+        ).pack(side=tk.RIGHT)
+
+        body = tk.Frame(browser_frame, bg=THEME.color_panel_bg)
+        body.pack(fill=tk.X)
+        self.file_browser = tk.Listbox(body, height=5, font=THEME.small_font, exportselection=False)
+        self.file_browser.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        scrollbar = ttk.Scrollbar(body, orient=tk.VERTICAL, command=self.file_browser.yview)
+        self.file_browser.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side=tk.LEFT, fill=tk.Y, padx=(4, 8))
+
+        buttons = tk.Frame(body, bg=THEME.color_panel_bg)
+        buttons.pack(side=tk.LEFT, fill=tk.Y)
+        refresh = ttk.Button(buttons, text="Refresh files", command=self.refresh_file_browser)
+        refresh.pack(fill=tk.X, pady=(0, 5))
+        attach_tooltip(refresh, "Refresh the local read-only file list for tmp and handoff files.")
+        copy_path = ttk.Button(buttons, text="Copy path", command=self.copy_selected_file_path)
+        copy_path.pack(fill=tk.X, pady=(0, 5))
+        attach_tooltip(copy_path, "Copy the selected repository-relative path to the clipboard.")
+        copy_file = ttk.Button(buttons, text="Copy file", command=self.copy_selected_file_content)
+        copy_file.pack(fill=tk.X)
+        attach_tooltip(copy_file, "Copy the selected text file content to the clipboard without editing it.")
+
+        self.file_browser_paths: list[str] = []
+        self.refresh_file_browser(write_status=False)
+
+    def _file_browser_roots(self) -> tuple[Path, ...]:
+        return (
+            Path("tmp"),
+            Path("docs/handoff"),
+            Path("docs/reports/handoff-packages/latest"),
+        )
+
+    def _iter_file_browser_paths(self) -> tuple[str, ...]:
+        paths: list[str] = []
+        for relative_root in self._file_browser_roots():
+            root = self.project_root / relative_root
+            if not root.exists() or not root.is_dir():
+                continue
+            for path in sorted(root.rglob("*")):
+                if path.is_symlink() or not path.is_file():
+                    continue
+                try:
+                    rel = path.relative_to(self.project_root).as_posix()
+                except ValueError:
+                    continue
+                paths.append(rel)
+        return tuple(paths[:300])
+
+    def refresh_file_browser(self, *, write_status: bool = True) -> None:
+        paths = list(self._iter_file_browser_paths())
+        self.file_browser_paths = paths
+        self.file_browser.delete(0, "end")
+        for path in paths:
+            self.file_browser.insert("end", path)
+        if write_status:
+            self.write_output(f"\nFile browser refreshed: {len(paths)} local files listed.\n")
+
+    def _selected_file_browser_path(self) -> Path | None:
+        selection = self.file_browser.curselection()
+        if not selection:
+            self.write_output("\nSelect a file in the Copy / Paste Files browser first.\n")
+            return None
+        index = int(selection[0])
+        try:
+            relative = self.file_browser_paths[index]
+        except IndexError:
+            self.write_output("\nSelected file is no longer available. Refresh files and try again.\n")
+            return None
+        path = (self.project_root / relative).resolve()
+        try:
+            path.relative_to(self.project_root.resolve())
+        except ValueError:
+            self.write_output("\nBlocked: selected path is outside the project root.\n")
+            return None
+        return path
+
+    def copy_selected_file_path(self) -> None:
+        path = self._selected_file_browser_path()
+        if path is None:
+            return
+        relative = path.relative_to(self.project_root).as_posix()
+        self.root.clipboard_clear()
+        self.root.clipboard_append(relative)
+        if hasattr(self.root, "update"):
+            self.root.update()
+        self.write_output(f"\nCopied path: {relative}\n")
+
+    def copy_selected_file_content(self) -> None:
+        path = self._selected_file_browser_path()
+        if path is None:
+            return
+        relative = path.relative_to(self.project_root).as_posix()
+        try:
+            content = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            self.write_output(f"\nBlocked: {relative} is not a UTF-8 text file.\n")
+            return
+        except OSError as exc:
+            self.write_output(f"\nBlocked: could not read {relative}: {exc}\n")
+            return
+        if len(content) > 200_000:
+            self.write_output(f"\nBlocked: {relative} is too large to copy safely from the GUI.\n")
+            return
+        self.root.clipboard_clear()
+        self.root.clipboard_append(content)
+        if hasattr(self.root, "update"):
+            self.root.update()
+        self.write_output(f"\nCopied file content: {relative}\n")
+
     def _build_output_panel(self, parent: Any) -> None:
         import tkinter as tk
         from tkinter import ttk
@@ -165,6 +304,16 @@ class CockpitTaskMixin:
             font=THEME.section_font,
             anchor=tk.W,
         ).pack(side=tk.LEFT)
+        self.busy_status_var = tk.StringVar(value="Ready")
+        tk.Label(
+            output_header,
+            textvariable=self.busy_status_var,
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+        ).pack(side=tk.LEFT, padx=(10, 0))
+        self.busy_progress = ttk.Progressbar(output_header, mode="indeterminate", length=120)
+        self.busy_progress.pack(side=tk.LEFT, padx=(8, 0))
         clear_button = ttk.Button(output_header, text="Clear", command=self.clear_output)
         attach_tooltip(clear_button, "Clear the output panel.")
         clear_button.pack(side=tk.RIGHT)
@@ -187,6 +336,19 @@ class CockpitTaskMixin:
     def write_output(self, text: str) -> None:
         self.output.insert("end", text)
         self.output.see("end")
+
+    def _set_busy(self, text: str, *, running: bool) -> None:
+        busy_var = getattr(self, "busy_status_var", None)
+        progress = getattr(self, "busy_progress", None)
+        if busy_var is not None:
+            busy_var.set(text)
+        if progress is not None:
+            if running:
+                progress.start(8)
+            else:
+                progress.stop()
+        if hasattr(self.root, "update_idletasks"):
+            self.root.update_idletasks()
 
     def clear_output(self) -> None:
         self.output.delete("1.0", "end")
@@ -255,14 +417,21 @@ class CockpitTaskMixin:
     def _agentic_command(self, *parts: str) -> subprocess.CompletedProcess[str]:
         executable = self.project_root / ".venv" / "bin" / "agentic-kit"
         command = [str(executable) if executable.exists() else "agentic-kit", *parts]
-        return subprocess.run(
-            command,
-            cwd=self.project_root,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
-        )
+        label = "agentic-kit " + " ".join(parts[:3])
+        self._set_busy(f"Running: {label}", running=True)
+        try:
+            completed = subprocess.run(
+                command,
+                cwd=self.project_root,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+        except OSError as exc:
+            completed = subprocess.CompletedProcess(command, 127, "", str(exc))
+        self._set_busy("Done" if completed.returncode == 0 else "Blocked", running=False)
+        return completed
 
     def show_initial_llm_prompt(self) -> None:
         completed = self._agentic_command("gui", "initial-llm-prompt", "--json")

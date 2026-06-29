@@ -90,18 +90,35 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
         separator = ttk.Separator(body, orient=tk.VERTICAL)
         separator.pack(side=tk.LEFT, fill=tk.Y)
 
-        main_area = tk.Frame(
+        main_scroll_shell = tk.Frame(
             body,
             bg=THEME.color_panel_bg,
             padx=THEME.frame_padding,
             pady=THEME.frame_padding,
         )
-        main_area.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        main_scroll_shell.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        main_canvas = tk.Canvas(main_scroll_shell, bg=THEME.color_panel_bg, highlightthickness=0)
+        main_scrollbar = ttk.Scrollbar(main_scroll_shell, orient=tk.VERTICAL, command=main_canvas.yview)
+        main_canvas.configure(yscrollcommand=main_scrollbar.set)
+        main_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        main_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        main_area = tk.Frame(main_canvas, bg=THEME.color_panel_bg)
+        main_window = main_canvas.create_window((0, 0), window=main_area, anchor=tk.NW)
+        main_area.bind(
+            "<Configure>",
+            lambda _event: main_canvas.configure(scrollregion=main_canvas.bbox(tk.ALL)),
+        )
+        main_canvas.bind(
+            "<Configure>",
+            lambda event: main_canvas.itemconfigure(main_window, width=event.width),
+        )
 
         self._build_sidebar(sidebar)
         self._build_next_step_panel(main_area)
         self._build_action_cards(main_area)
         self._build_task_editor(main_area)
+        self._build_file_browser(main_area)
         self._build_output_panel(main_area)
 
         self.write_output(format_basic_cockpit_summary(self.basic_view) + "\n")

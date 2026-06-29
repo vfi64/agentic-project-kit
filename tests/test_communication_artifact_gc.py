@@ -392,7 +392,7 @@ def test_artifact_gc_cli_transfer_runs_dry_run(tmp_path: Path, monkeypatch) -> N
     latest = base / "latest-transfer-report.log"
     stale.write_text("old\n", encoding="utf-8")
     latest.write_text("latest\n", encoding="utf-8")
-    old_time = 1_000_000.0 - (2 * 24 * 60 * 60)
+    old_time = 100.0
     os.utime(stale, (old_time, old_time))
     os.utime(latest, (old_time, old_time))
 
@@ -414,3 +414,63 @@ def test_artifact_gc_cli_rejects_two_modes() -> None:
 
     assert result.exit_code == 1
     assert "FAIL_MUTUALLY_EXCLUSIVE_MODES" in result.output
+
+
+def test_artifact_gc_cli_local_tmp_contents_is_local_only_dry_run(tmp_path: Path, monkeypatch) -> None:
+    import os
+    import json
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    stale = tmp_path / "tmp" / "old.bin"
+    stale.parent.mkdir()
+    stale.write_text("old\n", encoding="utf-8")
+    old_time = 100.0
+    os.utime(stale, (old_time, old_time))
+
+    monkeypatch.chdir(tmp_path)
+    result = CliRunner().invoke(
+        app,
+        ["artifact-gc", "--local-tmp-contents", "--older-than", "1970-01-02T00:00:00Z", "--json"],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["mode"] == "local-tmp-contents"
+    assert payload["dry_run"] is True
+    assert payload["remote_execution_policy"]["status"] == "forbidden"
+    assert "tmp/old.bin" in payload["deleted"]
+    assert stale.exists()
+
+
+def test_artifact_gc_cli_local_tmp_contents_execute_deletes_only_local_tmp(tmp_path: Path, monkeypatch) -> None:
+    import os
+    import json
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    stale = tmp_path / "tmp" / "old.bin"
+    stale.parent.mkdir()
+    stale.write_text("old\n", encoding="utf-8")
+    old_time = 100.0
+    os.utime(stale, (old_time, old_time))
+
+    monkeypatch.chdir(tmp_path)
+    result = CliRunner().invoke(
+        app,
+        [
+            "artifact-gc",
+            "--local-tmp-contents",
+            "--older-than",
+            "1970-01-02T00:00:00Z",
+            "--execute",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["mode"] == "local-tmp-contents"
+    assert payload["dry_run"] is False
+    assert "tmp/old.bin" in payload["deleted"]
+    assert not stale.exists()
