@@ -106,6 +106,22 @@ def test_humanize_finish_dry_run_allows_confirm_publish() -> None:
     assert message.allow_confirm_publish is True
 
 
+def test_humanize_discard_dry_run_allows_confirm_discard() -> None:
+    message = humanize_work_result(
+        {
+            "result_status": "PASS",
+            "action": "work-discard-changes",
+            "dry_run": True,
+            "changed_paths": ["src/example.py", "new.txt"],
+        }
+    )
+
+    assert message.headline == "Ready to discard changes."
+    assert message.suggested_next == "Confirm discard"
+    assert message.allow_confirm_discard is True
+    assert message.allow_confirm_publish is False
+
+
 def test_humanize_blocked_result_lists_human_blockers() -> None:
     message = humanize_work_result(
         {"result_status": "BLOCKED", "action": "work-check", "blockers": ["ruff", "pytest-core"]}
@@ -123,6 +139,14 @@ def test_humanize_unknown_blocker_has_generic_line() -> None:
     )
 
     assert message.blockers_human == ("A step did not pass: new-gate.",)
+
+
+def test_humanize_discard_main_branch_blocker() -> None:
+    message = humanize_work_result(
+        {"result_status": "BLOCKED", "action": "work-discard-changes", "blockers": ["main-branch"]}
+    )
+
+    assert "blocked on main" in message.blockers_human[0]
 
 
 def test_slugify_work_title_hides_branch_concept_behind_safe_name() -> None:

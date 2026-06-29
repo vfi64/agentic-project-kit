@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `195`
+- Command count: `196`
 
 ## Commands
 
@@ -1577,6 +1577,16 @@ Run common human workflow gates without committing or pushing.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `profile` | `TyperOption` | --profile | `False` | `code` | Check profile: minimal, code, docs, or release. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit work discard-changes`
+
+Preview or execute the explicit destructive discard-all workflow.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `execute` | `TyperOption` | --execute | `False` | `False` | Discard all feature-branch changes. Dry-run is the default. |
+| `expected_signature` | `TyperOption` | --expected-signature | `False` | `` | Optional dry-run signature that must match before execute. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit work finish`

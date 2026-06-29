@@ -146,6 +146,35 @@ class CockpitHeaderMixin:
             "Runs agentic-kit work finish --execute only after a successful dry-run preview.",
         )
         self.work_finish_confirm_button.pack(side=tk.RIGHT)
+        self.work_discard_confirm_button = ttk.Button(
+            frame,
+            text="Confirm discard",
+            command=self.confirm_discard_changes,
+            state=tk.DISABLED,
+        )
+        attach_tooltip(
+            self.work_discard_confirm_button,
+            "Runs agentic-kit work discard-changes --execute only after a matching dry-run preview.",
+        )
+        self.work_discard_confirm_button.pack(side=tk.RIGHT, padx=(0, 8))
+        discard_button = tk.Button(
+            frame,
+            text="Discard all changes",
+            command=self.preview_discard_changes,
+            bg=THEME.color_destructive,
+            fg="#7a1f1f",
+            font=THEME.body_font,
+            relief=tk.GROOVE,
+            bd=1,
+            padx=8,
+            pady=4,
+            state=tk.NORMAL if self._discard_available() else tk.DISABLED,
+        )
+        attach_tooltip(
+            discard_button,
+            "Destructive: first previews all feature-branch changes, then requires Confirm discard.",
+        )
+        discard_button.pack(side=tk.RIGHT, padx=(0, 8))
         ttk.Separator(parent, orient=tk.HORIZONTAL).pack(fill=tk.X)
 
     def _start_from_ref_options(self) -> tuple[str, ...]:
@@ -251,6 +280,7 @@ class CockpitHeaderMixin:
         completed: subprocess.CompletedProcess[str],
         *,
         allow_confirm_from_preview: bool = False,
+        allow_confirm_discard_from_preview: bool = False,
     ) -> dict[str, object] | None:
         output = completed.stdout or completed.stderr
         payload: dict[str, object] | None = None
@@ -264,6 +294,7 @@ class CockpitHeaderMixin:
         if payload is None:
             self.write_output("\n" + output + "\n")
             self._disable_confirm_publish()
+            self._disable_confirm_discard()
             return None
         message = humanize_work_result(payload)
         lines = [
@@ -280,14 +311,29 @@ class CockpitHeaderMixin:
             self.pending_finish_preview = payload
             if self.work_finish_confirm_button is not None:
                 self.work_finish_confirm_button.configure(state="normal")
+            self._disable_confirm_discard()
+        elif allow_confirm_discard_from_preview and message.allow_confirm_discard:
+            self.pending_discard_preview = payload
+            if self.work_discard_confirm_button is not None:
+                self.work_discard_confirm_button.configure(state="normal")
+            self._disable_confirm_publish()
         else:
             self._disable_confirm_publish()
+            self._disable_confirm_discard()
         return payload
 
     def _disable_confirm_publish(self) -> None:
         self.pending_finish_preview = None
         if self.work_finish_confirm_button is not None:
             self.work_finish_confirm_button.configure(state="disabled")
+
+    def _disable_confirm_discard(self) -> None:
+        self.pending_discard_preview = None
+        if self.work_discard_confirm_button is not None:
+            self.work_discard_confirm_button.configure(state="disabled")
+
+    def _discard_available(self) -> bool:
+        return self.current_branch() not in {"", "unknown", "main", "master"} and bool(self._changed_paths())
 
     def start_work_cycle(self) -> None:
         title = self.current_task_body()
@@ -399,4 +445,33 @@ class CockpitHeaderMixin:
 
     def run_work_recover(self) -> None:
         completed = self._agentic_command("work", "recover", "--json")
+        self._write_work_command_result(completed)
+
+    def preview_discard_changes(self) -> None:
+        completed = self._agentic_command("work", "discard-changes", "--json")
+        payload = self._write_work_command_result(completed, allow_confirm_discard_from_preview=True)
+        if payload and self.pending_discard_preview is not None:
+            self.pending_discard_preview = {
+                "payload": payload,
+                "signature": self._work_cycle_signature(),
+                "discard_signature": str(payload.get("signature", "")),
+            }
+
+    def confirm_discard_changes(self) -> None:
+        if not self.pending_discard_preview:
+            self.write_output("\nRun Discard all changes first. Confirm is enabled only after a passing dry-run.\n")
+            return
+        if self.pending_discard_preview.get("signature") != self._work_cycle_signature():
+            self.write_output("\nChanged files moved after the dry-run. Run Discard all changes again before confirming.\n")
+            self._disable_confirm_discard()
+            return
+        discard_signature = str(self.pending_discard_preview.get("discard_signature", ""))
+        completed = self._agentic_command(
+            "work",
+            "discard-changes",
+            "--execute",
+            "--expected-signature",
+            discard_signature,
+            "--json",
+        )
         self._write_work_command_result(completed)

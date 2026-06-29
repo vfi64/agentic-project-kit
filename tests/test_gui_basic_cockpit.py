@@ -561,6 +561,23 @@ def test_work_cycle_finish_requires_dry_run_before_execute() -> None:
     assert "Run Finish & publish first" in source
 
 
+def test_work_cycle_discard_changes_is_separate_destructive_confirm_flow() -> None:
+    source = _cockpit_sources()
+    preview_source = inspect.getsource(CockpitGui.preview_discard_changes)
+    confirm_source = inspect.getsource(CockpitGui.confirm_discard_changes)
+    recover_source = inspect.getsource(CockpitGui.run_work_recover)
+
+    assert "Discard all changes" in source
+    assert "Confirm discard" in source
+    assert "pending_discard_preview" in source
+    assert '"discard-changes"' in preview_source
+    assert '"--execute"' not in preview_source
+    assert '"--execute"' in confirm_source
+    assert '"--expected-signature"' in confirm_source
+    assert "self._work_cycle_signature()" in confirm_source
+    assert '"discard-changes"' not in recover_source
+
+
 def test_work_cycle_uses_existing_work_wrappers_not_direct_remote_mutation() -> None:
     source = _cockpit_sources()
 
