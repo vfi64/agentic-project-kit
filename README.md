@@ -196,6 +196,14 @@ Reviewed single-entry additions use `agentic-kit doc-registry register --path PA
 --class CLASS --json`; `agentic-kit doc-registry check-unregistered --json`
 lists unregistered document candidates as WARN without starting broad migration.
 
+## Rule registry
+
+`agentic-kit rule-registry check` validates the governed rule mechanism registry.
+`agentic-kit rule-registry report --json` summarizes direct coverage and follow-up
+state. Reviewed additive rule entries use `agentic-kit rule-registry register`
+with direct source and test evidence; it does not edit or deactivate existing
+rules and fails closed when the registry would no longer validate.
+
 ## Deterministic quality heuristics
 
 `agentic-kit check-docs` includes deterministic document-quality heuristics for machine-checkable problems such as unresolved placeholder markers, stale handoff markers, missing required sections, missing coverage terms, and documentation drift.

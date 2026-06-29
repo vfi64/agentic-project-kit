@@ -4375,6 +4375,228 @@
     },
     {
       "group": "rule-registry",
+      "help": "Add one reviewed rule mechanism with direct evidence coverage.",
+      "name": "register",
+      "params": [
+        {
+          "default": null,
+          "help": "Unique rule mechanism id.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "mechanism_id",
+          "opts": [
+            "--id"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Rule mechanism class/category.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "rule_class",
+          "opts": [
+            "--class"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Responsible owner.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "owner",
+          "opts": [
+            "--owner"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Positive enforcement priority.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "priority",
+          "opts": [
+            "--priority"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Allowed enforcement phase.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "enforcement_phase",
+          "opts": [
+            "--enforcement-phase"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Conflict domain; repeat for multiple domains.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "conflict_domains",
+          "opts": [
+            "--conflict-domain"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Covered rule surface; repeat for multiple surfaces.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "surfaces",
+          "opts": [
+            "--surface"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Repository-relative source path.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "source_path",
+          "opts": [
+            "--source"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Required source anchor term; repeat for multiple terms.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "required_terms",
+          "opts": [
+            "--required-term"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Direct regression test path; repeat for multiple tests.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "test_paths",
+          "opts": [
+            "--test"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Protected intent preserved by this rule.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "protected_rule_intent",
+          "opts": [
+            "--protected-rule-intent"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Direct coverage assertion statement.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "assertion_statement",
+          "opts": [
+            "--assertion-statement"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "guard",
+          "help": "Coverage assertion kind.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "assertion_kind",
+          "opts": [
+            "--assertion-kind"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "rule-registry",
+        "register"
+      ],
+      "qualified_name": "agentic-kit rule-registry register"
+    },
+    {
+      "group": "rule-registry",
       "help": "",
       "name": "report",
       "params": [

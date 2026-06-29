@@ -224,6 +224,30 @@ Accepted hardening mechanisms:
 
 Do not add normative rules that exist only as prose without a matching test, gate, coverage requirement, or explicit exception. Review-only exceptions must name why the rule cannot currently be enforced deterministically and what evidence reviewers should inspect.
 
+## Rule Registry Gate
+
+`agentic-kit rule-registry check` validates the governed rule mechanism registry.
+`agentic-kit rule-registry report --json` exposes direct coverage and follow-up
+state for review. Reviewed additive rule entries must use
+`agentic-kit rule-registry register` with direct source/test evidence when a
+single new mechanism is being registered.
+
+The register path is intentionally narrow:
+
+- add one reviewed mechanism and matching direct coverage entry;
+- preserve all existing rules and schema fields;
+- fail before writing when required fields, duplicate ids, baseline validation,
+  or candidate validation do not pass;
+- report whether the new rule is gate-relevant;
+- never edit, delete, deactivate, or silently change existing rule behavior.
+
+Required evidence:
+
+    python -m pytest -q tests/test_rule_registry_registration.py tests/test_rule_registry_validator.py tests/test_rule_registry_report.py
+    agentic-kit rule-registry check
+    agentic-kit rule-registry report --json
+    agentic-kit check-docs
+
 ## Control File Preservation Gate
 
 Critical control files must not lose active rules for compactness, token budget, or broad rewrite convenience. Information preservation outranks compactness.

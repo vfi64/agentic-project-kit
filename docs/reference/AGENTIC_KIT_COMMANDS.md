@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `193`
+- Command count: `194`
 
 ## Commands
 
@@ -748,6 +748,28 @@ Render the local release lifecycle state without mutating release files.
 ### `agentic-kit rule-registry check`
 
 _No parameters._
+
+### `agentic-kit rule-registry register`
+
+Add one reviewed rule mechanism with direct evidence coverage.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `mechanism_id` | `TyperOption` | --id | `True` |  | Unique rule mechanism id. |
+| `rule_class` | `TyperOption` | --class | `True` |  | Rule mechanism class/category. |
+| `owner` | `TyperOption` | --owner | `True` |  | Responsible owner. |
+| `priority` | `TyperOption` | --priority | `True` |  | Positive enforcement priority. |
+| `enforcement_phase` | `TyperOption` | --enforcement-phase | `True` |  | Allowed enforcement phase. |
+| `conflict_domains` | `TyperOption` | --conflict-domain | `True` |  | Conflict domain; repeat for multiple domains. |
+| `surfaces` | `TyperOption` | --surface | `True` |  | Covered rule surface; repeat for multiple surfaces. |
+| `source_path` | `TyperOption` | --source | `True` |  | Repository-relative source path. |
+| `required_terms` | `TyperOption` | --required-term | `True` |  | Required source anchor term; repeat for multiple terms. |
+| `test_paths` | `TyperOption` | --test | `True` |  | Direct regression test path; repeat for multiple tests. |
+| `protected_rule_intent` | `TyperOption` | --protected-rule-intent | `True` |  | Protected intent preserved by this rule. |
+| `assertion_statement` | `TyperOption` | --assertion-statement | `True` |  | Direct coverage assertion statement. |
+| `assertion_kind` | `TyperOption` | --assertion-kind | `False` | `guard` | Coverage assertion kind. |
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit rule-registry report`
 
