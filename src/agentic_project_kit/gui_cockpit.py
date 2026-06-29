@@ -99,6 +99,7 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
         main_area.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         self._build_sidebar(sidebar)
+        self._build_next_step_panel(main_area)
         self._build_action_cards(main_area)
         self._build_task_editor(main_area)
         self._build_output_panel(main_area)

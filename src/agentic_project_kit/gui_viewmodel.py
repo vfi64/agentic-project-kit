@@ -79,6 +79,19 @@ class BasicCockpitRecommendedAction:
 
 
 @dataclass(frozen=True)
+class BasicCockpitNextStepViewModel:
+    state_label: str
+    title: str
+    message: str
+    primary_label: str
+    primary_kind: str
+    primary_command_id: str
+    primary_cockpit_action_id: str
+    primary_enabled: bool
+    reason: str
+
+
+@dataclass(frozen=True)
 class BasicCockpitButtonGroupViewModel:
     group_id: str
     label: str
@@ -115,6 +128,19 @@ class BasicCockpitViewModel:
             kind="run_button",
             command_id="status-refresh",
             enabled=True,
+        )
+    )
+    next_step: BasicCockpitNextStepViewModel = field(
+        default_factory=lambda: BasicCockpitNextStepViewModel(
+            state_label="READY",
+            title="Next step",
+            message="Refresh status before choosing a next action.",
+            primary_label="Refresh status",
+            primary_kind="run_button",
+            primary_command_id="status-refresh",
+            primary_cockpit_action_id="workflow.state",
+            primary_enabled=True,
+            reason="State has not been inspected yet.",
         )
     )
     button_groups: tuple[BasicCockpitButtonGroupViewModel, ...] = ()
@@ -369,6 +395,32 @@ def _recommended_action_for_state(
     )
 
 
+def _next_step_view(
+    *,
+    traffic_state: str,
+    reason: str,
+    recommended_action: BasicCockpitRecommendedAction,
+) -> BasicCockpitNextStepViewModel:
+    title_by_state = {
+        "READY": "Ready for the next safe step",
+        "WAIT_FOR_D2": "Communication refresh required",
+        "WAIT": "Waiting for external state",
+        "BLOCKED": "Fix blockers before continuing",
+        "FAILED": "Preserve evidence and diagnose",
+    }
+    return BasicCockpitNextStepViewModel(
+        state_label=traffic_state,
+        title=title_by_state.get(traffic_state, "Next step"),
+        message=recommended_action.description,
+        primary_label=recommended_action.label,
+        primary_kind=recommended_action.kind,
+        primary_command_id=recommended_action.command_id,
+        primary_cockpit_action_id=recommended_action.cockpit_action_id,
+        primary_enabled=recommended_action.enabled,
+        reason=reason,
+    )
+
+
 def _button_group_for(button: BasicCockpitButtonViewModel) -> tuple[str, str, str]:
     command_id = button.command_id
     if command_id in {"status-refresh", "run-next-work-order", "close-out-last-run"}:
@@ -434,6 +486,12 @@ def build_basic_cockpit_view_model(
     selected_access_level: AccessLevel = normalize_access_level(access_level)
     mutation_allowed = traffic_state == "READY" and status.ready_for_mutating_actions
     button_models = _basic_button_view_models(status, traffic_state=traffic_state, buttons=buttons)
+    recommended_action = _recommended_action_for_state(
+        status,
+        traffic_state=traffic_state,
+        next_action=next_action,
+        mutation_allowed=mutation_allowed,
+    )
     evidence = (
         f"branch={status.branch}; workflow_state={status.workflow_state}; "
         f"current_work_state={status.current_work_state or '<none>'}"
@@ -458,11 +516,11 @@ def build_basic_cockpit_view_model(
         buttons=button_models,
         last_result="No action has run in this GUI session.",
         explanation="Basic Mode is a thin control surface over registered wrappers, gatekeeper state, typed work orders, evidence, and readiness reports.",
-        recommended_action=_recommended_action_for_state(
-            status,
+        recommended_action=recommended_action,
+        next_step=_next_step_view(
             traffic_state=traffic_state,
-            next_action=next_action,
-            mutation_allowed=mutation_allowed,
+            reason=reason,
+            recommended_action=recommended_action,
         ),
         button_groups=_group_basic_buttons(button_models),
         recovery_hint=_recovery_hint(status, traffic_state),

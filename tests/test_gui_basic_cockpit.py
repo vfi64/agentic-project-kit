@@ -336,6 +336,29 @@ def test_recommended_zone_shows_next_safe_action() -> None:
     assert view_model.reason in text
 
 
+def test_view_model_exposes_central_next_step_guidance() -> None:
+    view_model = build_basic_cockpit_view_model(gatekeeper_status=_status())
+
+    assert view_model.next_step.state_label == "READY"
+    assert view_model.next_step.title == "Ready for the next safe step"
+    assert view_model.next_step.message == view_model.recommended_action.description
+    assert view_model.next_step.primary_label == view_model.recommended_action.label
+    assert view_model.next_step.primary_kind == view_model.recommended_action.kind
+    assert view_model.next_step.primary_command_id == view_model.recommended_action.command_id
+
+
+def test_view_model_next_step_uses_blocked_recovery_language() -> None:
+    view_model = build_basic_cockpit_view_model(
+        gatekeeper_status=_status(git_dirty=True, blockers=("working tree is dirty",))
+    )
+
+    assert view_model.next_step.state_label == "BLOCKED"
+    assert view_model.next_step.title == "Fix blockers before continuing"
+    assert view_model.next_step.primary_label == "Open diagnostics"
+    assert view_model.next_step.primary_kind == "select_action"
+    assert view_model.next_step.primary_cockpit_action_id == "gate.doctor"
+
+
 def test_recommended_zone_recovery_only_selects_does_not_run() -> None:
     view_model = build_basic_cockpit_view_model(
         gatekeeper_status=_status(git_dirty=True, blockers=("working tree is dirty",))

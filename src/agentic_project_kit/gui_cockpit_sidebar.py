@@ -92,8 +92,6 @@ class CockpitSidebarMixin:
             wraplength=255,
         ).pack(fill=tk.X, pady=(12, 0))
 
-        self._build_recommended_card(sidebar)
-
         self._section_heading(sidebar, "Status Detail")
         self._detail_row(sidebar, "Worktree", "dirty" if "dirty" in self.basic_view.reason.lower() else "clean", value_color="#006b00")
         self._detail_row(sidebar, "Mutation", "allowed" if self.basic_view.mutation_allowed else "guarded")
