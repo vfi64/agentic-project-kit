@@ -56,11 +56,11 @@ def test_wrapper_live_status_rejects_unknown_phase(tmp_path: Path) -> None:
         )
 
 
-def test_default_safe_to_interrupt_marks_half_mutations_unsafe() -> None:
-    assert default_safe_to_interrupt("starting") is True
+def test_default_safe_to_interrupt_allows_only_ci_waiting_phase() -> None:
+    assert default_safe_to_interrupt("starting") is False
     assert default_safe_to_interrupt("creating_pr") is False
     assert default_safe_to_interrupt("waiting_ci") is True
     assert default_safe_to_interrupt("merging") is False
     assert default_safe_to_interrupt("post_merge") is False
-    assert default_safe_to_interrupt("done") is True
-    assert default_safe_to_interrupt("blocked") is True
+    assert default_safe_to_interrupt("done") is False
+    assert default_safe_to_interrupt("blocked") is False
