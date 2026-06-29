@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4f8d273537cc1bf3a9ff7dfb16103967e519818e
-  short: 4f8d2735
-  subject: Add release and branch picker to guided work start (#1643)
+  full: b02084bb710487eb5c4d394a7af0d319ace18e52
+  short: b02084bb
+  subject: Add explicit destructive discard changes workflow (#1645)
 last_substantive_work_state:
-  full: 4f8d273537cc1bf3a9ff7dfb16103967e519818e
-  short: 4f8d2735
-  subject: Add release and branch picker to guided work start (#1643)
+  full: b02084bb710487eb5c4d394a7af0d319ace18e52
+  short: b02084bb
+  subject: Add explicit destructive discard changes workflow (#1645)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
