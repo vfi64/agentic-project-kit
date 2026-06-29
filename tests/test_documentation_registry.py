@@ -12,10 +12,12 @@ from agentic_project_kit.documentation_registry import (
     DOCUMENT_CLASSES,
     REGISTRY_PATH,
     REQUIRED_CLASS_RULE_FIELDS,
+    build_unregistered_document_candidates_report,
     build_documentation_registry_summary,
     check_documentation_registry,
     find_unregistered_document_candidates,
     load_documentation_registry,
+    register_documentation_registry_entry,
 )
 from agentic_project_kit.documentation_system_audit import build_documentation_system_audit
 
@@ -80,6 +82,11 @@ def _write_registry(project: Path) -> None:
             {
                 "path": "docs/STATUS.md",
                 "class": "planning",
+                "owner": "maintainers",
+            },
+            {
+                "path": "docs/DOCUMENTATION_REGISTRY.yaml",
+                "class": "governance/system",
                 "owner": "maintainers",
             }
         ],
@@ -214,8 +221,9 @@ def test_docs_registry_cli_writes_json_report(tmp_path: Path) -> None:
     assert payload["broad_migration_allowed"] is False
     assert payload["class_counts"]["operational/automation"] >= 4
     assert payload["owner_counts"]["maintainers"] >= 1
-    assert payload["registration_policy"]["status"] == "inventory_only"
-    assert payload["registration_policy"]["mutation_allowed"] is False
+    assert payload["registration_policy"]["status"] == "reviewed_register_command_available"
+    assert payload["registration_policy"]["mutation_allowed"] is True
+    assert payload["registration_policy"]["allowed_command"] == "agentic-kit doc-registry register"
     assert "unregistered_candidate_count" in payload
 
 
@@ -230,7 +238,143 @@ def test_documentation_registry_lists_unregistered_candidates_without_mutating(t
     assert "docs/new-plan.md" in candidates
     assert "docs/reports/terminal/generated.md" not in candidates
     assert "docs/new-plan.md" in summary["unregistered_candidates"]
-    assert summary["registration_policy"]["mutation_allowed"] is False
+    assert summary["registration_policy"]["mutation_allowed"] is True
+
+
+def test_docs_register_adds_entry_for_valid_path_and_class(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write(project / "docs/new-plan.md", "# New plan\n")
+
+    result = register_documentation_registry_entry(
+        project,
+        document_path="docs/new-plan.md",
+        document_class="planning",
+        owner="maintainers",
+    )
+
+    registry = _read_registry(project)
+    assert result["result_status"] == "PASS"
+    assert result["written"] is True
+    assert registry["documents"][-1] == {
+        "path": "docs/new-plan.md",
+        "class": "planning",
+        "owner": "maintainers",
+    }
+    assert check_documentation_registry(project) == []
+
+
+def test_docs_register_rejects_unknown_class(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write(project / "docs/new-plan.md", "# New plan\n")
+    before = (project / REGISTRY_PATH).read_text(encoding="utf-8")
+
+    result = register_documentation_registry_entry(
+        project,
+        document_path="docs/new-plan.md",
+        document_class="unknown",
+    )
+
+    assert result["result_status"] == "FAIL"
+    assert result["code"] == "FAIL_UNKNOWN_CLASS"
+    assert "planning" in result["allowed_classes"]
+    assert (project / REGISTRY_PATH).read_text(encoding="utf-8") == before
+
+
+def test_docs_register_rejects_duplicate_path(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    before = (project / REGISTRY_PATH).read_text(encoding="utf-8")
+
+    result = register_documentation_registry_entry(
+        project,
+        document_path="docs/STATUS.md",
+        document_class="planning",
+    )
+
+    assert result["result_status"] == "FAIL"
+    assert result["code"] == "FAIL_DUPLICATE_PATH"
+    assert (project / REGISTRY_PATH).read_text(encoding="utf-8") == before
+
+
+def test_docs_register_rejects_missing_path(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    before = (project / REGISTRY_PATH).read_text(encoding="utf-8")
+
+    result = register_documentation_registry_entry(
+        project,
+        document_path="docs/missing.md",
+        document_class="planning",
+    )
+
+    assert result["result_status"] == "FAIL"
+    assert result["code"] == "FAIL_PATH_NOT_FOUND"
+    assert (project / REGISTRY_PATH).read_text(encoding="utf-8") == before
+
+
+def test_docs_register_preserves_existing_entries_and_schema(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write(project / "docs/new-plan.md", "# New plan\n")
+    before = _read_registry(project)
+
+    register_documentation_registry_entry(
+        project,
+        document_path="docs/new-plan.md",
+        document_class="planning",
+    )
+
+    after = _read_registry(project)
+    assert after["version"] == before["version"]
+    assert after["class_rules"] == before["class_rules"]
+    assert after["documents"][:-1] == before["documents"]
+
+
+def test_docs_check_unregistered_lists_as_warn(tmp_path: Path) -> None:
+    _write_registry(tmp_path)
+    _write(tmp_path / "docs" / "new-plan.md", "# New plan\n")
+
+    report = build_unregistered_document_candidates_report(tmp_path)
+
+    assert report["result_status"] == "WARN"
+    assert report["candidate_count"] == 1
+    assert report["candidates"] == ["docs/new-plan.md"]
+
+
+def test_doc_registry_register_cli_writes_valid_entry(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write(project / "docs/new-plan.md", "# New plan\n")
+    runner = CliRunner()
+
+    result = runner.invoke(
+        app,
+        [
+            "doc-registry",
+            "register",
+            "--root",
+            str(project),
+            "--path",
+            "docs/new-plan.md",
+            "--class",
+            "planning",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.output)
+    assert payload["result_status"] == "PASS"
+    assert _read_registry(project)["documents"][-1]["path"] == "docs/new-plan.md"
+
+
+def test_doc_registry_check_unregistered_cli_warns_without_failing(tmp_path: Path) -> None:
+    _write_registry(tmp_path)
+    _write(tmp_path / "docs" / "new-plan.md", "# New plan\n")
+    runner = CliRunner()
+
+    result = runner.invoke(app, ["doc-registry", "check-unregistered", "--root", str(tmp_path), "--json"])
+
+    assert result.exit_code == 0
+    payload = json.loads(result.output)
+    assert payload["result_status"] == "WARN"
+    assert payload["candidates"] == ["docs/new-plan.md"]
 
 
 def test_docs_audit_cli_runs_with_documentation_registry() -> None:

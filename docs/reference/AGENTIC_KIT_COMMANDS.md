@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `191`
+- Command count: `193`
 
 ## Commands
 
@@ -228,6 +228,27 @@ Apply safe automatic documentation mesh repairs.
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `result_path` | `TyperOption` | --result | `False` |  |  |
+
+### `agentic-kit doc-registry check-unregistered`
+
+List unregistered docs candidates as a non-failing WARN report.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+
+### `agentic-kit doc-registry register`
+
+Add one reviewed document entry to the documentation registry.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `document_path` | `TyperOption` | --path | `True` |  | Repository-relative document path. |
+| `document_class` | `TyperOption` | --class | `True` |  | Allowed documentation registry class. |
+| `owner` | `TyperOption` | --owner | `False` | `maintainers` | Document owner recorded in the registry. |
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit docs-audit`
 

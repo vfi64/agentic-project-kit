@@ -64,6 +64,17 @@ The first guard is wired into `agentic-kit check-docs`. Since `agentic-kit docs-
 
 Future slices may integrate the registry with doc-mesh, lifecycle audit, handoff checks, release checks, and artifact GC. Those integrations must remain additive, modular, reversible, and test-backed.
 
+## Reviewed registration command
+
+`agentic-kit docs-registry` remains the read-only summary/report command. Reviewed
+single-entry mutations use `agentic-kit doc-registry register --path PATH --class CLASS --json`.
+
+The register command validates that the path exists, the class is known, the path
+is not already registered, and the resulting registry still passes the
+documentation-registry guard before writing. `agentic-kit doc-registry
+check-unregistered --json` lists unregistered document candidates as WARN, not
+FAIL, because broad migration remains disabled.
+
 ## Migration boundary
 
 No broad migration is allowed in this first slice. The registry starts with a small set of canonical documents and evidence logs so that the schema and guard can be reviewed before the repository is classified broadly.
@@ -77,5 +88,6 @@ The registry is hardened through:
 - `docs/DOCUMENTATION_REGISTRY.yaml` as the machine-readable source;
 - `src/agentic_project_kit/documentation_registry.py` as the validation core;
 - `agentic-kit check-docs` integration;
+- `agentic-kit doc-registry register` tests for reviewed additive entries;
 - targeted tests for allowed classes, required fields, duplicate path detection, missing path detection, and docs-audit participation;
 - documentation coverage anchors for the registry contract.
