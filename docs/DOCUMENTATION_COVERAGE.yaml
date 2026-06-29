@@ -636,6 +636,8 @@ rules:
     - agentic-kit cockpit
     - agentic-kit actions
     - Tkinter cockpit
+    - agentic-kit release ready
+    - agentic-kit release prepare
   - path: docs/architecture/LOCAL_COCKPIT_FOUNDATION.md
     terms:
     - Local Cockpit Foundation

@@ -14,6 +14,13 @@ from agentic_project_kit.gui_action_views import (
     grouped_action_views,
 )
 from agentic_project_kit.gui_cockpit_common import THEME, action_tree_tag_colors
+from agentic_project_kit.gui_release_flow import (
+    humanize_release_result,
+    normalize_release_version,
+    release_prepare_args,
+    release_preview_signature,
+    release_ready_args,
+)
 from agentic_project_kit.gui_tk_widgets import attach_tooltip, traffic_light_fill
 from agentic_project_kit.gui_tkinter_shell import run_basic_cockpit_button
 
@@ -102,6 +109,71 @@ class CockpitActionsMixin:
         )
         self.gc_confirm_delete_button.pack(side=tk.LEFT, padx=(0, 9))
         self.pending_gc_preview = None
+        self._build_release_creation_panel(parent)
+
+    def _build_release_creation_panel(self, parent: Any) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        panel = tk.Frame(
+            parent,
+            bg=THEME.color_panel_bg,
+            highlightbackground=THEME.color_border,
+            highlightthickness=1,
+            padx=10,
+            pady=8,
+        )
+        panel.pack(fill=tk.X, pady=(0, 16))
+        header = tk.Frame(panel, bg=THEME.color_panel_bg)
+        header.pack(fill=tk.X, pady=(0, 7))
+        tk.Label(
+            header,
+            text="CREATE RELEASE",
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.section_font,
+            anchor=tk.W,
+        ).pack(side=tk.LEFT)
+        tk.Label(
+            header,
+            text="bounded",
+            bg=THEME.color_panel_bg,
+            fg="#6b3d00",
+            font=THEME.small_font,
+        ).pack(side=tk.RIGHT)
+
+        row = tk.Frame(panel, bg=THEME.color_panel_bg)
+        row.pack(fill=tk.X)
+        version_entry = ttk.Entry(row, textvariable=self.release_version_var, width=12)
+        version_entry.pack(side=tk.LEFT, padx=(0, 8))
+        attach_tooltip(version_entry, "Target release version in X.Y.Z format, for example 0.5.0.")
+        create_button = ttk.Button(row, text="Create release", command=self.preview_create_release)
+        create_button.pack(side=tk.LEFT, padx=(0, 8))
+        attach_tooltip(
+            create_button,
+            "Prepares a new release after a readiness check. Does not publish or tag; publishing stays a separate, gated step.",
+        )
+        self.release_confirm_button = ttk.Button(
+            row,
+            text="Confirm create release",
+            command=self.confirm_create_release,
+            state=tk.DISABLED,
+        )
+        self.release_confirm_button.pack(side=tk.LEFT)
+        attach_tooltip(
+            self.release_confirm_button,
+            "Runs agentic-kit release prepare --write only after a successful readiness preview for the same version and state.",
+        )
+        tk.Label(
+            panel,
+            text="Runs release ready first; confirm prepares metadata only. It never publishes tags or live releases.",
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+            anchor=tk.W,
+            justify=tk.LEFT,
+            wraplength=620,
+        ).pack(fill=tk.X, pady=(7, 0))
 
     def _default_gc_cutoff(self) -> str:
         return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -145,6 +217,12 @@ class CockpitActionsMixin:
         if button is not None:
             button.configure(state="disabled")
 
+    def _disable_confirm_release(self) -> None:
+        self.pending_release_preview = None
+        button = getattr(self, "release_confirm_button", None)
+        if button is not None:
+            button.configure(state="disabled")
+
     def preview_log_cleanup(self) -> None:
         cutoff = self._gc_cutoff_value()
         args = self._gc_command_args(cutoff=cutoff, execute=False)
@@ -174,6 +252,75 @@ class CockpitActionsMixin:
         completed = self._agentic_command(*self._gc_command_args(cutoff=cutoff, execute=True))
         self._write_gc_result(completed)
         self._disable_confirm_delete()
+
+    def _current_release_version(self) -> str | None:
+        version_var = getattr(self, "release_version_var", None)
+        value = version_var.get() if version_var is not None else ""
+        return normalize_release_version(value)
+
+    def _release_state_signature(self, version: str) -> str:
+        work_signature = self._work_cycle_signature() if hasattr(self, "_work_cycle_signature") else ""
+        return release_preview_signature(version=version, state_signature=work_signature)
+
+    def _write_release_result(self, completed: Any, *, preview: bool) -> dict[str, object] | None:
+        output = completed.stdout or completed.stderr
+        if not completed.stdout:
+            self.write_output("\n" + output + "\n")
+            self._disable_confirm_release()
+            return None
+        try:
+            payload = json.loads(completed.stdout)
+        except ValueError:
+            self.write_output("\n" + output + "\n")
+            self._disable_confirm_release()
+            return None
+        if not isinstance(payload, dict):
+            self.write_output("\n" + output + "\n")
+            self._disable_confirm_release()
+            return None
+        message = humanize_release_result(payload, preview=preview)
+        lines = ["", message.headline, message.detail]
+        if message.blockers:
+            lines.append("")
+            lines.extend(f"- {blocker}" for blocker in message.blockers)
+        lines.append("")
+        self.write_output("\n".join(lines))
+        if preview and message.allow_confirm:
+            version = str(payload.get("version", "")).strip()
+            self.pending_release_preview = {
+                "version": version,
+                "signature": self._release_state_signature(version),
+                "payload": payload,
+            }
+            if self.release_confirm_button is not None:
+                self.release_confirm_button.configure(state="normal")
+        else:
+            self._disable_confirm_release()
+        return payload
+
+    def preview_create_release(self) -> None:
+        version = self._current_release_version()
+        if version is None:
+            self.write_output("\nEnter a release version in X.Y.Z format before creating a release.\n")
+            self._disable_confirm_release()
+            return
+        completed = self._agentic_command(*release_ready_args(version))
+        self._write_release_result(completed, preview=True)
+
+    def confirm_create_release(self) -> None:
+        version = self._current_release_version()
+        if not self.pending_release_preview or version is None:
+            self.write_output("\nRun Create release first. Confirm is enabled only after a passing readiness preview.\n")
+            self._disable_confirm_release()
+            return
+        if self.pending_release_preview.get("signature") != self._release_state_signature(version):
+            self.write_output(
+                "\nVersion or state changed after preview, run Create release again before confirming.\n"
+            )
+            self._disable_confirm_release()
+            return
+        completed = self._agentic_command(*release_prepare_args(version))
+        self._write_release_result(completed, preview=False)
 
 
     def selected_action_id(self) -> str | None:

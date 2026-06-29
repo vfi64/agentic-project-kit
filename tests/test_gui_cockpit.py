@@ -76,6 +76,40 @@ class _GcHarness(CockpitActionsMixin):
         self.output.append(text)
 
 
+class _ReleaseHarness(CockpitActionsMixin):
+    def __init__(self) -> None:
+        self.release_version_var = _FakeVar("0.5.0")
+        self.release_confirm_button = _FakeButton()
+        self.pending_release_preview = None
+        self.calls: list[tuple[str, ...]] = []
+        self.output: list[str] = []
+        self.signature = "main::clean"
+
+    def _agentic_command(self, *parts: str) -> subprocess.CompletedProcess[str]:
+        self.calls.append(parts)
+        if parts[:2] == ("release", "ready"):
+            return subprocess.CompletedProcess(
+                parts,
+                0,
+                '{"action": "release-ready", "result_status": "PASS", "version": "0.5.0", "blockers": []}',
+                "",
+            )
+        if parts[:2] == ("release", "prepare"):
+            return subprocess.CompletedProcess(
+                parts,
+                0,
+                '{"action": "release-prepare", "result_status": "PASS", "version": "0.5.0", "blockers": []}',
+                "",
+            )
+        return subprocess.CompletedProcess(parts, 2, "", "unexpected command")
+
+    def _work_cycle_signature(self) -> str:
+        return self.signature
+
+    def write_output(self, text: str) -> None:
+        self.output.append(text)
+
+
 def test_gui_action_views_reuse_cockpit_action_metadata() -> None:
     actions = [
         CockpitAction(
@@ -302,6 +336,76 @@ def test_gc_button_tooltip_states_local_only() -> None:
     assert "Clean up logs" in source
     assert "Deletes local log files only" in source
     assert "Never touches the remote repository" in source
+
+
+def test_create_release_rejects_invalid_version_format() -> None:
+    gui = _ReleaseHarness()
+    gui.release_version_var.set("0.5")
+
+    gui.preview_create_release()
+
+    assert gui.calls == []
+    assert gui.release_confirm_button.state == "disabled"
+    assert any("X.Y.Z" in line for line in gui.output)
+
+
+def test_create_release_runs_readiness_check_first() -> None:
+    gui = _ReleaseHarness()
+
+    gui.preview_create_release()
+
+    assert gui.calls == [("release", "ready", "--version", "0.5.0", "--json")]
+    assert gui.release_confirm_button.state == "normal"
+
+
+def test_create_release_confirm_only_after_successful_preview() -> None:
+    gui = _ReleaseHarness()
+
+    gui.confirm_create_release()
+    assert gui.calls == []
+
+    gui.preview_create_release()
+    gui.confirm_create_release()
+
+    assert gui.calls[1] == (
+        "release",
+        "prepare",
+        "--version",
+        "0.5.0",
+        "--write",
+        "--json",
+    )
+
+
+def test_create_release_confirm_blocked_when_version_changed_after_preview() -> None:
+    gui = _ReleaseHarness()
+
+    gui.preview_create_release()
+    gui.release_version_var.set("0.6.0")
+    gui.confirm_create_release()
+
+    assert gui.calls == [("release", "ready", "--version", "0.5.0", "--json")]
+    assert gui.release_confirm_button.state == "disabled"
+    assert any("Version or state changed" in line for line in gui.output)
+
+
+def test_create_release_does_not_publish_or_tag() -> None:
+    gui = _ReleaseHarness()
+
+    gui.preview_create_release()
+    gui.confirm_create_release()
+
+    flat = " ".join(part for call in gui.calls for part in call)
+    assert "publish" not in flat
+    assert "tag" not in flat
+
+
+def test_create_release_button_is_bounded_class() -> None:
+    source = inspect.getsource(CockpitActionsMixin._build_release_creation_panel)
+
+    assert "Create release" in source
+    assert "bounded" in source
+    assert "Does not publish or tag" in source
 
 
 def test_gui_output_uses_readable_large_font_and_panel_height() -> None:
