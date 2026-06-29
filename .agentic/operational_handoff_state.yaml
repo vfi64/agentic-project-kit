@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d9469c00d62eda6bbb5d2be8ab9185347e295328
-  short: d9469c00
-  subject: Publish final remote-next report projection
+  full: 759a4d01baa98d7063b86e3e435f13435c95a99f
+  short: 759a4d01
+  subject: Keep GUI tooltips onscreen and maximize cockpit window (#1651)
 last_substantive_work_state:
-  full: d9469c00d62eda6bbb5d2be8ab9185347e295328
-  short: d9469c00
-  subject: Publish final remote-next report projection
+  full: 759a4d01baa98d7063b86e3e435f13435c95a99f
+  short: 759a4d01
+  subject: Keep GUI tooltips onscreen and maximize cockpit window (#1651)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
