@@ -10,10 +10,11 @@ LOCAL_GC_REPORT = Path("tmp/local-gc-last.json")
 LOCAL_GC_RUN_MARKER = Path("tmp/local-gc-last-run-id.txt")
 DEFAULT_RETENTION_SECONDS = 24 * 60 * 60
 
-# Intentionally narrow. Broader cleanup belongs to explicit GC rules, not ad-hoc deletion.
+# Intentionally narrow by root. This collector may clean all old untracked file
+# types, but only below repository-local tmp/.
 ALLOWED_ROOTS = (Path("tmp"),)
 SKIPPED_ROOTS = (Path("tmp/agent-evidence"),)
-ALLOWED_SUFFIXES = {".diff", ".err", ".json", ".log", ".md", ".out", ".py", ".sh", ".tmp", ".txt"}
+ALLOWED_FILE_POLICY = "all_untracked_file_types_below_repo_tmp"
 RESERVED_TMP_FILES = {
     LOCAL_GC_REPORT,
     LOCAL_GC_RUN_MARKER,
@@ -71,11 +72,11 @@ def _iter_file_candidates(root: Path) -> Iterable[Path]:
         for path in directory.rglob("*"):
             if not path.is_file():
                 continue
+            if path.is_symlink():
+                continue
             if any(_is_under(path, root, skipped) for skipped in SKIPPED_ROOTS):
                 continue
             if _is_reserved_tmp_file(path, root):
-                continue
-            if path.suffix.lower() not in ALLOWED_SUFFIXES:
                 continue
             yield path
 
@@ -133,8 +134,9 @@ def run_local_garbage_collector(
                 "skip_reason": "already_ran_for_command_stack",
                 "allowed_roots": [path.as_posix() for path in ALLOWED_ROOTS],
                 "skipped_roots": [path.as_posix() for path in SKIPPED_ROOTS],
-                "allowed_suffixes": sorted(ALLOWED_SUFFIXES),
+                "allowed_file_policy": ALLOWED_FILE_POLICY,
                 "retention_seconds": retention_seconds,
+                "candidate_count": 0,
                 "deleted": [],
                 "deleted_directories": [],
                 "kept": [],
@@ -152,6 +154,14 @@ def run_local_garbage_collector(
     deleted_directories: list[str] = []
     kept: list[dict[str, object]] = []
     errors: list[dict[str, str]] = []
+    directory_age_seconds: dict[Path, int] = {}
+
+    for directory in _iter_directory_candidates(root):
+        try:
+            stat = directory.stat()
+        except FileNotFoundError:
+            continue
+        directory_age_seconds[directory] = max(0, int(effective_now - stat.st_mtime))
 
     for path in sorted(_iter_file_candidates(root)):
         rel = _relative_to_root(path, root)
@@ -180,11 +190,13 @@ def run_local_garbage_collector(
 
     for directory in _iter_directory_candidates(root):
         rel = _relative_to_root(directory, root)
-        try:
-            stat = directory.stat()
-        except FileNotFoundError:
-            continue
-        age_seconds = max(0, int(effective_now - stat.st_mtime))
+        age_seconds = directory_age_seconds.get(directory)
+        if age_seconds is None:
+            try:
+                stat = directory.stat()
+            except FileNotFoundError:
+                continue
+            age_seconds = max(0, int(effective_now - stat.st_mtime))
         if age_seconds < retention_seconds:
             kept.append({"path": rel, "reason": "directory_retention_not_reached", "age_seconds": age_seconds})
             continue
@@ -213,8 +225,9 @@ def run_local_garbage_collector(
         "skipped": False,
         "allowed_roots": [path.as_posix() for path in ALLOWED_ROOTS],
         "skipped_roots": [path.as_posix() for path in SKIPPED_ROOTS],
-        "allowed_suffixes": sorted(ALLOWED_SUFFIXES),
+        "allowed_file_policy": ALLOWED_FILE_POLICY,
         "retention_seconds": retention_seconds,
+        "candidate_count": len(deleted) + len(deleted_directories),
         "deleted": deleted,
         "deleted_directories": deleted_directories,
         "kept": kept,

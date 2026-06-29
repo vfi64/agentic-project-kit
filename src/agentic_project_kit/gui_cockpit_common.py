@@ -23,6 +23,7 @@ class GuiTheme:
     task_text_height: int = 3
     window_geometry: str = "1180x760"
     sidebar_width: int = 320
+    action_list_width: int = 430
     color_shell_bg: str = "#fbfbfa"
     color_panel_bg: str = "#ffffff"
     color_border: str = "#dddddd"
@@ -34,7 +35,7 @@ class GuiTheme:
     color_ready_border: str = "#68c36a"
     color_recommended_bg: str = "#d7eaff"
     color_button_outline: str = "#cfcfcf"
-    action_card_height: int = 38
+    action_card_height: int = 23
     action_column_width: int = 165
     what_it_does_column_width: int = 465
     safety_column_width: int = 90

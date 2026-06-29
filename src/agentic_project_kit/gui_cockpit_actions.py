@@ -40,13 +40,13 @@ class CockpitActionsMixin:
             bg=THEME.color_recommended_bg,
             highlightbackground="#7eb1f1",
             highlightthickness=1,
-            padx=12,
-            pady=10,
+            padx=10,
+            pady=6,
         )
-        panel.pack(fill=tk.X, pady=(0, 14))
+        panel.pack(fill=tk.X, pady=(0, 8))
 
         header = tk.Frame(panel, bg=THEME.color_recommended_bg)
-        header.pack(fill=tk.X, pady=(0, 7))
+        header.pack(fill=tk.X, pady=(0, 4))
         tk.Label(
             header,
             text="NEXT STEP",
@@ -74,7 +74,7 @@ class CockpitActionsMixin:
             text=next_step.title,
             bg=THEME.color_recommended_bg,
             fg="#0b2f27",
-            font=("TkDefaultFont", 13, "bold"),
+            font=THEME.recommended_font,
             anchor=tk.W,
             justify=tk.LEFT,
             wraplength=720,
@@ -91,7 +91,7 @@ class CockpitActionsMixin:
         ).pack(fill=tk.X, pady=(5, 0))
 
         button_row = tk.Frame(panel, bg=THEME.color_recommended_bg)
-        button_row.pack(fill=tk.X, pady=(10, 0))
+        button_row.pack(fill=tk.X, pady=(6, 0))
         primary_state = tk.NORMAL if next_step.primary_enabled else tk.DISABLED
         primary = ttk.Button(
             button_row,
@@ -142,11 +142,15 @@ class CockpitActionsMixin:
         from tkinter import ttk
 
         self._section_heading(parent, "Actions")
-        action_scroll_shell = tk.Frame(parent, bg=THEME.color_panel_bg)
-        action_scroll_shell.pack(fill=tk.X)
+        actions_row = tk.Frame(parent, bg=THEME.color_panel_bg)
+        actions_row.pack(fill=tk.X, pady=(0, 10))
+        action_scroll_shell = tk.Frame(parent=actions_row, bg=THEME.color_panel_bg, width=THEME.action_list_width)
+        action_scroll_shell.pack(side=tk.LEFT, fill=tk.Y)
+        action_scroll_shell.pack_propagate(False)
         self.action_card_canvas = tk.Canvas(
             action_scroll_shell,
             bg=THEME.color_panel_bg,
+            width=THEME.action_list_width,
             height=THEME.action_rows_visible * THEME.action_card_height,
             highlightthickness=0,
         )
@@ -175,37 +179,55 @@ class CockpitActionsMixin:
                 width=event.width,
             ),
         )
-        self.action_card_canvas.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self.action_card_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.action_card_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.action_card_widgets: dict[str, Any] = {}
         self.populate_action_tree()
 
-        button_row = tk.Frame(parent, bg=THEME.color_panel_bg)
-        button_row.pack(fill=tk.X, pady=(10, 15))
-        inspect_button = ttk.Button(button_row, text="Inspect", command=self.inspect_selected)
+        controls = tk.Frame(actions_row, bg=THEME.color_panel_bg)
+        controls.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(12, 0))
+        inspect_button = ttk.Button(controls, text="Inspect", command=self.inspect_selected)
         attach_tooltip(inspect_button, "Show metadata, command, and safety details for the selected action.")
-        inspect_button.pack(side=tk.LEFT, padx=(0, 9))
-        run_button = ttk.Button(button_row, text="Run read-only", command=self.run_selected_read_only)
+        inspect_button.grid(row=0, column=0, sticky="ew", padx=(0, 8), pady=(0, 6))
+        run_button = ttk.Button(controls, text="Run read-only", command=self.run_selected_read_only)
         attach_tooltip(run_button, "Run only selected read-only cockpit actions through the shared cockpit layer.")
-        run_button.pack(side=tk.LEFT, padx=(0, 9))
+        run_button.grid(row=0, column=1, sticky="ew", pady=(0, 6))
 
-        maintenance_row = tk.Frame(parent, bg=THEME.color_panel_bg)
-        maintenance_row.pack(fill=tk.X, pady=(0, 15))
+        create_button = ttk.Button(controls, text="Create release", command=self.start_create_release)
+        create_button.grid(row=1, column=0, sticky="ew", padx=(0, 8), pady=(0, 6))
+        attach_tooltip(
+            create_button,
+            "Ask for a version, run release ready, then enable Confirm create release on PASS.",
+        )
+        self.release_confirm_button = ttk.Button(
+            controls,
+            text="Confirm create release",
+            command=self.confirm_create_release,
+            state=tk.DISABLED,
+        )
+        self.release_confirm_button.grid(row=1, column=1, sticky="ew", pady=(0, 6))
+        attach_tooltip(
+            self.release_confirm_button,
+            "Runs agentic-kit release prepare --write only after a successful readiness preview for the same version and state.",
+        )
+
+        maintenance_row = tk.Frame(controls, bg=THEME.color_panel_bg)
+        maintenance_row.grid(row=2, column=0, columnspan=2, sticky="ew")
         tk.Label(
             maintenance_row,
-            text="Log cutoff",
+            text="Local tmp cutoff",
             bg=THEME.color_panel_bg,
             fg=THEME.color_muted_text,
             font=THEME.small_font,
         ).pack(side=tk.LEFT, padx=(0, 6))
         self.gc_cutoff_var = tk.StringVar(value=self._default_gc_cutoff())
-        cutoff_entry = ttk.Entry(maintenance_row, textvariable=self.gc_cutoff_var, width=24)
-        attach_tooltip(cutoff_entry, "ISO cutoff for local tmp log cleanup. Default is now.")
+        cutoff_entry = ttk.Entry(maintenance_row, textvariable=self.gc_cutoff_var, width=20)
+        attach_tooltip(cutoff_entry, "ISO cutoff for local repository tmp/ cleanup. Default is now.")
         cutoff_entry.pack(side=tk.LEFT, padx=(0, 9))
-        gc_button = ttk.Button(maintenance_row, text="Clean up logs", command=self.preview_log_cleanup)
+        gc_button = ttk.Button(maintenance_row, text="Clean local tmp", command=self.preview_log_cleanup)
         attach_tooltip(
             gc_button,
-            "Dry-run local artifact-gc for repository tmp logs only. Never touches the remote repository.",
+            "Dry-run local artifact-gc for old untracked files and empty directories under repository tmp/. Never touches the remote repository.",
         )
         gc_button.pack(side=tk.LEFT, padx=(0, 9))
         self.gc_confirm_delete_button = ttk.Button(
@@ -216,75 +238,12 @@ class CockpitActionsMixin:
         )
         attach_tooltip(
             self.gc_confirm_delete_button,
-            "Deletes local log files only after a successful preview. Never touches the remote repository.",
+            "Deletes local tmp/ candidates only after a successful preview. Never touches the remote repository.",
         )
         self.gc_confirm_delete_button.pack(side=tk.LEFT, padx=(0, 9))
         self.pending_gc_preview = None
-        self._build_release_creation_panel(parent)
-
-    def _build_release_creation_panel(self, parent: Any) -> None:
-        import tkinter as tk
-        from tkinter import ttk
-
-        panel = tk.Frame(
-            parent,
-            bg=THEME.color_panel_bg,
-            highlightbackground=THEME.color_border,
-            highlightthickness=1,
-            padx=10,
-            pady=8,
-        )
-        panel.pack(fill=tk.X, pady=(0, 16))
-        header = tk.Frame(panel, bg=THEME.color_panel_bg)
-        header.pack(fill=tk.X, pady=(0, 7))
-        tk.Label(
-            header,
-            text="CREATE RELEASE",
-            bg=THEME.color_panel_bg,
-            fg=THEME.color_muted_text,
-            font=THEME.section_font,
-            anchor=tk.W,
-        ).pack(side=tk.LEFT)
-        tk.Label(
-            header,
-            text="bounded",
-            bg=THEME.color_panel_bg,
-            fg="#6b3d00",
-            font=THEME.small_font,
-        ).pack(side=tk.RIGHT)
-
-        row = tk.Frame(panel, bg=THEME.color_panel_bg)
-        row.pack(fill=tk.X)
-        version_entry = ttk.Entry(row, textvariable=self.release_version_var, width=12)
-        version_entry.pack(side=tk.LEFT, padx=(0, 8))
-        attach_tooltip(version_entry, "Target release version in X.Y.Z format, for example 0.5.0.")
-        create_button = ttk.Button(row, text="Create release", command=self.preview_create_release)
-        create_button.pack(side=tk.LEFT, padx=(0, 8))
-        attach_tooltip(
-            create_button,
-            "Prepares a new release after a readiness check. Does not publish or tag; publishing stays a separate, gated step.",
-        )
-        self.release_confirm_button = ttk.Button(
-            row,
-            text="Confirm create release",
-            command=self.confirm_create_release,
-            state=tk.DISABLED,
-        )
-        self.release_confirm_button.pack(side=tk.LEFT)
-        attach_tooltip(
-            self.release_confirm_button,
-            "Runs agentic-kit release prepare --write only after a successful readiness preview for the same version and state.",
-        )
-        tk.Label(
-            panel,
-            text="Runs release ready first; confirm prepares metadata only. It never publishes tags or live releases.",
-            bg=THEME.color_panel_bg,
-            fg=THEME.color_muted_text,
-            font=THEME.small_font,
-            anchor=tk.W,
-            justify=tk.LEFT,
-            wraplength=620,
-        ).pack(fill=tk.X, pady=(7, 0))
+        controls.columnconfigure(0, weight=1)
+        controls.columnconfigure(1, weight=1)
 
     def _default_gc_cutoff(self) -> str:
         return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -302,8 +261,7 @@ class CockpitActionsMixin:
     def _gc_command_args(self, *, cutoff: str, execute: bool) -> tuple[str, ...]:
         args = (
             "artifact-gc",
-            "--tmp-logs",
-            "--local-tmp",
+            "--local-tmp-contents",
             "--older-than",
             cutoff,
         )
@@ -337,6 +295,7 @@ class CockpitActionsMixin:
     def preview_log_cleanup(self) -> None:
         cutoff = self._gc_cutoff_value()
         args = self._gc_command_args(cutoff=cutoff, execute=False)
+        self.write_output(f"\nRunning local tmp cleanup preview for files before {cutoff}...\n")
         completed = self._agentic_command(*args)
         payload = self._write_gc_result(completed)
         candidate_count = int(payload.get("candidate_count", 0)) if payload else 0
@@ -360,6 +319,7 @@ class CockpitActionsMixin:
             self.write_output("\nLog cleanup cutoff changed after the preview. Run Clean up logs again before confirming.\n")
             self._disable_confirm_delete()
             return
+        self.write_output(f"\nDeleting local tmp cleanup candidates before {cutoff}...\n")
         completed = self._agentic_command(*self._gc_command_args(cutoff=cutoff, execute=True))
         self._write_gc_result(completed)
         self._disable_confirm_delete()
@@ -372,6 +332,23 @@ class CockpitActionsMixin:
     def _release_state_signature(self, version: str) -> str:
         work_signature = self._work_cycle_signature() if hasattr(self, "_work_cycle_signature") else ""
         return release_preview_signature(version=version, state_signature=work_signature)
+
+    def start_create_release(self) -> None:
+        from tkinter import simpledialog
+
+        current = self.release_version_var.get().strip()
+        version = simpledialog.askstring(
+            "Create release",
+            "Enter target version (X.Y.Z):",
+            initialvalue=current,
+            parent=self.root,
+        )
+        if version is None:
+            self.write_output("\nCreate release cancelled.\n")
+            self._disable_confirm_release()
+            return
+        self.release_version_var.set(version.strip())
+        self.preview_create_release()
 
     def _write_release_result(self, completed: Any, *, preview: bool) -> dict[str, object] | None:
         output = completed.stdout or completed.stderr
@@ -561,10 +538,11 @@ class CockpitActionsMixin:
             f"description={action.description}",
             "",
         ]
-        self.write_output("\n\n" + format_action_details(action) + "\n")
+        self.write_output("\nInspecting selected action...\n\n" + format_action_details(action) + "\n")
 
     def run_basic_action(self, command_id: str) -> None:
-        self.write_output("\n" + run_basic_cockpit_button(command_id, project_root=self.project_root) + "\n")
+        self.write_output(f"\nRunning basic action: {command_id}...\n")
+        self.write_output(run_basic_cockpit_button(command_id, project_root=self.project_root) + "\n")
 
     def run_selected_read_only(self) -> None:
         action_id = self.selected_action_id()
@@ -575,5 +553,6 @@ class CockpitActionsMixin:
         if action is not None and action.safety != READ_ONLY:
             self.write_output("\n" + format_action_details(action) + "\n")
             return
+        self.write_output(f"\nRunning read-only action: {action_id}...\n")
         result = run_cockpit_action(action_id, self.project_root, allow_bounded=False)
         self.write_output("\n" + format_action_result(result) + "\n")

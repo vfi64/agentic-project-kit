@@ -35,7 +35,10 @@ The current implementation hardens the communication artifact GC in bounded step
 - `docs/reports/terminal/LATEST_TERMINAL_LOG.txt` is a protected pointer and must not be collected.
 - Command-run reports under `docs/reports/command_runs/*.md` are protected evidence.
 - Command inbox files under `.agentic/commands/inbox/*` are protected pending or consumable commands and are never generic temporary files.
-- Local `/tmp/agentic-project-kit-*.log` files are the only TTL-based local tmp-log class currently handled by the GC.
+- Local `/tmp/agentic-project-kit-*.log` files remain the OS-level tmp-log class handled by the GC.
+- Repository-local `tmp/` cleanup is local-only: `agentic-kit artifact-gc --local-tmp-contents`
+  may collect old untracked files and empty directories under repo `tmp/`, but it never
+  performs remote cleanup, report retention, or git push.
 - `agentic-kit artifact-gc --tmp-logs` performs a dry-run for expired local tmp logs and reports `PENDING_EXPIRED_TMP_LOGS` without deleting.
 - `agentic-kit artifact-gc --tmp-logs --execute` may delete only expired, non-symlink `/tmp/agentic-project-kit-*.log` files directly under `/tmp`.
 - The GC must stay conservative: unknown files, repo evidence, command inbox files, symlinks, and files outside allowlisted zones are not collected.
@@ -47,6 +50,8 @@ agentic-kit artifact-gc
 agentic-kit artifact-gc --execute
 agentic-kit artifact-gc --tmp-logs
 agentic-kit artifact-gc --tmp-logs --execute
+agentic-kit artifact-gc --local-tmp-contents
+agentic-kit artifact-gc --local-tmp-contents --execute
 agentic-kit artifact-gc --transfer-runs
 agentic-kit artifact-gc --report-retention
 ```
@@ -105,6 +110,10 @@ Retention policy:
   `tmp/*handoff*.log`, `tmp/*release*.log`, and `tmp/*gc*.log` files older than
   24 hours while keeping the newest slice logs and protecting current GC,
   command-stack, and next-turn fixed-slot files.
+- `artifact-gc --local-tmp-contents` may collect old untracked files of any
+  file type and old empty directories under repository-local `tmp/`. It skips
+  tracked files, symlinks, reserved local state files, and `tmp/agent-evidence/`.
+  It is local-only and must not be used for remote report retention.
 - `artifact-gc --transfer-runs` may collect
   `docs/reports/transfer_runs` files older than 24 hours except these fixed
   latest files:

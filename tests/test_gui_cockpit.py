@@ -268,6 +268,8 @@ def test_gui_action_cards_are_four_rows_and_scrollable() -> None:
     source = _cockpit_sources()
 
     assert action_tree_visible_rows() == 4
+    assert THEME.action_card_height == 23
+    assert "THEME.action_list_width" in source
     assert "ttk.Scrollbar" in source
     assert "yscrollcommand" in source
     assert "action_card_container" in source
@@ -288,6 +290,7 @@ def test_cockpit_build_methods_live_in_focused_modules() -> None:
     assert CockpitGui._build_next_step_panel is CockpitActionsMixin._build_next_step_panel
     assert CockpitGui._build_action_cards is CockpitActionsMixin._build_action_cards
     assert CockpitGui._build_task_editor is CockpitTaskMixin._build_task_editor
+    assert CockpitGui._build_file_browser is CockpitTaskMixin._build_file_browser
     assert CockpitGui._build_output_panel is CockpitTaskMixin._build_output_panel
 
 
@@ -299,6 +302,35 @@ def test_cockpit_places_central_next_step_before_actions() -> None:
     assert "show_next_step_details" in source
     assert "show_cockpit_help" in source
     assert "self._build_recommended_card(sidebar)" not in source
+
+
+def test_cockpit_main_area_is_vertically_scrollable_and_output_reachable() -> None:
+    source = _cockpit_sources()
+
+    assert "main_canvas" in source
+    assert "main_scrollbar" in source
+    assert "self._build_file_browser(main_area)\n        self._build_output_panel(main_area)" in source
+
+
+def test_cockpit_file_browser_is_read_only_for_tmp_and_handoff_files() -> None:
+    source = _cockpit_sources()
+
+    assert "COPY / PASTE FILES" in source
+    assert "read-only local browser" in source
+    assert 'Path("tmp")' in source
+    assert 'Path("docs/handoff")' in source
+    assert 'Path("docs/reports/handoff-packages/latest")' in source
+    assert "Copy path" in source
+    assert "Copy file" in source
+    assert "delete" not in inspect.getsource(CockpitTaskMixin._build_file_browser).lower()
+
+
+def test_cockpit_output_header_has_busy_feedback() -> None:
+    source = _cockpit_sources()
+
+    assert "busy_status_var" in source
+    assert "ttk.Progressbar" in source
+    assert "Running:" in source
 
 
 def test_cockpit_help_placeholder_points_to_authoritative_sources() -> None:
@@ -322,8 +354,7 @@ def test_gc_button_runs_dry_run_first() -> None:
     assert gui.calls == [
         (
             "artifact-gc",
-            "--tmp-logs",
-            "--local-tmp",
+            "--local-tmp-contents",
             "--older-than",
             "2026-06-28T21:00:00Z",
             "--json",
@@ -344,8 +375,7 @@ def test_gc_confirm_only_after_preview() -> None:
 
     assert gui.calls[1] == (
         "artifact-gc",
-        "--tmp-logs",
-        "--local-tmp",
+        "--local-tmp-contents",
         "--older-than",
         "2026-06-28T21:00:00Z",
         "--execute",
@@ -357,16 +387,15 @@ def test_gc_confirm_only_after_preview() -> None:
 def test_gc_button_uses_local_modes_only() -> None:
     source = inspect.getsource(CockpitActionsMixin._gc_command_args)
 
-    assert '"--tmp-logs"' in source
-    assert '"--local-tmp"' in source
+    assert '"--local-tmp-contents"' in source
     assert "remote" not in source.lower()
 
 
 def test_gc_button_tooltip_states_local_only() -> None:
     source = inspect.getsource(CockpitActionsMixin._build_action_cards)
 
-    assert "Clean up logs" in source
-    assert "Deletes local log files only" in source
+    assert "Clean local tmp" in source
+    assert "Deletes local tmp/ candidates only" in source
     assert "Never touches the remote repository" in source
 
 
@@ -433,11 +462,19 @@ def test_create_release_does_not_publish_or_tag() -> None:
 
 
 def test_create_release_button_is_bounded_class() -> None:
-    source = inspect.getsource(CockpitActionsMixin._build_release_creation_panel)
+    source = inspect.getsource(CockpitActionsMixin._build_action_cards)
 
     assert "Create release" in source
-    assert "bounded" in source
-    assert "Does not publish or tag" in source
+    assert "Confirm create release" in source
+    assert "_build_release_creation_panel" not in _cockpit_sources()
+
+
+def test_create_release_starts_with_version_dialog() -> None:
+    source = inspect.getsource(CockpitActionsMixin.start_create_release)
+
+    assert "simpledialog.askstring" in source
+    assert "Enter target version" in source
+    assert "self.preview_create_release()" in source
 
 
 def test_gui_output_uses_readable_large_font_and_panel_height() -> None:

@@ -15,6 +15,7 @@ from agentic_project_kit.communication_artifact_gc import (
     execute_transfer_run_report_gc,
     render_plan,
 )
+from agentic_project_kit.local_garbage_collector import run_local_garbage_collector
 
 
 def _message_lines(message: str) -> list[str]:
@@ -87,6 +88,11 @@ def _ttl_from_older_than(older_than: str, *, default_ttl_seconds: int) -> int:
 def artifact_gc_command(
     tmp_logs: bool = typer.Option(False, "--tmp-logs", help="Collect expired local tmp logs."),
     local_tmp: bool = typer.Option(False, "--local-tmp", help="Use repository-local tmp/ instead of /tmp for --tmp-logs."),
+    local_tmp_contents: bool = typer.Option(
+        False,
+        "--local-tmp-contents",
+        help="Collect expired untracked files and empty directories under repository-local tmp/.",
+    ),
     transfer_runs: bool = typer.Option(False, "--transfer-runs", help="Collect expired docs/reports/transfer_runs files."),
     report_retention: bool = typer.Option(
         False,
@@ -108,7 +114,7 @@ def artifact_gc_command(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     """Dry-run by default garbage collector for transient communication artifacts."""
-    selected_modes = sum(1 for enabled in (tmp_logs, transfer_runs, report_retention) if enabled)
+    selected_modes = sum(1 for enabled in (tmp_logs, local_tmp_contents, transfer_runs, report_retention) if enabled)
     if selected_modes > 1:
         if json_output:
             _emit_json(
@@ -124,6 +130,34 @@ def artifact_gc_command(
         raise typer.Exit(code=1)
 
     effective_ttl_seconds = _ttl_from_older_than(older_than, default_ttl_seconds=ttl_seconds)
+
+    if local_tmp_contents:
+        result = run_local_garbage_collector(
+            Path("."),
+            dry_run=not execute,
+            retention_seconds=effective_ttl_seconds,
+            write_report=True,
+            skip_if_run_id_seen=False,
+        )
+        result = {
+            **result,
+            "mode": "local-tmp-contents",
+            "older_than": older_than or None,
+            "remote_execution_policy": {
+                "status": "forbidden",
+                "allowed_path": "local repo tmp/ cleanup only",
+                "forbidden_path": "remote tmp cleanup, report retention, or git push from this mode",
+            },
+        }
+        if json_output:
+            typer.echo(json.dumps(result, indent=2, sort_keys=True))
+        else:
+            typer.echo("PASS_LOCAL_TMP_CONTENTS" if result["result_status"] == "PASS" else "FAIL_LOCAL_TMP_CONTENTS")
+            for path in [*result.get("deleted", []), *result.get("deleted_directories", [])]:
+                typer.echo(path)
+        if result["result_status"] != "PASS":
+            raise typer.Exit(code=1)
+        return
 
     if tmp_logs:
         tmp_root = Path("tmp") if local_tmp else Path("/tmp")

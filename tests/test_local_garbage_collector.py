@@ -153,10 +153,11 @@ def test_local_gc_new_command_stack_id_runs_again(tmp_path: Path) -> None:
     assert not second.exists()
 
 
-def test_local_gc_deletes_old_tmp_allowlisted_artifact_types(tmp_path: Path) -> None:
-    suffixes = [".py", ".md", ".diff", ".json", ".sh", ".txt"]
+def test_local_gc_deletes_old_untracked_tmp_files_regardless_of_suffix(tmp_path: Path) -> None:
+    suffixes = [".py", ".md", ".diff", ".json", ".sh", ".txt", ".bin", ""]
     for suffix in suffixes:
-        target = tmp_path / "tmp" / f"old{suffix}"
+        name = f"old{suffix}" if suffix else "old-no-suffix"
+        target = tmp_path / "tmp" / name
         target.parent.mkdir(exist_ok=True)
         target.write_text("old", encoding="utf-8")
         os.utime(target, (100, 100))
@@ -169,9 +170,10 @@ def test_local_gc_deletes_old_tmp_allowlisted_artifact_types(tmp_path: Path) -> 
     )
 
     for suffix in suffixes:
-        rel = f"tmp/old{suffix}"
+        rel = f"tmp/old{suffix}" if suffix else "tmp/old-no-suffix"
         assert rel in result["deleted"]
         assert not (tmp_path / rel).exists()
+    assert result["allowed_file_policy"] == "all_untracked_file_types_below_repo_tmp"
 
 
 def test_local_gc_preserves_reserved_tmp_state_files(tmp_path: Path) -> None:
@@ -214,11 +216,11 @@ def test_local_gc_deletes_old_empty_tmp_directories(tmp_path: Path) -> None:
     assert not directory.exists()
 
 
-def test_local_gc_preserves_nonempty_tmp_directories(tmp_path: Path) -> None:
+def test_local_gc_deletes_old_tmp_directories_after_old_children_are_removed(tmp_path: Path) -> None:
     directory = tmp_path / "tmp" / "old-nonempty-dir"
     directory.mkdir(parents=True)
-    child = directory / "keep.bin"
-    child.write_text("not allowlisted", encoding="utf-8")
+    child = directory / "old.bin"
+    child.write_text("old", encoding="utf-8")
     os.utime(directory, (100, 100))
     os.utime(child, (100, 100))
 
@@ -229,6 +231,46 @@ def test_local_gc_preserves_nonempty_tmp_directories(tmp_path: Path) -> None:
         tracked_predicate=_never_tracked,
     )
 
-    assert "tmp/old-nonempty-dir" not in result["deleted_directories"]
+    assert "tmp/old-nonempty-dir/old.bin" in result["deleted"]
+    assert "tmp/old-nonempty-dir" in result["deleted_directories"]
+    assert not directory.exists()
+
+
+def test_local_gc_preserves_tmp_directories_with_fresh_children(tmp_path: Path) -> None:
+    directory = tmp_path / "tmp" / "mixed-dir"
+    directory.mkdir(parents=True)
+    child = directory / "fresh.bin"
+    child.write_text("fresh", encoding="utf-8")
+    os.utime(directory, (100, 100))
+    os.utime(child, (100 + 25 * 60 * 60 - 60, 100 + 25 * 60 * 60 - 60))
+
+    result = run_local_garbage_collector(
+        tmp_path,
+        now=100 + 25 * 60 * 60,
+        retention_seconds=24 * 60 * 60,
+        tracked_predicate=_never_tracked,
+    )
+
+    assert "tmp/mixed-dir" not in result["deleted_directories"]
     assert directory.exists()
     assert child.exists()
+
+
+def test_local_gc_skips_symlinks(tmp_path: Path) -> None:
+    target = tmp_path / "target.txt"
+    target.write_text("keep", encoding="utf-8")
+    link = tmp_path / "tmp" / "old-link.txt"
+    link.parent.mkdir()
+    link.symlink_to(target)
+    os.utime(link.parent, (100, 100))
+
+    result = run_local_garbage_collector(
+        tmp_path,
+        now=100 + 25 * 60 * 60,
+        retention_seconds=24 * 60 * 60,
+        tracked_predicate=_never_tracked,
+    )
+
+    assert result["deleted"] == []
+    assert link.is_symlink()
+    assert target.exists()
