@@ -210,7 +210,7 @@ def test_transfer_pr_create_complete_writes_final_live_status(monkeypatch, tmp_p
     assert status["wrapper"] == "pr-create-complete"
     assert status["phase"] == "done"
     assert status["result_status"] == "PASS"
-    assert status["safe_to_interrupt"] is True
+    assert status["safe_to_interrupt"] is False
     assert status["base"] == "main"
     assert status["head"] == "feature/demo"
     assert status["expected_head_sha"] == "0123456789abcdef0123456789abcdef01234567"
@@ -258,7 +258,7 @@ def test_transfer_pr_create_complete_writes_blocked_live_status(monkeypatch, tmp
     status = json.loads(Path("tmp/current-wrapper-status.json").read_text(encoding="utf-8"))
     assert status["phase"] == "blocked"
     assert status["result_status"] == "BLOCKED"
-    assert status["safe_to_interrupt"] is True
+    assert status["safe_to_interrupt"] is False
     assert status["blockers"] == ["current_branch_missing", "current_head_sha_invalid"]
 
 
@@ -329,7 +329,7 @@ def test_transfer_pr_complete_updates_parent_live_phases_when_wrapped(monkeypatc
                 kwargs["phase"],
                 kwargs["safe_to_interrupt"]
                 if kwargs.get("safe_to_interrupt") is not None
-                else kwargs["phase"] in {"starting", "waiting_ci", "done", "blocked"},
+                else kwargs["phase"] == "waiting_ci",
                 kwargs.get("step", ""),
             )
         )
@@ -368,7 +368,7 @@ def test_transfer_pr_complete_updates_parent_live_phases_when_wrapped(monkeypatc
         ("post_merge", False, "main-pull"),
         ("post_merge", False, "rules-acknowledge"),
         ("post_merge", False, "post-merge-complete"),
-        ("done", True, "pr-complete"),
+        ("done", False, "pr-complete"),
     ]
 
 

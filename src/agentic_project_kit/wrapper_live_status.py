@@ -29,13 +29,13 @@ WRAPPER_PHASES: tuple[WrapperPhase, ...] = (
 )
 
 _DEFAULT_SAFE_TO_INTERRUPT: dict[WrapperPhase, bool] = {
-    "starting": True,
+    "starting": False,
     "creating_pr": False,
     "waiting_ci": True,
     "merging": False,
     "post_merge": False,
-    "done": True,
-    "blocked": True,
+    "done": False,
+    "blocked": False,
 }
 
 
