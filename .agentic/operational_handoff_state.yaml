@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5850cadee8c017426852a9e1ddf2e1290fb39baf
-  short: 5850cade
-  subject: Detect conflicting verified-main HEAD lines (#1647)
+  full: d9469c00d62eda6bbb5d2be8ab9185347e295328
+  short: d9469c00
+  subject: Publish final remote-next report projection
 last_substantive_work_state:
-  full: 5850cadee8c017426852a9e1ddf2e1290fb39baf
-  short: 5850cade
-  subject: Detect conflicting verified-main HEAD lines (#1647)
+  full: d9469c00d62eda6bbb5d2be8ab9185347e295328
+  short: d9469c00
+  subject: Publish final remote-next report projection
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
