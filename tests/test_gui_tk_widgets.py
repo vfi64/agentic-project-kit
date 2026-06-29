@@ -6,7 +6,10 @@ from agentic_project_kit.gui_tk_widgets import (
     communication_mode_explanation,
     communication_mode_option_label,
     communication_mode_option_values,
+    constrain_tooltip_position,
+    maximize_root_window,
     selected_communication_mode_option,
+    TOOLTIP_WRAP_LENGTH,
     traffic_light_fill,
     traffic_light_state_label,
 )
@@ -22,6 +25,22 @@ class FakeWidget:
     def bind(self, event: str, callback: object) -> None:
         self.bound_events[event] = callback
         self.bind_counts[event] = self.bind_counts.get(event, 0) + 1
+
+
+class FakeRoot:
+    def __init__(self, *, width: int = 1440, height: int = 900) -> None:
+        self.width = width
+        self.height = height
+        self.geometry_calls: list[str] = []
+
+    def winfo_screenwidth(self) -> int:
+        return self.width
+
+    def winfo_screenheight(self) -> int:
+        return self.height
+
+    def geometry(self, value: str) -> None:
+        self.geometry_calls.append(value)
 
 
 def test_traffic_light_fill_maps_supported_colors() -> None:
@@ -97,6 +116,7 @@ def test_attach_tooltip_records_text_and_binds_hover_events() -> None:
 
     assert returned is widget
     assert widget._agentic_tooltip_text == "Helpful text"
+    assert widget._agentic_tooltip.wraplength == TOOLTIP_WRAP_LENGTH
     assert "<Enter>" in widget.bound_events
     assert "<Leave>" in widget.bound_events
 
@@ -121,3 +141,47 @@ def test_repeated_attach_tooltip_binds_hover_events_once() -> None:
 
     assert widget.bind_counts["<Enter>"] == 1
     assert widget.bind_counts["<Leave>"] == 1
+
+
+def test_constrain_tooltip_position_keeps_tooltip_inside_right_edge() -> None:
+    x, y = constrain_tooltip_position(
+        x=1180,
+        y=50,
+        width=320,
+        height=80,
+        screen_width=1280,
+        screen_height=800,
+    )
+
+    assert x == 948
+    assert y == 50
+
+
+def test_constrain_tooltip_position_keeps_margin_for_small_screens() -> None:
+    x, y = constrain_tooltip_position(
+        x=-100,
+        y=900,
+        width=800,
+        height=500,
+        screen_width=640,
+        screen_height=480,
+    )
+
+    assert x == 12
+    assert y == 12
+
+
+def test_maximize_root_window_uses_screen_size() -> None:
+    root = FakeRoot(width=1440, height=900)
+
+    maximize_root_window(root, fallback_geometry="1180x760")
+
+    assert root.geometry_calls == ["1440x900+0+0"]
+
+
+def test_maximize_root_window_falls_back_for_invalid_screen_size() -> None:
+    root = FakeRoot(width=0, height=0)
+
+    maximize_root_window(root, fallback_geometry="1180x760")
+
+    assert root.geometry_calls == ["1180x760"]

@@ -31,6 +31,7 @@ from agentic_project_kit.gui_cockpit_common import (
 from agentic_project_kit.gui_cockpit_header import CockpitHeaderMixin
 from agentic_project_kit.gui_cockpit_sidebar import CockpitSidebarMixin
 from agentic_project_kit.gui_cockpit_task import CockpitTaskMixin
+from agentic_project_kit.gui_tk_widgets import maximize_root_window
 from agentic_project_kit.gui_viewmodel import build_basic_cockpit_view_model
 
 
@@ -47,7 +48,7 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
         )
         self.recovery_action_id = recommended_recovery_action_id(self.basic_view)
         self.root.title(HEADER_TEXT)
-        self.root.geometry(THEME.window_geometry)
+        maximize_root_window(self.root, fallback_geometry=THEME.window_geometry)
         if hasattr(self.root, "minsize"):
             self.root.minsize(1040, 680)
         self.selected_action_id_value: str | None = None

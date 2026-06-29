@@ -25,6 +25,10 @@ TRAFFIC_LIGHT_LABEL_BY_STATE = {
     "FAILED": "FAILED (red)",
 }
 
+TOOLTIP_WRAP_LENGTH = 360
+TOOLTIP_SCREEN_MARGIN = 12
+
+
 def traffic_light_fill(color: str) -> str:
     return TRAFFIC_LIGHT_FILL_BY_COLOR.get(color.lower(), TRAFFIC_LIGHT_FILL_BY_COLOR["gray"])
 
@@ -64,9 +68,10 @@ def access_level_option_values() -> tuple[str, ...]:
 
 
 class TkTooltip:
-    def __init__(self, widget: Any, text: str) -> None:
+    def __init__(self, widget: Any, text: str, *, wraplength: int = TOOLTIP_WRAP_LENGTH) -> None:
         self.widget = widget
         self.text = text
+        self.wraplength = wraplength
         self.window: Any | None = None
         if hasattr(widget, "bind"):
             widget.bind("<Enter>", self.show)
@@ -81,7 +86,6 @@ class TkTooltip:
         y = self.widget.winfo_rooty() + self.widget.winfo_height() + 8
         self.window = tk.Toplevel(self.widget)
         self.window.wm_overrideredirect(True)
-        self.window.wm_geometry(f"+{x}+{y}")
         label = tk.Label(
             self.window,
             text=self.text,
@@ -91,8 +95,23 @@ class TkTooltip:
             borderwidth=1,
             padx=6,
             pady=3,
+            wraplength=self.wraplength,
         )
         label.pack()
+        self.window.update_idletasks()
+        width = self.window.winfo_reqwidth()
+        height = self.window.winfo_reqheight()
+        screen_width = self.widget.winfo_screenwidth()
+        screen_height = self.widget.winfo_screenheight()
+        x, y = constrain_tooltip_position(
+            x=x,
+            y=y,
+            width=width,
+            height=height,
+            screen_width=screen_width,
+            screen_height=screen_height,
+        )
+        self.window.wm_geometry(f"+{x}+{y}")
 
     def hide(self, _event: object | None = None) -> None:
         if self.window is None:
@@ -102,6 +121,21 @@ class TkTooltip:
 
     def update_text(self, text: str) -> None:
         self.text = text
+
+
+def constrain_tooltip_position(
+    *,
+    x: int,
+    y: int,
+    width: int,
+    height: int,
+    screen_width: int,
+    screen_height: int,
+    margin: int = TOOLTIP_SCREEN_MARGIN,
+) -> tuple[int, int]:
+    max_x = max(margin, screen_width - width - margin)
+    max_y = max(margin, screen_height - height - margin)
+    return max(margin, min(x, max_x)), max(margin, min(y, max_y))
 
 
 def attach_tooltip(widget: Any, text: str) -> Any:
@@ -116,3 +150,18 @@ def attach_tooltip(widget: Any, text: str) -> Any:
     widget._agentic_tooltip_text = text
     widget._agentic_tooltip = TkTooltip(widget, text)
     return widget
+
+
+def maximize_root_window(root: Any, *, fallback_geometry: str) -> None:
+    if not hasattr(root, "geometry"):
+        return
+    try:
+        screen_width = int(root.winfo_screenwidth())
+        screen_height = int(root.winfo_screenheight())
+    except Exception:
+        root.geometry(fallback_geometry)
+        return
+    if screen_width <= 0 or screen_height <= 0:
+        root.geometry(fallback_geometry)
+        return
+    root.geometry(f"{screen_width}x{screen_height}+0+0")
