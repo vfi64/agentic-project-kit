@@ -96,6 +96,8 @@ Registry/schema changes must preserve these boundaries:
 - keep evidence/log and temporary artifact behavior separate;
 - keep artifact GC integration explicit and protected;
 - keep `agentic-kit docs-registry` read-only;
+- use `agentic-kit doc-registry register --path PATH --class CLASS --json` for reviewed single-entry additions;
+- use `agentic-kit doc-registry check-unregistered --json` for WARN-only inventory of unregistered candidates;
 - update tests when allowed classes, required fields, guard semantics, or registry reporting change.
 
 Required evidence for this registry gate:
@@ -103,6 +105,7 @@ Required evidence for this registry gate:
     python -m pytest -q tests/test_documentation_registry.py
     agentic-kit docs-registry
     agentic-kit docs-registry --report tmp/agentic-docs-registry-summary.json
+    agentic-kit doc-registry check-unregistered --json
     agentic-kit check-docs
 
 ## Failure-Mode Review Automation Gate (planned)

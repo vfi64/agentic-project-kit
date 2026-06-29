@@ -1078,6 +1078,128 @@
       "qualified_name": "agentic-kit doc-mesh-repair"
     },
     {
+      "group": "doc-registry",
+      "help": "List unregistered docs candidates as a non-failing WARN report.",
+      "name": "check-unregistered",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "doc-registry",
+        "check-unregistered"
+      ],
+      "qualified_name": "agentic-kit doc-registry check-unregistered"
+    },
+    {
+      "group": "doc-registry",
+      "help": "Add one reviewed document entry to the documentation registry.",
+      "name": "register",
+      "params": [
+        {
+          "default": null,
+          "help": "Repository-relative document path.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "document_path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Allowed documentation registry class.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "document_class",
+          "opts": [
+            "--class"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "maintainers",
+          "help": "Document owner recorded in the registry.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "owner",
+          "opts": [
+            "--owner"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "doc-registry",
+        "register"
+      ],
+      "qualified_name": "agentic-kit doc-registry register"
+    },
+    {
       "group": "root",
       "help": "Run the umbrella documentation-system audit.",
       "name": "docs-audit",

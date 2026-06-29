@@ -163,11 +163,12 @@ def build_documentation_registry_summary(project_root: Path) -> dict[str, Any]:
         "class_counts": dict(sorted(class_counts.items())),
         "owner_counts": dict(sorted(owner_counts.items())),
         "registration_policy": {
-            "status": "inventory_only",
-            "mutation_allowed": False,
+            "status": "reviewed_register_command_available",
+            "mutation_allowed": True,
+            "allowed_command": "agentic-kit doc-registry register",
             "next_step": (
-                "Review unregistered candidates, classify them, then patch "
-                "docs/DOCUMENTATION_REGISTRY.yaml explicitly through the normal PR lifecycle."
+                "Review unregistered candidates, classify them, then register one explicit "
+                "path/class entry through the normal PR lifecycle."
             ),
         },
         "unregistered_candidate_count": len(unregistered_candidates),
@@ -198,7 +199,9 @@ def render_documentation_registry_summary(summary: dict[str, Any]) -> str:
     lines.extend(
         [
             "registration policy:",
-            "- status: inventory_only",
+            "- status: reviewed_register_command_available",
+            "- mutation_allowed: True",
+            "- allowed_command: agentic-kit doc-registry register",
             f"- unregistered_candidates: {summary.get('unregistered_candidate_count', 0)}",
         ]
     )
@@ -275,6 +278,19 @@ def write_documentation_registry_summary_json(
     )
 
 
+def documentation_registry_findings_for_data(
+    project_root: Path,
+    registry: dict[str, Any],
+) -> list[str]:
+    errors: list[str] = []
+    if registry.get("version") != 1:
+        errors.append(f"{REGISTRY_PATH}: version must be 1")
+
+    errors.extend(_check_class_rules(registry))
+    errors.extend(_check_document_entries(project_root, registry))
+    return errors
+
+
 def check_documentation_registry(project_root: Path) -> list[str]:
     registry_file = project_root / REGISTRY_PATH
     if not registry_file.exists():
@@ -287,13 +303,128 @@ def check_documentation_registry(project_root: Path) -> list[str]:
     except (OSError, ValueError, yaml.YAMLError) as exc:
         return [f"{REGISTRY_PATH}: invalid registry ({exc})"]
 
-    errors: list[str] = []
-    if registry.get("version") != 1:
-        errors.append(f"{REGISTRY_PATH}: version must be 1")
+    return documentation_registry_findings_for_data(project_root, registry)
 
-    errors.extend(_check_class_rules(registry))
-    errors.extend(_check_document_entries(project_root, registry))
-    return errors
+
+def register_documentation_registry_entry(
+    project_root: Path,
+    *,
+    document_path: str,
+    document_class: str,
+    owner: str = "maintainers",
+) -> dict[str, Any]:
+    normalized_path = document_path.strip().lstrip("./")
+    normalized_class = document_class.strip()
+    normalized_owner = owner.strip() or "maintainers"
+    base_payload: dict[str, Any] = {
+        "schema_version": 1,
+        "kind": "documentation_registry_register_result",
+        "registry_path": REGISTRY_PATH.as_posix(),
+        "path": normalized_path,
+        "class": normalized_class,
+        "owner": normalized_owner,
+        "written": False,
+    }
+
+    registry = load_documentation_registry(project_root)
+    existing_findings = documentation_registry_findings_for_data(project_root, registry)
+    if existing_findings:
+        return {
+            **base_payload,
+            "result_status": "FAIL",
+            "code": "FAIL_INVALID_REGISTRY",
+            "findings": existing_findings,
+        }
+
+    allowed_classes = set(DOCUMENT_CLASSES)
+    if normalized_class not in allowed_classes:
+        return {
+            **base_payload,
+            "result_status": "FAIL",
+            "code": "FAIL_UNKNOWN_CLASS",
+            "allowed_classes": sorted(allowed_classes),
+        }
+
+    if not normalized_path or not (project_root / normalized_path).exists():
+        return {
+            **base_payload,
+            "result_status": "FAIL",
+            "code": "FAIL_PATH_NOT_FOUND",
+        }
+
+    documents = registry.get("documents")
+    if not isinstance(documents, list):
+        return {
+            **base_payload,
+            "result_status": "FAIL",
+            "code": "FAIL_INVALID_REGISTRY",
+            "findings": [f"{REGISTRY_PATH}: documents must be a list"],
+        }
+
+    registered_paths = {
+        str(entry.get("path", "")).strip()
+        for entry in documents
+        if isinstance(entry, dict)
+    }
+    if normalized_path in registered_paths:
+        return {
+            **base_payload,
+            "result_status": "FAIL",
+            "code": "FAIL_DUPLICATE_PATH",
+        }
+
+    candidate_registry = dict(registry)
+    candidate_documents = list(documents)
+    candidate_documents.append(
+        {
+            "path": normalized_path,
+            "class": normalized_class,
+            "owner": normalized_owner,
+        }
+    )
+    candidate_registry["documents"] = candidate_documents
+    candidate_findings = documentation_registry_findings_for_data(
+        project_root,
+        candidate_registry,
+    )
+    if candidate_findings:
+        return {
+            **base_payload,
+            "result_status": "FAIL",
+            "code": "FAIL_VALIDATION",
+            "findings": candidate_findings,
+        }
+
+    registry_path = project_root / REGISTRY_PATH
+    registry_path.write_text(
+        yaml.safe_dump(candidate_registry, sort_keys=False, allow_unicode=True),
+        encoding="utf-8",
+    )
+    return {
+        **base_payload,
+        "result_status": "PASS",
+        "code": "PASS",
+        "written": True,
+    }
+
+
+def build_unregistered_document_candidates_report(project_root: Path) -> dict[str, Any]:
+    candidates = find_unregistered_document_candidates(project_root)
+    result_status = "WARN" if candidates else "PASS"
+    return {
+        "schema_version": 1,
+        "kind": "documentation_registry_unregistered_candidates",
+        "registry_path": REGISTRY_PATH.as_posix(),
+        "result_status": result_status,
+        "final_signal": "d",
+        "candidate_count": len(candidates),
+        "candidates": candidates,
+        "next_action": (
+            "Review and classify candidates before registering explicit entries."
+            if candidates
+            else "No unregistered document candidates found."
+        ),
+    }
 
 
 def _registry_required(project_root: Path) -> bool:

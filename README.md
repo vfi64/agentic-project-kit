@@ -189,6 +189,13 @@ It also updates the canonical chat-switch prompt projections in `docs/handoff/`.
 
 `agentic-kit slice gate --kind planning-doc` emits `SLICE_GATE_RESULT` and `slice_result=PASS|BLOCKED`. helper-local PASS is not a slice PASS; `planning-doc` runs targeted tests plus `agentic-kit handoff check`, `agentic-kit check-docs`, `agentic-kit docs-audit`, and `agentic-kit doctor`. Dirty state reports `merge_pr_ready=NO`.
 
+## Documentation registry
+
+`agentic-kit docs-registry` shows the read-only documentation registry summary.
+Reviewed single-entry additions use `agentic-kit doc-registry register --path PATH
+--class CLASS --json`; `agentic-kit doc-registry check-unregistered --json`
+lists unregistered document candidates as WARN without starting broad migration.
+
 ## Deterministic quality heuristics
 
 `agentic-kit check-docs` includes deterministic document-quality heuristics for machine-checkable problems such as unresolved placeholder markers, stale handoff markers, missing required sections, missing coverage terms, and documentation drift.
