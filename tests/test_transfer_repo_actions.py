@@ -8,6 +8,7 @@ from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
 import agentic_project_kit.transfer_repo_actions as transfer_repo_actions
+from agentic_project_kit.cli_commands import transfer as transfer_commands
 from agentic_project_kit.transfer_repo_actions import (
     admin_refresh_pr,
     branch_create,
@@ -129,6 +130,33 @@ def test_transfer_branch_create_cli(tmp_path, monkeypatch):
     assert '"action": "branch-create"' not in result.stdout
     assert "STATE:" in result.stdout
     assert "PASS" in result.stdout
+
+
+def test_transfer_list_refs_returns_tags_newest_first(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "tag", "--sort=-creatordate"]:
+            return subprocess.CompletedProcess(command, 0, "v0.4.11\nv0.4.10\nnot-a-release\n", "")
+        if command == ["git", "branch", "--format=%(refname:short)"]:
+            return subprocess.CompletedProcess(command, 0, "main\ncodex/demo\n", "")
+        if command == ["git", "branch", "-r", "--format=%(refname:short)"]:
+            return subprocess.CompletedProcess(command, 0, "origin/main\norigin/codex/demo\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_commands.subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "list-refs", "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["result_status"] == "PASS"
+    assert payload["default_ref"] == "main"
+    assert payload["tags"] == ["v0.4.11", "v0.4.10"]
+    assert payload["branches"] == ["main", "codex/demo"]
+    assert payload["remote_branches"] == ["origin/main", "origin/codex/demo"]
 
 
 def test_transfer_commit_cli_requires_path(tmp_path, monkeypatch):

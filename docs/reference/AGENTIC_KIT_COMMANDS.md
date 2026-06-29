@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `194`
+- Command count: `195`
 
 ## Commands
 
@@ -1156,6 +1156,14 @@ Finalize transfer evidence on an evidence branch and complete it through a PR.
 | `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/current.yaml')` | Transfer order path. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
+### `agentic-kit transfer list-refs`
+
+List local release tags and branches for safe work-start selection.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+
 ### `agentic-kit transfer log-header`
 
 Render the dynamic local-to-LLM copy/paste log header from rule files.
@@ -1601,6 +1609,7 @@ Start a human patch/slice workflow with the safe standard startup sequence.
 |---|---:|---|---:|---|---|
 | `branch` | `TyperOption` | --branch | `True` |  | Feature branch to create or switch to. |
 | `kind` | `TyperOption` | --kind | `False` | `patch` | Human label for the work kind. |
+| `from_ref` | `TyperOption` | --from-ref | `False` | `main` | Start new work from this tag or branch ref. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit work-order check`

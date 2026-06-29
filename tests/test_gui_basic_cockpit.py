@@ -564,7 +564,9 @@ def test_work_cycle_finish_requires_dry_run_before_execute() -> None:
 def test_work_cycle_uses_existing_work_wrappers_not_direct_remote_mutation() -> None:
     source = _cockpit_sources()
 
-    assert '"work", "start"' in source
+    start_source = inspect.getsource(CockpitGui.start_work_cycle)
+    assert '"work"' in start_source
+    assert '"start"' in start_source
     assert '"work", "check"' in source
     assert '"work", "recover"' in source
     assert "build_work_finish_args" in source
@@ -586,6 +588,16 @@ def test_work_cycle_start_generates_safe_branch_name_from_task() -> None:
     assert "simpledialog.askstring" in source
     assert "slugify_work_title" in source
     assert '"--branch"' in source
+    assert '"--from-ref"' in source
+
+
+def test_work_cycle_start_ref_picker_uses_based_on_language() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit_header.py").read_text(encoding="utf-8")
+
+    assert "Start new work based on" in source
+    assert "It does not rewind history." in source
+    assert "go back" not in source.casefold()
+    assert 'self._agentic_command("transfer", "list-refs", "--json")' in source
 
 
 def test_cockpit_gui_shows_wait_for_d2_label_when_pending() -> None:
