@@ -163,6 +163,7 @@ rules:
     - agentic-kit workflow show
     - agentic-kit workflow upload
     - agentic-kit work start --from-ref
+    - agentic-kit work discard-changes
     - agentic-kit transfer list-refs --json
     - agentic-kit workflow request
     - agentic-kit workflow run

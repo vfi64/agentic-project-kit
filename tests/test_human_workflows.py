@@ -165,6 +165,57 @@ def test_work_recover_runs_recovery_wrappers(monkeypatch):
     assert " clean " not in flattened
 
 
+def test_work_discard_changes_is_dry_run_by_default(monkeypatch):
+    calls: list[dict[str, object]] = []
+
+    def fake_discard(root, *, execute=False, expected_signature="", runner=None):
+        calls.append({"execute": execute, "expected_signature": expected_signature})
+        return {
+            "schema_version": 1,
+            "kind": "human_work_discard_changes_result",
+            "action": "work-discard-changes",
+            "result_status": "PASS",
+            "returncode": 0,
+            "dry_run": not execute,
+            "blockers": [],
+            "next_action": "Workflow completed.",
+        }
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.discard_all_changes", fake_discard)
+
+    result = CliRunner().invoke(app, ["work", "discard-changes", "--json"])
+
+    assert result.exit_code == 0, result.output
+    assert calls == [{"execute": False, "expected_signature": ""}]
+
+
+def test_work_discard_changes_execute_passes_expected_signature(monkeypatch):
+    calls: list[dict[str, object]] = []
+
+    def fake_discard(root, *, execute=False, expected_signature="", runner=None):
+        calls.append({"execute": execute, "expected_signature": expected_signature})
+        return {
+            "schema_version": 1,
+            "kind": "human_work_discard_changes_result",
+            "action": "work-discard-changes",
+            "result_status": "PASS",
+            "returncode": 0,
+            "dry_run": not execute,
+            "blockers": [],
+            "next_action": "Workflow completed.",
+        }
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.discard_all_changes", fake_discard)
+
+    result = CliRunner().invoke(
+        app,
+        ["work", "discard-changes", "--execute", "--expected-signature", "abc123", "--json"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert calls == [{"execute": True, "expected_signature": "abc123"}]
+
+
 def test_release_ready_requires_target_version_and_derives_tag(monkeypatch):
     calls: list[list[str]] = []
 

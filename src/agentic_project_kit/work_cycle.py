@@ -24,6 +24,7 @@ class WorkResultMessage:
     blockers_human: tuple[str, ...]
     suggested_next: str
     allow_confirm_publish: bool = False
+    allow_confirm_discard: bool = False
 
 
 @dataclass(frozen=True)
@@ -94,6 +95,12 @@ BLOCKER_EXPLANATIONS: dict[str, str] = {
     "standard-error-scan": "A release or workflow safety scan found a problem.",
     "protected-diff-plan": "A protected-file change needs review before publishing.",
     "path-selection": "Choose which changed files should be included.",
+    "main-branch": "Discard all changes is blocked on main.",
+    "signature-mismatch": "The worktree changed after the dry-run preview.",
+    "current-branch": "The current branch could not be identified.",
+    "status-porcelain": "The changed files could not be listed.",
+    "reset-hard": "Tracked changes could not be discarded.",
+    "clean-untracked": "Untracked files could not be removed.",
     "commit": "The selected files could not be saved.",
     "rules-acknowledge": "The project rules acknowledgement step needs attention.",
     "push-current": "The change could not be published to the server.",
@@ -166,6 +173,26 @@ def humanize_work_result(payload: dict[str, Any]) -> WorkResultMessage:
             blockers_human=(),
             suggested_next="Confirm publish",
             allow_confirm_publish=True,
+        )
+    if status == "PASS" and action == "work-discard-changes" and dry_run:
+        paths = payload.get("changed_paths", ())
+        path_count = len(paths) if isinstance(paths, list) else 0
+        if path_count == 0:
+            return WorkResultMessage(
+                headline="Nothing to discard.",
+                detail="The dry-run found no feature-branch changes.",
+                blockers_human=(),
+                suggested_next="Continue with the next safe step.",
+            )
+        return WorkResultMessage(
+            headline="Ready to discard changes.",
+            detail=(
+                f"The dry-run found {path_count} changed path"
+                f"{'' if path_count == 1 else 's'}. Confirm only if you want to delete them."
+            ),
+            blockers_human=(),
+            suggested_next="Confirm discard",
+            allow_confirm_discard=True,
         )
     if status == "PASS":
         return WorkResultMessage(

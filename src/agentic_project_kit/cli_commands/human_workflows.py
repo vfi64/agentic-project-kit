@@ -7,6 +7,8 @@ import subprocess
 
 import typer
 
+from agentic_project_kit.work_discard_changes import discard_all_changes
+
 work_app = typer.Typer(help="Human-friendly meta commands for patch, PR, and recovery workflows.")
 release_flow_app = typer.Typer(help="Human-friendly meta commands for release readiness and preparation.")
 
@@ -205,6 +207,26 @@ def work_recover_command(json_output: bool = typer.Option(False, "--json", help=
                 "runs reset, clean, checkout, or broad restore over product files."
             ),
         },
+    )
+    _emit(payload, json_output=json_output)
+    _exit_if_blocked(payload)
+
+
+@work_app.command("discard-changes")
+def work_discard_changes_command(
+    execute: bool = typer.Option(False, "--execute", help="Discard all feature-branch changes. Dry-run is the default."),
+    expected_signature: str = typer.Option(
+        "",
+        "--expected-signature",
+        help="Optional dry-run signature that must match before execute.",
+    ),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    """Preview or execute the explicit destructive discard-all workflow."""
+    payload = discard_all_changes(
+        Path("."),
+        execute=execute,
+        expected_signature=expected_signature,
     )
     _emit(payload, json_output=json_output)
     _exit_if_blocked(payload)
