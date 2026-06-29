@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 21bc5fbc022b71684bdfb38a05e60bc5a4e81640
-  short: 21bc5fbc
-  subject: Harden wrapper live-status interrupt policy (#1637)
+  full: a430876454a4578a31dafbd885b0400697bd95e7
+  short: a4308764
+  subject: Add reviewed documentation registry registration command (#1639)
 last_substantive_work_state:
-  full: 21bc5fbc022b71684bdfb38a05e60bc5a4e81640
-  short: 21bc5fbc
-  subject: Harden wrapper live-status interrupt policy (#1637)
+  full: a430876454a4578a31dafbd885b0400697bd95e7
+  short: a4308764
+  subject: Add reviewed documentation registry registration command (#1639)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
