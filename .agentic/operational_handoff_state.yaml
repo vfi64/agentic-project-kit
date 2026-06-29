@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 86aea0e5ace7037f504aacff9a20df2e375a0e58
-  short: 86aea0e5
-  subject: Compact cockpit layout and local tmp cleanup (#1655)
+  full: 7df28c12f5b4f0fe647da97e8bd4d97d35ca0c48
+  short: 7df28c12
+  subject: Fix cockpit Tk frame parent crash (#1657)
 last_substantive_work_state:
-  full: 86aea0e5ace7037f504aacff9a20df2e375a0e58
-  short: 86aea0e5
-  subject: Compact cockpit layout and local tmp cleanup (#1655)
+  full: 7df28c12f5b4f0fe647da97e8bd4d97d35ca0c48
+  short: 7df28c12
+  subject: Fix cockpit Tk frame parent crash (#1657)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
