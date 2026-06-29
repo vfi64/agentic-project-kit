@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b02084bb710487eb5c4d394a7af0d319ace18e52
-  short: b02084bb
-  subject: Add explicit destructive discard changes workflow (#1645)
+  full: 5850cadee8c017426852a9e1ddf2e1290fb39baf
+  short: 5850cade
+  subject: Detect conflicting verified-main HEAD lines (#1647)
 last_substantive_work_state:
-  full: b02084bb710487eb5c4d394a7af0d319ace18e52
-  short: b02084bb
-  subject: Add explicit destructive discard changes workflow (#1645)
+  full: 5850cadee8c017426852a9e1ddf2e1290fb39baf
+  short: 5850cade
+  subject: Detect conflicting verified-main HEAD lines (#1647)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
