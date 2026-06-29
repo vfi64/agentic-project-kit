@@ -171,6 +171,7 @@ rules:
     - agentic-kit audit-status-current-state
     - agentic-kit doc-registry register
     - agentic-kit doc-registry check-unregistered
+    - agentic-kit rule-registry register
     - agentic-kit patterns list
     - agentic-kit patterns show
     - agentic-kit slice gate --kind planning-doc

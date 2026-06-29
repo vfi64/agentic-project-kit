@@ -129,11 +129,12 @@ def build_rule_registry_report(root: Path | str = ".") -> dict[str, Any]:
         "schema_version": 1,
         "status": status,
         "auto_registration_policy": {
-            "status": "inventory_only",
-            "mutation_allowed": False,
+            "status": "reviewed_register_command_available",
+            "mutation_allowed": True,
+            "allowed_command": "agentic-kit rule-registry register",
             "next_step": (
-                "Review followups and add rule-registry entries with direct evidence "
-                "through an explicit protected-file patch."
+                "Use agentic-kit rule-registry register with direct source/test evidence "
+                "for reviewed additive entries; do not edit, remove, or deactivate existing rules."
             ),
         },
         "summary": {
