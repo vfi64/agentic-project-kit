@@ -144,7 +144,7 @@ class CockpitActionsMixin:
         self._section_heading(parent, "Actions")
         actions_row = tk.Frame(parent, bg=THEME.color_panel_bg)
         actions_row.pack(fill=tk.X, pady=(0, 10))
-        action_scroll_shell = tk.Frame(parent=actions_row, bg=THEME.color_panel_bg, width=THEME.action_list_width)
+        action_scroll_shell = tk.Frame(actions_row, bg=THEME.color_panel_bg, width=THEME.action_list_width)
         action_scroll_shell.pack(side=tk.LEFT, fill=tk.Y)
         action_scroll_shell.pack_propagate(False)
         self.action_card_canvas = tk.Canvas(

@@ -276,6 +276,21 @@ def test_gui_action_cards_are_four_rows_and_scrollable() -> None:
     assert "ttk.Treeview" not in source
 
 
+def test_cockpit_tk_widgets_do_not_use_parent_keyword() -> None:
+    source = _cockpit_sources()
+
+    forbidden = (
+        "tk.Frame(parent=",
+        "tk.Canvas(parent=",
+        "tk.Label(parent=",
+        "tk.Button(parent=",
+        "tk.Text(parent=",
+        "tk.Listbox(parent=",
+    )
+    for fragment in forbidden:
+        assert fragment not in source
+
+
 def test_cockpit_gui_composes_focused_mixins() -> None:
     assert issubclass(CockpitGui, CockpitHeaderMixin)
     assert issubclass(CockpitGui, CockpitSidebarMixin)
