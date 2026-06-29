@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 759a4d01baa98d7063b86e3e435f13435c95a99f
-  short: 759a4d01
-  subject: Keep GUI tooltips onscreen and maximize cockpit window (#1651)
+  full: 0aa870ed76602cfc0e2eea1664d5e5905d5f911e
+  short: 0aa870ed
+  subject: Add central next-step guidance to cockpit (#1653)
 last_substantive_work_state:
-  full: 759a4d01baa98d7063b86e3e435f13435c95a99f
-  short: 759a4d01
-  subject: Keep GUI tooltips onscreen and maximize cockpit window (#1651)
+  full: 0aa870ed76602cfc0e2eea1664d5e5905d5f911e
+  short: 0aa870ed
+  subject: Add central next-step guidance to cockpit (#1653)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
