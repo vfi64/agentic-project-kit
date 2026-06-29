@@ -319,6 +319,8 @@ Use `workflow status --explain` when you are unsure what to do next. It is read-
 
 Quick command guide:
 
+- `agentic-kit work start --from-ref REF`: create a fresh work branch based on a selected release tag or branch.
+- `agentic-kit transfer list-refs --json`: list local release tags and branches for the guided work-start picker.
 - `workflow status --explain`: inspect the current state and next safe step.
 - `workflow request`: mark a concrete local workflow slice as requested.
 - `workflow run`: run one bounded workflow state-machine step.

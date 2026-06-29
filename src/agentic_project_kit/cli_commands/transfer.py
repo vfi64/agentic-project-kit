@@ -2472,6 +2472,61 @@ def branch_create_command(
         raise typer.Exit(code=result.returncode)
 
 
+def _git_ref_lines(argv: list[str]) -> dict[str, object]:
+    completed = subprocess.run(argv, text=True, capture_output=True)
+    return {
+        "argv": argv,
+        "returncode": completed.returncode,
+        "ok": completed.returncode == 0,
+        "stdout": completed.stdout,
+        "stderr": completed.stderr,
+        "lines": [line.strip() for line in completed.stdout.splitlines() if line.strip()],
+    }
+
+
+@transfer_app.command("list-refs")
+def list_refs_command(
+    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
+) -> None:
+    """List local release tags and branches for safe work-start selection."""
+    tag_step = _git_ref_lines(["git", "tag", "--sort=-creatordate"])
+    branch_step = _git_ref_lines(["git", "branch", "--format=%(refname:short)"])
+    remote_branch_step = _git_ref_lines(["git", "branch", "-r", "--format=%(refname:short)"])
+    steps = [tag_step, branch_step, remote_branch_step]
+    tags = [line for line in tag_step["lines"] if str(line).startswith("v")]
+    branches = [
+        str(line)
+        for line in branch_step["lines"]
+        if str(line) and not str(line).startswith("(")
+    ]
+    remote_branches = [
+        str(line)
+        for line in remote_branch_step["lines"]
+        if str(line) and " -> " not in str(line)
+    ]
+    status = "PASS" if all(step["ok"] for step in steps[:2]) else "FAIL"
+    payload = {
+        "schema_version": 1,
+        "kind": "transfer_list_refs_result",
+        "result_status": status,
+        "tags": tags,
+        "branches": branches,
+        "remote_branches": remote_branches,
+        "default_ref": "main",
+        "steps": steps,
+    }
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        typer.echo("TRANSFER_LIST_REFS")
+        typer.echo(f"STATE: {status}")
+        typer.echo("DEFAULT: main")
+        typer.echo("TAGS: " + ", ".join(tags))
+        typer.echo("BRANCHES: " + ", ".join(branches))
+    if status != "PASS":
+        raise typer.Exit(code=2)
+
+
 @transfer_app.command("branch-switch")
 def branch_switch_command(
     branch: str = typer.Argument(..., help="Branch name to switch to."),

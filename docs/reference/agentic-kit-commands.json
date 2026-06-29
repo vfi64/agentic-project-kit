@@ -7062,6 +7062,32 @@
     },
     {
       "group": "transfer",
+      "help": "List local release tags and branches for safe work-start selection.",
+      "name": "list-refs",
+      "params": [
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "list-refs"
+      ],
+      "qualified_name": "agentic-kit transfer list-refs"
+    },
+    {
+      "group": "transfer",
       "help": "Render the dynamic local-to-LLM copy/paste log header from rule files.",
       "name": "log-header",
       "params": [
@@ -9829,6 +9855,20 @@
           "name": "kind",
           "opts": [
             "--kind"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "main",
+          "help": "Start new work from this tag or branch ref.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "from_ref",
+          "opts": [
+            "--from-ref"
           ],
           "param_type": "TyperOption",
           "required": false,

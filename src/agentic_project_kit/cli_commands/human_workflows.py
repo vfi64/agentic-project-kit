@@ -90,9 +90,11 @@ def _path_args(paths: list[Path]) -> list[str]:
 def work_start_command(
     branch: str = typer.Option(..., "--branch", help="Feature branch to create or switch to."),
     kind: str = typer.Option("patch", "--kind", help="Human label for the work kind."),
+    from_ref: str = typer.Option("main", "--from-ref", help="Start new work from this tag or branch ref."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     """Start a human patch/slice workflow with the safe standard startup sequence."""
+    base_ref = from_ref.strip() or "main"
     steps = [
         _run_step("sync-main", _agentic("transfer", "sync-main")),
         _run_step("rules-acknowledge", _agentic("rules", "acknowledge")),
@@ -104,8 +106,13 @@ def work_start_command(
         if exists.returncode == 0:
             steps.append(_run_step("git-switch-branch", ["git", "switch", branch]))
         else:
-            steps.append(_run_step("git-create-branch", ["git", "switch", "-c", branch]))
-    payload = _payload("work-start", steps, extra={"branch": branch, "work_kind": kind})
+            steps.append(
+                _run_step(
+                    "branch-create",
+                    _agentic("transfer", "branch-create", branch, "--start-point", base_ref),
+                )
+            )
+    payload = _payload("work-start", steps, extra={"branch": branch, "from_ref": base_ref, "work_kind": kind})
     _emit(payload, json_output=json_output)
     _exit_if_blocked(payload)
 

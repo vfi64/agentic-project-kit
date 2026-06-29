@@ -89,6 +89,27 @@ class CockpitHeaderMixin:
             attach_tooltip(button, recovery_view.tooltip)
             button.pack(side=tk.LEFT, padx=(0, 8))
         else:
+            ref_frame = tk.Frame(frame, bg=THEME.color_panel_bg)
+            ref_frame.pack(side=tk.LEFT, padx=(0, 10))
+            tk.Label(
+                ref_frame,
+                text="Start new work based on",
+                bg=THEME.color_panel_bg,
+                fg=THEME.color_muted_text,
+                font=THEME.small_font,
+            ).pack(side=tk.TOP, anchor=tk.W)
+            ref_picker = ttk.Combobox(
+                ref_frame,
+                textvariable=self.start_from_ref_value,
+                values=self._start_from_ref_options(),
+                width=18,
+                state="readonly",
+            )
+            ref_picker.pack(side=tk.TOP, anchor=tk.W)
+            attach_tooltip(
+                ref_picker,
+                "This creates a fresh workspace starting from the chosen version. It does not rewind history.",
+            )
             for index, view in enumerate(normal_views):
                 button = tk.Button(
                     frame,
@@ -126,6 +147,29 @@ class CockpitHeaderMixin:
         )
         self.work_finish_confirm_button.pack(side=tk.RIGHT)
         ttk.Separator(parent, orient=tk.HORIZONTAL).pack(fill=tk.X)
+
+    def _start_from_ref_options(self) -> tuple[str, ...]:
+        try:
+            completed = self._agentic_command("transfer", "list-refs", "--json")
+            payload = json.loads(completed.stdout) if completed.returncode == 0 and completed.stdout else {}
+        except (OSError, ValueError):
+            payload = {}
+        tags = [str(item) for item in payload.get("tags", []) if str(item).strip()]
+        branches = [str(item) for item in payload.get("branches", []) if str(item).strip()]
+        remote_branches = [
+            str(item)
+            for item in payload.get("remote_branches", [])
+            if str(item).strip() and str(item).strip() not in {"origin/HEAD"}
+        ]
+        values = ["latest main", *tags, *branches, *remote_branches]
+        deduped = tuple(dict.fromkeys(values))
+        if self.start_from_ref_value.get() not in deduped:
+            self.start_from_ref_value.set(deduped[0])
+        return deduped
+
+    def selected_start_ref(self) -> str:
+        selected = self.start_from_ref_value.get().strip()
+        return "main" if selected in {"", "latest main"} else selected
 
     def _work_cycle_command_for(self, phase_id: str) -> Any:
         if phase_id == "start":
@@ -254,7 +298,19 @@ class CockpitHeaderMixin:
                 parent=self.root,
             ) or ""
         branch = slugify_work_title(title)
-        completed = self._agentic_command("work", "start", "--branch", branch, "--kind", "patch", "--json")
+        start_ref = self.selected_start_ref()
+        self.write_output(f"\nStart new work based on {start_ref}.\n")
+        completed = self._agentic_command(
+            "work",
+            "start",
+            "--branch",
+            branch,
+            "--kind",
+            "patch",
+            "--from-ref",
+            start_ref,
+            "--json",
+        )
         self._write_work_command_result(completed)
 
     def focus_make_changes(self) -> None:

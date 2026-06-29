@@ -35,7 +35,52 @@ def test_work_start_runs_safe_start_sequence(monkeypatch):
         ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"],
         ["./.venv/bin/agentic-kit", "transfer", "repo-status"],
     ]
-    assert calls[-1] == ["git", "switch", "-c", "codex/demo"]
+    assert calls[-1] == [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "branch-create",
+        "codex/demo",
+        "--start-point",
+        "main",
+    ]
+
+
+def test_work_start_from_ref_creates_branch_based_on_chosen_ref(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:3] == ["git", "show-ref", "--verify"]:
+            return _completed(command, returncode=1)
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "work",
+            "start",
+            "--branch",
+            "codex/from-release",
+            "--from-ref",
+            "v0.4.11",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["from_ref"] == "v0.4.11"
+    assert calls[-1] == [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "branch-create",
+        "codex/from-release",
+        "--start-point",
+        "v0.4.11",
+    ]
 
 
 def test_work_finish_dry_run_requires_paths(monkeypatch):

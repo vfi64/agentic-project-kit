@@ -55,6 +55,7 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
         self.work_cycle_last_check_signature = ""
         self.pending_finish_preview: dict[str, object] | None = None
         self.work_finish_confirm_button: Any | None = None
+        self.start_from_ref_value = tk.StringVar(value="latest main")
 
         shell = tk.Frame(
             root,
