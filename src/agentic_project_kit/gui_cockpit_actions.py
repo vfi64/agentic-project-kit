@@ -13,7 +13,11 @@ from agentic_project_kit.gui_action_views import (
     format_action_result,
     grouped_action_views,
 )
-from agentic_project_kit.gui_cockpit_common import THEME, action_tree_tag_colors
+from agentic_project_kit.gui_cockpit_common import (
+    THEME,
+    action_tree_tag_colors,
+    format_state_details,
+)
 from agentic_project_kit.gui_release_flow import (
     humanize_release_result,
     normalize_release_version,
@@ -26,6 +30,113 @@ from agentic_project_kit.gui_tkinter_shell import run_basic_cockpit_button
 
 
 class CockpitActionsMixin:
+    def _build_next_step_panel(self, parent: Any) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        next_step = self.basic_view.next_step
+        panel = tk.Frame(
+            parent,
+            bg=THEME.color_recommended_bg,
+            highlightbackground="#7eb1f1",
+            highlightthickness=1,
+            padx=12,
+            pady=10,
+        )
+        panel.pack(fill=tk.X, pady=(0, 14))
+
+        header = tk.Frame(panel, bg=THEME.color_recommended_bg)
+        header.pack(fill=tk.X, pady=(0, 7))
+        tk.Label(
+            header,
+            text="NEXT STEP",
+            bg=THEME.color_recommended_bg,
+            fg="#174ea6",
+            font=THEME.section_font,
+            anchor=tk.W,
+        ).pack(side=tk.LEFT)
+        status = tk.Frame(header, bg=THEME.color_recommended_bg)
+        status.pack(side=tk.RIGHT)
+        light = tk.Canvas(status, width=14, height=14, bg=THEME.color_recommended_bg, highlightthickness=0)
+        fill = traffic_light_fill(self.basic_view.traffic_light_color)
+        light.create_oval(3, 3, 11, 11, fill=fill, outline=fill)
+        light.pack(side=tk.LEFT, padx=(0, 5))
+        tk.Label(
+            status,
+            text=next_step.state_label,
+            bg=THEME.color_recommended_bg,
+            fg="#174ea6",
+            font=THEME.small_font,
+        ).pack(side=tk.LEFT)
+
+        tk.Label(
+            panel,
+            text=next_step.title,
+            bg=THEME.color_recommended_bg,
+            fg="#0b2f27",
+            font=("TkDefaultFont", 13, "bold"),
+            anchor=tk.W,
+            justify=tk.LEFT,
+            wraplength=720,
+        ).pack(fill=tk.X)
+        tk.Label(
+            panel,
+            text=next_step.message,
+            bg=THEME.color_recommended_bg,
+            fg="#174ea6",
+            font=THEME.body_font,
+            anchor=tk.W,
+            justify=tk.LEFT,
+            wraplength=720,
+        ).pack(fill=tk.X, pady=(5, 0))
+
+        button_row = tk.Frame(panel, bg=THEME.color_recommended_bg)
+        button_row.pack(fill=tk.X, pady=(10, 0))
+        primary_state = tk.NORMAL if next_step.primary_enabled else tk.DISABLED
+        primary = ttk.Button(
+            button_row,
+            text=next_step.primary_label,
+            command=self.run_recommended_action,
+            state=primary_state,
+        )
+        primary.pack(side=tk.LEFT, padx=(0, 8))
+        attach_tooltip(primary, self.basic_view.recommended_action.tooltip)
+        why = ttk.Button(button_row, text="Why?", command=self.show_next_step_details)
+        why.pack(side=tk.LEFT, padx=(0, 8))
+        attach_tooltip(why, "Explain why this next step is recommended and show the current state details.")
+        help_button = ttk.Button(button_row, text="Help", command=self.show_cockpit_help)
+        help_button.pack(side=tk.LEFT)
+        attach_tooltip(help_button, "Show the current help placeholder, project sources, and maintainer contact.")
+
+    def show_next_step_details(self) -> None:
+        next_step = self.basic_view.next_step
+        lines = [
+            "",
+            "NEXT STEP DETAILS",
+            f"title={next_step.title}",
+            f"primary_action={next_step.primary_label}",
+            f"primary_enabled={str(next_step.primary_enabled).lower()}",
+            f"reason={next_step.reason}",
+            "",
+            format_state_details(self.basic_view),
+            "",
+        ]
+        self.write_output("\n".join(lines))
+
+    def show_cockpit_help(self) -> None:
+        lines = [
+            "",
+            "HELP (under construction)",
+            "The cockpit help area is under construction.",
+            "Authoritative sources:",
+            "- GitHub: https://github.com/vfi64/agentic-project-kit",
+            "- Zenodo concept DOI: https://doi.org/10.5281/zenodo.20101359",
+            "- Current verified Zenodo DOI: https://doi.org/10.5281/zenodo.20917074",
+            "- Maintainer: Volker Fickert",
+            "",
+        ]
+        self.write_output("\n".join(lines))
+
     def _build_action_cards(self, parent: Any) -> None:
         import tkinter as tk
         from tkinter import ttk

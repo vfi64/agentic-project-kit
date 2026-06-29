@@ -110,6 +110,14 @@ class _ReleaseHarness(CockpitActionsMixin):
         self.output.append(text)
 
 
+class _HelpHarness(CockpitActionsMixin):
+    def __init__(self) -> None:
+        self.output: list[str] = []
+
+    def write_output(self, text: str) -> None:
+        self.output.append(text)
+
+
 def test_gui_action_views_reuse_cockpit_action_metadata() -> None:
     actions = [
         CockpitAction(
@@ -277,9 +285,33 @@ def test_cockpit_build_methods_live_in_focused_modules() -> None:
     assert CockpitGui._build_header is CockpitHeaderMixin._build_header
     assert CockpitGui._build_work_cycle_bar is CockpitHeaderMixin._build_work_cycle_bar
     assert CockpitGui._build_sidebar is CockpitSidebarMixin._build_sidebar
+    assert CockpitGui._build_next_step_panel is CockpitActionsMixin._build_next_step_panel
     assert CockpitGui._build_action_cards is CockpitActionsMixin._build_action_cards
     assert CockpitGui._build_task_editor is CockpitTaskMixin._build_task_editor
     assert CockpitGui._build_output_panel is CockpitTaskMixin._build_output_panel
+
+
+def test_cockpit_places_central_next_step_before_actions() -> None:
+    source = _cockpit_sources()
+
+    assert "self._build_next_step_panel(main_area)\n        self._build_action_cards(main_area)" in source
+    assert "NEXT STEP" in source
+    assert "show_next_step_details" in source
+    assert "show_cockpit_help" in source
+    assert "self._build_recommended_card(sidebar)" not in source
+
+
+def test_cockpit_help_placeholder_points_to_authoritative_sources() -> None:
+    gui = _HelpHarness()
+
+    gui.show_cockpit_help()
+
+    text = "".join(gui.output)
+    assert "under construction" in text.lower()
+    assert "https://github.com/vfi64/agentic-project-kit" in text
+    assert "10.5281/zenodo.20101359" in text
+    assert "10.5281/zenodo.20917074" in text
+    assert "Volker Fickert" in text
 
 
 def test_gc_button_runs_dry_run_first() -> None:
