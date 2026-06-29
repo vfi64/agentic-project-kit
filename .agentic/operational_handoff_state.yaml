@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5bf515840b3e5fc1167d76ce152a3fde572b374d
-  short: 5bf51584
-  subject: Add register subcommand to rule-registry (#1641)
+  full: 4f8d273537cc1bf3a9ff7dfb16103967e519818e
+  short: 4f8d2735
+  subject: Add release and branch picker to guided work start (#1643)
 last_substantive_work_state:
-  full: 5bf515840b3e5fc1167d76ce152a3fde572b374d
-  short: 5bf51584
-  subject: Add register subcommand to rule-registry (#1641)
+  full: 4f8d273537cc1bf3a9ff7dfb16103967e519818e
+  short: 4f8d2735
+  subject: Add release and branch picker to guided work start (#1643)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
