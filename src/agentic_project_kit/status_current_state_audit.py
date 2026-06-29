@@ -276,9 +276,17 @@ def _current_state_block(status_text: str) -> str:
     return match.group(1).strip() if match else ""
 
 
+_CURRENT_VERIFIED_MAIN_PATTERN = r"^Current verified main:\s*`?([0-9a-f]{7,40})`?"
+_CURRENT_VERIFIED_MAIN_HEAD_PATTERN = r"^Current verified main HEAD(?:\s+is)?(?::)?\s*`?([0-9a-f]{7,40})`?"
+
+
 def _current_verified_main(current_block: str) -> str | None:
-    markers = re.findall(r"^Current verified main:\s*`?([0-9a-f]{7,40})`?", current_block, re.MULTILINE)
+    markers = _marker_values(current_block, _CURRENT_VERIFIED_MAIN_PATTERN)
     return markers[0] if markers else None
+
+
+def _marker_values(text: str, pattern: str) -> list[str]:
+    return re.findall(pattern, text, re.MULTILINE)
 
 
 def _string_or_none(value: object) -> str | None:
@@ -321,10 +329,10 @@ def _audit_status_main_marker(
     validation_head: str | None,
 ) -> None:
     live_text = status_text.split("## Historical State Snapshots", 1)[0]
-    live_markers = re.findall(r"^Current verified main:\s*`?([0-9a-f]{7,40})`?", live_text, re.MULTILINE)
-    current_block_markers = re.findall(r"^Current verified main:\s*`?([0-9a-f]{7,40})`?", current_block, re.MULTILINE)
-    live_unique = sorted(set(live_markers))
-    current_block_unique = sorted(set(current_block_markers))
+    live_markers = _marker_values(live_text, _CURRENT_VERIFIED_MAIN_PATTERN)
+    current_block_markers = _marker_values(current_block, _CURRENT_VERIFIED_MAIN_PATTERN)
+    live_unique = _unique_values(live_markers)
+    current_block_unique = _unique_values(current_block_markers)
     _finding(
         findings,
         blockers,
@@ -357,6 +365,16 @@ def _audit_status_main_marker(
         len(current_block_markers) == 1,
         f"current_block_marker_count={len(current_block_markers)}",
     )
+    live_head_markers = _marker_values(live_text, _CURRENT_VERIFIED_MAIN_HEAD_PATTERN)
+    live_head_unique = _unique_values(live_head_markers)
+    _finding(
+        findings,
+        blockers,
+        "docs/STATUS.md",
+        "status_md_internal_head_conflict",
+        len(live_head_unique) <= 1,
+        f"live_head_values={live_head_unique}",
+    )
     matches_validation = bool(status_main and validation_head and validation_head.startswith(status_main))
     _finding(
         findings,
@@ -366,6 +384,10 @@ def _audit_status_main_marker(
         matches_validation,
         f"status_main={status_main}, validation_head={validation_head}",
     )
+
+
+def _unique_values(values: Sequence[str]) -> list[str]:
+    return sorted(set(values))
 
 
 def _origin_main(root: Path, run_git: GitRunner) -> str | None:

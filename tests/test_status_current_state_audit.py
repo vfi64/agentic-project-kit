@@ -195,6 +195,85 @@ def test_audit_status_current_state_blocks_conflicting_current_verified_main_val
     )
 
 
+def test_status_audit_flags_conflicting_head_lines(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    status = tmp_path / "docs" / "STATUS.md"
+    status.write_text(
+        status.read_text(encoding="utf-8").replace(
+            "Post-merge handoff status: PASS/NOOP.",
+            "\n".join(
+                [
+                    "Current verified main HEAD is `1111111` (`First`).",
+                    "Current verified main HEAD is `2222222` (`Second`).",
+                    "Post-merge handoff status: PASS/NOOP.",
+                ]
+            ),
+        ),
+        encoding="utf-8",
+    )
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=_git_runner(),
+        release_status_builder=lambda _root: _release_status(),
+    )
+
+    assert any(
+        finding.check == "status_md_internal_head_conflict"
+        and finding.status == "BLOCK"
+        and "1111111" in finding.detail
+        and "2222222" in finding.detail
+        for finding in result.blockers
+    )
+
+
+def test_status_audit_passes_single_head_line(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    status = tmp_path / "docs" / "STATUS.md"
+    status.write_text(
+        status.read_text(encoding="utf-8").replace(
+            "Post-merge handoff status: PASS/NOOP.",
+            "Current verified main HEAD: `1111111` (`Single`).\nPost-merge handoff status: PASS/NOOP.",
+        ),
+        encoding="utf-8",
+    )
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=_git_runner(),
+        release_status_builder=lambda _root: _release_status(),
+    )
+
+    assert result.ok is True
+    assert not any(finding.check == "status_md_internal_head_conflict" for finding in result.blockers)
+
+
+def test_status_audit_head_conflict_ignores_historical_snapshots(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    status = tmp_path / "docs" / "STATUS.md"
+    status.write_text(
+        status.read_text(encoding="utf-8").replace(
+            "Current verified main HEAD is `fffffff` (`Historical`).",
+            "\n".join(
+                [
+                    "Current verified main HEAD is `fffffff` (`Historical`).",
+                    "Current verified main HEAD is `eeeeeee` (`Older historical`).",
+                ]
+            ),
+        ),
+        encoding="utf-8",
+    )
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=_git_runner(),
+        release_status_builder=lambda _root: _release_status(),
+    )
+
+    assert result.ok is True
+    assert not any(finding.check == "status_md_internal_head_conflict" for finding in result.blockers)
+
+
 def test_audit_status_current_state_blocks_when_validation_head_is_too_far_behind_origin(tmp_path: Path) -> None:
     _write_project(tmp_path)
 
