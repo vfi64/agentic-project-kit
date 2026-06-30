@@ -146,35 +146,6 @@ class CockpitHeaderMixin:
             "Runs agentic-kit work finish --execute only after a successful dry-run preview.",
         )
         self.work_finish_confirm_button.pack(side=tk.RIGHT)
-        self.work_discard_confirm_button = ttk.Button(
-            frame,
-            text="Confirm discard",
-            command=self.confirm_discard_changes,
-            state=tk.DISABLED,
-        )
-        attach_tooltip(
-            self.work_discard_confirm_button,
-            "Runs agentic-kit work discard-changes --execute only after a matching dry-run preview.",
-        )
-        self.work_discard_confirm_button.pack(side=tk.RIGHT, padx=(0, 8))
-        discard_button = tk.Button(
-            frame,
-            text="Discard all changes",
-            command=self.preview_discard_changes,
-            bg=THEME.color_destructive,
-            fg="#7a1f1f",
-            font=THEME.body_font,
-            relief=tk.GROOVE,
-            bd=1,
-            padx=8,
-            pady=4,
-            state=tk.NORMAL if self._discard_available() else tk.DISABLED,
-        )
-        attach_tooltip(
-            discard_button,
-            "Destructive: first previews all feature-branch changes, then requires Confirm discard.",
-        )
-        discard_button.pack(side=tk.RIGHT, padx=(0, 8))
         ttk.Separator(parent, orient=tk.HORIZONTAL).pack(fill=tk.X)
 
     def _start_from_ref_options(self) -> tuple[str, ...]:

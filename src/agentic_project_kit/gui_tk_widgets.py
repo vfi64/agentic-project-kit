@@ -6,6 +6,8 @@ from agentic_project_kit.access_levels import ACCESS_LEVEL_ORDER
 from agentic_project_kit.gui_communication_modes import (
     communication_mode_example as shared_communication_mode_example,
     communication_mode_explanation as shared_communication_mode_explanation,
+    communication_mode_next_step_hint as shared_communication_mode_next_step_hint,
+    communication_mode_walkthrough_steps as shared_communication_mode_walkthrough_steps,
 )
 from agentic_project_kit.gui_viewmodel import CommunicationModeViewModel
 
@@ -44,6 +46,14 @@ def communication_mode_explanation(mode: str) -> str:
 
 def communication_mode_example(mode: str) -> str:
     return shared_communication_mode_example(mode)
+
+
+def communication_mode_next_step_hint(mode: str) -> str:
+    return shared_communication_mode_next_step_hint(mode)
+
+
+def communication_mode_walkthrough_steps(mode: str) -> tuple[str, ...]:
+    return shared_communication_mode_walkthrough_steps(mode)
 
 
 def communication_mode_option_label(mode: CommunicationModeViewModel) -> str:

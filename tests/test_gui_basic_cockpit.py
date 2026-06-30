@@ -21,7 +21,11 @@ from agentic_project_kit.gui_cockpit import (
     ordered_action_views,
     recommended_recovery_action_id,
 )
-from agentic_project_kit.gui_communication_modes import communication_mode_definitions
+from agentic_project_kit.gui_communication_modes import (
+    communication_mode_definitions,
+    communication_mode_next_step_hint,
+    communication_mode_walkthrough_steps,
+)
 from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperStatus
 from agentic_project_kit.gui_task_editor import CANONICAL_TRANSFER_INBOX_PATH, task_editor_visible_for_mode
 from agentic_project_kit.gui_presenter import build_basic_no_window_presenter_result
@@ -161,13 +165,26 @@ def test_basic_cockpit_modes_are_built_from_shared_definitions() -> None:
     ]
 
 
-def test_sidebar_renders_separate_communication_mode_example() -> None:
+def test_communication_mode_has_next_step_hint_for_each_mode() -> None:
+    for definition in communication_mode_definitions():
+        assert definition.next_step_hint
+        assert communication_mode_next_step_hint(definition.mode_id) == definition.next_step_hint
+
+
+def test_communication_mode_has_walkthrough_steps_for_each_mode() -> None:
+    for definition in communication_mode_definitions():
+        assert len(definition.walkthrough_steps) >= 4
+        assert communication_mode_walkthrough_steps(definition.mode_id) == definition.walkthrough_steps
+
+
+def test_sidebar_renders_communication_mode_hint_and_walkthrough_from_shared_definitions() -> None:
     source = Path("src/agentic_project_kit/gui_cockpit_sidebar.py").read_text(encoding="utf-8")
 
     assert "mode_explanation_var" in source
-    assert "mode_example_var" in source
+    assert "mode_next_step_var" in source
     assert "communication_mode_example" in source
-    assert "self.mode_example_var.set(communication_mode_example(selected))" in source
+    assert "communication_mode_next_step_hint" in source
+    assert "communication_mode_walkthrough_steps" in source
 
 
 def test_basic_cockpit_view_model_carries_access_level() -> None:
