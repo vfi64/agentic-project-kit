@@ -141,7 +141,7 @@ class CockpitActionsMixin:
         import tkinter as tk
         from tkinter import ttk
 
-        self._section_heading(parent, "Actions")
+        self._section_heading(parent, "Advanced: individual actions")
         actions_row = tk.Frame(parent, bg=THEME.color_panel_bg)
         actions_row.pack(fill=tk.X, pady=(0, 10))
         action_scroll_shell = tk.Frame(actions_row, bg=THEME.color_panel_bg, width=THEME.action_list_width)
@@ -192,46 +192,94 @@ class CockpitActionsMixin:
         run_button = ttk.Button(controls, text="Run read-only", command=self.run_selected_read_only)
         attach_tooltip(run_button, "Run only selected read-only cockpit actions through the shared cockpit layer.")
         run_button.grid(row=0, column=1, sticky="ew", pady=(0, 6))
+        controls.columnconfigure(0, weight=1)
+        controls.columnconfigure(1, weight=1)
 
-        create_button = ttk.Button(controls, text="Create release", command=self.start_create_release)
-        create_button.grid(row=1, column=0, sticky="ew", padx=(0, 8), pady=(0, 6))
+    def _build_advanced_tools(self, parent: Any) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        panel = tk.Frame(
+            parent,
+            bg=THEME.color_panel_bg,
+            highlightbackground=THEME.color_border,
+            highlightthickness=1,
+            padx=THEME.section_padding,
+            pady=8,
+        )
+        panel.pack(fill=tk.X, pady=(0, 10))
+        header = tk.Frame(panel, bg=THEME.color_panel_bg)
+        header.pack(fill=tk.X)
+        title = "Advanced tools ▾" if self.advanced_tools_expanded else "Advanced tools ▸"
+        toggle = ttk.Button(header, text=title, command=self.toggle_advanced_tools)
+        attach_tooltip(toggle, "Show release, cleanup, discard, and copy/paste file tools.")
+        toggle.pack(side=tk.LEFT)
+        tk.Label(
+            header,
+            text="collapsed by default",
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+        ).pack(side=tk.RIGHT)
+        if not self.advanced_tools_expanded:
+            return
+
+        body = tk.Frame(panel, bg=THEME.color_panel_bg)
+        body.pack(fill=tk.X, pady=(10, 0))
+        self._build_release_and_cleanup_tools(body)
+        self._build_discard_tools(body)
+        self._build_file_browser(body)
+
+    def toggle_advanced_tools(self) -> None:
+        self.advanced_tools_expanded = not self.advanced_tools_expanded
+        if hasattr(self, "_rebuild_main_content"):
+            self._rebuild_main_content()
+
+    def _build_release_and_cleanup_tools(self, parent: Any) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        row = tk.Frame(parent, bg=THEME.color_panel_bg)
+        row.pack(fill=tk.X, pady=(0, 8))
+        create_button = ttk.Button(row, text="Create release", command=self.start_create_release)
+        create_button.grid(row=0, column=0, sticky="ew", padx=(0, 8), pady=(0, 6))
         attach_tooltip(
             create_button,
             "Ask for a version, run release ready, then enable Confirm create release on PASS.",
         )
         self.release_confirm_button = ttk.Button(
-            controls,
+            row,
             text="Confirm create release",
             command=self.confirm_create_release,
             state=tk.DISABLED,
         )
-        self.release_confirm_button.grid(row=1, column=1, sticky="ew", pady=(0, 6))
+        self.release_confirm_button.grid(row=0, column=1, sticky="ew", pady=(0, 6))
         attach_tooltip(
             self.release_confirm_button,
             "Runs agentic-kit release prepare --write only after a successful readiness preview for the same version and state.",
         )
 
-        maintenance_row = tk.Frame(controls, bg=THEME.color_panel_bg)
-        maintenance_row.grid(row=2, column=0, columnspan=2, sticky="ew")
+        cleanup_row = tk.Frame(row, bg=THEME.color_panel_bg)
+        cleanup_row.grid(row=1, column=0, columnspan=2, sticky="ew")
         tk.Label(
-            maintenance_row,
+            cleanup_row,
             text="Local tmp cutoff",
             bg=THEME.color_panel_bg,
             fg=THEME.color_muted_text,
             font=THEME.small_font,
         ).pack(side=tk.LEFT, padx=(0, 6))
         self.gc_cutoff_var = tk.StringVar(value=self._default_gc_cutoff())
-        cutoff_entry = ttk.Entry(maintenance_row, textvariable=self.gc_cutoff_var, width=20)
+        cutoff_entry = ttk.Entry(cleanup_row, textvariable=self.gc_cutoff_var, width=20)
         attach_tooltip(cutoff_entry, "ISO cutoff for local repository tmp/ cleanup. Default is now.")
         cutoff_entry.pack(side=tk.LEFT, padx=(0, 9))
-        gc_button = ttk.Button(maintenance_row, text="Clean local tmp", command=self.preview_log_cleanup)
+        gc_button = ttk.Button(cleanup_row, text="Clean local tmp", command=self.preview_log_cleanup)
         attach_tooltip(
             gc_button,
             "Dry-run local artifact-gc for old untracked files and empty directories under repository tmp/. Never touches the remote repository.",
         )
         gc_button.pack(side=tk.LEFT, padx=(0, 9))
         self.gc_confirm_delete_button = ttk.Button(
-            maintenance_row,
+            cleanup_row,
             text="Confirm delete",
             command=self.confirm_log_cleanup,
             state=tk.DISABLED,
@@ -242,8 +290,44 @@ class CockpitActionsMixin:
         )
         self.gc_confirm_delete_button.pack(side=tk.LEFT, padx=(0, 9))
         self.pending_gc_preview = None
-        controls.columnconfigure(0, weight=1)
-        controls.columnconfigure(1, weight=1)
+        row.columnconfigure(0, weight=1)
+        row.columnconfigure(1, weight=1)
+
+    def _build_discard_tools(self, parent: Any) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        row = tk.Frame(parent, bg="#fff3f3", highlightbackground="#e2b1b1", highlightthickness=1, padx=8, pady=7)
+        row.pack(fill=tk.X, pady=(0, 8))
+        tk.Label(
+            row,
+            text="DESTRUCTIVE",
+            bg="#fff3f3",
+            fg="#7a1f1f",
+            font=THEME.section_font,
+        ).pack(side=tk.LEFT, padx=(0, 8))
+        discard_button = ttk.Button(
+            row,
+            text="Discard all changes",
+            command=self.preview_discard_changes,
+            state=tk.NORMAL if self._discard_available() else tk.DISABLED,
+        )
+        attach_tooltip(
+            discard_button,
+            "Destructive: first previews all feature-branch changes, then requires Confirm discard.",
+        )
+        discard_button.pack(side=tk.LEFT, padx=(0, 8))
+        self.work_discard_confirm_button = ttk.Button(
+            row,
+            text="Confirm discard",
+            command=self.confirm_discard_changes,
+            state=tk.DISABLED,
+        )
+        attach_tooltip(
+            self.work_discard_confirm_button,
+            "Runs agentic-kit work discard-changes --execute only after a matching dry-run preview.",
+        )
+        self.work_discard_confirm_button.pack(side=tk.LEFT)
 
     def _default_gc_cutoff(self) -> str:
         return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")

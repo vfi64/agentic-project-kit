@@ -10,7 +10,9 @@ from agentic_project_kit.gui_tk_widgets import (
     attach_tooltip,
     communication_mode_example,
     communication_mode_explanation,
+    communication_mode_next_step_hint,
     communication_mode_option_values,
+    communication_mode_walkthrough_steps,
     selected_communication_mode_option,
     traffic_light_fill,
     traffic_light_state_label,
@@ -99,52 +101,6 @@ class CockpitSidebarMixin:
         version = self._package_version()
         self._detail_row(sidebar, "Version", version)
 
-        tk.Frame(sidebar, height=19, bg=THEME.color_panel_bg).pack(fill=tk.X)
-        self._section_heading(sidebar, "Transfer Mode")
-        self.mode_var = tk.StringVar(
-            value=selected_communication_mode_option(self.basic_view.communication_modes)
-        )
-        mode_select = ttk.Combobox(
-            sidebar,
-            textvariable=self.mode_var,
-            values=communication_mode_option_values(self.basic_view.communication_modes),
-            state="readonly",
-            width=24,
-            font=THEME.body_font,
-        )
-        mode_select.pack(fill=tk.X)
-        attach_tooltip(
-            mode_select,
-            "Select the communication mode. File Transfer is the standard path; Copy-and-Paste is a recovery fallback.",
-        )
-        self.mode_explanation_var = tk.StringVar(
-            value=communication_mode_explanation(self.basic_view.communication_mode)
-        )
-        tk.Label(
-            sidebar,
-            textvariable=self.mode_explanation_var,
-            anchor=tk.W,
-            justify=tk.LEFT,
-            bg=THEME.color_panel_bg,
-            fg=THEME.color_muted_text,
-            font=THEME.small_font,
-            wraplength=255,
-        ).pack(fill=tk.X, pady=(7, 0))
-        self.mode_example_var = tk.StringVar(
-            value=communication_mode_example(self.basic_view.communication_mode)
-        )
-        tk.Label(
-            sidebar,
-            textvariable=self.mode_example_var,
-            anchor=tk.W,
-            justify=tk.LEFT,
-            bg=THEME.color_panel_bg,
-            fg=THEME.color_muted_text,
-            font=THEME.small_font,
-            wraplength=255,
-        ).pack(fill=tk.X, pady=(5, 0))
-        mode_select.bind("<<ComboboxSelected>>", self.update_mode_explanation)
-
         tk.Frame(sidebar, height=18, bg=THEME.color_panel_bg).pack(fill=tk.X)
         self._section_heading(sidebar, "Access Level")
         self.access_level_var = tk.StringVar(value=self.basic_view.access_level)
@@ -177,6 +133,108 @@ class CockpitSidebarMixin:
         access_select.bind("<<ComboboxSelected>>", self.update_access_level)
 
         tk.Frame(sidebar, height=10, bg=THEME.color_panel_bg).pack(fill=tk.X, expand=True)
+
+    def _build_communication_panel(self, parent: Any) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        panel = tk.Frame(
+            parent,
+            bg=THEME.color_panel_bg,
+            highlightbackground=THEME.color_border,
+            highlightthickness=1,
+            padx=THEME.section_padding,
+            pady=THEME.section_padding,
+        )
+        panel.pack(fill=tk.X, pady=(0, 10))
+        header = tk.Frame(panel, bg=THEME.color_panel_bg)
+        header.pack(fill=tk.X, pady=(0, 8))
+        tk.Label(
+            header,
+            text="Communication with the assistant",
+            bg=THEME.color_panel_bg,
+            fg="#0b2f27",
+            font=THEME.recommended_font,
+            anchor=tk.W,
+        ).pack(side=tk.LEFT)
+        how_button = ttk.Button(header, text="Show me how it works", command=self.show_communication_walkthrough)
+        attach_tooltip(
+            how_button,
+            "Shows the steps and an example for the selected communication method.",
+        )
+        how_button.pack(side=tk.RIGHT)
+
+        self.mode_var = tk.StringVar(
+            value=selected_communication_mode_option(self.basic_view.communication_modes)
+        )
+        mode_select = ttk.Combobox(
+            panel,
+            textvariable=self.mode_var,
+            values=communication_mode_option_values(self.basic_view.communication_modes),
+            state="readonly",
+            width=36,
+            font=THEME.body_font,
+        )
+        mode_select.pack(fill=tk.X)
+        attach_tooltip(
+            mode_select,
+            "Select the communication mode. File Transfer is the standard path; Copy-and-Paste is a recovery fallback.",
+        )
+
+        selected = self.basic_view.communication_mode
+        self.mode_explanation_var = tk.StringVar(value=communication_mode_explanation(selected))
+        self.mode_next_step_var = tk.StringVar(value=communication_mode_next_step_hint(selected))
+        self.mode_example_var = tk.StringVar(value=communication_mode_example(selected))
+        tk.Label(
+            panel,
+            textvariable=self.mode_explanation_var,
+            anchor=tk.W,
+            justify=tk.LEFT,
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+            wraplength=760,
+        ).pack(fill=tk.X, pady=(8, 0))
+        tk.Label(
+            panel,
+            textvariable=self.mode_next_step_var,
+            anchor=tk.W,
+            justify=tk.LEFT,
+            bg=THEME.color_recommended_bg,
+            fg="#174ea6",
+            font=THEME.body_font,
+            wraplength=760,
+            padx=8,
+            pady=5,
+        ).pack(fill=tk.X, pady=(7, 0))
+        mode_select.bind("<<ComboboxSelected>>", self.update_mode_explanation)
+
+    def show_communication_walkthrough(self) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        selected = self.current_communication_mode()
+        window = tk.Toplevel(self.root)
+        window.title("How communication works")
+        window.geometry("560x420")
+        frame = tk.Frame(window, bg=THEME.color_panel_bg, padx=12, pady=12)
+        frame.pack(fill=tk.BOTH, expand=True)
+        text = tk.Text(frame, wrap=tk.WORD, font=THEME.body_font, padx=8, pady=8)
+        scrollbar = ttk.Scrollbar(frame, orient=tk.VERTICAL, command=text.yview)
+        text.configure(yscrollcommand=scrollbar.set)
+        text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        lines = [
+            "HOW IT WORKS",
+            "",
+            communication_mode_explanation(selected),
+            "",
+            "Steps:",
+        ]
+        lines.extend(f"{index}. {step}" for index, step in enumerate(communication_mode_walkthrough_steps(selected), start=1))
+        lines.extend(["", "Example:", communication_mode_example(selected), ""])
+        text.insert("1.0", "\n".join(lines))
+        text.configure(state=tk.DISABLED)
 
     def _build_recommended_card(self, sidebar: Any) -> None:
         import tkinter as tk
@@ -266,7 +324,13 @@ class CockpitSidebarMixin:
 
     def update_mode_explanation(self, _event: object | None = None) -> None:
         selected = self.current_communication_mode()
+        self.basic_view = build_basic_cockpit_view_model(
+            self.project_root,
+            communication_mode=selected,
+            access_level=self.basic_view.access_level,
+        )
         self.mode_explanation_var.set(communication_mode_explanation(selected))
+        self.mode_next_step_var.set(communication_mode_next_step_hint(selected))
         self.mode_example_var.set(communication_mode_example(selected))
         self.refresh_task_editor_buttons()
 
@@ -283,14 +347,18 @@ class CockpitSidebarMixin:
 
     def update_access_level(self, _event: object | None = None) -> None:
         selected = normalize_access_level(self.access_level_var.get())
+        communication_mode = self.current_communication_mode()
         # Access level is a visibility convenience only; safety remains the execution boundary.
         self.basic_view = build_basic_cockpit_view_model(
             self.project_root,
-            communication_mode=self.basic_view.communication_mode,
+            communication_mode=communication_mode,
             access_level=selected,
         )
         self.access_level_var.set(self.basic_view.access_level)
         self.access_level_explanation_var.set(self.basic_view.access_level_explanation)
         self.actions = ordered_action_views(build_gui_action_views(access_level=selected))
-        self.populate_action_tree()
+        if hasattr(self, "action_card_container"):
+            self.populate_action_tree()
+        if hasattr(self, "_rebuild_main_content"):
+            self._rebuild_main_content()
         self.write_output(f"\nAccess level changed to {self.basic_view.access_level}; action list rebuilt.\n")

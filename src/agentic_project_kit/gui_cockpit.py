@@ -62,6 +62,7 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
         self.release_confirm_button: Any | None = None
         self.start_from_ref_value = tk.StringVar(value="latest main")
         self.release_version_var = tk.StringVar(value="")
+        self.advanced_tools_expanded = False
 
         shell = tk.Frame(
             root,
@@ -113,15 +114,29 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
             "<Configure>",
             lambda event: main_canvas.itemconfigure(main_window, width=event.width),
         )
+        self.main_area = main_area
 
         self._build_sidebar(sidebar)
-        self._build_next_step_panel(main_area)
-        self._build_action_cards(main_area)
-        self._build_task_editor(main_area)
-        self._build_file_browser(main_area)
-        self._build_output_panel(main_area)
+        self._build_main_content()
 
         self.write_output(format_basic_cockpit_summary(self.basic_view) + "\n")
+
+    def _advanced_access_visible(self) -> bool:
+        return self.basic_view.access_level in {"advanced", "maintainer"}
+
+    def _build_main_content(self) -> None:
+        self._build_communication_panel(self.main_area)
+        self._build_next_step_panel(self.main_area)
+        if self._advanced_access_visible():
+            self._build_action_cards(self.main_area)
+            self._build_advanced_tools(self.main_area)
+        self._build_task_editor(self.main_area)
+        self._build_output_panel(self.main_area)
+
+    def _rebuild_main_content(self) -> None:
+        for child in self.main_area.winfo_children():
+            child.destroy()
+        self._build_main_content()
 
 
 def main() -> None:

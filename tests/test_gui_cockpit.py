@@ -312,7 +312,10 @@ def test_cockpit_build_methods_live_in_focused_modules() -> None:
 def test_cockpit_places_central_next_step_before_actions() -> None:
     source = _cockpit_sources()
 
-    assert "self._build_next_step_panel(main_area)\n        self._build_action_cards(main_area)" in source
+    assert "self._build_communication_panel(self.main_area)" in source
+    assert "self._build_next_step_panel(self.main_area)" in source
+    assert "if self._advanced_access_visible():" in source
+    assert "self._build_action_cards(self.main_area)" in source
     assert "NEXT STEP" in source
     assert "show_next_step_details" in source
     assert "show_cockpit_help" in source
@@ -324,7 +327,44 @@ def test_cockpit_main_area_is_vertically_scrollable_and_output_reachable() -> No
 
     assert "main_canvas" in source
     assert "main_scrollbar" in source
-    assert "self._build_file_browser(main_area)\n        self._build_output_panel(main_area)" in source
+    assert "self._build_task_editor(self.main_area)\n        self._build_output_panel(self.main_area)" in source
+
+
+def test_basic_view_hides_action_table_and_advanced_tools() -> None:
+    source = inspect.getsource(CockpitGui._build_main_content)
+
+    assert "if self._advanced_access_visible():" in source
+    assert "self._build_action_cards(self.main_area)" in source
+    assert "self._build_advanced_tools(self.main_area)" in source
+    assert source.index("if self._advanced_access_visible():") < source.index("self._build_task_editor")
+
+
+def test_basic_view_shows_work_cycle_communication_task_and_output() -> None:
+    source = _cockpit_sources()
+
+    assert "self._build_work_cycle_bar(shell)" in source
+    assert "self._build_communication_panel(self.main_area)" in source
+    assert "self._build_next_step_panel(self.main_area)" in source
+    assert "self._build_task_editor(self.main_area)" in source
+    assert "self._build_output_panel(self.main_area)" in source
+
+
+def test_advanced_view_shows_action_table() -> None:
+    source = inspect.getsource(CockpitActionsMixin._build_action_cards)
+
+    assert "Advanced: individual actions" in source
+    assert "Inspect" in source
+    assert "Run read-only" in source
+
+
+def test_advanced_tools_start_collapsed() -> None:
+    init_source = inspect.getsource(CockpitGui.__init__)
+    source = inspect.getsource(CockpitActionsMixin._build_advanced_tools)
+
+    assert "self.advanced_tools_expanded = False" in init_source
+    assert "Advanced tools ▸" in source
+    assert "if not self.advanced_tools_expanded:" in source
+    assert "return" in source
 
 
 def test_cockpit_file_browser_is_read_only_for_tmp_and_handoff_files() -> None:
@@ -407,7 +447,7 @@ def test_gc_button_uses_local_modes_only() -> None:
 
 
 def test_gc_button_tooltip_states_local_only() -> None:
-    source = inspect.getsource(CockpitActionsMixin._build_action_cards)
+    source = inspect.getsource(CockpitActionsMixin._build_release_and_cleanup_tools)
 
     assert "Clean local tmp" in source
     assert "Deletes local tmp/ candidates only" in source
@@ -477,11 +517,46 @@ def test_create_release_does_not_publish_or_tag() -> None:
 
 
 def test_create_release_button_is_bounded_class() -> None:
-    source = inspect.getsource(CockpitActionsMixin._build_action_cards)
+    source = inspect.getsource(CockpitActionsMixin._build_release_and_cleanup_tools)
 
     assert "Create release" in source
     assert "Confirm create release" in source
     assert "_build_release_creation_panel" not in _cockpit_sources()
+
+
+def test_discard_is_advanced_destructive_tool_not_work_cycle_button() -> None:
+    header_source = inspect.getsource(CockpitHeaderMixin._build_work_cycle_bar)
+    advanced_source = inspect.getsource(CockpitActionsMixin._build_discard_tools)
+
+    assert "Discard all changes" not in header_source
+    assert "DESTRUCTIVE" in advanced_source
+    assert "Discard all changes" in advanced_source
+    assert "Confirm discard" in advanced_source
+
+
+def test_show_how_it_works_renders_walkthrough_and_example_for_selected_mode() -> None:
+    source = inspect.getsource(CockpitSidebarMixin.show_communication_walkthrough)
+
+    assert "communication_mode_walkthrough_steps(selected)" in source
+    assert "communication_mode_example(selected)" in source
+    assert "HOW IT WORKS" in source
+
+
+def test_mode_change_updates_explanation_and_next_step_together() -> None:
+    source = inspect.getsource(CockpitSidebarMixin.update_mode_explanation)
+
+    assert "self.mode_explanation_var.set(communication_mode_explanation(selected))" in source
+    assert "self.mode_next_step_var.set(communication_mode_next_step_hint(selected))" in source
+    assert "self.mode_example_var.set(communication_mode_example(selected))" in source
+
+
+def test_access_level_still_does_not_override_safety_gating() -> None:
+    source = inspect.getsource(CockpitActionsMixin._build_discard_tools)
+    confirm_source = inspect.getsource(CockpitHeaderMixin.confirm_discard_changes)
+
+    assert "state=tk.NORMAL if self._discard_available() else tk.DISABLED" in source
+    assert "--execute" in confirm_source
+    assert "expected-signature" in confirm_source
 
 
 def test_create_release_starts_with_version_dialog() -> None:

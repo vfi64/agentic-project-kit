@@ -12,6 +12,8 @@ class CommunicationModeDefinition:
     safety_note: str
     explanation: str
     example: str
+    next_step_hint: str
+    walkthrough_steps: tuple[str, ...]
 
 
 COMMUNICATION_MODE_DEFINITIONS: tuple[CommunicationModeDefinition, ...] = (
@@ -29,6 +31,13 @@ COMMUNICATION_MODE_DEFINITIONS: tuple[CommunicationModeDefinition, ...] = (
             "Example: Send the task, type g/go in the LLM chat, then use Read or "
             "agentic-kit transfer continue --json for the repo-backed reply."
         ),
+        next_step_hint="Type your task below, click Send, then write g in chat.",
+        walkthrough_steps=(
+            "Start new work.",
+            "Type your task and Send; it is published to the repo.",
+            "Write g in chat; the assistant reads the task and works.",
+            "Click Check, then Finish & publish.",
+        ),
     ),
     CommunicationModeDefinition(
         mode_id="remote",
@@ -43,6 +52,13 @@ COMMUNICATION_MODE_DEFINITIONS: tuple[CommunicationModeDefinition, ...] = (
         example=(
             "Example: Ask the assistant to work through PR/CI, then inspect "
             "agentic-kit transfer patch-cycle-status --json and evidence links."
+        ),
+        next_step_hint="Open or check the pull request; CI verifies it before merge.",
+        walkthrough_steps=(
+            "Start new work.",
+            "Make your changes.",
+            "Check.",
+            "Finish & publish opens a pull request; CI verifies before merge.",
         ),
     ),
     CommunicationModeDefinition(
@@ -61,6 +77,13 @@ COMMUNICATION_MODE_DEFINITIONS: tuple[CommunicationModeDefinition, ...] = (
         example=(
             "Example: Open a local terminal and paste exactly one complete recovery block "
             "from the LLM, then return only LOG/RC or the requested evidence."
+        ),
+        next_step_hint="Run the shown command locally and paste the result back.",
+        walkthrough_steps=(
+            "Start new work.",
+            "Copy the assistant's command.",
+            "Run it locally.",
+            "Paste the result back. Use only when no repo connection works.",
         ),
     ),
 )
@@ -89,3 +112,11 @@ def communication_mode_explanation(mode: str) -> str:
 
 def communication_mode_example(mode: str) -> str:
     return communication_mode_definition(mode).example
+
+
+def communication_mode_next_step_hint(mode: str) -> str:
+    return communication_mode_definition(mode).next_step_hint
+
+
+def communication_mode_walkthrough_steps(mode: str) -> tuple[str, ...]:
+    return communication_mode_definition(mode).walkthrough_steps
