@@ -7,9 +7,9 @@ Current verified release: 0.4.11.
 Current release tag: v0.4.11.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20917074`.
-Current verified main: `7df28c12` (`Fix cockpit Tk frame parent crash (#1657)`).
-Latest substantive work: PR #1657 (`Fix cockpit Tk frame parent crash (#1657)`).
-Post-merge handoff status: PASS/NOOP after PR #1657 administrative refresh.
+Current verified main: `3278f844` (`Simplify cockpit into a guided beginner-first layout with progressive disclosure (#1659)`).
+Latest substantive work: PR #1659 (`Simplify cockpit into a guided beginner-first layout with progressive disclosure (#1659)`).
+Post-merge handoff status: PASS/NOOP after PR #1659 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -397,6 +397,6 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
 - Portability closeout: in progress; all tracked shell scripts removed in Slice 6, pending final gates and PR merge.
 - Portability closeout: legacy `ns` and `ns-menu` entrypoints removed; no tracked shell scripts remain, pending final gates and PR merge.
-## Operational documentation refresh state after PR #1657
+## Operational documentation refresh state after PR #1659
 
-Current administrative handoff refresh state is `7df28c12` (`Fix cockpit Tk frame parent crash (#1657)`). Continue next only after this post-PR1657 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `3278f844` (`Simplify cockpit into a guided beginner-first layout with progressive disclosure (#1659)`). Continue next only after this post-PR1659 refresh is committed and merged; the next substantive slice must be created from fresh main.
