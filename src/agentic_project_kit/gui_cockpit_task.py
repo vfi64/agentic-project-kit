@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 import subprocess
 from typing import Any
 
+from agentic_project_kit.gui_activity_log import ActivityEntry
 from agentic_project_kit.gui_cockpit_common import THEME
+from agentic_project_kit.gui_open_folder import open_folder_in_file_manager
 from agentic_project_kit.gui_task_editor import (
     CANONICAL_TRANSFER_INBOX_PATH,
     CANONICAL_TRANSFER_OUTBOX_PATH,
@@ -322,7 +325,7 @@ class CockpitTaskMixin:
         output_header.pack(fill=tk.X, pady=(0, 7))
         tk.Label(
             output_header,
-            text="□  OUTPUT",
+            text="□  ACTIVITY",
             bg=THEME.color_panel_bg,
             fg=THEME.color_muted_text,
             font=THEME.section_font,
@@ -338,28 +341,220 @@ class CockpitTaskMixin:
         ).pack(side=tk.LEFT, padx=(10, 0))
         self.busy_progress = ttk.Progressbar(output_header, mode="indeterminate", length=120)
         self.busy_progress.pack(side=tk.LEFT, padx=(8, 0))
-        clear_button = ttk.Button(output_header, text="Clear", command=self.clear_output)
-        attach_tooltip(clear_button, "Clear the output panel.")
+        clear_button = ttk.Button(output_header, text="Clear", command=self.clear_activity_log)
+        attach_tooltip(clear_button, "Clear the local cockpit activity history.")
         clear_button.pack(side=tk.RIGHT)
-        copy_button = ttk.Button(output_header, text="Copy", command=self.copy_output)
-        attach_tooltip(copy_button, "Copy the full output panel content to the clipboard.")
-        copy_button.pack(side=tk.RIGHT, padx=(0, 8))
-        self.output = tk.Text(
-            output_frame,
-            height=THEME.output_height,
-            wrap=tk.WORD,
-            font=THEME.output_font,
-            relief=tk.FLAT,
-            bd=0,
-            padx=6,
-            pady=4,
-        )
-        self.output.pack(fill=tk.BOTH, expand=True)
+        logs_button = ttk.Button(output_header, text="Open logs folder", command=self.open_logs_folder)
+        attach_tooltip(logs_button, "Open the local repository tmp/ folder in the operating-system file manager.")
+        logs_button.pack(side=tk.RIGHT, padx=(0, 8))
 
+        # This is a local cockpit action/result history, not an LLM chat transcript.
+        activity_shell = tk.Frame(output_frame, bg=THEME.color_panel_bg)
+        activity_shell.pack(fill=tk.BOTH, expand=True)
+        self.activity_canvas = tk.Canvas(
+            activity_shell,
+            bg=THEME.color_panel_bg,
+            height=THEME.output_height * 22,
+            highlightthickness=0,
+        )
+        self.activity_scrollbar = ttk.Scrollbar(
+            activity_shell,
+            orient=tk.VERTICAL,
+            command=self.activity_canvas.yview,
+        )
+        self.activity_canvas.configure(yscrollcommand=self.activity_scrollbar.set)
+        self.activity_container = tk.Frame(
+            self.activity_canvas,
+            bg=THEME.color_panel_bg,
+        )
+        self.activity_window = self.activity_canvas.create_window(
+            (0, 0),
+            window=self.activity_container,
+            anchor=tk.NW,
+        )
+        self.activity_container.bind(
+            "<Configure>",
+            lambda _event: self.activity_canvas.configure(scrollregion=self.activity_canvas.bbox(tk.ALL)),
+        )
+        self.activity_canvas.bind(
+            "<Configure>",
+            lambda event: self.activity_canvas.itemconfigure(
+                self.activity_window,
+                width=getattr(event, "width", 760),
+            ),
+        )
+        self._bind_activity_mousewheel()
+        self.activity_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.activity_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.render_activity_log()
+
+    def _bind_activity_mousewheel(self) -> None:
+        for event_name in ("<MouseWheel>", "<Button-4>", "<Button-5>"):
+            self.activity_canvas.bind(event_name, self._on_activity_mousewheel)
+
+    def _on_activity_mousewheel(self, event: Any) -> str:
+        number = getattr(event, "num", None)
+        delta = getattr(event, "delta", 0)
+        if number == 4:
+            units = -1
+        elif number == 5:
+            units = 1
+        else:
+            units = -1 if delta > 0 else 1
+        self.activity_canvas.yview_scroll(units, "units")
+        return "break"
+
+    def _activity_status_colors(self, status: str) -> tuple[str, str]:
+        return {
+            "PASS": (THEME.color_ready_bg, "#006b50"),
+            "BLOCKED": (THEME.color_bounded, "#6b3d00"),
+            "ERROR": (THEME.color_destructive, "#8a1f11"),
+            "INFO": ("#f2f2f2", "#4a4a4a"),
+        }.get(status, ("#f2f2f2", "#4a4a4a"))
+
+    def render_activity_log(self) -> None:
+        for child in self.activity_container.winfo_children():
+            child.destroy()
+        for entry in self.activity_log.entries():
+            self._render_activity_entry(entry)
+        self.activity_canvas.configure(scrollregion=self.activity_canvas.bbox("all"))
+        if hasattr(self.activity_canvas, "yview_moveto"):
+            self.activity_canvas.yview_moveto(1.0)
+
+    def _render_activity_entry(self, entry: ActivityEntry) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        row = tk.Frame(self.activity_container, bg=THEME.color_panel_bg)
+        row._activity_actor = entry.actor
+        row._activity_status = entry.status
+        row.pack(fill=tk.X, pady=(0, 7))
+        if entry.actor == "user":
+            bubble = tk.Frame(row, bg=THEME.color_recommended_bg, padx=10, pady=6)
+            bubble._activity_actor = "user"
+            bubble._activity_anchor = "e"
+            bubble.pack(side=tk.RIGHT, anchor=tk.E)
+            tk.Label(
+                bubble,
+                text=f"You ran: {entry.label}",
+                bg=THEME.color_recommended_bg,
+                fg="#174ea6",
+                font=THEME.body_font,
+                anchor=tk.E,
+                justify=tk.RIGHT,
+                wraplength=520,
+            ).pack(side=tk.RIGHT)
+            return
+
+        bubble = tk.Frame(
+            row,
+            bg="#f7f7f7",
+            highlightbackground=THEME.color_border,
+            highlightthickness=1,
+            padx=9,
+            pady=7,
+        )
+        bubble._activity_actor = "kit"
+        bubble._activity_anchor = "w"
+        bubble._activity_status = entry.status
+        bubble.pack(side=tk.LEFT, anchor=tk.W, fill=tk.X, expand=True)
+        header = tk.Frame(bubble, bg="#f7f7f7")
+        header.pack(fill=tk.X, pady=(0, 5))
+        tk.Label(
+            header,
+            text=f"{entry.created_at_utc} · {entry.label}",
+            bg="#f7f7f7",
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+            anchor=tk.W,
+        ).pack(side=tk.LEFT)
+        badge_bg, badge_fg = self._activity_status_colors(entry.status)
+        badge = tk.Label(
+            header,
+            text=entry.status,
+            bg=badge_bg,
+            fg=badge_fg,
+            font=THEME.small_font,
+            padx=6,
+            pady=2,
+        )
+        badge._activity_status_badge = entry.status
+        badge.pack(side=tk.RIGHT)
+        tk.Label(
+            bubble,
+            text=entry.body,
+            bg="#f7f7f7",
+            fg="#1f1f1f",
+            font=THEME.output_font,
+            anchor=tk.W,
+            justify=tk.LEFT,
+            wraplength=760,
+        ).pack(fill=tk.X)
+        copy_button = ttk.Button(
+            bubble,
+            text="Copy",
+            command=lambda body=entry.body: self.copy_activity_body(body),
+        )
+        copy_button._activity_copy_body = entry.body
+        attach_tooltip(copy_button, "Copy only this result body to the clipboard.")
+        copy_button.pack(anchor=tk.W, pady=(6, 0))
+
+    def log_action(self, label: str) -> None:
+        self.activity_log.log_action(label)
+        self.render_activity_log()
+
+    def log_result(self, label: str, status: str | None, body: str) -> None:
+        self.activity_log.log_result(label, status, body)
+        self.render_activity_log()
 
     def write_output(self, text: str) -> None:
-        self.output.insert("end", text)
-        self.output.see("end")
+        if hasattr(self, "activity_log") and hasattr(self, "activity_container"):
+            self.log_result("Output", None, text)
+            return
+        output = getattr(self, "output", None)
+        if output is not None:
+            output.insert("end", text)
+            output.see("end")
+
+    def _completed_status(self, completed: subprocess.CompletedProcess[str]) -> str:
+        if completed.stdout:
+            try:
+                payload = json.loads(completed.stdout)
+            except ValueError:
+                payload = None
+            if isinstance(payload, dict):
+                raw_status = payload.get("result_status", payload.get("STATE", payload.get("state")))
+                if raw_status is not None:
+                    return str(raw_status)
+        return "PASS" if completed.returncode == 0 else "ERROR"
+
+    def clear_activity_log(self) -> None:
+        self.activity_log.clear()
+        self.render_activity_log()
+
+    def clear_output(self) -> None:
+        self.clear_activity_log()
+
+    def _activity_transcript(self) -> str:
+        return "\n\n".join(entry.body for entry in self.activity_log.entries())
+
+    def copy_activity_body(self, body: str) -> None:
+        self.root.clipboard_clear()
+        self.root.clipboard_append(body)
+        if hasattr(self.root, "update"):
+            self.root.update()
+
+    def copy_output(self) -> None:
+        self.copy_activity_body(self._activity_transcript())
+
+    def open_logs_folder(self) -> None:
+        target = self.project_root / "tmp"
+        try:
+            open_folder_in_file_manager(target)
+        except OSError as exc:
+            self.log_result("Open logs folder", "ERROR", f"Could not open logs folder: {exc}")
+            return
+        self.log_result("Open logs folder", "INFO", "Opened logs folder: tmp/")
 
     def _set_busy(self, text: str, *, running: bool) -> None:
         busy_var = getattr(self, "busy_status_var", None)
@@ -373,16 +568,6 @@ class CockpitTaskMixin:
                 progress.stop()
         if hasattr(self.root, "update_idletasks"):
             self.root.update_idletasks()
-
-    def clear_output(self) -> None:
-        self.output.delete("1.0", "end")
-
-    def copy_output(self) -> None:
-        text = self.output.get("1.0", "end-1c")
-        self.root.clipboard_clear()
-        self.root.clipboard_append(text)
-        if hasattr(self.root, "update"):
-            self.root.update()
 
 
     def current_task_body(self) -> str:
@@ -458,25 +643,29 @@ class CockpitTaskMixin:
         return completed
 
     def show_initial_llm_prompt(self) -> None:
+        self.log_action("Initial prompt")
         completed = self._agentic_command("gui", "initial-llm-prompt", "--json")
-        self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
+        self.log_result("Initial prompt", self._completed_status(completed), completed.stdout or completed.stderr)
 
     def open_transfer_terminal(self) -> None:
+        self.log_action("Open local terminal")
         plan = open_transfer_terminal_for_project(
             self.project_root,
             communication_mode=self.current_communication_mode(),
         )
-        self.write_output("\n" + __import__("json").dumps(plan.as_json_data(), indent=2, sort_keys=True) + "\n")
+        self.log_result("Open local terminal", "INFO", json.dumps(plan.as_json_data(), indent=2, sort_keys=True))
 
     def run_mode_standard_command(self) -> None:
+        self.log_action(standard_command_label_for_communication_mode(self.current_communication_mode()))
         command_args = standard_command_args_for_communication_mode(self.current_communication_mode())
         if not command_args:
-            self.write_output("\nNo standard command is defined for Copy-and-Paste recovery mode.\n")
+            self.log_result("Standard command", "INFO", "No standard command is defined for Copy-and-Paste recovery mode.")
             return
         completed = self._agentic_command(*command_args)
-        self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
+        self.log_result("Standard command", self._completed_status(completed), completed.stdout or completed.stderr)
 
     def send_user_task(self) -> None:
+        self.log_action("Send")
         body = self.current_task_body()
         if not task_editor_send_enabled(
             body,
@@ -486,6 +675,11 @@ class CockpitTaskMixin:
         ):
             self.task_editor_state = TaskEditorState.BLOCKED
             self.task_status_var.set("Blocked: task text, READY state, and fresh communication context are required.")
+            self.log_result(
+                "Send",
+                "BLOCKED",
+                "Blocked: task text, READY state, and fresh communication context are required.",
+            )
             self.refresh_task_editor_buttons()
             return
         tmp_path = self.project_root / "tmp" / "gui-task-editor-current-task.md"
@@ -503,7 +697,7 @@ class CockpitTaskMixin:
             "--publish",
             "--json",
         )
-        self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
+        self.log_result("Send", self._completed_status(completed), completed.stdout or completed.stderr)
         result_status = "PASS" if completed.returncode == 0 else "FAIL"
         remote_readable = False
         if completed.stdout:
@@ -521,8 +715,9 @@ class CockpitTaskMixin:
         self.refresh_task_editor_buttons()
 
     def read_last_task_result(self) -> None:
+        self.log_action("Read")
         completed = self._agentic_command("transfer", "state", "--json")
-        self.write_output("\n" + (completed.stdout or completed.stderr) + "\n")
+        self.log_result("Read", self._completed_status(completed), completed.stdout or completed.stderr)
         outbox_available = False
         if completed.stdout:
             try:

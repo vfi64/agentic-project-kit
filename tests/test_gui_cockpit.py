@@ -5,6 +5,7 @@ import sys
 import types
 
 from agentic_project_kit.cockpit import BOUNDED, READ_ONLY, CockpitAction, CockpitActionResult
+from agentic_project_kit.gui_activity_log import normalize_activity_status
 from agentic_project_kit.gui_cockpit import (
     CockpitGui,
     HEADER_TEXT,
@@ -24,6 +25,7 @@ from agentic_project_kit.gui_cockpit_header import CockpitHeaderMixin
 from agentic_project_kit.gui_cockpit_sidebar import CockpitSidebarMixin
 from agentic_project_kit.gui_cockpit_task import CockpitTaskMixin
 from agentic_project_kit.gui_panel_state import PANEL_STATE_RELATIVE_PATH, read_panel_state, write_panel_state
+from agentic_project_kit.gui_open_folder import open_folder_in_file_manager
 
 
 COCKPIT_SOURCE_PATHS = (
@@ -68,13 +70,18 @@ class _FakeTkWidget:
         self.text_content = ""
         self.config: dict[str, object] = dict(kwargs)
         self.bindings: dict[str, object] = {}
+        self.pack_kwargs: dict[str, object] = {}
+        self.grid_kwargs: dict[str, object] = {}
+        self.created_windows: dict[int, dict[str, object]] = {}
         if hasattr(master, "children"):
             master.children.append(self)  # type: ignore[attr-defined]
 
-    def pack(self, **_kwargs: object) -> None:
+    def pack(self, **kwargs: object) -> None:
+        self.pack_kwargs = dict(kwargs)
         self.mapped = True
 
-    def grid(self, **_kwargs: object) -> None:
+    def grid(self, **kwargs: object) -> None:
+        self.grid_kwargs = dict(kwargs)
         self.mapped = True
 
     def pack_forget(self) -> None:
@@ -164,10 +171,13 @@ class _FakeTkWidget:
     def create_oval(self, *_args: object, **_kwargs: object) -> int:
         return 1
 
-    def create_window(self, *_args: object, **_kwargs: object) -> int:
-        return 1
+    def create_window(self, *_args: object, **kwargs: object) -> int:
+        window_id = len(self.created_windows) + 1
+        self.created_windows[window_id] = dict(kwargs)
+        return window_id
 
-    def itemconfigure(self, *_args: object, **_kwargs: object) -> None:
+    def itemconfigure(self, item: int, **kwargs: object) -> None:
+        self.created_windows.setdefault(item, {}).update(kwargs)
         return
 
     def bbox(self, *_args: object) -> tuple[int, int, int, int]:
@@ -175,6 +185,12 @@ class _FakeTkWidget:
 
     def yview(self, *_args: object) -> None:
         return
+
+    def yview_scroll(self, units: int, what: str) -> None:
+        self.config["yview_scroll"] = (units, what)
+
+    def yview_moveto(self, fraction: float) -> None:
+        self.config["yview_moveto"] = fraction
 
     def set(self, *_args: object) -> None:
         return
@@ -815,6 +831,141 @@ def test_cockpit_output_header_has_busy_feedback() -> None:
     assert "busy_status_var" in source
     assert "ttk.Progressbar" in source
     assert "Running:" in source
+
+
+def _walk_widgets(widget: _FakeTkWidget) -> list[_FakeTkWidget]:
+    found = [widget]
+    for child in widget.winfo_children():
+        found.extend(_walk_widgets(child))
+    return found
+
+
+def test_user_action_entry_rendered_right_aligned(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="basic")
+    gui.clear_activity_log()
+
+    gui.log_action("Check")
+
+    widgets = _walk_widgets(gui.activity_container)
+    user_bubbles = [widget for widget in widgets if getattr(widget, "_activity_actor", "") == "user"]
+    assert user_bubbles
+    assert any(getattr(widget, "_activity_anchor", "") == "e" for widget in user_bubbles)
+    assert any(widget.pack_kwargs.get("side") == "right" for widget in user_bubbles)
+
+
+def test_kit_result_entry_rendered_left_with_status_badge(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="basic")
+    gui.clear_activity_log()
+
+    gui.log_result("Check", "PASS", "result_status=PASS")
+
+    widgets = _walk_widgets(gui.activity_container)
+    kit_bubbles = [widget for widget in widgets if getattr(widget, "_activity_actor", "") == "kit"]
+    badges = [widget for widget in widgets if getattr(widget, "_activity_status_badge", "") == "PASS"]
+    assert kit_bubbles
+    assert any(getattr(widget, "_activity_anchor", "") == "w" for widget in kit_bubbles)
+    assert any(widget.pack_kwargs.get("side") == "left" for widget in kit_bubbles)
+    assert badges
+
+
+def test_each_result_entry_has_its_own_copy_button(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="basic")
+    gui.clear_activity_log()
+
+    gui.log_result("First", "INFO", "first body")
+    gui.log_result("Second", "INFO", "second body")
+
+    copy_buttons = [widget for widget in _walk_widgets(gui.activity_container) if hasattr(widget, "_activity_copy_body")]
+    assert [button._activity_copy_body for button in copy_buttons] == ["first body", "second body"]
+
+
+def test_copy_button_copies_only_that_entry_body(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="basic")
+    gui.clear_activity_log()
+
+    gui.log_result("First", "INFO", "first body")
+    gui.log_result("Second", "INFO", "second body")
+    copy_buttons = [widget for widget in _walk_widgets(gui.activity_container) if hasattr(widget, "_activity_copy_body")]
+
+    copy_buttons[1].config["command"]()
+
+    assert gui.root.config["clipboard"] == "second body"
+
+
+def test_explicit_status_takes_precedence_over_heuristic() -> None:
+    assert normalize_activity_status("PASS", "Traceback: boom") == "PASS"
+
+
+def test_heuristic_status_used_only_without_explicit_status() -> None:
+    assert normalize_activity_status(None, "Traceback: boom") == "ERROR"
+    assert normalize_activity_status("", "result_status=PASS") == "PASS"
+
+
+def test_open_logs_folder_targets_tmp_dir(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="basic")
+    captured: list[Path] = []
+    monkeypatch.setattr("agentic_project_kit.gui_cockpit_task.open_folder_in_file_manager", captured.append)
+
+    gui.open_logs_folder()
+
+    assert captured == [Path(".").resolve() / "tmp"]
+    assert gui.activity_log.entries()[-1].body == "Opened logs folder: tmp/"
+
+
+def test_open_folder_helper_platform_dispatch(monkeypatch, tmp_path: Path) -> None:
+    subprocess_calls: list[tuple[str, ...]] = []
+    windows_calls: list[str] = []
+    monkeypatch.setattr(
+        "agentic_project_kit.gui_open_folder.subprocess.run",
+        lambda command, check: subprocess_calls.append(tuple(command)),
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.gui_open_folder.os.startfile",
+        lambda path: windows_calls.append(str(path)),
+        raising=False,
+    )
+
+    monkeypatch.setattr("agentic_project_kit.gui_open_folder.sys.platform", "darwin")
+    open_folder_in_file_manager(tmp_path / "mac")
+    monkeypatch.setattr("agentic_project_kit.gui_open_folder.sys.platform", "win32")
+    open_folder_in_file_manager(tmp_path / "win")
+    monkeypatch.setattr("agentic_project_kit.gui_open_folder.sys.platform", "linux")
+    open_folder_in_file_manager(tmp_path / "linux")
+
+    assert subprocess_calls[0] == ("open", str(tmp_path / "mac"))
+    assert windows_calls == [str(tmp_path / "win")]
+    assert subprocess_calls[1] == ("xdg-open", str(tmp_path / "linux"))
+
+
+def test_clear_empties_log_and_view(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="basic")
+    gui.clear_activity_log()
+    gui.log_result("Check", "PASS", "body")
+
+    gui.clear_activity_log()
+
+    assert gui.activity_log.entries() == ()
+    assert gui.activity_container.winfo_children() == []
+
+
+def test_existing_messages_still_appear_as_entries(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="basic")
+    gui.clear_activity_log()
+
+    gui.write_output("legacy text")
+
+    assert gui.activity_log.entries()[-1].body == "legacy text"
+
+
+def test_activity_log_headless_scrollregion_is_set(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="basic")
+    gui.clear_activity_log()
+
+    gui.log_action("Check")
+    gui.log_result("Check", "PASS", "done")
+
+    assert gui.activity_canvas.config["scrollregion"] == (0, 0, 100, 100)
+    assert gui.activity_canvas.config["yview_moveto"] == 1.0
 
 
 def test_cockpit_help_placeholder_points_to_authoritative_sources() -> None:

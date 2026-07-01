@@ -30,6 +30,28 @@ from agentic_project_kit.gui_tkinter_shell import run_basic_cockpit_button
 
 
 class CockpitActionsMixin:
+    def _log_gui_action(self, label: str) -> None:
+        if hasattr(self, "log_action"):
+            self.log_action(label)
+
+    def _log_gui_result(self, label: str, status: str | None, body: str) -> None:
+        if hasattr(self, "log_result"):
+            self.log_result(label, status, body)
+            return
+        self.write_output("\n" + body + "\n")
+
+    def _completed_result_status(self, completed: Any) -> str:
+        if completed.stdout:
+            try:
+                payload = json.loads(completed.stdout)
+            except ValueError:
+                payload = None
+            if isinstance(payload, dict):
+                raw_status = payload.get("result_status", payload.get("STATE", payload.get("state")))
+                if raw_status is not None:
+                    return str(raw_status)
+        return "PASS" if getattr(completed, "returncode", 1) == 0 else "ERROR"
+
     def _build_next_step_panel(self, parent: Any) -> None:
         import tkinter as tk
         from tkinter import ttk
@@ -110,6 +132,7 @@ class CockpitActionsMixin:
         attach_tooltip(help_button, "Show the current help placeholder, project sources, and maintainer contact.")
 
     def show_next_step_details(self) -> None:
+        self._log_gui_action("Why?")
         next_step = self.basic_view.next_step
         lines = [
             "",
@@ -122,9 +145,10 @@ class CockpitActionsMixin:
             format_state_details(self.basic_view),
             "",
         ]
-        self.write_output("\n".join(lines))
+        self._log_gui_result("Why?", "INFO", "\n".join(lines))
 
     def show_cockpit_help(self) -> None:
+        self._log_gui_action("Help")
         lines = [
             "",
             "HELP (under construction)",
@@ -136,7 +160,7 @@ class CockpitActionsMixin:
             "- Maintainer: Volker Fickert",
             "",
         ]
-        self.write_output("\n".join(lines))
+        self._log_gui_result("Help", "INFO", "\n".join(lines))
 
     def _build_action_cards(self, parent: Any) -> None:
         import tkinter as tk
@@ -328,7 +352,7 @@ class CockpitActionsMixin:
 
     def _write_gc_result(self, completed: Any) -> dict[str, object] | None:
         output = completed.stdout or completed.stderr
-        self.write_output("\n" + output + "\n")
+        self._log_gui_result("Clean local tmp", self._completed_result_status(completed), output)
         if not completed.stdout:
             return None
         try:
@@ -350,9 +374,10 @@ class CockpitActionsMixin:
             button.configure(state="disabled")
 
     def preview_log_cleanup(self) -> None:
+        self._log_gui_action("Clean up logs")
         cutoff = self._gc_cutoff_value()
         args = self._gc_command_args(cutoff=cutoff, execute=False)
-        self.write_output(f"\nRunning local tmp cleanup preview for files before {cutoff}...\n")
+        self._log_gui_result("Clean up logs", "INFO", f"Running local tmp cleanup preview for files before {cutoff}...")
         completed = self._agentic_command(*args)
         payload = self._write_gc_result(completed)
         candidate_count = int(payload.get("candidate_count", 0)) if payload else 0
@@ -368,15 +393,24 @@ class CockpitActionsMixin:
         self._disable_confirm_delete()
 
     def confirm_log_cleanup(self) -> None:
+        self._log_gui_action("Confirm delete")
         if not self.pending_gc_preview:
-            self.write_output("\nRun Clean up logs first. Confirm is enabled only after a dry-run preview.\n")
+            self._log_gui_result(
+                "Confirm delete",
+                "INFO",
+                "Run Clean up logs first. Confirm is enabled only after a dry-run preview.",
+            )
             return
         cutoff = self._gc_cutoff_value()
         if self.pending_gc_preview.get("cutoff") != cutoff:
-            self.write_output("\nLog cleanup cutoff changed after the preview. Run Clean up logs again before confirming.\n")
+            self._log_gui_result(
+                "Confirm delete",
+                "BLOCKED",
+                "Log cleanup cutoff changed after the preview. Run Clean up logs again before confirming.",
+            )
             self._disable_confirm_delete()
             return
-        self.write_output(f"\nDeleting local tmp cleanup candidates before {cutoff}...\n")
+        self._log_gui_result("Confirm delete", "INFO", f"Deleting local tmp cleanup candidates before {cutoff}...")
         completed = self._agentic_command(*self._gc_command_args(cutoff=cutoff, execute=True))
         self._write_gc_result(completed)
         self._disable_confirm_delete()
@@ -393,6 +427,7 @@ class CockpitActionsMixin:
     def start_create_release(self) -> None:
         from tkinter import simpledialog
 
+        self._log_gui_action("Create release")
         current = self.release_version_var.get().strip()
         version = simpledialog.askstring(
             "Create release",
@@ -401,7 +436,7 @@ class CockpitActionsMixin:
             parent=self.root,
         )
         if version is None:
-            self.write_output("\nCreate release cancelled.\n")
+            self._log_gui_result("Create release", "INFO", "Create release cancelled.")
             self._disable_confirm_release()
             return
         self.release_version_var.set(version.strip())
@@ -410,17 +445,17 @@ class CockpitActionsMixin:
     def _write_release_result(self, completed: Any, *, preview: bool) -> dict[str, object] | None:
         output = completed.stdout or completed.stderr
         if not completed.stdout:
-            self.write_output("\n" + output + "\n")
+            self._log_gui_result("Create release", self._completed_result_status(completed), output)
             self._disable_confirm_release()
             return None
         try:
             payload = json.loads(completed.stdout)
         except ValueError:
-            self.write_output("\n" + output + "\n")
+            self._log_gui_result("Create release", self._completed_result_status(completed), output)
             self._disable_confirm_release()
             return None
         if not isinstance(payload, dict):
-            self.write_output("\n" + output + "\n")
+            self._log_gui_result("Create release", self._completed_result_status(completed), output)
             self._disable_confirm_release()
             return None
         message = humanize_release_result(payload, preview=preview)
@@ -429,7 +464,7 @@ class CockpitActionsMixin:
             lines.append("")
             lines.extend(f"- {blocker}" for blocker in message.blockers)
         lines.append("")
-        self.write_output("\n".join(lines))
+        self._log_gui_result("Create release", str(payload.get("result_status", "")), "\n".join(lines))
         if preview and message.allow_confirm:
             version = str(payload.get("version", "")).strip()
             self.pending_release_preview = {
@@ -446,21 +481,32 @@ class CockpitActionsMixin:
     def preview_create_release(self) -> None:
         version = self._current_release_version()
         if version is None:
-            self.write_output("\nEnter a release version in X.Y.Z format before creating a release.\n")
+            self._log_gui_result(
+                "Create release",
+                "INFO",
+                "Enter a release version in X.Y.Z format before creating a release.",
+            )
             self._disable_confirm_release()
             return
         completed = self._agentic_command(*release_ready_args(version))
         self._write_release_result(completed, preview=True)
 
     def confirm_create_release(self) -> None:
+        self._log_gui_action("Confirm create release")
         version = self._current_release_version()
         if not self.pending_release_preview or version is None:
-            self.write_output("\nRun Create release first. Confirm is enabled only after a passing readiness preview.\n")
+            self._log_gui_result(
+                "Confirm create release",
+                "INFO",
+                "Run Create release first. Confirm is enabled only after a passing readiness preview.",
+            )
             self._disable_confirm_release()
             return
         if self.pending_release_preview.get("signature") != self._release_state_signature(version):
-            self.write_output(
-                "\nVersion or state changed after preview, run Create release again before confirming.\n"
+            self._log_gui_result(
+                "Confirm create release",
+                "BLOCKED",
+                "Version or state changed after preview, run Create release again before confirming.",
             )
             self._disable_confirm_release()
             return
@@ -573,16 +619,17 @@ class CockpitActionsMixin:
         self._select_action(self.recovery_action_id)
         action = self.action_view_by_id(self.recovery_action_id)
         label = action.label if action is not None else self.recovery_action_id
-        self.write_output(f"\nRecovery action loaded: {label}. Inspect or run read-only manually.\n")
+        self._log_gui_result("Recovery action", "INFO", f"Recovery action loaded: {label}. Inspect or run read-only manually.")
 
     def inspect_selected(self) -> None:
+        self._log_gui_action("Inspect")
         action_id = self.selected_action_id()
         if action_id is None:
-            self.write_output("No cockpit action selected.\n")
+            self._log_gui_result("Inspect", "INFO", "No cockpit action selected.")
             return
         action = self.action_view_by_id(action_id)
         if action is None:
-            self.write_output(f"Unknown cockpit action: {action_id}\n")
+            self._log_gui_result("Inspect", "ERROR", f"Unknown cockpit action: {action_id}")
             return
         [
             "",
@@ -595,21 +642,23 @@ class CockpitActionsMixin:
             f"description={action.description}",
             "",
         ]
-        self.write_output("\nInspecting selected action...\n\n" + format_action_details(action) + "\n")
+        self._log_gui_result("Inspect", "INFO", "Inspecting selected action...\n\n" + format_action_details(action))
 
     def run_basic_action(self, command_id: str) -> None:
-        self.write_output(f"\nRunning basic action: {command_id}...\n")
-        self.write_output(run_basic_cockpit_button(command_id, project_root=self.project_root) + "\n")
+        self._log_gui_action(f"Run {command_id}")
+        self._log_gui_result("Run basic action", "INFO", f"Running basic action: {command_id}...")
+        self._log_gui_result("Run basic action", None, run_basic_cockpit_button(command_id, project_root=self.project_root))
 
     def run_selected_read_only(self) -> None:
+        self._log_gui_action("Run read-only")
         action_id = self.selected_action_id()
         if action_id is None:
-            self.write_output("No cockpit action selected.\n")
+            self._log_gui_result("Run read-only", "INFO", "No cockpit action selected.")
             return
         action = self.action_view_by_id(action_id)
         if action is not None and action.safety != READ_ONLY:
-            self.write_output("\n" + format_action_details(action) + "\n")
+            self._log_gui_result("Run read-only", "BLOCKED", format_action_details(action))
             return
-        self.write_output(f"\nRunning read-only action: {action_id}...\n")
+        self._log_gui_result("Run read-only", "INFO", f"Running read-only action: {action_id}...")
         result = run_cockpit_action(action_id, self.project_root, allow_bounded=False)
-        self.write_output("\n" + format_action_result(result) + "\n")
+        self._log_gui_result("Run read-only", "PASS" if result.allowed and result.executed else "BLOCKED", format_action_result(result))

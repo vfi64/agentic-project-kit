@@ -311,6 +311,8 @@ class CockpitSidebarMixin:
 
 
     def run_recommended_action(self) -> None:
+        if hasattr(self, "log_action"):
+            self.log_action("Run next work order")
         action = self.basic_view.recommended_action
         if action.kind == "run_button" and action.command_id:
             self.run_basic_action(action.command_id)
@@ -318,10 +320,20 @@ class CockpitSidebarMixin:
         if action.kind == "select_action" and action.cockpit_action_id:
             self._select_action(action.cockpit_action_id)
             label = action.label
-            self.write_output(f"\nRecommended action loaded: {label}. Inspect or run read-only manually.\n")
+            if hasattr(self, "log_result"):
+                self.log_result(
+                    "Run next work order",
+                    "INFO",
+                    f"Recommended action loaded: {label}. Inspect or run read-only manually.",
+                )
+            else:
+                self.write_output(f"\nRecommended action loaded: {label}. Inspect or run read-only manually.\n")
             return
         message = self.basic_view.recovery_hint or action.description
-        self.write_output(f"\nRecommended next: {message}\n")
+        if hasattr(self, "log_result"):
+            self.log_result("Run next work order", "INFO", f"Recommended next: {message}")
+        else:
+            self.write_output(f"\nRecommended next: {message}\n")
 
     def update_mode_explanation(self, _event: object | None = None) -> None:
         selected = self.current_communication_mode()
@@ -364,4 +376,11 @@ class CockpitSidebarMixin:
             self.populate_action_tree()
         if hasattr(self, "_rebuild_main_content"):
             self._rebuild_main_content()
-        self.write_output(f"\nAccess level changed to {self.basic_view.access_level}; action list rebuilt.\n")
+        if hasattr(self, "log_result"):
+            self.log_result(
+                "Access level",
+                "INFO",
+                f"Access level changed to {self.basic_view.access_level}; action list rebuilt.",
+            )
+        else:
+            self.write_output(f"\nAccess level changed to {self.basic_view.access_level}; action list rebuilt.\n")

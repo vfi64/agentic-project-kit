@@ -251,6 +251,7 @@ class CockpitHeaderMixin:
         self,
         completed: subprocess.CompletedProcess[str],
         *,
+        label: str = "Work result",
         allow_confirm_from_preview: bool = False,
         allow_confirm_discard_from_preview: bool = False,
     ) -> dict[str, object] | None:
@@ -264,7 +265,7 @@ class CockpitHeaderMixin:
             except ValueError:
                 payload = None
         if payload is None:
-            self.write_output("\n" + output + "\n")
+            self.log_result(label, "PASS" if completed.returncode == 0 else "ERROR", output)
             self._disable_confirm_publish()
             self._disable_confirm_discard()
             return None
@@ -278,7 +279,7 @@ class CockpitHeaderMixin:
             lines.append("")
             lines.extend(f"- {blocker}" for blocker in message.blockers_human)
         lines.extend(["", f"Next: {message.suggested_next}", ""])
-        self.write_output("\n".join(lines))
+        self.log_result(label, str(payload.get("result_status", "")), "\n".join(lines))
         if allow_confirm_from_preview and message.allow_confirm_publish:
             self.pending_finish_preview = payload
             if self.work_finish_confirm_button is not None:
@@ -308,6 +309,7 @@ class CockpitHeaderMixin:
         return self.current_branch() not in {"", "unknown", "main", "master"} and bool(self._changed_paths())
 
     def start_work_cycle(self) -> None:
+        self.log_action("Start work")
         title = self.current_task_body()
         if not title:
             title = simpledialog.askstring(
@@ -317,7 +319,7 @@ class CockpitHeaderMixin:
             ) or ""
         branch = slugify_work_title(title)
         start_ref = self.selected_start_ref()
-        self.write_output(f"\nStart new work based on {start_ref}.\n")
+        self.log_result("Start work", "INFO", f"Start new work based on {start_ref}.")
         completed = self._agentic_command(
             "work",
             "start",
@@ -329,21 +331,25 @@ class CockpitHeaderMixin:
             start_ref,
             "--json",
         )
-        self._write_work_command_result(completed)
+        self._write_work_command_result(completed, label="Start work")
 
     def focus_make_changes(self) -> None:
+        self.log_action("Make changes")
         if self.task_text is not None:
             self.task_text.focus_set()
             self.task_text.configure(highlightthickness=1, highlightbackground="#7eb1f1")
-        self.write_output(
-            "\nDescribe the change in the file-transfer task editor, then send it. "
-            "The assistant will work from the published task carrier via g/go.\n"
+        self.log_result(
+            "Make changes",
+            "INFO",
+            "Describe the change in the file-transfer task editor, then send it. "
+            "The assistant will work from the published task carrier via g/go.",
         )
 
     def run_work_check(self) -> None:
+        self.log_action("Check")
         signature = self._work_cycle_signature()
         completed = self._agentic_command("work", "check", "--profile", "code", "--json")
-        payload = self._write_work_command_result(completed)
+        payload = self._write_work_command_result(completed, label="Check")
         self.work_cycle_last_check_passed = bool(
             payload and str(payload.get("result_status", "")).upper() == "PASS"
         )
@@ -389,11 +395,12 @@ class CockpitHeaderMixin:
         )
 
     def preview_work_finish(self) -> None:
+        self.log_action("Finish & publish")
         args = self._current_finish_args(execute=False)
         if args is None:
             return
         completed = self._agentic_command(*args)
-        payload = self._write_work_command_result(completed, allow_confirm_from_preview=True)
+        payload = self._write_work_command_result(completed, label="Finish & publish", allow_confirm_from_preview=True)
         if payload and self.pending_finish_preview is not None:
             self.pending_finish_preview = {
                 "payload": payload,
@@ -402,26 +409,41 @@ class CockpitHeaderMixin:
             }
 
     def confirm_work_finish(self) -> None:
+        self.log_action("Confirm publish")
         if not self.pending_finish_preview:
-            self.write_output("\nRun Finish & publish first. Confirm is enabled only after a passing dry-run.\n")
+            self.log_result(
+                "Confirm publish",
+                "INFO",
+                "Run Finish & publish first. Confirm is enabled only after a passing dry-run.",
+            )
             return
         if self.pending_finish_preview.get("signature") != self._work_cycle_signature():
-            self.write_output("\nChanged files moved after the dry-run. Run Finish & publish again before confirming.\n")
+            self.log_result(
+                "Confirm publish",
+                "BLOCKED",
+                "Changed files moved after the dry-run. Run Finish & publish again before confirming.",
+            )
             self._disable_confirm_publish()
             return
         args = self._current_finish_args(execute=True)
         if args is None:
             return
         completed = self._agentic_command(*args)
-        self._write_work_command_result(completed)
+        self._write_work_command_result(completed, label="Confirm publish")
 
     def run_work_recover(self) -> None:
+        self.log_action("Needs recovery")
         completed = self._agentic_command("work", "recover", "--json")
-        self._write_work_command_result(completed)
+        self._write_work_command_result(completed, label="Needs recovery")
 
     def preview_discard_changes(self) -> None:
+        self.log_action("Discard all changes")
         completed = self._agentic_command("work", "discard-changes", "--json")
-        payload = self._write_work_command_result(completed, allow_confirm_discard_from_preview=True)
+        payload = self._write_work_command_result(
+            completed,
+            label="Discard all changes",
+            allow_confirm_discard_from_preview=True,
+        )
         if payload and self.pending_discard_preview is not None:
             self.pending_discard_preview = {
                 "payload": payload,
@@ -430,11 +452,20 @@ class CockpitHeaderMixin:
             }
 
     def confirm_discard_changes(self) -> None:
+        self.log_action("Confirm discard")
         if not self.pending_discard_preview:
-            self.write_output("\nRun Discard all changes first. Confirm is enabled only after a passing dry-run.\n")
+            self.log_result(
+                "Confirm discard",
+                "INFO",
+                "Run Discard all changes first. Confirm is enabled only after a passing dry-run.",
+            )
             return
         if self.pending_discard_preview.get("signature") != self._work_cycle_signature():
-            self.write_output("\nChanged files moved after the dry-run. Run Discard all changes again before confirming.\n")
+            self.log_result(
+                "Confirm discard",
+                "BLOCKED",
+                "Changed files moved after the dry-run. Run Discard all changes again before confirming.",
+            )
             self._disable_confirm_discard()
             return
         discard_signature = str(self.pending_discard_preview.get("discard_signature", ""))
@@ -446,4 +477,4 @@ class CockpitHeaderMixin:
             discard_signature,
             "--json",
         )
-        self._write_work_command_result(completed)
+        self._write_work_command_result(completed, label="Confirm discard")
