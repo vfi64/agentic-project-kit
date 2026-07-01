@@ -13,6 +13,7 @@ from agentic_project_kit.gui_action_views import (
     grouped_action_views as grouped_action_views,
     ordered_action_views as ordered_action_views,
 )
+from agentic_project_kit.gui_activity_log import ActivityLog
 from agentic_project_kit.gui_cockpit_actions import CockpitActionsMixin
 from agentic_project_kit.gui_cockpit_common import (
     HEADER_TEXT,
@@ -67,6 +68,7 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
 
         self.root = root
         self.project_root = (project_root or Path(".")).resolve()
+        self.activity_log = ActivityLog()
         self.gui_group_frames: dict[str, Any | None] = dict.fromkeys(GUI_GROUP_IDS)
         self.panel_expanded_state = read_panel_state(self.project_root)
         self.basic_view = build_basic_cockpit_view_model(self.project_root)
