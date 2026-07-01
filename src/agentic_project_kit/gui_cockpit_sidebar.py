@@ -148,7 +148,7 @@ class CockpitSidebarMixin:
             pady=THEME.section_padding,
         )
         self._register_group_frame("communication", panel)
-        panel.pack(fill=tk.X, pady=(0, 10))
+        panel.pack(fill=tk.BOTH, expand=True)
         header = tk.Frame(panel, bg=THEME.color_panel_bg)
         header.pack(fill=tk.X, pady=(0, 8))
         tk.Label(
