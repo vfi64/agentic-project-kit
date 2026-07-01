@@ -63,6 +63,7 @@ class CockpitHeaderMixin:
         recovery_view = next(view for view in views if view.phase_id == "recover")
 
         frame = tk.Frame(parent, bg=THEME.color_panel_bg, padx=16, pady=10)
+        self._register_group_frame("work_cycle", frame)
         frame.pack(fill=tk.X)
         title = tk.Label(
             frame,

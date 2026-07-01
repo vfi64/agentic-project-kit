@@ -43,6 +43,7 @@ class CockpitActionsMixin:
             padx=10,
             pady=6,
         )
+        self._register_group_frame("next_step", panel)
         panel.pack(fill=tk.X, pady=(0, 8))
 
         header = tk.Frame(panel, bg=THEME.color_recommended_bg)
@@ -143,6 +144,7 @@ class CockpitActionsMixin:
 
         self._section_heading(parent, "Advanced: individual actions")
         actions_row = tk.Frame(parent, bg=THEME.color_panel_bg)
+        self._register_group_frame("action_table", actions_row)
         actions_row.pack(fill=tk.X, pady=(0, 10))
         action_scroll_shell = tk.Frame(actions_row, bg=THEME.color_panel_bg, width=THEME.action_list_width)
         action_scroll_shell.pack(side=tk.LEFT, fill=tk.Y)
@@ -207,6 +209,7 @@ class CockpitActionsMixin:
             padx=THEME.section_padding,
             pady=8,
         )
+        self._register_group_frame("advanced_tools", panel)
         panel.pack(fill=tk.X, pady=(0, 10))
         header = tk.Frame(panel, bg=THEME.color_panel_bg)
         header.pack(fill=tk.X)

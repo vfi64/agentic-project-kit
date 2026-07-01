@@ -35,6 +35,27 @@ from agentic_project_kit.gui_tk_widgets import maximize_root_window
 from agentic_project_kit.gui_viewmodel import build_basic_cockpit_view_model
 
 
+GUI_GROUP_IDS = (
+    "work_cycle",
+    "communication",
+    "next_step",
+    "task_editor",
+    "action_table",
+    "advanced_tools",
+    "file_browser",
+    "output",
+)
+MAIN_CONTENT_GROUP_IDS = (
+    "communication",
+    "next_step",
+    "task_editor",
+    "action_table",
+    "advanced_tools",
+    "file_browser",
+    "output",
+)
+
+
 class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, CockpitTaskMixin):
     def __init__(self, root: Any, project_root: Path | None = None) -> None:
         import tkinter as tk
@@ -42,6 +63,7 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
 
         self.root = root
         self.project_root = (project_root or Path(".")).resolve()
+        self.gui_group_frames: dict[str, Any | None] = dict.fromkeys(GUI_GROUP_IDS)
         self.basic_view = build_basic_cockpit_view_model(self.project_root)
         self.actions = ordered_action_views(
             build_gui_action_views(access_level=self.basic_view.access_level)
@@ -124,7 +146,20 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
     def _advanced_access_visible(self) -> bool:
         return self.basic_view.access_level in {"advanced", "maintainer"}
 
+    def _register_group_frame(self, group_id: str, frame: Any) -> Any:
+        if group_id not in self.gui_group_frames:
+            raise KeyError(f"unknown GUI group id: {group_id}")
+        self.gui_group_frames[group_id] = frame
+        setattr(self, f"{group_id}_frame", frame)
+        return frame
+
+    def _reset_main_group_frames(self) -> None:
+        for group_id in MAIN_CONTENT_GROUP_IDS:
+            self.gui_group_frames[group_id] = None
+            setattr(self, f"{group_id}_frame", None)
+
     def _build_main_content(self) -> None:
+        self._reset_main_group_frames()
         self._build_communication_panel(self.main_area)
         self._build_next_step_panel(self.main_area)
         if self._advanced_access_visible():

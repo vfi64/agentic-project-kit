@@ -1,6 +1,8 @@
 import inspect
 from pathlib import Path
 import subprocess
+import sys
+import types
 
 from agentic_project_kit.cockpit import BOUNDED, READ_ONLY, CockpitAction, CockpitActionResult
 from agentic_project_kit.gui_cockpit import (
@@ -29,6 +31,317 @@ COCKPIT_SOURCE_PATHS = (
     Path("src/agentic_project_kit/gui_cockpit_actions.py"),
     Path("src/agentic_project_kit/gui_cockpit_task.py"),
 )
+COMMUNICATION_MODE_IDS = ("file_transfer", "remote", "copy_paste")
+ACCESS_LEVELS = ("basic", "advanced", "maintainer")
+GUI_VISIBILITY_GROUPS = (
+    "work_cycle",
+    "communication",
+    "next_step",
+    "task_editor",
+    "action_table",
+    "advanced_tools",
+    "file_browser",
+    "output",
+)
+
+
+class _FakeStringVar:
+    def __init__(self, value: str = "") -> None:
+        self.value = value
+
+    def get(self) -> str:
+        return self.value
+
+    def set(self, value: str) -> None:
+        self.value = value
+
+
+class _FakeTkWidget:
+    def __init__(self, master: object | None = None, **kwargs: object) -> None:
+        self.master = master
+        self.children: list[_FakeTkWidget] = []
+        self.mapped = False
+        self.exists = True
+        self.text_content = ""
+        self.config: dict[str, object] = dict(kwargs)
+        self.bindings: dict[str, object] = {}
+        if hasattr(master, "children"):
+            master.children.append(self)  # type: ignore[attr-defined]
+
+    def pack(self, **_kwargs: object) -> None:
+        self.mapped = True
+
+    def grid(self, **_kwargs: object) -> None:
+        self.mapped = True
+
+    def pack_forget(self) -> None:
+        self.mapped = False
+
+    def pack_propagate(self, _flag: bool) -> None:
+        return
+
+    def bind(self, event: str, callback: object) -> None:
+        self.bindings[event] = callback
+
+    def __getitem__(self, key: str) -> object:
+        return self.config.get(key, "")
+
+    def configure(self, **kwargs: object) -> None:
+        self.config.update(kwargs)
+
+    def cget(self, key: str) -> object:
+        return self.config.get(key, "")
+
+    def columnconfigure(self, *_args: object, **_kwargs: object) -> None:
+        return
+
+    def destroy(self) -> None:
+        self.exists = False
+        self.mapped = False
+        for child in self.children:
+            child.destroy()
+
+    def winfo_children(self) -> list["_FakeTkWidget"]:
+        return [child for child in self.children if child.exists]
+
+    def winfo_exists(self) -> int:
+        return int(self.exists)
+
+    def winfo_ismapped(self) -> int:
+        return int(self.mapped)
+
+    def winfo_screenwidth(self) -> int:
+        return 1400
+
+    def winfo_screenheight(self) -> int:
+        return 900
+
+    def winfo_reqwidth(self) -> int:
+        return 240
+
+    def winfo_reqheight(self) -> int:
+        return 80
+
+    def winfo_rootx(self) -> int:
+        return 0
+
+    def winfo_rooty(self) -> int:
+        return 0
+
+    def winfo_height(self) -> int:
+        return 20
+
+    def title(self, value: str) -> None:
+        self.config["title"] = value
+
+    def geometry(self, value: str) -> None:
+        self.config["geometry"] = value
+
+    def minsize(self, width: int, height: int) -> None:
+        self.config["minsize"] = (width, height)
+
+    def withdraw(self) -> None:
+        return
+
+    def update(self) -> None:
+        return
+
+    def update_idletasks(self) -> None:
+        return
+
+    def clipboard_clear(self) -> None:
+        self.config["clipboard"] = ""
+
+    def clipboard_append(self, text: str) -> None:
+        self.config["clipboard"] = text
+
+    def create_rectangle(self, *_args: object, **_kwargs: object) -> int:
+        return 1
+
+    def create_oval(self, *_args: object, **_kwargs: object) -> int:
+        return 1
+
+    def create_window(self, *_args: object, **_kwargs: object) -> int:
+        return 1
+
+    def itemconfigure(self, *_args: object, **_kwargs: object) -> None:
+        return
+
+    def bbox(self, *_args: object) -> tuple[int, int, int, int]:
+        return (0, 0, 100, 100)
+
+    def yview(self, *_args: object) -> None:
+        return
+
+    def set(self, *_args: object) -> None:
+        return
+
+    def start(self, *_args: object) -> None:
+        self.config["started"] = True
+
+    def stop(self) -> None:
+        self.config["started"] = False
+
+    def insert(self, _index: object, text: str) -> None:
+        self.text_content += text
+
+    def delete(self, *_args: object) -> None:
+        self.text_content = ""
+
+    def get(self, *_args: object) -> str:
+        return self.text_content
+
+    def see(self, *_args: object) -> None:
+        return
+
+    def curselection(self) -> tuple[int, ...]:
+        return ()
+
+    def focus_set(self) -> None:
+        self.config["focused"] = True
+
+
+class _FakeRoot(_FakeTkWidget):
+    pass
+
+
+def _install_fake_tk(monkeypatch) -> None:
+    ttk = types.SimpleNamespace(
+        Button=_FakeTkWidget,
+        Combobox=_FakeTkWidget,
+        Entry=_FakeTkWidget,
+        Progressbar=_FakeTkWidget,
+        Scrollbar=_FakeTkWidget,
+        Separator=_FakeTkWidget,
+    )
+    fake_tk = types.SimpleNamespace(
+        Tk=_FakeRoot,
+        Toplevel=_FakeTkWidget,
+        Frame=_FakeTkWidget,
+        Canvas=_FakeTkWidget,
+        Label=_FakeTkWidget,
+        Button=_FakeTkWidget,
+        Text=_FakeTkWidget,
+        Listbox=_FakeTkWidget,
+        StringVar=_FakeStringVar,
+        ttk=ttk,
+        BOTH="both",
+        X="x",
+        Y="y",
+        LEFT="left",
+        RIGHT="right",
+        TOP="top",
+        VERTICAL="vertical",
+        HORIZONTAL="horizontal",
+        WORD="word",
+        GROOVE="groove",
+        FLAT="flat",
+        NORMAL="normal",
+        DISABLED="disabled",
+        W="w",
+        E="e",
+        NW="nw",
+        ALL="all",
+    )
+    monkeypatch.setitem(sys.modules, "tkinter", fake_tk)
+    monkeypatch.setitem(sys.modules, "tkinter.ttk", ttk)
+
+
+def _mode_option(gui: CockpitGui, mode_id: str) -> str:
+    mode = next(mode for mode in gui.basic_view.communication_modes if mode.mode_id == mode_id)
+    return f"{mode.label}: {mode.role}"
+
+
+def _build_headless_cockpit(monkeypatch, *, communication_mode: str, access_level: str) -> CockpitGui:
+    _install_fake_tk(monkeypatch)
+    monkeypatch.setattr(CockpitHeaderMixin, "_start_from_ref_options", lambda _self: ("latest main",))
+    root = _FakeRoot()
+    gui = CockpitGui(root, project_root=Path("."))
+    gui.mode_var.set(_mode_option(gui, communication_mode))
+    gui.update_mode_explanation()
+    gui.access_level_var.set(access_level)
+    gui.update_access_level()
+    return gui
+
+
+def _group_is_visible(gui: CockpitGui, group_id: str) -> bool:
+    frame = gui.gui_group_frames.get(group_id)
+    return bool(frame is not None and frame.winfo_exists() and frame.winfo_ismapped())
+
+
+def _visibility_matrix_expected() -> dict[tuple[str, str], dict[str, bool]]:
+    expected: dict[tuple[str, str], dict[str, bool]] = {}
+    for mode in COMMUNICATION_MODE_IDS:
+        for level in ACCESS_LEVELS:
+            advanced = level in {"advanced", "maintainer"}
+            expected[(mode, level)] = {
+                "work_cycle": True,
+                "communication": True,
+                "next_step": True,
+                "task_editor": True,
+                "action_table": advanced,
+                "advanced_tools": advanced,
+                # Current GUI-T baseline: file browser lives inside the collapsed
+                # Advanced tools body; GUI-G owns collapsible subgroup title behavior.
+                "file_browser": False,
+                "output": True,
+            }
+    return expected
+
+
+def test_visibility_matrix_covers_all_nine_combinations() -> None:
+    expected = _visibility_matrix_expected()
+
+    assert len(expected) == 9
+    assert set(expected) == {
+        (mode, level) for mode in COMMUNICATION_MODE_IDS for level in ACCESS_LEVELS
+    }
+
+
+def test_gui_builds_headless_for_every_mode_and_level(monkeypatch) -> None:
+    for mode in COMMUNICATION_MODE_IDS:
+        for level in ACCESS_LEVELS:
+            gui = _build_headless_cockpit(monkeypatch, communication_mode=mode, access_level=level)
+
+            assert gui.basic_view.communication_mode == mode
+            assert gui.basic_view.access_level == level
+
+
+def test_visibility_matrix_core_groups_always_visible(monkeypatch) -> None:
+    for mode in COMMUNICATION_MODE_IDS:
+        for level in ACCESS_LEVELS:
+            gui = _build_headless_cockpit(monkeypatch, communication_mode=mode, access_level=level)
+
+            for group_id in ("work_cycle", "communication", "next_step", "task_editor", "output"):
+                assert _group_is_visible(gui, group_id), (mode, level, group_id)
+
+
+def test_visibility_matrix_basic_hides_advanced_groups(monkeypatch) -> None:
+    for mode in COMMUNICATION_MODE_IDS:
+        gui = _build_headless_cockpit(monkeypatch, communication_mode=mode, access_level="basic")
+
+        for group_id in ("action_table", "advanced_tools", "file_browser"):
+            assert not _group_is_visible(gui, group_id), (mode, "basic", group_id)
+
+
+def test_visibility_matrix_advanced_shows_advanced_groups(monkeypatch) -> None:
+    for mode in COMMUNICATION_MODE_IDS:
+        for level in ("advanced", "maintainer"):
+            gui = _build_headless_cockpit(monkeypatch, communication_mode=mode, access_level=level)
+
+            assert _group_is_visible(gui, "action_table"), (mode, level, "action_table")
+            assert _group_is_visible(gui, "advanced_tools"), (mode, level, "advanced_tools")
+            assert not _group_is_visible(gui, "file_browser"), (mode, level, "file_browser")
+
+
+def test_visibility_matrix_matches_expected_default_state(monkeypatch) -> None:
+    expected = _visibility_matrix_expected()
+
+    for (mode, level), matrix in expected.items():
+        gui = _build_headless_cockpit(monkeypatch, communication_mode=mode, access_level=level)
+        actual = {group_id: _group_is_visible(gui, group_id) for group_id in GUI_VISIBILITY_GROUPS}
+
+        assert actual == matrix
 
 
 def _cockpit_sources() -> str:
