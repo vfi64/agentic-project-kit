@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 055b6ae6bafa3765024df40a69f81e0299ddeb9f
-  short: 055b6ae6
-  subject: Fix cockpit action visibility and card alignment (#1669)
+  full: fdbb553efff8171a0acf763c8e21e90fd74e551c
+  short: fdbb553e
+  subject: Make cockpit action list separately scrollable (#1671)
 last_substantive_work_state:
-  full: 055b6ae6bafa3765024df40a69f81e0299ddeb9f
-  short: 055b6ae6
-  subject: Fix cockpit action visibility and card alignment (#1669)
+  full: fdbb553efff8171a0acf763c8e21e90fd74e551c
+  short: fdbb553e
+  subject: Make cockpit action list separately scrollable (#1671)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
