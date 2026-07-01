@@ -100,7 +100,6 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
         )
         shell.pack(fill=tk.BOTH, expand=True, padx=14, pady=14)
 
-        self._build_header(shell)
         self._build_work_cycle_bar(shell)
 
         body = tk.Frame(shell, bg=THEME.color_panel_bg)
@@ -202,8 +201,7 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
 
     def _build_main_content(self) -> None:
         self._reset_main_group_frames()
-        self._build_communication_panel(self.main_area)
-        self._build_next_step_panel(self.main_area)
+        self._build_primary_status_row(self.main_area)
         if self._advanced_access_visible():
             self._build_action_cards(self.main_area)
             self._build_advanced_tools(self.main_area)
@@ -211,6 +209,25 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
         self._build_task_editor(self.main_area)
         self._build_copy_paste_tools(self.main_area)
         self._build_output_panel(self.main_area)
+
+    def _build_primary_status_row(self, parent: Any) -> None:
+        import tkinter as tk
+
+        row = tk.Frame(parent, bg=THEME.color_panel_bg)
+        self.primary_status_row = row
+        row.pack(fill=tk.X, pady=(0, 10))
+        row.columnconfigure(0, weight=1)
+        row.columnconfigure(1, weight=1)
+
+        communication_column = tk.Frame(row, bg=THEME.color_panel_bg)
+        communication_column._primary_status_column = "communication"  # type: ignore[attr-defined]
+        communication_column.grid(row=0, column=0, sticky="nsew", padx=(0, 8))
+        next_step_column = tk.Frame(row, bg=THEME.color_panel_bg)
+        next_step_column._primary_status_column = "next_step"  # type: ignore[attr-defined]
+        next_step_column.grid(row=0, column=1, sticky="nsew", padx=(8, 0))
+
+        self._build_communication_panel(communication_column)
+        self._build_next_step_panel(next_step_column)
 
     def _rebuild_main_content(self) -> None:
         for child in self.main_area.winfo_children():

@@ -531,6 +531,7 @@ def test_changing_access_level_rebuilds_action_table() -> None:
 
     assert "build_basic_cockpit_view_model" in source
     assert "build_gui_action_views" in source
+    assert "_rebuild_main_content" in source
     assert "populate_action_tree" in source
 
 
@@ -573,9 +574,17 @@ def test_action_cards_use_single_tooltip_source_per_card() -> None:
 def test_cockpit_builds_work_cycle_bar_above_body() -> None:
     source = _cockpit_sources()
 
-    assert "self._build_header(shell)\n        self._build_work_cycle_bar(shell)\n\n        body =" in source
+    cockpit_source = Path("src/agentic_project_kit/gui_cockpit.py").read_text(encoding="utf-8")
+    assert "self._build_header(shell)" not in cockpit_source
+    assert "self._build_work_cycle_bar(shell)\n\n        body =" in cockpit_source
     assert "WORK CYCLE" in source
     assert "build_work_cycle_views" in source
+
+
+def test_branch_label_moves_from_large_header_to_status_detail() -> None:
+    source = Path("src/agentic_project_kit/gui_cockpit_sidebar.py").read_text(encoding="utf-8")
+
+    assert 'self._detail_row(sidebar, "Branch", self._branch_label())' in source
 
 
 def test_work_cycle_bar_exposes_human_phase_labels() -> None:
