@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9f155cb6247698942eead7b42708a8ffe9718464
-  short: 9f155cb6
-  subject: Add collapsible GUI control groups (#1663)
+  full: 6ad1eaf829d0d31f30dbd1a26248c2d47ff8ff12
+  short: 6ad1eaf8
+  subject: Render cockpit output as activity log (#1665)
 last_substantive_work_state:
-  full: 9f155cb6247698942eead7b42708a8ffe9718464
-  short: 9f155cb6
-  subject: Add collapsible GUI control groups (#1663)
+  full: 6ad1eaf829d0d31f30dbd1a26248c2d47ff8ff12
+  short: 6ad1eaf8
+  subject: Render cockpit output as activity log (#1665)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
