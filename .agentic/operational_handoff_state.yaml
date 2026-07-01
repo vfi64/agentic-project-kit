@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3278f844a82c730ef84b26c5ef80a2191cf8b756
-  short: 3278f844
-  subject: Simplify cockpit into a guided beginner-first layout with progressive disclosure (#1659)
+  full: 4b9f81a965a651d47a705fd6e0cf4a1ea08e41c6
+  short: 4b9f81a9
+  subject: Add GUI visibility matrix tests (#1661)
 last_substantive_work_state:
-  full: 3278f844a82c730ef84b26c5ef80a2191cf8b756
-  short: 3278f844
-  subject: Simplify cockpit into a guided beginner-first layout with progressive disclosure (#1659)
+  full: 4b9f81a965a651d47a705fd6e0cf4a1ea08e41c6
+  short: 4b9f81a9
+  subject: Add GUI visibility matrix tests (#1661)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
