@@ -171,10 +171,11 @@ class CockpitActionsMixin:
         self._register_group_frame("action_table", actions_row)
         actions_row.pack(fill=tk.X, pady=(0, 10))
         action_list_height = THEME.action_rows_visible * THEME.action_card_height
+        action_shell_width = THEME.action_list_width + THEME.action_scrollbar_width
         action_scroll_shell = tk.Frame(
             actions_row,
             bg=THEME.color_panel_bg,
-            width=THEME.action_list_width,
+            width=action_shell_width,
             height=action_list_height,
         )
         self.action_scroll_shell = action_scroll_shell
@@ -212,6 +213,8 @@ class CockpitActionsMixin:
                 width=event.width,
             ),
         )
+        self._bind_action_card_scroll_events(self.action_card_canvas)
+        self._bind_action_card_scroll_events(self.action_card_container)
         self.action_card_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.action_card_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.action_card_widgets: dict[str, Any] = {}
@@ -227,6 +230,22 @@ class CockpitActionsMixin:
         run_button.grid(row=0, column=1, sticky="ew", pady=(0, 6))
         controls.columnconfigure(0, weight=1)
         controls.columnconfigure(1, weight=1)
+
+    def _bind_action_card_scroll_events(self, widget: Any) -> None:
+        for event_name in ("<MouseWheel>", "<Button-4>", "<Button-5>"):
+            widget.bind(event_name, self._on_action_card_mousewheel)
+
+    def _on_action_card_mousewheel(self, event: Any) -> str:
+        number = getattr(event, "num", None)
+        delta = getattr(event, "delta", 0)
+        if number == 4:
+            units = -1
+        elif number == 5:
+            units = 1
+        else:
+            units = -1 if delta > 0 else 1
+        self.action_card_canvas.yview_scroll(units, "units")
+        return "break"
 
     def _build_advanced_tools(self, parent: Any) -> None:
         group = self._build_collapsible_group(
@@ -550,22 +569,26 @@ class CockpitActionsMixin:
 
         frame = tk.Frame(self.action_card_container, bg=THEME.color_panel_bg)
         frame.pack(fill=tk.X, pady=(7 if self.action_card_widgets else 0, 4))
-        tk.Label(
+        group_label = tk.Label(
             frame,
             text=group.label.upper(),
             bg=THEME.color_panel_bg,
             fg=THEME.color_muted_text,
             font=THEME.section_font,
             anchor=tk.W,
-        ).pack(side=tk.LEFT)
-        tk.Label(
+        )
+        group_label.pack(side=tk.LEFT)
+        group_description = tk.Label(
             frame,
             text=group.description,
             bg=THEME.color_panel_bg,
             fg=THEME.color_muted_text,
             font=THEME.small_font,
             anchor=tk.E,
-        ).pack(side=tk.RIGHT)
+        )
+        group_description.pack(side=tk.RIGHT)
+        for widget in (frame, group_label, group_description):
+            self._bind_action_card_scroll_events(widget)
 
     def _create_action_card(self, action: GuiActionView) -> None:
         import tkinter as tk
@@ -603,6 +626,7 @@ class CockpitActionsMixin:
         tooltip = f"{action.short_description}. {explain_safety(action.safety)}"
         for widget in (card, dot, label, safety):
             widget.bind("<Button-1>", lambda _event, action_id=action.action_id: self._select_action(action_id))
+            self._bind_action_card_scroll_events(widget)
         attach_tooltip(card, tooltip)
         self.action_card_widgets[action.action_id] = card
 

@@ -735,11 +735,14 @@ def test_gui_action_cards_are_four_rows_and_scrollable() -> None:
 
     assert action_tree_visible_rows() == 4
     assert THEME.action_card_height == 23
+    assert THEME.action_scrollbar_width == 18
     assert "THEME.action_list_width" in source
     assert "action_list_height = THEME.action_rows_visible * THEME.action_card_height" in source
+    assert "action_shell_width = THEME.action_list_width + THEME.action_scrollbar_width" in source
     assert "height=action_list_height" in source
     assert "ttk.Scrollbar" in source
     assert "yscrollcommand" in source
+    assert "_bind_action_card_scroll_events" in source
     assert "action_card_container" in source
     assert "ttk.Treeview" not in source
 
@@ -813,9 +816,23 @@ def test_cockpit_primary_status_cards_expand_to_equal_column_height(monkeypatch)
 def test_advanced_action_cards_keep_visible_scroll_container_height(monkeypatch) -> None:
     gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="advanced")
 
+    assert gui.action_scroll_shell.config["width"] == THEME.action_list_width + THEME.action_scrollbar_width
     assert gui.action_scroll_shell.config["height"] == THEME.action_rows_visible * THEME.action_card_height
+    assert gui.action_card_canvas.config["width"] == THEME.action_list_width
     assert gui.action_card_canvas.config["height"] == THEME.action_rows_visible * THEME.action_card_height
     assert gui.action_scroll_shell.pack_kwargs["fill"] == "both"
+
+
+def test_advanced_action_cards_support_separate_mousewheel_scrolling(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="advanced")
+
+    for event_name in ("<MouseWheel>", "<Button-4>", "<Button-5>"):
+        assert event_name in gui.action_card_canvas.bindings
+        assert event_name in gui.action_card_container.bindings
+        assert event_name in next(iter(gui.action_card_widgets.values())).bindings
+
+    assert gui._on_action_card_mousewheel(types.SimpleNamespace(delta=-120, num=None)) == "break"
+    assert gui.action_card_canvas.config["yview_scroll"] == (1, "units")
 
 
 def test_cockpit_main_area_is_vertically_scrollable_and_output_reachable() -> None:

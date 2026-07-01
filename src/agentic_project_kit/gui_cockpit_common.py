@@ -37,6 +37,7 @@ class GuiTheme:
     color_recommended_bg: str = "#d7eaff"
     color_button_outline: str = "#cfcfcf"
     action_card_height: int = 23
+    action_scrollbar_width: int = 18
     action_column_width: int = 165
     what_it_does_column_width: int = 465
     safety_column_width: int = 90
