@@ -51,6 +51,7 @@ class CommunicationModeViewModel:
     selected: bool
     is_default: bool
     safety_note: str
+    default_expanded_groups: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -146,6 +147,7 @@ class BasicCockpitViewModel:
     button_groups: tuple[BasicCockpitButtonGroupViewModel, ...] = ()
     recovery_hint: str = ""
     last_transfer_message: str = "No transfer task has been sent in this GUI session."
+    default_expanded_groups: tuple[str, ...] = ()
 
     @property
     def button_count(self) -> int:
@@ -222,6 +224,7 @@ def _communication_modes(selected_mode: str) -> tuple[CommunicationModeViewModel
             selected == definition.mode_id,
             definition.is_default,
             definition.safety_note,
+            definition.default_expanded_groups,
         )
         for definition in communication_mode_definitions()
     )
@@ -483,6 +486,10 @@ def build_basic_cockpit_view_model(
     traffic_state, color, reason, next_action = _traffic_light_from_gatekeeper_status(status)
     modes = _communication_modes(communication_mode)
     selected_mode = next((mode.mode_id for mode in modes if mode.selected), "file_transfer")
+    default_expanded_groups = next(
+        (mode.default_expanded_groups for mode in modes if mode.selected),
+        (),
+    )
     selected_access_level: AccessLevel = normalize_access_level(access_level)
     mutation_allowed = traffic_state == "READY" and status.ready_for_mutating_actions
     button_models = _basic_button_view_models(status, traffic_state=traffic_state, buttons=buttons)
@@ -524,6 +531,7 @@ def build_basic_cockpit_view_model(
         ),
         button_groups=_group_basic_buttons(button_models),
         recovery_hint=_recovery_hint(status, traffic_state),
+        default_expanded_groups=default_expanded_groups,
     )
 
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 from agentic_project_kit.cockpit import BOUNDED, DESTRUCTIVE, READ_ONLY
 from agentic_project_kit.gui_tk_widgets import traffic_light_state_label
@@ -45,6 +46,56 @@ THEME = GuiTheme()
 HEADER_TEXT = "Agentic Project Kit — Cockpit"
 ACTION_TREE_COLUMNS = ("action", "what_it_does", "safety")
 RECOVERY_ACTION_ID = "gate.doctor"
+
+
+@dataclass(frozen=True)
+class CollapsibleGroupFrame:
+    group_id: str
+    frame: Any
+    titlebar: Any
+    body: Any
+    expanded: bool
+
+
+def build_collapsible_group(
+    parent: Any,
+    *,
+    group_id: str,
+    title: str,
+    expanded: bool,
+    on_toggle: Any,
+    subtitle: str = "",
+    theme: GuiTheme = THEME,
+) -> CollapsibleGroupFrame:
+    import tkinter as tk
+    from tkinter import ttk
+
+    frame = tk.Frame(
+        parent,
+        bg=theme.color_panel_bg,
+        highlightbackground=theme.color_border,
+        highlightthickness=1,
+        padx=theme.section_padding,
+        pady=8,
+    )
+    frame.pack(fill=tk.X, pady=(0, 10))
+    titlebar = tk.Frame(frame, bg=theme.color_panel_bg)
+    titlebar.pack(fill=tk.X)
+    indicator = "▾" if expanded else "▸"
+    toggle = ttk.Button(titlebar, text=f"{indicator} {title}", command=lambda: on_toggle(group_id))
+    toggle.pack(side=tk.LEFT)
+    if subtitle:
+        tk.Label(
+            titlebar,
+            text=subtitle,
+            bg=theme.color_panel_bg,
+            fg=theme.color_muted_text,
+            font=theme.small_font,
+        ).pack(side=tk.RIGHT)
+    body = tk.Frame(frame, bg=theme.color_panel_bg)
+    if expanded:
+        body.pack(fill=tk.X, pady=(10, 0))
+    return CollapsibleGroupFrame(group_id, frame, titlebar, body, expanded)
 
 
 def action_tree_columns() -> tuple[str, ...]:

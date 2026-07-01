@@ -18,10 +18,12 @@ from agentic_project_kit.gui_cockpit import (
     format_action_result,
     main,
 )
+from agentic_project_kit.gui_cockpit_common import build_collapsible_group
 from agentic_project_kit.gui_cockpit_actions import CockpitActionsMixin
 from agentic_project_kit.gui_cockpit_header import CockpitHeaderMixin
 from agentic_project_kit.gui_cockpit_sidebar import CockpitSidebarMixin
 from agentic_project_kit.gui_cockpit_task import CockpitTaskMixin
+from agentic_project_kit.gui_panel_state import PANEL_STATE_RELATIVE_PATH, read_panel_state, write_panel_state
 
 
 COCKPIT_SOURCE_PATHS = (
@@ -41,6 +43,7 @@ GUI_VISIBILITY_GROUPS = (
     "action_table",
     "advanced_tools",
     "file_browser",
+    "copy_paste_tools",
     "output",
 )
 
@@ -252,9 +255,24 @@ def _mode_option(gui: CockpitGui, mode_id: str) -> str:
     return f"{mode.label}: {mode.role}"
 
 
-def _build_headless_cockpit(monkeypatch, *, communication_mode: str, access_level: str) -> CockpitGui:
+def _build_headless_cockpit(
+    monkeypatch,
+    *,
+    communication_mode: str,
+    access_level: str,
+    panel_state: dict[str, bool] | None = None,
+) -> CockpitGui:
     _install_fake_tk(monkeypatch)
     monkeypatch.setattr(CockpitHeaderMixin, "_start_from_ref_options", lambda _self: ("latest main",))
+    state = dict(panel_state or {})
+    monkeypatch.setattr("agentic_project_kit.gui_cockpit.read_panel_state", lambda _root: dict(state))
+
+    def write_state(_root: Path, new_state: dict[str, bool]) -> Path:
+        state.clear()
+        state.update(new_state)
+        return Path("tmp/gui-panel-state.json")
+
+    monkeypatch.setattr("agentic_project_kit.gui_cockpit.write_panel_state", write_state)
     root = _FakeRoot()
     gui = CockpitGui(root, project_root=Path("."))
     gui.mode_var.set(_mode_option(gui, communication_mode))
@@ -269,6 +287,10 @@ def _group_is_visible(gui: CockpitGui, group_id: str) -> bool:
     return bool(frame is not None and frame.winfo_exists() and frame.winfo_ismapped())
 
 
+def _group_is_expanded(gui: CockpitGui, group_id: str) -> bool:
+    return bool(getattr(gui, f"{group_id}_expanded", False))
+
+
 def _visibility_matrix_expected() -> dict[tuple[str, str], dict[str, bool]]:
     expected: dict[tuple[str, str], dict[str, bool]] = {}
     for mode in COMMUNICATION_MODE_IDS:
@@ -281,9 +303,8 @@ def _visibility_matrix_expected() -> dict[tuple[str, str], dict[str, bool]]:
                 "task_editor": True,
                 "action_table": advanced,
                 "advanced_tools": advanced,
-                # Current GUI-T baseline: file browser lives inside the collapsed
-                # Advanced tools body; GUI-G owns collapsible subgroup title behavior.
-                "file_browser": False,
+                "file_browser": advanced,
+                "copy_paste_tools": True,
                 "output": True,
             }
     return expected
@@ -331,7 +352,7 @@ def test_visibility_matrix_advanced_shows_advanced_groups(monkeypatch) -> None:
 
             assert _group_is_visible(gui, "action_table"), (mode, level, "action_table")
             assert _group_is_visible(gui, "advanced_tools"), (mode, level, "advanced_tools")
-            assert not _group_is_visible(gui, "file_browser"), (mode, level, "file_browser")
+            assert _group_is_visible(gui, "file_browser"), (mode, level, "file_browser")
 
 
 def test_visibility_matrix_matches_expected_default_state(monkeypatch) -> None:
@@ -342,6 +363,101 @@ def test_visibility_matrix_matches_expected_default_state(monkeypatch) -> None:
         actual = {group_id: _group_is_visible(gui, group_id) for group_id in GUI_VISIBILITY_GROUPS}
 
         assert actual == matrix
+
+
+def test_collapsible_group_toggles_content_not_titlebar(monkeypatch) -> None:
+    _install_fake_tk(monkeypatch)
+    calls: list[str] = []
+    root = _FakeRoot()
+
+    group = build_collapsible_group(
+        root,
+        group_id="task_editor",
+        title="Task",
+        expanded=False,
+        on_toggle=lambda group_id: calls.append(group_id),
+    )
+
+    assert group.frame.winfo_ismapped()
+    assert group.titlebar.winfo_ismapped()
+    assert not group.body.winfo_ismapped()
+    button = group.titlebar.winfo_children()[0]
+    button.config["command"]()
+    assert calls == ["task_editor"]
+
+
+def test_mode_file_transfer_expands_task_editor_by_default(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="basic")
+
+    assert _group_is_expanded(gui, "task_editor")
+    assert not _group_is_expanded(gui, "copy_paste_tools")
+
+
+def test_mode_copy_paste_expands_copy_paste_tools_by_default(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="copy_paste", access_level="basic")
+
+    assert not _group_is_expanded(gui, "task_editor")
+    assert _group_is_expanded(gui, "copy_paste_tools")
+
+
+def test_mode_remote_collapses_task_and_copy_paste_by_default(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="remote", access_level="basic")
+
+    assert not _group_is_expanded(gui, "task_editor")
+    assert not _group_is_expanded(gui, "copy_paste_tools")
+
+
+def test_user_override_persists_to_tmp_file(tmp_path: Path) -> None:
+    target = write_panel_state(tmp_path, {"task_editor": False, "copy_paste_tools": True})
+
+    assert target == tmp_path / PANEL_STATE_RELATIVE_PATH
+    assert read_panel_state(tmp_path) == {"copy_paste_tools": True, "task_editor": False}
+
+
+def test_user_override_survives_mode_change(monkeypatch) -> None:
+    gui = _build_headless_cockpit(
+        monkeypatch,
+        communication_mode="remote",
+        access_level="basic",
+        panel_state={"task_editor": True},
+    )
+
+    assert _group_is_expanded(gui, "task_editor")
+    gui.mode_var.set(_mode_option(gui, "copy_paste"))
+    gui.update_mode_explanation()
+
+    assert _group_is_expanded(gui, "task_editor")
+    assert _group_is_expanded(gui, "copy_paste_tools")
+
+
+def test_persisted_state_restored_on_rebuild(monkeypatch) -> None:
+    gui = _build_headless_cockpit(
+        monkeypatch,
+        communication_mode="file_transfer",
+        access_level="basic",
+        panel_state={"task_editor": False, "copy_paste_tools": True},
+    )
+
+    assert not _group_is_expanded(gui, "task_editor")
+    assert _group_is_expanded(gui, "copy_paste_tools")
+
+
+def test_corrupt_panel_state_file_does_not_crash(tmp_path: Path) -> None:
+    path = tmp_path / PANEL_STATE_RELATIVE_PATH
+    path.parent.mkdir(parents=True)
+    path.write_text("{not-json", encoding="utf-8")
+
+    assert read_panel_state(tmp_path) == {}
+
+
+def test_access_level_existence_unchanged(monkeypatch) -> None:
+    basic = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="basic")
+    advanced = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="advanced")
+
+    assert not _group_is_visible(basic, "advanced_tools")
+    assert not _group_is_visible(basic, "file_browser")
+    assert _group_is_visible(advanced, "advanced_tools")
+    assert _group_is_visible(advanced, "file_browser")
 
 
 def _cockpit_sources() -> str:
@@ -618,6 +734,7 @@ def test_cockpit_build_methods_live_in_focused_modules() -> None:
     assert CockpitGui._build_next_step_panel is CockpitActionsMixin._build_next_step_panel
     assert CockpitGui._build_action_cards is CockpitActionsMixin._build_action_cards
     assert CockpitGui._build_task_editor is CockpitTaskMixin._build_task_editor
+    assert CockpitGui._build_copy_paste_tools is CockpitTaskMixin._build_copy_paste_tools
     assert CockpitGui._build_file_browser is CockpitTaskMixin._build_file_browser
     assert CockpitGui._build_output_panel is CockpitTaskMixin._build_output_panel
 
@@ -640,7 +757,7 @@ def test_cockpit_main_area_is_vertically_scrollable_and_output_reachable() -> No
 
     assert "main_canvas" in source
     assert "main_scrollbar" in source
-    assert "self._build_task_editor(self.main_area)\n        self._build_output_panel(self.main_area)" in source
+    assert "self._build_task_editor(self.main_area)\n        self._build_copy_paste_tools(self.main_area)\n        self._build_output_panel(self.main_area)" in source
 
 
 def test_basic_view_hides_action_table_and_advanced_tools() -> None:
@@ -659,6 +776,7 @@ def test_basic_view_shows_work_cycle_communication_task_and_output() -> None:
     assert "self._build_communication_panel(self.main_area)" in source
     assert "self._build_next_step_panel(self.main_area)" in source
     assert "self._build_task_editor(self.main_area)" in source
+    assert "self._build_copy_paste_tools(self.main_area)" in source
     assert "self._build_output_panel(self.main_area)" in source
 
 
@@ -671,13 +789,11 @@ def test_advanced_view_shows_action_table() -> None:
 
 
 def test_advanced_tools_start_collapsed() -> None:
-    init_source = inspect.getsource(CockpitGui.__init__)
     source = inspect.getsource(CockpitActionsMixin._build_advanced_tools)
 
-    assert "self.advanced_tools_expanded = False" in init_source
-    assert "Advanced tools ▸" in source
-    assert "if not self.advanced_tools_expanded:" in source
-    assert "return" in source
+    assert 'group_id="advanced_tools"' in source
+    assert "self._build_collapsible_group" in source
+    assert "advanced_tools_expanded" not in _cockpit_sources()
 
 
 def test_cockpit_file_browser_is_read_only_for_tmp_and_handoff_files() -> None:

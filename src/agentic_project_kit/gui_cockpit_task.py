@@ -38,21 +38,20 @@ class CockpitTaskMixin:
             self.task_standard_command_button = None
             return
 
-        task_frame = tk.Frame(
+        group = self._build_collapsible_group(
             parent,
-            bg=THEME.color_panel_bg,
-            highlightbackground=THEME.color_border,
-            highlightthickness=1,
-            padx=THEME.section_padding,
-            pady=THEME.section_padding,
+            group_id="task_editor",
+            title="File transfer task",
+            subtitle="writes to repo · publishes",
         )
-        self._register_group_frame("task_editor", task_frame)
-        task_frame.pack(fill=tk.X, pady=(0, 12))
+        task_frame = group.body
+        self.task_open_terminal_button = None
+        self.task_standard_command_button = None
         heading_row = tk.Frame(task_frame, bg=THEME.color_panel_bg)
         heading_row.pack(fill=tk.X)
         tk.Label(
             heading_row,
-            text="File transfer task",
+            text="Describe the task for the LLM.",
             bg=THEME.color_panel_bg,
             font=THEME.body_font,
             anchor=tk.W,
@@ -108,30 +107,6 @@ class CockpitTaskMixin:
             "Read canonical transfer state through agentic-kit transfer state --json; the local result is .agentic/transfer/outbox/last_result.txt.",
         )
         self.task_read_button.pack(side=tk.LEFT, padx=(0, 9))
-        self.task_open_terminal_button = ttk.Button(
-            task_button_row,
-            text="Open local terminal",
-            command=self.open_transfer_terminal,
-        )
-        attach_tooltip(
-            self.task_open_terminal_button,
-            "Open the operating-system terminal for the currently selected transfer mode.",
-        )
-        self.task_open_terminal_button.pack(side=tk.LEFT, padx=(0, 9))
-        self.task_standard_command_button = ttk.Button(
-            task_button_row,
-            text=standard_command_label_for_communication_mode(self.current_communication_mode()),
-            command=self.run_mode_standard_command,
-        )
-        attach_tooltip(
-            self.task_standard_command_button,
-            (
-                "Run the selected mode's standard command: mode a uses "
-                "agentic-kit transfer patch-cycle-status --json; mode b uses "
-                "agentic-kit transfer continue --json."
-            ),
-        )
-        self.task_standard_command_button.pack(side=tk.LEFT, padx=(0, 9))
         tk.Label(
             task_frame,
             textvariable=self.task_status_var,
@@ -144,20 +119,66 @@ class CockpitTaskMixin:
         ).pack(fill=tk.X, pady=(7, 0))
         self.refresh_task_editor_buttons()
 
+    def _build_copy_paste_tools(self, parent: Any) -> None:
+        import tkinter as tk
+        from tkinter import ttk
+
+        group = self._build_collapsible_group(
+            parent,
+            group_id="copy_paste_tools",
+            title="Terminal and standard commands",
+            subtitle="local execution helpers",
+        )
+        body = group.body
+        tk.Label(
+            body,
+            text="Use these helpers when the selected communication mode needs a local command or terminal.",
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+            anchor=tk.W,
+            justify=tk.LEFT,
+            wraplength=720,
+        ).pack(fill=tk.X, pady=(0, 8))
+        row = tk.Frame(body, bg=THEME.color_panel_bg)
+        row.pack(fill=tk.X)
+        self.task_open_terminal_button = ttk.Button(
+            row,
+            text="Open local terminal",
+            command=self.open_transfer_terminal,
+        )
+        attach_tooltip(
+            self.task_open_terminal_button,
+            "Open the operating-system terminal for the currently selected transfer mode.",
+        )
+        self.task_open_terminal_button.pack(side=tk.LEFT, padx=(0, 9))
+        self.task_standard_command_button = ttk.Button(
+            row,
+            text=standard_command_label_for_communication_mode(self.current_communication_mode()),
+            command=self.run_mode_standard_command,
+        )
+        attach_tooltip(
+            self.task_standard_command_button,
+            (
+                "Run the selected mode's standard command: mode a uses "
+                "agentic-kit transfer patch-cycle-status --json; mode b uses "
+                "agentic-kit transfer continue --json."
+            ),
+        )
+        self.task_standard_command_button.pack(side=tk.LEFT, padx=(0, 9))
+        self.refresh_task_editor_buttons()
+
     def _build_file_browser(self, parent: Any) -> None:
         import tkinter as tk
         from tkinter import ttk
 
-        browser_frame = tk.Frame(
+        group = self._build_collapsible_group(
             parent,
-            bg=THEME.color_panel_bg,
-            highlightbackground=THEME.color_border,
-            highlightthickness=1,
-            padx=THEME.section_padding,
-            pady=8,
+            group_id="file_browser",
+            title="Copy / paste files",
+            subtitle="read-only local browser",
         )
-        self._register_group_frame("file_browser", browser_frame)
-        browser_frame.pack(fill=tk.X, pady=(0, 10))
+        browser_frame = group.body
         header = tk.Frame(browser_frame, bg=THEME.color_panel_bg)
         header.pack(fill=tk.X, pady=(0, 6))
         tk.Label(
