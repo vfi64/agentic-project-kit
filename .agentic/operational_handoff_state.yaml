@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 56c1e018513ed0df8e745dacaedc9660012deafa
-  short: 56c1e018
-  subject: Compact cockpit primary layout (#1667)
+  full: 055b6ae6bafa3765024df40a69f81e0299ddeb9f
+  short: 055b6ae6
+  subject: Fix cockpit action visibility and card alignment (#1669)
 last_substantive_work_state:
-  full: 56c1e018513ed0df8e745dacaedc9660012deafa
-  short: 56c1e018
-  subject: Compact cockpit primary layout (#1667)
+  full: 055b6ae6bafa3765024df40a69f81e0299ddeb9f
+  short: 055b6ae6
+  subject: Fix cockpit action visibility and card alignment (#1669)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
