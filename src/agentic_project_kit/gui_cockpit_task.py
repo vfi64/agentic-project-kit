@@ -46,6 +46,7 @@ class CockpitTaskMixin:
             padx=THEME.section_padding,
             pady=THEME.section_padding,
         )
+        self._register_group_frame("task_editor", task_frame)
         task_frame.pack(fill=tk.X, pady=(0, 12))
         heading_row = tk.Frame(task_frame, bg=THEME.color_panel_bg)
         heading_row.pack(fill=tk.X)
@@ -155,6 +156,7 @@ class CockpitTaskMixin:
             padx=THEME.section_padding,
             pady=8,
         )
+        self._register_group_frame("file_browser", browser_frame)
         browser_frame.pack(fill=tk.X, pady=(0, 10))
         header = tk.Frame(browser_frame, bg=THEME.color_panel_bg)
         header.pack(fill=tk.X, pady=(0, 6))
@@ -293,6 +295,7 @@ class CockpitTaskMixin:
             padx=THEME.section_padding,
             pady=THEME.section_padding,
         )
+        self._register_group_frame("output", output_frame)
         output_frame.pack(fill=tk.BOTH, expand=True)
         output_header = tk.Frame(output_frame, bg=THEME.color_panel_bg)
         output_header.pack(fill=tk.X, pady=(0, 7))
