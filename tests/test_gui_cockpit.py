@@ -736,6 +736,8 @@ def test_gui_action_cards_are_four_rows_and_scrollable() -> None:
     assert action_tree_visible_rows() == 4
     assert THEME.action_card_height == 23
     assert "THEME.action_list_width" in source
+    assert "action_list_height = THEME.action_rows_visible * THEME.action_card_height" in source
+    assert "height=action_list_height" in source
     assert "ttk.Scrollbar" in source
     assert "yscrollcommand" in source
     assert "action_card_container" in source
@@ -797,6 +799,23 @@ def test_cockpit_places_communication_and_next_step_in_two_columns(monkeypatch) 
     assert getattr(gui.next_step_frame.master, "_primary_status_column") == "next_step"
     assert gui.communication_frame.master.grid_kwargs["column"] == 0
     assert gui.next_step_frame.master.grid_kwargs["column"] == 1
+
+
+def test_cockpit_primary_status_cards_expand_to_equal_column_height(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="basic")
+
+    assert gui.communication_frame.pack_kwargs["fill"] == "both"
+    assert gui.communication_frame.pack_kwargs["expand"] is True
+    assert gui.next_step_frame.pack_kwargs["fill"] == "both"
+    assert gui.next_step_frame.pack_kwargs["expand"] is True
+
+
+def test_advanced_action_cards_keep_visible_scroll_container_height(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="advanced")
+
+    assert gui.action_scroll_shell.config["height"] == THEME.action_rows_visible * THEME.action_card_height
+    assert gui.action_card_canvas.config["height"] == THEME.action_rows_visible * THEME.action_card_height
+    assert gui.action_scroll_shell.pack_kwargs["fill"] == "both"
 
 
 def test_cockpit_main_area_is_vertically_scrollable_and_output_reachable() -> None:

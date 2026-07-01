@@ -66,7 +66,7 @@ class CockpitActionsMixin:
             pady=6,
         )
         self._register_group_frame("next_step", panel)
-        panel.pack(fill=tk.X, pady=(0, 8))
+        panel.pack(fill=tk.BOTH, expand=True)
 
         header = tk.Frame(panel, bg=THEME.color_recommended_bg)
         header.pack(fill=tk.X, pady=(0, 4))
@@ -170,14 +170,21 @@ class CockpitActionsMixin:
         actions_row = tk.Frame(parent, bg=THEME.color_panel_bg)
         self._register_group_frame("action_table", actions_row)
         actions_row.pack(fill=tk.X, pady=(0, 10))
-        action_scroll_shell = tk.Frame(actions_row, bg=THEME.color_panel_bg, width=THEME.action_list_width)
-        action_scroll_shell.pack(side=tk.LEFT, fill=tk.Y)
+        action_list_height = THEME.action_rows_visible * THEME.action_card_height
+        action_scroll_shell = tk.Frame(
+            actions_row,
+            bg=THEME.color_panel_bg,
+            width=THEME.action_list_width,
+            height=action_list_height,
+        )
+        self.action_scroll_shell = action_scroll_shell
+        action_scroll_shell.pack(side=tk.LEFT, fill=tk.BOTH)
         action_scroll_shell.pack_propagate(False)
         self.action_card_canvas = tk.Canvas(
             action_scroll_shell,
             bg=THEME.color_panel_bg,
             width=THEME.action_list_width,
-            height=THEME.action_rows_visible * THEME.action_card_height,
+            height=action_list_height,
             highlightthickness=0,
         )
         self.action_card_scrollbar = ttk.Scrollbar(

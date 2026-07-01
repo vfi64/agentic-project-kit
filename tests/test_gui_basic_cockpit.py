@@ -495,6 +495,9 @@ def test_action_cards_have_scrollbar_and_four_visible_rows() -> None:
     assert "ttk.Scrollbar" in source
     assert "yscrollcommand" in source
     assert "action_card_container" in source
+    assert "action_list_height = THEME.action_rows_visible * THEME.action_card_height" in source
+    assert "height=action_list_height" in source
+    assert "self.action_scroll_shell = action_scroll_shell" in source
     assert "ttk.Treeview" not in source
     assert "THEME.action_card_height" in source
 
