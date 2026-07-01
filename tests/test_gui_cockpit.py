@@ -476,6 +476,27 @@ def test_access_level_existence_unchanged(monkeypatch) -> None:
     assert _group_is_visible(advanced, "file_browser")
 
 
+def test_access_level_change_rebuilds_right_pane_visibility(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="basic")
+
+    assert not _group_is_visible(gui, "action_table")
+    assert not _group_is_visible(gui, "advanced_tools")
+
+    gui.access_level_var.set("advanced")
+    gui.update_access_level()
+
+    assert gui.basic_view.access_level == "advanced"
+    assert _group_is_visible(gui, "action_table")
+    assert _group_is_visible(gui, "advanced_tools")
+
+    gui.access_level_var.set("basic")
+    gui.update_access_level()
+
+    assert gui.basic_view.access_level == "basic"
+    assert not _group_is_visible(gui, "action_table")
+    assert not _group_is_visible(gui, "advanced_tools")
+
+
 def _cockpit_sources() -> str:
     return "\n".join(path.read_text(encoding="utf-8") for path in COCKPIT_SOURCE_PATHS)
 
@@ -756,16 +777,26 @@ def test_cockpit_build_methods_live_in_focused_modules() -> None:
 
 
 def test_cockpit_places_central_next_step_before_actions() -> None:
-    source = _cockpit_sources()
+    source = inspect.getsource(CockpitGui._build_main_content)
+    all_sources = _cockpit_sources()
 
-    assert "self._build_communication_panel(self.main_area)" in source
-    assert "self._build_next_step_panel(self.main_area)" in source
+    assert "self._build_primary_status_row(self.main_area)" in source
     assert "if self._advanced_access_visible():" in source
     assert "self._build_action_cards(self.main_area)" in source
-    assert "NEXT STEP" in source
-    assert "show_next_step_details" in source
-    assert "show_cockpit_help" in source
-    assert "self._build_recommended_card(sidebar)" not in source
+    assert source.index("self._build_primary_status_row(self.main_area)") < source.index("if self._advanced_access_visible():")
+    assert "NEXT STEP" in all_sources
+    assert "show_next_step_details" in all_sources
+    assert "show_cockpit_help" in all_sources
+    assert "self._build_recommended_card(sidebar)" not in all_sources
+
+
+def test_cockpit_places_communication_and_next_step_in_two_columns(monkeypatch) -> None:
+    gui = _build_headless_cockpit(monkeypatch, communication_mode="file_transfer", access_level="basic")
+
+    assert getattr(gui.communication_frame.master, "_primary_status_column") == "communication"
+    assert getattr(gui.next_step_frame.master, "_primary_status_column") == "next_step"
+    assert gui.communication_frame.master.grid_kwargs["column"] == 0
+    assert gui.next_step_frame.master.grid_kwargs["column"] == 1
 
 
 def test_cockpit_main_area_is_vertically_scrollable_and_output_reachable() -> None:
@@ -789,8 +820,9 @@ def test_basic_view_shows_work_cycle_communication_task_and_output() -> None:
     source = _cockpit_sources()
 
     assert "self._build_work_cycle_bar(shell)" in source
-    assert "self._build_communication_panel(self.main_area)" in source
-    assert "self._build_next_step_panel(self.main_area)" in source
+    assert "self._build_primary_status_row(self.main_area)" in source
+    assert "self._build_communication_panel(communication_column)" in source
+    assert "self._build_next_step_panel(next_step_column)" in source
     assert "self._build_task_editor(self.main_area)" in source
     assert "self._build_copy_paste_tools(self.main_area)" in source
     assert "self._build_output_panel(self.main_area)" in source

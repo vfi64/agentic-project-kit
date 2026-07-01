@@ -98,6 +98,7 @@ class CockpitSidebarMixin:
         self._detail_row(sidebar, "Worktree", "dirty" if "dirty" in self.basic_view.reason.lower() else "clean", value_color="#006b00")
         self._detail_row(sidebar, "Mutation", "allowed" if self.basic_view.mutation_allowed else "guarded")
         self._detail_row(sidebar, "d2 pending", "yes" if self.basic_view.required_next_reply == "d2" else "no")
+        self._detail_row(sidebar, "Branch", self._branch_label())
         version = self._package_version()
         self._detail_row(sidebar, "Version", version)
 
@@ -194,7 +195,7 @@ class CockpitSidebarMixin:
             bg=THEME.color_panel_bg,
             fg=THEME.color_muted_text,
             font=THEME.small_font,
-            wraplength=760,
+            wraplength=430,
         ).pack(fill=tk.X, pady=(8, 0))
         tk.Label(
             panel,
@@ -204,7 +205,7 @@ class CockpitSidebarMixin:
             bg=THEME.color_recommended_bg,
             fg="#174ea6",
             font=THEME.body_font,
-            wraplength=760,
+            wraplength=430,
             padx=8,
             pady=5,
         ).pack(fill=tk.X, pady=(7, 0))
@@ -372,10 +373,10 @@ class CockpitSidebarMixin:
         self.access_level_var.set(self.basic_view.access_level)
         self.access_level_explanation_var.set(self.basic_view.access_level_explanation)
         self.actions = ordered_action_views(build_gui_action_views(access_level=selected))
-        if hasattr(self, "action_card_container"):
-            self.populate_action_tree()
         if hasattr(self, "_rebuild_main_content"):
             self._rebuild_main_content()
+        elif hasattr(self, "action_card_container"):
+            self.populate_action_tree()
         if hasattr(self, "log_result"):
             self.log_result(
                 "Access level",
