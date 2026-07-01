@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4b9f81a965a651d47a705fd6e0cf4a1ea08e41c6
-  short: 4b9f81a9
-  subject: Add GUI visibility matrix tests (#1661)
+  full: 9f155cb6247698942eead7b42708a8ffe9718464
+  short: 9f155cb6
+  subject: Add collapsible GUI control groups (#1663)
 last_substantive_work_state:
-  full: 4b9f81a965a651d47a705fd6e0cf4a1ea08e41c6
-  short: 4b9f81a9
-  subject: Add GUI visibility matrix tests (#1661)
+  full: 9f155cb6247698942eead7b42708a8ffe9718464
+  short: 9f155cb6
+  subject: Add collapsible GUI control groups (#1663)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
