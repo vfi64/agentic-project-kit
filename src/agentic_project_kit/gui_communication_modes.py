@@ -14,6 +14,7 @@ class CommunicationModeDefinition:
     example: str
     next_step_hint: str
     walkthrough_steps: tuple[str, ...]
+    default_expanded_groups: tuple[str, ...]
 
 
 COMMUNICATION_MODE_DEFINITIONS: tuple[CommunicationModeDefinition, ...] = (
@@ -38,6 +39,7 @@ COMMUNICATION_MODE_DEFINITIONS: tuple[CommunicationModeDefinition, ...] = (
             "Write g in chat; the assistant reads the task and works.",
             "Click Check, then Finish & publish.",
         ),
+        default_expanded_groups=("task_editor",),
     ),
     CommunicationModeDefinition(
         mode_id="remote",
@@ -60,6 +62,7 @@ COMMUNICATION_MODE_DEFINITIONS: tuple[CommunicationModeDefinition, ...] = (
             "Check.",
             "Finish & publish opens a pull request; CI verifies before merge.",
         ),
+        default_expanded_groups=(),
     ),
     CommunicationModeDefinition(
         mode_id="copy_paste",
@@ -85,6 +88,7 @@ COMMUNICATION_MODE_DEFINITIONS: tuple[CommunicationModeDefinition, ...] = (
             "Run it locally.",
             "Paste the result back. Use only when no repo connection works.",
         ),
+        default_expanded_groups=("copy_paste_tools",),
     ),
 )
 
@@ -120,3 +124,7 @@ def communication_mode_next_step_hint(mode: str) -> str:
 
 def communication_mode_walkthrough_steps(mode: str) -> tuple[str, ...]:
     return communication_mode_definition(mode).walkthrough_steps
+
+
+def communication_mode_default_expanded_groups(mode: str) -> tuple[str, ...]:
+    return communication_mode_definition(mode).default_expanded_groups

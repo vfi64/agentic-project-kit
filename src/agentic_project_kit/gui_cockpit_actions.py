@@ -198,45 +198,15 @@ class CockpitActionsMixin:
         controls.columnconfigure(1, weight=1)
 
     def _build_advanced_tools(self, parent: Any) -> None:
-        import tkinter as tk
-        from tkinter import ttk
-
-        panel = tk.Frame(
+        group = self._build_collapsible_group(
             parent,
-            bg=THEME.color_panel_bg,
-            highlightbackground=THEME.color_border,
-            highlightthickness=1,
-            padx=THEME.section_padding,
-            pady=8,
+            group_id="advanced_tools",
+            title="Advanced tools",
+            subtitle="release, cleanup, discard",
         )
-        self._register_group_frame("advanced_tools", panel)
-        panel.pack(fill=tk.X, pady=(0, 10))
-        header = tk.Frame(panel, bg=THEME.color_panel_bg)
-        header.pack(fill=tk.X)
-        title = "Advanced tools ▾" if self.advanced_tools_expanded else "Advanced tools ▸"
-        toggle = ttk.Button(header, text=title, command=self.toggle_advanced_tools)
-        attach_tooltip(toggle, "Show release, cleanup, discard, and copy/paste file tools.")
-        toggle.pack(side=tk.LEFT)
-        tk.Label(
-            header,
-            text="collapsed by default",
-            bg=THEME.color_panel_bg,
-            fg=THEME.color_muted_text,
-            font=THEME.small_font,
-        ).pack(side=tk.RIGHT)
-        if not self.advanced_tools_expanded:
-            return
-
-        body = tk.Frame(panel, bg=THEME.color_panel_bg)
-        body.pack(fill=tk.X, pady=(10, 0))
+        body = group.body
         self._build_release_and_cleanup_tools(body)
         self._build_discard_tools(body)
-        self._build_file_browser(body)
-
-    def toggle_advanced_tools(self) -> None:
-        self.advanced_tools_expanded = not self.advanced_tools_expanded
-        if hasattr(self, "_rebuild_main_content"):
-            self._rebuild_main_content()
 
     def _build_release_and_cleanup_tools(self, parent: Any) -> None:
         import tkinter as tk

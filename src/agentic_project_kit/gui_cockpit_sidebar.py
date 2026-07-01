@@ -334,6 +334,8 @@ class CockpitSidebarMixin:
         self.mode_next_step_var.set(communication_mode_next_step_hint(selected))
         self.mode_example_var.set(communication_mode_example(selected))
         self.refresh_task_editor_buttons()
+        if hasattr(self, "_rebuild_main_content"):
+            self._rebuild_main_content()
 
     def current_communication_mode(self) -> str:
         option = self.mode_var.get()
