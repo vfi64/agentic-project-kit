@@ -22,7 +22,6 @@ from agentic_project_kit.gui_transfer_contract import (
     CANONICAL_TRANSFER_PAYLOAD_PATH,
     CURRENT_USER_TASK_PATH,
     GUI_TRANSFER_TASK_REF,
-    LEGACY_GUI_TRANSFER_TASK_PATH,
     fetch_gui_transfer_ref_args,
     remote_gui_task_spec,
 )
@@ -620,10 +619,6 @@ def _publish_task_carrier(
 
         _write_task_payload(root / task_path, payload)
         commit_paths = [task_path.as_posix()]
-        legacy_path = root / LEGACY_GUI_TRANSFER_TASK_PATH
-        if legacy_path.exists():
-            legacy_path.unlink()
-            commit_paths.append(LEGACY_GUI_TRANSFER_TASK_PATH.as_posix())
         commit_result = transfer_repo_actions.commit_paths(
             "Publish GUI transfer order",
             commit_paths,

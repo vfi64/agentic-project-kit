@@ -14,7 +14,6 @@ CANONICAL_TRANSFER_OUTBOX_PATH = OUTBOX_LAST_RESULT
 CANONICAL_REMOTE_TRANSFER_REPORT_PATH = Path(
     "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
 )
-LEGACY_GUI_TRANSFER_TASK_PATH = Path("docs/reports/transfer_tasks/current_user_task.json")
 
 
 def gui_transfer_refspec() -> str:
