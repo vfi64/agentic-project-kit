@@ -16,7 +16,6 @@ from agentic_project_kit.gui_task_editor import (
     CANONICAL_TRANSFER_OUTBOX_PATH,
     CURRENT_USER_TASK_PATH,
     GUI_TRANSFER_TASK_REF,
-    LEGACY_GUI_TRANSFER_TASK_PATH,
     REMOTE_STATUS_COMMAND,
     TRANSFER_CONTINUE_COMMAND,
     TaskEditorState,
@@ -184,7 +183,7 @@ def test_initial_llm_prompt_uses_gui_transfer_contract_constants() -> None:
     assert gui_transfer_contract.GUI_TRANSFER_TASK_REF in result.prompt_text
     assert gui_transfer_contract.CURRENT_USER_TASK_PATH.as_posix() in result.prompt_text
     assert "Do not read this GUI task carrier from `main`" in result.prompt_text
-    assert gui_transfer_contract.LEGACY_GUI_TRANSFER_TASK_PATH.as_posix() not in result.prompt_text
+    assert "docs/reports/transfer_tasks/current_user_task.json" not in result.prompt_text
 
 
 def test_submit_user_task_writes_canonical_transfer_inbox(tmp_path) -> None:
@@ -344,14 +343,11 @@ def test_transfer_submit_user_task_cli_publish_json(tmp_path, monkeypatch) -> No
     assert data["next_reply"] == "g"
 
 
-def test_submit_user_task_publish_uses_gui_transfer_branch_and_verifies_remote(
+def test_send_writes_only_canonical_carrier(
     tmp_path,
     monkeypatch,
 ) -> None:
     calls: list[object] = []
-    legacy_path = tmp_path / LEGACY_GUI_TRANSFER_TASK_PATH
-    legacy_path.parent.mkdir(parents=True)
-    legacy_path.write_text('{"kind":"legacy"}\n', encoding="utf-8")
 
     def fake_git_runner(root, args):
         calls.append(("git", args))
@@ -444,11 +440,10 @@ def test_submit_user_task_publish_uses_gui_transfer_branch_and_verifies_remote(
     assert (
         "commit_paths",
         "Publish GUI transfer order",
-        (CURRENT_USER_TASK_PATH.as_posix(), LEGACY_GUI_TRANSFER_TASK_PATH.as_posix()),
+        (CURRENT_USER_TASK_PATH.as_posix(),),
         GUI_TRANSFER_TASK_REF,
         False,
     ) in calls
-    assert not legacy_path.exists()
     assert ("push_current", GUI_TRANSFER_TASK_REF) in calls
     assert ("branch_switch", "main", False) in calls
     assert ("git", ("rev-parse", "--verify", f"origin/{GUI_TRANSFER_TASK_REF}:{CURRENT_USER_TASK_PATH.as_posix()}")) in calls
