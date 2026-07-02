@@ -3,10 +3,10 @@
 ## Current State
 
 Current version: 0.4.12
-Current verified release: 0.4.11.
-Current release tag: v0.4.11.
+Current verified release: 0.4.12.
+Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.20917074`.
+Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
 Current verified main: `2e8d6040` (`Verify cockpit inspect button binding (#1679)`).
 Latest substantive work: PR #1679 (`Verify cockpit inspect button binding (#1679)`).
 Post-merge handoff status: PASS/NOOP after PR #1679 administrative refresh.

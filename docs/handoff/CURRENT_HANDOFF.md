@@ -200,10 +200,10 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 
 ## Current State
 
-- Current verified release: 0.4.11.
-- Current release tag: v0.4.11.
+- Current verified release: 0.4.12.
+- Current release tag: v0.4.12.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
-- Verified Zenodo version DOI: `10.5281/zenodo.20917074`.
+- Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
 - Main contains PR #1387 at `e07ccd4`.
 - PR #1387 refreshed handoff state after the v0.4.8 release PR #1386.
 - Generated handoff safe-state now anchors to PR #1387 via `docs/reports/terminal/post-pr1386-successor-chat-handoff.md`.

@@ -57,6 +57,9 @@
 - Fix cockpit action visibility and card alignment
 - Make cockpit action list separately scrollable
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.4.12 DOI `10.5281/zenodo.21135030`.
+
+Zenodo v0.4.12 DOI: 10.5281/zenodo.21135030
 ## v0.4.11 - 2026-06-21
 
 - Zenodo DOI verification pending for v0.4.11.
