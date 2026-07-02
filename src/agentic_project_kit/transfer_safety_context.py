@@ -206,6 +206,19 @@ def build_transfer_safety_header(root: Path | str = ".") -> dict[str, Any]:
     }
 
 
+def _without_static_meta_command_preference(value: Any) -> Any:
+    """Return a JSON-safe projection without embedded meta-command policy snapshots."""
+    if isinstance(value, dict):
+        return {
+            str(key): _without_static_meta_command_preference(nested)
+            for key, nested in value.items()
+            if key != "meta_command_preference"
+        }
+    if isinstance(value, list):
+        return [_without_static_meta_command_preference(item) for item in value]
+    return value
+
+
 def build_local_to_llm_payload(
     root: Path | str,
     last_result: dict[str, Any],
@@ -213,12 +226,13 @@ def build_local_to_llm_payload(
     kind: str = "local_to_llm_last_result",
 ) -> dict[str, Any]:
     protocol_header = build_transfer_safety_header(root)
+    payload_header = _without_static_meta_command_preference(protocol_header)
     return {
         "schema_version": 1,
         "kind": kind,
         "derived_projection": True,
-        "protocol_header": protocol_header,
-        "safety_header": protocol_header,
+        "protocol_header": payload_header,
+        "safety_header": payload_header,
         "llm_execution_context": build_llm_execution_context(root),
         "last_result": last_result,
     }
@@ -275,4 +289,3 @@ Please upload or copy this log file to the LLM chat:
 LOG  =  {log_path}
 {rc_line}
 ##########################################################################"""
-

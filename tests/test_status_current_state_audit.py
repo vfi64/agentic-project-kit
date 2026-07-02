@@ -86,7 +86,13 @@ def _git_runner(*, origin: str = "def5678", lag: int = 1, ancestor_ok: bool = Tr
     return run
 
 
-def _release_status(version: str = "1.2.3", *, current_state: str = "current_verified") -> ReleaseLifecycleStatus:
+def _release_status(
+    version: str = "1.2.3",
+    *,
+    current_state: str = "current_verified",
+    current_verified_version: str | None = None,
+) -> ReleaseLifecycleStatus:
+    verified_version = current_verified_version or version
     remote = RemoteReleaseStatus(
         status="NOT_CHECKED",
         checked=False,
@@ -110,8 +116,8 @@ def _release_status(version: str = "1.2.3", *, current_state: str = "current_ver
         init_version=version,
         citation_version=version,
         concept_doi="10.5281/zenodo.100",
-        version_doi="10.5281/zenodo.123",
-        current_verified_version=version,
+        version_doi="10.5281/zenodo.123" if verified_version == version else "",
+        current_verified_version=verified_version,
         current_verified_doi="10.5281/zenodo.123",
         local_tag_exists=True,
         remote=remote,
@@ -134,6 +140,33 @@ def test_audit_status_current_state_passes_when_status_validation_release_and_or
     assert result.ok is True
     assert result.status == "PASS"
     assert result.status_current_verified_main == "abc1234"
+
+
+def test_audit_status_current_state_allows_prepared_release_with_previous_verified_status(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    (tmp_path / "pyproject.toml").write_text('[project]\nname = "demo"\nversion = "1.2.4"\n', encoding="utf-8")
+    (tmp_path / "src" / "agentic_project_kit" / "__init__.py").write_text(
+        '__version__ = "1.2.4"\n', encoding="utf-8"
+    )
+    status = tmp_path / "docs" / "STATUS.md"
+    status.write_text(
+        status.read_text(encoding="utf-8").replace("Current version: 1.2.3", "Current version: 1.2.4"),
+        encoding="utf-8",
+    )
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=_git_runner(),
+        release_status_builder=lambda _root: _release_status(
+            "1.2.4",
+            current_state="prepared",
+            current_verified_version="1.2.3",
+        ),
+    )
+
+    assert result.ok is True
+    assert result.status_current_verified_release == "1.2.3"
+    assert result.release_current_state == "prepared"
 
 
 def test_audit_status_current_state_blocks_stale_status_main(tmp_path: Path) -> None:

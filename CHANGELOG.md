@@ -1,3 +1,62 @@
+## v0.4.12 - 2026-07-02
+
+- Zenodo DOI verification pending for v0.4.12.
+- Close out v0.4.11 DOI release state
+- Plan pre-GUI hardening tasks
+- Move and harden pre-GUI planning target
+- Finalize pre-GUI planning authority shift
+- Build basic cockpit GUI state surface
+- Allow generated handoff projection refresh bundle
+- Refine basic cockpit GUI controls
+- Resolve cockpit agentic-kit commands from GUI
+- Harden communication rule refresh handshake
+- Recheck published communication rule pending state
+- Add file-transfer task editor and harden d2 GUI state
+- Harden GUI initial prompt and task editor cycle
+- Add cockpit visual hierarchy, recommended-action zone, and theme constants
+- Publish GUI task carrier to dedicated transfer branch
+- Add safe GUI volatile restore action
+- Harden GUI transfer files and PR remote head checks
+- Add cockpit access-level visibility policy
+- Fix GUI file-transfer carrier contract
+- Refine cockpit GUI visual hierarchy
+- Harden GUI prompt contract and compact cockpit layout
+- Guide cockpit actions with grouped recommendations
+- Harden GUI transfer communication contract
+- Add guided work-cycle bar to cockpit
+- Plan v0.4.12 pre-OS roadmap
+- Add transfer test plan
+- Add status current-state audit
+- Sync STATUS current state during handoff refresh
+- Centralize GUI transfer carrier contract
+- Make GUI tooltip attachment idempotent
+- Extract cockpit action view logic
+- Harden guided work cycle availability
+- Add shared communication mode examples
+- Add pr-create-complete live status
+- Harden governance planning helpers
+- Split cockpit GUI into focused modules
+- Add local artifact GC cockpit button
+- Separate communication mode examples in cockpit
+- Harden wrapper live-status interrupt policy
+- Add reviewed documentation registry registration command
+- Add register subcommand to rule-registry
+- Add release and branch picker to guided work start
+- Add explicit destructive discard changes workflow
+- Detect conflicting verified-main HEAD lines
+- Add guided create-release cockpit flow
+- Keep GUI tooltips onscreen and maximize cockpit window
+- Add central next-step guidance to cockpit
+- Compact cockpit layout and local tmp cleanup
+- Fix cockpit Tk frame parent crash
+- Simplify cockpit into a guided beginner-first layout with progressive disclosure
+- Add GUI visibility matrix tests
+- Add collapsible GUI control groups
+- Render cockpit output as activity log
+- Compact cockpit primary layout
+- Fix cockpit action visibility and card alignment
+- Make cockpit action list separately scrollable
+
 ## v0.4.11 - 2026-06-21
 
 - Zenodo DOI verification pending for v0.4.11.

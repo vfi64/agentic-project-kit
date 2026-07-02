@@ -11,9 +11,9 @@ from agentic_project_kit import release_metadata_prep
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET_VERSION = "0.4.11"
-PREVIOUS_VERSION = "0.4.10"
-TARGET_DATE = "2026-06-18"
+TARGET_VERSION = "0.4.12"
+PREVIOUS_VERSION = "0.4.11"
+TARGET_DATE = "2026-07-02"
 SUMMARY_LINES = [
     "Release metadata prepared through the explicit summary-line release-prep contract.",
     "Publish, DOI verification, and closeout remain separate guarded steps.",
@@ -61,6 +61,20 @@ def _copy_release_state_files(tmp_path: Path) -> Path:
         target = project / relative
         target.write_text(target.read_text(encoding="utf-8").replace(needle, replacement), encoding="utf-8")
 
+    readme = project / "README.md"
+    readme.write_text(
+        readme.read_text(encoding="utf-8")
+        .replace(
+            f"Version `{TARGET_VERSION}` is the current release line prepared",
+            f"Version `{PREVIOUS_VERSION}` is the current release line prepared",
+        )
+        .replace(
+            f"Prepared release: `v{TARGET_VERSION}`;",
+            f"Prepared release: `v{PREVIOUS_VERSION}`;",
+        ),
+        encoding="utf-8",
+    )
+
     changelog = project / "CHANGELOG.md"
     changelog_text = changelog.read_text(encoding="utf-8")
     marker = f"## v{TARGET_VERSION} - "
@@ -97,6 +111,11 @@ def test_prepare_release_state_updates_expected_files(tmp_path: Path) -> None:
     readme = (project / "README.md").read_text(encoding="utf-8")
     assert readme.count("Current version:") == 1
     assert f"Current version: {TARGET_VERSION}" in readme
+    assert (
+        f"Prepared release: `v{TARGET_VERSION}`; GitHub Release, tag publication, "
+        "and Zenodo version DOI verification are pending."
+    ) in readme
+    assert f"Prepared release: `v{PREVIOUS_VERSION}`;" not in readme
     citation = (project / "CITATION.cff").read_text(encoding="utf-8")
     assert f"version: {TARGET_VERSION}" in citation
     assert f'date-released: "{TARGET_DATE}"' in citation
@@ -108,6 +127,7 @@ def test_prepare_release_state_updates_expected_files(tmp_path: Path) -> None:
     ).read_text(encoding="utf-8")
     changelog = (project / "CHANGELOG.md").read_text(encoding="utf-8")
     assert f"## v{TARGET_VERSION} - {TARGET_DATE}" in changelog
+    assert f"Zenodo DOI verification pending for v{TARGET_VERSION}." in changelog
     assert SUMMARY_LINES[0] in changelog
     assert SUMMARY_LINES[1] in changelog
     assert "./ns release-prep" not in changelog.split(f"## v{TARGET_VERSION}", 1)[1].split("\n## v", 1)[0]

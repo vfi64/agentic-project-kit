@@ -1286,6 +1286,21 @@ def test_standard_error_scan_reports_local_to_llm_log_header_gate(tmp_path: Path
     assert static_scan["status"] == "PASS"
 
 
+def test_local_to_llm_json_payload_omits_static_meta_preference_policy(tmp_path: Path):
+    from agentic_project_kit.cli_commands.transfer import _scan_static_meta_preference_projection_drift
+    from agentic_project_kit.transfer_safety_context import build_local_to_llm_payload
+
+    _write_minimal_standard_error_scan_repo(tmp_path)
+    report_path = tmp_path / "docs" / "reports" / "transfer_runs" / "latest-remote-next-report.json"
+    report_path.parent.mkdir(parents=True)
+    payload = build_local_to_llm_payload(tmp_path, {"result_status": "PASS"})
+    report_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    rendered = report_path.read_text(encoding="utf-8")
+    assert '"meta_command_preference"' not in rendered
+    assert _scan_static_meta_preference_projection_drift(tmp_path)["status"] == "PASS"
+
+
 def test_standard_error_scan_reports_python_only_work_order_contract_gate(tmp_path: Path):
     from agentic_project_kit.cli_commands.transfer import _scan_llm_work_order_contract
 
