@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 22a3231f58cf9f3e60f6f697f6df226e8150e31f
-  short: 22a3231f
-  subject: Retire legacy GUI transfer task path (#1677)
+  full: 2e8d6040002d5281a556c7cdd43bc551c3e5aa8e
+  short: 2e8d6040
+  subject: Verify cockpit inspect button binding (#1679)
 last_substantive_work_state:
-  full: 22a3231f58cf9f3e60f6f697f6df226e8150e31f
-  short: 22a3231f
-  subject: Retire legacy GUI transfer task path (#1677)
+  full: 2e8d6040002d5281a556c7cdd43bc551c3e5aa8e
+  short: 2e8d6040
+  subject: Verify cockpit inspect button binding (#1679)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
