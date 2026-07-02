@@ -7,9 +7,9 @@ Current verified release: 0.4.11.
 Current release tag: v0.4.11.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.20917074`.
-Current verified main: `4c2f9bee` (`Prepare release 0.4.12 (#1673)`).
-Latest substantive work: PR #1673 (`Prepare release 0.4.12 (#1673)`).
-Post-merge handoff status: PASS/NOOP after PR #1673 administrative refresh.
+Current verified main: `6c386021` (`Defer tkinter simpledialog import in cockpit header (#1675)`).
+Latest substantive work: PR #1675 (`Defer tkinter simpledialog import in cockpit header (#1675)`).
+Post-merge handoff status: PASS/NOOP after PR #1675 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -397,6 +397,6 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
 - Portability closeout: in progress; all tracked shell scripts removed in Slice 6, pending final gates and PR merge.
 - Portability closeout: legacy `ns` and `ns-menu` entrypoints removed; no tracked shell scripts remain, pending final gates and PR merge.
-## Operational documentation refresh state after PR #1673
+## Operational documentation refresh state after PR #1675
 
-Current administrative handoff refresh state is `4c2f9bee` (`Prepare release 0.4.12 (#1673)`). Continue next only after this post-PR1673 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `6c386021` (`Defer tkinter simpledialog import in cockpit header (#1675)`). Continue next only after this post-PR1675 refresh is committed and merged; the next substantive slice must be created from fresh main.
