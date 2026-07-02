@@ -873,6 +873,13 @@ def test_advanced_view_shows_action_table() -> None:
     assert "Run read-only" in source
 
 
+def test_inspect_button_bound_to_inspect_selected() -> None:
+    source = inspect.getsource(CockpitActionsMixin._build_action_cards)
+
+    assert 'text="Inspect"' in source
+    assert "command=self.inspect_selected" in source
+
+
 def test_advanced_tools_start_collapsed() -> None:
     source = inspect.getsource(CockpitActionsMixin._build_advanced_tools)
 
