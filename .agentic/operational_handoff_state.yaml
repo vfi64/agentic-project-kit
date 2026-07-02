@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6c386021af673c6f58c3b90194795a3783d426f8
-  short: 6c386021
-  subject: Defer tkinter simpledialog import in cockpit header (#1675)
+  full: 22a3231f58cf9f3e60f6f697f6df226e8150e31f
+  short: 22a3231f
+  subject: Retire legacy GUI transfer task path (#1677)
 last_substantive_work_state:
-  full: 6c386021af673c6f58c3b90194795a3783d426f8
-  short: 6c386021
-  subject: Defer tkinter simpledialog import in cockpit header (#1675)
+  full: 22a3231f58cf9f3e60f6f697f6df226e8150e31f
+  short: 22a3231f
+  subject: Retire legacy GUI transfer task path (#1677)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
