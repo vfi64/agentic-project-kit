@@ -131,13 +131,12 @@ def audit_status_current_state(
         bool(pyproject_version and status_version == pyproject_version),
         f"status={status_version}, pyproject={pyproject_version}",
     )
-    _finding(
-        findings,
-        blockers,
-        "docs/STATUS.md",
-        "status_current_verified_release_matches_pyproject",
-        bool(pyproject_version and status_release == pyproject_version),
-        f"status_release={status_release}, pyproject={pyproject_version}",
+    _audit_status_release_marker(
+        findings=findings,
+        blockers=blockers,
+        release_status=release_status,
+        pyproject_version=pyproject_version,
+        status_release=status_release,
     )
     _audit_status_main_marker(
         findings=findings,
@@ -386,6 +385,38 @@ def _audit_status_main_marker(
     )
 
 
+def _audit_status_release_marker(
+    *,
+    findings: list[StatusCurrentStateFinding],
+    blockers: list[StatusCurrentStateFinding],
+    release_status: ReleaseLifecycleStatus | None,
+    pyproject_version: str | None,
+    status_release: str | None,
+) -> None:
+    if release_status is None:
+        _finding(
+            findings,
+            blockers,
+            "docs/STATUS.md",
+            "status_current_verified_release_matches_pyproject",
+            bool(pyproject_version and status_release == pyproject_version),
+            f"status_release={status_release}, pyproject={pyproject_version}",
+        )
+        return
+    _finding(
+        findings,
+        blockers,
+        "docs/STATUS.md",
+        "status_current_verified_release_matches_release_status",
+        bool(status_release and status_release == release_status.current_verified_version),
+        (
+            f"status_release={status_release}, "
+            f"release_status_current_verified={release_status.current_verified_version}, "
+            f"release_state={release_status.current_state}"
+        ),
+    )
+
+
 def _unique_values(values: Sequence[str]) -> list[str]:
     return sorted(set(values))
 
@@ -476,8 +507,8 @@ def _audit_release_status(
         findings,
         blockers,
         "release-status",
-        "release_status_current_verified",
-        release_status.current_state == "current_verified" and not release_status.blockers,
+        "release_status_current_or_prepared",
+        release_status.current_state in {"current_verified", "prepared"} and not release_status.blockers,
         f"current_state={release_status.current_state}, blockers={list(release_status.blockers)}",
     )
     _finding(

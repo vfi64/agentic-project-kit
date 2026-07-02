@@ -2138,7 +2138,7 @@
           "secondary_opts": []
         },
         {
-          "default": "0.4.11",
+          "default": "0.4.12",
           "help": "",
           "is_flag": false,
           "metavar": null,
@@ -4101,7 +4101,7 @@
       "name": "release-publish",
       "params": [
         {
-          "default": "0.4.11",
+          "default": "0.4.12",
           "help": "",
           "is_flag": false,
           "metavar": null,
@@ -5169,7 +5169,7 @@
           "secondary_opts": []
         },
         {
-          "default": "0.4.11",
+          "default": "0.4.12",
           "help": "",
           "is_flag": false,
           "metavar": null,

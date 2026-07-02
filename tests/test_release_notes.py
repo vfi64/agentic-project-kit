@@ -139,6 +139,62 @@ def test_release_notes_generator_uses_github_body_category_before_label(tmp_path
     assert report.items[0].category == "Docs"
 
 
+def test_release_notes_generator_classifies_current_gui_and_workflow_titles(tmp_path: Path) -> None:
+    report = build_release_notes_report(
+        tmp_path,
+        version="0.4.12",
+        from_tag="v0.4.11",
+        command_runner=FakeRunner(
+            subjects=[
+                "Plan pre-GUI hardening tasks (#1561)",
+                "Build basic cockpit GUI state surface (#1567)",
+                "Refine basic cockpit GUI controls (#1571)",
+                "Resolve cockpit agentic-kit commands from GUI (#1573)",
+                "Recheck published communication rule pending state (#1577)",
+                "Guide cockpit actions with grouped recommendations (#1600)",
+                "Make GUI tooltip attachment idempotent (#1619)",
+                "Extract cockpit action view logic (#1621)",
+                "Split cockpit GUI into focused modules (#1631)",
+                "Separate communication mode examples in cockpit (#1635)",
+                "Detect conflicting verified-main HEAD lines (#1647)",
+                "Keep GUI tooltips onscreen and maximize cockpit window (#1651)",
+                "Compact cockpit layout and local tmp cleanup (#1655)",
+                "Simplify cockpit into a guided beginner-first layout with progressive disclosure (#1659)",
+                "Render cockpit output as activity log (#1665)",
+                "Make cockpit action list separately scrollable (#1671)",
+            ]
+        ),
+    )
+
+    assert report.validation.status == "PASS"
+    assert report.unclassified_items == ()
+
+
+def test_release_notes_generator_treats_report_projection_commits_as_administrative(
+    tmp_path: Path,
+) -> None:
+    report = build_release_notes_report(
+        tmp_path,
+        version="0.4.12",
+        from_tag="v0.4.11",
+        command_runner=FakeRunner(
+            subjects=[
+                "Publish remote-next transfer report",
+                "Publish final remote-next report projection",
+                "Refresh successor package after PR1601 (#1602)",
+            ]
+        ),
+    )
+
+    assert report.validation.status == "PASS"
+    assert report.items == ()
+    assert [item.title for item in report.administrative_items] == [
+        "Publish remote-next transfer report",
+        "Publish final remote-next report projection",
+        "Refresh successor package after PR1601",
+    ]
+
+
 def test_release_notes_generator_warns_when_optional_github_metadata_is_unavailable(tmp_path: Path) -> None:
     report = build_release_notes_report(
         tmp_path,

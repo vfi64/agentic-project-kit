@@ -414,26 +414,60 @@ def _title_from_subject(subject: str) -> str:
 
 def _classify_subject(subject: str) -> str:
     lowered = subject.lower()
-    if re.search(r"^refresh handoff state after pr\d+", lowered) or "administrative handoff" in lowered:
+    if (
+        re.search(r"^refresh handoff state after pr\d+", lowered)
+        or "administrative handoff" in lowered
+        or "publish remote-next transfer report" in lowered
+        or "publish final remote-next report projection" in lowered
+        or lowered.startswith("refresh successor package")
+    ):
         return "Administrative Handoff Refresh"
     if "breaking" in lowered or lowered.startswith("remove "):
         return "Breaking"
     if "release" in lowered or "doi" in lowered:
         return "Release"
-    if any(token in lowered for token in ("handoff", "transfer", "patch cycle", "sync-main", "outbox")):
+    if any(
+        token in lowered
+        for token in (
+            "handoff",
+            "transfer",
+            "patch cycle",
+            "sync-main",
+            "outbox",
+            "communication",
+            "remote-next",
+        )
+    ):
         return "Transfer / Handoff"
     if any(token in lowered for token in ("governance", "policy", "contract", "authority")):
         return "Governance"
     if any(token in lowered for token in ("test", "gate", "audit", "ruff", "pytest")):
         return "Tests / Gates"
-    if any(token in lowered for token in ("doc", "documentation", "planning", "concept", "analysis")):
+    if any(token in lowered for token in ("doc", "documentation", "planning", "concept", "analysis", "plan ", "roadmap")):
         return "Docs"
-    if lowered.startswith(("fix ", "repair ", "harden ")):
+    if lowered.startswith(("fix ", "repair ", "harden ", "resolve ", "recheck ", "detect ", "keep ")):
         return "Fixed"
-    if lowered.startswith(("update ", "change ", "refactor ")):
-        return "Changed"
-    if lowered.startswith("add "):
+    if lowered.startswith(("add ", "build ")):
         return "Added"
+    if lowered.startswith(
+        (
+            "update ",
+            "change ",
+            "refactor ",
+            "refine ",
+            "guide ",
+            "extract ",
+            "split ",
+            "separate ",
+            "make ",
+            "compact ",
+            "simplify ",
+            "render ",
+        )
+    ):
+        return "Changed"
+    if any(token in lowered for token in ("gui", "cockpit", "tooltip", "layout", "visual hierarchy")):
+        return "Changed"
     return "Unclassified"
 
 
@@ -524,7 +558,13 @@ def _validate_release_notes(
 
 def _is_product_commit(evidence: dict[str, object]) -> bool:
     title = str(evidence.get("title", "")).lower()
-    return not (re.search(r"^refresh handoff state after pr\d+", title) or "administrative handoff" in title)
+    return not (
+        re.search(r"^refresh handoff state after pr\d+", title)
+        or "administrative handoff" in title
+        or "publish remote-next transfer report" in title
+        or "publish final remote-next report projection" in title
+        or title.startswith("refresh successor package")
+    )
 
 
 def _render_item(item: ReleaseNoteItem) -> str:

@@ -771,25 +771,6 @@
         "shell_commands_allowed": false
       }
     },
-    "meta_command_preference": {
-      "authoritative_sources": [
-        ".agentic/transfer_safety_rules.yaml",
-        ".agentic/transfer/one_command_transfer_protocol.yaml"
-      ],
-      "fallback_rule": "Low-level transfer/release commands may be used only for targeted diagnostics, recovery, or unsupported flows, and the reason must be explicit.",
-      "low_level_fallback_requires_reason": true,
-      "preferred_commands": [
-        "agentic-kit work start",
-        "agentic-kit work check",
-        "agentic-kit work finish",
-        "agentic-kit work recover",
-        "agentic-kit release ready",
-        "agentic-kit release prepare"
-      ],
-      "priority": "primary_path",
-      "source": "dynamic-from-rule-files",
-      "status": "active"
-    },
     "one_command_transfer_protocol": {
       "artifact_type": "transfer_protocol",
       "assistant_after_g": [
@@ -924,19 +905,6 @@
           "canonical_inbox": ".agentic/transfer/inbox/next_command.py.txt",
           "shell_commands_allowed": false
         }
-      },
-      "meta_command_preference": {
-        "human_cli_primary_path": true,
-        "low_level_fallback_requires_reason": true,
-        "preferred_entrypoints": [
-          "agentic-kit work start",
-          "agentic-kit work check",
-          "agentic-kit work finish",
-          "agentic-kit work recover",
-          "agentic-kit release ready",
-          "agentic-kit release prepare"
-        ],
-        "rule": "Prefer agentic-kit work/release meta commands for routine work, release readiness, and release preparation."
       },
       "next_implementation_slice": {
         "do_not_do": [
@@ -1529,25 +1497,6 @@
         "shell_commands_allowed": false
       }
     },
-    "meta_command_preference": {
-      "authoritative_sources": [
-        ".agentic/transfer_safety_rules.yaml",
-        ".agentic/transfer/one_command_transfer_protocol.yaml"
-      ],
-      "fallback_rule": "Low-level transfer/release commands may be used only for targeted diagnostics, recovery, or unsupported flows, and the reason must be explicit.",
-      "low_level_fallback_requires_reason": true,
-      "preferred_commands": [
-        "agentic-kit work start",
-        "agentic-kit work check",
-        "agentic-kit work finish",
-        "agentic-kit work recover",
-        "agentic-kit release ready",
-        "agentic-kit release prepare"
-      ],
-      "priority": "primary_path",
-      "source": "dynamic-from-rule-files",
-      "status": "active"
-    },
     "one_command_transfer_protocol": {
       "artifact_type": "transfer_protocol",
       "assistant_after_g": [
@@ -1682,19 +1631,6 @@
           "canonical_inbox": ".agentic/transfer/inbox/next_command.py.txt",
           "shell_commands_allowed": false
         }
-      },
-      "meta_command_preference": {
-        "human_cli_primary_path": true,
-        "low_level_fallback_requires_reason": true,
-        "preferred_entrypoints": [
-          "agentic-kit work start",
-          "agentic-kit work check",
-          "agentic-kit work finish",
-          "agentic-kit work recover",
-          "agentic-kit release ready",
-          "agentic-kit release prepare"
-        ],
-        "rule": "Prefer agentic-kit work/release meta commands for routine work, release readiness, and release preparation."
       },
       "next_implementation_slice": {
         "do_not_do": [

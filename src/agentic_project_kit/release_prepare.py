@@ -56,6 +56,10 @@ def _prepared_release_line(version: str) -> str:
     return f"Version `{version}` is the current release line prepared"
 
 
+def _prepared_release_status_line(version: str) -> str:
+    return f"Prepared release: `v{version}`; GitHub Release, tag publication, and Zenodo version DOI verification are pending."
+
+
 def _update_pyproject(text: str, version: str) -> str:
     return _replace_required(
         r'^version\s*=\s*"[^"]+"$',
@@ -101,11 +105,20 @@ def _update_readme(text: str, version: str) -> str:
     )
     line = _prepared_release_line(version)
     if "current release line prepared" in updated:
-        return re.sub(
+        updated = re.sub(
             rf"Version `(?:v)?{VERSION_RE}` is the current release line prepared",
             line,
             updated,
             count=1,
+        )
+    if re.search(r"^Prepared release:\s*`v" + VERSION_RE + r"`;", updated, flags=re.MULTILINE):
+        updated = _replace_required(
+            r"^Prepared release:\s*`v"
+            + VERSION_RE
+            + r"`; GitHub Release, tag publication, and Zenodo version DOI verification are [^.]+\.$",
+            _prepared_release_status_line(version),
+            updated,
+            label="README.md prepared release status",
         )
     return updated
 
@@ -120,7 +133,7 @@ def _update_current_version_doc(text: str, version: str, *, label: str) -> str:
 
 
 def _changelog_section(version: str, date: str, *, summary_lines: Sequence[str]) -> str:
-    normalized = _normalize_changelog_summary_lines(summary_lines)
+    normalized = _with_pending_doi_line(version, _normalize_changelog_summary_lines(summary_lines))
     body = "\n".join(f"- {line}" for line in normalized)
     return f"## v{version} - {date}\n\n{body}\n"
 
@@ -133,6 +146,12 @@ def _normalize_changelog_summary_lines(summary_lines: Sequence[str]) -> tuple[st
     if removed_route_refs:
         raise ValueError("Release changelog summary_lines must not reference removed ./ns release routes")
     return normalized
+
+
+def _with_pending_doi_line(version: str, summary_lines: Sequence[str]) -> tuple[str, ...]:
+    if any("Zenodo DOI verification pending" in line for line in summary_lines):
+        return tuple(summary_lines)
+    return (f"Zenodo DOI verification pending for v{version}.", *summary_lines)
 
 
 def _update_changelog(text: str, version: str, date: str, *, summary_lines: Sequence[str]) -> str:
