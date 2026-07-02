@@ -1,3 +1,4 @@
+import importlib.util
 import inspect
 from pathlib import Path
 import subprocess
@@ -1213,6 +1214,21 @@ def test_create_release_starts_with_version_dialog() -> None:
     assert "simpledialog.askstring" in source
     assert "Enter target version" in source
     assert "self.preview_create_release()" in source
+
+
+def test_gui_cockpit_header_importable_without_tkinter(monkeypatch) -> None:
+    module_name = "_agentic_project_kit_gui_cockpit_header_without_tkinter_probe"
+    module_path = Path("src/agentic_project_kit/gui_cockpit_header.py")
+    spec = importlib.util.spec_from_file_location(module_name, module_path)
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    monkeypatch.setitem(sys.modules, "tkinter", None)
+    monkeypatch.setitem(sys.modules, module_name, module)
+
+    spec.loader.exec_module(module)
+
+    assert hasattr(module, "CockpitHeaderMixin")
 
 
 def test_gui_output_uses_readable_large_font_and_panel_height() -> None:

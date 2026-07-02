@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import subprocess
 from typing import Any
-from tkinter import simpledialog
 
 from agentic_project_kit.gui_cockpit_common import HEADER_TEXT, THEME
 from agentic_project_kit.gui_tk_widgets import attach_tooltip
@@ -309,6 +308,8 @@ class CockpitHeaderMixin:
         return self.current_branch() not in {"", "unknown", "main", "master"} and bool(self._changed_paths())
 
     def start_work_cycle(self) -> None:
+        from tkinter import simpledialog
+
         self.log_action("Start work")
         title = self.current_task_body()
         if not title:
