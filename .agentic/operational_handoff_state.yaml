@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 0147d8597b8e71f256b93520e311ee4fa005509d
-  short: 0147d859
-  subject: Close out v0.4.12 DOI metadata (#1681)
+  full: 08a061121af736b02e88450af9cf965e05409e17
+  short: 08a06112
+  subject: Add kit operating-layer master plan (#1683)
 last_substantive_work_state:
-  full: 0147d8597b8e71f256b93520e311ee4fa005509d
-  short: 0147d859
-  subject: Close out v0.4.12 DOI metadata (#1681)
+  full: 08a061121af736b02e88450af9cf965e05409e17
+  short: 08a06112
+  subject: Add kit operating-layer master plan (#1683)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
