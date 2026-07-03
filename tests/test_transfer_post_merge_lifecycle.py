@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 from agentic_project_kit.transfer_post_merge_lifecycle import post_merge_complete
 from agentic_project_kit.transfer_repo_actions import RepoActionResult
 
@@ -436,3 +438,28 @@ def test_post_merge_complete_blocks_when_initial_check_failed_even_if_output_say
     assert result.lifecycle_state == "INITIAL_POST_MERGE_CHECK_FAILED"
     assert "NEEDS_SUCCESSOR_PACKAGE_REFRESH" in result.next_action
     assert "Post-merge lifecycle is complete" not in result.next_action
+
+
+def test_post_merge_complete_finish_invariant_rejects_pass_with_failed_noop_step():
+    from agentic_project_kit.transfer_post_merge_lifecycle import _finish, PostMergeLifecycleStep
+    from agentic_project_kit.transfer_repo_actions import RepoActionResult
+
+    failed_step = RepoActionResult(
+        action="post-merge-check",
+        result_status="FAIL",
+        returncode=1,
+        command=["agentic-kit", "handoff", "post-merge-refresh-status"],
+        stdout="result=NOOP\n",
+        stderr="",
+        next_action="STATE=NEEDS_SUCCESSOR_PACKAGE_REFRESH\nNEXT=refresh_successor_package",
+    )
+
+    with pytest.raises(AssertionError, match="post-merge-complete returned PASS"):
+        _finish(
+            after_pr=1687,
+            result_status="PASS",
+            returncode=0,
+            lifecycle_state="NOOP",
+            next_action="Post-merge lifecycle is complete",
+            steps=[PostMergeLifecycleStep("initial-post-merge-check", failed_step)],
+        )

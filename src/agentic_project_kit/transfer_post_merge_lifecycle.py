@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 from dataclasses import asdict, dataclass, field
 
+from agentic_project_kit.composed_wrapper_invariants import assert_no_failed_required_step_promoted_to_pass
 from agentic_project_kit.transfer_repo_actions import (
     RepoActionResult,
     admin_refresh_pr,
@@ -82,6 +83,13 @@ def _finish(
     refresh_pr: int | None = None,
     refresh_loop_detected: bool = False,
 ) -> PostMergeLifecycleResult:
+    if lifecycle_state == "NOOP":
+        assert_no_failed_required_step_promoted_to_pass(
+            wrapper="post-merge-complete",
+            wrapper_status=result_status,
+            steps=steps,
+            allowed_recovery_states=("REFRESH_REQUIRED",),
+        )
     return PostMergeLifecycleResult(
         after_pr=after_pr,
         result_status=result_status,
