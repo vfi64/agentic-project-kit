@@ -8,7 +8,7 @@ import re
 ABSOLUTE_PATH_PATTERNS = (
     re.compile(r"/Users/[A-Za-z0-9._-]+/[^\s`\"')]+"),
     re.compile(r"/home/[A-Za-z0-9._-]+/[^\s`\"')]+"),
-    re.compile(r"/tmp/[^\s`\"')]+"),
+    re.compile(r"(?<![\w.-])/tmp/[^\s`\"')]+"),
     re.compile(r"/var/folders/[^\s`\"')]+"),
     re.compile(r"/mnt/data/[^\s`\"')]+"),
 )

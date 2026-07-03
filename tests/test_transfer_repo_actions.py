@@ -499,6 +499,52 @@ def test_post_merge_check_classifies_stale_successor_package(tmp_path, monkeypat
     assert "validation_report.json generated_head" in result.stdout
 
 
+def test_post_merge_check_reports_refresh_only_successor_package_evidence(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    def fake_run(command, cwd=None):
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+            return subprocess.CompletedProcess(
+                command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", ""
+            )
+        return subprocess.CompletedProcess(command, 99, "", "unexpected command\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._agentic_kit_command", lambda: "agentic-kit"
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._successor_package_freshness_findings",
+        lambda: [],
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._successor_package_freshness_notes",
+        lambda: [
+            "successor_package_head_status=refresh_only_descendant",
+            "successor_package_generated_head=f96380798db1f11406889c476252ac54a53f8506",
+            "successor_package_current_head=a0ba8f99d8aaf121694c62ef8d607361bb982140",
+        ],
+    )
+
+    result = post_merge_check(main_branch="main")
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert "STATE=READY" in result.next_action
+    assert "successor_package_head_status=refresh_only_descendant" in result.stdout
+    assert (
+        "successor_package_generated_head=f96380798db1f11406889c476252ac54a53f8506"
+        in result.stdout
+    )
+    assert (
+        "successor_package_current_head=a0ba8f99d8aaf121694c62ef8d607361bb982140"
+        in result.stdout
+    )
+
+
 def test_post_merge_check_classifies_unexpected_refresh_status_output(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     monkeypatch.chdir(tmp_path)
@@ -2718,6 +2764,11 @@ def test_successor_package_freshness_allows_refresh_only_head_drift(monkeypatch,
     monkeypatch.setattr(actions, "_run", fake_run)
 
     assert actions._successor_package_freshness_findings(tmp_path) == []
+    check = actions._successor_package_freshness_check(tmp_path)
+    assert check.findings == ()
+    assert "successor_package_head_status=refresh_only_descendant" in check.notes
+    assert "successor_package_generated_head=old" in check.notes
+    assert "successor_package_current_head=new" in check.notes
 
 
 def test_successor_package_freshness_rejects_project_direction_head_drift(monkeypatch, tmp_path):

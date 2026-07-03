@@ -49,6 +49,7 @@ def test_successor_execution_contract_projection_contains_hard_start_rules():
     assert "Local copy-and-paste protocol" in prompt
     assert "head_matches_origin_main: `True`" in prompt
     assert "worktree_clean: `False`" in prompt
+    assert "successor_package_head_status=refresh_only_descendant" in prompt
     assert "naked `python`" in prompt
     assert "naked `pytest`" in prompt
     assert "git add ." in prompt
