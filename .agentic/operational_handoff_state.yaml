@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: dda814630145f6cdf99815b4ff5e82d053d93fef
-  short: dda81463
-  subject: Fix pr-closeout-complete PR state lookup (#1686)
+  full: f96380798db1f11406889c476252ac54a53f8506
+  short: f9638079
+  subject: Add composite short-circuit invariant (#1690)
 last_substantive_work_state:
-  full: dda814630145f6cdf99815b4ff5e82d053d93fef
-  short: dda81463
-  subject: Fix pr-closeout-complete PR state lookup (#1686)
+  full: f96380798db1f11406889c476252ac54a53f8506
+  short: f9638079
+  subject: Add composite short-circuit invariant (#1690)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
