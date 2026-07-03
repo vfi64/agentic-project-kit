@@ -30,8 +30,10 @@ class CommandTaxonomyEntry:
     group: str
     category: str
     role: str
+    composition_level: str
+    recommendation_weight: int
 
-    def as_dict(self) -> dict[str, str]:
+    def as_dict(self) -> dict[str, object]:
         return asdict(self)
 
 
@@ -78,12 +80,16 @@ def classify_command(command: dict[str, Any]) -> CommandTaxonomyEntry:
     leaf = path_parts[-1] if path_parts else qualified.rsplit(" ", 1)[-1]
 
     category = _category_for(group, leaf, qualified)
-    role = _role_for(category, leaf, qualified)
+    composition_level = _composition_level_for(group, leaf, qualified)
+    recommendation_weight = _recommendation_weight_for(category, composition_level, qualified)
+    role = _role_for(category, leaf, qualified, composition_level=composition_level)
     return CommandTaxonomyEntry(
         qualified_name=qualified,
         group=group,
         category=category,
         role=role,
+        composition_level=composition_level,
+        recommendation_weight=recommendation_weight,
     )
 
 
@@ -122,10 +128,53 @@ def _category_for(group: str, leaf: str, qualified: str) -> str:
     return "advanced/internal"
 
 
-def _role_for(category: str, leaf: str, qualified: str) -> str:
+PREFERRED_COMPOSITE_COMMANDS: tuple[str, ...] = (
+    "agentic-kit transfer pr-closeout-complete",
+    "agentic-kit transfer post-merge-complete",
+    "agentic-kit transfer pr-create-complete",
+    "agentic-kit work start",
+    "agentic-kit work check",
+    "agentic-kit work finish",
+    "agentic-kit work recover",
+    "agentic-kit release ready",
+    "agentic-kit release prepare",
+    "agentic-kit release-publish",
+)
+
+
+def _composition_level_for(group: str, leaf: str, qualified: str) -> str:
+    if qualified in PREFERRED_COMPOSITE_COMMANDS:
+        return "composite"
+    if leaf in {
+        "pr-closeout-complete",
+        "post-merge-complete",
+        "pr-create-complete",
+        "patch-cycle-status",
+        "standard-gates-audit-suite",
+    }:
+        return "composite"
+    if group in {"actions", "dev", "evidence", "patterns"}:
+        return "elementary/internal"
+    return "elementary"
+
+
+def _recommendation_weight_for(category: str, composition_level: str, qualified: str) -> int:
+    if qualified == "agentic-kit transfer pr-closeout-complete":
+        return 100
+    if composition_level == "composite":
+        return 90
+    if category == "advanced/internal" or composition_level == "elementary/internal":
+        return 20
+    return 50
+
+
+
+def _role_for(category: str, leaf: str, qualified: str, *, composition_level: str = "elementary") -> str:
     if category == "audit":
         return "Runs a focused repository safety or consistency audit."
     if category == "transfer":
+        if composition_level == "composite":
+            return "Preferred high-level wrapper for guarded transfer or PR lifecycle workflows; LLMs should choose this before low-level commands."
         return "Supports guarded GitHub/local transfer and PR lifecycle workflows."
     if category == "release":
         return "Supports release preparation, verification, or controlled publishing."
@@ -166,6 +215,10 @@ def build_command_taxonomy_report(project_root: Path) -> CommandTaxonomyReport:
             findings.append(f"{entry.qualified_name}: unsupported category {entry.category}")
         if not entry.role:
             findings.append(f"{entry.qualified_name}: missing role")
+        if entry.composition_level not in {"composite", "elementary", "elementary/internal"}:
+            findings.append(f"{entry.qualified_name}: unsupported composition level {entry.composition_level}")
+        if not 0 <= entry.recommendation_weight <= 100:
+            findings.append(f"{entry.qualified_name}: recommendation weight outside 0..100")
         if entry.group == "root" and entry.category == "core" and entry.qualified_name.startswith("agentic-kit audit-"):
             findings.append(f"{entry.qualified_name}: audit command classified as core")
 
@@ -188,6 +241,16 @@ def render_command_taxonomy_report(report: CommandTaxonomyReport) -> str:
         by_category[entry.category] = by_category.get(entry.category, 0) + 1
     for category, count in sorted(by_category.items()):
         lines.append(f"CATEGORY={category}|{count}")
+    by_level: dict[str, int] = {}
+    for entry in report.entries:
+        by_level[entry.composition_level] = by_level.get(entry.composition_level, 0) + 1
+    for level, count in sorted(by_level.items()):
+        lines.append(f"COMPOSITION_LEVEL={level}|{count}")
+    for entry in sorted(report.entries, key=lambda item: (-item.recommendation_weight, item.qualified_name))[:12]:
+        if entry.recommendation_weight >= 90:
+            lines.append(
+                f"PREFERRED={entry.qualified_name}|level={entry.composition_level}|weight={entry.recommendation_weight}"
+            )
     for finding in report.findings:
         lines.append(f"FINDING={finding}")
     return "\n".join(lines) + "\n"

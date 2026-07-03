@@ -302,6 +302,16 @@ def _detect_avoidable_low_level_meta_command_sequences(sequence_commands: list[s
         return []
 
     meta_command_sequences = {
+        "pr-closeout-complete": {
+            "meta_command": "agentic-kit transfer pr-closeout-complete",
+            "low_level_markers": {
+                "agentic-kit transfer pr-wait-ci",
+                "agentic-kit transfer pr-merge-safe",
+                "agentic-kit transfer post-merge-check",
+                "agentic-kit transfer post-merge-complete",
+                "agentic-kit transfer repo-status",
+            },
+        },
         "work-start": {
             "meta_command": "agentic-kit work start",
             "low_level_markers": {

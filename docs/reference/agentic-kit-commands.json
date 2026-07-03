@@ -7512,6 +7512,60 @@
     },
     {
       "group": "transfer",
+      "help": "Complete a substantive PR and its post-merge handoff refresh with idempotent resume logic.",
+      "name": "pr-closeout-complete",
+      "params": [
+        {
+          "default": null,
+          "help": "Substantive PR number to merge if needed and close out.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "after_pr",
+          "opts": [
+            "--after-pr"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": 300,
+          "help": "CI wait timeout for the substantive PR and refresh PR.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "timeout_seconds",
+          "opts": [
+            "--timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 10,
+          "help": "CI polling interval for the substantive PR and refresh PR.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "poll_seconds",
+          "opts": [
+            "--poll-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "pr-closeout-complete"
+      ],
+      "qualified_name": "agentic-kit transfer pr-closeout-complete"
+    },
+    {
+      "group": "transfer",
       "help": "",
       "name": "pr-complete",
       "params": [

@@ -102,3 +102,28 @@ def test_classify_project_direction_as_docs() -> None:
 
     assert entry.category == "docs"
 
+
+
+def test_classify_pr_closeout_complete_as_preferred_composite() -> None:
+    entry = classify_command(
+        {
+            "qualified_name": "agentic-kit transfer pr-closeout-complete",
+            "group": "transfer",
+            "path": ["transfer", "pr-closeout-complete"],
+            "help": "Complete PR closeout",
+        }
+    )
+
+    assert entry.category == "transfer"
+    assert entry.composition_level == "composite"
+    assert entry.recommendation_weight == 100
+    assert "Preferred high-level wrapper" in entry.role
+
+
+def test_render_command_taxonomy_report_includes_preferred_composites() -> None:
+    report = build_command_taxonomy_report(Path("."))
+
+    rendered = render_command_taxonomy_report(report)
+
+    assert "COMPOSITION_LEVEL=" in rendered
+    assert "PREFERRED=agentic-kit transfer pr-closeout-complete" in rendered
