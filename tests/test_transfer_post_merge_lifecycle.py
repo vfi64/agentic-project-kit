@@ -403,3 +403,36 @@ def test_post_merge_complete_blocks_unknown_initial_state(monkeypatch):
     assert result.returncode == 2
     assert result.lifecycle_state == "UNKNOWN"
     assert [step.name for step in result.steps] == ["initial-post-merge-check"]
+
+
+def test_post_merge_complete_blocks_when_initial_check_failed_even_if_output_says_noop(monkeypatch):
+    from agentic_project_kit.transfer_post_merge_lifecycle import post_merge_complete
+    from agentic_project_kit.transfer_repo_actions import RepoActionResult
+
+    failing = RepoActionResult(
+        action="post-merge-check",
+        result_status="FAIL",
+        returncode=1,
+        command=["agentic-kit", "handoff", "post-merge-refresh-status"],
+        stdout=(
+            "POST_MERGE_HANDOFF_REFRESH\n"
+            "refresh_required=False\n"
+            "result=NOOP\n"
+            "validation_report.json generated_head does not match HEAD or refresh-only ancestry\n"
+        ),
+        stderr="",
+        next_action="STATE=NEEDS_SUCCESSOR_PACKAGE_REFRESH\nNEXT=refresh_successor_package",
+    )
+
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_post_merge_lifecycle.post_merge_check",
+        lambda main_branch="main": failing,
+    )
+
+    result = post_merge_complete(after_pr=1687, ci_timeout_seconds=1, ci_poll_seconds=1)
+
+    assert result.result_status == "BLOCKED"
+    assert result.returncode == 1
+    assert result.lifecycle_state == "INITIAL_POST_MERGE_CHECK_FAILED"
+    assert "NEEDS_SUCCESSOR_PACKAGE_REFRESH" in result.next_action
+    assert "Post-merge lifecycle is complete" not in result.next_action
