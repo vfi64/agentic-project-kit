@@ -121,7 +121,7 @@ def _load_pr_info(after_pr: int) -> tuple[dict[str, Any], subprocess.CompletedPr
         "view",
         str(after_pr),
         "--json",
-        "number,state,merged,headRefOid,url,title",
+        "number,state,mergedAt,headRefOid,url,title",
     ]
     completed = _run_command(command)
     if completed.returncode != 0:
@@ -223,7 +223,9 @@ def pr_closeout_complete(
             steps=steps,
         )
 
-    merged = bool(pr_info.get("merged"))
+    state = str(pr_info.get("state") or "").upper()
+    merged_at = str(pr_info.get("mergedAt") or "")
+    merged = state == "MERGED" or bool(merged_at)
     expected_head_sha = str(pr_info.get("headRefOid") or "")
 
     if not merged:
