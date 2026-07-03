@@ -1093,6 +1093,9 @@ Prüfe:
 - `main == origin/main`
 - Worktree clean
 - `post-merge-check PASS` mit `refresh_required=False`, `result=NOOP`, `next_safe_action=none`
+- Wenn `validation_report.generated_head` vom aktuellen HEAD abweicht, akzeptiere nur die
+  durch `post-merge-check` geloggte Evidence `successor_package_head_status=refresh_only_descendant`;
+  sonst `BLOCK`.
 - `repo-status PASS`
 - `docs-audit PASS`
 - `validation_report.json PASS`

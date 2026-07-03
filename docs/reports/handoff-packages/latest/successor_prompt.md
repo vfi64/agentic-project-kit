@@ -38,8 +38,8 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1690-handoff-refresh`
-- head_matches_origin_main: `True`
+- branch: `codex/harden-refresh-only-handoff-bootstrap`
+- head_matches_origin_main: `False`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/project_direction.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
@@ -117,6 +117,9 @@ Prüfe:
 - `main == origin/main`
 - Worktree clean
 - `post-merge-check PASS` mit `refresh_required=False`, `result=NOOP`, `next_safe_action=none`
+- Wenn `validation_report.generated_head` vom aktuellen HEAD abweicht, akzeptiere nur die
+  durch `post-merge-check` geloggte Evidence `successor_package_head_status=refresh_only_descendant`;
+  sonst `BLOCK`.
 - `repo-status PASS`
 - `docs-audit PASS`
 - `validation_report.json PASS`
@@ -254,14 +257,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1690-handoff-refresh",
+    "branch": "codex/harden-refresh-only-handoff-bootstrap",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f96380798db1f11406889c476252ac54a53f8506",
-    "head_matches_origin_main": true,
-    "head_short": "f9638079",
+    "head": "c5e098602e7896bb908e742118895b1ae9309448",
+    "head_matches_origin_main": false,
+    "head_short": "c5e09860",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "f96380798db1f11406889c476252ac54a53f8506",
-    "origin_main_short": "f9638079",
+    "origin_main": "a0ba8f99d8aaf121694c62ef8d607361bb982140",
+    "origin_main_short": "a0ba8f99",
     "worktree_clean": false
   }
 }

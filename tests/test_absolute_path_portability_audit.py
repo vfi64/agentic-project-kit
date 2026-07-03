@@ -31,6 +31,29 @@ def test_absolute_path_audit_skips_tmp_tree(tmp_path: Path) -> None:
     assert result.references == ()
 
 
+def test_absolute_path_audit_allows_repo_relative_agentic_tmp_path(tmp_path: Path) -> None:
+    doc = tmp_path / "docs" / "planning.md"
+    doc.parent.mkdir()
+    doc.write_text("Lock path: .agentic/tmp/workspace.lock\n", encoding="utf-8")
+
+    result = audit_absolute_path_portability(tmp_path)
+
+    assert result.ok is True
+    assert result.references == ()
+
+
+def test_absolute_path_audit_blocks_absolute_tmp_path(tmp_path: Path) -> None:
+    doc = tmp_path / "docs" / "planning.md"
+    doc.parent.mkdir()
+    doc.write_text("Do not use /tmp/workspace.lock as a contract path.\n", encoding="utf-8")
+
+    result = audit_absolute_path_portability(tmp_path)
+
+    assert result.ok is False
+    assert result.blockers
+    assert result.blockers[0].classification == "transient_path_reference"
+
+
 def test_absolute_path_audit_allows_test_fixture(tmp_path: Path) -> None:
     test_file = tmp_path / "tests" / "test_example.py"
     test_file.parent.mkdir()
@@ -103,4 +126,3 @@ def test_absolute_path_audit_blocks_source_path_even_with_historical_word(tmp_pa
     assert result.ok is False
     assert result.blockers
     assert result.blockers[0].classification == "absolute_path_blocker"
-

@@ -26,6 +26,12 @@ class RepoActionResult:
         return asdict(self)
 
 
+@dataclass(frozen=True)
+class SuccessorPackageFreshnessCheck:
+    findings: tuple[str, ...]
+    notes: tuple[str, ...]
+
+
 def _agentic_kit_command() -> str:
     candidate = Path(sys.executable).parent / "agentic-kit"
     if candidate.exists():
@@ -238,11 +244,12 @@ def _is_refresh_only_successor_package_head(generated_head: str, current_head: s
 
 
 
-def _successor_package_freshness_findings(repo_root: Path | None = None) -> list[str]:
-    """Return deterministic successor handoff package freshness findings."""
+def _successor_package_freshness_check(repo_root: Path | None = None) -> SuccessorPackageFreshnessCheck:
+    """Return deterministic successor handoff package freshness state."""
 
     root = repo_root or Path.cwd()
     findings: list[str] = []
+    notes: list[str] = []
 
     def read(rel: str) -> str:
         path = root / rel
@@ -259,7 +266,7 @@ def _successor_package_freshness_findings(repo_root: Path | None = None) -> list
         root / "pyproject.toml",
     ]
     if not package_root.exists() and not canonical_start_prompt.exists() and not all(marker.exists() for marker in project_markers):
-        return []
+        return SuccessorPackageFreshnessCheck(findings=(), notes=())
 
     head = _run(["git", "rev-parse", "HEAD"]).stdout.strip()
 
@@ -277,8 +284,19 @@ def _successor_package_freshness_findings(repo_root: Path | None = None) -> list
     if validation.get("status") != "PASS":
         findings.append("validation_report.json status is not PASS")
     generated_head = str(validation.get("generated_head") or "")
-    if head and generated_head != head and not _is_refresh_only_successor_package_head(generated_head, head, root):
-        findings.append("validation_report.json generated_head does not match HEAD or refresh-only ancestry")
+    if head and generated_head:
+        if generated_head == head:
+            notes.append("successor_package_head_status=exact")
+        elif _is_refresh_only_successor_package_head(generated_head, head, root):
+            notes.extend(
+                [
+                    "successor_package_head_status=refresh_only_descendant",
+                    f"successor_package_generated_head={generated_head}",
+                    f"successor_package_current_head={head}",
+                ]
+            )
+        else:
+            findings.append("validation_report.json generated_head does not match HEAD or refresh-only ancestry")
 
     try:
         execution_contract = json.loads(execution_text) if execution_text else {}
@@ -315,7 +333,19 @@ def _successor_package_freshness_findings(repo_root: Path | None = None) -> list
     if "\\n## Operational documentation refresh state" in combined or "\\n\\n## Operational documentation refresh state" in combined:
         findings.append("successor handoff package contains literal newline artifacts")
 
-    return findings
+    return SuccessorPackageFreshnessCheck(findings=tuple(findings), notes=tuple(notes))
+
+
+def _successor_package_freshness_findings(repo_root: Path | None = None) -> list[str]:
+    """Return deterministic successor handoff package freshness findings."""
+
+    return list(_successor_package_freshness_check(repo_root).findings)
+
+
+def _successor_package_freshness_notes(repo_root: Path | None = None) -> list[str]:
+    """Return machine-readable successor handoff package freshness evidence lines."""
+
+    return list(_successor_package_freshness_check(repo_root).notes)
 
 
 def _successor_package_freshness_summary() -> str:
@@ -1246,6 +1276,15 @@ def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
     else:
         state = "BLOCKED"
         next_action = "diagnose_post_merge_refresh_status_output"
+
+    package_notes = _successor_package_freshness_notes()
+    if package_notes:
+        completed = subprocess.CompletedProcess(
+            completed.args,
+            completed.returncode,
+            completed.stdout + ("\n" if completed.stdout else "") + "\n".join(package_notes),
+            completed.stderr,
+        )
 
     package_findings = _successor_package_freshness_findings()
     if package_findings:

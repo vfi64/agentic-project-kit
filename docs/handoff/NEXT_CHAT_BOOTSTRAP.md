@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `f96380798db1f11406889c476252ac54a53f8506` (`f9638079`)
-- Handoff freshness marker: `f9638079`
-- Branch at generation: `docs/post-pr1690-handoff-refresh`
+- HEAD: `c5e098602e7896bb908e742118895b1ae9309448` (`c5e09860`)
+- Handoff freshness marker: `c5e09860`
+- Branch at generation: `codex/harden-refresh-only-handoff-bootstrap`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -35,6 +35,9 @@ Prüfe:
 - `main == origin/main`
 - Worktree clean
 - `post-merge-check PASS` mit `refresh_required=False`, `result=NOOP`, `next_safe_action=none`
+- Wenn `validation_report.generated_head` vom aktuellen HEAD abweicht, akzeptiere nur die
+  durch `post-merge-check` geloggte Evidence `successor_package_head_status=refresh_only_descendant`;
+  sonst `BLOCK`.
 - `repo-status PASS`
 - `docs-audit PASS`
 - `validation_report.json PASS`

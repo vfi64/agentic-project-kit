@@ -1,159 +1,15 @@
 {
   "derived_projection": true,
-  "kind": "local_to_llm_remote_next_report",
+  "kind": "local_to_llm_last_result",
   "last_result": {
-    "artifact_type": "transfer_remote_next_execution_report",
-    "blocked_message": "[Errno 2] No such file or directory: '.agentic/transfer/inbox/current.yaml'",
-    "branch": "main",
-    "chat_reply": "g",
-    "command_id": "remote-next-blocked",
-    "head": "94ab9f9b",
-    "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
-    "local_run": {
-      "apply": null,
-      "command_id": "remote-next-blocked",
-      "inspect": {
-        "message": "[Errno 2] No such file or directory: '.agentic/transfer/inbox/current.yaml'",
-        "reasons": [
-          "missing_transfer_order"
-        ],
-        "result_status": "BLOCKED",
-        "returncode": 2,
-        "schema_version": 1
-      },
-      "next": "Inspect the published remote-next diagnostic report before retrying.",
-      "next_action": "Inspect the published remote-next diagnostic report before retrying.",
-      "result_status": "BLOCKED",
-      "returncode": 2,
-      "schema_version": 1,
-      "state": {
-        "branch": "main",
-        "dirty_state": {
-          "clean": true,
-          "staged_changes": [],
-          "status_short": "",
-          "unstaged_changes": [],
-          "untracked_files": []
-        },
-        "head": "94ab9f9b",
-        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
-        "primary_state": "BLOCKED",
-        "reasons": [
-          "missing_transfer_order"
-        ],
-        "schema_version": 1
-      },
-      "transfer_id": "remote-next-blocked"
-    },
-    "next": "Inspect the published remote-next diagnostic report before retrying.",
-    "next_action": "Inspect the published remote-next diagnostic report before retrying.",
-    "post_report_actions": {
-      "attempted": true,
-      "branch": "main",
-      "commit_head": "04c27df7",
-      "committed": true,
-      "final_head": "04c27df7",
-      "final_status_short": "",
-      "paths": [
-        "docs/reports/transfer_runs/latest-remote-next-report.json",
-        "docs/reports/transfer_runs/latest-remote-next-report.log",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-      ],
-      "pushed": true,
-      "rule_ack_after_report_commit": {
-        "blocking_reasons": [],
-        "confirmed": true,
-        "head": "04c27df7",
-        "path": ".agentic/rule_ack/current.json",
-        "present": true
-      },
-      "rule_ack_refreshed_after_commit": true,
-      "schema_version": 1,
-      "steps": [
-        {
-          "argv": [
-            "git",
-            "add",
-            "-f",
-            "docs/reports/transfer_runs/latest-remote-next-report.json",
-            "docs/reports/transfer_runs/latest-remote-next-report.log",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-          ],
-          "name": "git_add_force_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": ""
-        },
-        {
-          "argv": [
-            "git",
-            "commit",
-            "-m",
-            "Publish remote-next transfer report"
-          ],
-          "name": "git_commit_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "[main 04c27df7] Publish remote-next transfer report\n 4 files changed, 94 insertions(+), 662 deletions(-)"
-        },
-        {
-          "argv": [
-            "./.venv/bin/agentic-kit",
-            "rules",
-            "acknowledge"
-          ],
-          "name": "rules_acknowledge_after_report_commit",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=c85d265442d341c61e6b8406375ebc3b692b545565e1b9402e957c874f5015e7\nrepo_head=04c27df7\ndeclared_next_allowed_action=run_next_command"
-        },
-        {
-          "argv": [
-            "git",
-            "push",
-            "origin",
-            "main"
-          ],
-          "name": "git_push_report_commit",
-          "returncode": 0,
-          "stderr": "To https://github.com/vfi64/agentic-project-kit.git\n   94ab9f9b..04c27df7  main -> main",
-          "stdout": ""
-        }
-      ]
-    },
-    "preflight": {
-      "current_branch": "main",
-      "dirty_state": {
-        "clean": true,
-        "staged_changes": [],
-        "status_short": "",
-        "unstaged_changes": [],
-        "untracked_files": []
-      },
-      "head": "94ab9f9b",
-      "remote_tracking": "origin/main"
-    },
-    "primary_state": "BLOCKED",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "reasons": [
-      "missing_transfer_order"
-    ],
-    "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
-    "result_status": "BLOCKED",
-    "returncode": 2,
-    "rule_ack": {
-      "blocking_reasons": [],
-      "confirmed": true,
-      "head": "94ab9f9b",
-      "path": ".agentic/rule_ack/current.json",
-      "present": true
-    },
-    "schema_version": 1,
-    "state": "BLOCKED",
-    "transfer_id": "remote-next-blocked"
+    "action": "refresh-llm-context-carriers",
+    "created_at_utc": "2026-07-03T18:44:05.772658+00:00",
+    "final_signal": "d",
+    "kind": "llm_context_carriers_refresh",
+    "label": "llm-context-carriers-refresh",
+    "next_action": "LLM context carriers refreshed.",
+    "result_status": "PASS",
+    "schema_version": 1
   },
   "llm_execution_context": {
     "canonical_lifecycle": {
@@ -239,7 +95,7 @@
       "status": "active"
     },
     "command_reference": {
-      "command_count": 196,
+      "command_count": 197,
       "generated_by": "scripts/generate_agentic_kit_command_reference.py",
       "important_wrappers": [
         {
@@ -435,11 +291,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-06-29T13:49:46.042145+00:00",
+    "generated_at_utc": "2026-07-03T18:44:06.007218+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "main",
-      "head": "04c27df707d39fb09c30c1f7671109da940c38ac",
+      "branch": "codex/harden-refresh-only-handoff-bootstrap",
+      "head": "8b331031e65a6d9fd70aa018e5243bd49c1269e7",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -497,10 +353,10 @@
     ],
     "source_hashes": {
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
-      ".agentic/transfer/one_command_transfer_protocol.yaml": "5f784f41355f3063a34d51e6a3ed4dd64f29f4a71b8859bdb7df1529aefdc789",
-      ".agentic/transfer_safety_rules.yaml": "926473e7a669d11c8402a92f91358a3b92b0021f0f6627907d37dae49ea76412",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "b916faff28d6fe2b253e47831f7ec63161e084cb54d77772b9d662f82c4e84d3",
-      "docs/reference/agentic-kit-commands.json": "6a6453c0053bf8792531bf2964b349accad65fb381193ae5ab74ca8945a8bcb4"
+      ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
+      ".agentic/transfer_safety_rules.yaml": "3523be071e72434ad25c6c6283a801ffdb194ed1ecb43c4da720522cfde89cbb",
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "88a5396721952ba54381dfaa02d22c8fc74758cbdcba9a806f272a5c319cf3ee",
+      "docs/reference/agentic-kit-commands.json": "e748379fd10ea188f64c1e3b4e0b31c76368523c82c5b61e56719702774355a5"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -524,11 +380,11 @@
     "authoritative_sources": [
       {
         "path": ".agentic/transfer_safety_rules.yaml",
-        "sha256": "926473e7a669d11c8402a92f91358a3b92b0021f0f6627907d37dae49ea76412"
+        "sha256": "3523be071e72434ad25c6c6283a801ffdb194ed1ecb43c4da720522cfde89cbb"
       },
       {
         "path": ".agentic/transfer/one_command_transfer_protocol.yaml",
-        "sha256": "5f784f41355f3063a34d51e6a3ed4dd64f29f4a71b8859bdb7df1529aefdc789"
+        "sha256": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04"
       },
       {
         "path": ".agentic/rule_mechanism_inventory.yaml",
@@ -540,7 +396,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "5006408f3ae55be78173fc186900d4da2fdb3211d2e256b481840c8b140ecd5f"
+        "sha256": "1ee53cb0eba49295d9401ac06e21feefe5a970852719aaa72406a643e2d55384"
       },
       {
         "path": "docs/planning/project_direction.yaml",
@@ -1045,12 +901,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "main",
+      "branch": "codex/harden-refresh-only-handoff-bootstrap",
       "dirty_status": "",
-      "head": "04c27df707d39fb09c30c1f7671109da940c38ac",
+      "head": "8b331031e65a6d9fd70aa018e5243bd49c1269e7",
       "head_matches_upstream": true,
-      "upstream": "origin/main",
-      "upstream_head": "04c27df707d39fb09c30c1f7671109da940c38ac"
+      "upstream": "origin/codex/harden-refresh-only-handoff-bootstrap",
+      "upstream_head": "8b331031e65a6d9fd70aa018e5243bd49c1269e7"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -1092,169 +948,15 @@
       "copy_paste_only_fallback"
     ]
   },
-  "remote_next_report": {
-    "artifact_type": "transfer_remote_next_execution_report",
-    "blocked_message": "[Errno 2] No such file or directory: '.agentic/transfer/inbox/current.yaml'",
-    "branch": "main",
-    "chat_reply": "g",
-    "command_id": "remote-next-blocked",
-    "head": "94ab9f9b",
-    "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
-    "local_run": {
-      "apply": null,
-      "command_id": "remote-next-blocked",
-      "inspect": {
-        "message": "[Errno 2] No such file or directory: '.agentic/transfer/inbox/current.yaml'",
-        "reasons": [
-          "missing_transfer_order"
-        ],
-        "result_status": "BLOCKED",
-        "returncode": 2,
-        "schema_version": 1
-      },
-      "next": "Inspect the published remote-next diagnostic report before retrying.",
-      "next_action": "Inspect the published remote-next diagnostic report before retrying.",
-      "result_status": "BLOCKED",
-      "returncode": 2,
-      "schema_version": 1,
-      "state": {
-        "branch": "main",
-        "dirty_state": {
-          "clean": true,
-          "staged_changes": [],
-          "status_short": "",
-          "unstaged_changes": [],
-          "untracked_files": []
-        },
-        "head": "94ab9f9b",
-        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
-        "primary_state": "BLOCKED",
-        "reasons": [
-          "missing_transfer_order"
-        ],
-        "schema_version": 1
-      },
-      "transfer_id": "remote-next-blocked"
-    },
-    "next": "Inspect the published remote-next diagnostic report before retrying.",
-    "next_action": "Inspect the published remote-next diagnostic report before retrying.",
-    "post_report_actions": {
-      "attempted": true,
-      "branch": "main",
-      "commit_head": "04c27df7",
-      "committed": true,
-      "final_head": "04c27df7",
-      "final_status_short": "",
-      "paths": [
-        "docs/reports/transfer_runs/latest-remote-next-report.json",
-        "docs/reports/transfer_runs/latest-remote-next-report.log",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-      ],
-      "pushed": true,
-      "rule_ack_after_report_commit": {
-        "blocking_reasons": [],
-        "confirmed": true,
-        "head": "04c27df7",
-        "path": ".agentic/rule_ack/current.json",
-        "present": true
-      },
-      "rule_ack_refreshed_after_commit": true,
-      "schema_version": 1,
-      "steps": [
-        {
-          "argv": [
-            "git",
-            "add",
-            "-f",
-            "docs/reports/transfer_runs/latest-remote-next-report.json",
-            "docs/reports/transfer_runs/latest-remote-next-report.log",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
-          ],
-          "name": "git_add_force_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": ""
-        },
-        {
-          "argv": [
-            "git",
-            "commit",
-            "-m",
-            "Publish remote-next transfer report"
-          ],
-          "name": "git_commit_report_paths",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "[main 04c27df7] Publish remote-next transfer report\n 4 files changed, 94 insertions(+), 662 deletions(-)"
-        },
-        {
-          "argv": [
-            "./.venv/bin/agentic-kit",
-            "rules",
-            "acknowledge"
-          ],
-          "name": "rules_acknowledge_after_report_commit",
-          "returncode": 0,
-          "stderr": "",
-          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=c85d265442d341c61e6b8406375ebc3b692b545565e1b9402e957c874f5015e7\nrepo_head=04c27df7\ndeclared_next_allowed_action=run_next_command"
-        },
-        {
-          "argv": [
-            "git",
-            "push",
-            "origin",
-            "main"
-          ],
-          "name": "git_push_report_commit",
-          "returncode": 0,
-          "stderr": "To https://github.com/vfi64/agentic-project-kit.git\n   94ab9f9b..04c27df7  main -> main",
-          "stdout": ""
-        }
-      ]
-    },
-    "preflight": {
-      "current_branch": "main",
-      "dirty_state": {
-        "clean": true,
-        "staged_changes": [],
-        "status_short": "",
-        "unstaged_changes": [],
-        "untracked_files": []
-      },
-      "head": "94ab9f9b",
-      "remote_tracking": "origin/main"
-    },
-    "primary_state": "BLOCKED",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "reasons": [
-      "missing_transfer_order"
-    ],
-    "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
-    "result_status": "BLOCKED",
-    "returncode": 2,
-    "rule_ack": {
-      "blocking_reasons": [],
-      "confirmed": true,
-      "head": "94ab9f9b",
-      "path": ".agentic/rule_ack/current.json",
-      "present": true
-    },
-    "schema_version": 1,
-    "state": "BLOCKED",
-    "transfer_id": "remote-next-blocked"
-  },
   "safety_header": {
     "authoritative_sources": [
       {
         "path": ".agentic/transfer_safety_rules.yaml",
-        "sha256": "926473e7a669d11c8402a92f91358a3b92b0021f0f6627907d37dae49ea76412"
+        "sha256": "3523be071e72434ad25c6c6283a801ffdb194ed1ecb43c4da720522cfde89cbb"
       },
       {
         "path": ".agentic/transfer/one_command_transfer_protocol.yaml",
-        "sha256": "5f784f41355f3063a34d51e6a3ed4dd64f29f4a71b8859bdb7df1529aefdc789"
+        "sha256": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04"
       },
       {
         "path": ".agentic/rule_mechanism_inventory.yaml",
@@ -1266,7 +968,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "5006408f3ae55be78173fc186900d4da2fdb3211d2e256b481840c8b140ecd5f"
+        "sha256": "1ee53cb0eba49295d9401ac06e21feefe5a970852719aaa72406a643e2d55384"
       },
       {
         "path": "docs/planning/project_direction.yaml",
@@ -1771,12 +1473,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "main",
+      "branch": "codex/harden-refresh-only-handoff-bootstrap",
       "dirty_status": "",
-      "head": "04c27df707d39fb09c30c1f7671109da940c38ac",
+      "head": "8b331031e65a6d9fd70aa018e5243bd49c1269e7",
       "head_matches_upstream": true,
-      "upstream": "origin/main",
-      "upstream_head": "04c27df707d39fb09c30c1f7671109da940c38ac"
+      "upstream": "origin/codex/harden-refresh-only-handoff-bootstrap",
+      "upstream_head": "8b331031e65a6d9fd70aa018e5243bd49c1269e7"
     },
     "schema_version": 1,
     "terminal_block_rules": {
