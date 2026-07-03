@@ -1,6 +1,8 @@
 # Kit as Operating Layer Master Plan
 
-Status: active planning document.  
+Status: active
+Decision status: accepted
+Review policy: required
 Scope: planning authority for turning `agentic-project-kit` into an operating layer for arbitrary GitHub repositories.  
 Implementation status: no code is authorized by this document itself. Implementation starts only through later separately reviewed slices.  
 Document class: planning.  
