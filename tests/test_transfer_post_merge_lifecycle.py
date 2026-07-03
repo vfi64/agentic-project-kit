@@ -463,3 +463,51 @@ def test_post_merge_complete_finish_invariant_rejects_pass_with_failed_noop_step
             next_action="Post-merge lifecycle is complete",
             steps=[PostMergeLifecycleStep("initial-post-merge-check", failed_step)],
         )
+
+
+def test_post_merge_complete_recovery_steps_satisfy_short_circuit_invariant():
+    from agentic_project_kit.composite_short_circuit import (
+        validate_no_effectful_steps_after_required_failure,
+    )
+    from agentic_project_kit.transfer_post_merge_lifecycle import PostMergeLifecycleStep
+    from agentic_project_kit.transfer_repo_actions import RepoActionResult
+
+    blocked_merge = RepoActionResult(
+        action="pr-merge-safe",
+        result_status="BLOCKED",
+        returncode=2,
+        command=["agentic-kit", "transfer", "pr-merge-safe"],
+        stdout="",
+        stderr="",
+        next_action="Recover by syncing main and checking post-merge state.",
+    )
+    sync = RepoActionResult(
+        action="pull-current",
+        result_status="PASS",
+        returncode=0,
+        command=["agentic-kit", "transfer", "pull-current"],
+        stdout="",
+        stderr="",
+        next_action="",
+    )
+    check = RepoActionResult(
+        action="post-merge-check",
+        result_status="PASS",
+        returncode=0,
+        command=["agentic-kit", "transfer", "post-merge-check"],
+        stdout="result=NOOP\n",
+        stderr="",
+        next_action="",
+    )
+
+    violations = validate_no_effectful_steps_after_required_failure(
+        wrapper="post-merge-complete",
+        steps=[
+            PostMergeLifecycleStep("admin-refresh-merge", blocked_merge),
+            PostMergeLifecycleStep("merge-block-recovery-main-sync", sync),
+            PostMergeLifecycleStep("merge-block-recovery-post-merge-check", check),
+        ],
+        allowed_recovery_actions=("pull-current", "post-merge-check"),
+    )
+
+    assert violations == []
