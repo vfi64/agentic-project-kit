@@ -41,7 +41,6 @@ decision_tree:
   known_volatile_dirty_state:
     action: run_restore_known_volatile_inside_transfer_continue
     forbidden: manual_git_restore_as_first_response
-
 llm_to_local_transfer_policy:
   status: active
   normative: true
@@ -49,13 +48,16 @@ llm_to_local_transfer_policy:
   payload_language: python
   payload_suffix: .py.txt
   rules:
-  - LLM-to-local transfer payloads must be written as Python source files with the .py.txt suffix.
+  - LLM-to-local transfer payloads must be written as Python source files with the
+    .py.txt suffix.
   - The Python payload must remain syntactically compilable before local execution.
-  - Do not put raw gh, GitHub API, or direct GitHub shell commands into LLM-to-local payloads or user copy/paste blocks.
-  - GitHub, PR, merge, evidence, release, and transfer operations should be invoked through repo-backed agentic-kit wrappers.
-  - Direct gh or GitHub commands are allowed only inside audited repo-backed wrappers or explicit recovery/diagnostic implementation work.
+  - Do not put raw gh, GitHub API, or direct GitHub shell commands into LLM-to-local
+    payloads or user copy/paste blocks.
+  - GitHub, PR, merge, evidence, release, and transfer operations should be invoked
+    through repo-backed agentic-kit wrappers.
+  - Direct gh or GitHub commands are allowed only inside audited repo-backed wrappers
+    or explicit recovery/diagnostic implementation work.
   - Copy/paste is a fallback lane; prefer transfer files and wrapper-first commands.
-
 command_integration_governance:
   status: active
   normative: true
@@ -84,7 +86,6 @@ command_integration_governance:
     - context generation commands
     - volatile repair commands
     - read-only inspection commands
-
 transfer_lanes:
   control_lane:
     file: .agentic/transfer/inbox/current.yaml
@@ -449,31 +450,34 @@ patch_generation_policy:
   avoid_raw_newlines_inside_generated_python_string_literals: true
   prefer_small_python_patch_scripts_with_stable_checks: true
   prefer_yaml_parse_modify_dump_for_governance_yaml: true
-
 meta_command_preference:
   status: active
-  priority: primary_path
-  summary: Human workflow meta commands are the preferred control plane for routine agentic-kit work.
+  priority: prefer_composite_wrapper_commands
+  summary: Human workflow meta commands are the preferred control plane for routine
+    agentic-kit work.
   preferred_commands:
-    work_start: "agentic-kit work start"
-    work_check: "agentic-kit work check"
-    work_finish: "agentic-kit work finish"
-    work_recover: "agentic-kit work recover"
-    release_ready: "agentic-kit release ready"
-    release_prepare: "agentic-kit release prepare"
-  fallback_rule: Low-level transfer/release commands may be used only for targeted diagnostics, recovery, or unsupported flows, and the reason must be explicit.
-  composition_gate: Command compositions should prefer the matching meta command over long low-level command chains.
-
+    pr_closeout_complete: agentic-kit transfer pr-closeout-complete
+    work_start: agentic-kit work start
+    work_check: agentic-kit work check
+    work_finish: agentic-kit work finish
+    work_recover: agentic-kit work recover
+    release_ready: agentic-kit release ready
+    release_prepare: agentic-kit release prepare
+  fallback_rule: Use low-level commands only when no matching composite command exists,
+    and state the reason.
+  composition_gate: Command compositions should prefer the matching meta command over
+    long low-level command chains.
 llm_work_order_contract:
   status: active
   required_format: python_script
   applies_to:
-    - copy_paste_blocks
-    - transfer_file_next_command
+  - copy_paste_blocks
+  - transfer_file_next_command
   shell_usage: outer_logging_wrapper_only
-  rule: All assistant-issued work orders must be Python scripts. Shell may only be used as a minimal local runner for logging, return-code capture, and invoking the Python script.
+  rule: All assistant-issued work orders must be Python scripts. Shell may only be
+    used as a minimal local runner for logging, return-code capture, and invoking
+    the Python script.
   enforced_by:
-    - transfer standard-error-scan
-    - transfer safety header
-    - tests
-
+  - transfer standard-error-scan
+  - transfer safety header
+  - tests
