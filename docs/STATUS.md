@@ -7,9 +7,9 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `08a06112` (`Add kit operating-layer master plan (#1683)`).
-Latest substantive work: PR #1683 (`Add kit operating-layer master plan (#1683)`).
-Post-merge handoff status: PASS/NOOP after PR #1683 administrative refresh.
+Current verified main: `dda81463` (`Fix pr-closeout-complete PR state lookup (#1686)`).
+Latest substantive work: PR #1686 (`Fix pr-closeout-complete PR state lookup (#1686)`).
+Post-merge handoff status: PASS/NOOP after PR #1686 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -397,6 +397,6 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
 - Portability closeout: in progress; all tracked shell scripts removed in Slice 6, pending final gates and PR merge.
 - Portability closeout: legacy `ns` and `ns-menu` entrypoints removed; no tracked shell scripts remain, pending final gates and PR merge.
-## Operational documentation refresh state after PR #1683
+## Operational documentation refresh state after PR #1686
 
-Current administrative handoff refresh state is `08a06112` (`Add kit operating-layer master plan (#1683)`). Continue next only after this post-PR1683 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `dda81463` (`Fix pr-closeout-complete PR state lookup (#1686)`). Continue next only after this post-PR1686 refresh is committed and merged; the next substantive slice must be created from fresh main.

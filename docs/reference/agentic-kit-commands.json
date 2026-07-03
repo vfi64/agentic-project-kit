@@ -7512,12 +7512,12 @@
     },
     {
       "group": "transfer",
-      "help": "Complete a substantive PR and its post-merge handoff refresh with idempotent resume logic.",
+      "help": "",
       "name": "pr-closeout-complete",
       "params": [
         {
           "default": null,
-          "help": "Substantive PR number to merge if needed and close out.",
+          "help": "Substantive PR number to merge if needed and close out with post-merge handoff refresh.",
           "is_flag": false,
           "metavar": null,
           "multiple": false,
@@ -7527,6 +7527,34 @@
           ],
           "param_type": "TyperOption",
           "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "main",
+          "help": "Main branch to synchronize and verify.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "main_branch",
+          "opts": [
+            "--main-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "squash",
+          "help": "Merge method for the substantive PR and any administrative refresh PR.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_method",
+          "opts": [
+            "--merge-method"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
           "secondary_opts": []
         },
         {
@@ -7552,6 +7580,48 @@
           "name": "poll_seconds",
           "opts": [
             "--poll-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 60,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_state_timeout_seconds",
+          "opts": [
+            "--merge-state-timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 5,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_state_poll_seconds",
+          "opts": [
+            "--merge-state-poll-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
           ],
           "param_type": "TyperOption",
           "required": false,
