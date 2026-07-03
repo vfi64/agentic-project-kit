@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a0ba8f99d8aaf121694c62ef8d607361bb982140
-  short: a0ba8f99
-  subject: Refresh handoff state after PR1690 (#1691)
+  full: d4aca23044f8a94edc131970398861361368907b
+  short: d4aca230
+  subject: Harden refresh-only handoff bootstrap evidence (#1692)
 last_substantive_work_state:
-  full: f96380798db1f11406889c476252ac54a53f8506
-  short: f9638079
-  subject: Add composite short-circuit invariant (#1690)
+  full: d4aca23044f8a94edc131970398861361368907b
+  short: d4aca230
+  subject: Harden refresh-only handoff bootstrap evidence (#1692)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
