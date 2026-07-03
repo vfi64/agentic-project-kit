@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `196`
+- Command count: `197`
 
 ## Commands
 
@@ -1233,6 +1233,19 @@ Render the current four-slice patch/handoff workflow state.
 | `refresh_expected_head_sha` | `TyperOption` | --refresh-expected-head-sha | `False` | `` | Expected admin refresh PR head SHA. Existing commands resolve empty values. |
 | `ci_timeout_seconds` | `TyperOption` | --ci-timeout-seconds | `False` | `300` | CI wait timeout. |
 | `ci_poll_seconds` | `TyperOption` | --ci-poll-seconds | `False` | `10` | CI polling interval. |
+| `merge_state_timeout_seconds` | `TyperOption` | --merge-state-timeout-seconds | `False` | `60` |  |
+| `merge_state_poll_seconds` | `TyperOption` | --merge-state-poll-seconds | `False` | `5` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+
+### `agentic-kit transfer pr-closeout-complete`
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `after_pr` | `TyperOption` | --after-pr | `True` |  | Substantive PR number to merge if needed and close out with post-merge handoff refresh. |
+| `main_branch` | `TyperOption` | --main-branch | `False` | `main` | Main branch to synchronize and verify. |
+| `merge_method` | `TyperOption` | --merge-method | `False` | `squash` | Merge method for the substantive PR and any administrative refresh PR. |
+| `timeout_seconds` | `TyperOption` | --timeout-seconds | `False` | `300` | CI wait timeout for the substantive PR and refresh PR. |
+| `poll_seconds` | `TyperOption` | --poll-seconds | `False` | `10` | CI polling interval for the substantive PR and refresh PR. |
 | `merge_state_timeout_seconds` | `TyperOption` | --merge-state-timeout-seconds | `False` | `60` |  |
 | `merge_state_poll_seconds` | `TyperOption` | --merge-state-poll-seconds | `False` | `5` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
