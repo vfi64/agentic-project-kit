@@ -213,6 +213,19 @@ def post_merge_complete(
     steps.append(PostMergeLifecycleStep("initial-post-merge-check", initial_check))
     initial_state = _post_merge_state(initial_check)
 
+    if initial_check.result_status != "PASS" and initial_state != "REFRESH_REQUIRED":
+        return _finish(
+            after_pr=after_pr,
+            result_status="BLOCKED",
+            returncode=initial_check.returncode or 1,
+            lifecycle_state="INITIAL_POST_MERGE_CHECK_FAILED",
+            next_action=(
+                initial_check.next_action
+                or "Inspect failing post-merge-check before continuing."
+            ),
+            steps=steps,
+        )
+
     if initial_state == "NOOP":
         return _finish(
             after_pr=after_pr,
