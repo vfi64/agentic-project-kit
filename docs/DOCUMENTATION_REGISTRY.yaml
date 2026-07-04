@@ -578,3 +578,11 @@ documents:
     review_policy: required
     status: active
     notes: Authoritative master plan for the post-v0.4.12 operating-layer transformation; implementation requires later separately reviewed slices.
+  - path: docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+    class: architecture
+    owner: maintainers
+    notes: Governing kit-as-operating-layer architecture authority for the workspace resolver and P1 migration line.
+  - path: docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6.md
+    class: evidence/log
+    owner: maintainers
+    notes: Post-S6 report-only path literal inventory used to derive the P1 migration order.

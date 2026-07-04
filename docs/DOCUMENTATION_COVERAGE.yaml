@@ -264,6 +264,23 @@ rules:
     - REPORT-ONLY
     - Post-S6 affected modules
     - Transfer Command Modules
+  - path: docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6.md
+    terms:
+    - Path Literal Audit Evidence (Post-S6)
+    - 'Command: `.venv/bin/agentic-kit audit-path-literals --json`'
+    - REPORT-ONLY
+    - P1 Migration Order
+    - successor_handoff_package
+- id: kit-os-architecture-coverage
+  description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, and evidence policy.
+  documents:
+  - path: docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+    terms:
+    - operating-layer mode
+    - implicit legacy profile
+    - workspace lock
+    - workspace resolver
+    - Evidence policy for current-state claims
 - id: pattern-advisor-readme-coverage
   description: Read-only Pattern Advisor MVP commands and boundaries must remain visible.
   documents:
