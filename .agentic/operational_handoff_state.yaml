@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 2c26d88b4373a8c76f9298a1b2c2659f0560fd27
-  short: 2c26d88b
-  subject: Remove unreachable release publish core body (#1696)
+  full: 8b4a256c786a322edc4f0cf3d9a3ceddfcff9679
+  short: 8b4a256c
+  subject: Add declarative registry scope and decision template for docs coverage (#1698)
 last_substantive_work_state:
-  full: 2c26d88b4373a8c76f9298a1b2c2659f0560fd27
-  short: 2c26d88b
-  subject: Remove unreachable release publish core body (#1696)
+  full: 8b4a256c786a322edc4f0cf3d9a3ceddfcff9679
+  short: 8b4a256c
+  subject: Add declarative registry scope and decision template for docs coverage (#1698)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
