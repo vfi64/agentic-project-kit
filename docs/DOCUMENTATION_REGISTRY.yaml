@@ -568,6 +568,10 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-generated report-only path literal inventory for workspace migration planning.
+  - path: docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6-transfer-split.md
+    class: evidence/log
+    owner: maintainers
+    notes: Post-S6 report-only path literal inventory after transfer CLI modularization.
   - path: docs/planning/KIT_AS_OS_MASTERPLAN.md
     class: planning
     owner: maintainers
