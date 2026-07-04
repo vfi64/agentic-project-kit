@@ -12,7 +12,7 @@ No scope recommendation is encoded here; maintainers fill the proposed column af
 |---|---:|---:|---:|---|
 | docs/ | 4 | 3 | 1 |  |
 | docs/agent_rules/ | 2 | 0 | 2 |  |
-| docs/architecture/ | 6 | 3 | 3 |  |
+| docs/architecture/ | 8 | 5 | 3 |  |
 | docs/archive/ | 3 | 3 | 0 |  |
 | docs/examples/ | 1 | 0 | 1 |  |
 | docs/governance/ | 15 | 1 | 14 |  |
