@@ -586,3 +586,7 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Post-S6 report-only path literal inventory used to derive the P1 migration order.
+  - path: docs/architecture/evidence/path-literal-audit-2026-07-04-post-p1.md
+    class: evidence/log
+    owner: maintainers
+    notes: Post-P1 report-only path literal inventory showing the P1 top-3 modules migrated to zero and workspace.py as the central literal source.
