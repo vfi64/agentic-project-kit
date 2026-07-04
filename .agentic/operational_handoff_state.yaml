@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d4aca23044f8a94edc131970398861361368907b
-  short: d4aca230
-  subject: Harden refresh-only handoff bootstrap evidence (#1692)
+  full: c9dd7438588c5f131ee49461e6f5cd307760dc9d
+  short: c9dd7438
+  subject: Fix stale pending-DOI line and gate CHANGELOG/STATUS consistency (#1694)
 last_substantive_work_state:
-  full: d4aca23044f8a94edc131970398861361368907b
-  short: d4aca230
-  subject: Harden refresh-only handoff bootstrap evidence (#1692)
+  full: c9dd7438588c5f131ee49461e6f5cd307760dc9d
+  short: c9dd7438
+  subject: Fix stale pending-DOI line and gate CHANGELOG/STATUS consistency (#1694)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
