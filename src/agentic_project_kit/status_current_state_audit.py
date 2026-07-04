@@ -106,6 +106,7 @@ def audit_status_current_state(
     current_block = _current_state_block(status_text)
     status_version = _match(r"^Current version:\s*([^\s.]+(?:\.[^\s.]+){2})\.?$", current_block)
     status_release = _match(r"^Current verified release:\s*v?([0-9]+\.[0-9]+\.[0-9]+)\.?", current_block)
+    status_verified_version_doi = _status_verified_version_doi(current_block)
     status_main = _current_verified_main(current_block)
     validation_status = _string_or_none(validation.get("status"))
     validation_head = _string_or_none(validation.get("generated_head"))
@@ -137,6 +138,14 @@ def audit_status_current_state(
         release_status=release_status,
         pyproject_version=pyproject_version,
         status_release=status_release,
+    )
+    _audit_changelog_current_pending_doi(
+        findings=findings,
+        blockers=blockers,
+        root=root,
+        pyproject_version=pyproject_version,
+        status_version=status_version,
+        status_verified_version_doi=status_verified_version_doi,
     )
     _audit_status_main_marker(
         findings=findings,
@@ -273,6 +282,88 @@ def _match(pattern: str, text: str) -> str | None:
 def _current_state_block(status_text: str) -> str:
     match = re.search(r"(?ms)^## Current State\s*(.*?)(?=^## |\Z)", status_text)
     return match.group(1).strip() if match else ""
+
+
+def _status_verified_version_doi(current_block: str) -> tuple[str, int] | None:
+    for index, line in enumerate(current_block.splitlines(), start=1):
+        match = re.search(r"^Verified Zenodo version DOI:\s*`?([^`.\s]+(?:\.[^`.\s]+)+)`?\.?", line)
+        if match:
+            return match.group(1).strip(), index
+    return None
+
+
+def _current_changelog_block(changelog_text: str, version: str) -> tuple[str, int]:
+    pattern = re.compile(rf"(?ms)^## v{re.escape(version)}\b.*?(?=^## v|\Z)")
+    match = pattern.search(changelog_text)
+    if not match:
+        return "", 0
+    start_line = changelog_text[: match.start()].count("\n") + 1
+    return match.group(0), start_line
+
+
+def _pending_doi_lines(block: str, *, start_line: int) -> list[tuple[int, str]]:
+    lines: list[tuple[int, str]] = []
+    for offset, line in enumerate(block.splitlines()):
+        lowered = line.lower()
+        if "doi" in lowered and "pending" in lowered:
+            lines.append((start_line + offset, line.strip()))
+    return lines
+
+
+def _audit_changelog_current_pending_doi(
+    *,
+    findings: list[StatusCurrentStateFinding],
+    blockers: list[StatusCurrentStateFinding],
+    root: Path,
+    pyproject_version: str | None,
+    status_version: str | None,
+    status_verified_version_doi: tuple[str, int] | None,
+) -> None:
+    changelog_path = root / "CHANGELOG.md"
+    changelog_text = _read_text(changelog_path)
+    if not pyproject_version:
+        return
+    block, start_line = _current_changelog_block(changelog_text, pyproject_version)
+    _finding(
+        findings,
+        blockers,
+        "CHANGELOG.md",
+        "changelog_current_version_block_exists",
+        True,
+        f"version={pyproject_version}; found={bool(block)}",
+    )
+    if not block:
+        return
+
+    pending_lines = _pending_doi_lines(block, start_line=start_line)
+    stale_pending = bool(
+        pending_lines
+        and status_version == pyproject_version
+        and status_verified_version_doi is not None
+    )
+    if stale_pending:
+        doi, status_line = status_verified_version_doi
+        pending_locations = ", ".join(
+            f"CHANGELOG.md:{line_no}:{line_text}" for line_no, line_text in pending_lines
+        )
+        detail = (
+            f"version={pyproject_version}; pending={pending_locations}; "
+            f"verified=docs/STATUS.md:{status_line}:Verified Zenodo version DOI {doi}"
+        )
+    else:
+        detail = (
+            f"version={pyproject_version}; pending_lines={len(pending_lines)}; "
+            f"status_version={status_version}; "
+            f"status_verified_doi={status_verified_version_doi[0] if status_verified_version_doi else None}"
+        )
+    _finding(
+        findings,
+        blockers,
+        "CHANGELOG.md",
+        "changelog_stale_pending_doi",
+        not stale_pending,
+        detail,
+    )
 
 
 _CURRENT_VERIFIED_MAIN_PATTERN = r"^Current verified main:\s*`?([0-9a-f]{7,40})`?"

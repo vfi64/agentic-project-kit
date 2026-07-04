@@ -181,14 +181,16 @@ rules:
     - agentic-kit workflow-guard check
 - id: status-current-state-audit-coverage
   description: Status current-state audit must remain discoverable as the deterministic
-    guard for STATUS, generated handoff validation, release-status, and origin/main
-    drift.
+    guard for STATUS, CHANGELOG, generated handoff validation, release-status, and
+    origin/main drift.
   documents:
   - path: README.md
     terms:
     - Status current-state audit
     - agentic-kit audit-status-current-state
     - Current verified main
+    - CHANGELOG.md
+    - pending DOI line
     - handoff validation report
     - origin/main
   - path: docs/TEST_GATES.md
@@ -196,6 +198,8 @@ rules:
     - Status Current-State Audit Gate
     - agentic-kit audit-status-current-state
     - docs/STATUS.md
+    - CHANGELOG.md
+    - pending DOI lines
     - validation_report.json
     - release-status
     - origin/main
