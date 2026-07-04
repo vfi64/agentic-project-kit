@@ -10,6 +10,7 @@ from pathlib import Path
 from agentic_project_kit.transfer_operation_monitor import MonitorDecision
 from agentic_project_kit.transfer_operation_monitor import guard_branch
 from agentic_project_kit.transfer_operation_monitor import guard_pr_create
+from agentic_project_kit.workspace import KitConfig, Workspace, load_workspace
 from agentic_project_kit.workspace_lock import acquire_workspace_lock
 
 
@@ -31,6 +32,32 @@ class RepoActionResult:
 class SuccessorPackageFreshnessCheck:
     findings: tuple[str, ...]
     notes: tuple[str, ...]
+
+
+_LEGACY_WORKSPACE = Workspace(root=Path("."), config=KitConfig())
+
+
+def _workspace_path_text(ws: Workspace, path: Path) -> str:
+    try:
+        return path.relative_to(ws.root).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def _admin_refresh_paths(ws: Workspace) -> tuple[str, ...]:
+    return (
+        _workspace_path_text(ws, ws.handoff_state_path()),
+        _workspace_path_text(ws, ws.operational_handoff_state_path()),
+        _workspace_path_text(ws, ws.status_path()),
+        _workspace_path_text(ws, ws.handoff_file("CURRENT_HANDOFF.md")),
+        _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md")),
+        _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md")),
+        _workspace_path_text(ws, ws.package_file("execution_contract.json")),
+        _workspace_path_text(ws, ws.package_file("source_manifest.json")),
+        _workspace_path_text(ws, ws.package_file("successor_context.yaml")),
+        _workspace_path_text(ws, ws.package_file("successor_prompt.md")),
+        _workspace_path_text(ws, ws.package_file("validation_report.json")),
+    )
 
 
 def _agentic_kit_command() -> str:
@@ -199,7 +226,7 @@ def _result(action: str, command: list[str], completed: subprocess.CompletedProc
 
 
 
-def _is_refresh_only_successor_package_head(generated_head: str, current_head: str, root: Path) -> bool:
+def _is_refresh_only_successor_package_head(generated_head: str, current_head: str, ws: Workspace) -> bool:
     """Return true when commits after generated_head only touch refresh artifacts.
 
     Successor package files are generated before they are committed. Therefore a
@@ -212,6 +239,7 @@ def _is_refresh_only_successor_package_head(generated_head: str, current_head: s
     if not generated_head or not current_head or generated_head == current_head:
         return generated_head == current_head
 
+    root = ws.root
     merge_base = _run(["git", "merge-base", "--is-ancestor", generated_head, current_head], cwd=root)
     if merge_base.returncode != 0:
         return False
@@ -224,21 +252,15 @@ def _is_refresh_only_successor_package_head(generated_head: str, current_head: s
     if not changed:
         return True
 
-    fixed_refresh_paths = {
-        ".agentic/handoff_state.yaml",
-        ".agentic/operational_handoff_state.yaml",
-        "docs/STATUS.md",
-        "docs/handoff/CURRENT_HANDOFF.md",
-        "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
-        "docs/handoff/START_NEW_CHAT_PROMPT.md",
-        "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-    }
+    fixed_refresh_paths = set(_admin_refresh_paths(ws))
+    fixed_refresh_paths.add(_workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")))
+    package_prefix = _workspace_path_text(ws, ws.handoff_packages_latest()) + "/"
 
     def allowed(path: str) -> bool:
         return (
             path in fixed_refresh_paths
-            or path.startswith("docs/reports/handoff-packages/latest/")
-            or path.startswith("docs/reports/terminal/post-pr")
+            or path.startswith(package_prefix)
+            or path.startswith(ws.post_pr_successor_chat_handoff_prefix())
         )
 
     return all(allowed(path) for path in changed)
@@ -249,32 +271,33 @@ def _successor_package_freshness_check(repo_root: Path | None = None) -> Success
     """Return deterministic successor handoff package freshness state."""
 
     root = repo_root or Path.cwd()
+    ws = load_workspace(root)
     findings: list[str] = []
     notes: list[str] = []
 
-    def read(rel: str) -> str:
-        path = root / rel
+    def read(path: Path) -> str:
+        rel = _workspace_path_text(ws, path)
         if not path.exists():
             findings.append(f"missing {rel}")
             return ""
         return path.read_text(encoding="utf-8", errors="replace")
 
-    package_root = root / "docs" / "reports" / "handoff-packages" / "latest"
-    canonical_start_prompt = root / "docs" / "handoff" / "START_NEW_CHAT_PROMPT.md"
+    package_root = ws.handoff_packages_latest()
+    canonical_start_prompt = ws.handoff_file("START_NEW_CHAT_PROMPT.md")
     project_markers = [
-        root / ".agentic",
-        root / "src" / "agentic_project_kit",
-        root / "pyproject.toml",
+        ws.agentic_root(),
+        ws.source_root(),
+        ws.pyproject_path(),
     ]
     if not package_root.exists() and not canonical_start_prompt.exists() and not all(marker.exists() for marker in project_markers):
         return SuccessorPackageFreshnessCheck(findings=(), notes=())
 
     head = _run(["git", "rev-parse", "HEAD"]).stdout.strip()
 
-    validation_text = read("docs/reports/handoff-packages/latest/validation_report.json")
-    execution_text = read("docs/reports/handoff-packages/latest/execution_contract.json")
-    successor_prompt = read("docs/reports/handoff-packages/latest/successor_prompt.md")
-    start_prompt = read("docs/handoff/START_NEW_CHAT_PROMPT.md")
+    validation_text = read(ws.package_file("validation_report.json"))
+    execution_text = read(ws.package_file("execution_contract.json"))
+    successor_prompt = read(ws.package_file("successor_prompt.md"))
+    start_prompt = read(ws.handoff_file("START_NEW_CHAT_PROMPT.md"))
 
     try:
         validation = json.loads(validation_text) if validation_text else {}
@@ -288,7 +311,7 @@ def _successor_package_freshness_check(repo_root: Path | None = None) -> Success
     if head and generated_head:
         if generated_head == head:
             notes.append("successor_package_head_status=exact")
-        elif _is_refresh_only_successor_package_head(generated_head, head, root):
+        elif _is_refresh_only_successor_package_head(generated_head, head, ws):
             notes.extend(
                 [
                     "successor_package_head_status=refresh_only_descendant",
@@ -1327,23 +1350,12 @@ def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
     )
 
 
-ADMIN_REFRESH_PATHS = (
-    ".agentic/handoff_state.yaml",
-    ".agentic/operational_handoff_state.yaml",
-    "docs/STATUS.md",
-    "docs/handoff/CURRENT_HANDOFF.md",
-    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
-    "docs/handoff/START_NEW_CHAT_PROMPT.md",
-    "docs/reports/handoff-packages/latest/execution_contract.json",
-    "docs/reports/handoff-packages/latest/source_manifest.json",
-    "docs/reports/handoff-packages/latest/successor_context.yaml",
-    "docs/reports/handoff-packages/latest/successor_prompt.md",
-    "docs/reports/handoff-packages/latest/validation_report.json",
-)
+ADMIN_REFRESH_PATHS = _admin_refresh_paths(_LEGACY_WORKSPACE)
 
 
-def _admin_refresh_successor_prompt_path(after_pr: int) -> str:
-    return f"docs/reports/terminal/post-pr{after_pr}-successor-chat-handoff.md"
+def _admin_refresh_successor_prompt_path(after_pr: int, *, ws: Workspace | None = None) -> str:
+    workspace = ws or _LEGACY_WORKSPACE
+    return _workspace_path_text(workspace, workspace.post_pr_successor_chat_handoff_path(after_pr))
 
 
 def _refresh_status_current_state_block(text: str, *, after_pr: int, short: str, subject: str) -> str:
@@ -1375,13 +1387,14 @@ def _refresh_status_current_state_block(text: str, *, after_pr: int, short: str,
     return text[: match.start()] + block + text[match.end() :]
 
 
-def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProcess[str]:
+def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = None) -> subprocess.CompletedProcess[str]:
     command = ["admin-refresh-operational-handoff-docs", "--after-pr", str(after_pr)]
+    workspace = ws or load_workspace(Path("."))
     try:
         full = _run(["git", "rev-parse", "HEAD"]).stdout.strip()
         short = _run(["git", "rev-parse", "--short=8", "HEAD"]).stdout.strip() or full[:8]
         subject = _run(["git", "log", "-1", "--format=%s"]).stdout.strip()
-        prompt_path = _admin_refresh_successor_prompt_path(after_pr)
+        prompt_path = _admin_refresh_successor_prompt_path(after_pr, ws=workspace)
 
         touched: list[str] = []
         successor_prompt_pattern = re.compile(r"post-pr\d+-successor-chat-handoff\.md")
@@ -1392,13 +1405,13 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
             r"confirm the post-PR\d+ operational handoff refresh"
         )
 
-        for file_name in (".agentic/handoff_state.yaml", ".agentic/operational_handoff_state.yaml"):
-            file_path = Path(file_name)
+        for file_path in (workspace.handoff_state_path(), workspace.operational_handoff_state_path()):
+            file_name = _workspace_path_text(workspace, file_path)
             if not file_path.exists():
                 continue
             current = file_path.read_text(encoding="utf-8")
             updated = current
-            if file_name == ".agentic/handoff_state.yaml":
+            if file_path == workspace.handoff_state_path():
                 updated = re.sub(r"^(\s*commit:\s*)[0-9a-f]{7,40}\s*$", rf"\g<1>{short}", updated, count=1, flags=re.MULTILINE)
                 updated = re.sub(r"^(\s*current_head:\s*)[0-9a-f]{7,40}\s*$", rf"\g<1>{short}", updated, count=1, flags=re.MULTILINE)
                 updated = re.sub(r"^(\s*commit_subject:\s*).*$", rf"\g<1>{subject}", updated, count=1, flags=re.MULTILINE)
@@ -1423,7 +1436,7 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
                     updated,
                 )
                 updated = re.sub(r"main at [0-9a-f]{7,40}", f"main at {short}", updated)
-            if file_name == ".agentic/operational_handoff_state.yaml":
+            if file_path == workspace.operational_handoff_state_path():
                 updated = re.sub(r"^(\s*full:\s*)[0-9a-f]{40}\s*$", rf"\g<1>{full}", updated, flags=re.MULTILINE)
                 updated = re.sub(r"^(\s*short:\s*)[0-9a-f]{7,40}\s*$", rf"\g<1>{short}", updated, flags=re.MULTILINE)
                 updated = re.sub(r"^(\s*subject:\s*).*$", rf"\g<1>{subject}", updated, flags=re.MULTILINE)
@@ -1444,16 +1457,16 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
             r"the next substantive slice must be created from fresh main\.\n?",
             flags=re.MULTILINE,
         )
-        for file_name in (
-            "docs/STATUS.md",
-            "docs/handoff/CURRENT_HANDOFF.md",
-            "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        for file_path in (
+            workspace.status_path(),
+            workspace.handoff_file("CURRENT_HANDOFF.md"),
+            workspace.handoff_file("START_NEW_CHAT_PROMPT.md"),
         ):
-            file_path = Path(file_name)
+            file_name = _workspace_path_text(workspace, file_path)
             if not file_path.exists():
                 continue
             current = file_path.read_text(encoding="utf-8").replace("\\n", "\n")
-            if file_name == "docs/STATUS.md":
+            if file_path == workspace.status_path():
                 current = _refresh_status_current_state_block(
                     current,
                     after_pr=after_pr,
@@ -1475,26 +1488,29 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
             )
 
         for package_path in (
-            "docs/reports/handoff-packages/latest/execution_contract.json",
-            "docs/reports/handoff-packages/latest/source_manifest.json",
-            "docs/reports/handoff-packages/latest/successor_context.yaml",
-            "docs/reports/handoff-packages/latest/successor_prompt.md",
-            "docs/reports/handoff-packages/latest/validation_report.json",
+            workspace.package_file("execution_contract.json"),
+            workspace.package_file("source_manifest.json"),
+            workspace.package_file("successor_context.yaml"),
+            workspace.package_file("successor_prompt.md"),
+            workspace.package_file("validation_report.json"),
         ):
-            if Path(package_path).exists() and package_path not in touched:
-                touched.append(package_path)
+            package_name = _workspace_path_text(workspace, package_path)
+            if package_path.exists() and package_name not in touched:
+                touched.append(package_name)
 
         boot = _run([_agentic_kit_command(), "boot", "write"])
         if boot.returncode != 0:
             return subprocess.CompletedProcess(command, boot.returncode, boot.stdout, boot.stderr)
-        if Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md").exists() and "docs/handoff/NEXT_CHAT_BOOTSTRAP.md" not in touched:
-            touched.append("docs/handoff/NEXT_CHAT_BOOTSTRAP.md")
+        bootstrap_path = workspace.handoff_file("NEXT_CHAT_BOOTSTRAP.md")
+        bootstrap_name = _workspace_path_text(workspace, bootstrap_path)
+        if bootstrap_path.exists() and bootstrap_name not in touched:
+            touched.append(bootstrap_name)
 
         prompt = _run([_agentic_kit_command(), "handoff", "prompt"])
         if prompt.returncode != 0:
             return subprocess.CompletedProcess(command, prompt.returncode, prompt.stdout, prompt.stderr)
 
-        prompt_file = Path(prompt_path)
+        prompt_file = workspace.post_pr_successor_chat_handoff_path(after_pr)
         prompt_file.parent.mkdir(parents=True, exist_ok=True)
         prompt_file.write_text(prompt.stdout, encoding="utf-8")
         touched.append(prompt_path)
@@ -1521,7 +1537,7 @@ def _refresh_operational_handoff_docs(after_pr: int) -> subprocess.CompletedProc
         return subprocess.CompletedProcess(command, 2, "", f"{type(exc).__name__}: {exc}\\n")
 
 
-def _is_refresh_only_pr(after_pr: int) -> bool:
+def _is_refresh_only_pr(after_pr: int, *, ws: Workspace | None = None) -> bool:
     """Return true when the merged PR is itself an administrative handoff refresh.
 
     Refresh-only PRs are already the administrative follow-up for an earlier
@@ -1529,6 +1545,7 @@ def _is_refresh_only_pr(after_pr: int) -> bool:
     post-pr<N>-handoff-refresh treadmill.
     """
 
+    workspace = ws or load_workspace(Path("."))
     completed = _run(
         [
             "gh",
@@ -1550,13 +1567,14 @@ def _is_refresh_only_pr(after_pr: int) -> bool:
 
     return (
         title.startswith("Refresh successor handoff after PR")
-        and head_ref.startswith("docs/post-pr")
+        and head_ref.startswith(workspace.admin_refresh_branch_prefix())
         and head_ref.endswith("-handoff-refresh")
     )
 
 
 def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionResult:
-    if _is_refresh_only_pr(after_pr):
+    ws = load_workspace(Path("."))
+    if _is_refresh_only_pr(after_pr, ws=ws):
         completed = subprocess.CompletedProcess(
             ["admin-refresh-pr", "--after-pr", str(after_pr)],
             0,
@@ -1605,7 +1623,7 @@ def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionR
     if preflight is not None:
         return preflight
 
-    refresh_branch = f"docs/post-pr{after_pr}-handoff-refresh"
+    refresh_branch = ws.admin_refresh_branch(after_pr)
     transcript: list[str] = []
 
     branch_create_step = ["git", "switch", "-c", refresh_branch, main_branch]
@@ -1655,7 +1673,7 @@ def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionR
 
     for step in steps:
         if step[0] == "admin-refresh-operational-handoff-docs":
-            completed = _refresh_operational_handoff_docs(after_pr)
+            completed = _refresh_operational_handoff_docs(after_pr, ws=ws)
         else:
             completed = _run(step)
         transcript.append(f"$ {' '.join(step)}\n{completed.stdout}{completed.stderr}")
@@ -1664,8 +1682,9 @@ def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionR
 
     final_status = _run(["git", "status", "--short"])
     changed = tuple(line.strip() for line in final_status.stdout.splitlines() if line.strip())
-    allowed = set(tuple(f"M {path}" for path in ADMIN_REFRESH_PATHS) + (
-        f"?? {_admin_refresh_successor_prompt_path(after_pr)}",
+    admin_refresh_paths = _admin_refresh_paths(ws)
+    allowed = set(tuple(f"M {path}" for path in admin_refresh_paths) + (
+        f"?? {_admin_refresh_successor_prompt_path(after_pr, ws=ws)}",
     ))
     changed_set = set(changed)
     unexpected = sorted(changed_set - allowed)
@@ -1682,7 +1701,7 @@ def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionR
     commit_message = f"Refresh handoff state after PR{after_pr}"
     commit_result = commit_paths(
         commit_message,
-        [*ADMIN_REFRESH_PATHS, _admin_refresh_successor_prompt_path(after_pr)],
+        [*admin_refresh_paths, _admin_refresh_successor_prompt_path(after_pr, ws=ws)],
         required_branch=refresh_branch,
     )
     transcript.append(
