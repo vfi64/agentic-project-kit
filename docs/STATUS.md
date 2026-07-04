@@ -7,9 +7,9 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `10e819ba` (`Retire if-False contract sentinels in deprecated transfer alias (#1703)`).
-Latest substantive work: PR #1703 (`Retire if-False contract sentinels in deprecated transfer alias (#1703)`).
-Post-merge handoff status: PASS/NOOP after PR #1703 administrative refresh.
+Current verified main: `f920ac59` (`Split transfer CLI monolith into focused command modules (#1705)`).
+Latest substantive work: PR #1705 (`Split transfer CLI monolith into focused command modules (#1705)`).
+Post-merge handoff status: PASS/NOOP after PR #1705 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -397,6 +397,6 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
 - Portability closeout: in progress; all tracked shell scripts removed in Slice 6, pending final gates and PR merge.
 - Portability closeout: legacy `ns` and `ns-menu` entrypoints removed; no tracked shell scripts remain, pending final gates and PR merge.
-## Operational documentation refresh state after PR #1703
+## Operational documentation refresh state after PR #1705
 
-Current administrative handoff refresh state is `10e819ba` (`Retire if-False contract sentinels in deprecated transfer alias (#1703)`). Continue next only after this post-PR1703 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `f920ac59` (`Split transfer CLI monolith into focused command modules (#1705)`). Continue next only after this post-PR1705 refresh is committed and merged; the next substantive slice must be created from fresh main.

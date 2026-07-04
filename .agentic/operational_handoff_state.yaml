@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 10e819bad80e6b0e052ba05dd0c62094d1a31b53
-  short: 10e819ba
-  subject: Retire if-False contract sentinels in deprecated transfer alias (#1703)
+  full: f920ac59b46f1d56150a1f8780f60b5260f57b23
+  short: f920ac59
+  subject: Split transfer CLI monolith into focused command modules (#1705)
 last_substantive_work_state:
-  full: 10e819bad80e6b0e052ba05dd0c62094d1a31b53
-  short: 10e819ba
-  subject: Retire if-False contract sentinels in deprecated transfer alias (#1703)
+  full: f920ac59b46f1d56150a1f8780f60b5260f57b23
+  short: f920ac59
+  subject: Split transfer CLI monolith into focused command modules (#1705)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
