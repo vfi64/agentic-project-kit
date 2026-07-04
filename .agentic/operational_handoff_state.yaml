@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c9dd7438588c5f131ee49461e6f5cd307760dc9d
-  short: c9dd7438
-  subject: Fix stale pending-DOI line and gate CHANGELOG/STATUS consistency (#1694)
+  full: 2c26d88b4373a8c76f9298a1b2c2659f0560fd27
+  short: 2c26d88b
+  subject: Remove unreachable release publish core body (#1696)
 last_substantive_work_state:
-  full: c9dd7438588c5f131ee49461e6f5cd307760dc9d
-  short: c9dd7438
-  subject: Fix stale pending-DOI line and gate CHANGELOG/STATUS consistency (#1694)
+  full: 2c26d88b4373a8c76f9298a1b2c2659f0560fd27
+  short: 2c26d88b
+  subject: Remove unreachable release publish core body (#1696)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
