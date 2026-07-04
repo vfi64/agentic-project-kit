@@ -30,6 +30,7 @@ class KitConfig:
     planning_root: str = "docs/planning"
     governance_root: str = "docs/governance"
     reference_root: str = "docs/reference"
+    architecture_root: str = "docs/architecture"
     source_root: str = "src/agentic_project_kit"
     pyproject_file: str = "pyproject.toml"
     admin_refresh_branch_prefix: str = "docs/post-pr"
@@ -48,6 +49,9 @@ class Workspace:
 
     def _path(self, relative: str | Path) -> Path:
         return self.root / Path(relative)
+
+    def root_file(self, name: str) -> Path:
+        return self.root / name
 
     def docs_root(self) -> Path:
         return self._path(self.config.docs_root)
@@ -81,6 +85,9 @@ class Workspace:
 
     def operational_handoff_state_path(self) -> Path:
         return self.agentic_file(self.config.operational_handoff_state_file)
+
+    def compiled_agent_context_path(self) -> Path:
+        return self.agentic_file("compiled_agent_context.yaml")
 
     def status_path(self) -> Path:
         return self.docs_file(self.config.status_file)
@@ -138,6 +145,12 @@ class Workspace:
 
     def reference_file(self, name: str) -> Path:
         return self.reference_dir() / name
+
+    def architecture_dir(self) -> Path:
+        return self._path(self.config.architecture_root)
+
+    def architecture_file(self, name: str) -> Path:
+        return self.architecture_dir() / name
 
     def source_root(self) -> Path:
         return self._path(self.config.source_root)

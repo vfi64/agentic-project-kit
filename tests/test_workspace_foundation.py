@@ -21,6 +21,7 @@ def _rel(path: Path) -> str:
 def test_legacy_workspace_paths_match_todays_literals() -> None:
     ws = load_workspace(Path("."))
 
+    assert _rel(ws.root_file("README.md")) == "README.md"
     assert _rel(ws.docs_root()) == "docs"
     assert _rel(ws.tmp()) == "tmp"
     assert _rel(ws.agentic_root()) == ".agentic"
@@ -31,6 +32,7 @@ def test_legacy_workspace_paths_match_todays_literals() -> None:
     assert _rel(ws.transfer_outbox()) == ".agentic/transfer/outbox"
     assert _rel(ws.handoff_state_path()) == ".agentic/handoff_state.yaml"
     assert _rel(ws.operational_handoff_state_path()) == ".agentic/operational_handoff_state.yaml"
+    assert _rel(ws.compiled_agent_context_path()) == ".agentic/compiled_agent_context.yaml"
     assert _rel(ws.status_path()) == "docs/STATUS.md"
     assert _rel(ws.test_gates_path()) == "docs/TEST_GATES.md"
     assert _rel(ws.documentation_coverage_path()) == "docs/DOCUMENTATION_COVERAGE.yaml"
@@ -56,6 +58,8 @@ def test_legacy_workspace_paths_match_todays_literals() -> None:
     assert _rel(ws.governance_file("FINAL_SUMMARY_CONTRACT.md")) == "docs/governance/FINAL_SUMMARY_CONTRACT.md"
     assert _rel(ws.reference_dir()) == "docs/reference"
     assert _rel(ws.reference_file("AGENTIC_KIT_COMMANDS.md")) == "docs/reference/AGENTIC_KIT_COMMANDS.md"
+    assert _rel(ws.architecture_dir()) == "docs/architecture"
+    assert _rel(ws.architecture_file("ARCHITECTURE_CONTRACT.md")) == "docs/architecture/ARCHITECTURE_CONTRACT.md"
     assert _rel(ws.source_root()) == "src/agentic_project_kit"
     assert _rel(ws.pyproject_path()) == "pyproject.toml"
     assert ws.admin_refresh_branch_prefix() == "docs/post-pr"
