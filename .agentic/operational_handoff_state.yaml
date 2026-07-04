@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 09d5299235ca1cf00002cf7950bd714a03987050
-  short: 09d52992
-  subject: Register kit OS architecture and refresh path literal evidence (#1709)
+  full: e12feb14d08388e4a8e7083551351da8d83ea1c2
+  short: e12feb14
+  subject: Add workspace resolver foundation and mutation lock (#1711)
 last_substantive_work_state:
-  full: 09d5299235ca1cf00002cf7950bd714a03987050
-  short: 09d52992
-  subject: Register kit OS architecture and refresh path literal evidence (#1709)
+  full: e12feb14d08388e4a8e7083551351da8d83ea1c2
+  short: e12feb14
+  subject: Add workspace resolver foundation and mutation lock (#1711)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
