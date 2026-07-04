@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f920ac59b46f1d56150a1f8780f60b5260f57b23
-  short: f920ac59
-  subject: Split transfer CLI monolith into focused command modules (#1705)
+  full: 2d59d6f3ddd4cbc030da56119ef2aa55c4be3809
+  short: 2d59d6f3
+  subject: Add post-S6 path literal audit evidence (#1707)
 last_substantive_work_state:
-  full: f920ac59b46f1d56150a1f8780f60b5260f57b23
-  short: f920ac59
-  subject: Split transfer CLI monolith into focused command modules (#1705)
+  full: 2d59d6f3ddd4cbc030da56119ef2aa55c4be3809
+  short: 2d59d6f3
+  subject: Add post-S6 path literal audit evidence (#1707)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
