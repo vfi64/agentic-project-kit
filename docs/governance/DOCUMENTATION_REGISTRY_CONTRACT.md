@@ -75,6 +75,25 @@ documentation-registry guard before writing. `agentic-kit doc-registry
 check-unregistered --json` lists unregistered document candidates as WARN, not
 FAIL, because broad migration remains disabled.
 
+## Declarative scope
+
+`docs/DOC_REGISTRY_SCOPE.yaml` is the optional scope declaration for making
+selected documentation areas strict without broad migration. It contains
+`required_paths` for paths where every Markdown file must be registered and
+`exempt_paths` for explicitly registration-free paths with a required reason.
+
+The checked-in scope is initially empty. With no scope file or an empty scope
+file, `agentic-kit doc-registry check-unregistered` keeps the existing WARN-only
+inventory behavior. When maintainers later fill `required_paths`, unregistered
+Markdown files under those paths are reported as separate scope violations.
+`agentic-kit doc-registry check-unregistered --strict-scope` fails only for
+those declared scope violations; the standard suite does not enable
+`--strict-scope` in this slice.
+
+`docs/planning/DOC_REGISTRY_SCOPE_DECISION.md` is a machine-generated decision
+template that counts Markdown files by `docs/` subdirectory and leaves the
+required/exempt/undecided decision blank for maintainers.
+
 ## Migration boundary
 
 No broad migration is allowed in this first slice. The registry starts with a small set of canonical documents and evidence logs so that the schema and guard can be reviewed before the repository is classified broadly.
@@ -89,5 +108,7 @@ The registry is hardened through:
 - `src/agentic_project_kit/documentation_registry.py` as the validation core;
 - `agentic-kit check-docs` integration;
 - `agentic-kit doc-registry register` tests for reviewed additive entries;
+- `agentic-kit doc-registry check-unregistered --strict-scope` tests for
+  declared required scope;
 - targeted tests for allowed classes, required fields, duplicate path detection, missing path detection, and docs-audit participation;
 - documentation coverage anchors for the registry contract.

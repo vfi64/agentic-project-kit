@@ -45,10 +45,20 @@ def doc_registry_register(
 @doc_registry_app.command("check-unregistered")
 def doc_registry_check_unregistered(
     project_root: Annotated[Path, typer.Option("--root", help="Project root.")] = Path("."),
+    strict_scope: Annotated[
+        bool,
+        typer.Option(
+            "--strict-scope",
+            help="Fail when unregistered Markdown files violate declared required scope paths.",
+        ),
+    ] = False,
     json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
 ) -> None:
-    """List unregistered docs candidates as a non-failing WARN report."""
-    report = build_unregistered_document_candidates_report(project_root.resolve())
+    """List unregistered docs candidates with optional strict declared-scope failure."""
+    report = build_unregistered_document_candidates_report(
+        project_root.resolve(),
+        strict_scope=strict_scope,
+    )
     if json_output:
         typer.echo(json.dumps(report, indent=2, sort_keys=True))
     else:
@@ -57,3 +67,18 @@ def doc_registry_check_unregistered(
         typer.echo(f"CANDIDATES={report['candidate_count']}")
         for candidate in report["candidates"]:
             typer.echo(f"- {candidate}")
+        if report["scope_present"] and (
+            report["scope_required_path_count"]
+            or report["scope_exempt_path_count"]
+            or report["scope_violation_count"]
+            or report["scope_errors"]
+        ):
+            typer.echo(f"STRICT_SCOPE={report['strict_scope']}")
+            typer.echo(f"EXEMPTED={report['exempted_count']}")
+            typer.echo(f"SCOPE_VIOLATIONS={report['scope_violation_count']}")
+            for violation in report["scope_violations"]:
+                typer.echo(f"SCOPE-VIOLATION {violation}")
+            for error in report["scope_errors"]:
+                typer.echo(f"SCOPE-ERROR {error}")
+    if report.get("result_status") == "FAIL":
+        raise typer.Exit(code=1)

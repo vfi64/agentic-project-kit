@@ -174,11 +174,46 @@ rules:
     - agentic-kit audit-status-current-state
     - agentic-kit doc-registry register
     - agentic-kit doc-registry check-unregistered
+    - agentic-kit doc-registry check-unregistered --strict-scope
     - agentic-kit rule-registry register
     - agentic-kit patterns list
     - agentic-kit patterns show
     - agentic-kit slice gate --kind planning-doc
     - agentic-kit workflow-guard check
+- id: documentation-registry-scope-coverage
+  description: Declarative documentation registry scope must remain visible without
+    forcing broad migration or enabling strict scope in the standard suite before
+    maintainers fill the scope.
+  documents:
+  - path: README.md
+    terms:
+    - docs/DOC_REGISTRY_SCOPE.yaml
+    - agentic-kit doc-registry check-unregistered --strict-scope
+    - declared required scope
+  - path: docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md
+    terms:
+    - Declarative scope
+    - docs/DOC_REGISTRY_SCOPE.yaml
+    - required_paths
+    - exempt_paths
+    - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+    - standard suite does not enable
+  - path: docs/TEST_GATES.md
+    terms:
+    - docs/DOC_REGISTRY_SCOPE.yaml
+    - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+    - agentic-kit doc-registry check-unregistered --strict-scope
+    - standard gate suite while the checked-in scope is empty
+  - path: docs/DOC_REGISTRY_SCOPE.yaml
+    terms:
+    - 'schema_version: 1'
+    - 'required_paths: []'
+    - 'exempt_paths: []'
+  - path: docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+    terms:
+    - Documentation Registry Scope Decision Template
+    - No scope recommendation is encoded here
+    - 'proposed: required / exempt / undecided'
 - id: status-current-state-audit-coverage
   description: Status current-state audit must remain discoverable as the deterministic
     guard for STATUS, CHANGELOG, generated handoff validation, release-status, and

@@ -195,6 +195,9 @@ It also updates the canonical chat-switch prompt projections in `docs/handoff/`.
 Reviewed single-entry additions use `agentic-kit doc-registry register --path PATH
 --class CLASS --json`; `agentic-kit doc-registry check-unregistered --json`
 lists unregistered document candidates as WARN without starting broad migration.
+`docs/DOC_REGISTRY_SCOPE.yaml` declares optional required or exempt registry
+scope paths; `agentic-kit doc-registry check-unregistered --strict-scope`
+fails only when unregistered Markdown files violate declared required scope.
 
 ## Rule registry
 
