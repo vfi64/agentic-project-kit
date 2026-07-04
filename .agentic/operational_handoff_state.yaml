@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 12b9ff19c0dd08961251b7519083b5c45ad8ce38
-  short: 12b9ff19
-  subject: Add machine-generated path-literal evidence report for workspace migration (#1701)
+  full: 10e819bad80e6b0e052ba05dd0c62094d1a31b53
+  short: 10e819ba
+  subject: Retire if-False contract sentinels in deprecated transfer alias (#1703)
 last_substantive_work_state:
-  full: 12b9ff19c0dd08961251b7519083b5c45ad8ce38
-  short: 12b9ff19
-  subject: Add machine-generated path-literal evidence report for workspace migration (#1701)
+  full: 10e819bad80e6b0e052ba05dd0c62094d1a31b53
+  short: 10e819ba
+  subject: Retire if-False contract sentinels in deprecated transfer alias (#1703)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
