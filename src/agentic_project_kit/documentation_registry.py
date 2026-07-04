@@ -521,7 +521,10 @@ def build_unregistered_document_candidates_report(
 def build_doc_registry_scope_decision_rows(project_root: Path) -> list[dict[str, int | str]]:
     registered_paths = _registered_document_paths(project_root)
     counters: dict[str, Counter[str]] = {}
-    for rel in _iter_docs_markdown_files(project_root):
+    for rel in _iter_docs_markdown_files(
+        project_root,
+        excluded_prefixes=DOCUMENT_REGISTRATION_EXCLUDED_PREFIXES,
+    ):
         group = _docs_subdirectory_group(rel)
         bucket = counters.setdefault(group, Counter())
         bucket["md_files"] += 1
@@ -551,6 +554,7 @@ def render_doc_registry_scope_decision_template(project_root: Path) -> str:
         "Review policy: required",
         "",
         "Generated from the current repository filesystem and `docs/DOCUMENTATION_REGISTRY.yaml`.",
+        "Counts exclude generated report prefixes that are already outside the registry candidate scan.",
         "No scope recommendation is encoded here; maintainers fill the proposed column after review.",
         "",
         "| docs path | md files | registered | unregistered | proposed: required / exempt / undecided |",
@@ -682,7 +686,11 @@ def _find_scope_violations(
     return violations
 
 
-def _iter_docs_markdown_files(project_root: Path) -> list[str]:
+def _iter_docs_markdown_files(
+    project_root: Path,
+    *,
+    excluded_prefixes: tuple[str, ...] = (),
+) -> list[str]:
     docs_root = project_root / "docs"
     if not docs_root.exists():
         return []
@@ -692,7 +700,10 @@ def _iter_docs_markdown_files(project_root: Path) -> list[str]:
             continue
         if path.suffix.lower() not in SCOPE_REQUIRED_SUFFIXES:
             continue
-        result.append(path.relative_to(project_root).as_posix())
+        rel = path.relative_to(project_root).as_posix()
+        if any(rel.startswith(prefix) for prefix in excluded_prefixes):
+            continue
+        result.append(rel)
     return result
 
 
