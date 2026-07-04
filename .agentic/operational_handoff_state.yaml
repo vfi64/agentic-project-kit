@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 8b4a256c786a322edc4f0cf3d9a3ceddfcff9679
-  short: 8b4a256c
-  subject: Add declarative registry scope and decision template for docs coverage (#1698)
+  full: 1ea48d2ec28c6914cb3f74a6839803efde13efc2
+  short: 1ea48d2e
+  subject: Refresh handoff state after PR1698 (#1699)
 last_substantive_work_state:
-  full: 8b4a256c786a322edc4f0cf3d9a3ceddfcff9679
-  short: 8b4a256c
-  subject: Add declarative registry scope and decision template for docs coverage (#1698)
+  full: 1ea48d2ec28c6914cb3f74a6839803efde13efc2
+  short: 1ea48d2e
+  subject: Refresh handoff state after PR1698 (#1699)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
