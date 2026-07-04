@@ -54,6 +54,6 @@ Current administrative handoff refresh state is `a7a0b6a2` (`Audit ns to agentic
 Current administrative handoff refresh state is `c6ab40da` (`Classify ns migration docs before GUI (#1334)`). Continue next only after this post-PR1334 refresh is committed and merged; the next substantive slice must be created from fresh main.## Operational documentation refresh state after PR #1338
 
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1705
+## Operational documentation refresh state after PR #1707
 
-Current administrative handoff refresh state is `f920ac59` (`Split transfer CLI monolith into focused command modules (#1705)`). Continue next only after this post-PR1705 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `2d59d6f3` (`Add post-S6 path literal audit evidence (#1707)`). Continue next only after this post-PR1707 refresh is committed and merged; the next substantive slice must be created from fresh main.
