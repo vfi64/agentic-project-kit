@@ -16,6 +16,12 @@ def test_patch_transfer_request_schema_exists_and_blocks_fragile_patch_style() -
 
 
 def test_handoff_required_sources_include_patch_transfer_schema() -> None:
-    text = Path("src/agentic_project_kit/cli_commands/transfer.py").read_text(encoding="utf-8")
-    assert ".agentic/transfer/schemas/handoff_request.schema.json" in text
-    assert ".agentic/transfer/schemas/patch_transfer_request.schema.json" in text
+    handoff_schema = json.loads(
+        Path(".agentic/transfer/schemas/handoff_request.schema.json").read_text(encoding="utf-8")
+    )
+    patch_schema = json.loads(
+        Path(".agentic/transfer/schemas/patch_transfer_request.schema.json").read_text(encoding="utf-8")
+    )
+
+    assert handoff_schema["properties"]["message_kind"]["const"] == "handoff_request"
+    assert patch_schema["properties"]["message_kind"]["const"] == "patch_transfer_request"

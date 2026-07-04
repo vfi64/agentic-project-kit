@@ -4705,22 +4705,8 @@ def prepare_successor_handoff(
     ),
 ) -> None:
     """Deprecated compatibility alias for transfer chat-switch-complete."""
-    # Legacy prepare-successor-handoff textual contract sentinels.
-    # Kept for compatibility tests while this command delegates to chat-switch-complete.
-    legacy_handoff_schema = ".agentic/transfer/schemas/handoff_request.schema.json"
-    legacy_schema_paths = (
-        legacy_handoff_schema,
-        ".agentic/transfer/schemas/patch_transfer_request.schema.json",
-    )
-    _ = legacy_schema_paths
-
-    if False:
-        payload = {"schema": legacy_handoff_schema}
-        payload["outbox_written"] = None
-
-    legacy_outbox_contract = """if write_outbox:
-            write_transfer_outbox(root, payload)"""
-    _ = legacy_outbox_contract
+    # Deprecated options are accepted for CLI compatibility and intentionally ignored.
+    _ = (repair_known_volatile, write_outbox)
 
     _emit_successor_package(
         json_output=json_output,
