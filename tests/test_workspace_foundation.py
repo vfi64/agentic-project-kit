@@ -29,13 +29,24 @@ def test_legacy_workspace_paths_match_todays_literals() -> None:
     assert _rel(ws.transfer_outbox()) == ".agentic/transfer/outbox"
     assert _rel(ws.status_path()) == "docs/STATUS.md"
     assert _rel(ws.test_gates_path()) == "docs/TEST_GATES.md"
+    assert _rel(ws.documentation_coverage_path()) == "docs/DOCUMENTATION_COVERAGE.yaml"
     assert _rel(ws.doc_registry_path()) == "docs/DOCUMENTATION_REGISTRY.yaml"
+    assert _rel(ws.reports_dir()) == "docs/reports"
+    assert _rel(ws.terminal_reports_dir()) == "docs/reports/terminal"
+    assert (
+        _rel(ws.transfer_handoff_report_file("latest-transfer-handoff-report.json"))
+        == "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
+    )
     assert _rel(ws.handoff_dir()) == "docs/handoff"
     assert _rel(ws.handoff_file("CURRENT_HANDOFF.md")) == "docs/handoff/CURRENT_HANDOFF.md"
     assert _rel(ws.handoff_packages_latest()) == "docs/reports/handoff-packages/latest"
     assert _rel(ws.package_file("validation_report.json")) == "docs/reports/handoff-packages/latest/validation_report.json"
     assert _rel(ws.planning_dir()) == "docs/planning"
+    assert _rel(ws.planning_file("project_direction.yaml")) == "docs/planning/project_direction.yaml"
     assert _rel(ws.governance_dir()) == "docs/governance"
+    assert _rel(ws.governance_file("FINAL_SUMMARY_CONTRACT.md")) == "docs/governance/FINAL_SUMMARY_CONTRACT.md"
+    assert _rel(ws.reference_dir()) == "docs/reference"
+    assert _rel(ws.reference_file("AGENTIC_KIT_COMMANDS.md")) == "docs/reference/AGENTIC_KIT_COMMANDS.md"
 
 
 def test_load_workspace_fails_loud_on_unexpected_manifest(tmp_path: Path) -> None:

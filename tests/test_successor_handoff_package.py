@@ -81,6 +81,60 @@ def test_write_successor_handoff_package_writes_execution_contract_json(tmp_path
     assert "protected-file-preservation" in rule_ids
 
 
+def test_successor_handoff_artifacts_snapshot(tmp_path):
+    import json
+
+    from agentic_project_kit.successor_handoff_package import write_successor_handoff_package
+
+    result = write_successor_handoff_package(tmp_path, update_canonical_prompts=True)
+
+    generated_paths = sorted(
+        path.relative_to(tmp_path).as_posix()
+        for path in tmp_path.rglob("*")
+        if path.is_file()
+    )
+    assert generated_paths == [
+        "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+        "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "docs/reports/handoff-packages/latest/execution_contract.json",
+        "docs/reports/handoff-packages/latest/source_manifest.json",
+        "docs/reports/handoff-packages/latest/successor_context.yaml",
+        "docs/reports/handoff-packages/latest/successor_prompt.md",
+        "docs/reports/handoff-packages/latest/validation_report.json",
+    ]
+
+    package_dir = tmp_path / "docs" / "reports" / "handoff-packages" / "latest"
+    context = json.loads((package_dir / "successor_context.yaml").read_text(encoding="utf-8"))
+    source_manifest = json.loads((package_dir / "source_manifest.json").read_text(encoding="utf-8"))
+    validation = json.loads((package_dir / "validation_report.json").read_text(encoding="utf-8"))
+    execution_contract = json.loads((package_dir / "execution_contract.json").read_text(encoding="utf-8"))
+    successor_prompt = (package_dir / "successor_prompt.md").read_text(encoding="utf-8")
+    next_bootstrap = (tmp_path / "docs" / "handoff" / "NEXT_CHAT_BOOTSTRAP.md").read_text(encoding="utf-8")
+    closeout_prompt = (
+        tmp_path / "docs" / "handoff" / "CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
+    ).read_text(encoding="utf-8")
+
+    assert result.output_dir.as_posix() == "docs/reports/handoff-packages/latest"
+    assert context["kind"] == "successor_chat_context"
+    assert {"repo", "long_term_memory", "short_term_memory", "handoff_validity"} <= set(context)
+    assert source_manifest["kind"] == "successor_source_manifest"
+    assert "sources" in source_manifest
+    assert validation["kind"] == "successor_handoff_validation_report"
+    assert {"status", "findings", "generated_head"} <= set(validation)
+    assert execution_contract["kind"] == "successor_execution_contract"
+    assert {"general_contract", "current_state_contract", "handoff_projection_contract", "rules"} <= set(
+        execution_contract
+    )
+    assert "Machine-readable execution contract" in successor_prompt
+    assert "# Successor Chat Prompt" in successor_prompt
+    assert "Handoff package precedence" in successor_prompt
+    assert "# NEXT CHAT BOOTSTRAP" in next_bootstrap
+    assert "Successor handoff package" in next_bootstrap
+    assert "### RESULT: PASS ###" in next_bootstrap
+    assert "# Closeout Before Chat Switch Prompt" in closeout_prompt
+    assert "agentic-kit transfer chat-switch-complete --render-prompt" in closeout_prompt
+
+
 
 def _minimal_successor_context():
     return {
