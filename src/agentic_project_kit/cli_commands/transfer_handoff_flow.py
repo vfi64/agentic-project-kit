@@ -451,7 +451,8 @@ def show_last_report(
     json_output: bool = typer.Option(False, "--json", help="Print the full latest transfer report JSON."),
 ) -> None:
     try:
-        report_text = read_latest_transfer_report(Path("."))
+        read_report = _public_transfer_attr("read_latest_transfer_report", read_latest_transfer_report)
+        report_text = read_report(Path("."))
     except FileNotFoundError as exc:
         typer.echo(str(exc))
         raise typer.Exit(code=1) from exc
