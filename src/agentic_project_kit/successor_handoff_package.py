@@ -9,42 +9,62 @@ from typing import Any
 
 from agentic_project_kit import __version__ as PACKAGE_VERSION
 from agentic_project_kit.project_direction import load_project_direction
+from agentic_project_kit.workspace import KitConfig, Workspace, load_workspace
 
 REPO_FULL_NAME = "vfi64/agentic-project-kit"
 DEFAULT_LOCAL_PATH = "cd /path/to/agentic-project-kit"
 
-NEXT_CHAT_BOOTSTRAP = Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md")
-START_NEW_CHAT_PROMPT = Path("docs/handoff/START_NEW_CHAT_PROMPT.md")
-CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT = Path("docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")
+_LEGACY_WORKSPACE = Workspace(root=Path("."), config=KitConfig())
 
-DEFAULT_PACKAGE_DIR = Path("docs/reports/handoff-packages/latest")
 
-LONG_TERM_SOURCES: tuple[str, ...] = (
-    ".agentic/compiled_agent_context.yaml",
-    ".agentic/handoff_state.yaml",
-    ".agentic/operational_handoff_state.yaml",
-    ".agentic/rule_mechanism_inventory.yaml",
-    ".agentic/rule_migrations.yaml",
-    ".agentic/rule_preservation.yaml",
-    "AGENTS.md",
-    "README.md",
-    "SECURITY.md",
-    "docs/DOCUMENTATION_COVERAGE.yaml",
-    "docs/DOCUMENTATION_REGISTRY.yaml",
-    "docs/STATUS.md",
-    "docs/TEST_GATES.md",
-    "docs/handoff/CURRENT_HANDOFF.md",
-    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
-    "docs/handoff/START_NEW_CHAT_PROMPT.md",
-    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-    "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-    "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-    "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-    "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-    "docs/planning/project_direction.yaml",
-    "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "docs/reference/agentic-kit-commands.json",
-)
+def _path_text(path: Path) -> str:
+    return path.as_posix()
+
+
+def _workspace_path_text(ws: Workspace, path: Path) -> str:
+    try:
+        return path.relative_to(ws.root).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+NEXT_CHAT_BOOTSTRAP = _LEGACY_WORKSPACE.handoff_file("NEXT_CHAT_BOOTSTRAP.md")
+START_NEW_CHAT_PROMPT = _LEGACY_WORKSPACE.handoff_file("START_NEW_CHAT_PROMPT.md")
+CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT = _LEGACY_WORKSPACE.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")
+
+DEFAULT_PACKAGE_DIR = _LEGACY_WORKSPACE.handoff_packages_latest()
+
+
+def _long_term_sources(ws: Workspace) -> tuple[str, ...]:
+    return (
+        ".agentic/compiled_agent_context.yaml",
+        ".agentic/handoff_state.yaml",
+        ".agentic/operational_handoff_state.yaml",
+        ".agentic/rule_mechanism_inventory.yaml",
+        ".agentic/rule_migrations.yaml",
+        ".agentic/rule_preservation.yaml",
+        "AGENTS.md",
+        "README.md",
+        "SECURITY.md",
+        _workspace_path_text(ws, ws.documentation_coverage_path()),
+        _workspace_path_text(ws, ws.doc_registry_path()),
+        _workspace_path_text(ws, ws.status_path()),
+        _workspace_path_text(ws, ws.test_gates_path()),
+        _workspace_path_text(ws, ws.handoff_file("CURRENT_HANDOFF.md")),
+        _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md")),
+        _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md")),
+        _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")),
+        _workspace_path_text(ws, ws.governance_file("FINAL_SUMMARY_CONTRACT.md")),
+        _workspace_path_text(ws, ws.governance_file("CHAT_COMMUNICATION_CONTRACT.md")),
+        _workspace_path_text(ws, ws.governance_file("PORTABLE_CHAT_EXECUTION_CONTRACT.md")),
+        _workspace_path_text(ws, ws.governance_file("CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md")),
+        _workspace_path_text(ws, ws.planning_file("project_direction.yaml")),
+        _workspace_path_text(ws, ws.reference_file("AGENTIC_KIT_COMMANDS.md")),
+        _workspace_path_text(ws, ws.reference_file("agentic-kit-commands.json")),
+    )
+
+
+LONG_TERM_SOURCES: tuple[str, ...] = _long_term_sources(_LEGACY_WORKSPACE)
 
 STARTUP_COMMANDS: tuple[str, ...] = (
     "cd /path/to/agentic-project-kit",
@@ -110,28 +130,37 @@ GENERAL_CONTRACT_RULE_IDS: frozenset[str] = frozenset(
     }
 )
 
-GENERATED_HANDOFF_PROJECTION_PATHS: tuple[str, ...] = (
-    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
-    "docs/handoff/START_NEW_CHAT_PROMPT.md",
-    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-    "docs/reports/handoff-packages/latest/execution_contract.json",
-    "docs/reports/handoff-packages/latest/source_manifest.json",
-    "docs/reports/handoff-packages/latest/successor_context.yaml",
-    "docs/reports/handoff-packages/latest/successor_prompt.md",
-    "docs/reports/handoff-packages/latest/validation_report.json",
-    "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-)
+def _generated_handoff_projection_paths(ws: Workspace) -> tuple[str, ...]:
+    return (
+        _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md")),
+        _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md")),
+        _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")),
+        _workspace_path_text(ws, ws.package_file("execution_contract.json")),
+        _workspace_path_text(ws, ws.package_file("source_manifest.json")),
+        _workspace_path_text(ws, ws.package_file("successor_context.yaml")),
+        _workspace_path_text(ws, ws.package_file("successor_prompt.md")),
+        _workspace_path_text(ws, ws.package_file("validation_report.json")),
+        _workspace_path_text(ws, ws.transfer_handoff_report_file("latest-transfer-handoff-report.json")),
+        _workspace_path_text(ws, ws.transfer_handoff_report_file("latest-transfer-handoff-report.log")),
+    )
 
-GENERAL_SOURCE_AUTHORITIES: tuple[str, ...] = (
-    ".agentic/compiled_agent_context.yaml",
-    ".agentic/transfer_safety_rules.yaml",
-    ".agentic/transfer/one_command_transfer_protocol.yaml",
-    "docs/planning/project_direction.yaml",
-    "docs/DOCUMENTATION_REGISTRY.yaml",
-    "docs/reference/agentic-kit-commands.json",
-    "docs/reference/AGENTIC_KIT_COMMANDS.md",
-)
+
+GENERATED_HANDOFF_PROJECTION_PATHS: tuple[str, ...] = _generated_handoff_projection_paths(_LEGACY_WORKSPACE)
+
+
+def _general_source_authorities(ws: Workspace) -> tuple[str, ...]:
+    return (
+        ".agentic/compiled_agent_context.yaml",
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/transfer/one_command_transfer_protocol.yaml",
+        _workspace_path_text(ws, ws.planning_file("project_direction.yaml")),
+        _workspace_path_text(ws, ws.doc_registry_path()),
+        _workspace_path_text(ws, ws.reference_file("agentic-kit-commands.json")),
+        _workspace_path_text(ws, ws.reference_file("AGENTIC_KIT_COMMANDS.md")),
+    )
+
+
+GENERAL_SOURCE_AUTHORITIES: tuple[str, ...] = _general_source_authorities(_LEGACY_WORKSPACE)
 
 FORBIDDEN_LOCAL_COMMAND_RECOMMENDATIONS: tuple[str, ...] = (
     "python ",
@@ -229,7 +258,9 @@ def _build_repo_state(root: Path) -> dict[str, Any]:
     }
 
 
-def _open_tasks_from_project_direction(root: Path) -> list[dict[str, Any]]:
+def _open_tasks_from_project_direction(root: Path, ws: Workspace) -> list[dict[str, Any]]:
+    project_direction_path = _workspace_path_text(ws, ws.planning_file("project_direction.yaml"))
+    registry_path = _workspace_path_text(ws, ws.doc_registry_path())
     try:
         direction = load_project_direction(root)
         findings = direction.validate()
@@ -238,8 +269,8 @@ def _open_tasks_from_project_direction(root: Path) -> list[dict[str, Any]]:
             {
                 "id": "project-direction-unavailable",
                 "status": "blocked",
-                "summary": f"Cannot load docs/planning/project_direction.yaml: {exc}",
-                "files": ["docs/planning/project_direction.yaml"],
+                "summary": f"Cannot load {project_direction_path}: {exc}",
+                "files": [project_direction_path],
             }
         ]
     if findings:
@@ -248,7 +279,7 @@ def _open_tasks_from_project_direction(root: Path) -> list[dict[str, Any]]:
                 "id": "project-direction-invalid",
                 "status": "blocked",
                 "summary": "Project direction validation failed: " + "; ".join(findings),
-                "files": ["docs/planning/project_direction.yaml"],
+                "files": [project_direction_path],
             }
         ]
 
@@ -273,8 +304,8 @@ def _open_tasks_from_project_direction(root: Path) -> list[dict[str, Any]]:
                 "status": status,
                 "summary": summary,
                 "files": [
-                    "docs/planning/project_direction.yaml",
-                    "docs/DOCUMENTATION_REGISTRY.yaml",
+                    project_direction_path,
+                    registry_path,
                 ],
             }
         )
@@ -283,13 +314,18 @@ def _open_tasks_from_project_direction(root: Path) -> list[dict[str, Any]]:
             "id": "project-direction-no-open-milestones",
             "status": "review",
             "summary": "No active or planned milestones are listed in project_direction.yaml.",
-            "files": ["docs/planning/project_direction.yaml"],
+            "files": [project_direction_path],
         }
     ]
 
 
-def _build_context(root: Path) -> dict[str, Any]:
+def _build_context(root: Path, ws: Workspace) -> dict[str, Any]:
     repo_state = _build_repo_state(root)
+    successor_context_path = _workspace_path_text(ws, ws.package_file("successor_context.yaml"))
+    successor_prompt_path = _workspace_path_text(ws, ws.package_file("successor_prompt.md"))
+    next_chat_bootstrap_path = _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md"))
+    start_prompt_path = _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md"))
+    closeout_prompt_path = _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"))
     return {
         "schema_version": 1,
         "kind": "successor_chat_context",
@@ -301,19 +337,19 @@ def _build_context(root: Path) -> dict[str, Any]:
         },
         "handoff_validity": {
             "status": "PENDING_VALIDATION",
-            "canonical_package": "docs/reports/handoff-packages/latest/successor_context.yaml",
-            "canonical_prompt": "docs/reports/handoff-packages/latest/successor_prompt.md",
-            "canonical_bootstrap": str(NEXT_CHAT_BOOTSTRAP),
-            "paired_prompts": [str(START_NEW_CHAT_PROMPT), str(CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT)],
+            "canonical_package": successor_context_path,
+            "canonical_prompt": successor_prompt_path,
+            "canonical_bootstrap": next_chat_bootstrap_path,
+            "paired_prompts": [start_prompt_path, closeout_prompt_path],
         },
         "long_term_memory": {
             "source": "repository files and command references",
-            "mandatory_sources": list(LONG_TERM_SOURCES),
+            "mandatory_sources": list(_long_term_sources(ws)),
             "required_startup_commands": list(STARTUP_COMMANDS),
         },
         "short_term_memory": {
             "source": "current local/repo state at package generation time",
-            "open_tasks": _open_tasks_from_project_direction(root),
+            "open_tasks": _open_tasks_from_project_direction(root, ws),
             "recent_lessons": list(RECENT_LESSONS),
         },
         "working_rules": {
@@ -327,15 +363,20 @@ def _build_context(root: Path) -> dict[str, Any]:
     }
 
 
-def _source_manifest(root: Path) -> dict[str, Any]:
+def _source_manifest(root: Path, ws: Workspace) -> dict[str, Any]:
     return {
         "schema_version": 1,
         "kind": "successor_source_manifest",
-        "sources": [_file_info(root, rel) for rel in LONG_TERM_SOURCES],
+        "sources": [_file_info(root, rel) for rel in _long_term_sources(ws)],
     }
 
 
-def validate_successor_outputs(outputs: dict[str, str], context: dict[str, Any]) -> dict[str, Any]:
+def validate_successor_outputs(
+    outputs: dict[str, str],
+    context: dict[str, Any],
+    ws: Workspace | None = None,
+) -> dict[str, Any]:
+    ws = ws or _LEGACY_WORKSPACE
     findings: list[dict[str, str]] = []
     for name, text in outputs.items():
         for marker in STALE_MARKERS:
@@ -480,7 +521,7 @@ def validate_successor_outputs(outputs: dict[str, str], context: dict[str, Any])
                     "message": "handoff_projection_contract must make machine-readable files authoritative over copied prompt text.",
                 }
             )
-        expected_projection_paths = set(GENERATED_HANDOFF_PROJECTION_PATHS)
+        expected_projection_paths = set(_generated_handoff_projection_paths(ws))
         actual_projection_paths = set(projection_contract.get("generated_projection_paths", []))
         missing_projection_paths = sorted(expected_projection_paths - actual_projection_paths)
         if missing_projection_paths:
@@ -550,12 +591,18 @@ def validate_successor_outputs(outputs: dict[str, str], context: dict[str, Any])
     }
 
 
-def build_execution_contract(context: dict[str, Any]) -> dict[str, object]:
+def build_execution_contract(context: dict[str, Any], ws: Workspace | None = None) -> dict[str, object]:
     """Build the machine-readable execution contract for successor chats."""
 
+    ws = ws or _LEGACY_WORKSPACE
     repo = context.get("repo", {})
     dirty_paths = context.get("dirty_paths", ())
     validation_report = context.get("validation_report", {})
+    successor_context_path = _workspace_path_text(ws, ws.package_file("successor_context.yaml"))
+    source_manifest_path = _workspace_path_text(ws, ws.package_file("source_manifest.json"))
+    validation_report_path = _workspace_path_text(ws, ws.package_file("validation_report.json"))
+    execution_contract_path = _workspace_path_text(ws, ws.package_file("execution_contract.json"))
+    successor_prompt_path = _workspace_path_text(ws, ws.package_file("successor_prompt.md"))
 
     branch = str(repo.get("branch", ""))
     head = str(repo.get("head", ""))
@@ -568,7 +615,7 @@ def build_execution_contract(context: dict[str, Any]) -> dict[str, object]:
     general_contract = {
         "scope": "durable-agentic-kit-operating-model",
         "rule_ids": sorted(GENERAL_CONTRACT_RULE_IDS),
-        "source_authorities": list(GENERAL_SOURCE_AUTHORITIES),
+        "source_authorities": list(_general_source_authorities(ws)),
         "summary": {
             "agentic_kit_is_control_plane": True,
             "wrapper_first": True,
@@ -593,8 +640,8 @@ def build_execution_contract(context: dict[str, Any]) -> dict[str, object]:
             "worktree_clean": worktree_clean,
             "dirty_paths": list(dirty_paths),
         },
-        "open_tasks_source": "docs/planning/project_direction.yaml",
-        "document_registry_source": "docs/DOCUMENTATION_REGISTRY.yaml",
+        "open_tasks_source": _workspace_path_text(ws, ws.planning_file("project_direction.yaml")),
+        "document_registry_source": _workspace_path_text(ws, ws.doc_registry_path()),
         "open_tasks": open_tasks,
         "recent_lessons": recent_lessons,
         "next_action_rule": "Use current_state_contract only as continuation state; do not promote it to durable rules.",
@@ -603,7 +650,7 @@ def build_execution_contract(context: dict[str, Any]) -> dict[str, object]:
     handoff_projection_contract = {
         "prompt_is_projection_only": True,
         "machine_readable_files_take_precedence": True,
-        "generated_projection_paths": list(GENERATED_HANDOFF_PROJECTION_PATHS),
+        "generated_projection_paths": list(_generated_handoff_projection_paths(ws)),
         "source_of_truth": "generator_and_machine_readable_successor_package",
         "allowed_update_path": [
             "Change successor_handoff_package.py, execution contract inputs, or repo-backed rule sources.",
@@ -617,11 +664,11 @@ def build_execution_contract(context: dict[str, Any]) -> dict[str, object]:
         ],
         "generator_command": "agentic-kit transfer prepare-successor-handoff --render-prompt",
         "must_read_files": [
-            "docs/reports/handoff-packages/latest/execution_contract.json",
-            "docs/reports/handoff-packages/latest/successor_context.yaml",
-            "docs/reports/handoff-packages/latest/validation_report.json",
-            "docs/reports/handoff-packages/latest/source_manifest.json",
-            "docs/reports/handoff-packages/latest/successor_prompt.md",
+            execution_contract_path,
+            successor_context_path,
+            validation_report_path,
+            source_manifest_path,
+            successor_prompt_path,
         ],
         "stale_local_prompt_files_are_not_authoritative": True,
         "do_not_use_uploaded_or_copied_prompt_text_as_sole_source": True,
@@ -940,10 +987,22 @@ def render_execution_contract_projection(contract: dict[str, object]) -> str:
     return "\n".join(lines)
 
 
-def render_successor_prompt(context: dict[str, Any]) -> str:
-    contract = build_execution_contract(context)
+def render_successor_prompt(context: dict[str, Any], ws: Workspace | None = None) -> str:
+    ws = ws or _LEGACY_WORKSPACE
+    contract = build_execution_contract(context, ws)
     contract_projection = render_execution_contract_projection(contract)
     repo = context["repo"]
+    package_files = [
+        ws.package_file("successor_context.yaml"),
+        ws.package_file("source_manifest.json"),
+        ws.package_file("validation_report.json"),
+        ws.package_file("execution_contract.json"),
+        ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md"),
+        ws.handoff_file("START_NEW_CHAT_PROMPT.md"),
+        ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"),
+        ws.reference_file("AGENTIC_KIT_COMMANDS.md"),
+        ws.reference_file("agentic-kit-commands.json"),
+    ]
     return contract_projection + "\n" + "\n".join(
         [
             "# Successor Chat Prompt",
@@ -960,15 +1019,7 @@ def render_successor_prompt(context: dict[str, Any]) -> str:
             "",
             "## Zuerst lesen",
             "",
-            "- `docs/reports/handoff-packages/latest/successor_context.yaml`",
-            "- `docs/reports/handoff-packages/latest/source_manifest.json`",
-            "- `docs/reports/handoff-packages/latest/validation_report.json`",
-            "- `docs/reports/handoff-packages/latest/execution_contract.json`",
-            "- `docs/handoff/NEXT_CHAT_BOOTSTRAP.md`",
-            "- `docs/handoff/START_NEW_CHAT_PROMPT.md`",
-            "- `docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md`",
-            "- `docs/reference/AGENTIC_KIT_COMMANDS.md`",
-            "- `docs/reference/agentic-kit-commands.json`",
+            *(f"- `{_workspace_path_text(ws, path)}`" for path in package_files),
             "",
             "## Bootstrap-Akzeptanzbremse",
             "",
@@ -1027,8 +1078,15 @@ def _format_open_tasks_for_bootstrap(context: dict[str, Any]) -> list[str]:
     return lines or ["- No open tasks recorded."]
 
 
-def render_next_chat_bootstrap_from_context(context: dict[str, Any]) -> str:
+def render_next_chat_bootstrap_from_context(context: dict[str, Any], ws: Workspace | None = None) -> str:
+    ws = ws or _LEGACY_WORKSPACE
     repo = context["repo"]
+    successor_context_path = _workspace_path_text(ws, ws.package_file("successor_context.yaml"))
+    source_manifest_path = _workspace_path_text(ws, ws.package_file("source_manifest.json"))
+    validation_report_path = _workspace_path_text(ws, ws.package_file("validation_report.json"))
+    successor_prompt_path = _workspace_path_text(ws, ws.package_file("successor_prompt.md"))
+    start_prompt_path = _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md"))
+    closeout_prompt_path = _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"))
     return "\n".join(
         [
             "# NEXT CHAT BOOTSTRAP",
@@ -1046,15 +1104,15 @@ def render_next_chat_bootstrap_from_context(context: dict[str, Any]) -> str:
             "",
             "## Successor handoff package",
             "",
-            "- `docs/reports/handoff-packages/latest/successor_context.yaml`",
-            "- `docs/reports/handoff-packages/latest/source_manifest.json`",
-            "- `docs/reports/handoff-packages/latest/validation_report.json`",
-            "- `docs/reports/handoff-packages/latest/successor_prompt.md`",
+            f"- `{successor_context_path}`",
+            f"- `{source_manifest_path}`",
+            f"- `{validation_report_path}`",
+            f"- `{successor_prompt_path}`",
             "",
             "## Canonical chat-switch prompt files",
             "",
-            f"- Start a successor chat with `{START_NEW_CHAT_PROMPT}`.",
-            f"- Before leaving a chat, run the closeout routine in `{CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT}`.",
+            f"- Start a successor chat with `{start_prompt_path}`.",
+            f"- Before leaving a chat, run the closeout routine in `{closeout_prompt_path}`.",
             "",
             "## Bootstrap-Akzeptanzbremse",
             "",
@@ -1119,8 +1177,14 @@ Wenn der Bootstrap grün ist:
 - Neue Produktarbeit nur aus frischem, sauberem `main` beginnen.
 """
 
-def render_start_prompt_from_context(context: dict[str, Any]) -> str:
+def render_start_prompt_from_context(context: dict[str, Any], ws: Workspace | None = None) -> str:
+    ws = ws or _LEGACY_WORKSPACE
     repo = context["repo"]
+    next_chat_bootstrap_path = _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md"))
+    successor_context_path = _workspace_path_text(ws, ws.package_file("successor_context.yaml"))
+    start_prompt_path = _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md"))
+    closeout_prompt_path = _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"))
+    successor_prompt_path = _workspace_path_text(ws, ws.package_file("successor_prompt.md"))
     return "\n".join(
         [
             "---",
@@ -1129,13 +1193,13 @@ def render_start_prompt_from_context(context: dict[str, Any]) -> str:
             "role: start_new_chat",
             f"current_handoff_marker: {repo['head_short']}",
             f"current_branch_at_generation: {repo['branch']}",
-            f"canonical_bootstrap: {NEXT_CHAT_BOOTSTRAP}",
-            "successor_context: docs/reports/handoff-packages/latest/successor_context.yaml",
-            "paired_prompt: docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+            f"canonical_bootstrap: {next_chat_bootstrap_path}",
+            f"successor_context: {successor_context_path}",
+            f"paired_prompt: {closeout_prompt_path}",
             "must_update_together:",
-            f"  - {START_NEW_CHAT_PROMPT}",
-            f"  - {CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT}",
-            f"  - {NEXT_CHAT_BOOTSTRAP}",
+            f"  - {start_prompt_path}",
+            f"  - {closeout_prompt_path}",
+            f"  - {next_chat_bootstrap_path}",
             "required_terms:",
             "  - successor_context.yaml",
             "  - source_manifest.json",
@@ -1158,7 +1222,7 @@ def render_start_prompt_from_context(context: dict[str, Any]) -> str:
             "",
             f"Current handoff marker: `{repo['head_short']}`.",
             "",
-            "Copy `docs/reports/handoff-packages/latest/successor_prompt.md` into the successor chat.",
+            f"Copy `{successor_prompt_path}` into the successor chat.",
             "",
             "The successor chat must treat the Successor Handoff Package as the short-term handoff and the repository files listed in `source_manifest.json` as long-term truth.",
             "",
@@ -1170,20 +1234,25 @@ def render_start_prompt_from_context(context: dict[str, Any]) -> str:
     )
 
 
-def render_closeout_prompt_from_context(context: dict[str, Any]) -> str:
+def render_closeout_prompt_from_context(context: dict[str, Any], ws: Workspace | None = None) -> str:
+    ws = ws or _LEGACY_WORKSPACE
+    next_chat_bootstrap_path = _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md"))
+    successor_context_path = _workspace_path_text(ws, ws.package_file("successor_context.yaml"))
+    start_prompt_path = _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md"))
+    closeout_prompt_path = _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"))
     return "\n".join(
         [
             "---",
             "schema_version: 2",
             "artifact_type: chat_switch_prompt",
             "role: closeout_before_chat_switch",
-            f"canonical_bootstrap: {NEXT_CHAT_BOOTSTRAP}",
-            "successor_context: docs/reports/handoff-packages/latest/successor_context.yaml",
-            f"paired_prompt: {START_NEW_CHAT_PROMPT}",
+            f"canonical_bootstrap: {next_chat_bootstrap_path}",
+            f"successor_context: {successor_context_path}",
+            f"paired_prompt: {start_prompt_path}",
             "must_update_together:",
-            f"  - {START_NEW_CHAT_PROMPT}",
-            f"  - {CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT}",
-            f"  - {NEXT_CHAT_BOOTSTRAP}",
+            f"  - {start_prompt_path}",
+            f"  - {closeout_prompt_path}",
+            f"  - {next_chat_bootstrap_path}",
             "required_terms:",
             "  - successor_context.yaml",
             "  - source_manifest.json",
@@ -1224,27 +1293,27 @@ def load_successor_context(path: Path | str) -> dict[str, Any]:
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
-def build_successor_handoff_package(root: Path | str = ".") -> SuccessorPackageResult:
-    root_path = Path(root)
-    context = _build_context(root_path)
-    source_manifest = _source_manifest(root_path)
-    successor_prompt = render_successor_prompt(context)
-    next_chat_bootstrap = render_next_chat_bootstrap_from_context(context)
-    start_prompt = render_start_prompt_from_context(context)
-    closeout_prompt = render_closeout_prompt_from_context(context)
-    provisional_execution_contract = build_execution_contract(context)
+def _build_successor_handoff_package(root_path: Path, ws: Workspace) -> SuccessorPackageResult:
+    context = _build_context(root_path, ws)
+    source_manifest = _source_manifest(root_path, ws)
+    successor_prompt = render_successor_prompt(context, ws)
+    next_chat_bootstrap = render_next_chat_bootstrap_from_context(context, ws)
+    start_prompt = render_start_prompt_from_context(context, ws)
+    closeout_prompt = render_closeout_prompt_from_context(context, ws)
+    provisional_execution_contract = build_execution_contract(context, ws)
     validation_report = validate_successor_outputs(
         {
-            str(NEXT_CHAT_BOOTSTRAP): next_chat_bootstrap,
-            str(START_NEW_CHAT_PROMPT): start_prompt,
-            str(CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT): closeout_prompt,
+            _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md")): next_chat_bootstrap,
+            _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md")): start_prompt,
+            _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")): closeout_prompt,
             "successor_prompt.md": successor_prompt,
             "execution_contract.json": _json_block(provisional_execution_contract),
         },
         context,
+        ws,
     )
     context["handoff_validity"]["status"] = validation_report["status"]
-    execution_contract = build_execution_contract({**context, "validation_report": validation_report})
+    execution_contract = build_execution_contract({**context, "validation_report": validation_report}, ws)
     return SuccessorPackageResult(
         context=context,
         source_manifest=source_manifest,
@@ -1254,8 +1323,14 @@ def build_successor_handoff_package(root: Path | str = ".") -> SuccessorPackageR
         next_chat_bootstrap=next_chat_bootstrap,
         start_new_chat_prompt=start_prompt,
         closeout_prompt=closeout_prompt,
-        output_dir=DEFAULT_PACKAGE_DIR,
+        output_dir=Path(_workspace_path_text(ws, ws.handoff_packages_latest())),
     )
+
+
+def build_successor_handoff_package(root: Path | str = ".") -> SuccessorPackageResult:
+    root_path = Path(root)
+    ws = load_workspace(root_path)
+    return _build_successor_handoff_package(root_path, ws)
 
 
 def write_successor_handoff_package(
@@ -1265,7 +1340,8 @@ def write_successor_handoff_package(
     update_canonical_prompts: bool = True,
 ) -> SuccessorPackageResult:
     root_path = Path(root)
-    result = build_successor_handoff_package(root_path)
+    ws = load_workspace(root_path)
+    result = _build_successor_handoff_package(root_path, ws)
     out = root_path / output_dir
     out.mkdir(parents=True, exist_ok=True)
     (out / "successor_context.yaml").write_text(_json_block(result.context) + "\n", encoding="utf-8")
@@ -1275,12 +1351,12 @@ def write_successor_handoff_package(
     (out / "successor_prompt.md").write_text(result.successor_prompt, encoding="utf-8")
     # START_NEW_CHAT_PROMPT is protected against broad generator replacement. The
     # successor package refresh updates NEXT_CHAT_BOOTSTRAP, the closeout prompt,
-    # and docs/reports/handoff-packages/latest/*; START_NEW_CHAT_PROMPT must be
-    # changed only by a dedicated minimal handoff-refresh/admin slice.
+    # and package files; START_NEW_CHAT_PROMPT must be changed only by a dedicated
+    # minimal handoff-refresh/admin slice.
     if update_canonical_prompts:
         for rel, text in (
-            (NEXT_CHAT_BOOTSTRAP, result.next_chat_bootstrap),
-            (CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT, result.closeout_prompt),
+            (ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md"), result.next_chat_bootstrap),
+            (ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"), result.closeout_prompt),
         ):
             path = root_path / rel
             path.parent.mkdir(parents=True, exist_ok=True)
