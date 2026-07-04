@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 from typer.testing import CliRunner
 
@@ -6,14 +7,19 @@ from agentic_project_kit.cli import app
 from agentic_project_kit.cli_commands import transfer as transfer_module
 
 
+def _plain_cli_output(output: str) -> str:
+    return re.sub(r"\x1b\[[0-9;]*m", "", output)
+
+
 def test_prepare_successor_handoff_help_marks_deprecated_alias() -> None:
     result = CliRunner().invoke(app, ["transfer", "prepare-successor-handoff", "--help"])
+    output = _plain_cli_output(result.output)
 
     assert result.exit_code == 0
-    assert "Deprecated compatibility alias for transfer chat-switch-complete." in result.output
-    assert "--write-outbox" in result.output
-    assert "--no-write-outbox" in result.output
-    assert "Deprecated compatibility" in result.output
+    assert "Deprecated compatibility alias for transfer chat-switch-complete." in output
+    assert "--write-outbox" in output
+    assert "--no-write-outbox" in output
+    assert "Deprecated compatibility" in output
 
 
 def test_deprecated_prepare_successor_handoff_alias_still_delegates(
