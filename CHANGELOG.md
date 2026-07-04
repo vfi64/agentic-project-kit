@@ -1,6 +1,5 @@
 ## v0.4.12 - 2026-07-02
 
-- Zenodo DOI verification pending for v0.4.12.
 - Close out v0.4.11 DOI release state
 - Plan pre-GUI hardening tasks
 - Move and harden pre-GUI planning target

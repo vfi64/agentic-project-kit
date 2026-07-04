@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-07-03T18:44:05.772658+00:00",
+    "created_at_utc": "2026-07-04T08:16:34.264850+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -291,11 +291,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-07-03T18:44:06.007218+00:00",
+    "generated_at_utc": "2026-07-04T08:16:34.480699+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/harden-refresh-only-handoff-bootstrap",
-      "head": "8b331031e65a6d9fd70aa018e5243bd49c1269e7",
+      "branch": "codex/changelog-doi-consistency-gate",
+      "head": "96c06239ab063cda808e2433ed338feaa27da5f5",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -901,12 +901,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/harden-refresh-only-handoff-bootstrap",
+      "branch": "codex/changelog-doi-consistency-gate",
       "dirty_status": "",
-      "head": "8b331031e65a6d9fd70aa018e5243bd49c1269e7",
-      "head_matches_upstream": true,
-      "upstream": "origin/codex/harden-refresh-only-handoff-bootstrap",
-      "upstream_head": "8b331031e65a6d9fd70aa018e5243bd49c1269e7"
+      "head": "96c06239ab063cda808e2433ed338feaa27da5f5",
+      "head_matches_upstream": false,
+      "upstream": "",
+      "upstream_head": ""
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -1473,12 +1473,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/harden-refresh-only-handoff-bootstrap",
+      "branch": "codex/changelog-doi-consistency-gate",
       "dirty_status": "",
-      "head": "8b331031e65a6d9fd70aa018e5243bd49c1269e7",
-      "head_matches_upstream": true,
-      "upstream": "origin/codex/harden-refresh-only-handoff-bootstrap",
-      "upstream_head": "8b331031e65a6d9fd70aa018e5243bd49c1269e7"
+      "head": "96c06239ab063cda808e2433ed338feaa27da5f5",
+      "head_matches_upstream": false,
+      "upstream": "",
+      "upstream_head": ""
     },
     "schema_version": 1,
     "terminal_block_rules": {

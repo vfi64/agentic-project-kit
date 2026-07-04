@@ -307,6 +307,93 @@ def test_status_audit_head_conflict_ignores_historical_snapshots(tmp_path: Path)
     assert not any(finding.check == "status_md_internal_head_conflict" for finding in result.blockers)
 
 
+def test_changelog_stale_pending_doi_blocks(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    changelog = tmp_path / "CHANGELOG.md"
+    changelog.write_text(
+        "\n".join(
+            [
+                "## v1.2.3 - 2026-06-28",
+                "",
+                "- Zenodo DOI verification pending for v1.2.3.",
+                "",
+                "Post-release verification complete: verified v1.2.3 DOI `10.5281/zenodo.123`.",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=_git_runner(),
+        release_status_builder=lambda _root: _release_status(),
+    )
+
+    blockers = [finding for finding in result.blockers if finding.check == "changelog_stale_pending_doi"]
+    assert blockers
+    assert blockers[0].path == "CHANGELOG.md"
+    assert "CHANGELOG.md:3" in blockers[0].detail
+    assert "docs/STATUS.md:" in blockers[0].detail
+
+
+def test_changelog_pending_without_status_doi_passes(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    changelog = tmp_path / "CHANGELOG.md"
+    changelog.write_text(
+        "## v1.2.3 - 2026-06-28\n\n- Zenodo DOI verification pending for v1.2.3.\n",
+        encoding="utf-8",
+    )
+    status = tmp_path / "docs" / "STATUS.md"
+    status.write_text(
+        status.read_text(encoding="utf-8").replace(
+            "Verified Zenodo version DOI: `10.5281/zenodo.123`.\n",
+            "",
+        ),
+        encoding="utf-8",
+    )
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=_git_runner(),
+        release_status_builder=lambda _root: _release_status(),
+    )
+
+    assert result.ok is True
+    assert not any(finding.check == "changelog_stale_pending_doi" for finding in result.blockers)
+
+
+def test_changelog_older_version_blocks_ignored(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    changelog = tmp_path / "CHANGELOG.md"
+    changelog.write_text(
+        "\n".join(
+            [
+                "## v1.2.3 - 2026-06-28",
+                "",
+                "- Done.",
+                "",
+                "Post-release verification complete: verified v1.2.3 DOI `10.5281/zenodo.123`.",
+                "",
+                "## v1.2.2 - 2026-06-27",
+                "",
+                "- Zenodo DOI verification pending for v1.2.2.",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=_git_runner(),
+        release_status_builder=lambda _root: _release_status(),
+    )
+
+    assert result.ok is True
+    assert not any(finding.check == "changelog_stale_pending_doi" for finding in result.blockers)
+
+
 def test_audit_status_current_state_blocks_when_validation_head_is_too_far_behind_origin(tmp_path: Path) -> None:
     _write_project(tmp_path)
 
