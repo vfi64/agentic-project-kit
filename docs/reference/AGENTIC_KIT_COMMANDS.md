@@ -232,11 +232,12 @@ Apply safe automatic documentation mesh repairs.
 
 ### `agentic-kit doc-registry check-unregistered`
 
-List unregistered docs candidates as a non-failing WARN report.
+List unregistered docs candidates with optional strict declared-scope failure.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
+| `strict_scope` | `TyperOption` | --strict-scope | `False` | `False` | Fail when unregistered Markdown files violate declared required scope paths. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit doc-registry register`

@@ -419,6 +419,14 @@ documents:
     class: governance/system
     owner: maintainers
     notes: Self-registers the additive registry schema baseline.
+  - path: docs/DOC_REGISTRY_SCOPE.yaml
+    class: governance/system
+    owner: maintainers
+    notes: Declarative opt-in scope for making selected documentation registry areas strict.
+  - path: docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+    class: planning
+    owner: maintainers
+    notes: Machine-generated maintainer decision template for selecting required or exempt registry scope areas.
   - path: docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md
     class: governance/system
     owner: maintainers

@@ -1093,7 +1093,7 @@
     },
     {
       "group": "doc-registry",
-      "help": "List unregistered docs candidates as a non-failing WARN report.",
+      "help": "List unregistered docs candidates with optional strict declared-scope failure.",
       "name": "check-unregistered",
       "params": [
         {
@@ -1105,6 +1105,20 @@
           "name": "project_root",
           "opts": [
             "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail when unregistered Markdown files violate declared required scope paths.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "strict_scope",
+          "opts": [
+            "--strict-scope"
           ],
           "param_type": "TyperOption",
           "required": false,

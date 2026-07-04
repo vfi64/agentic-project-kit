@@ -2,12 +2,15 @@ from __future__ import annotations
 
 import json
 from collections import Counter
+from dataclasses import dataclass
+from fnmatch import fnmatchcase
 from pathlib import Path
 from typing import Any
 
 import yaml
 
 REGISTRY_PATH = Path("docs/DOCUMENTATION_REGISTRY.yaml")
+SCOPE_PATH = Path("docs/DOC_REGISTRY_SCOPE.yaml")
 COMPILED_CONTEXT_PATH = Path(".agentic/compiled_agent_context.yaml")
 REGISTRY_CONTRACT_PATH = Path("docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md")
 COMMUNICATION_ARTIFACTS_PATH = Path(".agentic/communication_artifacts.yaml")
@@ -50,6 +53,21 @@ DOCUMENT_REGISTRATION_EXCLUDED_PREFIXES = (
     "docs/reports/terminal/",
     "docs/reports/transfer_runs/",
 )
+SCOPE_REQUIRED_SUFFIXES = frozenset({".md"})
+
+
+@dataclass(frozen=True)
+class ScopeExemption:
+    path: str
+    reason: str
+
+
+@dataclass(frozen=True)
+class DocumentationRegistryScope:
+    present: bool
+    required_paths: tuple[str, ...]
+    exempt_paths: tuple[ScopeExemption, ...]
+    errors: tuple[str, ...] = ()
 
 
 def load_documentation_registry(project_root: Path) -> dict[str, Any]:
@@ -58,6 +76,54 @@ def load_documentation_registry(project_root: Path) -> dict[str, Any]:
     if not isinstance(data, dict):
         raise ValueError(f"{REGISTRY_PATH}: root must be a mapping")
     return data
+
+
+def load_documentation_registry_scope(project_root: Path) -> DocumentationRegistryScope:
+    path = project_root / SCOPE_PATH
+    if not path.exists():
+        return DocumentationRegistryScope(
+            present=False,
+            required_paths=(),
+            exempt_paths=(),
+        )
+
+    errors: list[str] = []
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as exc:
+        return DocumentationRegistryScope(
+            present=True,
+            required_paths=(),
+            exempt_paths=(),
+            errors=(f"{SCOPE_PATH}: invalid scope ({exc})",),
+        )
+
+    if data is None:
+        data = {}
+    if not isinstance(data, dict):
+        return DocumentationRegistryScope(
+            present=True,
+            required_paths=(),
+            exempt_paths=(),
+            errors=(f"{SCOPE_PATH}: root must be a mapping",),
+        )
+
+    if data.get("schema_version") != 1:
+        errors.append(f"{SCOPE_PATH}: schema_version must be 1")
+
+    required_paths = _parse_scope_required_paths(data.get("required_paths"), errors)
+    exempt_paths = _parse_scope_exempt_paths(data.get("exempt_paths"), errors)
+    return DocumentationRegistryScope(
+        present=True,
+        required_paths=tuple(required_paths),
+        exempt_paths=tuple(exempt_paths),
+        errors=tuple(errors),
+    )
+
+
+def check_documentation_registry_scope(project_root: Path) -> list[str]:
+    scope = load_documentation_registry_scope(project_root)
+    return list(scope.errors)
 
 
 def load_communication_artifact_policy(project_root: Path) -> dict[str, Any]:
@@ -303,7 +369,9 @@ def check_documentation_registry(project_root: Path) -> list[str]:
     except (OSError, ValueError, yaml.YAMLError) as exc:
         return [f"{REGISTRY_PATH}: invalid registry ({exc})"]
 
-    return documentation_registry_findings_for_data(project_root, registry)
+    return documentation_registry_findings_for_data(project_root, registry) + (
+        check_documentation_registry_scope(project_root)
+    )
 
 
 def register_documentation_registry_entry(
@@ -408,23 +476,243 @@ def register_documentation_registry_entry(
     }
 
 
-def build_unregistered_document_candidates_report(project_root: Path) -> dict[str, Any]:
+def build_unregistered_document_candidates_report(
+    project_root: Path,
+    *,
+    strict_scope: bool = False,
+) -> dict[str, Any]:
+    scope = load_documentation_registry_scope(project_root)
     candidates = find_unregistered_document_candidates(project_root)
-    result_status = "WARN" if candidates else "PASS"
+    candidates, exempted_count = _filter_exempt_candidates(candidates, scope)
+    scope_violations = _find_scope_violations(project_root, scope)
+    if scope.errors:
+        result_status = "FAIL"
+        next_action = "Repair docs/DOC_REGISTRY_SCOPE.yaml before checking registry scope."
+    elif strict_scope and scope_violations:
+        result_status = "FAIL"
+        next_action = "Register or exempt unregistered files in required documentation scope paths."
+    elif candidates or scope_violations:
+        result_status = "WARN"
+        next_action = "Review and classify candidates before registering explicit entries."
+    else:
+        result_status = "PASS"
+        next_action = "No unregistered document candidates found."
     return {
         "schema_version": 1,
         "kind": "documentation_registry_unregistered_candidates",
         "registry_path": REGISTRY_PATH.as_posix(),
+        "scope_path": SCOPE_PATH.as_posix(),
         "result_status": result_status,
         "final_signal": "d",
+        "strict_scope": strict_scope,
+        "scope_present": scope.present,
+        "scope_required_path_count": len(scope.required_paths),
+        "scope_exempt_path_count": len(scope.exempt_paths),
+        "scope_errors": list(scope.errors),
+        "exempted_count": exempted_count,
+        "scope_violation_count": len(scope_violations),
+        "scope_violations": scope_violations,
         "candidate_count": len(candidates),
         "candidates": candidates,
-        "next_action": (
-            "Review and classify candidates before registering explicit entries."
-            if candidates
-            else "No unregistered document candidates found."
-        ),
+        "next_action": next_action,
     }
+
+
+def build_doc_registry_scope_decision_rows(project_root: Path) -> list[dict[str, int | str]]:
+    registered_paths = _registered_document_paths(project_root)
+    counters: dict[str, Counter[str]] = {}
+    for rel in _iter_docs_markdown_files(project_root):
+        group = _docs_subdirectory_group(rel)
+        bucket = counters.setdefault(group, Counter())
+        bucket["md_files"] += 1
+        if rel in registered_paths:
+            bucket["registered"] += 1
+        else:
+            bucket["unregistered"] += 1
+
+    return [
+        {
+            "docs_path": group,
+            "md_files": counters[group]["md_files"],
+            "registered": counters[group]["registered"],
+            "unregistered": counters[group]["unregistered"],
+        }
+        for group in sorted(counters, key=lambda value: ("0" if value == "docs/" else value))
+    ]
+
+
+def render_doc_registry_scope_decision_template(project_root: Path) -> str:
+    rows = build_doc_registry_scope_decision_rows(project_root)
+    lines = [
+        "# Documentation Registry Scope Decision Template",
+        "",
+        "Status: active",
+        "Decision status: undecided",
+        "Review policy: required",
+        "",
+        "Generated from the current repository filesystem and `docs/DOCUMENTATION_REGISTRY.yaml`.",
+        "No scope recommendation is encoded here; maintainers fill the proposed column after review.",
+        "",
+        "| docs path | md files | registered | unregistered | proposed: required / exempt / undecided |",
+        "|---|---:|---:|---:|---|",
+    ]
+    for row in rows:
+        lines.append(
+            "| {docs_path} | {md_files} | {registered} | {unregistered} |  |".format(
+                **row
+            )
+        )
+    lines.extend(
+        [
+            "",
+            "Notes:",
+            "- `required_paths` means every Markdown file in that declared path must be registered.",
+            "- `exempt_paths` means a declared path is intentionally registration-free and must carry a reason.",
+            "- This template is evidence for a maintainer decision; it does not modify scope by itself.",
+        ]
+    )
+    return "\n".join(lines) + "\n"
+
+
+def _parse_scope_required_paths(value: object, errors: list[str]) -> list[str]:
+    if value in (None, []):
+        return []
+    if not isinstance(value, list):
+        errors.append(f"{SCOPE_PATH}: required_paths must be a list")
+        return []
+
+    required_paths: list[str] = []
+    for index, item in enumerate(value, start=1):
+        if not isinstance(item, str):
+            errors.append(f"{SCOPE_PATH}: required_paths entry {index} must be a string")
+            continue
+        normalized = _normalize_scope_pattern(item)
+        if not normalized:
+            errors.append(f"{SCOPE_PATH}: required_paths entry {index} must not be empty")
+            continue
+        if _scope_pattern_is_unsafe(normalized):
+            errors.append(f"{SCOPE_PATH}: required_paths entry {index} is not repository-relative")
+            continue
+        required_paths.append(normalized)
+    return required_paths
+
+
+def _parse_scope_exempt_paths(value: object, errors: list[str]) -> list[ScopeExemption]:
+    if value in (None, []):
+        return []
+    if not isinstance(value, list):
+        errors.append(f"{SCOPE_PATH}: exempt_paths must be a list")
+        return []
+
+    exempt_paths: list[ScopeExemption] = []
+    for index, item in enumerate(value, start=1):
+        if not isinstance(item, dict):
+            errors.append(f"{SCOPE_PATH}: exempt_paths entry {index} must be a mapping")
+            continue
+        raw_path = item.get("path")
+        raw_reason = item.get("reason")
+        path = _normalize_scope_pattern(raw_path) if isinstance(raw_path, str) else ""
+        reason = raw_reason.strip() if isinstance(raw_reason, str) else ""
+        if not path:
+            errors.append(f"{SCOPE_PATH}: exempt_paths entry {index} missing path")
+            continue
+        if _scope_pattern_is_unsafe(path):
+            errors.append(f"{SCOPE_PATH}: exempt_paths entry {index} path is not repository-relative")
+            continue
+        if not reason:
+            errors.append(f"{SCOPE_PATH}: exempt_paths entry {index} missing reason")
+            continue
+        exempt_paths.append(ScopeExemption(path=path, reason=reason))
+    return exempt_paths
+
+
+def _normalize_scope_pattern(value: str) -> str:
+    return value.strip().replace("\\", "/").lstrip("./")
+
+
+def _scope_pattern_is_unsafe(pattern: str) -> bool:
+    return pattern.startswith("/") or any(part == ".." for part in pattern.split("/"))
+
+
+def _registered_document_paths(project_root: Path) -> set[str]:
+    try:
+        registry = load_documentation_registry(project_root)
+    except (FileNotFoundError, OSError, ValueError, yaml.YAMLError):
+        return set()
+    documents = registry.get("documents", [])
+    if not isinstance(documents, list):
+        return set()
+    return {
+        str(entry.get("path", "")).strip()
+        for entry in documents
+        if isinstance(entry, dict) and str(entry.get("path", "")).strip()
+    }
+
+
+def _filter_exempt_candidates(
+    candidates: list[str],
+    scope: DocumentationRegistryScope,
+) -> tuple[list[str], int]:
+    if scope.errors or not scope.exempt_paths:
+        return candidates, 0
+    filtered = [
+        candidate
+        for candidate in candidates
+        if not _matches_any_scope_pattern(candidate, [exemption.path for exemption in scope.exempt_paths])
+    ]
+    return filtered, len(candidates) - len(filtered)
+
+
+def _find_scope_violations(
+    project_root: Path,
+    scope: DocumentationRegistryScope,
+) -> list[str]:
+    if scope.errors or not scope.required_paths:
+        return []
+    registered_paths = _registered_document_paths(project_root)
+    exempt_patterns = [exemption.path for exemption in scope.exempt_paths]
+    violations = []
+    for rel in _iter_docs_markdown_files(project_root):
+        if rel in registered_paths:
+            continue
+        if exempt_patterns and _matches_any_scope_pattern(rel, exempt_patterns):
+            continue
+        if _matches_any_scope_pattern(rel, scope.required_paths):
+            violations.append(rel)
+    return violations
+
+
+def _iter_docs_markdown_files(project_root: Path) -> list[str]:
+    docs_root = project_root / "docs"
+    if not docs_root.exists():
+        return []
+    result: list[str] = []
+    for path in sorted(docs_root.rglob("*")):
+        if not path.is_file() or path.is_symlink():
+            continue
+        if path.suffix.lower() not in SCOPE_REQUIRED_SUFFIXES:
+            continue
+        result.append(path.relative_to(project_root).as_posix())
+    return result
+
+
+def _docs_subdirectory_group(relative_path: str) -> str:
+    parts = relative_path.split("/")
+    if len(parts) < 3:
+        return "docs/"
+    return f"docs/{parts[1]}/"
+
+
+def _matches_any_scope_pattern(path: str, patterns: list[str] | tuple[str, ...]) -> bool:
+    return any(_matches_scope_pattern(path, pattern) for pattern in patterns)
+
+
+def _matches_scope_pattern(path: str, pattern: str) -> bool:
+    if any(token in pattern for token in "*?["):
+        return fnmatchcase(path, pattern)
+    if pattern.endswith("/"):
+        return path.startswith(pattern)
+    return path == pattern or path.startswith(f"{pattern}/")
 
 
 def _registry_required(project_root: Path) -> bool:

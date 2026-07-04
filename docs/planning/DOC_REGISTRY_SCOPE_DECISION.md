@@ -1,0 +1,35 @@
+# Documentation Registry Scope Decision Template
+
+Status: active
+Decision status: undecided
+Review policy: required
+
+Generated from the current repository filesystem and `docs/DOCUMENTATION_REGISTRY.yaml`.
+No scope recommendation is encoded here; maintainers fill the proposed column after review.
+
+| docs path | md files | registered | unregistered | proposed: required / exempt / undecided |
+|---|---:|---:|---:|---|
+| docs/ | 4 | 3 | 1 |  |
+| docs/agent_rules/ | 2 | 0 | 2 |  |
+| docs/architecture/ | 4 | 1 | 3 |  |
+| docs/archive/ | 3 | 3 | 0 |  |
+| docs/examples/ | 1 | 0 | 1 |  |
+| docs/governance/ | 15 | 1 | 14 |  |
+| docs/gui/ | 1 | 0 | 1 |  |
+| docs/handoff/ | 6 | 2 | 4 |  |
+| docs/ideas/ | 5 | 0 | 5 |  |
+| docs/patterns/ | 2 | 0 | 2 |  |
+| docs/planning/ | 30 | 30 | 0 |  |
+| docs/plans/ | 1 | 1 | 0 |  |
+| docs/reference/ | 2 | 0 | 2 |  |
+| docs/releases/ | 1 | 1 | 0 |  |
+| docs/reports/ | 203 | 0 | 203 |  |
+| docs/roadmap/ | 1 | 1 | 0 |  |
+| docs/strategy/ | 2 | 2 | 0 |  |
+| docs/testing/ | 1 | 1 | 0 |  |
+| docs/workflow/ | 19 | 19 | 0 |  |
+
+Notes:
+- `required_paths` means every Markdown file in that declared path must be registered.
+- `exempt_paths` means a declared path is intentionally registration-free and must carry a reason.
+- This template is evidence for a maintainer decision; it does not modify scope by itself.

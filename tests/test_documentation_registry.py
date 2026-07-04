@@ -11,7 +11,9 @@ from agentic_project_kit.cli import app
 from agentic_project_kit.documentation_registry import (
     DOCUMENT_CLASSES,
     REGISTRY_PATH,
+    SCOPE_PATH,
     REQUIRED_CLASS_RULE_FIELDS,
+    build_doc_registry_scope_decision_rows,
     build_unregistered_document_candidates_report,
     build_documentation_registry_summary,
     check_documentation_registry,
@@ -92,6 +94,35 @@ def _write_registry(project: Path) -> None:
         ],
     }
     _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+
+def _write_scope(
+    project: Path,
+    *,
+    required_paths: list[str] | None = None,
+    exempt_paths: list[dict[str, str]] | None = None,
+) -> None:
+    scope = {
+        "schema_version": 1,
+        "required_paths": required_paths or [],
+        "exempt_paths": exempt_paths or [],
+    }
+    _write(project / SCOPE_PATH, yaml.safe_dump(scope, sort_keys=False))
+    registry = _read_registry(project)
+    documents = registry["documents"]
+    assert isinstance(documents, list)
+    if not any(
+        isinstance(document, dict) and document.get("path") == SCOPE_PATH.as_posix()
+        for document in documents
+    ):
+        documents.append(
+            {
+                "path": SCOPE_PATH.as_posix(),
+                "class": "governance/system",
+                "owner": "maintainers",
+            }
+        )
+        _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
 
 
 def _read_registry(project: Path) -> dict[str, object]:
@@ -336,6 +367,136 @@ def test_docs_check_unregistered_lists_as_warn(tmp_path: Path) -> None:
     assert report["result_status"] == "WARN"
     assert report["candidate_count"] == 1
     assert report["candidates"] == ["docs/new-plan.md"]
+
+
+def test_scope_file_absent_keeps_current_warn_behavior(tmp_path: Path) -> None:
+    _write_registry(tmp_path)
+    _write(tmp_path / "docs" / "new-plan.md", "# New plan\n")
+
+    report = build_unregistered_document_candidates_report(tmp_path)
+
+    assert report["result_status"] == "WARN"
+    assert report["scope_present"] is False
+    assert report["candidate_count"] == 1
+    assert report["candidates"] == ["docs/new-plan.md"]
+    assert report["exempted_count"] == 0
+    assert report["scope_violation_count"] == 0
+
+
+def test_required_path_violations_listed_separately(tmp_path: Path) -> None:
+    _write_registry(tmp_path)
+    _write_scope(tmp_path, required_paths=["docs/required/"])
+    _write(tmp_path / "docs" / "required" / "missing.md", "# Missing\n")
+    _write(tmp_path / "docs" / "outside.md", "# Outside\n")
+
+    report = build_unregistered_document_candidates_report(tmp_path)
+
+    assert report["result_status"] == "WARN"
+    assert report["candidates"] == ["docs/outside.md", "docs/required/missing.md"]
+    assert report["scope_violations"] == ["docs/required/missing.md"]
+    assert report["scope_violation_count"] == 1
+
+
+def test_strict_scope_fails_on_violation_and_passes_when_clean(tmp_path: Path) -> None:
+    _write_registry(tmp_path)
+    _write_scope(tmp_path, required_paths=["docs/required/"])
+    _write(tmp_path / "docs" / "required" / "missing.md", "# Missing\n")
+    runner = CliRunner()
+
+    failed = runner.invoke(
+        app,
+        [
+            "doc-registry",
+            "check-unregistered",
+            "--root",
+            str(tmp_path),
+            "--strict-scope",
+            "--json",
+        ],
+    )
+
+    assert failed.exit_code == 1
+    failed_payload = json.loads(failed.output)
+    assert failed_payload["result_status"] == "FAIL"
+    assert failed_payload["scope_violations"] == ["docs/required/missing.md"]
+
+    clean_project = tmp_path / "clean-project"
+    clean_project.mkdir()
+    _write_registry(clean_project)
+    _write(clean_project / "docs" / "STATUS.md", "## Current Goal\n")
+    _write(clean_project / "docs" / "required" / "registered.md", "# Registered\n")
+    register_documentation_registry_entry(
+        clean_project,
+        document_path="docs/required/registered.md",
+        document_class="planning",
+    )
+    _write_scope(clean_project, required_paths=["docs/required/"])
+
+    passed = runner.invoke(
+        app,
+        [
+            "doc-registry",
+            "check-unregistered",
+            "--root",
+            str(clean_project),
+            "--strict-scope",
+            "--json",
+        ],
+    )
+
+    assert passed.exit_code == 0
+    passed_payload = json.loads(passed.output)
+    assert passed_payload["result_status"] == "PASS"
+    assert passed_payload["scope_violations"] == []
+
+
+def test_exempt_paths_filtered_with_counter(tmp_path: Path) -> None:
+    _write_registry(tmp_path)
+    _write_scope(
+        tmp_path,
+        exempt_paths=[
+            {
+                "path": "docs/examples/",
+                "reason": "Example documents are intentionally outside registry scope.",
+            }
+        ],
+    )
+    _write(tmp_path / "docs" / "examples" / "sample.md", "# Sample\n")
+    _write(tmp_path / "docs" / "active.md", "# Active\n")
+
+    report = build_unregistered_document_candidates_report(tmp_path)
+
+    assert report["result_status"] == "WARN"
+    assert report["candidate_count"] == 1
+    assert report["candidates"] == ["docs/active.md"]
+    assert report["exempted_count"] == 1
+
+
+def test_decision_template_counts_match_filesystem() -> None:
+    rows = {
+        str(row["docs_path"]): row
+        for row in build_doc_registry_scope_decision_rows(ROOT)
+    }
+    decision = (ROOT / "docs/planning/DOC_REGISTRY_SCOPE_DECISION.md").read_text(
+        encoding="utf-8"
+    )
+
+    table_rows = [
+        line
+        for line in decision.splitlines()
+        if line.startswith("| docs/") and not line.startswith("| docs path ")
+    ]
+    parsed: dict[str, dict[str, int | str]] = {}
+    for line in table_rows:
+        cells = [cell.strip() for cell in line.strip("|").split("|")]
+        parsed[cells[0]] = {
+            "docs_path": cells[0],
+            "md_files": int(cells[1]),
+            "registered": int(cells[2]),
+            "unregistered": int(cells[3]),
+        }
+
+    assert parsed == rows
 
 
 def test_doc_registry_register_cli_writes_valid_entry(tmp_path: Path) -> None:
