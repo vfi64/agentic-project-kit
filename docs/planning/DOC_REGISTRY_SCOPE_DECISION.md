@@ -5,6 +5,7 @@ Decision status: undecided
 Review policy: required
 
 Generated from the current repository filesystem and `docs/DOCUMENTATION_REGISTRY.yaml`.
+Counts exclude generated report prefixes that are already outside the registry candidate scan.
 No scope recommendation is encoded here; maintainers fill the proposed column after review.
 
 | docs path | md files | registered | unregistered | proposed: required / exempt / undecided |
@@ -23,7 +24,7 @@ No scope recommendation is encoded here; maintainers fill the proposed column af
 | docs/plans/ | 1 | 1 | 0 |  |
 | docs/reference/ | 2 | 0 | 2 |  |
 | docs/releases/ | 1 | 1 | 0 |  |
-| docs/reports/ | 203 | 0 | 203 |  |
+| docs/reports/ | 63 | 0 | 63 |  |
 | docs/roadmap/ | 1 | 1 | 0 |  |
 | docs/strategy/ | 2 | 2 | 0 |  |
 | docs/testing/ | 1 | 1 | 0 |  |
