@@ -24,15 +24,21 @@ class KitConfig:
     reports_root: str = "docs/reports"
     terminal_reports_root: str = "docs/reports/terminal"
     transfer_handoff_reports_root: str = "docs/reports/terminal/transfer_handoff_reports"
+    terminal_post_pr_successor_chat_handoff_prefix: str = "docs/reports/terminal/post-pr"
     handoff_root: str = "docs/handoff"
     handoff_packages_latest_root: str = "docs/reports/handoff-packages/latest"
     planning_root: str = "docs/planning"
     governance_root: str = "docs/governance"
     reference_root: str = "docs/reference"
+    source_root: str = "src/agentic_project_kit"
+    pyproject_file: str = "pyproject.toml"
+    admin_refresh_branch_prefix: str = "docs/post-pr"
     status_file: str = "STATUS.md"
     test_gates_file: str = "TEST_GATES.md"
     documentation_coverage_file: str = "DOCUMENTATION_COVERAGE.yaml"
     documentation_registry_file: str = "DOCUMENTATION_REGISTRY.yaml"
+    handoff_state_file: str = "handoff_state.yaml"
+    operational_handoff_state_file: str = "operational_handoff_state.yaml"
 
 
 @dataclass(frozen=True)
@@ -52,6 +58,12 @@ class Workspace:
     def tmp(self) -> Path:
         return self._path(self.config.tmp_root)
 
+    def agentic_root(self) -> Path:
+        return self._path(self.config.agentic_root)
+
+    def agentic_file(self, name: str) -> Path:
+        return self.agentic_root() / name
+
     def agentic_tmp(self) -> Path:
         return self._path(self.config.agentic_tmp_root)
 
@@ -63,6 +75,12 @@ class Workspace:
 
     def transfer_outbox(self) -> Path:
         return self._path(self.config.transfer_root) / self.config.transfer_outbox_name
+
+    def handoff_state_path(self) -> Path:
+        return self.agentic_file(self.config.handoff_state_file)
+
+    def operational_handoff_state_path(self) -> Path:
+        return self.agentic_file(self.config.operational_handoff_state_file)
 
     def status_path(self) -> Path:
         return self.docs_file(self.config.status_file)
@@ -81,6 +99,12 @@ class Workspace:
 
     def terminal_reports_dir(self) -> Path:
         return self._path(self.config.terminal_reports_root)
+
+    def post_pr_successor_chat_handoff_prefix(self) -> str:
+        return self.config.terminal_post_pr_successor_chat_handoff_prefix
+
+    def post_pr_successor_chat_handoff_path(self, after_pr: int) -> Path:
+        return self._path(f"{self.config.terminal_post_pr_successor_chat_handoff_prefix}{after_pr}-successor-chat-handoff.md")
 
     def transfer_handoff_report_file(self, name: str) -> Path:
         return self._path(self.config.transfer_handoff_reports_root) / name
@@ -114,6 +138,18 @@ class Workspace:
 
     def reference_file(self, name: str) -> Path:
         return self.reference_dir() / name
+
+    def source_root(self) -> Path:
+        return self._path(self.config.source_root)
+
+    def pyproject_path(self) -> Path:
+        return self._path(self.config.pyproject_file)
+
+    def admin_refresh_branch_prefix(self) -> str:
+        return self.config.admin_refresh_branch_prefix
+
+    def admin_refresh_branch(self, after_pr: int) -> str:
+        return f"{self.config.admin_refresh_branch_prefix}{after_pr}-handoff-refresh"
 
 
 def load_workspace(root: Path = Path(".")) -> Workspace:

@@ -626,8 +626,9 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
             return subprocess.CompletedProcess(command, 0, "PLAN: PASS\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
-    def fake_refresh_operational_handoff_docs(after_pr):
+    def fake_refresh_operational_handoff_docs(after_pr, *, ws=None):
         assert after_pr == 123
+        assert ws is not None
         return subprocess.CompletedProcess(
             ["admin-refresh-operational-handoff-docs", "--after-pr", "123"],
             0,
@@ -2179,8 +2180,9 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
             return subprocess.CompletedProcess(command, 0, "PLAN: PASS\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
-    def fake_refresh_operational_handoff_docs(after_pr):
+    def fake_refresh_operational_handoff_docs(after_pr, *, ws=None):
         assert after_pr == 123
+        assert ws is not None
         return subprocess.CompletedProcess(
             ["admin-refresh-operational-handoff-docs", "--after-pr", "123"],
             0,

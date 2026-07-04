@@ -23,16 +23,25 @@ def test_legacy_workspace_paths_match_todays_literals() -> None:
 
     assert _rel(ws.docs_root()) == "docs"
     assert _rel(ws.tmp()) == "tmp"
+    assert _rel(ws.agentic_root()) == ".agentic"
+    assert _rel(ws.agentic_file("handoff_state.yaml")) == ".agentic/handoff_state.yaml"
     assert _rel(ws.agentic_tmp()) == ".agentic/tmp"
     assert _rel(ws.workspace_lock_path()) == ".agentic/tmp/workspace.lock"
     assert _rel(ws.transfer_inbox()) == ".agentic/transfer/inbox"
     assert _rel(ws.transfer_outbox()) == ".agentic/transfer/outbox"
+    assert _rel(ws.handoff_state_path()) == ".agentic/handoff_state.yaml"
+    assert _rel(ws.operational_handoff_state_path()) == ".agentic/operational_handoff_state.yaml"
     assert _rel(ws.status_path()) == "docs/STATUS.md"
     assert _rel(ws.test_gates_path()) == "docs/TEST_GATES.md"
     assert _rel(ws.documentation_coverage_path()) == "docs/DOCUMENTATION_COVERAGE.yaml"
     assert _rel(ws.doc_registry_path()) == "docs/DOCUMENTATION_REGISTRY.yaml"
     assert _rel(ws.reports_dir()) == "docs/reports"
     assert _rel(ws.terminal_reports_dir()) == "docs/reports/terminal"
+    assert ws.post_pr_successor_chat_handoff_prefix() == "docs/reports/terminal/post-pr"
+    assert (
+        _rel(ws.post_pr_successor_chat_handoff_path(123))
+        == "docs/reports/terminal/post-pr123-successor-chat-handoff.md"
+    )
     assert (
         _rel(ws.transfer_handoff_report_file("latest-transfer-handoff-report.json"))
         == "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
@@ -47,6 +56,10 @@ def test_legacy_workspace_paths_match_todays_literals() -> None:
     assert _rel(ws.governance_file("FINAL_SUMMARY_CONTRACT.md")) == "docs/governance/FINAL_SUMMARY_CONTRACT.md"
     assert _rel(ws.reference_dir()) == "docs/reference"
     assert _rel(ws.reference_file("AGENTIC_KIT_COMMANDS.md")) == "docs/reference/AGENTIC_KIT_COMMANDS.md"
+    assert _rel(ws.source_root()) == "src/agentic_project_kit"
+    assert _rel(ws.pyproject_path()) == "pyproject.toml"
+    assert ws.admin_refresh_branch_prefix() == "docs/post-pr"
+    assert ws.admin_refresh_branch(123) == "docs/post-pr123-handoff-refresh"
 
 
 def test_load_workspace_fails_loud_on_unexpected_manifest(tmp_path: Path) -> None:
