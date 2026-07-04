@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6457b9d0320e8c1e7c712d2fee164c71c7466d64
-  short: 6457b9d0
-  subject: Resolve transfer repo action paths through the workspace resolver (#1715)
+  full: ab9369eb900b6fac08b6e1b28a8847559a1b50fb
+  short: ab9369eb
+  subject: Resolve documentation audit paths through the workspace resolver (#1717)
 last_substantive_work_state:
-  full: 6457b9d0320e8c1e7c712d2fee164c71c7466d64
-  short: 6457b9d0
-  subject: Resolve transfer repo action paths through the workspace resolver (#1715)
+  full: ab9369eb900b6fac08b6e1b28a8847559a1b50fb
+  short: ab9369eb
+  subject: Resolve documentation audit paths through the workspace resolver (#1717)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
