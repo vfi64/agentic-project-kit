@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: ab9369eb900b6fac08b6e1b28a8847559a1b50fb
-  short: ab9369eb
-  subject: Resolve documentation audit paths through the workspace resolver (#1717)
+  full: a8272bc4f2fcfc8df216454460e6d8100b610071
+  short: a8272bc4
+  subject: Record P1 path literal migration evidence (#1719)
 last_substantive_work_state:
-  full: ab9369eb900b6fac08b6e1b28a8847559a1b50fb
-  short: ab9369eb
-  subject: Resolve documentation audit paths through the workspace resolver (#1717)
+  full: a8272bc4f2fcfc8df216454460e6d8100b610071
+  short: a8272bc4
+  subject: Record P1 path literal migration evidence (#1719)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
