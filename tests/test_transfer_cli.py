@@ -111,7 +111,7 @@ def test_transfer_apply_cli_blocks_without_rule_acknowledgement(tmp_path, monkey
 def test_sync_main_uses_restore_known_volatile_wrapper_for_mixed_tracked_and_untracked_carriers():
     from pathlib import Path
 
-    source = Path("src/agentic_project_kit/cli_commands/transfer.py").read_text(encoding="utf-8")
+    source = Path("src/agentic_project_kit/cli_commands/transfer_context_flow.py").read_text(encoding="utf-8")
 
     assert 'step("restore-before-sync", ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"])' in source
     assert 'step("restore-before-sync", ["git", "restore", "--", *KNOWN_VOLATILE_TRANSFER_PATHS])' not in source
