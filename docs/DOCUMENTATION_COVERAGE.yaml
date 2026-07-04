@@ -257,6 +257,13 @@ rules:
     - REPORT-ONLY
     - Affected modules
     - Literal count
+  - path: docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6-transfer-split.md
+    terms:
+    - Path Literal Audit Evidence (Post-S6 Transfer Split)
+    - 'Command: `agentic-kit audit-path-literals --json`'
+    - REPORT-ONLY
+    - Post-S6 affected modules
+    - Transfer Command Modules
 - id: pattern-advisor-readme-coverage
   description: Read-only Pattern Advisor MVP commands and boundaries must remain visible.
   documents:
