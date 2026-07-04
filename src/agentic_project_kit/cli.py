@@ -46,6 +46,7 @@ from agentic_project_kit.cli_commands.planning_docs_audit import audit_planning_
 from agentic_project_kit.cli_commands.program_redundancy_audit import audit_program_redundancy_command
 from agentic_project_kit.cli_commands.gui_readiness_gate import gui_readiness_gate_command
 from agentic_project_kit.cli_commands.patch_failure_discipline_audit import audit_patch_failure_discipline_command
+from agentic_project_kit.cli_commands.path_literal_audit import audit_path_literals_command
 from agentic_project_kit.cli_commands.release_publish_orchestration import release_publish_command
 from agentic_project_kit.cli_commands.standard_gates_audit_suite import standard_gates_audit_suite_command
 from agentic_project_kit.cli_commands.command_taxonomy import command_taxonomy_check_command
@@ -62,6 +63,7 @@ app.command("command-taxonomy-check")(command_taxonomy_check_command)
 app.command("standard-gates-audit-suite")(standard_gates_audit_suite_command)
 app.command("release-publish")(release_publish_command)
 app.command("audit-patch-failure-discipline")(audit_patch_failure_discipline_command)
+app.command("audit-path-literals")(audit_path_literals_command)
 app.command("gui-readiness-gate")(gui_readiness_gate_command)
 app.command("audit-program-redundancy")(audit_program_redundancy_command)
 app.command("audit-planning-docs-consolidation")(audit_planning_docs_consolidation_command)

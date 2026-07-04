@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `197`
+- Command count: `198`
 
 ## Commands
 
@@ -73,6 +73,15 @@ Audit whether repeated patch failures were followed by diagnosis evidence.
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `include_tmp` | `TyperOption` | --include-tmp | `False` | `False` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
+### `agentic-kit audit-path-literals`
+
+Report hardcoded docs/tmp path literals in source modules.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit audit-planning-docs-consolidation`
 

@@ -29,6 +29,12 @@ def test_standard_gates_audit_suite_contains_required_gates() -> None:
     assert REQUIRED_NAMES <= command_names
 
 
+def test_path_literal_audit_is_report_only_not_standard_gate() -> None:
+    command_names = {command[0] for command in REQUIRED_STANDARD_GATE_COMMANDS}
+
+    assert "audit-path-literals" not in command_names
+
+
 def test_standard_gates_audit_suite_passes_when_commands_pass(tmp_path: Path) -> None:
     seen: list[tuple[str, ...]] = []
 
