@@ -271,6 +271,13 @@ rules:
     - REPORT-ONLY
     - P1 Migration Order
     - successor_handoff_package
+  - path: docs/architecture/evidence/path-literal-audit-2026-07-04-post-p1.md
+    terms:
+    - Path Literal Audit 2026-07-04 Post-P1
+    - .venv/bin/agentic-kit audit-path-literals
+    - P1 migration verification
+    - successor_handoff_package.py
+    - workspace.py
 - id: kit-os-architecture-coverage
   description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, and evidence policy.
   documents:
