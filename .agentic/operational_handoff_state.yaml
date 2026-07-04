@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 1ea48d2ec28c6914cb3f74a6839803efde13efc2
-  short: 1ea48d2e
-  subject: Refresh handoff state after PR1698 (#1699)
+  full: 12b9ff19c0dd08961251b7519083b5c45ad8ce38
+  short: 12b9ff19
+  subject: Add machine-generated path-literal evidence report for workspace migration (#1701)
 last_substantive_work_state:
-  full: 1ea48d2ec28c6914cb3f74a6839803efde13efc2
-  short: 1ea48d2e
-  subject: Refresh handoff state after PR1698 (#1699)
+  full: 12b9ff19c0dd08961251b7519083b5c45ad8ce38
+  short: 12b9ff19
+  subject: Add machine-generated path-literal evidence report for workspace migration (#1701)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
