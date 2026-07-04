@@ -2583,6 +2583,126 @@ def test_admin_refresh_replaces_existing_operational_refresh_marker(tmp_path: Pa
 
 
 
+def test_transfer_repo_actions_path_contract_snapshot(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.chdir(tmp_path)
+    for rel in (
+        ".agentic/handoff_state.yaml",
+        ".agentic/operational_handoff_state.yaml",
+        "docs/STATUS.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    ):
+        (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+
+    (tmp_path / ".agentic/handoff_state.yaml").write_text(
+        "administrative_evidence_state:\n"
+        "  current_head: oldhead1\n"
+        "  current_head_subject: Old subject\n"
+        "  latest_successor_prompt: docs/reports/terminal/post-pr1000-successor-chat-handoff.md\n"
+        "first_instruction: Start the next chat from the fresh post-PR1000 successor handoff prompt. "
+        "Verify main at oldhead1, confirm the post-PR1000 operational handoff refresh passes explicit summary inspection.\n",
+        encoding="utf-8",
+    )
+    (tmp_path / ".agentic/operational_handoff_state.yaml").write_text(
+        "current_head:\n"
+        "  full: 0000000000000000000000000000000000000000\n"
+        "  short: oldhead1\n"
+        "  subject: Old subject\n",
+        encoding="utf-8",
+    )
+    for rel in (
+        "docs/STATUS.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    ):
+        (tmp_path / rel).write_text("# Stable document\n", encoding="utf-8")
+
+    full = "1234567890abcdef1234567890abcdef12345678"
+    short = "12345678"
+    subject = "Refresh path contract (#2468)"
+
+    def fake_run(argv: list[str], *, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
+        if cwd is not None:
+            raise AssertionError(f"unexpected cwd for snapshot fake: {cwd}")
+        if argv == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(argv, 0, full + "\n", "")
+        if argv == ["git", "rev-parse", "--short=8", "HEAD"]:
+            return subprocess.CompletedProcess(argv, 0, short + "\n", "")
+        if argv == ["git", "log", "-1", "--format=%s"]:
+            return subprocess.CompletedProcess(argv, 0, subject + "\n", "")
+        if argv[-2:] == ["prepare-successor-handoff", "--render-prompt"]:
+            for rel in (
+                "docs/reports/handoff-packages/latest/execution_contract.json",
+                "docs/reports/handoff-packages/latest/source_manifest.json",
+                "docs/reports/handoff-packages/latest/successor_context.yaml",
+                "docs/reports/handoff-packages/latest/successor_prompt.md",
+                "docs/reports/handoff-packages/latest/validation_report.json",
+            ):
+                (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+                (tmp_path / rel).write_text(f"package artifact: {rel}\n", encoding="utf-8")
+            return subprocess.CompletedProcess(argv, 0, "fresh package\n", "")
+        if argv[-2:] == ["boot", "write"]:
+            bootstrap = tmp_path / "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
+            bootstrap.parent.mkdir(parents=True, exist_ok=True)
+            bootstrap.write_text("bootstrap contract\n", encoding="utf-8")
+            return subprocess.CompletedProcess(argv, 0, "WROTE docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n", "")
+        if argv[-2:] == ["handoff", "prompt"]:
+            return subprocess.CompletedProcess(argv, 0, "successor prompt contract\n", "")
+        if argv[-2:] == ["handoff", "post-merge-refresh-status"]:
+            return subprocess.CompletedProcess(argv, 0, "result=NOOP\nrefresh_required=False\n", "")
+        return subprocess.CompletedProcess(argv, 99, "", f"unexpected command: {argv}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions._refresh_operational_handoff_docs(2468)
+
+    assert result.returncode == 0, result.stderr
+    relative_files = sorted(
+        path.relative_to(tmp_path).as_posix()
+        for path in tmp_path.rglob("*")
+        if path.is_file()
+    )
+    assert relative_files == [
+        ".agentic/handoff_state.yaml",
+        ".agentic/operational_handoff_state.yaml",
+        "docs/STATUS.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+        "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "docs/reports/handoff-packages/latest/execution_contract.json",
+        "docs/reports/handoff-packages/latest/source_manifest.json",
+        "docs/reports/handoff-packages/latest/successor_context.yaml",
+        "docs/reports/handoff-packages/latest/successor_prompt.md",
+        "docs/reports/handoff-packages/latest/validation_report.json",
+        "docs/reports/terminal/post-pr2468-successor-chat-handoff.md",
+    ]
+    assert result.stdout.split("\\n") == [
+        "Updated operational handoff docs:",
+        "- .agentic/handoff_state.yaml",
+        "- .agentic/operational_handoff_state.yaml",
+        "- docs/STATUS.md",
+        "- docs/handoff/CURRENT_HANDOFF.md",
+        "- docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "- docs/reports/handoff-packages/latest/execution_contract.json",
+        "- docs/reports/handoff-packages/latest/source_manifest.json",
+        "- docs/reports/handoff-packages/latest/successor_context.yaml",
+        "- docs/reports/handoff-packages/latest/successor_prompt.md",
+        "- docs/reports/handoff-packages/latest/validation_report.json",
+        "- docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "- docs/reports/terminal/post-pr2468-successor-chat-handoff.md",
+        "",
+    ]
+    assert "latest_successor_prompt: docs/reports/terminal/post-pr2468-successor-chat-handoff.md" in (
+        tmp_path / ".agentic/handoff_state.yaml"
+    ).read_text(encoding="utf-8")
+    assert "Operational documentation refresh state after PR #2468" in (
+        tmp_path / "docs/STATUS.md"
+    ).read_text(encoding="utf-8")
+    assert (
+        tmp_path / "docs/reports/terminal/post-pr2468-successor-chat-handoff.md"
+    ).read_text(encoding="utf-8") == "successor prompt contract\n"
+
+
 def test_admin_refresh_pr_skips_refresh_only_pr(monkeypatch):
     from agentic_project_kit import transfer_repo_actions as actions
 
