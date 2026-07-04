@@ -12,39 +12,57 @@ from agentic_project_kit.checks import check_docs
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_report
 from agentic_project_kit.doc_mesh import build_doc_mesh_report
 from agentic_project_kit.documentation_registry import build_documentation_registry_summary
+from agentic_project_kit.workspace import KitConfig, Workspace, load_workspace
 
 
-MANDATORY_ORDER = (
-    ".agentic/compiled_agent_context.yaml",
-    "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-    "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-    "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-    "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-    "docs/TEST_GATES.md",
-    "docs/STATUS.md",
-    "docs/handoff/CURRENT_HANDOFF.md",
-)
+_LEGACY_WORKSPACE = Workspace(root=Path("."), config=KitConfig())
 
 STATUS_HEADROOM_WORD_LIMIT = 4968
 
-REQUIRED_DOCS = (
-    "README.md",
-    "AGENTS.md",
-    "docs/STATUS.md",
-    "docs/TEST_GATES.md",
-    "docs/handoff/CURRENT_HANDOFF.md",
-    "docs/DOCUMENTATION_COVERAGE.yaml",
-    "docs/DOCUMENTATION_REGISTRY.yaml",
-    "sentinel.yaml",
-    ".agentic/compiled_agent_context.yaml",
-    "docs/governance/FINAL_SUMMARY_CONTRACT.md",
-    "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
-    "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
-    "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
-    "docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md",
-    "docs/architecture/ARCHITECTURE_CONTRACT.md",
-    "docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md",
-)
+
+def _workspace_path_text(ws: Workspace, path: Path) -> str:
+    try:
+        return path.relative_to(ws.root).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def _mandatory_order(ws: Workspace) -> tuple[str, ...]:
+    return (
+        _workspace_path_text(ws, ws.compiled_agent_context_path()),
+        _workspace_path_text(ws, ws.governance_file("FINAL_SUMMARY_CONTRACT.md")),
+        _workspace_path_text(ws, ws.governance_file("CHAT_COMMUNICATION_CONTRACT.md")),
+        _workspace_path_text(ws, ws.governance_file("PORTABLE_CHAT_EXECUTION_CONTRACT.md")),
+        _workspace_path_text(ws, ws.governance_file("CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md")),
+        _workspace_path_text(ws, ws.test_gates_path()),
+        _workspace_path_text(ws, ws.status_path()),
+        _workspace_path_text(ws, ws.handoff_file("CURRENT_HANDOFF.md")),
+    )
+
+
+def _required_docs(ws: Workspace) -> tuple[str, ...]:
+    return (
+        _workspace_path_text(ws, ws.root_file("README.md")),
+        _workspace_path_text(ws, ws.root_file("AGENTS.md")),
+        _workspace_path_text(ws, ws.status_path()),
+        _workspace_path_text(ws, ws.test_gates_path()),
+        _workspace_path_text(ws, ws.handoff_file("CURRENT_HANDOFF.md")),
+        _workspace_path_text(ws, ws.documentation_coverage_path()),
+        _workspace_path_text(ws, ws.doc_registry_path()),
+        _workspace_path_text(ws, ws.root_file("sentinel.yaml")),
+        _workspace_path_text(ws, ws.compiled_agent_context_path()),
+        _workspace_path_text(ws, ws.governance_file("FINAL_SUMMARY_CONTRACT.md")),
+        _workspace_path_text(ws, ws.governance_file("CHAT_COMMUNICATION_CONTRACT.md")),
+        _workspace_path_text(ws, ws.governance_file("PORTABLE_CHAT_EXECUTION_CONTRACT.md")),
+        _workspace_path_text(ws, ws.governance_file("CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md")),
+        _workspace_path_text(ws, ws.governance_file("DOCUMENTATION_REGISTRY_CONTRACT.md")),
+        _workspace_path_text(ws, ws.architecture_file("ARCHITECTURE_CONTRACT.md")),
+        _workspace_path_text(ws, ws.architecture_file("DOCUMENTATION_INFORMATION_ARCHITECTURE.md")),
+    )
+
+
+MANDATORY_ORDER = _mandatory_order(_LEGACY_WORKSPACE)
+REQUIRED_DOCS = _required_docs(_LEGACY_WORKSPACE)
 
 
 @dataclass(frozen=True)
@@ -80,15 +98,16 @@ class DocumentationSystemAuditReport:
 
 def build_documentation_system_audit(project_root: Path) -> DocumentationSystemAuditReport:
     project_root = project_root.resolve()
+    ws = load_workspace(project_root)
     check_doc_errors = tuple(check_docs(project_root))
     mesh_report = build_doc_mesh_report(project_root)
     lifecycle_report = build_doc_lifecycle_report(project_root)
     dimensions = (
-        _freshness_dimension(project_root, mesh_report),
-        _completeness_dimension(project_root, check_doc_errors),
+        _freshness_dimension(ws, mesh_report),
+        _completeness_dimension(ws, check_doc_errors),
         _correctness_dimension(check_doc_errors, mesh_report, lifecycle_report),
-        _redundancy_dimension(project_root),
-        _document_order_dimension(project_root),
+        _redundancy_dimension(ws),
+        _document_order_dimension(ws),
         _registry_dimension(project_root),
         _consistency_dimension(mesh_report, lifecycle_report),
     )
@@ -119,20 +138,20 @@ def write_documentation_system_audit_json(
     output_path.write_text(json.dumps(report.to_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def _freshness_dimension(project_root: Path, mesh_report: Any) -> DocumentationAuditDimension:
+def _freshness_dimension(ws: Workspace, mesh_report: Any) -> DocumentationAuditDimension:
     freshness_codes = {"stale-current-state-marker", "version-mismatch", "release-doi-list-mismatch"}
     findings = [
         f"{finding.path}: {finding.message}"
         for finding in mesh_report.findings
         if finding.code in freshness_codes
     ]
-    findings.extend(_status_handoff_sync_findings(project_root))
-    findings.extend(_status_headroom_findings(project_root))
+    findings.extend(_status_handoff_sync_findings(ws))
+    findings.extend(_status_headroom_findings(ws))
     return DocumentationAuditDimension("Aktualität", ok=not findings, findings=tuple(findings))
 
 
-def _completeness_dimension(project_root: Path, check_doc_errors: tuple[str, ...]) -> DocumentationAuditDimension:
-    missing = [path for path in REQUIRED_DOCS if not (project_root / path).exists()]
+def _completeness_dimension(ws: Workspace, check_doc_errors: tuple[str, ...]) -> DocumentationAuditDimension:
+    missing = [path for path in _required_docs(ws) if not (ws.root / path).exists()]
     findings = [f"missing required documentation file: {path}" for path in missing]
     findings.extend(error for error in check_doc_errors if "missing" in error.lower())
     return DocumentationAuditDimension("Vollständigkeit", ok=not findings, findings=tuple(findings))
@@ -152,14 +171,17 @@ def _correctness_dimension(
     return DocumentationAuditDimension("Korrektheit", ok=not findings, findings=tuple(findings))
 
 
-def _redundancy_dimension(project_root: Path) -> DocumentationAuditDimension:
+def _redundancy_dimension(ws: Workspace) -> DocumentationAuditDimension:
     findings: list[str] = []
-    test_gates = _read_optional(project_root / "docs/TEST_GATES.md")
+    test_gates = _read_optional(ws.test_gates_path())
     if _contains_long_rule_duplication(test_gates):
-        findings.append("docs/TEST_GATES.md appears to duplicate long rule-book content")
-    status = _read_optional(project_root / "docs/STATUS.md")
-    handoff = _read_optional(project_root / "docs/handoff/CURRENT_HANDOFF.md")
-    for path, text in (("docs/STATUS.md", status), ("docs/handoff/CURRENT_HANDOFF.md", handoff)):
+        findings.append(f"{_workspace_path_text(ws, ws.test_gates_path())} appears to duplicate long rule-book content")
+    status = _read_optional(ws.status_path())
+    handoff = _read_optional(ws.handoff_file("CURRENT_HANDOFF.md"))
+    for path, text in (
+        (_workspace_path_text(ws, ws.status_path()), status),
+        (_workspace_path_text(ws, ws.handoff_file("CURRENT_HANDOFF.md")), handoff),
+    ):
         if "concise pointers, not duplicate rule books" not in text and len(text.split()) > 3500:
             findings.append(f"{path} is long but does not state the concise-pointer boundary")
     boundary = (
@@ -177,46 +199,52 @@ def _redundancy_dimension(project_root: Path) -> DocumentationAuditDimension:
 
 
 
-def _status_headroom_findings(project_root: Path) -> tuple[str, ...]:
-    status = _read_optional(project_root / "docs/STATUS.md")
+def _status_headroom_findings(ws: Workspace) -> tuple[str, ...]:
+    status_path = ws.status_path()
+    status = _read_optional(status_path)
     words = len(status.split())
     if words > STATUS_HEADROOM_WORD_LIMIT:
-        return (f"docs/STATUS.md exceeds headroom limit: {words}/{STATUS_HEADROOM_WORD_LIMIT} words",)
+        return (f"{_workspace_path_text(ws, status_path)} exceeds headroom limit: {words}/{STATUS_HEADROOM_WORD_LIMIT} words",)
     return ()
 
 
-def _status_handoff_sync_findings(project_root: Path) -> tuple[str, ...]:
-    status = _read_optional(project_root / "docs/STATUS.md")
-    handoff = _read_optional(project_root / "docs/handoff/CURRENT_HANDOFF.md")
+def _status_handoff_sync_findings(ws: Workspace) -> tuple[str, ...]:
+    status_path = ws.status_path()
+    handoff_path = ws.handoff_file("CURRENT_HANDOFF.md")
+    status_name = _workspace_path_text(ws, status_path)
+    handoff_name = _workspace_path_text(ws, handoff_path)
+    status = _read_optional(status_path)
+    handoff = _read_optional(handoff_path)
     findings: list[str] = []
     status_prs = set(re.findall(r"PR #\d+ merged", status))
     handoff_prs = set(re.findall(r"PR #\d+ merged", handoff))
     for item in sorted(status_prs - handoff_prs):
-        findings.append(f"docs/handoff/CURRENT_HANDOFF.md missing current closeout marker from STATUS.md: {item}")
+        findings.append(f"{handoff_name} missing current closeout marker from STATUS.md: {item}")
     for item in sorted(handoff_prs - status_prs):
-        findings.append(f"docs/STATUS.md missing current closeout marker from CURRENT_HANDOFF.md: {item}")
+        findings.append(f"{status_name} missing current closeout marker from CURRENT_HANDOFF.md: {item}")
     required_handoff_terms = (
-        ".agentic/compiled_agent_context.yaml",
+        _workspace_path_text(ws, ws.compiled_agent_context_path()),
         "FINAL_SUMMARY_CONTRACT.md",
         "CHAT_COMMUNICATION_CONTRACT.md",
         "CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
     )
     for term in required_handoff_terms:
         if term not in handoff:
-            findings.append(f"docs/handoff/CURRENT_HANDOFF.md missing mandatory successor-chat source pointer: {term}")
+            findings.append(f"{handoff_name} missing mandatory successor-chat source pointer: {term}")
     return tuple(findings)
 
 
-def _document_order_dimension(project_root: Path) -> DocumentationAuditDimension:
+def _document_order_dimension(ws: Workspace) -> DocumentationAuditDimension:
     findings: list[str] = []
-    context = _load_yaml(project_root / ".agentic/compiled_agent_context.yaml")
+    context = _load_yaml(ws.compiled_agent_context_path())
     configured = tuple(context.get("mandatory_successor_chat_sources", []) or [])
-    if configured[: len(MANDATORY_ORDER)] != MANDATORY_ORDER:
+    mandatory_order = _mandatory_order(ws)
+    if configured[: len(mandatory_order)] != mandatory_order:
         findings.append("compiled agent context does not preserve the mandatory successor-chat source order")
-    for source in MANDATORY_ORDER:
+    for source in mandatory_order:
         if source not in configured:
             findings.append(f"mandatory successor-chat source missing from compiled context: {source}")
-        if not (project_root / source).exists():
+        if not (ws.root / source).exists():
             findings.append(f"mandatory successor-chat source file missing: {source}")
     return DocumentationAuditDimension("Stringenz der Dokumentenordnung", ok=not findings, findings=tuple(findings))
 
