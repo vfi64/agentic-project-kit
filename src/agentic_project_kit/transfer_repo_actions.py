@@ -10,6 +10,7 @@ from pathlib import Path
 from agentic_project_kit.transfer_operation_monitor import MonitorDecision
 from agentic_project_kit.transfer_operation_monitor import guard_branch
 from agentic_project_kit.transfer_operation_monitor import guard_pr_create
+from agentic_project_kit.workspace_lock import acquire_workspace_lock
 
 
 @dataclass(frozen=True)
@@ -648,6 +649,22 @@ def _main_commit_refusal(message: str) -> RepoActionResult:
 
 
 def commit_paths(message: str, paths: list[str], *, allow_main: bool = False, required_branch: str = "") -> RepoActionResult:
+    with acquire_workspace_lock(Path("."), "commit_paths"):
+        return _commit_paths_unlocked(
+            message,
+            paths,
+            allow_main=allow_main,
+            required_branch=required_branch,
+        )
+
+
+def _commit_paths_unlocked(
+    message: str,
+    paths: list[str],
+    *,
+    allow_main: bool = False,
+    required_branch: str = "",
+) -> RepoActionResult:
     if not paths:
         completed = subprocess.CompletedProcess(["git", "add"], 2, "", "No paths supplied.\n")
         return _result("commit", ["git", "add"], completed, "Provide explicit paths for commit.")
@@ -727,6 +744,11 @@ def commit_paths(message: str, paths: list[str], *, allow_main: bool = False, re
 
 
 def push_current(*, required_branch: str = "") -> RepoActionResult:
+    with acquire_workspace_lock(Path("."), "push_current"):
+        return _push_current_unlocked(required_branch=required_branch)
+
+
+def _push_current_unlocked(*, required_branch: str = "") -> RepoActionResult:
     if required_branch:
         monitor = guard_branch(
             command_kind="push-current",

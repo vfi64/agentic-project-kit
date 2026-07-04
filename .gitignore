@@ -17,6 +17,7 @@ Screen-Control_Output.txt
 
 # Local runtime rule acknowledgement state
 .agentic/rule_ack/
+.agentic/tmp/
 
 # Local transfer report scratch output; never commit generated quiet/progress reports.
 docs/reports/transfer_runs/
