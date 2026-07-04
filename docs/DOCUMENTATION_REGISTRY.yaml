@@ -564,6 +564,10 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Handoff refresh evidence before registry work.
+  - path: docs/architecture/evidence/path-literal-audit-2026-07-04.md
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-generated report-only path literal inventory for workspace migration planning.
   - path: docs/planning/KIT_AS_OS_MASTERPLAN.md
     class: planning
     owner: maintainers

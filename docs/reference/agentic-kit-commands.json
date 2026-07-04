@@ -346,6 +346,45 @@
     },
     {
       "group": "root",
+      "help": "Report hardcoded docs/tmp path literals in source modules.",
+      "name": "audit-path-literals",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "audit-path-literals"
+      ],
+      "qualified_name": "agentic-kit audit-path-literals"
+    },
+    {
+      "group": "root",
       "help": "Audit planning and handoff docs for consolidation candidates.",
       "name": "audit-planning-docs-consolidation",
       "params": [

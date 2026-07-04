@@ -445,8 +445,11 @@ Future repair tools should stay bounded to mechanical edits and must not rewrite
 
 ## Status current-state audit
 
-`agentic-kit audit-status-current-state` checks that the live `docs/STATUS.md` Current verified main pointer, the generated handoff validation report, `release-status`, `origin/main`, and the current `CHANGELOG.md` release block describe one coherent state. It permits a bounded administrative handoff-refresh lag, but blocks stale or contradictory current-state claims before they can guide a successor LLM, including a pending DOI line after STATUS records a verified Zenodo version DOI for the same current version.
+`agentic-kit audit-status-current-state` checks that `docs/STATUS.md` Current verified main, the handoff validation report, `release-status`, `origin/main`, and the current `CHANGELOG.md` release block agree. It allows bounded admin-refresh lag, but blocks stale current-state claims, including a pending DOI line after STATUS records a verified Zenodo version DOI for the same current version.
 
+## Path literal audit
+
+`agentic-kit audit-path-literals` is report-only, exits 0, is not part of the standard gate suite, and records evidence in `docs/architecture/evidence/path-literal-audit-2026-07-04.md`.
 
 ## Documentation system audit
 
