@@ -139,7 +139,7 @@ def test_pr_create_complete_payload_guard_detects_blocked_json() -> None:
 
 
 def test_pr_complete_invalid_post_merge_complete_message_is_present() -> None:
-    source = Path("src/agentic_project_kit/cli_commands/transfer.py").read_text(encoding="utf-8")
+    source = Path("src/agentic_project_kit/cli_commands/transfer_pr_merge_flow.py").read_text(encoding="utf-8")
     assert "invalid_argument_post_merge_complete" in source
     assert "--post-merge-complete is not valid for transfer pr-complete" in source
 

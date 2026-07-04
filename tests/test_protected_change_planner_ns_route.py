@@ -12,7 +12,7 @@ def test_legacy_ns_protected_change_plan_route_is_removed() -> None:
 
 
 def test_agentic_kit_protected_change_plan_route_exists() -> None:
-    transfer = (ROOT / "src/agentic_project_kit/cli_commands/transfer.py").read_text(
+    transfer = (ROOT / "src/agentic_project_kit/cli_commands/transfer_repo_pre_pr.py").read_text(
         encoding="utf-8",
     )
     assert "protected-diff-plan" in transfer or "protected_diff_plan" in transfer
@@ -43,7 +43,7 @@ def test_protected_change_planner_core_keeps_blocking_contract() -> None:
     candidates = [
         ROOT / "src/agentic_project_kit/protected_change_planner.py",
         ROOT / "src/agentic_project_kit/transfer_repo_actions.py",
-        ROOT / "src/agentic_project_kit/cli_commands/transfer.py",
+        ROOT / "src/agentic_project_kit/cli_commands/transfer_repo_pre_pr.py",
     ]
     existing = [path for path in candidates if path.exists()]
     assert existing
@@ -54,7 +54,7 @@ def test_protected_change_planner_core_keeps_blocking_contract() -> None:
 
 
 def test_transfer_protected_diff_plan_does_not_call_legacy_ns() -> None:
-    transfer = (ROOT / "src/agentic_project_kit/cli_commands/transfer.py").read_text(
+    transfer = (ROOT / "src/agentic_project_kit/cli_commands/transfer_repo_pre_pr.py").read_text(
         encoding="utf-8",
     )
     assert '["./ns", "protected-change-plan"' not in transfer

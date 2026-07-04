@@ -7,10 +7,14 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
+from agentic_project_kit.cli_commands import transfer as transfer_module
 
 
 def test_transfer_pr_complete_command_is_registered_in_source() -> None:
-    text = Path("src/agentic_project_kit/cli_commands/transfer.py").read_text(encoding="utf-8")
+    assembler = Path("src/agentic_project_kit/cli_commands/transfer.py").read_text(encoding="utf-8")
+    text = Path("src/agentic_project_kit/cli_commands/transfer_pr_merge_flow.py").read_text(encoding="utf-8")
+
+    assert "transfer_pr_merge_flow import *" in assembler
     assert '@transfer_app.command("pr-complete")' in text
     assert "transfer_pr_complete_result" in text
     assert "TRANSFER_PR_COMPLETE" in text
@@ -18,6 +22,10 @@ def test_transfer_pr_complete_command_is_registered_in_source() -> None:
     assert '"pr-merge-safe"' in text
     assert '"post-merge-complete"' in text
     assert '"rules", "acknowledge"' in text
+    assert any(
+        command.name == "pr-complete" and command.callback.__name__ == "pr_complete_command"
+        for command in transfer_module.transfer_app.registered_commands
+    )
 
 
 def test_transfer_pr_complete_orchestrates_wait_merge_sync_ack_and_post_merge(monkeypatch) -> None:

@@ -71,7 +71,7 @@ def test_release_cores_remain_available_without_ns_entrypoint() -> None:
 
 
 def test_transfer_pr_complete_replaces_legacy_ns_up_route() -> None:
-    transfer_text = Path("src/agentic_project_kit/cli_commands/transfer.py").read_text(
+    transfer_text = Path("src/agentic_project_kit/cli_commands/transfer_pr_merge_flow.py").read_text(
         encoding="utf-8",
     )
     command_reference = Path("docs/reference/AGENTIC_KIT_COMMANDS.md").read_text(

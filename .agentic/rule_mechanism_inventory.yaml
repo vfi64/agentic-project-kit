@@ -163,7 +163,7 @@ mechanisms:
     required_terms:
     - test_flags_large_rewrite_without_decision
     - test_accepts_large_rewrite_with_explicit_decision
-  - path: src/agentic_project_kit/cli_commands/transfer.py
+  - path: src/agentic_project_kit/cli_commands/transfer_repo_pre_pr.py
     required_terms:
     - protected-diff-plan
     - protected_diff_plan
