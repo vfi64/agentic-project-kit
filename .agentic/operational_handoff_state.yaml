@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e12feb14d08388e4a8e7083551351da8d83ea1c2
-  short: e12feb14
-  subject: Add workspace resolver foundation and mutation lock (#1711)
+  full: 0eebf09a5fe162532b33270e1dcfa1f3c87d8a7d
+  short: 0eebf09a
+  subject: Resolve successor handoff paths through the workspace resolver (#1713)
 last_substantive_work_state:
-  full: e12feb14d08388e4a8e7083551351da8d83ea1c2
-  short: e12feb14
-  subject: Add workspace resolver foundation and mutation lock (#1711)
+  full: 0eebf09a5fe162532b33270e1dcfa1f3c87d8a7d
+  short: 0eebf09a
+  subject: Resolve successor handoff paths through the workspace resolver (#1713)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
