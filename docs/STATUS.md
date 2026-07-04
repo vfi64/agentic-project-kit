@@ -7,9 +7,9 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `d4aca230` (`Harden refresh-only handoff bootstrap evidence (#1692)`).
-Latest substantive work: PR #1692 (`Harden refresh-only handoff bootstrap evidence (#1692)`).
-Post-merge handoff status: PASS/NOOP after PR #1692 administrative refresh.
+Current verified main: `c9dd7438` (`Fix stale pending-DOI line and gate CHANGELOG/STATUS consistency (#1694)`).
+Latest substantive work: PR #1694 (`Fix stale pending-DOI line and gate CHANGELOG/STATUS consistency (#1694)`).
+Post-merge handoff status: PASS/NOOP after PR #1694 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -397,6 +397,6 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
 - Portability closeout: in progress; all tracked shell scripts removed in Slice 6, pending final gates and PR merge.
 - Portability closeout: legacy `ns` and `ns-menu` entrypoints removed; no tracked shell scripts remain, pending final gates and PR merge.
-## Operational documentation refresh state after PR #1692
+## Operational documentation refresh state after PR #1694
 
-Current administrative handoff refresh state is `d4aca230` (`Harden refresh-only handoff bootstrap evidence (#1692)`). Continue next only after this post-PR1692 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `c9dd7438` (`Fix stale pending-DOI line and gate CHANGELOG/STATUS consistency (#1694)`). Continue next only after this post-PR1694 refresh is committed and merged; the next substantive slice must be created from fresh main.
