@@ -280,13 +280,6 @@ documents:
     review_policy: required
     superseded_by: docs/planning/project_direction.yaml
     summary: Historical v0.4.0 planning note.
-  - path: docs/planning/V0.3.8_SCOPE.md
-    class: historical archive
-    status: superseded
-    owner: maintainers
-    review_policy: required
-    superseded_by: docs/planning/project_direction.yaml
-    summary: Historical release-scope note.
   - path: docs/archive/planning/RULE_REGISTRY_IMPLEMENTATION_PLAN.yaml
     class: historical archive
     status: superseded
@@ -337,27 +330,6 @@ documents:
     review_policy: required
     superseded_by: docs/planning/project_direction.yaml
     summary: Superseded ns workflow control note retained as historical context.
-  - path: docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md
-    class: historical archive
-    status: superseded
-    owner: maintainers
-    review_policy: required
-    superseded_by: docs/planning/project_direction.yaml
-    summary: Historical GUI gatekeeper planning context; current phase is summarized in project_direction.yaml.
-  - path: docs/planning/GUI_COCKPIT_EXPANSION_ROADMAP.md
-    class: historical archive
-    status: superseded
-    owner: maintainers
-    review_policy: required
-    superseded_by: docs/planning/project_direction.yaml
-    summary: Superseded GUI roadmap; current GUI direction is governed by project_direction.yaml.
-  - path: docs/plans/DOCUMENT_ARTIFACT_GOVERNANCE_OS_PLAN.md
-    class: historical archive
-    status: superseded
-    owner: maintainers
-    review_policy: required
-    superseded_by: docs/planning/PROJECT_DIRECTION.yaml
-    summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
   - path: docs/archive/planning/V040_DOCUMENTATION_FOLLOW_UP.md
     class: historical archive
     status: archived
@@ -366,13 +338,6 @@ documents:
     superseded_by: docs/planning/project_direction.yaml
     archived_from: docs/plans/V040_DOCUMENTATION_FOLLOW_UP.md
     summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
-  - path: docs/roadmap/V0.3.0_OUTPUT_REPAIR_PLAN.md
-    class: historical archive
-    status: superseded
-    owner: maintainers
-    review_policy: required
-    superseded_by: docs/planning/PROJECT_DIRECTION.yaml
-    summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
   - path: docs/archive/planning/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md
     class: historical archive
     status: superseded
@@ -380,20 +345,6 @@ documents:
     review_policy: required
     superseded_by: docs/planning/project_direction.yaml
     archived_from: docs/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md
-    summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
-  - path: docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md
-    class: historical archive
-    status: superseded
-    owner: maintainers
-    review_policy: required
-    superseded_by: docs/planning/PROJECT_DIRECTION.yaml
-    summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
-  - path: docs/strategy/V0.4_PROFESSIONAL_SINGLE_USER_STRATEGY.md
-    class: historical archive
-    status: superseded
-    owner: maintainers
-    review_policy: required
-    superseded_by: docs/planning/PROJECT_DIRECTION.yaml
     summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
   - path: docs/planning/PROJECT_DIRECTION.yaml
     class: planning

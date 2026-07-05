@@ -40,6 +40,30 @@ def test_flags_large_deletion() -> None:
     findings = analyze_diff(diff)
     assert any(f.code == "possible-full-replacement-or-large-deletion" for f in findings)
 
+
+def test_accepts_large_deletion_with_added_migration_record() -> None:
+    removed = "\n".join("-line" + str(i) for i in range(25))
+    record = "\n".join(
+        [
+            "diff --git a/docs/reports/protected-change-decisions/delete.md b/docs/reports/protected-change-decisions/delete.md",
+            "+# Protected Change Decision",
+            "+",
+            "+protected_control: docs/DOCUMENTATION_REGISTRY.yaml",
+            "+decision: obsolete",
+            "+migration record: obsolete document entries moved to PROJECT_DIRECTION.yaml and removed after reference cleanup.",
+        ]
+    )
+    diff = "\n".join(
+        [
+            "diff --git a/docs/DOCUMENTATION_REGISTRY.yaml b/docs/DOCUMENTATION_REGISTRY.yaml",
+            removed,
+            record,
+        ]
+    )
+    findings = analyze_diff(diff)
+    assert not any(f.code == "possible-full-replacement-or-large-deletion" for f in findings)
+
+
 def test_flags_large_rewrite_without_decision() -> None:
     removed = "\n".join("-old protected rule " + str(i) for i in range(25))
     added = "\n".join("+new replacement text " + str(i) for i in range(25))

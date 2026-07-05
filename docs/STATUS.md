@@ -7,7 +7,7 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `8dc05a26` (`Migrate active planning content into project direction (#1730)`).
+Current verified main: `ae066495` (`Refresh handoff state after PR1730 (#1731)`).
 Latest substantive work: PR #1730 (`Migrate active planning content into project direction (#1730)`).
 Post-merge handoff status: PASS/NOOP after PR #1730 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
@@ -152,7 +152,7 @@ Commit subject: `Record PR873 final main closeout evidence`.
 
 PR #873 baseline: `Add GUI work order upload strip (#873)`, commit `23532a0`. Final closeout evidence: `docs/reports/terminal/pr873-final-main-closeout.log`.
 
-Planning document: `docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md`.
+Planning document: `docs/planning/PROJECT_DIRECTION.yaml`.
 
 PR #874 is planning/state-refresh only. It records the GUI deterministic gatekeeper migration plan and refreshes state pointers. It must not include product-code changes.
 
@@ -399,4 +399,4 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 - Portability closeout: legacy `ns` and `ns-menu` entrypoints removed; no tracked shell scripts remain, pending final gates and PR merge.
 ## Operational documentation refresh state after PR #1730
 
-Current administrative handoff refresh state is `8dc05a26` (`Migrate active planning content into project direction (#1730)`). Continue next only after this post-PR1730 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.

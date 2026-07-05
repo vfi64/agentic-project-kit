@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `8dc05a26e5962f838f1c17d44e0a6b1b86350ff8` (`8dc05a26`)
-- Handoff freshness marker: `8dc05a26`
-- Branch at generation: `docs/post-pr1730-handoff-refresh`
+- HEAD: `ae0664953a315506b2b2106ae8da628d91288731` (`ae066495`)
+- Handoff freshness marker: `ae066495`
+- Branch at generation: `codex/remove-obsolete-planning-docs`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -83,7 +83,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 - `next-turn-workflow-kernel` (active): Move recurring next-step execution from chat discipline into a deterministic local workflow kernel for v0.4.12
 - `release-command-authority` (active): Keep release preparation, publishing, and DOI closeout under explicit command authority for v0.4.12
 - `rule-registry-hardening` (active): Preserve active rule identity, source validation, and refresh handshakes for v0.4.12
-- `portability-and-ns-closeout` (planned): Finish replacing core ./ns dependencies with Python-backed agentic-kit commands for v0.4.12
+- `portability-and-ns-closeout` (planned): Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands for v0.4.12
 - `gui-workbench-plan` (planned): Implement the GUI gatekeeper/workbench as a view over governed action specs for v0.4.x
 
 ### RESULT: PASS ###

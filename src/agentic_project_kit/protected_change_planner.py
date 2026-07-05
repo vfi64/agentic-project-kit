@@ -97,6 +97,25 @@ def added_lines_for_path(diff_text: str, path: str) -> list[str]:
 def _has_valid_decision(path: str, decisions: dict[str, str]) -> bool:
     return decisions.get(path) in VALID_DECISIONS
 
+
+def _migration_record_decisions(diff_text: str) -> dict[str, str]:
+    decisions: dict[str, str] = {}
+    added_text = "\n".join(
+        line[1:]
+        for line in diff_text.splitlines()
+        if line.startswith("+") and not line.startswith("+++")
+    )
+    if "protected_control" not in added_text and "migration record" not in added_text.lower():
+        return decisions
+    for path in PROTECTED_FILES:
+        if path not in added_text:
+            continue
+        match = re.search(r"(?im)^\s*decision\s*:\s*(keep|migrate|obsolete|abort)\s*$", added_text)
+        if match:
+            decisions[path] = match.group(1)
+    return decisions
+
+
 def _contains_anchor(path: str, text: str, anchor: str) -> bool:
     if path in YAML_PROTECTED_FILES:
         return re.search(rf"(?m)^\s*{re.escape(anchor)}\s*:", text) is not None
@@ -122,7 +141,7 @@ def _is_successor_handoff_projection_refresh(touched: set[str]) -> bool:
 
 
 def analyze_diff(diff_text: str, decisions: dict[str, str] | None = None) -> list[ProtectedChangeFinding]:
-    decisions = decisions or {}
+    decisions = {**_migration_record_decisions(diff_text), **(decisions or {})}
     findings: list[ProtectedChangeFinding] = []
     touched = touched_files(diff_text)
     for path, generator_sources in sorted(GENERATED_ARTIFACTS.items()):
