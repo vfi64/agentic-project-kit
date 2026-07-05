@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-05T21:41:16.741843+00:00",
+  "generated_at_utc": "2026-07-05T23:42:23.373162+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,14 +56,14 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1736-handoff-refresh",
+    "branch": "docs/post-pr1738-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f00e6c86840d41716ca1afdaa6e82b36ecc6a513",
+    "head": "de346f30a2ba90e1e73668f2eab61264bf084201",
     "head_matches_origin_main": true,
-    "head_short": "f00e6c86",
+    "head_short": "de346f30",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "f00e6c86840d41716ca1afdaa6e82b36ecc6a513",
-    "origin_main_short": "f00e6c86",
+    "origin_main": "de346f30a2ba90e1e73668f2eab61264bf084201",
+    "origin_main_short": "de346f30",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -74,18 +74,81 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "p1-planning-consolidation",
+        "id": "p3-workspace-adopt-init-upgrade",
         "status": "next",
-        "summary": "Consolidate scattered planning into project direction for v0.4.12"
+        "summary": "Add workspace adopt, init, and upgrade lifecycle commands for P3"
       },
       {
         "files": [
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "p2-workspace-manifest-followup",
+        "id": "p4-namespace-completion",
         "status": "planned",
-        "summary": "Continue workspace manifest and schema-gated operating model work for P2"
+        "summary": "Complete namespace resolution for manifest-bearing projects for P4"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "p5a-self-hosting-manifest",
+        "status": "planned",
+        "summary": "Add a self-hosting manifest while keeping physical paths stable for P5"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "p5b-resolver-aliases",
+        "status": "planned",
+        "summary": "Route self-hosted accesses through resolver-backed aliases for P5"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "p5c-physical-migration",
+        "status": "planned",
+        "summary": "Optionally migrate physical paths after resolver decoupling for P5"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "p5d-legacy-path-deprecation",
+        "status": "planned",
+        "summary": "Deprecate legacy top-level paths in line with legacy-profile removal for P5"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "p6-gui-project-selection-and-ci-recipe",
+        "status": "planned",
+        "summary": "Add GUI project selection and harden CI recipe follow-ups for P6"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "v1-0-milestone",
+        "status": "planned",
+        "summary": "Reach the 1.0 operating-layer stability milestone for unphased"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "v2-0-legacy-profile-removal",
+        "status": "planned",
+        "summary": "Remove the implicit legacy profile in 2.0.0 for unphased"
       },
       {
         "files": [
@@ -137,9 +200,27 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "direction-schema-command-migration",
+        "id": "governance-doc-backfill",
         "status": "active",
-        "summary": "Introduce direction schema, command, migration, cleanup, scope, and gate slices for v0.4.12"
+        "summary": "Backfill reviewed governance document registry entries"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "strict-scope-suite-adoption",
+        "status": "planned",
+        "summary": "Decide whether strict documentation scope belongs in the standard gate suite"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "planning-ideas-residual-cleanup",
+        "status": "planned",
+        "summary": "Resolve remaining planning and idea residual documents"
       },
       {
         "files": [
