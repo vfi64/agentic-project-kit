@@ -22,7 +22,7 @@ schema_version: 1
 meta:
   owner: maintainers
   status: active
-  updated_after_pr: pending-pr-direction-refresh-post-p2
+  updated_after_pr: 1738
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
