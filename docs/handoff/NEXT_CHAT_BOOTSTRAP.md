@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `bc1ee86860ae664f8c53927967dcea55263c5911` (`bc1ee868`)
-- Handoff freshness marker: `bc1ee868`
-- Branch at generation: `docs/post-pr1727-handoff-refresh`
+- HEAD: `8dc05a26e5962f838f1c17d44e0a6b1b86350ff8` (`8dc05a26`)
+- Handoff freshness marker: `8dc05a26`
+- Branch at generation: `docs/post-pr1730-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -73,6 +73,17 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 
 - `p1-planning-consolidation` (next): Consolidate scattered planning into project direction for v0.4.12
 - `p2-workspace-manifest-followup` (planned): Continue workspace manifest and schema-gated operating model work for P2
+- `pre-gui-hardening-line` (next): Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for v0.4.12
+- `workflow-kernel-and-transfer-hardening` (planned): Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI
+- `release-and-doi-governance` (planned): Keep release metadata, publish, and DOI closeout behind authoritative commands for pre-GUI
+- `gui-gatekeeper-workbench` (planned): Build the local gatekeeper/workbench GUI over deterministic actions for GUI
+- `documentation-artifact-governance-os` (planned): Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance
 - `direction-schema-command-migration` (active): Introduce direction schema, command, migration, cleanup, scope, and gate slices for v0.4.12
+- `pre-gui-hardening-plan` (active): Execute the pre-GUI hardening backlog in small wrapper-first slices for v0.4.12
+- `next-turn-workflow-kernel` (active): Move recurring next-step execution from chat discipline into a deterministic local workflow kernel for v0.4.12
+- `release-command-authority` (active): Keep release preparation, publishing, and DOI closeout under explicit command authority for v0.4.12
+- `rule-registry-hardening` (active): Preserve active rule identity, source validation, and refresh handshakes for v0.4.12
+- `portability-and-ns-closeout` (planned): Finish replacing core ./ns dependencies with Python-backed agentic-kit commands for v0.4.12
+- `gui-workbench-plan` (planned): Implement the GUI gatekeeper/workbench as a view over governed action specs for v0.4.x
 
 ### RESULT: PASS ###
