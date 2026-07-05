@@ -11,8 +11,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: baa09833
-  commit_subject: Remove obsolete scattered planning documents (#1732)
+  commit: b5457009
+  commit_subject: Enforce documentation registry scope after direction cleanup (#1734)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -435,7 +435,7 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr1732-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1734-successor-chat-handoff.md
   first_instruction: >-
     Review PR #1436 and the refreshed successor handoff package for the release
     command authority planning slice. After merge, start from fresh main and
@@ -448,10 +448,10 @@ next_step:
     implement docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md before DOI,
     legacy-doc, absolute-path, or GUI work.
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr1732-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1734-successor-chat-handoff.md
 administrative_evidence_state:
-  current_head: baa09833
-  current_head_subject: Remove obsolete scattered planning documents (#1732)
+  current_head: b5457009
+  current_head_subject: Enforce documentation registry scope after direction cleanup (#1734)
   allowed_after_safe_state: true
   reason: administrative evidence/log/handoff commit after substantive safe_state
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL

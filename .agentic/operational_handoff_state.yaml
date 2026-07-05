@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: baa09833ef8f9255bae63302154d9430d216cfab
-  short: baa09833
-  subject: Remove obsolete scattered planning documents (#1732)
+  full: b54570096a0269eb87c95a4a4ef7255a03cbac68
+  short: b5457009
+  subject: Enforce documentation registry scope after direction cleanup (#1734)
 last_substantive_work_state:
-  full: baa09833ef8f9255bae63302154d9430d216cfab
-  short: baa09833
-  subject: Remove obsolete scattered planning documents (#1732)
+  full: b54570096a0269eb87c95a4a4ef7255a03cbac68
+  short: b5457009
+  subject: Enforce documentation registry scope after direction cleanup (#1734)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
