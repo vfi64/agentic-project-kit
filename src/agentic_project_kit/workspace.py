@@ -1,13 +1,40 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Mapping
+from dataclasses import dataclass, field, fields, replace
 from pathlib import Path
+from types import MappingProxyType
+from typing import Any
+
+import yaml
 
 
-UNEXPECTED_WORKSPACE_MANIFEST_MESSAGE = (
-    "workspace manifests are enabled with the schema gate (P2); "
-    "found unexpected .agentic/config.yaml"
+SUPPORTED_MANIFEST_SCHEMA_VERSION = 1
+WORKSPACE_MANIFEST_FIX_HINT = (
+    "run `agentic-kit workspace upgrade` after it ships (P3), "
+    "or fix the manifest"
 )
+ALLOWED_PROJECT_TYPES = frozenset({"python", "node", "generic"})
+ALLOWED_PROFILES = frozenset({"python-default", "generic"})
+ALLOWED_MODULES = frozenset(
+    {"release_governance", "doc_registry", "rule_registry", "transfer"}
+)
+ALLOWED_TRANSFER_VISIBILITIES = frozenset({"repo", "local"})
+ALLOWED_TOP_LEVEL_KEYS = frozenset(
+    {
+        "kit_schema_version",
+        "project",
+        "profile",
+        "modules",
+        "transfer",
+        "paths",
+        "gates",
+    }
+)
+
+
+def _default_modules() -> Mapping[str, bool]:
+    return MappingProxyType({name: True for name in sorted(ALLOWED_MODULES)})
 
 
 @dataclass(frozen=True)
@@ -44,8 +71,23 @@ class KitConfig:
 
 @dataclass(frozen=True)
 class Workspace:
+    """Resolved workspace paths plus manifest metadata.
+
+    In P2, manifest metadata is parsed and retained for later phases, but only
+    `paths` overrides affect behavior. Profiles, module toggles, transfer
+    visibility, and gate lists are intentionally not enforced until later
+    schema-gated slices add those behaviors.
+    """
+
     root: Path
     config: KitConfig
+    profile: str = "implicit-legacy"
+    project_name: str = ""
+    project_type: str = "generic"
+    modules: Mapping[str, bool] = field(default_factory=_default_modules)
+    transfer_visibility: str = "repo"
+    gates_extra: tuple[str, ...] = ()
+    gates_skip: tuple[str, ...] = ()
 
     def _path(self, relative: str | Path) -> Path:
         return self.root / Path(relative)
@@ -166,8 +208,185 @@ class Workspace:
 
 
 def load_workspace(root: Path = Path(".")) -> Workspace:
+    """Load the workspace using the implicit legacy profile or a schema-v1 manifest."""
+
     config = KitConfig()
     root = Path(root)
-    if (root / config.workspace_manifest_file).exists():
-        raise RuntimeError(UNEXPECTED_WORKSPACE_MANIFEST_MESSAGE)
+    manifest_path = root / config.workspace_manifest_file
+    if manifest_path.exists():
+        return _load_manifest_workspace(root, manifest_path, config)
     return Workspace(root=root, config=config)
+
+
+def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig) -> Workspace:
+    location = _manifest_location(config.workspace_manifest_file)
+    manifest = _read_manifest(manifest_path, location)
+    _validate_top_level(manifest, location)
+    _validate_schema_version(manifest, location)
+    project_name, project_type = _parse_project(manifest.get("project"), location)
+    profile = _parse_profile(manifest.get("profile", "python-default"), location)
+    modules = _parse_modules(manifest.get("modules"), location)
+    transfer_visibility = _parse_transfer_visibility(manifest.get("transfer"), location)
+    config = _apply_path_overrides(config, manifest.get("paths"), location)
+    gates_extra, gates_skip = _parse_gates(manifest.get("gates"), location)
+    return Workspace(
+        root=root,
+        config=config,
+        profile=profile,
+        project_name=project_name,
+        project_type=project_type,
+        modules=modules,
+        transfer_visibility=transfer_visibility,
+        gates_extra=gates_extra,
+        gates_skip=gates_skip,
+    )
+
+
+def _read_manifest(manifest_path: Path, location: str) -> dict[str, Any]:
+    try:
+        loaded = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
+    except yaml.YAMLError as exc:
+        raise RuntimeError(_manifest_error(location, f"invalid YAML: {exc}")) from exc
+    except OSError as exc:
+        raise RuntimeError(_manifest_error(location, f"cannot read manifest: {exc}")) from exc
+    if not isinstance(loaded, dict):
+        raise RuntimeError(_manifest_error(location, "expected top-level mapping"))
+    return loaded
+
+
+def _validate_top_level(manifest: dict[str, Any], location: str) -> None:
+    for key in manifest:
+        if key not in ALLOWED_TOP_LEVEL_KEYS:
+            raise RuntimeError(
+                _manifest_error(f"{location}:{key}", "unknown top-level key")
+            )
+
+
+def _validate_schema_version(manifest: dict[str, Any], location: str) -> None:
+    version = manifest.get("kit_schema_version")
+    if type(version) is not int or version < 1:
+        raise RuntimeError(
+            f"{location}:kit_schema_version: invalid kit_schema_version; "
+            f"{WORKSPACE_MANIFEST_FIX_HINT}"
+        )
+    if version > SUPPORTED_MANIFEST_SCHEMA_VERSION:
+        raise RuntimeError(
+            f"{location}:kit_schema_version: manifest schema v{version} "
+            "is newer than this kit; upgrade the kit"
+        )
+
+
+def _parse_project(project: object, location: str) -> tuple[str, str]:
+    if project is None:
+        return "", "generic"
+    if not isinstance(project, dict):
+        raise RuntimeError(_manifest_error(f"{location}:project", "expected mapping"))
+    project_name = project.get("name", "")
+    if not isinstance(project_name, str):
+        raise RuntimeError(_manifest_error(f"{location}:project.name", "expected string"))
+    project_type = project.get("type", "generic")
+    if not isinstance(project_type, str) or project_type not in ALLOWED_PROJECT_TYPES:
+        allowed = ", ".join(sorted(ALLOWED_PROJECT_TYPES))
+        raise RuntimeError(
+            _manifest_error(
+                f"{location}:project.type",
+                f"invalid project type {project_type!r}; expected one of {allowed}",
+            )
+        )
+    return project_name, project_type
+
+
+def _parse_profile(profile: object, location: str) -> str:
+    if not isinstance(profile, str) or profile not in ALLOWED_PROFILES:
+        allowed = ", ".join(sorted(ALLOWED_PROFILES))
+        raise RuntimeError(
+            _manifest_error(
+                f"{location}:profile",
+                f"invalid profile {profile!r}; expected one of {allowed}",
+            )
+        )
+    return profile
+
+
+def _parse_modules(modules: object, location: str) -> Mapping[str, bool]:
+    if modules is None:
+        return _default_modules()
+    if not isinstance(modules, dict):
+        raise RuntimeError(_manifest_error(f"{location}:modules", "expected mapping"))
+    merged = dict(_default_modules())
+    for name, enabled in modules.items():
+        if not isinstance(name, str) or name not in ALLOWED_MODULES:
+            raise RuntimeError(
+                _manifest_error(f"{location}:modules.{name}", "unknown module key")
+            )
+        if type(enabled) is not bool:
+            raise RuntimeError(
+                _manifest_error(f"{location}:modules.{name}", "expected bool")
+            )
+        merged[name] = enabled
+    return MappingProxyType(merged)
+
+
+def _parse_transfer_visibility(transfer: object, location: str) -> str:
+    if transfer is None:
+        return "repo"
+    if not isinstance(transfer, dict):
+        raise RuntimeError(_manifest_error(f"{location}:transfer", "expected mapping"))
+    visibility = transfer.get("visibility", "repo")
+    if (
+        not isinstance(visibility, str)
+        or visibility not in ALLOWED_TRANSFER_VISIBILITIES
+    ):
+        allowed = ", ".join(sorted(ALLOWED_TRANSFER_VISIBILITIES))
+        raise RuntimeError(
+            _manifest_error(
+                f"{location}:transfer.visibility",
+                f"invalid transfer visibility {visibility!r}; expected one of {allowed}",
+            )
+        )
+    return visibility
+
+
+def _apply_path_overrides(config: KitConfig, paths: object, location: str) -> KitConfig:
+    if paths is None:
+        return config
+    if not isinstance(paths, dict):
+        raise RuntimeError(_manifest_error(f"{location}:paths", "expected mapping"))
+    allowed_fields = {field.name for field in fields(KitConfig)}
+    overrides: dict[str, str] = {}
+    for name, value in paths.items():
+        if not isinstance(name, str) or name not in allowed_fields:
+            raise RuntimeError(
+                _manifest_error(f"{location}:paths.{name}", "unknown paths key")
+            )
+        if not isinstance(value, str):
+            raise RuntimeError(
+                _manifest_error(f"{location}:paths.{name}", "expected string")
+            )
+        overrides[name] = value
+    return replace(config, **overrides)
+
+
+def _parse_gates(gates: object, location: str) -> tuple[tuple[str, ...], tuple[str, ...]]:
+    if gates is None:
+        return (), ()
+    if not isinstance(gates, dict):
+        raise RuntimeError(_manifest_error(f"{location}:gates", "expected mapping"))
+    return (
+        _parse_string_list(gates.get("extra", []), f"{location}:gates.extra"),
+        _parse_string_list(gates.get("skip", []), f"{location}:gates.skip"),
+    )
+
+
+def _parse_string_list(value: object, location: str) -> tuple[str, ...]:
+    if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
+        raise RuntimeError(_manifest_error(location, "expected list of strings"))
+    return tuple(value)
+
+
+def _manifest_location(path: str) -> str:
+    return path
+
+
+def _manifest_error(location: str, message: str) -> str:
+    return f"{location}: {message}; {WORKSPACE_MANIFEST_FIX_HINT}"
