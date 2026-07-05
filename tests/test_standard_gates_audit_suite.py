@@ -13,6 +13,7 @@ from agentic_project_kit.standard_gates_audit_suite import (
 
 REQUIRED_NAMES = {
     "audit-patch-failure-discipline",
+    "direction",
     "audit-ns-legacy-references",
     "audit-absolute-path-portability",
     "audit-doc-currency",
@@ -60,6 +61,19 @@ def test_standard_gates_audit_suite_fails_when_required_gate_fails(tmp_path: Pat
 
     assert result.ok is False
     assert any(check.name == "audit-doc-currency" for check in result.blockers)
+
+
+def test_standard_gates_audit_suite_blocks_invalid_project_direction(tmp_path: Path) -> None:
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        if args[-2:] == ("direction", "validate"):
+            return 1, "PROJECT_DIRECTION_VALIDATE\nSTATUS=FAIL\nFINDING=duplicate-id|docs/planning/PROJECT_DIRECTION.yaml|duplicate id\n"
+        return 0, "PASS\n"
+
+    result = evaluate_standard_gates_audit_suite(tmp_path, runner=runner)
+
+    assert result.ok is False
+    blocker = next(check for check in result.blockers if check.name == "direction validate")
+    assert blocker.detail == "STATUS=FAIL"
 
 
 def test_standard_gates_audit_suite_default_version_follows_package_version(tmp_path: Path) -> None:
