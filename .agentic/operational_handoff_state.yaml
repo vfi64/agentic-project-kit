@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3eac2b533be8fa0e5adc730df8474c7777f052f1
-  short: 3eac2b53
-  subject: Add canonical project direction schema (#1725)
+  full: bc1ee86860ae664f8c53927967dcea55263c5911
+  short: bc1ee868
+  subject: Add project direction validation and drift audit commands (#1727)
 last_substantive_work_state:
-  full: 3eac2b533be8fa0e5adc730df8474c7777f052f1
-  short: 3eac2b53
-  subject: Add canonical project direction schema (#1725)
+  full: bc1ee86860ae664f8c53927967dcea55263c5911
+  short: bc1ee868
+  subject: Add project direction validation and drift audit commands (#1727)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
