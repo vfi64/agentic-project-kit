@@ -443,6 +443,146 @@ documents:
     owner: maintainers
     notes: Active transfer-mode test specification for remote, file-transfer, and Copy-and-Paste recovery paths before GUI expansion.
     status: active
+  - path: docs/agent_rules/PORTABILITY_AND_OPERATIONAL_RULES.md
+    class: governance/system
+    owner: maintainers
+    notes: Required operational portability rule source for agents and maintainers.
+    status: active
+  - path: docs/agent_rules/REMOTE_INSPECTION_EVIDENCE_RULES.md
+    class: governance/system
+    owner: maintainers
+    notes: Required evidence rule source for remote inspection and follow-up analysis.
+    status: active
+  - path: docs/architecture/AGENTIC_CODING_RESEARCH_INPUTS.md
+    class: architecture
+    owner: maintainers
+    notes: Architecture research input retained under required architecture scope.
+    status: active
+  - path: docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+    class: architecture
+    owner: maintainers
+    notes: Documentation information architecture and lifecycle baseline.
+    status: active
+  - path: docs/architecture/LOCAL_COCKPIT_FOUNDATION.md
+    class: architecture
+    owner: maintainers
+    notes: Local cockpit architecture foundation.
+    status: active
+  - path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
+    class: governance/system
+    owner: maintainers
+    notes: Required chat bootstrap and drift governance contract.
+    status: active
+  - path: docs/governance/CHAT_COMMUNICATION_CONTRACT.md
+    class: governance/system
+    owner: maintainers
+    notes: Required chat communication governance contract.
+    status: active
+  - path: docs/governance/COMMAND_REFERENCE_REGISTRY_CONTRACT.md
+    class: governance/system
+    owner: maintainers
+    notes: Required command-reference registry contract.
+    status: active
+  - path: docs/governance/COMPILED_AGENT_CONTEXT.md
+    class: governance/system
+    owner: maintainers
+    notes: Required compiled-agent-context governance contract.
+    status: active
+  - path: docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md
+    class: governance/system
+    owner: maintainers
+    notes: Required documentation-system audit contract.
+    status: active
+  - path: docs/governance/FINAL_SUMMARY_CONTRACT.md
+    class: governance/system
+    owner: maintainers
+    notes: Required final-summary contract.
+    status: active
+  - path: docs/governance/FINAL_SUMMARY_CONTRACT_FINALIZE_LOG_ADDENDUM.md
+    class: governance/system
+    owner: maintainers
+    notes: Required addendum for finalize-log summary behavior.
+    status: active
+  - path: docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md
+    class: governance/system
+    owner: maintainers
+    notes: Required handoff prompt freshness guard.
+    status: active
+  - path: docs/governance/MERGE_READINESS_CONTRACT.md
+    class: governance/system
+    owner: maintainers
+    notes: Required merge readiness contract.
+    status: active
+  - path: docs/governance/PATCH_FAILURE_DIAGNOSIS_POLICY.md
+    class: governance/system
+    owner: maintainers
+    notes: Required patch failure diagnosis policy.
+    status: active
+  - path: docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md
+    class: governance/system
+    owner: maintainers
+    notes: Required portable chat execution contract.
+    status: active
+  - path: docs/governance/PROTECTED_CONTROL_FILE_CHANGE_CONTRACT.md
+    class: governance/system
+    owner: maintainers
+    notes: Required protected control-file change contract.
+    status: active
+  - path: docs/governance/STANDARD_ERROR_PREVENTION.md
+    class: governance/system
+    owner: maintainers
+    notes: Required standard-error prevention governance contract.
+    status: active
+  - path: docs/governance/TERMINAL_SAFETY.md
+    class: governance/system
+    owner: maintainers
+    notes: Required terminal safety governance contract.
+    status: active
+  - path: docs/gui/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md
+    class: operational/automation
+    owner: maintainers
+    notes: Required GUI action readiness contract.
+    status: active
+  - path: docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
+    class: operational/automation
+    owner: maintainers
+    notes: Required closeout prompt for chat-switch workflows.
+    status: active
+  - path: docs/handoff/CODEX_NS_COMMAND_MIGRATION_HANDOFF.md
+    class: operational/automation
+    owner: maintainers
+    notes: Historical handoff retained under required handoff scope.
+    status: archived
+  - path: docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+    class: generated artifact
+    owner: automation
+    notes: Generated next-chat bootstrap projection.
+    status: active
+  - path: docs/handoff/START_NEW_CHAT_PROMPT.md
+    class: generated artifact
+    owner: automation
+    notes: Generated start-new-chat prompt projection.
+    status: active
+  - path: docs/patterns/bounded-workflow-evidence.md
+    class: governance/system
+    owner: maintainers
+    notes: Required governed workflow evidence pattern.
+    status: active
+  - path: docs/patterns/hidden-autopilot.md
+    class: governance/system
+    owner: maintainers
+    notes: Required hidden-autopilot anti-pattern.
+    status: active
+  - path: docs/reference/AGENTIC_KIT_COMMANDS.md
+    class: user-facing description
+    owner: maintainers
+    notes: Generated command reference for agentic-kit.
+    status: active
+  - path: docs/reference/HUMAN_WORKFLOW_COMMANDS.md
+    class: user-facing description
+    owner: maintainers
+    notes: Human workflow command reference.
+    status: active
   - path: docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
     class: planning
     owner: maintainers

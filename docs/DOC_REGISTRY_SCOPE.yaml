@@ -1,3 +1,21 @@
 schema_version: 1
-required_paths: []
-exempt_paths: []
+required_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/planning/PROJECT_DIRECTION.md
+required_paths:
+  - docs/agent_rules/
+  - docs/architecture/
+  - docs/archive/
+  - docs/governance/
+  - docs/gui/
+  - docs/handoff/
+  - docs/patterns/
+  - docs/reference/
+  - docs/releases/
+  - docs/testing/
+  - docs/workflow/
+exempt_paths:
+  - path: docs/reports/
+    reason: generated output surface for handoff packages, terminal reports, audits, and protected-change evidence
+  - path: docs/examples/
+    reason: illustrative material, not normative project governance

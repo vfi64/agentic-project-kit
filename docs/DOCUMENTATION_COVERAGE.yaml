@@ -215,6 +215,7 @@ rules:
     terms:
     - Declarative scope
     - docs/DOC_REGISTRY_SCOPE.yaml
+    - required_files
     - required_paths
     - exempt_paths
     - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -228,8 +229,10 @@ rules:
   - path: docs/DOC_REGISTRY_SCOPE.yaml
     terms:
     - 'schema_version: 1'
-    - 'required_paths: []'
-    - 'exempt_paths: []'
+    - required_files
+    - docs/planning/PROJECT_DIRECTION.yaml
+    - required_paths
+    - exempt_paths
   - path: docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
     terms:
     - Documentation Registry Scope Decision Template
