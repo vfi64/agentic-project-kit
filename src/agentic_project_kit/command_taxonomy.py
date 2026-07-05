@@ -115,6 +115,8 @@ def _category_for(group: str, leaf: str, qualified: str) -> str:
 
     if leaf.startswith("audit-") or leaf.endswith("-audit"):
         return "audit"
+    if group == "direction":
+        return "docs"
     if leaf in {"docs-audit", "docs-registry", "doc-mesh-repair", "project-direction"} or leaf.startswith("doc-"):
         return "docs"
     if leaf in {"release-publish", "release-prep", "post-release-check", "release-metadata-authority-gate"}:

@@ -73,6 +73,26 @@ rules:
     - slice_result=PASS|BLOCKED
     - helper-local PASS from slice PASS
     - agentic-kit docs-audit
+- id: project-direction-command-coverage
+  description: Canonical project direction commands must remain discoverable and documented.
+  documents:
+  - path: README.md
+    terms:
+    - Project direction
+    - docs/planning/PROJECT_DIRECTION.yaml
+    - agentic-kit direction validate
+    - agentic-kit direction render
+    - agentic-kit direction audit-drift
+  - path: docs/TEST_GATES.md
+    terms:
+    - Project Direction Gate
+    - agentic-kit direction validate
+    - agentic-kit direction render
+    - agentic-kit direction audit-drift
+  - path: docs/planning/PROJECT_DIRECTION.md
+    terms:
+    - docs/planning/PROJECT_DIRECTION.yaml
+    - canonical machine-readable source
 - id: llm-communication-bootstrap-coverage
   description: Portable LLM communication, final summary, bootstrap, drift, and handoff
     contracts must remain visible without turning status files into duplicate rule

@@ -8,7 +8,7 @@ Current version: 0.4.12
 
 `agentic-project-kit` is a local Python package for generating GitHub-ready project skeletons for human-AI software development workflows.
 
-It creates not only files, but a reusable development process: agent onboarding, project contract, profile and policy pack selection, status discipline, test gates, task tracking, bounded logging conventions, optional GitHub automation, workflow evidence capture, and release-state validation.
+It creates a reusable development process: agent onboarding, project contract, policy selection, status discipline, test gates, task tracking, bounded logs, GitHub automation, workflow evidence, and release-state validation.
 
 In one sentence: `agentic-project-kit` is an early, dogfooded attempt to make AI-assisted repository work more reproducible through project contracts, documentation gates, release-state checks, task gates, policy expectations, workflow evidence, and bounded auditability.
 
@@ -188,6 +188,10 @@ It also updates the canonical chat-switch prompt projections in `docs/handoff/`.
 ## Planning-documentation slice gate
 
 `agentic-kit slice gate --kind planning-doc` emits `SLICE_GATE_RESULT` and `slice_result=PASS|BLOCKED`. helper-local PASS is not a slice PASS; `planning-doc` runs targeted tests plus `agentic-kit handoff check`, `agentic-kit check-docs`, `agentic-kit docs-audit`, and `agentic-kit doctor`. Dirty state reports `merge_pr_ready=NO`.
+
+## Project direction
+
+`agentic-kit direction validate`, `agentic-kit direction render`, and `agentic-kit direction audit-drift` guard `docs/planning/PROJECT_DIRECTION.yaml`.
 
 ## Documentation registry
 

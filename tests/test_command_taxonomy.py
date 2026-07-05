@@ -103,6 +103,19 @@ def test_classify_project_direction_as_docs() -> None:
     assert entry.category == "docs"
 
 
+def test_classify_direction_group_as_docs() -> None:
+    entry = classify_command(
+        {
+            "qualified_name": "agentic-kit direction validate",
+            "group": "direction",
+            "path": ["direction", "validate"],
+            "help": "Validate direction",
+        }
+    )
+
+    assert entry.category == "docs"
+
+
 
 def test_classify_pr_closeout_complete_as_preferred_composite() -> None:
     entry = classify_command(

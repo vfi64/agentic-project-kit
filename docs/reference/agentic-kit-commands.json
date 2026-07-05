@@ -1000,6 +1000,168 @@
       "qualified_name": "agentic-kit dev local-feature-gate"
     },
     {
+      "group": "direction",
+      "help": "Report planning files that are not yet represented in project direction.",
+      "name": "audit-drift",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "direction",
+        "audit-drift"
+      ],
+      "qualified_name": "agentic-kit direction audit-drift"
+    },
+    {
+      "group": "direction",
+      "help": "Render project direction without overwriting committed projections.",
+      "name": "render",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "all",
+          "help": "all, strategy, roadmap, plans, ideas, done, or discarded.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "section",
+          "opts": [
+            "--section"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "text",
+          "help": "text, markdown, or json.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_format",
+          "opts": [
+            "--format"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional tmp/*.md, tmp/*.txt, or tmp/*.json output path.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "direction",
+        "render"
+      ],
+      "qualified_name": "agentic-kit direction render"
+    },
+    {
+      "group": "direction",
+      "help": "Validate docs/planning/PROJECT_DIRECTION.yaml.",
+      "name": "validate",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail when free docs/planning files are not canonical files or listed sources.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "strict_planning_files",
+          "opts": [
+            "--strict-planning-files"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "direction",
+        "validate"
+      ],
+      "qualified_name": "agentic-kit direction validate"
+    },
+    {
       "group": "root",
       "help": "Audit lifecycle status headers for planning, roadmap, strategy, and idea documents.",
       "name": "doc-lifecycle-audit",

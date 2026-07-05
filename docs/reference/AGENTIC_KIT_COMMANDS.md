@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `198`
+- Command count: `201`
 
 ## Commands
 
@@ -210,6 +210,36 @@ Run the local feature gate through the supported agentic-kit CLI.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `include_pr_hygiene` | `TyperOption` | --include-pr-hygiene | `False` | `False` | Also run PR hygiene after the local feature gate. |
+
+### `agentic-kit direction audit-drift`
+
+Report planning files that are not yet represented in project direction.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+
+### `agentic-kit direction render`
+
+Render project direction without overwriting committed projections.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `section` | `TyperOption` | --section | `False` | `all` | all, strategy, roadmap, plans, ideas, done, or discarded. |
+| `output_format` | `TyperOption` | --format | `False` | `text` | text, markdown, or json. |
+| `output` | `TyperOption` | --output | `False` |  | Optional tmp/*.md, tmp/*.txt, or tmp/*.json output path. |
+
+### `agentic-kit direction validate`
+
+Validate docs/planning/PROJECT_DIRECTION.yaml.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `strict_planning_files` | `TyperOption` | --strict-planning-files | `False` | `False` | Fail when free docs/planning files are not canonical files or listed sources. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit doc-lifecycle-audit`
 
