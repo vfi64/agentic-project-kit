@@ -18,7 +18,7 @@ def _direction_docs() -> list[Path]:
 
 def test_direction_duplicate_docs_are_marked_superseded() -> None:
     docs = _direction_docs()
-    assert docs, "expected at least one direction duplicate doc to classify"
+    assert docs == []
 
     for path in docs:
         head = "\n".join(path.read_text(encoding="utf-8").splitlines()[:12])

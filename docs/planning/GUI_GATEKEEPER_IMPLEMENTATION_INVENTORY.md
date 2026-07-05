@@ -20,8 +20,7 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 - docs/handoff/CURRENT_HANDOFF_OVERLAY_AFTER_PR660.md
 - docs/handoff/NEXT_CHAT_BOOTSTRAP.md
 - docs/handoff/START_NEW_CHAT_PROMPT.md
-- docs/planning/GUI_COCKPIT_EXPANSION_ROADMAP.md
-- docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md
+- docs/planning/PROJECT_DIRECTION.yaml
 - docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
 - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
 - docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
@@ -251,7 +250,7 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 
 ### Action registry / cockpit
 
-- docs/planning/GUI_COCKPIT_EXPANSION_ROADMAP.md
+- docs/planning/PROJECT_DIRECTION.yaml
 - src/agentic_project_kit/action_registry.py
 - src/agentic_project_kit/action_specs.py
 - src/agentic_project_kit/cli_commands/cockpit.py
@@ -268,8 +267,8 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 
 ### GUI display layer
 
-- docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md
 - docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
+- docs/planning/PROJECT_DIRECTION.yaml
 - docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
 - src/agentic_project_kit/gui_action_execution.py
 - src/agentic_project_kit/gui_action_renderer.py

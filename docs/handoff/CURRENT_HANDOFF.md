@@ -128,7 +128,7 @@ Commit subject: `Record PR873 final main closeout evidence`.
 
 PR #873 baseline is `Add GUI work order upload strip (#873)`, commit `23532a0`. Final closeout evidence: `docs/reports/terminal/pr873-final-main-closeout.log`.
 
-Planning document: `docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md`.
+Planning document: `docs/planning/PROJECT_DIRECTION.yaml`.
 
 PR #874 is planning/state-refresh only. It records the GUI deterministic gatekeeper migration plan and refreshes state pointers. It must not include product-code changes.
 
@@ -316,4 +316,4 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
 ## Operational documentation refresh state after PR #1730
 
-Current administrative handoff refresh state is `8dc05a26` (`Migrate active planning content into project direction (#1730)`). Continue next only after this post-PR1730 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.

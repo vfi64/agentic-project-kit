@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1730-handoff-refresh`
+- branch: `codex/remove-obsolete-planning-docs`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -262,7 +262,7 @@ Wenn der Bootstrap grün ist:
       ],
       "id": "portability-and-ns-closeout",
       "status": "planned",
-      "summary": "Finish replacing core ./ns dependencies with Python-backed agentic-kit commands for v0.4.12"
+      "summary": "Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands for v0.4.12"
     },
     {
       "files": [
@@ -284,14 +284,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1730-handoff-refresh",
+    "branch": "codex/remove-obsolete-planning-docs",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "8dc05a26e5962f838f1c17d44e0a6b1b86350ff8",
+    "head": "ae0664953a315506b2b2106ae8da628d91288731",
     "head_matches_origin_main": true,
-    "head_short": "8dc05a26",
+    "head_short": "ae066495",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "8dc05a26e5962f838f1c17d44e0a6b1b86350ff8",
-    "origin_main_short": "8dc05a26",
+    "origin_main": "ae0664953a315506b2b2106ae8da628d91288731",
+    "origin_main_short": "ae066495",
     "worktree_clean": false
   }
 }

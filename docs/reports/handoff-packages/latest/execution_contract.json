@@ -118,7 +118,7 @@
         ],
         "id": "portability-and-ns-closeout",
         "status": "planned",
-        "summary": "Finish replacing core ./ns dependencies with Python-backed agentic-kit commands for v0.4.12"
+        "summary": "Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands for v0.4.12"
       },
       {
         "files": [
@@ -141,13 +141,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1730-handoff-refresh",
+      "branch": "codex/remove-obsolete-planning-docs",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "8dc05a26e5962f838f1c17d44e0a6b1b86350ff8",
+      "head": "ae0664953a315506b2b2106ae8da628d91288731",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/agentic-project-kit",
-      "origin_main": "8dc05a26e5962f838f1c17d44e0a6b1b86350ff8",
+      "origin_main": "ae0664953a315506b2b2106ae8da628d91288731",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -224,13 +224,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1730-handoff-refresh",
+    "branch": "codex/remove-obsolete-planning-docs",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "8dc05a26e5962f838f1c17d44e0a6b1b86350ff8",
+    "head": "ae0664953a315506b2b2106ae8da628d91288731",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "8dc05a26e5962f838f1c17d44e0a6b1b86350ff8",
+    "origin_main": "ae0664953a315506b2b2106ae8da628d91288731",
     "worktree_clean": false
   },
   "rules": [

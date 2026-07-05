@@ -69,10 +69,7 @@ strategy:
       visible governance, and a future GUI that orchestrates deterministic
       wrappers rather than becoming a second command system.
     source_files:
-      - docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md
       - docs/planning/PRE_GUI_HARDENING_TASKS.md
-      - docs/planning/GUI_COCKPIT_EXPANSION_ROADMAP.md
-      - docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md
       - docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
       - docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
   - id: python-backed-portable-workflows
@@ -192,9 +189,6 @@ roadmap:
       - Mutating actions remain disabled or guarded until their backend wrapper is safe.
       - GUI state mirrors command, rule, handoff, evidence, and project-direction state.
     source_files:
-      - docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md
-      - docs/planning/GUI_COCKPIT_EXPANSION_ROADMAP.md
-      - docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md
       - docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
       - docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
   - id: documentation-artifact-governance-os
@@ -290,14 +284,14 @@ plans:
       - docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
   - id: portability-and-ns-closeout
     status: planned
-    title: Finish replacing core ./ns dependencies with Python-backed agentic-kit commands
+    title: Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands
     target_release: v0.4.12
     depends_on:
       - next-turn-workflow-kernel
     acceptance:
       - Remaining ns-named modules and helper routes are classified before migration.
-      - Core tests, gates, GUI actions, and governance docs do not depend on ./ns.
-      - ./ns remains only a human convenience adapter or explicit legacy path.
+      - Core tests, gates, GUI actions, and governance docs do not depend on the legacy ns adapter.
+      - The legacy ns adapter remains only a human convenience adapter or explicit legacy path.
     source_files:
       - docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
       - docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
@@ -314,8 +308,6 @@ plans:
       - Disabled future buttons are explicit and backed by planned action contracts.
       - No write-capable GUI path bypasses branch, dirty-state, rule, evidence, or failure-mode guards.
     source_files:
-      - docs/planning/GUI_COCKPIT_EXPANSION_ROADMAP.md
-      - docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md
       - docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
       - docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
 ideas:
@@ -411,14 +403,6 @@ done:
       - docs/architecture/evidence/path-literal-audit-2026-07-04-post-p1.md
     source_files:
       - docs/planning/KIT_AS_OS_MASTERPLAN.md
-  - id: v0-3-8-guided-cli-scope
-    status: done
-    title: Guided CLI usability v0.3.8 scope
-    completed_by_pr: null
-    merge_commit: null
-    completion_exception: Historical release-scope note superseded by later workflow and planning-authority work.
-    source_files:
-      - docs/planning/V0.3.8_SCOPE.md
   - id: portable-llm-communication-bootstrap
     status: done
     title: Portable LLM communication bootstrap
@@ -499,15 +483,14 @@ discarded:
     source_files:
       - docs/planning/PROJECT_DIRECTION.md
       - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
-      - docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md
   - id: raw-ns-as-core-workflow-control
     status: discarded
-    title: ./ns as core governed workflow control
+    title: Legacy ns adapter as core governed workflow control
     reason: >-
-      Making ./ns the primary governed workflow controller is superseded by
-      Python-backed agentic-kit workflow, transfer, and future GUI action
-      models; ./ns may remain only as a convenience adapter or explicit legacy
-      route.
+      Making the legacy ns adapter the primary governed workflow controller is
+      superseded by Python-backed agentic-kit workflow, transfer, and future GUI
+      action models; the adapter may remain only as a convenience adapter or
+      explicit legacy route.
     discarded_at: "2026-07-05"
     source_files:
       - docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md

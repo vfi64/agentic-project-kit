@@ -20,13 +20,10 @@ No scope recommendation is encoded here; maintainers fill the proposed column af
 | docs/handoff/ | 6 | 2 | 4 |  |
 | docs/ideas/ | 5 | 0 | 5 |  |
 | docs/patterns/ | 2 | 0 | 2 |  |
-| docs/planning/ | 31 | 31 | 0 |  |
-| docs/plans/ | 1 | 1 | 0 |  |
+| docs/planning/ | 28 | 28 | 0 |  |
 | docs/reference/ | 2 | 0 | 2 |  |
 | docs/releases/ | 1 | 1 | 0 |  |
-| docs/reports/ | 63 | 0 | 63 |  |
-| docs/roadmap/ | 1 | 1 | 0 |  |
-| docs/strategy/ | 2 | 2 | 0 |  |
+| docs/reports/ | 64 | 0 | 64 |  |
 | docs/testing/ | 1 | 1 | 0 |  |
 | docs/workflow/ | 19 | 19 | 0 |  |
 
