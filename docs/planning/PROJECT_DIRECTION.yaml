@@ -1,0 +1,157 @@
+# Authoritative machine-readable project direction file.
+#
+# Human-readable output:
+#   agentic-kit project-direction
+#   agentic-kit project-direction --section strategy
+#   agentic-kit project-direction --section roadmap
+#   agentic-kit project-direction --section plans
+#   agentic-kit project-direction --section ideas
+#   agentic-kit project-direction --section done
+#   agentic-kit project-direction --section discarded
+#   agentic-kit project-direction --section all
+#   agentic-kit project-direction --format text
+#   agentic-kit project-direction --format markdown
+#   agentic-kit project-direction --format json
+#
+# Governance:
+#   This file is the active source for project strategy, roadmap, plans,
+#   candidate ideas, completed work, and discarded planning choices.
+#   Older planning, roadmap, strategy, and idea documents remain migration
+#   sources until reference-clean consolidation removes or archives them.
+schema_version: 1
+meta:
+  owner: maintainers
+  status: active
+  updated_after_pr: null
+  update_policy: update after successful slice, release, or strategic decision
+  authority: docs/planning/PROJECT_DIRECTION.yaml
+  migration_state: schema-inventory
+
+strategy:
+  - id: governed-operating-model
+    status: active
+    title: Governed operating model
+    rationale: >-
+      Prefer deterministic wrappers, machine-checked gates, repo-backed
+      evidence, and explicit planning authority over raw shell, implicit chat
+      memory, duplicated workflow logic, or manually maintained status
+      fragments.
+    evidence:
+      - docs/architecture/ARCHITECTURE_CONTRACT.md
+      - docs/planning/KIT_AS_OS_MASTERPLAN.md
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+  - id: kit-as-os
+    status: active
+    title: Kit as OS architecture direction
+    rationale: >-
+      Evolve agentic-project-kit from a single-repository toolkit into a
+      governed repository operating layer with explicit workspace, resolver,
+      manifest, handoff, rule, and gate contracts.
+    evidence:
+      - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+      - docs/planning/KIT_AS_OS_MASTERPLAN.md
+    source_files:
+      - docs/planning/KIT_AS_OS_MASTERPLAN.md
+
+roadmap:
+  - id: p1-planning-consolidation
+    phase: unphased
+    status: next
+    title: Consolidate scattered planning into project direction
+    target_release: v0.4.12
+    depends_on: []
+    acceptance:
+      - docs/planning/PROJECT_DIRECTION.yaml is the canonical planning source.
+      - Old scattered planning files are migrated, classified, or removed with reference-clean evidence.
+      - Standard documentation gates validate the project direction contract.
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+  - id: p2-workspace-manifest-followup
+    phase: P2
+    status: planned
+    title: Continue workspace manifest and schema-gated operating model work
+    depends_on:
+      - p1-planning-consolidation
+    acceptance:
+      - Manifest, resolver, and workspace adoption behavior remain architecture-governed.
+      - Planning authority stays in project direction instead of scattered Markdown plans.
+    source_files:
+      - docs/planning/KIT_AS_OS_MASTERPLAN.md
+
+plans:
+  - id: direction-schema-command-migration
+    status: active
+    title: Introduce direction schema, command, migration, cleanup, scope, and gate slices
+    target_release: v0.4.12
+    depends_on: []
+    acceptance:
+      - Slice A introduces PROJECT_DIRECTION.yaml and inventory view.
+      - Slice B validates, renders, and audits drift.
+      - Slice C migrates active content.
+      - Slice D removes obsolete scattered planning documents.
+      - Slice E sharpens documentation registry scope.
+      - Slice F adds direction validation to standard gates.
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+
+ideas:
+  - id: project-direction-gui-panel
+    status: accepted
+    title: Project direction panel
+    rationale: >-
+      A future GUI can render strategy, roadmap, plans, ideas, done, and
+      discarded decisions from the machine-readable direction source.
+    decision_needed: false
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+  - id: deterministic-gui-gatekeeper
+    status: accepted
+    title: Deterministic GUI gatekeeper
+    rationale: >-
+      GUI workflow should expose safe wrappers, readiness checks, guided work
+      cycle state, communication-mode examples, and project direction without
+      raw shell execution or duplicate workflow logic.
+    decision_needed: false
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+  - id: live-release-gui
+    status: candidate
+    title: Live release publish from GUI
+    rationale: >-
+      Live publication may become useful after core workflow controls are
+      stable, but it must remain capability-gated and separate from early GUI
+      phases.
+    decision_needed: true
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+
+done:
+  - id: p1-workspace-resolver-line
+    completed_by_pr: null
+    merge_commit: null
+    evidence:
+      - docs/architecture/evidence/path-literal-audit-2026-07-05-post-p1.md
+    source_files:
+      - docs/planning/KIT_AS_OS_MASTERPLAN.md
+
+discarded:
+  - id: raw-shell-gui
+    reason: Raw shell execution from GUI violates wrapper-first governance.
+    discarded_at: "2026-06-28"
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+  - id: gc-as-docs-migration-tool
+    reason: >-
+      Artifact GC is a retention tool for transient artifacts, not a semantic
+      planning-document consolidation mechanism.
+    discarded_at: "2026-06-28"
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+  - id: copied-in-kit-model-b
+    reason: >-
+      Copying the kit into every target repository mixes kit code with project
+      code and creates avoidable maintenance drift.
+    discarded_at: "2026-06-28"
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml

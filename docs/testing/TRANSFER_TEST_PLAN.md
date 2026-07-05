@@ -3,7 +3,7 @@
 Status: active  
 Owner: maintainers  
 Target release: v0.4.12  
-Planning anchor: `docs/planning/project_direction.yaml` milestone `transfer-test-plan`
+Planning anchor: `docs/planning/PROJECT_DIRECTION.yaml` milestone `transfer-test-plan`
 
 ## Purpose
 

@@ -28,7 +28,7 @@ REQUIRED_CURRENT_DOCS: tuple[str, ...] = (
     "docs/STATUS.md",
     "docs/handoff/CURRENT_HANDOFF.md",
     "docs/DOCUMENTATION_REGISTRY.yaml",
-    "docs/planning/project_direction.yaml",
+    "docs/planning/PROJECT_DIRECTION.yaml",
     "docs/reference/AGENTIC_KIT_COMMANDS.md",
     "docs/reference/agentic-kit-commands.json",
 )

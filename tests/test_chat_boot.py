@@ -48,20 +48,28 @@ def _write_operational_handoff_state(root: Path) -> None:
 
 def _write_boot_source(path: Path, source: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    if source == "docs/planning/project_direction.yaml":
+    if source == "docs/planning/PROJECT_DIRECTION.yaml":
         path.write_text(
             "schema_version: 1\n"
-            "status: active\n"
-            "updated: '2026-06-19'\n"
-            "authority: docs/planning/project_direction.yaml\n"
-            "strategy: {}\n"
+            "meta:\n"
+            "  owner: maintainers\n"
+            "  status: active\n"
+            "  updated_after_pr: null\n"
+            "  update_policy: update after successful slice\n"
+            "  authority: docs/planning/PROJECT_DIRECTION.yaml\n"
+            "strategy: []\n"
             "roadmap:\n"
-            "  milestones:\n"
-            "    - id: docs-reconciliation\n"
-            "      title: Reconcile documentation authority\n"
-            "      status: active\n"
-            "      target_release: v0.4.10\n"
-            "ideas: {}\n",
+            "  - id: docs-reconciliation\n"
+            "    phase: unphased\n"
+            "    title: Reconcile documentation authority\n"
+            "    status: next\n"
+            "    depends_on: []\n"
+            "    acceptance: []\n"
+            "    source_files: []\n"
+            "plans: []\n"
+            "ideas: []\n"
+            "done: []\n"
+            "discarded: []\n",
             encoding="utf-8",
         )
         return
@@ -106,7 +114,7 @@ def test_next_chat_bootstrap_contains_standard_prompt_and_next_work(tmp_path: Pa
     assert "successor_context.yaml" in text
     assert "validation_report.json" in text
     assert "chat-switch-complete" not in text or "stale" not in text
-    assert "project_direction.yaml" in text
+    assert "PROJECT_DIRECTION.yaml" in text
     assert "docs-reconciliation" in text
     assert "Post-PR1245" not in text
     assert "PR #880" not in text

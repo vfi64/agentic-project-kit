@@ -4,7 +4,7 @@ from pathlib import Path
 
 import yaml
 
-PROJECT_DIRECTION = "docs/planning/project_direction.yaml"
+PROJECT_DIRECTION = "docs/planning/PROJECT_DIRECTION.yaml"
 
 
 def _registry() -> dict[str, dict[str, object]]:

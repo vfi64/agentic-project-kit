@@ -356,7 +356,7 @@ documents:
     status: superseded
     owner: maintainers
     review_policy: required
-    superseded_by: docs/planning/project_direction.yaml
+    superseded_by: docs/planning/PROJECT_DIRECTION.yaml
     summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
   - path: docs/archive/planning/V040_DOCUMENTATION_FOLLOW_UP.md
     class: historical archive
@@ -371,7 +371,7 @@ documents:
     status: superseded
     owner: maintainers
     review_policy: required
-    superseded_by: docs/planning/project_direction.yaml
+    superseded_by: docs/planning/PROJECT_DIRECTION.yaml
     summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
   - path: docs/archive/planning/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md
     class: historical archive
@@ -386,21 +386,27 @@ documents:
     status: superseded
     owner: maintainers
     review_policy: required
-    superseded_by: docs/planning/project_direction.yaml
+    superseded_by: docs/planning/PROJECT_DIRECTION.yaml
     summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
   - path: docs/strategy/V0.4_PROFESSIONAL_SINGLE_USER_STRATEGY.md
     class: historical archive
     status: superseded
     owner: maintainers
     review_policy: required
-    superseded_by: docs/planning/project_direction.yaml
+    superseded_by: docs/planning/PROJECT_DIRECTION.yaml
     summary: Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.
-  - path: docs/planning/project_direction.yaml
+  - path: docs/planning/PROJECT_DIRECTION.yaml
     class: planning
     status: active
     owner: maintainers
     review_policy: required
-    summary: Machine-readable source of truth for project strategy, roadmap, and ideas rendered by agentic-kit project-direction.
+    summary: Canonical machine-readable source of truth for project strategy, roadmap, plans, ideas, done items, and discarded choices.
+  - path: docs/planning/PROJECT_DIRECTION.md
+    class: planning
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Human-readable orientation view pointing to PROJECT_DIRECTION.yaml; not an independent planning authority.
   - path: docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
     class: planning
     status: active

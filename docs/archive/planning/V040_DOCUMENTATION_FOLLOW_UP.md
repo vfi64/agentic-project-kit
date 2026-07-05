@@ -1,6 +1,6 @@
 <!--
 Status: superseded
-Authority: docs/planning/project_direction.yaml
+Authority: docs/planning/PROJECT_DIRECTION.yaml
 Reason: Strategy, roadmap, and idea direction now live in the machine-readable project direction source.
 Retention: Keep as historical context until a later protected reference check archives or removes it explicitly.
 -->
@@ -28,7 +28,7 @@ This plan records documentation and review follow-up work that must not be mixed
 
 ## Document and Artifact Governance OS
 
-The former broader professionalization track is superseded; current strategy, roadmap, and ideas are governed by `docs/planning/project_direction.yaml`.
+The former broader professionalization track is superseded; current strategy, roadmap, and ideas are governed by `docs/planning/PROJECT_DIRECTION.yaml`.
 
 That plan treats documentation, generated handoffs, terminal evidence, temporary artifacts, security filters, source-of-truth relationships, update triggers, garbage-collector integration, and LLM/Codex/Claude-Code collaboration artifacts as one modular governance subsystem.
 

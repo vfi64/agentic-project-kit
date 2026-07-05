@@ -605,12 +605,12 @@ _No parameters._
 
 ### `agentic-kit project-direction`
 
-Render strategy, roadmap, and ideas from the project direction YAML source.
+Render project direction sections from the YAML source.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
-| `section` | `TyperOption` | --section | `False` | `all` | all, strategy, roadmap, or ideas. |
+| `section` | `TyperOption` | --section | `False` | `all` | all, strategy, roadmap, plans, ideas, done, or discarded. |
 | `output_format` | `TyperOption` | --format | `False` | `text` | text, markdown, or json. |
 
 ### `agentic-kit release prepare`

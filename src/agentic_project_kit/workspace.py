@@ -55,6 +55,7 @@ class KitConfig:
     handoff_root: str = "docs/handoff"
     handoff_packages_latest_root: str = "docs/reports/handoff-packages/latest"
     planning_root: str = "docs/planning"
+    project_direction_file: str = "PROJECT_DIRECTION.yaml"
     governance_root: str = "docs/governance"
     reference_root: str = "docs/reference"
     architecture_root: str = "docs/architecture"
@@ -175,6 +176,9 @@ class Workspace:
 
     def planning_file(self, name: str) -> Path:
         return self.planning_dir() / name
+
+    def project_direction_path(self) -> Path:
+        return self.planning_file(self.config.project_direction_file)
 
     def governance_dir(self) -> Path:
         return self._path(self.config.governance_root)

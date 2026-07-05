@@ -18,7 +18,7 @@ SOURCE_FILES = (
     ".agentic/rule_mechanism_inventory.yaml",
     ".agentic/rule_preservation.yaml",
     "docs/DOCUMENTATION_REGISTRY.yaml",
-    "docs/planning/project_direction.yaml",
+    "docs/planning/PROJECT_DIRECTION.yaml",
 )
 
 
@@ -175,7 +175,7 @@ post_patch_rules: {}
     (tmp_path / "docs").mkdir(exist_ok=True)
     (tmp_path / "docs/DOCUMENTATION_REGISTRY.yaml").write_text("schema_version: 1\n", encoding="utf-8")
     (tmp_path / "docs/planning").mkdir(parents=True, exist_ok=True)
-    (tmp_path / "docs/planning/project_direction.yaml").write_text("schema_version: 1\n", encoding="utf-8")
+    (tmp_path / "docs/planning/PROJECT_DIRECTION.yaml").write_text("schema_version: 1\n", encoding="utf-8")
 
     write_transfer_outbox(tmp_path, {"result_status": "PASS", "final_signal": "d"})
 

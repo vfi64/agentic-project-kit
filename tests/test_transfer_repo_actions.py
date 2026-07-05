@@ -2929,7 +2929,7 @@ def test_successor_package_freshness_rejects_project_direction_head_drift(monkey
             return subprocess.CompletedProcess(
                 command,
                 0,
-                "docs/planning/project_direction.yaml\n",
+                "docs/planning/PROJECT_DIRECTION.yaml\n",
                 "",
             )
         return subprocess.CompletedProcess(command, 1, "", "unexpected command")

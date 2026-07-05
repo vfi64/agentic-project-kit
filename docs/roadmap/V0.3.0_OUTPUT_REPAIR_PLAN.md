@@ -1,6 +1,6 @@
 <!--
 Status: superseded
-Authority: docs/planning/project_direction.yaml
+Authority: docs/planning/PROJECT_DIRECTION.yaml
 Reason: Strategy, roadmap, and idea direction now live in the machine-readable project direction source.
 Retention: Keep as historical context until a later protected reference check archives or removes it explicitly.
 -->

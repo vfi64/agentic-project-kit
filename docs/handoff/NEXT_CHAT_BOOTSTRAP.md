@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `387b680dba83116016320e06b1283f2b1ddf1f74` (`387b680d`)
-- Handoff freshness marker: `387b680d`
-- Branch at generation: `docs/post-pr1723-handoff-refresh`
+- HEAD: `c1215490936f3fa33944b5fac651f25cf327420c` (`c1215490`)
+- Handoff freshness marker: `c1215490`
+- Branch at generation: `codex/project-direction-schema`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -69,18 +69,10 @@ Wenn der Bootstrap grün ist:
 
 ## Open high-priority work
 
-Source: `docs/planning/project_direction.yaml`.
+Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 
-- `transfer-test-plan` (planned): Specify transfer tests for remote, transfer-file, and copy-paste modes for v0.4.12
-- `audit-status-current-state` (planned): Add current-state drift audit with STATUS.md consistency checks for v0.4.12
-- `send-read-ref-consistency` (planned): Test that g/go reads the gui-transfer-tasks carrier ref for v0.4.12
-- `tooltip-idempotence` (planned): Make GUI tooltip attachment idempotent for v0.4.12
-- `gui-modularization-smoke-tests` (planned): Add GUI smoke tests before modularizing large GUI files for v0.4.12
-- `guided-work-cycle-bar` (planned): Add guided work-cycle bar over existing work wrappers for v0.4.12
-- `communication-mode-examples` (planned): Add communication-mode explanations with examples for v0.4.12
-- `wrapper-live-status` (planned): Add bounded live status for pr-create-complete for v0.4.12
-- `artifact-gc-extension` (planned): Extend artifact-gc instead of adding duplicate log-GC commands for v0.4.12
-- `documentation-auto-registration` (planned): Plan documentation auto-registration for post-v0.4.12
-- `rule-auto-registration-inventory` (planned): Inventory rule auto-registration prerequisites for post-v0.4.12
+- `p1-planning-consolidation` (next): Consolidate scattered planning into project direction for v0.4.12
+- `p2-workspace-manifest-followup` (planned): Continue workspace manifest and schema-gated operating model work for P2
+- `direction-schema-command-migration` (active): Introduce direction schema, command, migration, cleanup, scope, and gate slices for v0.4.12
 
 ### RESULT: PASS ###

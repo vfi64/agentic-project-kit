@@ -1,8 +1,8 @@
 # Workflow Reduction Focus
 
 Status: superseded
-Superseded by: `docs/planning/PRE_GUI_HARDENING_TASKS.md` for pre-GUI hardening work and `docs/planning/project_direction.yaml` for durable strategy/roadmap authority.
-Lifecycle note: This document is closed as an active direction source; current pre-GUI hardening work is governed by `docs/planning/PRE_GUI_HARDENING_TASKS.md`, and durable strategy/roadmap authority is governed by `docs/planning/project_direction.yaml`.
+Superseded by: `docs/planning/PRE_GUI_HARDENING_TASKS.md` for pre-GUI hardening work and `docs/planning/PROJECT_DIRECTION.yaml` for durable strategy/roadmap authority.
+Lifecycle note: This document is closed as an active direction source; current pre-GUI hardening work is governed by `docs/planning/PRE_GUI_HARDENING_TASKS.md`, and durable strategy/roadmap authority is governed by `docs/planning/PROJECT_DIRECTION.yaml`.
 
 This file is retained as historical planning context only. Do not use the current-slice markers or roadmap items below as active work instructions; add new pre-GUI hardening content to `docs/planning/PRE_GUI_HARDENING_TASKS.md`.
 

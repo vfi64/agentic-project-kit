@@ -31,15 +31,37 @@ def test_planning_docs_audit_classifies_current_handoff_as_authoritative(tmp_pat
     assert result.records[0].classification == "authoritative_current_handoff"
 
 
-def test_planning_docs_audit_classifies_project_direction_as_active_anchor(tmp_path: Path) -> None:
-    doc = tmp_path / "docs" / "planning" / "project_direction.yaml"
+def test_planning_docs_audit_classifies_next_chat_bootstrap_as_projection(tmp_path: Path) -> None:
+    doc = tmp_path / "docs" / "handoff" / "NEXT_CHAT_BOOTSTRAP.md"
     doc.parent.mkdir(parents=True)
-    doc.write_text("status: active\nauthority: docs/planning/project_direction.yaml\n", encoding="utf-8")
+    doc.write_text("# NEXT CHAT BOOTSTRAP\nnext active task\n", encoding="utf-8")
+
+    result = audit_planning_docs_consolidation(tmp_path)
+
+    assert result.ok is True
+    assert result.records[0].classification == "handoff_projection"
+
+
+def test_planning_docs_audit_classifies_project_direction_as_active_anchor(tmp_path: Path) -> None:
+    doc = tmp_path / "docs" / "planning" / "PROJECT_DIRECTION.yaml"
+    doc.parent.mkdir(parents=True)
+    doc.write_text("status: active\nauthority: docs/planning/PROJECT_DIRECTION.yaml\n", encoding="utf-8")
 
     result = audit_planning_docs_consolidation(tmp_path)
 
     assert result.ok is True
     assert result.records[0].classification == "authoritative_planning_anchor"
+
+
+def test_planning_docs_audit_classifies_project_direction_view(tmp_path: Path) -> None:
+    doc = tmp_path / "docs" / "planning" / "PROJECT_DIRECTION.md"
+    doc.parent.mkdir(parents=True)
+    doc.write_text("# Project Direction\nThis view points to PROJECT_DIRECTION.yaml.\n", encoding="utf-8")
+
+    result = audit_planning_docs_consolidation(tmp_path)
+
+    assert result.ok is True
+    assert result.records[0].classification == "planning_authority_view"
 
 
 def test_planning_docs_audit_classifies_pre_gui_tasks_as_scoped_anchor(tmp_path: Path) -> None:
