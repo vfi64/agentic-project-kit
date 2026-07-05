@@ -22,7 +22,7 @@ schema_version: 1
 meta:
   owner: maintainers
   status: active
-  updated_after_pr: null
+  updated_after_pr: pending-pr-direction-refresh-post-p2
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
@@ -107,27 +107,146 @@ strategy:
 roadmap:
   - id: p1-planning-consolidation
     phase: unphased
-    status: next
+    status: done
     title: Consolidate scattered planning into project direction
     target_release: v0.4.12
+    completed_by_pr: 1736
+    merge_commit: f00e6c86
     depends_on: []
     acceptance:
       - docs/planning/PROJECT_DIRECTION.yaml is the canonical planning source.
       - Old scattered planning files are migrated, classified, or removed with reference-clean evidence.
       - Standard documentation gates validate the project direction contract.
+    evidence:
+      - PR #1725 introduced the canonical direction schema.
+      - PR #1727 added direction validate/render/audit-drift commands.
+      - PR #1730 migrated active planning content.
+      - PR #1732 removed obsolete scattered planning documents.
+      - PR #1734 enforced documentation registry scope after cleanup.
+      - PR #1736 added direction validation to the standard gates.
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
   - id: p2-workspace-manifest-followup
     phase: P2
-    status: planned
+    status: done
     title: Continue workspace manifest and schema-gated operating model work
+    completed_by_pr: 1723
+    merge_commit: 387b680d
     depends_on:
       - p1-planning-consolidation
     acceptance:
       - Manifest, resolver, and workspace adoption behavior remain architecture-governed.
       - Planning authority stays in project direction instead of scattered Markdown plans.
+    evidence:
+      - PR #1723 parsed workspace manifests with the schema gate.
     source_files:
       - docs/planning/KIT_AS_OS_MASTERPLAN.md
+  - id: p3-workspace-adopt-init-upgrade
+    phase: P3
+    status: next
+    title: Add workspace adopt, init, and upgrade lifecycle commands
+    depends_on:
+      - p2-workspace-manifest-followup
+    acceptance:
+      - workspace adopt analyzes an existing repository without writing.
+      - workspace init creates the .agentic workspace with dry-run default and CI templates.
+      - workspace upgrade provides the deterministic schema-migration frame.
+      - CI injection remains an explicit opt-in exception.
+    source_files:
+      - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  - id: p4-namespace-completion
+    phase: P4
+    status: planned
+    title: Complete namespace resolution for manifest-bearing projects
+    depends_on:
+      - p3-workspace-adopt-init-upgrade
+    acceptance:
+      - Registries resolve into .agentic for manifest-bearing projects.
+      - Status, rules, and tmp paths resolve through the workspace resolver.
+      - Legacy profile behavior remains unchanged for manifest-less repositories.
+    source_files:
+      - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  - id: p5a-self-hosting-manifest
+    phase: P5
+    status: planned
+    title: Add a self-hosting manifest while keeping physical paths stable
+    depends_on:
+      - p4-namespace-completion
+    acceptance:
+      - The kit repository gains a manifest without physical path moves.
+      - Existing public paths and generated projections remain stable.
+    source_files:
+      - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  - id: p5b-resolver-aliases
+    phase: P5
+    status: planned
+    title: Route self-hosted accesses through resolver-backed aliases
+    depends_on:
+      - p5a-self-hosting-manifest
+    acceptance:
+      - Kit-repo access uses the resolver while physical paths remain stable.
+      - Tests cover alias behavior before any physical migration.
+    source_files:
+      - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  - id: p5c-physical-migration
+    phase: P5
+    status: planned
+    title: Optionally migrate physical paths after resolver decoupling
+    depends_on:
+      - p5b-resolver-aliases
+    acceptance:
+      - Physical migration starts only after references, docs, and tests are resolver-based.
+      - Public surfaces may remain projections instead of being moved.
+    source_files:
+      - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  - id: p5d-legacy-path-deprecation
+    phase: P5
+    status: planned
+    title: Deprecate legacy top-level paths in line with legacy-profile removal
+    depends_on:
+      - p5c-physical-migration
+    acceptance:
+      - Legacy top-level path deprecation is explicit and reviewable.
+      - The timing aligns with the 2.0.0 removal of the implicit legacy profile.
+    source_files:
+      - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  - id: p6-gui-project-selection-and-ci-recipe
+    phase: P6
+    status: planned
+    title: Add GUI project selection and harden CI recipe follow-ups
+    depends_on:
+      - p5d-legacy-path-deprecation
+    acceptance:
+      - The GUI can operate on a selected workspace root.
+      - Initial prompts are parameterized per workspace.
+      - CI recipes are hardened after the workspace lifecycle commands exist.
+    source_files:
+      - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  - id: v1-0-milestone
+    phase: unphased
+    status: planned
+    title: Reach the 1.0 operating-layer stability milestone
+    depends_on:
+      - p6-gui-project-selection-and-ci-recipe
+    acceptance:
+      - The self-hosting litmus has passed.
+      - workspace adopt/init is stable on at least one real external project.
+      - Too-old and too-new kit_schema_version failure paths are tested.
+      - A tested workspace upgrade transformation exists before or with the first schema bump.
+    source_files:
+      - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  - id: v2-0-legacy-profile-removal
+    phase: unphased
+    status: planned
+    title: Remove the implicit legacy profile in 2.0.0
+    depends_on:
+      - v1-0-milestone
+    acceptance:
+      - The implicit legacy profile is removed.
+      - .agentic/config.yaml is required for governed repositories.
+      - The migration path is documented before removal.
+    source_files:
+      - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
   - id: pre-gui-hardening-line
     phase: pre-GUI
     status: next
@@ -208,9 +327,11 @@ roadmap:
 
 plans:
   - id: direction-schema-command-migration
-    status: active
+    status: done
     title: Introduce direction schema, command, migration, cleanup, scope, and gate slices
     target_release: v0.4.12
+    completed_by_pr: 1736
+    merge_commit: f00e6c86
     depends_on: []
     acceptance:
       - Slice A introduces PROJECT_DIRECTION.yaml and inventory view.
@@ -219,6 +340,48 @@ plans:
       - Slice D removes obsolete scattered planning documents.
       - Slice E sharpens documentation registry scope.
       - Slice F adds direction validation to standard gates.
+    evidence:
+      - PR #1725 introduced the canonical direction schema.
+      - PR #1727 added direction validate/render/audit-drift.
+      - PR #1730 migrated active planning content.
+      - PR #1732 removed obsolete scattered planning documents.
+      - PR #1734 finalized documentation registry scope after cleanup.
+      - PR #1736 added direction validation to standard documentation gates.
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+      - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+  - id: governance-doc-backfill
+    status: active
+    title: Backfill reviewed governance document registry entries
+    depends_on:
+      - direction-schema-command-migration
+    acceptance:
+      - Remaining governance document registrations are reviewed and additive.
+      - Documentation registry scope decisions stay visible in the decision template.
+      - Broad migration remains separate from generated evidence and examples.
+    source_files:
+      - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+  - id: strict-scope-suite-adoption
+    status: planned
+    title: Decide whether strict documentation scope belongs in the standard gate suite
+    depends_on:
+      - governance-doc-backfill
+    acceptance:
+      - Strict-scope adoption is considered only after governance backfill is complete.
+      - The standard suite stays free of false positives for clean repositories.
+      - Any adoption is documented and test-backed.
+    source_files:
+      - docs/DOC_REGISTRY_SCOPE.yaml
+      - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+  - id: planning-ideas-residual-cleanup
+    status: planned
+    title: Resolve remaining planning and idea residual documents
+    depends_on:
+      - direction-schema-command-migration
+    acceptance:
+      - direction audit-drift has no unreviewed planning or idea residuals.
+      - docs/ideas candidates are accepted, rejected, archived, or removed with reference-clean evidence.
+      - Remaining docs/planning legacy files are retained only with clear source or archive status.
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -391,6 +554,36 @@ ideas:
     decision_needed: true
     source_files:
       - docs/ideas/PATTERN_ADVISOR.md
+  - id: comm-sci-first-external-adoption
+    status: candidate
+    title: Comm-SCI-Control-private as first external adoption candidate
+    rationale: >-
+      The 1.0 milestone requires workspace adopt/init stability on at least one
+      real external project; Comm-SCI-Control-private is named in the architecture
+      document as the candidate for that evidence.
+    decision_needed: true
+    source_files:
+      - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  - id: node-profile
+    status: candidate
+    title: Node profile
+    rationale: >-
+      Operating-layer adoption detects package.json as node, but a fuller node
+      profile should wait until the workspace lifecycle is stable enough to add
+      profile-specific gates deliberately.
+    decision_needed: true
+    source_files:
+      - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  - id: direction-auto-status-flip
+    status: candidate
+    title: Automatic direction status flip after PR merge
+    rationale: >-
+      A post-merge hook could later mark direction items with completed PR
+      evidence as done, reducing manual drift, but it needs bounded rules so it
+      does not infer semantic completion from a merge alone.
+    decision_needed: true
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
 
 done:
   - id: p1-workspace-resolver-line
