@@ -99,11 +99,13 @@ def _write_registry(project: Path) -> None:
 def _write_scope(
     project: Path,
     *,
+    required_files: list[str] | None = None,
     required_paths: list[str] | None = None,
     exempt_paths: list[dict[str, str]] | None = None,
 ) -> None:
     scope = {
         "schema_version": 1,
+        "required_files": required_files or [],
         "required_paths": required_paths or [],
         "exempt_paths": exempt_paths or [],
     }
@@ -395,6 +397,31 @@ def test_required_path_violations_listed_separately(tmp_path: Path) -> None:
     assert report["candidates"] == ["docs/outside.md", "docs/required/missing.md"]
     assert report["scope_violations"] == ["docs/required/missing.md"]
     assert report["scope_violation_count"] == 1
+
+
+def test_required_file_violations_do_not_require_parent_path(tmp_path: Path) -> None:
+    _write_registry(tmp_path)
+    _write(tmp_path / "docs" / "STATUS.md", "## Current Goal\n")
+    _write_scope(tmp_path, required_files=["docs/planning/PROJECT_DIRECTION.yaml"])
+    _write(tmp_path / "docs" / "planning" / "PROJECT_DIRECTION.yaml", "schema_version: 1\n")
+    _write(tmp_path / "docs" / "planning" / "scratch.md", "# Scratch\n")
+
+    report = build_unregistered_document_candidates_report(tmp_path, strict_scope=True)
+
+    assert report["result_status"] == "FAIL"
+    assert report["scope_violations"] == ["docs/planning/PROJECT_DIRECTION.yaml"]
+    assert "docs/planning/scratch.md" in report["candidates"]
+
+    register_documentation_registry_entry(
+        tmp_path,
+        document_path="docs/planning/PROJECT_DIRECTION.yaml",
+        document_class="planning",
+    )
+
+    clean_report = build_unregistered_document_candidates_report(tmp_path, strict_scope=True)
+
+    assert clean_report["scope_violations"] == []
+    assert "docs/planning/scratch.md" in clean_report["candidates"]
 
 
 def test_strict_scope_fails_on_violation_and_passes_when_clean(tmp_path: Path) -> None:

@@ -65,6 +65,7 @@ class ScopeExemption:
 @dataclass(frozen=True)
 class DocumentationRegistryScope:
     present: bool
+    required_files: tuple[str, ...]
     required_paths: tuple[str, ...]
     exempt_paths: tuple[ScopeExemption, ...]
     errors: tuple[str, ...] = ()
@@ -83,6 +84,7 @@ def load_documentation_registry_scope(project_root: Path) -> DocumentationRegist
     if not path.exists():
         return DocumentationRegistryScope(
             present=False,
+            required_files=(),
             required_paths=(),
             exempt_paths=(),
         )
@@ -93,6 +95,7 @@ def load_documentation_registry_scope(project_root: Path) -> DocumentationRegist
     except (OSError, yaml.YAMLError) as exc:
         return DocumentationRegistryScope(
             present=True,
+            required_files=(),
             required_paths=(),
             exempt_paths=(),
             errors=(f"{SCOPE_PATH}: invalid scope ({exc})",),
@@ -103,6 +106,7 @@ def load_documentation_registry_scope(project_root: Path) -> DocumentationRegist
     if not isinstance(data, dict):
         return DocumentationRegistryScope(
             present=True,
+            required_files=(),
             required_paths=(),
             exempt_paths=(),
             errors=(f"{SCOPE_PATH}: root must be a mapping",),
@@ -111,10 +115,12 @@ def load_documentation_registry_scope(project_root: Path) -> DocumentationRegist
     if data.get("schema_version") != 1:
         errors.append(f"{SCOPE_PATH}: schema_version must be 1")
 
+    required_files = _parse_scope_required_files(data.get("required_files"), errors)
     required_paths = _parse_scope_required_paths(data.get("required_paths"), errors)
     exempt_paths = _parse_scope_exempt_paths(data.get("exempt_paths"), errors)
     return DocumentationRegistryScope(
         present=True,
+        required_files=tuple(required_files),
         required_paths=tuple(required_paths),
         exempt_paths=tuple(exempt_paths),
         errors=tuple(errors),
@@ -506,6 +512,7 @@ def build_unregistered_document_candidates_report(
         "final_signal": "d",
         "strict_scope": strict_scope,
         "scope_present": scope.present,
+        "scope_required_file_count": len(scope.required_files),
         "scope_required_path_count": len(scope.required_paths),
         "scope_exempt_path_count": len(scope.exempt_paths),
         "scope_errors": list(scope.errors),
@@ -570,6 +577,7 @@ def render_doc_registry_scope_decision_template(project_root: Path) -> str:
         [
             "",
             "Notes:",
+            "- `required_files` means each declared file must have a registry entry.",
             "- `required_paths` means every Markdown file in that declared path must be registered.",
             "- `exempt_paths` means a declared path is intentionally registration-free and must carry a reason.",
             "- This template is evidence for a maintainer decision; it does not modify scope by itself.",
@@ -599,6 +607,31 @@ def _parse_scope_required_paths(value: object, errors: list[str]) -> list[str]:
             continue
         required_paths.append(normalized)
     return required_paths
+
+
+def _parse_scope_required_files(value: object, errors: list[str]) -> list[str]:
+    if value in (None, []):
+        return []
+    if not isinstance(value, list):
+        errors.append(f"{SCOPE_PATH}: required_files must be a list")
+        return []
+    required_files: list[str] = []
+    for index, entry in enumerate(value, start=1):
+        if not isinstance(entry, str):
+            errors.append(f"{SCOPE_PATH}: required_files entry {index} must be a string")
+            continue
+        normalized = _normalize_scope_pattern(entry)
+        if not normalized:
+            errors.append(f"{SCOPE_PATH}: required_files entry {index} must not be empty")
+            continue
+        if _scope_pattern_is_unsafe(normalized):
+            errors.append(f"{SCOPE_PATH}: required_files entry {index} is not repository-relative")
+            continue
+        if normalized.endswith("/"):
+            errors.append(f"{SCOPE_PATH}: required_files entry {index} must be a file path")
+            continue
+        required_files.append(normalized)
+    return required_files
 
 
 def _parse_scope_exempt_paths(value: object, errors: list[str]) -> list[ScopeExemption]:
@@ -671,11 +704,17 @@ def _find_scope_violations(
     project_root: Path,
     scope: DocumentationRegistryScope,
 ) -> list[str]:
-    if scope.errors or not scope.required_paths:
+    if scope.errors or (not scope.required_files and not scope.required_paths):
         return []
     registered_paths = _registered_document_paths(project_root)
     exempt_patterns = [exemption.path for exemption in scope.exempt_paths]
     violations = []
+    for rel in scope.required_files:
+        if rel in registered_paths:
+            continue
+        if exempt_patterns and _matches_any_scope_pattern(rel, exempt_patterns):
+            continue
+        violations.append(rel)
     for rel in _iter_docs_markdown_files(project_root):
         if rel in registered_paths:
             continue
@@ -683,7 +722,7 @@ def _find_scope_violations(
             continue
         if _matches_any_scope_pattern(rel, scope.required_paths):
             violations.append(rel)
-    return violations
+    return sorted(set(violations))
 
 
 def _iter_docs_markdown_files(

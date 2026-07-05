@@ -79,16 +79,18 @@ FAIL, because broad migration remains disabled.
 
 `docs/DOC_REGISTRY_SCOPE.yaml` is the optional scope declaration for making
 selected documentation areas strict without broad migration. It contains
-`required_paths` for paths where every Markdown file must be registered and
-`exempt_paths` for explicitly registration-free paths with a required reason.
+`required_files` for individual required registry entries, `required_paths` for
+paths where every Markdown file must be registered, and `exempt_paths` for
+explicitly registration-free paths with a required reason.
 
 The checked-in scope is initially empty. With no scope file or an empty scope
 file, `agentic-kit doc-registry check-unregistered` keeps the existing WARN-only
-inventory behavior. When maintainers later fill `required_paths`, unregistered
-Markdown files under those paths are reported as separate scope violations.
-`agentic-kit doc-registry check-unregistered --strict-scope` fails only for
-those declared scope violations; the standard suite does not enable
-`--strict-scope` in this slice.
+inventory behavior. When maintainers fill `required_files`, missing registry
+entries for those exact files are reported as scope violations. When maintainers
+fill `required_paths`, unregistered Markdown files under those paths are
+reported as separate scope violations. `agentic-kit doc-registry
+check-unregistered --strict-scope` fails only for those declared scope
+violations; the standard suite does not enable `--strict-scope` in this slice.
 
 `docs/planning/DOC_REGISTRY_SCOPE_DECISION.md` is a machine-generated decision
 template that counts Markdown files by `docs/` subdirectory and leaves the
