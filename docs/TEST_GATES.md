@@ -342,6 +342,10 @@ Run these commands:
 
 For `planning-doc`, the gate must run targeted tests plus `agentic-kit handoff check`, `agentic-kit check-docs`, `agentic-kit docs-audit`, and `agentic-kit doctor`. Helper-local PASS is not a slice PASS; slice PASS requires the repository governance gates to pass. Dirty state must be visible and must keep `merge_pr_ready=NO` until the changed files have been reviewed and committed intentionally.
 
+## Project Direction Gate
+
+Run `agentic-kit direction validate` when changing `docs/planning/PROJECT_DIRECTION.yaml`. Use `agentic-kit direction render` only for stdout or temporary `tmp/` views, and run `agentic-kit direction audit-drift` before migrating, archiving, or deleting scattered planning documents.
+
 ## Doctor Gate
 
 Run this command when changing project health diagnostics:

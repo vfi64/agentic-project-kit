@@ -5,6 +5,7 @@ from agentic_project_kit.cli_commands.boot import boot_app
 from agentic_project_kit.cli_commands.checks import register_check_commands
 from agentic_project_kit.cli_commands.cockpit import cockpit_app
 from agentic_project_kit.cli_commands.dev import dev_app
+from agentic_project_kit.cli_commands.direction import direction_app
 from agentic_project_kit.cli_commands.evidence import app as evidence_app
 from agentic_project_kit.cli_commands.github import register_github_commands
 from agentic_project_kit.cli_commands.governance import governance_app
@@ -96,6 +97,7 @@ app.add_typer(boot_app, name="boot")
 app.add_typer(pass_already_done_app, name="pass-already-done")
 app.add_typer(actions_app, name="actions")
 app.add_typer(dev_app, name="dev")
+app.add_typer(direction_app, name="direction")
 app.add_typer(evidence_app, name="evidence")
 app.add_typer(work_orders_app, name="work-order")
 app.add_typer(governance_app, name="governance")

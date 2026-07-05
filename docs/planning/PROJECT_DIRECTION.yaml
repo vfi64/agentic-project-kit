@@ -130,8 +130,9 @@ done:
   - id: p1-workspace-resolver-line
     completed_by_pr: null
     merge_commit: null
+    completion_exception: Historical completion entry; PR metadata will be reconciled during planning migration.
     evidence:
-      - docs/architecture/evidence/path-literal-audit-2026-07-05-post-p1.md
+      - docs/architecture/evidence/path-literal-audit-2026-07-04-post-p1.md
     source_files:
       - docs/planning/KIT_AS_OS_MASTERPLAN.md
 
