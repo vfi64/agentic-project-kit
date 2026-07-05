@@ -1,10 +1,9 @@
 # Agentic Project Kit as an Operating Layer for Arbitrary GitHub Projects
 
-Status: DRAFT v4 (three review rounds) — post-v0.4.12 architecture document,
-no implementation before acceptance. v0.4.12 release and DOI closeout are
-complete (release tag `v0.4.12`, version DOI `10.5281/zenodo.21135030`); the
-remaining administrative handoff refresh after PR #1681 (open PR #1682) must
-be resolved before any implementation work starts from this architecture.
+Status: ACCEPTED (v4, angenommen 2026-07-04) — P1 foundation implemented
+(workspace resolver, implicit legacy profile, workspace lock); P2+ proceed
+on maintainer signal. v0.4.12 release and DOI closeout are complete (release
+tag `v0.4.12`, version DOI `10.5281/zenodo.21135030`).
 Proposed repo location: `docs/architecture/KIT_AS_OS_ARCHITECTURE.md`
 (register via `agentic-kit doc-registry register`; the adopting PR carries
 documentation only, no code).
