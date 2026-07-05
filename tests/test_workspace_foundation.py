@@ -10,12 +10,18 @@ import pytest
 
 from agentic_project_kit.transfer_repo_actions import RepoActionResult
 import agentic_project_kit.transfer_repo_actions as transfer_repo_actions
-from agentic_project_kit.workspace import UNEXPECTED_WORKSPACE_MANIFEST_MESSAGE, load_workspace
+from agentic_project_kit.workspace import load_workspace
 from agentic_project_kit.workspace_lock import WorkspaceLockBusy, acquire_workspace_lock
 
 
 def _rel(path: Path) -> str:
     return path.as_posix()
+
+
+def _write_manifest(root: Path, text: str) -> None:
+    manifest = root / ".agentic" / "config.yaml"
+    manifest.parent.mkdir(parents=True)
+    manifest.write_text(text, encoding="utf-8")
 
 
 def test_legacy_workspace_paths_match_todays_literals() -> None:
@@ -66,13 +72,172 @@ def test_legacy_workspace_paths_match_todays_literals() -> None:
     assert ws.admin_refresh_branch(123) == "docs/post-pr123-handoff-refresh"
 
 
-def test_load_workspace_fails_loud_on_unexpected_manifest(tmp_path: Path) -> None:
-    manifest = tmp_path / ".agentic" / "config.yaml"
-    manifest.parent.mkdir(parents=True)
-    manifest.write_text("kit_schema_version: 1\n", encoding="utf-8")
+def test_manifest_happy_path_overrides_paths(tmp_path: Path) -> None:
+    _write_manifest(
+        tmp_path,
+        """
+kit_schema_version: 1
+project: {name: demo, type: python}
+profile: generic
+paths:
+  docs_root: project-docs
+gates:
+  extra: [custom-gate]
+  skip: [slow-gate]
+""",
+    )
 
-    with pytest.raises(RuntimeError, match=re.escape(UNEXPECTED_WORKSPACE_MANIFEST_MESSAGE)):
+    ws = load_workspace(tmp_path)
+
+    assert ws.profile == "generic"
+    assert ws.project_name == "demo"
+    assert ws.project_type == "python"
+    assert _rel(ws.status_path().relative_to(tmp_path)) == "project-docs/STATUS.md"
+    assert _rel(ws.doc_registry_path().relative_to(tmp_path)) == "project-docs/DOCUMENTATION_REGISTRY.yaml"
+    assert _rel(ws.handoff_dir().relative_to(tmp_path)) == "docs/handoff"
+    assert ws.gates_extra == ("custom-gate",)
+    assert ws.gates_skip == ("slow-gate",)
+
+
+def test_manifest_visibility_and_modules_are_held_not_enforced(tmp_path: Path) -> None:
+    _write_manifest(
+        tmp_path,
+        """
+kit_schema_version: 1
+modules:
+  release_governance: false
+  doc_registry: true
+  rule_registry: false
+  transfer: false
+transfer:
+  visibility: local
+""",
+    )
+
+    ws = load_workspace(tmp_path)
+
+    assert ws.modules == {
+        "doc_registry": True,
+        "release_governance": False,
+        "rule_registry": False,
+        "transfer": False,
+    }
+    assert ws.transfer_visibility == "local"
+    assert _rel(ws.transfer_inbox().relative_to(tmp_path)) == ".agentic/transfer/inbox"
+    assert _rel(ws.transfer_outbox().relative_to(tmp_path)) == ".agentic/transfer/outbox"
+
+
+def test_manifest_missing_schema_version_fails_naming_upgrade(tmp_path: Path) -> None:
+    _write_manifest(tmp_path, "profile: generic\n")
+
+    with pytest.raises(
+        RuntimeError,
+        match=re.escape(
+            ".agentic/config.yaml:kit_schema_version: invalid kit_schema_version; "
+            "run `agentic-kit workspace upgrade` after it ships (P3), or fix the manifest"
+        ),
+    ):
         load_workspace(tmp_path)
+
+
+def test_manifest_newer_schema_fails_naming_kit_upgrade(tmp_path: Path) -> None:
+    _write_manifest(tmp_path, "kit_schema_version: 2\n")
+
+    with pytest.raises(
+        RuntimeError,
+        match=re.escape(".agentic/config.yaml:kit_schema_version: manifest schema v2 is newer than this kit; upgrade the kit"),
+    ):
+        load_workspace(tmp_path)
+
+
+def test_manifest_unknown_top_level_key_fails(tmp_path: Path) -> None:
+    _write_manifest(
+        tmp_path,
+        """
+kit_schema_version: 1
+surprise: true
+""",
+    )
+
+    with pytest.raises(
+        RuntimeError,
+        match=re.escape(".agentic/config.yaml:surprise: unknown top-level key"),
+    ):
+        load_workspace(tmp_path)
+
+
+def test_manifest_unknown_paths_key_fails(tmp_path: Path) -> None:
+    _write_manifest(
+        tmp_path,
+        """
+kit_schema_version: 1
+paths:
+  doc_root_typo: docs
+""",
+    )
+
+    with pytest.raises(
+        RuntimeError,
+        match=re.escape(".agentic/config.yaml:paths.doc_root_typo: unknown paths key"),
+    ):
+        load_workspace(tmp_path)
+
+
+def test_manifest_module_value_must_be_bool(tmp_path: Path) -> None:
+    _write_manifest(
+        tmp_path,
+        """
+kit_schema_version: 1
+modules:
+  transfer: yes please
+""",
+    )
+
+    with pytest.raises(
+        RuntimeError,
+        match=re.escape(".agentic/config.yaml:modules.transfer: expected bool"),
+    ):
+        load_workspace(tmp_path)
+
+
+@pytest.mark.parametrize(
+    ("manifest", "message"),
+    [
+        ("kit_schema_version: 1\nprofile: unknown\n", ".agentic/config.yaml:profile: invalid profile"),
+        (
+            "kit_schema_version: 1\nproject: {type: ruby}\n",
+            ".agentic/config.yaml:project.type: invalid project type",
+        ),
+        (
+            "kit_schema_version: 1\ntransfer: {visibility: secret}\n",
+            ".agentic/config.yaml:transfer.visibility: invalid transfer visibility",
+        ),
+    ],
+)
+def test_manifest_invalid_profile_type_visibility_fail(tmp_path: Path, manifest: str, message: str) -> None:
+    _write_manifest(tmp_path, manifest)
+
+    with pytest.raises(RuntimeError, match=re.escape(message)):
+        load_workspace(tmp_path)
+
+
+def test_manifest_invalid_yaml_fails_loud(tmp_path: Path) -> None:
+    _write_manifest(tmp_path, "project: [unterminated\n")
+
+    with pytest.raises(
+        RuntimeError,
+        match=re.escape(".agentic/config.yaml: invalid YAML"),
+    ):
+        load_workspace(tmp_path)
+
+
+def test_no_manifest_keeps_legacy_golden(tmp_path: Path) -> None:
+    ws = load_workspace(tmp_path)
+
+    assert ws.profile == "implicit-legacy"
+    assert _rel(ws.status_path().relative_to(tmp_path)) == "docs/STATUS.md"
+    assert _rel(ws.doc_registry_path().relative_to(tmp_path)) == "docs/DOCUMENTATION_REGISTRY.yaml"
+    assert _rel(ws.workspace_lock_path().relative_to(tmp_path)) == ".agentic/tmp/workspace.lock"
 
 
 def test_lock_busy_fails_fast_with_holder_info(tmp_path: Path) -> None:
