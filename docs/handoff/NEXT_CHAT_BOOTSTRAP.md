@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `f00e6c86840d41716ca1afdaa6e82b36ecc6a513` (`f00e6c86`)
-- Handoff freshness marker: `f00e6c86`
-- Branch at generation: `docs/post-pr1736-handoff-refresh`
+- HEAD: `de346f30a2ba90e1e73668f2eab61264bf084201` (`de346f30`)
+- Handoff freshness marker: `de346f30`
+- Branch at generation: `docs/post-pr1738-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -71,14 +71,23 @@ Wenn der Bootstrap grün ist:
 
 Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 
-- `p1-planning-consolidation` (next): Consolidate scattered planning into project direction for v0.4.12
-- `p2-workspace-manifest-followup` (planned): Continue workspace manifest and schema-gated operating model work for P2
+- `p3-workspace-adopt-init-upgrade` (next): Add workspace adopt, init, and upgrade lifecycle commands for P3
+- `p4-namespace-completion` (planned): Complete namespace resolution for manifest-bearing projects for P4
+- `p5a-self-hosting-manifest` (planned): Add a self-hosting manifest while keeping physical paths stable for P5
+- `p5b-resolver-aliases` (planned): Route self-hosted accesses through resolver-backed aliases for P5
+- `p5c-physical-migration` (planned): Optionally migrate physical paths after resolver decoupling for P5
+- `p5d-legacy-path-deprecation` (planned): Deprecate legacy top-level paths in line with legacy-profile removal for P5
+- `p6-gui-project-selection-and-ci-recipe` (planned): Add GUI project selection and harden CI recipe follow-ups for P6
+- `v1-0-milestone` (planned): Reach the 1.0 operating-layer stability milestone for unphased
+- `v2-0-legacy-profile-removal` (planned): Remove the implicit legacy profile in 2.0.0 for unphased
 - `pre-gui-hardening-line` (next): Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for v0.4.12
 - `workflow-kernel-and-transfer-hardening` (planned): Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI
 - `release-and-doi-governance` (planned): Keep release metadata, publish, and DOI closeout behind authoritative commands for pre-GUI
 - `gui-gatekeeper-workbench` (planned): Build the local gatekeeper/workbench GUI over deterministic actions for GUI
 - `documentation-artifact-governance-os` (planned): Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance
-- `direction-schema-command-migration` (active): Introduce direction schema, command, migration, cleanup, scope, and gate slices for v0.4.12
+- `governance-doc-backfill` (active): Backfill reviewed governance document registry entries
+- `strict-scope-suite-adoption` (planned): Decide whether strict documentation scope belongs in the standard gate suite
+- `planning-ideas-residual-cleanup` (planned): Resolve remaining planning and idea residual documents
 - `pre-gui-hardening-plan` (active): Execute the pre-GUI hardening backlog in small wrapper-first slices for v0.4.12
 - `next-turn-workflow-kernel` (active): Move recurring next-step execution from chat discipline into a deterministic local workflow kernel for v0.4.12
 - `release-command-authority` (active): Keep release preparation, publishing, and DOI closeout under explicit command authority for v0.4.12

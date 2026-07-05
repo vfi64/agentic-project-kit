@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f00e6c86840d41716ca1afdaa6e82b36ecc6a513
-  short: f00e6c86
-  subject: Add project direction validation to standard gates (#1736)
+  full: de346f30a2ba90e1e73668f2eab61264bf084201
+  short: de346f30
+  subject: Refresh project direction after P2 and planning consolidation (#1738)
 last_substantive_work_state:
-  full: f00e6c86840d41716ca1afdaa6e82b36ecc6a513
-  short: f00e6c86
-  subject: Add project direction validation to standard gates (#1736)
+  full: de346f30a2ba90e1e73668f2eab61264bf084201
+  short: de346f30
+  subject: Refresh project direction after P2 and planning consolidation (#1738)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
