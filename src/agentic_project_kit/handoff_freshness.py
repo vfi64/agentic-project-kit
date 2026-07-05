@@ -126,7 +126,7 @@ def _assess_operational_document_freshness(
     prompts, and the active roadmap are human-facing projections of the
     machine-readable handoff state and must mention at least one current
     safe/admin commit marker when they exist. Stable authority sources such as
-    project_direction.yaml are intentionally excluded; they are required
+    PROJECT_DIRECTION.yaml are intentionally excluded; they are required
     context, not per-PR refresh projections.
     """
 

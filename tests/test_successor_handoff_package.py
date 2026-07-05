@@ -446,7 +446,7 @@ def test_successor_execution_contract_separates_general_rules_from_current_state
     assert contract["handoff_projection_contract"]["prompt_is_projection_only"] is True
     assert contract["handoff_projection_contract"]["machine_readable_files_take_precedence"] is True
 
-    assert "docs/planning/project_direction.yaml" in contract["general_contract"]["source_authorities"]
+    assert "docs/planning/PROJECT_DIRECTION.yaml" in contract["general_contract"]["source_authorities"]
     assert "docs/DOCUMENTATION_REGISTRY.yaml" in contract["general_contract"]["source_authorities"]
     assert contract["current_state_contract"]["repo"]["branch"] == "feature/docs-reconciliation-active-obsolete-refs"
     assert contract["current_state_contract"]["open_tasks"][0]["id"] == "docs-reconciliation"

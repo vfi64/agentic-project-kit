@@ -20,7 +20,7 @@ No scope recommendation is encoded here; maintainers fill the proposed column af
 | docs/handoff/ | 6 | 2 | 4 |  |
 | docs/ideas/ | 5 | 0 | 5 |  |
 | docs/patterns/ | 2 | 0 | 2 |  |
-| docs/planning/ | 30 | 30 | 0 |  |
+| docs/planning/ | 31 | 31 | 0 |  |
 | docs/plans/ | 1 | 1 | 0 |  |
 | docs/reference/ | 2 | 0 | 2 |  |
 | docs/releases/ | 1 | 1 | 0 |  |

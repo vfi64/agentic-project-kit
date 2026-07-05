@@ -157,7 +157,7 @@ def test_successor_package_mentions_current_release_and_project_direction_tasks(
     combined = "\n".join([successor_prompt, successor_context, validation_report, source_manifest])
 
     assert _pyproject_version() in combined
-    assert "docs/planning/project_direction.yaml" in combined
+    assert "docs/planning/PROJECT_DIRECTION.yaml" in combined
     assert "project-direction" in combined
     assert "docs-reconciliation" in combined
     assert "v0.4.12" in combined

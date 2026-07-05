@@ -316,4 +316,4 @@ Current administrative handoff refresh state is `c6ab40da` (`Classify ns migrati
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
 ## Operational documentation refresh state after PR #1723
 
-Current administrative handoff refresh state is `387b680d` (`Parse workspace manifests with schema gate (#1723)`). Continue next only after this post-PR1723 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `c1215490` (`Refresh handoff state after PR1723 (#1724)`). Continue next only after this post-PR1723 refresh is committed and merged; the next substantive slice must be created from fresh main.

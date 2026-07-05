@@ -25,7 +25,7 @@ def test_transfer_outbox_is_json_with_safety_header(tmp_path: Path) -> None:
         ".agentic/rule_mechanism_inventory.yaml",
         ".agentic/rule_preservation.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml",
-        "docs/planning/project_direction.yaml",
+        "docs/planning/PROJECT_DIRECTION.yaml",
     ):
         source = Path(relative)
         target = tmp_path / relative

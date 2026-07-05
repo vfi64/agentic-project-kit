@@ -47,11 +47,20 @@ POST_V049_MARKERS = (
 )
 
 AUTHORITATIVE_PLANNING_DOCS = {
-    "docs/planning/project_direction.yaml",
+    "docs/planning/PROJECT_DIRECTION.yaml",
+}
+
+PLANNING_VIEW_DOCS = {
+    "docs/planning/PROJECT_DIRECTION.md",
 }
 
 SCOPED_AUTHORITATIVE_PLANNING_DOCS = {
     "docs/planning/PRE_GUI_HARDENING_TASKS.md",
+}
+
+HANDOFF_PROJECTION_DOCS = {
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
 }
 
 HISTORICAL_PLANNING_DOCS = {
@@ -191,8 +200,14 @@ def _classify(relative: str, text: str, active_score: int, stale_score: int, pos
     if relative in AUTHORITATIVE_PLANNING_DOCS:
         return "authoritative_planning_anchor", "explicit current planning authority"
 
+    if relative in PLANNING_VIEW_DOCS:
+        return "planning_authority_view", "human-readable view of the current planning authority"
+
     if relative in SCOPED_AUTHORITATIVE_PLANNING_DOCS:
         return "authoritative_scoped_planning_anchor", "explicit scoped planning authority"
+
+    if relative in HANDOFF_PROJECTION_DOCS:
+        return "handoff_projection", "generated handoff prompt projection, not planning authority"
 
     if relative in HISTORICAL_PLANNING_DOCS:
         return "historical_planning_doc", "known historical planning/handoff artifact"

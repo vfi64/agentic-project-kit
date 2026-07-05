@@ -31,7 +31,7 @@ CANONICAL_SOURCE_PATHS = (
     ".agentic/rule_mechanism_inventory.yaml",
     ".agentic/rule_preservation.yaml",
     "docs/DOCUMENTATION_REGISTRY.yaml",
-    "docs/planning/project_direction.yaml",
+    "docs/planning/PROJECT_DIRECTION.yaml",
 )
 
 

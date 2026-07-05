@@ -4,7 +4,7 @@ from pathlib import Path
 
 import yaml
 
-AUTHORITY = "docs/planning/project_direction.yaml"
+AUTHORITY = "docs/planning/PROJECT_DIRECTION.yaml"
 DIRECTION_DIRS = [Path("docs/plans"), Path("docs/roadmap"), Path("docs/strategy")]
 
 

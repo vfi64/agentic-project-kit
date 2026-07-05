@@ -58,7 +58,7 @@ def _long_term_sources(ws: Workspace) -> tuple[str, ...]:
         _workspace_path_text(ws, ws.governance_file("CHAT_COMMUNICATION_CONTRACT.md")),
         _workspace_path_text(ws, ws.governance_file("PORTABLE_CHAT_EXECUTION_CONTRACT.md")),
         _workspace_path_text(ws, ws.governance_file("CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md")),
-        _workspace_path_text(ws, ws.planning_file("project_direction.yaml")),
+        _workspace_path_text(ws, ws.project_direction_path()),
         _workspace_path_text(ws, ws.reference_file("AGENTIC_KIT_COMMANDS.md")),
         _workspace_path_text(ws, ws.reference_file("agentic-kit-commands.json")),
     )
@@ -153,7 +153,7 @@ def _general_source_authorities(ws: Workspace) -> tuple[str, ...]:
         ".agentic/compiled_agent_context.yaml",
         ".agentic/transfer_safety_rules.yaml",
         ".agentic/transfer/one_command_transfer_protocol.yaml",
-        _workspace_path_text(ws, ws.planning_file("project_direction.yaml")),
+        _workspace_path_text(ws, ws.project_direction_path()),
         _workspace_path_text(ws, ws.doc_registry_path()),
         _workspace_path_text(ws, ws.reference_file("agentic-kit-commands.json")),
         _workspace_path_text(ws, ws.reference_file("AGENTIC_KIT_COMMANDS.md")),
@@ -259,7 +259,7 @@ def _build_repo_state(root: Path) -> dict[str, Any]:
 
 
 def _open_tasks_from_project_direction(root: Path, ws: Workspace) -> list[dict[str, Any]]:
-    project_direction_path = _workspace_path_text(ws, ws.planning_file("project_direction.yaml"))
+    project_direction_path = _workspace_path_text(ws, ws.project_direction_path())
     registry_path = _workspace_path_text(ws, ws.doc_registry_path())
     try:
         direction = load_project_direction(root)
@@ -283,37 +283,43 @@ def _open_tasks_from_project_direction(root: Path, ws: Workspace) -> list[dict[s
             }
         ]
 
-    roadmap = direction.data.get("roadmap", {})
-    current_phase = roadmap.get("current_phase", {})
     tasks: list[dict[str, Any]] = []
-    for item in roadmap.get("milestones", []):
-        if not isinstance(item, dict):
+    open_statuses = {
+        "roadmap": {"next", "planned", "blocked"},
+        "plans": {"active", "planned", "blocked"},
+    }
+    for section, statuses in open_statuses.items():
+        section_items = direction.data.get(section, [])
+        if not isinstance(section_items, list):
             continue
-        status = str(item.get("status", "")).strip()
-        if status not in {"active", "planned"}:
-            continue
-        task_id = str(item.get("id", "unknown-milestone")).strip()
-        title = str(item.get("title", task_id)).strip()
-        target_release = str(item.get("target_release", current_phase.get("id", ""))).strip()
-        summary = title
-        if target_release:
-            summary = f"{summary} for {target_release}"
-        tasks.append(
-            {
-                "id": task_id,
-                "status": status,
-                "summary": summary,
-                "files": [
-                    project_direction_path,
-                    registry_path,
-                ],
-            }
-        )
+        for item in section_items:
+            if not isinstance(item, dict):
+                continue
+            status = str(item.get("status", "")).strip()
+            if status not in statuses:
+                continue
+            task_id = str(item.get("id", f"unknown-{section}-item")).strip()
+            title = str(item.get("title", task_id)).strip()
+            target = str(item.get("target_release") or item.get("phase") or "").strip()
+            summary = title
+            if target:
+                summary = f"{summary} for {target}"
+            tasks.append(
+                {
+                    "id": task_id,
+                    "status": status,
+                    "summary": summary,
+                    "files": [
+                        project_direction_path,
+                        registry_path,
+                    ],
+                }
+            )
     return tasks or [
         {
             "id": "project-direction-no-open-milestones",
             "status": "review",
-            "summary": "No active or planned milestones are listed in project_direction.yaml.",
+            "summary": "No active or planned milestones are listed in PROJECT_DIRECTION.yaml.",
             "files": [project_direction_path],
         }
     ]
@@ -640,7 +646,7 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
             "worktree_clean": worktree_clean,
             "dirty_paths": list(dirty_paths),
         },
-        "open_tasks_source": _workspace_path_text(ws, ws.planning_file("project_direction.yaml")),
+        "open_tasks_source": _workspace_path_text(ws, ws.project_direction_path()),
         "document_registry_source": _workspace_path_text(ws, ws.doc_registry_path()),
         "open_tasks": open_tasks,
         "recent_lessons": recent_lessons,
@@ -787,7 +793,7 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
                 "priority": "critical",
                 "scope": "documentation-reconciliation",
                 "must": [
-                    "Use docs/planning/project_direction.yaml for active roadmap, strategy, and current tasks.",
+                    "Use docs/planning/PROJECT_DIRECTION.yaml for active roadmap, strategy, and current tasks.",
                     "Use docs/DOCUMENTATION_REGISTRY.yaml for document classification and authority mapping.",
                     "Classify obsolete documents before archive/delete decisions.",
                     "Retarget active references away from obsolete/superseded documents before archival.",
@@ -1044,7 +1050,7 @@ def render_successor_prompt(context: dict[str, Any], ws: Workspace | None = None
             "- Große Ausgaben nach `~/Downloads/*.log` umleiten und nur `LOG=...` posten.",
             "- Vor Commit: tatsächlichen Diff inspizieren, Tests laufen lassen, protected-diff-plan ausführen.",
             "- Bei `BLOCK` oder `FAIL`: sofort stoppen, Diagnose statt Weiterarbeiten.",
-            "- Aktive Aufgaben stammen aus `docs/planning/project_direction.yaml`; alte Planungsdokumente sind keine Startautorität.",
+            "- Aktive Aufgaben stammen aus `docs/planning/PROJECT_DIRECTION.yaml`; alte Planungsdokumente sind keine Startautorität.",
             "- Allgemeingültige Regeln stehen in `execution_contract.json.general_contract`; aktueller Fortsetzungspunkt steht in `execution_contract.json.current_state_contract` und `successor_context.yaml`.",
             "- `successor_prompt.md` ist nur Projektion. Maschinenlesbare Dateien haben Vorrang.",
             "- Komplexe `agentic-kit`-Wrapper haben Vorrang vor selbstgebauten Git-/GitHub-/Handoff-/GC-/Release-Blöcken.",
@@ -1054,7 +1060,7 @@ def render_successor_prompt(context: dict[str, Any], ws: Workspace | None = None
             "",
             "1. Wenn `validation_report.json` nicht PASS ist: Handoff-Projektion reparieren.",
             "2. Wenn der Arbeitsbaum dirty ist: nur explizite WIP-Dateien prüfen und abschließen oder sauber dokumentieren.",
-            "3. Danach die nächste aktive Aufgabe aus `docs/planning/project_direction.yaml` bearbeiten.",
+            "3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` bearbeiten.",
             "",
         ]
     )
@@ -1127,7 +1133,7 @@ def render_next_chat_bootstrap_from_context(context: dict[str, Any], ws: Workspa
             "",
             "## Open high-priority work",
             "",
-            "Source: `docs/planning/project_direction.yaml`.",
+            "Source: `docs/planning/PROJECT_DIRECTION.yaml`.",
             "",
             *_format_open_tasks_for_bootstrap(context),
             "",

@@ -16,7 +16,7 @@ Source authorities:
 - `.agentic/compiled_agent_context.yaml`
 - `.agentic/transfer_safety_rules.yaml`
 - `.agentic/transfer/one_command_transfer_protocol.yaml`
-- `docs/planning/project_direction.yaml`
+- `docs/planning/PROJECT_DIRECTION.yaml`
 - `docs/DOCUMENTATION_REGISTRY.yaml`
 - `docs/reference/agentic-kit-commands.json`
 - `docs/reference/AGENTIC_KIT_COMMANDS.md`
@@ -38,10 +38,10 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1723-handoff-refresh`
+- branch: `codex/project-direction-schema`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
-- open_tasks_source: `docs/planning/project_direction.yaml`
+- open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
 
@@ -149,102 +149,30 @@ Wenn der Bootstrap grün ist:
   "open_tasks": [
     {
       "files": [
-        "docs/planning/project_direction.yaml",
+        "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "transfer-test-plan",
-      "status": "planned",
-      "summary": "Specify transfer tests for remote, transfer-file, and copy-paste modes for v0.4.12"
+      "id": "p1-planning-consolidation",
+      "status": "next",
+      "summary": "Consolidate scattered planning into project direction for v0.4.12"
     },
     {
       "files": [
-        "docs/planning/project_direction.yaml",
+        "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "audit-status-current-state",
+      "id": "p2-workspace-manifest-followup",
       "status": "planned",
-      "summary": "Add current-state drift audit with STATUS.md consistency checks for v0.4.12"
+      "summary": "Continue workspace manifest and schema-gated operating model work for P2"
     },
     {
       "files": [
-        "docs/planning/project_direction.yaml",
+        "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "send-read-ref-consistency",
-      "status": "planned",
-      "summary": "Test that g/go reads the gui-transfer-tasks carrier ref for v0.4.12"
-    },
-    {
-      "files": [
-        "docs/planning/project_direction.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "tooltip-idempotence",
-      "status": "planned",
-      "summary": "Make GUI tooltip attachment idempotent for v0.4.12"
-    },
-    {
-      "files": [
-        "docs/planning/project_direction.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "gui-modularization-smoke-tests",
-      "status": "planned",
-      "summary": "Add GUI smoke tests before modularizing large GUI files for v0.4.12"
-    },
-    {
-      "files": [
-        "docs/planning/project_direction.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "guided-work-cycle-bar",
-      "status": "planned",
-      "summary": "Add guided work-cycle bar over existing work wrappers for v0.4.12"
-    },
-    {
-      "files": [
-        "docs/planning/project_direction.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "communication-mode-examples",
-      "status": "planned",
-      "summary": "Add communication-mode explanations with examples for v0.4.12"
-    },
-    {
-      "files": [
-        "docs/planning/project_direction.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "wrapper-live-status",
-      "status": "planned",
-      "summary": "Add bounded live status for pr-create-complete for v0.4.12"
-    },
-    {
-      "files": [
-        "docs/planning/project_direction.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "artifact-gc-extension",
-      "status": "planned",
-      "summary": "Extend artifact-gc instead of adding duplicate log-GC commands for v0.4.12"
-    },
-    {
-      "files": [
-        "docs/planning/project_direction.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "documentation-auto-registration",
-      "status": "planned",
-      "summary": "Plan documentation auto-registration for post-v0.4.12"
-    },
-    {
-      "files": [
-        "docs/planning/project_direction.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "rule-auto-registration-inventory",
-      "status": "planned",
-      "summary": "Inventory rule auto-registration prerequisites for post-v0.4.12"
+      "id": "direction-schema-command-migration",
+      "status": "active",
+      "summary": "Introduce direction schema, command, migration, cleanup, scope, and gate slices for v0.4.12"
     }
   ],
   "recent_lessons": [
@@ -257,14 +185,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1723-handoff-refresh",
+    "branch": "codex/project-direction-schema",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "387b680dba83116016320e06b1283f2b1ddf1f74",
+    "head": "c1215490936f3fa33944b5fac651f25cf327420c",
     "head_matches_origin_main": true,
-    "head_short": "387b680d",
+    "head_short": "c1215490",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "387b680dba83116016320e06b1283f2b1ddf1f74",
-    "origin_main_short": "387b680d",
+    "origin_main": "c1215490936f3fa33944b5fac651f25cf327420c",
+    "origin_main_short": "c1215490",
     "worktree_clean": false
   }
 }
@@ -277,7 +205,7 @@ Wenn der Bootstrap grün ist:
 - Große Ausgaben nach `~/Downloads/*.log` umleiten und nur `LOG=...` posten.
 - Vor Commit: tatsächlichen Diff inspizieren, Tests laufen lassen, protected-diff-plan ausführen.
 - Bei `BLOCK` oder `FAIL`: sofort stoppen, Diagnose statt Weiterarbeiten.
-- Aktive Aufgaben stammen aus `docs/planning/project_direction.yaml`; alte Planungsdokumente sind keine Startautorität.
+- Aktive Aufgaben stammen aus `docs/planning/PROJECT_DIRECTION.yaml`; alte Planungsdokumente sind keine Startautorität.
 - Allgemeingültige Regeln stehen in `execution_contract.json.general_contract`; aktueller Fortsetzungspunkt steht in `execution_contract.json.current_state_contract` und `successor_context.yaml`.
 - `successor_prompt.md` ist nur Projektion. Maschinenlesbare Dateien haben Vorrang.
 - Komplexe `agentic-kit`-Wrapper haben Vorrang vor selbstgebauten Git-/GitHub-/Handoff-/GC-/Release-Blöcken.
@@ -287,4 +215,4 @@ Wenn der Bootstrap grün ist:
 
 1. Wenn `validation_report.json` nicht PASS ist: Handoff-Projektion reparieren.
 2. Wenn der Arbeitsbaum dirty ist: nur explizite WIP-Dateien prüfen und abschließen oder sauber dokumentieren.
-3. Danach die nächste aktive Aufgabe aus `docs/planning/project_direction.yaml` bearbeiten.
+3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` bearbeiten.

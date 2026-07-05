@@ -12,7 +12,7 @@ def test_project_direction_yaml_validates() -> None:
     direction = load_project_direction(Path("."))
 
     assert direction.validate() == []
-    assert direction.data["authority"] == "docs/planning/project_direction.yaml"
+    assert direction.data["meta"]["authority"] == "docs/planning/PROJECT_DIRECTION.yaml"
 
 
 def test_project_direction_text_output_contains_sections() -> None:
@@ -23,9 +23,10 @@ def test_project_direction_text_output_contains_sections() -> None:
     assert "PROJECT DIRECTION" in rendered
     assert "Strategy" in rendered
     assert "Roadmap" in rendered
+    assert "Plans" in rendered
     assert "Ideas" in rendered
-    assert "v0.4.12" in rendered
-    assert "post-v0.4.12-external-operating-model" in rendered
+    assert "p1-planning-consolidation" in rendered
+    assert "direction-schema-command-migration" in rendered
 
 
 def test_project_direction_json_section_output() -> None:
@@ -34,7 +35,7 @@ def test_project_direction_json_section_output() -> None:
     rendered = render_project_direction(direction, section="roadmap", output_format="json")
 
     assert '"roadmap"' in rendered
-    assert '"current_phase"' in rendered
+    assert '"p1-planning-consolidation"' in rendered
     assert '"strategy"' not in rendered
 
 
@@ -44,7 +45,7 @@ def test_project_direction_cli_markdown() -> None:
     assert result.exit_code == 0
     assert "# Project Direction" in result.output
     assert "## Strategy" in result.output
-    assert "Wrapper first" in result.output
+    assert "Governed operating model" in result.output
 
 
 def test_project_direction_cli_json() -> None:
@@ -52,4 +53,4 @@ def test_project_direction_cli_json() -> None:
 
     assert result.exit_code == 0
     assert '"ideas"' in result.output
-    assert "raw-shell-gui" in result.output
+    assert "project-direction-gui-panel" in result.output

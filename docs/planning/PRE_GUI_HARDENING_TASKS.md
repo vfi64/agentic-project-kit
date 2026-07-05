@@ -133,7 +133,7 @@ Purpose: prevent future LLMs, scripts, or wrapper flows from adding new planning
 
    If the project later becomes strictly YAML-first, the resolver may redirect to:
 
-       docs/planning/project_direction.yaml
+       docs/planning/PROJECT_DIRECTION.yaml
 
    but it must never silently fall back to `docs/planning/WORKFLOW_REDUCTION_FOCUS.md`.
 

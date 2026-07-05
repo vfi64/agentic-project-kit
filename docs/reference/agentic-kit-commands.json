@@ -3459,7 +3459,7 @@
     },
     {
       "group": "root",
-      "help": "Render strategy, roadmap, and ideas from the project direction YAML source.",
+      "help": "Render project direction sections from the YAML source.",
       "name": "project-direction",
       "params": [
         {
@@ -3478,7 +3478,7 @@
         },
         {
           "default": "all",
-          "help": "all, strategy, roadmap, or ideas.",
+          "help": "all, strategy, roadmap, plans, ideas, done, or discarded.",
           "is_flag": false,
           "metavar": null,
           "multiple": false,

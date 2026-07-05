@@ -7,9 +7,9 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `387b680d` (`Parse workspace manifests with schema gate (#1723)`).
+Current verified main: `c1215490` (`Refresh handoff state after PR1723 (#1724)`).
 Latest substantive work: PR #1723 (`Parse workspace manifests with schema gate (#1723)`).
-Post-merge handoff status: PASS/NOOP after PR #1723 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #1724 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -399,4 +399,4 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 - Portability closeout: legacy `ns` and `ns-menu` entrypoints removed; no tracked shell scripts remain, pending final gates and PR merge.
 ## Operational documentation refresh state after PR #1723
 
-Current administrative handoff refresh state is `387b680d` (`Parse workspace manifests with schema gate (#1723)`). Continue next only after this post-PR1723 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `c1215490` (`Refresh handoff state after PR1723 (#1724)`). Continue next only after this post-PR1723 refresh is committed and merged; the next substantive slice must be created from fresh main.
