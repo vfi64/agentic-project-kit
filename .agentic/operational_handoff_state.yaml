@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a8272bc4f2fcfc8df216454460e6d8100b610071
-  short: a8272bc4
-  subject: Record P1 path literal migration evidence (#1719)
+  full: 57c5e7572ec9a8456fdd8606ba91e67d590afd3d
+  short: 57c5e757
+  subject: Mark OS architecture accepted (#1721)
 last_substantive_work_state:
-  full: a8272bc4f2fcfc8df216454460e6d8100b610071
-  short: a8272bc4
-  subject: Record P1 path literal migration evidence (#1719)
+  full: 57c5e7572ec9a8456fdd8606ba91e67d590afd3d
+  short: 57c5e757
+  subject: Mark OS architecture accepted (#1721)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
