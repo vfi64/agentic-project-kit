@@ -344,7 +344,7 @@ For `planning-doc`, the gate must run targeted tests plus `agentic-kit handoff c
 
 ## Project Direction Gate
 
-Run `agentic-kit direction validate` when changing `docs/planning/PROJECT_DIRECTION.yaml`. Use `agentic-kit direction render` only for stdout or temporary `tmp/` views, and run `agentic-kit direction audit-drift` before migrating, archiving, or deleting scattered planning documents.
+Run `agentic-kit direction validate` when changing `docs/planning/PROJECT_DIRECTION.yaml`. `agentic-kit standard-gates-audit-suite` also runs `agentic-kit direction validate` so invalid direction YAML, dead source files, duplicate IDs, and missing dependencies block the standard gate. Use `agentic-kit direction render` only for stdout or temporary `tmp/` views, and run `agentic-kit direction audit-drift` before migrating, archiving, or deleting scattered planning documents.
 
 ## Doctor Gate
 

@@ -86,6 +86,7 @@ rules:
   - path: docs/TEST_GATES.md
     terms:
     - Project Direction Gate
+    - agentic-kit standard-gates-audit-suite
     - agentic-kit direction validate
     - agentic-kit direction render
     - agentic-kit direction audit-drift
