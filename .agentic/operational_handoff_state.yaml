@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 8dc05a26e5962f838f1c17d44e0a6b1b86350ff8
-  short: 8dc05a26
-  subject: Migrate active planning content into project direction (#1730)
+  full: baa09833ef8f9255bae63302154d9430d216cfab
+  short: baa09833
+  subject: Remove obsolete scattered planning documents (#1732)
 last_substantive_work_state:
-  full: 8dc05a26e5962f838f1c17d44e0a6b1b86350ff8
-  short: 8dc05a26
-  subject: Migrate active planning content into project direction (#1730)
+  full: baa09833ef8f9255bae63302154d9430d216cfab
+  short: baa09833
+  subject: Remove obsolete scattered planning documents (#1732)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
