@@ -7,9 +7,9 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `b5457009` (`Enforce documentation registry scope after direction cleanup (#1734)`).
-Latest substantive work: PR #1734 (`Enforce documentation registry scope after direction cleanup (#1734)`).
-Post-merge handoff status: PASS/NOOP after PR #1734 administrative refresh.
+Current verified main: `f00e6c86` (`Add project direction validation to standard gates (#1736)`).
+Latest substantive work: PR #1736 (`Add project direction validation to standard gates (#1736)`).
+Post-merge handoff status: PASS/NOOP after PR #1736 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1734
+## Operational documentation refresh state after PR #1736
 
-Current administrative handoff refresh state is `b5457009` (`Enforce documentation registry scope after direction cleanup (#1734)`). Continue next only after this post-PR1734 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `f00e6c86` (`Add project direction validation to standard gates (#1736)`). Continue next only after this post-PR1736 refresh is committed and merged; the next substantive slice must be created from fresh main.

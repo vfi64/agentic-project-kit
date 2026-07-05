@@ -317,6 +317,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1734
+## Operational documentation refresh state after PR #1736
 
-Current administrative handoff refresh state is `b5457009` (`Enforce documentation registry scope after direction cleanup (#1734)`). Continue next only after this post-PR1734 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `f00e6c86` (`Add project direction validation to standard gates (#1736)`). Continue next only after this post-PR1736 refresh is committed and merged; the next substantive slice must be created from fresh main.
