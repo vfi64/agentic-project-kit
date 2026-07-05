@@ -26,9 +26,108 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
+        "id": "pre-gui-hardening-line",
+        "status": "next",
+        "summary": "Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for v0.4.12"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "workflow-kernel-and-transfer-hardening",
+        "status": "planned",
+        "summary": "Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "release-and-doi-governance",
+        "status": "planned",
+        "summary": "Keep release metadata, publish, and DOI closeout behind authoritative commands for pre-GUI"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "gui-gatekeeper-workbench",
+        "status": "planned",
+        "summary": "Build the local gatekeeper/workbench GUI over deterministic actions for GUI"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "documentation-artifact-governance-os",
+        "status": "planned",
+        "summary": "Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
         "id": "direction-schema-command-migration",
         "status": "active",
         "summary": "Introduce direction schema, command, migration, cleanup, scope, and gate slices for v0.4.12"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "pre-gui-hardening-plan",
+        "status": "active",
+        "summary": "Execute the pre-GUI hardening backlog in small wrapper-first slices for v0.4.12"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "next-turn-workflow-kernel",
+        "status": "active",
+        "summary": "Move recurring next-step execution from chat discipline into a deterministic local workflow kernel for v0.4.12"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "release-command-authority",
+        "status": "active",
+        "summary": "Keep release preparation, publishing, and DOI closeout under explicit command authority for v0.4.12"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "rule-registry-hardening",
+        "status": "active",
+        "summary": "Preserve active rule identity, source validation, and refresh handshakes for v0.4.12"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "portability-and-ns-closeout",
+        "status": "planned",
+        "summary": "Finish replacing core ./ns dependencies with Python-backed agentic-kit commands for v0.4.12"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "gui-workbench-plan",
+        "status": "planned",
+        "summary": "Implement the GUI gatekeeper/workbench as a view over governed action specs for v0.4.x"
       }
     ],
     "open_tasks_source": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -42,13 +141,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1727-handoff-refresh",
+      "branch": "docs/post-pr1730-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "bc1ee86860ae664f8c53927967dcea55263c5911",
+      "head": "8dc05a26e5962f838f1c17d44e0a6b1b86350ff8",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/agentic-project-kit",
-      "origin_main": "bc1ee86860ae664f8c53927967dcea55263c5911",
+      "origin_main": "8dc05a26e5962f838f1c17d44e0a6b1b86350ff8",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -125,13 +224,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1727-handoff-refresh",
+    "branch": "docs/post-pr1730-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "bc1ee86860ae664f8c53927967dcea55263c5911",
+    "head": "8dc05a26e5962f838f1c17d44e0a6b1b86350ff8",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "bc1ee86860ae664f8c53927967dcea55263c5911",
+    "origin_main": "8dc05a26e5962f838f1c17d44e0a6b1b86350ff8",
     "worktree_clean": false
   },
   "rules": [
