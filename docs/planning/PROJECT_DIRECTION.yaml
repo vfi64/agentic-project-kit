@@ -25,7 +25,8 @@ meta:
   updated_after_pr: null
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
-  migration_state: schema-inventory
+  migration_state: active-content-migrated
+  migration_date: "2026-07-05"
 
 strategy:
   - id: governed-operating-model
@@ -41,6 +42,12 @@ strategy:
       - docs/planning/KIT_AS_OS_MASTERPLAN.md
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
+      - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
+      - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
+      - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+      - docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
+      - docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
+      - docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
   - id: kit-as-os
     status: active
     title: Kit as OS architecture direction
@@ -53,6 +60,52 @@ strategy:
       - docs/planning/KIT_AS_OS_MASTERPLAN.md
     source_files:
       - docs/planning/KIT_AS_OS_MASTERPLAN.md
+  - id: professional-single-user-tool
+    status: active
+    title: Professional single-user governance target
+    rationale: >-
+      Keep the kit focused on a professional, local, single-user operating
+      surface: clear command layers, safe defaults, explicit handoff state,
+      visible governance, and a future GUI that orchestrates deterministic
+      wrappers rather than becoming a second command system.
+    source_files:
+      - docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md
+      - docs/planning/PRE_GUI_HARDENING_TASKS.md
+      - docs/planning/GUI_COCKPIT_EXPANSION_ROADMAP.md
+      - docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md
+      - docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
+      - docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
+  - id: python-backed-portable-workflows
+    status: active
+    title: Python-backed portable workflow control
+    rationale: >-
+      Critical workflow, transfer, release, and evidence behavior belongs in
+      portable Python-backed commands, state models, and tests; shell snippets,
+      raw GitHub operations, and chat-only discipline are fallback lanes, not
+      canonical execution.
+    source_files:
+      - docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md
+      - docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
+      - docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md
+      - docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
+      - docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
+      - docs/planning/NS_RELEASE_SHORTCUTS.md
+      - docs/planning/NS_UP_PR_COMPLETION.md
+  - id: machine-readable-governance
+    status: active
+    title: Machine-readable documentation, rule, and artifact governance
+    rationale: >-
+      Durable project knowledge should move from scattered prose into
+      validated registries, lifecycle-aware documents, generated projections,
+      and machine-readable contracts while preserving human-readable
+      orientation.
+    source_files:
+      - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+      - docs/planning/PERSISTENT_HANDOFF_STATE.md
+      - docs/planning/RULE_REGISTRY_ARCHITECTURE.md
+      - docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
+      - docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
+      - docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
 
 roadmap:
   - id: p1-planning-consolidation
@@ -78,6 +131,86 @@ roadmap:
       - Planning authority stays in project direction instead of scattered Markdown plans.
     source_files:
       - docs/planning/KIT_AS_OS_MASTERPLAN.md
+  - id: pre-gui-hardening-line
+    phase: pre-GUI
+    status: next
+    title: Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion
+    target_release: v0.4.12
+    depends_on:
+      - p1-planning-consolidation
+    acceptance:
+      - Workflow and PR lifecycle wrappers remain the normal path.
+      - Failure classes are converted into tests, gates, or state transitions.
+      - GUI work starts only from bounded command contracts and clean evidence paths.
+    source_files:
+      - docs/planning/PRE_GUI_HARDENING_TASKS.md
+      - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
+      - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
+      - docs/planning/IDEMPOTENT_FINALIZATION_GUARD.md
+      - docs/planning/PATCH_ARTIFACT_PREFLIGHT_SLICE.md
+      - docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
+      - docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
+      - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+  - id: workflow-kernel-and-transfer-hardening
+    phase: pre-GUI
+    status: planned
+    title: Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows
+    depends_on:
+      - pre-gui-hardening-line
+    acceptance:
+      - Work-order execution records command identity, branch, head, evidence, and next safe action.
+      - Remote transfer paths fail closed on stale, mismatched, or unreachable state.
+      - Protected diff, command reference, and evidence publication remain wrapper-driven.
+    source_files:
+      - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+      - docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md
+      - docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
+      - docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
+  - id: release-and-doi-governance
+    phase: pre-GUI
+    status: planned
+    title: Keep release metadata, publish, and DOI closeout behind authoritative commands
+    depends_on:
+      - pre-gui-hardening-line
+    acceptance:
+      - Release preparation and publish behavior remains fail-closed and Python-backed.
+      - DOI closeout uses verified release metadata before write mode.
+      - Legacy shell shortcut plans are either completed, superseded, or deleted in cleanup.
+    source_files:
+      - docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
+      - docs/planning/NS_RELEASE_SHORTCUTS.md
+      - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+  - id: gui-gatekeeper-workbench
+    phase: GUI
+    status: planned
+    title: Build the local gatekeeper/workbench GUI over deterministic actions
+    depends_on:
+      - pre-gui-hardening-line
+      - workflow-kernel-and-transfer-hardening
+    acceptance:
+      - Buttons map to known action specs and capability checks.
+      - Mutating actions remain disabled or guarded until their backend wrapper is safe.
+      - GUI state mirrors command, rule, handoff, evidence, and project-direction state.
+    source_files:
+      - docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md
+      - docs/planning/GUI_COCKPIT_EXPANSION_ROADMAP.md
+      - docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md
+      - docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
+      - docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
+  - id: documentation-artifact-governance-os
+    phase: governance
+    status: planned
+    title: Convert document, artifact, evidence, and policy control into lifecycle-aware governance
+    depends_on:
+      - p1-planning-consolidation
+    acceptance:
+      - Registry scope is explicit.
+      - Required lifecycle headers and source-of-truth relationships are checkable.
+      - Artifact retention and local-leak filters do not become semantic planning mechanisms.
+    source_files:
+      - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+      - docs/planning/RULE_REGISTRY_ARCHITECTURE.md
+      - docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
 
 plans:
   - id: direction-schema-command-migration
@@ -94,7 +227,97 @@ plans:
       - Slice F adds direction validation to standard gates.
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
-
+      - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+  - id: pre-gui-hardening-plan
+    status: active
+    title: Execute the pre-GUI hardening backlog in small wrapper-first slices
+    target_release: v0.4.12
+    depends_on:
+      - p1-planning-consolidation
+    acceptance:
+      - Command safety, post-merge lifecycle, failure-mode review, patch preflight, and rule refresh gaps are represented by executable checks or explicit remaining backlog.
+      - Superseded workflow-reduction prose no longer acts as active authority.
+    source_files:
+      - docs/planning/PRE_GUI_HARDENING_TASKS.md
+      - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
+      - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
+      - docs/planning/IDEMPOTENT_FINALIZATION_GUARD.md
+      - docs/planning/PATCH_ARTIFACT_PREFLIGHT_SLICE.md
+      - docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
+      - docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
+      - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+  - id: next-turn-workflow-kernel
+    status: active
+    title: Move recurring next-step execution from chat discipline into a deterministic local workflow kernel
+    target_release: v0.4.12
+    depends_on:
+      - pre-gui-hardening-plan
+    acceptance:
+      - Work requests, execution results, evidence pointers, and state transitions are machine-readable.
+      - Re-running status, cleanup, validation, and closeout commands is idempotent.
+      - Unsafe transitions stop with durable diagnostics instead of producing false PASS states.
+    source_files:
+      - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+      - docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md
+      - docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
+  - id: release-command-authority
+    status: active
+    title: Keep release preparation, publishing, and DOI closeout under explicit command authority
+    target_release: v0.4.12
+    depends_on:
+      - pre-gui-hardening-plan
+    acceptance:
+      - Release metadata preparation and publish core triage stay portable and fail-closed.
+      - DOI closeout validates release, concept DOI, and version DOI before any write.
+      - Legacy release shortcut notes are retired in the cleanup slice.
+    source_files:
+      - docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
+      - docs/planning/NS_RELEASE_SHORTCUTS.md
+  - id: rule-registry-hardening
+    status: active
+    title: Preserve active rule identity, source validation, and refresh handshakes
+    target_release: v0.4.12
+    depends_on:
+      - documentation-artifact-governance-os
+    acceptance:
+      - Rule source validation remains read-only and fail-closed.
+      - Rule refresh outputs are tied to current repo state and transfer context.
+      - Registry improvement backlog is explicit without starting a broad second rebuild.
+    source_files:
+      - docs/planning/RULE_REGISTRY_ARCHITECTURE.md
+      - docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
+      - docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
+      - docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
+  - id: portability-and-ns-closeout
+    status: planned
+    title: Finish replacing core ./ns dependencies with Python-backed agentic-kit commands
+    target_release: v0.4.12
+    depends_on:
+      - next-turn-workflow-kernel
+    acceptance:
+      - Remaining ns-named modules and helper routes are classified before migration.
+      - Core tests, gates, GUI actions, and governance docs do not depend on ./ns.
+      - ./ns remains only a human convenience adapter or explicit legacy path.
+    source_files:
+      - docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
+      - docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
+      - docs/planning/NS_UP_PR_COMPLETION.md
+      - docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
+  - id: gui-workbench-plan
+    status: planned
+    title: Implement the GUI gatekeeper/workbench as a view over governed action specs
+    target_release: v0.4.x
+    depends_on:
+      - gui-gatekeeper-workbench
+    acceptance:
+      - Full intended workbench layout is visible from the start.
+      - Disabled future buttons are explicit and backed by planned action contracts.
+      - No write-capable GUI path bypasses branch, dirty-state, rule, evidence, or failure-mode guards.
+    source_files:
+      - docs/planning/GUI_COCKPIT_EXPANSION_ROADMAP.md
+      - docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md
+      - docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
+      - docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
 ideas:
   - id: project-direction-gui-panel
     status: accepted
@@ -125,9 +348,62 @@ ideas:
     decision_needed: true
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
+  - id: deterministic-cell-orchestration
+    status: candidate
+    title: Deterministic Cell Orchestration
+    rationale: >-
+      DCO remains a candidate pattern for complex generated artifacts where
+      typed cells, validation, selective repair, and deterministic rendering
+      reduce drift without making simple workflows harder.
+    decision_needed: true
+    source_files:
+      - docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md
+  - id: governed-workflow-patterns
+    status: accepted
+    title: Governed workflow patterns
+    rationale: >-
+      Explicit state models, contract-first commands, idempotency, stop states,
+      typed intermediate artifacts, bounded repair, and capability matrices are
+      accepted design principles when they reduce workflow drift and improve
+      restartability.
+    decision_needed: false
+    source_files:
+      - docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md
+  - id: layered-cli-usability
+    status: candidate
+    title: Layered CLI usability model
+    rationale: >-
+      Keep the daily command surface simple while preserving guided,
+      maintainer, and debug layers for advanced workflow, release, audit, and
+      evidence needs.
+    decision_needed: true
+    source_files:
+      - docs/ideas/LAYERED_CLI_USABILITY.md
+  - id: didactic-guidance
+    status: candidate
+    title: Didactic guidance layer
+    rationale: >-
+      Human-facing explanations can make state, handoffs, gates, workflow
+      requests, and safe next steps easier to understand, but should remain
+      advisory unless converted into tested commands or coverage rules.
+    decision_needed: true
+    source_files:
+      - docs/ideas/DIDACTIC_GUIDANCE.md
+  - id: pattern-advisor
+    status: candidate
+    title: Pattern Advisor
+    rationale: >-
+      A small advisory pattern catalog or CLI may later help choose between
+      documented governance patterns, but it must stay bounded and never replace
+      deterministic gates.
+    decision_needed: true
+    source_files:
+      - docs/ideas/PATTERN_ADVISOR.md
 
 done:
   - id: p1-workspace-resolver-line
+    status: done
+    title: Workspace resolver foundation and top path-literal migrations
     completed_by_pr: null
     merge_commit: null
     completion_exception: Historical completion entry; PR metadata will be reconciled during planning migration.
@@ -135,14 +411,67 @@ done:
       - docs/architecture/evidence/path-literal-audit-2026-07-04-post-p1.md
     source_files:
       - docs/planning/KIT_AS_OS_MASTERPLAN.md
+  - id: v0-3-8-guided-cli-scope
+    status: done
+    title: Guided CLI usability v0.3.8 scope
+    completed_by_pr: null
+    merge_commit: null
+    completion_exception: Historical release-scope note superseded by later workflow and planning-authority work.
+    source_files:
+      - docs/planning/V0.3.8_SCOPE.md
+  - id: portable-llm-communication-bootstrap
+    status: done
+    title: Portable LLM communication bootstrap
+    completed_by_pr: null
+    merge_commit: null
+    completion_exception: Historical bootstrap line absorbed into current workflow, transfer, and handoff governance.
+    source_files:
+      - docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md
+  - id: persistent-handoff-state
+    status: done
+    title: Persistent handoff state
+    completed_by_pr: null
+    merge_commit: null
+    completion_exception: Implemented as persistent handoff state and successor-package projections before the current planning cleanup.
+    source_files:
+      - docs/planning/PERSISTENT_HANDOFF_STATE.md
+  - id: ns-command-migration-core
+    status: done
+    title: Core ns command migration classification and resolved targets
+    completed_by_pr: null
+    merge_commit: null
+    completion_exception: Historical classification says ns dev/go/up/upload targets were resolved in earlier slices.
+    source_files:
+      - docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
+      - docs/planning/NS_UP_PR_COMPLETION.md
+  - id: transfer-github-action-coverage-phase0
+    status: done
+    title: Transfer GitHub action coverage phase 0
+    completed_by_pr: null
+    merge_commit: null
+    completion_exception: Phase-0 coverage work is retained as historical evidence for wrapper-first transfer actions.
+    source_files:
+      - docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
+  - id: workflow-reduction-closeout
+    status: done
+    title: Workflow reduction planning closeout
+    completed_by_pr: null
+    merge_commit: null
+    completion_exception: Superseded planning authority moved to PRE_GUI_HARDENING_TASKS and PROJECT_DIRECTION.yaml.
+    source_files:
+      - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
 
 discarded:
   - id: raw-shell-gui
+    status: discarded
+    title: Raw shell execution from GUI
     reason: Raw shell execution from GUI violates wrapper-first governance.
     discarded_at: "2026-06-28"
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
   - id: gc-as-docs-migration-tool
+    status: discarded
+    title: Artifact GC as planning-document migration tool
     reason: >-
       Artifact GC is a retention tool for transient artifacts, not a semantic
       planning-document consolidation mechanism.
@@ -150,9 +479,60 @@ discarded:
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
   - id: copied-in-kit-model-b
+    status: discarded
+    title: Copy the kit into every target repository
     reason: >-
       Copying the kit into every target repository mixes kit code with project
       code and creates avoidable maintenance drift.
     discarded_at: "2026-06-28"
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
+  - id: scattered-markdown-planning-authority
+    status: discarded
+    title: Scattered Markdown as active planning authority
+    reason: >-
+      Free-form strategy, roadmap, plan, and idea Markdown must no longer be
+      treated as active planning authority after project direction
+      consolidation; old files remain only migration or historical sources
+      until reference-clean cleanup.
+    discarded_at: "2026-07-05"
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.md
+      - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+      - docs/strategy/V0.4.0_GUI_MVP_ROADMAP.md
+  - id: raw-ns-as-core-workflow-control
+    status: discarded
+    title: ./ns as core governed workflow control
+    reason: >-
+      Making ./ns the primary governed workflow controller is superseded by
+      Python-backed agentic-kit workflow, transfer, and future GUI action
+      models; ./ns may remain only as a convenience adapter or explicit legacy
+      route.
+    discarded_at: "2026-07-05"
+    source_files:
+      - docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
+      - docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
+      - docs/planning/NS_UP_PR_COMPLETION.md
+  - id: placeholder-release-shortcuts
+    status: discarded
+    title: Placeholder release shortcut plan as authority
+    reason: >-
+      Placeholder release shortcut planning with TODO bodies is not active
+      authority; release command authority and DOI closeout plans carry the
+      remaining release-governance direction.
+    discarded_at: "2026-07-05"
+    source_files:
+      - docs/planning/NS_RELEASE_SHORTCUTS.md
+      - docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
+  - id: long-chat-terminal-blocks-as-normal-workflow
+    status: discarded
+    title: Long chat terminal blocks as normal workflow
+    reason: >-
+      Long copy-paste terminal blocks remain a fallback communication lane, not
+      the normal workflow path, because they create quoting, shell, PATH,
+      evidence, and false-PASS failure modes.
+    discarded_at: "2026-07-05"
+    source_files:
+      - docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md
+      - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+      - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
