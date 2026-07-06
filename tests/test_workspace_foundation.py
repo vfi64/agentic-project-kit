@@ -135,7 +135,7 @@ def test_manifest_missing_schema_version_fails_naming_upgrade(tmp_path: Path) ->
         RuntimeError,
         match=re.escape(
             ".agentic/config.yaml:kit_schema_version: invalid kit_schema_version; "
-            "run `agentic-kit workspace upgrade` after it ships (P3), or fix the manifest"
+            "run `agentic-kit workspace upgrade`, or fix the manifest"
         ),
     ):
         load_workspace(tmp_path)

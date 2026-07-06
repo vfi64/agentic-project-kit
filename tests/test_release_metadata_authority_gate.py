@@ -10,6 +10,7 @@ from agentic_project_kit.cli_commands import release as release_cli
 from agentic_project_kit.release_metadata_authority_gate import (
     evaluate_release_metadata_authority_gate,
     is_release_anchor_path,
+    release_metadata_anchor_changes_from_diff,
 )
 
 
@@ -45,6 +46,35 @@ def test_gate_blocks_release_anchor_changes_without_evidence(tmp_path: Path) -> 
     assert result.status == "BLOCK"
     assert result.changed_release_anchor_paths == ["README.md", "pyproject.toml"]
     assert "without authoritative release-prepare evidence" in result.message
+
+
+def test_release_metadata_diff_filter_ignores_non_release_readme_hunks() -> None:
+    diff_text = """diff --git a/README.md b/README.md
+--- a/README.md
++++ b/README.md
+@@ -10,0 +11,3 @@
++`agentic-kit workspace upgrade --root PATH` is a dry-run by default.
++It prints a manifest diff and writes `.agentic/config.yaml.bak.v<N>`.
++It tells newer-schema repositories to upgrade the kit instead of guessing.
+"""
+
+    changed = release_metadata_anchor_changes_from_diff(diff_text, ["README.md"])
+
+    assert changed == []
+
+
+def test_release_metadata_diff_filter_keeps_release_readme_hunks() -> None:
+    diff_text = """diff --git a/README.md b/README.md
+--- a/README.md
++++ b/README.md
+@@ -10,0 +11,2 @@
++Current verified release: `0.4.13`.
++Verified Zenodo version DOI: `10.5281/zenodo.29999999`.
+"""
+
+    changed = release_metadata_anchor_changes_from_diff(diff_text, ["README.md"])
+
+    assert changed == ["README.md"]
 
 
 def test_gate_accepts_authoritative_json_evidence(tmp_path: Path) -> None:

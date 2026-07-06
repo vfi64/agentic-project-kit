@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `203`
+- Command count: `204`
 
 ## Commands
 
@@ -1855,4 +1855,14 @@ Plan or create a bounded operating-layer workspace.
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write the planned workspace files. |
 | `inject_ci` | `TyperOption` | --inject-ci | `False` | `False` | Opt in to GitHub Actions workflow injection. |
 | `inject_pre_commit` | `TyperOption` | --inject-pre-commit | `False` | `False` | Opt in to pre-commit snippet injection. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+
+### `agentic-kit workspace upgrade`
+
+Plan or run deterministic workspace manifest schema upgrades.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Target repository root. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write the upgraded manifest and backups. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |

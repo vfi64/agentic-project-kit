@@ -11118,6 +11118,60 @@
         "init"
       ],
       "qualified_name": "agentic-kit workspace init"
+    },
+    {
+      "group": "workspace",
+      "help": "Plan or run deterministic workspace manifest schema upgrades.",
+      "name": "upgrade",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Target repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write the upgraded manifest and backups.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workspace",
+        "upgrade"
+      ],
+      "qualified_name": "agentic-kit workspace upgrade"
     }
   ],
   "generated_by": "scripts/generate_agentic_kit_command_reference.py",

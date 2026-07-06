@@ -10,10 +10,7 @@ import yaml
 
 
 SUPPORTED_MANIFEST_SCHEMA_VERSION = 1
-WORKSPACE_MANIFEST_FIX_HINT = (
-    "run `agentic-kit workspace upgrade` after it ships (P3), "
-    "or fix the manifest"
-)
+WORKSPACE_MANIFEST_FIX_HINT = "run `agentic-kit workspace upgrade`, or fix the manifest"
 ALLOWED_PROJECT_TYPES = frozenset({"python", "node", "generic"})
 ALLOWED_PROFILES = frozenset({"python-default", "generic"})
 ALLOWED_MODULES = frozenset(

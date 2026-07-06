@@ -334,6 +334,19 @@ rules:
     - .agentic/tmp/
     - --inject-ci
     - --inject-pre-commit
+- id: workspace-upgrade-readme-coverage
+  description: Bounded workspace upgrade behavior must remain visible with dry-run, stepwise migration, backup, and schema-boundary messages.
+  documents:
+  - path: README.md
+    terms:
+    - agentic-kit workspace upgrade --root PATH
+    - dry-run by default
+    - deterministic manifest schema migrations step by step
+    - manifest diff
+    - already at schema v1
+    - .agentic/config.yaml.bak.v<N>
+    - workspace init
+    - upgrade the kit
 - id: pattern-advisor-readme-coverage
   description: Read-only Pattern Advisor MVP commands and boundaries must remain visible.
   documents:

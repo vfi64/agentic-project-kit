@@ -202,6 +202,13 @@ It also updates the canonical chat-switch prompt projections in `docs/handoff/`.
 `.agentic/tmp/` to `.gitignore`, and leaves existing repository files alone
 unless `--inject-ci` or `--inject-pre-commit` is explicitly requested.
 
+`agentic-kit workspace upgrade --root PATH` is also a dry-run by default. It
+plans deterministic manifest schema migrations step by step, prints the
+manifest diff, reports when a workspace is already at schema v1, and with
+`--execute` writes `.agentic/config.yaml.bak.v<N>` before each migration step.
+It tells manifest-less repositories to run `workspace init` and tells
+newer-schema repositories to upgrade the kit instead of guessing.
+
 ## Documentation registry
 
 `agentic-kit docs-registry` shows the read-only documentation registry summary.
