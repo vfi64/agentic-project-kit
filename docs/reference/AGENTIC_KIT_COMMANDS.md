@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `202`
+- Command count: `203`
 
 ## Commands
 
@@ -1840,4 +1840,19 @@ Analyze an existing repository without writing workspace files.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Target repository root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+
+### `agentic-kit workspace init`
+
+Plan or create a bounded operating-layer workspace.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Target repository root. |
+| `name` | `TyperOption` | --name | `False` |  | Project name override. |
+| `project_type` | `TyperOption` | --type | `False` |  | Project type override: python, node, or generic. |
+| `profile` | `TyperOption` | --profile | `False` |  | Workspace profile override. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write the planned workspace files. |
+| `inject_ci` | `TyperOption` | --inject-ci | `False` | `False` | Opt in to GitHub Actions workflow injection. |
+| `inject_pre_commit` | `TyperOption` | --inject-pre-commit | `False` | `False` | Opt in to pre-commit snippet injection. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |

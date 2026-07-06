@@ -323,6 +323,17 @@ rules:
     - .agentic/config.yaml
     - private/public boundary
     - foreign .agentic/ directory
+- id: workspace-init-readme-coverage
+  description: Bounded workspace init behavior must remain visible with dry-run and opt-in injection boundaries.
+  documents:
+  - path: README.md
+    terms:
+    - agentic-kit workspace init --root PATH
+    - dry-run by default
+    - --execute
+    - .agentic/tmp/
+    - --inject-ci
+    - --inject-pre-commit
 - id: pattern-advisor-readme-coverage
   description: Read-only Pattern Advisor MVP commands and boundaries must remain visible.
   documents:

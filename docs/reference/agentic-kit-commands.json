@@ -10994,6 +10994,130 @@
         "adopt"
       ],
       "qualified_name": "agentic-kit workspace adopt"
+    },
+    {
+      "group": "workspace",
+      "help": "Plan or create a bounded operating-layer workspace.",
+      "name": "init",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Target repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Project name override.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "name",
+          "opts": [
+            "--name"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Project type override: python, node, or generic.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_type",
+          "opts": [
+            "--type"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Workspace profile override.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "profile",
+          "opts": [
+            "--profile"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write the planned workspace files.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Opt in to GitHub Actions workflow injection.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "inject_ci",
+          "opts": [
+            "--inject-ci"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Opt in to pre-commit snippet injection.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "inject_pre_commit",
+          "opts": [
+            "--inject-pre-commit"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workspace",
+        "init"
+      ],
+      "qualified_name": "agentic-kit workspace init"
     }
   ],
   "generated_by": "scripts/generate_agentic_kit_command_reference.py",

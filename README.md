@@ -197,6 +197,11 @@ It also updates the canonical chat-switch prompt projections in `docs/handoff/`.
 
 `agentic-kit workspace adopt --root PATH` analyzes an existing repository without writing files. It proposes a schema-validated `.agentic/config.yaml`, reports docs registration candidates, lists existing `.github/workflows/*.yml` files, prints the `.agentic/` private/public boundary, and tells whether the repository is ready for `workspace init`, already initialized, or blocked by a foreign .agentic/ directory.
 
+`agentic-kit workspace init --root PATH` is a dry-run by default. With
+`--execute`, it creates the bounded `.agentic/` workspace, appends
+`.agentic/tmp/` to `.gitignore`, and leaves existing repository files alone
+unless `--inject-ci` or `--inject-pre-commit` is explicitly requested.
+
 ## Documentation registry
 
 `agentic-kit docs-registry` shows the read-only documentation registry summary.
