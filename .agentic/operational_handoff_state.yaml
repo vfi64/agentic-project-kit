@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4fccf4ffbf301166c3e401927171adb7bb504fcd
-  short: 4fccf4ff
-  subject: Add read-only workspace adopt analysis (#1740)
+  full: b877ef3566a985b5f720ce81e92567ebe2215537
+  short: b877ef35
+  subject: Add bounded workspace init (#1742)
 last_substantive_work_state:
-  full: 4fccf4ffbf301166c3e401927171adb7bb504fcd
-  short: 4fccf4ff
-  subject: Add read-only workspace adopt analysis (#1740)
+  full: b877ef3566a985b5f720ce81e92567ebe2215537
+  short: b877ef35
+  subject: Add bounded workspace init (#1742)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
