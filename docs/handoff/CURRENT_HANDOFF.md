@@ -317,6 +317,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1742
+## Operational documentation refresh state after PR #1744
 
-Current administrative handoff refresh state is `b877ef35` (`Add bounded workspace init (#1742)`). Continue next only after this post-PR1742 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `7ae0570a` (`Add workspace upgrade skeleton with stepwise schema migration frame (#1744)`). Continue next only after this post-PR1744 refresh is committed and merged; the next substantive slice must be created from fresh main.

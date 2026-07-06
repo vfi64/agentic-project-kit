@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-06T04:53:21.614721+00:00",
+  "generated_at_utc": "2026-07-06T07:49:33.169751+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,28 +56,19 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1742-handoff-refresh",
+    "branch": "docs/post-pr1744-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "b877ef3566a985b5f720ce81e92567ebe2215537",
+    "head": "7ae0570aa8706c726f6ff51c3290e0063750210b",
     "head_matches_origin_main": true,
-    "head_short": "b877ef35",
+    "head_short": "7ae0570a",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "b877ef3566a985b5f720ce81e92567ebe2215537",
-    "origin_main_short": "b877ef35",
+    "origin_main": "7ae0570aa8706c726f6ff51c3290e0063750210b",
+    "origin_main_short": "7ae0570a",
     "worktree_clean": false
   },
   "schema_version": 1,
   "short_term_memory": {
     "open_tasks": [
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "p3-workspace-adopt-init-upgrade",
-        "status": "next",
-        "summary": "Add workspace adopt, init, and upgrade lifecycle commands for P3"
-      },
       {
         "files": [
           "docs/planning/PROJECT_DIRECTION.yaml",

@@ -8,15 +8,6 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "p3-workspace-adopt-init-upgrade",
-        "status": "next",
-        "summary": "Add workspace adopt, init, and upgrade lifecycle commands for P3"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
         "id": "p4-namespace-completion",
         "status": "planned",
         "summary": "Complete namespace resolution for manifest-bearing projects for P4"
@@ -222,13 +213,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1742-handoff-refresh",
+      "branch": "docs/post-pr1744-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "b877ef3566a985b5f720ce81e92567ebe2215537",
+      "head": "7ae0570aa8706c726f6ff51c3290e0063750210b",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/agentic-project-kit",
-      "origin_main": "b877ef3566a985b5f720ce81e92567ebe2215537",
+      "origin_main": "7ae0570aa8706c726f6ff51c3290e0063750210b",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -305,13 +296,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1742-handoff-refresh",
+    "branch": "docs/post-pr1744-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "b877ef3566a985b5f720ce81e92567ebe2215537",
+    "head": "7ae0570aa8706c726f6ff51c3290e0063750210b",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "b877ef3566a985b5f720ce81e92567ebe2215537",
+    "origin_main": "7ae0570aa8706c726f6ff51c3290e0063750210b",
     "worktree_clean": false
   },
   "rules": [

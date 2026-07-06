@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b877ef3566a985b5f720ce81e92567ebe2215537
-  short: b877ef35
-  subject: Add bounded workspace init (#1742)
+  full: 7ae0570aa8706c726f6ff51c3290e0063750210b
+  short: 7ae0570a
+  subject: Add workspace upgrade skeleton with stepwise schema migration frame (#1744)
 last_substantive_work_state:
-  full: b877ef3566a985b5f720ce81e92567ebe2215537
-  short: b877ef35
-  subject: Add bounded workspace init (#1742)
+  full: 7ae0570aa8706c726f6ff51c3290e0063750210b
+  short: 7ae0570a
+  subject: Add workspace upgrade skeleton with stepwise schema migration frame (#1744)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

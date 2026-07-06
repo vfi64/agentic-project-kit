@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1742-handoff-refresh`
+- branch: `docs/post-pr1744-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -147,15 +147,6 @@ Wenn der Bootstrap grün ist:
 ```json
 {
   "open_tasks": [
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "p3-workspace-adopt-init-upgrade",
-      "status": "next",
-      "summary": "Add workspace adopt, init, and upgrade lifecycle commands for P3"
-    },
     {
       "files": [
         "docs/planning/PROJECT_DIRECTION.yaml",
@@ -365,14 +356,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1742-handoff-refresh",
+    "branch": "docs/post-pr1744-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "b877ef3566a985b5f720ce81e92567ebe2215537",
+    "head": "7ae0570aa8706c726f6ff51c3290e0063750210b",
     "head_matches_origin_main": true,
-    "head_short": "b877ef35",
+    "head_short": "7ae0570a",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "b877ef3566a985b5f720ce81e92567ebe2215537",
-    "origin_main_short": "b877ef35",
+    "origin_main": "7ae0570aa8706c726f6ff51c3290e0063750210b",
+    "origin_main_short": "7ae0570a",
     "worktree_clean": false
   }
 }

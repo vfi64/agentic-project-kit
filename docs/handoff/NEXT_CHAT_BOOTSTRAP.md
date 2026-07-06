@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `b877ef3566a985b5f720ce81e92567ebe2215537` (`b877ef35`)
-- Handoff freshness marker: `b877ef35`
-- Branch at generation: `docs/post-pr1742-handoff-refresh`
+- HEAD: `7ae0570aa8706c726f6ff51c3290e0063750210b` (`7ae0570a`)
+- Handoff freshness marker: `7ae0570a`
+- Branch at generation: `docs/post-pr1744-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -71,7 +71,6 @@ Wenn der Bootstrap grün ist:
 
 Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 
-- `p3-workspace-adopt-init-upgrade` (next): Add workspace adopt, init, and upgrade lifecycle commands for P3
 - `p4-namespace-completion` (planned): Complete namespace resolution for manifest-bearing projects for P4
 - `p5a-self-hosting-manifest` (planned): Add a self-hosting manifest while keeping physical paths stable for P5
 - `p5b-resolver-aliases` (planned): Route self-hosted accesses through resolver-backed aliases for P5

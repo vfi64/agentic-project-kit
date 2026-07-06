@@ -11,8 +11,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: b877ef35
-  commit_subject: Add bounded workspace init (#1742)
+  commit: 7ae0570a
+  commit_subject: Add workspace upgrade skeleton with stepwise schema migration frame (#1744)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -435,7 +435,7 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr1742-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1744-successor-chat-handoff.md
   first_instruction: >-
     Review PR #1436 and the refreshed successor handoff package for the release
     command authority planning slice. After merge, start from fresh main and
@@ -448,10 +448,10 @@ next_step:
     implement docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md before DOI,
     legacy-doc, absolute-path, or GUI work.
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr1742-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1744-successor-chat-handoff.md
 administrative_evidence_state:
-  current_head: b877ef35
-  current_head_subject: Add bounded workspace init (#1742)
+  current_head: 7ae0570a
+  current_head_subject: Add workspace upgrade skeleton with stepwise schema migration frame (#1744)
   allowed_after_safe_state: true
   reason: administrative evidence/log/handoff commit after substantive safe_state
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
