@@ -193,6 +193,10 @@ It also updates the canonical chat-switch prompt projections in `docs/handoff/`.
 
 `agentic-kit direction validate`, `agentic-kit direction render`, and `agentic-kit direction audit-drift` guard `docs/planning/PROJECT_DIRECTION.yaml`.
 
+## Workspace operating-layer mode
+
+`agentic-kit workspace adopt --root PATH` analyzes an existing repository without writing files. It proposes a schema-validated `.agentic/config.yaml`, reports docs registration candidates, lists existing `.github/workflows/*.yml` files, prints the `.agentic/` private/public boundary, and tells whether the repository is ready for `workspace init`, already initialized, or blocked by a foreign .agentic/ directory.
+
 ## Documentation registry
 
 `agentic-kit docs-registry` shows the read-only documentation registry summary.

@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `201`
+- Command count: `202`
 
 ## Commands
 
@@ -1832,3 +1832,12 @@ Alias for upload-output.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `paths` | `TyperArgument` | paths | `False` |  |  |
+
+### `agentic-kit workspace adopt`
+
+Analyze an existing repository without writing workspace files.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Target repository root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |

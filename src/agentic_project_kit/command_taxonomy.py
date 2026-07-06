@@ -106,6 +106,8 @@ def _category_for(group: str, leaf: str, qualified: str) -> str:
         return "state"
     if group == "work-order":
         return "work-order"
+    if group == "workspace":
+        return "core"
     if group in {"evidence", "actions", "patterns", "pass-already-done", "dev"}:
         return "advanced/internal"
     if group == "todo":
