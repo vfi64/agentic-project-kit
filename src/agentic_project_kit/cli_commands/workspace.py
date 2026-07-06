@@ -13,6 +13,13 @@ from agentic_project_kit.workspace_init import (
     render_workspace_init_error,
     render_workspace_init_plan,
 )
+from agentic_project_kit.workspace_upgrade import (
+    WorkspaceUpgradeError,
+    build_workspace_upgrade_plan,
+    execute_workspace_upgrade,
+    render_workspace_upgrade_error,
+    render_workspace_upgrade_plan,
+)
 from agentic_project_kit.workspace_adopt import (
     analyze_workspace_adoption,
     render_workspace_adopt_report,
@@ -81,4 +88,56 @@ def workspace_init_command(
             )
         else:
             typer.echo(render_workspace_init_error(exc), nl=False)
+        raise typer.Exit(code=1) from exc
+
+
+@workspace_app.command("upgrade")
+def workspace_upgrade_command(
+    root: Annotated[Path, typer.Option("--root", help="Target repository root.")] = Path("."),
+    execute: Annotated[
+        bool, typer.Option("--execute", help="Write the upgraded manifest and backups.")
+    ] = False,
+    json_output: Annotated[
+        bool, typer.Option("--json", help="Emit machine-readable JSON.")
+    ] = False,
+) -> None:
+    """Plan or run deterministic workspace manifest schema upgrades."""
+
+    try:
+        plan = build_workspace_upgrade_plan(root.resolve(), execute=execute)
+        if execute:
+            execute_workspace_upgrade(plan)
+        if json_output:
+            typer.echo(
+                json.dumps(
+                    plan.as_json_data(written=execute and plan.requires_upgrade),
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+        else:
+            typer.echo(
+                render_workspace_upgrade_plan(
+                    plan,
+                    written=execute and plan.requires_upgrade,
+                ),
+                nl=False,
+            )
+    except WorkspaceUpgradeError as exc:
+        if json_output:
+            typer.echo(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "kind": "workspace_upgrade_result",
+                        "result_status": "FAIL",
+                        "code": exc.code,
+                        "error": str(exc),
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+        else:
+            typer.echo(render_workspace_upgrade_error(exc), nl=False)
         raise typer.Exit(code=1) from exc
