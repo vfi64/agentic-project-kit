@@ -7,9 +7,9 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `de346f30` (`Refresh project direction after P2 and planning consolidation (#1738)`).
-Latest substantive work: PR #1738 (`Refresh project direction after P2 and planning consolidation (#1738)`).
-Post-merge handoff status: PASS/NOOP after PR #1738 administrative refresh.
+Current verified main: `4fccf4ff` (`Add read-only workspace adopt analysis (#1740)`).
+Latest substantive work: PR #1740 (`Add read-only workspace adopt analysis (#1740)`).
+Post-merge handoff status: PASS/NOOP after PR #1740 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1738
+## Operational documentation refresh state after PR #1740
 
-Current administrative handoff refresh state is `de346f30` (`Refresh project direction after P2 and planning consolidation (#1738)`). Continue next only after this post-PR1738 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `4fccf4ff` (`Add read-only workspace adopt analysis (#1740)`). Continue next only after this post-PR1740 refresh is committed and merged; the next substantive slice must be created from fresh main.

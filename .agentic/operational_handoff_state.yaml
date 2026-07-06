@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: de346f30a2ba90e1e73668f2eab61264bf084201
-  short: de346f30
-  subject: Refresh project direction after P2 and planning consolidation (#1738)
+  full: 4fccf4ffbf301166c3e401927171adb7bb504fcd
+  short: 4fccf4ff
+  subject: Add read-only workspace adopt analysis (#1740)
 last_substantive_work_state:
-  full: de346f30a2ba90e1e73668f2eab61264bf084201
-  short: de346f30
-  subject: Refresh project direction after P2 and planning consolidation (#1738)
+  full: 4fccf4ffbf301166c3e401927171adb7bb504fcd
+  short: 4fccf4ff
+  subject: Add read-only workspace adopt analysis (#1740)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
