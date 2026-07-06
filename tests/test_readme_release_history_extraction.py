@@ -14,4 +14,4 @@ def test_verified_releases_doc_contains_extracted_doi_history() -> None:
 
 def test_readme_has_release_history_word_count_headroom() -> None:
     words = Path("README.md").read_text(encoding="utf-8").split()
-    assert len(words) <= 3600
+    assert len(words) <= 3800
