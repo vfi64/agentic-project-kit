@@ -22,7 +22,7 @@ schema_version: 1
 meta:
   owner: maintainers
   status: active
-  updated_after_pr: 1738
+  updated_after_pr: 1744
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
@@ -143,8 +143,9 @@ roadmap:
       - docs/planning/KIT_AS_OS_MASTERPLAN.md
   - id: p3-workspace-adopt-init-upgrade
     phase: P3
-    status: next
+    status: done
     title: Add workspace adopt, init, and upgrade lifecycle commands
+    completed_by_pr: 1744
     depends_on:
       - p2-workspace-manifest-followup
     acceptance:
@@ -152,6 +153,10 @@ roadmap:
       - workspace init creates the .agentic workspace with dry-run default and CI templates.
       - workspace upgrade provides the deterministic schema-migration frame.
       - CI injection remains an explicit opt-in exception.
+    evidence:
+      - PR #1740 added read-only workspace adoption analysis.
+      - PR #1742 added bounded workspace initialization with dry-run default and opt-in CI/hook injection.
+      - PR #1744 added the deterministic workspace upgrade skeleton and closes the P3 lifecycle line.
     source_files:
       - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
   - id: p4-namespace-completion

@@ -23,6 +23,19 @@ RELEASE_ANCHOR_PREFIXES: tuple[str, ...] = (
     "docs/releases/",
 )
 
+RELEASE_METADATA_LINE_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"\bcurrent verified release\b", re.IGNORECASE),
+    re.compile(r"\bcurrent release tag\b", re.IGNORECASE),
+    re.compile(r"\bcurrent version\b", re.IGNORECASE),
+    re.compile(r"\bverified zenodo\b", re.IGNORECASE),
+    re.compile(r"\bzenodo\b", re.IGNORECASE),
+    re.compile(r"\bdoi\b", re.IGNORECASE),
+    re.compile(r"^version\s*[:=]", re.IGNORECASE),
+    re.compile(r"^__version__\s*="),
+    re.compile(r"^##\s+v?\d+\.\d+\.\d+\b", re.IGNORECASE),
+    re.compile(r"\bv?\d+\.\d+\.\d+\b", re.IGNORECASE),
+)
+
 AUTHORIZED_ROUTE = "agentic-kit release-prep"
 
 
@@ -82,6 +95,52 @@ def changed_paths_from_git(project_root: Path, base_ref: str) -> list[str]:
     return [line.strip() for line in completed.stdout.splitlines() if line.strip()]
 
 
+def release_metadata_anchor_changes_from_diff(
+    diff_text: str,
+    changed_anchor_paths: Sequence[str],
+) -> list[str]:
+    anchors = set(changed_anchor_paths)
+    current_path: str | None = None
+    touched: set[str] = set()
+    for line in diff_text.splitlines():
+        if line.startswith("+++ "):
+            marker = line[4:]
+            current_path = marker[2:] if marker.startswith("b/") else None
+            continue
+        if line.startswith("--- "):
+            marker = line[4:]
+            if current_path is None and marker.startswith("a/"):
+                current_path = marker[2:]
+            continue
+        if current_path not in anchors:
+            continue
+        if not line.startswith(("+", "-")) or line.startswith(("+++", "---")):
+            continue
+        if _diff_line_mentions_release_metadata(line[1:].strip()):
+            touched.add(current_path)
+    return sorted(touched)
+
+
+def release_metadata_anchor_changes_from_git(
+    project_root: Path,
+    base_ref: str,
+    changed_anchor_paths: Sequence[str],
+) -> list[str]:
+    if not changed_anchor_paths:
+        return []
+    completed = subprocess.run(
+        ["git", "diff", "--unified=0", f"{base_ref}...HEAD", "--", *changed_anchor_paths],
+        cwd=project_root,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    if completed.returncode != 0:
+        raise RuntimeError(completed.stdout.strip() or f"git diff failed for {base_ref}...HEAD")
+    return release_metadata_anchor_changes_from_diff(completed.stdout, changed_anchor_paths)
+
+
 def _evidence_text_mentions_authorized_route(text: str) -> bool:
     lowered = text.lower()
     return "release-prep" in lowered and (
@@ -90,6 +149,10 @@ def _evidence_text_mentions_authorized_route(text: str) -> bool:
         or "'release-prep'" in lowered
         or "release metadata" in lowered
     )
+
+
+def _diff_line_mentions_release_metadata(text: str) -> bool:
+    return any(pattern.search(text) for pattern in RELEASE_METADATA_LINE_PATTERNS)
 
 
 def _evidence_text_mentions_version(text: str, version: str | None) -> bool:
@@ -154,6 +217,12 @@ def evaluate_release_metadata_authority_gate(
 
     changed = list(changed_paths) if changed_paths is not None else changed_paths_from_git(root, base_ref)
     changed_anchor_paths = release_anchor_changes(changed)
+    if changed_paths is None:
+        changed_anchor_paths = release_metadata_anchor_changes_from_git(
+            root,
+            base_ref,
+            changed_anchor_paths,
+        )
     if not changed_anchor_paths:
         return ReleaseMetadataAuthorityGateResult(
             ok=True,
