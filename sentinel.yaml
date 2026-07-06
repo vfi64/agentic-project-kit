@@ -7,7 +7,7 @@ documents:
       - "## Project health check"
       - "## Documentation coverage and drift checks"
       - "## Current status"
-    max_words: 3500
+    max_words: 3600
   - path: AGENTS.md
     required_sections:
       - "## Required Reading Order"

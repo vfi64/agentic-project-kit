@@ -10954,6 +10954,46 @@
         "diagnose"
       ],
       "qualified_name": "agentic-kit workflow-guard diagnose"
+    },
+    {
+      "group": "workspace",
+      "help": "Analyze an existing repository without writing workspace files.",
+      "name": "adopt",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Target repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workspace",
+        "adopt"
+      ],
+      "qualified_name": "agentic-kit workspace adopt"
     }
   ],
   "generated_by": "scripts/generate_agentic_kit_command_reference.py",

@@ -116,6 +116,19 @@ def test_classify_direction_group_as_docs() -> None:
     assert entry.category == "docs"
 
 
+def test_classify_workspace_group_as_core() -> None:
+    entry = classify_command(
+        {
+            "qualified_name": "agentic-kit workspace adopt",
+            "group": "workspace",
+            "path": ["workspace", "adopt"],
+            "help": "Analyze workspace adoption",
+        }
+    )
+
+    assert entry.category == "core"
+
+
 
 def test_classify_pr_closeout_complete_as_preferred_composite() -> None:
     entry = classify_command(

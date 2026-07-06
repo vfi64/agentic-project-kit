@@ -35,6 +35,7 @@ from agentic_project_kit.cli_commands.transfer_pr_closeout_complete import (
 )
 from agentic_project_kit.cli_commands.validation import register_validation_commands
 from agentic_project_kit.cli_commands.work_orders import work_orders_app
+from agentic_project_kit.cli_commands.workspace import workspace_app
 from agentic_project_kit.cli_commands.workflow import workflow_app
 from agentic_project_kit.cli_commands.workflow_guard import workflow_guard_app
 from agentic_project_kit.cli_commands.removed_ns_commands import register_removed_ns_commands
@@ -100,6 +101,7 @@ app.add_typer(dev_app, name="dev")
 app.add_typer(direction_app, name="direction")
 app.add_typer(evidence_app, name="evidence")
 app.add_typer(work_orders_app, name="work-order")
+app.add_typer(workspace_app, name="workspace")
 app.add_typer(governance_app, name="governance")
 app.add_typer(gui_app, name="gui")
 app.add_typer(pr_app, name="pr")

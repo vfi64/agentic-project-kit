@@ -312,6 +312,17 @@ rules:
     - workspace lock
     - workspace resolver
     - Evidence policy for current-state claims
+- id: workspace-adopt-readme-coverage
+  description: Read-only workspace adoption analysis must remain visible as the first operating-layer command for existing repositories.
+  documents:
+  - path: README.md
+    terms:
+    - Workspace operating-layer mode
+    - agentic-kit workspace adopt --root PATH
+    - analyzes an existing repository without writing files
+    - .agentic/config.yaml
+    - private/public boundary
+    - foreign .agentic/ directory
 - id: pattern-advisor-readme-coverage
   description: Read-only Pattern Advisor MVP commands and boundaries must remain visible.
   documents:
