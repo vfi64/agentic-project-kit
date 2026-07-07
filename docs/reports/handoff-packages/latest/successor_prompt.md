@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1744-handoff-refresh`
+- branch: `docs/post-pr1746-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -278,15 +278,6 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "strict-scope-suite-adoption",
-      "status": "planned",
-      "summary": "Decide whether strict documentation scope belongs in the standard gate suite"
-    },
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
       "id": "planning-ideas-residual-cleanup",
       "status": "planned",
       "summary": "Resolve remaining planning and idea residual documents"
@@ -356,14 +347,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1744-handoff-refresh",
+    "branch": "docs/post-pr1746-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "7ae0570aa8706c726f6ff51c3290e0063750210b",
+    "head": "481008954587859e4125f0708d3bb86298b8dfa7",
     "head_matches_origin_main": true,
-    "head_short": "7ae0570a",
+    "head_short": "48100895",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "7ae0570aa8706c726f6ff51c3290e0063750210b",
-    "origin_main_short": "7ae0570a",
+    "origin_main": "481008954587859e4125f0708d3bb86298b8dfa7",
+    "origin_main_short": "48100895",
     "worktree_clean": false
   }
 }

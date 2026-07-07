@@ -134,15 +134,6 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "strict-scope-suite-adoption",
-        "status": "planned",
-        "summary": "Decide whether strict documentation scope belongs in the standard gate suite"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
         "id": "planning-ideas-residual-cleanup",
         "status": "planned",
         "summary": "Resolve remaining planning and idea residual documents"
@@ -213,13 +204,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1744-handoff-refresh",
+      "branch": "docs/post-pr1746-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "7ae0570aa8706c726f6ff51c3290e0063750210b",
+      "head": "481008954587859e4125f0708d3bb86298b8dfa7",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/agentic-project-kit",
-      "origin_main": "7ae0570aa8706c726f6ff51c3290e0063750210b",
+      "origin_main": "481008954587859e4125f0708d3bb86298b8dfa7",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -296,13 +287,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1744-handoff-refresh",
+    "branch": "docs/post-pr1746-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "7ae0570aa8706c726f6ff51c3290e0063750210b",
+    "head": "481008954587859e4125f0708d3bb86298b8dfa7",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "7ae0570aa8706c726f6ff51c3290e0063750210b",
+    "origin_main": "481008954587859e4125f0708d3bb86298b8dfa7",
     "worktree_clean": false
   },
   "rules": [
