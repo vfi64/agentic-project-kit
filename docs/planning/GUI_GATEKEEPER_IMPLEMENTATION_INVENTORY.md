@@ -23,7 +23,7 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 - docs/planning/PROJECT_DIRECTION.yaml
 - docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
 - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
-- docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
+- docs/planning/PROJECT_DIRECTION.yaml (`python-backed-portable-workflows` preserved no-copy workflow context)
 - docs/planning/PROJECT_DIRECTION.yaml
 - docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
 - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
@@ -342,7 +342,7 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 
 ### Shell-adapter migration
 
-- docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
+- docs/planning/PROJECT_DIRECTION.yaml (`python-backed-portable-workflows` preserved no-copy workflow context)
 - src/agentic_project_kit/cli_commands/actions.py
 - tests/test_agent_command_runner_summary_footer.py
 - tests/test_quality_first_workflow_lessons.py

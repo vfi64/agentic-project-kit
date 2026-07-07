@@ -290,13 +290,6 @@ documents:
     review_policy: required
     superseded_by: docs/planning/project_direction.yaml
     summary: Historical transfer-state-machine hardening plan retained as context.
-  - path: docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
-    class: historical archive
-    status: superseded
-    owner: maintainers
-    review_policy: required
-    superseded_by: docs/planning/project_direction.yaml
-    summary: Superseded ns workflow control note retained as historical context.
   - path: docs/archive/planning/V040_DOCUMENTATION_FOLLOW_UP.md
     class: historical archive
     status: archived

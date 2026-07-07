@@ -75,16 +75,43 @@ strategy:
   - id: python-backed-portable-workflows
     status: active
     title: Python-backed portable workflow control
-    rationale: >-
-      Critical workflow, transfer, release, and evidence behavior belongs in
-      portable Python-backed commands, state models, and tests; shell snippets,
-      raw GitHub operations, and chat-only discipline are fallback lanes, not
-      canonical execution.
+    intent: >-
+      Prefer bounded, tested agentic-kit commands and future GUI cockpit actions
+      over long chat-to-terminal copy-and-paste blocks and over active ./ns
+      workflow control.
+    preserved_information:
+      removed_source:
+        path: docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
+        status: removed_source
+        central_target: docs/planning/PROJECT_DIRECTION.yaml
+      original_status: active
+      original_decision_status: proposed
+      original_scope: unify ./ns no-copy workflow control with future GUI cockpit action model
+      retained_context:
+        - Long Chat-provided shell blocks are error-prone and contradict the no-copy goal.
+        - .agentic/current_work.yaml must not be repurposed as free-form slice scratch state.
+        - Terminal workflow must not diverge from the future GUI cockpit action model.
+        - New actions should be documented as future GUI cockpit candidates rather than hidden shell-only behavior.
+        - Multi-step local actions should expose explicit PASS/FAIL style result markers.
+      migration_decision: >-
+        The old proposal to make ./ns the primary local workflow controller is
+        superseded by Python-backed agentic-kit command families and the planned
+        GUI cockpit action model. Remaining ./ns references must be classified
+        as legacy, compatibility-only, obsolete, or replaced by tested
+        agentic-kit commands before GUI integration.
+      before_gui_requirements:
+        - classify every remaining ./ns reference as active, legacy, compatibility, or obsolete
+        - replace active workflow instructions with tested agentic-kit commands
+        - keep any remaining ./ns mention explicitly labeled as legacy or compatibility-only
+        - keep GUI action candidates aligned with command contracts and evidence output
+      evidence_expectations:
+        - python -m pytest -q
+        - ruff check .
+        - agentic-kit check-docs or current documentation gates
+        - agentic-kit doctor or current health checks
+        - agentic-kit pr-hygiene or current PR lifecycle checks
     source_files:
-      - docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md
-      - docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
-      - docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md
-      - docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
+      - docs/planning/PROJECT_DIRECTION.yaml
   - id: machine-readable-governance
     status: active
     title: Machine-readable documentation, rule, and artifact governance
@@ -606,6 +633,11 @@ plans:
           status: removed_source
           central_target: docs/planning/PROJECT_DIRECTION.yaml
           retained_as: transfer GitHub action coverage principle and governed action-family matrix
+      package_5_removed_sources:
+        - path: docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: python-backed portable workflow control and GUI compatibility requirements
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
