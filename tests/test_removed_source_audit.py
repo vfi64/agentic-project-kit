@@ -119,3 +119,33 @@ def test_removed_source_audit_cli_fails_for_specific_path(tmp_path: Path) -> Non
 
     assert result.exit_code == 1
     assert "LIVE_REF tests/test_old_note.py:1:OLD = \"docs/planning/OLD_NOTE.md\"" in result.output
+
+
+def test_removed_source_audit_collects_removed_sources_lists(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "docs" / "planning" / "PROJECT_DIRECTION.yaml",
+        """
+active:
+  - id: sample-centralization
+    preserved_information:
+      removed_sources:
+        - path: docs/planning/OLD_A.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+        - path: docs/handoff/OLD_B.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+""",
+    )
+    _write(tmp_path / "docs" / "planning" / "CURRENT.md", "# current\n")
+
+    result = build_removed_source_audit(tmp_path)
+
+    assert result.ok is True
+    assert result.audited_count == 2
+    assert [finding.path for finding in result.findings] == [
+        "docs/handoff/OLD_B.md",
+        "docs/planning/OLD_A.md",
+    ]

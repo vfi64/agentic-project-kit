@@ -110,17 +110,39 @@ def _extract_removed_source_paths(root: Path, central_target: str) -> list[str]:
     if not central_path.exists():
         return []
     text = central_path.read_text(encoding="utf-8")
-    candidates = re.findall(r"^\s*path:\s+(docs/[^\s#]+)\s*$", text, flags=re.MULTILINE)
-    removed: list[str] = []
-    for candidate in candidates:
-        pattern = rf"status:\s*removed_source|removed_source:\s*\n(?:.|\n){{0,240}}path:\s+{re.escape(candidate)}"
-        window_start = max(0, text.find(candidate) - 260)
-        window_end = min(len(text), text.find(candidate) + len(candidate) + 260)
-        window = text[window_start:window_end]
-        if re.search(pattern, window):
-            removed.append(candidate)
-    return sorted(set(removed))
 
+    # Intentionally dependency-free YAML-ish parser.  It recognizes both
+    # centralization forms used in PROJECT_DIRECTION.yaml:
+    #
+    #   removed_source:
+    #     status: removed_source
+    #     path: docs/old.md
+    #
+    #   removed_sources:
+    #     - path: docs/old-a.md
+    #       status: removed_source
+    #
+    # A candidate path is counted only when a nearby local block contains
+    # status: removed_source.  This keeps ordinary source_files entries out of
+    # the removed-source set while still supporting both key orders.
+    removed: list[str] = []
+    pattern = re.compile(
+        r"^\s*(?:-\s+)?path:\s+(docs/[^\s#]+)\s*$",
+        flags=re.MULTILINE,
+    )
+
+    for match in pattern.finditer(text):
+        candidate = match.group(1)
+        window_start = max(0, match.start() - 420)
+        window_end = min(len(text), match.end() + 420)
+        window = text[window_start:window_end]
+        if re.search(
+            r"(?m)^\s*status:\s*removed_source\s*$",
+            window,
+        ):
+            removed.append(candidate)
+
+    return sorted(set(removed))
 
 def _source_file_style_refs(root: Path, central_target: str, removed_path: str) -> list[str]:
     path = root / central_target

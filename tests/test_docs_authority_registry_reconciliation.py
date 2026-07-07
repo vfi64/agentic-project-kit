@@ -45,9 +45,12 @@ def test_legacy_ns_planning_docs_are_centralized_not_registered_sources() -> Non
 
     direction = Path("docs/planning/PROJECT_DIRECTION.yaml").read_text(encoding="utf-8")
     assert "ns-command-migration-core" in direction
-    assert "docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md" in direction
-    assert "docs/handoff/CODEX_NS_COMMAND_MIGRATION_HANDOFF.md" in direction
     assert "obsolete one-time handoff evidence" in direction
+    assert "ns dev" in direction
+    assert "ns go" in direction
+    assert "ns up" in direction
+    assert "ns upload" in direction
+    assert "removed_sources:" in direction
 
 
 def test_workflow_docs_remain_operational_not_project_direction() -> None:
