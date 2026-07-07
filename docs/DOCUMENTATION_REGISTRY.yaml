@@ -133,12 +133,6 @@ class_rules:
     gate_coverage: doc-mesh audit, lifecycle audit, release DOI list checks, and historical banner checks.
 
 documents:
-  - path: docs/handoff/CURRENT_HANDOFF_OVERLAY_AFTER_PR660.md
-    class: historical archive
-    status: delete_candidate
-    owner: maintainers
-    review_policy: required
-    summary: Historical handoff overlay candidate retained until explicit reference-checked deletion.
   - path: docs/workflow/WORK_ORDER_TEMPLATES.md
     class: operational/automation
     status: active

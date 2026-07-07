@@ -17,7 +17,6 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 - docs/governance/MERGE_READINESS_CONTRACT.md
 - docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
 - docs/handoff/CURRENT_HANDOFF.md
-- docs/handoff/CURRENT_HANDOFF_OVERLAY_AFTER_PR660.md
 - docs/handoff/NEXT_CHAT_BOOTSTRAP.md
 - docs/handoff/START_NEW_CHAT_PROMPT.md
 - docs/planning/PROJECT_DIRECTION.yaml
@@ -313,7 +312,6 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 - docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md
 - docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
 - docs/handoff/CURRENT_HANDOFF.md
-- docs/handoff/CURRENT_HANDOFF_OVERLAY_AFTER_PR660.md
 - docs/handoff/NEXT_CHAT_BOOTSTRAP.md
 - docs/handoff/START_NEW_CHAT_PROMPT.md
 - docs/planning/PROJECT_DIRECTION.yaml

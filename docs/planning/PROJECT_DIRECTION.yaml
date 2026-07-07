@@ -809,6 +809,11 @@ plans:
           status: removed_source
           central_target: docs/planning/PROJECT_DIRECTION.yaml
           retained_as: obsolete one-time handoff evidence for completed ns command migration
+      package_14_removed_sources:
+        - path: docs/handoff/CURRENT_HANDOFF_OVERLAY_AFTER_PR660.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: obsolete PR660 handoff overlay state, GUI baseline, drift notes, and current authority redirect
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -1434,6 +1439,54 @@ plans:
         - generated handoff package validation remains part of lifecycle truth
         - release closeout remains separate from ordinary post-merge completion
         - docs and direction gates remain part of K2 closeout before PR
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+
+  - id: obsolete-pr660-handoff-overlay
+    status: done
+    title: Obsolete PR660 handoff overlay centralized
+    completed_by_pr: null
+    completion_exception: K2 removes the stale one-time overlay after later handoff authority superseded it.
+    preserved_information:
+      removed_source:
+        path: docs/handoff/CURRENT_HANDOFF_OVERLAY_AFTER_PR660.md
+        status: removed_source
+        central_target: docs/planning/PROJECT_DIRECTION.yaml
+        removal_reason: obsolete one-time handoff overlay for PR659/PR660-era state
+      original_status_date: "2026-05-22"
+      original_context:
+        project: agentic-project-kit
+        branch: main
+        base_branch: main
+        release_version: 0.3.37
+        release_tag: v0.3.37
+        zenodo_concept_doi: 10.5281/zenodo.20101359
+        verified_zenodo_version_doi: 10.5281/zenodo.20329450
+      retained_state:
+        - PR #656 closed out the GUI MVP three read-only actions cockpit-readiness, doctor, and check-docs.
+        - PR #657 modeled administrative evidence state in generated handoff prompts.
+        - PR #659 repaired docs/STATUS.md current-state drift after PR #657.
+        - PR #660 refreshed .agentic/handoff_state.yaml after PR #659.
+      retained_gui_baseline:
+        - cockpit-readiness visually passed as a bounded read-only GUI action
+        - doctor visually passed as a bounded read-only GUI action
+        - check-docs visually passed as a bounded read-only GUI action
+        - agent-run and non-read-only GUI actions remained disabled in the GUI MVP
+      historical_drift_notes:
+        - CURRENT_HANDOFF.md still opened with old v0.3.30/v0.3.34 planning text at that time
+        - historical PRs #562, #564, and #568 still needed explicit classification or closure at that time
+        - a later patch was expected to merge the overlay non-destructively into current handoff state
+      current_authority:
+        - docs/handoff/CURRENT_HANDOFF.md
+        - docs/handoff/NEXT_CHAT_BOOTSTRAP.md
+        - docs/handoff/START_NEW_CHAT_PROMPT.md
+        - docs/reports/handoff-packages/latest/successor_prompt.md
+        - docs/reports/handoff-packages/latest/validation_report.json
+        - docs/reports/handoff-packages/latest/source_manifest.json
+        - docs/reports/handoff-packages/latest/execution_contract.json
+      closeout_rule: >-
+        The PR660 overlay is historical evidence only. It must not be used as
+        current release, GUI, handoff, or next-safe-step authority.
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
 
