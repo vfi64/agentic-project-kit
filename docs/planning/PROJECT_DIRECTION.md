@@ -12,9 +12,8 @@ This Markdown file is only a human-readable orientation view. It must not become
 an independent planning source, and it must not contain strategy, roadmap, or
 plan details that are absent from `PROJECT_DIRECTION.yaml`.
 
-During the consolidation sequence, the older `docs/strategy/`, `docs/planning/`,
-`docs/plans/`, `docs/ideas/`, and `docs/roadmap/` documents are migration
-sources. Their active steering content is migrated into
+During the consolidation sequence, older scattered planning documents are
+migration sources. Idea content has been migrated into
 `PROJECT_DIRECTION.yaml`; completed and discarded material is recorded in the
 `done` and `discarded` sections; obsolete files are deleted only after a
 reference-clean protected-diff slice.

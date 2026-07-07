@@ -513,16 +513,65 @@ ideas:
     decision_needed: true
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
+
   - id: deterministic-cell-orchestration
     status: candidate
     title: Deterministic Cell Orchestration
     rationale: >-
-      DCO remains a candidate pattern for complex generated artifacts where
-      typed cells, validation, selective repair, and deterministic rendering
-      reduce drift without making simple workflows harder.
+      DCO remains a candidate pattern for complex, rule-bound generated
+      artifacts where typed cells, validation, selective repair, and
+      deterministic rendering reduce instruction drift without making simple
+      workflows harder.
     decision_needed: true
+    decision_status: deferred
+    binding_policy: not implemented as binding architecture
+    preserved_information:
+      purpose: >-
+        Preserve DCO as an architecture option for complex generated outputs
+        whose free-form structure is too fragile for prompt discipline alone.
+      core_model:
+        - Split complex output into explicit typed cells with stable identity.
+        - Validate cell structure before rendering user-facing artifacts.
+        - Repair only failed cells and preserve valid cells.
+        - Render final Markdown, HTML, reports, or other artifacts
+          deterministically after validation.
+      problems_addressed:
+        - instruction drift in large rule-heavy prompts
+        - fragile free-form Markdown structure
+        - all-or-nothing regeneration after localized failure
+        - renderer instability when the model owns final formatting
+      good_fit:
+        - structured audit or handoff reports
+        - validation and repair reports
+        - release or review artifacts with machine-readable intermediate state
+        - generated content where only a subset should be repaired
+      bad_fit:
+        - simple Markdown documents
+        - small CLI additions
+        - ordinary documentation edits
+        - one-off reports without repair or renderer needs
+        - features where typed intermediate state is harder than direct implementation
+      relation_to_project: >-
+        DCO is an option, not a default. It should move into tests, schemas,
+        validators, repair plans, renderer contracts, doctor/check-docs checks,
+        architecture documentation, or ADRs only when a concrete feature needs
+        validation, repair, rendering, or auditability.
+      external_context_boundary: >-
+        The idea came from Comm-SCI-Control-style rule complexity, but this kit
+        must adapt it only for concrete agentic-project-kit features and must
+        not import wrapper-project assumptions blindly.
+      adr_triggers:
+        - DCO becomes official architecture for a concrete feature.
+        - DCO is rejected for a major workflow or repair design after alternatives are considered.
+        - Public CLI behavior or persistent state depends on DCO.
+        - Tests, schemas, or renderer contracts make DCO maintained architecture.
+      current_recommendation: >-
+        Keep DCO as a curated candidate until a concrete feature needs it.
+        Prefer the smallest architecture that solves the actual drift,
+        validation, repair, rendering, or auditability problem.
     source_files:
-      - docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md
+      - docs/planning/PROJECT_DIRECTION.yaml
+
   - id: governed-workflow-patterns
     status: accepted
     title: Governed workflow patterns
@@ -532,8 +581,91 @@ ideas:
       accepted design principles when they reduce workflow drift and improve
       restartability.
     decision_needed: false
+    decision_status: accepted_as_design_principles
+    binding_policy: advisory until converted into commands, tests, schemas, or gates
+    preserved_information:
+      purpose: >-
+        Preserve reusable workflow-governance patterns without turning them into
+        one immediate feature or mandatory subsystem.
+      problem_classes:
+        - implicit workflow state
+        - unclear command semantics
+        - unbounded repair
+        - hidden side effects
+        - fragile parsing of free text
+        - lost diagnostic evidence after failure
+      event_sourcing_light:
+        intent: >-
+          Record a small bounded sequence of important workflow events in
+          addition to current state when this helps diagnosis and restart.
+        candidate_events:
+          - requested
+          - started
+          - gates_passed
+          - evidence_uploaded
+          - cleaned_up
+        guidance:
+          - keep event history bounded
+          - prefer current slice reports or local JSONL evidence over permanent repo history unless long-term audit value is real
+          - keep current state authoritative
+          - never let event logs replace explicit state-machine rules
+      capability_matrix:
+        intent: >-
+          Make command availability and authority explicit when behavior depends
+          on state, role, profile, workflow phase, release phase, or
+          maintainer-only authority.
+        guidance:
+          - keep runtime-governing matrices machine-readable
+          - test matrix-to-runtime mapping
+          - avoid documentation-only matrices when direct code is simpler
+      adr_policy:
+        use_for:
+          - durable architecture decisions with real alternatives
+          - public CLI semantics that are hard to change later
+          - state-machine design choices
+          - release, repair, validation, or evidence conventions with long-term consequences
+          - decisions future agents are likely to rediscover incorrectly
+        avoid_for:
+          - routine implementation details
+          - small refactors with no long-term alternative
+          - simple documentation edits
+          - decisions already captured sufficiently in code, tests, and existing docs
+        assistant_rule: >-
+          When a proposed change affects architecture, public CLI semantics,
+          state-machine behavior, repair strategy, release workflow, evidence
+          policy, capability boundaries, or long-term agent behavior, state
+          whether an ADR is recommended and why. The maintainer decides.
+      state_model_template:
+        required_topics:
+          - purpose
+          - state file or storage
+          - authoritative state source
+          - states
+          - allowed transitions
+          - no-op behavior
+          - stop states
+          - evidence
+          - tests
+        guidance:
+          - require explicit state models only for persistent, resumable, multi-step, side-effecting, or failure-prone processes
+          - name no-op and stop-state behavior explicitly
+          - keep states behaviorally meaningful
+          - update tests when transitions change
+      relation_to_dco: >-
+        DCO structures generated outputs; governed workflow patterns structure
+        runtime and process reliability. Both make implicit model- or
+        chat-dependent behavior explicit, reviewable, and testable only when
+        the added structure reduces complexity.
+      conversion_targets:
+        - tests
+        - schema checks
+        - doctor or check-docs checks
+        - documentation coverage entries
+        - CLI contract documentation
+        - ADRs for durable architecture choices
     source_files:
-      - docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md
+      - docs/planning/PROJECT_DIRECTION.yaml
+
   - id: layered-cli-usability
     status: candidate
     title: Layered CLI usability model
@@ -542,8 +674,79 @@ ideas:
       maintainer, and debug layers for advanced workflow, release, audit, and
       evidence needs.
     decision_needed: true
+    decision_status: not implemented as binding CLI policy
+    binding_policy: advisory review lens until converted into CLI contract or tests
+    preserved_information:
+      purpose: >-
+        Preserve a layered usability model so the kit can keep high automation
+        and professional governance without making daily operation difficult.
+      central_principle: Internal complexity is allowed. Default user experience must stay simple.
+      layers:
+        daily:
+          audience: normal daily users and chat-assisted workflows
+          goal: keep common operation obvious, safe, and low-friction
+          characteristics:
+            - low cognitive load
+            - safe to run repeatedly
+            - clear pass/fail or no-op behavior
+            - minimal flags
+            - suitable for the default workflow path
+        guided:
+          audience: users who want the kit to lead them through a bounded workflow
+          goal: provide explicit next steps without exposing raw implementation details
+          characteristics:
+            - explains current state and recommended action
+            - writes bounded evidence when useful
+            - preserves no-op and stop-state behavior
+            - avoids raw state-file inspection unless diagnosis needs it
+        maintainer:
+          audience: repository maintainers and power users
+          goal: support release, governance, audit, and project-health decisions
+          characteristics:
+            - may require more context
+            - may influence release readiness or architecture hygiene
+            - must be documented clearly
+            - should not enter the daily happy path unless output is simple and stable
+        debug:
+          audience: developers, maintainers diagnosing failures, or coding agents
+          goal: expose internal evidence and raw diagnostics without making them normal UI
+          characteristics:
+            - high detail
+            - may expose implementation concepts
+            - useful for failure diagnosis and development
+            - must not be required for ordinary operation
+      golden_path_rule: >-
+        Ordinary repository health and workflow state should remain
+        understandable through a small number of stable commands. Advanced
+        capability should support the Golden Path, not replace it with a larger
+        checklist.
+      feature_placement_questions:
+        - Is this command or option needed for daily use?
+        - Can it be hidden behind a guided command or summarized by doctor?
+        - Is it maintainer-only because it affects release, audit, governance, or persistent state?
+        - Is it a debug tool that should stay under tools, JSON, verbose output, or raw reports?
+        - Does it make the Golden Path harder to explain?
+      gui_relationship: >-
+        A future local cockpit must not become a separate command system. It
+        should present and select governed actions, show safety/readiness/output
+        explicitly, preserve terminal evidence, and make the Golden Path easier
+        to choose without weakening command safety.
+      capability_matrix_relationship: >-
+        A capability matrix may implement part of layered usability if command
+        availability depends on role, workflow state, profile, release phase, or
+        maintainer-only authority. Do not force that abstraction before needed.
+      adr_triggers:
+        - all public commands must be assigned a usability layer
+        - an assist-like command becomes the official guided entry point
+        - command visibility or behavior becomes role-, state-, or capability-dependent
+        - the Golden Path becomes part of the architecture contract
+      current_recommendation: >-
+        Use this as a review lens for public CLI growth. Before adding public
+        surface area, ask whether simple workflows stay simple and which layer
+        the feature belongs to.
     source_files:
-      - docs/ideas/LAYERED_CLI_USABILITY.md
+      - docs/planning/PROJECT_DIRECTION.yaml
+
   - id: didactic-guidance
     status: candidate
     title: Didactic guidance layer
@@ -552,8 +755,44 @@ ideas:
       requests, and safe next steps easier to understand, but should remain
       advisory unless converted into tested commands or coverage rules.
     decision_needed: true
+    decision_status: not implemented as binding architecture or CLI policy
+    binding_policy: advisory, human-facing, documentation-first
+    preserved_information:
+      purpose: >-
+        Document didactic guidance as a non-binding orientation layer for making
+        agentic project work understandable, restartable, teachable, and
+        auditable.
+      contract:
+        - no runtime code in the foundation idea
+        - no public CLI commands in the foundation idea
+        - no deterministic gates from the idea alone
+        - no workflow states, Pattern Advisor implementation, pattern catalog behavior, or promotion/deprecation workflow
+      guidance_questions:
+        - What is the current state?
+        - What is the intended next step?
+        - Which rules are binding and which are advisory?
+        - What must not be mixed into this slice?
+        - What evidence is needed to trust the result?
+      relation_to_deterministic_gates: >-
+        doctor, check-docs, and doc-mesh-style audits are hard checks for known
+        structural and consistency problems. They cannot prove didactic
+        optimality, audience fit, architectural wisdom, or future handoff
+        sufficiency.
+      future_review_command_boundary: >-
+        Any future didactic review command must remain advisory unless converted
+        into a deterministic rule with a clear, testable failure condition.
+      relation_to_pattern_advisor: >-
+        Didactic guidance can make a later Pattern Advisor safer by clarifying
+        framing, limits, and explanations, but it does not approve a Pattern
+        Advisor MVP, catalog, automatic suggestions, candidate capture,
+        promotion/deprecation workflow, or public patterns/advise CLI behavior.
+      current_decision: >-
+        Didactic guidance is an idea-level orientation layer: advisory,
+        human-facing, documentation-first, and separate from deterministic gates
+        and runtime behavior.
     source_files:
-      - docs/ideas/DIDACTIC_GUIDANCE.md
+      - docs/planning/PROJECT_DIRECTION.yaml
+
   - id: pattern-advisor
     status: candidate
     title: Pattern Advisor
@@ -562,8 +801,90 @@ ideas:
       documented governance patterns, but it must stay bounded and never replace
       deterministic gates.
     decision_needed: true
+    decision_status: architecture research track
+    binding_policy: not implemented as binding architecture
+    preserved_information:
+      purpose: >-
+        Preserve Pattern Advisor as a governed architecture option without
+        adding a mandatory subsystem now.
+      project_constraint: >-
+        agentic-project-kit is a metatool for agentic and LLM-assisted project
+        development in general. Wrapper-project lessons may supply evidence, but
+        resulting patterns must remain project-neutral.
+      problem_classes:
+        - repeated patch patterns without naming the underlying problem class
+        - branch, handoff, workflow, or release drift across sessions
+        - local evidence lost in chat context instead of becoming repository state
+        - semantic review expectations drifting into deterministic gates
+        - command growth making daily use harder
+        - project-specific lessons trapped in one repository
+      advisory_model:
+        questions:
+          - What recurring problem class does this resemble?
+          - Which established kit pattern should be considered?
+          - Which anti-pattern should be avoided?
+          - What evidence is still missing before a safe decision?
+          - Should this repeated lesson become a candidate pattern?
+        boundary: >-
+          Pattern Advisor is not an oracle, autopilot, hidden decision engine,
+          replacement for human architecture judgment, gate, semantic proof
+          system, wrapper-project special case, or reason to overload doctor.
+      relation_to_gates: >-
+        Deterministic checks remain separate. Pattern advice can be useful even
+        when not provable, but it must be labelled as advice and must not become
+        pass/fail behavior by accident.
+      relation_to_existing_patterns:
+        - Governed workflow patterns preserve workflow, ADR, capability, and state-model design patterns.
+        - DCO preserves a decision pattern for complex rule-bound generated outputs.
+        - Layered CLI usability preserves a model for keeping daily operation simple.
+      later_mvp:
+        scope:
+          - read-only pattern catalog
+          - list/show command surface only if approved
+          - schema and loader tests
+          - three to five starter patterns
+        defer:
+          - automatic suggest
+          - candidate capture
+          - promotion or deprecation workflow
+          - broad pattern library
+          - public advise command
+      possible_starter_patterns:
+        - repository-state-as-source-of-truth
+        - explicit-workflow-request-before-execution
+        - bounded-deterministic-repair
+        - evidence-branch-for-local-output-transfer
+        - layered-cli-usability
+      candidate_lifecycle:
+        - candidate
+        - accepted
+        - deprecated
+        - archived
+      implementation_preferences:
+        - plain YAML or JSON metadata
+        - deterministic metadata validation
+        - Markdown documentation for human-readable explanations
+        - stable IDs for patterns and anti-patterns
+        - test fixtures with no remote dependencies
+        - no direct coupling to one wrapper project
+      adr_triggers:
+        - public patterns or advise CLI is introduced
+        - pattern classification becomes part of a documented project contract
+        - advisory output influences workflow state or gate behavior
+        - pattern lifecycle rules become binding
+        - the project commits to a long-term pattern catalog format
+      review_triggers:
+        - recurring architecture or workflow problem appears across multiple repos
+        - Guided CLI usability needs pattern-level explanation
+        - documentation audits produce recurring finding classes
+        - a release planning cycle needs a project-neutral pattern catalog
+      removal_or_archive_triggers:
+        - superseded by a simpler mechanism
+        - too complex for the kit usability goals
+        - pattern advice is intentionally rejected
+        - fully absorbed into implemented docs, tests, and ADRs
     source_files:
-      - docs/ideas/PATTERN_ADVISOR.md
+      - docs/planning/PROJECT_DIRECTION.yaml
   - id: comm-sci-first-external-adoption
     status: candidate
     title: Comm-SCI-Control-private as first external adoption candidate

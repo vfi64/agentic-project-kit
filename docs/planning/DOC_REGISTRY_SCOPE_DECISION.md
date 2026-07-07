@@ -18,7 +18,6 @@ No scope recommendation is encoded here; maintainers fill the proposed column af
 | docs/governance/ | 15 | 15 | 0 |  |
 | docs/gui/ | 1 | 1 | 0 |  |
 | docs/handoff/ | 6 | 6 | 0 |  |
-| docs/ideas/ | 5 | 0 | 5 |  |
 | docs/patterns/ | 2 | 2 | 0 |  |
 | docs/planning/ | 28 | 28 | 0 |  |
 | docs/reference/ | 2 | 2 | 0 |  |
