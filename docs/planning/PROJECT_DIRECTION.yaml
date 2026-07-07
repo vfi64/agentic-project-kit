@@ -800,6 +800,15 @@ plans:
           status: removed_source
           central_target: docs/planning/PROJECT_DIRECTION.yaml
           retained_as: post-merge lifecycle state model, invariants, command coverage, and retained acceptance criteria
+      package_12_removed_sources:
+        - path: docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: ns dev/go/up/upload classification, command mapping, evidence base, and closeout rule
+        - path: docs/handoff/CODEX_NS_COMMAND_MIGRATION_HANDOFF.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: obsolete one-time handoff evidence for completed ns command migration
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -1955,12 +1964,103 @@ done:
       - docs/planning/PROJECT_DIRECTION.yaml
   - id: ns-command-migration-core
     status: done
-    title: Core ns command migration classification and resolved targets
-    completed_by_pr: null
+    title: Core ns command migration classification and obsolete handoff evidence
+    completed_by_pr: "#1406"
     merge_commit: null
     completion_exception: Historical classification says ns dev/go/up/upload targets were resolved in earlier slices.
+    preserved_information:
+      removed_sources:
+        - path: docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          removal_reason: obsolete completed classification; no longer an active planning source
+        - path: docs/handoff/CODEX_NS_COMMAND_MIGRATION_HANDOFF.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          removal_reason: obsolete one-time handoff evidence for completed ns migration
+      original_status_date: "2026-06-17"
+      original_status: active
+      original_decision_status: proposed
+      completion_status_after_pr_1406: completed
+      migration_scope: >-
+        Classification only for old ./ns dev, ./ns go, ./ns up, and ./ns
+        upload semantics. The classification did not migrate or add commands;
+        later slices resolved the targets. The associated handoff file was a
+        one-time transition artifact and is not current handoff authority.
+      verification_after_pr_1406:
+        - main == origin/main == 65eda04758632981a4cbdb7f80ed90d1c76af77d
+        - worktree clean
+        - post-merge-check PASS/NOOP
+        - repo-status PASS
+        - docs-audit PASS
+        - check-docs PASS
+        - doctor PASS
+        - Ruff PASS
+        - full pytest 1705 passed
+      obsolete_handoff_decision: >-
+        The old Codex NS command migration handoff is retained here only as
+        historical migration evidence. It must not be treated as a live
+        successor prompt, active handoff, or current workflow source.
+      evidence_base:
+        - tmp/codex-ns-migration-start-20260617-162611.log
+        - tmp/codex-ns-migration-handoff-status-20260617-162942.log
+        - tmp/codex-ns-migration-classify-investigate-20260617-164459.log
+        - tmp/ns-migration-evidence.md
+        - tmp/ns-migration-evidence.json
+      command_mapping:
+        - old_command: ns dev
+          old_source: v0.4.6:ns:401-404
+          old_semantics: run local feature gate with PR hygiene enabled
+          current_equivalent:
+            - agentic-kit dev local-feature-gate
+          decision: migrated_to_real_python_backed_agentic_kit_command
+          replacement_status: resolved_after_pr_1400
+          retained_requirements:
+            - do not restore ./ns dev
+            - keep local-only behavior explicit
+            - preserve include-pr-hygiene behavior
+            - keep command reference and CLI registration tested
+        - old_command: ns go
+          old_source: v0.4.6:ns:406-428
+          old_semantics: request configured workflow and run one bounded step; refuse dirty non-main git_pull_ff_only workflow
+          current_equivalent:
+            - agentic-kit workflow go
+          decision: existing command kept and old dirty-branch guard migrated if absent
+          replacement_status: resolved_after_pr_1402
+          retained_requirements:
+            - do not add duplicate transfer go route
+            - preserve non-IDLE refusal and bounded workflow semantics
+            - preserve dirty non-main branch guard for git_pull_ff_only
+        - old_command: ns up
+          old_source: v0.4.6:ns:430-433
+          old_semantics: bounded PR completion cycle from current branch
+          current_equivalent:
+            - agentic-kit transfer pr-complete
+          decision: obsolete ns_up_pr_completion route removed; transfer PR lifecycle is supported target
+          replacement_status: resolved_after_pr_1404
+          retained_requirements:
+            - do not add agentic-kit up
+            - do not preserve ns_up_pr_completion as supported route
+            - keep CI wait, safe merge, main sync, rule acknowledgement, and post-merge completion explicit
+        - old_command: ns upload
+          old_source: v0.4.6:ns:436-443
+          old_semantics: delegate workflow evidence upload to kit CLI
+          current_equivalent:
+            - agentic-kit workflow upload
+            - agentic-kit workflow upload-output
+          decision: existing workflow upload command documented; active ./ns upload shortcut removed
+          replacement_status: resolved_after_pr_1406
+          retained_requirements:
+            - upload must not bypass evidence or protected-file lifecycle rules
+            - preserve refusal states such as already uploaded or cleanup pending
+            - ns-menu must route directly to agentic-kit workflow upload
+      closeout_rule: >-
+        Remaining references to ns dev, ns go, ns up, and ns upload are
+        historical classification, test, or diagnostic references, not active
+        runtime entrypoints. Do not restart the same migration loop unless a
+        fresh scan finds an active runtime entrypoint.
     source_files:
-      - docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
+      - docs/planning/PROJECT_DIRECTION.yaml
   - id: transfer-github-action-coverage-phase0
     status: done
     title: Transfer GitHub action coverage phase 0

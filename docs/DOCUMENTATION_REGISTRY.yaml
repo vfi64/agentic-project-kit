@@ -469,11 +469,6 @@ documents:
     owner: maintainers
     notes: Required closeout prompt for chat-switch workflows.
     status: active
-  - path: docs/handoff/CODEX_NS_COMMAND_MIGRATION_HANDOFF.md
-    class: operational/automation
-    owner: maintainers
-    notes: Historical handoff retained under required handoff scope.
-    status: archived
   - path: docs/handoff/NEXT_CHAT_BOOTSTRAP.md
     class: generated artifact
     owner: automation
@@ -520,12 +515,6 @@ documents:
     owner: maintainers
     notes: Priority plan for hardening unsafe individual commands before GUI or release orchestration work resumes.
     status: active
-  - path: docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
-    class: planning
-    owner: maintainers
-    notes: Classification-first plan for mapping remaining meaningful old ns command semantics to supported agentic-kit commands.
-    superseded_by: docs/planning/project_direction.yaml
-    status: superseded
   - path: docs/handoff/CURRENT_HANDOFF.md
     class: planning
     owner: maintainers
