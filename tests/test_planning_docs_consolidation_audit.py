@@ -105,7 +105,7 @@ def test_planning_docs_audit_classifies_workflow_reduction_focus_as_historical(t
 
 
 def test_planning_docs_audit_classifies_known_historical_plan(tmp_path: Path) -> None:
-    doc = tmp_path / "docs" / "planning" / "V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md"
+    doc = tmp_path / "docs" / "planning" / "WORKFLOW_REDUCTION_FOCUS.md"
     doc.parent.mkdir(parents=True)
     doc.write_text("# Old\nsource of truth for old handoff workflow\n", encoding="utf-8")
 

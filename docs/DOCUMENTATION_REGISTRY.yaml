@@ -261,13 +261,6 @@ documents:
     archived_from: docs/planning/NEXT_TURN_A0_STANDARD_ERROR_ADDITIONS.md
     superseded_by: docs/planning/project_direction.yaml
     summary: Archived next-turn planning note; current direction is governed by project_direction.yaml.
-  - path: docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md
-    class: historical archive
-    status: superseded
-    owner: maintainers
-    review_policy: required
-    superseded_by: docs/planning/project_direction.yaml
-    summary: Historical v0.4.0 planning note.
   - path: docs/archive/planning/RULE_REGISTRY_IMPLEMENTATION_PLAN.yaml
     class: historical archive
     status: superseded

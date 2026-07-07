@@ -750,6 +750,11 @@ plans:
           status: removed_source
           central_target: docs/planning/PROJECT_DIRECTION.yaml
           retained_as: governed rule registry target design, rule fields, required properties, planned CLI, and migration boundary
+      package_8_removed_sources:
+        - path: docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: portable LLM communication bootstrap problem statement, objectives, decisions, and acceptance criteria
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -1531,9 +1536,39 @@ done:
     title: Portable LLM communication bootstrap
     completed_by_pr: null
     merge_commit: null
-    completion_exception: Historical bootstrap line absorbed into current workflow, transfer, and handoff governance.
+    completion_exception: Historical v0.4.0 bootstrap plan is preserved centrally as K2 cleanup evidence.
+    preserved_information:
+      removed_source:
+        path: docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md
+        status: removed_source
+        central_target: docs/planning/PROJECT_DIRECTION.yaml
+      original_status: active
+      original_decision_status: accepted
+      original_scope: portable LLM communication, summary, drift, and handoff hardening
+      branch_baseline: main at 66412fc after PR647 recovery log
+      problem_statement: >-
+        Chat-generated terminal blocks had assumed a POSIX-like shell toolchain
+        and healthy PATH. The workflow failed before preserving evidence because
+        tools such as git, cp, tail, and sh were not found. The issue was treated
+        as a communication-contract problem, not only a terminal problem.
+      retained_objectives:
+        - durable behavior belongs in Python modules, CLI commands, tests, docs, and machine-readable context
+        - shell remains a convenience adapter, not canonical workflow authority
+        - long chat-generated shell blocks must not be the durable execution contract
+        - LLMs must be constrained by repository-owned, portable, tested contracts and runners
+        - evidence preservation, summary handoff, drift checks, and portable communication are first-class workflow requirements
+      retained_decisions:
+        - prefer bounded commands and machine-readable context over prose-only prompts
+        - make local workflow state recoverable through repository-backed artifacts
+        - treat GUI and transfer-file workflows as future carriers for the same bounded command contracts
+        - review before further GUI expansion
+      retained_acceptance:
+        - plan and roadmap name portable LLM communication hardening as a priority
+        - workflow avoids depending on unavailable shell tools as canonical behavior
+        - summary, drift, and handoff state are preserved in repo-backed or generated artifacts
+        - future GUI expansion remains blocked until communication contracts are portable and testable
     source_files:
-      - docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md
+      - docs/planning/PROJECT_DIRECTION.yaml
   - id: persistent-handoff-state
     status: done
     title: Persistent handoff state
@@ -1679,6 +1714,5 @@ discarded:
       evidence, and false-PASS failure modes.
     discarded_at: "2026-07-05"
     source_files:
-      - docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md
       - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
       - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
