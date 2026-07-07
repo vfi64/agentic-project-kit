@@ -276,13 +276,6 @@ documents:
     superseded_by: docs/planning/project_direction.yaml
     archived_from: docs/planning/RULE_REGISTRY_IMPLEMENTATION_PLAN.yaml
     summary: Historical rule-registry implementation plan retained as context.
-  - path: docs/planning/RULE_REGISTRY_ARCHITECTURE.md
-    class: historical archive
-    status: superseded
-    owner: maintainers
-    review_policy: required
-    superseded_by: docs/planning/project_direction.yaml
-    summary: Historical rule-registry architecture note retained as context.
   - path: docs/archive/planning/V040_DOCUMENTATION_FOLLOW_UP.md
     class: historical archive
     status: archived

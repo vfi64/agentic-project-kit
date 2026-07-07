@@ -122,7 +122,6 @@ strategy:
       orientation.
     source_files:
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
-      - docs/planning/RULE_REGISTRY_ARCHITECTURE.md
       - docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
       - docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
 
@@ -521,7 +520,6 @@ roadmap:
       - Artifact retention and local-leak filters do not become semantic planning mechanisms.
     source_files:
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
-      - docs/planning/RULE_REGISTRY_ARCHITECTURE.md
       - docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
 
 plans:
@@ -747,6 +745,11 @@ plans:
           status: removed_source
           central_target: docs/planning/PROJECT_DIRECTION.yaml
           retained_as: transfer state-machine states, metadata, validation rules, implementation slices, and MVP gate
+      package_7_removed_sources:
+        - path: docs/planning/RULE_REGISTRY_ARCHITECTURE.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: governed rule registry target design, rule fields, required properties, planned CLI, and migration boundary
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -813,15 +816,76 @@ plans:
   - id: rule-registry-hardening
     status: active
     title: Preserve active rule identity, source validation, and refresh handshakes
-    target_release: v0.4.12
-    depends_on:
-      - documentation-artifact-governance-os
     acceptance:
       - Rule source validation remains read-only and fail-closed.
-      - Rule refresh outputs are tied to current repo state and transfer context.
-      - Registry improvement backlog is explicit without starting a broad second rebuild.
+      - Active rules have stable identity, status, category, priority, scope, enforcement references, projection targets, dependencies, conflicts, and migration metadata.
+      - Status files, handoff files, compiled agent context, and successor prompts are generated or validated projections, not independent rule stores.
+      - Rule ids are stable and never recycled; obsolete or migrated rules keep explicit metadata.
+      - Duplicate ids fail.
+      - Non-English active persistent rules fail.
+      - Critical active rules without enforcement fail.
+      - Unknown dependencies fail.
+      - Active conflicts fail.
+      - Obsolete rules rendered into active projections fail.
+      - Projection drift fails.
+      - Workflow guards include the registry check.
+    preserved_information:
+      removed_source:
+        path: docs/planning/RULE_REGISTRY_ARCHITECTURE.md
+        status: removed_source
+        central_target: docs/planning/PROJECT_DIRECTION.yaml
+      original_status: proposed
+      original_decision_status: proposed
+      original_priority: 1
+      purpose: >-
+        Preserve the governed rule registry architecture proposal without
+        keeping a separate planning note. The proposal exists to prevent active
+        rules from being lost when prose-heavy control files are shortened,
+        reorganized, or refreshed manually.
+      target_design:
+        canonical_rule_location: .agentic/rules/
+        proposed_modules:
+          - 000-core.yaml
+          - 100-communication.yaml
+          - 200-evidence.yaml
+          - 300-terminal.yaml
+          - 400-remote-git.yaml
+          - 500-release.yaml
+          - 600-gui.yaml
+          - 700-documentation.yaml
+        rule_fields:
+          - stable id
+          - English normative text
+          - status
+          - category
+          - priority
+          - scope
+          - enforcement references
+          - projection targets
+          - dependencies
+          - conflicts
+          - migration metadata
+      required_properties:
+        - small reviewable connector-friendly YAML modules
+        - machine-readable active rules instead of Markdown-only prose
+        - English-only persistent active project rules
+        - deterministic tests, guards, or generator checks for critical and required rules
+        - complete registry representation before rendering into projections
+        - non-lossy obsolete or migrated rule metadata
+        - dependency and conflict validation across the registry
+        - projection-based STATUS.md, CURRENT_HANDOFF.md, and successor prompts
+      planned_cli:
+        - agentic-kit rules check
+        - agentic-kit rules render --check
+        - agentic-kit rules diff
+        - agentic-kit rules audit
+      initial_migration_boundary: >-
+        The first implementation slice migrates active rules currently protected
+        by .agentic/rule_preservation.yaml into the modular registry. It must
+        not perform broad documentation migration and must not modify release,
+        tag, or DOI state.
     source_files:
-      - docs/planning/RULE_REGISTRY_ARCHITECTURE.md
+      - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
       - docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
       - docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
