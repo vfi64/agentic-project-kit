@@ -241,12 +241,6 @@ documents:
     owner: maintainers
     review_policy: required
     summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
-    class: planning
-    status: review_required
-    owner: maintainers
-    review_policy: required
-    summary: Review-required historical standard-error hardening plan.
   - path: docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
     class: planning
     status: review_required

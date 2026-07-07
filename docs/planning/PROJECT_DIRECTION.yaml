@@ -46,7 +46,6 @@ strategy:
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
       - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
       - docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
-      - docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
       - docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
   - id: kit-as-os
     status: active
@@ -289,7 +288,6 @@ roadmap:
       - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
       - docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
-      - docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
       - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
   - id: workflow-kernel-and-transfer-hardening
     phase: pre-GUI
@@ -755,6 +753,11 @@ plans:
           status: removed_source
           central_target: docs/planning/PROJECT_DIRECTION.yaml
           retained_as: portable LLM communication bootstrap problem statement, objectives, decisions, and acceptance criteria
+      package_9_removed_sources:
+        - path: docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: standard-error backlog, legacy ns command coverage map, hard rules, guard acceptance, and sequencing
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -791,7 +794,6 @@ plans:
       - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
       - docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
-      - docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
       - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
   - id: next-turn-workflow-kernel
     status: active
@@ -1084,6 +1086,180 @@ plans:
       - Historical docs/reports references remain allowed.
       - Tests cover markdown, YAML, Python/test references, deleted path handling, and failure modes.
       - The command remains separate from this K2 guard-only removed-source-audit.
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+
+  - id: standard-error-hardening-backlog
+    status: active
+    title: Standard-error hardening backlog and legacy ns command coverage map
+    depends_on:
+      - pre-gui-hardening-line
+    intent: >-
+      Preserve the post-v0.4.2 standard-error hardening plan centrally after
+      K2 removes the standalone planning note. Repeated workflow failures must
+      escalate to repository-owned guards, tests, state transitions, or CLI
+      commands instead of accumulating chat-only rules.
+    centralization_policy:
+      command_coverage_check_required: true
+      rule: >-
+        When centralizing old planning sources, compare old proposed command
+        names and legacy ./ns forms against the current agentic-kit command
+        surface. Preserve them as legacy requirements only when they are not
+        already replaced, and record current authority when they are replaced.
+    preserved_information:
+      removed_source:
+        path: docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
+        status: removed_source
+        central_target: docs/planning/PROJECT_DIRECTION.yaml
+      original_status: active
+      original_decision_status: accepted
+      original_review_policy: >-
+        Review before any successor implementation slice; retire or update
+        after guard, DOI closeout, and workflow-kernel follow-up are merged.
+      historical_context:
+        clean_base: main at or after 06d6ea30a39e5763283358db8bb93d5566b421cd
+        clean_release_line: v0.4.2 after PR #769
+        failed_closeout_attempt: PR #771 is evidence for a standard-error class, not a merge candidate
+      meta_rule:
+        problem: repeated workflow failures must not be answered by accumulating more chat-only rules
+        escalation_order:
+          - technically block the invalid action
+          - add a deterministic test or gate
+          - register the rule in machine-readable policy
+          - document the behavior
+          - use a chat-only reminder only as a temporary fallback
+        critical_rule: For critical workflow errors, documentation alone is not an acceptable final fix.
+      legacy_ns_command_requirements:
+        - legacy_form: ./ns pr-status <pr>
+          retained_requirement: machine-readable PR, merge, and check state plus failed CI log diagnosis
+          current_authority:
+            - agentic-kit transfer pr-status
+            - agentic-kit transfer repo-status
+          replacement_status: replaced
+        - legacy_form: ./ns merge-if-green <pr>
+          retained_requirement: merge only after required PR checks are green
+          current_authority:
+            - agentic-kit pr merge-if-green
+            - agentic-kit transfer pr-complete
+            - agentic-kit transfer pr-create-complete
+          replacement_status: replaced_or_covered_by_split_authority
+        - legacy_form: ./ns fail
+          retained_requirement: log-first failure diagnosis and explicit classification of work failure versus evidence/transport failure
+          current_authority:
+            - agentic-kit audit-patch-failure-discipline
+            - agentic-kit transfer diagnostics and evidence flows
+          replacement_status: partially_replaced
+        - legacy_form: ./ns protected-diff-check [diff]
+          retained_requirement: block unsafe protected-file diffs, broad YAML rewrites, and partial-fetch full replacements
+          current_authority:
+            - agentic-kit transfer protected-diff-plan
+            - agentic-kit patch-scope-preflight
+          replacement_status: replaced
+        - legacy_form: ./ns next-safe-step
+          retained_requirement: state-based next action with explicit NEXT values
+          current_authority:
+            - agentic-kit transfer continue
+            - workflow-kernel transfer state-machine NEXT model
+          replacement_status: partially_replaced_or_future
+        - legacy_form: ./ns closeout-check --version VERSION
+          retained_requirement: release, DOI, status, handoff, and post-merge consistency check
+          current_authority:
+            - agentic-kit pr closeout-check
+            - agentic-kit release-status
+            - agentic-kit transfer post-merge-check
+            - validation_report.json and handoff validation
+          replacement_status: partially_replaced_by_split_authority
+      standard_error_backlog:
+        - id: partial-fetch-full-replacement-corruption
+          priority: 1
+          classification: concrete PR #771 failure
+          fix_direction: forbid full-file replacement from line ranges, snippets, patches, truncated responses, or chat excerpts
+          done_when: a test fails when partial context is treated as complete file content
+        - id: protected-yaml-or-control-file-noisy-rewrite
+          priority: 2
+          classification: concrete PR #771 failure class
+          fix_direction: protected-file diff budget plus migration requirement
+          done_when: large deletion or reformatting diffs in protected files fail without explicit migration
+        - id: full-file-replacement-without-complete-source-proof
+          priority: 3
+          classification: recurring remote workflow risk
+          fix_direction: require raw full fetch, blob content, local complete file, or generated canonical source
+          done_when: reviewer-visible evidence names the complete source for any full replacement
+        - id: stale-post-release-metadata-after-successful-verification
+          priority: 4
+          classification: concrete after v0.4.2
+          fix_direction: redo DOI closeout only after guards exist
+          done_when: release, DOI, status, handoff, handoff-state, changelog, citation, verified releases, and evidence agree
+        - id: projection-drift-and-handoff-staleness
+          priority: 5
+          classification: known repeated failure class
+          fix_direction: solve through one closeout synchronization path
+          done_when: closeout check catches stale current-state and handoff claims after merge or release
+        - id: required-term-pseudo-assurance
+          priority: 6
+          classification: known design weakness
+          fix_direction: add selected structural or behavioral assertions
+          done_when: at least one high-risk mechanism fails on real integration break
+        - id: reporting-versus-enforcement-ambiguity
+          priority: 7
+          classification: planning weakness
+          fix_direction: every slice states advisory-only, blocking, or both
+          done_when: no slice closes with vague reporting-only claims
+        - id: connector-or-transport-failure-treated-as-product-failure
+          priority: 8
+          classification: recurring workflow risk
+          fix_direction: classify transport, schema, and filter failures separately
+          done_when: final summaries distinguish work failure, evidence failure, and transport failure
+        - id: tool-schema-drift
+          priority: 9
+          classification: recurring small failure
+          fix_direction: inspect tool schema before write actions
+          done_when: wrong argument names are caught before mutation
+        - id: oversized-slices
+          priority: 10
+          classification: recurring workflow risk
+          fix_direction: split DOI, guard, handoff, registry, and GUI work
+          done_when: one PR has one primary failure class and one rollback path
+        - id: final-summary-contradiction
+          priority: 11
+          classification: known repeated failure class
+          fix_direction: preserve canonical renderer and evidence-first review
+          done_when: PASS cannot hide earlier FAIL or blocked work
+        - id: remote-evidence-unavailable-on-fail
+          priority: 12
+          classification: improved but critical
+          fix_direction: remote-log-first where possible, local-log-first during local-only recovery
+          done_when: paste-output is requested only when evidence is missing or unusable
+        - id: gui-safety-class-string-heuristics
+          priority: 13
+          classification: concrete low-priority design bug
+          fix_direction: replace substring heuristics with structured safety values
+          done_when: GUI evidence hints use stable safety-class values
+      hard_rules:
+        - Partial fetches, search snippets, PR patches, diff hunks, truncated API responses, and copied chat excerpts are read-only context.
+        - Full-file replacement is allowed only from complete raw fetch, complete blob content, local complete file content, or a generated file from a canonical source model.
+        - Protected files require deletion and rewrite budgets.
+        - Large deletion diffs, broad YAML reformatting, or unexplained control-file churn must block unless an explicit migration records removed anchors, successor anchors, rationale, and deterministic tests.
+      guard_acceptance:
+        - .agentic/control_file_preservation.yaml names partial-fetch-full-replacement-corruption
+        - README and .agentic/handoff_state.yaml are protected files
+        - workflow guard or patch preflight rejects a synthetic PR #771-style diff
+        - tests cover large protected-file deletion, small safe metadata diff, and explicit migration override
+        - v0.4.2 DOI closeout is not repeated until the guard is merged or included in the same guarded local PR
+      external_review_incorporation_rule:
+        - do not record external ratings as project evidence
+        - do not treat external summaries as source of truth over current main
+        - use repeated-risk observations to refine backlog ordering
+        - connect useful observations to deterministic guard candidates, tests, protected-diff checks, GUI safety contracts, or workflow-kernel commands
+        - preserve existing planning text additively unless a separate protected-change plan approves migration or retirement
+      sequencing:
+        - repair the PR #772 documentation lifecycle failure
+        - verify current command coverage before preserving legacy command requirements
+        - implement or retain pr-status and merge-if-green command authority
+        - implement fail log-first diagnosis gaps if still missing
+        - keep protected-diff-plan as the protected-diff-check successor
+        - redo DOI metadata closeout only through guarded release/post-merge paths
+        - continue Rule Registry Phase A only after the workflow kernel has the required command coverage
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
 
