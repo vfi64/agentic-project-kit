@@ -16,7 +16,7 @@ That slice establishes the supported release metadata preparation route and make
 
 ## First priority: Remote transfer state-machine hardening before ns replacement
 
-Before the remaining `ns` replacement work continues, complete the transfer state-machine MVP from `docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md`.
+Before the remaining `ns` replacement work continues, complete the transfer state-machine MVP from `docs/planning/PROJECT_DIRECTION.yaml` (`workflow-kernel-and-transfer-hardening` transfer-state MVP).
 
 Required before further `ns` replacement slices:
 

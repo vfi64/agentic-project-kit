@@ -304,23 +304,127 @@ roadmap:
       - Protected diff, command reference, and evidence publication remain wrapper-driven.
       - Transfer GitHub action coverage remains explicit for read, create/update, branch, PR, and workflow-run operations.
       - Any future GitHub connector action is classified before being treated as supported workflow authority.
+      - Transfer-state MVP validates exactly one active command, inbox/outbox correlation, stale results, duplicate active files, remote drift, and unreachable remotes.
+      - Transfer status outputs expose machine-readable STATE and NEXT values without prose parsing.
     preserved_information:
-      removed_source:
-        path: docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
-        status: removed_source
-        central_target: docs/planning/PROJECT_DIRECTION.yaml
+      removed_sources:
+        - path: docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+        - path: docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
       original_status: active
       original_decision_status: proposed
       purpose: >-
-        Preserve the transfer GitHub action coverage matrix without keeping a
-        separate planning document. The source classified which GitHub actions
-        were covered by deterministic transfer wrappers, which were intentionally
-        unsupported, and which required future implementation before GUI or
-        release workflows could depend on them.
+        Preserve transfer GitHub action coverage and remote transfer
+        state-machine hardening requirements without keeping separate planning
+        documents. The preserved state-machine plan classified how the transfer
+        layer should correlate active inbox commands, outbox results, repository
+        branch/head state, command identity, and transient remote failures.
       coverage_principle: >-
         The GUI and LLM workflow must not call raw GitHub APIs as project
         authority. Supported GitHub operations need explicit agentic-kit command
         wrappers, safety classification, evidence output, and tests.
+      transfer_state_model:
+        allowed_states:
+          - NO_COMMAND
+          - COMMAND_READY
+          - COMMAND_RUNNING
+          - RESULT_READY
+          - STALE_RESULT
+          - CONFLICT
+          - REMOTE_DRIFT
+          - REMOTE_UNREACHABLE
+          - BLOCKED
+        state_contract: >-
+          Every transfer state must include a deterministic NEXT value such as
+          consume_result, ignore_or_archive_stale_result,
+          retry_remote_check_later, or sync_or_regenerate_command.
+        command_metadata:
+          - command_id
+          - created_at_utc
+          - command_kind
+          - expected_branch
+          - expected_head
+          - expected_origin_main
+          - input_hash
+        result_metadata:
+          - command_id
+          - finished_at_utc
+          - result_status
+          - observed_branch
+          - observed_head
+          - observed_origin_main
+          - output_hash
+        validation_rules:
+          exactly_one_command:
+            - zero or one active inbox command is allowed
+            - more than one active command reports CONFLICT
+            - no active command and no active result reports NO_COMMAND
+          inbox_outbox_correlation:
+            - inbox and outbox command_id values must match
+            - unmatched outbox results are stale or already consumed
+            - command_id mismatch reports STALE_RESULT or CONFLICT
+          stale_last_result:
+            - command_id mismatch
+            - observed head incompatible with expected command head
+            - finished_at_utc predates active command creation
+            - result produced for a different branch
+            - input_hash mismatch
+          duplicate_active_files:
+            - active inbox/outbox locations may contain only canonical active files
+            - unknown tmp, bak, old, duplicate command, or duplicate result files in active locations report CONFLICT
+          remote_drift:
+            - local_branch must equal expected_branch
+            - local_head must equal expected_head
+            - origin_main must equal expected_origin_main
+            - mismatch reports REMOTE_DRIFT with NEXT=sync_or_regenerate_command
+          remote_unreachable:
+            - failed SSH/GitHub/fetch/push/ls-remote checks are not success
+            - no later mutation may occur after failed remote preflight
+            - same command_id can remain reusable for safe retry
+            - remote verification is required after push, PR creation, merge, or fetch-sensitive operations
+        implementation_slices:
+          - id: transfer_metadata_schema_and_parser
+            acceptance:
+              - malformed metadata is rejected
+              - missing command_id is rejected
+              - command/result metadata can be parsed without executing payload
+          - id: inbox_outbox_correlation_check
+            acceptance:
+              - matching command/result returns RESULT_READY
+              - mismatched command/result returns STALE_RESULT
+              - duplicate active files return CONFLICT
+          - id: stale_last_result_detection
+            acceptance:
+              - old last_result after new inbox command is not accepted
+              - stale result includes reason and NEXT
+          - id: remote_drift_preflight
+            acceptance:
+              - mismatched local head blocks execution
+              - mismatched origin/main blocks execution
+              - sync/regenerate command is allowed only when explicit
+          - id: remote_unreachable_classification
+            acceptance:
+              - failed remote operations are not treated as success
+              - no later mutation occurs after a remote preflight failure
+              - output says retry is safe
+          - id: roadmap_gate_before_ns_replacement
+            acceptance:
+              - roadmap names transfer-state hardening as first dependency
+              - ns replacement section references this gate
+              - no ns replacement slice starts before the gate is green
+        mvp_definition_of_done:
+          - exactly-one-command validation is tested
+          - inbox/outbox command-id correlation is tested
+          - stale last_result is tested
+          - duplicate active transfer file detection is tested
+          - remote-vs-local drift blocks mutable execution
+          - remote-unreachable state is represented distinctly
+          - post-merge-check, repo-status, and transfer status outputs can be consumed without prose parsing
+          - protected-diff-plan passes
+          - docs-audit passes
       covered_or_governed_action_families:
         repository_status:
           examples:
@@ -638,6 +742,11 @@ plans:
           status: removed_source
           central_target: docs/planning/PROJECT_DIRECTION.yaml
           retained_as: python-backed portable workflow control and GUI compatibility requirements
+      package_6_removed_sources:
+        - path: docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: transfer state-machine states, metadata, validation rules, implementation slices, and MVP gate
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -688,7 +797,6 @@ plans:
       - Unsafe transitions stop with durable diagnostics instead of producing false PASS states.
     source_files:
       - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
-      - docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md
       - docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
   - id: release-command-authority
     status: active

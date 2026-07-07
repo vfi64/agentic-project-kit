@@ -283,13 +283,6 @@ documents:
     review_policy: required
     superseded_by: docs/planning/project_direction.yaml
     summary: Historical rule-registry architecture note retained as context.
-  - path: docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md
-    class: historical archive
-    status: superseded
-    owner: maintainers
-    review_policy: required
-    superseded_by: docs/planning/project_direction.yaml
-    summary: Historical transfer-state-machine hardening plan retained as context.
   - path: docs/archive/planning/V040_DOCUMENTATION_FOLLOW_UP.md
     class: historical archive
     status: archived
