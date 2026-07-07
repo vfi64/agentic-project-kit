@@ -86,8 +86,6 @@ strategy:
       - docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md
       - docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
       - docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
-      - docs/planning/NS_RELEASE_SHORTCUTS.md
-      - docs/planning/NS_UP_PR_COMPLETION.md
   - id: machine-readable-governance
     status: active
     title: Machine-readable documentation, rule, and artifact governance
@@ -299,7 +297,6 @@ roadmap:
       - Legacy shell shortcut plans are either completed, superseded, or deleted in cleanup.
     source_files:
       - docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
-      - docs/planning/NS_RELEASE_SHORTCUTS.md
       - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
   - id: gui-gatekeeper-workbench
     phase: GUI
@@ -383,6 +380,7 @@ plans:
     source_files:
       - docs/DOC_REGISTRY_SCOPE.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+
   - id: planning-ideas-residual-cleanup
     status: planned
     title: Resolve remaining planning and idea residual documents
@@ -392,6 +390,68 @@ plans:
       - direction audit-drift has no unreviewed planning or idea residuals.
       - docs/ideas candidates are accepted, rejected, archived, or removed with reference-clean evidence.
       - Remaining docs/planning legacy files are retained only with clear source or archive status.
+      - Deleted planning documents have their durable information preserved in PROJECT_DIRECTION.yaml or KIT_AS_OS_ARCHITECTURE.md before removal.
+      - Deleted planning documents leave no live source_files, registry, coverage, or scope references behind.
+    preserved_information:
+      cleanup_rule: >-
+        Deletion is not the primary objective. The primary objective is
+        machine-readable centralization of durable planning knowledge. A
+        decentralized planning document may be removed only after its current
+        purpose, decision status, constraints, non-goals, review triggers, and
+        actionable follow-up have been represented in a central source.
+      package_1_removed_sources:
+        - path: docs/ideas/DETERMINISTIC_CELL_ORCHESTRATION.md
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: idea candidate with typed-cell, validation, repair, rendering, fit, bad-fit, ADR, and review-trigger metadata
+        - path: docs/ideas/DIDACTIC_GUIDANCE.md
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: idea candidate with advisory boundary, guidance questions, gate separation, and Pattern Advisor boundary
+        - path: docs/ideas/GOVERNED_WORKFLOW_PATTERNS.md
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: accepted design principles for event evidence, capability matrices, ADR policy, and state-model templates
+        - path: docs/ideas/LAYERED_CLI_USABILITY.md
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: candidate CLI usability model with daily, guided, maintainer, and debug layers
+        - path: docs/ideas/PATTERN_ADVISOR.md
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: candidate advisory pattern catalog concept with non-goals, MVP, lifecycle, implementation preferences, and ADR triggers
+      package_2a_removed_sources:
+        - path: docs/planning/NS_RELEASE_SHORTCUTS.md
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          original_status: active
+          original_decision_status: proposed
+          removal_reason: obsolete ns command planning; active release authority moved to agentic-kit commands
+          retained_information:
+            purpose: >-
+              Legacy note for automating release preparation, release gates, and
+              guarded publishing through old ./ns command paths.
+            current_decision: >-
+              The note is not active authority. Release and post-release work
+              must use tested agentic-kit release, transfer, handoff, and
+              post-merge commands.
+            migration_rule: >-
+              Before GUI implementation, any remaining release shortcut that
+              points primarily to ./ns must be replaced by an agentic-kit command
+              path or explicitly deprecated.
+            discarded_authority: >-
+              Placeholder TODO sections in the old document are not retained as
+              project knowledge.
+        - path: docs/planning/NS_UP_PR_COMPLETION.md
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          original_status: superseded
+          original_decision_status: superseded
+          removal_reason: obsolete ns PR-completion route; replaced by transfer command family
+          retained_information:
+            superseded_by: agentic-kit transfer pr-complete
+            removed_legacy_module: agentic_project_kit.ns_up_pr_completion
+            current_decision: >-
+              Active PR lifecycle work must use agentic-kit transfer
+              pr-create-complete, pr-complete, post-merge-complete,
+              post-merge-check, and related bounded wrappers.
+            prohibition: >-
+              The old ns up route is no longer a supported runtime path. Do not
+              reintroduce agentic_project_kit.ns_up_pr_completion; put missing
+              behavior into the transfer command family.
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -439,7 +499,6 @@ plans:
       - Legacy release shortcut notes are retired in the cleanup slice.
     source_files:
       - docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
-      - docs/planning/NS_RELEASE_SHORTCUTS.md
   - id: rule-registry-hardening
     status: active
     title: Preserve active rule identity, source validation, and refresh handshakes
@@ -468,7 +527,6 @@ plans:
     source_files:
       - docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
       - docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
-      - docs/planning/NS_UP_PR_COMPLETION.md
       - docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
   - id: gui-workbench-plan
     status: planned
@@ -951,7 +1009,6 @@ done:
     completion_exception: Historical classification says ns dev/go/up/upload targets were resolved in earlier slices.
     source_files:
       - docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
-      - docs/planning/NS_UP_PR_COMPLETION.md
   - id: transfer-github-action-coverage-phase0
     status: done
     title: Transfer GitHub action coverage phase 0
@@ -1007,6 +1064,7 @@ discarded:
     source_files:
       - docs/planning/PROJECT_DIRECTION.md
       - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+
   - id: raw-ns-as-core-workflow-control
     status: discarded
     title: Legacy ns adapter as core governed workflow control
@@ -1016,10 +1074,19 @@ discarded:
       action models; the adapter may remain only as a convenience adapter or
       explicit legacy route.
     discarded_at: "2026-07-05"
+    preserved_information:
+      removed_sources:
+        - path: docs/planning/NS_UP_PR_COMPLETION.md
+          status: removed_source
+        - path: docs/planning/NS_RELEASE_SHORTCUTS.md
+          status: removed_source
+      current_authority: >-
+        Active PR, merge, post-merge, release, and handoff lifecycle work belongs
+        to tested agentic-kit command families, especially transfer and release
+        wrappers. Legacy ns routes must not be restored as core workflow control.
     source_files:
-      - docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
-      - docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
-      - docs/planning/NS_UP_PR_COMPLETION.md
+      - docs/planning/PROJECT_DIRECTION.yaml
+
   - id: placeholder-release-shortcuts
     status: discarded
     title: Placeholder release shortcut plan as authority
@@ -1028,8 +1095,16 @@ discarded:
       authority; release command authority and DOI closeout plans carry the
       remaining release-governance direction.
     discarded_at: "2026-07-05"
+    preserved_information:
+      removed_sources:
+        - path: docs/planning/NS_RELEASE_SHORTCUTS.md
+          status: removed_source
+      current_authority: >-
+        Release preparation, publishing, DOI closeout, and post-release
+        verification must remain under explicit tested agentic-kit command
+        authority, not under obsolete ns shortcut notes.
     source_files:
-      - docs/planning/NS_RELEASE_SHORTCUTS.md
+      - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
   - id: long-chat-terminal-blocks-as-normal-workflow
     status: discarded

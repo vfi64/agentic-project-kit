@@ -309,20 +309,6 @@ documents:
     review_policy: required
     superseded_by: docs/planning/project_direction.yaml
     summary: Historical handoff-state planning note retained as context.
-  - path: docs/planning/NS_UP_PR_COMPLETION.md
-    class: historical archive
-    status: superseded
-    owner: maintainers
-    review_policy: required
-    superseded_by: docs/planning/project_direction.yaml
-    summary: Superseded ns PR completion note retained as historical context.
-  - path: docs/planning/NS_RELEASE_SHORTCUTS.md
-    class: historical archive
-    status: superseded
-    owner: maintainers
-    review_policy: required
-    superseded_by: docs/planning/project_direction.yaml
-    summary: Superseded ns release shortcuts retained as historical context.
   - path: docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
     class: historical archive
     status: superseded
