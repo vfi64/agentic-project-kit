@@ -156,7 +156,7 @@ Inspect these files first:
 - `docs/reference/agentic-kit-commands.json`
 - `README.md`
 - `docs/TEST_GATES.md`
-- `docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md`
+- `docs/planning/PROJECT_DIRECTION.yaml` (`portability-and-ns-closeout` preserved classification)
 - this file
 
 Record, in the PR body or slice notes, which route is authoritative and which routes are compatibility-only, unsupported, historical, or obsolete.
@@ -264,7 +264,7 @@ Likely current-doc candidates:
 
 - `README.md`
 - `docs/TEST_GATES.md`
-- `docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md`
+- `docs/planning/PROJECT_DIRECTION.yaml` (`portability-and-ns-closeout` preserved classification)
 - `docs/planning/WORKFLOW_REDUCTION_FOCUS.md`
 - this file, only if implementation discovers a different authoritative route.
 

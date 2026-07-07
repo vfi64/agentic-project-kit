@@ -325,13 +325,6 @@ documents:
     owner: maintainers
     review_policy: required
     summary: Human-readable orientation view pointing to PROJECT_DIRECTION.yaml; not an independent planning authority.
-  - path: docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
-    class: planning
-    status: active
-    owner: project
-    review_policy: required
-    summary: Classifies remaining ns-named and shell-dependent portability work after ns command migration closeout.
-    superseded_by: docs/planning/project_direction.yaml
   - path: docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
     class: planning
     status: active

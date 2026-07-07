@@ -84,7 +84,6 @@ strategy:
       - docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md
       - docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
       - docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md
-      - docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
       - docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
   - id: machine-readable-governance
     status: active
@@ -527,6 +526,11 @@ plans:
               patch/preflight checks cover script syntax, generated-file
               validity, YAML parsing, coverage-type safety, final-summary
               validation, and unsupported shortcut patterns.
+      package_3_removed_sources:
+        - path: docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: structured portability-and-ns-closeout classification matrix and slice plan
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -616,10 +620,155 @@ plans:
       - Remaining ns-named modules and helper routes are classified before migration.
       - Core tests, gates, GUI actions, and governance docs do not depend on the legacy ns adapter.
       - The legacy ns adapter remains only a human convenience adapter or explicit legacy path.
+      - No active shell runtime dependency remains in supported workflow paths.
+      - No active ./ns runtime route remains in supported workflow paths.
+      - Historical ns safety tests are either renamed or explicitly retained as regression coverage.
+    preserved_information:
+      removed_source:
+        path: docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
+        status: removed_source
+        central_target: docs/planning/PROJECT_DIRECTION.yaml
+      original_status: active
+      original_decision_status: proposed
+      purpose: >-
+        Classify remaining ns-named Python modules, shell scripts, and
+        shell-dependent helper routes after completed migration of ns dev,
+        ns go, ns up, and ns upload. The source was classification-only and
+        was not implementation evidence.
+      historical_baseline:
+        after_pr: 1408
+        head: d60a5ab1a23d6ce9a7a9d69dae1f77c248a066ea
+        status:
+          - main == origin/main
+          - worktree clean
+          - post-merge-check PASS/NOOP
+          - repo-status PASS
+          - docs-audit PASS
+      classification_matrix:
+        - item: tools/capture_workflow_output.py
+          role: Shell helper for workflow output capture
+          decision: port_or_remove_after_exact_caller_check
+          target_slice: 2
+        - item: tools/workflow_runner.py
+          role: Shell workflow cycle helper referenced by tools/next-step.py and subprocess/tool interactions
+          decision: port_to_python_or_agentic_kit_route
+          target_slice: 2
+        - item: tools/next-step.py
+          role: Python helper still calling shell workflow cycle
+          decision: adjust_to_python_route
+          target_slice: 2
+        - item: tools/NEXT_TRANSFER_TASK.py
+          role: Transfer task helper with potential shell/process assumptions
+          decision: audit_as_dependency_of_workflow_shell_helper_slice
+          target_slice: 2
+        - item: tools/screen_control_gate.py
+          role: Shell gate with terminal/output assumptions
+          decision: port_or_explicitly_mark_local_only
+          target_slice: 3
+        - item: src/agentic_project_kit/ns_slice_runner.py
+          role: Remaining ns-named Python runtime path
+          decision: rename_or_port_to_neutral_agentic_kit_command_or_isolate_as_legacy
+          target_slice: 4
+        - item: tests/test_ns_slice_runner.py
+          role: Test for ns_slice_runner behavior
+          decision: update_with_ns_slice_runner_migration
+          target_slice: 4
+        - item: agentic_project_kit.release_metadata_prep
+          role: Release metadata preparation in package code after legacy tool wrapper removal
+          decision: keep_package_route_no_compatibility_wrapper
+          target_slice: 5_complete
+        - item: tests/test_ns_interpreter_and_no_exec_guard.py
+          role: Safety guard against unsafe ns interpretation or exec behavior
+          decision: keep_as_safety_regression_or_rename_after_runtime_ns_removal
+          target_slice: 4_or_6
+        - item: tests/test_ns_evidence_guard_shortcut.py
+          role: Safety guard against unsafe ns evidence shortcuts
+          decision: keep_as_safety_regression_or_rename_after_runtime_ns_removal
+          target_slice: 4_or_6
+      slice_plan:
+        slice_2_workflow_shell_helpers:
+          scope:
+            - tools/capture_workflow_output.py
+            - tools/workflow_runner.py
+            - tools/next-step.py
+            - tools/NEXT_TRANSFER_TASK.py
+          goal:
+            - remove shell dependency from active workflow cycle path
+            - provide Python-backed or agentic-kit-backed route
+            - keep behavior tested
+            - do not add compatibility shell layer unless explicitly documented local-only
+          status: in_progress_in_feature_port_workflow_shell_helpers
+          intent: >-
+            Move active workflow progression away from tools/workflow_runner.py,
+            provide Python-backed output capture through
+            tools/capture_workflow_output.py, and keep shell files only as
+            legacy/local helpers until active references are eliminated.
+        slice_3_screen_control_gate:
+          scope:
+            - tools/screen_control_gate.py
+          goal:
+            - handle terminal, screen, and TTY assumptions separately
+            - port to Python or agentic-kit if part of supported workflow
+            - otherwise mark local-only developer helper or remove
+          status: in_progress_in_feature_screen_control_gate_portability
+          intent: >-
+            Provide a Python-backed replacement and avoid shell pipeline or tee
+            dependency in the supported gate runner.
+        slice_4_ns_slice_runner:
+          scope:
+            - src/agentic_project_kit/ns_slice_runner.py
+            - tests/test_ns_slice_runner.py
+            - affected ns entrypoint behavior
+          goal:
+            - remove or neutralize remaining runtime ns-named path
+            - migrate useful behavior to neutral module and first-class agentic-kit command
+            - keep no-exec and evidence safety guards
+          status: in_progress_in_feature_port_ns_slice_runner
+          intent: >-
+            Move active ns entrypoint behavior to neutral
+            agentic_project_kit.entrypoint_slice_runner and keep ns_slice_runner
+            only as temporary compatibility shim if historical imports require it.
+        slice_5_release_metadata_prep:
+          scope:
+            - agentic_project_kit.release_metadata_prep
+            - release prep callers and tests
+          goal:
+            - remove tools/ns_* script from release path
+            - keep logic in package module or release prep core
+            - keep release gates green
+          status: in_progress_in_feature_port_ns_release_metadata_prep
+          intent: >-
+            Keep release metadata preparation in neutral package module and keep
+            the old tool path removed rather than retaining a compatibility
+            wrapper.
+        slice_6_portability_closeout:
+          goal:
+            - no active tracked tools/*.sh runtime dependency
+            - no active ./ns runtime route
+            - no required ns_* runtime module names except deliberate historical tests or docs
+            - full gates green
+            - docs, status, and handoff updated
+          status: in_progress_in_feature_portability_closeout_remove_shell_scripts
+          intent: >-
+            Remove tracked shell helper scripts, require git ls-files
+            'tools/*.sh' to be empty, keep supported replacements in
+            Python-backed routes, and preserve historical safety checks without
+            requiring shell files.
+        slice_7_legacy_ns_entrypoints:
+          goal:
+            - remove legacy ./ns and ./ns-menu entrypoints
+            - replace legacy ns text-marker tests with agentic-kit command-surface and Python-core contract tests
+            - require git ls-files '*.sh' to be empty
+            - require ns and ns-menu to be absent from tracked files and worktree
+          status: in_progress_in_feature_remove_legacy_ns_entrypoints
+      non_goals:
+        - restore old ./ns command families
+        - start GUI or release work from this classification alone
+        - delete safety tests without replacement coverage
+        - replace protected docs broadly
+        - combine screen or TTY work with unrelated shell cleanup
     source_files:
-      - docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
-      - docs/planning/NS_COMMAND_MIGRATION_CLASSIFICATION.md
-      - docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
+      - docs/planning/PROJECT_DIRECTION.yaml
   - id: gui-workbench-plan
     status: planned
     title: Implement the GUI gatekeeper/workbench as a view over governed action specs
@@ -1187,13 +1336,15 @@ discarded:
           status: removed_source
         - path: docs/planning/NS_RELEASE_SHORTCUTS.md
           status: removed_source
+        - path: docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
+          status: removed_source
       current_authority: >-
-        Active PR, merge, post-merge, release, and handoff lifecycle work belongs
-        to tested agentic-kit command families, especially transfer and release
-        wrappers. Legacy ns routes must not be restored as core workflow control.
+        Active PR, merge, post-merge, release, portability, and handoff
+        lifecycle work belongs to tested agentic-kit command families and
+        Python-backed routes. Legacy ns routes must not be restored as core
+        workflow control.
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
-
   - id: placeholder-release-shortcuts
     status: discarded
     title: Placeholder release shortcut plan as authority
