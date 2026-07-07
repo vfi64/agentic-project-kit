@@ -19,7 +19,7 @@ No scope recommendation is encoded here; maintainers fill the proposed column af
 | docs/gui/ | 1 | 1 | 0 |  |
 | docs/handoff/ | 6 | 6 | 0 |  |
 | docs/patterns/ | 2 | 2 | 0 |  |
-| docs/planning/ | 28 | 28 | 0 |  |
+| docs/planning/ | 18 | 18 | 0 |  |
 | docs/reference/ | 2 | 2 | 0 |  |
 | docs/releases/ | 1 | 1 | 0 |  |
 | docs/reports/ | 64 | 0 | 64 |  |
