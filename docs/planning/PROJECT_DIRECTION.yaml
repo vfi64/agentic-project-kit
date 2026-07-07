@@ -22,7 +22,7 @@ schema_version: 1
 meta:
   owner: maintainers
   status: active
-  updated_after_pr: 1744
+  updated_after_pr: pending-pr-strict-scope-suite-adoption
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
@@ -367,14 +367,19 @@ plans:
     source_files:
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
   - id: strict-scope-suite-adoption
-    status: planned
+    status: done
     title: Decide whether strict documentation scope belongs in the standard gate suite
+    completed_by_pr: pending-pr-strict-scope-suite-adoption
     depends_on:
       - governance-doc-backfill
     acceptance:
       - Strict-scope adoption is considered only after governance backfill is complete.
       - The standard suite stays free of false positives for clean repositories.
       - Any adoption is documented and test-backed.
+    evidence:
+      - The standard gates audit suite now runs doc-registry check-unregistered --strict-scope.
+      - The strict-scope step is test-backed and fails the suite on scope violations.
+      - The current documentation registry scope has zero strict-scope violations.
     source_files:
       - docs/DOC_REGISTRY_SCOPE.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md

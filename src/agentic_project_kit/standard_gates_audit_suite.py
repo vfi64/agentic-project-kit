@@ -15,6 +15,7 @@ REQUIRED_STANDARD_GATE_COMMANDS: tuple[tuple[str, ...], ...] = (
     ("audit-patch-failure-discipline",),
     ("command-taxonomy-check",),
     ("direction", "validate"),
+    ("doc-registry", "check-unregistered", "--strict-scope"),
     ("project-direction", "--section", "all", "--format", "json"),
     ("audit-ns-legacy-references",),
     ("audit-absolute-path-portability",),

@@ -13,7 +13,9 @@ from agentic_project_kit.standard_gates_audit_suite import (
 
 REQUIRED_NAMES = {
     "audit-patch-failure-discipline",
+    "command-taxonomy-check",
     "direction",
+    "doc-registry",
     "audit-ns-legacy-references",
     "audit-absolute-path-portability",
     "audit-doc-currency",
@@ -24,10 +26,17 @@ REQUIRED_NAMES = {
 }
 
 
+STRICT_SCOPE_COMMAND = ("doc-registry", "check-unregistered", "--strict-scope")
+
+
 def test_standard_gates_audit_suite_contains_required_gates() -> None:
     command_names = {command[0] for command in REQUIRED_STANDARD_GATE_COMMANDS}
 
     assert REQUIRED_NAMES <= command_names
+
+
+def test_suite_contains_strict_scope_step() -> None:
+    assert STRICT_SCOPE_COMMAND in REQUIRED_STANDARD_GATE_COMMANDS
 
 
 def test_path_literal_audit_is_report_only_not_standard_gate() -> None:
@@ -66,13 +75,46 @@ def test_standard_gates_audit_suite_fails_when_required_gate_fails(tmp_path: Pat
 def test_standard_gates_audit_suite_blocks_invalid_project_direction(tmp_path: Path) -> None:
     def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
         if args[-2:] == ("direction", "validate"):
-            return 1, "PROJECT_DIRECTION_VALIDATE\nSTATUS=FAIL\nFINDING=duplicate-id|docs/planning/PROJECT_DIRECTION.yaml|duplicate id\n"
+            return (
+                1,
+                "PROJECT_DIRECTION_VALIDATE\n"
+                "STATUS=FAIL\n"
+                "FINDING=duplicate-id|docs/planning/PROJECT_DIRECTION.yaml|duplicate id\n",
+            )
         return 0, "PASS\n"
 
     result = evaluate_standard_gates_audit_suite(tmp_path, runner=runner)
 
     assert result.ok is False
     blocker = next(check for check in result.blockers if check.name == "direction validate")
+    assert blocker.detail == "STATUS=FAIL"
+
+
+def test_strict_scope_violation_fails_suite(tmp_path: Path) -> None:
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        if args[-3:] == STRICT_SCOPE_COMMAND:
+            return (
+                1,
+                "DOC_REGISTRY_UNREGISTERED\n"
+                "STATUS=FAIL\n"
+                "CANDIDATES=1\n"
+                "- docs/governance/MISSING.md\n"
+                "STRICT_SCOPE=True\n"
+                "EXEMPTED=0\n"
+                "SCOPE_VIOLATIONS=1\n"
+                "SCOPE-VIOLATION docs/governance/MISSING.md\n",
+            )
+        return 0, "PASS\n"
+
+    result = evaluate_standard_gates_audit_suite(tmp_path, runner=runner)
+
+    assert result.ok is False
+    blocker = next(
+        check
+        for check in result.blockers
+        if check.name == "doc-registry check-unregistered --strict-scope"
+    )
+    assert blocker.returncode == 1
     assert blocker.detail == "STATUS=FAIL"
 
 
