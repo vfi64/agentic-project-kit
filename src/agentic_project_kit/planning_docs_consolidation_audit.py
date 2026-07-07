@@ -78,7 +78,6 @@ LEGACY_REVIEW_DOCS = {
     "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
     "docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md",
     "docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md",
-    "docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md",
     "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
 }
 

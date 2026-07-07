@@ -45,7 +45,6 @@ strategy:
       - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
       - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
-      - docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
       - docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
   - id: kit-as-os
     status: active
@@ -303,7 +302,6 @@ roadmap:
       - docs/planning/PRE_GUI_HARDENING_TASKS.md
       - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
-      - docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
       - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
   - id: workflow-kernel-and-transfer-hardening
     phase: pre-GUI
@@ -797,6 +795,11 @@ plans:
             status: removed_source
           - path: docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
             status: removed_source
+      package_11_removed_sources:
+        - path: docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: post-merge lifecycle state model, invariants, command coverage, and retained acceptance criteria
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -832,7 +835,6 @@ plans:
       - docs/planning/PRE_GUI_HARDENING_TASKS.md
       - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
-      - docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
       - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
   - id: next-turn-workflow-kernel
     status: active
@@ -1324,6 +1326,105 @@ plans:
         - keep protected-diff-plan as the protected-diff-check successor
         - redo DOI metadata closeout only through guarded release/post-merge paths
         - continue Rule Registry Phase A only after the workflow kernel has the required command coverage
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+
+  - id: post-merge-lifecycle-state-model
+    status: active
+    title: Post-merge lifecycle state model and command authority
+    intent: >-
+      Preserve the former standalone post-merge lifecycle state model centrally
+      after K2 cleanup. The model is no longer a separate planning source; its
+      requirements are implemented or governed through transfer, PR, release,
+      and handoff validation commands.
+    preserved_information:
+      removed_source:
+        path: docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
+        status: removed_source
+        central_target: docs/planning/PROJECT_DIRECTION.yaml
+      original_status: active
+      original_decision_status: accepted
+      retained_model:
+        purpose: >-
+          Keep post-merge work as an explicit lifecycle instead of allowing
+          merged PRs, generated handoff state, release metadata, documentation
+          projections, or local main synchronization to drift silently.
+        lifecycle_principle: >-
+          A merge is not complete until local main, origin/main, post-merge
+          verification, generated handoff package state, documentation checks,
+          and next safe action agree.
+        important_states:
+          - PR_CREATED_OR_UPDATED
+          - PR_CHECKS_PENDING
+          - PR_CHECKS_FAILED
+          - READY_TO_MERGE
+          - MERGED_REMOTE
+          - LOCAL_MAIN_STALE
+          - LOCAL_MAIN_SYNCED
+          - POST_MERGE_CHECK_REQUIRED
+          - POST_MERGE_CHECK_FAILED
+          - POST_MERGE_COMPLETE
+          - HANDOFF_REFRESH_REQUIRED
+          - RELEASE_CLOSEOUT_REQUIRED
+          - BLOCKED
+        invariants:
+          - feature-branch gates and main/post-merge gates are distinct
+          - post-merge-check is a main/post-merge lifecycle check, not a feature-branch pre-PR gate
+          - mutable release, DOI, handoff, or status updates require explicit evidence and command authority
+          - stale generated handoff files must not be treated as current truth
+          - a final PASS summary must not hide earlier FAIL/BLOCK evidence
+        next_action_contract:
+          - every state reports a deterministic next action
+          - completed lifecycle reports no hidden follow-up mutation
+          - failed or blocked lifecycle reports diagnosis before further mutation
+      command_coverage:
+        - old_or_model_action: post-merge completion wrapper
+          retained_requirement: complete post-merge lifecycle after merge, including admin refresh recovery handling and explicit chat reply state
+          current_authority:
+            - agentic-kit transfer post-merge-complete
+            - src/agentic_project_kit/transfer_post_merge_lifecycle.py
+            - tests/test_transfer_post_merge_complete_command.py
+            - tests/test_transfer_post_merge_lifecycle.py
+          replacement_status: implemented
+        - old_or_model_action: post-merge verification gate
+          retained_requirement: verify local main/origin/main, cleanliness, generated state, and next action after merge
+          current_authority:
+            - agentic-kit transfer post-merge-check
+            - agentic-kit transfer repo-status
+            - validation_report.json
+            - handoff package validation
+          replacement_status: implemented_or_split_across_transfer_and_handoff_validation
+        - old_or_model_action: PR closeout consistency
+          retained_requirement: ensure PR/CI/merge state is complete before closeout claims
+          current_authority:
+            - agentic-kit pr closeout-check
+            - agentic-kit pr status
+            - agentic-kit pr wait-ci
+            - agentic-kit pr merge-if-green
+          replacement_status: implemented_in_pr_command_family
+        - old_or_model_action: release and DOI closeout consistency
+          retained_requirement: keep release metadata, DOI, status, and handoff closeout behind explicit lifecycle checks
+          current_authority:
+            - agentic-kit release-status
+            - agentic-kit transfer post-merge-check
+            - agentic-kit pr closeout-check
+          replacement_status: partially_replaced_by_split_release_pr_transfer_authority
+        - old_or_model_action: stale projection and handoff detection
+          retained_requirement: block stale generated projections and stale successor context after merge or release
+          current_authority:
+            - docs/reports/handoff-packages/latest/validation_report.json
+            - docs/reports/handoff-packages/latest/source_manifest.json
+            - docs/reports/handoff-packages/latest/execution_contract.json
+            - agentic-kit direction validate
+            - agentic-kit audit-doc-currency
+          replacement_status: implemented_or_guarded_by_handoff_direction_and_doc_currency_paths
+      retained_acceptance:
+        - post-merge lifecycle commands remain fail-closed
+        - post-merge status is machine-readable enough for wrapper/GUI use
+        - admin refresh recovery remains explicit and tested
+        - generated handoff package validation remains part of lifecycle truth
+        - release closeout remains separate from ordinary post-merge completion
+        - docs and direction gates remain part of K2 closeout before PR
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
 

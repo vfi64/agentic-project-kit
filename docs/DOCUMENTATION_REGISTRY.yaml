@@ -515,12 +515,6 @@ documents:
     owner: maintainers
     notes: Read-only implementation-surface inventory for the GUI deterministic gatekeeper migration.
     status: active
-  - path: docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
-    class: planning
-    owner: maintainers
-    notes: Typed post-merge lifecycle state model for completing PR merges without REFRESH_REQUIRED loops.
-    superseded_by: docs/planning/project_direction.yaml
-    status: superseded
   - path: docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
     class: planning
     owner: maintainers

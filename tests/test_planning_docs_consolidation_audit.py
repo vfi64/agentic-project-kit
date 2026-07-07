@@ -115,15 +115,16 @@ def test_planning_docs_audit_classifies_known_historical_plan(tmp_path: Path) ->
     assert result.records[0].classification == "historical_planning_doc"
 
 
-def test_planning_docs_audit_classifies_known_legacy_review_doc(tmp_path: Path) -> None:
-    doc = tmp_path / "docs" / "planning" / "POST_MERGE_LIFECYCLE_STATE_MODEL.md"
+def test_planning_docs_audit_classifies_ns_migration_doc_as_active_review_candidate(tmp_path: Path) -> None:
+    doc = tmp_path / "docs" / "planning" / "NS_COMMAND_MIGRATION_CLASSIFICATION.md"
     doc.parent.mkdir(parents=True)
     doc.write_text("# Model\nnext handoff work\n", encoding="utf-8")
 
     result = audit_planning_docs_consolidation(tmp_path)
 
-    assert result.ok is True
-    assert result.records[0].classification == "legacy_review_candidate"
+    assert result.ok is False
+    assert result.records[0].classification == "active_but_needs_review"
+    assert result.records[0].reason == "active markers found but no current release anchor"
 
 def test_planning_docs_audit_classifies_gui_gatekeeper_as_historical_plan(tmp_path: Path) -> None:
     doc = tmp_path / "docs" / "planning" / "GUI_DETERMINISTIC_GATEKEEPER_PLAN.md"
