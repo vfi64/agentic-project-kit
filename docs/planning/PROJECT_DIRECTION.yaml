@@ -92,6 +92,22 @@ strategy:
         - Terminal workflow must not diverge from the future GUI cockpit action model.
         - New actions should be documented as future GUI cockpit candidates rather than hidden shell-only behavior.
         - Multi-step local actions should expose explicit PASS/FAIL style result markers.
+      command_coverage:
+        - legacy_or_old_form: long chat-generated shell block
+          retained_requirement: expose bounded, copy-safe, evidence-producing workflow actions
+          current_authority:
+            - agentic-kit transfer continue
+            - agentic-kit transfer run-and-log
+            - agentic-kit transfer workflow-next
+            - agentic-kit docs removed-source-audit
+          replacement_status: partially_replaced_by_bounded_agentic_kit_commands
+        - legacy_or_old_form: ./ns local workflow controller
+          retained_requirement: avoid divergence between terminal workflow and future GUI cockpit action model
+          current_authority:
+            - agentic-kit command-taxonomy-check
+            - agentic-kit gui-readiness-gate
+            - future GUI cockpit buttons backed by agentic-kit commands
+          replacement_status: superseded_by_agentic_kit_command_contracts_and_future_gui
       migration_decision: >-
         The old proposal to make ./ns the primary local workflow controller is
         superseded by Python-backed agentic-kit command families and the planned
@@ -758,6 +774,29 @@ plans:
           status: removed_source
           central_target: docs/planning/PROJECT_DIRECTION.yaml
           retained_as: standard-error backlog, legacy ns command coverage map, hard rules, guard acceptance, and sequencing
+      retrofit_command_coverage_review:
+        status: done
+        reason: >-
+          Earlier K2 centralizations were rechecked for old command ideas and
+          legacy ./ns forms after package 9 showed that some requirements are
+          already implemented by agentic-kit commands.
+        rule: >-
+          Future centralizations must compare old command names and legacy
+          workflow forms against the current agentic-kit command surface before
+          preserving them as future work.
+        checked_removed_sources:
+          - path: docs/planning/NS_RELEASE_SHORTCUTS.md
+            status: removed_source
+          - path: docs/planning/NS_UP_PR_COMPLETION.md
+            status: removed_source
+          - path: docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
+            status: removed_source
+          - path: docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
+            status: removed_source
+          - path: docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md
+            status: removed_source
+          - path: docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
+            status: removed_source
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -971,6 +1010,31 @@ plans:
           role: Safety guard against unsafe ns evidence shortcuts
           decision: keep_as_safety_regression_or_rename_after_runtime_ns_removal
           target_slice: 4_or_6
+      command_coverage:
+        - legacy_or_old_form: remaining ./ns runtime route
+          retained_requirement: preserve useful behavior only behind neutral agentic-kit commands or explicitly marked compatibility shims
+          current_authority:
+            - agentic-kit transfer continue
+            - agentic-kit transfer workflow-next
+            - agentic-kit transfer repo-status
+            - agentic-kit transfer pr-status
+            - agentic-kit pr status
+          replacement_status: partially_replaced_by_transfer_pr_and_workflow_next_commands
+        - legacy_or_old_form: tools/workflow_runner.py shell workflow helper
+          retained_requirement: provide deterministic next-step/workflow progression without shell-only assumptions
+          current_authority:
+            - agentic-kit transfer continue
+            - agentic-kit transfer workflow-next
+            - agentic-kit transfer command-stack-begin
+            - agentic-kit transfer command-stack-end
+          replacement_status: partially_replaced_or_under_portability_closeout
+        - legacy_or_old_form: tracked tools/*.sh workflow dependency
+          retained_requirement: no active shell runtime dependency in supported workflow paths
+          current_authority:
+            - Python-backed agentic-kit CLI command families
+            - command-taxonomy-check
+            - standard-gates-audit-suite
+          replacement_status: target_state_no_active_shell_runtime_dependency
       slice_plan:
         slice_2_workflow_shell_helpers:
           scope:
@@ -1738,6 +1802,26 @@ done:
         - make local workflow state recoverable through repository-backed artifacts
         - treat GUI and transfer-file workflows as future carriers for the same bounded command contracts
         - review before further GUI expansion
+      command_coverage:
+        - legacy_or_old_form: long POSIX-like chat shell block
+          retained_requirement: communicate through portable, repo-backed, bounded command carriers
+          current_authority:
+            - agentic-kit transfer continue
+            - agentic-kit transfer remote-next
+            - agentic-kit transfer run-and-log
+            - agentic-kit transfer repo-status
+            - agentic-kit transfer normalize-files
+          replacement_status: partially_replaced_by_transfer_file_and_bounded_command_carriers
+        - legacy_or_old_form: prompt-only handoff or drift assurance
+          retained_requirement: preserve summary, drift, validation, and handoff state in repo-backed/generated artifacts
+          current_authority:
+            - validation_report.json
+            - source_manifest.json
+            - execution_contract.json
+            - NEXT_CHAT_BOOTSTRAP.md
+            - agentic-kit direction validate
+            - agentic-kit audit-doc-currency
+          replacement_status: replaced_by_handoff_package_and_direction_validation_paths
       retained_acceptance:
         - plan and roadmap name portable LLM communication hardening as a priority
         - workflow avoids depending on unavailable shell tools as canonical behavior
@@ -1843,9 +1927,9 @@ discarded:
     title: Legacy ns adapter as core governed workflow control
     reason: >-
       Making the legacy ns adapter the primary governed workflow controller is
-      superseded by Python-backed agentic-kit workflow, transfer, and future GUI
-      action models; the adapter may remain only as a convenience adapter or
-      explicit legacy route.
+      superseded by Python-backed agentic-kit workflow, transfer, PR, release,
+      and future GUI action models; the adapter may remain only as a convenience
+      adapter or explicit legacy route.
     discarded_at: "2026-07-05"
     preserved_information:
       removed_sources:
@@ -1853,8 +1937,30 @@ discarded:
           status: removed_source
         - path: docs/planning/NS_RELEASE_SHORTCUTS.md
           status: removed_source
-        - path: docs/planning/REMAINING_PORTABILITY_CLASSIFICATION.md
-          status: removed_source
+      command_coverage:
+        - legacy_or_old_form: ./ns up PR-completion route
+          retained_requirement: create or complete PRs through a guarded branch/head/CI/post-merge lifecycle
+          current_authority:
+            - agentic-kit transfer pr-create-complete
+            - agentic-kit transfer pr-complete
+            - agentic-kit transfer post-merge-complete
+            - agentic-kit transfer post-merge-check
+            - agentic-kit pr merge-if-green
+          replacement_status: replaced_by_transfer_and_pr_command_families
+        - legacy_or_old_form: ./ns release shortcut route
+          retained_requirement: prepare release metadata, publish/release only through explicit guarded workflow, and verify post-release status
+          current_authority:
+            - agentic-kit release-status
+            - agentic-kit transfer post-merge-check
+            - agentic-kit pr closeout-check
+            - agentic-kit release-notes-generate
+          replacement_status: replaced_or_split_across_release_transfer_and_pr_closeout_commands
+        - legacy_or_old_form: ./ns protected diff shortcut
+          retained_requirement: block unsafe protected-file diffs and broad rewrites before closeout
+          current_authority:
+            - agentic-kit transfer protected-diff-plan
+            - agentic-kit patch-scope-preflight
+          replacement_status: replaced
       current_authority: >-
         Active PR, merge, post-merge, release, portability, and handoff
         lifecycle work belongs to tested agentic-kit command families and
