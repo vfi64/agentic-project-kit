@@ -96,7 +96,6 @@ strategy:
       orientation.
     source_files:
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
-      - docs/planning/PERSISTENT_HANDOFF_STATE.md
       - docs/planning/RULE_REGISTRY_ARCHITECTURE.md
       - docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
       - docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
@@ -265,8 +264,6 @@ roadmap:
       - docs/planning/PRE_GUI_HARDENING_TASKS.md
       - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
-      - docs/planning/IDEMPOTENT_FINALIZATION_GUARD.md
-      - docs/planning/PATCH_ARTIFACT_PREFLIGHT_SLICE.md
       - docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
       - docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
       - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
@@ -452,6 +449,84 @@ plans:
               The old ns up route is no longer a supported runtime path. Do not
               reintroduce agentic_project_kit.ns_up_pr_completion; put missing
               behavior into the transfer command family.
+      package_2b_removed_sources:
+        - path: docs/planning/PERSISTENT_HANDOFF_STATE.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          implementation_status: largely_absorbed
+          retained_information:
+            purpose: >-
+              Repository-backed handoff state prevents future chats, agents, and
+              cockpit views from reconstructing project state from conversation
+              memory.
+            current_form: >-
+              The original read-only handoff-state idea has been absorbed into
+              persistent handoff state, successor-package projections, generated
+              bootstrap prompts, validation reports, source manifests, and
+              execution contracts.
+            retained_requirements:
+              - future chats must not reconstruct project state from chat memory
+              - active, superseded, and historical rule lifecycle states stay distinct
+              - generated prompts must not include superseded or historical rules as binding instructions
+              - handoff checks reject missing critical fields, duplicate active rule ids, and contradictory first instructions
+              - GUI mutation controls must wait for stable state and parameterized action objects
+        - path: docs/planning/IDEMPOTENT_FINALIZATION_GUARD.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          implementation_status: partially_implemented_hardening_requirement
+          retained_information:
+            goal: >-
+              Remove recurring non-semantic FAIL states from finalization,
+              documentation, and governed workflow slices.
+            recurring_failure_classes:
+              - finalization branch already exists
+              - target documentation marker already exists
+              - no staged changes after an idempotent patch
+              - pull request creation attempted with no commits between base and head
+              - direct commit to main during documentation-only state updates
+              - fragile quote-heavy patch scripts failing before intended patch
+              - new documents missing required lifecycle headers
+              - wrapper commit paths failing on already staged deletions or missing pathspecs
+            required_behavior:
+              - existing target marker on main reports PASS without creating a branch
+              - existing branch containing target commit is selected deterministically
+              - no diff after patching is PASS only when the target marker exists
+              - never create a PR when head and base have no commit difference
+              - never commit directly to main for feature or finalization slices
+              - new Markdown documents include required lifecycle/status headers immediately
+              - patch generation uses shell-simple file writing or stable line-based scripts instead of quote-fragile inline Python
+              - delete-heavy packages are handled by wrappers without forcing native git commit exceptions
+            central_followup: >-
+              This remains a workflow-kernel hardening requirement until the
+              wrapper lifecycle handles idempotent finalization, staged deletes,
+              no-op diffs, and already-existing branch/marker states without
+              false BLOCK/FAIL results.
+        - path: docs/planning/PATCH_ARTIFACT_PREFLIGHT_SLICE.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          implementation_status: partially_implemented_preflight_requirement
+          retained_information:
+            purpose: >-
+              Stop complex shell-generated patch blocks from damaging Python,
+              YAML, Markdown, coverage files, or terminal result contracts.
+            principle: Prefer deterministic preflight over fast patching.
+            required_checks:
+              - patch scripts pass Python syntax checks before execution
+              - generated or changed Python files pass py_compile before full gates
+              - governance YAML files parse before and after mutation
+              - documentation coverage terms remain strings
+              - terminal logs satisfy the mandatory final SUMMARY contract
+              - GitHub CLI JSON fields are not guessed; supported fields such as state, mergedAt, mergeCommit, and url are used
+              - no inner FAIL is relabeled as OVERALL RESULT PASS
+            non_goals:
+              - no GUI work from this requirement alone
+              - no release work from this requirement alone
+              - no broad workflow rewrite from this requirement alone
+            central_followup: >-
+              This remains a pre-GUI hardening requirement until deterministic
+              patch/preflight checks cover script syntax, generated-file
+              validity, YAML parsing, coverage-type safety, final-summary
+              validation, and unsupported shortcut patterns.
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -464,12 +539,29 @@ plans:
     acceptance:
       - Command safety, post-merge lifecycle, failure-mode review, patch preflight, and rule refresh gaps are represented by executable checks or explicit remaining backlog.
       - Superseded workflow-reduction prose no longer acts as active authority.
+    centralized_preflight_requirements:
+      - source:
+          path: docs/planning/PATCH_ARTIFACT_PREFLIGHT_SLICE.md
+          status: removed_source
+        status: partially_implemented_requirement
+        summary: >-
+          Preserve deterministic patch/preflight checks for script syntax,
+          generated Python validity, YAML parse safety, coverage term types,
+          final-summary contracts, GitHub CLI field discipline, and no
+          FAIL-as-PASS relabeling.
+      - source:
+          path: docs/planning/IDEMPOTENT_FINALIZATION_GUARD.md
+          status: removed_source
+        status: partially_implemented_requirement
+        summary: >-
+          Preserve idempotent finalization requirements for existing markers,
+          already-existing branches, no-op diffs, PRs with no commit
+          difference, main-mutation refusal, lifecycle headers, quote-safe
+          patching, and delete-heavy wrapper behavior.
     source_files:
       - docs/planning/PRE_GUI_HARDENING_TASKS.md
       - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
-      - docs/planning/IDEMPOTENT_FINALIZATION_GUARD.md
-      - docs/planning/PATCH_ARTIFACT_PREFLIGHT_SLICE.md
       - docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md
       - docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md
       - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
@@ -999,8 +1091,23 @@ done:
     completed_by_pr: null
     merge_commit: null
     completion_exception: Implemented as persistent handoff state and successor-package projections before the current planning cleanup.
+    preserved_information:
+      original_document:
+        path: docs/planning/PERSISTENT_HANDOFF_STATE.md
+        status: removed_source
+      original_decision: planned read-only handoff-state MVP
+      current_form: >-
+        Persistent handoff state is now represented by repository-backed
+        handoff state, successor package projections, validation reports,
+        execution contracts, source manifests, and generated bootstrap prompts.
+      retained_requirements:
+        - future chats must not reconstruct current project state from conversation memory
+        - active, superseded, and historical rule lifecycle states must stay distinct
+        - generated prompts must not include superseded or historical rules as binding instructions
+        - handoff checks must reject missing critical fields, duplicate active rule ids, and contradictory first instructions
+        - GUI mutation controls must wait for stable state and parameterized action objects
     source_files:
-      - docs/planning/PERSISTENT_HANDOFF_STATE.md
+      - docs/planning/PROJECT_DIRECTION.yaml
   - id: ns-command-migration-core
     status: done
     title: Core ns command migration classification and resolved targets

@@ -247,12 +247,6 @@ documents:
     owner: maintainers
     review_policy: required
     summary: Review-required historical standard-error hardening plan.
-  - path: docs/planning/PATCH_ARTIFACT_PREFLIGHT_SLICE.md
-    class: planning
-    status: review_required
-    owner: maintainers
-    review_policy: required
-    summary: Review-required implementation-slice note after patch preflight work.
   - path: docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
     class: planning
     status: review_required
@@ -267,12 +261,6 @@ documents:
     archived_from: docs/planning/NEXT_TURN_A0_STANDARD_ERROR_ADDITIONS.md
     superseded_by: docs/planning/project_direction.yaml
     summary: Archived next-turn planning note; current direction is governed by project_direction.yaml.
-  - path: docs/planning/IDEMPOTENT_FINALIZATION_GUARD.md
-    class: planning
-    status: review_required
-    owner: maintainers
-    review_policy: required
-    summary: Review-required planning note for idempotent finalization behavior.
   - path: docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md
     class: historical archive
     status: superseded
@@ -302,13 +290,6 @@ documents:
     review_policy: required
     superseded_by: docs/planning/project_direction.yaml
     summary: Historical transfer-state-machine hardening plan retained as context.
-  - path: docs/planning/PERSISTENT_HANDOFF_STATE.md
-    class: historical archive
-    status: superseded
-    owner: maintainers
-    review_policy: required
-    superseded_by: docs/planning/project_direction.yaml
-    summary: Historical handoff-state planning note retained as context.
   - path: docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
     class: historical archive
     status: superseded
