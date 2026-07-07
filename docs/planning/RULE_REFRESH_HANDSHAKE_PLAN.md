@@ -158,7 +158,7 @@ Acceptance:
 - identify actions that are safe enough for GUI dispatch;
 - add deterministic test anchors for the critical action names.
 
-Phase 0 artifact: `docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md`.
+Phase 0 artifact: `docs/planning/PROJECT_DIRECTION.yaml` (`workflow-kernel-and-transfer-hardening` preserved transfer GitHub action coverage).
 
 Rule-source validator JSON contract: `docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md`.
 

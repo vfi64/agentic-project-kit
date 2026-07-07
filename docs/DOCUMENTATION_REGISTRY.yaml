@@ -393,11 +393,6 @@ documents:
     owner: maintainers
     notes: Stable JSON contract for the read-only canonical rule source validator consumed by rule-refresh, transfer-state, and GUI gates.
     status: active
-  - path: docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
-    class: planning
-    owner: maintainers
-    notes: Phase 0 coverage matrix for transfer GitHub actions needed before hardened rule-refresh handshake and GUI write-action expansion.
-    status: active
   - path: docs/testing/TRANSFER_TEST_PLAN.md
     class: operational/automation
     owner: maintainers

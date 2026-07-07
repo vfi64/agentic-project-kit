@@ -98,7 +98,6 @@ strategy:
       - docs/planning/RULE_REGISTRY_ARCHITECTURE.md
       - docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
       - docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
-      - docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
 
 roadmap:
   - id: p1-planning-consolidation
@@ -276,11 +275,82 @@ roadmap:
       - Work-order execution records command identity, branch, head, evidence, and next safe action.
       - Remote transfer paths fail closed on stale, mismatched, or unreachable state.
       - Protected diff, command reference, and evidence publication remain wrapper-driven.
+      - Transfer GitHub action coverage remains explicit for read, create/update, branch, PR, and workflow-run operations.
+      - Any future GitHub connector action is classified before being treated as supported workflow authority.
+    preserved_information:
+      removed_source:
+        path: docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
+        status: removed_source
+        central_target: docs/planning/PROJECT_DIRECTION.yaml
+      original_status: active
+      original_decision_status: proposed
+      purpose: >-
+        Preserve the transfer GitHub action coverage matrix without keeping a
+        separate planning document. The source classified which GitHub actions
+        were covered by deterministic transfer wrappers, which were intentionally
+        unsupported, and which required future implementation before GUI or
+        release workflows could depend on them.
+      coverage_principle: >-
+        The GUI and LLM workflow must not call raw GitHub APIs as project
+        authority. Supported GitHub operations need explicit agentic-kit command
+        wrappers, safety classification, evidence output, and tests.
+      covered_or_governed_action_families:
+        repository_status:
+          examples:
+            - get repository metadata
+            - compare local and remote branch/head status
+            - inspect clean/dirty worktree before mutation
+          authority: agentic-kit transfer repo-status and related post-merge checks
+          status: covered_by_transfer_wrappers
+        branch_operations:
+          examples:
+            - create feature branch from fresh main
+            - push current branch
+            - ensure remote head before PR creation
+          authority: agentic-kit transfer remote-work-start, push-current, pr-create-complete
+          status: covered_or_wrapper_required_before_mutation
+        pull_request_lifecycle:
+          examples:
+            - create PR
+            - complete PR
+            - post-merge completion
+            - post-merge check
+          authority: agentic-kit transfer pr-create-complete, pr-complete, post-merge-complete, post-merge-check
+          status: covered_by_transfer_wrappers
+        file_transfer_carrier:
+          examples:
+            - transfer inbox current.yaml
+            - transfer outbox last_result
+            - gui-transfer-tasks ref
+          authority: file-transfer protocol and transfer commands
+          status: covered_with_mode_dependent_visibility
+        workflow_and_ci_observation:
+          examples:
+            - observe run status
+            - fetch concise evidence
+            - avoid dumping long logs into chat
+          authority: wrapper evidence logs and bounded summaries
+          status: supported_as_read_or_evidence_path_only
+        release_and_doi_operations:
+          examples:
+            - prepare release metadata
+            - publish release
+            - DOI closeout
+          authority: release command family and explicit maintainer-gated workflows
+          status: not_raw_github_action_authority
+      unsupported_or_guarded_patterns:
+        - raw PR creation without branch/head/dirty-state checks
+        - raw merge or release publication without post-merge or release evidence
+        - direct GitHub file mutations as a substitute for local protected diff workflow
+        - long workflow-log dumps into chat
+        - connector or GUI bypass of command reference, rule acknowledgement, or protected-diff-plan
+      future_rule: >-
+        Before a GUI button, workflow kernel step, release helper, or transfer
+        command depends on a GitHub action, the action must have a documented
+        wrapper path, safety class, failure behavior, evidence output, and
+        regression coverage.
     source_files:
-      - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
-      - docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md
-      - docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
-      - docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
+      - docs/planning/PROJECT_DIRECTION.yaml
   - id: release-and-doi-governance
     phase: pre-GUI
     status: planned
@@ -531,6 +601,11 @@ plans:
           status: removed_source
           central_target: docs/planning/PROJECT_DIRECTION.yaml
           retained_as: structured portability-and-ns-closeout classification matrix and slice plan
+      package_4_removed_sources:
+        - path: docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: transfer GitHub action coverage principle and governed action-family matrix
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -1271,8 +1346,14 @@ done:
     completed_by_pr: null
     merge_commit: null
     completion_exception: Phase-0 coverage work is retained as historical evidence for wrapper-first transfer actions.
+    preserved_information:
+      removed_source:
+        path: docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
+        status: removed_source
+      current_location: docs/planning/PROJECT_DIRECTION.yaml
+      retained_as: workflow-kernel-and-transfer-hardening coverage matrix
     source_files:
-      - docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
+      - docs/planning/PROJECT_DIRECTION.yaml
   - id: workflow-reduction-closeout
     status: done
     title: Workflow reduction planning closeout
