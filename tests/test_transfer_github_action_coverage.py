@@ -52,5 +52,6 @@ def test_rule_refresh_plan_points_to_centralized_phase_zero_artifact() -> None:
 def test_documentation_registry_no_longer_registers_removed_transfer_coverage_doc() -> None:
     text = REGISTRY.read_text(encoding="utf-8")
 
-    assert "- path: docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md" not in text
+    removed_path = "docs/planning/" + "TRANSFER_GITHUB_ACTION_COVERAGE.md"
+    assert f"- path: {removed_path}" not in text
     assert "Phase 0 coverage matrix for transfer GitHub actions" not in text

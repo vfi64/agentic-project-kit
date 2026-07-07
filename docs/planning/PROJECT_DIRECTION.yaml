@@ -857,6 +857,27 @@ plans:
     source_files:
       - docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
       - docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
+  - id: docs-centralize-and-remove-command
+    status: planned
+    title: Build governed docs centralize-and-remove command before K3
+    target_phase: before-K3
+    depends_on:
+      - planning-ideas-residual-cleanup
+    intent: >-
+      Build the larger governed helper `agentic-kit docs centralize-and-remove
+      <file>` after K2 cleanup and before K3, so future documentation
+      consolidation can centralize content, remove the old source, update
+      registry metadata, rewrite live references, and run removed-source audits
+      through one tested workflow instead of repeated ad-hoc patch blocks.
+    acceptance:
+      - The command never deletes a source unless a central target records the preserved information.
+      - The command updates or fails on registry, coverage, scope, and live-reference state.
+      - Historical docs/reports references remain allowed.
+      - Tests cover markdown, YAML, Python/test references, deleted path handling, and failure modes.
+      - The command remains separate from this K2 guard-only removed-source-audit.
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+
 ideas:
   - id: project-direction-gui-panel
     status: accepted
