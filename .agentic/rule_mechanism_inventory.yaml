@@ -309,9 +309,9 @@ mechanisms:
     required_terms:
     - transfer-wrapper-command-layer
     - transfer-wrapper-command-layer-registry-current
-  - path: docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
+  - path: docs/planning/PROJECT_DIRECTION.yaml
     required_terms:
-    - GUI Implications
+    - transfer-github-action-coverage
     - transfer
     - GitHub
   protected_rule_intent: Preserve the generated command reference and transfer-wrapper

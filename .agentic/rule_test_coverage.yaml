@@ -474,6 +474,6 @@ coverage:
     - kind: test
       path: tests/test_transfer_github_action_coverage.py
     - kind: source
-      path: docs/planning/TRANSFER_GITHUB_ACTION_COVERAGE.md
+      path: docs/planning/PROJECT_DIRECTION.yaml
     statement: transfer and GitHub workflow actions remain visible to the coverage
       audit before GUI dispatch expands
