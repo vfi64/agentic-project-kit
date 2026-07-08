@@ -1,7 +1,7 @@
 from pathlib import Path
 
 DIRECTION = Path("docs/planning/PROJECT_DIRECTION.yaml")
-RULE_PLAN = Path("docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md")
+RULE_PLAN = Path("docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md")
 REGISTRY = Path("docs/DOCUMENTATION_REGISTRY.yaml")
 
 CRITICAL_TRANSFER_ACTIONS = (

@@ -8,7 +8,7 @@ from agentic_project_kit.cli import app
 
 DOC = "docs/governance/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md"
 REGISTRY = "docs/DOCUMENTATION_REGISTRY.yaml"
-RULE_PLAN = "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md"
+RULE_PLAN = "docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md"
 
 
 def test_rule_source_validator_json_contract_documents_stable_fields() -> None:
@@ -58,8 +58,8 @@ def test_documentation_registry_contains_rule_source_validator_json_contract() -
     assert "Stable JSON contract for the read-only canonical rule source validator" in text
 
 
-def test_rule_refresh_plan_links_rule_source_validator_json_contract() -> None:
+def test_rule_refresh_contract_preserves_single_source_model() -> None:
     text = open(RULE_PLAN, encoding="utf-8").read()
 
-    assert "RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md" in text
-    assert "Rule-source validator JSON contract" in text
+    assert "Canonical Rule Source Contract" in text
+    assert "single-source model" in text or "only canonical rule source of truth" in text

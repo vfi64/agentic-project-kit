@@ -86,6 +86,6 @@ The GUI must show the blocking reason and must not expose write actions that dep
 
 ## Relationship To Canonical Rule Source Contract
 
-This contract supports the single-source model from `docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md`.
+This contract supports the single-source model from `docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md`.
 
 The validator checks canonical sources. It does not create canonical state. Snapshots and Markdown projections remain derived artifacts.

@@ -337,12 +337,13 @@ documents:
     owner: maintainers
     notes: Implementation contract for repo-backed failure-mode review automation before slices and after merges.
     status: active
-  - path: docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
-    class: planning
-    owner: maintainers
-    notes: Hardened plan for machine-checkable local-to-LLM and LLM-to-local rule-refresh handshake state before GUI expansion.
-    superseded_by: docs/planning/project_direction.yaml
+  - path: docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md
+    class: historical archive
     status: superseded
+    owner: maintainers
+    archived_from: docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
+    superseded_by: docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md
+    notes: Historical rule-refresh handshake plan; normative handshake rules are now in RULE_REFRESH_HANDSHAKE_CONTRACT.md and remaining actionable work is tracked in PROJECT_DIRECTION.yaml.
   - path: docs/governance/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
     class: governance/system
     status: active
@@ -588,3 +589,8 @@ documents:
     status: active
     owner: maintainers
     notes: Normative command-safety policy for deterministic results, evidence, idempotence, GUI gating, and command reclassification.
+  - path: docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md
+    class: governance/system
+    status: active
+    owner: maintainers
+    notes: Normative rule-refresh handshake contract for canonical rule sources, deterministic transfer outbox context, LLM acknowledgement, fail-closed rule freshness, and GUI gate downstream behavior.

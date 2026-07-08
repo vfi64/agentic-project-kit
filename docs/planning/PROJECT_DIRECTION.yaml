@@ -45,7 +45,7 @@ strategy:
       - docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
       - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
-      - docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
+      - docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md
   - id: kit-as-os
     status: active
     title: Kit as OS architecture direction
@@ -866,7 +866,7 @@ plans:
       - Unsafe transitions stop with durable diagnostics instead of producing false PASS states.
     source_files:
       - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
-      - docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
+      - docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md
   - id: release-command-authority
     status: active
     title: Keep release preparation, publishing, and DOI closeout under explicit command authority
@@ -954,7 +954,7 @@ plans:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/archive/RULE_REGISTRY_IMPROVEMENT_PLAN.md
       - docs/governance/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
-      - docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
+      - docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md
   - id: portability-and-ns-closeout
     status: planned
     title: Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands

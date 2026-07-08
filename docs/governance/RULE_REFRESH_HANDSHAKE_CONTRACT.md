@@ -1,16 +1,30 @@
-# Rule Refresh Handshake Plan
+# Rule Refresh Handshake Contract
 
-Status-date: 2026-06-01
-Status: active
-Decision status: accepted
-Review policy: Review before Phase 0 closeout, before adding rule-snapshot schema implementation, before adding the deterministic transfer outbox header builder, and before expanding GUI write actions.
+
+
+Document class: governance/system
+
+Status-date: 2026-07-08
+
+Split-from: docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
+
+Archived-source: docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md
+
 Project: agentic-project-kit
+
+
+
+This governance contract preserves the normative rule-refresh handshake rules extracted from the historical plan. Historical implementation phases remain archived in `docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md`.
+
+
 
 ## Purpose
 
 This plan defines the hardened rule-refresh handshake between the local repository, GitHub-backed transfer artifacts, and the LLM.
 
 The goal is to reduce chat drift, stale-rule execution, connector-blocked orchestration, and instruction loss by moving rule freshness into a machine-checkable workflow state instead of relying on chat memory or informal reminders.
+
+
 
 ## Problem
 
@@ -21,6 +35,8 @@ That is necessary but not sufficient.
 The current mechanism is still trigger-based: the assistant is instructed to read generated files after user replies such as `d2` or `d3`. This improves reproducibility, but it does not yet provide a fail-closed handshake proving that the LLM has consumed the correct current rule snapshot before product work continues.
 
 A second failure mode is the local-to-LLM transfer boundary. `.agentic/transfer/outbox/last_result.txt` is intended to carry the latest local result back to the LLM, but without a deterministic machine-readable rule/context header it can become just another chat-like transcript. That is too weak: the local partner must make the current sources of truth, transfer priorities, transfer-file contract, signal semantics, and current report state explicit every time it writes the outbox file.
+
+
 
 ## Target Outcome
 
@@ -40,6 +56,8 @@ A correct workflow should be able to answer:
 - whether the current `chat_reply` is only a communication signal or an evidence-backed next-step gate.
 
 The GUI must later display this state; it must not invent or infer it.
+
+
 
 ## Canonical Rule Source Contract
 
@@ -66,6 +84,8 @@ The optimized architecture is:
 
 A future implementation must preserve this single-source model. If a proposed slice adds a manually edited snapshot, a separate GUI rule table, a hand-maintained outbox rule header, or a chat-only rule copy, the slice must be blocked or redesigned.
 
+
+
 ## Deterministic Transfer Outbox Context Projection
 
 The local partner must be able to write `.agentic/transfer/outbox/last_result.txt` as parseable JSON with a deterministic header extracted from canonical repo sources at write time.
@@ -87,6 +107,8 @@ The header must be generated from the local checkout and must include, at minimu
 The generator must fail closed if a mandatory canonical source is missing, unreadable, unparsable, or contradictory with the expected source contract. The file may contain concise extracted rule statements, but those statements must be derived from source anchors or machine-readable rule files, not copied from chat.
 
 Performance expectation: local Python may read and hash the required governance, YAML, status, handoff, and transfer-report files on every outbox write. This is expected to be cheap relative to Git, PR, CI, and test operations and is the preferred anti-drift mechanism.
+
+
 
 ## Machine-Readable Dialogue Rule File Direction
 
@@ -110,6 +132,8 @@ Required integration before activation:
 
 Until that slice is implemented and tested, the machine-readable dialogue rule file is a planned canonical source, not an active manually maintained parallel rule table.
 
+
+
 ## Non-Negotiable Requirements
 
 - Fail closed when a mandatory rule source is missing.
@@ -125,182 +149,7 @@ Until that slice is implemented and tested, the machine-readable dialogue rule f
 - Do not introduce double-maintained rule or snapshot state. This means no parallel manually maintained snapshot or GUI rule table.
 - Treat generated snapshots, Markdown refresh files, and transfer outbox headers as derived artifacts, not canonical sources.
 
-## Phase 0: Transfer GitHub Action Coverage
 
-Goal: prove that the GitHub-backed transfer path has local `agentic-kit transfer` actions for the commands needed to avoid connector-blocked orchestration.
-
-Inventory at minimum:
-
-- repository status,
-- repository log,
-- current HEAD SHA,
-- actual diff,
-- fetch origin,
-- pull current branch,
-- create branch,
-- switch branch,
-- commit explicit paths,
-- push current branch,
-- create PR,
-- inspect PR status,
-- wait for PR CI with expected head SHA,
-- safe PR merge with expected head SHA,
-- post-merge handoff-refresh status,
-- administrative handoff-refresh PR,
-- transfer-state inspection,
-- local transfer-order execution,
-- remote transfer-order execution.
-
-Acceptance:
-
-- produce a coverage matrix with `covered`, `partial`, `missing`, and `unsafe-for-gui` classifications;
-- identify actions that still shell out to `git` or `gh`;
-- identify actions that are safe enough for GUI dispatch;
-- add deterministic test anchors for the critical action names.
-
-Phase 0 artifact: `docs/planning/PROJECT_DIRECTION.yaml` (`workflow-kernel-and-transfer-hardening` preserved transfer GitHub action coverage).
-
-Rule-source validator JSON contract: `docs/governance/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md`.
-
-## Phase 1: Canonical Rule Source Hardening And Derived Snapshot Schema
-
-Goal: harden the existing canonical rule sources and define the derived snapshot schema without creating a second manually maintained rule system.
-
-Required work:
-
-- document the canonical source set used by rule refresh;
-- add read-only validation expectations for existing YAML and governance sources;
-- define required source presence, parseability, and role metadata;
-- define per-source content hashing for derived snapshots;
-- define a combined snapshot identity derived from canonical sources;
-- define missing-source and stale-state validity fields;
-- define intended next LLM action and allowed next transfer state;
-- define the transfer outbox context header schema and required source extraction behavior;
-- specify that Markdown refresh files and transfer outbox headers are projections, not canonical state.
-
-Acceptance:
-
-- the canonical source contract is documented;
-- schema work is framed as a generated derivative of canonical sources;
-- generated snapshots are deterministic except for timestamp;
-- outbox context headers are deterministic except for timestamp and current repo/run state;
-- missing mandatory sources make the derived snapshot or outbox header invalid;
-- tests reject double-maintained rule-state language;
-- tests protect the no-parallel-rule-system decision.
-
-## Phase 2: Rule Snapshot Generator
-
-Goal: replace loose generated Markdown-only rule refreshes with a structured snapshot plus human projection.
-
-Acceptance:
-
-- `communication-refresh` and `handoff-refresh` emit or reference structured snapshot data;
-- Markdown projections remain readable but are not the only source of truth;
-- tests verify source hashes and missing-source behavior.
-
-## Phase 2A: Transfer Outbox Header Generator
-
-Goal: ensure every local-to-LLM outbox write embeds a freshly extracted deterministic context header.
-
-Required work:
-
-- implement a Python builder, for example `TransferOutboxHeaderBuilder`, that reads canonical sources from the local checkout;
-- hash each source used for the header;
-- extract transfer priority, dialogue signals, canonical transfer file paths, forbidden patterns, and evidence expectations;
-- merge the header with the current transfer result from `docs/reports/transfer_runs/latest-transfer-report.json`;
-- write `.agentic/transfer/outbox/last_result.txt` as JSON;
-- validate the written JSON against a local schema or structural validator;
-- make `run-and-log`, `run-sequence-and-log`, `show-last-report`, and `publish-last-report` use consistent outbox state semantics;
-- ensure `CHAT_REPLY=g` is emitted only for published tracked handoff state, not for local report write state.
-
-Acceptance:
-
-- local report writing produces `state: local_report_written`, `published: false`, and `chat_reply: d` unless the underlying command failed;
-- published handoff produces `state: published_transfer_handoff`, `published: true`, and `chat_reply: g`;
-- `show-last-report` never claims publication;
-- source hashes are present in every outbox file;
-- missing mandatory sources fail closed;
-- tests cover success, failure, missing source, stale source, unpublished local report, and published handoff cases.
-
-## Phase 2B: Machine-Readable Dialogue Rules Source
-
-Goal: introduce `.agentic/dialogue_rules.yaml` as a canonical, parseable rule source for dialogue and transfer-handshake semantics without duplicating governance prose by hand.
-
-Required work:
-
-- define schema version, purpose, owners, source policy, dialogue signals, transfer priorities, canonical transfer files, outbox projection requirements, forbidden patterns, and drift responses;
-- cross-reference the human governance documents that remain explanatory authority;
-- add the file to compiled context and rule mechanism inventory through parse-modify-dump, not free-text YAML patching;
-- add tests that compare required semantic anchors across the YAML file and the existing governance documents;
-- update rule-refresh and outbox-header builders to consume the file once active.
-
-Acceptance:
-
-- `.agentic/dialogue_rules.yaml` parses and validates;
-- rule mechanism inventory references it;
-- compiled context exposes it as a mandatory source where appropriate;
-- tests fail if core signal semantics or transfer priorities drift;
-- protected-change planning is satisfied for any protected control-file edits;
-- the file is not a manual replacement for governance documents but the machine-readable companion used by generators.
-
-## Phase 3: LLM Acknowledgement Contract
-
-Goal: define and validate an acknowledgement that proves the LLM has read the exact current snapshot.
-
-Required acknowledgement fields:
-
-- snapshot id,
-- snapshot hash,
-- repo head,
-- source count,
-- missing source count,
-- declared next allowed action.
-
-Acceptance:
-
-- product work remains blocked without a matching acknowledgement;
-- stale or mismatched acknowledgement is rejected;
-- acknowledgement is repo-readable or transfer-state-readable.
-
-## Phase 4: Transfer-State Integration
-
-Goal: integrate rule freshness into transfer state.
-
-Required states:
-
-- `RULE_REFRESH_REQUIRED`,
-- `RULE_SNAPSHOT_READY`,
-- `WAITING_FOR_LLM_RULE_ACK`,
-- `RULES_CONFIRMED`,
-- `RULE_REFRESH_BLOCKED`.
-
-Acceptance:
-
-- transfer state exposes these states as JSON;
-- next action is deterministic;
-- unsafe actions are blocked unless rules are confirmed;
-- outbox generation state is visible when the next safe action depends on local-to-LLM transfer.
-
-## Phase 5: GUI Gate Integration
-
-Goal: make the GUI a control surface over the hardened rule state.
-
-Acceptance:
-
-- GUI buttons are enabled only when transfer state allows them;
-- blocked states show the exact missing prerequisite;
-- no GUI path bypasses the rule-refresh gate;
-- GUI display of transfer results is read from the generated outbox/report state, not inferred from chat text.
-
-## Execution Order
-
-1. Complete Phase 0 before expanding GUI implementation.
-2. Harden and validate canonical sources before adding generated snapshot behavior broadly.
-3. Add the deterministic transfer outbox header generator before treating local-to-LLM transfer as no-copy reliable.
-4. Introduce `.agentic/dialogue_rules.yaml` only through the protected rule-management workflow and tests.
-5. Add acknowledgement validation before treating a generated rule file as sufficient.
-6. Integrate transfer-state gating before adding GUI write actions.
-7. Only after this foundation is green should GUI implementation expand.
 
 ## Explicit Non-Goals
 
@@ -310,6 +159,8 @@ Acceptance:
 - no claim that deterministic validation proves semantic perfection;
 - no chat-only rule additions without repo-backed anchors;
 - no parallel manually maintained snapshot, outbox memory file, or GUI rule table.
+
+
 
 ## Review Rule
 
