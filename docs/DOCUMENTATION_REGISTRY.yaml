@@ -313,12 +313,13 @@ documents:
     class: planning
     owner: maintainers
     notes: Concise current-state dashboard, not a long-term history file.
-  - path: docs/planning/WORKFLOW_REDUCTION_FOCUS.md
-    class: planning
-    owner: maintainers
-    notes: Historical near-term focus document. Pre-GUI hardening tasks moved to PRE_GUI_HARDENING_TASKS.md; durable strategy/roadmap authority remains project_direction.yaml.
-    superseded_by: docs/planning/PRE_GUI_HARDENING_TASKS.md
+  - path: docs/archive/WORKFLOW_REDUCTION_FOCUS.md
+    class: historical archive
     status: superseded
+    owner: maintainers
+    archived_from: docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+    superseded_by: docs/planning/PRE_GUI_HARDENING_TASKS.md
+    notes: Historical near-term focus document. Pre-GUI hardening tasks moved to PRE_GUI_HARDENING_TASKS.md; durable strategy/roadmap authority remains project_direction.yaml.
   - path: docs/planning/PRE_GUI_HARDENING_TASKS.md
     class: planning
     owner: maintainers
@@ -486,14 +487,15 @@ documents:
     owner: maintainers
     notes: Human workflow command reference.
     status: active
-  - path: docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
-    class: planning
-    owner: maintainers
-    notes: Full structured Tkinter workbench GUI plan with complete button catalog, staged enablement, dispatch integration, and evidence requirements.
-    superseded_by: docs/planning/project_direction.yaml
+  - path: docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md
+    class: historical archive
     status: superseded
-  - path: docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
-    class: planning
+    owner: maintainers
+    archived_from: docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
+    superseded_by: docs/planning/PROJECT_DIRECTION.yaml
+    notes: Full structured Tkinter workbench GUI plan archived after the GUI was implemented differently as a progressive-disclosure cockpit.
+  - path: docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
+    class: user-facing description
     owner: maintainers
     notes: Read-only implementation-surface inventory for the GUI deterministic gatekeeper migration.
     status: active

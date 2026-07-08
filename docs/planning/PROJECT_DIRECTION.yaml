@@ -68,8 +68,8 @@ strategy:
       wrappers rather than becoming a second command system.
     source_files:
       - docs/planning/PRE_GUI_HARDENING_TASKS.md
-      - docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
-      - docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
+      - docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
+      - docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md
   - id: python-backed-portable-workflows
     status: active
     title: Python-backed portable workflow control
@@ -302,7 +302,7 @@ roadmap:
       - docs/planning/PRE_GUI_HARDENING_TASKS.md
       - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
-      - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+      - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
   - id: workflow-kernel-and-transfer-hardening
     phase: pre-GUI
     status: planned
@@ -504,7 +504,7 @@ roadmap:
       - DOI closeout uses verified release metadata before write mode.
       - Legacy shell shortcut plans are either completed, superseded, or deleted in cleanup.
     source_files:
-      - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+      - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
   - id: gui-gatekeeper-workbench
     phase: GUI
     status: planned
@@ -517,8 +517,8 @@ roadmap:
       - Mutating actions remain disabled or guarded until their backend wrapper is safe.
       - GUI state mirrors command, rule, handoff, evidence, and project-direction state.
     source_files:
-      - docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
-      - docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
+      - docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
+      - docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md
   - id: documentation-artifact-governance-os
     phase: governance
     status: planned
@@ -853,7 +853,7 @@ plans:
       - docs/planning/PRE_GUI_HARDENING_TASKS.md
       - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
-      - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+      - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
   - id: next-turn-workflow-kernel
     status: active
     title: Move recurring next-step execution from chat discipline into a deterministic local workflow kernel
@@ -1150,8 +1150,8 @@ plans:
       - Disabled future buttons are explicit and backed by planned action contracts.
       - No write-capable GUI path bypasses branch, dirty-state, rule, evidence, or failure-mode guards.
     source_files:
-      - docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
-      - docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
+      - docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
+      - docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md
   - id: docs-centralize-and-remove-command
     status: planned
     title: Build governed docs centralize-and-remove command before K3
@@ -2213,7 +2213,7 @@ done:
     merge_commit: null
     completion_exception: Superseded planning authority moved to PRE_GUI_HARDENING_TASKS and PROJECT_DIRECTION.yaml.
     source_files:
-      - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+      - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
 
 discarded:
   - id: raw-shell-gui
@@ -2252,7 +2252,7 @@ discarded:
     discarded_at: "2026-07-05"
     source_files:
       - docs/planning/PROJECT_DIRECTION.md
-      - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+      - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
 
   - id: raw-ns-as-core-workflow-control
     status: discarded

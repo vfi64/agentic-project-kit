@@ -131,7 +131,7 @@ Until Phase 1 is implemented, this section is a planning gate only. It must not 
 
 ## Tkinter Workbench GUI Gate (planned)
 
-`docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md` defines the full structured Tkinter workbench plan. The GUI must render the complete planned button catalog from the first implementation slice, while non-implemented actions remain visible and disabled. Functionality is enabled in later slices only behind metadata, tests, safety classes, evidence checks, and existing branch/PR workflow gates.
+`docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md` defines the full structured Tkinter workbench plan. The GUI must render the complete planned button catalog from the first implementation slice, while non-implemented actions remain visible and disabled. Functionality is enabled in later slices only behind metadata, tests, safety classes, evidence checks, and existing branch/PR workflow gates.
 
 The first implementation phase must remain non-destructive and must add the full button catalog plus a headless-renderable Tkinter workbench skeleton before enabling bounded mutation buttons. The planned Phase-1 evidence is:
 
