@@ -186,7 +186,7 @@ Current planning-slice branch: `codex/release-command-authority-plan`.
 Current planning-slice commit: `1becc4a7` (`Plan release command authority slice`).
 Planning PR: #1436 (`[codex] Plan release command authority slice`).
 
-Current handoff package and prompt projections are refreshed for this planning slice. After PR #1436 merges, the next product action is to start from fresh `main` and implement `docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md`.
+Current handoff package and prompt projections are refreshed for this planning slice. After PR #1436 merges, the next product action is to start from fresh `main` and implement `docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice`.
 
 Status-date: 2026-05-27
 Project: agentic-project-kit

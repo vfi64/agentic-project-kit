@@ -285,13 +285,6 @@ documents:
     owner: maintainers
     review_policy: required
     summary: Human-readable orientation view pointing to PROJECT_DIRECTION.yaml; not an independent planning authority.
-  - path: docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
-    class: planning
-    status: active
-    owner: project
-    review_policy: required
-    summary: First post-v0.4.9 implementation slice for establishing the supported release metadata route and making release publish core portable or fail-closed.
-    superseded_by: docs/planning/project_direction.yaml
   - path: docs/DOCUMENTATION_REGISTRY.yaml
     class: governance/system
     owner: maintainers

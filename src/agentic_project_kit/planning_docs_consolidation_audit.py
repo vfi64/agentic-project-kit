@@ -64,7 +64,6 @@ HANDOFF_PROJECTION_DOCS = {
 }
 
 HISTORICAL_PLANNING_DOCS = {
-    "docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md",
     "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
     "docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md",
     "docs/planning/V0.3.8_SCOPE.md",

@@ -504,7 +504,6 @@ roadmap:
       - DOI closeout uses verified release metadata before write mode.
       - Legacy shell shortcut plans are either completed, superseded, or deleted in cleanup.
     source_files:
-      - docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
       - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
   - id: gui-gatekeeper-workbench
     phase: GUI
@@ -814,6 +813,11 @@ plans:
           status: removed_source
           central_target: docs/planning/PROJECT_DIRECTION.yaml
           retained_as: obsolete PR660 handoff overlay state, GUI baseline, drift notes, and current authority redirect
+      package_15_removed_sources:
+        - path: docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
+          status: removed_source
+          central_target: docs/planning/PROJECT_DIRECTION.yaml
+          retained_as: historical v0.4.9 release command authority slice, retained work order, current command authority, and closeout rule
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
@@ -874,7 +878,7 @@ plans:
       - DOI closeout validates release, concept DOI, and version DOI before any write.
       - Legacy release shortcut notes are retired in the cleanup slice.
     source_files:
-      - docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
+      - docs/planning/PROJECT_DIRECTION.yaml
   - id: rule-registry-hardening
     status: active
     title: Preserve active rule identity, source validation, and refresh handshakes
@@ -1487,6 +1491,80 @@ plans:
       closeout_rule: >-
         The PR660 overlay is historical evidence only. It must not be used as
         current release, GUI, handoff, or next-safe-step authority.
+    source_files:
+      - docs/planning/PROJECT_DIRECTION.yaml
+
+  - id: release-command-authority-slice
+    status: done
+    title: Release command authority slice centralized
+    completed_by_pr: null
+    completion_exception: K2 centralizes the old v0.4.9 first implementation slice after later release, PR, transfer, and post-merge commands superseded it.
+    preserved_information:
+      removed_source:
+        path: docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
+        status: removed_source
+        central_target: docs/planning/PROJECT_DIRECTION.yaml
+        removal_reason: historical post-v0.4.9 implementation slice; no longer current next-step authority
+      original_status_date: "2026-06-18"
+      original_status: active
+      original_decision_status: accepted first implementation slice
+      original_scope: planning source for the first post-v0.4.9 release-governance implementation slice
+      historical_evidence_anchor:
+        baseline_log: tmp/codex-v049-analysis-baseline-20260618-120431.log
+        verified_package_version: 0.4.9
+        verified_tag: v0.4.9
+        verified_tag_target: cd775a1f2e06f7f7f4fd4ba13ebcf139a2ef30a7
+        verified_main_audit_head: d33dd595f031445dd73c1f0f75a1ce174a4dfe42
+        verified_version_doi: 10.5281/zenodo.20738074
+        verified_concept_doi: 10.5281/zenodo.20101359
+      retained_problem_statement:
+        - release metadata is a coupled project contract, not a free-text patch
+        - manual release metadata edits needed one supported, documented, tested agentic-kit route
+        - release commands had to avoid implicit shell/PATH authority and stale DOI/status drift
+        - release publication and closeout needed explicit failure and stop states
+      retained_non_goals:
+        - do not implement broad DOI closeout atomicity in this slice
+        - do not do broad legacy ns/shell documentation cleanup in this slice
+        - do not start GUI expansion from this old release slice
+      retained_work_order:
+        - inventory release command authority before mutating release files
+        - choose one public metadata route
+        - make release prep core portable or explicitly non-canonical
+        - make release publish core safe
+        - add regression tests before documentation claims
+        - update documentation only where needed
+      retained_acceptance:
+        - one supported release metadata route exists and is documented
+        - release prep and release publish avoid unbounded shell/PATH assumptions
+        - release closeout reports machine-readable status and failure evidence
+        - release/DOI/status updates require explicit command-backed evidence
+        - successor handoff must not treat the v0.4.9 slice as current work
+      current_authority:
+        - agentic-kit release-status
+        - agentic-kit pr closeout-check
+        - agentic-kit pr merge-if-green
+        - agentic-kit pr wait-ci
+        - agentic-kit transfer pr-status
+        - agentic-kit transfer pr-complete
+        - agentic-kit transfer pr-create-complete
+        - agentic-kit transfer post-merge-check
+        - agentic-kit transfer post-merge-complete
+        - agentic-kit transfer repo-status
+        - agentic-kit transfer protected-diff-plan
+      related_current_tests:
+        - tests/test_release_status.py
+        - tests/test_release_notes_generate.py
+        - tests/test_release_core_help_validation.py
+        - tests/test_post_release_closeout_hardening.py
+        - tests/test_post_release_doi_closeout_atomicity.py
+        - tests/test_transfer_post_merge_complete_command.py
+        - tests/test_transfer_post_merge_lifecycle.py
+      closeout_rule: >-
+        The old release command authority slice is historical evidence only.
+        It must not be used as current release, handoff, GUI, or next-work
+        authority. Future release-governance work must start from current
+        command help, tests, release-status output, PROJECT_DIRECTION.yaml,
+        and handoff package validation instead.
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
 
@@ -2240,7 +2318,6 @@ discarded:
         authority, not under obsolete ns shortcut notes.
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
-      - docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md
   - id: long-chat-terminal-blocks-as-normal-workflow
     status: discarded
     title: Long chat terminal blocks as normal workflow
