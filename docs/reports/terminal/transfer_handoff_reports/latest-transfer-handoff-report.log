@@ -1,5 +1,1692 @@
-TRANSFER_REFRESH_LLM_CONTEXT_CARRIERS
-STATE=PASS
-OUTBOX=.agentic/transfer/outbox/last_result.txt
-LATEST=docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
-CHAT_REPLY=d | NEXT=LLM context carriers refreshed.
+TRANSFER_REMOTE_NEXT_REPORT
+COMMAND_ID=remote-next-blocked
+STATE=BLOCKED
+RESULT_STATUS=BLOCKED
+RETURNCODE=2
+BRANCH=main
+HEAD=0908f663
+REMOTE_REPORT=docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
+CHAT_REPLY=g
+NEXT=Inspect the published remote-next diagnostic report before retrying.
+
+### JSON RESULT ###
+{
+  "derived_projection": true,
+  "kind": "local_to_llm_remote_next_report",
+  "last_result": {
+    "artifact_type": "transfer_remote_next_execution_report",
+    "blocked_message": "[Errno 2] No such file or directory: '.agentic/transfer/inbox/current.yaml'",
+    "branch": "main",
+    "chat_reply": "g",
+    "command_id": "remote-next-blocked",
+    "head": "0908f663",
+    "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+    "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
+    "local_run": {
+      "apply": null,
+      "command_id": "remote-next-blocked",
+      "inspect": {
+        "message": "[Errno 2] No such file or directory: '.agentic/transfer/inbox/current.yaml'",
+        "reasons": [
+          "missing_transfer_order"
+        ],
+        "result_status": "BLOCKED",
+        "returncode": 2,
+        "schema_version": 1
+      },
+      "next": "Inspect the published remote-next diagnostic report before retrying.",
+      "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+      "result_status": "BLOCKED",
+      "returncode": 2,
+      "schema_version": 1,
+      "state": {
+        "branch": "main",
+        "dirty_state": {
+          "clean": true,
+          "staged_changes": [],
+          "status_short": "",
+          "unstaged_changes": [],
+          "untracked_files": []
+        },
+        "head": "0908f663",
+        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+        "primary_state": "BLOCKED",
+        "reasons": [
+          "missing_transfer_order"
+        ],
+        "schema_version": 1
+      },
+      "transfer_id": "remote-next-blocked"
+    },
+    "next": "Inspect the published remote-next diagnostic report before retrying.",
+    "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+    "post_report_actions": {
+      "attempted": true,
+      "schema_version": 1,
+      "status": "pending_until_report_files_are_written"
+    },
+    "preflight": {
+      "current_branch": "main",
+      "dirty_state": {
+        "clean": true,
+        "staged_changes": [],
+        "status_short": "",
+        "unstaged_changes": [],
+        "untracked_files": []
+      },
+      "head": "0908f663",
+      "remote_tracking": "origin/main"
+    },
+    "primary_state": "BLOCKED",
+    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+    "reasons": [
+      "missing_transfer_order"
+    ],
+    "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
+    "result_status": "BLOCKED",
+    "returncode": 2,
+    "rule_ack": {
+      "blocking_reasons": [],
+      "confirmed": true,
+      "head": "0908f663",
+      "path": ".agentic/rule_ack/current.json",
+      "present": true
+    },
+    "schema_version": 1,
+    "state": "BLOCKED",
+    "transfer_id": "remote-next-blocked"
+  },
+  "llm_execution_context": {
+    "canonical_lifecycle": {
+      "do_not_use_stale_prompt_text_as_handoff_source": true,
+      "existing_pr_requires_concrete_number": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "pr-complete",
+        "use-the-concrete-pr-number-from-wrapper-output",
+        "--expected-head-sha",
+        "current",
+        "--merge-method",
+        "squash"
+      ],
+      "feature_branch_pre_pr_gate": "agentic-kit transfer repo-status",
+      "forbidden_feature_branch_pre_pr_gate": "agentic-kit transfer post-merge-check",
+      "fresh_llm_context_before_pr": [
+        "./.venv/bin/agentic-kit transfer prepare-successor-handoff --render-prompt",
+        "./.venv/bin/agentic-kit transfer publish-last-report",
+        "./.venv/bin/agentic-kit transfer require-fresh-llm-context --json"
+      ],
+      "new_pr_single_command": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "pr-create-complete",
+        "--post-merge-complete",
+        "--base",
+        "main",
+        "--head",
+        "current",
+        "--merge-method",
+        "squash"
+      ],
+      "new_pr_single_command_text": "agentic-kit transfer pr-create-complete --post-merge-complete",
+      "post_merge_check_after_merge_only": true,
+      "post_merge_checks_belong_to_main": true,
+      "post_merge_requires_concrete_number": [
+        "./.venv/bin/agentic-kit transfer sync-main",
+        "./.venv/bin/agentic-kit transfer post-merge-complete --after-pr use-the-concrete-pr-number-from-wrapper-output",
+        "./.venv/bin/agentic-kit transfer sync-main",
+        "./.venv/bin/agentic-kit transfer post-merge-check",
+        "./.venv/bin/agentic-kit transfer repo-status"
+      ],
+      "shell_placeholder_policy": {
+        "if_pr_number_unknown_first_run_diagnostic_not_shell_placeholder": true,
+        "known_failure_example": "zsh parses angle-bracket placeholders as redirection",
+        "no_angle_bracket_placeholders_in_executable_blocks": true
+      },
+      "verify_context_refresh_command": "agentic-kit transfer verify-llm-context-refresh"
+    },
+    "command_integration_governance": {
+      "applies_to": [
+        "new agentic-kit commands",
+        "changed agentic-kit commands",
+        "new or changed governance rules"
+      ],
+      "classification": {
+        "usually_do_not_gate": [
+          "status commands",
+          "diagnostics",
+          "context generation commands",
+          "volatile repair commands",
+          "read-only inspection commands"
+        ],
+        "usually_gate": [
+          "mutating lifecycle wrappers",
+          "PR lifecycle wrappers",
+          "merge lifecycle wrappers",
+          "release lifecycle wrappers",
+          "evidence lifecycle wrappers",
+          "transfer orchestration wrappers"
+        ]
+      },
+      "normative": true,
+      "required_review": [
+        "command reference refresh/check integration",
+        "LLM execution context visibility",
+        "handoff and transfer-context visibility",
+        "fresh LLM context gate requirement or explicit non-gated exception",
+        "recovery skip option when a hard gate could deadlock recovery",
+        "tests for wrapper behavior and intended exceptions"
+      ],
+      "status": "active"
+    },
+    "command_reference": {
+      "command_count": 204,
+      "generated_by": "scripts/generate_agentic_kit_command_reference.py",
+      "important_wrappers": [
+        {
+          "help": "Continue chat/local transfer communication through the safest available wrapper path.",
+          "options": [
+            "--json",
+            "--skip-llm-context-gate"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer continue"
+        },
+        {
+          "help": "",
+          "options": [
+            "--json"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer remote-next"
+        },
+        {
+          "help": "Create a deterministic successor handoff package and prompt projections.",
+          "options": [
+            "--json",
+            "--output-dir",
+            "--render-prompt",
+            "--update-canonical-prompts"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer chat-switch-complete"
+        },
+        {
+          "help": "Regenerate the agentic-kit command reference without committing changes.",
+          "options": [
+            "--json"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer command-reference-refresh"
+        },
+        {
+          "help": "Check whether the committed agentic-kit command reference is current.",
+          "options": [
+            "--json"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer command-reference-check"
+        },
+        {
+          "help": "Synchronize main, acknowledge rules, and normalize the session.",
+          "options": [
+            "--json",
+            "--main-branch"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer sync-main"
+        },
+        {
+          "help": "",
+          "options": [
+            "--json",
+            "--main-branch"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer remote-work-start"
+        },
+        {
+          "help": "Write the current diff to /tmp and run the Python protected change planner on it.",
+          "options": [
+            "--cached",
+            "--json",
+            "--label"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer protected-diff-plan"
+        },
+        {
+          "help": "Create a PR and complete it without requiring manual PR-number or SHA copying.",
+          "options": [
+            "--base",
+            "--body",
+            "--head",
+            "--interval-seconds",
+            "--json",
+            "--merge-method",
+            "--poll-seconds",
+            "--post-merge-complete",
+            "--skip-llm-context-gate",
+            "--timeout-seconds",
+            "--title"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer pr-create-complete"
+        },
+        {
+          "help": "",
+          "options": [],
+          "present": false,
+          "qualified_name": "agentic-kit transfer pr-create-complete --post-merge-complete"
+        },
+        {
+          "help": "",
+          "options": [
+            "--expected-head-sha",
+            "--interval-seconds",
+            "--json",
+            "--main-branch",
+            "--merge-method",
+            "--poll-seconds",
+            "--post-merge-complete",
+            "--skip-llm-context-gate",
+            "--timeout-seconds"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer pr-complete"
+        },
+        {
+          "help": "",
+          "options": [
+            "--after-pr",
+            "--ci-poll-seconds",
+            "--ci-timeout-seconds",
+            "--json",
+            "--main-branch",
+            "--merge-method",
+            "--merge-state-poll-seconds",
+            "--merge-state-timeout-seconds",
+            "--refresh-expected-head-sha"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer post-merge-complete"
+        },
+        {
+          "help": "",
+          "options": [
+            "--json",
+            "--main-branch"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer post-merge-check"
+        },
+        {
+          "help": "",
+          "options": [
+            "--json",
+            "--short"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer repo-status"
+        },
+        {
+          "help": "",
+          "options": [
+            "--json",
+            "--label"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer run-and-log"
+        },
+        {
+          "help": "",
+          "options": [
+            "--json",
+            "--label"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer publish-last-report"
+        },
+        {
+          "help": "",
+          "options": [
+            "--json"
+          ],
+          "present": true,
+          "qualified_name": "agentic-kit transfer show-last-report"
+        }
+      ],
+      "json": "docs/reference/agentic-kit-commands.json",
+      "markdown": "docs/reference/AGENTIC_KIT_COMMANDS.md",
+      "must_not_reconstruct_commands_from_memory": true
+    },
+    "context_quality": {
+      "generated_from_current_repo_sources": true,
+      "machine_readable": true,
+      "must_be_regenerated_from_rules_not_cached": true,
+      "projection_only_not_source_of_truth": true,
+      "source_hashes_complete": true,
+      "source_hashes_present": true
+    },
+    "execution_policy": {
+      "copy_paste_last": true,
+      "post_merge_complete_required_after_merge": true,
+      "read_remote_report_before_planning_after_g": true,
+      "run_and_log_is_diagnostic_only": true,
+      "transfer_file_second": true,
+      "wrapper_first": true
+    },
+    "generated_at_utc": "2026-07-08T10:11:02.259153+00:00",
+    "generated_from_current_repo": true,
+    "git_state": {
+      "branch": "main",
+      "head": "0908f6634f34222f9ac359422bd95d36417af8ac",
+      "status_short": ""
+    },
+    "kind": "llm_execution_context",
+    "llm_to_local_transfer_policy": {
+      "normative": true,
+      "payload_file": ".agentic/transfer/inbox/next_command.py.txt",
+      "payload_language": "python",
+      "payload_suffix": ".py.txt",
+      "rules": [
+        "LLM-to-local transfer payloads must be written as Python source files with the .py.txt suffix.",
+        "The Python payload must remain syntactically compilable before local execution.",
+        "Do not put raw gh, GitHub API, or direct GitHub shell commands into LLM-to-local payloads or user copy/paste blocks.",
+        "GitHub, PR, merge, evidence, release, and transfer operations should be invoked through repo-backed agentic-kit wrappers.",
+        "Direct gh or GitHub commands are allowed only inside audited repo-backed wrappers or explicit recovery/diagnostic implementation work.",
+        "Copy/paste is a fallback lane; prefer transfer files and wrapper-first commands."
+      ],
+      "status": "active"
+    },
+    "patch_generation_policy": {
+      "avoid_fragile_multiline_inline_python_anchors": true,
+      "avoid_heredoc_quote_escape_drift": true,
+      "avoid_long_shell_mutation_blocks": true,
+      "avoid_raw_newlines_inside_generated_python_string_literals": true,
+      "prefer_small_python_patch_scripts_with_stable_checks": true
+    },
+    "projection_only_not_source_of_truth": true,
+    "running_chat_refresh_contract": {
+      "chat_memory_is_not_source_of_truth": true,
+      "local_transfer_context_must_be_regenerated_from_rules": true,
+      "minimum_context_carriers": [
+        ".agentic/transfer/outbox/last_result.txt",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
+      ],
+      "missing_or_stale_context_blocks_planning": true,
+      "normative": true,
+      "refresh_required_for_running_chats": true,
+      "refresh_required_for_successor_chats": true,
+      "status": "active"
+    },
+    "schema_version": 1,
+    "shell_placeholder_policy": {
+      "if_pr_number_unknown_first_run_diagnostic_not_shell_placeholder": true,
+      "known_failure_class": "terminal_quote_prompt_hang",
+      "known_failure_example": "zsh parses angle-bracket placeholders as redirection",
+      "no_angle_bracket_placeholders_in_executable_blocks": true,
+      "normative": true,
+      "status": "active"
+    },
+    "source_files": [
+      ".agentic/compiled_agent_context.yaml",
+      ".agentic/transfer_safety_rules.yaml",
+      ".agentic/transfer/one_command_transfer_protocol.yaml",
+      "docs/reference/agentic-kit-commands.json",
+      "docs/reference/AGENTIC_KIT_COMMANDS.md"
+    ],
+    "source_hashes": {
+      ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
+      ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
+      ".agentic/transfer_safety_rules.yaml": "3523be071e72434ad25c6c6283a801ffdb194ed1ecb43c4da720522cfde89cbb",
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "6760abe6d030473cbbd323bc944d131276f092b3310902344b6c483d75b837a3",
+      "docs/reference/agentic-kit-commands.json": "099410f994a0e6f945b23975be57746dd23cac5053efd1935e390da50fe2bae1"
+    },
+    "terminal_resilience": {
+      "avoid_process_ended_terminal_dead_end": true,
+      "avoid_set_euo_pipefail_in_exploratory_patch_blocks": true,
+      "avoid_unnecessary_raise_system_exit_in_diagnostics": true,
+      "do_not_require_terminal_restart_after_script_errors": true,
+      "patch_scripts_should_report_status_and_return_to_shell": true
+    },
+    "volatile_cleanup": {
+      "known_paths": [
+        ".agentic/transfer/inbox/next_command.py.txt",
+        ".agentic/transfer/outbox/last_result.txt",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+      ],
+      "must_not_discard_substantive_changes": true,
+      "only_when_not_target_changes": true
+    }
+  },
+  "protocol_header": {
+    "authoritative_sources": [
+      {
+        "path": ".agentic/transfer_safety_rules.yaml",
+        "sha256": "3523be071e72434ad25c6c6283a801ffdb194ed1ecb43c4da720522cfde89cbb"
+      },
+      {
+        "path": ".agentic/transfer/one_command_transfer_protocol.yaml",
+        "sha256": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04"
+      },
+      {
+        "path": ".agentic/rule_mechanism_inventory.yaml",
+        "sha256": "6972e397e018d8369f2153516ba767888dac962b3482109c5e7124d51b188e1b"
+      },
+      {
+        "path": ".agentic/rule_preservation.yaml",
+        "sha256": "817319e295674992e6665df25778b5c9cb767d1e393e5402df708d52ec79ff39"
+      },
+      {
+        "path": "docs/DOCUMENTATION_REGISTRY.yaml",
+        "sha256": "0c25cd50651ee211af8a91c39bfdf8960df422048af414a09bb68e2a366ba38b"
+      },
+      {
+        "path": "docs/planning/PROJECT_DIRECTION.yaml",
+        "sha256": "ec1210503a8a2cfd74c5c5b00061688f9f2bcf548b497965513e181ff379e722"
+      }
+    ],
+    "canonical_cli_usage": {
+      "canonical_communication_continue": {
+        "command": "./.venv/bin/agentic-kit transfer continue",
+        "forbidden_normal_replacements": [
+          "manual git cleanup before trying restore-known-volatile",
+          "direct next_command.py.txt execution as normal path",
+          "remote-next without preflight when transfer continue is available"
+        ],
+        "required_behavior": [
+          "restore known volatile transfer files before continuing",
+          "infer exactly one active transfer order branch when branchless continuation is ambiguous",
+          "run remote-next through the selected branch or current transfer order",
+          "treat missing, stale, or unpushed remote reports as BLOCKED",
+          "emit g semantics only after a fresh remote report is pushed"
+        ],
+        "role": "single_communication_entrypoint_for_successor_chats_and_transfer_retries"
+      },
+      "canonical_one_command_transfer": {
+        "command": "./.venv/bin/agentic-kit transfer remote-next",
+        "forbidden_normal_replacements": [
+          "direct next_command.py.txt execution by the user",
+          "manual multi-command transfer sequences"
+        ],
+        "notes": [
+          "next_command.py.txt is a pure Python payload lane, not the user-facing wrapper command",
+          "direct Python execution is reserved for explicit debug or recovery only"
+        ],
+        "required_behavior": [
+          "read branch from .agentic/transfer/inbox/current.yaml when no branch argument is supplied",
+          "block stale, missing, inactive, or head-mismatched transfer orders",
+          "synchronize and fast-forward the target branch before local execution",
+          "refresh stale rule acknowledgement before transfer execution where possible",
+          "run lower-level transfer-order actions through the local transfer runner",
+          "publish remote-next report projections under docs/reports/terminal/transfer_handoff_reports/",
+          "print a human summary after report publication"
+        ]
+      },
+      "evidence_finalize_log": {
+        "command": "agentic-kit evidence finalize-log --run-log <path> --remote-log <docs/reports/terminal/name.log> --slice <name> --scope <text> --mode-check <text> --command-report <text> --interpretation <text> --safe-step <text>",
+        "required_options": [
+          "--run-log",
+          "--remote-log",
+          "--slice",
+          "--scope",
+          "--mode-check",
+          "--command-report",
+          "--interpretation",
+          "--safe-step"
+        ]
+      },
+      "evidence_inspect": {
+        "command": "agentic-kit evidence inspect --require-summary <path>",
+        "invalid_forms": [
+          "agentic-kit evidence inspect --run-log <path>"
+        ]
+      },
+      "rules_acknowledge_after_commit": {
+        "command": "agentic-kit rules acknowledge",
+        "trigger": "required after every commit because repo_head changes"
+      },
+      "transfer_admin_refresh_pr": {
+        "command": "agentic-kit transfer admin-refresh-pr --after-pr <merged-pr-number>",
+        "required_options": [
+          "--after-pr"
+        ]
+      },
+      "transfer_pr_create": {
+        "command": "agentic-kit transfer pr-create --base main --head <branch> --title <title> --body <body>",
+        "required_options": [
+          "--head",
+          "--title"
+        ]
+      },
+      "transfer_pr_create_complete_post_merge": {
+        "command": "./.venv/bin/agentic-kit transfer pr-create-complete --post-merge-complete --base main --head current --merge-method squash",
+        "required_behavior": [
+          "resolve the concrete PR number internally",
+          "run pr-complete",
+          "run post-merge-complete with the concrete PR number",
+          "run post-merge-check and repo-status",
+          "avoid chat or user propagation of PR number placeholders"
+        ],
+        "role": "preferred_new_pr_lifecycle_with_internal_concrete_pr_number_closeout"
+      },
+      "transfer_publish_last_report": {
+        "command": "./.venv/bin/agentic-kit transfer publish-last-report --label <label>",
+        "role": "tracked_handoff_upload_for_run_and_log_reports"
+      },
+      "transfer_run_and_log": {
+        "command": "./.venv/bin/agentic-kit transfer run-and-log --label <label> -- <command...>",
+        "notes": [
+          "Requires publish-last-report before g/go semantics."
+        ],
+        "role": "local_report_only"
+      },
+      "transfer_run_local": {
+        "command": "./.venv/bin/agentic-kit transfer run-local --path .agentic/transfer/inbox/current.yaml",
+        "role": "lower_level_adapter_only"
+      },
+      "verify_llm_context_refresh": {
+        "command": "./.venv/bin/agentic-kit transfer verify-llm-context-refresh",
+        "required_behavior": [
+          "check local outbox for generated llm_execution_context",
+          "check latest handoff report for generated llm_execution_context",
+          "verify source hashes and rule-projected policies",
+          "block on missing or stale refresh context"
+        ],
+        "role": "running_chat_and_successor_chat_drift_guard"
+      }
+    },
+    "canonical_runner": {
+      "command": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "remote-next"
+      ],
+      "direct_python_execution_allowed": "recovery_only",
+      "rule": "remote-next is the normal local transfer command; next_command.py.txt is a payload lane and direct user execution is only recovery/debug."
+    },
+    "canonical_transfer_files": {
+      "llm_to_local": ".agentic/transfer/inbox/next_command.py.txt",
+      "local_to_llm": ".agentic/transfer/outbox/last_result.txt",
+      "remote_latest_report": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+      "transfer_order": ".agentic/transfer/inbox/current.yaml"
+    },
+    "decision_tree": {
+      "active_order_on_non_current_branch": {
+        "action": "transfer_continue_infers_single_active_order_or_requires_branch",
+        "forbidden": "assume_branchless_remote_next_finds_feature_branch_order"
+      },
+      "communication_start_or_retry": {
+        "action": "instruct_user_to_run_transfer_continue",
+        "command": "./.venv/bin/agentic-kit transfer continue",
+        "forbidden": "start_with_remote_next_or_manual_multicommand_sequence"
+      },
+      "direct_next_command_execution": {
+        "allowed_only_if": "explicit_debug_or_recovery"
+      },
+      "known_volatile_dirty_state": {
+        "action": "run_restore_known_volatile_inside_transfer_continue",
+        "forbidden": "manual_git_restore_as_first_response"
+      },
+      "local_transfer_needed": {
+        "action": "instruct_user_to_run_remote_next",
+        "forbidden": "direct_python_next_command"
+      },
+      "remote_next_reports_blocked_or_fail": {
+        "action": "diagnose_from_report",
+        "forbidden": "claim_success"
+      },
+      "remote_next_reports_pass": {
+        "action": "continue_planning_from_report"
+      },
+      "remote_report_missing_or_stale": {
+        "action": "treat_as_transfer_uplink_problem",
+        "forbidden": "ask_for_long_terminal_output_first"
+      },
+      "user_says_g_or_go": {
+        "action": "read_latest_remote_transfer_report_first",
+        "forbidden": "continue_from_chat_memory"
+      }
+    },
+    "derived_projection": true,
+    "kind": "transfer_protocol_header",
+    "known_failure_classes": [
+      "wrong_branch_execution",
+      "stale_local_branch_after_fetch",
+      "stale_local_inbox_execution",
+      "local_inbox_not_materialized_from_remote",
+      "local_inbox_differs_from_remote_task",
+      "direct_python_execution_used_as_normal_path",
+      "rule_acknowledgement_head_mismatch",
+      "dirty_worktree_before_transfer",
+      "accumulated_untracked_transfer_or_report_files",
+      "failed_report_publication_misread_as_go_signal",
+      "summary_shown_before_outbox_remote_publish",
+      "outbox_not_written_before_completion_signal",
+      "outbox_not_uploaded_to_remote",
+      "user_go_before_remote_report_published",
+      "llm_planning_without_reading_remote_outbox",
+      "diagnostic_status_success_masking_earlier_blocker",
+      "heredoc_style_shell_mutation",
+      "unescaped_shell_substitution",
+      "raw_newline_in_python_string_literals",
+      "quote_escape_drift",
+      "fragile_multiline_inline_python_commands",
+      "long_shell_mutation_blocks",
+      "line_ending_drift",
+      "python_transfer_txt_suffix_not_syntax_validated",
+      "partial_patch_application",
+      "fragile_text_anchor_patching",
+      "accidental_compatibility_key_removal",
+      "destructive_use_of_moving_references",
+      "implicit_main_push_or_upstream_mutation",
+      "syntax_broken_python_before_cli_import",
+      "cli_parameter_drift",
+      "pr_create_missing_required_head",
+      "finalize_log_missing_required_metadata",
+      "evidence_inspect_wrong_run_log_option",
+      "admin_refresh_pr_missing_after_pr",
+      "rule_acknowledgement_required_after_commit",
+      "terminal_quote_prompt_hang",
+      "communication_start_or_retry_must_use_transfer_continue",
+      "transfer_continue_missing_or_stale_remote_report",
+      "manual_git_cleanup_used_before_restore_known_volatile"
+    ],
+    "llm_work_order_contract": {
+      "applies_to": [
+        "copy_paste_blocks",
+        "transfer_file_next_command"
+      ],
+      "authoritative_sources": [
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/transfer/one_command_transfer_protocol.yaml"
+      ],
+      "required_format": "python_script",
+      "shell_usage": "outer_logging_wrapper_only",
+      "source": "dynamic-from-rule-files",
+      "status": "active",
+      "transfer_file": {
+        "canonical_inbox": ".agentic/transfer/inbox/next_command.py.txt",
+        "shell_commands_allowed": false
+      }
+    },
+    "one_command_transfer_protocol": {
+      "artifact_type": "transfer_protocol",
+      "assistant_after_g": [
+        "Read the newest remote report or latest pointer from the repository.",
+        "Verify whether the report is fresh.",
+        "Derive the actual status from evidence, not from the chat signal.",
+        "Continue only on PASS.",
+        "Inspect evidence on FAIL or BLOCK.",
+        "Diagnose transfer-uplink problems when the remote report is missing or stale.",
+        "Never claim success if the report is stale.",
+        "Never invent success state.",
+        "Do not ask for long terminal output while a repo-backed or local diagnosis path is available."
+      ],
+      "blocked_state_requirement": {
+        "example_reasons": [
+          "dirty_worktree",
+          "repo_head_mismatch",
+          "missing_rule_ack",
+          "stale_rule_ack",
+          "missing_transfer_order",
+          "missing_branch_in_transfer_order",
+          "branch_switch_blocked",
+          "pull_blocked",
+          "push_blocked",
+          "report_commit_blocked"
+        ],
+        "must_emit_stable_diagnostic_report": true,
+        "product_progress": false,
+        "required_report_fields": {
+          "branch": "current_branch_or_null",
+          "chat_reply": "g",
+          "dirty_state": {
+            "clean": "bool",
+            "paths": "list[str]"
+          },
+          "expected_branch": "transfer_order_branch_or_null",
+          "head": "current_head_or_null",
+          "next_safe_action": "string",
+          "primary_state": "BLOCKED",
+          "reasons": "list[str]",
+          "result_status": "BLOCKED",
+          "rule_ack": {
+            "blocking_reasons": "list[str]",
+            "confirmed": "bool",
+            "present": "bool"
+          }
+        }
+      },
+      "branch_argument_rule": {
+        "branch_source": "transfer_order_or_derived_remote_next_configuration",
+        "user_command_must_not_include_branch_argument": true
+      },
+      "canonical_communication_command": {
+        "command": "./.venv/bin/agentic-kit transfer continue",
+        "notes": [
+          "remote-next remains the lower-level execution wrapper",
+          "transfer continue is the communication wrapper a new chat should prefer"
+        ],
+        "replaces_as_normal_user_entrypoint": [
+          "./.venv/bin/agentic-kit transfer remote-next",
+          "./.venv/bin/agentic-kit transfer restore-known-volatile",
+          "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile"
+        ],
+        "semantics": "single command for successor-chat communication start, transfer retries, and local-to-LLM report publication"
+      },
+      "central_assumption": {
+        "local_state_may_be_blocked_before_remote_next": true,
+        "remote_next_must_not_assume": [
+          "clean_checkout",
+          "synchronized_checkout",
+          "confirmed_rule_ack",
+          "pushable_branch"
+        ]
+      },
+      "chat_signal": {
+        "canonical": "g",
+        "failure_reply_is_still": "g",
+        "legacy_signals_replaced": [
+          "d",
+          "f",
+          "w"
+        ],
+        "meaning": "I ran the standard local command. Read the newest remote-backed transfer report, or, if none is visible, treat the state as BLOCKED or TRANSFER_UPLINK_PROBLEM and decide from available evidence whether the state is PASS, FAIL, BLOCK, or WAIT."
+      },
+      "communication_precedence": {
+        "command_integration_governance": {
+          "normative": true,
+          "rules": [
+            "Every new or changed agentic-kit command must be reviewed for Command Reference, LLM context, handoff/transfer visibility, fresh-context gate, recovery-skip, and explicit exception needs.",
+            "Do not hard-gate diagnostics, context generation, status, or volatile repair commands unless a deadlock analysis shows it is safe.",
+            "Mutating lifecycle wrappers must either require fresh LLM context or document and test a specific exception."
+          ],
+          "status": "active"
+        },
+        "llm_to_local_payload_discipline": {
+          "normative": true,
+          "rules": [
+            "LLM-to-local transfer files must use .agentic/transfer/inbox/next_command.py.txt.",
+            "The .py.txt transfer file must be valid Python source despite the text suffix.",
+            "Do not place raw gh, GitHub API, or direct GitHub shell commands in transfer payloads or copy/paste command blocks.",
+            "Use repo-backed agentic-kit wrappers for GitHub, PR, merge, evidence, release, and transfer operations.",
+            "Direct GitHub commands are recovery/diagnostic exceptions only, or internal implementation details of audited wrappers."
+          ],
+          "status": "active"
+        },
+        "primary": {
+          "llm_to_local": ".agentic/transfer/inbox/next_command.py.txt",
+          "local_to_llm": ".agentic/transfer/outbox/last_result.txt",
+          "mode": "canonical_transfer_files"
+        },
+        "rule": "Use transfer files as the primary communication channel. Remote work is secondary. Copy-and-paste is tertiary fallback only.",
+        "secondary": {
+          "mode": "remote_repo_backed_work"
+        },
+        "tertiary": {
+          "allowed_only_as_fallback": true,
+          "mode": "copy_paste"
+        }
+      },
+      "id": "one-command-transfer-protocol",
+      "language": "en",
+      "llm_work_order_contract": {
+        "copy_paste": {
+          "required_payload": "python_script",
+          "shell_commands_allowed": false,
+          "shell_wrapper_allowed_for_logging": true
+        },
+        "required_format": "python_script",
+        "status": "active",
+        "transfer_file": {
+          "allowed_payload": "python_script",
+          "canonical_inbox": ".agentic/transfer/inbox/next_command.py.txt",
+          "shell_commands_allowed": false
+        }
+      },
+      "next_implementation_slice": {
+        "do_not_do": [
+          "release_publish_work",
+          "governance_file_rewrites_before_working_technical_protocol",
+          "manual_multi_command_user_sequences"
+        ],
+        "must_fix_first": [
+          "tests/test_transfer_remote_next.py currently contains a syntax error from the bootstrap script output.",
+          "remote-next currently reads branchless orders but is not yet block-tolerant end-to-end.",
+          "report publication, commit, rule re-ack, and push must be integrated into one wrapper-owned execution report."
+        ],
+        "title": "Harden remote-next as block-tolerant one-command transfer wrapper"
+      },
+      "principles": [
+        "Chat is only the control channel.",
+        "Evidence lives in the repository, or, if remote publication is blocked, first in stable local transfer evidence.",
+        "The user runs exactly the same local command every time.",
+        "All concrete execution steps live in the transfer order or are executed by the remote-next wrapper."
+      ],
+      "publish_last_report_requirements": {
+        "blocked_output": {
+          "CHAT_REPLY": "g",
+          "NEXT": "concrete_next_safe_diagnostic_or_recovery_step",
+          "REMOTE_REPORT": "",
+          "TRANSFER_UPLOAD": "blocked"
+        },
+        "must_report_commit_or_push_blockers_as_BLOCKED": true,
+        "must_update_stable_latest_pointer": true,
+        "success_output": {
+          "CHAT_REPLY": "g",
+          "REMOTE_REPORT": "repo_relative_path",
+          "TRANSFER_UPLOAD": "done"
+        }
+      },
+      "purpose": "When direct remote work is not possible because of tool, connector, or safety boundaries, collaboration must use one permanently stable local command. The user must not be required to manually run several transfer, commit, push, diagnostic, pull, or branch commands.",
+      "remote_next_preflight_must_capture": [
+        "current_branch",
+        "current_head",
+        "remote_tracking_state",
+        "rule_ack_status",
+        "rule_ack_head_match",
+        "dirty_state",
+        "untracked_files",
+        "staged_changes",
+        "unstaged_changes",
+        "branch_switch_safety",
+        "pull_fast_forward_safety",
+        "report_creation_capability",
+        "remote_report_publication_capability"
+      ],
+      "schema_version": 1,
+      "scope": "llm_to_local_to_remote_report_fallback",
+      "status": "proposed_normative_requirement",
+      "transfer_file_header_requirement": {
+        "description": "This protocol must be stored in a machine-readable form and prepended as a machine-readable header to every local-to-LLM transfer file. The goal is to reduce LLM drift by making the communication contract available inside each transfer artifact.",
+        "enabled": true
+      },
+      "transfer_order_minimum_schema": {
+        "allow_blocked_start": true,
+        "branch": "working_branch",
+        "commit": {
+          "message": "Publish <short-label> transfer report",
+          "paths": [
+            "docs/reports/transfer_runs",
+            "docs/reports/terminal/transfer_handoff_reports"
+          ]
+        },
+        "expected_chat_reply": "g",
+        "id": "stable_transfer_id",
+        "label": "short_label",
+        "publish_last_report": true,
+        "push": {
+          "branch": "working_branch"
+        },
+        "safety": "safety_description",
+        "schema_version": 1,
+        "steps": [
+          {
+            "command": "list[str]"
+          }
+        ],
+        "title": "short_title"
+      },
+      "user_command": {
+        "argv": [
+          "./.venv/bin/agentic-kit",
+          "transfer",
+          "remote-next"
+        ],
+        "chat_reply": "g",
+        "working_directory": "<local-repo-path>"
+      },
+      "wrapper_first_inside_transfer_files": {
+        "command_reference_lifecycle_discipline": {
+          "canonical_post_merge_sequence": [
+            "./.venv/bin/agentic-kit transfer sync-main",
+            "./.venv/bin/agentic-kit transfer post-merge-complete --after-pr <PR_NUMBER>",
+            "./.venv/bin/agentic-kit transfer sync-main",
+            "./.venv/bin/agentic-kit transfer post-merge-check",
+            "./.venv/bin/agentic-kit transfer repo-status"
+          ],
+          "command_reference_sources": [
+            "docs/reference/AGENTIC_KIT_COMMANDS.md",
+            "docs/reference/agentic-kit-commands.json"
+          ],
+          "normative": true,
+          "rules": [
+            "Do not reconstruct agentic-kit commands from memory.",
+            "Use Command Reference before local control, transfer files, or copy/paste commands.",
+            "Use wrapper-first, transfer-file second, copy/paste shell only as fallback.",
+            "Use transfer pr-create-complete for new PRs.",
+            "Use transfer pr-complete for existing PRs.",
+            "After merge, always run transfer post-merge-complete --after-pr <PR_NUMBER>.",
+            "Use run-and-log only for diagnostics or fallback evidence, not as replacement for post-merge-complete.",
+            "Clean known volatile transfer outputs before branch switches and merge-safe operations when they are not target changes."
+          ],
+          "status": "active"
+        },
+        "manual_sequence_warning_threshold": 5,
+        "rule": "A canonical transfer file should invoke existing complex agentic-kit transfer wrappers whenever possible instead of spelling out many low-level commands."
+      }
+    },
+    "post_patch_rules": [
+      "changed_python_files_must_compile_before_cli_import",
+      "failed_guard_must_emit_final_signal_f",
+      "failed_guard_must_not_emit_go_semantics"
+    ],
+    "preflight_rules": [
+      "remote_repo_state_must_be_checked_before_transfer_execution",
+      "canonical_inbox_must_be_materialized_from_remote_before_execution",
+      "local_inbox_must_match_remote_task_source",
+      "expected_branch_must_match",
+      "worktree_must_be_clean_before_transfer",
+      "local_head_must_match_upstream_head",
+      "rule_acknowledgement_must_match_head",
+      "canonical_inbox_file_must_exist",
+      "canonical_inbox_file_must_compile_as_python_source"
+    ],
+    "repo_state": {
+      "branch": "main",
+      "dirty_status": "",
+      "head": "0908f6634f34222f9ac359422bd95d36417af8ac",
+      "head_matches_upstream": true,
+      "upstream": "origin/main",
+      "upstream_head": "0908f6634f34222f9ac359422bd95d36417af8ac"
+    },
+    "schema_version": 1,
+    "terminal_block_rules": {
+      "avoid": [
+        "long heredoc-style shell mutation blocks",
+        "inline Python with complex shell quoting",
+        "commands that can leave zsh in quote> or dquote>"
+      ],
+      "preferred": [
+        "Use printf '%s\\n' for visible shell output lines",
+        "Keep terminal blocks small",
+        "Avoid unterminated single or double quotes",
+        "Avoid large nested quote blocks",
+        "Use ./.venv/bin/python instead of python"
+      ],
+      "recovery": [
+        "If quote>, dquote>, or heredoc> appears, press Ctrl-C, then run git status --short and git branch --show-current"
+      ]
+    },
+    "transfer_lanes": {
+      "control_lane": {
+        "file": ".agentic/transfer/inbox/current.yaml",
+        "role": "wrapper_control_plane",
+        "runner": "./.venv/bin/agentic-kit transfer remote-next",
+        "user_visible": true
+      },
+      "python_payload_lane": {
+        "direct_user_execution": "forbidden_except_recovery",
+        "file": ".agentic/transfer/inbox/next_command.py.txt",
+        "role": "pure_python_payload",
+        "runner": "./.venv/bin/python",
+        "user_visible": false
+      }
+    },
+    "transfer_priorities": [
+      "remote_repo_backed_work_first",
+      "canonical_one_command_remote_next_second",
+      "canonical_transfer_files_second",
+      "copy_paste_only_fallback"
+    ]
+  },
+  "remote_next_report": {
+    "artifact_type": "transfer_remote_next_execution_report",
+    "blocked_message": "[Errno 2] No such file or directory: '.agentic/transfer/inbox/current.yaml'",
+    "branch": "main",
+    "chat_reply": "g",
+    "command_id": "remote-next-blocked",
+    "head": "0908f663",
+    "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+    "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
+    "local_run": {
+      "apply": null,
+      "command_id": "remote-next-blocked",
+      "inspect": {
+        "message": "[Errno 2] No such file or directory: '.agentic/transfer/inbox/current.yaml'",
+        "reasons": [
+          "missing_transfer_order"
+        ],
+        "result_status": "BLOCKED",
+        "returncode": 2,
+        "schema_version": 1
+      },
+      "next": "Inspect the published remote-next diagnostic report before retrying.",
+      "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+      "result_status": "BLOCKED",
+      "returncode": 2,
+      "schema_version": 1,
+      "state": {
+        "branch": "main",
+        "dirty_state": {
+          "clean": true,
+          "staged_changes": [],
+          "status_short": "",
+          "unstaged_changes": [],
+          "untracked_files": []
+        },
+        "head": "0908f663",
+        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+        "primary_state": "BLOCKED",
+        "reasons": [
+          "missing_transfer_order"
+        ],
+        "schema_version": 1
+      },
+      "transfer_id": "remote-next-blocked"
+    },
+    "next": "Inspect the published remote-next diagnostic report before retrying.",
+    "next_action": "Inspect the published remote-next diagnostic report before retrying.",
+    "post_report_actions": {
+      "attempted": true,
+      "schema_version": 1,
+      "status": "pending_until_report_files_are_written"
+    },
+    "preflight": {
+      "current_branch": "main",
+      "dirty_state": {
+        "clean": true,
+        "staged_changes": [],
+        "status_short": "",
+        "unstaged_changes": [],
+        "untracked_files": []
+      },
+      "head": "0908f663",
+      "remote_tracking": "origin/main"
+    },
+    "primary_state": "BLOCKED",
+    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+    "reasons": [
+      "missing_transfer_order"
+    ],
+    "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
+    "result_status": "BLOCKED",
+    "returncode": 2,
+    "rule_ack": {
+      "blocking_reasons": [],
+      "confirmed": true,
+      "head": "0908f663",
+      "path": ".agentic/rule_ack/current.json",
+      "present": true
+    },
+    "schema_version": 1,
+    "state": "BLOCKED",
+    "transfer_id": "remote-next-blocked"
+  },
+  "safety_header": {
+    "authoritative_sources": [
+      {
+        "path": ".agentic/transfer_safety_rules.yaml",
+        "sha256": "3523be071e72434ad25c6c6283a801ffdb194ed1ecb43c4da720522cfde89cbb"
+      },
+      {
+        "path": ".agentic/transfer/one_command_transfer_protocol.yaml",
+        "sha256": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04"
+      },
+      {
+        "path": ".agentic/rule_mechanism_inventory.yaml",
+        "sha256": "6972e397e018d8369f2153516ba767888dac962b3482109c5e7124d51b188e1b"
+      },
+      {
+        "path": ".agentic/rule_preservation.yaml",
+        "sha256": "817319e295674992e6665df25778b5c9cb767d1e393e5402df708d52ec79ff39"
+      },
+      {
+        "path": "docs/DOCUMENTATION_REGISTRY.yaml",
+        "sha256": "0c25cd50651ee211af8a91c39bfdf8960df422048af414a09bb68e2a366ba38b"
+      },
+      {
+        "path": "docs/planning/PROJECT_DIRECTION.yaml",
+        "sha256": "ec1210503a8a2cfd74c5c5b00061688f9f2bcf548b497965513e181ff379e722"
+      }
+    ],
+    "canonical_cli_usage": {
+      "canonical_communication_continue": {
+        "command": "./.venv/bin/agentic-kit transfer continue",
+        "forbidden_normal_replacements": [
+          "manual git cleanup before trying restore-known-volatile",
+          "direct next_command.py.txt execution as normal path",
+          "remote-next without preflight when transfer continue is available"
+        ],
+        "required_behavior": [
+          "restore known volatile transfer files before continuing",
+          "infer exactly one active transfer order branch when branchless continuation is ambiguous",
+          "run remote-next through the selected branch or current transfer order",
+          "treat missing, stale, or unpushed remote reports as BLOCKED",
+          "emit g semantics only after a fresh remote report is pushed"
+        ],
+        "role": "single_communication_entrypoint_for_successor_chats_and_transfer_retries"
+      },
+      "canonical_one_command_transfer": {
+        "command": "./.venv/bin/agentic-kit transfer remote-next",
+        "forbidden_normal_replacements": [
+          "direct next_command.py.txt execution by the user",
+          "manual multi-command transfer sequences"
+        ],
+        "notes": [
+          "next_command.py.txt is a pure Python payload lane, not the user-facing wrapper command",
+          "direct Python execution is reserved for explicit debug or recovery only"
+        ],
+        "required_behavior": [
+          "read branch from .agentic/transfer/inbox/current.yaml when no branch argument is supplied",
+          "block stale, missing, inactive, or head-mismatched transfer orders",
+          "synchronize and fast-forward the target branch before local execution",
+          "refresh stale rule acknowledgement before transfer execution where possible",
+          "run lower-level transfer-order actions through the local transfer runner",
+          "publish remote-next report projections under docs/reports/terminal/transfer_handoff_reports/",
+          "print a human summary after report publication"
+        ]
+      },
+      "evidence_finalize_log": {
+        "command": "agentic-kit evidence finalize-log --run-log <path> --remote-log <docs/reports/terminal/name.log> --slice <name> --scope <text> --mode-check <text> --command-report <text> --interpretation <text> --safe-step <text>",
+        "required_options": [
+          "--run-log",
+          "--remote-log",
+          "--slice",
+          "--scope",
+          "--mode-check",
+          "--command-report",
+          "--interpretation",
+          "--safe-step"
+        ]
+      },
+      "evidence_inspect": {
+        "command": "agentic-kit evidence inspect --require-summary <path>",
+        "invalid_forms": [
+          "agentic-kit evidence inspect --run-log <path>"
+        ]
+      },
+      "rules_acknowledge_after_commit": {
+        "command": "agentic-kit rules acknowledge",
+        "trigger": "required after every commit because repo_head changes"
+      },
+      "transfer_admin_refresh_pr": {
+        "command": "agentic-kit transfer admin-refresh-pr --after-pr <merged-pr-number>",
+        "required_options": [
+          "--after-pr"
+        ]
+      },
+      "transfer_pr_create": {
+        "command": "agentic-kit transfer pr-create --base main --head <branch> --title <title> --body <body>",
+        "required_options": [
+          "--head",
+          "--title"
+        ]
+      },
+      "transfer_pr_create_complete_post_merge": {
+        "command": "./.venv/bin/agentic-kit transfer pr-create-complete --post-merge-complete --base main --head current --merge-method squash",
+        "required_behavior": [
+          "resolve the concrete PR number internally",
+          "run pr-complete",
+          "run post-merge-complete with the concrete PR number",
+          "run post-merge-check and repo-status",
+          "avoid chat or user propagation of PR number placeholders"
+        ],
+        "role": "preferred_new_pr_lifecycle_with_internal_concrete_pr_number_closeout"
+      },
+      "transfer_publish_last_report": {
+        "command": "./.venv/bin/agentic-kit transfer publish-last-report --label <label>",
+        "role": "tracked_handoff_upload_for_run_and_log_reports"
+      },
+      "transfer_run_and_log": {
+        "command": "./.venv/bin/agentic-kit transfer run-and-log --label <label> -- <command...>",
+        "notes": [
+          "Requires publish-last-report before g/go semantics."
+        ],
+        "role": "local_report_only"
+      },
+      "transfer_run_local": {
+        "command": "./.venv/bin/agentic-kit transfer run-local --path .agentic/transfer/inbox/current.yaml",
+        "role": "lower_level_adapter_only"
+      },
+      "verify_llm_context_refresh": {
+        "command": "./.venv/bin/agentic-kit transfer verify-llm-context-refresh",
+        "required_behavior": [
+          "check local outbox for generated llm_execution_context",
+          "check latest handoff report for generated llm_execution_context",
+          "verify source hashes and rule-projected policies",
+          "block on missing or stale refresh context"
+        ],
+        "role": "running_chat_and_successor_chat_drift_guard"
+      }
+    },
+    "canonical_runner": {
+      "command": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "remote-next"
+      ],
+      "direct_python_execution_allowed": "recovery_only",
+      "rule": "remote-next is the normal local transfer command; next_command.py.txt is a payload lane and direct user execution is only recovery/debug."
+    },
+    "canonical_transfer_files": {
+      "llm_to_local": ".agentic/transfer/inbox/next_command.py.txt",
+      "local_to_llm": ".agentic/transfer/outbox/last_result.txt",
+      "remote_latest_report": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+      "transfer_order": ".agentic/transfer/inbox/current.yaml"
+    },
+    "decision_tree": {
+      "active_order_on_non_current_branch": {
+        "action": "transfer_continue_infers_single_active_order_or_requires_branch",
+        "forbidden": "assume_branchless_remote_next_finds_feature_branch_order"
+      },
+      "communication_start_or_retry": {
+        "action": "instruct_user_to_run_transfer_continue",
+        "command": "./.venv/bin/agentic-kit transfer continue",
+        "forbidden": "start_with_remote_next_or_manual_multicommand_sequence"
+      },
+      "direct_next_command_execution": {
+        "allowed_only_if": "explicit_debug_or_recovery"
+      },
+      "known_volatile_dirty_state": {
+        "action": "run_restore_known_volatile_inside_transfer_continue",
+        "forbidden": "manual_git_restore_as_first_response"
+      },
+      "local_transfer_needed": {
+        "action": "instruct_user_to_run_remote_next",
+        "forbidden": "direct_python_next_command"
+      },
+      "remote_next_reports_blocked_or_fail": {
+        "action": "diagnose_from_report",
+        "forbidden": "claim_success"
+      },
+      "remote_next_reports_pass": {
+        "action": "continue_planning_from_report"
+      },
+      "remote_report_missing_or_stale": {
+        "action": "treat_as_transfer_uplink_problem",
+        "forbidden": "ask_for_long_terminal_output_first"
+      },
+      "user_says_g_or_go": {
+        "action": "read_latest_remote_transfer_report_first",
+        "forbidden": "continue_from_chat_memory"
+      }
+    },
+    "derived_projection": true,
+    "kind": "transfer_protocol_header",
+    "known_failure_classes": [
+      "wrong_branch_execution",
+      "stale_local_branch_after_fetch",
+      "stale_local_inbox_execution",
+      "local_inbox_not_materialized_from_remote",
+      "local_inbox_differs_from_remote_task",
+      "direct_python_execution_used_as_normal_path",
+      "rule_acknowledgement_head_mismatch",
+      "dirty_worktree_before_transfer",
+      "accumulated_untracked_transfer_or_report_files",
+      "failed_report_publication_misread_as_go_signal",
+      "summary_shown_before_outbox_remote_publish",
+      "outbox_not_written_before_completion_signal",
+      "outbox_not_uploaded_to_remote",
+      "user_go_before_remote_report_published",
+      "llm_planning_without_reading_remote_outbox",
+      "diagnostic_status_success_masking_earlier_blocker",
+      "heredoc_style_shell_mutation",
+      "unescaped_shell_substitution",
+      "raw_newline_in_python_string_literals",
+      "quote_escape_drift",
+      "fragile_multiline_inline_python_commands",
+      "long_shell_mutation_blocks",
+      "line_ending_drift",
+      "python_transfer_txt_suffix_not_syntax_validated",
+      "partial_patch_application",
+      "fragile_text_anchor_patching",
+      "accidental_compatibility_key_removal",
+      "destructive_use_of_moving_references",
+      "implicit_main_push_or_upstream_mutation",
+      "syntax_broken_python_before_cli_import",
+      "cli_parameter_drift",
+      "pr_create_missing_required_head",
+      "finalize_log_missing_required_metadata",
+      "evidence_inspect_wrong_run_log_option",
+      "admin_refresh_pr_missing_after_pr",
+      "rule_acknowledgement_required_after_commit",
+      "terminal_quote_prompt_hang",
+      "communication_start_or_retry_must_use_transfer_continue",
+      "transfer_continue_missing_or_stale_remote_report",
+      "manual_git_cleanup_used_before_restore_known_volatile"
+    ],
+    "llm_work_order_contract": {
+      "applies_to": [
+        "copy_paste_blocks",
+        "transfer_file_next_command"
+      ],
+      "authoritative_sources": [
+        ".agentic/transfer_safety_rules.yaml",
+        ".agentic/transfer/one_command_transfer_protocol.yaml"
+      ],
+      "required_format": "python_script",
+      "shell_usage": "outer_logging_wrapper_only",
+      "source": "dynamic-from-rule-files",
+      "status": "active",
+      "transfer_file": {
+        "canonical_inbox": ".agentic/transfer/inbox/next_command.py.txt",
+        "shell_commands_allowed": false
+      }
+    },
+    "one_command_transfer_protocol": {
+      "artifact_type": "transfer_protocol",
+      "assistant_after_g": [
+        "Read the newest remote report or latest pointer from the repository.",
+        "Verify whether the report is fresh.",
+        "Derive the actual status from evidence, not from the chat signal.",
+        "Continue only on PASS.",
+        "Inspect evidence on FAIL or BLOCK.",
+        "Diagnose transfer-uplink problems when the remote report is missing or stale.",
+        "Never claim success if the report is stale.",
+        "Never invent success state.",
+        "Do not ask for long terminal output while a repo-backed or local diagnosis path is available."
+      ],
+      "blocked_state_requirement": {
+        "example_reasons": [
+          "dirty_worktree",
+          "repo_head_mismatch",
+          "missing_rule_ack",
+          "stale_rule_ack",
+          "missing_transfer_order",
+          "missing_branch_in_transfer_order",
+          "branch_switch_blocked",
+          "pull_blocked",
+          "push_blocked",
+          "report_commit_blocked"
+        ],
+        "must_emit_stable_diagnostic_report": true,
+        "product_progress": false,
+        "required_report_fields": {
+          "branch": "current_branch_or_null",
+          "chat_reply": "g",
+          "dirty_state": {
+            "clean": "bool",
+            "paths": "list[str]"
+          },
+          "expected_branch": "transfer_order_branch_or_null",
+          "head": "current_head_or_null",
+          "next_safe_action": "string",
+          "primary_state": "BLOCKED",
+          "reasons": "list[str]",
+          "result_status": "BLOCKED",
+          "rule_ack": {
+            "blocking_reasons": "list[str]",
+            "confirmed": "bool",
+            "present": "bool"
+          }
+        }
+      },
+      "branch_argument_rule": {
+        "branch_source": "transfer_order_or_derived_remote_next_configuration",
+        "user_command_must_not_include_branch_argument": true
+      },
+      "canonical_communication_command": {
+        "command": "./.venv/bin/agentic-kit transfer continue",
+        "notes": [
+          "remote-next remains the lower-level execution wrapper",
+          "transfer continue is the communication wrapper a new chat should prefer"
+        ],
+        "replaces_as_normal_user_entrypoint": [
+          "./.venv/bin/agentic-kit transfer remote-next",
+          "./.venv/bin/agentic-kit transfer restore-known-volatile",
+          "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile"
+        ],
+        "semantics": "single command for successor-chat communication start, transfer retries, and local-to-LLM report publication"
+      },
+      "central_assumption": {
+        "local_state_may_be_blocked_before_remote_next": true,
+        "remote_next_must_not_assume": [
+          "clean_checkout",
+          "synchronized_checkout",
+          "confirmed_rule_ack",
+          "pushable_branch"
+        ]
+      },
+      "chat_signal": {
+        "canonical": "g",
+        "failure_reply_is_still": "g",
+        "legacy_signals_replaced": [
+          "d",
+          "f",
+          "w"
+        ],
+        "meaning": "I ran the standard local command. Read the newest remote-backed transfer report, or, if none is visible, treat the state as BLOCKED or TRANSFER_UPLINK_PROBLEM and decide from available evidence whether the state is PASS, FAIL, BLOCK, or WAIT."
+      },
+      "communication_precedence": {
+        "command_integration_governance": {
+          "normative": true,
+          "rules": [
+            "Every new or changed agentic-kit command must be reviewed for Command Reference, LLM context, handoff/transfer visibility, fresh-context gate, recovery-skip, and explicit exception needs.",
+            "Do not hard-gate diagnostics, context generation, status, or volatile repair commands unless a deadlock analysis shows it is safe.",
+            "Mutating lifecycle wrappers must either require fresh LLM context or document and test a specific exception."
+          ],
+          "status": "active"
+        },
+        "llm_to_local_payload_discipline": {
+          "normative": true,
+          "rules": [
+            "LLM-to-local transfer files must use .agentic/transfer/inbox/next_command.py.txt.",
+            "The .py.txt transfer file must be valid Python source despite the text suffix.",
+            "Do not place raw gh, GitHub API, or direct GitHub shell commands in transfer payloads or copy/paste command blocks.",
+            "Use repo-backed agentic-kit wrappers for GitHub, PR, merge, evidence, release, and transfer operations.",
+            "Direct GitHub commands are recovery/diagnostic exceptions only, or internal implementation details of audited wrappers."
+          ],
+          "status": "active"
+        },
+        "primary": {
+          "llm_to_local": ".agentic/transfer/inbox/next_command.py.txt",
+          "local_to_llm": ".agentic/transfer/outbox/last_result.txt",
+          "mode": "canonical_transfer_files"
+        },
+        "rule": "Use transfer files as the primary communication channel. Remote work is secondary. Copy-and-paste is tertiary fallback only.",
+        "secondary": {
+          "mode": "remote_repo_backed_work"
+        },
+        "tertiary": {
+          "allowed_only_as_fallback": true,
+          "mode": "copy_paste"
+        }
+      },
+      "id": "one-command-transfer-protocol",
+      "language": "en",
+      "llm_work_order_contract": {
+        "copy_paste": {
+          "required_payload": "python_script",
+          "shell_commands_allowed": false,
+          "shell_wrapper_allowed_for_logging": true
+        },
+        "required_format": "python_script",
+        "status": "active",
+        "transfer_file": {
+          "allowed_payload": "python_script",
+          "canonical_inbox": ".agentic/transfer/inbox/next_command.py.txt",
+          "shell_commands_allowed": false
+        }
+      },
+      "next_implementation_slice": {
+        "do_not_do": [
+          "release_publish_work",
+          "governance_file_rewrites_before_working_technical_protocol",
+          "manual_multi_command_user_sequences"
+        ],
+        "must_fix_first": [
+          "tests/test_transfer_remote_next.py currently contains a syntax error from the bootstrap script output.",
+          "remote-next currently reads branchless orders but is not yet block-tolerant end-to-end.",
+          "report publication, commit, rule re-ack, and push must be integrated into one wrapper-owned execution report."
+        ],
+        "title": "Harden remote-next as block-tolerant one-command transfer wrapper"
+      },
+      "principles": [
+        "Chat is only the control channel.",
+        "Evidence lives in the repository, or, if remote publication is blocked, first in stable local transfer evidence.",
+        "The user runs exactly the same local command every time.",
+        "All concrete execution steps live in the transfer order or are executed by the remote-next wrapper."
+      ],
+      "publish_last_report_requirements": {
+        "blocked_output": {
+          "CHAT_REPLY": "g",
+          "NEXT": "concrete_next_safe_diagnostic_or_recovery_step",
+          "REMOTE_REPORT": "",
+          "TRANSFER_UPLOAD": "blocked"
+        },
+        "must_report_commit_or_push_blockers_as_BLOCKED": true,
+        "must_update_stable_latest_pointer": true,
+        "success_output": {
+          "CHAT_REPLY": "g",
+          "REMOTE_REPORT": "repo_relative_path",
+          "TRANSFER_UPLOAD": "done"
+        }
+      },
+      "purpose": "When direct remote work is not possible because of tool, connector, or safety boundaries, collaboration must use one permanently stable local command. The user must not be required to manually run several transfer, commit, push, diagnostic, pull, or branch commands.",
+      "remote_next_preflight_must_capture": [
+        "current_branch",
+        "current_head",
+        "remote_tracking_state",
+        "rule_ack_status",
+        "rule_ack_head_match",
+        "dirty_state",
+        "untracked_files",
+        "staged_changes",
+        "unstaged_changes",
+        "branch_switch_safety",
+        "pull_fast_forward_safety",
+        "report_creation_capability",
+        "remote_report_publication_capability"
+      ],
+      "schema_version": 1,
+      "scope": "llm_to_local_to_remote_report_fallback",
+      "status": "proposed_normative_requirement",
+      "transfer_file_header_requirement": {
+        "description": "This protocol must be stored in a machine-readable form and prepended as a machine-readable header to every local-to-LLM transfer file. The goal is to reduce LLM drift by making the communication contract available inside each transfer artifact.",
+        "enabled": true
+      },
+      "transfer_order_minimum_schema": {
+        "allow_blocked_start": true,
+        "branch": "working_branch",
+        "commit": {
+          "message": "Publish <short-label> transfer report",
+          "paths": [
+            "docs/reports/transfer_runs",
+            "docs/reports/terminal/transfer_handoff_reports"
+          ]
+        },
+        "expected_chat_reply": "g",
+        "id": "stable_transfer_id",
+        "label": "short_label",
+        "publish_last_report": true,
+        "push": {
+          "branch": "working_branch"
+        },
+        "safety": "safety_description",
+        "schema_version": 1,
+        "steps": [
+          {
+            "command": "list[str]"
+          }
+        ],
+        "title": "short_title"
+      },
+      "user_command": {
+        "argv": [
+          "./.venv/bin/agentic-kit",
+          "transfer",
+          "remote-next"
+        ],
+        "chat_reply": "g",
+        "working_directory": "<local-repo-path>"
+      },
+      "wrapper_first_inside_transfer_files": {
+        "command_reference_lifecycle_discipline": {
+          "canonical_post_merge_sequence": [
+            "./.venv/bin/agentic-kit transfer sync-main",
+            "./.venv/bin/agentic-kit transfer post-merge-complete --after-pr <PR_NUMBER>",
+            "./.venv/bin/agentic-kit transfer sync-main",
+            "./.venv/bin/agentic-kit transfer post-merge-check",
+            "./.venv/bin/agentic-kit transfer repo-status"
+          ],
+          "command_reference_sources": [
+            "docs/reference/AGENTIC_KIT_COMMANDS.md",
+            "docs/reference/agentic-kit-commands.json"
+          ],
+          "normative": true,
+          "rules": [
+            "Do not reconstruct agentic-kit commands from memory.",
+            "Use Command Reference before local control, transfer files, or copy/paste commands.",
+            "Use wrapper-first, transfer-file second, copy/paste shell only as fallback.",
+            "Use transfer pr-create-complete for new PRs.",
+            "Use transfer pr-complete for existing PRs.",
+            "After merge, always run transfer post-merge-complete --after-pr <PR_NUMBER>.",
+            "Use run-and-log only for diagnostics or fallback evidence, not as replacement for post-merge-complete.",
+            "Clean known volatile transfer outputs before branch switches and merge-safe operations when they are not target changes."
+          ],
+          "status": "active"
+        },
+        "manual_sequence_warning_threshold": 5,
+        "rule": "A canonical transfer file should invoke existing complex agentic-kit transfer wrappers whenever possible instead of spelling out many low-level commands."
+      }
+    },
+    "post_patch_rules": [
+      "changed_python_files_must_compile_before_cli_import",
+      "failed_guard_must_emit_final_signal_f",
+      "failed_guard_must_not_emit_go_semantics"
+    ],
+    "preflight_rules": [
+      "remote_repo_state_must_be_checked_before_transfer_execution",
+      "canonical_inbox_must_be_materialized_from_remote_before_execution",
+      "local_inbox_must_match_remote_task_source",
+      "expected_branch_must_match",
+      "worktree_must_be_clean_before_transfer",
+      "local_head_must_match_upstream_head",
+      "rule_acknowledgement_must_match_head",
+      "canonical_inbox_file_must_exist",
+      "canonical_inbox_file_must_compile_as_python_source"
+    ],
+    "repo_state": {
+      "branch": "main",
+      "dirty_status": "",
+      "head": "0908f6634f34222f9ac359422bd95d36417af8ac",
+      "head_matches_upstream": true,
+      "upstream": "origin/main",
+      "upstream_head": "0908f6634f34222f9ac359422bd95d36417af8ac"
+    },
+    "schema_version": 1,
+    "terminal_block_rules": {
+      "avoid": [
+        "long heredoc-style shell mutation blocks",
+        "inline Python with complex shell quoting",
+        "commands that can leave zsh in quote> or dquote>"
+      ],
+      "preferred": [
+        "Use printf '%s\\n' for visible shell output lines",
+        "Keep terminal blocks small",
+        "Avoid unterminated single or double quotes",
+        "Avoid large nested quote blocks",
+        "Use ./.venv/bin/python instead of python"
+      ],
+      "recovery": [
+        "If quote>, dquote>, or heredoc> appears, press Ctrl-C, then run git status --short and git branch --show-current"
+      ]
+    },
+    "transfer_lanes": {
+      "control_lane": {
+        "file": ".agentic/transfer/inbox/current.yaml",
+        "role": "wrapper_control_plane",
+        "runner": "./.venv/bin/agentic-kit transfer remote-next",
+        "user_visible": true
+      },
+      "python_payload_lane": {
+        "direct_user_execution": "forbidden_except_recovery",
+        "file": ".agentic/transfer/inbox/next_command.py.txt",
+        "role": "pure_python_payload",
+        "runner": "./.venv/bin/python",
+        "user_visible": false
+      }
+    },
+    "transfer_priorities": [
+      "remote_repo_backed_work_first",
+      "canonical_one_command_remote_next_second",
+      "canonical_transfer_files_second",
+      "copy_paste_only_fallback"
+    ]
+  },
+  "schema_version": 1
+}
