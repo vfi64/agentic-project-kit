@@ -1429,6 +1429,74 @@
       "qualified_name": "agentic-kit doc-registry register"
     },
     {
+      "group": "docs",
+      "help": "Fail if removed documentation sources still have live refs or registry refs.",
+      "name": "removed-source-audit",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Repository-relative removed source path to audit. May be supplied multiple times. Defaults to removed_source paths in PROJECT_DIRECTION.yaml.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "docs/planning/PROJECT_DIRECTION.yaml",
+          "help": "Repository-relative central document that may retain removed_source metadata.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "central_target",
+          "opts": [
+            "--central-target"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "docs",
+        "removed-source-audit"
+      ],
+      "qualified_name": "agentic-kit docs removed-source-audit"
+    },
+    {
       "group": "root",
       "help": "Run the umbrella documentation-system audit.",
       "name": "docs-audit",
