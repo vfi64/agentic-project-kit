@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1746-handoff-refresh`
+- branch: `docs/post-pr1748-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -316,7 +316,7 @@ Wenn der Bootstrap grün ist:
       ],
       "id": "rule-registry-hardening",
       "status": "active",
-      "summary": "Preserve active rule identity, source validation, and refresh handshakes for v0.4.12"
+      "summary": "Preserve active rule identity, source validation, and refresh handshakes"
     },
     {
       "files": [
@@ -335,6 +335,33 @@ Wenn der Bootstrap grün ist:
       "id": "gui-workbench-plan",
       "status": "planned",
       "summary": "Implement the GUI gatekeeper/workbench as a view over governed action specs for v0.4.x"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "docs-centralize-and-remove-command",
+      "status": "planned",
+      "summary": "Build governed docs centralize-and-remove command before K3"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "standard-error-hardening-backlog",
+      "status": "active",
+      "summary": "Standard-error hardening backlog and legacy ns command coverage map"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "post-merge-lifecycle-state-model",
+      "status": "active",
+      "summary": "Post-merge lifecycle state model and command authority"
     }
   ],
   "recent_lessons": [
@@ -347,14 +374,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1746-handoff-refresh",
+    "branch": "docs/post-pr1748-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "481008954587859e4125f0708d3bb86298b8dfa7",
+    "head": "9f94f3eb77634a1cd710617f0b189cf7a3e61b4e",
     "head_matches_origin_main": true,
-    "head_short": "48100895",
+    "head_short": "9f94f3eb",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "481008954587859e4125f0708d3bb86298b8dfa7",
-    "origin_main_short": "48100895",
+    "origin_main": "9f94f3eb77634a1cd710617f0b189cf7a3e61b4e",
+    "origin_main_short": "9f94f3eb",
     "worktree_clean": false
   }
 }
