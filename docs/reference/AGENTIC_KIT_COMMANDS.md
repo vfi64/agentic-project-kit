@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `205`
+- Command count: `206`
 
 ## Commands
 
@@ -277,6 +277,16 @@ List unregistered docs candidates with optional strict declared-scope failure.
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
 | `strict_scope` | `TyperOption` | --strict-scope | `False` | `False` | Fail when unregistered Markdown files violate declared required scope paths. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+
+### `agentic-kit doc-registry reconcile`
+
+Reconcile documentation registry, declared scope, and decision projection.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Reserved for a later slice; current implementation is dry-run only. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit doc-registry register`
