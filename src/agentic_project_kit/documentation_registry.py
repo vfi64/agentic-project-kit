@@ -13,6 +13,7 @@ REGISTRY_PATH = Path("docs/DOCUMENTATION_REGISTRY.yaml")
 SCOPE_PATH = Path("docs/DOC_REGISTRY_SCOPE.yaml")
 COMPILED_CONTEXT_PATH = Path(".agentic/compiled_agent_context.yaml")
 REGISTRY_CONTRACT_PATH = Path("docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md")
+SCOPE_DECISION_PATH = Path("docs/governance/DOC_REGISTRY_SCOPE_DECISION.md")
 COMMUNICATION_ARTIFACTS_PATH = Path(".agentic/communication_artifacts.yaml")
 
 DOCUMENT_CLASSES = (
@@ -339,6 +340,222 @@ def find_unregistered_document_candidates(
             candidates.append(rel)
     return candidates
 
+
+
+def _registered_document_paths_from_registry(registry: dict[str, Any]) -> set[str]:
+    documents = registry.get("documents", [])
+    if not isinstance(documents, list):
+        return set()
+    return {
+        str(entry.get("path", "")).strip()
+        for entry in documents
+        if isinstance(entry, dict) and str(entry.get("path", "")).strip()
+    }
+
+
+def _scope_exempt_matches(scope: DocumentationRegistryScope, rel_path: str) -> bool:
+    return any(fnmatchcase(rel_path, exemption.path) for exemption in scope.exempt_paths)
+
+
+def _markdown_files_under_scope(project_root: Path, scope: DocumentationRegistryScope) -> list[str]:
+    paths: set[str] = set()
+
+    for required_file in scope.required_files:
+        candidate = project_root / required_file
+        if candidate.is_file() and candidate.suffix.lower() in SCOPE_REQUIRED_SUFFIXES:
+            paths.add(required_file)
+
+    for required_path in scope.required_paths:
+        scan_root = project_root / required_path
+        if not scan_root.exists():
+            continue
+        if scan_root.is_file():
+            rel = scan_root.relative_to(project_root).as_posix()
+            if scan_root.suffix.lower() in SCOPE_REQUIRED_SUFFIXES:
+                paths.add(rel)
+            continue
+        for candidate in scan_root.rglob("*"):
+            if not candidate.is_file() or candidate.is_symlink():
+                continue
+            if candidate.suffix.lower() not in SCOPE_REQUIRED_SUFFIXES:
+                continue
+            rel = candidate.relative_to(project_root).as_posix()
+            if _scope_exempt_matches(scope, rel):
+                continue
+            paths.add(rel)
+
+    return sorted(paths)
+
+
+def build_doc_registry_reconcile_scope_decision_rows(project_root: Path) -> list[dict[str, Any]]:
+    """Build deterministic docs-root rows for the scope decision table.
+
+    This is read-only and intentionally limited to Markdown files under docs/.
+    """
+    docs_root = project_root / "docs"
+    if not docs_root.exists():
+        return []
+
+    rows: list[dict[str, Any]] = []
+    registry = load_documentation_registry(project_root)
+    registered_paths = _registered_document_paths_from_registry(registry)
+
+    for docs_path in sorted(p for p in docs_root.iterdir() if p.is_dir()):
+        md_files = sorted(
+            candidate.relative_to(project_root).as_posix()
+            for candidate in docs_path.rglob("*.md")
+            if candidate.is_file() and not candidate.is_symlink()
+        )
+        registered = [path for path in md_files if path in registered_paths]
+        rows.append(
+            {
+                "docs_path": docs_path.relative_to(project_root).as_posix() + "/",
+                "md_files": len(md_files),
+                "registered": len(registered),
+                "unregistered": len(md_files) - len(registered),
+            }
+        )
+    return rows
+
+
+def render_doc_registry_scope_decision_table(rows: list[dict[str, Any]]) -> str:
+    lines = [
+        "| docs path | md files | registered | unregistered | proposed: required / exempt / undecided |",
+        "|---|---:|---:|---:|---|",
+    ]
+    for row in rows:
+        lines.append(
+            f"| {row['docs_path']} | {row['md_files']} | {row['registered']} | "
+            f"{row['unregistered']} |  |"
+        )
+    return "\n".join(lines)
+
+
+def build_doc_registry_reconcile_report(project_root: Path) -> dict[str, Any]:
+    """Build a read-only reconciliation report for registry/scope state.
+
+    The report deliberately performs no writes. It centralizes diagnostics that
+    were previously assembled manually during documentation taxonomy cleanup.
+    """
+    registry = load_documentation_registry(project_root)
+    scope = load_documentation_registry_scope(project_root)
+    registered_paths = _registered_document_paths_from_registry(registry)
+    scope_required_markdown = _markdown_files_under_scope(project_root, scope)
+    unregistered_candidates = find_unregistered_document_candidates(
+        project_root,
+        registered_paths=registered_paths,
+    )
+    strict_scope_violations = [
+        path for path in scope_required_markdown if path not in registered_paths
+    ]
+
+    rows = build_doc_registry_reconcile_scope_decision_rows(project_root)
+    rendered_scope_table = render_doc_registry_scope_decision_table(rows)
+
+    decision_path = project_root / SCOPE_DECISION_PATH
+    decision_present = decision_path.exists()
+    decision_text = decision_path.read_text(encoding="utf-8") if decision_present else ""
+    decision_table_stale = (
+        decision_present
+        and rendered_scope_table not in decision_text
+    )
+
+    findings: list[dict[str, str]] = []
+    for error in scope.errors:
+        findings.append(
+            {
+                "severity": "BLOCK",
+                "kind": "scope_schema",
+                "path": str(SCOPE_PATH),
+                "message": error,
+                "next_action": "Fix docs/DOC_REGISTRY_SCOPE.yaml before registry reconciliation.",
+            }
+        )
+
+    if strict_scope_violations:
+        findings.append(
+            {
+                "severity": "BLOCK",
+                "kind": "strict_scope_unregistered",
+                "path": str(SCOPE_PATH),
+                "message": f"{len(strict_scope_violations)} required-scope Markdown files are unregistered.",
+                "next_action": "Register reviewed required-scope documents or narrow the declared scope.",
+            }
+        )
+
+    if decision_table_stale:
+        findings.append(
+            {
+                "severity": "WARN",
+                "kind": "scope_decision_table_stale",
+                "path": str(SCOPE_DECISION_PATH),
+                "message": "Rendered docs-root table differs from DOC_REGISTRY_SCOPE_DECISION.md.",
+                "next_action": "Refresh the decision table from the reconcile report before committing taxonomy changes.",
+            }
+        )
+
+    status = "PASS"
+    if any(finding["severity"] == "BLOCK" for finding in findings):
+        status = "BLOCK"
+    elif findings:
+        status = "WARN"
+
+    return {
+        "schema_version": 1,
+        "kind": "doc_registry_reconcile_report",
+        "result_status": status,
+        "mode": "dry-run",
+        "registry_path": str(REGISTRY_PATH),
+        "scope_path": str(SCOPE_PATH),
+        "scope_decision_path": str(SCOPE_DECISION_PATH),
+        "scope_present": scope.present,
+        "registered_count": len(registered_paths),
+        "unregistered_candidate_count": len(unregistered_candidates),
+        "unregistered_candidates": unregistered_candidates,
+        "scope_required_markdown_count": len(scope_required_markdown),
+        "strict_scope_violation_count": len(strict_scope_violations),
+        "strict_scope_violations": strict_scope_violations,
+        "scope_decision_present": decision_present,
+        "scope_decision_table_stale": decision_table_stale,
+        "scope_decision_rows": rows,
+        "rendered_scope_decision_table": rendered_scope_table,
+        "findings": findings,
+    }
+
+
+def render_doc_registry_reconcile_report(report: dict[str, Any]) -> str:
+    lines = [
+        "DOC_REGISTRY_RECONCILE",
+        f"STATE: {report['result_status']}",
+        f"MODE: {report['mode']}",
+        f"REGISTRY: {report['registry_path']}",
+        f"SCOPE: {report['scope_path']}",
+        f"SCOPE_DECISION: {report['scope_decision_path']}",
+        f"REGISTERED: {report['registered_count']}",
+        f"UNREGISTERED_CANDIDATES: {report['unregistered_candidate_count']}",
+        f"STRICT_SCOPE_VIOLATIONS: {report['strict_scope_violation_count']}",
+        f"SCOPE_DECISION_TABLE_STALE: {report['scope_decision_table_stale']}",
+        "",
+        "FINDINGS:",
+    ]
+    findings = report.get("findings", [])
+    if not findings:
+        lines.append("- none")
+    else:
+        for finding in findings:
+            lines.append(
+                f"- {finding['severity']} {finding['kind']} {finding['path']}: "
+                f"{finding['message']} NEXT={finding['next_action']}"
+            )
+
+    lines.extend(
+        [
+            "",
+            "RENDERED_SCOPE_DECISION_TABLE:",
+            report["rendered_scope_decision_table"],
+        ]
+    )
+    return "\n".join(lines)
 
 def write_documentation_registry_summary_json(
     summary: dict[str, Any], report_path: Path

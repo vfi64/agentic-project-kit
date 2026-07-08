@@ -1348,6 +1348,60 @@
     },
     {
       "group": "doc-registry",
+      "help": "Reconcile documentation registry, declared scope, and decision projection.",
+      "name": "reconcile",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Project root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Reserved for a later slice; current implementation is dry-run only.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "doc-registry",
+        "reconcile"
+      ],
+      "qualified_name": "agentic-kit doc-registry reconcile"
+    },
+    {
+      "group": "doc-registry",
       "help": "Add one reviewed document entry to the documentation registry.",
       "name": "register",
       "params": [
