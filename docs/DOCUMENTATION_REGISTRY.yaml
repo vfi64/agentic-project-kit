@@ -325,12 +325,13 @@ documents:
     owner: maintainers
     notes: Active scoped authority for post-v0.4.11 pre-GUI hardening tasks and planning-target guard follow-up before GUI expansion.
     status: active
-  - path: docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
-    class: planning
-    owner: maintainers
-    notes: Accepted backlog for reducing remaining rule-registry weaknesses without blocking documentation-management work.
-    superseded_by: docs/planning/project_direction.yaml
+  - path: docs/archive/RULE_REGISTRY_IMPROVEMENT_PLAN.md
+    class: historical archive
     status: superseded
+    owner: maintainers
+    archived_from: docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
+    superseded_by: docs/planning/PROJECT_DIRECTION.yaml
+    notes: Accepted backlog for reducing remaining rule-registry weaknesses after baseline completion; remaining actionable items are tracked in PROJECT_DIRECTION.yaml.
   - path: docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
     class: planning
     owner: maintainers
@@ -342,11 +343,11 @@ documents:
     notes: Hardened plan for machine-checkable local-to-LLM and LLM-to-local rule-refresh handshake state before GUI expansion.
     superseded_by: docs/planning/project_direction.yaml
     status: superseded
-  - path: docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
-    class: planning
+  - path: docs/governance/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
+    class: governance/system
+    status: active
     owner: maintainers
     notes: Stable JSON contract for the read-only canonical rule source validator consumed by rule-refresh, transfer-state, and GUI gates.
-    status: active
   - path: docs/testing/TRANSFER_TEST_PLAN.md
     class: operational/automation
     owner: maintainers

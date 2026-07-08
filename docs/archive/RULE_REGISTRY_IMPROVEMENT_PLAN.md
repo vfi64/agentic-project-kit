@@ -1,6 +1,10 @@
 # Rule Registry Improvement Plan
 
-Status-date: 2026-05-25
+Document class: historical archive
+Status-date: 2026-07-08
+Archived-from: docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
+Superseded-by: docs/planning/PROJECT_DIRECTION.yaml
+
 Status: active
 Decision status: accepted
 Review policy: Review after each documentation-registry foundation milestone and before introducing external policy engines.

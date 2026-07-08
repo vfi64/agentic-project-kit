@@ -6,7 +6,7 @@ from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
 
-DOC = "docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md"
+DOC = "docs/governance/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md"
 REGISTRY = "docs/DOCUMENTATION_REGISTRY.yaml"
 RULE_PLAN = "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md"
 
@@ -54,7 +54,7 @@ def test_rule_source_validator_json_contract_matches_cli_shape() -> None:
 def test_documentation_registry_contains_rule_source_validator_json_contract() -> None:
     text = open(REGISTRY, encoding="utf-8").read()
 
-    assert "docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md" in text
+    assert "docs/governance/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md" in text
     assert "Stable JSON contract for the read-only canonical rule source validator" in text
 
 

@@ -1,6 +1,9 @@
 # Rule Source Validator JSON Contract
 
-Status-date: 2026-05-31
+Document class: governance/system
+Status-date: 2026-07-08
+Moved-from: docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
+
 Status: active
 Decision status: accepted
 Review policy: Review before derived rule snapshots, LLM acknowledgement gates, or GUI rule-state buttons consume this JSON.

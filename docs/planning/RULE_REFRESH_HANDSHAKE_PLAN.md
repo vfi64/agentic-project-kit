@@ -160,7 +160,7 @@ Acceptance:
 
 Phase 0 artifact: `docs/planning/PROJECT_DIRECTION.yaml` (`workflow-kernel-and-transfer-hardening` preserved transfer GitHub action coverage).
 
-Rule-source validator JSON contract: `docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md`.
+Rule-source validator JSON contract: `docs/governance/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md`.
 
 ## Phase 1: Canonical Rule Source Hardening And Derived Snapshot Schema
 
