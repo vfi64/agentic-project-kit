@@ -500,11 +500,13 @@ documents:
     owner: maintainers
     notes: Read-only implementation-surface inventory for the GUI deterministic gatekeeper migration.
     status: active
-  - path: docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
-    class: planning
+  - path: docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
+    class: historical archive
+    status: superseded
     owner: maintainers
-    notes: Priority plan for hardening unsafe individual commands before GUI or release orchestration work resumes.
-    status: active
+    archived_from: docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
+    superseded_by: docs/governance/COMMAND_SAFETY_POLICY.md
+    notes: Historical command-safety hardening plan; normative command-safety rules are now in COMMAND_SAFETY_POLICY.md and remaining actionable work is tracked in PROJECT_DIRECTION.yaml.
   - path: docs/handoff/CURRENT_HANDOFF.md
     class: planning
     owner: maintainers
@@ -581,3 +583,8 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Post-P1 report-only path literal inventory showing the P1 top-3 modules migrated to zero and workspace.py as the central literal source.
+  - path: docs/governance/COMMAND_SAFETY_POLICY.md
+    class: governance/system
+    status: active
+    owner: maintainers
+    notes: Normative command-safety policy for deterministic results, evidence, idempotence, GUI gating, and command reclassification.

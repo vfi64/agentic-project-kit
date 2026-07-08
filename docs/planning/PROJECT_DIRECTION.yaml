@@ -42,7 +42,7 @@ strategy:
       - docs/planning/KIT_AS_OS_MASTERPLAN.md
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
-      - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
+      - docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
       - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
       - docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
@@ -300,7 +300,7 @@ roadmap:
       - GUI work starts only from bounded command contracts and clean evidence paths.
     source_files:
       - docs/planning/PRE_GUI_HARDENING_TASKS.md
-      - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
+      - docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
       - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
   - id: workflow-kernel-and-transfer-hardening
@@ -851,7 +851,7 @@ plans:
           patching, and delete-heavy wrapper behavior.
     source_files:
       - docs/planning/PRE_GUI_HARDENING_TASKS.md
-      - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
+      - docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
       - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
   - id: next-turn-workflow-kernel
@@ -2328,4 +2328,4 @@ discarded:
     discarded_at: "2026-07-05"
     source_files:
       - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
-      - docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
+      - docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
