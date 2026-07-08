@@ -135,7 +135,7 @@ strategy:
       and machine-readable contracts while preserving human-readable
       orientation.
     source_files:
-      - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+      - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
       - docs/archive/RULE_REGISTRY_IMPROVEMENT_PLAN.md
       - docs/governance/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
 
@@ -530,7 +530,7 @@ roadmap:
       - Required lifecycle headers and source-of-truth relationships are checkable.
       - Artifact retention and local-leak filters do not become semantic planning mechanisms.
     source_files:
-      - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+      - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
       - docs/archive/RULE_REGISTRY_IMPROVEMENT_PLAN.md
 
 plans:
@@ -557,7 +557,7 @@ plans:
       - PR #1736 added direction validation to standard documentation gates.
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
-      - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+      - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
   - id: governance-doc-backfill
     status: active
     title: Backfill reviewed governance document registry entries
@@ -568,7 +568,7 @@ plans:
       - Documentation registry scope decisions stay visible in the decision template.
       - Broad migration remains separate from generated evidence and examples.
     source_files:
-      - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+      - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
   - id: strict-scope-suite-adoption
     status: done
     title: Decide whether strict documentation scope belongs in the standard gate suite
@@ -585,7 +585,7 @@ plans:
       - The current documentation registry scope has zero strict-scope violations.
     source_files:
       - docs/DOC_REGISTRY_SCOPE.yaml
-      - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+      - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
 
   - id: planning-ideas-residual-cleanup
     status: planned
@@ -820,7 +820,7 @@ plans:
           retained_as: historical v0.4.9 release command authority slice, retained work order, current command authority, and closeout rule
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
-      - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+      - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
   - id: pre-gui-hardening-plan
     status: active
     title: Execute the pre-GUI hardening backlog in small wrapper-first slices
@@ -1567,6 +1567,28 @@ plans:
         and handoff package validation instead.
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
+
+  - id: mechanize-doc-registry-scope-reconcile
+    status: planned
+    title: Mechanize documentation registry scope reconciliation
+    summary: Add a dry-run-first doc-registry reconcile command for scope files, registry entries, stale decision projections, and portable foreign-repo adoption.
+    rationale: K2b exposed existing renderer/test logic for documentation registry scope decisions, but no exposed agentic-kit command wraps refresh, stale-projection detection, registry consistency, coverage, and diagnostics as a deterministic transaction.
+    scope:
+      - Expose dry-run and execute modes.
+      - Support agentic-project-kit and adopted foreign GitHub repositories.
+      - Detect stale DOC_REGISTRY_SCOPE_DECISION projections.
+      - Compare docs/DOC_REGISTRY_SCOPE.yaml, docs/DOCUMENTATION_REGISTRY.yaml, coverage files, and filesystem counts.
+      - Report required/exempt/unregistered Markdown paths with precise next actions.
+    non_goals:
+      - Do not implement during K2b.
+      - Do not replace existing docs-audit or strict-scope checks.
+      - Do not perform broad documentation rewrites.
+    source_files:
+      - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
+      - docs/DOC_REGISTRY_SCOPE.yaml
+      - docs/DOCUMENTATION_REGISTRY.yaml
+      - src/agentic_project_kit/documentation_registry.py
+      - tests/test_documentation_registry.py
 
 ideas:
   - id: project-direction-gui-panel

@@ -99,7 +99,7 @@ Registry/schema changes must preserve these boundaries:
 - use `agentic-kit doc-registry register --path PATH --class CLASS --json` for reviewed single-entry additions;
 - use `agentic-kit doc-registry check-unregistered --json` for WARN-only inventory of unregistered candidates;
 - keep `docs/DOC_REGISTRY_SCOPE.yaml` empty until maintainers decide required
-  and exempt paths from `docs/planning/DOC_REGISTRY_SCOPE_DECISION.md`;
+  and exempt paths from `docs/governance/DOC_REGISTRY_SCOPE_DECISION.md`;
 - use `agentic-kit doc-registry check-unregistered --strict-scope` only as an
   opt-in hard check for declared required scope paths; do not add it to the
   standard gate suite while the checked-in scope is empty.

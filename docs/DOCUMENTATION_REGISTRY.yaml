@@ -293,10 +293,12 @@ documents:
     class: governance/system
     owner: maintainers
     notes: Declarative opt-in scope for making selected documentation registry areas strict.
-  - path: docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
-    class: planning
+  - path: docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
+    class: governance/system
+    status: active
     owner: maintainers
-    notes: Machine-generated maintainer decision template for selecting required or exempt registry scope areas.
+    moved_from: docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+    notes: Governance decision evidence for documentation registry scope; active declarative scope is docs/DOC_REGISTRY_SCOPE.yaml.
   - path: docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md
     class: governance/system
     owner: maintainers

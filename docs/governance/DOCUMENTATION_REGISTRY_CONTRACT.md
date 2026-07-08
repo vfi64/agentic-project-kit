@@ -92,7 +92,7 @@ reported as separate scope violations. `agentic-kit doc-registry
 check-unregistered --strict-scope` fails only for those declared scope
 violations; the standard suite does not enable `--strict-scope` in this slice.
 
-`docs/planning/DOC_REGISTRY_SCOPE_DECISION.md` is a machine-generated decision
+`docs/governance/DOC_REGISTRY_SCOPE_DECISION.md` is a machine-generated decision
 template that counts Markdown files by `docs/` subdirectory and leaves the
 required/exempt/undecided decision blank for maintainers.
 
