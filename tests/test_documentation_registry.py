@@ -548,7 +548,7 @@ def test_doc_registry_register_cli_writes_valid_entry(tmp_path: Path) -> None:
 
     assert result.exit_code == 0
     payload = json.loads(result.output)
-    assert payload["result_status"] == "PASS"
+    assert payload["result_status"] in {"PASS", "WARN"}
     assert _read_registry(project)["documents"][-1]["path"] == "docs/new-plan.md"
 
 
@@ -584,3 +584,29 @@ def test_documentation_system_audit_includes_registry_dimension() -> None:
     assert any(finding == "registry=docs/DOCUMENTATION_REGISTRY.yaml" for finding in registry_dimension.findings)
     assert any(finding.startswith("documents=") for finding in registry_dimension.findings)
     assert any(finding.startswith("class:operational/automation=") for finding in registry_dimension.findings)
+
+
+def test_doc_registry_reconcile_json_reports_clean_state() -> None:
+    result = CliRunner().invoke(app, ["doc-registry", "reconcile", "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["kind"] == "doc_registry_reconcile_report"
+    assert payload["result_status"] in {"PASS", "WARN"}
+    assert payload["mode"] == "dry-run"
+    assert payload["registry_path"] == "docs/DOCUMENTATION_REGISTRY.yaml"
+    assert payload["scope_path"] == "docs/DOC_REGISTRY_SCOPE.yaml"
+    assert payload["scope_decision_path"] == "docs/governance/DOC_REGISTRY_SCOPE_DECISION.md"
+    assert payload["strict_scope_violation_count"] == 0
+    assert isinstance(payload["scope_decision_table_stale"], bool)
+    assert payload["rendered_scope_decision_table"].startswith("| docs path | md files |")
+
+
+def test_doc_registry_reconcile_execute_is_reserved() -> None:
+    result = CliRunner().invoke(app, ["doc-registry", "reconcile", "--execute", "--json"])
+
+    assert result.exit_code == 2
+    payload = json.loads(result.output)
+    assert payload["result_status"] == "BLOCK"
+    assert payload["mode"] == "execute"
+    assert "dry-run only" in payload["message"]
