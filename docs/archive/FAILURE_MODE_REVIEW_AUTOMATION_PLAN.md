@@ -1,5 +1,11 @@
 # Failure-Mode Review Automation Plan
 
+Document class: archive/historical
+Status-date: 2026-07-08
+Moved-from: docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
+Superseded-by: docs/planning/PROJECT_DIRECTION.yaml
+Archive note: Open implementation work is carried by Project Direction items; this file is retained as historical plan evidence.
+
 Status: proposed
 Decision status: proposed for phased implementation
 Owner: release/evidence kernel

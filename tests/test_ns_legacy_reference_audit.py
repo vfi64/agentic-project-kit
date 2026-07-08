@@ -112,7 +112,7 @@ def test_audit_skips_tmp_and_docs_reports_generated_evidence(tmp_path: Path) -> 
 
 def test_classifies_planning_docs_as_legacy_documentation_context() -> None:
     classification, reason = classify_legacy_reference(
-        "docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md",
+        "docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md",
         "Once ./ns next-turn exists, the assistant can use it.",
     )
     assert classification == "legacy_documentation_context"

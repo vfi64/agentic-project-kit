@@ -1,13 +1,19 @@
 # Pre-GUI Hardening Tasks
+
+Document class: archive/historical
+Status-date: 2026-07-08
+Moved-from: docs/archive/PRE_GUI_HARDENING_TASKS.md
+Superseded-by: docs/planning/PROJECT_DIRECTION.yaml
+Archive note: Pre-GUI hardening priorities now belong in Project Direction; this file is retained as historical plan evidence.
 Status: active
 Decision status: accepted
 Review policy: update when pre-GUI hardening priorities, command contracts, or canonical planning targets change.
 
 This planning file collects the post-v0.4.11 hardening tasks that should be completed before GUI expansion.
 
-Authoritative target for pre-GUI hardening planning: `docs/planning/PRE_GUI_HARDENING_TASKS.md`.
+Authoritative target for pre-GUI hardening planning: `docs/archive/PRE_GUI_HARDENING_TASKS.md`.
 
-Do not add new pre-GUI planning content to superseded planning documents such as `docs/planning/WORKFLOW_REDUCTION_FOCUS.md`.
+Do not add new pre-GUI planning content to superseded planning documents such as `docs/archive/WORKFLOW_REDUCTION_FOCUS.md`.
 
 <!-- PRE_GUI_HARDENING_V0411_START -->
 ## Pre-GUI hardening roadmap after v0.4.11
@@ -98,9 +104,9 @@ Purpose: prevent future LLMs, scripts, or wrapper flows from adding new planning
 
        {
          "result_status": "PASS",
-         "target": "docs/planning/PRE_GUI_HARDENING_TASKS.md",
+         "target": "docs/archive/PRE_GUI_HARDENING_TASKS.md",
          "forbidden_targets": [
-           "docs/planning/WORKFLOW_REDUCTION_FOCUS.md"
+           "docs/archive/WORKFLOW_REDUCTION_FOCUS.md"
          ],
          "reason": "WORKFLOW_REDUCTION_FOCUS.md is superseded"
        }
@@ -117,7 +123,7 @@ Purpose: prevent future LLMs, scripts, or wrapper flows from adding new planning
    - moving content into the active canonical target,
    - other explicitly labelled cleanup-only changes.
 
-3. Extend protected-diff handling for `docs/planning/WORKFLOW_REDUCTION_FOCUS.md`.
+3. Extend protected-diff handling for `docs/archive/WORKFLOW_REDUCTION_FOCUS.md`.
 
    Required behavior:
    - adding new sections: `BLOCK`,
@@ -129,13 +135,13 @@ Purpose: prevent future LLMs, scripts, or wrapper flows from adding new planning
 
    Current canonical pre-GUI hardening target:
 
-       docs/planning/PRE_GUI_HARDENING_TASKS.md
+       docs/archive/PRE_GUI_HARDENING_TASKS.md
 
    If the project later becomes strictly YAML-first, the resolver may redirect to:
 
        docs/planning/PROJECT_DIRECTION.yaml
 
-   but it must never silently fall back to `docs/planning/WORKFLOW_REDUCTION_FOCUS.md`.
+   but it must never silently fall back to `docs/archive/WORKFLOW_REDUCTION_FOCUS.md`.
 
 5. Update script templates.
 

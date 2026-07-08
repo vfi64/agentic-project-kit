@@ -1,5 +1,9 @@
 # GUI Gatekeeper Implementation Inventory
 
+Document class: user-facing description
+Status-date: 2026-07-08
+Moved-from: docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
+
 Status: proposed
 Decision status: proposed
 Scope: read-only inventory; no product-code changes.
@@ -20,12 +24,12 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 - docs/handoff/NEXT_CHAT_BOOTSTRAP.md
 - docs/handoff/START_NEW_CHAT_PROMPT.md
 - docs/planning/PROJECT_DIRECTION.yaml
-- docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
-- docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+- docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
+- docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md
 - docs/planning/PROJECT_DIRECTION.yaml (`python-backed-portable-workflows` preserved no-copy workflow context)
 - docs/planning/PROJECT_DIRECTION.yaml
-- docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
-- docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+- docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md
+- docs/archive/WORKFLOW_REDUCTION_FOCUS.md
 - src/agentic_project_kit/action_registry.py
 - src/agentic_project_kit/action_specs.py
 - src/agentic_project_kit/cli_commands/actions.py
@@ -226,7 +230,7 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 
 ### Work-order routing
 
-- docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+- docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md
 - src/agentic_project_kit/cli_commands/work_orders.py
 - src/agentic_project_kit/typed_work_order_queue.py
 - src/agentic_project_kit/typed_work_order_runner.py
@@ -264,9 +268,9 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 
 ### GUI display layer
 
-- docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
+- docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
 - docs/planning/PROJECT_DIRECTION.yaml
-- docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
+- docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md
 - src/agentic_project_kit/gui_action_execution.py
 - src/agentic_project_kit/gui_action_renderer.py
 - src/agentic_project_kit/gui_action_run_intent.py
@@ -362,7 +366,7 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 
 ### Unclassified / review required
 
-- docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+- docs/archive/WORKFLOW_REDUCTION_FOCUS.md
 - src/agentic_project_kit/cli_commands/workflow.py
 - src/agentic_project_kit/cli_commands/workflow_guard.py
 - src/agentic_project_kit/workflow_guard.py

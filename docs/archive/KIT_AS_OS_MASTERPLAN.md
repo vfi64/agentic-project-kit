@@ -1,11 +1,16 @@
 # Kit as Operating Layer Master Plan
 
+Document class: archive/historical
+Status-date: 2026-07-08
+Moved-from: docs/archive/KIT_AS_OS_MASTERPLAN.md
+Superseded-by: docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+Archive note: This plan is not discarded. Its normative architecture content has been centralized in docs/architecture/KIT_AS_OS_ARCHITECTURE.md, and residual follow-up work is tracked in docs/planning/PROJECT_DIRECTION.yaml. This file is retained as historical source and planning evidence.
+
 Status: active
 Decision status: accepted
 Review policy: required
 Scope: planning authority for turning `agentic-project-kit` into an operating layer for arbitrary GitHub repositories.  
 Implementation status: no code is authorized by this document itself. Implementation starts only through later separately reviewed slices.  
-Document class: planning.  
 Language: English, following the active planning-document policy.
 
 ## 1. Purpose

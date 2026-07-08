@@ -55,7 +55,7 @@ PLANNING_VIEW_DOCS = {
 }
 
 SCOPED_AUTHORITATIVE_PLANNING_DOCS = {
-    "docs/planning/PRE_GUI_HARDENING_TASKS.md",
+    "docs/archive/PRE_GUI_HARDENING_TASKS.md",
 }
 
 HANDOFF_PROJECTION_DOCS = {
@@ -64,6 +64,7 @@ HANDOFF_PROJECTION_DOCS = {
 }
 
 HISTORICAL_PLANNING_DOCS = {
+    "docs/archive/WORKFLOW_REDUCTION_FOCUS.md",
     "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
     "docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md",
     "docs/planning/V0.3.8_SCOPE.md",
@@ -74,9 +75,9 @@ KNOWN_ACTIVE_PLANNING_DOCS = set()
 
 LEGACY_REVIEW_DOCS = {
     "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-    "docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md",
-    "docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md",
-    "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
+    "docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md",
+    "docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md",
+    "docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md",
 }
 
 

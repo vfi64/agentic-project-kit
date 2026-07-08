@@ -1,6 +1,9 @@
 # Rule Source Validator JSON Contract
 
-Status-date: 2026-05-31
+Document class: governance/system
+Status-date: 2026-07-08
+Moved-from: docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
+
 Status: active
 Decision status: accepted
 Review policy: Review before derived rule snapshots, LLM acknowledgement gates, or GUI rule-state buttons consume this JSON.
@@ -83,6 +86,6 @@ The GUI must show the blocking reason and must not expose write actions that dep
 
 ## Relationship To Canonical Rule Source Contract
 
-This contract supports the single-source model from `docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md`.
+This contract supports the single-source model from `docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md`.
 
 The validator checks canonical sources. It does not create canonical state. Snapshots and Markdown projections remain derived artifacts.

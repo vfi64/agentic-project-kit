@@ -282,7 +282,7 @@ mechanisms:
     - agentic-kit transfer
     - bounded workflow entry points
     - GUI expansion
-  - path: docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+  - path: docs/archive/WORKFLOW_REDUCTION_FOCUS.md
     required_terms:
     - Completed wrapper set to audit before GUI expansion
     - transfer evidence-pr-complete

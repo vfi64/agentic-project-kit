@@ -1,5 +1,11 @@
 # Tkinter Workbench GUI Plan
 
+Document class: historical archive
+Status-date: 2026-07-08
+Archived-from: docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
+Superseded-by: docs/planning/PROJECT_DIRECTION.yaml
+Note: implemented differently (progressive-disclosure cockpit).
+
 Status: proposed
 Decision status: proposed as the highest-priority implementation track after current closeout evidence is recorded
 Owner: workflow/gui kernel

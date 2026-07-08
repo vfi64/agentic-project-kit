@@ -235,12 +235,12 @@ documents:
     owner: maintainers
     review_policy: required
     summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
-    class: planning
-    status: review_required
+  - path: docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md
+    class: governance/system
+    status: active
     owner: maintainers
-    review_policy: required
-    summary: Review-required next-turn work-order plan; should not be treated as long-term direction.
+    moved_from: docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+    notes: Normative work-order workflow contract for fixed-slot next-turn execution, state machine, safety classes, result/evidence lookup, no-chat-decision boundaries, and GUI-ready command routing.
   - path: docs/archive/planning/NEXT_TURN_A0_STANDARD_ERROR_ADDITIONS.md
     class: historical archive
     status: archived
@@ -293,10 +293,12 @@ documents:
     class: governance/system
     owner: maintainers
     notes: Declarative opt-in scope for making selected documentation registry areas strict.
-  - path: docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
-    class: planning
+  - path: docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
+    class: governance/system
+    status: active
     owner: maintainers
-    notes: Machine-generated maintainer decision template for selecting required or exempt registry scope areas.
+    moved_from: docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+    notes: Governance decision evidence for documentation registry scope; active declarative scope is docs/DOC_REGISTRY_SCOPE.yaml.
   - path: docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md
     class: governance/system
     owner: maintainers
@@ -313,39 +315,44 @@ documents:
     class: planning
     owner: maintainers
     notes: Concise current-state dashboard, not a long-term history file.
-  - path: docs/planning/WORKFLOW_REDUCTION_FOCUS.md
-    class: planning
+  - path: docs/archive/WORKFLOW_REDUCTION_FOCUS.md
+    class: historical archive
+    status: superseded
     owner: maintainers
+    archived_from: docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+    superseded_by: docs/archive/PRE_GUI_HARDENING_TASKS.md
     notes: Historical near-term focus document. Pre-GUI hardening tasks moved to PRE_GUI_HARDENING_TASKS.md; durable strategy/roadmap authority remains project_direction.yaml.
-    superseded_by: docs/planning/PRE_GUI_HARDENING_TASKS.md
-    status: superseded
-  - path: docs/planning/PRE_GUI_HARDENING_TASKS.md
-    class: planning
+  - path: docs/archive/PRE_GUI_HARDENING_TASKS.md
+    class: historical archive
+    status: archived
     owner: maintainers
-    notes: Active scoped authority for post-v0.4.11 pre-GUI hardening tasks and planning-target guard follow-up before GUI expansion.
+    moved_from: docs/planning/PRE_GUI_HARDENING_TASKS.md
+    notes: Historical pre-GUI hardening plan; canonical planning target is PROJECT_DIRECTION.yaml.
+  - path: docs/archive/RULE_REGISTRY_IMPROVEMENT_PLAN.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    archived_from: docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
+    superseded_by: docs/planning/PROJECT_DIRECTION.yaml
+    notes: Accepted backlog for reducing remaining rule-registry weaknesses after baseline completion; remaining actionable items are tracked in PROJECT_DIRECTION.yaml.
+  - path: docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
+    class: historical archive
+    status: archived
+    owner: maintainers
+    moved_from: docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
+    notes: Historical phased failure-mode review automation plan; residual work belongs in PROJECT_DIRECTION.yaml and must not be implemented in K2b.
+  - path: docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    archived_from: docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
+    superseded_by: docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md
+    notes: Historical rule-refresh handshake plan; normative handshake rules are now in RULE_REFRESH_HANDSHAKE_CONTRACT.md and remaining actionable work is tracked in PROJECT_DIRECTION.yaml.
+  - path: docs/governance/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
+    class: governance/system
     status: active
-  - path: docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
-    class: planning
-    owner: maintainers
-    notes: Accepted backlog for reducing remaining rule-registry weaknesses without blocking documentation-management work.
-    superseded_by: docs/planning/project_direction.yaml
-    status: superseded
-  - path: docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
-    class: planning
-    owner: maintainers
-    notes: Implementation contract for repo-backed failure-mode review automation before slices and after merges.
-    status: active
-  - path: docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
-    class: planning
-    owner: maintainers
-    notes: Hardened plan for machine-checkable local-to-LLM and LLM-to-local rule-refresh handshake state before GUI expansion.
-    superseded_by: docs/planning/project_direction.yaml
-    status: superseded
-  - path: docs/planning/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
-    class: planning
     owner: maintainers
     notes: Stable JSON contract for the read-only canonical rule source validator consumed by rule-refresh, transfer-state, and GUI gates.
-    status: active
   - path: docs/testing/TRANSFER_TEST_PLAN.md
     class: operational/automation
     owner: maintainers
@@ -486,22 +493,25 @@ documents:
     owner: maintainers
     notes: Human workflow command reference.
     status: active
-  - path: docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
-    class: planning
-    owner: maintainers
-    notes: Full structured Tkinter workbench GUI plan with complete button catalog, staged enablement, dispatch integration, and evidence requirements.
-    superseded_by: docs/planning/project_direction.yaml
+  - path: docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md
+    class: historical archive
     status: superseded
-  - path: docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
-    class: planning
+    owner: maintainers
+    archived_from: docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
+    superseded_by: docs/planning/PROJECT_DIRECTION.yaml
+    notes: Full structured Tkinter workbench GUI plan archived after the GUI was implemented differently as a progressive-disclosure cockpit.
+  - path: docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
+    class: user-facing description
     owner: maintainers
     notes: Read-only implementation-surface inventory for the GUI deterministic gatekeeper migration.
     status: active
-  - path: docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
-    class: planning
+  - path: docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
+    class: historical archive
+    status: superseded
     owner: maintainers
-    notes: Priority plan for hardening unsafe individual commands before GUI or release orchestration work resumes.
-    status: active
+    archived_from: docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
+    superseded_by: docs/governance/COMMAND_SAFETY_POLICY.md
+    notes: Historical command-safety hardening plan; normative command-safety rules are now in COMMAND_SAFETY_POLICY.md and remaining actionable work is tracked in PROJECT_DIRECTION.yaml.
   - path: docs/handoff/CURRENT_HANDOFF.md
     class: planning
     owner: maintainers
@@ -560,12 +570,12 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Post-S6 report-only path literal inventory after transfer CLI modularization.
-  - path: docs/planning/KIT_AS_OS_MASTERPLAN.md
-    class: planning
+  - path: docs/archive/KIT_AS_OS_MASTERPLAN.md
+    class: historical archive
+    status: archived
     owner: maintainers
-    review_policy: required
-    status: active
-    notes: Authoritative master plan for the post-v0.4.12 operating-layer transformation; implementation requires later separately reviewed slices.
+    moved_from: docs/planning/KIT_AS_OS_MASTERPLAN.md
+    notes: Historical operating-layer master plan; normative architecture is docs/architecture/KIT_AS_OS_ARCHITECTURE.md and residual follow-up is tracked in PROJECT_DIRECTION.yaml.
   - path: docs/architecture/KIT_AS_OS_ARCHITECTURE.md
     class: architecture
     owner: maintainers
@@ -578,3 +588,13 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Post-P1 report-only path literal inventory showing the P1 top-3 modules migrated to zero and workspace.py as the central literal source.
+  - path: docs/governance/COMMAND_SAFETY_POLICY.md
+    class: governance/system
+    status: active
+    owner: maintainers
+    notes: Normative command-safety policy for deterministic results, evidence, idempotence, GUI gating, and command reclassification.
+  - path: docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md
+    class: governance/system
+    status: active
+    owner: maintainers
+    notes: Normative rule-refresh handshake contract for canonical rule sources, deterministic transfer outbox context, LLM acknowledgement, fail-closed rule freshness, and GUI gate downstream behavior.

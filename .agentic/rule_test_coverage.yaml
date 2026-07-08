@@ -460,7 +460,7 @@ coverage:
     - kind: source
       path: .agentic/rule_mechanism_inventory.yaml
     - kind: source
-      path: docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+      path: docs/archive/WORKFLOW_REDUCTION_FOCUS.md
     - kind: test
       path: tests/test_rule_mechanism_inventory.py
     statement: the transfer-wrapper command layer is inventoried before GUI expansion

@@ -99,7 +99,7 @@ Registry/schema changes must preserve these boundaries:
 - use `agentic-kit doc-registry register --path PATH --class CLASS --json` for reviewed single-entry additions;
 - use `agentic-kit doc-registry check-unregistered --json` for WARN-only inventory of unregistered candidates;
 - keep `docs/DOC_REGISTRY_SCOPE.yaml` empty until maintainers decide required
-  and exempt paths from `docs/planning/DOC_REGISTRY_SCOPE_DECISION.md`;
+  and exempt paths from `docs/governance/DOC_REGISTRY_SCOPE_DECISION.md`;
 - use `agentic-kit doc-registry check-unregistered --strict-scope` only as an
   opt-in hard check for declared required scope paths; do not add it to the
   standard gate suite while the checked-in scope is empty.
@@ -116,7 +116,7 @@ Required evidence for this registry gate:
 
 ## Failure-Mode Review Automation Gate (planned)
 
-`docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md` defines the implementation contract for a future repo-backed failure-mode review path.
+`docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md` defines the implementation contract for a future repo-backed failure-mode review path.
 
 The first implementation phase must remain read-only and must add `agentic-kit next-slice review` plus `./ns next-slice-review` before any patch-preflight BLOCK integration. The planned Phase-1 evidence is:
 
@@ -131,7 +131,7 @@ Until Phase 1 is implemented, this section is a planning gate only. It must not 
 
 ## Tkinter Workbench GUI Gate (planned)
 
-`docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md` defines the full structured Tkinter workbench plan. The GUI must render the complete planned button catalog from the first implementation slice, while non-implemented actions remain visible and disabled. Functionality is enabled in later slices only behind metadata, tests, safety classes, evidence checks, and existing branch/PR workflow gates.
+`docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md` defines the full structured Tkinter workbench plan. The GUI must render the complete planned button catalog from the first implementation slice, while non-implemented actions remain visible and disabled. Functionality is enabled in later slices only behind metadata, tests, safety classes, evidence checks, and existing branch/PR workflow gates.
 
 The first implementation phase must remain non-destructive and must add the full button catalog plus a headless-renderable Tkinter workbench skeleton before enabling bounded mutation buttons. The planned Phase-1 evidence is:
 

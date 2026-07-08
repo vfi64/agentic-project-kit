@@ -1,10 +1,15 @@
 # Workflow Reduction Focus
 
-Status: superseded
-Superseded by: `docs/planning/PRE_GUI_HARDENING_TASKS.md` for pre-GUI hardening work and `docs/planning/PROJECT_DIRECTION.yaml` for durable strategy/roadmap authority.
-Lifecycle note: This document is closed as an active direction source; current pre-GUI hardening work is governed by `docs/planning/PRE_GUI_HARDENING_TASKS.md`, and durable strategy/roadmap authority is governed by `docs/planning/PROJECT_DIRECTION.yaml`.
+Document class: historical archive
+Status-date: 2026-07-08
+Archived-from: docs/planning/WORKFLOW_REDUCTION_FOCUS.md
+Superseded-by: docs/archive/PRE_GUI_HARDENING_TASKS.md and docs/planning/PROJECT_DIRECTION.yaml
 
-This file is retained as historical planning context only. Do not use the current-slice markers or roadmap items below as active work instructions; add new pre-GUI hardening content to `docs/planning/PRE_GUI_HARDENING_TASKS.md`.
+Status: superseded
+Superseded by: `docs/archive/PRE_GUI_HARDENING_TASKS.md` for pre-GUI hardening work and `docs/planning/PROJECT_DIRECTION.yaml` for durable strategy/roadmap authority.
+Lifecycle note: This document is closed as an active direction source; current pre-GUI hardening work is governed by `docs/archive/PRE_GUI_HARDENING_TASKS.md`, and durable strategy/roadmap authority is governed by `docs/planning/PROJECT_DIRECTION.yaml`.
+
+This file is retained as historical planning context only. Do not use the current-slice markers or roadmap items below as active work instructions; add new pre-GUI hardening content to `docs/archive/PRE_GUI_HARDENING_TASKS.md`.
 
 ## Current First Slice After v0.4.9
 
@@ -39,7 +44,6 @@ This is an administrative handoff/evidence refresh after PR #1244. It does not r
 
 Next safe substantive slice: implement the professional operational documentation projection system from a machine-readable state source, with generated blocks, preservation of curated documentation, rule-registry coverage, and drift gates.
 
-Status-date: 2026-06-10
 Status: active
 Decision status: accepted
 Review policy: Review after operational handoff freshness changes, after transfer-output summary hardening (#1240/#1242), before adding deterministic transfer outbox implementation, before expanding GUI scope or Pattern Advisor scope, and whenever handoff/bootstrap/status projections drift behind main.
@@ -313,7 +317,6 @@ When a future slice adds complexity, reviewers should ask whether it reduces man
 
 ## Pre-GUI Wrapper And Workflow Hardening Roadmap
 
-Status-date: 2026-06-07
 Status: active
 Decision status: accepted
 
@@ -413,7 +416,6 @@ The GUI may now proceed only as a display and gating layer over existing bounded
 
 ### Pre-GUI Wrapper Registry Audit
 
-Status-date: 2026-06-08
 Status: active
 
 Audit finding after the completed wrapper hardening pass:

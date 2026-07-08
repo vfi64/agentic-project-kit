@@ -1,6 +1,10 @@
 # Command Safety Hardening Plan
 
-Status-date: 2026-06-05
+Document class: historical archive
+Status-date: 2026-07-08
+Archived-from: docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
+Superseded-by: docs/governance/COMMAND_SAFETY_POLICY.md and docs/planning/PROJECT_DIRECTION.yaml
+
 Status: active
 Decision status: accepted
 Review policy: Review before GUI work, release orchestration work, or any change to transfer, remote-next, post-merge, PR, evidence, or release command behavior.

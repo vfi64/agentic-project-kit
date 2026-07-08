@@ -3,11 +3,11 @@
 Status-date: 2026-05-25
 Status: active
 Decision status: accepted
-Review policy: Review together with `docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md` before Slice A1.
+Review policy: Review together with `docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md` before Slice A1.
 
 ## Purpose
 
-This addendum records standard-error variants observed during the Slice A0 implementation and merge cycle. They refine the standard-error list in `docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md` and should be folded into the main list when the next planning-file maintenance slice runs locally.
+This addendum records standard-error variants observed during the Slice A0 implementation and merge cycle. They refine the standard-error list in `docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md` and should be folded into the main list when the next planning-file maintenance slice runs locally.
 
 ## Additions
 
@@ -25,4 +25,4 @@ A1 should also introduce idempotent final-result classification so `nothing to c
 
 ## Review Policy
 
-Review this addendum together with `docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md` before Slice A1 starts. When Slice A1 updates the main plan, fold these additions into the primary standard-error list or explicitly keep this file as the active addendum.
+Review this addendum together with `docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md` before Slice A1 starts. When Slice A1 updates the main plan, fold these additions into the primary standard-error list or explicitly keep this file as the active addendum.

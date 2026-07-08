@@ -219,12 +219,12 @@ rules:
     - required_files
     - required_paths
     - exempt_paths
-    - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+    - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
     - standard suite does not enable
   - path: docs/TEST_GATES.md
     terms:
     - docs/DOC_REGISTRY_SCOPE.yaml
-    - docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+    - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
     - agentic-kit doc-registry check-unregistered --strict-scope
     - standard gate suite while the checked-in scope is empty
   - path: docs/DOC_REGISTRY_SCOPE.yaml
@@ -234,7 +234,7 @@ rules:
     - docs/planning/PROJECT_DIRECTION.yaml
     - required_paths
     - exempt_paths
-  - path: docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
+  - path: docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
     terms:
     - Documentation Registry Scope Decision Template
     - No scope recommendation is encoded here

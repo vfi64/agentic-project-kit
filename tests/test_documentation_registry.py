@@ -504,7 +504,7 @@ def test_decision_template_counts_match_filesystem() -> None:
         str(row["docs_path"]): row
         for row in build_doc_registry_scope_decision_rows(ROOT)
     }
-    decision = (ROOT / "docs/planning/DOC_REGISTRY_SCOPE_DECISION.md").read_text(
+    decision = (ROOT / "docs/governance/DOC_REGISTRY_SCOPE_DECISION.md").read_text(
         encoding="utf-8"
     )
 
