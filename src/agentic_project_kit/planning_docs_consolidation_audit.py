@@ -64,12 +64,8 @@ HANDOFF_PROJECTION_DOCS = {
 }
 
 HISTORICAL_PLANNING_DOCS = {
-    "docs/handoff/CODEX_NS_COMMAND_MIGRATION_HANDOFF.md",
-    "docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md",
     "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
     "docs/planning/GUI_DETERMINISTIC_GATEKEEPER_PLAN.md",
-    "docs/planning/POST_V042_STANDARD_ERROR_HARDENING_PLAN.md",
-    "docs/planning/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md",
     "docs/planning/V0.3.8_SCOPE.md",
 }
 
@@ -80,10 +76,7 @@ LEGACY_REVIEW_DOCS = {
     "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
     "docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md",
     "docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md",
-    "docs/planning/IDEMPOTENT_FINALIZATION_GUARD.md",
-    "docs/planning/POST_MERGE_LIFECYCLE_STATE_MODEL.md",
     "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
-    "docs/planning/RULE_REGISTRY_ARCHITECTURE.md",
 }
 
 

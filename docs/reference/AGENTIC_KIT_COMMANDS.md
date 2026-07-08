@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `204`
+- Command count: `205`
 
 ## Commands
 
@@ -289,6 +289,17 @@ Add one reviewed document entry to the documentation registry.
 | `document_class` | `TyperOption` | --class | `True` |  | Allowed documentation registry class. |
 | `owner` | `TyperOption` | --owner | `False` | `maintainers` | Document owner recorded in the registry. |
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+
+### `agentic-kit docs removed-source-audit`
+
+Fail if removed documentation sources still have live refs or registry refs.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `path` | `TyperOption` | --path | `False` |  | Repository-relative removed source path to audit. May be supplied multiple times. Defaults to removed_source paths in PROJECT_DIRECTION.yaml. |
+| `central_target` | `TyperOption` | --central-target | `False` | `docs/planning/PROJECT_DIRECTION.yaml` | Repository-relative central document that may retain removed_source metadata. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit docs-audit`

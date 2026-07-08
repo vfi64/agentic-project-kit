@@ -10,13 +10,13 @@ This file is retained as historical planning context only. Do not use the curren
 
 Current planning-slice marker: `1becc4a7` / PR #1436 (`[codex] Plan release command authority slice`).
 
-Before DOI closeout hardening, broad legacy-doc cleanup, planning consolidation, absolute-path cleanup, or GUI work, execute `docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md`.
+Before DOI closeout hardening, broad legacy-doc cleanup, planning consolidation, absolute-path cleanup, or GUI work, execute `docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice`.
 
 That slice establishes the supported release metadata preparation route and makes the remaining release publish core portable or fail-closed after the `./ns` removal.
 
 ## First priority: Remote transfer state-machine hardening before ns replacement
 
-Before the remaining `ns` replacement work continues, complete the transfer state-machine MVP from `docs/planning/REMOTE_TRANSFER_STATE_MACHINE_HARDENING_PLAN.md`.
+Before the remaining `ns` replacement work continues, complete the transfer state-machine MVP from `docs/planning/PROJECT_DIRECTION.yaml` (`workflow-kernel-and-transfer-hardening` transfer-state MVP).
 
 Required before further `ns` replacement slices:
 

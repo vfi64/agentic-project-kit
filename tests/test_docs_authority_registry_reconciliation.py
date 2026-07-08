@@ -29,7 +29,7 @@ def test_project_direction_is_only_active_direction_source() -> None:
             assert item.get("superseded_by") == PROJECT_DIRECTION, path
 
 
-def test_legacy_ns_planning_docs_are_not_active_direction_sources() -> None:
+def test_legacy_ns_planning_docs_are_centralized_not_registered_sources() -> None:
     registry = _registry()
     legacy_ns_entries = [
         (path, entry)
@@ -41,9 +41,16 @@ def test_legacy_ns_planning_docs_are_not_active_direction_sources() -> None:
         )
     ]
 
-    assert legacy_ns_entries
-    for path, entry in legacy_ns_entries:
-        assert entry["status"] == "superseded", path
+    assert legacy_ns_entries == []
+
+    direction = Path("docs/planning/PROJECT_DIRECTION.yaml").read_text(encoding="utf-8")
+    assert "ns-command-migration-core" in direction
+    assert "obsolete one-time handoff evidence" in direction
+    assert "ns dev" in direction
+    assert "ns go" in direction
+    assert "ns up" in direction
+    assert "ns upload" in direction
+    assert "removed_sources:" in direction
 
 
 def test_workflow_docs_remain_operational_not_project_direction() -> None:

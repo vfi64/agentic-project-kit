@@ -427,7 +427,7 @@ blocked_until_closeout:
 first_instruction: >-
   Review PR #1436 and the refreshed successor handoff package for the release
   command authority planning slice. After merge, start from fresh main and
-  implement docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md before DOI,
+  use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice before DOI,
   legacy-doc, absolute-path, or GUI work.
 handoff_maintenance:
   principle: curated-not-accumulated
@@ -439,13 +439,13 @@ handoff_maintenance:
   first_instruction: >-
     Review PR #1436 and the refreshed successor handoff package for the release
     command authority planning slice. After merge, start from fresh main and
-    implement docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md before DOI,
+    use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice before DOI,
     legacy-doc, absolute-path, or GUI work.
 next_step:
   first_instruction: >-
     Review PR #1436 and the refreshed successor handoff package for the release
     command authority planning slice. After merge, start from fresh main and
-    implement docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md before DOI,
+    use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice before DOI,
     legacy-doc, absolute-path, or GUI work.
 evidence:
   latest_successor_prompt: docs/reports/terminal/post-pr1746-successor-chat-handoff.md

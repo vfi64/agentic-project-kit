@@ -105,7 +105,7 @@ def test_planning_docs_audit_classifies_workflow_reduction_focus_as_historical(t
 
 
 def test_planning_docs_audit_classifies_known_historical_plan(tmp_path: Path) -> None:
-    doc = tmp_path / "docs" / "planning" / "V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_PLAN.md"
+    doc = tmp_path / "docs" / "planning" / "WORKFLOW_REDUCTION_FOCUS.md"
     doc.parent.mkdir(parents=True)
     doc.write_text("# Old\nsource of truth for old handoff workflow\n", encoding="utf-8")
 
@@ -115,15 +115,16 @@ def test_planning_docs_audit_classifies_known_historical_plan(tmp_path: Path) ->
     assert result.records[0].classification == "historical_planning_doc"
 
 
-def test_planning_docs_audit_classifies_known_legacy_review_doc(tmp_path: Path) -> None:
-    doc = tmp_path / "docs" / "planning" / "POST_MERGE_LIFECYCLE_STATE_MODEL.md"
+def test_planning_docs_audit_classifies_unknown_active_doc_as_active_review_candidate(tmp_path: Path) -> None:
+    doc = tmp_path / "docs" / "planning" / "UNMIGRATED_ACTIVE_PLAN.md"
     doc.parent.mkdir(parents=True)
-    doc.write_text("# Model\nnext handoff work\n", encoding="utf-8")
+    doc.write_text("# Model\nStatus: active\nnext handoff work\n", encoding="utf-8")
 
     result = audit_planning_docs_consolidation(tmp_path)
 
-    assert result.ok is True
-    assert result.records[0].classification == "legacy_review_candidate"
+    assert result.ok is False
+    assert result.records[0].classification == "active_but_needs_review"
+    assert result.records[0].reason == "active markers found but no current release anchor"
 
 def test_planning_docs_audit_classifies_gui_gatekeeper_as_historical_plan(tmp_path: Path) -> None:
     doc = tmp_path / "docs" / "planning" / "GUI_DETERMINISTIC_GATEKEEPER_PLAN.md"

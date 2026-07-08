@@ -17,10 +17,9 @@ No scope recommendation is encoded here; maintainers fill the proposed column af
 | docs/examples/ | 1 | 0 | 1 |  |
 | docs/governance/ | 15 | 15 | 0 |  |
 | docs/gui/ | 1 | 1 | 0 |  |
-| docs/handoff/ | 6 | 6 | 0 |  |
-| docs/ideas/ | 5 | 0 | 5 |  |
+| docs/handoff/ | 4 | 4 | 0 |  |
 | docs/patterns/ | 2 | 2 | 0 |  |
-| docs/planning/ | 28 | 28 | 0 |  |
+| docs/planning/ | 13 | 13 | 0 |  |
 | docs/reference/ | 2 | 2 | 0 |  |
 | docs/releases/ | 1 | 1 | 0 |  |
 | docs/reports/ | 64 | 0 | 64 |  |

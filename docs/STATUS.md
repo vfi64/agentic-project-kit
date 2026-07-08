@@ -20,7 +20,7 @@ Historical planning-slice branch: `codex/release-command-authority-plan`.
 Historical planning-slice commit: `1becc4a7` (`Plan release command authority slice`).
 Historical planning PR: #1436 (`[codex] Plan release command authority slice`).
 
-This slice recorded `docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md` as the first implementation step after v0.4.9. It is historical and must not be treated as the current next step.
+This slice recorded `docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice` as the first implementation step after v0.4.9. It is historical and must not be treated as the current next step.
 
 
 ## Post-PR1245 Administrative Handoff Refresh State

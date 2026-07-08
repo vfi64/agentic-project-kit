@@ -143,7 +143,6 @@ def _legacy_documentation_context(relative_path: str) -> bool:
         or relative_path == "docs/DOCUMENTATION_COVERAGE.yaml"
         or relative_path == "docs/TEST_GATES.md"
         or relative_path == "docs/WORKFLOW_OUTPUT_CYCLE.md"
-        or relative_path == "docs/handoff/CODEX_NS_COMMAND_MIGRATION_HANDOFF.md"
     )
 
 

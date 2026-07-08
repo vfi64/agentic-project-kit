@@ -43,6 +43,7 @@ from agentic_project_kit.cli_commands.ns_legacy_audit import audit_ns_legacy_ref
 from agentic_project_kit.cli_commands.absolute_path_audit import audit_absolute_path_portability_command
 from agentic_project_kit.cli_commands.doc_currency_audit import audit_doc_currency_command
 from agentic_project_kit.cli_commands.doc_registry import doc_registry_app
+from agentic_project_kit.cli_commands.docs import docs_app
 from agentic_project_kit.cli_commands.status_current_state_audit import audit_status_current_state_command
 from agentic_project_kit.cli_commands.planning_docs_audit import audit_planning_docs_consolidation_command
 from agentic_project_kit.cli_commands.program_redundancy_audit import audit_program_redundancy_command
@@ -93,6 +94,7 @@ app.add_typer(workflow_app, name="workflow")
 app.add_typer(workflow_guard_app, name="workflow-guard")
 app.add_typer(rule_registry_app, name="rule-registry")
 app.add_typer(doc_registry_app, name="doc-registry")
+app.add_typer(docs_app, name="docs")
 app.add_typer(handoff_app, name="handoff")
 app.add_typer(boot_app, name="boot")
 app.add_typer(pass_already_done_app, name="pass-already-done")

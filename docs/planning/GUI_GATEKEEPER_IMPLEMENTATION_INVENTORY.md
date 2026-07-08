@@ -17,15 +17,13 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 - docs/governance/MERGE_READINESS_CONTRACT.md
 - docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
 - docs/handoff/CURRENT_HANDOFF.md
-- docs/handoff/CURRENT_HANDOFF_OVERLAY_AFTER_PR660.md
 - docs/handoff/NEXT_CHAT_BOOTSTRAP.md
 - docs/handoff/START_NEW_CHAT_PROMPT.md
 - docs/planning/PROJECT_DIRECTION.yaml
 - docs/planning/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
 - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
-- docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
-- docs/planning/PATCH_ARTIFACT_PREFLIGHT_SLICE.md
-- docs/planning/PERSISTENT_HANDOFF_STATE.md
+- docs/planning/PROJECT_DIRECTION.yaml (`python-backed-portable-workflows` preserved no-copy workflow context)
+- docs/planning/PROJECT_DIRECTION.yaml
 - docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
 - docs/planning/WORKFLOW_REDUCTION_FOCUS.md
 - src/agentic_project_kit/action_registry.py
@@ -195,7 +193,6 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 
 ### Evidence/upload preflight
 
-- docs/planning/PATCH_ARTIFACT_PREFLIGHT_SLICE.md
 - src/agentic_project_kit/cli_commands/evidence.py
 - src/agentic_project_kit/evidence_clean.py
 - src/agentic_project_kit/evidence_finalize_log.py
@@ -315,10 +312,12 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 - docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md
 - docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
 - docs/handoff/CURRENT_HANDOFF.md
-- docs/handoff/CURRENT_HANDOFF_OVERLAY_AFTER_PR660.md
 - docs/handoff/NEXT_CHAT_BOOTSTRAP.md
 - docs/handoff/START_NEW_CHAT_PROMPT.md
-- docs/planning/PERSISTENT_HANDOFF_STATE.md
+- docs/planning/PROJECT_DIRECTION.yaml
+- docs/reports/handoff-packages/latest/successor_context.yaml
+- docs/reports/handoff-packages/latest/execution_contract.json
+- docs/reports/handoff-packages/latest/validation_report.json
 - src/agentic_project_kit/cli_commands/handoff.py
 - src/agentic_project_kit/handoff_freshness.py
 - src/agentic_project_kit/handoff_prompt.py
@@ -341,7 +340,7 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 
 ### Shell-adapter migration
 
-- docs/planning/NO_COPY_NS_WORKFLOW_CONTROL.md
+- docs/planning/PROJECT_DIRECTION.yaml (`python-backed-portable-workflows` preserved no-copy workflow context)
 - src/agentic_project_kit/cli_commands/actions.py
 - tests/test_agent_command_runner_summary_footer.py
 - tests/test_quality_first_workflow_lessons.py
