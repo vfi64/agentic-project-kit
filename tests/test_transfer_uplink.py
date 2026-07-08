@@ -327,7 +327,7 @@ def test_run_and_log_writes_canonical_outbox_with_safety_header(tmp_path):
         ".agentic/rule_mechanism_inventory.yaml",
         ".agentic/rule_preservation.yaml",
         "docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md",
-        "docs/planning/PRE_GUI_HARDENING_TASKS.md",
+        "docs/archive/PRE_GUI_HARDENING_TASKS.md",
     ):
         source = Path(relative)
         target = tmp_path / relative
@@ -417,7 +417,7 @@ def test_verify_llm_context_refresh_cli_passes_for_generated_reports(tmp_path, m
         ".agentic/rule_mechanism_inventory.yaml",
         ".agentic/rule_preservation.yaml",
         "docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md",
-        "docs/planning/PRE_GUI_HARDENING_TASKS.md",
+        "docs/archive/PRE_GUI_HARDENING_TASKS.md",
     ):
         src = Path(relative)
         dst = tmp_path / relative

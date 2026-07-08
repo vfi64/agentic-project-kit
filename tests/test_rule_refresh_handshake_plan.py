@@ -2,7 +2,7 @@ from pathlib import Path
 
 CONTRACT = Path("docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md")
 ARCHIVE = Path("docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md")
-PRE_GUI = Path("docs/planning/PRE_GUI_HARDENING_TASKS.md")
+PRE_GUI = Path("docs/archive/PRE_GUI_HARDENING_TASKS.md")
 REGISTRY = Path("docs/DOCUMENTATION_REGISTRY.yaml")
 
 

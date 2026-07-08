@@ -43,7 +43,7 @@ strategy:
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
-      - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
+      - docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
       - docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md
       - docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md
   - id: kit-as-os
@@ -67,7 +67,7 @@ strategy:
       visible governance, and a future GUI that orchestrates deterministic
       wrappers rather than becoming a second command system.
     source_files:
-      - docs/planning/PRE_GUI_HARDENING_TASKS.md
+      - docs/archive/PRE_GUI_HARDENING_TASKS.md
       - docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
       - docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md
   - id: python-backed-portable-workflows
@@ -299,9 +299,9 @@ roadmap:
       - Failure classes are converted into tests, gates, or state transitions.
       - GUI work starts only from bounded command contracts and clean evidence paths.
     source_files:
-      - docs/planning/PRE_GUI_HARDENING_TASKS.md
+      - docs/archive/PRE_GUI_HARDENING_TASKS.md
       - docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
-      - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
+      - docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
       - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
   - id: workflow-kernel-and-transfer-hardening
     phase: pre-GUI
@@ -850,9 +850,9 @@ plans:
           difference, main-mutation refusal, lifecycle headers, quote-safe
           patching, and delete-heavy wrapper behavior.
     source_files:
-      - docs/planning/PRE_GUI_HARDENING_TASKS.md
+      - docs/archive/PRE_GUI_HARDENING_TASKS.md
       - docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
-      - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
+      - docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
       - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
   - id: next-turn-workflow-kernel
     status: active
@@ -1589,6 +1589,40 @@ plans:
       - docs/DOCUMENTATION_REGISTRY.yaml
       - src/agentic_project_kit/documentation_registry.py
       - tests/test_documentation_registry.py
+
+  - id: mechanize-failure-mode-review-automation
+    status: planned
+    title: Mechanize failure-mode review automation
+    summary: Add deterministic failure-mode catalog review, next-slice review reporting, stale review artifact rejection, and later post-merge closeout integration.
+    rationale: The archived plan identified repeated workflow failures that must become repository-backed commands, tests, and gates rather than chat-only prompts.
+    scope:
+      - Preserve phased implementation outside K2b.
+      - Start with read-only/WARN review behavior before hard blockers.
+      - Keep semantic recommendations advisory and deterministic hazards machine-checkable.
+    non_goals:
+      - Do not implement during K2b.
+      - Do not introduce autonomous free-form agent behavior.
+      - Do not combine all phases in one PR.
+    source_files:
+      - docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
+      - docs/planning/PROJECT_DIRECTION.yaml
+
+  - id: mechanize-pre-gui-hardening-readiness
+    status: planned
+    title: Mechanize pre-GUI hardening readiness
+    summary: Carry remaining pre-GUI hardening priorities into deterministic Project Direction items and future CLI/cockpit readiness surfaces.
+    rationale: The archived pre-GUI plan collected post-v0.4.11 hardening tasks that should be expressed as commands, gates, status reports, or cockpit metadata before GUI expansion.
+    scope:
+      - Preserve release final verification, wrapper live status, admin refresh status, publish readiness, and GUI gatekeeper readiness as future work.
+      - Keep GUI actions routed through existing agentic-kit command and cockpit layers.
+      - Keep planning-target resolution and superseded planning write blocking as future deterministic guard work.
+    non_goals:
+      - Do not implement during K2b.
+      - Do not create a parallel CLI.
+      - Do not start GUI prototype work in this taxonomy cleanup.
+    source_files:
+      - docs/archive/PRE_GUI_HARDENING_TASKS.md
+      - docs/planning/PROJECT_DIRECTION.yaml
 
 ideas:
   - id: project-direction-gui-panel

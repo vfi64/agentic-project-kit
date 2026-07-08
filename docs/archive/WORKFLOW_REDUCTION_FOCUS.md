@@ -3,13 +3,13 @@
 Document class: historical archive
 Status-date: 2026-07-08
 Archived-from: docs/planning/WORKFLOW_REDUCTION_FOCUS.md
-Superseded-by: docs/planning/PRE_GUI_HARDENING_TASKS.md and docs/planning/PROJECT_DIRECTION.yaml
+Superseded-by: docs/archive/PRE_GUI_HARDENING_TASKS.md and docs/planning/PROJECT_DIRECTION.yaml
 
 Status: superseded
-Superseded by: `docs/planning/PRE_GUI_HARDENING_TASKS.md` for pre-GUI hardening work and `docs/planning/PROJECT_DIRECTION.yaml` for durable strategy/roadmap authority.
-Lifecycle note: This document is closed as an active direction source; current pre-GUI hardening work is governed by `docs/planning/PRE_GUI_HARDENING_TASKS.md`, and durable strategy/roadmap authority is governed by `docs/planning/PROJECT_DIRECTION.yaml`.
+Superseded by: `docs/archive/PRE_GUI_HARDENING_TASKS.md` for pre-GUI hardening work and `docs/planning/PROJECT_DIRECTION.yaml` for durable strategy/roadmap authority.
+Lifecycle note: This document is closed as an active direction source; current pre-GUI hardening work is governed by `docs/archive/PRE_GUI_HARDENING_TASKS.md`, and durable strategy/roadmap authority is governed by `docs/planning/PROJECT_DIRECTION.yaml`.
 
-This file is retained as historical planning context only. Do not use the current-slice markers or roadmap items below as active work instructions; add new pre-GUI hardening content to `docs/planning/PRE_GUI_HARDENING_TASKS.md`.
+This file is retained as historical planning context only. Do not use the current-slice markers or roadmap items below as active work instructions; add new pre-GUI hardening content to `docs/archive/PRE_GUI_HARDENING_TASKS.md`.
 
 ## Current First Slice After v0.4.9
 

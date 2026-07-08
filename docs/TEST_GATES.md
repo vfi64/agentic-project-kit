@@ -116,7 +116,7 @@ Required evidence for this registry gate:
 
 ## Failure-Mode Review Automation Gate (planned)
 
-`docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md` defines the implementation contract for a future repo-backed failure-mode review path.
+`docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md` defines the implementation contract for a future repo-backed failure-mode review path.
 
 The first implementation phase must remain read-only and must add `agentic-kit next-slice review` plus `./ns next-slice-review` before any patch-preflight BLOCK integration. The planned Phase-1 evidence is:
 

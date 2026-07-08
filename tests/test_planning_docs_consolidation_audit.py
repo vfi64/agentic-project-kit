@@ -64,20 +64,21 @@ def test_planning_docs_audit_classifies_project_direction_view(tmp_path: Path) -
     assert result.records[0].classification == "planning_authority_view"
 
 
-def test_planning_docs_audit_classifies_pre_gui_tasks_as_scoped_anchor(tmp_path: Path) -> None:
-    doc = tmp_path / "docs" / "planning" / "PRE_GUI_HARDENING_TASKS.md"
+def test_planning_docs_audit_ignores_archived_pre_gui_tasks(tmp_path: Path) -> None:
+    doc = tmp_path / "docs" / "archive" / "PRE_GUI_HARDENING_TASKS.md"
     doc.parent.mkdir(parents=True)
     doc.write_text(
         "# Pre-GUI Hardening Tasks\n"
-        "Status: active\n"
-        "Authoritative target for pre-GUI hardening planning.\n",
+        "Document class: archive/historical\n"
+        "Status: archived\n"
+        "Superseded-by: docs/planning/PROJECT_DIRECTION.yaml\n",
         encoding="utf-8",
     )
 
     result = audit_planning_docs_consolidation(tmp_path)
 
     assert result.ok is True
-    assert result.records[0].classification == "authoritative_scoped_planning_anchor"
+    assert not result.records
 
 
 def test_render_planning_docs_audit_reports_blockers(tmp_path: Path) -> None:

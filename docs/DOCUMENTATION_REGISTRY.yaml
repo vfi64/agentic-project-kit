@@ -320,13 +320,14 @@ documents:
     status: superseded
     owner: maintainers
     archived_from: docs/planning/WORKFLOW_REDUCTION_FOCUS.md
-    superseded_by: docs/planning/PRE_GUI_HARDENING_TASKS.md
+    superseded_by: docs/archive/PRE_GUI_HARDENING_TASKS.md
     notes: Historical near-term focus document. Pre-GUI hardening tasks moved to PRE_GUI_HARDENING_TASKS.md; durable strategy/roadmap authority remains project_direction.yaml.
-  - path: docs/planning/PRE_GUI_HARDENING_TASKS.md
-    class: planning
+  - path: docs/archive/PRE_GUI_HARDENING_TASKS.md
+    class: historical archive
+    status: archived
     owner: maintainers
-    notes: Active scoped authority for post-v0.4.11 pre-GUI hardening tasks and planning-target guard follow-up before GUI expansion.
-    status: active
+    moved_from: docs/planning/PRE_GUI_HARDENING_TASKS.md
+    notes: Historical pre-GUI hardening plan; canonical planning target is PROJECT_DIRECTION.yaml.
   - path: docs/archive/RULE_REGISTRY_IMPROVEMENT_PLAN.md
     class: historical archive
     status: superseded
@@ -334,11 +335,12 @@ documents:
     archived_from: docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
     superseded_by: docs/planning/PROJECT_DIRECTION.yaml
     notes: Accepted backlog for reducing remaining rule-registry weaknesses after baseline completion; remaining actionable items are tracked in PROJECT_DIRECTION.yaml.
-  - path: docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
-    class: planning
+  - path: docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
+    class: historical archive
+    status: archived
     owner: maintainers
-    notes: Implementation contract for repo-backed failure-mode review automation before slices and after merges.
-    status: active
+    moved_from: docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
+    notes: Historical phased failure-mode review automation plan; residual work belongs in PROJECT_DIRECTION.yaml and must not be implemented in K2b.
   - path: docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md
     class: historical archive
     status: superseded
