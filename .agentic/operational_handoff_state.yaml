@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9f94f3eb77634a1cd710617f0b189cf7a3e61b4e
-  short: 9f94f3eb
-  subject: Centralize migrated planning and handoff remnants (#1748)
+  full: a864606e6b9bd9eed2bde67b7d2ee2974e4721bf
+  short: a864606e
+  subject: Clean up planning documentation taxonomy (#1750)
 last_substantive_work_state:
-  full: 9f94f3eb77634a1cd710617f0b189cf7a3e61b4e
-  short: 9f94f3eb
-  subject: Centralize migrated planning and handoff remnants (#1748)
+  full: a864606e6b9bd9eed2bde67b7d2ee2974e4721bf
+  short: a864606e
+  subject: Clean up planning documentation taxonomy (#1750)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

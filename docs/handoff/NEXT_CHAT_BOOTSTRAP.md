@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `9f94f3eb77634a1cd710617f0b189cf7a3e61b4e` (`9f94f3eb`)
-- Handoff freshness marker: `9f94f3eb`
-- Branch at generation: `docs/post-pr1748-handoff-refresh`
+- HEAD: `a864606e6b9bd9eed2bde67b7d2ee2974e4721bf` (`a864606e`)
+- Handoff freshness marker: `a864606e`
+- Branch at generation: `docs/post-pr1750-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -95,5 +95,9 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 - `docs-centralize-and-remove-command` (planned): Build governed docs centralize-and-remove command before K3
 - `standard-error-hardening-backlog` (active): Standard-error hardening backlog and legacy ns command coverage map
 - `post-merge-lifecycle-state-model` (active): Post-merge lifecycle state model and command authority
+- `mechanize-doc-registry-scope-reconcile` (planned): Mechanize documentation registry scope reconciliation
+- `mechanize-failure-mode-review-automation` (planned): Mechanize failure-mode review automation
+- `mechanize-pre-gui-hardening-readiness` (planned): Mechanize pre-GUI hardening readiness
+- `mechanize-operating-layer-public-onboarding-evidence` (planned): Mechanize operating-layer public onboarding and evidence
 
 ### RESULT: PASS ###

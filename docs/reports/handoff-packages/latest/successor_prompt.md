@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1748-handoff-refresh`
+- branch: `docs/post-pr1750-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -362,6 +362,42 @@ Wenn der Bootstrap grün ist:
       "id": "post-merge-lifecycle-state-model",
       "status": "active",
       "summary": "Post-merge lifecycle state model and command authority"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "mechanize-doc-registry-scope-reconcile",
+      "status": "planned",
+      "summary": "Mechanize documentation registry scope reconciliation"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "mechanize-failure-mode-review-automation",
+      "status": "planned",
+      "summary": "Mechanize failure-mode review automation"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "mechanize-pre-gui-hardening-readiness",
+      "status": "planned",
+      "summary": "Mechanize pre-GUI hardening readiness"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "mechanize-operating-layer-public-onboarding-evidence",
+      "status": "planned",
+      "summary": "Mechanize operating-layer public onboarding and evidence"
     }
   ],
   "recent_lessons": [
@@ -374,14 +410,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1748-handoff-refresh",
+    "branch": "docs/post-pr1750-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "9f94f3eb77634a1cd710617f0b189cf7a3e61b4e",
+    "head": "a864606e6b9bd9eed2bde67b7d2ee2974e4721bf",
     "head_matches_origin_main": true,
-    "head_short": "9f94f3eb",
+    "head_short": "a864606e",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "9f94f3eb77634a1cd710617f0b189cf7a3e61b4e",
-    "origin_main_short": "9f94f3eb",
+    "origin_main": "a864606e6b9bd9eed2bde67b7d2ee2974e4721bf",
+    "origin_main_short": "a864606e",
     "worktree_clean": false
   }
 }

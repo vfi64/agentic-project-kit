@@ -317,6 +317,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1748
+## Operational documentation refresh state after PR #1750
 
-Current administrative handoff refresh state is `9f94f3eb` (`Centralize migrated planning and handoff remnants (#1748)`). Continue next only after this post-PR1748 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `a864606e` (`Clean up planning documentation taxonomy (#1750)`). Continue next only after this post-PR1750 refresh is committed and merged; the next substantive slice must be created from fresh main.
