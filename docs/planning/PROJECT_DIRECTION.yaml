@@ -39,7 +39,7 @@ strategy:
       fragments.
     evidence:
       - docs/architecture/ARCHITECTURE_CONTRACT.md
-      - docs/planning/KIT_AS_OS_MASTERPLAN.md
+      - docs/archive/KIT_AS_OS_MASTERPLAN.md
     source_files:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
@@ -55,9 +55,9 @@ strategy:
       manifest, handoff, rule, and gate contracts.
     evidence:
       - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
-      - docs/planning/KIT_AS_OS_MASTERPLAN.md
+      - docs/archive/KIT_AS_OS_MASTERPLAN.md
     source_files:
-      - docs/planning/KIT_AS_OS_MASTERPLAN.md
+      - docs/archive/KIT_AS_OS_MASTERPLAN.md
   - id: professional-single-user-tool
     status: active
     title: Professional single-user governance target
@@ -175,7 +175,7 @@ roadmap:
     evidence:
       - PR #1723 parsed workspace manifests with the schema gate.
     source_files:
-      - docs/planning/KIT_AS_OS_MASTERPLAN.md
+      - docs/archive/KIT_AS_OS_MASTERPLAN.md
   - id: p3-workspace-adopt-init-upgrade
     phase: P3
     status: done
@@ -1624,6 +1624,25 @@ plans:
       - docs/archive/PRE_GUI_HARDENING_TASKS.md
       - docs/planning/PROJECT_DIRECTION.yaml
 
+  - id: mechanize-operating-layer-public-onboarding-evidence
+    status: planned
+    title: Mechanize operating-layer public onboarding and evidence
+    summary: Carry remaining Kit-as-OS public onboarding, website, installation distinction, external-repo evidence, and workspace evidence helper follow-up into deterministic Direction work.
+    rationale: The archived masterplan still contains useful residual follow-up beyond the accepted architecture, especially public documentation, website framing, installation versus repository onboarding, evidence logs for current-state claims, and external-repo validation.
+    scope:
+      - Keep accepted architecture as the normative source.
+      - Track public website, installation guide, repository onboarding guide, troubleshooting, glossary, and private/public boundary docs as future work.
+      - Preserve external-repo validation and workspace evidence generation as future deterministic evidence work.
+      - Ensure future docs do not claim operating-layer maturity before implemented and tested phases.
+    non_goals:
+      - Do not implement during K2b.
+      - Do not replace the accepted architecture.
+      - Do not create broad documentation rewrites.
+    source_files:
+      - docs/archive/KIT_AS_OS_MASTERPLAN.md
+      - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+      - docs/planning/PROJECT_DIRECTION.yaml
+
 ideas:
   - id: project-direction-gui-panel
     status: accepted
@@ -2067,7 +2086,7 @@ done:
     evidence:
       - docs/architecture/evidence/path-literal-audit-2026-07-04-post-p1.md
     source_files:
-      - docs/planning/KIT_AS_OS_MASTERPLAN.md
+      - docs/archive/KIT_AS_OS_MASTERPLAN.md
   - id: portable-llm-communication-bootstrap
     status: done
     title: Portable LLM communication bootstrap

@@ -570,12 +570,12 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Post-S6 report-only path literal inventory after transfer CLI modularization.
-  - path: docs/planning/KIT_AS_OS_MASTERPLAN.md
-    class: planning
+  - path: docs/archive/KIT_AS_OS_MASTERPLAN.md
+    class: historical archive
+    status: archived
     owner: maintainers
-    review_policy: required
-    status: active
-    notes: Authoritative master plan for the post-v0.4.12 operating-layer transformation; implementation requires later separately reviewed slices.
+    moved_from: docs/planning/KIT_AS_OS_MASTERPLAN.md
+    notes: Historical operating-layer master plan; normative architecture is docs/architecture/KIT_AS_OS_ARCHITECTURE.md and residual follow-up is tracked in PROJECT_DIRECTION.yaml.
   - path: docs/architecture/KIT_AS_OS_ARCHITECTURE.md
     class: architecture
     owner: maintainers
