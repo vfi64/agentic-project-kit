@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `481008954587859e4125f0708d3bb86298b8dfa7` (`48100895`)
-- Handoff freshness marker: `48100895`
-- Branch at generation: `docs/post-pr1746-handoff-refresh`
+- HEAD: `9f94f3eb77634a1cd710617f0b189cf7a3e61b4e` (`9f94f3eb`)
+- Handoff freshness marker: `9f94f3eb`
+- Branch at generation: `docs/post-pr1748-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -89,8 +89,11 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 - `pre-gui-hardening-plan` (active): Execute the pre-GUI hardening backlog in small wrapper-first slices for v0.4.12
 - `next-turn-workflow-kernel` (active): Move recurring next-step execution from chat discipline into a deterministic local workflow kernel for v0.4.12
 - `release-command-authority` (active): Keep release preparation, publishing, and DOI closeout under explicit command authority for v0.4.12
-- `rule-registry-hardening` (active): Preserve active rule identity, source validation, and refresh handshakes for v0.4.12
+- `rule-registry-hardening` (active): Preserve active rule identity, source validation, and refresh handshakes
 - `portability-and-ns-closeout` (planned): Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands for v0.4.12
 - `gui-workbench-plan` (planned): Implement the GUI gatekeeper/workbench as a view over governed action specs for v0.4.x
+- `docs-centralize-and-remove-command` (planned): Build governed docs centralize-and-remove command before K3
+- `standard-error-hardening-backlog` (active): Standard-error hardening backlog and legacy ns command coverage map
+- `post-merge-lifecycle-state-model` (active): Post-merge lifecycle state model and command authority
 
 ### RESULT: PASS ###

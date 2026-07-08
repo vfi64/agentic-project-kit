@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 481008954587859e4125f0708d3bb86298b8dfa7
-  short: 48100895
-  subject: Add strict documentation scope to standard gates (#1746)
+  full: 9f94f3eb77634a1cd710617f0b189cf7a3e61b4e
+  short: 9f94f3eb
+  subject: Centralize migrated planning and handoff remnants (#1748)
 last_substantive_work_state:
-  full: 481008954587859e4125f0708d3bb86298b8dfa7
-  short: 48100895
-  subject: Add strict documentation scope to standard gates (#1746)
+  full: 9f94f3eb77634a1cd710617f0b189cf7a3e61b4e
+  short: 9f94f3eb
+  subject: Centralize migrated planning and handoff remnants (#1748)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
