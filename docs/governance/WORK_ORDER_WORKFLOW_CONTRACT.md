@@ -1,6 +1,9 @@
-# Next-Turn Work Order Workflow Plan
+# Work Order Workflow Contract
 
-Status-date: 2026-05-25
+Document class: governance/system
+Status-date: 2026-07-08
+Moved-from: docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+
 Status: active
 Decision status: accepted
 Review policy: Review before every implementation slice; retire or replace only after the next-turn kernel, state machine, run-result model, execution ledger, evidence upload, PR/CI gates, protected-diff gate, and GUI-ready command path are implemented and tested.

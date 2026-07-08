@@ -44,7 +44,7 @@ strategy:
       - docs/planning/PROJECT_DIRECTION.yaml
       - docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
       - docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
-      - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+      - docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md
       - docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md
   - id: kit-as-os
     status: active
@@ -865,7 +865,7 @@ plans:
       - Re-running status, cleanup, validation, and closeout commands is idempotent.
       - Unsafe transitions stop with durable diagnostics instead of producing false PASS states.
     source_files:
-      - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+      - docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md
       - docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md
   - id: release-command-authority
     status: active
@@ -2327,5 +2327,5 @@ discarded:
       evidence, and false-PASS failure modes.
     discarded_at: "2026-07-05"
     source_files:
-      - docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+      - docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md
       - docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md

@@ -235,12 +235,12 @@ documents:
     owner: maintainers
     review_policy: required
     summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
-    class: planning
-    status: review_required
+  - path: docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md
+    class: governance/system
+    status: active
     owner: maintainers
-    review_policy: required
-    summary: Review-required next-turn work-order plan; should not be treated as long-term direction.
+    moved_from: docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+    notes: Normative work-order workflow contract for fixed-slot next-turn execution, state machine, safety classes, result/evidence lookup, no-chat-decision boundaries, and GUI-ready command routing.
   - path: docs/archive/planning/NEXT_TURN_A0_STANDARD_ERROR_ADDITIONS.md
     class: historical archive
     status: archived

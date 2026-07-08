@@ -137,12 +137,12 @@ def test_planning_docs_audit_classifies_gui_gatekeeper_as_historical_plan(tmp_pa
     assert result.records[0].classification == "historical_planning_doc"
 
 
-def test_planning_docs_audit_classifies_next_turn_work_order_as_legacy_review(tmp_path: Path) -> None:
-    doc = tmp_path / "docs" / "planning" / "NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md"
+def test_planning_docs_audit_ignores_moved_work_order_governance_contract(tmp_path: Path) -> None:
+    doc = tmp_path / "docs" / "governance" / "WORK_ORDER_WORKFLOW_CONTRACT.md"
     doc.parent.mkdir(parents=True)
-    doc.write_text("# Next-Turn\ncurrent source of truth for previous next-turn workflow\n", encoding="utf-8")
+    doc.write_text("# Work Order Workflow Contract\ncurrent source of truth for previous next-turn workflow\n", encoding="utf-8")
 
     result = audit_planning_docs_consolidation(tmp_path)
 
     assert result.ok is True
-    assert result.records[0].classification == "legacy_review_candidate"
+    assert not result.records

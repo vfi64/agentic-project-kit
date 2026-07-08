@@ -25,7 +25,7 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 - docs/handoff/START_NEW_CHAT_PROMPT.md
 - docs/planning/PROJECT_DIRECTION.yaml
 - docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
-- docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+- docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md
 - docs/planning/PROJECT_DIRECTION.yaml (`python-backed-portable-workflows` preserved no-copy workflow context)
 - docs/planning/PROJECT_DIRECTION.yaml
 - docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md
@@ -230,7 +230,7 @@ This document maps the implementation surface for the GUI deterministic gatekeep
 
 ### Work-order routing
 
-- docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md
+- docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md
 - src/agentic_project_kit/cli_commands/work_orders.py
 - src/agentic_project_kit/typed_work_order_queue.py
 - src/agentic_project_kit/typed_work_order_runner.py
