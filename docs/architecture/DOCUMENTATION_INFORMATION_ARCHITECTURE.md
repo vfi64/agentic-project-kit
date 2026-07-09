@@ -9,6 +9,60 @@ This document defines where durable project information belongs. Its purpose is 
 
 The repository must preserve information, but it must not preserve ambiguity. Each durable information type should have one canonical home. Other documents may summarize or reference that information, but they should not become competing sources of truth.
 
+## K2d documentation taxonomy baseline
+
+K2d uses four operational documentation classes for triage decisions:
+
+1. Architecture and governance: durable rules, contracts, invariants, safety boundaries, and authority limits. Canonical homes are docs/architecture/ and docs/governance/.
+2. Reference and user-facing documentation: command references, research inputs, stable examples, user-facing descriptions, and reusable explanatory material. Canonical homes include docs/reference/, docs/examples/, and selected top-level anchors such as README.md.
+3. Workflow, release, and operational automation: active process documentation, release records, workflow guards, automation contracts, and code-backed operational documents. Canonical homes include docs/workflow/, docs/releases/, and explicitly justified root exceptions.
+4. Evidence, reports, planning, and archive: generated reports, handoff projections, run evidence, project direction, completed or discarded plans, and superseded historical material. Canonical homes include docs/reports/, docs/handoff/, docs/planning/, and docs/archive/.
+
+The taxonomy is intentionally operational rather than literary. A document is classified by the role it plays in repository governance and automation, not by its prose style.
+
+## Root exceptions
+
+The docs/ root should stay small. Root-level documentation is allowed only when a file is a stable public anchor, code-backed control file, or historically entrenched compatibility anchor.
+
+Current justified root exceptions include:
+
+- docs/DOCUMENTATION_REGISTRY.yaml: machine-readable documentation registry.
+- docs/DOC_REGISTRY_SCOPE.yaml: machine-readable required/exempt scope declaration.
+- docs/DOCUMENTATION_COVERAGE.yaml: code-backed documentation coverage contract and explicit exception to the no-root-sprawl rule.
+- docs/TEST_GATES.md: public gate overview.
+- docs/STATUS.md: current human status projection.
+- docs/WORKFLOW_OUTPUT_CYCLE.md: code-/audit-backed workflow output-cycle contract retained at its legacy path.
+
+New root files require an explicit reason in the registry or coverage contract. Convenience is not enough.
+
+## Status header convention
+
+Active Markdown documents in registry-governed scope should use this compact header before the title when practical:
+
+    Status: active
+    Status-date: YYYY-MM-DD
+    Superseded-by: n/a
+
+Superseded or archived documents should use Status: superseded or Status: archived and a concrete Superseded-by: target when one exists.
+
+Generated reports, evidence bundles, examples, and legacy compatibility anchors may have specialized metadata, but they must not contradict the registry. A missing or conflicting lifecycle header is a documentation hygiene finding, not a license to infer semantic truth.
+
+## Handoff model
+
+The current handoff model is package-first.
+
+docs/reports/handoff-packages/latest/ contains the authoritative machine-readable handoff package:
+
+- successor_context.yaml
+- source_manifest.json
+- validation_report.json
+- execution_contract.json
+- successor_prompt.md
+
+docs/handoff/*.md files are human prompt/bootstrap projections and safety belts. They are useful entry points for a maintainer or successor chat, but they are not more authoritative than the validated package data. If a docs/handoff/*.md projection disagrees with the latest validated package, the package wins and the projection must be regenerated through the supported closeout/chat-switch workflow.
+
+Feature-branch handoff packages must not be treated as final main-state evidence when a gate requires validation against origin/main. Final handoff/status refresh belongs after merge or in a workflow that explicitly supports branch handoff state.
+
 ## Directory responsibilities
 
 ### docs/architecture
