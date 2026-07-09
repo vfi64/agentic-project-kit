@@ -230,3 +230,133 @@ def test_remote_branch_hygiene_report_command_blocks_output_outside_safe_roots(m
 
     assert result.exit_code != 0
     assert "output path must be below" in result.output
+
+
+def test_remote_branch_hygiene_apply_requires_execute(monkeypatch) -> None:
+    def fake_collect(root):
+        return ([RemoteBranchInfo("origin/feature/merged", merged_to_origin_main=True)], [])
+
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.remote_branch_hygiene.collect_remote_branch_hygiene_inputs",
+        fake_collect,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["remote-branch-hygiene-apply", "--only", "origin/feature/merged", "--json"],
+    )
+
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.output)
+    assert data["kind"] == "k3_remote_branch_hygiene_apply_result"
+    assert data["mode"] == "dry-run"
+    assert data["mutation"] == "none"
+    assert data["deleted"] is False
+    assert data["result_status"] == "PASS"
+
+
+def test_remote_branch_hygiene_apply_blocks_unqualified_branch(monkeypatch) -> None:
+    def fake_collect(root):
+        return ([RemoteBranchInfo("origin/feature/not-merged", merged_to_origin_main=False)], [])
+
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.remote_branch_hygiene.collect_remote_branch_hygiene_inputs",
+        fake_collect,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["remote-branch-hygiene-apply", "--only", "origin/feature/not-merged", "--execute", "--json"],
+    )
+
+    assert result.exit_code != 0
+    assert "not a safe delete candidate" in result.output
+
+
+def test_remote_branch_hygiene_apply_blocks_open_pr_branch(monkeypatch) -> None:
+    def fake_collect(root):
+        return (
+            [RemoteBranchInfo("origin/feature/active", merged_to_origin_main=True)],
+            [OpenPullRequestHead("feature/active", 99, "Active", "https://example.invalid/pr/99")],
+        )
+
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.remote_branch_hygiene.collect_remote_branch_hygiene_inputs",
+        fake_collect,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["remote-branch-hygiene-apply", "--only", "origin/feature/active", "--execute", "--json"],
+    )
+
+    assert result.exit_code != 0
+    assert "not a safe delete candidate" in result.output
+
+
+def test_remote_branch_hygiene_apply_blocks_unknown_branch(monkeypatch) -> None:
+    def fake_collect(root):
+        return ([RemoteBranchInfo("origin/feature/merged", merged_to_origin_main=True)], [])
+
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.remote_branch_hygiene.collect_remote_branch_hygiene_inputs",
+        fake_collect,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["remote-branch-hygiene-apply", "--only", "origin/feature/missing", "--execute", "--json"],
+    )
+
+    assert result.exit_code != 0
+    assert "branch not found in current hygiene report" in result.output
+
+
+def test_remote_branch_hygiene_apply_blocks_batch_or_protected_names(monkeypatch) -> None:
+    def fake_collect(root):
+        return ([RemoteBranchInfo("origin/feature/merged", merged_to_origin_main=True)], [])
+
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.remote_branch_hygiene.collect_remote_branch_hygiene_inputs",
+        fake_collect,
+    )
+
+    for branch in ["origin/main", "origin/HEAD", "feature/merged", "origin/feature/a,origin/feature/b"]:
+        result = CliRunner().invoke(
+            app,
+            ["remote-branch-hygiene-apply", "--only", branch, "--execute", "--json"],
+        )
+        assert result.exit_code != 0, branch
+
+
+def test_remote_branch_hygiene_apply_execute_deletes_single_safe_candidate(monkeypatch) -> None:
+    deleted: list[str] = []
+
+    def fake_collect(root):
+        return ([RemoteBranchInfo("origin/feature/merged", merged_to_origin_main=True)], [])
+
+    def fake_delete(root, branch):
+        deleted.append(branch)
+
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.remote_branch_hygiene.collect_remote_branch_hygiene_inputs",
+        fake_collect,
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.remote_branch_hygiene.delete_remote_branch",
+        fake_delete,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["remote-branch-hygiene-apply", "--only", "origin/feature/merged", "--execute", "--json"],
+    )
+
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.output)
+    assert data["kind"] == "k3_remote_branch_hygiene_apply_result"
+    assert data["mode"] == "execute"
+    assert data["mutation"] == "delete-single-remote-branch"
+    assert data["deleted"] is True
+    assert data["branch"] == "origin/feature/merged"
+    assert deleted == ["origin/feature/merged"]

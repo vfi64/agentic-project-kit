@@ -4899,6 +4899,73 @@
     },
     {
       "group": "root",
+      "help": "Safely apply exactly one remote branch deletion candidate.",
+      "name": "remote-branch-hygiene-apply",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "only",
+          "opts": [
+            "--only"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "remote-branch-hygiene-apply"
+      ],
+      "qualified_name": "agentic-kit remote-branch-hygiene-apply"
+    },
+    {
+      "group": "root",
       "help": "Write a K3 remote branch hygiene evidence report only with --execute.",
       "name": "remote-branch-hygiene-report",
       "params": [
