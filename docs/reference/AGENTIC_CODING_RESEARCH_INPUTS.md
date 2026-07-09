@@ -1,9 +1,13 @@
+Status: active
+Status-date: 2026-07-09
+Superseded-by: n/a
+
 # Agentic Coding Research Inputs
 
 Status: planning input  
 Date: 2026-05-10  
 Related document: `docs/architecture/ARCHITECTURE_CONTRACT.md`  
-Bibliography: `docs/architecture/references.bib`
+Bibliography: `docs/reference/references.bib`
 
 ## 1. Purpose
 

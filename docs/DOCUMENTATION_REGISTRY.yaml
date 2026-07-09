@@ -395,10 +395,10 @@ documents:
     owner: maintainers
     notes: Required evidence rule source for remote inspection and follow-up analysis.
     status: active
-  - path: docs/architecture/AGENTIC_CODING_RESEARCH_INPUTS.md
+  - path: docs/reference/AGENTIC_CODING_RESEARCH_INPUTS.md
     class: architecture
     owner: maintainers
-    notes: Architecture research input retained under required architecture scope.
+    notes: Architecture research input retained under reference scope.
     status: active
   - path: docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
     class: architecture

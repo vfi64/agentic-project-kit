@@ -4,9 +4,9 @@ Status: Draft contract
 Date: 2026-05-10  
 Project: agentic-project-kit  
 Audience: maintainers, human developers, AI coding agents  
-Related planning input: `docs/architecture/AGENTIC_CODING_RESEARCH_INPUTS.md`  
+Related planning input: `docs/reference/AGENTIC_CODING_RESEARCH_INPUTS.md`  
 Documentation information architecture: `docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md`  
-Bibliography: `docs/architecture/references.bib`
+Bibliography: `docs/reference/references.bib`
 
 ## 1. Executive Summary
 
@@ -177,7 +177,7 @@ The architecture therefore adopts these constraints:
 - policy packs must distinguish prototypes from release-managed or research-reproducible projects;
 - secret hygiene and bounded evidence staging are part of the governance problem.
 
-Detailed source notes are kept in `AGENTIC_CODING_RESEARCH_INPUTS.md`; bibliographic records are kept in `references.bib`.
+Detailed source notes are kept in `docs/reference/AGENTIC_CODING_RESEARCH_INPUTS.md`; bibliographic records are kept in `docs/reference/references.bib`.
 
 ## 7. Architectural Contract
 
