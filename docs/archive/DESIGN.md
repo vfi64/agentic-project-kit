@@ -1,3 +1,7 @@
+Status: superseded
+Status-date: 2026-07-09
+Superseded-by: docs/architecture/ARCHITECTURE_CONTRACT.md, docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+
 # Design Notes
 
 ## Goal
