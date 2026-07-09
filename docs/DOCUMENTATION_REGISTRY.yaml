@@ -157,18 +157,24 @@ documents:
     owner: maintainers
     review_policy: required
     summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md
-    class: operational/automation
-    status: active
+  - path: docs/archive/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md
+    class: historical archive
+    status: superseded
     owner: maintainers
     review_policy: required
-    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
-    class: operational/automation
-    status: active
+    summary: Superseded workflow document retained as historical archive context.
+    archived_from: docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md
+    source_files:
+      - docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md
+  - path: docs/archive/V0.3.36_REMAINING_WORKPLAN.md
+    class: historical archive
+    status: superseded
     owner: maintainers
     review_policy: required
-    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+    summary: Superseded workflow document retained as historical archive context.
+    archived_from: docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
+    source_files:
+      - docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
   - path: docs/workflow/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md
     class: operational/automation
     status: active
@@ -205,12 +211,15 @@ documents:
     owner: maintainers
     review_policy: required
     summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/PRE_GUI_EXECUTION_HARDENING.md
-    class: operational/automation
-    status: active
+  - path: docs/archive/PRE_GUI_EXECUTION_HARDENING.md
+    class: historical archive
+    status: superseded
     owner: maintainers
     review_policy: required
-    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+    summary: Superseded workflow document retained as historical archive context.
+    archived_from: docs/workflow/PRE_GUI_EXECUTION_HARDENING.md
+    source_files:
+      - docs/workflow/PRE_GUI_EXECUTION_HARDENING.md
   - path: docs/workflow/PARAMETERIZED_ACTIONS.md
     class: operational/automation
     status: active

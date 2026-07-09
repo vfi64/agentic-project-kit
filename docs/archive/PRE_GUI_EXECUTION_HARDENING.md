@@ -1,3 +1,7 @@
+Status: superseded
+Status-date: 2026-07-09
+Superseded-by: docs/archive/PRE_GUI_HARDENING_TASKS.md
+
 # Pre-GUI Execution Hardening
 
 Status: Active
