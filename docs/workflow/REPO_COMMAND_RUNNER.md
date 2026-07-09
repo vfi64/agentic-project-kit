@@ -1,3 +1,7 @@
+Status: active
+Status-date: 2026-07-09
+Superseded-by: n/a
+
 # Repo Command Runner
 
 `./ns agent-run` is the intended no-copy handoff path for local agent work.
