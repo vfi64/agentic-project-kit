@@ -175,25 +175,31 @@ documents:
     archived_from: docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
     source_files:
       - docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
-  - path: docs/workflow/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md
-    class: operational/automation
+  - path: docs/governance/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md
+    class: governance/system
     status: active
     owner: maintainers
     review_policy: required
-    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+    summary: Active governance contract for typed work orders and required execution evidence.
+    moved_from: docs/workflow/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md
+    source_files:
+      - docs/workflow/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md
   - path: docs/workflow/TEXT_TRANSFER_RUNNER.md
     class: operational/automation
     status: active
     owner: maintainers
     review_policy: required
     summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md
-    class: operational/automation
+  - path: docs/governance/TERMINAL_LOG_HANDOFF_RULE.md
+    class: governance/system
     status: active
     owner: maintainers
     review_policy: required
-    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/RULE_GOVERNANCE.md
+    summary: Active governance rule for bounded terminal-log evidence handoff after long local runs.
+    moved_from: docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md
+    source_files:
+      - docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md
+  - path: docs/governance/RULE_GOVERNANCE.md
     class: operational/automation
     status: active
     owner: maintainers
@@ -205,12 +211,15 @@ documents:
     owner: maintainers
     review_policy: required
     summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/PR_CLOSEOUT_GATE.md
-    class: operational/automation
+  - path: docs/governance/PR_CLOSEOUT_GATE.md
+    class: governance/system
     status: active
     owner: maintainers
     review_policy: required
-    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+    summary: Active governance gate preventing ready PRs from being treated as generic continuation work.
+    moved_from: docs/workflow/PR_CLOSEOUT_GATE.md
+    source_files:
+      - docs/workflow/PR_CLOSEOUT_GATE.md
   - path: docs/archive/PRE_GUI_EXECUTION_HARDENING.md
     class: historical archive
     status: superseded

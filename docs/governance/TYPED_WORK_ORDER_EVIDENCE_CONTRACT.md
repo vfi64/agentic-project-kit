@@ -1,3 +1,7 @@
+Status: active
+Status-date: 2026-07-09
+Superseded-by: n/a
+
 # Typed Work Order Evidence Contract
 
 Status: active contract for v0.3.31 pre-GUI execution hardening.
