@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7d099c9d4f94e207354e9ec48ad66b471a61e76b
-  short: 7d099c9d
-  subject: Complete documentation taxonomy cleanup (#1754)
+  full: 7dd0cfa91b7dcea47194d0f728797b336a7abd00
+  short: 7dd0cfa9
+  subject: Add docs lifecycle triage command (#1756)
 last_substantive_work_state:
-  full: 7d099c9d4f94e207354e9ec48ad66b471a61e76b
-  short: 7d099c9d
-  subject: Complete documentation taxonomy cleanup (#1754)
+  full: 7dd0cfa91b7dcea47194d0f728797b336a7abd00
+  short: 7dd0cfa9
+  subject: Add docs lifecycle triage command (#1756)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
