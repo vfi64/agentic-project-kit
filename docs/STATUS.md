@@ -7,9 +7,9 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `2ca04c07` (`Add handoff context to docs lifecycle reports (#1768)`).
-Latest substantive work: PR #1768 (`Add handoff context to docs lifecycle reports (#1768)`).
-Post-merge handoff status: PASS/NOOP after PR #1768 administrative refresh.
+Current verified main: `59fce759` (`Add K3 remote branch hygiene dry-run command (#1770)`).
+Latest substantive work: PR #1770 (`Add K3 remote branch hygiene dry-run command (#1770)`).
+Post-merge handoff status: PASS/NOOP after PR #1770 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1768
+## Operational documentation refresh state after PR #1770
 
-Current administrative handoff refresh state is `2ca04c07` (`Add handoff context to docs lifecycle reports (#1768)`). Continue next only after this post-PR1768 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `59fce759` (`Add K3 remote branch hygiene dry-run command (#1770)`). Continue next only after this post-PR1770 refresh is committed and merged; the next substantive slice must be created from fresh main.
