@@ -382,12 +382,15 @@ documents:
     moved_from: docs/testing/TRANSFER_TEST_PLAN.md
     source_files:
       - docs/testing/TRANSFER_TEST_PLAN.md
-  - path: docs/agent_rules/PORTABILITY_AND_OPERATIONAL_RULES.md
+  - path: docs/governance/PORTABILITY_AND_OPERATIONAL_RULES.md
     class: governance/system
     owner: maintainers
-    notes: Required operational portability rule source for agents and maintainers.
+    summary: Active governance rule set for portability and operational behavior.
     status: active
-  - path: docs/agent_rules/REMOTE_INSPECTION_EVIDENCE_RULES.md
+    moved_from: docs/agent_rules/PORTABILITY_AND_OPERATIONAL_RULES.md
+    source_files:
+      - docs/agent_rules/PORTABILITY_AND_OPERATIONAL_RULES.md
+  - path: docs/governance/REMOTE_INSPECTION_EVIDENCE_RULES.md
     class: governance/system
     owner: maintainers
     notes: Required evidence rule source for remote inspection and follow-up analysis.
@@ -500,12 +503,15 @@ documents:
     owner: automation
     notes: Generated start-new-chat prompt projection.
     status: active
-  - path: docs/patterns/bounded-workflow-evidence.md
-    class: governance/system
+  - path: docs/reference/bounded-workflow-evidence.md
+    class: operational/automation
     owner: maintainers
-    notes: Required governed workflow evidence pattern.
+    summary: Reference pattern for bounded workflow evidence capture.
     status: active
-  - path: docs/patterns/hidden-autopilot.md
+    moved_from: docs/patterns/bounded-workflow-evidence.md
+    source_files:
+      - docs/patterns/bounded-workflow-evidence.md
+  - path: docs/reference/hidden-autopilot.md
     class: governance/system
     owner: maintainers
     notes: Required hidden-autopilot anti-pattern.
