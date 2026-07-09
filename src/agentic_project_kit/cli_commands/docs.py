@@ -6,6 +6,10 @@ from typing import Annotated
 
 import typer
 
+from agentic_project_kit.doc_lifecycle import (
+    build_doc_lifecycle_triage_payload,
+    render_doc_lifecycle_triage_report,
+)
 from agentic_project_kit.removed_source_audit import (
     DEFAULT_CENTRAL_TARGET,
     build_removed_source_audit,
@@ -13,6 +17,23 @@ from agentic_project_kit.removed_source_audit import (
 )
 
 docs_app = typer.Typer(help="Documentation maintenance and migration guards.")
+lifecycle_app = typer.Typer(help="Safe documentation lifecycle triage and planning.")
+docs_app.add_typer(lifecycle_app, name="lifecycle")
+
+
+@lifecycle_app.command("triage")
+def docs_lifecycle_triage_command(
+    root: Annotated[Path, typer.Option("--root", help="Repository root.")] = Path("."),
+    json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
+) -> None:
+    """Propose safe documentation lifecycle actions without applying changes."""
+    payload = build_doc_lifecycle_triage_payload(root.resolve())
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        typer.echo(render_doc_lifecycle_triage_report(payload), nl=False)
+    if payload["result_status"] == "BLOCK":
+        raise typer.Exit(code=2)
 
 
 @docs_app.command("removed-source-audit")

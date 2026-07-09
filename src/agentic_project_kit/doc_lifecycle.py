@@ -174,3 +174,121 @@ def _first_header_value(text: str, key: str) -> str | None:
             value = line[len(prefix):].strip()
             return value or None
     return None
+
+
+def build_doc_lifecycle_triage_payload(project_root: Path) -> dict[str, Any]:
+    """Build a safe dry-run lifecycle triage report.
+
+    The triage layer is intentionally advisory. Missing lifecycle metadata is
+    WARN-only. Objective event conflicts, such as an invalid Status header, are
+    blocking because they make downstream lifecycle decisions unsafe.
+    """
+    report = build_doc_lifecycle_report(project_root)
+    findings: list[dict[str, str]] = []
+    proposed_actions: list[dict[str, str]] = []
+    failures = 0
+    warnings = 0
+
+    for finding in report.findings:
+        severity = "FAIL" if finding.code == "invalid-status" else "WARN"
+        if severity == "FAIL":
+            failures += 1
+        else:
+            warnings += 1
+        findings.append(
+            {
+                "severity": severity,
+                "code": finding.code,
+                "path": finding.path,
+                "message": finding.message,
+            }
+        )
+        proposed_actions.append(
+            {
+                "id": finding.path + ":" + finding.code,
+                "path": finding.path,
+                "operation": "manual-review" if severity == "FAIL" else "defer",
+                "reason": finding.message,
+                "execute": "false",
+            }
+        )
+
+    finding_paths = {finding["path"] for finding in findings}
+    for document in report.documents:
+        if document.path in finding_paths:
+            continue
+        operation = _triage_operation_for_status(document.status)
+        proposed_actions.append(
+            {
+                "id": document.path + ":" + operation,
+                "path": document.path,
+                "operation": operation,
+                "reason": _triage_reason_for_status(document.status),
+                "execute": "false",
+            }
+        )
+
+    return {
+        "schema_version": 1,
+        "kind": "doc_lifecycle_triage_report",
+        "mode": "dry-run",
+        "auto_apply": False,
+        "result_status": "BLOCK" if failures else "PASS",
+        "summary": {
+            "documents": len(report.documents),
+            "findings": len(findings),
+            "warnings": warnings,
+            "failures": failures,
+            "proposed_actions": len(proposed_actions),
+        },
+        "documents": [document.to_dict() for document in report.documents],
+        "findings": findings,
+        "proposed_actions": proposed_actions,
+        "registry_summary": report.registry_summary,
+    }
+
+
+def render_doc_lifecycle_triage_report(payload: dict[str, Any]) -> str:
+    summary = payload["summary"]
+    lines = [
+        "DOC_LIFECYCLE_TRIAGE",
+        f"STATUS: {payload['result_status']}",
+        f"MODE: {payload['mode']}",
+        "AUTO_APPLY: disabled",
+        f"DOCUMENTS: {summary['documents']}",
+        f"FINDINGS: {summary['findings']}",
+        f"WARNINGS: {summary['warnings']}",
+        f"FAILURES: {summary['failures']}",
+        "",
+        "PROPOSED_ACTIONS:",
+    ]
+    actions = payload.get("proposed_actions", [])
+    if not actions:
+        lines.append("- none")
+    for action in actions:
+        lines.append(
+            "- "
+            f"{action['operation']} | {action['path']} | "
+            f"{action['reason']} | execute={action['execute']}"
+        )
+    return "\n".join(lines) + "\n"
+
+
+def _triage_operation_for_status(status: str | None) -> str:
+    if status in {"active", "accepted", "implemented"}:
+        return "confirm-current"
+    if status in {"superseded", "archived", "rejected"}:
+        return "historical"
+    if status == "idea-note":
+        return "defer"
+    return "manual-review"
+
+
+def _triage_reason_for_status(status: str | None) -> str:
+    if status in {"active", "accepted", "implemented"}:
+        return "registered lifecycle metadata indicates current document"
+    if status in {"superseded", "archived", "rejected"}:
+        return "registered lifecycle metadata indicates historical document"
+    if status == "idea-note":
+        return "idea document remains advisory"
+    return "status requires manual review"

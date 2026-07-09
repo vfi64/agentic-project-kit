@@ -1483,6 +1483,47 @@
       "qualified_name": "agentic-kit doc-registry register"
     },
     {
+      "group": "docs lifecycle",
+      "help": "Propose safe documentation lifecycle actions without applying changes.",
+      "name": "triage",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "docs",
+        "lifecycle",
+        "triage"
+      ],
+      "qualified_name": "agentic-kit docs lifecycle triage"
+    },
+    {
       "group": "docs",
       "help": "Fail if removed documentation sources still have live refs or registry refs.",
       "name": "removed-source-audit",
