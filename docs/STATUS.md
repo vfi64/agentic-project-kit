@@ -7,9 +7,9 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `e01331a9` (`Add safe docs lifecycle apply command (#1764)`).
-Latest substantive work: PR #1764 (`Add safe docs lifecycle apply command (#1764)`).
-Post-merge handoff status: PASS/NOOP after PR #1764 administrative refresh.
+Current verified main: `f52ba472` (`Add docs lifecycle evidence report command (#1766)`).
+Latest substantive work: PR #1766 (`Add docs lifecycle evidence report command (#1766)`).
+Post-merge handoff status: PASS/NOOP after PR #1766 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1764
+## Operational documentation refresh state after PR #1766
 
-Current administrative handoff refresh state is `e01331a9` (`Add safe docs lifecycle apply command (#1764)`). Continue next only after this post-PR1764 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `f52ba472` (`Add docs lifecycle evidence report command (#1766)`). Continue next only after this post-PR1766 refresh is committed and merged; the next substantive slice must be created from fresh main.
