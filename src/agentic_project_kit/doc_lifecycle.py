@@ -292,3 +292,81 @@ def _triage_reason_for_status(status: str | None) -> str:
     if status == "idea-note":
         return "idea document remains advisory"
     return "status requires manual review"
+
+
+def build_doc_lifecycle_plan_payload(project_root: Path, scope: str) -> dict[str, Any]:
+    """Build a deterministic dry-run lifecycle plan for a repository scope."""
+    normalized_scope = scope.strip().strip("/")
+    triage = build_doc_lifecycle_triage_payload(project_root)
+    steps: list[dict[str, Any]] = []
+
+    for action in triage.get("proposed_actions", []):
+        path = action["path"]
+        if normalized_scope and not (
+            path == normalized_scope or path.startswith(normalized_scope + "/")
+        ):
+            continue
+        operation = action["operation"]
+        steps.append(
+            {
+                "id": action["id"],
+                "path": path,
+                "operation": operation,
+                "reason": action["reason"],
+                "execute": False,
+                "safety_class": _plan_safety_class(operation),
+            }
+        )
+
+    failures = sum(1 for step in steps if step["safety_class"] == "human-decision-required")
+    result_status = "BLOCK" if triage["result_status"] == "BLOCK" and failures else "PASS"
+
+    return {
+        "schema_version": 1,
+        "kind": "doc_lifecycle_plan",
+        "mode": "dry-run",
+        "scope": normalized_scope,
+        "execution_enabled": False,
+        "result_status": result_status,
+        "summary": {
+            "steps": len(steps),
+            "failures": failures,
+            "warnings": sum(1 for step in steps if step["safety_class"] == "advisory"),
+            "safe_noops": sum(1 for step in steps if step["safety_class"] == "no-op-confirmation"),
+        },
+        "steps": steps,
+        "triage_summary": triage["summary"],
+    }
+
+
+def render_doc_lifecycle_plan_report(payload: dict[str, Any]) -> str:
+    summary = payload["summary"]
+    lines = [
+        "DOC_LIFECYCLE_PLAN",
+        f"STATUS: {payload['result_status']}",
+        f"MODE: {payload['mode']}",
+        f"SCOPE: {payload['scope']}",
+        "EXECUTION: disabled",
+        f"STEPS: {summary['steps']}",
+        f"FAILURES: {summary['failures']}",
+        f"WARNINGS: {summary['warnings']}",
+        "",
+        "STEPS:",
+    ]
+    if not payload["steps"]:
+        lines.append("- none")
+    for step in payload["steps"]:
+        lines.append(
+            "- "
+            f"{step['operation']} | {step['path']} | "
+            f"{step['safety_class']} | execute={str(step['execute']).lower()}"
+        )
+    return "\n".join(lines) + "\n"
+
+
+def _plan_safety_class(operation: str) -> str:
+    if operation == "confirm-current":
+        return "no-op-confirmation"
+    if operation in {"defer", "historical"}:
+        return "advisory"
+    return "human-decision-required"
