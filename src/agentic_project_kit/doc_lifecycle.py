@@ -626,12 +626,14 @@ def build_doc_lifecycle_evidence_report_payload(
 
     triage = build_doc_lifecycle_triage_payload(project_root)
     plan = build_doc_lifecycle_plan_payload(project_root, scope)
+    handoff_context = _load_handoff_context(project_root)
     report = {
         "schema_version": 1,
         "kind": "doc_lifecycle_evidence_report",
         "scope": scope.strip().strip("/"),
         "triage": triage,
         "plan": plan,
+        "handoff_context": handoff_context,
     }
 
     if not execute:
@@ -646,6 +648,7 @@ def build_doc_lifecycle_evidence_report_payload(
             "mutation": "none",
             "archive": "disabled",
             "delete": "disabled",
+            "handoff_context": handoff_context,
             "report_summary": {
                 "triage": triage["summary"],
                 "plan": plan["summary"],
@@ -665,6 +668,7 @@ def build_doc_lifecycle_evidence_report_payload(
         "mutation": "write-report",
         "archive": "disabled",
         "delete": "disabled",
+        "handoff_context": handoff_context,
         "report_summary": {
             "triage": triage["summary"],
             "plan": plan["summary"],
@@ -680,6 +684,7 @@ def render_doc_lifecycle_evidence_report_result(payload: dict[str, Any]) -> str:
         f"MUTATION: {payload['mutation']}",
         "ARCHIVE: disabled",
         "DELETE: disabled",
+        f"HANDOFF_CONTEXT: {payload.get('handoff_context', {}).get('severity', 'advisory')}",
     ]
     if payload["result_status"] == "BLOCK":
         lines.append(f"REASON: {payload['reason']}")
@@ -703,3 +708,60 @@ def _is_allowed_lifecycle_evidence_output(project_root: Path, output_path: Path)
         "tmp/",
     )
     return relative_text.startswith(allowed_prefixes), relative_text
+
+
+
+def _load_handoff_context(project_root: Path) -> dict[str, Any]:
+    """Load lightweight successor handoff context for lifecycle evidence.
+
+    This is advisory evidence only. It does not decide repository state and it
+    does not replace post-merge-check.
+    """
+    validation_path = (
+        project_root
+        / "docs"
+        / "reports"
+        / "handoff-packages"
+        / "latest"
+        / "validation_report.json"
+    )
+    if not validation_path.exists():
+        return {
+            "available": False,
+            "severity": "advisory",
+            "safe_to_continue": None,
+            "path": validation_path.as_posix(),
+        }
+    try:
+        data = json.loads(validation_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {
+            "available": True,
+            "severity": "advisory",
+            "safe_to_continue": None,
+            "path": validation_path.as_posix(),
+            "parse_status": "unreadable",
+        }
+
+    result_status = data.get("result_status") or data.get("status")
+    head_status = (
+        data.get("head_status")
+        or data.get("successor_package_head_status")
+        or data.get("generated_head_status")
+    )
+    safe_to_continue = result_status in {"PASS", "WARN"} and head_status in {
+        None,
+        "current",
+        "matches_head",
+        "refresh_only_descendant",
+    }
+    return {
+        "available": True,
+        "severity": "advisory",
+        "safe_to_continue": safe_to_continue,
+        "path": validation_path.as_posix(),
+        "result_status": result_status,
+        "head_status": head_status,
+        "generated_head": data.get("generated_head"),
+        "current_head": data.get("current_head"),
+    }
