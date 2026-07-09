@@ -198,3 +198,19 @@ def collect_remote_branch_hygiene_inputs(repo_root: Path) -> tuple[list[RemoteBr
             )
         )
     return remote_branches, prs
+
+def build_remote_branch_hygiene_evidence_report_payload(report: RemoteBranchHygieneReport) -> dict[str, Any]:
+    return {
+        "schema_version": 1,
+        "kind": "k3_remote_branch_hygiene_evidence_report",
+        "mode": "dry-run",
+        "mutation": "none",
+        "result_status": "PASS",
+        "inventory": report_as_json_data(report),
+    }
+
+
+def write_remote_branch_hygiene_evidence_report(path: Path, report: RemoteBranchHygieneReport) -> None:
+    payload = build_remote_branch_hygiene_evidence_report_payload(report)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")

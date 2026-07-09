@@ -115,3 +115,118 @@ def test_remote_branch_hygiene_cli_json_uses_collectors(monkeypatch) -> None:
     data = json.loads(result.output)
     assert data["kind"] == "k3_remote_branch_hygiene_report"
     assert data["summary"]["candidate_delete_merged_remote_branch"] == 1
+
+
+def test_remote_branch_hygiene_evidence_report_payload_embeds_inventory() -> None:
+    from agentic_project_kit.remote_branch_hygiene import build_remote_branch_hygiene_evidence_report_payload
+
+    report = analyze_remote_branch_hygiene(
+        [
+            RemoteBranchInfo("origin/feature/merged", merged_to_origin_main=True),
+            RemoteBranchInfo("origin/feature/not-merged", merged_to_origin_main=False),
+        ],
+        [],
+    )
+
+    payload = build_remote_branch_hygiene_evidence_report_payload(report)
+
+    assert payload["schema_version"] == 1
+    assert payload["kind"] == "k3_remote_branch_hygiene_evidence_report"
+    assert payload["mode"] == "dry-run"
+    assert payload["mutation"] == "none"
+    assert payload["result_status"] == "PASS"
+    assert payload["inventory"]["kind"] == "k3_remote_branch_hygiene_report"
+    assert payload["inventory"]["summary"]["candidate_delete_merged_remote_branch"] == 1
+
+
+def test_remote_branch_hygiene_report_command_requires_execute_to_write(monkeypatch, tmp_path) -> None:
+    def fake_collect(root):
+        return ([RemoteBranchInfo("origin/feature/merged", merged_to_origin_main=True)], [])
+
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.remote_branch_hygiene.collect_remote_branch_hygiene_inputs",
+        fake_collect,
+    )
+
+    output = tmp_path / "tmp" / "report.json"
+    result = CliRunner().invoke(
+        app,
+        [
+            "remote-branch-hygiene-report",
+            "--root",
+            str(tmp_path),
+            "--output",
+            str(output),
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.output)
+    assert data["kind"] == "k3_remote_branch_hygiene_report_write_result"
+    assert data["mode"] == "dry-run"
+    assert data["mutation"] == "none"
+    assert data["written"] is False
+    assert not output.exists()
+
+
+def test_remote_branch_hygiene_report_command_writes_only_with_execute(monkeypatch, tmp_path) -> None:
+    def fake_collect(root):
+        return ([RemoteBranchInfo("origin/feature/merged", merged_to_origin_main=True)], [])
+
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.remote_branch_hygiene.collect_remote_branch_hygiene_inputs",
+        fake_collect,
+    )
+
+    output = tmp_path / "tmp" / "report.json"
+    result = CliRunner().invoke(
+        app,
+        [
+            "remote-branch-hygiene-report",
+            "--root",
+            str(tmp_path),
+            "--output",
+            str(output),
+            "--execute",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.output)
+    assert data["kind"] == "k3_remote_branch_hygiene_report_write_result"
+    assert data["mode"] == "execute"
+    assert data["mutation"] == "evidence-report-write"
+    assert data["written"] is True
+    assert data["output_path"] == str(output)
+    written = json.loads(output.read_text(encoding="utf-8"))
+    assert written["kind"] == "k3_remote_branch_hygiene_evidence_report"
+    assert written["inventory"]["summary"]["candidate_delete_merged_remote_branch"] == 1
+
+
+def test_remote_branch_hygiene_report_command_blocks_output_outside_safe_roots(monkeypatch, tmp_path) -> None:
+    def fake_collect(root):
+        return ([RemoteBranchInfo("origin/feature/merged", merged_to_origin_main=True)], [])
+
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.remote_branch_hygiene.collect_remote_branch_hygiene_inputs",
+        fake_collect,
+    )
+
+    output = tmp_path.parent / "unsafe-report.json"
+    result = CliRunner().invoke(
+        app,
+        [
+            "remote-branch-hygiene-report",
+            "--root",
+            str(tmp_path),
+            "--output",
+            str(output),
+            "--execute",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code != 0
+    assert "output path must be below" in result.output
