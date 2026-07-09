@@ -1,3 +1,7 @@
+Status: active
+Status-date: 2026-07-09
+Superseded-by: n/a
+
 # Communication Artifact Garbage Collector
 
 ## Purpose
