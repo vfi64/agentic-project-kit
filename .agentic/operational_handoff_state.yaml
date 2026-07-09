@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6c910708ae7fd3456bbf9a627e703174e98693bf
-  short: 6c910708
-  subject: Integrate doc registry reconcile findings into docs lifecycle (#1762)
+  full: e01331a9de58298eb93820446b28dec56acd0c70
+  short: e01331a9
+  subject: Add safe docs lifecycle apply command (#1764)
 last_substantive_work_state:
-  full: 6c910708ae7fd3456bbf9a627e703174e98693bf
-  short: 6c910708
-  subject: Integrate doc registry reconcile findings into docs lifecycle (#1762)
+  full: e01331a9de58298eb93820446b28dec56acd0c70
+  short: e01331a9
+  subject: Add safe docs lifecycle apply command (#1764)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
