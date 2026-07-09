@@ -7,6 +7,7 @@ import yaml
 import json
 from typing import Any
 
+from agentic_project_kit.documentation_registry import build_doc_registry_reconcile_report
 from agentic_project_kit.documentation_registry import build_documentation_registry_summary
 
 ALLOWED_STATUS_VALUES = {
@@ -204,6 +205,7 @@ def build_doc_lifecycle_triage_payload(project_root: Path) -> dict[str, Any]:
     blocking because they make downstream lifecycle decisions unsafe.
     """
     report = build_doc_lifecycle_report(project_root)
+    reconcile = _load_reconcile_summary(project_root)
     findings: list[dict[str, str]] = []
     proposed_actions: list[dict[str, str]] = []
     failures = 0
@@ -230,9 +232,11 @@ def build_doc_lifecycle_triage_payload(project_root: Path) -> dict[str, Any]:
                 "operation": "manual-review" if severity == "FAIL" else "defer",
                 "reason": finding.message,
                 "execute": "false",
+                "source": "doc-lifecycle-triage",
             }
         )
 
+    reconcile_actions = _reconcile_actions(reconcile)
     finding_paths = {finding["path"] for finding in findings}
     for document in report.documents:
         if document.path in finding_paths:
@@ -245,6 +249,7 @@ def build_doc_lifecycle_triage_payload(project_root: Path) -> dict[str, Any]:
                 "operation": operation,
                 "reason": _triage_reason_for_status(document.status),
                 "execute": "false",
+                "source": "doc-lifecycle-triage",
             }
         )
 
@@ -259,12 +264,14 @@ def build_doc_lifecycle_triage_payload(project_root: Path) -> dict[str, Any]:
             "findings": len(findings),
             "warnings": warnings,
             "failures": failures,
-            "proposed_actions": len(proposed_actions),
+            "proposed_actions": len(proposed_actions) + len(reconcile_actions),
+            "reconcile_findings": len(reconcile.get("findings", [])),
         },
         "documents": [_document_with_registry_metadata(document, report.registry_summary) for document in report.documents],
         "findings": findings,
-        "proposed_actions": proposed_actions,
+        "proposed_actions": proposed_actions + reconcile_actions,
         "registry_summary": _public_registry_summary(report.registry_summary),
+        "reconcile": reconcile,
     }
 
 
@@ -336,6 +343,7 @@ def build_doc_lifecycle_plan_payload(project_root: Path, scope: str) -> dict[str
                 "reason": action["reason"],
                 "execute": False,
                 "safety_class": _plan_safety_class(operation),
+                "source": action.get("source", "doc-lifecycle-triage"),
                 "registry": registry_by_path.get(
                     path,
                     _registry_metadata_for_path(triage.get("registry_summary") or {}, path),
@@ -391,6 +399,7 @@ def render_doc_lifecycle_plan_report(payload: dict[str, Any]) -> str:
             "- "
             f"{step['operation']} | {step['path']} | "
             f"{step['safety_class']} | execute={str(step['execute']).lower()}"
+            f" | source={step.get('source', 'doc-lifecycle-triage')}"
             f"{registry_note}"
         )
     return "\n".join(lines) + "\n"
@@ -465,3 +474,42 @@ def _public_registry_summary(registry_summary: dict[str, Any] | None) -> dict[st
     public = dict(registry_summary)
     public.pop("entries_by_path", None)
     return public
+
+
+
+def _load_reconcile_summary(project_root: Path) -> dict[str, Any]:
+    try:
+        report = build_doc_registry_reconcile_report(project_root)
+    except (OSError, ValueError):
+        return {
+            "schema_version": 1,
+            "kind": "doc_registry_reconcile_report",
+            "mode": "dry-run",
+            "result_status": "PASS",
+            "findings": [],
+        }
+    public = dict(report)
+    public.pop("rendered_scope_decision_table", None)
+    public.pop("scope_decision_rows", None)
+    return public
+
+
+def _reconcile_actions(reconcile: dict[str, Any]) -> list[dict[str, Any]]:
+    actions: list[dict[str, Any]] = []
+    for index, finding in enumerate(reconcile.get("findings", []), start=1):
+        severity = finding.get("severity", "WARN")
+        operation = "manual-review" if severity == "BLOCK" else "defer"
+        actions.append(
+            {
+                "id": f"doc-registry-reconcile:{index}:{finding.get('kind', 'finding')}",
+                "path": finding.get("path") or "docs",
+                "operation": operation,
+                "reason": finding.get("message", "doc-registry reconcile finding"),
+                "execute": "false",
+                "source": "doc-registry-reconcile",
+                "finding_kind": finding.get("kind"),
+                "severity": severity,
+                "next_action": finding.get("next_action"),
+            }
+        )
+    return actions
