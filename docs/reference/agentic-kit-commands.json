@@ -1484,6 +1484,89 @@
     },
     {
       "group": "docs lifecycle",
+      "help": "Apply one safe documentation lifecycle plan step.",
+      "name": "apply",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "docs",
+          "help": "Repository-relative documentation scope.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "scope",
+          "opts": [
+            "--scope"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Plan step id to apply.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "only",
+          "opts": [
+            "--only"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Required explicit execution flag.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "docs",
+        "lifecycle",
+        "apply"
+      ],
+      "qualified_name": "agentic-kit docs lifecycle apply"
+    },
+    {
+      "group": "docs lifecycle",
       "help": "Build a dry-run lifecycle plan for one documentation scope.",
       "name": "plan",
       "params": [

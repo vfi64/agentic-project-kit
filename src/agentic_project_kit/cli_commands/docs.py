@@ -7,8 +7,10 @@ from typing import Annotated
 import typer
 
 from agentic_project_kit.doc_lifecycle import (
+    build_doc_lifecycle_apply_payload,
     build_doc_lifecycle_plan_payload,
     build_doc_lifecycle_triage_payload,
+    render_doc_lifecycle_apply_report,
     render_doc_lifecycle_plan_report,
     render_doc_lifecycle_triage_report,
 )
@@ -22,6 +24,30 @@ docs_app = typer.Typer(help="Documentation maintenance and migration guards.")
 lifecycle_app = typer.Typer(help="Safe documentation lifecycle triage and planning.")
 docs_app.add_typer(lifecycle_app, name="lifecycle")
 
+
+
+
+@lifecycle_app.command("apply")
+def docs_lifecycle_apply_command(
+    root: Annotated[Path, typer.Option("--root", help="Repository root.")] = Path("."),
+    scope: Annotated[str, typer.Option("--scope", help="Repository-relative documentation scope.")] = "docs",
+    only: Annotated[str, typer.Option("--only", help="Plan step id to apply.")] = "",
+    execute: Annotated[bool, typer.Option("--execute", help="Required explicit execution flag.")] = False,
+    json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
+) -> None:
+    """Apply one safe documentation lifecycle plan step."""
+    payload = build_doc_lifecycle_apply_payload(
+        root.resolve(),
+        scope,
+        only,
+        execute=execute,
+    )
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        typer.echo(render_doc_lifecycle_apply_report(payload), nl=False)
+    if payload["result_status"] == "BLOCK":
+        raise typer.Exit(code=2)
 
 
 @lifecycle_app.command("plan")

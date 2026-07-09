@@ -513,3 +513,90 @@ def _reconcile_actions(reconcile: dict[str, Any]) -> list[dict[str, Any]]:
             }
         )
     return actions
+
+
+
+def build_doc_lifecycle_apply_payload(
+    project_root: Path,
+    scope: str,
+    only: str,
+    *,
+    execute: bool,
+) -> dict[str, Any]:
+    """Apply one safe lifecycle plan step.
+
+    This first apply slice intentionally supports only no-op confirmations and
+    deferrals. It never edits, moves, archives, or deletes files.
+    """
+    if not execute:
+        return {
+            "schema_version": 1,
+            "kind": "doc_lifecycle_apply_result",
+            "mode": "blocked",
+            "result_status": "BLOCK",
+            "reason": "missing_execute_flag",
+            "requested_id": only,
+            "mutation": "none",
+        }
+
+    plan = build_doc_lifecycle_plan_payload(project_root, scope)
+    match = next((step for step in plan.get("steps", []) if step.get("id") == only), None)
+    if match is None:
+        return {
+            "schema_version": 1,
+            "kind": "doc_lifecycle_apply_result",
+            "mode": "blocked",
+            "result_status": "BLOCK",
+            "reason": "unknown_step_id",
+            "requested_id": only,
+            "mutation": "none",
+        }
+
+    operation = match.get("operation")
+    if operation not in {"confirm-current", "defer"}:
+        return {
+            "schema_version": 1,
+            "kind": "doc_lifecycle_apply_result",
+            "mode": "blocked",
+            "result_status": "BLOCK",
+            "reason": "unsafe_operation",
+            "requested_id": only,
+            "mutation": "none",
+            "step": match,
+        }
+
+    return {
+        "schema_version": 1,
+        "kind": "doc_lifecycle_apply_result",
+        "mode": "execute",
+        "result_status": "PASS",
+        "requested_id": only,
+        "mutation": "none",
+        "applied": {
+            "id": match["id"],
+            "path": match["path"],
+            "operation": operation,
+            "effect": "no-op",
+            "reason": match["reason"],
+            "source": match.get("source", "doc-lifecycle-triage"),
+        },
+    }
+
+
+def render_doc_lifecycle_apply_report(payload: dict[str, Any]) -> str:
+    lines = [
+        "DOC_LIFECYCLE_APPLY",
+        f"STATUS: {payload['result_status']}",
+        f"MODE: {payload['mode']}",
+        "MUTATION: none",
+    ]
+    if payload["result_status"] == "BLOCK":
+        lines.append(f"REASON: {payload['reason']}")
+        lines.append(f"REQUESTED_ID: {payload['requested_id']}")
+    else:
+        applied = payload["applied"]
+        lines.append(f"APPLIED: {applied['id']}")
+        lines.append(f"OPERATION: {applied['operation']}")
+        lines.append(f"EFFECT: {applied['effect']}")
+        lines.append(f"SOURCE: {applied['source']}")
+    return "\n".join(lines) + "\n"
