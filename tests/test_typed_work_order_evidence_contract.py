@@ -2,7 +2,7 @@ from pathlib import Path
 
 import yaml
 
-DOC = Path("docs/workflow/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md")
+DOC = Path("docs/governance/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md")
 EXAMPLE = Path(".agentic/typed_work_orders/examples/evidence-terminal-log.yaml")
 
 def test_typed_work_order_evidence_contract_is_documented() -> None:

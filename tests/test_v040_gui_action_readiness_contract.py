@@ -1,6 +1,6 @@
 from pathlib import Path
 
-CONTRACT = Path("docs/gui/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md")
+CONTRACT = Path("docs/archive/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md")
 
 
 def test_gui_action_readiness_contract_exists_with_lifecycle_header():

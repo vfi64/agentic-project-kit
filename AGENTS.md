@@ -385,5 +385,5 @@ When the marker is `PASS`, the human can reply with a short acknowledgement such
 
 Terminal blocks must avoid heredocs and risky multi-line `python -c` strings. Prefer small script files under `tmp/`, explicit virtualenv paths such as `.venv/bin/python`, and quote-safe one-line shell operations.
 
-Detailed portability and shell-removal rules live in `docs/agent_rules/PORTABILITY_AND_OPERATIONAL_RULES.md`.
-Remote inspection evidence rules live in `docs/agent_rules/REMOTE_INSPECTION_EVIDENCE_RULES.md`.
+Detailed portability and shell-removal rules live in `docs/governance/PORTABILITY_AND_OPERATIONAL_RULES.md`.
+Remote inspection evidence rules live in `docs/governance/REMOTE_INSPECTION_EVIDENCE_RULES.md`.

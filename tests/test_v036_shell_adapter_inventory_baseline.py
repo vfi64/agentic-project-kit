@@ -5,7 +5,7 @@ import re
 import subprocess
 from pathlib import Path
 
-DOC = Path("docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md")
+DOC = Path("docs/archive/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md")
 
 
 def git_ls_files(pattern: str) -> list[str]:

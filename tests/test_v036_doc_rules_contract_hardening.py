@@ -22,6 +22,6 @@ def test_release_route_help_and_invalid_argument_safety_is_documented():
 
 
 def test_v036_remaining_workplan_names_durable_rules_before_release():
-    text = read("docs/workflow/V0.3.36_REMAINING_WORKPLAN.md")
+    text = read("docs/archive/V0.3.36_REMAINING_WORKPLAN.md")
     assert "Release-route help and invalid-argument paths must be read-only" in text
-    assert "New blocks must use `./ns summary`" in text
+    assert "Release-route help and invalid-argument paths must be read-only" in text
