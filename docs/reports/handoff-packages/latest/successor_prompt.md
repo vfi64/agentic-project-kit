@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1752-handoff-refresh`
+- branch: `docs/post-pr1754-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -398,6 +398,15 @@ Wenn der Bootstrap grün ist:
       "id": "mechanize-operating-layer-public-onboarding-evidence",
       "status": "planned",
       "summary": "Mechanize operating-layer public onboarding and evidence"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "reports-retention-policy",
+      "status": "planned",
+      "summary": "Mechanize report and evidence retention policy"
     }
   ],
   "recent_lessons": [
@@ -410,14 +419,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1752-handoff-refresh",
+    "branch": "docs/post-pr1754-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "1fca15674b0d39ffed0196b9376ecd39994e93da",
+    "head": "7d099c9d4f94e207354e9ec48ad66b471a61e76b",
     "head_matches_origin_main": true,
-    "head_short": "1fca1567",
+    "head_short": "7d099c9d",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "1fca15674b0d39ffed0196b9376ecd39994e93da",
-    "origin_main_short": "1fca1567",
+    "origin_main": "7d099c9d4f94e207354e9ec48ad66b471a61e76b",
+    "origin_main_short": "7d099c9d",
     "worktree_clean": false
   }
 }

@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `1fca15674b0d39ffed0196b9376ecd39994e93da` (`1fca1567`)
-- Handoff freshness marker: `1fca1567`
-- Branch at generation: `docs/post-pr1752-handoff-refresh`
+- HEAD: `7d099c9d4f94e207354e9ec48ad66b471a61e76b` (`7d099c9d`)
+- Handoff freshness marker: `7d099c9d`
+- Branch at generation: `docs/post-pr1754-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -99,5 +99,6 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 - `mechanize-failure-mode-review-automation` (planned): Mechanize failure-mode review automation
 - `mechanize-pre-gui-hardening-readiness` (planned): Mechanize pre-GUI hardening readiness
 - `mechanize-operating-layer-public-onboarding-evidence` (planned): Mechanize operating-layer public onboarding and evidence
+- `reports-retention-policy` (planned): Mechanize report and evidence retention policy
 
 ### RESULT: PASS ###
