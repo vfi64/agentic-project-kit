@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `207`
+- Command count: `208`
 
 ## Commands
 
@@ -299,6 +299,16 @@ Add one reviewed document entry to the documentation registry.
 | `document_class` | `TyperOption` | --class | `True` |  | Allowed documentation registry class. |
 | `owner` | `TyperOption` | --owner | `False` | `maintainers` | Document owner recorded in the registry. |
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+
+### `agentic-kit docs lifecycle plan`
+
+Build a dry-run lifecycle plan for one documentation scope.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `scope` | `TyperOption` | --scope | `False` | `docs` | Repository-relative documentation scope. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit docs lifecycle triage`
