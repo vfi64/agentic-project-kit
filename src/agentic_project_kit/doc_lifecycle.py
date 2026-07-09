@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+
+import yaml
 import json
 from typing import Any
 
@@ -125,9 +127,27 @@ def render_doc_lifecycle_report(report: DocLifecycleReport) -> str:
 
 def _load_registry_summary(project_root: Path) -> dict[str, Any] | None:
     try:
-        return build_documentation_registry_summary(project_root)
+        summary = build_documentation_registry_summary(project_root)
     except (OSError, ValueError):
         return None
+    summary["entries_by_path"] = _load_documentation_registry_entries_by_path(project_root)
+    return summary
+
+
+def _load_documentation_registry_entries_by_path(project_root: Path) -> dict[str, dict[str, Any]]:
+    registry_path = project_root / "docs" / "DOCUMENTATION_REGISTRY.yaml"
+    if not registry_path.exists():
+        return {}
+    data = yaml.safe_load(registry_path.read_text(encoding="utf-8")) or {}
+    documents = data.get("documents", []) if isinstance(data, dict) else []
+    entries: dict[str, dict[str, Any]] = {}
+    for item in documents:
+        if not isinstance(item, dict):
+            continue
+        path = item.get("path")
+        if isinstance(path, str) and path:
+            entries[path] = item
+    return entries
 
 
 def _iter_lifecycle_markdown_files(project_root: Path) -> tuple[Path, ...]:
@@ -241,10 +261,10 @@ def build_doc_lifecycle_triage_payload(project_root: Path) -> dict[str, Any]:
             "failures": failures,
             "proposed_actions": len(proposed_actions),
         },
-        "documents": [document.to_dict() for document in report.documents],
+        "documents": [_document_with_registry_metadata(document, report.registry_summary) for document in report.documents],
         "findings": findings,
         "proposed_actions": proposed_actions,
-        "registry_summary": report.registry_summary,
+        "registry_summary": _public_registry_summary(report.registry_summary),
     }
 
 
@@ -307,6 +327,7 @@ def build_doc_lifecycle_plan_payload(project_root: Path, scope: str) -> dict[str
         ):
             continue
         operation = action["operation"]
+        registry_by_path = _registry_metadata_by_path(triage)
         steps.append(
             {
                 "id": action["id"],
@@ -315,6 +336,10 @@ def build_doc_lifecycle_plan_payload(project_root: Path, scope: str) -> dict[str
                 "reason": action["reason"],
                 "execute": False,
                 "safety_class": _plan_safety_class(operation),
+                "registry": registry_by_path.get(
+                    path,
+                    _registry_metadata_for_path(triage.get("registry_summary") or {}, path),
+                ),
             }
         )
 
@@ -356,10 +381,17 @@ def render_doc_lifecycle_plan_report(payload: dict[str, Any]) -> str:
     if not payload["steps"]:
         lines.append("- none")
     for step in payload["steps"]:
+        registry = step.get("registry", {})
+        registry_note = (
+            f" | class={registry.get('doc_class')} | owner={registry.get('owner')}"
+            if registry
+            else ""
+        )
         lines.append(
             "- "
             f"{step['operation']} | {step['path']} | "
             f"{step['safety_class']} | execute={str(step['execute']).lower()}"
+            f"{registry_note}"
         )
     return "\n".join(lines) + "\n"
 
@@ -370,3 +402,66 @@ def _plan_safety_class(operation: str) -> str:
     if operation in {"defer", "historical"}:
         return "advisory"
     return "human-decision-required"
+
+
+
+def _registry_metadata_for_path(registry_summary: dict[str, Any] | None, path: str) -> dict[str, Any]:
+    """Return stable lifecycle registry context for one repository-relative path."""
+    registry_summary = registry_summary or {}
+    entry = (registry_summary.get("entries_by_path") or {}).get(path)
+    if isinstance(entry, dict):
+        return {
+            "registered": True,
+            "doc_class": entry.get("class"),
+            "owner": entry.get("owner"),
+            "scope": "in-scope",
+            "status": entry.get("status"),
+            "review_policy": entry.get("review_policy"),
+            "summary": entry.get("summary"),
+        }
+    unregistered = set(registry_summary.get("unregistered_candidates", []))
+    if path in unregistered:
+        return {
+            "registered": False,
+            "doc_class": None,
+            "owner": None,
+            "scope": "unregistered-candidate",
+            "status": None,
+            "review_policy": None,
+            "summary": None,
+        }
+    return {
+        "registered": None,
+        "doc_class": None,
+        "owner": None,
+        "scope": "unknown",
+        "status": None,
+        "review_policy": None,
+        "summary": None,
+    }
+
+def _registry_metadata_by_path(payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    registry_summary = payload.get("registry_summary") or {}
+    return {
+        document["path"]: document.get(
+            "registry",
+            _registry_metadata_for_path(registry_summary, document["path"]),
+        )
+        for document in payload.get("documents", [])
+    }
+
+
+
+def _document_with_registry_metadata(document: Any, registry_summary: dict[str, Any]) -> dict[str, Any]:
+    data = document.to_dict()
+    data["registry"] = _registry_metadata_for_path(registry_summary or {}, document.path)
+    return data
+
+
+
+def _public_registry_summary(registry_summary: dict[str, Any] | None) -> dict[str, Any] | None:
+    if registry_summary is None:
+        return None
+    public = dict(registry_summary)
+    public.pop("entries_by_path", None)
+    return public
