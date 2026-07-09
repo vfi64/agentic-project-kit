@@ -1,8 +1,8 @@
 # Local Cockpit Foundation
 
-Lifecycle: active
-Owner: agentic-project-kit
-Last-reviewed: 2026-05-16
+Status: superseded
+Status-date: 2026-07-09
+Superseded-by: docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 
 ## Goal
 

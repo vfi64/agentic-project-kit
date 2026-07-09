@@ -405,11 +405,13 @@ documents:
     owner: maintainers
     notes: Documentation information architecture and lifecycle baseline.
     status: active
-  - path: docs/architecture/LOCAL_COCKPIT_FOUNDATION.md
-    class: architecture
+  - path: docs/archive/LOCAL_COCKPIT_FOUNDATION.md
+    class: historical archive
+    status: superseded
     owner: maintainers
-    notes: Local cockpit architecture foundation.
-    status: active
+    archived_from: docs/architecture/LOCAL_COCKPIT_FOUNDATION.md
+    superseded_by: docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+    notes: Archived local cockpit foundation; current architecture is covered by KIT_AS_OS_ARCHITECTURE.md.
   - path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
     class: governance/system
     owner: maintainers
