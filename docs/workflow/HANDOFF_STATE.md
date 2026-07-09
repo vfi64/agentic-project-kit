@@ -1,3 +1,7 @@
+Status: active
+Status-date: 2026-07-09
+Superseded-by: n/a
+
 # Persistent Handoff State
 
 Quality rule: choose the technically deterministic solution over the quickest workaround. Standard errors must be converted into guards, tests, and documented contracts; do not rely on memory, speed, or manual discipline when a deterministic check can prevent recurrence.

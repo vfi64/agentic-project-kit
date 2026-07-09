@@ -1,3 +1,7 @@
+Status: active
+Status-date: 2026-07-09
+Superseded-by: n/a
+
 # Workflow Guard
 
 The workflow guard is a machine-checkable diagnostic layer for recurring workflow errors. It starts in diagnose-and-fail mode and blocks further mutation when protected control files lose required anchors, governance YAML stops parsing, or known bootstrap drift appears.

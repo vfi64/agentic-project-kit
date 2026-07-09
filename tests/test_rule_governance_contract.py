@@ -16,7 +16,7 @@ def test_rule_governance_rule_is_active_in_handoff_state() -> None:
 
 
 def test_rule_governance_is_documented() -> None:
-    text = Path("docs/workflow/RULE_GOVERNANCE.md").read_text(encoding="utf-8")
+    text = Path("docs/governance/RULE_GOVERNANCE.md").read_text(encoding="utf-8")
     assert RULE_ID in text
     assert "stable rule id" in text
     assert "deterministic test" in text

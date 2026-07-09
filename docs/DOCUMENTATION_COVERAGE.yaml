@@ -786,7 +786,7 @@ rules:
     - Tkinter cockpit
     - agentic-kit release ready
     - agentic-kit release prepare
-  - path: docs/architecture/LOCAL_COCKPIT_FOUNDATION.md
+  - path: docs/archive/LOCAL_COCKPIT_FOUNDATION.md
     terms:
     - Local Cockpit Foundation
     - Access-level model

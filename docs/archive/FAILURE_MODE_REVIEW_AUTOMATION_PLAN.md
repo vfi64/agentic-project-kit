@@ -56,7 +56,7 @@ Allowed work:
 - Add `src/agentic_project_kit/failure_mode_review.py`.
 - Add `src/agentic_project_kit/cli_commands/next_slice.py`.
 - Register `agentic-kit next-slice review`.
-- Add `./ns next-slice-review` shortcut.
+- Record the removed legacy wrapper shortcut as historical context only.
 - Add tests for catalog loading, report rendering, CLI exposure, dirty worktree blocking, missing catalog blocking, and stale review artifact rejection.
 - Add documentation references in `docs/TEST_GATES.md` and this planning document.
 
@@ -83,7 +83,7 @@ Forbidden in Phase 1:
 
 ### Phase 4: post-merge closeout command
 
-- Add `agentic-kit post-merge closeout <pr>` and `./ns post-merge-closeout <pr>`.
+- Add `agentic-kit post-merge closeout <pr>` and `removed legacy-wrapper route post-merge-closeout <pr>`.
 - Wrap existing primitives rather than reimplementing them: merge commit inspection, main CI verification, evidence finalize-log, evidence inspect with `--require-summary`, state-freshness-check, handoff-check, governance-check, and doctor.
 - Produce a structured closeout report.
 
@@ -112,7 +112,7 @@ failure_modes:
     surface: pr-status
     question: "Can red CI be reported without failed check diagnostics?"
     required_commands:
-      - "./ns pr-status <pr>"
+      - "removed legacy-wrapper route pr-status <pr>"
     required_tests:
       - "tests/test_next_turn_pr_status.py"
 
@@ -120,7 +120,7 @@ failure_modes:
     surface: merge-if-green
     question: "Can merge success be reported before main CI is verified?"
     required_commands:
-      - "./ns merge-if-green <pr>"
+      - "removed legacy-wrapper route merge-if-green <pr>"
     required_tests:
       - "tests/test_next_turn_merge_if_green.py"
 
@@ -128,7 +128,7 @@ failure_modes:
     surface: merge-if-green
     question: "Can a different commit be merged than the one checked?"
     required_commands:
-      - "./ns merge-if-green <pr>"
+      - "removed legacy-wrapper route merge-if-green <pr>"
     required_tests:
       - "tests/test_next_turn_merge_if_green.py"
 
@@ -136,8 +136,8 @@ failure_modes:
     surface: handoff prompt
     question: "Can stale successor handoff content override the current safe state?"
     required_commands:
-      - "./ns handoff-check"
-      - "./ns state-freshness-check"
+      - "removed legacy-wrapper route handoff-check"
+      - "removed legacy-wrapper route state-freshness-check"
     required_tests:
       - "tests/test_handoff_freshness.py"
 
@@ -145,27 +145,19 @@ failure_modes:
     surface: handoff state
     question: "Can active next-step text point to already-recorded closeout evidence or stale release state?"
     required_commands:
-      - "./ns state-freshness-check"
+      - "removed legacy-wrapper route state-freshness-check"
     required_tests:
       - "tests/test_state_freshness.py"
 ```
 
-## `next-slice review` command contract
+## Archived next-slice review command proposal
 
-Canonical command:
+Status: superseded
+Status-date: 2026-07-09
+Superseded-by: src/agentic_project_kit/cli_commands/ and current transfer workflow commands
 
-```bash
-agentic-kit next-slice review
-```
-
-Shortcut:
-
-```bash
-./ns next-slice-review
-```
-
-The command is read-only in Phase 1.
-
+This archived section records an early command proposal only.
+It is not a current executable route and must not be used as an operator instruction.
 ### Required checks
 
 The command must inspect:
@@ -265,7 +257,7 @@ Phase 1 must add or update tests for these behaviors:
 
 ## Documentation integration
 
-- `docs/TEST_GATES.md` must list `agentic-kit next-slice review` / `./ns next-slice-review` as a release/evidence-kernel gate once Phase 1 exists.
+- `docs/TEST_GATES.md` must list the canonical `agentic-kit next-slice review` gate once Phase 1 exists; removed wrapper shortcuts are historical only.
 - `docs/STATUS.md` may reference only the current next safe slice. It must not contain the full plan.
 - `docs/handoff/CURRENT_HANDOFF.md` may reference only the next safe phase and must not duplicate the full plan.
 - `docs/DOCUMENTATION_REGISTRY.yaml` must register this planning document if the registry requires planning documents to be enumerated.
@@ -285,7 +277,7 @@ The planning PR is complete when:
 The Phase 1 implementation PR is complete when:
 
 - `agentic-kit next-slice review` exists
-- `./ns next-slice-review` exists
+- removed legacy wrapper shortcut is not required
 - the command emits YAML-compatible structured output
 - required ids from `.agentic/failure_modes.yaml` are checked
 - dirty worktree blocks with exit `2`

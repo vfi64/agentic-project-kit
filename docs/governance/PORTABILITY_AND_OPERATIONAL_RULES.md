@@ -1,3 +1,7 @@
+Status: active
+Status-date: 2026-07-09
+Superseded-by: n/a
+
 # Portability and Operational Rules
 
 This document contains durable operational rules that are too detailed for `AGENTS.md` but still binding for repository work.

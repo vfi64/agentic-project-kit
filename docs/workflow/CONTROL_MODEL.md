@@ -1,3 +1,7 @@
+Status: active
+Status-date: 2026-07-09
+Superseded-by: n/a
+
 # Deterministic Workflow Control Model
 
 The workflow control model separates low-level command success from target-state success.

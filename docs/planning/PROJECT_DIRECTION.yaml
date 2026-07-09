@@ -1694,6 +1694,25 @@ plans:
   - docs/planning/PROJECT_DIRECTION.yaml
   introduced_by_pr: 1750
   introduced_by_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1750
+- id: reports-retention-policy
+  title: Mechanize report and evidence retention policy
+  status: planned
+  depends_on:
+  - mechanize-doc-registry-scope-reconcile
+  source_files:
+  - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+  - docs/DOCUMENTATION_REGISTRY.yaml
+  - docs/reports/
+  intent: Extend the existing documentation and artifact hygiene mechanisms with a
+    deterministic report-retention policy, so generated reports and evidence remain
+    useful without turning docs/reports into an unbounded archive.
+  acceptance:
+  - docs/reports retention classes and exemptions are documented.
+  - Generated report candidates can be listed without deleting anything.
+  - Any cleanup path is dry-run first and protected-diff-plan guarded.
+  - Archive, reports, examples, required files, and handoff-package evidence keep
+    explicit exemptions where needed.
+  - No retention gate depends on wall-clock time as a hard FAIL condition.
 ideas:
 - id: project-direction-gui-panel
   status: accepted

@@ -17,7 +17,7 @@ Current planning-slice marker: `1becc4a7` / PR #1436 (`[codex] Plan release comm
 
 Before DOI closeout hardening, broad legacy-doc cleanup, planning consolidation, absolute-path cleanup, or GUI work, execute `docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice`.
 
-That slice establishes the supported release metadata preparation route and makes the remaining release publish core portable or fail-closed after the `./ns` removal.
+That slice establishes the supported release metadata preparation route and makes the remaining release publish core portable or fail-closed after the removed legacy-wrapper route removal.
 
 ## First priority: Remote transfer state-machine hardening before ns replacement
 
@@ -358,7 +358,7 @@ This roadmap records the remaining wrapper, transfer, evidence, output-disciplin
 | `transfer remote-work-start` concise default output | erledigt und regressionsgetestet |
 | `transfer pr-create-complete` | erledigt, getestet und real erfolgreich genutzt; beseitigt den manuellen PR-Nummern- und HEAD-SHA-Kopierschritt |
 | `transfer pr-existing-for-branch` | erledigt und getestet als read-only Branch-zu-PR-Diagnosehelper; optional für GUI-Diagnostik |
-| `transfer protected-diff-plan` | erledigt, getestet und real genutzt; ersetzt `git diff --output=/tmp/...` plus `./ns protected-change-plan` |
+| `transfer protected-diff-plan` | erledigt, getestet und real genutzt; ersetzt `git diff --output=/tmp/...` plus `removed legacy-wrapper route protected-change-plan` |
 | `transfer conflict-status` | erledigt, getestet und real genutzt; diagnostiziert Merge-/Rebase-Konflikte ohne Auflösung |
 | `transfer work-order-patch` | erledigt, getestet und real genutzt; wendet JSON/YAML-Textpatches mit Branch-, Pfad- und Exact-Match-Guards an |
 | `transfer rebase-on-upstream` | erledigt, getestet und real genutzt; führt Rebase mit Branch-Guard und `conflict-status`-Integration aus |
@@ -396,7 +396,7 @@ Target:
 
 This reduces quote, terminal, heredoc, escape, copy/paste, and message-stream failure modes.
 
-Next priority: first GUI display/gating phase, while keeping `transfer pr-existing-for-branch` optional as a future read-only diagnostic helper and tracking `./ns` replacement as a separate OS-independence line.
+Next priority: first GUI display/gating phase, while keeping `transfer pr-existing-for-branch` optional as a future read-only diagnostic helper and tracking removed legacy-wrapper route replacement as a separate OS-independence line.
 
 
 ### Pre-GUI Wrapper/Gating Closeout
@@ -561,24 +561,24 @@ The GUI should expose stable wrappers, not raw git, raw GitHub, or unbounded she
 Acceptance condition before GUI expansion: every GUI button that mutates repository state must map to a bounded wrapper with branch, dirty-state, rule-ack, evidence, and failure-mode guards.
 
 
-### OS-Independence Line: Replace `./ns` Core Dependencies With `agentic-kit`
+### OS-Independence Line: Replace removed legacy-wrapper route Core Dependencies With `agentic-kit`
 
-Goal: make the project workflow operating-system independent by ensuring that `./ns` remains only a human convenience adapter or explicit legacy compatibility route, not a core dependency of `agentic-kit` Python code, normal tests, governance gates, or GUI execution.
+Goal: make the project workflow operating-system independent by ensuring that removed legacy-wrapper route remains only a human convenience adapter or explicit legacy compatibility route, not a core dependency of `agentic-kit` Python code, normal tests, governance gates, or GUI execution.
 
 Guiding decision:
 
-- `./ns` may remain as a local shortcut for humans.
-- `agentic-kit` product code must not call `./ns` as its normal implementation path.
+- removed legacy-wrapper route may remain as a local shortcut for humans.
+- `agentic-kit` product code must not call removed legacy wrapper shortcuts as its normal implementation path.
 - normal product, wrapper, workflow, and GUI tests should call `agentic-kit` commands or Python core APIs directly.
-- only an explicit legacy compatibility test may call `./ns`.
-- documentation must not present `./ns` as the canonical cross-platform route.
+- only an explicit legacy compatibility test may exercise removed legacy-wrapper routes.
+- documentation must not present removed legacy-wrapper routes as the canonical cross-platform route.
 
 Questions to answer in the audit slice:
 
-1. How many `./ns` command references remain?
+1. How many removed legacy-wrapper command references remain?
 B. Which references are in product code, tests, docs, governance, scripts, and `.agentic` control files?
-3. Are any `./ns` routes currently called from `agentic-kit` commands?
-4. Which test cases still rely on `./ns` as the main workflow guarantee?
+3. Are any removed legacy-wrapper routes currently called from `agentic-kit` commands?
+4. Which test cases still rely on removed legacy-wrapper routes as the main workflow guarantee?
 5. Which references are historical/legacy and which are normative?
 6. Which replacements are small, medium, or risky?
 
@@ -588,33 +588,33 @@ Classification:
 
 | Category | Treatment |
 |---|---|
-| `src/...` product code calls `./ns` | replace with Python core API or `agentic-kit` command |
-| tests use `./ns` for product/workflow guarantees | replace with `agentic-kit` or direct Python core tests |
-| explicit legacy `./ns` compatibility tests | may remain, narrowly scoped |
-| docs say `./ns` is required/canonical | update to `agentic-kit`; mark `./ns` as legacy/convenience |
-| docs mention `./ns` historically | keep only if clearly marked historical or local shortcut |
-| `./ns` adapter file itself | may remain as an adapter, but must not be the only route |
+| product code calls a removed legacy wrapper route | replace with Python core API or canonical `agentic-kit` command |
+| tests use removed legacy-wrapper routes for product/workflow guarantees | replace with canonical `agentic-kit` commands or direct Python core tests |
+| explicit legacy removed legacy-wrapper route compatibility tests | may remain, narrowly scoped |
+| docs say removed legacy-wrapper route is required/canonical | update to `agentic-kit`; mark removed legacy-wrapper route as legacy/convenience |
+| docs mention removed legacy-wrapper route historically | keep only if clearly marked historical or local shortcut |
+| removed legacy-wrapper route adapter file itself | may remain as an adapter, but must not be the only route |
 
 Implementation slices:
 
-1. Audit and guard plan: count all `./ns` references, classify them, and record allowed exceptions.
+1. Audit and guard plan: count all removed legacy-wrapper route references, classify them, and record allowed exceptions.
 2. Protected-change-plan Python route: provide a canonical `agentic-kit transfer protected-change-plan --diff-file ...` or equivalent Python-core-backed route for explicit diff-file validation.
-3. Detach `transfer protected-diff-plan` from `./ns`: call the protected-change planner core or the new `agentic-kit` route directly.
-4. Tests and docs migration: replace normative `./ns` calls in tests, bootloader text, governance, and handoff docs with `agentic-kit` routes; retain at most one legacy adapter test.
-5. Regression guard: add a test that blocks `./ns` subprocess calls in `src/`, with only explicit legacy-test exceptions.
+3. Detach `transfer protected-diff-plan` from removed legacy-wrapper routes: call the protected-change planner core or the canonical `agentic-kit` route directly.
+4. Tests and docs migration: replace normative removed legacy-wrapper route calls in tests, bootloader text, governance, and handoff docs with `agentic-kit` routes; retain at most one legacy adapter test.
+5. Regression guard: add a test that blocks removed legacy-wrapper route subprocess calls in `src/`, with only explicit legacy-test exceptions.
 
 Estimated effort:
 
 | Area | Effort |
 |---|---|
-|Audit all `./ns` occurrences | small |
+|Audit all removed legacy-wrapper route occurrences | small |
 | Add explicit protected-change-plan `agentic-kit` route | small to medium |
-|Detach product code from `./ns` | small |
+|Detach product code from removed legacy-wrapper route | small |
 | Update tests | medium |
 |Update docs/governance/handoff references | medium |
-|Add CI guard against new `./ns` product-code use | small to medium |
+|Add CI guard against new removed-legacy-wrapper product-code use | small to medium |
 
-This is a separate OS-independence line and should not be treated as a blocker for the next GUI display/gating slice unless the GUI would otherwise call `./ns` directly.
+This is a separate OS-independence line and should not be treated as a blocker for the next GUI display/gating slice unless the GUI would otherwise call removed legacy-wrapper route directly.
 
 ## Operational documentation projection state after PR #1249
 
@@ -646,13 +646,13 @@ Audit anchor:
 - `docs/reports/ns-migration/ns_to_agentic_kit_replacement_table.md`
 
 Policy:
-- Do not start GUI implementation until `./ns` usage is either replaced by `agentic-kit` commands or explicitly retained only as a thin compatibility/deprecation shim.
-- Do not remove `./ns` blindly. First map each remaining workflow to a tested `agentic-kit` command or to a documented deprecation decision.
+- Do not start GUI implementation until removed legacy-wrapper route usage is either replaced by `agentic-kit` commands or explicitly retained only as a thin compatibility/deprecation shim.
+- Do not remove removed legacy-wrapper route blindly. First map each remaining workflow to a tested `agentic-kit` command or to a documented deprecation decision.
 - Protected/governance/status/handoff/YAML/generated-reference/planning files remain protected; update them minimally and with `protected-diff-plan`.
 
 Migration slices:
-1. Classify all `./ns` references from the audit as one of: active workflow, historical note, compatibility shim, or obsolete planning note.
-2. Build a replacement table: `./ns` workflow -> existing `agentic-kit` command -> missing wrapper/test if any.
+1. Classify all removed legacy-wrapper route references from the audit as one of: active workflow, historical note, compatibility shim, or obsolete planning note.
+2. Build a replacement table: removed legacy-wrapper route workflow -> existing `agentic-kit` command -> missing wrapper/test if any.
 3. Patch docs to prefer `agentic-kit` commands for active workflows; keep legacy notes explicitly labeled as legacy.
 4. Add or extend tests for every newly introduced `agentic-kit` replacement wrapper.
 5. Only after slices 1-4 pass, start GUI Phase 1 as a display/gating layer over bounded `agentic-kit` wrappers.
@@ -662,7 +662,7 @@ Acceptance gates:
 - `agentic-kit transfer repo-status` PASS.
 - `agentic-kit docs-audit` PASS.
 - `agentic-kit transfer protected-diff-plan` PASS for every migration slice.
-- No active workflow instruction points users primarily to `./ns` when a tested `agentic-kit` command exists.## Operational documentation refresh state after PR #1334
+- No active workflow instruction points users primarily to removed legacy-wrapper route when a tested `agentic-kit` command exists.## Operational documentation refresh state after PR #1334
 
 Current administrative handoff refresh state is `c6ab40da` (`Classify ns migration docs before GUI (#1334)`). Continue next only after this post-PR1334 refresh is committed and merged; the next substantive slice must be created from fresh main.## Operational documentation refresh state after PR #1338
 

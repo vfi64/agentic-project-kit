@@ -2,7 +2,7 @@ from pathlib import Path
 
 
 def test_remote_inspection_evidence_rules_exist() -> None:
-    text = Path("docs/agent_rules/REMOTE_INSPECTION_EVIDENCE_RULES.md").read_text(encoding="utf-8")
+    text = Path("docs/governance/REMOTE_INSPECTION_EVIDENCE_RULES.md").read_text(encoding="utf-8")
     assert "docs/reports/terminal/tmp-inspection/" in text
     assert "registered for later cleanup" in text
     assert "d` or `done" in text
@@ -11,7 +11,7 @@ def test_remote_inspection_evidence_rules_exist() -> None:
 
 def test_agents_points_to_remote_inspection_evidence_rules() -> None:
     text = Path("AGENTS.md").read_text(encoding="utf-8")
-    assert "docs/agent_rules/REMOTE_INSPECTION_EVIDENCE_RULES.md" in text
+    assert "docs/governance/REMOTE_INSPECTION_EVIDENCE_RULES.md" in text
 
 
 def test_status_records_remote_inspection_evidence_contract() -> None:

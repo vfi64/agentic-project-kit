@@ -118,11 +118,10 @@ Required evidence for this registry gate:
 
 `docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md` defines the implementation contract for a future repo-backed failure-mode review path.
 
-The first implementation phase must remain read-only and must add `agentic-kit next-slice review` plus `./ns next-slice-review` before any patch-preflight BLOCK integration. The planned Phase-1 evidence is:
+The first implementation phase must remain read-only and must add the canonical `agentic-kit next-slice review` command before any patch-preflight BLOCK integration. Removed wrapper shortcuts are historical only. The planned Phase-1 evidence is:
 
     python -m pytest -q tests/test_failure_mode_review.py
     agentic-kit next-slice review
-    ./ns next-slice-review
     agentic-kit check-docs
     agentic-kit docs-audit
     agentic-kit doctor
@@ -292,7 +291,7 @@ The following decisions remain maintainer-owned and require explicit approval:
 
 ## Local Cockpit Gate
 
-When changing the local cockpit, cockpit action registry, cockpit CLI adapter, `agentic-kit cockpit` shortcuts, or `./ns-menu` cockpit entries, run unit tests plus explicit CLI smoke commands.
+When changing the local cockpit, cockpit action registry, cockpit CLI adapter, `agentic-kit cockpit` shortcuts, or `removed legacy-wrapper route-menu` cockpit entries, run unit tests plus explicit CLI smoke commands.
 When changing the experimental Tkinter GUI cockpit, also verify that the selected local Python can import `tkinter`. On Homebrew/macOS, Tk support is provided by the separate `python-tk@3.13` package and is not a pip dependency. A GUI launch smoke should use a dedicated Tk-capable virtual environment when the default development venv lacks `_tkinter`. Real Tk window smoke checks are blocked by default during local gates; set `AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE=1` only for an intentional real-window launch evidence run.
 
 
@@ -414,8 +413,8 @@ This file intentionally keeps compact anchors for deterministic tests and human 
 - Release remote readiness: release remote checks may report `WARN` for inconclusive network/tool state, but release readiness must report `BLOCK` and exit nonzero until the remote tag and GitHub Release absence checks pass.
 - PASS_ALREADY_DONE target-state safety: already-done classification must require `--target-verified` and target-specific output patterns; generic `already exists` output is not sufficient success evidence.
 - PR status failed-log diagnosis: red CI status must expose failed check names, GitHub Actions run ids when available, exact `gh run view <run-id> --log-failed` commands, and bounded failed-log fetch status; empty check rollups must classify as `no-checks`, not green or pending.
-- Merge-if-green postcondition: after a successful merge, `./ns merge-if-green <pr>` must verify the merge commit on `main`, wait for main CI, and fail the command result when main CI is red, pending beyond the wait budget, unknown, or missing checks.
-- Merge-if-green head/base pinning: `./ns merge-if-green <pr>` must refuse unexpected base branches, require a PR head SHA, pass `--match-head-commit <sha>` to GitHub, and render the checked base/head refs in the command output.
+- Merge-if-green postcondition: after a successful merge, `removed legacy-wrapper route merge-if-green <pr>` must verify the merge commit on `main`, wait for main CI, and fail the command result when main CI is red, pending beyond the wait budget, unknown, or missing checks.
+- Merge-if-green head/base pinning: `removed legacy-wrapper route merge-if-green <pr>` must refuse unexpected base branches, require a PR head SHA, pass `--match-head-commit <sha>` to GitHub, and render the checked base/head refs in the command output.
 
 - Release route help anchors: `release-prep --help`, `release-gate --help`, `release-publish --help`, and `release-verify --help` and invalid-argument paths must not create branches` must remain documented and testable before release-route changes.
 
@@ -448,11 +447,11 @@ Whenever the current branch, version, release state, test status, architecture c
 
 ## Remote mutation preflight guard
 
-Before terminal workflows perform remote mutations or merge/sync verification, the working tree must be fully clean. Terminal-log dirtiness is not allowed for this preflight because it can block branch switching, fast-forward pulls, PR merges, and verification. Use `./ns terminal-remote-preflight` before `gh pr merge`, release publication, tag creation, or any merge-verification block.
+Before terminal workflows perform remote mutations or merge/sync verification, the working tree must be fully clean. Terminal-log dirtiness is not allowed for this preflight because it can block branch switching, fast-forward pulls, PR merges, and verification. Use `removed legacy-wrapper route terminal-remote-preflight` before `gh pr merge`, release publication, tag creation, or any merge-verification block.
 
 ## State freshness guard
 
-`./ns state-freshness-check` detects known stale current-state fragments in `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md`. It is intentionally narrow and deterministic: it catches recurring obsolete state fragments such as old released-version claims, old status dates, and stale slice descriptions without trying to prove full semantic freshness.
+`removed legacy-wrapper route state-freshness-check` detects known stale current-state fragments in `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md`. It is intentionally narrow and deterministic: it catches recurring obsolete state fragments such as old released-version claims, old status dates, and stale slice descriptions without trying to prove full semantic freshness.
 
 The gate also checks active next-step instructions in `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, and `.agentic/handoff_state.yaml`: they must not point to closeout evidence that already exists, and active handoff instructions must not reference an older release version than `.agentic/handoff_state.yaml` declares as current.
 
@@ -478,7 +477,7 @@ Fixed-slot work-order execution must write the active result first to `/tmp/agen
 
 ## Command inbox check
 
-`tests/test_command_inbox_check.py` verifies the repo-backed command queue validator behind `./ns command-inbox-check`: empty inbox, one valid pair, orphan detection, multiple-command refusal, invalid safety class detection, and forbidden-fragment detection.
+`tests/test_command_inbox_check.py` verifies the repo-backed command queue validator behind `removed legacy-wrapper route command-inbox-check`: empty inbox, one valid pair, orphan detection, multiple-command refusal, invalid safety class detection, and forbidden-fragment detection.
 
 
 ### Mandatory terminal evidence capture gate
@@ -527,7 +526,7 @@ Before acting on repository state, command syntax, release phase, file locations
 
 Rule id: no-remote-command-deadlock
 
-Remote command first is a delivery preference, not a blocking rule. If `./ns agent-next` reports `NO-COMMAND`, the next assistant response must either queue a complete command pair remotely or give exactly one minimal fallback command. The user must not be kept in an `ask-agent-to-queue-command` loop. Long ad-hoc terminal blocks are only allowed when the remote command path is unavailable or broken.
+Remote command first is a delivery preference, not a blocking rule. If `removed legacy-wrapper route agent-next` reports `NO-COMMAND`, the next assistant response must either queue a complete command pair remotely or give exactly one minimal fallback command. The user must not be kept in an `ask-agent-to-queue-command` loop. Long ad-hoc terminal blocks are only allowed when the remote command path is unavailable or broken.
 
 ## Remote Connector Gate
 

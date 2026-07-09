@@ -157,37 +157,49 @@ documents:
     owner: maintainers
     review_policy: required
     summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md
-    class: operational/automation
+  - path: docs/archive/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    summary: Superseded workflow document retained as historical archive context.
+    archived_from: docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md
+    source_files:
+      - docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md
+  - path: docs/archive/V0.3.36_REMAINING_WORKPLAN.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    review_policy: required
+    summary: Superseded workflow document retained as historical archive context.
+    archived_from: docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
+    source_files:
+      - docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
+  - path: docs/governance/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md
+    class: governance/system
     status: active
     owner: maintainers
     review_policy: required
-    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/V0.3.36_REMAINING_WORKPLAN.md
-    class: operational/automation
-    status: active
-    owner: maintainers
-    review_policy: required
-    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md
-    class: operational/automation
-    status: active
-    owner: maintainers
-    review_policy: required
-    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+    summary: Active governance contract for typed work orders and required execution evidence.
+    moved_from: docs/workflow/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md
+    source_files:
+      - docs/workflow/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md
   - path: docs/workflow/TEXT_TRANSFER_RUNNER.md
     class: operational/automation
     status: active
     owner: maintainers
     review_policy: required
     summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md
-    class: operational/automation
+  - path: docs/governance/TERMINAL_LOG_HANDOFF_RULE.md
+    class: governance/system
     status: active
     owner: maintainers
     review_policy: required
-    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/RULE_GOVERNANCE.md
+    summary: Active governance rule for bounded terminal-log evidence handoff after long local runs.
+    moved_from: docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md
+    source_files:
+      - docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md
+  - path: docs/governance/RULE_GOVERNANCE.md
     class: operational/automation
     status: active
     owner: maintainers
@@ -199,18 +211,24 @@ documents:
     owner: maintainers
     review_policy: required
     summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/PR_CLOSEOUT_GATE.md
-    class: operational/automation
+  - path: docs/governance/PR_CLOSEOUT_GATE.md
+    class: governance/system
     status: active
     owner: maintainers
     review_policy: required
-    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/PRE_GUI_EXECUTION_HARDENING.md
-    class: operational/automation
-    status: active
+    summary: Active governance gate preventing ready PRs from being treated as generic continuation work.
+    moved_from: docs/workflow/PR_CLOSEOUT_GATE.md
+    source_files:
+      - docs/workflow/PR_CLOSEOUT_GATE.md
+  - path: docs/archive/PRE_GUI_EXECUTION_HARDENING.md
+    class: historical archive
+    status: superseded
     owner: maintainers
     review_policy: required
-    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+    summary: Superseded workflow document retained as historical archive context.
+    archived_from: docs/workflow/PRE_GUI_EXECUTION_HARDENING.md
+    source_files:
+      - docs/workflow/PRE_GUI_EXECUTION_HARDENING.md
   - path: docs/workflow/PARAMETERIZED_ACTIONS.md
     class: operational/automation
     status: active
@@ -223,12 +241,15 @@ documents:
     owner: maintainers
     review_policy: required
     summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/GOVERNANCE_CHECK.md
-    class: operational/automation
+  - path: docs/governance/GOVERNANCE_CHECK.md
+    class: governance/system
     status: active
     owner: maintainers
     review_policy: required
-    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+    summary: Active governance check contract for read-only constitutional validation.
+    moved_from: docs/workflow/GOVERNANCE_CHECK.md
+    source_files:
+      - docs/workflow/GOVERNANCE_CHECK.md
   - path: docs/workflow/CONTROL_MODEL.md
     class: operational/automation
     status: active
@@ -353,36 +374,44 @@ documents:
     status: active
     owner: maintainers
     notes: Stable JSON contract for the read-only canonical rule source validator consumed by rule-refresh, transfer-state, and GUI gates.
-  - path: docs/testing/TRANSFER_TEST_PLAN.md
+  - path: docs/reference/TRANSFER_TEST_PLAN.md
     class: operational/automation
     owner: maintainers
-    notes: Active transfer-mode test specification for remote, file-transfer, and Copy-and-Paste recovery paths before GUI expansion.
+    summary: Active transfer-mode test reference for remote, file-transfer, and Copy-and-Paste recovery paths.
     status: active
-  - path: docs/agent_rules/PORTABILITY_AND_OPERATIONAL_RULES.md
+    moved_from: docs/testing/TRANSFER_TEST_PLAN.md
+    source_files:
+      - docs/testing/TRANSFER_TEST_PLAN.md
+  - path: docs/governance/PORTABILITY_AND_OPERATIONAL_RULES.md
     class: governance/system
     owner: maintainers
-    notes: Required operational portability rule source for agents and maintainers.
+    summary: Active governance rule set for portability and operational behavior.
     status: active
-  - path: docs/agent_rules/REMOTE_INSPECTION_EVIDENCE_RULES.md
+    moved_from: docs/agent_rules/PORTABILITY_AND_OPERATIONAL_RULES.md
+    source_files:
+      - docs/agent_rules/PORTABILITY_AND_OPERATIONAL_RULES.md
+  - path: docs/governance/REMOTE_INSPECTION_EVIDENCE_RULES.md
     class: governance/system
     owner: maintainers
     notes: Required evidence rule source for remote inspection and follow-up analysis.
     status: active
-  - path: docs/architecture/AGENTIC_CODING_RESEARCH_INPUTS.md
+  - path: docs/reference/AGENTIC_CODING_RESEARCH_INPUTS.md
     class: architecture
     owner: maintainers
-    notes: Architecture research input retained under required architecture scope.
+    notes: Architecture research input retained under reference scope.
     status: active
   - path: docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
     class: architecture
     owner: maintainers
     notes: Documentation information architecture and lifecycle baseline.
     status: active
-  - path: docs/architecture/LOCAL_COCKPIT_FOUNDATION.md
-    class: architecture
+  - path: docs/archive/LOCAL_COCKPIT_FOUNDATION.md
+    class: historical archive
+    status: superseded
     owner: maintainers
-    notes: Local cockpit architecture foundation.
-    status: active
+    archived_from: docs/architecture/LOCAL_COCKPIT_FOUNDATION.md
+    superseded_by: docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+    notes: Archived local cockpit foundation; current architecture is covered by KIT_AS_OS_ARCHITECTURE.md.
   - path: docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md
     class: governance/system
     owner: maintainers
@@ -453,11 +482,14 @@ documents:
     owner: maintainers
     notes: Required terminal safety governance contract.
     status: active
-  - path: docs/gui/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md
-    class: operational/automation
+  - path: docs/archive/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md
+    class: historical archive
     owner: maintainers
-    notes: Required GUI action readiness contract.
-    status: active
+    summary: Superseded GUI readiness contract retained as historical archive context.
+    status: superseded
+    archived_from: docs/gui/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md
+    source_files:
+      - docs/gui/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md
   - path: docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
     class: operational/automation
     owner: maintainers
@@ -473,12 +505,15 @@ documents:
     owner: automation
     notes: Generated start-new-chat prompt projection.
     status: active
-  - path: docs/patterns/bounded-workflow-evidence.md
-    class: governance/system
+  - path: docs/reference/bounded-workflow-evidence.md
+    class: operational/automation
     owner: maintainers
-    notes: Required governed workflow evidence pattern.
+    summary: Reference pattern for bounded workflow evidence capture.
     status: active
-  - path: docs/patterns/hidden-autopilot.md
+    moved_from: docs/patterns/bounded-workflow-evidence.md
+    source_files:
+      - docs/patterns/bounded-workflow-evidence.md
+  - path: docs/reference/hidden-autopilot.md
     class: governance/system
     owner: maintainers
     notes: Required hidden-autopilot anti-pattern.
@@ -598,3 +633,14 @@ documents:
     status: active
     owner: maintainers
     notes: Normative rule-refresh handshake contract for canonical rule sources, deterministic transfer outbox context, LLM acknowledgement, fail-closed rule freshness, and GUI gate downstream behavior.
+  - path: docs/archive/DESIGN.md
+    class: historical archive
+    status: superseded
+    owner: maintainers
+    archived_from: docs/archive/DESIGN.md
+    superseded_by: docs/architecture/ARCHITECTURE_CONTRACT.md, docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+    source_files:
+      - docs/archive/DESIGN.md
+      - docs/architecture/ARCHITECTURE_CONTRACT.md
+      - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+    summary: Historical early generator design note retained as archive context.
