@@ -241,12 +241,15 @@ documents:
     owner: maintainers
     review_policy: required
     summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
-  - path: docs/workflow/GOVERNANCE_CHECK.md
-    class: operational/automation
+  - path: docs/governance/GOVERNANCE_CHECK.md
+    class: governance/system
     status: active
     owner: maintainers
     review_policy: required
-    summary: Active workflow runbook; workflow authority is not folded into project_direction.yaml.
+    summary: Active governance check contract for read-only constitutional validation.
+    moved_from: docs/workflow/GOVERNANCE_CHECK.md
+    source_files:
+      - docs/workflow/GOVERNANCE_CHECK.md
   - path: docs/workflow/CONTROL_MODEL.md
     class: operational/automation
     status: active
