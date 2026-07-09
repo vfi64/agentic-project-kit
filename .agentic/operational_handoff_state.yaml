@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 63045f9ee3a1dd02eb8103c6a6fa0378204b6fac
-  short: 63045f9e
-  subject: Enrich docs lifecycle reports with registry metadata (#1760)
+  full: 6c910708ae7fd3456bbf9a627e703174e98693bf
+  short: 6c910708
+  subject: Integrate doc registry reconcile findings into docs lifecycle (#1762)
 last_substantive_work_state:
-  full: 63045f9ee3a1dd02eb8103c6a6fa0378204b6fac
-  short: 63045f9e
-  subject: Enrich docs lifecycle reports with registry metadata (#1760)
+  full: 6c910708ae7fd3456bbf9a627e703174e98693bf
+  short: 6c910708
+  subject: Integrate doc registry reconcile findings into docs lifecycle (#1762)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
