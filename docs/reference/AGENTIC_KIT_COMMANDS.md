@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `209`
+- Command count: `210`
 
 ## Commands
 
@@ -321,6 +321,18 @@ Build a dry-run lifecycle plan for one documentation scope.
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
 | `scope` | `TyperOption` | --scope | `False` | `docs` | Repository-relative documentation scope. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+
+### `agentic-kit docs lifecycle report`
+
+Build or write one documentation lifecycle evidence report.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `scope` | `TyperOption` | --scope | `False` | `docs` | Repository-relative documentation scope. |
+| `output` | `TyperOption` | --output | `False` | `PosixPath('docs/architecture/evidence/doc-lifecycle-report.json')` | Evidence JSON output path. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write the evidence report. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit docs lifecycle triage`

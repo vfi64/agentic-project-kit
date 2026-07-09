@@ -1622,6 +1622,89 @@
     },
     {
       "group": "docs lifecycle",
+      "help": "Build or write one documentation lifecycle evidence report.",
+      "name": "report",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "docs",
+          "help": "Repository-relative documentation scope.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "scope",
+          "opts": [
+            "--scope"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/evidence/doc-lifecycle-report.json')",
+          "help": "Evidence JSON output path.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write the evidence report.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "docs",
+        "lifecycle",
+        "report"
+      ],
+      "qualified_name": "agentic-kit docs lifecycle report"
+    },
+    {
+      "group": "docs lifecycle",
       "help": "Propose safe documentation lifecycle actions without applying changes.",
       "name": "triage",
       "params": [

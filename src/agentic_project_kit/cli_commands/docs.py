@@ -8,9 +8,11 @@ import typer
 
 from agentic_project_kit.doc_lifecycle import (
     build_doc_lifecycle_apply_payload,
+    build_doc_lifecycle_evidence_report_payload,
     build_doc_lifecycle_plan_payload,
     build_doc_lifecycle_triage_payload,
     render_doc_lifecycle_apply_report,
+    render_doc_lifecycle_evidence_report_result,
     render_doc_lifecycle_plan_report,
     render_doc_lifecycle_triage_report,
 )
@@ -46,6 +48,32 @@ def docs_lifecycle_apply_command(
         typer.echo(json.dumps(payload, indent=2, sort_keys=True))
     else:
         typer.echo(render_doc_lifecycle_apply_report(payload), nl=False)
+    if payload["result_status"] == "BLOCK":
+        raise typer.Exit(code=2)
+
+
+
+@lifecycle_app.command("report")
+def docs_lifecycle_report_command(
+    root: Annotated[Path, typer.Option("--root", help="Repository root.")] = Path("."),
+    scope: Annotated[str, typer.Option("--scope", help="Repository-relative documentation scope.")] = "docs",
+    output: Annotated[Path, typer.Option("--output", help="Evidence JSON output path.")] = Path(
+        "docs/architecture/evidence/doc-lifecycle-report.json"
+    ),
+    execute: Annotated[bool, typer.Option("--execute", help="Write the evidence report.")] = False,
+    json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
+) -> None:
+    """Build or write one documentation lifecycle evidence report."""
+    payload = build_doc_lifecycle_evidence_report_payload(
+        root.resolve(),
+        scope,
+        output,
+        execute=execute,
+    )
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        typer.echo(render_doc_lifecycle_evidence_report_result(payload), nl=False)
     if payload["result_status"] == "BLOCK":
         raise typer.Exit(code=2)
 

@@ -600,3 +600,106 @@ def render_doc_lifecycle_apply_report(payload: dict[str, Any]) -> str:
         lines.append(f"EFFECT: {applied['effect']}")
         lines.append(f"SOURCE: {applied['source']}")
     return "\n".join(lines) + "\n"
+
+
+
+def build_doc_lifecycle_evidence_report_payload(
+    project_root: Path,
+    scope: str,
+    output_path: Path,
+    *,
+    execute: bool,
+) -> dict[str, Any]:
+    """Build or write one explicit documentation lifecycle evidence report."""
+    output = output_path if output_path.is_absolute() else project_root / output_path
+    allowed, relative_output = _is_allowed_lifecycle_evidence_output(project_root, output)
+    if not allowed:
+        return {
+            "schema_version": 1,
+            "kind": "doc_lifecycle_evidence_report_result",
+            "mode": "blocked",
+            "result_status": "BLOCK",
+            "reason": "output_path_not_allowed",
+            "output_path": str(output),
+            "mutation": "none",
+        }
+
+    triage = build_doc_lifecycle_triage_payload(project_root)
+    plan = build_doc_lifecycle_plan_payload(project_root, scope)
+    report = {
+        "schema_version": 1,
+        "kind": "doc_lifecycle_evidence_report",
+        "scope": scope.strip().strip("/"),
+        "triage": triage,
+        "plan": plan,
+    }
+
+    if not execute:
+        return {
+            "schema_version": 1,
+            "kind": "doc_lifecycle_evidence_report_result",
+            "mode": "dry-run",
+            "result_status": "PASS",
+            "scope": scope.strip().strip("/"),
+            "output_path": relative_output,
+            "would_write": True,
+            "mutation": "none",
+            "archive": "disabled",
+            "delete": "disabled",
+            "report_summary": {
+                "triage": triage["summary"],
+                "plan": plan["summary"],
+            },
+        }
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return {
+        "schema_version": 1,
+        "kind": "doc_lifecycle_evidence_report_result",
+        "mode": "execute",
+        "result_status": "PASS",
+        "scope": scope.strip().strip("/"),
+        "output_path": relative_output,
+        "would_write": True,
+        "mutation": "write-report",
+        "archive": "disabled",
+        "delete": "disabled",
+        "report_summary": {
+            "triage": triage["summary"],
+            "plan": plan["summary"],
+        },
+    }
+
+
+def render_doc_lifecycle_evidence_report_result(payload: dict[str, Any]) -> str:
+    lines = [
+        "DOC_LIFECYCLE_EVIDENCE_REPORT",
+        f"STATUS: {payload['result_status']}",
+        f"MODE: {payload['mode']}",
+        f"MUTATION: {payload['mutation']}",
+        "ARCHIVE: disabled",
+        "DELETE: disabled",
+    ]
+    if payload["result_status"] == "BLOCK":
+        lines.append(f"REASON: {payload['reason']}")
+    else:
+        lines.append(f"OUTPUT: {payload['output_path']}")
+        lines.append(f"SCOPE: {payload['scope']}")
+    return "\n".join(lines) + "\n"
+
+
+def _is_allowed_lifecycle_evidence_output(project_root: Path, output_path: Path) -> tuple[bool, str]:
+    resolved_root = project_root.resolve()
+    resolved_output = output_path.resolve()
+    try:
+        relative = resolved_output.relative_to(resolved_root)
+    except ValueError:
+        return False, str(resolved_output)
+    relative_text = relative.as_posix()
+    allowed_prefixes = (
+        "docs/architecture/evidence/",
+        "docs/reports/doc-lifecycle/",
+        "tmp/",
+    )
+    return relative_text.startswith(allowed_prefixes), relative_text
