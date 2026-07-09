@@ -1,3 +1,7 @@
+Status: active
+Status-date: 2026-07-09
+Superseded-by: n/a
+
 # Verified Releases
 
 This file stores historical release DOI notes extracted from the README to keep the public README below its documentation gate word limit.
