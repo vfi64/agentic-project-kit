@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `210`
+- Command count: `211`
 
 ## Commands
 
@@ -828,6 +828,15 @@ Render the local release lifecycle state without mutating release files.
 | `version` | `TyperOption` | --version | `False` |  | Release version without leading v. |
 | `include_remote` | `TyperOption` | --include-remote | `False` | `False` | Include remote tag, GitHub Release, and DOI/Zenodo checks. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print a machine-readable result. |
+
+### `agentic-kit remote-branch-hygiene`
+
+Dry-run remote branch hygiene classification for K3.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit remote-next`
 

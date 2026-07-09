@@ -4860,6 +4860,45 @@
     },
     {
       "group": "root",
+      "help": "Dry-run remote branch hygiene classification for K3.",
+      "name": "remote-branch-hygiene",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "remote-branch-hygiene"
+      ],
+      "qualified_name": "agentic-kit remote-branch-hygiene"
+    },
+    {
+      "group": "root",
       "help": "",
       "name": "remote-next",
       "params": [
