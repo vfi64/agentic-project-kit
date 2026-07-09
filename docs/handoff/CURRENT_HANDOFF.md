@@ -317,6 +317,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1762
+## Operational documentation refresh state after PR #1764
 
-Current administrative handoff refresh state is `6c910708` (`Integrate doc registry reconcile findings into docs lifecycle (#1762)`). Continue next only after this post-PR1762 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `e01331a9` (`Add safe docs lifecycle apply command (#1764)`). Continue next only after this post-PR1764 refresh is committed and merged; the next substantive slice must be created from fresh main.
