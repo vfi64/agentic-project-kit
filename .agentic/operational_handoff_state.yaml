@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 1fca15674b0d39ffed0196b9376ecd39994e93da
-  short: 1fca1567
-  subject: Add doc registry reconcile dry-run command (#1752)
+  full: 7d099c9d4f94e207354e9ec48ad66b471a61e76b
+  short: 7d099c9d
+  subject: Complete documentation taxonomy cleanup (#1754)
 last_substantive_work_state:
-  full: 1fca15674b0d39ffed0196b9376ecd39994e93da
-  short: 1fca1567
-  subject: Add doc registry reconcile dry-run command (#1752)
+  full: 7d099c9d4f94e207354e9ec48ad66b471a61e76b
+  short: 7d099c9d
+  subject: Complete documentation taxonomy cleanup (#1754)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
