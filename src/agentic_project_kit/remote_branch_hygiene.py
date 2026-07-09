@@ -162,6 +162,13 @@ def _lines(repo_root: Path, args: list[str]) -> list[str]:
     return [line.strip() for line in _run(repo_root, args).splitlines() if line.strip()]
 
 
+
+def delete_remote_branch(repo_root: Path, branch: str) -> None:
+    short_name = _short_name(branch)
+    if _is_protected_remote_ref(branch) or short_name == branch or "," in branch:
+        raise ValueError(f"unsafe remote branch name: {branch}")
+    _run(repo_root, ["git", "push", "origin", "--delete", short_name])
+
 def collect_remote_branch_hygiene_inputs(repo_root: Path) -> tuple[list[RemoteBranchInfo], list[OpenPullRequestHead]]:
     remote_refs = _lines(repo_root, ["git", "for-each-ref", "--format=%(refname:short)", "refs/remotes/origin"])
     merged_refs = set(

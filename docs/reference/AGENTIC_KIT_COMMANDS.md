@@ -7,7 +7,7 @@ Do not edit this Markdown file manually.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `212`
+- Command count: `213`
 
 ## Commands
 
@@ -836,6 +836,17 @@ Dry-run remote branch hygiene classification for K3.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
+### `agentic-kit remote-branch-hygiene-apply`
+
+Safely apply exactly one remote branch deletion candidate.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `only` | `TyperOption` | --only | `True` |  |  |
+| `execute` | `TyperOption` | --execute | `False` | `False` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit remote-branch-hygiene-report`
