@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f4ad165b912111667cf7b29852cabc5339fd0755
-  short: f4ad165b
-  subject: Add K3 remote branch hygiene evidence report (#1772)
+  full: f29d25b2894c6b34ffeac2a2024f3a78875274c0
+  short: f29d25b2
+  subject: Add K3 remote branch hygiene safe apply (#1774)
 last_substantive_work_state:
-  full: f4ad165b912111667cf7b29852cabc5339fd0755
-  short: f4ad165b
-  subject: Add K3 remote branch hygiene evidence report (#1772)
+  full: f29d25b2894c6b34ffeac2a2024f3a78875274c0
+  short: f29d25b2
+  subject: Add K3 remote branch hygiene safe apply (#1774)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
