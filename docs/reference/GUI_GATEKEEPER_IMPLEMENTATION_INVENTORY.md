@@ -398,4 +398,4 @@ This explicitly captures the failure mode observed in PR883: the inventory gener
 - No GUI execution changes in this inventory slice.
 - No upload behavior changes in this inventory slice.
 - No merge automation changes in this inventory slice.
-- No removal of ./ns in this inventory slice.
+- No removal of removed legacy-wrapper routes in this inventory slice.
