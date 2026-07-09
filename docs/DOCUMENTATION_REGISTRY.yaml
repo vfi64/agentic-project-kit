@@ -362,11 +362,14 @@ documents:
     status: active
     owner: maintainers
     notes: Stable JSON contract for the read-only canonical rule source validator consumed by rule-refresh, transfer-state, and GUI gates.
-  - path: docs/testing/TRANSFER_TEST_PLAN.md
+  - path: docs/reference/TRANSFER_TEST_PLAN.md
     class: operational/automation
     owner: maintainers
-    notes: Active transfer-mode test specification for remote, file-transfer, and Copy-and-Paste recovery paths before GUI expansion.
+    summary: Active transfer-mode test reference for remote, file-transfer, and Copy-and-Paste recovery paths.
     status: active
+    moved_from: docs/testing/TRANSFER_TEST_PLAN.md
+    source_files:
+      - docs/testing/TRANSFER_TEST_PLAN.md
   - path: docs/agent_rules/PORTABILITY_AND_OPERATIONAL_RULES.md
     class: governance/system
     owner: maintainers
@@ -462,11 +465,14 @@ documents:
     owner: maintainers
     notes: Required terminal safety governance contract.
     status: active
-  - path: docs/gui/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md
-    class: operational/automation
+  - path: docs/archive/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md
+    class: historical archive
     owner: maintainers
-    notes: Required GUI action readiness contract.
-    status: active
+    summary: Superseded GUI readiness contract retained as historical archive context.
+    status: superseded
+    archived_from: docs/gui/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md
+    source_files:
+      - docs/gui/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md
   - path: docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
     class: operational/automation
     owner: maintainers
