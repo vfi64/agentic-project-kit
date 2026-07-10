@@ -10008,7 +10008,7 @@
     {
       "dry_run_available": false,
       "group": "transfer",
-      "help": "Create a PR and complete it without requiring manual PR-number or SHA copying.",
+      "help": "",
       "name": "pr-create-complete",
       "params": [
         {
@@ -10166,7 +10166,7 @@
         "bounded",
         "transfer"
       ],
-      "when_to_use": "Create a PR and complete it without requiring manual PR-number or SHA copying."
+      "when_to_use": "Run agentic-kit transfer pr-create-complete."
     },
     {
       "dry_run_available": false,
@@ -13622,7 +13622,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "dda3f3742f28",
+    "manifest_sha": "dd695b73dc3a",
     "schema_version": 1
   },
   "schema_version": 2,

@@ -96,3 +96,15 @@ def acquire_workspace_lock(root: Path, command: str) -> Iterator[Path]:
                 path.unlink()
             except FileNotFoundError as exc:
                 LOGGER.debug("workspace lock already removed before release: %s", exc)
+
+@contextmanager
+def workspace_mutation_lock(root: Path, command: str) -> Iterator[Path]:
+    """Explicit workspace mutation lock contract for repo/file mutators.
+
+    This is a semantic alias around ``acquire_workspace_lock``. It must not
+    change the lock lifecycle: each wrapped mutation gets an acquire/release
+    pair and leaves no stale lock behind for the next repo action.
+    """
+
+    with acquire_workspace_lock(root, command) as lock_path:
+        yield lock_path

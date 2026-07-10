@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: dda3f3742f28
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: dd695b73dc3a
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -2062,11 +2062,9 @@ Render the current four-slice patch/handoff workflow state.
 ### `agentic-kit transfer pr-create-complete`
 
 - Safety: `BOUNDED`
-- When to use: Create a PR and complete it without requiring manual PR-number or SHA copying.
+- When to use: Run agentic-kit transfer pr-create-complete.
 - Dry-run available: `False`
 - Replaces raw: `gh pr create`
-
-Create a PR and complete it without requiring manual PR-number or SHA copying.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|

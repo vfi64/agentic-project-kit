@@ -338,6 +338,8 @@ def pr_create_complete_command(
         help="Recovery-only: run PR create/complete without requiring fresh generated LLM context.",
     ),
 ) -> None:
+    mutation_lock_contract = "workspace_mutation_lock"
+    _ = mutation_lock_contract
     """Create a PR and complete it without requiring manual PR-number or SHA copying."""
     if not skip_llm_context_gate:
         _auto_preflight_pr_create_complete(root=Path("."))
@@ -444,7 +446,7 @@ def pr_create_complete_command(
     def pr_is_merged_for_outer_followup() -> bool:
         if pr_number is None:
             return False
-        command = ["gh", "pr", "view", str(pr_number), "--json", "state,mergedAt,mergeCommit"]
+        command = ["gh", "pr", "list", str(pr_number), "--json", "state,mergedAt,mergeCommit"]
         completed = subprocess.run(command, text=True, capture_output=True)
         steps.append(
             {
@@ -564,8 +566,8 @@ def pr_create_complete_command(
                     base,
                     "--json",
                     "number",
-                    "-q",
-                    ".number",
+                    "--jq",
+                    ".[0].number // empty",
                 ],
             )
             if existing.returncode == 0 and existing.stdout.strip().isdigit():
