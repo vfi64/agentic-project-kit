@@ -1,0 +1,20 @@
+kit_schema_version: 1
+project:
+  name: agentic-project-kit
+  type: python
+profile: python-default
+paths:
+  tmp_root: tmp
+  status_file: docs/STATUS.md
+  documentation_registry_file: docs/DOCUMENTATION_REGISTRY.yaml
+  rule_registry_file: .agentic/rule_mechanism_inventory.yaml
+  handoff_state_file: .agentic/handoff_state.yaml
+  operational_handoff_state_file: .agentic/operational_handoff_state.yaml
+  reports_root: docs/reports
+  terminal_reports_root: docs/reports/terminal
+  command_runs_root: docs/reports/command_runs
+  transfer_runs_root: docs/reports/transfer_runs
+  transfer_handoff_reports_root: docs/reports/terminal/transfer_handoff_reports
+  terminal_post_pr_successor_chat_handoff_prefix: docs/reports/terminal/post-pr
+  handoff_root: docs/handoff
+  handoff_packages_latest_root: docs/reports/handoff-packages/latest

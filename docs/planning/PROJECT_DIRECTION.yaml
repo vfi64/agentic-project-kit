@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q supersedes earlier direct P4/P5/P6 ordering.
   owner: maintainers
   status: active
-  updated_after_pr: 1803
+  updated_after_pr: 1805
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1803
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1805
 strategy:
 - id: governed-operating-model
   status: active
@@ -194,13 +194,17 @@ roadmap:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: p5a-self-hosting-manifest
   phase: P5
-  status: planned
+  status: done
   title: Add a self-hosting manifest while keeping physical paths stable
+  completed_by_pr: 1805
   depends_on:
   - p4-namespace-completion
   acceptance:
   - The kit repository gains a manifest without physical path moves.
   - Existing public paths and generated projections remain stable.
+  evidence:
+  - PR
+  - .agentic/config.yaml
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: p5b-resolver-aliases
