@@ -1,10 +1,131 @@
 from __future__ import annotations
 
+import sys
 # ruff: noqa: F403,F405
 
 from agentic_project_kit.cli_commands.transfer_shared import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import *
 from agentic_project_kit.cli_commands.transfer_pr_merge_flow import _resolve_expected_head_sha_alias
+
+
+
+def _auto_preflight_pr_create_complete(*, root: Path) -> None:
+    """Prepare rule/context carriers before pr-create-complete mutates GitHub state."""
+
+    # Isolated CliRunner fixtures may not be real Git worktrees. In that case,
+    # do not shadow the canonical fresh-LLM-context gate with rule/context
+    # repair blockers from the auto-preflight.
+    if not (root / ".git").exists():
+        return
+
+    def run_step(
+        name: str,
+        command: list[str],
+        *,
+        allow_nonzero: bool = False,
+    ) -> subprocess.CompletedProcess[str]:
+        completed = subprocess.run(
+            command,
+            cwd=root,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        if completed.returncode != 0 and not allow_nonzero:
+            typer.echo(
+                {
+                    "result_status": "BLOCKED",
+                    "blocker": name,
+                    "returncode": completed.returncode,
+                    "stdout": completed.stdout,
+                    "stderr": completed.stderr,
+                    "next_action": "Fix the automatic pr-create-complete preflight blocker before PR creation.",
+                }
+            )
+            raise typer.Exit(code=2)
+        return completed
+
+    # Rule acknowledgement can be unavailable in isolated test fixtures. Do not let it
+    # shadow the canonical fresh-LLM-context gate; the later gate remains authoritative.
+    run_step(
+        "rules_acknowledge",
+        [
+            sys.executable,
+            "-m",
+            "agentic_project_kit.cli",
+            "rules",
+            "acknowledge",
+            "--json",
+        ],
+        allow_nonzero=True,
+    )
+    run_step(
+        "refresh_llm_context_carriers",
+        [
+            sys.executable,
+            "-m",
+            "agentic_project_kit.cli",
+            "transfer",
+            "refresh-llm-context-carriers",
+            "--json",
+        ],
+        allow_nonzero=True,
+    )
+    run_step(
+        "require_fresh_llm_context",
+        [
+            sys.executable,
+            "-m",
+            "agentic_project_kit.cli",
+            "transfer",
+            "require-fresh-llm-context",
+            "--json",
+        ],
+        allow_nonzero=True,
+    )
+
+    for rel_path in sorted(
+        {
+            Path("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"),
+            Path("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"),
+        }
+    ):
+        run_step(
+            "restore_known_volatile_tracked_carrier",
+            ["git", "restore", "--", str(rel_path)],
+            allow_nonzero=True,
+        )
+
+    status_result = run_step("git_status", ["git", "status", "--porcelain"], allow_nonzero=True)
+    if status_result.returncode != 0:
+        return
+    status = status_result.stdout.splitlines()
+    unexpected_dirt: list[str] = []
+    for line in status:
+        if not line:
+            continue
+        marker = line[:2]
+        rel = line[3:]
+        if marker == "??" and (rel.startswith("tmp/") or rel == ".agentic/transfer/outbox/last_result.txt"):
+            continue
+        if rel in {
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
+        }:
+            continue
+        unexpected_dirt.append(line)
+
+    if unexpected_dirt:
+        typer.echo(
+            {
+                "result_status": "BLOCKED",
+                "blocker": "unexpected_dirt_after_pr_create_complete_preflight",
+                "unexpected_dirt": unexpected_dirt,
+                "next_action": "Review unexpected dirt before PR creation.",
+            }
+        )
+        raise typer.Exit(code=2)
+
 
 
 @transfer_app.command("pr-create")
@@ -219,6 +340,7 @@ def pr_create_complete_command(
 ) -> None:
     """Create a PR and complete it without requiring manual PR-number or SHA copying."""
     if not skip_llm_context_gate:
+        _auto_preflight_pr_create_complete(root=Path("."))
         require_fresh = _public_transfer_attr("_require_fresh_llm_context_or_exit", _require_fresh_llm_context_or_exit)
         require_fresh(max_age_minutes=60, json_output=json_output)
     require_communication_context = _public_transfer_attr(
