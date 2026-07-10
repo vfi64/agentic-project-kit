@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3c0d82492858f37d6292cae738a300aa76e87615
-  short: 3c0d8249
-  subject: Enforce mutation lock core contract (#1794)
+  full: 5fb1844c8150a9b69088a17f0f304d8fa76e4b31
+  short: 5fb1844c
+  subject: Classify mutation lock audit findings (#1796)
 last_substantive_work_state:
-  full: 3c0d82492858f37d6292cae738a300aa76e87615
-  short: 3c0d8249
-  subject: Enforce mutation lock core contract (#1794)
+  full: 5fb1844c8150a9b69088a17f0f304d8fa76e4b31
+  short: 5fb1844c
+  subject: Classify mutation lock audit findings (#1796)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
