@@ -11,14 +11,20 @@ import yaml
 from agentic_project_kit.transfer_local_runner import TransferLocalRun, run_local_transfer
 from agentic_project_kit.transfer_runner import DEFAULT_INBOX
 from agentic_project_kit.transfer_safety_context import build_local_to_llm_payload
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, Workspace, load_workspace
 
-REMOTE_NEXT_REPORT_DIR = Path("docs/reports/transfer_runs")
+REMOTE_NEXT_LATEST_JSON_NAME = "latest-remote-next-report.json"
+REMOTE_NEXT_LATEST_LOG_NAME = "latest-remote-next-report.log"
+PUBLISHED_LATEST_JSON_NAME = "latest-transfer-handoff-report.json"
+PUBLISHED_LATEST_LOG_NAME = "latest-transfer-handoff-report.log"
+
+REMOTE_NEXT_REPORT_DIR = Path(LEGACY_DEFAULTS.transfer_runs_root)
 REMOTE_NEXT_LATEST_JSON = REMOTE_NEXT_REPORT_DIR / "latest-remote-next-report.json"
 REMOTE_NEXT_LATEST_LOG = REMOTE_NEXT_REPORT_DIR / "latest-remote-next-report.log"
-PUBLISHED_REPORT_DIR = Path("docs/reports/terminal/transfer_handoff_reports")
+PUBLISHED_REPORT_DIR = Path(LEGACY_DEFAULTS.transfer_handoff_reports_root)
 PUBLISHED_LATEST_JSON = PUBLISHED_REPORT_DIR / "latest-transfer-handoff-report.json"
 PUBLISHED_LATEST_LOG = PUBLISHED_REPORT_DIR / "latest-transfer-handoff-report.log"
-COMMAND_RUN_LATEST = Path("docs/reports/command_runs/LATEST_COMMAND_RUN.txt")
+COMMAND_RUN_LATEST = Path(LEGACY_DEFAULTS.command_runs_root) / "LATEST_COMMAND_RUN.txt"
 RULE_ACK_PATH = Path(".agentic/rule_ack/current.json")
 
 
@@ -285,6 +291,7 @@ def _refresh_rule_ack(root: Path) -> _CommandResult:
 
 
 def _current_transfer_report_path(root: Path) -> str:
+    workspace = load_workspace(root)
     try:
         data = yaml.safe_load((root / DEFAULT_INBOX).read_text(encoding="utf-8")) or {}
     except FileNotFoundError:
@@ -295,34 +302,57 @@ def _current_transfer_report_path(root: Path) -> str:
     if not isinstance(report_path, str):
         return ""
     value = report_path.strip()
-    if not value.startswith("docs/reports/command_runs/"):
+    if not value.startswith(workspace.path_text(workspace.command_runs_dir()) + "/"):
         return ""
     if ".." in Path(value).parts:
         return ""
     return value
 
 
-def _is_owned_remote_next_report_path(path: str, *, current_order_report: str = "") -> bool:
+def _remote_next_latest_json(workspace: Workspace) -> Path:
+    return workspace.transfer_run_file(REMOTE_NEXT_LATEST_JSON_NAME)
+
+
+def _remote_next_latest_log(workspace: Workspace) -> Path:
+    return workspace.transfer_run_file(REMOTE_NEXT_LATEST_LOG_NAME)
+
+
+def _published_latest_json(workspace: Workspace) -> Path:
+    return workspace.transfer_handoff_report_file(PUBLISHED_LATEST_JSON_NAME)
+
+
+def _published_latest_log(workspace: Workspace) -> Path:
+    return workspace.transfer_handoff_report_file(PUBLISHED_LATEST_LOG_NAME)
+
+
+def _is_owned_remote_next_report_path(path: str, *, workspace: Workspace, current_order_report: str = "") -> bool:
     value = path.strip()
     if value in {
-        str(REMOTE_NEXT_LATEST_JSON),
-        str(REMOTE_NEXT_LATEST_LOG),
-        str(PUBLISHED_LATEST_JSON),
-        str(PUBLISHED_LATEST_LOG),
-        str(COMMAND_RUN_LATEST),
+        workspace.path_text(_remote_next_latest_json(workspace)),
+        workspace.path_text(_remote_next_latest_log(workspace)),
+        workspace.path_text(_published_latest_json(workspace)),
+        workspace.path_text(_published_latest_log(workspace)),
+        workspace.path_text(workspace.latest_command_run_pointer()),
         current_order_report,
     }:
         return True
-    if value.startswith(str(REMOTE_NEXT_REPORT_DIR) + "/") and value.endswith(("-remote-next.json", "-remote-next.log")):
+    transfer_runs_prefix = workspace.path_text(workspace.transfer_runs_dir()) + "/"
+    published_prefix = workspace.path_text(workspace.transfer_handoff_reports_dir()) + "/"
+    if value.startswith(transfer_runs_prefix) and value.endswith(("-remote-next.json", "-remote-next.log")):
         return True
-    return value.startswith(str(PUBLISHED_REPORT_DIR) + "/") and value.endswith(("-remote-next.json", "-remote-next.log"))
+    return value.startswith(published_prefix) and value.endswith(("-remote-next.json", "-remote-next.log"))
 
 
 def _recover_owned_report_artifacts(root: Path) -> dict[str, object]:
     snapshot = _git_snapshot(root)
+    workspace = load_workspace(root)
     current_order_report = _current_transfer_report_path(root)
     dirty_paths = tuple(dict.fromkeys((*snapshot.staged_changes, *snapshot.unstaged_changes, *snapshot.untracked_files)))
-    owned = tuple(path for path in dirty_paths if _is_owned_remote_next_report_path(path, current_order_report=current_order_report))
+    owned = tuple(
+        path
+        for path in dirty_paths
+        if _is_owned_remote_next_report_path(path, workspace=workspace, current_order_report=current_order_report)
+    )
     foreign = tuple(path for path in dirty_paths if path not in owned)
     actions: list[dict[str, object]] = []
     result: dict[str, object] = {
@@ -557,8 +587,13 @@ def _remote_next_payload(root: Path, data: dict[str, object]) -> dict[str, objec
     return payload
 
 
-def _report_paths() -> tuple[str, ...]:
-    return tuple(str(path) for path in (REMOTE_NEXT_LATEST_JSON, REMOTE_NEXT_LATEST_LOG, PUBLISHED_LATEST_JSON, PUBLISHED_LATEST_LOG))
+def _report_paths(workspace: Workspace) -> tuple[str, ...]:
+    return (
+        workspace.path_text(_remote_next_latest_json(workspace)),
+        workspace.path_text(_remote_next_latest_log(workspace)),
+        workspace.path_text(_published_latest_json(workspace)),
+        workspace.path_text(_published_latest_log(workspace)),
+    )
 
 
 def _build_log_text(data: dict[str, object], payload_text: str) -> str:
@@ -583,23 +618,24 @@ def _build_log_text(data: dict[str, object], payload_text: str) -> str:
 
 
 def _write_payload_files(root: Path, paths_and_content: tuple[tuple[Path, str], ...]) -> None:
-    for relative_path, content in paths_and_content:
-        target = root / relative_path
+    for path, content in paths_and_content:
+        target = path if path.is_absolute() else root / path
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(content, encoding="utf-8")
 
 
 def _write_report_payloads(root: Path, data: dict[str, object]) -> None:
+    workspace = load_workspace(root)
     payload = _remote_next_payload(root, data)
     payload_text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
     log_text = _build_log_text(data, payload_text)
     _write_payload_files(
         root,
         (
-            (REMOTE_NEXT_LATEST_JSON, payload_text),
-            (REMOTE_NEXT_LATEST_LOG, log_text),
-            (PUBLISHED_LATEST_JSON, payload_text),
-            (PUBLISHED_LATEST_LOG, log_text),
+            (_remote_next_latest_json(workspace), payload_text),
+            (_remote_next_latest_log(workspace), log_text),
+            (_published_latest_json(workspace), payload_text),
+            (_published_latest_log(workspace), log_text),
         ),
     )
 
@@ -692,14 +728,17 @@ def _attempt_final_report_projection_commit_push(
 
 
 def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> TransferRemoteNextRun:
-    paths = _report_paths()
+    workspace = load_workspace(root)
+    latest_report = workspace.path_text(_remote_next_latest_json(workspace))
+    latest_published_report = workspace.path_text(_published_latest_json(workspace))
+    paths = _report_paths(workspace)
     provisional_data = result.as_json_data()
     provisional_data.update(
         {
-            "report_path": str(REMOTE_NEXT_LATEST_JSON),
-            "published_report_path": str(PUBLISHED_LATEST_JSON),
-            "latest_report_path": str(REMOTE_NEXT_LATEST_JSON),
-            "latest_published_report_path": str(PUBLISHED_LATEST_JSON),
+            "report_path": latest_report,
+            "published_report_path": latest_published_report,
+            "latest_report_path": latest_report,
+            "latest_published_report_path": latest_published_report,
             "post_report_actions": {"schema_version": 1, "attempted": True, "status": "pending_until_report_files_are_written"},
         }
     )
@@ -713,8 +752,8 @@ def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> Tran
         result_status=result.result_status,
         returncode=result.returncode,
         next_action=result.next_action,
-        report_path=str(REMOTE_NEXT_LATEST_JSON),
-        published_report_path=str(PUBLISHED_LATEST_JSON),
+        report_path=latest_report,
+        published_report_path=latest_published_report,
         reasons=result.reasons,
         preflight=result.preflight,
         rule_ack=result.rule_ack,
@@ -725,10 +764,10 @@ def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> Tran
     final_data = final_result.as_json_data()
     final_data.update(
         {
-            "report_path": str(REMOTE_NEXT_LATEST_JSON),
-            "published_report_path": str(PUBLISHED_LATEST_JSON),
-            "latest_report_path": str(REMOTE_NEXT_LATEST_JSON),
-            "latest_published_report_path": str(PUBLISHED_LATEST_JSON),
+            "report_path": latest_report,
+            "published_report_path": latest_published_report,
+            "latest_report_path": latest_report,
+            "latest_published_report_path": latest_published_report,
         }
     )
     _write_report_payloads(root, final_data)
@@ -750,8 +789,8 @@ def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> Tran
         result_status=result.result_status,
         returncode=result.returncode,
         next_action=result.next_action,
-        report_path=str(REMOTE_NEXT_LATEST_JSON),
-        published_report_path=str(PUBLISHED_LATEST_JSON),
+        report_path=latest_report,
+        published_report_path=latest_published_report,
         reasons=result.reasons,
         preflight=result.preflight,
         rule_ack=result.rule_ack,

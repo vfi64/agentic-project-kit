@@ -5,6 +5,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
+
 ALLOWED_COMMAND_CATEGORIES: tuple[str, ...] = (
     "core",
     "transfer",
@@ -21,7 +23,7 @@ ALLOWED_COMMAND_CATEGORIES: tuple[str, ...] = (
     "advanced/internal",
 )
 
-COMMAND_REFERENCE_PATH = Path("docs/reference/agentic-kit-commands.json")
+COMMAND_REFERENCE_PATH = Path(LEGACY_DEFAULTS.reference_root) / "agentic-kit-commands.json"
 
 
 @dataclass(frozen=True)
@@ -64,7 +66,7 @@ class CommandTaxonomyReport:
 
 
 def load_command_reference(project_root: Path) -> list[dict[str, Any]]:
-    path = project_root / COMMAND_REFERENCE_PATH
+    path = load_workspace(project_root).reference_file("agentic-kit-commands.json")
     data = json.loads(path.read_text(encoding="utf-8"))
     commands = data.get("commands") if isinstance(data, dict) else data
     if not isinstance(commands, list):

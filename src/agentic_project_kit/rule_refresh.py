@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, Workspace, load_workspace
+
 COMMUNICATION_RULE_SOURCES = (
     "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md",
     "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
@@ -23,8 +25,8 @@ HANDOFF_RULE_SOURCES = (
     ".agentic/compiled_agent_context.yaml",
 )
 
-COMMUNICATION_RULES_OUTPUT = Path("docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md")
-HANDOFF_RULES_OUTPUT = Path("docs/reports/handoff_rules/CURRENT_HANDOFF_RULES.md")
+COMMUNICATION_RULES_OUTPUT = Path(LEGACY_DEFAULTS.reports_root) / "communication_rules" / "CURRENT_COMMUNICATION_RULES.md"
+HANDOFF_RULES_OUTPUT = Path(LEGACY_DEFAULTS.reports_root) / "handoff_rules" / "CURRENT_HANDOFF_RULES.md"
 
 
 @dataclass(frozen=True)
@@ -98,6 +100,7 @@ def _write_rule_file(
     next_reply: str,
     instruction: str,
 ) -> RuleRefreshResult:
+    workspace = load_workspace(project_root)
     source_texts: list[tuple[str, str]] = []
     missing: list[str] = []
     for rel in sources:
@@ -107,19 +110,27 @@ def _write_rule_file(
         else:
             missing.append(rel)
 
-    output = project_root / output_path
+    output = _rule_output_path(workspace, output_path)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(
         _render_rule_file(title, source_texts, missing, next_reply, instruction),
         encoding="utf-8",
     )
     return RuleRefreshResult(
-        str(output_path),
+        workspace.path_text(output),
         tuple(rel for rel, _text in source_texts),
         tuple(missing),
         next_reply,
         instruction,
     )
+
+
+def _rule_output_path(workspace: Workspace, output_path: Path) -> Path:
+    if output_path == COMMUNICATION_RULES_OUTPUT:
+        return workspace.communication_rules_output_path()
+    if output_path == HANDOFF_RULES_OUTPUT:
+        return workspace.handoff_rules_output_path()
+    return output_path if output_path.is_absolute() else workspace.root / output_path
 
 
 def _render_rule_file(

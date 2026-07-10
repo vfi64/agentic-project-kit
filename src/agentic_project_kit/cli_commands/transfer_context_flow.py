@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from agentic_project_kit.cli_commands.transfer_shared import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import *
+from agentic_project_kit.workspace import load_workspace
 
 
 @transfer_app.command("require-fresh-llm-context")
@@ -39,9 +40,10 @@ def verify_llm_context_refresh(
     blockers: list[str] = []
     checked: dict[str, dict[str, object]] = {}
 
+    workspace = load_workspace(Path("."))
     paths = {
         "outbox": Path(".agentic/transfer/outbox/last_result.txt"),
-        "latest_handoff_report": Path("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"),
+        "latest_handoff_report": workspace.transfer_handoff_report_file("latest-transfer-handoff-report.json"),
     }
     required_context_keys = [
         "source_hashes",

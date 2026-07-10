@@ -4,7 +4,7 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from agentic_project_kit.work_order_validator import LOCAL_RESULT_LOG_PATH, RESULT_LOG_PATH
+from agentic_project_kit.work_order_validator import default_local_result_log_path, default_result_log_path
 
 
 @dataclass(frozen=True)
@@ -72,12 +72,14 @@ def _current_branch() -> str:
 
 def upload_next_turn_result_log(
     *,
-    log_path: Path = RESULT_LOG_PATH,
-    local_log_path: Path = LOCAL_RESULT_LOG_PATH,
+    log_path: Path | None = None,
+    local_log_path: Path | None = None,
     commit_message: str = "Upload next-turn result log",
     required_branch: str = "",
     allow_main: bool = False,
 ) -> WorkOrderUploadResult:
+    log_path = log_path or default_result_log_path(Path.cwd())
+    local_log_path = local_log_path or default_local_result_log_path(Path.cwd())
     local_log_ready = _local_log_belongs_to_current_repo(local_log_path)
     if not log_path.exists() and not local_log_ready:
         return WorkOrderUploadResult(

@@ -47,6 +47,8 @@ class KitConfig:
     transfer_outbox_name: str = "outbox"
     reports_root: str = "docs/reports"
     terminal_reports_root: str = "docs/reports/terminal"
+    command_runs_root: str = "docs/reports/command_runs"
+    transfer_runs_root: str = "docs/reports/transfer_runs"
     transfer_handoff_reports_root: str = "docs/reports/terminal/transfer_handoff_reports"
     terminal_post_pr_successor_chat_handoff_prefix: str = "docs/reports/terminal/post-pr"
     handoff_root: str = "docs/handoff"
@@ -80,6 +82,8 @@ class KitConfig:
 # operational_handoff_state_file: .agentic/operational_handoff_state.yaml -> .agentic/state/handoff/operational_handoff_state.yaml
 # reports_root: docs/reports -> .agentic/state/handoff/reports
 # terminal_reports_root: docs/reports/terminal -> .agentic/state/handoff/terminal
+# command_runs_root: docs/reports/command_runs -> .agentic/state/handoff/command_runs
+# transfer_runs_root: docs/reports/transfer_runs -> .agentic/state/handoff/transfer_runs
 # transfer_handoff_reports_root: docs/reports/terminal/transfer_handoff_reports -> .agentic/state/handoff/transfer_handoff_reports
 # terminal_post_pr_successor_chat_handoff_prefix: docs/reports/terminal/post-pr -> .agentic/state/handoff/terminal/post-pr
 # handoff_root: docs/handoff -> .agentic/state/handoff
@@ -95,6 +99,8 @@ NAMESPACE_DEFAULTS = replace(
     operational_handoff_state_file="state/handoff/operational_handoff_state.yaml",
     reports_root=".agentic/state/handoff/reports",
     terminal_reports_root=".agentic/state/handoff/terminal",
+    command_runs_root=".agentic/state/handoff/command_runs",
+    transfer_runs_root=".agentic/state/handoff/transfer_runs",
     transfer_handoff_reports_root=".agentic/state/handoff/transfer_handoff_reports",
     terminal_post_pr_successor_chat_handoff_prefix=".agentic/state/handoff/terminal/post-pr",
     handoff_root=".agentic/state/handoff",
@@ -140,6 +146,12 @@ class Workspace:
     def _path(self, relative: str | Path) -> Path:
         return self.root / Path(relative)
 
+    def path_text(self, path: Path) -> str:
+        try:
+            return path.relative_to(self.root).as_posix()
+        except ValueError:
+            return path.as_posix()
+
     def root_file(self, name: str) -> Path:
         return self.root / name
 
@@ -151,6 +163,30 @@ class Workspace:
 
     def tmp(self) -> Path:
         return self._path(self.config.tmp_root)
+
+    def tmp_file(self, name: str) -> Path:
+        return self.tmp() / name
+
+    def tmp_dir(self, name: str) -> Path:
+        return self.tmp() / name
+
+    def agent_evidence_dir(self) -> Path:
+        return self.tmp_dir("agent-evidence")
+
+    def wrapper_status_path(self) -> Path:
+        return self.tmp_file("current-wrapper-status.json")
+
+    def gui_panel_state_path(self) -> Path:
+        return self.tmp_file("gui-panel-state.json")
+
+    def local_command_stack_state_path(self) -> Path:
+        return self.tmp_file("local-command-stack-state.json")
+
+    def local_gc_report_path(self) -> Path:
+        return self.tmp_file("local-gc-last.json")
+
+    def local_gc_run_marker_path(self) -> Path:
+        return self.tmp_file("local-gc-last-run-id.txt")
 
     def agentic_root(self) -> Path:
         return self._path(self.config.agentic_root)
@@ -217,6 +253,36 @@ class Workspace:
     def terminal_reports_dir(self) -> Path:
         return self._path(self.config.terminal_reports_root)
 
+    def terminal_report_file(self, name: str) -> Path:
+        return self.terminal_reports_dir() / name
+
+    def latest_terminal_log_pointer(self) -> Path:
+        return self.terminal_report_file("LATEST_TERMINAL_LOG.txt")
+
+    def command_runs_dir(self) -> Path:
+        return self._path(self.config.command_runs_root)
+
+    def command_run_file(self, name: str) -> Path:
+        return self.command_runs_dir() / name
+
+    def latest_command_run_pointer(self) -> Path:
+        return self.command_run_file("LATEST_COMMAND_RUN.txt")
+
+    def transfer_runs_dir(self) -> Path:
+        return self._path(self.config.transfer_runs_root)
+
+    def transfer_run_file(self, name: str) -> Path:
+        return self.transfer_runs_dir() / name
+
+    def current_workflow_output_path(self) -> Path:
+        return self.reports_dir() / "CURRENT_WORKFLOW_OUTPUT.md"
+
+    def communication_rules_output_path(self) -> Path:
+        return self.reports_dir() / "communication_rules" / "CURRENT_COMMUNICATION_RULES.md"
+
+    def handoff_rules_output_path(self) -> Path:
+        return self.reports_dir() / "handoff_rules" / "CURRENT_HANDOFF_RULES.md"
+
     def post_pr_successor_chat_handoff_prefix(self) -> str:
         return self.config.terminal_post_pr_successor_chat_handoff_prefix
 
@@ -225,6 +291,9 @@ class Workspace:
 
     def transfer_handoff_report_file(self, name: str) -> Path:
         return self._path(self.config.transfer_handoff_reports_root) / name
+
+    def transfer_handoff_reports_dir(self) -> Path:
+        return self._path(self.config.transfer_handoff_reports_root)
 
     def handoff_dir(self) -> Path:
         return self._path(self.config.handoff_root)

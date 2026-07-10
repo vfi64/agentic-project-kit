@@ -9,11 +9,13 @@ from typing import Any
 
 import yaml
 
-REGISTRY_PATH = Path("docs/DOCUMENTATION_REGISTRY.yaml")
-SCOPE_PATH = Path("docs/DOC_REGISTRY_SCOPE.yaml")
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
+
+REGISTRY_PATH = Path(LEGACY_DEFAULTS.docs_root) / LEGACY_DEFAULTS.documentation_registry_file
+SCOPE_PATH = Path(LEGACY_DEFAULTS.docs_root) / "DOC_REGISTRY_SCOPE.yaml"
 COMPILED_CONTEXT_PATH = Path(".agentic/compiled_agent_context.yaml")
-REGISTRY_CONTRACT_PATH = Path("docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md")
-SCOPE_DECISION_PATH = Path("docs/governance/DOC_REGISTRY_SCOPE_DECISION.md")
+REGISTRY_CONTRACT_PATH = Path(LEGACY_DEFAULTS.governance_root) / "DOCUMENTATION_REGISTRY_CONTRACT.md"
+SCOPE_DECISION_PATH = Path(LEGACY_DEFAULTS.governance_root) / "DOC_REGISTRY_SCOPE_DECISION.md"
 COMMUNICATION_ARTIFACTS_PATH = Path(".agentic/communication_artifacts.yaml")
 
 DOCUMENT_CLASSES = (
@@ -48,7 +50,7 @@ REQUIRED_DOCUMENT_FIELDS = (
 )
 
 DOCUMENT_REGISTRATION_SCAN_SUFFIXES = frozenset({".md", ".yaml", ".yml"})
-DOCUMENT_REGISTRATION_SCAN_ROOTS = (Path("docs"),)
+DOCUMENT_REGISTRATION_SCAN_ROOTS = (Path(LEGACY_DEFAULTS.docs_root),)
 DOCUMENT_REGISTRATION_EXCLUDED_PREFIXES = (
     "docs/reports/handoff-packages/",
     "docs/reports/terminal/",
@@ -73,15 +75,17 @@ class DocumentationRegistryScope:
 
 
 def load_documentation_registry(project_root: Path) -> dict[str, Any]:
-    path = project_root / REGISTRY_PATH
+    workspace = load_workspace(project_root)
+    path = workspace.doc_registry_path()
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
-        raise ValueError(f"{REGISTRY_PATH}: root must be a mapping")
+        raise ValueError(f"{workspace.path_text(path)}: root must be a mapping")
     return data
 
 
 def load_documentation_registry_scope(project_root: Path) -> DocumentationRegistryScope:
-    path = project_root / SCOPE_PATH
+    workspace = load_workspace(project_root)
+    path = workspace.docs_file("DOC_REGISTRY_SCOPE.yaml")
     if not path.exists():
         return DocumentationRegistryScope(
             present=False,
@@ -99,7 +103,7 @@ def load_documentation_registry_scope(project_root: Path) -> DocumentationRegist
             required_files=(),
             required_paths=(),
             exempt_paths=(),
-            errors=(f"{SCOPE_PATH}: invalid scope ({exc})",),
+            errors=(f"{workspace.path_text(path)}: invalid scope ({exc})",),
         )
 
     if data is None:
@@ -110,11 +114,11 @@ def load_documentation_registry_scope(project_root: Path) -> DocumentationRegist
             required_files=(),
             required_paths=(),
             exempt_paths=(),
-            errors=(f"{SCOPE_PATH}: root must be a mapping",),
+            errors=(f"{workspace.path_text(path)}: root must be a mapping",),
         )
 
     if data.get("schema_version") != 1:
-        errors.append(f"{SCOPE_PATH}: schema_version must be 1")
+        errors.append(f"{workspace.path_text(path)}: schema_version must be 1")
 
     required_files = _parse_scope_required_files(data.get("required_files"), errors)
     required_paths = _parse_scope_required_paths(data.get("required_paths"), errors)
@@ -198,6 +202,7 @@ def build_documentation_registry_summary(project_root: Path) -> dict[str, Any]:
     migration or changing any document lifecycle policy.
     """
     registry = load_documentation_registry(project_root)
+    workspace = load_workspace(project_root)
     documents = registry.get("documents", [])
     if not isinstance(documents, list):
         documents = []
@@ -222,7 +227,7 @@ def build_documentation_registry_summary(project_root: Path) -> dict[str, Any]:
     )
 
     return {
-        "registry_path": str(REGISTRY_PATH),
+        "registry_path": workspace.path_text(workspace.doc_registry_path()),
         "version": registry.get("version"),
         "lifecycle": (registry.get("status") or {}).get("lifecycle")
         if isinstance(registry.get("status"), dict)
@@ -437,6 +442,7 @@ def build_doc_registry_reconcile_report(project_root: Path) -> dict[str, Any]:
     The report deliberately performs no writes. It centralizes diagnostics that
     were previously assembled manually during documentation taxonomy cleanup.
     """
+    workspace = load_workspace(project_root)
     registry = load_documentation_registry(project_root)
     scope = load_documentation_registry_scope(project_root)
     registered_paths = _registered_document_paths_from_registry(registry)
@@ -452,7 +458,8 @@ def build_doc_registry_reconcile_report(project_root: Path) -> dict[str, Any]:
     rows = build_doc_registry_reconcile_scope_decision_rows(project_root)
     rendered_scope_table = render_doc_registry_scope_decision_table(rows)
 
-    decision_path = project_root / SCOPE_DECISION_PATH
+    scope_path = workspace.docs_file("DOC_REGISTRY_SCOPE.yaml")
+    decision_path = workspace.governance_file("DOC_REGISTRY_SCOPE_DECISION.md")
     decision_present = decision_path.exists()
     decision_text = decision_path.read_text(encoding="utf-8") if decision_present else ""
     decision_table_stale = (
@@ -466,7 +473,7 @@ def build_doc_registry_reconcile_report(project_root: Path) -> dict[str, Any]:
             {
                 "severity": "BLOCK",
                 "kind": "scope_schema",
-                "path": str(SCOPE_PATH),
+                "path": workspace.path_text(scope_path),
                 "message": error,
                 "next_action": "Fix docs/DOC_REGISTRY_SCOPE.yaml before registry reconciliation.",
             }
@@ -477,7 +484,7 @@ def build_doc_registry_reconcile_report(project_root: Path) -> dict[str, Any]:
             {
                 "severity": "BLOCK",
                 "kind": "strict_scope_unregistered",
-                "path": str(SCOPE_PATH),
+                "path": workspace.path_text(scope_path),
                 "message": f"{len(strict_scope_violations)} required-scope Markdown files are unregistered.",
                 "next_action": "Register reviewed required-scope documents or narrow the declared scope.",
             }
@@ -488,7 +495,7 @@ def build_doc_registry_reconcile_report(project_root: Path) -> dict[str, Any]:
             {
                 "severity": "WARN",
                 "kind": "scope_decision_table_stale",
-                "path": str(SCOPE_DECISION_PATH),
+                "path": workspace.path_text(decision_path),
                 "message": "Rendered docs-root table differs from DOC_REGISTRY_SCOPE_DECISION.md.",
                 "next_action": "Refresh the decision table from the reconcile report before committing taxonomy changes.",
             }
@@ -505,9 +512,9 @@ def build_doc_registry_reconcile_report(project_root: Path) -> dict[str, Any]:
         "kind": "doc_registry_reconcile_report",
         "result_status": status,
         "mode": "dry-run",
-        "registry_path": str(REGISTRY_PATH),
-        "scope_path": str(SCOPE_PATH),
-        "scope_decision_path": str(SCOPE_DECISION_PATH),
+        "registry_path": workspace.path_text(workspace.doc_registry_path()),
+        "scope_path": workspace.path_text(scope_path),
+        "scope_decision_path": workspace.path_text(decision_path),
         "scope_present": scope.present,
         "registered_count": len(registered_paths),
         "unregistered_candidate_count": len(unregistered_candidates),
@@ -581,16 +588,17 @@ def documentation_registry_findings_for_data(
 
 
 def check_documentation_registry(project_root: Path) -> list[str]:
-    registry_file = project_root / REGISTRY_PATH
+    workspace = load_workspace(project_root)
+    registry_file = workspace.doc_registry_path()
     if not registry_file.exists():
         if _registry_required(project_root):
-            return [f"Missing documentation registry: {REGISTRY_PATH}"]
+            return [f"Missing documentation registry: {workspace.path_text(registry_file)}"]
         return []
 
     try:
         registry = load_documentation_registry(project_root)
     except (OSError, ValueError, yaml.YAMLError) as exc:
-        return [f"{REGISTRY_PATH}: invalid registry ({exc})"]
+        return [f"{workspace.path_text(registry_file)}: invalid registry ({exc})"]
 
     return documentation_registry_findings_for_data(project_root, registry) + (
         check_documentation_registry_scope(project_root)
@@ -607,10 +615,12 @@ def register_documentation_registry_entry(
     normalized_path = document_path.strip().lstrip("./")
     normalized_class = document_class.strip()
     normalized_owner = owner.strip() or "maintainers"
+    workspace = load_workspace(project_root)
+    registry_path = workspace.doc_registry_path()
     base_payload: dict[str, Any] = {
         "schema_version": 1,
         "kind": "documentation_registry_register_result",
-        "registry_path": REGISTRY_PATH.as_posix(),
+        "registry_path": workspace.path_text(registry_path),
         "path": normalized_path,
         "class": normalized_class,
         "owner": normalized_owner,
@@ -686,7 +696,6 @@ def register_documentation_registry_entry(
             "findings": candidate_findings,
         }
 
-    registry_path = project_root / REGISTRY_PATH
     registry_path.write_text(
         yaml.safe_dump(candidate_registry, sort_keys=False, allow_unicode=True),
         encoding="utf-8",
@@ -705,6 +714,7 @@ def build_unregistered_document_candidates_report(
     strict_scope: bool = False,
 ) -> dict[str, Any]:
     scope = load_documentation_registry_scope(project_root)
+    workspace = load_workspace(project_root)
     candidates = find_unregistered_document_candidates(project_root)
     candidates, exempted_count = _filter_exempt_candidates(candidates, scope)
     scope_violations = _find_scope_violations(project_root, scope)
@@ -723,8 +733,8 @@ def build_unregistered_document_candidates_report(
     return {
         "schema_version": 1,
         "kind": "documentation_registry_unregistered_candidates",
-        "registry_path": REGISTRY_PATH.as_posix(),
-        "scope_path": SCOPE_PATH.as_posix(),
+        "registry_path": workspace.path_text(workspace.doc_registry_path()),
+        "scope_path": workspace.path_text(workspace.docs_file("DOC_REGISTRY_SCOPE.yaml")),
         "result_status": result_status,
         "final_signal": "d",
         "strict_scope": strict_scope,
@@ -983,7 +993,7 @@ def _matches_scope_pattern(path: str, pattern: str) -> bool:
 
 
 def _registry_required(project_root: Path) -> bool:
-    if (project_root / REGISTRY_CONTRACT_PATH).exists():
+    if load_workspace(project_root).governance_file("DOCUMENTATION_REGISTRY_CONTRACT.md").exists():
         return True
     compiled_context = project_root / COMPILED_CONTEXT_PATH
     if not compiled_context.exists():

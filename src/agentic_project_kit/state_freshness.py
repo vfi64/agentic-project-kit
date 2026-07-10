@@ -7,6 +7,8 @@ from typing import Any
 
 import yaml
 
+from agentic_project_kit.workspace import load_workspace
+
 
 @dataclass(frozen=True)
 class StaleFragment:
@@ -59,12 +61,13 @@ def _stale_closeout_evidence_findings(base: Path, relative: str, text: str) -> l
         if pr_number in seen_prs:
             continue
         seen_prs.add(pr_number)
-        evidence_path = Path("docs/reports/terminal") / f"pr{pr_number}-merge-finalize.log"
-        if (base / evidence_path).exists():
+        workspace = load_workspace(base)
+        evidence_path = workspace.terminal_report_file(f"pr{pr_number}-merge-finalize.log")
+        if evidence_path.exists():
             findings.append(
                 StaleFragment(
                     relative,
-                    f"stale closeout instruction for PR{pr_number}; {evidence_path.as_posix()} already exists",
+                    f"stale closeout instruction for PR{pr_number}; {workspace.path_text(evidence_path)} already exists",
                 )
             )
     return findings

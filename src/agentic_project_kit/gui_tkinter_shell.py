@@ -59,6 +59,7 @@ from agentic_project_kit.rule_registry_validator import (
     render_rule_registry_findings,
     validate_rule_registry,
 )
+from agentic_project_kit.workspace import load_workspace
 from agentic_project_kit.state_freshness import find_stale_state_fragments, format_findings
 from agentic_project_kit.workflow_guard import render_findings as render_workflow_guard_findings
 from agentic_project_kit.workflow_guard import run_workflow_guard
@@ -643,7 +644,7 @@ def _run_handoff_prompt() -> tuple[int, str]:
 
 
 def _run_bootstrap_show() -> tuple[int, str]:
-    path = Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md")
+    path = load_workspace(Path(".")).handoff_file("NEXT_CHAT_BOOTSTRAP.md")
     if not path.exists():
         return 1, f"missing bootstrap file: {path}"
     return 0, path.read_text(encoding="utf-8")

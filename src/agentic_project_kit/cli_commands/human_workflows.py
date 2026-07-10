@@ -8,6 +8,7 @@ import subprocess
 import typer
 
 from agentic_project_kit.work_discard_changes import discard_all_changes
+from agentic_project_kit.workspace import load_workspace
 
 work_app = typer.Typer(help="Human-friendly meta commands for patch, PR, and recovery workflows.")
 release_flow_app = typer.Typer(help="Human-friendly meta commands for release readiness and preparation.")
@@ -265,7 +266,7 @@ def release_prepare_command(
     """Generate release summary evidence and run release-prep safely."""
     release_date = date or date_cls.today().isoformat()
     effective_from_tag = from_tag or _latest_release_tag()
-    summary_lines_path = Path("tmp") / f"release-{version.replace('.', '')}-summary-lines.json"
+    summary_lines_path = load_workspace(Path(".")).tmp_file(f"release-{version.replace('.', '')}-summary-lines.json")
     steps = [
         _run_step("release-notes-generate", _agentic("release-notes-generate", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--include-github-metadata", "--summary-lines-json", str(summary_lines_path), "--json"))
     ]

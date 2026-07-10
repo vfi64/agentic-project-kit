@@ -6,6 +6,7 @@ import sys
 from agentic_project_kit.cli_commands.transfer_shared import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import *
 from agentic_project_kit.cli_commands.transfer_pr_merge_flow import _resolve_expected_head_sha_alias
+from agentic_project_kit.workspace import load_workspace
 
 
 
@@ -84,15 +85,15 @@ def _auto_preflight_pr_create_complete(*, root: Path) -> None:
         allow_nonzero=True,
     )
 
-    for rel_path in sorted(
-        {
-            Path("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"),
-            Path("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"),
-        }
-    ):
+    workspace = load_workspace(root)
+    volatile_carriers = {
+        workspace.path_text(workspace.transfer_handoff_report_file("latest-transfer-handoff-report.json")),
+        workspace.path_text(workspace.transfer_handoff_report_file("latest-transfer-handoff-report.log")),
+    }
+    for rel_path in sorted(volatile_carriers):
         run_step(
             "restore_known_volatile_tracked_carrier",
-            ["git", "restore", "--", str(rel_path)],
+            ["git", "restore", "--", rel_path],
             allow_nonzero=True,
         )
 
@@ -106,12 +107,9 @@ def _auto_preflight_pr_create_complete(*, root: Path) -> None:
             continue
         marker = line[:2]
         rel = line[3:]
-        if marker == "??" and (rel.startswith("tmp/") or rel == ".agentic/transfer/outbox/last_result.txt"):
+        if marker == "??" and (rel.startswith(workspace.path_text(workspace.tmp()) + "/") or rel == ".agentic/transfer/outbox/last_result.txt"):
             continue
-        if rel in {
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-        }:
+        if rel in volatile_carriers:
             continue
         unexpected_dirt.append(line)
 

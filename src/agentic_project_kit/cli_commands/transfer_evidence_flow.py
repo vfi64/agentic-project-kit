@@ -4,6 +4,9 @@ from __future__ import annotations
 
 from agentic_project_kit.cli_commands.transfer_shared import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import *
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
+
+_DEFAULT_TRANSFER_RUN_LOG = Path(LEGACY_DEFAULTS.transfer_runs_root) / "latest-transfer-report.log"
 
 
 @transfer_app.command("evidence-inspect-latest")
@@ -42,7 +45,7 @@ def evidence_pr_complete_command(
     body: str = typer.Option("", "--body", help="Evidence PR body."),
     base: str = typer.Option("main", "--base", help="Base branch for the evidence PR."),
     run_log: Path = typer.Option(
-        Path("docs/reports/transfer_runs/latest-transfer-report.log"),
+        _DEFAULT_TRANSFER_RUN_LOG,
         "--run-log",
         help="Local run log to finalize.",
     ),
@@ -140,6 +143,9 @@ def evidence_pr_complete_command(
                 run_step("switch-created-evidence-branch", [agentic_kit, "transfer", "branch-switch", evidence_branch])
 
     if not blockers:
+        workspace = load_workspace(Path("."))
+        if run_log == _DEFAULT_TRANSFER_RUN_LOG:
+            run_log = workspace.transfer_run_file("latest-transfer-report.log")
         finalize_argv = [
             agentic_kit,
             "transfer",
@@ -255,7 +261,7 @@ def evidence_pr_complete_command(
 def evidence_finalize_current_transfer(
     slice_name: str = typer.Option(..., "--slice", help="Evidence slice label."),
     run_log: Path = typer.Option(
-        Path("docs/reports/transfer_runs/latest-transfer-report.log"),
+        _DEFAULT_TRANSFER_RUN_LOG,
         "--run-log",
         help="Local run log to finalize.",
     ),
@@ -296,9 +302,12 @@ def evidence_finalize_current_transfer(
         slug = re.sub(r"[^A-Za-z0-9._-]+", "-", value.strip()).strip("-")
         return slug or "transfer"
 
+    workspace = load_workspace(Path("."))
+    if run_log == _DEFAULT_TRANSFER_RUN_LOG:
+        run_log = workspace.transfer_run_file("latest-transfer-report.log")
     if remote_log is None:
         stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-        remote_log = Path("docs/reports/terminal") / f"{stamp}-{slugify(slice_name)}.log"
+        remote_log = workspace.terminal_report_file(f"{stamp}-{slugify(slice_name)}.log")
 
     argv = [
         "./.venv/bin/agentic-kit",
@@ -307,7 +316,7 @@ def evidence_finalize_current_transfer(
         "--run-log",
         str(run_log),
         "--remote-log",
-        str(remote_log),
+        workspace.path_text(remote_log),
         "--slice",
         slice_name,
         "--scope",

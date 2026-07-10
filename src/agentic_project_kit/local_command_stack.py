@@ -7,7 +7,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-LOCAL_COMMAND_STACK_STATE = Path("tmp/local-command-stack-state.json")
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
+
+LOCAL_COMMAND_STACK_STATE_FILE = "local-command-stack-state.json"
+LOCAL_COMMAND_STACK_STATE = Path(LEGACY_DEFAULTS.tmp_root) / LOCAL_COMMAND_STACK_STATE_FILE
 DEFAULT_MAX_AGE_SECONDS = 6 * 60 * 60
 
 
@@ -29,7 +32,7 @@ def _parse_iso(value: object) -> datetime | None:
 
 
 def _state_path(project_root: Path) -> Path:
-    return project_root.resolve() / LOCAL_COMMAND_STACK_STATE
+    return load_workspace(project_root).local_command_stack_state_path()
 
 
 def read_local_command_stack(project_root: Path = Path(".")) -> dict[str, Any]:

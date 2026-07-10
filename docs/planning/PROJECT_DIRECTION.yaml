@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q supersedes earlier direct P4/P5/P6 ordering.
   owner: maintainers
   status: active
-  updated_after_pr: 1782
+  updated_after_pr: 1803
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1782
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1803
 strategy:
 - id: governed-operating-model
   status: active
@@ -178,14 +178,18 @@ roadmap:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: p4-namespace-completion
   phase: P4
-  status: planned
+  status: done
   title: Complete namespace resolution for manifest-bearing projects
+  completed_by_pr: 1803
   depends_on:
   - p3-workspace-adopt-init-upgrade
   acceptance:
   - Registries resolve into .agentic for manifest-bearing projects.
   - Status, rules, and tmp paths resolve through the workspace resolver.
   - Legacy profile behavior remains unchanged for manifest-less repositories.
+  evidence:
+  - PR
+  - docs/architecture/evidence/path-literal-audit-2026-07-10-post-p4b.md
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: p5a-self-hosting-manifest

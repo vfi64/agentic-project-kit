@@ -13,6 +13,7 @@ from agentic_project_kit.rule_ack import (
     validate_rule_acknowledgement,
 )
 from agentic_project_kit.rule_snapshot import build_derived_rule_snapshot
+from agentic_project_kit.workspace import load_workspace
 
 PRIMARY_READY = "READY"
 PRIMARY_WAIT = "WAIT"
@@ -82,7 +83,7 @@ def _read_repo_name(project_root: Path) -> str:
 
 
 def _read_latest_result(project_root: Path) -> dict[str, Any] | None:
-    latest = project_root / "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
+    latest = load_workspace(project_root).latest_command_run_pointer()
     if not latest.exists():
         return None
     report_path = latest.read_text(encoding="utf-8").strip()

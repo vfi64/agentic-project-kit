@@ -1,5 +1,6 @@
 import importlib.util
 import inspect
+import json
 from pathlib import Path
 import subprocess
 import sys
@@ -429,6 +430,26 @@ def test_user_override_persists_to_tmp_file(tmp_path: Path) -> None:
 
     assert target == tmp_path / PANEL_STATE_RELATIVE_PATH
     assert read_panel_state(tmp_path) == {"copy_paste_tools": True, "task_editor": False}
+
+
+def test_user_override_uses_manifest_tmp_namespace(tmp_path: Path) -> None:
+    manifest = tmp_path / ".agentic" / "config.yaml"
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    manifest.write_text(
+        "kit_schema_version: 1\n"
+        "project:\n"
+        "  name: fixture\n"
+        "  type: generic\n"
+        "profile: generic\n",
+        encoding="utf-8",
+    )
+
+    target = write_panel_state(tmp_path, {"task_editor": True})
+
+    assert target == tmp_path / ".agentic/tmp/gui-panel-state.json"
+    payload = json.loads(target.read_text(encoding="utf-8"))
+    assert payload["state_path"] == ".agentic/tmp/gui-panel-state.json"
+    assert read_panel_state(tmp_path) == {"task_editor": True}
 
 
 def test_user_override_survives_mode_change(monkeypatch) -> None:
@@ -893,9 +914,10 @@ def test_cockpit_file_browser_is_read_only_for_tmp_and_handoff_files() -> None:
 
     assert "COPY / PASTE FILES" in source
     assert "read-only local browser" in source
-    assert 'Path("tmp")' in source
-    assert 'Path("docs/handoff")' in source
-    assert 'Path("docs/reports/handoff-packages/latest")' in source
+    assert "load_workspace" in source
+    assert "workspace.tmp()" in source
+    assert "workspace.handoff_dir()" in source
+    assert "workspace.handoff_packages_latest()" in source
     assert "Copy path" in source
     assert "Copy file" in source
     assert "delete" not in inspect.getsource(CockpitTaskMixin._build_file_browser).lower()

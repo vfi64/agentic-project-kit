@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 from typing import Any, Literal
 
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
+
 WrapperPhase = Literal[
     "starting",
     "creating_pr",
@@ -16,7 +18,8 @@ WrapperPhase = Literal[
     "blocked",
 ]
 
-WRAPPER_STATUS_RELATIVE_PATH = Path("tmp/current-wrapper-status.json")
+WRAPPER_STATUS_FILE = "current-wrapper-status.json"
+WRAPPER_STATUS_RELATIVE_PATH = Path(LEGACY_DEFAULTS.tmp_root) / WRAPPER_STATUS_FILE
 
 WRAPPER_PHASES: tuple[WrapperPhase, ...] = (
     "starting",
@@ -40,7 +43,7 @@ _DEFAULT_SAFE_TO_INTERRUPT: dict[WrapperPhase, bool] = {
 
 
 def wrapper_status_path(root: Path = Path(".")) -> Path:
-    return root / WRAPPER_STATUS_RELATIVE_PATH
+    return load_workspace(root).wrapper_status_path()
 
 
 def default_safe_to_interrupt(phase: WrapperPhase) -> bool:
@@ -70,7 +73,7 @@ def write_wrapper_live_status(
         "schema_version": 1,
         "kind": "wrapper_live_status",
         "wrapper": wrapper,
-        "status_path": WRAPPER_STATUS_RELATIVE_PATH.as_posix(),
+        "status_path": load_workspace(root).path_text(wrapper_status_path(root)),
         "updated_at_utc": datetime.now(timezone.utc).isoformat(),
         "phase": phase,
         "result_status": result_status,

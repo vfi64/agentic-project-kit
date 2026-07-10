@@ -23,6 +23,7 @@ from agentic_project_kit.gui_task_editor import (
     transfer_state_has_canonical_outbox_result,
 )
 from agentic_project_kit.gui_tk_widgets import attach_tooltip
+from agentic_project_kit.workspace import load_workspace
 
 
 class CockpitTaskMixin:
@@ -224,16 +225,16 @@ class CockpitTaskMixin:
         self.refresh_file_browser(write_status=False)
 
     def _file_browser_roots(self) -> tuple[Path, ...]:
+        workspace = load_workspace(self.project_root)
         return (
-            Path("tmp"),
-            Path("docs/handoff"),
-            Path("docs/reports/handoff-packages/latest"),
+            workspace.tmp(),
+            workspace.handoff_dir(),
+            workspace.handoff_packages_latest(),
         )
 
     def _iter_file_browser_paths(self) -> tuple[str, ...]:
         paths: list[str] = []
-        for relative_root in self._file_browser_roots():
-            root = self.project_root / relative_root
+        for root in self._file_browser_roots():
             if not root.exists() or not root.is_dir():
                 continue
             for path in sorted(root.rglob("*")):
@@ -548,13 +549,14 @@ class CockpitTaskMixin:
         self.copy_activity_body(self._activity_transcript())
 
     def open_logs_folder(self) -> None:
-        target = self.project_root / "tmp"
+        workspace = load_workspace(self.project_root)
+        target = workspace.tmp()
         try:
             open_folder_in_file_manager(target)
         except OSError as exc:
             self.log_result("Open logs folder", "ERROR", f"Could not open logs folder: {exc}")
             return
-        self.log_result("Open logs folder", "INFO", "Opened logs folder: tmp/")
+        self.log_result("Open logs folder", "INFO", f"Opened logs folder: {workspace.path_text(target)}/")
 
     def _set_busy(self, text: str, *, running: bool) -> None:
         busy_var = getattr(self, "busy_status_var", None)

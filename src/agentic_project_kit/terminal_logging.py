@@ -15,7 +15,9 @@ import subprocess
 import sys
 from pathlib import Path
 
-TERMINAL_DIR = Path("docs/reports/terminal")
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
+
+TERMINAL_DIR = Path(LEGACY_DEFAULTS.terminal_reports_root)
 LATEST_POINTER = TERMINAL_DIR / "LATEST_TERMINAL_LOG.txt"
 
 
@@ -24,28 +26,45 @@ def _safe_name(name: str) -> str:
     return safe or "run"
 
 
+def _terminal_dir(root: Path = Path(".")) -> Path:
+    if TERMINAL_DIR != Path(LEGACY_DEFAULTS.terminal_reports_root):
+        return TERMINAL_DIR
+    return load_workspace(root).terminal_reports_dir()
+
+
+def _latest_pointer(root: Path = Path(".")) -> Path:
+    if LATEST_POINTER != TERMINAL_DIR / "LATEST_TERMINAL_LOG.txt":
+        return LATEST_POINTER
+    return load_workspace(root).latest_terminal_log_pointer()
+
+
 def make_log_path(name: str, now: _dt.datetime | None = None) -> Path:
     current = now or _dt.datetime.now()
     stamp = current.strftime("%Y%m%d-%H%M%S")
-    return TERMINAL_DIR / f"{stamp}_{_safe_name(name)}.log"
+    return _terminal_dir() / f"{stamp}_{_safe_name(name)}.log"
 
 
 def write_latest_pointer(log_path: Path) -> None:
-    TERMINAL_DIR.mkdir(parents=True, exist_ok=True)
-    LATEST_POINTER.write_text(log_path.as_posix() + "\n", encoding="utf-8")
+    pointer = _latest_pointer()
+    pointer.parent.mkdir(parents=True, exist_ok=True)
+    pointer.write_text(log_path.as_posix() + "\n", encoding="utf-8")
 
 
 def read_latest_pointer() -> Path | None:
-    if not LATEST_POINTER.exists():
+    pointer = _latest_pointer()
+    if not pointer.exists():
         return None
-    value = LATEST_POINTER.read_text(encoding="utf-8").strip()
+    value = pointer.read_text(encoding="utf-8").strip()
     if not value:
         return None
     return Path(value)
 
 
 def _is_allowed_terminal_artifact(path_text: str) -> bool:
-    return path_text == LATEST_POINTER.as_posix() or (path_text.startswith(TERMINAL_DIR.as_posix() + "/") and path_text.endswith(".log"))
+    workspace = load_workspace(Path("."))
+    latest = workspace.path_text(_latest_pointer())
+    terminal_dir = workspace.path_text(_terminal_dir())
+    return path_text == latest or (path_text.startswith(terminal_dir + "/") and path_text.endswith(".log"))
 
 
 def git_dirty_paths() -> list[str]:
@@ -100,7 +119,8 @@ def finalize_terminal_log(tmp_log: Path, name: str) -> tuple[str, str]:
     if not _has_result_marker(source_text):
         return "FAIL_MISSING_RESULT_MARKER", source.as_posix()
     source_resolved = source.resolve()
-    terminal_resolved = TERMINAL_DIR.resolve()
+    terminal_dir = _terminal_dir()
+    terminal_resolved = terminal_dir.resolve()
     try:
         source_resolved.relative_to(terminal_resolved)
     except ValueError:
@@ -109,7 +129,7 @@ def finalize_terminal_log(tmp_log: Path, name: str) -> tuple[str, str]:
         source_inside_terminal_dir = True
     if source_inside_terminal_dir:
         return "FAIL_SOURCE_INSIDE_TERMINAL_DIR", source.as_posix()
-    TERMINAL_DIR.mkdir(parents=True, exist_ok=True)
+    terminal_dir.mkdir(parents=True, exist_ok=True)
     target = make_log_path(name)
     target.write_text(source_text, encoding="utf-8")
     write_latest_pointer(target)
@@ -120,7 +140,7 @@ def run_logged(name: str, command: list[str]) -> int:
     if not command:
         print("FAIL_NO_COMMAND")
         return 2
-    TERMINAL_DIR.mkdir(parents=True, exist_ok=True)
+    _terminal_dir().mkdir(parents=True, exist_ok=True)
     log_path = make_log_path(name)
     write_latest_pointer(log_path)
     with log_path.open("w", encoding="utf-8") as log:
@@ -177,7 +197,7 @@ def upload_terminal_output(required_branch: str = "", allow_main: bool = False) 
         return 1
     latest = read_latest_pointer()
     assert latest is not None
-    subprocess.run(["git", "add", latest.as_posix(), LATEST_POINTER.as_posix()], check=True)
+    subprocess.run(["git", "add", latest.as_posix(), _latest_pointer().as_posix()], check=True)
     diff = subprocess.run(["git", "diff", "--cached", "--quiet"], check=False)
     if diff.returncode == 0:
         print("PASS_ALREADY_UPLOADED")

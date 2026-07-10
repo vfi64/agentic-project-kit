@@ -4,10 +4,33 @@ from agentic_project_kit import terminal_logging as tl
 from agentic_project_kit.action_registry import SafetyClass, get_action
 
 
+def _write_manifest(root: Path) -> None:
+    manifest = root / ".agentic" / "config.yaml"
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    manifest.write_text(
+        "kit_schema_version: 1\n"
+        "project:\n"
+        "  name: fixture\n"
+        "  type: generic\n"
+        "profile: generic\n",
+        encoding="utf-8",
+    )
+
+
 def test_safe_name_and_log_path_are_deterministic():
     assert tl._safe_name("Dev Gate!") == "Dev_Gate_"
     path = tl.make_log_path("Dev Gate!")
     assert path.parent.as_posix() == "docs/reports/terminal"
+    assert path.name.endswith("_Dev_Gate_.log")
+
+
+def test_log_path_uses_manifest_terminal_namespace(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    _write_manifest(tmp_path)
+
+    path = tl.make_log_path("Dev Gate!")
+
+    assert path.parent.as_posix() == ".agentic/state/handoff/terminal"
     assert path.name.endswith("_Dev_Gate_.log")
 
 

@@ -6,9 +6,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from agentic_project_kit.work_order_validator import (
-    LOCAL_RESULT_LOG_PATH,
-    RESULT_LOG_PATH,
     WORK_ORDER_PATH,
+    default_local_result_log_path,
+    default_result_log_path,
     render_work_order_validation,
     validate_work_order_file,
 )
@@ -27,9 +27,12 @@ class WorkOrderRunResult:
 def run_validated_work_order(
     *,
     work_order_path: Path = WORK_ORDER_PATH,
-    local_log_path: Path = LOCAL_RESULT_LOG_PATH,
-    remote_log_path: Path = RESULT_LOG_PATH,
+    local_log_path: Path | None = None,
+    remote_log_path: Path | None = None,
 ) -> WorkOrderRunResult:
+    root = Path.cwd()
+    local_log_path = local_log_path or default_local_result_log_path(root)
+    remote_log_path = remote_log_path or default_result_log_path(root)
     validation = validate_work_order_file(work_order_path)
     local_log_path.parent.mkdir(parents=True, exist_ok=True)
 

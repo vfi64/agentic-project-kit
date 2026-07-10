@@ -7,12 +7,13 @@ from pathlib import Path
 
 from agentic_project_kit.run_summary_renderer import SummaryPayload
 from agentic_project_kit.run_summary_renderer import validate_summary_data
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
 PASS_MARKER = "### RESULT: PASS ###"
 FAIL_MARKER = "### RESULT: FAIL ###"
 PENDING_MARKER = "### RESULT: PENDING ###"
 HARD_FAIL_MARKER = "### RESULT: HARD-FAIL ###"
-LATEST_TERMINAL_POINTER = Path("docs/reports/terminal/LATEST_TERMINAL_LOG.txt")
+LATEST_TERMINAL_POINTER = Path(LEGACY_DEFAULTS.terminal_reports_root) / "LATEST_TERMINAL_LOG.txt"
 STRUCTURED_SUMMARY_HEADER = "SUMMARY COMM-"
 SUMMARY_BOUNDARY = "================================================================"
 EXPECTED_NEGATIVE_SMOKE_START = "### EXPECTED NEGATIVE SMOKE START ###"
@@ -96,7 +97,7 @@ def _run_git(args: list[str], root: Path) -> tuple[str, ...]:
 
 def resolve_latest_evidence(root: Path | str = ".") -> Path | None:
     root_path = Path(root)
-    pointer = root_path / LATEST_TERMINAL_POINTER
+    pointer = load_workspace(root_path).latest_terminal_log_pointer()
     if not pointer.exists():
         return None
     target = pointer.read_text(encoding="utf-8").strip()

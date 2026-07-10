@@ -10,13 +10,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, Workspace, load_workspace
+
 EVIDENCE_REMOTE_PRESENT = "REMOTE_EVIDENCE_PRESENT"
 EVIDENCE_LOCAL_TMP_ONLY = "LOCAL_TMP_ONLY"
 EVIDENCE_MISSING = "MISSING_EVIDENCE"
 EVIDENCE_STALE_LATEST_POINTER = "STALE_LATEST_POINTER"
 
-TERMINAL_DIR = Path("docs/reports/terminal")
-COMMAND_RUN_DIR = Path("docs/reports/command_runs")
+TERMINAL_DIR = Path(LEGACY_DEFAULTS.terminal_reports_root)
+COMMAND_RUN_DIR = Path(LEGACY_DEFAULTS.command_runs_root)
 LATEST_TERMINAL_LOG = TERMINAL_DIR / "LATEST_TERMINAL_LOG.txt"
 LATEST_COMMAND_RUN = COMMAND_RUN_DIR / "LATEST_COMMAND_RUN.txt"
 
@@ -44,10 +46,12 @@ def _read_pointer(path: Path) -> str | None:
     value = path.read_text(encoding="utf-8").strip()
     return value or None
 
-def _is_repo_evidence_path(value: str | None) -> bool:
+def _is_repo_evidence_path(value: str | None, workspace: Workspace) -> bool:
     if value is None:
         return False
-    return value.startswith("docs/reports/terminal/") or value.startswith("docs/reports/command_runs/")
+    return value.startswith(workspace.path_text(workspace.terminal_reports_dir()) + "/") or value.startswith(
+        workspace.path_text(workspace.command_runs_dir()) + "/"
+    )
 
 def _exists(root: Path, value: str | None) -> bool:
     if value is None:
@@ -59,15 +63,16 @@ def _exists(root: Path, value: str | None) -> bool:
 
 def inspect_evidence_state(root: Path = Path("."), terminal_log: str | None = None, command_report: str | None = None) -> EvidenceState:
     root = _root(root)
-    latest = _read_pointer(root / LATEST_TERMINAL_LOG)
-    latest_command_report = _read_pointer(root / LATEST_COMMAND_RUN)
+    workspace = load_workspace(root)
+    latest = _read_pointer(workspace.latest_terminal_log_pointer())
+    latest_command_report = _read_pointer(workspace.latest_command_run_pointer())
     effective_report = command_report or latest_command_report
     effective_terminal = terminal_log or latest
     command_report_available = _exists(root, effective_report)
     if effective_terminal is None:
         return EvidenceState(1, EVIDENCE_MISSING, False, False, True, False, None, latest, effective_report, command_report_available, "no terminal evidence path is available", ("paste-output",))
     terminal_exists = _exists(root, effective_terminal)
-    repo_path = _is_repo_evidence_path(effective_terminal)
+    repo_path = _is_repo_evidence_path(effective_terminal, workspace)
     stale = latest is not None and terminal_log is not None and latest != terminal_log
     if stale:
         return EvidenceState(1, EVIDENCE_STALE_LATEST_POINTER, repo_path and terminal_exists, False, not terminal_exists, True, effective_terminal, latest, effective_report, command_report_available, "latest terminal pointer does not match requested terminal log", ("terminal-upload", "paste-output"))

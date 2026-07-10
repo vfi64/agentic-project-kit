@@ -7,14 +7,16 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
+
 try:
     import yaml
 except Exception:  # pragma: no cover - PyYAML is expected in the project env.
     yaml = None  # type: ignore[assignment]
 
 
-COMMAND_REFERENCE_JSON = Path("docs/reference/agentic-kit-commands.json")
-COMMAND_REFERENCE_MD = Path("docs/reference/AGENTIC_KIT_COMMANDS.md")
+COMMAND_REFERENCE_JSON = Path(LEGACY_DEFAULTS.reference_root) / "agentic-kit-commands.json"
+COMMAND_REFERENCE_MD = Path(LEGACY_DEFAULTS.reference_root) / "AGENTIC_KIT_COMMANDS.md"
 COMPILED_CONTEXT = Path(".agentic/compiled_agent_context.yaml")
 TRANSFER_SAFETY_RULES = Path(".agentic/transfer_safety_rules.yaml")
 ONE_COMMAND_PROTOCOL = Path(".agentic/transfer/one_command_transfer_protocol.yaml")
@@ -191,7 +193,7 @@ def _load_yaml(path: Path) -> dict[str, Any]:
 
 
 def _load_command_reference(root: Path) -> dict[str, Any]:
-    path = root / COMMAND_REFERENCE_JSON
+    path = load_workspace(root).reference_file("agentic-kit-commands.json")
     if not path.exists():
         return {}
     try:
