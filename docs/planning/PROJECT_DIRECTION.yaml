@@ -1,5 +1,9 @@
 schema_version: 1
 meta:
+  master_plan: docs/planning/MASTER_IMPLEMENTATION_Q.md
+  master_sequence: CM -> LC/ID -> K3 -> P4-P6 -> LC3/TH1 -> L
+  master_plan_anchor_pr: 1776
+  planning_note: Master Implementation Q supersedes earlier direct P4/P5/P6 ordering.
   owner: maintainers
   status: active
   updated_after_pr: 1750
@@ -519,6 +523,16 @@ roadmap:
   - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
   - docs/archive/RULE_REGISTRY_IMPROVEMENT_PLAN.md
 plans:
+- id: master-implementation-q
+  status: active
+  title: Master Implementation Q sequence
+  rationale: Central ordering authority for CM -> LC/ID -> K3 -> P4-P6 -> LC3/TH1 -> L.
+  source_files:
+  - docs/planning/MASTER_IMPLEMENTATION_Q.md
+  acceptance:
+  - Master Q is the central planning anchor.
+  - P4/P5/P6 are planned after CM and LC/ID prerequisites.
+  - The generated handoff report dirty-state bug is handled in Turn 0 and fixed durably in CM1.
 - id: direction-schema-command-migration
   status: done
   title: Introduce direction schema, command, migration, cleanup, scope, and gate

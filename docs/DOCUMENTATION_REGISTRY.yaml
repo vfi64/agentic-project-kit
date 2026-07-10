@@ -133,6 +133,9 @@ class_rules:
     gate_coverage: doc-mesh audit, lifecycle audit, release DOI list checks, and historical banner checks.
 
 documents:
+  - path: docs/planning/MASTER_IMPLEMENTATION_Q.md
+    class: planning
+    owner: maintainers
   - path: docs/workflow/WORK_ORDER_TEMPLATES.md
     class: operational/automation
     status: active
