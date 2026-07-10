@@ -4,6 +4,10 @@ from agentic_project_kit.cli_commands.actions import actions_app
 from agentic_project_kit.cli_commands.boot import boot_app
 from agentic_project_kit.cli_commands.checks import register_check_commands
 from agentic_project_kit.cli_commands.cockpit import cockpit_app
+from agentic_project_kit.cli_commands.commands import (
+    audit_command_manifest_command,
+    commands_app,
+)
 from agentic_project_kit.cli_commands.dev import dev_app
 from agentic_project_kit.cli_commands.direction import direction_app
 from agentic_project_kit.cli_commands.evidence import app as evidence_app
@@ -64,6 +68,7 @@ app.command("project-direction")(project_direction_command)
 app.command("artifact-gc")(artifact_gc_command)
 app.command("patch-scope-preflight")(patch_preflight_command)
 app.command("command-taxonomy-check")(command_taxonomy_check_command)
+app.command("audit-command-manifest")(audit_command_manifest_command)
 app.command("standard-gates-audit-suite")(standard_gates_audit_suite_command)
 app.command("release-publish")(release_publish_command)
 app.command("audit-patch-failure-discipline")(audit_patch_failure_discipline_command)
@@ -99,6 +104,7 @@ app.add_typer(doc_registry_app, name="doc-registry")
 app.add_typer(docs_app, name="docs")
 app.add_typer(handoff_app, name="handoff")
 app.add_typer(boot_app, name="boot")
+app.add_typer(commands_app, name="commands")
 app.add_typer(pass_already_done_app, name="pass-already-done")
 app.add_typer(actions_app, name="actions")
 app.add_typer(dev_app, name="dev")

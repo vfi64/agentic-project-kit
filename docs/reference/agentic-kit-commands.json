@@ -1,6 +1,7 @@
 {
   "commands": [
     {
+      "dry_run_available": false,
       "group": "actions",
       "help": "",
       "name": "list",
@@ -9,9 +10,17 @@
         "actions",
         "list"
       ],
-      "qualified_name": "agentic-kit actions list"
+      "qualified_name": "agentic-kit actions list",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "actions",
+        "read-only"
+      ],
+      "when_to_use": "Run agentic-kit actions list."
     },
     {
+      "dry_run_available": false,
       "group": "actions",
       "help": "",
       "name": "show",
@@ -35,9 +44,17 @@
         "actions",
         "show"
       ],
-      "qualified_name": "agentic-kit actions show"
+      "qualified_name": "agentic-kit actions show",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "actions",
+        "read-only"
+      ],
+      "when_to_use": "Run agentic-kit actions show."
     },
     {
+      "dry_run_available": true,
       "group": "root",
       "help": "Dry-run by default garbage collector for transient communication artifacts.",
       "name": "artifact-gc",
@@ -172,9 +189,16 @@
       "path": [
         "artifact-gc"
       ],
-      "qualified_name": "agentic-kit artifact-gc"
+      "qualified_name": "agentic-kit artifact-gc",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Dry-run by default garbage collector for transient communication artifacts."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Audit absolute local paths that may break portability.",
       "name": "audit-absolute-path-portability",
@@ -211,9 +235,62 @@
       "path": [
         "audit-absolute-path-portability"
       ],
-      "qualified_name": "agentic-kit audit-absolute-path-portability"
+      "qualified_name": "agentic-kit audit-absolute-path-portability",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Audit absolute local paths that may break portability."
     },
     {
+      "dry_run_available": false,
+      "group": "root",
+      "help": "Audit command manifest hash, CLI coverage, safety metadata, and MD sync.",
+      "name": "audit-command-manifest",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "audit-command-manifest"
+      ],
+      "qualified_name": "agentic-kit audit-command-manifest",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Audit command manifest hash, CLI coverage, safety metadata, and MD sync."
+    },
+    {
+      "dry_run_available": false,
       "group": "root",
       "help": "Audit current release/documentation currency across handoff and release docs.",
       "name": "audit-doc-currency",
@@ -250,9 +327,16 @@
       "path": [
         "audit-doc-currency"
       ],
-      "qualified_name": "agentic-kit audit-doc-currency"
+      "qualified_name": "agentic-kit audit-doc-currency",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Audit current release/documentation currency across handoff and release docs."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Audit remaining legacy ./ns/ns-menu/ns_release references.",
       "name": "audit-ns-legacy-references",
@@ -289,9 +373,16 @@
       "path": [
         "audit-ns-legacy-references"
       ],
-      "qualified_name": "agentic-kit audit-ns-legacy-references"
+      "qualified_name": "agentic-kit audit-ns-legacy-references",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Audit remaining legacy ./ns/ns-menu/ns_release references."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Audit whether repeated patch failures were followed by diagnosis evidence.",
       "name": "audit-patch-failure-discipline",
@@ -342,9 +433,16 @@
       "path": [
         "audit-patch-failure-discipline"
       ],
-      "qualified_name": "agentic-kit audit-patch-failure-discipline"
+      "qualified_name": "agentic-kit audit-patch-failure-discipline",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Audit whether repeated patch failures were followed by diagnosis evidence."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Report hardcoded docs/tmp path literals in source modules.",
       "name": "audit-path-literals",
@@ -381,9 +479,16 @@
       "path": [
         "audit-path-literals"
       ],
-      "qualified_name": "agentic-kit audit-path-literals"
+      "qualified_name": "agentic-kit audit-path-literals",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Report hardcoded docs/tmp path literals in source modules."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Audit planning and handoff docs for consolidation candidates.",
       "name": "audit-planning-docs-consolidation",
@@ -420,9 +525,16 @@
       "path": [
         "audit-planning-docs-consolidation"
       ],
-      "qualified_name": "agentic-kit audit-planning-docs-consolidation"
+      "qualified_name": "agentic-kit audit-planning-docs-consolidation",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Audit planning and handoff docs for consolidation candidates."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Audit source for risky bug/redundancy patterns.",
       "name": "audit-program-redundancy",
@@ -459,9 +571,16 @@
       "path": [
         "audit-program-redundancy"
       ],
-      "qualified_name": "agentic-kit audit-program-redundancy"
+      "qualified_name": "agentic-kit audit-program-redundancy",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Audit source for risky bug/redundancy patterns."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Audit STATUS.md current-state claims against handoff, release, and origin/main state.",
       "name": "audit-status-current-state",
@@ -512,9 +631,16 @@
       "path": [
         "audit-status-current-state"
       ],
-      "qualified_name": "agentic-kit audit-status-current-state"
+      "qualified_name": "agentic-kit audit-status-current-state",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Audit STATUS.md current-state claims against handoff, release, and origin/main state."
     },
     {
+      "dry_run_available": false,
       "group": "boot",
       "help": "",
       "name": "check",
@@ -538,9 +664,17 @@
         "boot",
         "check"
       ],
-      "qualified_name": "agentic-kit boot check"
+      "qualified_name": "agentic-kit boot check",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "boot",
+        "read-only"
+      ],
+      "when_to_use": "Run agentic-kit boot check."
     },
     {
+      "dry_run_available": false,
       "group": "boot",
       "help": "",
       "name": "closeout",
@@ -564,9 +698,17 @@
         "boot",
         "closeout"
       ],
-      "qualified_name": "agentic-kit boot closeout"
+      "qualified_name": "agentic-kit boot closeout",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "boot",
+        "bounded"
+      ],
+      "when_to_use": "Run agentic-kit boot closeout."
     },
     {
+      "dry_run_available": false,
       "group": "boot",
       "help": "",
       "name": "prompt",
@@ -590,9 +732,17 @@
         "boot",
         "prompt"
       ],
-      "qualified_name": "agentic-kit boot prompt"
+      "qualified_name": "agentic-kit boot prompt",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "boot",
+        "bounded"
+      ],
+      "when_to_use": "Run agentic-kit boot prompt."
     },
     {
+      "dry_run_available": false,
       "group": "boot",
       "help": "",
       "name": "report",
@@ -630,9 +780,17 @@
         "boot",
         "report"
       ],
-      "qualified_name": "agentic-kit boot report"
+      "qualified_name": "agentic-kit boot report",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "boot",
+        "read-only"
+      ],
+      "when_to_use": "Run agentic-kit boot report."
     },
     {
+      "dry_run_available": false,
       "group": "boot",
       "help": "",
       "name": "write",
@@ -686,9 +844,17 @@
         "boot",
         "write"
       ],
-      "qualified_name": "agentic-kit boot write"
+      "qualified_name": "agentic-kit boot write",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "boot",
+        "bounded"
+      ],
+      "when_to_use": "Run agentic-kit boot write."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "",
       "name": "check",
@@ -711,9 +877,16 @@
       "path": [
         "check"
       ],
-      "qualified_name": "agentic-kit check"
+      "qualified_name": "agentic-kit check",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Run agentic-kit check."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "",
       "name": "check-docs",
@@ -736,9 +909,16 @@
       "path": [
         "check-docs"
       ],
-      "qualified_name": "agentic-kit check-docs"
+      "qualified_name": "agentic-kit check-docs",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Run agentic-kit check-docs."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "",
       "name": "check-todo",
@@ -761,9 +941,16 @@
       "path": [
         "check-todo"
       ],
-      "qualified_name": "agentic-kit check-todo"
+      "qualified_name": "agentic-kit check-todo",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Run agentic-kit check-todo."
     },
     {
+      "dry_run_available": false,
       "group": "cockpit",
       "help": "",
       "name": "actions",
@@ -787,9 +974,17 @@
         "cockpit",
         "actions"
       ],
-      "qualified_name": "agentic-kit cockpit actions"
+      "qualified_name": "agentic-kit cockpit actions",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "cockpit",
+        "read-only"
+      ],
+      "when_to_use": "Run agentic-kit cockpit actions."
     },
     {
+      "dry_run_available": false,
       "group": "cockpit",
       "help": "",
       "name": "gatekeeper-status",
@@ -827,9 +1022,17 @@
         "cockpit",
         "gatekeeper-status"
       ],
-      "qualified_name": "agentic-kit cockpit gatekeeper-status"
+      "qualified_name": "agentic-kit cockpit gatekeeper-status",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "cockpit",
+        "read-only"
+      ],
+      "when_to_use": "Run agentic-kit cockpit gatekeeper-status."
     },
     {
+      "dry_run_available": false,
       "group": "cockpit",
       "help": "",
       "name": "run",
@@ -895,9 +1098,17 @@
         "cockpit",
         "run"
       ],
-      "qualified_name": "agentic-kit cockpit run"
+      "qualified_name": "agentic-kit cockpit run",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "cockpit"
+      ],
+      "when_to_use": "Run agentic-kit cockpit run."
     },
     {
+      "dry_run_available": false,
       "group": "cockpit",
       "help": "",
       "name": "select",
@@ -906,9 +1117,17 @@
         "cockpit",
         "select"
       ],
-      "qualified_name": "agentic-kit cockpit select"
+      "qualified_name": "agentic-kit cockpit select",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "cockpit"
+      ],
+      "when_to_use": "Run agentic-kit cockpit select."
     },
     {
+      "dry_run_available": false,
       "group": "cockpit",
       "help": "",
       "name": "status",
@@ -932,9 +1151,17 @@
         "cockpit",
         "status"
       ],
-      "qualified_name": "agentic-kit cockpit status"
+      "qualified_name": "agentic-kit cockpit status",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "cockpit",
+        "read-only"
+      ],
+      "when_to_use": "Run agentic-kit cockpit status."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Check that public commands have stable GUI-usable taxonomy.",
       "name": "command-taxonomy-check",
@@ -971,9 +1198,78 @@
       "path": [
         "command-taxonomy-check"
       ],
-      "qualified_name": "agentic-kit command-taxonomy-check"
+      "qualified_name": "agentic-kit command-taxonomy-check",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Check that public commands have stable GUI-usable taxonomy."
     },
     {
+      "dry_run_available": true,
+      "group": "commands",
+      "help": "Render docs/reference/AGENTIC_KIT_COMMANDS.md from the JSON manifest.",
+      "name": "render-md",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write generated Markdown.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "commands",
+        "render-md"
+      ],
+      "qualified_name": "agentic-kit commands render-md",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "commands"
+      ],
+      "when_to_use": "Render docs/reference/AGENTIC_KIT_COMMANDS.md from the JSON manifest."
+    },
+    {
+      "dry_run_available": false,
       "group": "dev",
       "help": "Run the local feature gate through the supported agentic-kit CLI.",
       "name": "local-feature-gate",
@@ -997,9 +1293,17 @@
         "dev",
         "local-feature-gate"
       ],
-      "qualified_name": "agentic-kit dev local-feature-gate"
+      "qualified_name": "agentic-kit dev local-feature-gate",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "dev"
+      ],
+      "when_to_use": "Run the local feature gate through the supported agentic-kit CLI."
     },
     {
+      "dry_run_available": false,
       "group": "direction",
       "help": "Report planning files that are not yet represented in project direction.",
       "name": "audit-drift",
@@ -1037,9 +1341,17 @@
         "direction",
         "audit-drift"
       ],
-      "qualified_name": "agentic-kit direction audit-drift"
+      "qualified_name": "agentic-kit direction audit-drift",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "direction",
+        "read-only"
+      ],
+      "when_to_use": "Report planning files that are not yet represented in project direction."
     },
     {
+      "dry_run_available": false,
       "group": "direction",
       "help": "Render project direction without overwriting committed projections.",
       "name": "render",
@@ -1105,9 +1417,17 @@
         "direction",
         "render"
       ],
-      "qualified_name": "agentic-kit direction render"
+      "qualified_name": "agentic-kit direction render",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "direction"
+      ],
+      "when_to_use": "Render project direction without overwriting committed projections."
     },
     {
+      "dry_run_available": false,
       "group": "direction",
       "help": "Validate docs/planning/PROJECT_DIRECTION.yaml.",
       "name": "validate",
@@ -1159,9 +1479,17 @@
         "direction",
         "validate"
       ],
-      "qualified_name": "agentic-kit direction validate"
+      "qualified_name": "agentic-kit direction validate",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "direction",
+        "read-only"
+      ],
+      "when_to_use": "Validate docs/planning/PROJECT_DIRECTION.yaml."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Audit lifecycle status headers for planning, roadmap, strategy, and idea documents.",
       "name": "doc-lifecycle-audit",
@@ -1198,9 +1526,16 @@
       "path": [
         "doc-lifecycle-audit"
       ],
-      "qualified_name": "agentic-kit doc-lifecycle-audit"
+      "qualified_name": "agentic-kit doc-lifecycle-audit",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Audit lifecycle status headers for planning, roadmap, strategy, and idea documents."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Audit cross-document state, governance, architecture, and historical-plan drift.",
       "name": "doc-mesh-audit",
@@ -1251,9 +1586,16 @@
       "path": [
         "doc-mesh-audit"
       ],
-      "qualified_name": "agentic-kit doc-mesh-audit"
+      "qualified_name": "agentic-kit doc-mesh-audit",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Audit cross-document state, governance, architecture, and historical-plan drift."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Apply safe automatic documentation mesh repairs.",
       "name": "doc-mesh-repair",
@@ -1290,9 +1632,16 @@
       "path": [
         "doc-mesh-repair"
       ],
-      "qualified_name": "agentic-kit doc-mesh-repair"
+      "qualified_name": "agentic-kit doc-mesh-repair",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Apply safe automatic documentation mesh repairs."
     },
     {
+      "dry_run_available": false,
       "group": "doc-registry",
       "help": "List unregistered docs candidates with optional strict declared-scope failure.",
       "name": "check-unregistered",
@@ -1344,9 +1693,17 @@
         "doc-registry",
         "check-unregistered"
       ],
-      "qualified_name": "agentic-kit doc-registry check-unregistered"
+      "qualified_name": "agentic-kit doc-registry check-unregistered",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "doc-registry"
+      ],
+      "when_to_use": "List unregistered docs candidates with optional strict declared-scope failure."
     },
     {
+      "dry_run_available": true,
       "group": "doc-registry",
       "help": "Reconcile documentation registry, declared scope, and decision projection.",
       "name": "reconcile",
@@ -1398,9 +1755,17 @@
         "doc-registry",
         "reconcile"
       ],
-      "qualified_name": "agentic-kit doc-registry reconcile"
+      "qualified_name": "agentic-kit doc-registry reconcile",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "doc-registry"
+      ],
+      "when_to_use": "Reconcile documentation registry, declared scope, and decision projection."
     },
     {
+      "dry_run_available": false,
       "group": "doc-registry",
       "help": "Add one reviewed document entry to the documentation registry.",
       "name": "register",
@@ -1480,9 +1845,17 @@
         "doc-registry",
         "register"
       ],
-      "qualified_name": "agentic-kit doc-registry register"
+      "qualified_name": "agentic-kit doc-registry register",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "doc-registry"
+      ],
+      "when_to_use": "Add one reviewed document entry to the documentation registry."
     },
     {
+      "dry_run_available": true,
       "group": "docs lifecycle",
       "help": "Apply one safe documentation lifecycle plan step.",
       "name": "apply",
@@ -1563,9 +1936,17 @@
         "lifecycle",
         "apply"
       ],
-      "qualified_name": "agentic-kit docs lifecycle apply"
+      "qualified_name": "agentic-kit docs lifecycle apply",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "docs-lifecycle"
+      ],
+      "when_to_use": "Apply one safe documentation lifecycle plan step."
     },
     {
+      "dry_run_available": false,
       "group": "docs lifecycle",
       "help": "Build a dry-run lifecycle plan for one documentation scope.",
       "name": "plan",
@@ -1618,9 +1999,17 @@
         "lifecycle",
         "plan"
       ],
-      "qualified_name": "agentic-kit docs lifecycle plan"
+      "qualified_name": "agentic-kit docs lifecycle plan",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "docs-lifecycle",
+        "read-only"
+      ],
+      "when_to_use": "Build a dry-run lifecycle plan for one documentation scope."
     },
     {
+      "dry_run_available": true,
       "group": "docs lifecycle",
       "help": "Build or write one documentation lifecycle evidence report.",
       "name": "report",
@@ -1701,9 +2090,17 @@
         "lifecycle",
         "report"
       ],
-      "qualified_name": "agentic-kit docs lifecycle report"
+      "qualified_name": "agentic-kit docs lifecycle report",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "docs-lifecycle",
+        "read-only"
+      ],
+      "when_to_use": "Build or write one documentation lifecycle evidence report."
     },
     {
+      "dry_run_available": false,
       "group": "docs lifecycle",
       "help": "Propose safe documentation lifecycle actions without applying changes.",
       "name": "triage",
@@ -1742,9 +2139,17 @@
         "lifecycle",
         "triage"
       ],
-      "qualified_name": "agentic-kit docs lifecycle triage"
+      "qualified_name": "agentic-kit docs lifecycle triage",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "docs-lifecycle",
+        "read-only"
+      ],
+      "when_to_use": "Propose safe documentation lifecycle actions without applying changes."
     },
     {
+      "dry_run_available": false,
       "group": "docs",
       "help": "Fail if removed documentation sources still have live refs or registry refs.",
       "name": "removed-source-audit",
@@ -1810,9 +2215,17 @@
         "docs",
         "removed-source-audit"
       ],
-      "qualified_name": "agentic-kit docs removed-source-audit"
+      "qualified_name": "agentic-kit docs removed-source-audit",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "docs",
+        "read-only"
+      ],
+      "when_to_use": "Fail if removed documentation sources still have live refs or registry refs."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Run the umbrella documentation-system audit.",
       "name": "docs-audit",
@@ -1849,9 +2262,16 @@
       "path": [
         "docs-audit"
       ],
-      "qualified_name": "agentic-kit docs-audit"
+      "qualified_name": "agentic-kit docs-audit",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Run the umbrella documentation-system audit."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Show a read-only summary of the documentation registry.",
       "name": "docs-registry",
@@ -1888,9 +2308,16 @@
       "path": [
         "docs-registry"
       ],
-      "qualified_name": "agentic-kit docs-registry"
+      "qualified_name": "agentic-kit docs-registry",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Show a read-only summary of the documentation registry."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Run a compact project health check.",
       "name": "doctor",
@@ -1913,9 +2340,16 @@
       "path": [
         "doctor"
       ],
-      "qualified_name": "agentic-kit doctor"
+      "qualified_name": "agentic-kit doctor",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Run a compact project health check."
     },
     {
+      "dry_run_available": false,
       "group": "evidence",
       "help": "Classify a terminal/evidence log for deterministic gatekeeper decisions.",
       "name": "classify-log",
@@ -1981,9 +2415,17 @@
         "evidence",
         "classify-log"
       ],
-      "qualified_name": "agentic-kit evidence classify-log"
+      "qualified_name": "agentic-kit evidence classify-log",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "evidence"
+      ],
+      "when_to_use": "Classify a terminal/evidence log for deterministic gatekeeper decisions."
     },
     {
+      "dry_run_available": false,
       "group": "evidence",
       "help": "Clean local evidence according to repo policy.",
       "name": "clean",
@@ -2007,9 +2449,17 @@
         "evidence",
         "clean"
       ],
-      "qualified_name": "agentic-kit evidence clean"
+      "qualified_name": "agentic-kit evidence clean",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "evidence"
+      ],
+      "when_to_use": "Clean local evidence according to repo policy."
     },
     {
+      "dry_run_available": false,
       "group": "evidence",
       "help": "Pass when git status is clean except one expected in-progress log.",
       "name": "clean-check",
@@ -2047,9 +2497,17 @@
         "evidence",
         "clean-check"
       ],
-      "qualified_name": "agentic-kit evidence clean-check"
+      "qualified_name": "agentic-kit evidence clean-check",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "evidence"
+      ],
+      "when_to_use": "Pass when git status is clean except one expected in-progress log."
     },
     {
+      "dry_run_available": false,
       "group": "evidence",
       "help": "Commit an explicit evidence path set and verify the worktree is clean afterwards.",
       "name": "commit-paths",
@@ -2157,9 +2615,17 @@
         "evidence",
         "commit-paths"
       ],
-      "qualified_name": "agentic-kit evidence commit-paths"
+      "qualified_name": "agentic-kit evidence commit-paths",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "evidence"
+      ],
+      "when_to_use": "Commit an explicit evidence path set and verify the worktree is clean afterwards."
     },
     {
+      "dry_run_available": false,
       "group": "evidence",
       "help": "Append a canonical summary, require strict inspection, then upload the evidence log.",
       "name": "finalize-log",
@@ -2505,9 +2971,17 @@
         "evidence",
         "finalize-log"
       ],
-      "qualified_name": "agentic-kit evidence finalize-log"
+      "qualified_name": "agentic-kit evidence finalize-log",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "evidence"
+      ],
+      "when_to_use": "Append a canonical summary, require strict inspection, then upload the evidence log."
     },
     {
+      "dry_run_available": false,
       "group": "evidence",
       "help": "Fail if a terminal evidence log has contradictory final state.",
       "name": "guard",
@@ -2531,9 +3005,17 @@
         "evidence",
         "guard"
       ],
-      "qualified_name": "agentic-kit evidence guard"
+      "qualified_name": "agentic-kit evidence guard",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "evidence"
+      ],
+      "when_to_use": "Fail if a terminal evidence log has contradictory final state."
     },
     {
+      "dry_run_available": false,
       "group": "evidence",
       "help": "Inspect explicit or latest terminal evidence before continuing after chat control signals.",
       "name": "inspect",
@@ -2585,9 +3067,17 @@
         "evidence",
         "inspect"
       ],
-      "qualified_name": "agentic-kit evidence inspect"
+      "qualified_name": "agentic-kit evidence inspect",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "evidence",
+        "read-only"
+      ],
+      "when_to_use": "Inspect explicit or latest terminal evidence before continuing after chat control signals."
     },
     {
+      "dry_run_available": false,
       "group": "evidence",
       "help": "Fail if expected target paths are missing from a change set.",
       "name": "scope-check",
@@ -2625,9 +3115,17 @@
         "evidence",
         "scope-check"
       ],
-      "qualified_name": "agentic-kit evidence scope-check"
+      "qualified_name": "agentic-kit evidence scope-check",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "evidence"
+      ],
+      "when_to_use": "Fail if expected target paths are missing from a change set."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "",
       "name": "github-create",
@@ -2678,9 +3176,16 @@
       "path": [
         "github-create"
       ],
-      "qualified_name": "agentic-kit github-create"
+      "qualified_name": "agentic-kit github-create",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Run agentic-kit github-create."
     },
     {
+      "dry_run_available": false,
       "group": "governance",
       "help": "",
       "name": "check",
@@ -2689,9 +3194,17 @@
         "governance",
         "check"
       ],
-      "qualified_name": "agentic-kit governance check"
+      "qualified_name": "agentic-kit governance check",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "governance",
+        "read-only"
+      ],
+      "when_to_use": "Run agentic-kit governance check."
     },
     {
+      "dry_run_available": false,
       "group": "gui",
       "help": "",
       "name": "initial-llm-prompt",
@@ -2715,9 +3228,17 @@
         "gui",
         "initial-llm-prompt"
       ],
-      "qualified_name": "agentic-kit gui initial-llm-prompt"
+      "qualified_name": "agentic-kit gui initial-llm-prompt",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "gui"
+      ],
+      "when_to_use": "Run agentic-kit gui initial-llm-prompt."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Run the pre-GUI readiness gate.",
       "name": "gui-readiness-gate",
@@ -2768,9 +3289,16 @@
       "path": [
         "gui-readiness-gate"
       ],
-      "qualified_name": "agentic-kit gui-readiness-gate"
+      "qualified_name": "agentic-kit gui-readiness-gate",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Run the pre-GUI readiness gate."
     },
     {
+      "dry_run_available": false,
       "group": "handoff",
       "help": "",
       "name": "check",
@@ -2794,9 +3322,17 @@
         "handoff",
         "check"
       ],
-      "qualified_name": "agentic-kit handoff check"
+      "qualified_name": "agentic-kit handoff check",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "handoff",
+        "read-only"
+      ],
+      "when_to_use": "Run agentic-kit handoff check."
     },
     {
+      "dry_run_available": false,
       "group": "handoff",
       "help": "",
       "name": "post-merge-refresh-status",
@@ -2805,9 +3341,17 @@
         "handoff",
         "post-merge-refresh-status"
       ],
-      "qualified_name": "agentic-kit handoff post-merge-refresh-status"
+      "qualified_name": "agentic-kit handoff post-merge-refresh-status",
+      "replaces_raw": [],
+      "safety": "DESTRUCTIVE",
+      "task_tags": [
+        "destructive",
+        "handoff"
+      ],
+      "when_to_use": "Run agentic-kit handoff post-merge-refresh-status."
     },
     {
+      "dry_run_available": false,
       "group": "handoff",
       "help": "",
       "name": "prompt",
@@ -2831,9 +3375,17 @@
         "handoff",
         "prompt"
       ],
-      "qualified_name": "agentic-kit handoff prompt"
+      "qualified_name": "agentic-kit handoff prompt",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "handoff"
+      ],
+      "when_to_use": "Run agentic-kit handoff prompt."
     },
     {
+      "dry_run_available": false,
       "group": "handoff",
       "help": "",
       "name": "refresh",
@@ -2871,9 +3423,17 @@
         "handoff",
         "refresh"
       ],
-      "qualified_name": "agentic-kit handoff refresh"
+      "qualified_name": "agentic-kit handoff refresh",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "handoff"
+      ],
+      "when_to_use": "Run agentic-kit handoff refresh."
     },
     {
+      "dry_run_available": false,
       "group": "handoff",
       "help": "",
       "name": "show",
@@ -2897,9 +3457,17 @@
         "handoff",
         "show"
       ],
-      "qualified_name": "agentic-kit handoff show"
+      "qualified_name": "agentic-kit handoff show",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "handoff",
+        "read-only"
+      ],
+      "when_to_use": "Run agentic-kit handoff show."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "",
       "name": "init",
@@ -3114,9 +3682,16 @@
       "path": [
         "init"
       ],
-      "qualified_name": "agentic-kit init"
+      "qualified_name": "agentic-kit init",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Run agentic-kit init."
     },
     {
+      "dry_run_available": false,
       "group": "pass-already-done",
       "help": "",
       "name": "classify",
@@ -3196,9 +3771,17 @@
         "pass-already-done",
         "classify"
       ],
-      "qualified_name": "agentic-kit pass-already-done classify"
+      "qualified_name": "agentic-kit pass-already-done classify",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "pass-already-done"
+      ],
+      "when_to_use": "Run agentic-kit pass-already-done classify."
     },
     {
+      "dry_run_available": false,
       "group": "pass-already-done",
       "help": "",
       "name": "report",
@@ -3278,9 +3861,17 @@
         "pass-already-done",
         "report"
       ],
-      "qualified_name": "agentic-kit pass-already-done report"
+      "qualified_name": "agentic-kit pass-already-done report",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "pass-already-done",
+        "read-only"
+      ],
+      "when_to_use": "Run agentic-kit pass-already-done report."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "",
       "name": "patch-preflight",
@@ -3317,9 +3908,16 @@
       "path": [
         "patch-preflight"
       ],
-      "qualified_name": "agentic-kit patch-preflight"
+      "qualified_name": "agentic-kit patch-preflight",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Run agentic-kit patch-preflight."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Diagnose patch size, protected paths, and diff-risk before closeout.",
       "name": "patch-scope-preflight",
@@ -3426,9 +4024,16 @@
       "path": [
         "patch-scope-preflight"
       ],
-      "qualified_name": "agentic-kit patch-scope-preflight"
+      "qualified_name": "agentic-kit patch-scope-preflight",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Diagnose patch size, protected paths, and diff-risk before closeout."
     },
     {
+      "dry_run_available": false,
       "group": "patterns",
       "help": "List known local patterns and anti-patterns.",
       "name": "list",
@@ -3437,9 +4042,17 @@
         "patterns",
         "list"
       ],
-      "qualified_name": "agentic-kit patterns list"
+      "qualified_name": "agentic-kit patterns list",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "patterns",
+        "read-only"
+      ],
+      "when_to_use": "List known local patterns and anti-patterns."
     },
     {
+      "dry_run_available": false,
       "group": "patterns",
       "help": "Show one local pattern catalog entry by stable ID.",
       "name": "show",
@@ -3463,9 +4076,17 @@
         "patterns",
         "show"
       ],
-      "qualified_name": "agentic-kit patterns show"
+      "qualified_name": "agentic-kit patterns show",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "patterns",
+        "read-only"
+      ],
+      "when_to_use": "Show one local pattern catalog entry by stable ID."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Validate post-release GitHub and Zenodo state without guessing DOI metadata.",
       "name": "post-release-check",
@@ -3502,9 +4123,16 @@
       "path": [
         "post-release-check"
       ],
-      "qualified_name": "agentic-kit post-release-check"
+      "qualified_name": "agentic-kit post-release-check",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Validate post-release GitHub and Zenodo state without guessing DOI metadata."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "",
       "name": "post-release-doi-closeout",
@@ -3569,9 +4197,16 @@
       "path": [
         "post-release-doi-closeout"
       ],
-      "qualified_name": "agentic-kit post-release-doi-closeout"
+      "qualified_name": "agentic-kit post-release-doi-closeout",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Run agentic-kit post-release-doi-closeout."
     },
     {
+      "dry_run_available": false,
       "group": "pr",
       "help": "",
       "name": "closeout-check",
@@ -3595,9 +4230,17 @@
         "pr",
         "closeout-check"
       ],
-      "qualified_name": "agentic-kit pr closeout-check"
+      "qualified_name": "agentic-kit pr closeout-check",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "pr"
+      ],
+      "when_to_use": "Run agentic-kit pr closeout-check."
     },
     {
+      "dry_run_available": true,
       "group": "pr",
       "help": "Merge only when PR checks are green, refs match, and merge state is clean.",
       "name": "merge-if-green",
@@ -3777,9 +4420,17 @@
         "pr",
         "merge-if-green"
       ],
-      "qualified_name": "agentic-kit pr merge-if-green"
+      "qualified_name": "agentic-kit pr merge-if-green",
+      "replaces_raw": [],
+      "safety": "DESTRUCTIVE",
+      "task_tags": [
+        "destructive",
+        "pr"
+      ],
+      "when_to_use": "Merge only when PR checks are green, refs match, and merge state is clean."
     },
     {
+      "dry_run_available": false,
       "group": "pr",
       "help": "Print deterministic PR/CI status and fetch failed logs for red CI.",
       "name": "status",
@@ -3845,9 +4496,17 @@
         "pr",
         "status"
       ],
-      "qualified_name": "agentic-kit pr status"
+      "qualified_name": "agentic-kit pr status",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "pr",
+        "read-only"
+      ],
+      "when_to_use": "Print deterministic PR/CI status and fetch failed logs for red CI."
     },
     {
+      "dry_run_available": false,
       "group": "pr",
       "help": "Wait for pull-request CI; guard merge preparation with --expected-head-sha.",
       "name": "wait-ci",
@@ -3927,9 +4586,17 @@
         "pr",
         "wait-ci"
       ],
-      "qualified_name": "agentic-kit pr wait-ci"
+      "qualified_name": "agentic-kit pr wait-ci",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "pr"
+      ],
+      "when_to_use": "Wait for pull-request CI; guard merge preparation with --expected-head-sha."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "",
       "name": "pr-closeout",
@@ -3952,9 +4619,16 @@
       "path": [
         "pr-closeout"
       ],
-      "qualified_name": "agentic-kit pr-closeout"
+      "qualified_name": "agentic-kit pr-closeout",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Run agentic-kit pr-closeout."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "",
       "name": "pr-hygiene",
@@ -3991,9 +4665,16 @@
       "path": [
         "pr-hygiene"
       ],
-      "qualified_name": "agentic-kit pr-hygiene"
+      "qualified_name": "agentic-kit pr-hygiene",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Run agentic-kit pr-hygiene."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "List available project profiles and policy packs.",
       "name": "profile-explain",
@@ -4001,9 +4682,16 @@
       "path": [
         "profile-explain"
       ],
-      "qualified_name": "agentic-kit profile-explain"
+      "qualified_name": "agentic-kit profile-explain",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "List available project profiles and policy packs."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Render project direction sections from the YAML source.",
       "name": "project-direction",
@@ -4054,9 +4742,16 @@
       "path": [
         "project-direction"
       ],
-      "qualified_name": "agentic-kit project-direction"
+      "qualified_name": "agentic-kit project-direction",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Render project direction sections from the YAML source."
     },
     {
+      "dry_run_available": true,
       "group": "release",
       "help": "Generate release summary evidence and run release-prep safely.",
       "name": "prepare",
@@ -4152,9 +4847,17 @@
         "release",
         "prepare"
       ],
-      "qualified_name": "agentic-kit release prepare"
+      "qualified_name": "agentic-kit release prepare",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "release"
+      ],
+      "when_to_use": "Generate release summary evidence and run release-prep safely."
     },
     {
+      "dry_run_available": false,
       "group": "release",
       "help": "Run release readiness through the standard-error scan wrapper.",
       "name": "ready",
@@ -4234,9 +4937,20 @@
         "release",
         "ready"
       ],
-      "qualified_name": "agentic-kit release ready"
+      "qualified_name": "agentic-kit release ready",
+      "replaces_raw": [
+        "git tag",
+        "gh release create"
+      ],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "release"
+      ],
+      "when_to_use": "Run release readiness through the standard-error scan wrapper."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Validate release state for a target version.",
       "name": "release-check",
@@ -4273,9 +4987,16 @@
       "path": [
         "release-check"
       ],
-      "qualified_name": "agentic-kit release-check"
+      "qualified_name": "agentic-kit release-check",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Validate release state for a target version."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Block manual release metadata anchor edits without release-prep evidence.",
       "name": "release-metadata-authority-gate",
@@ -4354,9 +5075,16 @@
       "path": [
         "release-metadata-authority-gate"
       ],
-      "qualified_name": "agentic-kit release-metadata-authority-gate"
+      "qualified_name": "agentic-kit release-metadata-authority-gate",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Block manual release metadata anchor edits without release-prep evidence."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Generate deterministic evidence-backed release notes from a local git tag diff.",
       "name": "release-notes-generate",
@@ -4519,9 +5247,16 @@
       "path": [
         "release-notes-generate"
       ],
-      "qualified_name": "agentic-kit release-notes-generate"
+      "qualified_name": "agentic-kit release-notes-generate",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Generate deterministic evidence-backed release notes from a local git tag diff."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Print a release preparation checklist for the current project.",
       "name": "release-plan",
@@ -4558,9 +5293,16 @@
       "path": [
         "release-plan"
       ],
-      "qualified_name": "agentic-kit release-plan"
+      "qualified_name": "agentic-kit release-plan",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Print a release preparation checklist for the current project."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Validate before-metadata release readiness for a target version.",
       "name": "release-preflight",
@@ -4583,9 +5325,16 @@
       "path": [
         "release-preflight"
       ],
-      "qualified_name": "agentic-kit release-preflight"
+      "qualified_name": "agentic-kit release-preflight",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Validate before-metadata release readiness for a target version."
     },
     {
+      "dry_run_available": true,
       "group": "root",
       "help": "Prepare release metadata through the supported agentic-kit route.\n\nThis edits only local release metadata files. It does not tag, publish,\npush, create GitHub releases, or write Zenodo DOI metadata.",
       "name": "release-prep",
@@ -4692,9 +5441,16 @@
       "path": [
         "release-prep"
       ],
-      "qualified_name": "agentic-kit release-prep"
+      "qualified_name": "agentic-kit release-prep",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Prepare release metadata through the supported agentic-kit route."
     },
     {
+      "dry_run_available": true,
       "group": "root",
       "help": "Plan release publishing without live tag/release side effects.",
       "name": "release-publish",
@@ -4789,9 +5545,16 @@
       "path": [
         "release-publish"
       ],
-      "qualified_name": "agentic-kit release-publish"
+      "qualified_name": "agentic-kit release-publish",
+      "replaces_raw": [],
+      "safety": "DESTRUCTIVE",
+      "task_tags": [
+        "destructive"
+      ],
+      "when_to_use": "Plan release publishing without live tag/release side effects."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Render the local release lifecycle state without mutating release files.",
       "name": "release-status",
@@ -4856,9 +5619,16 @@
       "path": [
         "release-status"
       ],
-      "qualified_name": "agentic-kit release-status"
+      "qualified_name": "agentic-kit release-status",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Render the local release lifecycle state without mutating release files."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Dry-run remote branch hygiene classification for K3.",
       "name": "remote-branch-hygiene",
@@ -4895,9 +5665,16 @@
       "path": [
         "remote-branch-hygiene"
       ],
-      "qualified_name": "agentic-kit remote-branch-hygiene"
+      "qualified_name": "agentic-kit remote-branch-hygiene",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Dry-run remote branch hygiene classification for K3."
     },
     {
+      "dry_run_available": true,
       "group": "root",
       "help": "Safely apply exactly one remote branch deletion candidate.",
       "name": "remote-branch-hygiene-apply",
@@ -4962,9 +5739,16 @@
       "path": [
         "remote-branch-hygiene-apply"
       ],
-      "qualified_name": "agentic-kit remote-branch-hygiene-apply"
+      "qualified_name": "agentic-kit remote-branch-hygiene-apply",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Safely apply exactly one remote branch deletion candidate."
     },
     {
+      "dry_run_available": true,
       "group": "root",
       "help": "Write a K3 remote branch hygiene evidence report only with --execute.",
       "name": "remote-branch-hygiene-report",
@@ -5029,9 +5813,16 @@
       "path": [
         "remote-branch-hygiene-report"
       ],
-      "qualified_name": "agentic-kit remote-branch-hygiene-report"
+      "qualified_name": "agentic-kit remote-branch-hygiene-report",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Write a K3 remote branch hygiene evidence report only with --execute."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "",
       "name": "remote-next",
@@ -5068,9 +5859,16 @@
       "path": [
         "remote-next"
       ],
-      "qualified_name": "agentic-kit remote-next"
+      "qualified_name": "agentic-kit remote-next",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Run agentic-kit remote-next."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "",
       "name": "rn",
@@ -5107,9 +5905,16 @@
       "path": [
         "rn"
       ],
-      "qualified_name": "agentic-kit rn"
+      "qualified_name": "agentic-kit rn",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Run agentic-kit rn."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "",
       "name": "rnc",
@@ -5146,9 +5951,16 @@
       "path": [
         "rnc"
       ],
-      "qualified_name": "agentic-kit rnc"
+      "qualified_name": "agentic-kit rnc",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded"
+      ],
+      "when_to_use": "Run agentic-kit rnc."
     },
     {
+      "dry_run_available": false,
       "group": "rule-registry",
       "help": "",
       "name": "check",
@@ -5157,9 +5969,17 @@
         "rule-registry",
         "check"
       ],
-      "qualified_name": "agentic-kit rule-registry check"
+      "qualified_name": "agentic-kit rule-registry check",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "rule-registry"
+      ],
+      "when_to_use": "Run agentic-kit rule-registry check."
     },
     {
+      "dry_run_available": false,
       "group": "rule-registry",
       "help": "Add one reviewed rule mechanism with direct evidence coverage.",
       "name": "register",
@@ -5379,9 +6199,17 @@
         "rule-registry",
         "register"
       ],
-      "qualified_name": "agentic-kit rule-registry register"
+      "qualified_name": "agentic-kit rule-registry register",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "rule-registry"
+      ],
+      "when_to_use": "Add one reviewed rule mechanism with direct evidence coverage."
     },
     {
+      "dry_run_available": false,
       "group": "rule-registry",
       "help": "",
       "name": "report",
@@ -5419,9 +6247,17 @@
         "rule-registry",
         "report"
       ],
-      "qualified_name": "agentic-kit rule-registry report"
+      "qualified_name": "agentic-kit rule-registry report",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "rule-registry"
+      ],
+      "when_to_use": "Run agentic-kit rule-registry report."
     },
     {
+      "dry_run_available": false,
       "group": "rules",
       "help": "",
       "name": "acknowledge",
@@ -5487,9 +6323,17 @@
         "rules",
         "acknowledge"
       ],
-      "qualified_name": "agentic-kit rules acknowledge"
+      "qualified_name": "agentic-kit rules acknowledge",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "rules"
+      ],
+      "when_to_use": "Run agentic-kit rules acknowledge."
     },
     {
+      "dry_run_available": false,
       "group": "rules",
       "help": "",
       "name": "acknowledge-communication-refresh",
@@ -5541,9 +6385,17 @@
         "rules",
         "acknowledge-communication-refresh"
       ],
-      "qualified_name": "agentic-kit rules acknowledge-communication-refresh"
+      "qualified_name": "agentic-kit rules acknowledge-communication-refresh",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "rules"
+      ],
+      "when_to_use": "Run agentic-kit rules acknowledge-communication-refresh."
     },
     {
+      "dry_run_available": false,
       "group": "rules",
       "help": "",
       "name": "communication-refresh",
@@ -5595,9 +6447,17 @@
         "rules",
         "communication-refresh"
       ],
-      "qualified_name": "agentic-kit rules communication-refresh"
+      "qualified_name": "agentic-kit rules communication-refresh",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "rules"
+      ],
+      "when_to_use": "Run agentic-kit rules communication-refresh."
     },
     {
+      "dry_run_available": false,
       "group": "rules",
       "help": "",
       "name": "handoff-refresh",
@@ -5635,9 +6495,17 @@
         "rules",
         "handoff-refresh"
       ],
-      "qualified_name": "agentic-kit rules handoff-refresh"
+      "qualified_name": "agentic-kit rules handoff-refresh",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "rules"
+      ],
+      "when_to_use": "Run agentic-kit rules handoff-refresh."
     },
     {
+      "dry_run_available": false,
       "group": "rules",
       "help": "",
       "name": "require-current-communication-context",
@@ -5675,9 +6543,17 @@
         "rules",
         "require-current-communication-context"
       ],
-      "qualified_name": "agentic-kit rules require-current-communication-context"
+      "qualified_name": "agentic-kit rules require-current-communication-context",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "rules"
+      ],
+      "when_to_use": "Run agentic-kit rules require-current-communication-context."
     },
     {
+      "dry_run_available": false,
       "group": "rules",
       "help": "",
       "name": "snapshot",
@@ -5715,9 +6591,17 @@
         "rules",
         "snapshot"
       ],
-      "qualified_name": "agentic-kit rules snapshot"
+      "qualified_name": "agentic-kit rules snapshot",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "rules"
+      ],
+      "when_to_use": "Run agentic-kit rules snapshot."
     },
     {
+      "dry_run_available": false,
       "group": "rules",
       "help": "",
       "name": "validate-sources",
@@ -5755,9 +6639,17 @@
         "rules",
         "validate-sources"
       ],
-      "qualified_name": "agentic-kit rules validate-sources"
+      "qualified_name": "agentic-kit rules validate-sources",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "rules"
+      ],
+      "when_to_use": "Run agentic-kit rules validate-sources."
     },
     {
+      "dry_run_available": false,
       "group": "scaffold",
       "help": "",
       "name": "planning-doc",
@@ -5879,9 +6771,17 @@
         "scaffold",
         "planning-doc"
       ],
-      "qualified_name": "agentic-kit scaffold planning-doc"
+      "qualified_name": "agentic-kit scaffold planning-doc",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "scaffold"
+      ],
+      "when_to_use": "Run agentic-kit scaffold planning-doc."
     },
     {
+      "dry_run_available": false,
       "group": "slice",
       "help": "",
       "name": "gate",
@@ -5919,9 +6819,17 @@
         "slice",
         "gate"
       ],
-      "qualified_name": "agentic-kit slice gate"
+      "qualified_name": "agentic-kit slice gate",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "slice"
+      ],
+      "when_to_use": "Run agentic-kit slice gate."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Run the audit suite required by standard project gates.",
       "name": "standard-gates-audit-suite",
@@ -5972,9 +6880,16 @@
       "path": [
         "standard-gates-audit-suite"
       ],
-      "qualified_name": "agentic-kit standard-gates-audit-suite"
+      "qualified_name": "agentic-kit standard-gates-audit-suite",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Run the audit suite required by standard project gates."
     },
     {
+      "dry_run_available": false,
       "group": "state",
       "help": "",
       "name": "freshness-check",
@@ -5983,9 +6898,17 @@
         "state",
         "freshness-check"
       ],
-      "qualified_name": "agentic-kit state freshness-check"
+      "qualified_name": "agentic-kit state freshness-check",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "state"
+      ],
+      "when_to_use": "Run agentic-kit state freshness-check."
     },
     {
+      "dry_run_available": false,
       "group": "state",
       "help": "",
       "name": "mode-check",
@@ -6037,9 +6960,17 @@
         "state",
         "mode-check"
       ],
-      "qualified_name": "agentic-kit state mode-check"
+      "qualified_name": "agentic-kit state mode-check",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "state"
+      ],
+      "when_to_use": "Run agentic-kit state mode-check."
     },
     {
+      "dry_run_available": false,
       "group": "state",
       "help": "",
       "name": "mode-write",
@@ -6105,9 +7036,17 @@
         "state",
         "mode-write"
       ],
-      "qualified_name": "agentic-kit state mode-write"
+      "qualified_name": "agentic-kit state mode-write",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "state"
+      ],
+      "when_to_use": "Run agentic-kit state mode-write."
     },
     {
+      "dry_run_available": false,
       "group": "todo",
       "help": "Mark a TODO item as done and store evidence.",
       "name": "complete",
@@ -6161,9 +7100,17 @@
         "todo",
         "complete"
       ],
-      "qualified_name": "agentic-kit todo complete"
+      "qualified_name": "agentic-kit todo complete",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "todo"
+      ],
+      "when_to_use": "Mark a TODO item as done and store evidence."
     },
     {
+      "dry_run_available": false,
       "group": "todo",
       "help": "List project TODO items from .agentic/todo.yaml.",
       "name": "list",
@@ -6187,9 +7134,17 @@
         "todo",
         "list"
       ],
-      "qualified_name": "agentic-kit todo list"
+      "qualified_name": "agentic-kit todo list",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "todo"
+      ],
+      "when_to_use": "List project TODO items from .agentic/todo.yaml."
     },
     {
+      "dry_run_available": false,
       "group": "todo",
       "help": "Regenerate docs/TODO.md from .agentic/todo.yaml.",
       "name": "render",
@@ -6198,9 +7153,17 @@
         "todo",
         "render"
       ],
-      "qualified_name": "agentic-kit todo render"
+      "qualified_name": "agentic-kit todo render",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "todo"
+      ],
+      "when_to_use": "Regenerate docs/TODO.md from .agentic/todo.yaml."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "admin-refresh-pr",
@@ -6252,9 +7215,17 @@
         "transfer",
         "admin-refresh-pr"
       ],
-      "qualified_name": "agentic-kit transfer admin-refresh-pr"
+      "qualified_name": "agentic-kit transfer admin-refresh-pr",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer admin-refresh-pr."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "apply",
@@ -6292,9 +7263,17 @@
         "transfer",
         "apply"
       ],
-      "qualified_name": "agentic-kit transfer apply"
+      "qualified_name": "agentic-kit transfer apply",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer apply."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "branch-create",
@@ -6360,9 +7339,20 @@
         "transfer",
         "branch-create"
       ],
-      "qualified_name": "agentic-kit transfer branch-create"
+      "qualified_name": "agentic-kit transfer branch-create",
+      "replaces_raw": [
+        "git switch -c",
+        "git checkout -b"
+      ],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer branch-create."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "branch-delete",
@@ -6428,9 +7418,17 @@
         "transfer",
         "branch-delete"
       ],
-      "qualified_name": "agentic-kit transfer branch-delete"
+      "qualified_name": "agentic-kit transfer branch-delete",
+      "replaces_raw": [],
+      "safety": "DESTRUCTIVE",
+      "task_tags": [
+        "destructive",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer branch-delete."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "branch-switch",
@@ -6482,9 +7480,17 @@
         "transfer",
         "branch-switch"
       ],
-      "qualified_name": "agentic-kit transfer branch-switch"
+      "qualified_name": "agentic-kit transfer branch-switch",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer branch-switch."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Create a deterministic successor handoff package and prompt projections.",
       "name": "chat-switch-complete",
@@ -6552,9 +7558,17 @@
         "transfer",
         "chat-switch-complete"
       ],
-      "qualified_name": "agentic-kit transfer chat-switch-complete"
+      "qualified_name": "agentic-kit transfer chat-switch-complete",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Create a deterministic successor handoff package and prompt projections."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "closeout",
@@ -6594,9 +7608,17 @@
         "transfer",
         "closeout"
       ],
-      "qualified_name": "agentic-kit transfer closeout"
+      "qualified_name": "agentic-kit transfer closeout",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer closeout."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Block common copied-command mistakes before running patch, transfer, or release gates.",
       "name": "command-composition-check",
@@ -6676,9 +7698,17 @@
         "transfer",
         "command-composition-check"
       ],
-      "qualified_name": "agentic-kit transfer command-composition-check"
+      "qualified_name": "agentic-kit transfer command-composition-check",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Block common copied-command mistakes before running patch, transfer, or release gates."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Check whether the committed agentic-kit command reference is current.",
       "name": "command-reference-check",
@@ -6702,9 +7732,17 @@
         "transfer",
         "command-reference-check"
       ],
-      "qualified_name": "agentic-kit transfer command-reference-check"
+      "qualified_name": "agentic-kit transfer command-reference-check",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "transfer"
+      ],
+      "when_to_use": "Check whether the committed agentic-kit command reference is current."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Regenerate the agentic-kit command reference without committing changes.",
       "name": "command-reference-refresh",
@@ -6728,9 +7766,17 @@
         "transfer",
         "command-reference-refresh"
       ],
-      "qualified_name": "agentic-kit transfer command-reference-refresh"
+      "qualified_name": "agentic-kit transfer command-reference-refresh",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Regenerate the agentic-kit command reference without committing changes."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Begin a repo-local command-stack state for deterministic local preflight cleanup.",
       "name": "command-stack-begin",
@@ -6756,9 +7802,17 @@
         "transfer",
         "command-stack-begin"
       ],
-      "qualified_name": "agentic-kit transfer command-stack-begin"
+      "qualified_name": "agentic-kit transfer command-stack-begin",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Begin a repo-local command-stack state for deterministic local preflight cleanup."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "End the repo-local command-stack state after a local command stack completed.",
       "name": "command-stack-end",
@@ -6784,9 +7838,17 @@
         "transfer",
         "command-stack-end"
       ],
-      "qualified_name": "agentic-kit transfer command-stack-end"
+      "qualified_name": "agentic-kit transfer command-stack-end",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "End the repo-local command-stack state after a local command stack completed."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "commit",
@@ -6867,9 +7929,19 @@
         "transfer",
         "commit"
       ],
-      "qualified_name": "agentic-kit transfer commit"
+      "qualified_name": "agentic-kit transfer commit",
+      "replaces_raw": [
+        "git commit"
+      ],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer commit."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Resolve one conflicted file by replacing it from an explicit source and staging it.",
       "name": "conflict-resolve-file",
@@ -6935,9 +8007,17 @@
         "transfer",
         "conflict-resolve-file"
       ],
-      "qualified_name": "agentic-kit transfer conflict-resolve-file"
+      "qualified_name": "agentic-kit transfer conflict-resolve-file",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Resolve one conflicted file by replacing it from an explicit source and staging it."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Report merge/rebase conflict state without resolving anything.",
       "name": "conflict-status",
@@ -6961,9 +8041,17 @@
         "transfer",
         "conflict-status"
       ],
-      "qualified_name": "agentic-kit transfer conflict-status"
+      "qualified_name": "agentic-kit transfer conflict-status",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Report merge/rebase conflict state without resolving anything."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Continue chat/local transfer communication through the safest available wrapper path.",
       "name": "continue",
@@ -7017,9 +8105,17 @@
         "transfer",
         "continue"
       ],
-      "qualified_name": "agentic-kit transfer continue"
+      "qualified_name": "agentic-kit transfer continue",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Continue chat/local transfer communication through the safest available wrapper path."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Delete a merged non-main work branch after PR merge-state verification.",
       "name": "delete-merged-work-branch",
@@ -7103,9 +8199,20 @@
         "transfer",
         "delete-merged-work-branch"
       ],
-      "qualified_name": "agentic-kit transfer delete-merged-work-branch"
+      "qualified_name": "agentic-kit transfer delete-merged-work-branch",
+      "replaces_raw": [
+        "git push --delete",
+        "git branch -D"
+      ],
+      "safety": "DESTRUCTIVE",
+      "task_tags": [
+        "destructive",
+        "transfer"
+      ],
+      "when_to_use": "Delete a merged non-main work branch after PR merge-state verification."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Diagnose ns command definitions/usages removed or reduced between release refs.",
       "name": "diagnose-removed-ns-commands",
@@ -7185,9 +8292,17 @@
         "transfer",
         "diagnose-removed-ns-commands"
       ],
-      "qualified_name": "agentic-kit transfer diagnose-removed-ns-commands"
+      "qualified_name": "agentic-kit transfer diagnose-removed-ns-commands",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Diagnose ns command definitions/usages removed or reduced between release refs."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Report local/upstream divergence without mutating repository state.",
       "name": "divergence-status",
@@ -7211,9 +8326,17 @@
         "transfer",
         "divergence-status"
       ],
-      "qualified_name": "agentic-kit transfer divergence-status"
+      "qualified_name": "agentic-kit transfer divergence-status",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "transfer"
+      ],
+      "when_to_use": "Report local/upstream divergence without mutating repository state."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Finalize the current transfer evidence log through the stricter evidence CLI.",
       "name": "evidence-finalize-current-transfer",
@@ -7419,9 +8542,17 @@
         "transfer",
         "evidence-finalize-current-transfer"
       ],
-      "qualified_name": "agentic-kit transfer evidence-finalize-current-transfer"
+      "qualified_name": "agentic-kit transfer evidence-finalize-current-transfer",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Finalize the current transfer evidence log through the stricter evidence CLI."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Inspect the latest evidence log with the required-summary contract.",
       "name": "evidence-inspect-latest",
@@ -7445,9 +8576,17 @@
         "transfer",
         "evidence-inspect-latest"
       ],
-      "qualified_name": "agentic-kit transfer evidence-inspect-latest"
+      "qualified_name": "agentic-kit transfer evidence-inspect-latest",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Inspect the latest evidence log with the required-summary contract."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Finalize transfer evidence on an evidence branch and complete it through a PR.",
       "name": "evidence-pr-complete",
@@ -7724,9 +8863,17 @@
         "transfer",
         "evidence-pr-complete"
       ],
-      "qualified_name": "agentic-kit transfer evidence-pr-complete"
+      "qualified_name": "agentic-kit transfer evidence-pr-complete",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Finalize transfer evidence on an evidence branch and complete it through a PR."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "fetch-origin",
@@ -7764,9 +8911,17 @@
         "transfer",
         "fetch-origin"
       ],
-      "qualified_name": "agentic-kit transfer fetch-origin"
+      "qualified_name": "agentic-kit transfer fetch-origin",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer fetch-origin."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "head-sha",
@@ -7804,9 +8959,17 @@
         "transfer",
         "head-sha"
       ],
-      "qualified_name": "agentic-kit transfer head-sha"
+      "qualified_name": "agentic-kit transfer head-sha",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer head-sha."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "inspect",
@@ -7844,9 +9007,17 @@
         "transfer",
         "inspect"
       ],
-      "qualified_name": "agentic-kit transfer inspect"
+      "qualified_name": "agentic-kit transfer inspect",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer inspect."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "List local release tags and branches for safe work-start selection.",
       "name": "list-refs",
@@ -7870,9 +9041,17 @@
         "transfer",
         "list-refs"
       ],
-      "qualified_name": "agentic-kit transfer list-refs"
+      "qualified_name": "agentic-kit transfer list-refs",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "List local release tags and branches for safe work-start selection."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Render the dynamic local-to-LLM copy/paste log header from rule files.",
       "name": "log-header",
@@ -7896,9 +9075,17 @@
         "transfer",
         "log-header"
       ],
-      "qualified_name": "agentic-kit transfer log-header"
+      "qualified_name": "agentic-kit transfer log-header",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Render the dynamic local-to-LLM copy/paste log header from rule files."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Render the terminal hint for copy/paste communication with the LLM.",
       "name": "log-upload-hint",
@@ -7936,9 +9123,17 @@
         "transfer",
         "log-upload-hint"
       ],
-      "qualified_name": "agentic-kit transfer log-upload-hint"
+      "qualified_name": "agentic-kit transfer log-upload-hint",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Render the terminal hint for copy/paste communication with the LLM."
     },
     {
+      "dry_run_available": true,
       "group": "transfer",
       "help": "Normalize active transfer files by adding missing command IDs and archiving stale active files.",
       "name": "normalize-files",
@@ -7978,9 +9173,17 @@
         "transfer",
         "normalize-files"
       ],
-      "qualified_name": "agentic-kit transfer normalize-files"
+      "qualified_name": "agentic-kit transfer normalize-files",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Normalize active transfer files by adding missing command IDs and archiving stale active files."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Normalize and summarize the local transfer session state.\n\nThe MVP is diagnostic and evidence-producing only. It does not switch branches,\npull, delete files, commit, push, or mutate the worktree except for writing the\ncanonical transfer outbox file.",
       "name": "normalize-session",
@@ -8034,9 +9237,17 @@
         "transfer",
         "normalize-session"
       ],
-      "qualified_name": "agentic-kit transfer normalize-session"
+      "qualified_name": "agentic-kit transfer normalize-session",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Normalize and summarize the local transfer session state."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Render the current four-slice patch/handoff workflow state.",
       "name": "patch-cycle-status",
@@ -8102,9 +9313,17 @@
         "transfer",
         "patch-cycle-status"
       ],
-      "qualified_name": "agentic-kit transfer patch-cycle-status"
+      "qualified_name": "agentic-kit transfer patch-cycle-status",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Render the current four-slice patch/handoff workflow state."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "post-merge-check",
@@ -8142,9 +9361,17 @@
         "transfer",
         "post-merge-check"
       ],
-      "qualified_name": "agentic-kit transfer post-merge-check"
+      "qualified_name": "agentic-kit transfer post-merge-check",
+      "replaces_raw": [],
+      "safety": "DESTRUCTIVE",
+      "task_tags": [
+        "destructive",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer post-merge-check."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "post-merge-complete",
@@ -8280,9 +9507,17 @@
         "transfer",
         "post-merge-complete"
       ],
-      "qualified_name": "agentic-kit transfer post-merge-complete"
+      "qualified_name": "agentic-kit transfer post-merge-complete",
+      "replaces_raw": [],
+      "safety": "DESTRUCTIVE",
+      "task_tags": [
+        "destructive",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer post-merge-complete."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "pr-closeout-complete",
@@ -8404,9 +9639,17 @@
         "transfer",
         "pr-closeout-complete"
       ],
-      "qualified_name": "agentic-kit transfer pr-closeout-complete"
+      "qualified_name": "agentic-kit transfer pr-closeout-complete",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer pr-closeout-complete."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "pr-complete",
@@ -8543,9 +9786,17 @@
         "transfer",
         "pr-complete"
       ],
-      "qualified_name": "agentic-kit transfer pr-complete"
+      "qualified_name": "agentic-kit transfer pr-complete",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer pr-complete."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "pr-create",
@@ -8639,9 +9890,17 @@
         "transfer",
         "pr-create"
       ],
-      "qualified_name": "agentic-kit transfer pr-create"
+      "qualified_name": "agentic-kit transfer pr-create",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer pr-create."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Create a PR and complete it without requiring manual PR-number or SHA copying.",
       "name": "pr-create-complete",
@@ -8792,9 +10051,19 @@
         "transfer",
         "pr-create-complete"
       ],
-      "qualified_name": "agentic-kit transfer pr-create-complete"
+      "qualified_name": "agentic-kit transfer pr-create-complete",
+      "replaces_raw": [
+        "gh pr create"
+      ],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Create a PR and complete it without requiring manual PR-number or SHA copying."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "pr-existing-for-branch",
@@ -8860,9 +10129,17 @@
         "transfer",
         "pr-existing-for-branch"
       ],
-      "qualified_name": "agentic-kit transfer pr-existing-for-branch"
+      "qualified_name": "agentic-kit transfer pr-existing-for-branch",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer pr-existing-for-branch."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "pr-merge-safe",
@@ -8998,9 +10275,19 @@
         "transfer",
         "pr-merge-safe"
       ],
-      "qualified_name": "agentic-kit transfer pr-merge-safe"
+      "qualified_name": "agentic-kit transfer pr-merge-safe",
+      "replaces_raw": [
+        "gh pr merge"
+      ],
+      "safety": "DESTRUCTIVE",
+      "task_tags": [
+        "destructive",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer pr-merge-safe."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "pr-status",
@@ -9080,9 +10367,17 @@
         "transfer",
         "pr-status"
       ],
-      "qualified_name": "agentic-kit transfer pr-status"
+      "qualified_name": "agentic-kit transfer pr-status",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer pr-status."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "pr-wait-ci",
@@ -9177,9 +10472,17 @@
         "transfer",
         "pr-wait-ci"
       ],
-      "qualified_name": "agentic-kit transfer pr-wait-ci"
+      "qualified_name": "agentic-kit transfer pr-wait-ci",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer pr-wait-ci."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Deprecated compatibility alias for transfer chat-switch-complete.",
       "name": "prepare-successor-handoff",
@@ -9247,9 +10550,17 @@
         "transfer",
         "prepare-successor-handoff"
       ],
-      "qualified_name": "agentic-kit transfer prepare-successor-handoff"
+      "qualified_name": "agentic-kit transfer prepare-successor-handoff",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Deprecated compatibility alias for transfer chat-switch-complete."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Write the current diff to /tmp and run the Python protected change planner on it.",
       "name": "protected-diff-plan",
@@ -9301,9 +10612,17 @@
         "transfer",
         "protected-diff-plan"
       ],
-      "qualified_name": "agentic-kit transfer protected-diff-plan"
+      "qualified_name": "agentic-kit transfer protected-diff-plan",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "transfer"
+      ],
+      "when_to_use": "Write the current diff to /tmp and run the Python protected change planner on it."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "publish-last-report",
@@ -9341,9 +10660,17 @@
         "transfer",
         "publish-last-report"
       ],
-      "qualified_name": "agentic-kit transfer publish-last-report"
+      "qualified_name": "agentic-kit transfer publish-last-report",
+      "replaces_raw": [],
+      "safety": "DESTRUCTIVE",
+      "task_tags": [
+        "destructive",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer publish-last-report."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "pull-current",
@@ -9367,9 +10694,17 @@
         "transfer",
         "pull-current"
       ],
-      "qualified_name": "agentic-kit transfer pull-current"
+      "qualified_name": "agentic-kit transfer pull-current",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer pull-current."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "push-current",
@@ -9407,9 +10742,19 @@
         "transfer",
         "push-current"
       ],
-      "qualified_name": "agentic-kit transfer push-current"
+      "qualified_name": "agentic-kit transfer push-current",
+      "replaces_raw": [
+        "git push"
+      ],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer push-current."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "read-user-task",
@@ -9433,9 +10778,17 @@
         "transfer",
         "read-user-task"
       ],
-      "qualified_name": "agentic-kit transfer read-user-task"
+      "qualified_name": "agentic-kit transfer read-user-task",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer read-user-task."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Rebase the current branch on its upstream with bounded conflict reporting.",
       "name": "rebase-on-upstream",
@@ -9487,9 +10840,17 @@
         "transfer",
         "rebase-on-upstream"
       ],
-      "qualified_name": "agentic-kit transfer rebase-on-upstream"
+      "qualified_name": "agentic-kit transfer rebase-on-upstream",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Rebase the current branch on its upstream with bounded conflict reporting."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Refresh outbox and latest handoff report with fresh generated LLM context.",
       "name": "refresh-llm-context-carriers",
@@ -9513,9 +10874,17 @@
         "transfer",
         "refresh-llm-context-carriers"
       ],
-      "qualified_name": "agentic-kit transfer refresh-llm-context-carriers"
+      "qualified_name": "agentic-kit transfer refresh-llm-context-carriers",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Refresh outbox and latest handoff report with fresh generated LLM context."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "remote-next",
@@ -9555,9 +10924,17 @@
         "transfer",
         "remote-next"
       ],
-      "qualified_name": "agentic-kit transfer remote-next"
+      "qualified_name": "agentic-kit transfer remote-next",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer remote-next."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "remote-work-start",
@@ -9609,9 +10986,17 @@
         "transfer",
         "remote-work-start"
       ],
-      "qualified_name": "agentic-kit transfer remote-work-start"
+      "qualified_name": "agentic-kit transfer remote-work-start",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer remote-work-start."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "repo-diff",
@@ -9663,9 +11048,17 @@
         "transfer",
         "repo-diff"
       ],
-      "qualified_name": "agentic-kit transfer repo-diff"
+      "qualified_name": "agentic-kit transfer repo-diff",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer repo-diff."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "repo-log",
@@ -9704,9 +11097,17 @@
         "transfer",
         "repo-log"
       ],
-      "qualified_name": "agentic-kit transfer repo-log"
+      "qualified_name": "agentic-kit transfer repo-log",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer repo-log."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "repo-status",
@@ -9746,9 +11147,17 @@
         "transfer",
         "repo-status"
       ],
-      "qualified_name": "agentic-kit transfer repo-status"
+      "qualified_name": "agentic-kit transfer repo-status",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer repo-status."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Require fresh generated LLM context before transfer planning.",
       "name": "require-fresh-llm-context",
@@ -9800,9 +11209,17 @@
         "transfer",
         "require-fresh-llm-context"
       ],
-      "qualified_name": "agentic-kit transfer require-fresh-llm-context"
+      "qualified_name": "agentic-kit transfer require-fresh-llm-context",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "transfer"
+      ],
+      "when_to_use": "Require fresh generated LLM context before transfer planning."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Restore the canonical known volatile transfer files.",
       "name": "restore-known-volatile",
@@ -9826,9 +11243,17 @@
         "transfer",
         "restore-known-volatile"
       ],
-      "qualified_name": "agentic-kit transfer restore-known-volatile"
+      "qualified_name": "agentic-kit transfer restore-known-volatile",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Restore the canonical known volatile transfer files."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "run-and-log",
@@ -9866,9 +11291,17 @@
         "transfer",
         "run-and-log"
       ],
-      "qualified_name": "agentic-kit transfer run-and-log"
+      "qualified_name": "agentic-kit transfer run-and-log",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer run-and-log."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "run-local",
@@ -9908,9 +11341,17 @@
         "transfer",
         "run-local"
       ],
-      "qualified_name": "agentic-kit transfer run-local"
+      "qualified_name": "agentic-kit transfer run-local",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer run-local."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "run-sequence-and-log",
@@ -9962,9 +11403,17 @@
         "transfer",
         "run-sequence-and-log"
       ],
-      "qualified_name": "agentic-kit transfer run-sequence-and-log"
+      "qualified_name": "agentic-kit transfer run-sequence-and-log",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer run-sequence-and-log."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "show-last-report",
@@ -9988,9 +11437,17 @@
         "transfer",
         "show-last-report"
       ],
-      "qualified_name": "agentic-kit transfer show-last-report"
+      "qualified_name": "agentic-kit transfer show-last-report",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer show-last-report."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Run a bounded scan for known workflow standard errors before patch/transfer/release work.",
       "name": "standard-error-scan",
@@ -10098,9 +11555,17 @@
         "transfer",
         "standard-error-scan"
       ],
-      "qualified_name": "agentic-kit transfer standard-error-scan"
+      "qualified_name": "agentic-kit transfer standard-error-scan",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run a bounded scan for known workflow standard errors before patch/transfer/release work."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "state",
@@ -10126,9 +11591,17 @@
         "transfer",
         "state"
       ],
-      "qualified_name": "agentic-kit transfer state"
+      "qualified_name": "agentic-kit transfer state",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer state."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "status",
@@ -10166,9 +11639,17 @@
         "transfer",
         "status"
       ],
-      "qualified_name": "agentic-kit transfer status"
+      "qualified_name": "agentic-kit transfer status",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer status."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "submit-user-task",
@@ -10248,9 +11729,17 @@
         "transfer",
         "submit-user-task"
       ],
-      "qualified_name": "agentic-kit transfer submit-user-task"
+      "qualified_name": "agentic-kit transfer submit-user-task",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer submit-user-task."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Synchronize main, acknowledge rules, and normalize the session.",
       "name": "sync-main",
@@ -10288,9 +11777,17 @@
         "transfer",
         "sync-main"
       ],
-      "qualified_name": "agentic-kit transfer sync-main"
+      "qualified_name": "agentic-kit transfer sync-main",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Synchronize main, acknowledge rules, and normalize the session."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "",
       "name": "verify-llm-context-refresh",
@@ -10314,9 +11811,17 @@
         "transfer",
         "verify-llm-context-refresh"
       ],
-      "qualified_name": "agentic-kit transfer verify-llm-context-refresh"
+      "qualified_name": "agentic-kit transfer verify-llm-context-refresh",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "transfer"
+      ],
+      "when_to_use": "Run agentic-kit transfer verify-llm-context-refresh."
     },
     {
+      "dry_run_available": true,
       "group": "transfer",
       "help": "Apply a guarded JSON/YAML text-replacement patch work order.",
       "name": "work-order-patch",
@@ -10368,9 +11873,17 @@
         "transfer",
         "work-order-patch"
       ],
-      "qualified_name": "agentic-kit transfer work-order-patch"
+      "qualified_name": "agentic-kit transfer work-order-patch",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Apply a guarded JSON/YAML text-replacement patch work order."
     },
     {
+      "dry_run_available": false,
       "group": "transfer",
       "help": "Read repo and transfer state and print the next safe wrapper command without mutating state.",
       "name": "workflow-next",
@@ -10396,9 +11909,17 @@
         "transfer",
         "workflow-next"
       ],
-      "qualified_name": "agentic-kit transfer workflow-next"
+      "qualified_name": "agentic-kit transfer workflow-next",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Read repo and transfer state and print the next safe wrapper command without mutating state."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Validate the machine-readable project contract.",
       "name": "validate-contract",
@@ -10421,9 +11942,16 @@
       "path": [
         "validate-contract"
       ],
-      "qualified_name": "agentic-kit validate-contract"
+      "qualified_name": "agentic-kit validate-contract",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Validate the machine-readable project contract."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Validate an output file against a machine-readable output contract.",
       "name": "validate-output-contract",
@@ -10517,9 +12045,16 @@
       "path": [
         "validate-output-contract"
       ],
-      "qualified_name": "agentic-kit validate-output-contract"
+      "qualified_name": "agentic-kit validate-output-contract",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Validate an output file against a machine-readable output contract."
     },
     {
+      "dry_run_available": false,
       "group": "root",
       "help": "Validate that a text file contains required literal section markers.",
       "name": "validate-sections",
@@ -10557,9 +12092,16 @@
       "path": [
         "validate-sections"
       ],
-      "qualified_name": "agentic-kit validate-sections"
+      "qualified_name": "agentic-kit validate-sections",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Validate that a text file contains required literal section markers."
     },
     {
+      "dry_run_available": false,
       "group": "work",
       "help": "Run common human workflow gates without committing or pushing.",
       "name": "check",
@@ -10597,9 +12139,17 @@
         "work",
         "check"
       ],
-      "qualified_name": "agentic-kit work check"
+      "qualified_name": "agentic-kit work check",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "work"
+      ],
+      "when_to_use": "Run common human workflow gates without committing or pushing."
     },
     {
+      "dry_run_available": true,
       "group": "work",
       "help": "Preview or execute the explicit destructive discard-all workflow.",
       "name": "discard-changes",
@@ -10651,9 +12201,17 @@
         "work",
         "discard-changes"
       ],
-      "qualified_name": "agentic-kit work discard-changes"
+      "qualified_name": "agentic-kit work discard-changes",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "work"
+      ],
+      "when_to_use": "Preview or execute the explicit destructive discard-all workflow."
     },
     {
+      "dry_run_available": true,
       "group": "work",
       "help": "Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks.",
       "name": "finish",
@@ -10763,9 +12321,17 @@
         "work",
         "finish"
       ],
-      "qualified_name": "agentic-kit work finish"
+      "qualified_name": "agentic-kit work finish",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "work"
+      ],
+      "when_to_use": "Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks."
     },
     {
+      "dry_run_available": false,
       "group": "work",
       "help": "Run safe recovery/status commands after interrupted work.",
       "name": "recover",
@@ -10789,9 +12355,17 @@
         "work",
         "recover"
       ],
-      "qualified_name": "agentic-kit work recover"
+      "qualified_name": "agentic-kit work recover",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "work"
+      ],
+      "when_to_use": "Run safe recovery/status commands after interrupted work."
     },
     {
+      "dry_run_available": false,
       "group": "work",
       "help": "Start a human patch/slice workflow with the safe standard startup sequence.",
       "name": "start",
@@ -10857,9 +12431,17 @@
         "work",
         "start"
       ],
-      "qualified_name": "agentic-kit work start"
+      "qualified_name": "agentic-kit work start",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "work"
+      ],
+      "when_to_use": "Start a human patch/slice workflow with the safe standard startup sequence."
     },
     {
+      "dry_run_available": false,
       "group": "work-order",
       "help": "",
       "name": "check",
@@ -10868,9 +12450,17 @@
         "work-order",
         "check"
       ],
-      "qualified_name": "agentic-kit work-order check"
+      "qualified_name": "agentic-kit work-order check",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "work-order"
+      ],
+      "when_to_use": "Run agentic-kit work-order check."
     },
     {
+      "dry_run_available": false,
       "group": "work-order",
       "help": "",
       "name": "list",
@@ -10879,9 +12469,17 @@
         "work-order",
         "list"
       ],
-      "qualified_name": "agentic-kit work-order list"
+      "qualified_name": "agentic-kit work-order list",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "work-order"
+      ],
+      "when_to_use": "Run agentic-kit work-order list."
     },
     {
+      "dry_run_available": false,
       "group": "work-order",
       "help": "",
       "name": "prepare",
@@ -10933,9 +12531,17 @@
         "work-order",
         "prepare"
       ],
-      "qualified_name": "agentic-kit work-order prepare"
+      "qualified_name": "agentic-kit work-order prepare",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "work-order"
+      ],
+      "when_to_use": "Run agentic-kit work-order prepare."
     },
     {
+      "dry_run_available": true,
       "group": "work-order",
       "help": "",
       "name": "run",
@@ -10973,9 +12579,17 @@
         "work-order",
         "run"
       ],
-      "qualified_name": "agentic-kit work-order run"
+      "qualified_name": "agentic-kit work-order run",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "work-order"
+      ],
+      "when_to_use": "Run agentic-kit work-order run."
     },
     {
+      "dry_run_available": false,
       "group": "work-order",
       "help": "",
       "name": "show",
@@ -10999,9 +12613,17 @@
         "work-order",
         "show"
       ],
-      "qualified_name": "agentic-kit work-order show"
+      "qualified_name": "agentic-kit work-order show",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "work-order"
+      ],
+      "when_to_use": "Run agentic-kit work-order show."
     },
     {
+      "dry_run_available": false,
       "group": "work-order",
       "help": "",
       "name": "templates",
@@ -11010,9 +12632,17 @@
         "work-order",
         "templates"
       ],
-      "qualified_name": "agentic-kit work-order templates"
+      "qualified_name": "agentic-kit work-order templates",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "work-order"
+      ],
+      "when_to_use": "Run agentic-kit work-order templates."
     },
     {
+      "dry_run_available": false,
       "group": "work-order",
       "help": "",
       "name": "typed-next",
@@ -11036,9 +12666,17 @@
         "work-order",
         "typed-next"
       ],
-      "qualified_name": "agentic-kit work-order typed-next"
+      "qualified_name": "agentic-kit work-order typed-next",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "work-order"
+      ],
+      "when_to_use": "Run agentic-kit work-order typed-next."
     },
     {
+      "dry_run_available": false,
       "group": "work-order",
       "help": "",
       "name": "typed-queue-status",
@@ -11076,9 +12714,17 @@
         "work-order",
         "typed-queue-status"
       ],
-      "qualified_name": "agentic-kit work-order typed-queue-status"
+      "qualified_name": "agentic-kit work-order typed-queue-status",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "work-order"
+      ],
+      "when_to_use": "Run agentic-kit work-order typed-queue-status."
     },
     {
+      "dry_run_available": true,
       "group": "work-order",
       "help": "",
       "name": "typed-run",
@@ -11130,9 +12776,17 @@
         "work-order",
         "typed-run"
       ],
-      "qualified_name": "agentic-kit work-order typed-run"
+      "qualified_name": "agentic-kit work-order typed-run",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "work-order"
+      ],
+      "when_to_use": "Run agentic-kit work-order typed-run."
     },
     {
+      "dry_run_available": false,
       "group": "workflow",
       "help": "Cleanup completed or stale temporary workflow evidence branches.",
       "name": "cleanup",
@@ -11156,9 +12810,17 @@
         "workflow",
         "cleanup"
       ],
-      "qualified_name": "agentic-kit workflow cleanup"
+      "qualified_name": "agentic-kit workflow cleanup",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "workflow"
+      ],
+      "when_to_use": "Cleanup completed or stale temporary workflow evidence branches."
     },
     {
+      "dry_run_available": false,
       "group": "workflow",
       "help": "Upload preserved FAILED workflow evidence without cleanup or retry.",
       "name": "fail-report",
@@ -11182,9 +12844,17 @@
         "workflow",
         "fail-report"
       ],
-      "qualified_name": "agentic-kit workflow fail-report"
+      "qualified_name": "agentic-kit workflow fail-report",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "workflow"
+      ],
+      "when_to_use": "Upload preserved FAILED workflow evidence without cleanup or retry."
     },
     {
+      "dry_run_available": false,
       "group": "workflow",
       "help": "Request the configured workflow and run one bounded step.",
       "name": "go",
@@ -11208,9 +12878,17 @@
         "workflow",
         "go"
       ],
-      "qualified_name": "agentic-kit workflow go"
+      "qualified_name": "agentic-kit workflow go",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "workflow"
+      ],
+      "when_to_use": "Request the configured workflow and run one bounded step."
     },
     {
+      "dry_run_available": false,
       "group": "workflow",
       "help": "List stored local workflow items.",
       "name": "list",
@@ -11234,9 +12912,17 @@
         "workflow",
         "list"
       ],
-      "qualified_name": "agentic-kit workflow list"
+      "qualified_name": "agentic-kit workflow list",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "workflow"
+      ],
+      "when_to_use": "List stored local workflow items."
     },
     {
+      "dry_run_available": false,
       "group": "workflow",
       "help": "Request the configured declarative workflow without running it.",
       "name": "request",
@@ -11260,9 +12946,17 @@
         "workflow",
         "request"
       ],
-      "qualified_name": "agentic-kit workflow request"
+      "qualified_name": "agentic-kit workflow request",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "workflow"
+      ],
+      "when_to_use": "Request the configured declarative workflow without running it."
     },
     {
+      "dry_run_available": false,
       "group": "workflow",
       "help": "Run the current workflow, or set a stored workflow item and run it.",
       "name": "run",
@@ -11300,9 +12994,17 @@
         "workflow",
         "run"
       ],
-      "qualified_name": "agentic-kit workflow run"
+      "qualified_name": "agentic-kit workflow run",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "workflow"
+      ],
+      "when_to_use": "Run the current workflow, or set a stored workflow item and run it."
     },
     {
+      "dry_run_available": false,
       "group": "workflow",
       "help": "Show the current workflow request or one stored workflow item.",
       "name": "show",
@@ -11340,9 +13042,17 @@
         "workflow",
         "show"
       ],
-      "qualified_name": "agentic-kit workflow show"
+      "qualified_name": "agentic-kit workflow show",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "workflow"
+      ],
+      "when_to_use": "Show the current workflow request or one stored workflow item."
     },
     {
+      "dry_run_available": false,
       "group": "workflow",
       "help": "Show guided workflow state; shortcut for workflow status --explain.",
       "name": "state",
@@ -11366,9 +13076,17 @@
         "workflow",
         "state"
       ],
-      "qualified_name": "agentic-kit workflow state"
+      "qualified_name": "agentic-kit workflow state",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "workflow"
+      ],
+      "when_to_use": "Show guided workflow state; shortcut for workflow status --explain."
     },
     {
+      "dry_run_available": false,
       "group": "workflow",
       "help": "Print the current workflow state and bounded evidence pointers.",
       "name": "status",
@@ -11406,9 +13124,17 @@
         "workflow",
         "status"
       ],
-      "qualified_name": "agentic-kit workflow status"
+      "qualified_name": "agentic-kit workflow status",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "workflow"
+      ],
+      "when_to_use": "Print the current workflow state and bounded evidence pointers."
     },
     {
+      "dry_run_available": false,
       "group": "workflow",
       "help": "Alias for upload-output.",
       "name": "upload",
@@ -11432,9 +13158,17 @@
         "workflow",
         "upload"
       ],
-      "qualified_name": "agentic-kit workflow upload"
+      "qualified_name": "agentic-kit workflow upload",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "workflow"
+      ],
+      "when_to_use": "Alias for upload-output."
     },
     {
+      "dry_run_available": false,
       "group": "workflow",
       "help": "Alias for upload-output.",
       "name": "upload-output",
@@ -11458,9 +13192,17 @@
         "workflow",
         "upload-output"
       ],
-      "qualified_name": "agentic-kit workflow upload-output"
+      "qualified_name": "agentic-kit workflow upload-output",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "workflow"
+      ],
+      "when_to_use": "Alias for upload-output."
     },
     {
+      "dry_run_available": false,
       "group": "workflow-guard",
       "help": "",
       "name": "check",
@@ -11484,9 +13226,17 @@
         "workflow-guard",
         "check"
       ],
-      "qualified_name": "agentic-kit workflow-guard check"
+      "qualified_name": "agentic-kit workflow-guard check",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only",
+        "workflow-guard"
+      ],
+      "when_to_use": "Run agentic-kit workflow-guard check."
     },
     {
+      "dry_run_available": false,
       "group": "workflow-guard",
       "help": "",
       "name": "diagnose",
@@ -11510,9 +13260,17 @@
         "workflow-guard",
         "diagnose"
       ],
-      "qualified_name": "agentic-kit workflow-guard diagnose"
+      "qualified_name": "agentic-kit workflow-guard diagnose",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "workflow-guard"
+      ],
+      "when_to_use": "Run agentic-kit workflow-guard diagnose."
     },
     {
+      "dry_run_available": false,
       "group": "workspace",
       "help": "Analyze an existing repository without writing workspace files.",
       "name": "adopt",
@@ -11550,9 +13308,17 @@
         "workspace",
         "adopt"
       ],
-      "qualified_name": "agentic-kit workspace adopt"
+      "qualified_name": "agentic-kit workspace adopt",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "workspace"
+      ],
+      "when_to_use": "Analyze an existing repository without writing workspace files."
     },
     {
+      "dry_run_available": true,
       "group": "workspace",
       "help": "Plan or create a bounded operating-layer workspace.",
       "name": "init",
@@ -11674,9 +13440,17 @@
         "workspace",
         "init"
       ],
-      "qualified_name": "agentic-kit workspace init"
+      "qualified_name": "agentic-kit workspace init",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "workspace"
+      ],
+      "when_to_use": "Plan or create a bounded operating-layer workspace."
     },
     {
+      "dry_run_available": true,
       "group": "workspace",
       "help": "Plan or run deterministic workspace manifest schema upgrades.",
       "name": "upgrade",
@@ -11728,11 +13502,23 @@
         "workspace",
         "upgrade"
       ],
-      "qualified_name": "agentic-kit workspace upgrade"
+      "qualified_name": "agentic-kit workspace upgrade",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "workspace"
+      ],
+      "when_to_use": "Plan or run deterministic workspace manifest schema upgrades."
     }
   ],
   "generated_by": "scripts/generate_agentic_kit_command_reference.py",
   "kind": "agentic_kit_command_reference",
+  "meta": {
+    "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "manifest_sha": "0ada88ea60f4",
+    "schema_version": 1
+  },
   "schema_version": 2,
   "source": "generated_from_typer_click_registry",
   "successor_execution_contract": "docs/reports/handoff-packages/latest/execution_contract.json"
