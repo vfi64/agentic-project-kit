@@ -549,7 +549,7 @@ plans:
   - Generated Markdown is reproducible from the manifest.
   - audit-command-manifest is part of the standard gates.
 - id: command-for-selector
-  status: planned
+  status: active
   title: Deterministic command selector
   depends_on:
   - command-manifest-hardening

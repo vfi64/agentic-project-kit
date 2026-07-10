@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 0ada88ea60f4
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 7bdb002881d4
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `215`
+- Command count: `216`
 
 ## Commands
 
@@ -302,6 +302,21 @@ _No parameters._
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 
+### `agentic-kit command-for`
+
+- Safety: `READ_ONLY`
+- When to use: Select the deterministic wrapper command for a raw command or task tag.
+- Dry-run available: `False`
+
+Select the deterministic wrapper command for a raw command or task tag.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `raw` | `TyperOption` | --raw | `False` |  | Raw command line to map to a wrapper. |
+| `task` | `TyperOption` | --task | `False` |  | Task tag to list matching commands. |
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
 ### `agentic-kit command-taxonomy-check`
 
 - Safety: `READ_ONLY`
@@ -317,7 +332,7 @@ Check that public commands have stable GUI-usable taxonomy.
 
 ### `agentic-kit commands render-md`
 
-- Safety: `BOUNDED`
+- Safety: `READ_ONLY`
 - When to use: Render docs/reference/AGENTIC_KIT_COMMANDS.md from the JSON manifest.
 - Dry-run available: `True`
 

@@ -5,6 +5,11 @@ from pathlib import Path
 
 import typer
 
+from agentic_project_kit.command_selector import (
+    render_command_selection,
+    select_for_raw,
+    select_for_task,
+)
 from agentic_project_kit.command_manifest import (
     MD_PATH,
     evaluate_command_manifest,
@@ -61,3 +66,21 @@ def audit_command_manifest_command(
         typer.echo(render_command_manifest_audit(audit), nl=False)
     if not audit.ok:
         raise typer.Exit(code=audit.returncode)
+
+
+def command_for_command(
+    raw: str | None = typer.Option(None, "--raw", help="Raw command line to map to a wrapper."),
+    task: str | None = typer.Option(None, "--task", help="Task tag to list matching commands."),
+    root: Path = typer.Option(Path("."), "--root", help="Repository root."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    """Select the deterministic wrapper command for a raw command or task tag."""
+    if bool(raw) == bool(task):
+        typer.echo("Provide exactly one of --raw or --task.", err=True)
+        raise typer.Exit(code=2)
+    manifest = load_manifest(root.resolve())
+    selection = select_for_raw(manifest, raw) if raw is not None else select_for_task(manifest, str(task))
+    if json_output:
+        typer.echo(json.dumps(selection.payload, indent=2, sort_keys=True))
+    else:
+        typer.echo(render_command_selection(selection), nl=False)

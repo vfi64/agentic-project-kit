@@ -65,6 +65,16 @@ def test_fixture_reference_contains_required_manifest_fields() -> None:
     assert command["dry_run_available"] is False
 
 
+def test_selector_commands_are_read_only_in_current_reference() -> None:
+    from agentic_project_kit.command_manifest import build_current_reference
+
+    data = build_current_reference()
+    by_name = {command["qualified_name"]: command for command in data["commands"]}
+
+    assert by_name["agentic-kit command-for"]["safety"] == "READ_ONLY"
+    assert by_name["agentic-kit commands render-md"]["safety"] == "READ_ONLY"
+
+
 def test_audit_detects_missing_safety(tmp_path: Path, monkeypatch) -> None:
     data = build_reference_from_app(_fixture_app())
     data["commands"][0].pop("safety")
