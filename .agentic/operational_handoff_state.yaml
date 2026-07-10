@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 1e1dbf8332ac72310e99f026f273399aa4079077
-  short: 1e1dbf83
-  subject: Add instruction lint gate for transfer apply (#1786)
+  full: acf25e615dc09d64b45cdd06fcb40f952fa040fa
+  short: acf25e61
+  subject: Add chat entrypoint command reference contract (#1788)
 last_substantive_work_state:
-  full: 1e1dbf8332ac72310e99f026f273399aa4079077
-  short: 1e1dbf83
-  subject: Add instruction lint gate for transfer apply (#1786)
+  full: acf25e615dc09d64b45cdd06fcb40f952fa040fa
+  short: acf25e61
+  subject: Add chat entrypoint command reference contract (#1788)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
