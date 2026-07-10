@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1801-handoff-refresh`
+- branch: `docs/post-pr1803-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -147,15 +147,6 @@ Wenn der Bootstrap grün ist:
 ```json
 {
   "open_tasks": [
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "p4-namespace-completion",
-      "status": "planned",
-      "summary": "Complete namespace resolution for manifest-bearing projects for P4"
-    },
     {
       "files": [
         "docs/planning/PROJECT_DIRECTION.yaml",
@@ -455,14 +446,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1801-handoff-refresh",
+    "branch": "docs/post-pr1803-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "28f0956180ecbd1cd6f925a3464ef9b0ac4db447",
+    "head": "f7320d16aae89a0bf4b346d4f66bf3d6eafbede0",
     "head_matches_origin_main": true,
-    "head_short": "28f09561",
+    "head_short": "f7320d16",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "28f0956180ecbd1cd6f925a3464ef9b0ac4db447",
-    "origin_main_short": "28f09561",
+    "origin_main": "f7320d16aae89a0bf4b346d4f66bf3d6eafbede0",
+    "origin_main_short": "f7320d16",
     "worktree_clean": false
   }
 }
