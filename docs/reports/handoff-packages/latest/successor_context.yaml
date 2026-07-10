@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-10T11:04:16.855353+00:00",
+  "generated_at_utc": "2026-07-10T11:46:56.982359+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,14 +56,14 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1782-handoff-refresh",
+    "branch": "docs/post-pr1784-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6",
+    "head": "572ec27e525952e5bbf38e45e578deaa5920a2f9",
     "head_matches_origin_main": true,
-    "head_short": "b0b48fe9",
+    "head_short": "572ec27e",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6",
-    "origin_main_short": "b0b48fe9",
+    "origin_main": "572ec27e525952e5bbf38e45e578deaa5920a2f9",
+    "origin_main_short": "572ec27e",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -201,7 +201,7 @@
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
         "id": "command-for-selector",
-        "status": "planned",
+        "status": "active",
         "summary": "Deterministic command selector"
       },
       {
