@@ -63,8 +63,58 @@ class KitConfig:
     test_gates_file: str = "TEST_GATES.md"
     documentation_coverage_file: str = "DOCUMENTATION_COVERAGE.yaml"
     documentation_registry_file: str = "DOCUMENTATION_REGISTRY.yaml"
+    rule_registry_file: str = ".agentic/rule_mechanism_inventory.yaml"
+    rules_root: str = ".agentic/rules"
     handoff_state_file: str = "handoff_state.yaml"
     operational_handoff_state_file: str = "operational_handoff_state.yaml"
+
+
+# Legacy->namespace mapping for manifest-bearing workspaces:
+# docs_root stays docs (project documentation, not kit governance).
+# tmp_root: tmp -> .agentic/tmp
+# status_file: docs/STATUS.md -> .agentic/state/status.md
+# documentation_registry_file: docs/DOCUMENTATION_REGISTRY.yaml -> .agentic/registries/documentation.yaml
+# rule_registry_file: .agentic/rule_mechanism_inventory.yaml -> .agentic/registries/rules.yaml
+# rules_root: .agentic/rules -> .agentic/rules
+# handoff_state_file: .agentic/handoff_state.yaml -> .agentic/state/handoff/handoff_state.yaml
+# operational_handoff_state_file: .agentic/operational_handoff_state.yaml -> .agentic/state/handoff/operational_handoff_state.yaml
+# reports_root: docs/reports -> .agentic/state/handoff/reports
+# terminal_reports_root: docs/reports/terminal -> .agentic/state/handoff/terminal
+# transfer_handoff_reports_root: docs/reports/terminal/transfer_handoff_reports -> .agentic/state/handoff/transfer_handoff_reports
+# terminal_post_pr_successor_chat_handoff_prefix: docs/reports/terminal/post-pr -> .agentic/state/handoff/terminal/post-pr
+# handoff_root: docs/handoff -> .agentic/state/handoff
+# handoff_packages_latest_root: docs/reports/handoff-packages/latest -> .agentic/state/handoff/packages/latest
+LEGACY_DEFAULTS = KitConfig()
+NAMESPACE_DEFAULTS = replace(
+    LEGACY_DEFAULTS,
+    tmp_root=".agentic/tmp",
+    status_file=".agentic/state/status.md",
+    documentation_registry_file=".agentic/registries/documentation.yaml",
+    rule_registry_file=".agentic/registries/rules.yaml",
+    handoff_state_file="state/handoff/handoff_state.yaml",
+    operational_handoff_state_file="state/handoff/operational_handoff_state.yaml",
+    reports_root=".agentic/state/handoff/reports",
+    terminal_reports_root=".agentic/state/handoff/terminal",
+    transfer_handoff_reports_root=".agentic/state/handoff/transfer_handoff_reports",
+    terminal_post_pr_successor_chat_handoff_prefix=".agentic/state/handoff/terminal/post-pr",
+    handoff_root=".agentic/state/handoff",
+    handoff_packages_latest_root=".agentic/state/handoff/packages/latest",
+)
+
+PATH_OVERRIDE_ALIASES = MappingProxyType(
+    {
+        "tmp": "tmp_root",
+        "status_path": "status_file",
+        "test_gates_path": "test_gates_file",
+        "documentation_coverage_path": "documentation_coverage_file",
+        "doc_registry_path": "documentation_registry_file",
+        "rule_registry_path": "rule_registry_file",
+        "handoff_state_path": "handoff_state_file",
+        "operational_handoff_state_path": "operational_handoff_state_file",
+        "handoff_packages_latest": "handoff_packages_latest_root",
+        "handoff_packages_latest_path": "handoff_packages_latest_root",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -108,6 +158,20 @@ class Workspace:
     def agentic_file(self, name: str) -> Path:
         return self.agentic_root() / name
 
+    def _docs_file_or_path(self, name: str) -> Path:
+        path = Path(name)
+        if len(path.parts) > 1:
+            return self._path(path)
+        return self.docs_file(name)
+
+    def _agentic_file_or_path(self, name: str) -> Path:
+        path = Path(name)
+        if len(path.parts) > 1:
+            if path.parts[0] == self.config.agentic_root:
+                return self._path(path)
+            return self._path(self.config.agentic_root) / path
+        return self.agentic_file(name)
+
     def agentic_tmp(self) -> Path:
         return self._path(self.config.agentic_tmp_root)
 
@@ -121,25 +185,31 @@ class Workspace:
         return self._path(self.config.transfer_root) / self.config.transfer_outbox_name
 
     def handoff_state_path(self) -> Path:
-        return self.agentic_file(self.config.handoff_state_file)
+        return self._agentic_file_or_path(self.config.handoff_state_file)
 
     def operational_handoff_state_path(self) -> Path:
-        return self.agentic_file(self.config.operational_handoff_state_file)
+        return self._agentic_file_or_path(self.config.operational_handoff_state_file)
 
     def compiled_agent_context_path(self) -> Path:
         return self.agentic_file("compiled_agent_context.yaml")
 
     def status_path(self) -> Path:
-        return self.docs_file(self.config.status_file)
+        return self._docs_file_or_path(self.config.status_file)
 
     def test_gates_path(self) -> Path:
-        return self.docs_file(self.config.test_gates_file)
+        return self._docs_file_or_path(self.config.test_gates_file)
 
     def documentation_coverage_path(self) -> Path:
-        return self.docs_file(self.config.documentation_coverage_file)
+        return self._docs_file_or_path(self.config.documentation_coverage_file)
 
     def doc_registry_path(self) -> Path:
-        return self.docs_file(self.config.documentation_registry_file)
+        return self._docs_file_or_path(self.config.documentation_registry_file)
+
+    def rule_registry_path(self) -> Path:
+        return self._path(self.config.rule_registry_file)
+
+    def rules_dir(self) -> Path:
+        return self._path(self.config.rules_root)
 
     def reports_dir(self) -> Path:
         return self._path(self.config.reports_root)
@@ -211,11 +281,11 @@ class Workspace:
 def load_workspace(root: Path = Path(".")) -> Workspace:
     """Load the workspace using the implicit legacy profile or a schema-v1 manifest."""
 
-    config = KitConfig()
+    config = LEGACY_DEFAULTS
     root = Path(root)
     manifest_path = root / config.workspace_manifest_file
     if manifest_path.exists():
-        return _load_manifest_workspace(root, manifest_path, config)
+        return _load_manifest_workspace(root, manifest_path, NAMESPACE_DEFAULTS)
     return Workspace(root=root, config=config)
 
 
@@ -356,7 +426,8 @@ def _apply_path_overrides(config: KitConfig, paths: object, location: str) -> Ki
     allowed_fields = {field.name for field in fields(KitConfig)}
     overrides: dict[str, str] = {}
     for name, value in paths.items():
-        if not isinstance(name, str) or name not in allowed_fields:
+        field_name = PATH_OVERRIDE_ALIASES.get(name, name) if isinstance(name, str) else name
+        if not isinstance(field_name, str) or field_name not in allowed_fields:
             raise RuntimeError(
                 _manifest_error(f"{location}:paths.{name}", "unknown paths key")
             )
@@ -364,7 +435,7 @@ def _apply_path_overrides(config: KitConfig, paths: object, location: str) -> Ki
             raise RuntimeError(
                 _manifest_error(f"{location}:paths.{name}", "expected string")
             )
-        overrides[name] = value
+        overrides[field_name] = value
     return replace(config, **overrides)
 
 

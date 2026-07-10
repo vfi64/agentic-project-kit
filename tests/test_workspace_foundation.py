@@ -43,6 +43,8 @@ def test_legacy_workspace_paths_match_todays_literals() -> None:
     assert _rel(ws.test_gates_path()) == "docs/TEST_GATES.md"
     assert _rel(ws.documentation_coverage_path()) == "docs/DOCUMENTATION_COVERAGE.yaml"
     assert _rel(ws.doc_registry_path()) == "docs/DOCUMENTATION_REGISTRY.yaml"
+    assert _rel(ws.rule_registry_path()) == ".agentic/rule_mechanism_inventory.yaml"
+    assert _rel(ws.rules_dir()) == ".agentic/rules"
     assert _rel(ws.reports_dir()) == "docs/reports"
     assert _rel(ws.terminal_reports_dir()) == "docs/reports/terminal"
     assert ws.post_pr_successor_chat_handoff_prefix() == "docs/reports/terminal/post-pr"
@@ -93,11 +95,85 @@ gates:
     assert ws.profile == "generic"
     assert ws.project_name == "demo"
     assert ws.project_type == "python"
-    assert _rel(ws.status_path().relative_to(tmp_path)) == "project-docs/STATUS.md"
-    assert _rel(ws.doc_registry_path().relative_to(tmp_path)) == "project-docs/DOCUMENTATION_REGISTRY.yaml"
-    assert _rel(ws.handoff_dir().relative_to(tmp_path)) == "docs/handoff"
+    assert _rel(ws.docs_root().relative_to(tmp_path)) == "project-docs"
+    assert _rel(ws.status_path().relative_to(tmp_path)) == ".agentic/state/status.md"
+    assert _rel(ws.doc_registry_path().relative_to(tmp_path)) == ".agentic/registries/documentation.yaml"
+    assert _rel(ws.handoff_dir().relative_to(tmp_path)) == ".agentic/state/handoff"
     assert ws.gates_extra == ("custom-gate",)
     assert ws.gates_skip == ("slow-gate",)
+
+
+def test_manifest_defaults_resolve_into_namespace(tmp_path: Path) -> None:
+    _write_manifest(tmp_path, "kit_schema_version: 1\nprofile: generic\n")
+
+    ws = load_workspace(tmp_path)
+
+    assert _rel(ws.docs_root().relative_to(tmp_path)) == "docs"
+    assert _rel(ws.tmp().relative_to(tmp_path)) == ".agentic/tmp"
+    assert _rel(ws.agentic_root().relative_to(tmp_path)) == ".agentic"
+    assert _rel(ws.agentic_tmp().relative_to(tmp_path)) == ".agentic/tmp"
+    assert _rel(ws.workspace_lock_path().relative_to(tmp_path)) == ".agentic/tmp/workspace.lock"
+    assert _rel(ws.transfer_inbox().relative_to(tmp_path)) == ".agentic/transfer/inbox"
+    assert _rel(ws.transfer_outbox().relative_to(tmp_path)) == ".agentic/transfer/outbox"
+    assert _rel(ws.handoff_state_path().relative_to(tmp_path)) == ".agentic/state/handoff/handoff_state.yaml"
+    assert (
+        _rel(ws.operational_handoff_state_path().relative_to(tmp_path))
+        == ".agentic/state/handoff/operational_handoff_state.yaml"
+    )
+    assert _rel(ws.status_path().relative_to(tmp_path)) == ".agentic/state/status.md"
+    assert _rel(ws.doc_registry_path().relative_to(tmp_path)) == ".agentic/registries/documentation.yaml"
+    assert _rel(ws.rule_registry_path().relative_to(tmp_path)) == ".agentic/registries/rules.yaml"
+    assert _rel(ws.rules_dir().relative_to(tmp_path)) == ".agentic/rules"
+    assert _rel(ws.reports_dir().relative_to(tmp_path)) == ".agentic/state/handoff/reports"
+    assert _rel(ws.terminal_reports_dir().relative_to(tmp_path)) == ".agentic/state/handoff/terminal"
+    assert ws.post_pr_successor_chat_handoff_prefix() == ".agentic/state/handoff/terminal/post-pr"
+    assert (
+        _rel(ws.post_pr_successor_chat_handoff_path(123).relative_to(tmp_path))
+        == ".agentic/state/handoff/terminal/post-pr123-successor-chat-handoff.md"
+    )
+    assert (
+        _rel(ws.transfer_handoff_report_file("latest.json").relative_to(tmp_path))
+        == ".agentic/state/handoff/transfer_handoff_reports/latest.json"
+    )
+    assert _rel(ws.handoff_dir().relative_to(tmp_path)) == ".agentic/state/handoff"
+    assert (
+        _rel(ws.handoff_file("CURRENT_HANDOFF.md").relative_to(tmp_path))
+        == ".agentic/state/handoff/CURRENT_HANDOFF.md"
+    )
+    assert _rel(ws.handoff_packages_latest().relative_to(tmp_path)) == ".agentic/state/handoff/packages/latest"
+    assert (
+        _rel(ws.package_file("validation_report.json").relative_to(tmp_path))
+        == ".agentic/state/handoff/packages/latest/validation_report.json"
+    )
+
+
+def test_explicit_override_beats_namespace_default(tmp_path: Path) -> None:
+    _write_manifest(
+        tmp_path,
+        """
+kit_schema_version: 1
+paths:
+  tmp: tmp
+  status_path: docs/STATUS.md
+  doc_registry_path: docs/DOCUMENTATION_REGISTRY.yaml
+  rule_registry_path: .agentic/rule_mechanism_inventory.yaml
+  handoff_state_path: .agentic/handoff_state.yaml
+  operational_handoff_state_path: .agentic/operational_handoff_state.yaml
+  handoff_root: docs/handoff
+  handoff_packages_latest: docs/reports/handoff-packages/latest
+""",
+    )
+
+    ws = load_workspace(tmp_path)
+
+    assert _rel(ws.tmp().relative_to(tmp_path)) == "tmp"
+    assert _rel(ws.status_path().relative_to(tmp_path)) == "docs/STATUS.md"
+    assert _rel(ws.doc_registry_path().relative_to(tmp_path)) == "docs/DOCUMENTATION_REGISTRY.yaml"
+    assert _rel(ws.rule_registry_path().relative_to(tmp_path)) == ".agentic/rule_mechanism_inventory.yaml"
+    assert _rel(ws.handoff_state_path().relative_to(tmp_path)) == ".agentic/handoff_state.yaml"
+    assert _rel(ws.operational_handoff_state_path().relative_to(tmp_path)) == ".agentic/operational_handoff_state.yaml"
+    assert _rel(ws.handoff_dir().relative_to(tmp_path)) == "docs/handoff"
+    assert _rel(ws.handoff_packages_latest().relative_to(tmp_path)) == "docs/reports/handoff-packages/latest"
 
 
 def test_manifest_visibility_and_modules_are_held_not_enforced(tmp_path: Path) -> None:
@@ -238,6 +314,7 @@ def test_no_manifest_keeps_legacy_golden(tmp_path: Path) -> None:
     assert ws.profile == "implicit-legacy"
     assert _rel(ws.status_path().relative_to(tmp_path)) == "docs/STATUS.md"
     assert _rel(ws.doc_registry_path().relative_to(tmp_path)) == "docs/DOCUMENTATION_REGISTRY.yaml"
+    assert _rel(ws.rule_registry_path().relative_to(tmp_path)) == ".agentic/rule_mechanism_inventory.yaml"
     assert _rel(ws.workspace_lock_path().relative_to(tmp_path)) == ".agentic/tmp/workspace.lock"
 
 

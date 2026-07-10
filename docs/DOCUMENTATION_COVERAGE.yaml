@@ -332,6 +332,8 @@ rules:
     - dry-run by default
     - --execute
     - .agentic/tmp/
+    - .agentic/state/status.md
+    - .agentic/state/handoff/
     - --inject-ci
     - --inject-pre-commit
 - id: workspace-upgrade-readme-coverage
