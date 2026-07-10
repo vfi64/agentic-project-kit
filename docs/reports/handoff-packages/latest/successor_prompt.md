@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1788-handoff-refresh`
+- branch: `docs/post-pr1790-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -455,14 +455,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1788-handoff-refresh",
+    "branch": "docs/post-pr1790-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "acf25e615dc09d64b45cdd06fcb40f952fa040fa",
+    "head": "ebb9e31261c23d3ae64b8eb4b27c1ebeefd5a127",
     "head_matches_origin_main": true,
-    "head_short": "acf25e61",
+    "head_short": "ebb9e312",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "acf25e615dc09d64b45cdd06fcb40f952fa040fa",
-    "origin_main_short": "acf25e61",
+    "origin_main": "ebb9e31261c23d3ae64b8eb4b27c1ebeefd5a127",
+    "origin_main_short": "ebb9e312",
     "worktree_clean": false
   }
 }
@@ -493,5 +493,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 7bd26a27f5712bc279265883f38138bc342bcfddd6af69a1b64d186d0e888201
-- docs/reference/agentic-kit-commands.json: bede7b56fcccaffe3bef33886dd0fba555ecf61afc33a4f23d39b6bb729b82d2
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 4fcec84c07cd9fbe6083b302fe879fb29f698667cb7fd55b692c42fe60a92b5e
+- docs/reference/agentic-kit-commands.json: 869f41f2e8ec84846cb9e0b35999950232190fa8b846c8c871e0432c1ccaa7aa

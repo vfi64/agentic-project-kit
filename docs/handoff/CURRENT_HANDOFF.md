@@ -317,6 +317,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1788
+## Operational documentation refresh state after PR #1790
 
-Current administrative handoff refresh state is `acf25e61` (`Add chat entrypoint command reference contract (#1788)`). Continue next only after this post-PR1788 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `ebb9e312` (`Add mutation lock coverage audit (#1790)`). Continue next only after this post-PR1790 refresh is committed and merged; the next substantive slice must be created from fresh main.
