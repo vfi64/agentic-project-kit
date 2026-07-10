@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 38d926a5c8533b062d9955e20b42d819b3232671
-  short: 38d926a5
-  subject: Automate PR preflight context refresh (#1792)
+  full: 3c0d82492858f37d6292cae738a300aa76e87615
+  short: 3c0d8249
+  subject: Enforce mutation lock core contract (#1794)
 last_substantive_work_state:
-  full: 38d926a5c8533b062d9955e20b42d819b3232671
-  short: 38d926a5
-  subject: Automate PR preflight context refresh (#1792)
+  full: 3c0d82492858f37d6292cae738a300aa76e87615
+  short: 3c0d8249
+  subject: Enforce mutation lock core contract (#1794)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
