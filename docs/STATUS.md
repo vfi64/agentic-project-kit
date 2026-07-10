@@ -7,9 +7,9 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `54e0e57e` (`Record Master Implementation Q planning sequence (#1778)`).
-Latest substantive work: PR #1778 (`Record Master Implementation Q planning sequence (#1778)`).
-Post-merge handoff status: PASS/NOOP after PR #1778 administrative refresh.
+Current verified main: `2b936f02` (`Materialize Masterplan Q full text (#1780)`).
+Latest substantive work: PR #1780 (`Materialize Masterplan Q full text (#1780)`).
+Post-merge handoff status: PASS/NOOP after PR #1780 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1778
+## Operational documentation refresh state after PR #1780
 
-Current administrative handoff refresh state is `54e0e57e` (`Record Master Implementation Q planning sequence (#1778)`). Continue next only after this post-PR1778 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `2b936f02` (`Materialize Masterplan Q full text (#1780)`). Continue next only after this post-PR1780 refresh is committed and merged; the next substantive slice must be created from fresh main.
