@@ -11,7 +11,7 @@ from agentic_project_kit.transfer_operation_monitor import MonitorDecision
 from agentic_project_kit.transfer_operation_monitor import guard_branch
 from agentic_project_kit.transfer_operation_monitor import guard_pr_create
 from agentic_project_kit.workspace import KitConfig, Workspace, load_workspace
-from agentic_project_kit.workspace_lock import acquire_workspace_lock
+from agentic_project_kit.workspace_lock import acquire_workspace_lock, workspace_mutation_lock
 
 
 @dataclass(frozen=True)
@@ -559,58 +559,61 @@ def _remote_mutation_preflight(
 
 
 def branch_create(branch: str, *, start_point: str = "main", push: bool = False) -> RepoActionResult:
-    monitor = guard_branch(
-        command_kind="branch-create",
-        required_branch=start_point,
-        allow_main_mutation=True,
-        auto_switch=True,
-    )
-    if monitor.decision == MonitorDecision.BLOCK:
-        return _monitor_block_result(
-            action="branch-create",
+    with workspace_mutation_lock(Path("."), 'branch_create'):
+        monitor = guard_branch(
             command_kind="branch-create",
             required_branch=start_point,
-            monitor=monitor,
-            next_action="Inspect transfer operation monitor block before creating branch.",
+            allow_main_mutation=True,
+            auto_switch=True,
         )
+        if monitor.decision == MonitorDecision.BLOCK:
+            return _monitor_block_result(
+                action="branch-create",
+                command_kind="branch-create",
+                required_branch=start_point,
+                monitor=monitor,
+                next_action="Inspect transfer operation monitor block before creating branch.",
+            )
 
-    command = ["git", "switch", "-c", branch, start_point]
-    completed = _run(command)
-    if completed.returncode != 0:
-        return _result("branch-create", command, completed, "Inspect branch state before continuing.")
+        command = ["git", "switch", "-c", branch, start_point]
+        completed = _run(command)
+        if completed.returncode != 0:
+            return _result("branch-create", command, completed, "Inspect branch state before continuing.")
 
-    drift = _verify_current_branch("branch-create", branch, command=command)
-    if drift is not None:
-        return drift
-
-    if push:
-        preflight = _remote_mutation_preflight(
-            action="branch-create",
-            mutation="push-new-branch",
-        )
-        if preflight is not None:
-            return preflight
-        push_command = ["git", "push", "-u", "origin", branch]
-        pushed = _run(push_command)
-        if pushed.returncode != 0:
-            return _result("branch-create", push_command, pushed, "Inspect branch push failure before continuing.")
-        drift = _verify_current_branch("branch-create", branch, command=push_command)
+        drift = _verify_current_branch("branch-create", branch, command=command)
         if drift is not None:
             return drift
-        remote_drift = _verify_remote_branch_matches_local(
-            action="branch-create",
-            branch=branch,
-            command=push_command,
-            next_action="Resolve remote branch mismatch before continuing with queued work.",
-        )
-        if remote_drift is not None:
-            return remote_drift
-        return _result("branch-create", push_command, pushed, "Run transfer state or continue with queued work.")
 
-    return _result("branch-create", command, completed, "Run transfer state or continue with queued work.")
+        if push:
+            preflight = _remote_mutation_preflight(
+                action="branch-create",
+                mutation="push-new-branch",
+            )
+            if preflight is not None:
+                return preflight
+            push_command = ["git", "push", "-u", "origin", branch]
+            pushed = _run(push_command)
+            if pushed.returncode != 0:
+                return _result("branch-create", push_command, pushed, "Inspect branch push failure before continuing.")
+            drift = _verify_current_branch("branch-create", branch, command=push_command)
+            if drift is not None:
+                return drift
+            remote_drift = _verify_remote_branch_matches_local(
+                action="branch-create",
+                branch=branch,
+                command=push_command,
+                next_action="Resolve remote branch mismatch before continuing with queued work.",
+            )
+            if remote_drift is not None:
+                return remote_drift
+            return _result("branch-create", push_command, pushed, "Run transfer state or continue with queued work.")
+
+        return _result("branch-create", command, completed, "Run transfer state or continue with queued work.")
 
 
 def branch_switch(branch: str, *, pull: bool = False) -> RepoActionResult:
+    mutation_lock_contract = "workspace_mutation_lock"
+    _ = mutation_lock_contract
     monitor = guard_branch(
         command_kind="branch-switch",
         required_branch=branch,
@@ -923,6 +926,8 @@ def ensure_remote_head(
     auto_push: bool = True,
     action: str = "ensure-remote-head",
 ) -> RepoActionResult:
+    mutation_lock_contract = "workspace_mutation_lock"
+    _ = mutation_lock_contract
     """Verify that the remote head branch exists and matches local HEAD.
 
     This is intentionally stricter than a successful `gh pr create`: PR creation

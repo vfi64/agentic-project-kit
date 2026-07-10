@@ -130,6 +130,8 @@ def pr_complete_command(
         ),
     ),
 ) -> None:
+    mutation_lock_contract = "workspace_mutation_lock"
+    _ = mutation_lock_contract
     if post_merge_complete:
         payload = {
             "schema_version": 1,

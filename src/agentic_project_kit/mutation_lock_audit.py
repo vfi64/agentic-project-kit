@@ -1,9 +1,16 @@
 from __future__ import annotations
 
+import re
 from dataclasses import asdict, dataclass
 from pathlib import Path
-import re
 from typing import Any
+
+LOCK_MARKER = "workspace_mutation_lock"
+ENFORCED_CORE_MUTATION_LOCK_PATHS = (
+    "transfer_repo_actions.py",
+    "transfer_pr_create_flow.py",
+    "transfer_pr_merge_flow.py",
+)
 
 
 @dataclass(frozen=True)
