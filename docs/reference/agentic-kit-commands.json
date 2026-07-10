@@ -338,6 +338,38 @@
     {
       "dry_run_available": false,
       "group": "root",
+      "help": "Audit mutating entrypoints for workspace mutation-lock coverage.",
+      "name": "audit-mutation-lock-coverage",
+      "params": [
+        {
+          "default": false,
+          "help": "Emit JSON output.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "audit-mutation-lock-coverage"
+      ],
+      "qualified_name": "agentic-kit audit-mutation-lock-coverage",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Audit mutating entrypoints for workspace mutation-lock coverage."
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
       "help": "Audit remaining legacy ./ns/ns-menu/ns_release references.",
       "name": "audit-ns-legacy-references",
       "params": [
@@ -13590,7 +13622,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "7bdb002881d4",
+    "manifest_sha": "dda3f3742f28",
     "schema_version": 1
   },
   "schema_version": 2,

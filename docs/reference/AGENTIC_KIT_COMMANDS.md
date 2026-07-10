@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 7bdb002881d4
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: dda3f3742f28
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `216`
+- Command count: `217`
 
 ## Commands
 
@@ -86,6 +86,18 @@ Audit current release/documentation currency across handoff and release docs.
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
+### `agentic-kit audit-mutation-lock-coverage`
+
+- Safety: `READ_ONLY`
+- When to use: Audit mutating entrypoints for workspace mutation-lock coverage.
+- Dry-run available: `False`
+
+Audit mutating entrypoints for workspace mutation-lock coverage.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit JSON output. |
 
 ### `agentic-kit audit-ns-legacy-references`
 
