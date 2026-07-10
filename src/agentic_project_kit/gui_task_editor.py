@@ -6,6 +6,7 @@ from enum import StrEnum
 import hashlib
 import os
 from pathlib import Path
+from agentic_project_kit.chat_entrypoint_contract import ensure_command_reference_in_prompt
 import platform
 import shlex
 import subprocess
@@ -391,7 +392,7 @@ def build_initial_llm_prompt(
     return InitialLlmPrompt(
         result_status="PASS",
         kind="initial_llm_prompt",
-        prompt_text=prompt + "\n",
+        prompt_text=ensure_command_reference_in_prompt(prompt + "\n"),
         copy_paste_instruction=(
             "Copy the prompt_text and paste it once into the LLM chat at the start "
             "of a new session. The LLM must read the bootstrap files before any work."
