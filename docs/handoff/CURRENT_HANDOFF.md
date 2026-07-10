@@ -317,6 +317,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1803
+## Operational documentation refresh state after PR #1805
 
-Current administrative handoff refresh state is `f7320d16` (`Complete P4b resolver sweep (#1803)`). Continue next only after this post-PR1803 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `323e6ea5` (`Add self-hosting workspace manifest (#1805)`). Continue next only after this post-PR1805 refresh is committed and merged; the next substantive slice must be created from fresh main.

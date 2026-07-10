@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f7320d16aae89a0bf4b346d4f66bf3d6eafbede0
-  short: f7320d16
-  subject: Complete P4b resolver sweep (#1803)
+  full: 323e6ea5219c9f6ddfc1c9e6af5a9bcd4377aea3
+  short: 323e6ea5
+  subject: Add self-hosting workspace manifest (#1805)
 last_substantive_work_state:
-  full: f7320d16aae89a0bf4b346d4f66bf3d6eafbede0
-  short: f7320d16
-  subject: Complete P4b resolver sweep (#1803)
+  full: 323e6ea5219c9f6ddfc1c9e6af5a9bcd4377aea3
+  short: 323e6ea5
+  subject: Add self-hosting workspace manifest (#1805)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1803-handoff-refresh`
+- branch: `docs/post-pr1805-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -147,15 +147,6 @@ Wenn der Bootstrap grün ist:
 ```json
 {
   "open_tasks": [
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "p5a-self-hosting-manifest",
-      "status": "planned",
-      "summary": "Add a self-hosting manifest while keeping physical paths stable for P5"
-    },
     {
       "files": [
         "docs/planning/PROJECT_DIRECTION.yaml",
@@ -446,14 +437,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1803-handoff-refresh",
+    "branch": "docs/post-pr1805-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f7320d16aae89a0bf4b346d4f66bf3d6eafbede0",
+    "head": "323e6ea5219c9f6ddfc1c9e6af5a9bcd4377aea3",
     "head_matches_origin_main": true,
-    "head_short": "f7320d16",
+    "head_short": "323e6ea5",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "f7320d16aae89a0bf4b346d4f66bf3d6eafbede0",
-    "origin_main_short": "f7320d16",
+    "origin_main": "323e6ea5219c9f6ddfc1c9e6af5a9bcd4377aea3",
+    "origin_main_short": "323e6ea5",
     "worktree_clean": false
   }
 }
