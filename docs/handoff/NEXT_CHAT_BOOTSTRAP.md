@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `f7320d16aae89a0bf4b346d4f66bf3d6eafbede0` (`f7320d16`)
-- Handoff freshness marker: `f7320d16`
-- Branch at generation: `docs/post-pr1803-handoff-refresh`
+- HEAD: `323e6ea5219c9f6ddfc1c9e6af5a9bcd4377aea3` (`323e6ea5`)
+- Handoff freshness marker: `323e6ea5`
+- Branch at generation: `docs/post-pr1805-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -71,7 +71,6 @@ Wenn der Bootstrap grün ist:
 
 Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 
-- `p5a-self-hosting-manifest` (planned): Add a self-hosting manifest while keeping physical paths stable for P5
 - `p5b-resolver-aliases` (planned): Route self-hosted accesses through resolver-backed aliases for P5
 - `p5c-physical-migration` (planned): Optionally migrate physical paths after resolver decoupling for P5
 - `p5d-legacy-path-deprecation` (planned): Deprecate legacy top-level paths in line with legacy-profile removal for P5
