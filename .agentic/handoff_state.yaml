@@ -1,6 +1,6 @@
 schema_version: 1
 updated:
-  date: '2026-07-03'
+  date: '2026-07-10'
   reason: 'administrative handoff refresh: Current HEAD is administrative evidence;
     safe_state remains on last substantive work state'
   source: agentic-kit handoff refresh
@@ -435,7 +435,7 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr1796-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1797-successor-chat-handoff.md
   first_instruction: >-
     Review PR #1436 and the refreshed successor handoff package for the release
     command authority planning slice. After merge, start from fresh main and
@@ -448,10 +448,10 @@ next_step:
     use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice before DOI,
     legacy-doc, absolute-path, or GUI work.
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr1796-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1797-successor-chat-handoff.md
 administrative_evidence_state:
-  current_head: 5fb1844c
-  current_head_subject: Classify mutation lock audit findings (#1796)
+  current_head: 77fe1824
+  current_head_subject: Refresh handoff state after PR1796 (#1797)
   allowed_after_safe_state: true
   reason: administrative evidence/log/handoff commit after substantive safe_state
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL

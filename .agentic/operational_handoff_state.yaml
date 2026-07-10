@@ -1,8 +1,8 @@
 schema_version: 1
 current_head:
-  full: 5fb1844c8150a9b69088a17f0f304d8fa76e4b31
-  short: 5fb1844c
-  subject: Classify mutation lock audit findings (#1796)
+  full: 77fe1824cde22205caf73044d11b17624108fbde
+  short: 77fe1824
+  subject: Refresh handoff state after PR1796 (#1797)
 last_substantive_work_state:
   full: 5fb1844c8150a9b69088a17f0f304d8fa76e4b31
   short: 5fb1844c
