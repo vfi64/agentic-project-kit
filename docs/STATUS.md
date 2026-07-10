@@ -7,7 +7,7 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `1e1dbf83` (`Add instruction lint gate for transfer apply (#1786)`).
+Current verified main: `b45b14b0` (`Add instruction lint gate for transfer apply (#1786)`).
 Latest substantive work: PR #1786 (`Add instruction lint gate for transfer apply (#1786)`).
 Post-merge handoff status: PASS/NOOP after PR #1786 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.

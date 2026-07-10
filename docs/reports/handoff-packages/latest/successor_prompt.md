@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1786-handoff-refresh`
+- branch: `codex/cm4-chat-entrypoint-contract`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -455,14 +455,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1786-handoff-refresh",
+    "branch": "codex/cm4-chat-entrypoint-contract",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "1e1dbf8332ac72310e99f026f273399aa4079077",
+    "head": "b45b14b06fb977ba44840a21706f70ce5b7770c4",
     "head_matches_origin_main": true,
-    "head_short": "1e1dbf83",
+    "head_short": "b45b14b0",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "1e1dbf8332ac72310e99f026f273399aa4079077",
-    "origin_main_short": "1e1dbf83",
+    "origin_main": "b45b14b06fb977ba44840a21706f70ce5b7770c4",
+    "origin_main_short": "b45b14b0",
     "worktree_clean": false
   }
 }
@@ -486,3 +486,12 @@ Wenn der Bootstrap grün ist:
 1. Wenn `validation_report.json` nicht PASS ist: Handoff-Projektion reparieren.
 2. Wenn der Arbeitsbaum dirty ist: nur explizite WIP-Dateien prüfen und abschließen oder sauber dokumentieren.
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` bearbeiten.
+
+Command reference contract:
+- Read `docs/reference/agentic-kit-commands.json` before composing agentic-kit commands.
+- Read `docs/reference/AGENTIC_KIT_COMMANDS.md` before composing agentic-kit commands.
+- `must_not_reconstruct_commands_from_memory: true`.
+- Treat `source_hashes` as freshness evidence.
+source_hashes:
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 7bd26a27f5712bc279265883f38138bc342bcfddd6af69a1b64d186d0e888201
+- docs/reference/agentic-kit-commands.json: bede7b56fcccaffe3bef33886dd0fba555ecf61afc33a4f23d39b6bb729b82d2

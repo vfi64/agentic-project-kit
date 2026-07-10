@@ -5,6 +5,10 @@ import subprocess
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+from agentic_project_kit.chat_entrypoint_contract import (
+    command_reference_contract,
+    ensure_command_reference_in_prompt,
+)
 from typing import Any
 
 from agentic_project_kit import __version__ as PACKAGE_VERSION
@@ -687,6 +691,8 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
         "current_state_contract": current_state_contract,
         "handoff_projection_contract": handoff_projection_contract,
         "repo": current_state_contract["repo"],
+        "command_reference": command_reference_contract(ws.root),
+        "source_hashes": command_reference_contract(ws.root)["source_hashes"],
         "validation": {
             "status": validation_report.get("status"),
             "path": validation_report.get("path", ".agentic/successor_handoff_package/validation_report.json"),
@@ -1303,6 +1309,7 @@ def _build_successor_handoff_package(root_path: Path, ws: Workspace) -> Successo
     context = _build_context(root_path, ws)
     source_manifest = _source_manifest(root_path, ws)
     successor_prompt = render_successor_prompt(context, ws)
+    successor_prompt = ensure_command_reference_in_prompt(successor_prompt, ws.root)
     next_chat_bootstrap = render_next_chat_bootstrap_from_context(context, ws)
     start_prompt = render_start_prompt_from_context(context, ws)
     closeout_prompt = render_closeout_prompt_from_context(context, ws)
