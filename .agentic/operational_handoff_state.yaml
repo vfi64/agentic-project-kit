@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: acf25e615dc09d64b45cdd06fcb40f952fa040fa
-  short: acf25e61
-  subject: Add chat entrypoint command reference contract (#1788)
+  full: ebb9e31261c23d3ae64b8eb4b27c1ebeefd5a127
+  short: ebb9e312
+  subject: Add mutation lock coverage audit (#1790)
 last_substantive_work_state:
-  full: acf25e615dc09d64b45cdd06fcb40f952fa040fa
-  short: acf25e61
-  subject: Add chat entrypoint command reference contract (#1788)
+  full: ebb9e31261c23d3ae64b8eb4b27c1ebeefd5a127
+  short: ebb9e312
+  subject: Add mutation lock coverage audit (#1790)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
