@@ -134,6 +134,33 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
+        "id": "command-for-selector",
+        "status": "planned",
+        "summary": "Deterministic command selector"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "instruction-lint-gate",
+        "status": "planned",
+        "summary": "Instruction lint gate"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "chat-entrypoint-contract",
+        "status": "planned",
+        "summary": "Chat entrypoint manifest contract"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
         "id": "governance-doc-backfill",
         "status": "active",
         "summary": "Backfill reviewed governance document registry entries"
@@ -285,13 +312,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1780-handoff-refresh",
+      "branch": "docs/post-pr1782-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "2b936f02edd34128939cc7d5ccaf92d48fb20c09",
+      "head": "b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/agentic-project-kit",
-      "origin_main": "2b936f02edd34128939cc7d5ccaf92d48fb20c09",
+      "origin_main": "b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -368,13 +395,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1780-handoff-refresh",
+    "branch": "docs/post-pr1782-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "2b936f02edd34128939cc7d5ccaf92d48fb20c09",
+    "head": "b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "2b936f02edd34128939cc7d5ccaf92d48fb20c09",
+    "origin_main": "b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6",
     "worktree_clean": false
   },
   "rules": [
