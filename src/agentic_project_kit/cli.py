@@ -62,6 +62,7 @@ from agentic_project_kit.cli_commands.command_taxonomy import command_taxonomy_c
 from agentic_project_kit.cli_commands.patch_preflight import patch_preflight_command
 from agentic_project_kit.cli_commands.artifact_gc import artifact_gc_command
 from agentic_project_kit.cli_commands.project_direction import project_direction_command
+from agentic_project_kit.cli_commands.mutation_lock_audit import register_mutation_lock_audit_command
 from agentic_project_kit.patch_artifact_preflight import register_patch_preflight_command
 
 app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
@@ -118,6 +119,7 @@ app.add_typer(governance_app, name="governance")
 app.add_typer(gui_app, name="gui")
 app.add_typer(pr_app, name="pr")
 register_pr_closeout_alias(app)
+register_mutation_lock_audit_command(app)
 app.add_typer(cockpit_app, name="cockpit")
 app.add_typer(patterns_app, name="patterns")
 app.add_typer(scaffold_app, name="scaffold")
@@ -125,6 +127,9 @@ app.add_typer(slice_app, name="slice")
 app.add_typer(state_app, name="state")
 app.add_typer(todo_app, name="todo")
 app.add_typer(transfer_app, name="transfer")
+
+
+
 
 
 if __name__ == "__main__":
