@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6
-  short: b0b48fe9
-  subject: Harden command manifest contract (#1782)
+  full: 572ec27e525952e5bbf38e45e578deaa5920a2f9
+  short: 572ec27e
+  subject: Add command selector support for CM2 (#1784)
 last_substantive_work_state:
-  full: b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6
-  short: b0b48fe9
-  subject: Harden command manifest contract (#1782)
+  full: 572ec27e525952e5bbf38e45e578deaa5920a2f9
+  short: 572ec27e
+  subject: Add command selector support for CM2 (#1784)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

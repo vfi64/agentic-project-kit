@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1782-handoff-refresh`
+- branch: `docs/post-pr1784-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -279,7 +279,7 @@ Wenn der Bootstrap grün ist:
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
       "id": "command-for-selector",
-      "status": "planned",
+      "status": "active",
       "summary": "Deterministic command selector"
     },
     {
@@ -455,14 +455,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1782-handoff-refresh",
+    "branch": "docs/post-pr1784-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6",
+    "head": "572ec27e525952e5bbf38e45e578deaa5920a2f9",
     "head_matches_origin_main": true,
-    "head_short": "b0b48fe9",
+    "head_short": "572ec27e",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6",
-    "origin_main_short": "b0b48fe9",
+    "origin_main": "572ec27e525952e5bbf38e45e578deaa5920a2f9",
+    "origin_main_short": "572ec27e",
     "worktree_clean": false
   }
 }
