@@ -17,15 +17,6 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "p4-namespace-completion",
-        "status": "planned",
-        "summary": "Complete namespace resolution for manifest-bearing projects for P4"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
         "id": "p5a-self-hosting-manifest",
         "status": "planned",
         "summary": "Add a self-hosting manifest while keeping physical paths stable for P5"
@@ -321,13 +312,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1801-handoff-refresh",
+      "branch": "docs/post-pr1803-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "28f0956180ecbd1cd6f925a3464ef9b0ac4db447",
+      "head": "f7320d16aae89a0bf4b346d4f66bf3d6eafbede0",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/agentic-project-kit",
-      "origin_main": "28f0956180ecbd1cd6f925a3464ef9b0ac4db447",
+      "origin_main": "f7320d16aae89a0bf4b346d4f66bf3d6eafbede0",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -404,13 +395,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1801-handoff-refresh",
+    "branch": "docs/post-pr1803-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "28f0956180ecbd1cd6f925a3464ef9b0ac4db447",
+    "head": "f7320d16aae89a0bf4b346d4f66bf3d6eafbede0",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "28f0956180ecbd1cd6f925a3464ef9b0ac4db447",
+    "origin_main": "f7320d16aae89a0bf4b346d4f66bf3d6eafbede0",
     "worktree_clean": false
   },
   "rules": [

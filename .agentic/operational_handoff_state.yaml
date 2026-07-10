@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 28f0956180ecbd1cd6f925a3464ef9b0ac4db447
-  short: 28f09561
-  subject: Add namespace defaults for manifest workspaces (#1801)
+  full: f7320d16aae89a0bf4b346d4f66bf3d6eafbede0
+  short: f7320d16
+  subject: Complete P4b resolver sweep (#1803)
 last_substantive_work_state:
-  full: 28f0956180ecbd1cd6f925a3464ef9b0ac4db447
-  short: 28f09561
-  subject: Add namespace defaults for manifest workspaces (#1801)
+  full: f7320d16aae89a0bf4b346d4f66bf3d6eafbede0
+  short: f7320d16
+  subject: Complete P4b resolver sweep (#1803)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
