@@ -179,6 +179,8 @@ def infer_safety(command: dict[str, Any]) -> str:
         "standard-gates-audit-suite",
         "protected-diff-plan",
         "post-merge-check",
+        "command-for",
+        "render-md",
     }
     read_only_prefixes = (
         "agentic-kit audit-",
