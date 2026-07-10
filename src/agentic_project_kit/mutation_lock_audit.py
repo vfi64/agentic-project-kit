@@ -3,9 +3,136 @@ from __future__ import annotations
 import re
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 LOCK_MARKER = "workspace_mutation_lock"
+
+@dataclass(frozen=True)
+class MutationLockFindingClassification:
+    """Human-facing classification for mutation-lock audit findings."""
+
+    kind: str
+    counts_as_blocking: bool
+    rationale: str
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "kind": self.kind,
+            "counts_as_blocking": self.counts_as_blocking,
+            "rationale": self.rationale,
+        }
+
+
+MODULE_LEVEL_STRING_TABLE_PATHS = frozenset(
+    {
+        "src/agentic_project_kit/command_manifest.py",
+        "src/agentic_project_kit/work_order_validator.py",
+        "src/agentic_project_kit/command_inbox_check.py",
+        "src/agentic_project_kit/composite_short_circuit.py",
+        "src/agentic_project_kit/llm_execution_context.py",
+    }
+)
+
+METADATA_LITERAL_SYMBOLS = frozenset(
+    {
+        "_category_for",
+        "_composition_level_for",
+        "_task_tags",
+        "_button",
+        "_actions",
+    }
+)
+
+GENERATED_REFERENCE_SYMBOLS = frozenset(
+    {
+        "write_reference",
+        "render_markdown",
+        "commands_render_md_command",
+        "direction_render_command",
+    }
+)
+
+REPORT_WRITER_SYMBOL_HINTS = (
+    "write_",
+    "_write_",
+    "report",
+    "evidence",
+    "summary",
+    "log",
+    "finalize",
+)
+
+RUNTIME_MUTATION_SYMBOL_HINTS = (
+    "branch",
+    "commit",
+    "push",
+    "merge",
+    "restore",
+    "sync",
+    "pr_",
+    "release",
+)
+
+
+def _finding_value(finding: object, key: str) -> str:
+    if isinstance(finding, Mapping):
+        return str(finding.get(key) or "")
+    return str(getattr(finding, key, "") or "")
+
+
+def classify_mutation_lock_finding(finding: object) -> MutationLockFindingClassification:
+    """Classify a mutation-lock audit finding without changing audit behavior."""
+
+    path = _finding_value(finding, "path")
+    symbol = _finding_value(finding, "symbol")
+    category = _finding_value(finding, "category")
+    reason = _finding_value(finding, "reason")
+
+    symbol_l = symbol.lower()
+
+    if symbol == "<module>" and path in MODULE_LEVEL_STRING_TABLE_PATHS:
+        return MutationLockFindingClassification(
+            kind="metadata_literal",
+            counts_as_blocking=False,
+            rationale="module-level command metadata is audit vocabulary, not executed mutation",
+        )
+
+    if symbol in METADATA_LITERAL_SYMBOLS:
+        return MutationLockFindingClassification(
+            kind="metadata_literal",
+            counts_as_blocking=False,
+            rationale="symbol describes command/category metadata rather than executing a mutation",
+        )
+
+    if symbol in GENERATED_REFERENCE_SYMBOLS:
+        return MutationLockFindingClassification(
+            kind="generated_reference",
+            counts_as_blocking=False,
+            rationale="symbol writes generated command/reference material, not a workspace mutation target",
+        )
+
+    if category == "C" or "filesystem_" in reason:
+        if any(hint in symbol_l for hint in REPORT_WRITER_SYMBOL_HINTS):
+            return MutationLockFindingClassification(
+                kind="report_writer",
+                counts_as_blocking=False,
+                rationale="filesystem mutation writes report, evidence, summary, or log output",
+            )
+
+    if category in {"A", "B"} or "git_" in reason or "github_" in reason:
+        if any(hint in symbol_l for hint in RUNTIME_MUTATION_SYMBOL_HINTS):
+            return MutationLockFindingClassification(
+                kind="runtime_mutation",
+                counts_as_blocking=True,
+                rationale="finding is in a runtime git/github mutation path",
+            )
+
+    return MutationLockFindingClassification(
+        kind="unknown",
+        counts_as_blocking=True,
+        rationale="finding did not match a known non-blocking taxonomy rule",
+    )
+
 ENFORCED_CORE_MUTATION_LOCK_PATHS = (
     "transfer_repo_actions.py",
     "transfer_pr_create_flow.py",
