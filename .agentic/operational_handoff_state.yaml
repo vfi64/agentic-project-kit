@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 957e79916ea12222e4f301822b2dd3b9e9793247
-  short: 957e7991
-  subject: Classify mutation lock audit findings (#1799)
+  full: 28f0956180ecbd1cd6f925a3464ef9b0ac4db447
+  short: 28f09561
+  subject: Add namespace defaults for manifest workspaces (#1801)
 last_substantive_work_state:
-  full: 957e79916ea12222e4f301822b2dd3b9e9793247
-  short: 957e7991
-  subject: Classify mutation lock audit findings (#1799)
+  full: 28f0956180ecbd1cd6f925a3464ef9b0ac4db447
+  short: 28f09561
+  subject: Add namespace defaults for manifest workspaces (#1801)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
