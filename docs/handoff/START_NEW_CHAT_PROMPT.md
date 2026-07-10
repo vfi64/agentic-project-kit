@@ -54,6 +54,6 @@ Current administrative handoff refresh state is `a7a0b6a2` (`Audit ns to agentic
 Current administrative handoff refresh state is `c6ab40da` (`Classify ns migration docs before GUI (#1334)`). Continue next only after this post-PR1334 refresh is committed and merged; the next substantive slice must be created from fresh main.## Operational documentation refresh state after PR #1338
 
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1784
+## Operational documentation refresh state after PR #1786
 
-Current administrative handoff refresh state is `572ec27e` (`Add command selector support for CM2 (#1784)`). Continue next only after this post-PR1784 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `1e1dbf83` (`Add instruction lint gate for transfer apply (#1786)`). Continue next only after this post-PR1786 refresh is committed and merged; the next substantive slice must be created from fresh main.

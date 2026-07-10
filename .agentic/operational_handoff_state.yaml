@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 572ec27e525952e5bbf38e45e578deaa5920a2f9
-  short: 572ec27e
-  subject: Add command selector support for CM2 (#1784)
+  full: 1e1dbf8332ac72310e99f026f273399aa4079077
+  short: 1e1dbf83
+  subject: Add instruction lint gate for transfer apply (#1786)
 last_substantive_work_state:
-  full: 572ec27e525952e5bbf38e45e578deaa5920a2f9
-  short: 572ec27e
-  subject: Add command selector support for CM2 (#1784)
+  full: 1e1dbf8332ac72310e99f026f273399aa4079077
+  short: 1e1dbf83
+  subject: Add instruction lint gate for transfer apply (#1786)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
