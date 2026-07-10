@@ -588,6 +588,10 @@ documents:
     class: operational/automation
     owner: maintainers
     notes: Machine-readable communication artifact allowlist and retention policy.
+  - path: .agentic/config.yaml
+    class: governance/system
+    owner: maintainers
+    notes: Self-hosting workspace manifest that keeps physical legacy paths stable during P5a.
   - path: docs/reports/terminal/LATEST_TERMINAL_LOG.txt
     class: generated artifact
     owner: automation

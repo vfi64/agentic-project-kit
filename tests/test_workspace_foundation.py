@@ -1,17 +1,21 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
+from dataclasses import fields
 import json
 import os
 from pathlib import Path
 import re
 
 import pytest
+import yaml
 
 from agentic_project_kit.transfer_repo_actions import RepoActionResult
 import agentic_project_kit.transfer_repo_actions as transfer_repo_actions
-from agentic_project_kit.workspace import load_workspace
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, NAMESPACE_DEFAULTS, load_workspace
 from agentic_project_kit.workspace_lock import WorkspaceLockBusy, acquire_workspace_lock
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def _rel(path: Path) -> str:
@@ -22,6 +26,38 @@ def _write_manifest(root: Path, text: str) -> None:
     manifest = root / ".agentic" / "config.yaml"
     manifest.parent.mkdir(parents=True)
     manifest.write_text(text, encoding="utf-8")
+
+
+def test_kit_repo_manifest_yields_legacy_paths() -> None:
+    manifest_path = ROOT / ".agentic" / "config.yaml"
+    manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["kit_schema_version"] == 1
+    assert manifest["project"] == {"name": "agentic-project-kit", "type": "python"}
+    assert manifest["profile"] == "python-default"
+
+    expected_overrides = {
+        field.name: getattr(LEGACY_DEFAULTS, field.name)
+        for field in fields(LEGACY_DEFAULTS)
+        if getattr(LEGACY_DEFAULTS, field.name) != getattr(NAMESPACE_DEFAULTS, field.name)
+    }
+    expected_overrides.update(
+        {
+            "status_file": "docs/STATUS.md",
+            "documentation_registry_file": "docs/DOCUMENTATION_REGISTRY.yaml",
+            "handoff_state_file": ".agentic/handoff_state.yaml",
+            "operational_handoff_state_file": ".agentic/operational_handoff_state.yaml",
+        }
+    )
+    assert manifest["paths"] == expected_overrides
+
+    ws = load_workspace(ROOT)
+    assert ws.project_name == "agentic-project-kit"
+    assert ws.project_type == "python"
+    assert ws.profile == "python-default"
+    assert _rel(ws.status_path().relative_to(ROOT)) == "docs/STATUS.md"
+    assert _rel(ws.doc_registry_path().relative_to(ROOT)) == "docs/DOCUMENTATION_REGISTRY.yaml"
+    assert _rel(ws.handoff_state_path().relative_to(ROOT)) == ".agentic/handoff_state.yaml"
+    assert _rel(ws.tmp().relative_to(ROOT)) == "tmp"
 
 
 def test_legacy_workspace_paths_match_todays_literals() -> None:
