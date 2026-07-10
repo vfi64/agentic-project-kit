@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 2b936f02edd34128939cc7d5ccaf92d48fb20c09
-  short: 2b936f02
-  subject: Materialize Masterplan Q full text (#1780)
+  full: b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6
+  short: b0b48fe9
+  subject: Harden command manifest contract (#1782)
 last_substantive_work_state:
-  full: 2b936f02edd34128939cc7d5ccaf92d48fb20c09
-  short: 2b936f02
-  subject: Materialize Masterplan Q full text (#1780)
+  full: b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6
+  short: b0b48fe9
+  subject: Harden command manifest contract (#1782)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

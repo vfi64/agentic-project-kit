@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-10T10:42:01.578120+00:00",
+  "generated_at_utc": "2026-07-10T11:04:16.855353+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,14 +56,14 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1780-handoff-refresh",
+    "branch": "docs/post-pr1782-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "2b936f02edd34128939cc7d5ccaf92d48fb20c09",
+    "head": "b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6",
     "head_matches_origin_main": true,
-    "head_short": "2b936f02",
+    "head_short": "b0b48fe9",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "2b936f02edd34128939cc7d5ccaf92d48fb20c09",
-    "origin_main_short": "2b936f02",
+    "origin_main": "b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6",
+    "origin_main_short": "b0b48fe9",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -194,6 +194,33 @@
         "id": "master-implementation-q",
         "status": "active",
         "summary": "Master Implementation Q sequence"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "command-for-selector",
+        "status": "planned",
+        "summary": "Deterministic command selector"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "instruction-lint-gate",
+        "status": "planned",
+        "summary": "Instruction lint gate"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "chat-entrypoint-contract",
+        "status": "planned",
+        "summary": "Chat entrypoint manifest contract"
       },
       {
         "files": [

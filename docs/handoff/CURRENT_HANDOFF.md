@@ -317,6 +317,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1780
+## Operational documentation refresh state after PR #1782
 
-Current administrative handoff refresh state is `2b936f02` (`Materialize Masterplan Q full text (#1780)`). Continue next only after this post-PR1780 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `b0b48fe9` (`Harden command manifest contract (#1782)`). Continue next only after this post-PR1782 refresh is committed and merged; the next substantive slice must be created from fresh main.

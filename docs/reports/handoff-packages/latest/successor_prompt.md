@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1780-handoff-refresh`
+- branch: `docs/post-pr1782-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -278,6 +278,33 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
+      "id": "command-for-selector",
+      "status": "planned",
+      "summary": "Deterministic command selector"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "instruction-lint-gate",
+      "status": "planned",
+      "summary": "Instruction lint gate"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "chat-entrypoint-contract",
+      "status": "planned",
+      "summary": "Chat entrypoint manifest contract"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
       "id": "governance-doc-backfill",
       "status": "active",
       "summary": "Backfill reviewed governance document registry entries"
@@ -428,14 +455,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1780-handoff-refresh",
+    "branch": "docs/post-pr1782-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "2b936f02edd34128939cc7d5ccaf92d48fb20c09",
+    "head": "b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6",
     "head_matches_origin_main": true,
-    "head_short": "2b936f02",
+    "head_short": "b0b48fe9",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "2b936f02edd34128939cc7d5ccaf92d48fb20c09",
-    "origin_main_short": "2b936f02",
+    "origin_main": "b0b48fe9ae49dff6674be5bd70cb99941b3fdcf6",
+    "origin_main_short": "b0b48fe9",
     "worktree_clean": false
   }
 }
