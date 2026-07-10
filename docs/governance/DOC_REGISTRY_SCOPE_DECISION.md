@@ -20,7 +20,7 @@ Decision outcome: active registry scope is declared in `docs/DOC_REGISTRY_SCOPE.
 | docs/examples/ | 1 | 0 | 1 |  |
 | docs/governance/ | 27 | 27 | 0 |  |
 | docs/handoff/ | 4 | 4 | 0 |  |
-| docs/planning/ | 1 | 1 | 0 |  |
+| docs/planning/ | 2 | 2 | 0 |  |
 | docs/reference/ | 7 | 7 | 0 |  |
 | docs/releases/ | 1 | 1 | 0 |  |
 | docs/reports/ | 65 | 0 | 65 |  |
