@@ -11,10 +11,21 @@ import os
 
 from agentic_project_kit.next_turn_evidence import commit_and_push_evidence, publish_and_stage_evidence, render_finalize_result
 from agentic_project_kit.next_turn_slot import FIXED_SLOT_SCRIPT, FIXED_SLOT_YAML
-from agentic_project_kit.work_order_validator import LOCAL_RESULT_LOG_PATH
+from agentic_project_kit.work_order_validator import default_local_result_log_path
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
-LATEST_TERMINAL_LOG = LOCAL_RESULT_LOG_PATH
-LATEST_COMMAND_REPORT = Path(os.environ.get("AGENTIC_KIT_NEXT_TURN_REPORT", "tmp/next-turn-latest.json"))
+LATEST_TERMINAL_LOG = Path(
+    os.environ.get(
+        "AGENTIC_KIT_NEXT_TURN_LOG",
+        (Path(LEGACY_DEFAULTS.tmp_root) / "next-turn-latest.log").as_posix(),
+    )
+)
+LATEST_COMMAND_REPORT = Path(
+    os.environ.get(
+        "AGENTIC_KIT_NEXT_TURN_REPORT",
+        (Path(LEGACY_DEFAULTS.tmp_root) / "next-turn-latest.json").as_posix(),
+    )
+)
 
 
 @dataclass(frozen=True)
@@ -42,8 +53,16 @@ def run_fixed_slot(root: Path | str = ".") -> NextTurnRunResult:
     root_path = Path(root)
     yaml_path = root_path / FIXED_SLOT_YAML
     script_path = root_path / FIXED_SLOT_SCRIPT
-    terminal_log = root_path / LATEST_TERMINAL_LOG
-    command_report = root_path / LATEST_COMMAND_REPORT
+    terminal_log = (
+        root_path / LATEST_TERMINAL_LOG
+        if LATEST_TERMINAL_LOG != Path(LEGACY_DEFAULTS.tmp_root) / "next-turn-latest.log"
+        else default_local_result_log_path(root_path)
+    )
+    command_report = (
+        root_path / LATEST_COMMAND_REPORT
+        if LATEST_COMMAND_REPORT != Path(LEGACY_DEFAULTS.tmp_root) / "next-turn-latest.json"
+        else load_workspace(root_path).tmp_file("next-turn-latest.json")
+    )
 
     terminal_log.parent.mkdir(parents=True, exist_ok=True)
     command_report.parent.mkdir(parents=True, exist_ok=True)

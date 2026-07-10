@@ -24,11 +24,11 @@ SECTION_STATUS_VALUES = {
 }
 ACTIVE_STATUSES = frozenset({"active", "next", "planned", "blocked", "candidate", "accepted"})
 PLANNING_SCAN_ROOTS = (
-    Path("docs/strategy"),
-    Path("docs/planning"),
-    Path("docs/plans"),
-    Path("docs/ideas"),
-    Path("docs/roadmap"),
+    Path(_DEFAULT_CONFIG.docs_root) / "strategy",
+    Path(_DEFAULT_CONFIG.planning_root),
+    Path(_DEFAULT_CONFIG.docs_root) / "plans",
+    Path(_DEFAULT_CONFIG.docs_root) / "ideas",
+    Path(_DEFAULT_CONFIG.docs_root) / "roadmap",
 )
 CANONICAL_DIRECTION_FILES = {
     "docs/planning/PROJECT_DIRECTION.yaml",

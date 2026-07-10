@@ -16,6 +16,7 @@ from agentic_project_kit.communication_artifact_gc import (
     render_plan,
 )
 from agentic_project_kit.local_garbage_collector import run_local_garbage_collector
+from agentic_project_kit.workspace import load_workspace
 
 
 def _message_lines(message: str) -> list[str]:
@@ -160,7 +161,7 @@ def artifact_gc_command(
         return
 
     if tmp_logs:
-        tmp_root = Path("tmp") if local_tmp else Path("/tmp")
+        tmp_root = load_workspace(Path(".")).tmp() if local_tmp else Path("/tmp")
         outcome, message = execute_tmp_log_gc(tmp_root, execute=execute, ttl_seconds=effective_ttl_seconds)
         if json_output:
             _emit_json(

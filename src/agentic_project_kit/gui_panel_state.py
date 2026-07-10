@@ -5,12 +5,14 @@ import json
 from pathlib import Path
 from typing import Any
 
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
-PANEL_STATE_RELATIVE_PATH = Path("tmp/gui-panel-state.json")
+PANEL_STATE_FILE = "gui-panel-state.json"
+PANEL_STATE_RELATIVE_PATH = Path(LEGACY_DEFAULTS.tmp_root) / PANEL_STATE_FILE
 
 
 def panel_state_path(root: Path = Path(".")) -> Path:
-    return root / PANEL_STATE_RELATIVE_PATH
+    return load_workspace(root).gui_panel_state_path()
 
 
 def _coerce_state(data: Any) -> dict[str, bool]:
@@ -33,10 +35,11 @@ def read_panel_state(root: Path = Path(".")) -> dict[str, bool]:
 def write_panel_state(root: Path = Path("."), state: dict[str, bool] | None = None) -> Path:
     path = panel_state_path(root)
     path.parent.mkdir(parents=True, exist_ok=True)
+    workspace = load_workspace(root)
     payload = {
         "schema_version": 1,
         "kind": "gui_panel_state",
-        "state_path": PANEL_STATE_RELATIVE_PATH.as_posix(),
+        "state_path": workspace.path_text(path),
         "updated_at_utc": datetime.now(timezone.utc).isoformat(),
         "expanded_groups": dict(sorted((state or {}).items())),
     }

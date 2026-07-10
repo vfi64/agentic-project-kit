@@ -9,6 +9,8 @@ from typing import Any
 
 import yaml
 
+from agentic_project_kit.workspace import load_workspace
+
 DEFAULT_INBOX = Path(".agentic/transfer/inbox/current.yaml")
 RESULT_PASS = "PASS"
 RESULT_FAIL = "FAIL"
@@ -182,7 +184,7 @@ def _write_report(project_root: Path, result: TransferResult) -> None:
         "Terminal bleibt offen. Kein exit am Blockende.",
     ]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    latest = project_root / "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
+    latest = load_workspace(project_root).latest_command_run_pointer()
     latest.parent.mkdir(parents=True, exist_ok=True)
     latest.write_text(result.report_path + "\n", encoding="utf-8")
 

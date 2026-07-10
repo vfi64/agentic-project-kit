@@ -7,9 +7,12 @@ from typing import Any
 
 from agentic_project_kit.transfer_safety_context import build_local_to_llm_payload
 from agentic_project_kit.transfer_safety_context import write_transfer_outbox
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
-LATEST_HANDOFF_REPORT = Path("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json")
-LATEST_HANDOFF_LOG = Path("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log")
+LATEST_HANDOFF_REPORT_NAME = "latest-transfer-handoff-report.json"
+LATEST_HANDOFF_LOG_NAME = "latest-transfer-handoff-report.log"
+LATEST_HANDOFF_REPORT = Path(LEGACY_DEFAULTS.transfer_handoff_reports_root) / LATEST_HANDOFF_REPORT_NAME
+LATEST_HANDOFF_LOG = Path(LEGACY_DEFAULTS.transfer_handoff_reports_root) / LATEST_HANDOFF_LOG_NAME
 
 
 def refresh_llm_context_carriers(root: Path | str = ".", *, label: str = "llm-context-carriers-refresh") -> dict[str, Any]:
@@ -28,12 +31,13 @@ def refresh_llm_context_carriers(root: Path | str = ".", *, label: str = "llm-co
 
     outbox_path = write_transfer_outbox(root_path, last_result)
     payload = build_local_to_llm_payload(root_path, last_result)
+    workspace = load_workspace(root_path)
 
-    latest_path = root_path / LATEST_HANDOFF_REPORT
+    latest_path = workspace.transfer_handoff_report_file(LATEST_HANDOFF_REPORT_NAME)
     latest_path.parent.mkdir(parents=True, exist_ok=True)
     latest_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
-    latest_log = root_path / LATEST_HANDOFF_LOG
+    latest_log = workspace.transfer_handoff_report_file(LATEST_HANDOFF_LOG_NAME)
     latest_log.parent.mkdir(parents=True, exist_ok=True)
     latest_log.write_text(
         "\n".join(

@@ -30,6 +30,14 @@ def test_legacy_workspace_paths_match_todays_literals() -> None:
     assert _rel(ws.root_file("README.md")) == "README.md"
     assert _rel(ws.docs_root()) == "docs"
     assert _rel(ws.tmp()) == "tmp"
+    assert _rel(ws.tmp_file("demo.json")) == "tmp/demo.json"
+    assert _rel(ws.tmp_dir("agent-evidence")) == "tmp/agent-evidence"
+    assert _rel(ws.agent_evidence_dir()) == "tmp/agent-evidence"
+    assert _rel(ws.wrapper_status_path()) == "tmp/current-wrapper-status.json"
+    assert _rel(ws.gui_panel_state_path()) == "tmp/gui-panel-state.json"
+    assert _rel(ws.local_command_stack_state_path()) == "tmp/local-command-stack-state.json"
+    assert _rel(ws.local_gc_report_path()) == "tmp/local-gc-last.json"
+    assert _rel(ws.local_gc_run_marker_path()) == "tmp/local-gc-last-run-id.txt"
     assert _rel(ws.agentic_root()) == ".agentic"
     assert _rel(ws.agentic_file("handoff_state.yaml")) == ".agentic/handoff_state.yaml"
     assert _rel(ws.agentic_tmp()) == ".agentic/tmp"
@@ -47,6 +55,16 @@ def test_legacy_workspace_paths_match_todays_literals() -> None:
     assert _rel(ws.rules_dir()) == ".agentic/rules"
     assert _rel(ws.reports_dir()) == "docs/reports"
     assert _rel(ws.terminal_reports_dir()) == "docs/reports/terminal"
+    assert _rel(ws.terminal_report_file("x.log")) == "docs/reports/terminal/x.log"
+    assert _rel(ws.latest_terminal_log_pointer()) == "docs/reports/terminal/LATEST_TERMINAL_LOG.txt"
+    assert _rel(ws.command_runs_dir()) == "docs/reports/command_runs"
+    assert _rel(ws.command_run_file("x.md")) == "docs/reports/command_runs/x.md"
+    assert _rel(ws.latest_command_run_pointer()) == "docs/reports/command_runs/LATEST_COMMAND_RUN.txt"
+    assert _rel(ws.transfer_runs_dir()) == "docs/reports/transfer_runs"
+    assert _rel(ws.transfer_run_file("x.json")) == "docs/reports/transfer_runs/x.json"
+    assert _rel(ws.current_workflow_output_path()) == "docs/reports/CURRENT_WORKFLOW_OUTPUT.md"
+    assert _rel(ws.communication_rules_output_path()) == "docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md"
+    assert _rel(ws.handoff_rules_output_path()) == "docs/reports/handoff_rules/CURRENT_HANDOFF_RULES.md"
     assert ws.post_pr_successor_chat_handoff_prefix() == "docs/reports/terminal/post-pr"
     assert (
         _rel(ws.post_pr_successor_chat_handoff_path(123))
@@ -56,6 +74,7 @@ def test_legacy_workspace_paths_match_todays_literals() -> None:
         _rel(ws.transfer_handoff_report_file("latest-transfer-handoff-report.json"))
         == "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
     )
+    assert _rel(ws.transfer_handoff_reports_dir()) == "docs/reports/terminal/transfer_handoff_reports"
     assert _rel(ws.handoff_dir()) == "docs/handoff"
     assert _rel(ws.handoff_file("CURRENT_HANDOFF.md")) == "docs/handoff/CURRENT_HANDOFF.md"
     assert _rel(ws.handoff_packages_latest()) == "docs/reports/handoff-packages/latest"
@@ -110,6 +129,14 @@ def test_manifest_defaults_resolve_into_namespace(tmp_path: Path) -> None:
 
     assert _rel(ws.docs_root().relative_to(tmp_path)) == "docs"
     assert _rel(ws.tmp().relative_to(tmp_path)) == ".agentic/tmp"
+    assert _rel(ws.wrapper_status_path().relative_to(tmp_path)) == ".agentic/tmp/current-wrapper-status.json"
+    assert _rel(ws.gui_panel_state_path().relative_to(tmp_path)) == ".agentic/tmp/gui-panel-state.json"
+    assert (
+        _rel(ws.local_command_stack_state_path().relative_to(tmp_path))
+        == ".agentic/tmp/local-command-stack-state.json"
+    )
+    assert _rel(ws.local_gc_report_path().relative_to(tmp_path)) == ".agentic/tmp/local-gc-last.json"
+    assert _rel(ws.local_gc_run_marker_path().relative_to(tmp_path)) == ".agentic/tmp/local-gc-last-run-id.txt"
     assert _rel(ws.agentic_root().relative_to(tmp_path)) == ".agentic"
     assert _rel(ws.agentic_tmp().relative_to(tmp_path)) == ".agentic/tmp"
     assert _rel(ws.workspace_lock_path().relative_to(tmp_path)) == ".agentic/tmp/workspace.lock"
@@ -126,6 +153,22 @@ def test_manifest_defaults_resolve_into_namespace(tmp_path: Path) -> None:
     assert _rel(ws.rules_dir().relative_to(tmp_path)) == ".agentic/rules"
     assert _rel(ws.reports_dir().relative_to(tmp_path)) == ".agentic/state/handoff/reports"
     assert _rel(ws.terminal_reports_dir().relative_to(tmp_path)) == ".agentic/state/handoff/terminal"
+    assert _rel(ws.latest_terminal_log_pointer().relative_to(tmp_path)) == ".agentic/state/handoff/terminal/LATEST_TERMINAL_LOG.txt"
+    assert _rel(ws.command_runs_dir().relative_to(tmp_path)) == ".agentic/state/handoff/command_runs"
+    assert (
+        _rel(ws.latest_command_run_pointer().relative_to(tmp_path))
+        == ".agentic/state/handoff/command_runs/LATEST_COMMAND_RUN.txt"
+    )
+    assert _rel(ws.transfer_runs_dir().relative_to(tmp_path)) == ".agentic/state/handoff/transfer_runs"
+    assert _rel(ws.current_workflow_output_path().relative_to(tmp_path)) == ".agentic/state/handoff/reports/CURRENT_WORKFLOW_OUTPUT.md"
+    assert (
+        _rel(ws.communication_rules_output_path().relative_to(tmp_path))
+        == ".agentic/state/handoff/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md"
+    )
+    assert (
+        _rel(ws.handoff_rules_output_path().relative_to(tmp_path))
+        == ".agentic/state/handoff/reports/handoff_rules/CURRENT_HANDOFF_RULES.md"
+    )
     assert ws.post_pr_successor_chat_handoff_prefix() == ".agentic/state/handoff/terminal/post-pr"
     assert (
         _rel(ws.post_pr_successor_chat_handoff_path(123).relative_to(tmp_path))
@@ -135,6 +178,7 @@ def test_manifest_defaults_resolve_into_namespace(tmp_path: Path) -> None:
         _rel(ws.transfer_handoff_report_file("latest.json").relative_to(tmp_path))
         == ".agentic/state/handoff/transfer_handoff_reports/latest.json"
     )
+    assert _rel(ws.transfer_handoff_reports_dir().relative_to(tmp_path)) == ".agentic/state/handoff/transfer_handoff_reports"
     assert _rel(ws.handoff_dir().relative_to(tmp_path)) == ".agentic/state/handoff"
     assert (
         _rel(ws.handoff_file("CURRENT_HANDOFF.md").relative_to(tmp_path))
@@ -157,6 +201,9 @@ paths:
   status_path: docs/STATUS.md
   doc_registry_path: docs/DOCUMENTATION_REGISTRY.yaml
   rule_registry_path: .agentic/rule_mechanism_inventory.yaml
+  command_runs_root: docs/reports/command_runs
+  transfer_runs_root: docs/reports/transfer_runs
+  terminal_reports_root: docs/reports/terminal
   handoff_state_path: .agentic/handoff_state.yaml
   operational_handoff_state_path: .agentic/operational_handoff_state.yaml
   handoff_root: docs/handoff
@@ -170,6 +217,9 @@ paths:
     assert _rel(ws.status_path().relative_to(tmp_path)) == "docs/STATUS.md"
     assert _rel(ws.doc_registry_path().relative_to(tmp_path)) == "docs/DOCUMENTATION_REGISTRY.yaml"
     assert _rel(ws.rule_registry_path().relative_to(tmp_path)) == ".agentic/rule_mechanism_inventory.yaml"
+    assert _rel(ws.command_runs_dir().relative_to(tmp_path)) == "docs/reports/command_runs"
+    assert _rel(ws.transfer_runs_dir().relative_to(tmp_path)) == "docs/reports/transfer_runs"
+    assert _rel(ws.terminal_reports_dir().relative_to(tmp_path)) == "docs/reports/terminal"
     assert _rel(ws.handoff_state_path().relative_to(tmp_path)) == ".agentic/handoff_state.yaml"
     assert _rel(ws.operational_handoff_state_path().relative_to(tmp_path)) == ".agentic/operational_handoff_state.yaml"
     assert _rel(ws.handoff_dir().relative_to(tmp_path)) == "docs/handoff"

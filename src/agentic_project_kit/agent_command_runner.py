@@ -24,6 +24,7 @@ import sys
 from pathlib import Path
 
 from agentic_project_kit import terminal_logging
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
 
 def _clean_git_env() -> dict[str, str]:
@@ -37,7 +38,7 @@ CURRENT_YAML = COMMAND_DIR / "current.yaml"
 CURRENT_SCRIPT = COMMAND_DIR / "current.sh"
 INBOX_DIR = COMMAND_DIR / "inbox"
 EXECUTED_JSONL = COMMAND_DIR / "executed.jsonl"
-REPORT_DIR = Path("docs/reports/command_runs")
+REPORT_DIR = Path(LEGACY_DEFAULTS.command_runs_root)
 LATEST_COMMAND_RUN_POINTER = REPORT_DIR / "LATEST_COMMAND_RUN.txt"
 
 ALLOWED_SAFETY_CLASSES = {
@@ -224,13 +225,26 @@ def validate_command(command: AgentCommand) -> tuple[str, str]:
     return OUTCOME_PASS_EXECUTED, "valid"
 
 
-def report_path(command_id: str) -> Path:
+def _report_dir(project_root: Path = Path(".")) -> Path:
+    if REPORT_DIR != Path(LEGACY_DEFAULTS.command_runs_root):
+        return REPORT_DIR
+    return load_workspace(project_root).command_runs_dir()
+
+
+def _latest_command_run_pointer(project_root: Path = Path(".")) -> Path:
+    if LATEST_COMMAND_RUN_POINTER != REPORT_DIR / "LATEST_COMMAND_RUN.txt":
+        return LATEST_COMMAND_RUN_POINTER
+    return load_workspace(project_root).latest_command_run_pointer()
+
+
+def report_path(command_id: str, project_root: Path = Path(".")) -> Path:
     safe = "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in command_id)
-    return REPORT_DIR / f"{safe}.md"
+    return _report_dir(project_root) / f"{safe}.md"
 
 
 def write_report(command: AgentCommand, outcome: str, exit_code: int, log_path: Path | None, detail: str = "") -> Path:
-    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    report_dir = _report_dir()
+    report_dir.mkdir(parents=True, exist_ok=True)
     path = report_path(command.command_id)
     lines = [
         f"# Agent command run: {command.command_id}",
@@ -247,7 +261,9 @@ def write_report(command: AgentCommand, outcome: str, exit_code: int, log_path: 
     if detail:
         lines.extend(["", "## Detail", "", detail])
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    LATEST_COMMAND_RUN_POINTER.write_text(path.as_posix() + "\n", encoding="utf-8")
+    latest = _latest_command_run_pointer()
+    latest.parent.mkdir(parents=True, exist_ok=True)
+    latest.write_text(path.as_posix() + "\n", encoding="utf-8")
     return path
 
 
@@ -337,7 +353,7 @@ def agent_run(extra_upload_paths: list[Path] | None = None) -> int:
     report = write_report(command, outcome, exit_code, log_path)
     append_executed(command, outcome, exit_code)
 
-    upload_paths = [report, LATEST_COMMAND_RUN_POINTER, EXECUTED_JSONL, *extra_upload_paths]
+    upload_paths = [report, _latest_command_run_pointer(), EXECUTED_JSONL, *extra_upload_paths]
     if log_path is not None:
         upload_paths.append(log_path)
     upload_paths.append(terminal_logging.LATEST_POINTER)
@@ -371,8 +387,9 @@ def print_agent_next_footer(outcome: str, reply: str, reason: str = "") -> None:
         print("### NEXT CHAT REPLY: NO-COMMAND -> ask agent to queue command ###")
     if reason:
         print(f"reason={reason}")
-    if LATEST_COMMAND_RUN_POINTER.exists():
-        print(f"latest_command_run={LATEST_COMMAND_RUN_POINTER.as_posix()}")
+    latest_command_run = _latest_command_run_pointer()
+    if latest_command_run.exists():
+        print(f"latest_command_run={latest_command_run.as_posix()}")
     print("### END AGENT-NEXT RESULT ###")
     if outcome == "PASS":
         work_result = "PASS"

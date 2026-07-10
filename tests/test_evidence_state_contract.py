@@ -9,6 +9,20 @@ from agentic_project_kit.evidence_state_contract import (
     inspect_evidence_state,
 )
 
+
+def _write_manifest(root: Path) -> None:
+    manifest = root / ".agentic" / "config.yaml"
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    manifest.write_text(
+        "kit_schema_version: 1\n"
+        "project:\n"
+        "  name: fixture\n"
+        "  type: generic\n"
+        "profile: generic\n",
+        encoding="utf-8",
+    )
+
+
 def _write(root: Path, rel: str, text: str = "log") -> Path:
     path = root / rel
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -64,5 +78,22 @@ def test_command_report_availability_from_latest_pointer(tmp_path: Path) -> None
     _write(tmp_path, "docs/reports/command_runs/LATEST_COMMAND_RUN.txt", report_rel)
     state = inspect_evidence_state(tmp_path)
     assert state.evidence_state == EVIDENCE_REMOTE_PRESENT
+    assert state.command_report_available is True
+    assert state.command_report == report_rel
+
+
+def test_evidence_state_uses_manifest_terminal_and_command_namespaces(tmp_path: Path) -> None:
+    _write_manifest(tmp_path)
+    terminal_rel = ".agentic/state/handoff/terminal/run.log"
+    report_rel = ".agentic/state/handoff/command_runs/run.md"
+    _write(tmp_path, terminal_rel)
+    _write(tmp_path, report_rel)
+    _write(tmp_path, ".agentic/state/handoff/terminal/LATEST_TERMINAL_LOG.txt", terminal_rel)
+    _write(tmp_path, ".agentic/state/handoff/command_runs/LATEST_COMMAND_RUN.txt", report_rel)
+
+    state = inspect_evidence_state(tmp_path)
+
+    assert state.evidence_state == EVIDENCE_REMOTE_PRESENT
+    assert state.remote_evidence_present is True
     assert state.command_report_available is True
     assert state.command_report == report_rel

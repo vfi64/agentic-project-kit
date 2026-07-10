@@ -6,11 +6,12 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from agentic_project_kit.operational_handoff_projection import render_current_operational_handoff_state
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
-DEFAULT_BOOTSTRAP_PATH = Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md")
+DEFAULT_BOOTSTRAP_PATH = Path(LEGACY_DEFAULTS.handoff_root) / "NEXT_CHAT_BOOTSTRAP.md"
 START_PROMPT_PATH = "docs/handoff/START_NEW_CHAT_PROMPT.md"
 CLOSEOUT_PROMPT_PATH = "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
-BOOT_REPORT_PATH = Path("docs/handoff/BOOT_REPORT.md")
+BOOT_REPORT_PATH = Path(LEGACY_DEFAULTS.handoff_root) / "BOOT_REPORT.md"
 
 MANDATORY_BOOT_SOURCES = (
     ".agentic/compiled_agent_context.yaml",
@@ -149,13 +150,19 @@ def write_next_chat_bootstrap(
     include_state: bool = False,
 ) -> Path:
     output_path = Path(path)
+    if output_path == DEFAULT_BOOTSTRAP_PATH:
+        output_path = load_workspace(Path(root)).handoff_file("NEXT_CHAT_BOOTSTRAP.md")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(render_next_chat_bootstrap(root, include_state=include_state), encoding="utf-8")
     return output_path
 
 
 def validate_generated_bootstrap(path: Path | str = DEFAULT_BOOTSTRAP_PATH, root: Path | str = ".") -> list[str]:
-    output_path = Path(root) / path
+    output_path = Path(path)
+    if output_path == DEFAULT_BOOTSTRAP_PATH:
+        output_path = load_workspace(Path(root)).handoff_file("NEXT_CHAT_BOOTSTRAP.md")
+    elif not output_path.is_absolute():
+        output_path = Path(root) / output_path
     if not output_path.exists():
         return [f"missing bootstrap file: {path}"]
     expected = render_next_chat_bootstrap(root)
@@ -193,6 +200,8 @@ def render_boot_report(root: Path | str = ".") -> str:
 
 def write_boot_report(path: Path | str = BOOT_REPORT_PATH, root: Path | str = ".") -> Path:
     output_path = Path(path)
+    if output_path == BOOT_REPORT_PATH:
+        output_path = load_workspace(Path(root)).handoff_file("BOOT_REPORT.md")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(render_boot_report(root), encoding="utf-8")
     return output_path

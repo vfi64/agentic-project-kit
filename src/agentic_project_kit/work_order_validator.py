@@ -5,9 +5,16 @@ from dataclasses import dataclass
 from pathlib import Path
 import os
 
-WORK_ORDER_PATH = Path('.agentic/commands/inbox/next-turn.py')
-RESULT_LOG_PATH = Path('docs/reports/terminal/next-turn-latest.log')
-LOCAL_RESULT_LOG_PATH = Path(os.environ.get("AGENTIC_KIT_NEXT_TURN_LOG", "tmp/next-turn-latest.log"))
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
+
+WORK_ORDER_PATH = Path(".agentic/commands/inbox/next-turn.py")
+RESULT_LOG_PATH = Path(LEGACY_DEFAULTS.terminal_reports_root) / "next-turn-latest.log"
+LOCAL_RESULT_LOG_PATH = Path(
+    os.environ.get(
+        "AGENTIC_KIT_NEXT_TURN_LOG",
+        (Path(LEGACY_DEFAULTS.tmp_root) / "next-turn-latest.log").as_posix(),
+    )
+)
 
 REQUIRED_PHRASES = (
     'agentic-project-kit work order',
@@ -65,6 +72,17 @@ class WorkOrderValidationResult:
 
 def _finding(severity: str, message: str) -> WorkOrderFinding:
     return WorkOrderFinding(severity=severity, message=message)
+
+
+def default_result_log_path(root: Path = Path(".")) -> Path:
+    return load_workspace(root).terminal_report_file("next-turn-latest.log")
+
+
+def default_local_result_log_path(root: Path = Path(".")) -> Path:
+    env_path = os.environ.get("AGENTIC_KIT_NEXT_TURN_LOG")
+    if env_path:
+        return Path(env_path)
+    return load_workspace(root).tmp_file("next-turn-latest.log")
 
 
 def _import_names(tree: ast.AST) -> set[str]:

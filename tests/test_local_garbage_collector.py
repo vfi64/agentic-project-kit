@@ -6,6 +6,19 @@ from pathlib import Path
 from agentic_project_kit.local_garbage_collector import run_local_garbage_collector
 
 
+def _write_manifest(root: Path) -> None:
+    manifest = root / ".agentic" / "config.yaml"
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    manifest.write_text(
+        "kit_schema_version: 1\n"
+        "project:\n"
+        "  name: fixture\n"
+        "  type: generic\n"
+        "profile: generic\n",
+        encoding="utf-8",
+    )
+
+
 def _never_tracked(root: Path, path: Path) -> bool:
     return False
 
@@ -31,6 +44,33 @@ def test_local_gc_deletes_old_untracked_tmp_log(tmp_path: Path) -> None:
     assert result["deleted"] == ["tmp/old.log"]
     assert not target.exists()
     assert (tmp_path / "tmp" / "local-gc-last.json").exists()
+
+
+def test_local_gc_uses_manifest_tmp_namespace(tmp_path: Path) -> None:
+    _write_manifest(tmp_path)
+    target = tmp_path / ".agentic/tmp/old.log"
+    target.parent.mkdir(parents=True)
+    target.write_text("old", encoding="utf-8")
+    os.utime(target, (100, 100))
+    evidence = tmp_path / ".agentic/tmp/agent-evidence/old.log"
+    evidence.parent.mkdir(parents=True)
+    evidence.write_text("keep", encoding="utf-8")
+    os.utime(evidence, (100, 100))
+
+    result = run_local_garbage_collector(
+        tmp_path,
+        now=100 + 25 * 60 * 60,
+        retention_seconds=24 * 60 * 60,
+        tracked_predicate=_never_tracked,
+    )
+
+    assert result["result_status"] == "PASS"
+    assert result["allowed_roots"] == [".agentic/tmp"]
+    assert result["skipped_roots"] == [".agentic/tmp/agent-evidence"]
+    assert result["deleted"] == [".agentic/tmp/old.log"]
+    assert not target.exists()
+    assert evidence.exists()
+    assert (tmp_path / ".agentic/tmp/local-gc-last.json").exists()
 
 
 def test_local_gc_keeps_new_tmp_log_until_retention(tmp_path: Path) -> None:

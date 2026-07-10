@@ -6,9 +6,10 @@ from typing import Any
 
 import yaml
 
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
 DEFAULT_TODO_PATH = Path(".agentic/todo.yaml")
-DEFAULT_RENDER_PATH = Path("docs/TODO.md")
+DEFAULT_RENDER_PATH = Path(LEGACY_DEFAULTS.docs_root) / "TODO.md"
 
 
 def load_todo(path: Path = DEFAULT_TODO_PATH) -> dict[str, Any]:
@@ -57,6 +58,8 @@ def render_markdown(
     output_path: Path = DEFAULT_RENDER_PATH,
 ) -> str:
     data = load_todo(todo_path)
+    if output_path == DEFAULT_RENDER_PATH:
+        output_path = load_workspace(Path(".")).docs_file("TODO.md")
     lines: list[str] = [
         "# TODO",
         "",

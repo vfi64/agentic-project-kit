@@ -13,6 +13,19 @@ from agentic_project_kit.transfer_uplink import (
 )
 
 
+def _write_manifest(root: Path) -> None:
+    manifest = root / ".agentic" / "config.yaml"
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    manifest.write_text(
+        "kit_schema_version: 1\n"
+        "project:\n"
+        "  name: fixture\n"
+        "  type: generic\n"
+        "profile: generic\n",
+        encoding="utf-8",
+    )
+
+
 def test_run_and_log_transfer_command_records_success_with_chat_reply(tmp_path):
     script = "print('FINAL_SIGNAL=d'); print('FINAL_NEXT=continue now'); print('CHAT_REPLY=d | NEXT=continue now')"
 
@@ -34,6 +47,24 @@ def test_run_and_log_transfer_command_records_success_with_chat_reply(tmp_path):
     assert data["final_signal"] == "d"
     assert data["next_action"] == "continue now"
     assert "CHAT_REPLY=d | NEXT=Run transfer publish-last-report" in (tmp_path / LATEST_LOG).read_text(encoding="utf-8")
+
+
+def test_run_and_log_transfer_command_uses_manifest_transfer_namespace(tmp_path):
+    _write_manifest(tmp_path)
+
+    result = run_and_log_transfer_command(
+        [sys.executable, "-c", "print('FINAL_SIGNAL=d'); print('FINAL_NEXT=continue now')"],
+        label="manifest-case",
+        cwd=tmp_path,
+    )
+
+    assert result.returncode == 0
+    assert result.latest_log_path == ".agentic/state/handoff/transfer_runs/latest-transfer-report.log"
+    assert result.latest_json_path == ".agentic/state/handoff/transfer_runs/latest-transfer-report.json"
+    assert result.remote_report_path.startswith(".agentic/state/handoff/transfer_runs/")
+    assert (tmp_path / result.latest_log_path).exists()
+    assert (tmp_path / result.remote_report_path).exists()
+    assert not (tmp_path / LATEST_LOG).exists()
 
 
 def test_run_and_log_transfer_command_records_failure_without_explicit_signal(tmp_path):

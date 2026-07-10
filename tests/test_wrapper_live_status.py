@@ -14,6 +14,19 @@ from agentic_project_kit.wrapper_live_status import (
 )
 
 
+def _write_manifest(root: Path) -> None:
+    manifest = root / ".agentic" / "config.yaml"
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    manifest.write_text(
+        "kit_schema_version: 1\n"
+        "project:\n"
+        "  name: fixture\n"
+        "  type: generic\n"
+        "profile: generic\n",
+        encoding="utf-8",
+    )
+
+
 def test_write_wrapper_live_status_uses_canonical_tmp_path(tmp_path: Path) -> None:
     payload = write_wrapper_live_status(
         tmp_path,
@@ -34,6 +47,21 @@ def test_write_wrapper_live_status_uses_canonical_tmp_path(tmp_path: Path) -> No
     assert payload["phase"] == "creating_pr"
     assert payload["safe_to_interrupt"] is False
     assert payload["known_phases"] == list(WRAPPER_PHASES)
+
+
+def test_write_wrapper_live_status_uses_manifest_tmp_namespace(tmp_path: Path) -> None:
+    _write_manifest(tmp_path)
+
+    payload = write_wrapper_live_status(
+        tmp_path,
+        wrapper="pr-create-complete",
+        phase="starting",
+    )
+
+    path = wrapper_status_path(tmp_path)
+    assert path == tmp_path / ".agentic/tmp/current-wrapper-status.json"
+    assert payload["status_path"] == ".agentic/tmp/current-wrapper-status.json"
+    assert json.loads(path.read_text(encoding="utf-8")) == payload
 
 
 def test_read_wrapper_live_status_round_trips(tmp_path: Path) -> None:

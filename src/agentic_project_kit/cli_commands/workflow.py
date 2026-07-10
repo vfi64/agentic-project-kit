@@ -8,6 +8,8 @@ from pathlib import Path
 
 import typer
 
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
+
 workflow_app = typer.Typer(help="Run and inspect bounded local workflow handoff states.")
 
 
@@ -22,8 +24,8 @@ VALID_STATES = {"IDLE", "TEST", "UPLOAD", "CLEANUP", "REQUESTED", "RUNNING", "UP
 STATE_FILE = Path(".agentic/workflow_state")
 WORK_FILE = Path(".agentic/current_work.yaml")
 WORK_ITEMS_DIR = Path(".agentic/work_items")
-BRANCH_FILE = Path("tmp/agent-evidence/latest-branch.txt")
-REPORT_FILE = Path("docs/reports/CURRENT_WORKFLOW_OUTPUT.md")
+BRANCH_FILE = Path(LEGACY_DEFAULTS.tmp_root) / "agent-evidence" / "latest-branch.txt"
+REPORT_FILE = Path(LEGACY_DEFAULTS.reports_root) / "CURRENT_WORKFLOW_OUTPUT.md"
 NEXT_STEP_SCRIPT = Path("tools/next-step.py")
 TEMP_PREFIX = "temp/workflow-evidence-"
 
@@ -74,7 +76,7 @@ def _copy_work_item_to_temp_run_file(root: Path, name: str) -> Path:
     source = _work_item_path(root, name)
     if not source.exists():
         raise typer.BadParameter(f"unknown workflow item: {_safe_work_item_name(name)}")
-    target = _rooted(Path("tmp/agent-evidence") / f"run-{_safe_work_item_name(name)}.yaml", root)
+    target = load_workspace(root).agent_evidence_dir() / f"run-{_safe_work_item_name(name)}.yaml"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
     return target
@@ -405,13 +407,14 @@ def workflow_status(
     if work_file.exists():
         work_state = _workflow_request_state(root)
         typer.echo(f"current_work_state={work_state}")
-    branch_file = _rooted(BRANCH_FILE, root)
+    workspace = load_workspace(root)
+    branch_file = workspace.agent_evidence_dir() / "latest-branch.txt"
     if branch_file.exists():
         typer.echo(f"evidence_branch={branch_file.read_text(encoding='utf-8').strip()}")
-    report_file = _rooted(REPORT_FILE, root)
+    report_file = workspace.current_workflow_output_path()
     report_present = report_file.exists()
     if report_present:
-        typer.echo(f"current_report={REPORT_FILE}")
+        typer.echo(f"current_report={workspace.path_text(report_file)}")
     if explain:
         _print_status_explanation(root, state, work_state, report_present)
 

@@ -8,9 +8,10 @@ from typing import Any
 
 from typer.main import get_command
 
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
-JSON_PATH = Path("docs/reference/agentic-kit-commands.json")
-MD_PATH = Path("docs/reference/AGENTIC_KIT_COMMANDS.md")
+JSON_PATH = Path(LEGACY_DEFAULTS.reference_root) / "agentic-kit-commands.json"
+MD_PATH = Path(LEGACY_DEFAULTS.reference_root) / "AGENTIC_KIT_COMMANDS.md"
 SAFETY_VALUES = {"READ_ONLY", "BOUNDED", "DESTRUCTIVE"}
 
 RAW_REPLACEMENTS: dict[str, tuple[str, ...]] = {
@@ -345,8 +346,8 @@ def render_markdown(data: dict[str, Any]) -> str:
 
 def write_reference(root: Path) -> dict[str, Any]:
     data = build_current_reference()
-    json_path = root / JSON_PATH
-    md_path = root / MD_PATH
+    json_path = load_workspace(root).reference_file("agentic-kit-commands.json")
+    md_path = load_workspace(root).reference_file("AGENTIC_KIT_COMMANDS.md")
     json_path.parent.mkdir(parents=True, exist_ok=True)
     json_path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     md_path.write_text(render_markdown(data), encoding="utf-8")
@@ -354,14 +355,14 @@ def write_reference(root: Path) -> dict[str, Any]:
 
 
 def load_manifest(root: Path) -> dict[str, Any]:
-    return json.loads((root / JSON_PATH).read_text(encoding="utf-8"))
+    return json.loads(load_workspace(root).reference_file("agentic-kit-commands.json").read_text(encoding="utf-8"))
 
 
 def evaluate_command_manifest(root: Path = Path(".")) -> CommandManifestAudit:
     root = root.resolve()
     findings: list[CommandManifestFinding] = []
-    json_path = root / JSON_PATH
-    md_path = root / MD_PATH
+    json_path = load_workspace(root).reference_file("agentic-kit-commands.json")
+    md_path = load_workspace(root).reference_file("AGENTIC_KIT_COMMANDS.md")
 
     try:
         committed = load_manifest(root)

@@ -9,8 +9,9 @@ import yaml
 from agentic_project_kit.run_summary_renderer import validate_rendered_summary_text
 from agentic_project_kit.rule_preservation import validate_rule_preservation
 from agentic_project_kit.rule_registry_validator import validate_rule_registry
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
-WORKFLOW_GUARD_CONFIG = Path("docs/workflow/WORKFLOW_GUARD.md")
+WORKFLOW_GUARD_CONFIG = Path(LEGACY_DEFAULTS.docs_root) / "workflow" / "WORKFLOW_GUARD.md"
 CONTROL_FILE_PRESERVATION = Path(".agentic/control_file_preservation.yaml")
 REQUIRED_RULE_REGISTRY_FILES = (
     Path(".agentic/rule_mechanism_inventory.yaml"),
@@ -188,7 +189,7 @@ def check_no_lossy_control_file_policy() -> list[GuardFinding]:
 
 
 def check_workflow_guard_document() -> list[GuardFinding]:
-    doc = WORKFLOW_GUARD_CONFIG
+    doc = load_workspace(Path(".")).docs_file("workflow/WORKFLOW_GUARD.md")
     if not doc.exists():
         return [
             GuardFinding(

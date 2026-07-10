@@ -302,6 +302,14 @@ rules:
     - P1 migration verification
     - successor_handoff_package.py
     - workspace.py
+  - path: docs/architecture/evidence/path-literal-audit-2026-07-10-post-p4b.md
+    terms:
+    - Path Literal Audit Evidence
+    - 'Command: `./.venv/bin/agentic-kit audit-path-literals --json`'
+    - 'Active path literal count: 0'
+    - 'Declared exception modules: 2'
+    - Path Literal Classifications
+    - Repo Identity Literals
 - id: kit-os-architecture-coverage
   description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, and evidence policy.
   documents:

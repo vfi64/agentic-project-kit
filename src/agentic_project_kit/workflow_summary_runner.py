@@ -7,9 +7,10 @@ from pathlib import Path
 from typing import Sequence
 
 from agentic_project_kit.run_summary_renderer import SummaryPayload, render_summary
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
-DEFAULT_TERMINAL_LOG = Path("docs/reports/terminal/python-workflow-latest.log")
-DEFAULT_COMMAND_REPORT = Path("docs/reports/command_runs/python-workflow-latest.txt")
+DEFAULT_TERMINAL_LOG = Path(LEGACY_DEFAULTS.terminal_reports_root) / "python-workflow-latest.log"
+DEFAULT_COMMAND_REPORT = Path(LEGACY_DEFAULTS.command_runs_root) / "python-workflow-latest.txt"
 
 
 @dataclass(frozen=True)
@@ -29,11 +30,14 @@ def run_python_workflow(
     command: Sequence[str],
     *,
     name: str,
-    terminal_log: Path = DEFAULT_TERMINAL_LOG,
-    command_report: Path = DEFAULT_COMMAND_REPORT,
+    terminal_log: Path | None = None,
+    command_report: Path | None = None,
 ) -> WorkflowRunResult:
     if not command:
         raise ValueError("command must not be empty")
+    workspace = load_workspace(Path("."))
+    terminal_log = terminal_log or workspace.terminal_report_file("python-workflow-latest.log")
+    command_report = command_report or workspace.command_run_file("python-workflow-latest.txt")
     terminal_log.parent.mkdir(parents=True, exist_ok=True)
     command_report.parent.mkdir(parents=True, exist_ok=True)
     completed = subprocess.run(list(command), text=True, capture_output=True, check=False)
@@ -108,8 +112,8 @@ def main(argv: list[str] | None = None) -> int:
     result = run_python_workflow(
         command,
         name=args.name,
-        terminal_log=Path(args.terminal_log),
-        command_report=Path(args.command_report),
+        terminal_log=None if args.terminal_log == str(DEFAULT_TERMINAL_LOG) else Path(args.terminal_log),
+        command_report=None if args.command_report == str(DEFAULT_COMMAND_REPORT) else Path(args.command_report),
     )
     print(render_command_report(result), end="")
     print(render_workflow_summary(result))

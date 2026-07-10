@@ -8,9 +8,10 @@ from pathlib import Path
 from typing import Any
 
 from agentic_project_kit.transfer_state import build_transfer_state
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
 
-LATEST_COMMAND_RUN = Path("docs/reports/command_runs/LATEST_COMMAND_RUN.txt")
+LATEST_COMMAND_RUN = Path(LEGACY_DEFAULTS.command_runs_root) / "LATEST_COMMAND_RUN.txt"
 TRANSFER_ROOT = Path(".agentic/transfer")
 
 
@@ -61,8 +62,8 @@ def _status_path(line: str) -> str:
     return line[3:].strip().split(" -> ")[-1]
 
 
-def _is_allowed_dirty(path: str, latest_report_path: str | None) -> bool:
-    if path == str(LATEST_COMMAND_RUN):
+def _is_allowed_dirty(path: str, latest_report_path: str | None, latest_command_run: str) -> bool:
+    if path == latest_command_run:
         return True
     if latest_report_path and path == latest_report_path:
         return True
@@ -70,7 +71,7 @@ def _is_allowed_dirty(path: str, latest_report_path: str | None) -> bool:
 
 
 def _read_latest_report_path(root: Path) -> tuple[str | None, bool]:
-    latest = root / LATEST_COMMAND_RUN
+    latest = load_workspace(root).latest_command_run_pointer()
     if not latest.exists():
         return None, False
     value = latest.read_text(encoding="utf-8").strip()
@@ -89,13 +90,15 @@ def closeout_transfer(project_root: Path = Path("."), remove_transfer_dir: bool 
         removed = True
 
     latest_report_path, latest_report_exists = _read_latest_report_path(root)
+    workspace = load_workspace(root)
+    latest_command_run = workspace.path_text(workspace.latest_command_run_pointer())
 
     status_lines = _git_status_short(root)
     allowed: list[str] = []
     blocked: list[str] = []
     for line in status_lines:
         path = _status_path(line)
-        if _is_allowed_dirty(path, latest_report_path):
+        if _is_allowed_dirty(path, latest_report_path, latest_command_run):
             allowed.append(path)
         else:
             blocked.append(path)

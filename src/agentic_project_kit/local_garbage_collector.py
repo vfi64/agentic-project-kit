@@ -6,29 +6,28 @@ import time
 from pathlib import Path
 from typing import Callable, Iterable
 
-LOCAL_GC_REPORT = Path("tmp/local-gc-last.json")
-LOCAL_GC_RUN_MARKER = Path("tmp/local-gc-last-run-id.txt")
+from agentic_project_kit.workspace import LEGACY_DEFAULTS, Workspace, load_workspace
+
+LOCAL_GC_REPORT_FILE = "local-gc-last.json"
+LOCAL_GC_RUN_MARKER_FILE = "local-gc-last-run-id.txt"
+LOCAL_COMMAND_STACK_STATE_FILE = "local-command-stack-state.json"
+AGENT_EVIDENCE_DIR_NAME = "agent-evidence"
+LOCAL_GC_REPORT = Path(LEGACY_DEFAULTS.tmp_root) / LOCAL_GC_REPORT_FILE
+LOCAL_GC_RUN_MARKER = Path(LEGACY_DEFAULTS.tmp_root) / LOCAL_GC_RUN_MARKER_FILE
 DEFAULT_RETENTION_SECONDS = 24 * 60 * 60
 
 # Intentionally narrow by root. This collector may clean all old untracked file
-# types, but only below repository-local tmp/.
-ALLOWED_ROOTS = (Path("tmp"),)
-SKIPPED_ROOTS = (Path("tmp/agent-evidence"),)
+# types, but only below the repository-local workspace tmp root.
 ALLOWED_FILE_POLICY = "all_untracked_file_types_below_repo_tmp"
-RESERVED_TMP_FILES = {
-    LOCAL_GC_REPORT,
-    LOCAL_GC_RUN_MARKER,
-    Path("tmp/local-command-stack-state.json"),
-}
 
 
 def _relative_to_root(path: Path, root: Path) -> str:
     return path.resolve().relative_to(root.resolve()).as_posix()
 
 
-def _is_under(path: Path, root: Path, candidate_root: Path) -> bool:
+def _is_under(path: Path, candidate_root: Path) -> bool:
     try:
-        path.resolve().relative_to((root / candidate_root).resolve())
+        path.resolve().relative_to(candidate_root.resolve())
     except ValueError:
         return False
     return True
@@ -57,16 +56,35 @@ def _is_tracked(root: Path, path: Path) -> bool:
     return result.returncode == 0
 
 
-def _is_reserved_tmp_file(path: Path, root: Path) -> bool:
-    for reserved in RESERVED_TMP_FILES:
-        if path.resolve() == (root / reserved).resolve():
+def _allowed_roots(workspace: Workspace) -> tuple[Path, ...]:
+    return (workspace.tmp(),)
+
+
+def _skipped_roots(workspace: Workspace) -> tuple[Path, ...]:
+    return (workspace.agent_evidence_dir(),)
+
+
+def _reserved_tmp_files(workspace: Workspace) -> tuple[Path, ...]:
+    return (
+        workspace.local_gc_report_path(),
+        workspace.local_gc_run_marker_path(),
+        workspace.local_command_stack_state_path(),
+    )
+
+
+def _path_texts(workspace: Workspace, paths: Iterable[Path]) -> list[str]:
+    return [workspace.path_text(path) for path in paths]
+
+
+def _is_reserved_tmp_file(path: Path, workspace: Workspace) -> bool:
+    for reserved in _reserved_tmp_files(workspace):
+        if path.resolve() == reserved.resolve():
             return True
     return False
 
 
-def _iter_file_candidates(root: Path) -> Iterable[Path]:
-    for allowed_root in ALLOWED_ROOTS:
-        directory = root / allowed_root
+def _iter_file_candidates(workspace: Workspace) -> Iterable[Path]:
+    for directory in _allowed_roots(workspace):
         if not directory.exists():
             continue
         for path in directory.rglob("*"):
@@ -74,23 +92,22 @@ def _iter_file_candidates(root: Path) -> Iterable[Path]:
                 continue
             if path.is_symlink():
                 continue
-            if any(_is_under(path, root, skipped) for skipped in SKIPPED_ROOTS):
+            if any(_is_under(path, skipped) for skipped in _skipped_roots(workspace)):
                 continue
-            if _is_reserved_tmp_file(path, root):
+            if _is_reserved_tmp_file(path, workspace):
                 continue
             yield path
 
 
-def _iter_directory_candidates(root: Path) -> Iterable[Path]:
-    for allowed_root in ALLOWED_ROOTS:
-        directory = root / allowed_root
+def _iter_directory_candidates(workspace: Workspace) -> Iterable[Path]:
+    for directory in _allowed_roots(workspace):
         if not directory.exists():
             continue
         candidates = [path for path in directory.rglob("*") if path.is_dir()]
         for path in sorted(candidates, key=lambda item: len(item.parts), reverse=True):
             if path.resolve() == directory.resolve():
                 continue
-            if any(_is_under(path, root, skipped) for skipped in SKIPPED_ROOTS):
+            if any(_is_under(path, skipped) for skipped in _skipped_roots(workspace)):
                 continue
             yield path
 
@@ -118,8 +135,9 @@ def run_local_garbage_collector(
     """
 
     root = project_root.resolve()
+    workspace = load_workspace(root)
     normalized_run_id = (run_id or "").strip()
-    marker_path = root / LOCAL_GC_RUN_MARKER
+    marker_path = workspace.local_gc_run_marker_path()
     if normalized_run_id and skip_if_run_id_seen and marker_path.exists():
         seen_run_id = marker_path.read_text(encoding="utf-8").strip()
         if seen_run_id == normalized_run_id:
@@ -132,8 +150,8 @@ def run_local_garbage_collector(
                 "run_id": normalized_run_id,
                 "skipped": True,
                 "skip_reason": "already_ran_for_command_stack",
-                "allowed_roots": [path.as_posix() for path in ALLOWED_ROOTS],
-                "skipped_roots": [path.as_posix() for path in SKIPPED_ROOTS],
+                "allowed_roots": _path_texts(workspace, _allowed_roots(workspace)),
+                "skipped_roots": _path_texts(workspace, _skipped_roots(workspace)),
                 "allowed_file_policy": ALLOWED_FILE_POLICY,
                 "retention_seconds": retention_seconds,
                 "candidate_count": 0,
@@ -144,7 +162,7 @@ def run_local_garbage_collector(
                 "next_action": "Local deterministic garbage collection already ran for this command stack.",
             }
             if write_report:
-                report_path = root / LOCAL_GC_REPORT
+                report_path = workspace.local_gc_report_path()
                 report_path.parent.mkdir(parents=True, exist_ok=True)
                 report_path.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
             return result
@@ -156,14 +174,14 @@ def run_local_garbage_collector(
     errors: list[dict[str, str]] = []
     directory_age_seconds: dict[Path, int] = {}
 
-    for directory in _iter_directory_candidates(root):
+    for directory in _iter_directory_candidates(workspace):
         try:
             stat = directory.stat()
         except FileNotFoundError:
             continue
         directory_age_seconds[directory] = max(0, int(effective_now - stat.st_mtime))
 
-    for path in sorted(_iter_file_candidates(root)):
+    for path in sorted(_iter_file_candidates(workspace)):
         rel = _relative_to_root(path, root)
         try:
             stat = path.stat()
@@ -188,7 +206,7 @@ def run_local_garbage_collector(
         except OSError as exc:
             errors.append({"path": rel, "error": str(exc)})
 
-    for directory in _iter_directory_candidates(root):
+    for directory in _iter_directory_candidates(workspace):
         rel = _relative_to_root(directory, root)
         age_seconds = directory_age_seconds.get(directory)
         if age_seconds is None:
@@ -223,8 +241,8 @@ def run_local_garbage_collector(
         "dry_run": dry_run,
         "run_id": normalized_run_id,
         "skipped": False,
-        "allowed_roots": [path.as_posix() for path in ALLOWED_ROOTS],
-        "skipped_roots": [path.as_posix() for path in SKIPPED_ROOTS],
+        "allowed_roots": _path_texts(workspace, _allowed_roots(workspace)),
+        "skipped_roots": _path_texts(workspace, _skipped_roots(workspace)),
         "allowed_file_policy": ALLOWED_FILE_POLICY,
         "retention_seconds": retention_seconds,
         "candidate_count": len(deleted) + len(deleted_directories),
@@ -244,7 +262,7 @@ def run_local_garbage_collector(
         marker_path.write_text(normalized_run_id + "\n", encoding="utf-8")
 
     if write_report:
-        report_path = root / LOCAL_GC_REPORT
+        report_path = workspace.local_gc_report_path()
         report_path.parent.mkdir(parents=True, exist_ok=True)
         report_path.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
