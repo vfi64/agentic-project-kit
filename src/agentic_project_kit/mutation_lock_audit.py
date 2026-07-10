@@ -153,19 +153,77 @@ class MutationLockFinding:
 @dataclass(frozen=True)
 class MutationLockCoverageAuditResult:
     kind: str
-    result_status: str
     findings: list[MutationLockFinding]
+
+    @property
+    def blocking_findings(self) -> list[MutationLockFinding]:
+        return [
+            finding
+            for finding in self.findings
+            if classify_mutation_lock_finding(finding).counts_as_blocking
+        ]
+
+    @property
+    def non_blocking_findings(self) -> list[MutationLockFinding]:
+        return [
+            finding
+            for finding in self.findings
+            if not classify_mutation_lock_finding(finding).counts_as_blocking
+        ]
+
+    @property
+    def result_status(self) -> str:
+        return "BLOCK" if self.blocking_findings else "PASS"
 
     @property
     def returncode(self) -> int:
         return 0 if self.result_status == "PASS" else 1
 
     def to_dict(self) -> dict[str, Any]:
+        findings = [_finding_to_dict(finding) for finding in self.findings]
+        blocking_findings = [
+            finding
+            for finding in findings
+            if finding["classification"]["counts_as_blocking"]
+        ]
+        non_blocking_findings = [
+            finding
+            for finding in findings
+            if not finding["classification"]["counts_as_blocking"]
+        ]
         return {
             "kind": self.kind,
             "result_status": self.result_status,
-            "findings": [asdict(finding) for finding in self.findings],
+            "finding_count": len(findings),
+            "blocking_finding_count": len(blocking_findings),
+            "non_blocking_finding_count": len(non_blocking_findings),
+            "classification_summary": _classification_summary(self.findings),
+            "findings": findings,
+            "blocking_findings": blocking_findings,
+            "non_blocking_findings": non_blocking_findings,
         }
+
+
+def _finding_to_dict(finding: MutationLockFinding) -> dict[str, Any]:
+    classification = classify_mutation_lock_finding(finding)
+    data = asdict(finding)
+    data["classification"] = classification.to_dict()
+    return data
+
+
+def _classification_summary(findings: list[MutationLockFinding]) -> dict[str, dict[str, object]]:
+    summary: dict[str, dict[str, object]] = {}
+    for finding in findings:
+        classification = classify_mutation_lock_finding(finding)
+        entry = summary.setdefault(
+            classification.kind,
+            {
+                "count": 0,
+                "counts_as_blocking": classification.counts_as_blocking,
+            },
+        )
+        entry["count"] = int(entry["count"]) + 1
+    return dict(sorted(summary.items()))
 
 
 _MUTATION_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
@@ -211,7 +269,6 @@ def audit_mutation_lock_coverage(root: Path | str = ".") -> MutationLockCoverage
     if not src_root.exists():
         return MutationLockCoverageAuditResult(
             kind="mutation_lock_coverage_audit",
-            result_status="BLOCK",
             findings=[
                 MutationLockFinding(
                     category="A",
@@ -273,7 +330,6 @@ def audit_mutation_lock_coverage(root: Path | str = ".") -> MutationLockCoverage
 
     return MutationLockCoverageAuditResult(
         kind="mutation_lock_coverage_audit",
-        result_status="BLOCK" if findings else "PASS",
         findings=findings,
     )
 
@@ -283,9 +339,32 @@ def render_mutation_lock_coverage_audit(result: MutationLockCoverageAuditResult)
         "MUTATION_LOCK_COVERAGE_AUDIT",
         f"RESULT: {result.result_status}",
         f"FINDINGS: {len(result.findings)}",
+        f"BLOCKING_FINDINGS: {len(result.blocking_findings)}",
+        f"NON_BLOCKING_FINDINGS: {len(result.non_blocking_findings)}",
     ]
-    for finding in result.findings:
+    if result.findings:
+        lines.append("CLASSIFICATION_SUMMARY:")
+        for kind, summary in _classification_summary(result.findings).items():
+            disposition = "BLOCK" if summary["counts_as_blocking"] else "non-blocking"
+            lines.append(f"- {kind}: {summary['count']} ({disposition})")
+
+    if result.blocking_findings:
+        lines.append("BLOCKING:")
+    for finding in result.blocking_findings:
+        classification = classify_mutation_lock_finding(finding)
         lines.append(
-            f"- [{finding.category}] {finding.symbol} {finding.path}:{finding.line} — {finding.reason}"
+            f"- [{finding.category}] {finding.symbol} {finding.path}:{finding.line} "
+            f"— classification={classification.kind} disposition=BLOCK "
+            f"— {finding.reason} — {classification.rationale}"
+        )
+
+    if result.non_blocking_findings:
+        lines.append("NON_BLOCKING:")
+    for finding in result.non_blocking_findings:
+        classification = classify_mutation_lock_finding(finding)
+        lines.append(
+            f"- [{finding.category}] {finding.symbol} {finding.path}:{finding.line} "
+            f"— classification={classification.kind} disposition=non-blocking "
+            f"— {finding.reason} — {classification.rationale}"
         )
     return "\n".join(lines) + "\n"
