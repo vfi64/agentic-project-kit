@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 77fe1824cde22205caf73044d11b17624108fbde
-  short: 77fe1824
-  subject: Refresh handoff state after PR1796 (#1797)
+  full: 957e79916ea12222e4f301822b2dd3b9e9793247
+  short: 957e7991
+  subject: Classify mutation lock audit findings (#1799)
 last_substantive_work_state:
-  full: 5fb1844c8150a9b69088a17f0f304d8fa76e4b31
-  short: 5fb1844c
-  subject: Classify mutation lock audit findings (#1796)
+  full: 957e79916ea12222e4f301822b2dd3b9e9793247
+  short: 957e7991
+  subject: Classify mutation lock audit findings (#1799)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
