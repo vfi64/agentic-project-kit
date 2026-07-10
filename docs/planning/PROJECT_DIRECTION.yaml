@@ -533,6 +533,53 @@ plans:
   - Master Q is the central planning anchor.
   - P4/P5/P6 are planned after CM and LC/ID prerequisites.
   - The generated handoff report dirty-state bug is handled in Turn 0 and fixed durably in CM1.
+- id: command-manifest-hardening
+  status: active
+  title: Command manifest hardening
+  rationale: Make the generated command manifest hash-addressable, safety-annotated,
+    and gate-checked before selector and lint work depend on it.
+  source_files:
+  - docs/planning/MASTER_IMPLEMENTATION_Q.md
+  - docs/reference/agentic-kit-commands.json
+  - docs/reference/AGENTIC_KIT_COMMANDS.md
+  acceptance:
+  - Every CLI command has manifest safety metadata.
+  - The manifest carries a deterministic manifest_sha.
+  - Generated Markdown is reproducible from the manifest.
+  - audit-command-manifest is part of the standard gates.
+- id: command-for-selector
+  status: planned
+  title: Deterministic command selector
+  depends_on:
+  - command-manifest-hardening
+  rationale: Use the hardened manifest to map raw command requests to approved
+    wrappers deterministically.
+  source_files:
+  - docs/planning/MASTER_IMPLEMENTATION_Q.md
+  acceptance:
+  - command-for maps raw commands and task tags without mutating the manifest.
+- id: instruction-lint-gate
+  status: planned
+  title: Instruction lint gate
+  depends_on:
+  - command-for-selector
+  rationale: Reject unsafe or stale instruction payloads before transfer apply can
+    execute them.
+  source_files:
+  - docs/planning/MASTER_IMPLEMENTATION_Q.md
+  acceptance:
+  - Non-conforming order text is rejected before application.
+- id: chat-entrypoint-contract
+  status: planned
+  title: Chat entrypoint manifest contract
+  depends_on:
+  - instruction-lint-gate
+  rationale: Keep AGENTS, initial prompts, refresher output, and carrier headers
+    pinned to the current command manifest.
+  source_files:
+  - docs/planning/MASTER_IMPLEMENTATION_Q.md
+  acceptance:
+  - Chat entrypoints carry the current manifest pointer and hash.
 - id: direction-schema-command-migration
   status: done
   title: Introduce direction schema, command, migration, cleanup, scope, and gate

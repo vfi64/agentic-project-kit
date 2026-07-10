@@ -1,27 +1,38 @@
 # Agentic-kit command reference
 
-This file is generated from `docs/reference/agentic-kit-commands.json`.
-Do not edit this Markdown file manually.
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 0ada88ea60f4
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `213`
+- Command count: `215`
 
 ## Commands
 
 ### `agentic-kit actions list`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit actions list.
+- Dry-run available: `False`
+
 _No parameters._
 
 ### `agentic-kit actions show`
+
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit actions show.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `action_id` | `TyperArgument` | action_id | `True` |  |  |
 
 ### `agentic-kit artifact-gc`
+
+- Safety: `BOUNDED`
+- When to use: Dry-run by default garbage collector for transient communication artifacts.
+- Dry-run available: `True`
 
 Dry-run by default garbage collector for transient communication artifacts.
 
@@ -39,6 +50,10 @@ Dry-run by default garbage collector for transient communication artifacts.
 
 ### `agentic-kit audit-absolute-path-portability`
 
+- Safety: `READ_ONLY`
+- When to use: Audit absolute local paths that may break portability.
+- Dry-run available: `False`
+
 Audit absolute local paths that may break portability.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -46,7 +61,24 @@ Audit absolute local paths that may break portability.
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
+### `agentic-kit audit-command-manifest`
+
+- Safety: `READ_ONLY`
+- When to use: Audit command manifest hash, CLI coverage, safety metadata, and MD sync.
+- Dry-run available: `False`
+
+Audit command manifest hash, CLI coverage, safety metadata, and MD sync.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
 ### `agentic-kit audit-doc-currency`
+
+- Safety: `READ_ONLY`
+- When to use: Audit current release/documentation currency across handoff and release docs.
+- Dry-run available: `False`
 
 Audit current release/documentation currency across handoff and release docs.
 
@@ -57,6 +89,10 @@ Audit current release/documentation currency across handoff and release docs.
 
 ### `agentic-kit audit-ns-legacy-references`
 
+- Safety: `READ_ONLY`
+- When to use: Audit remaining legacy ./ns/ns-menu/ns_release references.
+- Dry-run available: `False`
+
 Audit remaining legacy ./ns/ns-menu/ns_release references.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -65,6 +101,10 @@ Audit remaining legacy ./ns/ns-menu/ns_release references.
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit audit-patch-failure-discipline`
+
+- Safety: `READ_ONLY`
+- When to use: Audit whether repeated patch failures were followed by diagnosis evidence.
+- Dry-run available: `False`
 
 Audit whether repeated patch failures were followed by diagnosis evidence.
 
@@ -76,6 +116,10 @@ Audit whether repeated patch failures were followed by diagnosis evidence.
 
 ### `agentic-kit audit-path-literals`
 
+- Safety: `READ_ONLY`
+- When to use: Report hardcoded docs/tmp path literals in source modules.
+- Dry-run available: `False`
+
 Report hardcoded docs/tmp path literals in source modules.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -84,6 +128,10 @@ Report hardcoded docs/tmp path literals in source modules.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit audit-planning-docs-consolidation`
+
+- Safety: `READ_ONLY`
+- When to use: Audit planning and handoff docs for consolidation candidates.
+- Dry-run available: `False`
 
 Audit planning and handoff docs for consolidation candidates.
 
@@ -94,6 +142,10 @@ Audit planning and handoff docs for consolidation candidates.
 
 ### `agentic-kit audit-program-redundancy`
 
+- Safety: `READ_ONLY`
+- When to use: Audit source for risky bug/redundancy patterns.
+- Dry-run available: `False`
+
 Audit source for risky bug/redundancy patterns.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -102,6 +154,10 @@ Audit source for risky bug/redundancy patterns.
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit audit-status-current-state`
+
+- Safety: `READ_ONLY`
+- When to use: Audit STATUS.md current-state claims against handoff, release, and origin/main state.
+- Dry-run available: `False`
 
 Audit STATUS.md current-state claims against handoff, release, and origin/main state.
 
@@ -113,11 +169,19 @@ Audit STATUS.md current-state claims against handoff, release, and origin/main s
 
 ### `agentic-kit boot check`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit boot check.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `.` |  |
 
 ### `agentic-kit boot closeout`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit boot closeout.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -125,11 +189,19 @@ Audit STATUS.md current-state claims against handoff, release, and origin/main s
 
 ### `agentic-kit boot prompt`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit boot prompt.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `.` |  |
 
 ### `agentic-kit boot report`
+
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit boot report.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -137,6 +209,10 @@ Audit STATUS.md current-state claims against handoff, release, and origin/main s
 | `path` | `TyperOption` | --path | `False` | `` |  |
 
 ### `agentic-kit boot write`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit boot write.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -146,11 +222,19 @@ Audit STATUS.md current-state claims against handoff, release, and origin/main s
 
 ### `agentic-kit check`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit check.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 
 ### `agentic-kit check-docs`
+
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit check-docs.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -158,11 +242,19 @@ Audit STATUS.md current-state claims against handoff, release, and origin/main s
 
 ### `agentic-kit check-todo`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit check-todo.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 
 ### `agentic-kit cockpit actions`
+
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit cockpit actions.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -170,12 +262,20 @@ Audit STATUS.md current-state claims against handoff, release, and origin/main s
 
 ### `agentic-kit cockpit gatekeeper-status`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit cockpit gatekeeper-status.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON GUI gatekeeper status. |
 
 ### `agentic-kit cockpit run`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit cockpit run.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -186,15 +286,27 @@ Audit STATUS.md current-state claims against handoff, release, and origin/main s
 
 ### `agentic-kit cockpit select`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit cockpit select.
+- Dry-run available: `False`
+
 _No parameters._
 
 ### `agentic-kit cockpit status`
+
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit cockpit status.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 
 ### `agentic-kit command-taxonomy-check`
+
+- Safety: `READ_ONLY`
+- When to use: Check that public commands have stable GUI-usable taxonomy.
+- Dry-run available: `False`
 
 Check that public commands have stable GUI-usable taxonomy.
 
@@ -203,7 +315,25 @@ Check that public commands have stable GUI-usable taxonomy.
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
+### `agentic-kit commands render-md`
+
+- Safety: `BOUNDED`
+- When to use: Render docs/reference/AGENTIC_KIT_COMMANDS.md from the JSON manifest.
+- Dry-run available: `True`
+
+Render docs/reference/AGENTIC_KIT_COMMANDS.md from the JSON manifest.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write generated Markdown. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
 ### `agentic-kit dev local-feature-gate`
+
+- Safety: `BOUNDED`
+- When to use: Run the local feature gate through the supported agentic-kit CLI.
+- Dry-run available: `False`
 
 Run the local feature gate through the supported agentic-kit CLI.
 
@@ -213,6 +343,10 @@ Run the local feature gate through the supported agentic-kit CLI.
 
 ### `agentic-kit direction audit-drift`
 
+- Safety: `READ_ONLY`
+- When to use: Report planning files that are not yet represented in project direction.
+- Dry-run available: `False`
+
 Report planning files that are not yet represented in project direction.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -221,6 +355,10 @@ Report planning files that are not yet represented in project direction.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit direction render`
+
+- Safety: `BOUNDED`
+- When to use: Render project direction without overwriting committed projections.
+- Dry-run available: `False`
 
 Render project direction without overwriting committed projections.
 
@@ -233,6 +371,10 @@ Render project direction without overwriting committed projections.
 
 ### `agentic-kit direction validate`
 
+- Safety: `READ_ONLY`
+- When to use: Validate docs/planning/PROJECT_DIRECTION.yaml.
+- Dry-run available: `False`
+
 Validate docs/planning/PROJECT_DIRECTION.yaml.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -243,6 +385,10 @@ Validate docs/planning/PROJECT_DIRECTION.yaml.
 
 ### `agentic-kit doc-lifecycle-audit`
 
+- Safety: `READ_ONLY`
+- When to use: Audit lifecycle status headers for planning, roadmap, strategy, and idea documents.
+- Dry-run available: `False`
+
 Audit lifecycle status headers for planning, roadmap, strategy, and idea documents.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -251,6 +397,10 @@ Audit lifecycle status headers for planning, roadmap, strategy, and idea documen
 | `report_path` | `TyperOption` | --report | `False` |  |  |
 
 ### `agentic-kit doc-mesh-audit`
+
+- Safety: `READ_ONLY`
+- When to use: Audit cross-document state, governance, architecture, and historical-plan drift.
+- Dry-run available: `False`
 
 Audit cross-document state, governance, architecture, and historical-plan drift.
 
@@ -262,6 +412,10 @@ Audit cross-document state, governance, architecture, and historical-plan drift.
 
 ### `agentic-kit doc-mesh-repair`
 
+- Safety: `BOUNDED`
+- When to use: Apply safe automatic documentation mesh repairs.
+- Dry-run available: `False`
+
 Apply safe automatic documentation mesh repairs.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -270,6 +424,10 @@ Apply safe automatic documentation mesh repairs.
 | `result_path` | `TyperOption` | --result | `False` |  |  |
 
 ### `agentic-kit doc-registry check-unregistered`
+
+- Safety: `BOUNDED`
+- When to use: List unregistered docs candidates with optional strict declared-scope failure.
+- Dry-run available: `False`
 
 List unregistered docs candidates with optional strict declared-scope failure.
 
@@ -281,6 +439,10 @@ List unregistered docs candidates with optional strict declared-scope failure.
 
 ### `agentic-kit doc-registry reconcile`
 
+- Safety: `BOUNDED`
+- When to use: Reconcile documentation registry, declared scope, and decision projection.
+- Dry-run available: `True`
+
 Reconcile documentation registry, declared scope, and decision projection.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -290,6 +452,10 @@ Reconcile documentation registry, declared scope, and decision projection.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit doc-registry register`
+
+- Safety: `BOUNDED`
+- When to use: Add one reviewed document entry to the documentation registry.
+- Dry-run available: `False`
 
 Add one reviewed document entry to the documentation registry.
 
@@ -303,6 +469,10 @@ Add one reviewed document entry to the documentation registry.
 
 ### `agentic-kit docs lifecycle apply`
 
+- Safety: `BOUNDED`
+- When to use: Apply one safe documentation lifecycle plan step.
+- Dry-run available: `True`
+
 Apply one safe documentation lifecycle plan step.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -315,6 +485,10 @@ Apply one safe documentation lifecycle plan step.
 
 ### `agentic-kit docs lifecycle plan`
 
+- Safety: `READ_ONLY`
+- When to use: Build a dry-run lifecycle plan for one documentation scope.
+- Dry-run available: `False`
+
 Build a dry-run lifecycle plan for one documentation scope.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -324,6 +498,10 @@ Build a dry-run lifecycle plan for one documentation scope.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit docs lifecycle report`
+
+- Safety: `READ_ONLY`
+- When to use: Build or write one documentation lifecycle evidence report.
+- Dry-run available: `True`
 
 Build or write one documentation lifecycle evidence report.
 
@@ -337,6 +515,10 @@ Build or write one documentation lifecycle evidence report.
 
 ### `agentic-kit docs lifecycle triage`
 
+- Safety: `READ_ONLY`
+- When to use: Propose safe documentation lifecycle actions without applying changes.
+- Dry-run available: `False`
+
 Propose safe documentation lifecycle actions without applying changes.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -345,6 +527,10 @@ Propose safe documentation lifecycle actions without applying changes.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit docs removed-source-audit`
+
+- Safety: `READ_ONLY`
+- When to use: Fail if removed documentation sources still have live refs or registry refs.
+- Dry-run available: `False`
 
 Fail if removed documentation sources still have live refs or registry refs.
 
@@ -357,6 +543,10 @@ Fail if removed documentation sources still have live refs or registry refs.
 
 ### `agentic-kit docs-audit`
 
+- Safety: `READ_ONLY`
+- When to use: Run the umbrella documentation-system audit.
+- Dry-run available: `False`
+
 Run the umbrella documentation-system audit.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -365,6 +555,10 @@ Run the umbrella documentation-system audit.
 | `report_path` | `TyperOption` | --report | `False` |  |  |
 
 ### `agentic-kit docs-registry`
+
+- Safety: `BOUNDED`
+- When to use: Show a read-only summary of the documentation registry.
+- Dry-run available: `False`
 
 Show a read-only summary of the documentation registry.
 
@@ -375,6 +569,10 @@ Show a read-only summary of the documentation registry.
 
 ### `agentic-kit doctor`
 
+- Safety: `READ_ONLY`
+- When to use: Run a compact project health check.
+- Dry-run available: `False`
+
 Run a compact project health check.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -382,6 +580,10 @@ Run a compact project health check.
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 
 ### `agentic-kit evidence classify-log`
+
+- Safety: `BOUNDED`
+- When to use: Classify a terminal/evidence log for deterministic gatekeeper decisions.
+- Dry-run available: `False`
 
 Classify a terminal/evidence log for deterministic gatekeeper decisions.
 
@@ -394,6 +596,10 @@ Classify a terminal/evidence log for deterministic gatekeeper decisions.
 
 ### `agentic-kit evidence clean`
 
+- Safety: `BOUNDED`
+- When to use: Clean local evidence according to repo policy.
+- Dry-run available: `False`
+
 Clean local evidence according to repo policy.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -401,6 +607,10 @@ Clean local evidence according to repo policy.
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 
 ### `agentic-kit evidence clean-check`
+
+- Safety: `BOUNDED`
+- When to use: Pass when git status is clean except one expected in-progress log.
+- Dry-run available: `False`
 
 Pass when git status is clean except one expected in-progress log.
 
@@ -410,6 +620,10 @@ Pass when git status is clean except one expected in-progress log.
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 
 ### `agentic-kit evidence commit-paths`
+
+- Safety: `BOUNDED`
+- When to use: Commit an explicit evidence path set and verify the worktree is clean afterwards.
+- Dry-run available: `False`
 
 Commit an explicit evidence path set and verify the worktree is clean afterwards.
 
@@ -424,6 +638,10 @@ Commit an explicit evidence path set and verify the worktree is clean afterwards
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 
 ### `agentic-kit evidence finalize-log`
+
+- Safety: `BOUNDED`
+- When to use: Append a canonical summary, require strict inspection, then upload the evidence log.
+- Dry-run available: `False`
 
 Append a canonical summary, require strict inspection, then upload the evidence log.
 
@@ -456,6 +674,10 @@ Append a canonical summary, require strict inspection, then upload the evidence 
 
 ### `agentic-kit evidence guard`
 
+- Safety: `BOUNDED`
+- When to use: Fail if a terminal evidence log has contradictory final state.
+- Dry-run available: `False`
+
 Fail if a terminal evidence log has contradictory final state.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -463,6 +685,10 @@ Fail if a terminal evidence log has contradictory final state.
 | `logfile` | `TyperArgument` | logfile | `True` |  |  |
 
 ### `agentic-kit evidence inspect`
+
+- Safety: `READ_ONLY`
+- When to use: Inspect explicit or latest terminal evidence before continuing after chat control signals.
+- Dry-run available: `False`
 
 Inspect explicit or latest terminal evidence before continuing after chat control signals.
 
@@ -474,6 +700,10 @@ Inspect explicit or latest terminal evidence before continuing after chat contro
 
 ### `agentic-kit evidence scope-check`
 
+- Safety: `BOUNDED`
+- When to use: Fail if expected target paths are missing from a change set.
+- Dry-run available: `False`
+
 Fail if expected target paths are missing from a change set.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -483,6 +713,10 @@ Fail if expected target paths are missing from a change set.
 
 ### `agentic-kit github-create`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit github-create.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
@@ -491,15 +725,27 @@ Fail if expected target paths are missing from a change set.
 
 ### `agentic-kit governance check`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit governance check.
+- Dry-run available: `False`
+
 _No parameters._
 
 ### `agentic-kit gui initial-llm-prompt`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit gui initial-llm-prompt.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit gui-readiness-gate`
+
+- Safety: `BOUNDED`
+- When to use: Run the pre-GUI readiness gate.
+- Dry-run available: `False`
 
 Run the pre-GUI readiness gate.
 
@@ -511,21 +757,37 @@ Run the pre-GUI readiness gate.
 
 ### `agentic-kit handoff check`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit handoff check.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `path` | `TyperOption` | --path | `False` | `.agentic/handoff_state.yaml` |  |
 
 ### `agentic-kit handoff post-merge-refresh-status`
 
+- Safety: `DESTRUCTIVE`
+- When to use: Run agentic-kit handoff post-merge-refresh-status.
+- Dry-run available: `False`
+
 _No parameters._
 
 ### `agentic-kit handoff prompt`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit handoff prompt.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `path` | `TyperOption` | --path | `False` | `.agentic/handoff_state.yaml` |  |
 
 ### `agentic-kit handoff refresh`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit handoff refresh.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -534,11 +796,19 @@ _No parameters._
 
 ### `agentic-kit handoff show`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit handoff show.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `path` | `TyperOption` | --path | `False` | `.agentic/handoff_state.yaml` |  |
 
 ### `agentic-kit init`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit init.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -559,6 +829,10 @@ _No parameters._
 
 ### `agentic-kit pass-already-done classify`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit pass-already-done classify.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `path` | `TyperArgument` | path | `True` |  |  |
@@ -568,6 +842,10 @@ _No parameters._
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON output. |
 
 ### `agentic-kit pass-already-done report`
+
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit pass-already-done report.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -579,12 +857,20 @@ _No parameters._
 
 ### `agentic-kit patch-preflight`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit patch-preflight.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `paths` | `TyperArgument` | paths | `False` |  |  |
 | `require_slice_gate` | `TyperOption` | --require-slice-gate | `False` |  | Require a clean passing slice gate before accepting preflight. |
 
 ### `agentic-kit patch-scope-preflight`
+
+- Safety: `BOUNDED`
+- When to use: Diagnose patch size, protected paths, and diff-risk before closeout.
+- Dry-run available: `False`
 
 Diagnose patch size, protected paths, and diff-risk before closeout.
 
@@ -600,11 +886,19 @@ Diagnose patch size, protected paths, and diff-risk before closeout.
 
 ### `agentic-kit patterns list`
 
+- Safety: `READ_ONLY`
+- When to use: List known local patterns and anti-patterns.
+- Dry-run available: `False`
+
 List known local patterns and anti-patterns.
 
 _No parameters._
 
 ### `agentic-kit patterns show`
+
+- Safety: `READ_ONLY`
+- When to use: Show one local pattern catalog entry by stable ID.
+- Dry-run available: `False`
 
 Show one local pattern catalog entry by stable ID.
 
@@ -613,6 +907,10 @@ Show one local pattern catalog entry by stable ID.
 | `pattern_id` | `TyperArgument` | pattern_id | `True` |  |  |
 
 ### `agentic-kit post-release-check`
+
+- Safety: `BOUNDED`
+- When to use: Validate post-release GitHub and Zenodo state without guessing DOI metadata.
+- Dry-run available: `False`
 
 Validate post-release GitHub and Zenodo state without guessing DOI metadata.
 
@@ -623,6 +921,10 @@ Validate post-release GitHub and Zenodo state without guessing DOI metadata.
 
 ### `agentic-kit post-release-doi-closeout`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit post-release-doi-closeout.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
@@ -632,11 +934,19 @@ Validate post-release GitHub and Zenodo state without guessing DOI metadata.
 
 ### `agentic-kit pr closeout-check`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit pr closeout-check.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `json_file` | `TyperArgument` | json_file | `True` |  |  |
 
 ### `agentic-kit pr merge-if-green`
+
+- Safety: `DESTRUCTIVE`
+- When to use: Merge only when PR checks are green, refs match, and merge state is clean.
+- Dry-run available: `True`
 
 Merge only when PR checks are green, refs match, and merge state is clean.
 
@@ -657,6 +967,10 @@ Merge only when PR checks are green, refs match, and merge state is clean.
 
 ### `agentic-kit pr status`
 
+- Safety: `READ_ONLY`
+- When to use: Print deterministic PR/CI status and fetch failed logs for red CI.
+- Dry-run available: `False`
+
 Print deterministic PR/CI status and fetch failed logs for red CI.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -667,6 +981,10 @@ Print deterministic PR/CI status and fetch failed logs for red CI.
 | `failed_log_lines` | `TyperOption` | --failed-log-lines | `False` | `120` | Maximum failed-log excerpt lines. |
 
 ### `agentic-kit pr wait-ci`
+
+- Safety: `BOUNDED`
+- When to use: Wait for pull-request CI; guard merge preparation with --expected-head-sha.
+- Dry-run available: `False`
 
 Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 
@@ -680,11 +998,19 @@ Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 
 ### `agentic-kit pr-closeout`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit pr-closeout.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `json_file` | `TyperArgument` | json_file | `True` |  |  |
 
 ### `agentic-kit pr-hygiene`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit pr-hygiene.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -693,11 +1019,19 @@ Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 
 ### `agentic-kit profile-explain`
 
+- Safety: `BOUNDED`
+- When to use: List available project profiles and policy packs.
+- Dry-run available: `False`
+
 List available project profiles and policy packs.
 
 _No parameters._
 
 ### `agentic-kit project-direction`
+
+- Safety: `BOUNDED`
+- When to use: Render project direction sections from the YAML source.
+- Dry-run available: `False`
 
 Render project direction sections from the YAML source.
 
@@ -708,6 +1042,10 @@ Render project direction sections from the YAML source.
 | `output_format` | `TyperOption` | --format | `False` | `text` | text, markdown, or json. |
 
 ### `agentic-kit release prepare`
+
+- Safety: `BOUNDED`
+- When to use: Generate release summary evidence and run release-prep safely.
+- Dry-run available: `True`
 
 Generate release summary evidence and run release-prep safely.
 
@@ -722,6 +1060,11 @@ Generate release summary evidence and run release-prep safely.
 
 ### `agentic-kit release ready`
 
+- Safety: `BOUNDED`
+- When to use: Run release readiness through the standard-error scan wrapper.
+- Dry-run available: `False`
+- Replaces raw: `git tag`, `gh release create`
+
 Run release readiness through the standard-error scan wrapper.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -734,6 +1077,10 @@ Run release readiness through the standard-error scan wrapper.
 
 ### `agentic-kit release-check`
 
+- Safety: `BOUNDED`
+- When to use: Validate release state for a target version.
+- Dry-run available: `False`
+
 Validate release state for a target version.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -742,6 +1089,10 @@ Validate release state for a target version.
 | `version` | `TyperOption` | --version | `False` |  | Release version without leading v. |
 
 ### `agentic-kit release-metadata-authority-gate`
+
+- Safety: `BOUNDED`
+- When to use: Block manual release metadata anchor edits without release-prep evidence.
+- Dry-run available: `False`
 
 Block manual release metadata anchor edits without release-prep evidence.
 
@@ -754,6 +1105,10 @@ Block manual release metadata anchor edits without release-prep evidence.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print a machine-readable result. |
 
 ### `agentic-kit release-notes-generate`
+
+- Safety: `BOUNDED`
+- When to use: Generate deterministic evidence-backed release notes from a local git tag diff.
+- Dry-run available: `False`
 
 Generate deterministic evidence-backed release notes from a local git tag diff.
 
@@ -773,6 +1128,10 @@ Generate deterministic evidence-backed release notes from a local git tag diff.
 
 ### `agentic-kit release-plan`
 
+- Safety: `BOUNDED`
+- When to use: Print a release preparation checklist for the current project.
+- Dry-run available: `False`
+
 Print a release preparation checklist for the current project.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -782,6 +1141,10 @@ Print a release preparation checklist for the current project.
 
 ### `agentic-kit release-preflight`
 
+- Safety: `BOUNDED`
+- When to use: Validate before-metadata release readiness for a target version.
+- Dry-run available: `False`
+
 Validate before-metadata release readiness for a target version.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -789,6 +1152,10 @@ Validate before-metadata release readiness for a target version.
 | `version` | `TyperOption` | --version | `True` |  | Target release version without leading v. |
 
 ### `agentic-kit release-prep`
+
+- Safety: `BOUNDED`
+- When to use: Prepare release metadata through the supported agentic-kit route.
+- Dry-run available: `True`
 
 Prepare release metadata through the supported agentic-kit route.
 
@@ -807,6 +1174,10 @@ push, create GitHub releases, or write Zenodo DOI metadata.
 
 ### `agentic-kit release-publish`
 
+- Safety: `DESTRUCTIVE`
+- When to use: Plan release publishing without live tag/release side effects.
+- Dry-run available: `True`
+
 Plan release publishing without live tag/release side effects.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -820,6 +1191,10 @@ Plan release publishing without live tag/release side effects.
 
 ### `agentic-kit release-status`
 
+- Safety: `BOUNDED`
+- When to use: Render the local release lifecycle state without mutating release files.
+- Dry-run available: `False`
+
 Render the local release lifecycle state without mutating release files.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -831,6 +1206,10 @@ Render the local release lifecycle state without mutating release files.
 
 ### `agentic-kit remote-branch-hygiene`
 
+- Safety: `BOUNDED`
+- When to use: Dry-run remote branch hygiene classification for K3.
+- Dry-run available: `False`
+
 Dry-run remote branch hygiene classification for K3.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -839,6 +1218,10 @@ Dry-run remote branch hygiene classification for K3.
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit remote-branch-hygiene-apply`
+
+- Safety: `BOUNDED`
+- When to use: Safely apply exactly one remote branch deletion candidate.
+- Dry-run available: `True`
 
 Safely apply exactly one remote branch deletion candidate.
 
@@ -851,6 +1234,10 @@ Safely apply exactly one remote branch deletion candidate.
 
 ### `agentic-kit remote-branch-hygiene-report`
 
+- Safety: `BOUNDED`
+- When to use: Write a K3 remote branch hygiene evidence report only with --execute.
+- Dry-run available: `True`
+
 Write a K3 remote branch hygiene evidence report only with --execute.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -862,12 +1249,20 @@ Write a K3 remote branch hygiene evidence report only with --execute.
 
 ### `agentic-kit remote-next`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit remote-next.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON result. |
 
 ### `agentic-kit rn`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit rn.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -876,6 +1271,10 @@ Write a K3 remote branch hygiene evidence report only with --execute.
 
 ### `agentic-kit rnc`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit rnc.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
@@ -883,9 +1282,17 @@ Write a K3 remote branch hygiene evidence report only with --execute.
 
 ### `agentic-kit rule-registry check`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit rule-registry check.
+- Dry-run available: `False`
+
 _No parameters._
 
 ### `agentic-kit rule-registry register`
+
+- Safety: `BOUNDED`
+- When to use: Add one reviewed rule mechanism with direct evidence coverage.
+- Dry-run available: `False`
 
 Add one reviewed rule mechanism with direct evidence coverage.
 
@@ -909,12 +1316,20 @@ Add one reviewed rule mechanism with direct evidence coverage.
 
 ### `agentic-kit rule-registry report`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit rule-registry report.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 | `fail_on_followups` | `TyperOption` | --fail-on-followups | `False` | `False` | Exit non-zero when follow-up items remain, even if validation passes. |
 
 ### `agentic-kit rules acknowledge`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit rules acknowledge.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -925,6 +1340,10 @@ Add one reviewed rule mechanism with direct evidence coverage.
 
 ### `agentic-kit rules acknowledge-communication-refresh`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit rules acknowledge-communication-refresh.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `ack_file` | `TyperOption` | --ack-file | `True` |  | Path to RULE_REFRESH_ACK JSON/text. |
@@ -932,6 +1351,10 @@ Add one reviewed rule mechanism with direct evidence coverage.
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit rules communication-refresh`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit rules communication-refresh.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -941,12 +1364,20 @@ Add one reviewed rule mechanism with direct evidence coverage.
 
 ### `agentic-kit rules handoff-refresh`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit rules handoff-refresh.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit rules require-current-communication-context`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit rules require-current-communication-context.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -955,6 +1386,10 @@ Add one reviewed rule mechanism with direct evidence coverage.
 
 ### `agentic-kit rules snapshot`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit rules snapshot.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
@@ -962,12 +1397,20 @@ Add one reviewed rule mechanism with direct evidence coverage.
 
 ### `agentic-kit rules validate-sources`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit rules validate-sources.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit scaffold planning-doc`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit scaffold planning-doc.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -982,12 +1425,20 @@ Add one reviewed rule mechanism with direct evidence coverage.
 
 ### `agentic-kit slice gate`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit slice gate.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `kind` | `TyperOption` | --kind | `False` | `planning-doc` | Slice gate kind to run. |
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
 
 ### `agentic-kit standard-gates-audit-suite`
+
+- Safety: `READ_ONLY`
+- When to use: Run the audit suite required by standard project gates.
+- Dry-run available: `False`
 
 Run the audit suite required by standard project gates.
 
@@ -999,9 +1450,17 @@ Run the audit suite required by standard project gates.
 
 ### `agentic-kit state freshness-check`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit state freshness-check.
+- Dry-run available: `False`
+
 _No parameters._
 
 ### `agentic-kit state mode-check`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit state mode-check.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1011,6 +1470,10 @@ _No parameters._
 
 ### `agentic-kit state mode-write`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit state mode-write.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `target` | `TyperArgument` | target | `True` |  | Execution target: local or remote. |
@@ -1019,6 +1482,10 @@ _No parameters._
 | `allow_dirty` | `TyperOption` | --allow-dirty | `False` | `False` | Allow a dirty worktree. |
 
 ### `agentic-kit todo complete`
+
+- Safety: `BOUNDED`
+- When to use: Mark a TODO item as done and store evidence.
+- Dry-run available: `False`
 
 Mark a TODO item as done and store evidence.
 
@@ -1030,6 +1497,10 @@ Mark a TODO item as done and store evidence.
 
 ### `agentic-kit todo list`
 
+- Safety: `READ_ONLY`
+- When to use: List project TODO items from .agentic/todo.yaml.
+- Dry-run available: `False`
+
 List project TODO items from .agentic/todo.yaml.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1038,11 +1509,19 @@ List project TODO items from .agentic/todo.yaml.
 
 ### `agentic-kit todo render`
 
+- Safety: `BOUNDED`
+- When to use: Regenerate docs/TODO.md from .agentic/todo.yaml.
+- Dry-run available: `False`
+
 Regenerate docs/TODO.md from .agentic/todo.yaml.
 
 _No parameters._
 
 ### `agentic-kit transfer admin-refresh-pr`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer admin-refresh-pr.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1052,12 +1531,21 @@ _No parameters._
 
 ### `agentic-kit transfer apply`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer apply.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/current.yaml')` | Transfer order path. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer branch-create`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer branch-create.
+- Dry-run available: `False`
+- Replaces raw: `git switch -c`, `git checkout -b`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1068,6 +1556,10 @@ _No parameters._
 
 ### `agentic-kit transfer branch-delete`
 
+- Safety: `DESTRUCTIVE`
+- When to use: Run agentic-kit transfer branch-delete.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `branch` | `TyperArgument` | branch | `True` |  | Branch name to delete. |
@@ -1077,6 +1569,10 @@ _No parameters._
 
 ### `agentic-kit transfer branch-switch`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer branch-switch.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `branch` | `TyperArgument` | branch | `True` |  | Branch name to switch to. |
@@ -1084,6 +1580,10 @@ _No parameters._
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer chat-switch-complete`
+
+- Safety: `BOUNDED`
+- When to use: Create a deterministic successor handoff package and prompt projections.
+- Dry-run available: `False`
 
 Create a deterministic successor handoff package and prompt projections.
 
@@ -1096,12 +1596,20 @@ Create a deterministic successor handoff package and prompt projections.
 
 ### `agentic-kit transfer closeout`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer closeout.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `no_remove_transfer_dir` | `TyperOption` | --no-remove-transfer-dir | `False` | `False` | Do not remove .agentic/transfer during closeout. |
 | `json_output` | `TyperOption` | --json, --no-json | `False` | `True` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer command-composition-check`
+
+- Safety: `BOUNDED`
+- When to use: Block common copied-command mistakes before running patch, transfer, or release gates.
+- Dry-run available: `False`
 
 Block common copied-command mistakes before running patch, transfer, or release gates.
 
@@ -1115,6 +1623,10 @@ Block common copied-command mistakes before running patch, transfer, or release 
 
 ### `agentic-kit transfer command-reference-check`
 
+- Safety: `READ_ONLY`
+- When to use: Check whether the committed agentic-kit command reference is current.
+- Dry-run available: `False`
+
 Check whether the committed agentic-kit command reference is current.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1122,6 +1634,10 @@ Check whether the committed agentic-kit command reference is current.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
 ### `agentic-kit transfer command-reference-refresh`
+
+- Safety: `BOUNDED`
+- When to use: Regenerate the agentic-kit command reference without committing changes.
+- Dry-run available: `False`
 
 Regenerate the agentic-kit command reference without committing changes.
 
@@ -1131,6 +1647,10 @@ Regenerate the agentic-kit command reference without committing changes.
 
 ### `agentic-kit transfer command-stack-begin`
 
+- Safety: `BOUNDED`
+- When to use: Begin a repo-local command-stack state for deterministic local preflight cleanup.
+- Dry-run available: `False`
+
 Begin a repo-local command-stack state for deterministic local preflight cleanup.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1139,6 +1659,10 @@ Begin a repo-local command-stack state for deterministic local preflight cleanup
 
 ### `agentic-kit transfer command-stack-end`
 
+- Safety: `BOUNDED`
+- When to use: End the repo-local command-stack state after a local command stack completed.
+- Dry-run available: `False`
+
 End the repo-local command-stack state after a local command stack completed.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1146,6 +1670,11 @@ End the repo-local command-stack state after a local command stack completed.
 | `json_output` | `TyperOption` | --json, --no-json | `False` | `True` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer commit`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer commit.
+- Dry-run available: `False`
+- Replaces raw: `git commit`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1156,6 +1685,10 @@ End the repo-local command-stack state after a local command stack completed.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer conflict-resolve-file`
+
+- Safety: `BOUNDED`
+- When to use: Resolve one conflicted file by replacing it from an explicit source and staging it.
+- Dry-run available: `False`
 
 Resolve one conflicted file by replacing it from an explicit source and staging it.
 
@@ -1168,6 +1701,10 @@ Resolve one conflicted file by replacing it from an explicit source and staging 
 
 ### `agentic-kit transfer conflict-status`
 
+- Safety: `BOUNDED`
+- When to use: Report merge/rebase conflict state without resolving anything.
+- Dry-run available: `False`
+
 Report merge/rebase conflict state without resolving anything.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1175,6 +1712,10 @@ Report merge/rebase conflict state without resolving anything.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
 ### `agentic-kit transfer continue`
+
+- Safety: `BOUNDED`
+- When to use: Continue chat/local transfer communication through the safest available wrapper path.
+- Dry-run available: `False`
 
 Continue chat/local transfer communication through the safest available wrapper path.
 
@@ -1185,6 +1726,11 @@ Continue chat/local transfer communication through the safest available wrapper 
 | `skip_llm_context_gate` | `TyperOption` | --skip-llm-context-gate | `False` | `False` | Recovery-only: continue without requiring fresh generated LLM context. |
 
 ### `agentic-kit transfer delete-merged-work-branch`
+
+- Safety: `DESTRUCTIVE`
+- When to use: Delete a merged non-main work branch after PR merge-state verification.
+- Dry-run available: `False`
+- Replaces raw: `git push --delete`, `git branch -D`
 
 Delete a merged non-main work branch after PR merge-state verification.
 
@@ -1198,6 +1744,10 @@ Delete a merged non-main work branch after PR merge-state verification.
 
 ### `agentic-kit transfer diagnose-removed-ns-commands`
 
+- Safety: `BOUNDED`
+- When to use: Diagnose ns command definitions/usages removed or reduced between release refs.
+- Dry-run available: `False`
+
 Diagnose ns command definitions/usages removed or reduced between release refs.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1210,6 +1760,10 @@ Diagnose ns command definitions/usages removed or reduced between release refs.
 
 ### `agentic-kit transfer divergence-status`
 
+- Safety: `READ_ONLY`
+- When to use: Report local/upstream divergence without mutating repository state.
+- Dry-run available: `False`
+
 Report local/upstream divergence without mutating repository state.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1217,6 +1771,10 @@ Report local/upstream divergence without mutating repository state.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
 ### `agentic-kit transfer evidence-finalize-current-transfer`
+
+- Safety: `BOUNDED`
+- When to use: Finalize the current transfer evidence log through the stricter evidence CLI.
+- Dry-run available: `False`
 
 Finalize the current transfer evidence log through the stricter evidence CLI.
 
@@ -1239,6 +1797,10 @@ Finalize the current transfer evidence log through the stricter evidence CLI.
 
 ### `agentic-kit transfer evidence-inspect-latest`
 
+- Safety: `BOUNDED`
+- When to use: Inspect the latest evidence log with the required-summary contract.
+- Dry-run available: `False`
+
 Inspect the latest evidence log with the required-summary contract.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1246,6 +1808,10 @@ Inspect the latest evidence log with the required-summary contract.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 
 ### `agentic-kit transfer evidence-pr-complete`
+
+- Safety: `BOUNDED`
+- When to use: Finalize transfer evidence on an evidence branch and complete it through a PR.
+- Dry-run available: `False`
 
 Finalize transfer evidence on an evidence branch and complete it through a PR.
 
@@ -1273,12 +1839,20 @@ Finalize transfer evidence on an evidence branch and complete it through a PR.
 
 ### `agentic-kit transfer fetch-origin`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer fetch-origin.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `branch` | `TyperOption` | --branch | `False` | `main` | Remote branch to fetch from origin. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer head-sha`
+
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit transfer head-sha.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1287,12 +1861,20 @@ Finalize transfer evidence on an evidence branch and complete it through a PR.
 
 ### `agentic-kit transfer inspect`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit transfer inspect.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/current.yaml')` | Transfer order path. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer list-refs`
+
+- Safety: `BOUNDED`
+- When to use: List local release tags and branches for safe work-start selection.
+- Dry-run available: `False`
 
 List local release tags and branches for safe work-start selection.
 
@@ -1302,6 +1884,10 @@ List local release tags and branches for safe work-start selection.
 
 ### `agentic-kit transfer log-header`
 
+- Safety: `BOUNDED`
+- When to use: Render the dynamic local-to-LLM copy/paste log header from rule files.
+- Dry-run available: `False`
+
 Render the dynamic local-to-LLM copy/paste log header from rule files.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1309,6 +1895,10 @@ Render the dynamic local-to-LLM copy/paste log header from rule files.
 | `log_path` | `TyperOption` | --log-path | `False` | `` | Optional log path to include in the dynamic local-to-LLM header. |
 
 ### `agentic-kit transfer log-upload-hint`
+
+- Safety: `BOUNDED`
+- When to use: Render the terminal hint for copy/paste communication with the LLM.
+- Dry-run available: `False`
 
 Render the terminal hint for copy/paste communication with the LLM.
 
@@ -1319,6 +1909,10 @@ Render the terminal hint for copy/paste communication with the LLM.
 
 ### `agentic-kit transfer normalize-files`
 
+- Safety: `BOUNDED`
+- When to use: Normalize active transfer files by adding missing command IDs and archiving stale active files.
+- Dry-run available: `True`
+
 Normalize active transfer files by adding missing command IDs and archiving stale active files.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1327,6 +1921,10 @@ Normalize active transfer files by adding missing command IDs and archiving stal
 | `json_output` | `TyperOption` | --json, --no-json | `False` | `True` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer normalize-session`
+
+- Safety: `BOUNDED`
+- When to use: Normalize and summarize the local transfer session state.
+- Dry-run available: `False`
 
 Normalize and summarize the local transfer session state.
 
@@ -1342,6 +1940,10 @@ canonical transfer outbox file.
 
 ### `agentic-kit transfer patch-cycle-status`
 
+- Safety: `BOUNDED`
+- When to use: Render the current four-slice patch/handoff workflow state.
+- Dry-run available: `False`
+
 Render the current four-slice patch/handoff workflow state.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1353,12 +1955,20 @@ Render the current four-slice patch/handoff workflow state.
 
 ### `agentic-kit transfer post-merge-check`
 
+- Safety: `DESTRUCTIVE`
+- When to use: Run agentic-kit transfer post-merge-check.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `main_branch` | `TyperOption` | --main-branch | `False` | `main` | Expected current branch after merge. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer post-merge-complete`
+
+- Safety: `DESTRUCTIVE`
+- When to use: Run agentic-kit transfer post-merge-complete.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1374,6 +1984,10 @@ Render the current four-slice patch/handoff workflow state.
 
 ### `agentic-kit transfer pr-closeout-complete`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer pr-closeout-complete.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `after_pr` | `TyperOption` | --after-pr | `True` |  | Substantive PR number to merge if needed and close out with post-merge handoff refresh. |
@@ -1386,6 +2000,10 @@ Render the current four-slice patch/handoff workflow state.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer pr-complete`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer pr-complete.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1401,6 +2019,10 @@ Render the current four-slice patch/handoff workflow state.
 
 ### `agentic-kit transfer pr-create`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer pr-create.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `base` | `TyperOption` | --base | `False` | `main` | Base branch. |
@@ -1411,6 +2033,11 @@ Render the current four-slice patch/handoff workflow state.
 | `skip_llm_context_gate` | `TyperOption` | --skip-llm-context-gate | `False` | `False` | Recovery-only: create PR without requiring fresh generated LLM context. |
 
 ### `agentic-kit transfer pr-create-complete`
+
+- Safety: `BOUNDED`
+- When to use: Create a PR and complete it without requiring manual PR-number or SHA copying.
+- Dry-run available: `False`
+- Replaces raw: `gh pr create`
 
 Create a PR and complete it without requiring manual PR-number or SHA copying.
 
@@ -1429,6 +2056,10 @@ Create a PR and complete it without requiring manual PR-number or SHA copying.
 
 ### `agentic-kit transfer pr-existing-for-branch`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer pr-existing-for-branch.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `head` | `TyperOption` | --head | `False` | `current` | Head branch to look up. Use current to resolve git branch --show-current. |
@@ -1437,6 +2068,11 @@ Create a PR and complete it without requiring manual PR-number or SHA copying.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text report. |
 
 ### `agentic-kit transfer pr-merge-safe`
+
+- Safety: `DESTRUCTIVE`
+- When to use: Run agentic-kit transfer pr-merge-safe.
+- Dry-run available: `False`
+- Replaces raw: `gh pr merge`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1452,6 +2088,10 @@ Create a PR and complete it without requiring manual PR-number or SHA copying.
 
 ### `agentic-kit transfer pr-status`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer pr-status.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `pr_number` | `TyperArgument` | pr_number | `True` |  | Pull request number to inspect through the transfer wrapper. |
@@ -1461,6 +2101,10 @@ Create a PR and complete it without requiring manual PR-number or SHA copying.
 | `expected_head_sha` | `TyperOption` | --expected-head-sha | `False` | `` | Expected full PR head SHA. |
 
 ### `agentic-kit transfer pr-wait-ci`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer pr-wait-ci.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1473,6 +2117,10 @@ Create a PR and complete it without requiring manual PR-number or SHA copying.
 
 ### `agentic-kit transfer prepare-successor-handoff`
 
+- Safety: `BOUNDED`
+- When to use: Deprecated compatibility alias for transfer chat-switch-complete.
+- Dry-run available: `False`
+
 Deprecated compatibility alias for transfer chat-switch-complete.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1484,6 +2132,10 @@ Deprecated compatibility alias for transfer chat-switch-complete.
 
 ### `agentic-kit transfer protected-diff-plan`
 
+- Safety: `READ_ONLY`
+- When to use: Write the current diff to /tmp and run the Python protected change planner on it.
+- Dry-run available: `False`
+
 Write the current diff to /tmp and run the Python protected change planner on it.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1494,6 +2146,10 @@ Write the current diff to /tmp and run the Python protected change planner on it
 
 ### `agentic-kit transfer publish-last-report`
 
+- Safety: `DESTRUCTIVE`
+- When to use: Run agentic-kit transfer publish-last-report.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `label` | `TyperOption` | --label | `False` | `transfer-handoff` | Label for the published tracked handoff report. |
@@ -1501,11 +2157,20 @@ Write the current diff to /tmp and run the Python protected change planner on it
 
 ### `agentic-kit transfer pull-current`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer pull-current.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer push-current`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer push-current.
+- Dry-run available: `False`
+- Replaces raw: `git push`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1514,11 +2179,19 @@ Write the current diff to /tmp and run the Python protected change planner on it
 
 ### `agentic-kit transfer read-user-task`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer read-user-task.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer rebase-on-upstream`
+
+- Safety: `BOUNDED`
+- When to use: Rebase the current branch on its upstream with bounded conflict reporting.
+- Dry-run available: `False`
 
 Rebase the current branch on its upstream with bounded conflict reporting.
 
@@ -1530,6 +2203,10 @@ Rebase the current branch on its upstream with bounded conflict reporting.
 
 ### `agentic-kit transfer refresh-llm-context-carriers`
 
+- Safety: `BOUNDED`
+- When to use: Refresh outbox and latest handoff report with fresh generated LLM context.
+- Dry-run available: `False`
+
 Refresh outbox and latest handoff report with fresh generated LLM context.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1538,12 +2215,20 @@ Refresh outbox and latest handoff report with fresh generated LLM context.
 
 ### `agentic-kit transfer remote-next`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer remote-next.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `branch` | `TyperArgument` | branch | `False` |  | Optional remote transfer branch. If omitted, read branch from the transfer order. |
 | `json_output` | `TyperOption` | --json, --no-json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer remote-work-start`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer remote-work-start.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1553,6 +2238,10 @@ Refresh outbox and latest handoff report with fresh generated LLM context.
 
 ### `agentic-kit transfer repo-diff`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit transfer repo-diff.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `cached` | `TyperOption` | --cached | `False` | `False` | Show staged diff. |
@@ -1561,6 +2250,10 @@ Refresh outbox and latest handoff report with fresh generated LLM context.
 
 ### `agentic-kit transfer repo-log`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit transfer repo-log.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `limit` | `TyperOption` | --limit, -n | `False` | `5` | Number of commits to show. |
@@ -1568,12 +2261,20 @@ Refresh outbox and latest handoff report with fresh generated LLM context.
 
 ### `agentic-kit transfer repo-status`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer repo-status.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `short` | `TyperOption` | --short, --full | `False` | `True` | Use short git status by default. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer require-fresh-llm-context`
+
+- Safety: `READ_ONLY`
+- When to use: Require fresh generated LLM context before transfer planning.
+- Dry-run available: `False`
 
 Require fresh generated LLM context before transfer planning.
 
@@ -1585,6 +2286,10 @@ Require fresh generated LLM context before transfer planning.
 
 ### `agentic-kit transfer restore-known-volatile`
 
+- Safety: `BOUNDED`
+- When to use: Restore the canonical known volatile transfer files.
+- Dry-run available: `False`
+
 Restore the canonical known volatile transfer files.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1593,6 +2298,10 @@ Restore the canonical known volatile transfer files.
 
 ### `agentic-kit transfer run-and-log`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer run-and-log.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `label` | `TyperOption` | --label | `False` | `transfer-run` | Label for the transfer uplink report. |
@@ -1600,12 +2309,20 @@ Restore the canonical known volatile transfer files.
 
 ### `agentic-kit transfer run-local`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer run-local.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/current.yaml')` | Transfer order path. |
 | `json_output` | `TyperOption` | --json, --no-json | `False` | `True` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer run-sequence-and-log`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer run-sequence-and-log.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1615,11 +2332,19 @@ Restore the canonical known volatile transfer files.
 
 ### `agentic-kit transfer show-last-report`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer show-last-report.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print the full latest transfer report JSON. |
 
 ### `agentic-kit transfer standard-error-scan`
+
+- Safety: `BOUNDED`
+- When to use: Run a bounded scan for known workflow standard errors before patch/transfer/release work.
+- Dry-run available: `False`
 
 Run a bounded scan for known workflow standard errors before patch/transfer/release work.
 
@@ -1635,11 +2360,19 @@ Run a bounded scan for known workflow standard errors before patch/transfer/rele
 
 ### `agentic-kit transfer state`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit transfer state.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `json_output` | `TyperOption` | --json, --no-json | `False` | `True` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer status`
+
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit transfer status.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1647,6 +2380,10 @@ Run a bounded scan for known workflow standard errors before patch/transfer/rele
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer submit-user-task`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit transfer submit-user-task.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1658,6 +2395,10 @@ Run a bounded scan for known workflow standard errors before patch/transfer/rele
 
 ### `agentic-kit transfer sync-main`
 
+- Safety: `BOUNDED`
+- When to use: Synchronize main, acknowledge rules, and normalize the session.
+- Dry-run available: `False`
+
 Synchronize main, acknowledge rules, and normalize the session.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1667,11 +2408,19 @@ Synchronize main, acknowledge rules, and normalize the session.
 
 ### `agentic-kit transfer verify-llm-context-refresh`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit transfer verify-llm-context-refresh.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer work-order-patch`
+
+- Safety: `BOUNDED`
+- When to use: Apply a guarded JSON/YAML text-replacement patch work order.
+- Dry-run available: `True`
 
 Apply a guarded JSON/YAML text-replacement patch work order.
 
@@ -1683,6 +2432,10 @@ Apply a guarded JSON/YAML text-replacement patch work order.
 
 ### `agentic-kit transfer workflow-next`
 
+- Safety: `BOUNDED`
+- When to use: Read repo and transfer state and print the next safe wrapper command without mutating state.
+- Dry-run available: `False`
+
 Read repo and transfer state and print the next safe wrapper command without mutating state.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1691,6 +2444,10 @@ Read repo and transfer state and print the next safe wrapper command without mut
 
 ### `agentic-kit validate-contract`
 
+- Safety: `READ_ONLY`
+- When to use: Validate the machine-readable project contract.
+- Dry-run available: `False`
+
 Validate the machine-readable project contract.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1698,6 +2455,10 @@ Validate the machine-readable project contract.
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root containing .agentic/project.yaml. |
 
 ### `agentic-kit validate-output-contract`
+
+- Safety: `READ_ONLY`
+- When to use: Validate an output file against a machine-readable output contract.
+- Dry-run available: `False`
 
 Validate an output file against a machine-readable output contract.
 
@@ -1712,6 +2473,10 @@ Validate an output file against a machine-readable output contract.
 
 ### `agentic-kit validate-sections`
 
+- Safety: `READ_ONLY`
+- When to use: Validate that a text file contains required literal section markers.
+- Dry-run available: `False`
+
 Validate that a text file contains required literal section markers.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1720,6 +2485,10 @@ Validate that a text file contains required literal section markers.
 | `required_section` | `TyperOption` | --required-section, -s | `True` |  | Required literal section marker. Repeat the option for multiple sections. |
 
 ### `agentic-kit work check`
+
+- Safety: `READ_ONLY`
+- When to use: Run common human workflow gates without committing or pushing.
+- Dry-run available: `False`
 
 Run common human workflow gates without committing or pushing.
 
@@ -1730,6 +2499,10 @@ Run common human workflow gates without committing or pushing.
 
 ### `agentic-kit work discard-changes`
 
+- Safety: `BOUNDED`
+- When to use: Preview or execute the explicit destructive discard-all workflow.
+- Dry-run available: `True`
+
 Preview or execute the explicit destructive discard-all workflow.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1739,6 +2512,10 @@ Preview or execute the explicit destructive discard-all workflow.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit work finish`
+
+- Safety: `BOUNDED`
+- When to use: Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks.
+- Dry-run available: `True`
 
 Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks.
 
@@ -1754,6 +2531,10 @@ Finish a human work slice by planning or executing commit, push, PR, merge, and 
 
 ### `agentic-kit work recover`
 
+- Safety: `BOUNDED`
+- When to use: Run safe recovery/status commands after interrupted work.
+- Dry-run available: `False`
+
 Run safe recovery/status commands after interrupted work.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1761,6 +2542,10 @@ Run safe recovery/status commands after interrupted work.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit work start`
+
+- Safety: `BOUNDED`
+- When to use: Start a human patch/slice workflow with the safe standard startup sequence.
+- Dry-run available: `False`
 
 Start a human patch/slice workflow with the safe standard startup sequence.
 
@@ -1773,13 +2558,25 @@ Start a human patch/slice workflow with the safe standard startup sequence.
 
 ### `agentic-kit work-order check`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit work-order check.
+- Dry-run available: `False`
+
 _No parameters._
 
 ### `agentic-kit work-order list`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit work-order list.
+- Dry-run available: `False`
+
 _No parameters._
 
 ### `agentic-kit work-order prepare`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit work-order prepare.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1789,6 +2586,10 @@ _No parameters._
 
 ### `agentic-kit work-order run`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit work-order run.
+- Dry-run available: `True`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `work_order_id` | `TyperArgument` | work_order_id | `True` |  |  |
@@ -1796,15 +2597,27 @@ _No parameters._
 
 ### `agentic-kit work-order show`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit work-order show.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `work_order_id` | `TyperArgument` | work_order_id | `True` |  |  |
 
 ### `agentic-kit work-order templates`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit work-order templates.
+- Dry-run available: `False`
+
 _No parameters._
 
 ### `agentic-kit work-order typed-next`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit work-order typed-next.
+- Dry-run available: `False`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1812,12 +2625,20 @@ _No parameters._
 
 ### `agentic-kit work-order typed-queue-status`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit work-order typed-queue-status.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `inbox_path` | `TyperOption` | --inbox | `False` | `PosixPath('.agentic/typed_work_orders/inbox')` | Typed work order inbox directory. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON queue status. |
 
 ### `agentic-kit work-order typed-run`
+
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit work-order typed-run.
+- Dry-run available: `True`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1827,6 +2648,10 @@ _No parameters._
 
 ### `agentic-kit workflow cleanup`
 
+- Safety: `BOUNDED`
+- When to use: Cleanup completed or stale temporary workflow evidence branches.
+- Dry-run available: `False`
+
 Cleanup completed or stale temporary workflow evidence branches.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1834,6 +2659,10 @@ Cleanup completed or stale temporary workflow evidence branches.
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root containing tools/next-step.py. |
 
 ### `agentic-kit workflow fail-report`
+
+- Safety: `BOUNDED`
+- When to use: Upload preserved FAILED workflow evidence without cleanup or retry.
+- Dry-run available: `False`
 
 Upload preserved FAILED workflow evidence without cleanup or retry.
 
@@ -1843,6 +2672,10 @@ Upload preserved FAILED workflow evidence without cleanup or retry.
 
 ### `agentic-kit workflow go`
 
+- Safety: `BOUNDED`
+- When to use: Request the configured workflow and run one bounded step.
+- Dry-run available: `False`
+
 Request the configured workflow and run one bounded step.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1850,6 +2683,10 @@ Request the configured workflow and run one bounded step.
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root containing .agentic/current_work.yaml and tools/next-step.py. |
 
 ### `agentic-kit workflow list`
+
+- Safety: `READ_ONLY`
+- When to use: List stored local workflow items.
+- Dry-run available: `False`
 
 List stored local workflow items.
 
@@ -1859,6 +2696,10 @@ List stored local workflow items.
 
 ### `agentic-kit workflow request`
 
+- Safety: `BOUNDED`
+- When to use: Request the configured declarative workflow without running it.
+- Dry-run available: `False`
+
 Request the configured declarative workflow without running it.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1866,6 +2707,10 @@ Request the configured declarative workflow without running it.
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root containing .agentic/current_work.yaml. |
 
 ### `agentic-kit workflow run`
+
+- Safety: `BOUNDED`
+- When to use: Run the current workflow, or set a stored workflow item and run it.
+- Dry-run available: `False`
 
 Run the current workflow, or set a stored workflow item and run it.
 
@@ -1876,6 +2721,10 @@ Run the current workflow, or set a stored workflow item and run it.
 
 ### `agentic-kit workflow show`
 
+- Safety: `READ_ONLY`
+- When to use: Show the current workflow request or one stored workflow item.
+- Dry-run available: `False`
+
 Show the current workflow request or one stored workflow item.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1885,6 +2734,10 @@ Show the current workflow request or one stored workflow item.
 
 ### `agentic-kit workflow state`
 
+- Safety: `READ_ONLY`
+- When to use: Show guided workflow state; shortcut for workflow status --explain.
+- Dry-run available: `False`
+
 Show guided workflow state; shortcut for workflow status --explain.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1892,6 +2745,10 @@ Show guided workflow state; shortcut for workflow status --explain.
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root containing .agentic/workflow_state. |
 
 ### `agentic-kit workflow status`
+
+- Safety: `READ_ONLY`
+- When to use: Print the current workflow state and bounded evidence pointers.
+- Dry-run available: `False`
 
 Print the current workflow state and bounded evidence pointers.
 
@@ -1902,6 +2759,10 @@ Print the current workflow state and bounded evidence pointers.
 
 ### `agentic-kit workflow upload`
 
+- Safety: `BOUNDED`
+- When to use: Alias for upload-output.
+- Dry-run available: `False`
+
 Alias for upload-output.
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -1909,6 +2770,10 @@ Alias for upload-output.
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root containing tools/next-step.py. |
 
 ### `agentic-kit workflow upload-output`
+
+- Safety: `BOUNDED`
+- When to use: Alias for upload-output.
+- Dry-run available: `False`
 
 Alias for upload-output.
 
@@ -1918,17 +2783,29 @@ Alias for upload-output.
 
 ### `agentic-kit workflow-guard check`
 
+- Safety: `READ_ONLY`
+- When to use: Run agentic-kit workflow-guard check.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `paths` | `TyperArgument` | paths | `False` |  |  |
 
 ### `agentic-kit workflow-guard diagnose`
 
+- Safety: `BOUNDED`
+- When to use: Run agentic-kit workflow-guard diagnose.
+- Dry-run available: `False`
+
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `paths` | `TyperArgument` | paths | `False` |  |  |
 
 ### `agentic-kit workspace adopt`
+
+- Safety: `BOUNDED`
+- When to use: Analyze an existing repository without writing workspace files.
+- Dry-run available: `False`
 
 Analyze an existing repository without writing workspace files.
 
@@ -1938,6 +2815,10 @@ Analyze an existing repository without writing workspace files.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit workspace init`
+
+- Safety: `BOUNDED`
+- When to use: Plan or create a bounded operating-layer workspace.
+- Dry-run available: `True`
 
 Plan or create a bounded operating-layer workspace.
 
@@ -1953,6 +2834,10 @@ Plan or create a bounded operating-layer workspace.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit workspace upgrade`
+
+- Safety: `BOUNDED`
+- When to use: Plan or run deterministic workspace manifest schema upgrades.
+- Dry-run available: `True`
 
 Plan or run deterministic workspace manifest schema upgrades.
 

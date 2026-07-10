@@ -13,6 +13,7 @@ Runner = Callable[[Sequence[str], Path], tuple[int, str]]
 
 REQUIRED_STANDARD_GATE_COMMANDS: tuple[tuple[str, ...], ...] = (
     ("audit-patch-failure-discipline",),
+    ("audit-command-manifest",),
     ("command-taxonomy-check",),
     ("direction", "validate"),
     ("doc-registry", "check-unregistered", "--strict-scope"),
