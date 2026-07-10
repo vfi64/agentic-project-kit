@@ -66,6 +66,22 @@ def apply(
     path: Path = typer.Option(DEFAULT_INBOX, "--path", help="Transfer order path."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
+
+    from agentic_project_kit.instruction_lint import lint_transfer_instruction
+
+    lint_result = lint_transfer_instruction(path)
+    if lint_result.result_status != "PASS":
+        payload = lint_result.to_dict()
+        if json_output:
+            print(json.dumps(payload, indent=2, sort_keys=True))
+        else:
+            print("INSTRUCTION_LINT_GATE")
+            print(f"STATE: {lint_result.result_status}")
+            print("BLOCKERS:")
+            for blocker in lint_result.blockers:
+                print(f"- {blocker}")
+        raise typer.Exit(2)
+
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
     require_capability("run_next_command")
     order = _load_or_exit(path)
