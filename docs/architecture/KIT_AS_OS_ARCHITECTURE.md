@@ -235,12 +235,12 @@ by construction.
 ### 7.2 `workspace init` (BOUNDED, dry-run default)
 
 Creates `.agentic/` with manifest, empty registries, the `.agentic/tmp/`
-ignore rule, CI recipe templates under `.agentic/ci/`, and a
-repo-parameterized initial LLM prompt. Refuses if a foreign `.agentic/`
-already exists (no silent merge). `--execute` required to write; never
-touches files outside the namespace and `.gitignore` (CI injection is a
-separate opt-in, §7.3). Bulk-registering discovered docs stays a separate,
-explicit, additive step.
+ignore rule, `.agentic/state/status.md`, `.agentic/state/handoff/`, CI recipe
+templates under `.agentic/ci/`, and a repo-parameterized initial LLM prompt.
+Refuses if a foreign `.agentic/` already exists (no silent merge). `--execute`
+required to write; never touches files outside the namespace and `.gitignore`
+(CI injection is a separate opt-in, §7.3). Bulk-registering discovered docs
+stays a separate, explicit, additive step.
 
 ### 7.3 CI and hook entry points (the "bootloader" decision)
 

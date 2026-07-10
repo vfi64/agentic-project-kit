@@ -104,6 +104,12 @@ def build_workspace_init_plan(
         ".agentic/registries",
         ".agentic/rules",
         ".agentic/state",
+        ".agentic/state/handoff",
+        ".agentic/state/handoff/packages",
+        ".agentic/state/handoff/packages/latest",
+        ".agentic/state/handoff/reports",
+        ".agentic/state/handoff/terminal",
+        ".agentic/state/handoff/transfer_handoff_reports",
         ".agentic/transfer",
         ".agentic/transfer/inbox",
         ".agentic/transfer/outbox",
@@ -285,6 +291,8 @@ def _planned_files(project: ProjectSuggestion, manifest_yaml: str) -> dict[str, 
         ".agentic/registries/rules.yaml": "schema_version: 1\nrules: []\n",
         ".agentic/rules/README.md": "# Workspace Rules\n\nAdd reviewed project rule capsules here.\n",
         ".agentic/state/README.md": "# Workspace State\n\nMachine-readable governed state belongs here.\n",
+        ".agentic/state/status.md": _workspace_status_seed(project),
+        ".agentic/state/handoff/README.md": "# Workspace Handoff\n\nValidated handoff packages belong here.\n",
         CI_TEMPLATE_PATH: _ci_template(),
         PRE_COMMIT_TEMPLATE_PATH: _pre_commit_template(),
         ".agentic/INITIAL_LLM_PROMPT.md": _initial_llm_prompt(project),
@@ -320,6 +328,17 @@ def _pre_commit_template() -> str:
         entry: agentic-kit standard-gates-audit-suite
         language: system
         pass_filenames: false
+"""
+
+
+def _workspace_status_seed(project: ProjectSuggestion) -> str:
+    return f"""# Workspace Status
+
+Project: {project.name}
+Project type: {project.type}
+Profile: {project.profile}
+
+Current state: initialized workspace.
 """
 
 

@@ -199,8 +199,9 @@ It also updates the canonical chat-switch prompt projections in `docs/handoff/`.
 
 `agentic-kit workspace init --root PATH` is a dry-run by default. With
 `--execute`, it creates the bounded `.agentic/` workspace, appends
-`.agentic/tmp/` to `.gitignore`, and leaves existing repository files alone
-unless `--inject-ci` or `--inject-pre-commit` is explicitly requested.
+`.agentic/tmp/` to `.gitignore`, seeds `.agentic/state/status.md`, creates
+`.agentic/state/handoff/`, and leaves existing repository files alone unless
+`--inject-ci` or `--inject-pre-commit` is explicitly requested.
 
 `agentic-kit workspace upgrade --root PATH` is also a dry-run by default. It
 plans deterministic manifest schema migrations step by step, prints the

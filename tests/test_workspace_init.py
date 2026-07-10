@@ -65,6 +65,12 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
         ".agentic/registries",
         ".agentic/rules",
         ".agentic/state",
+        ".agentic/state/handoff",
+        ".agentic/state/handoff/packages",
+        ".agentic/state/handoff/packages/latest",
+        ".agentic/state/handoff/reports",
+        ".agentic/state/handoff/terminal",
+        ".agentic/state/handoff/transfer_handoff_reports",
         ".agentic/tmp",
         ".agentic/transfer",
         ".agentic/transfer/inbox",
@@ -82,6 +88,8 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
         ".agentic/registries/rules.yaml",
         ".agentic/rules/README.md",
         ".agentic/state/README.md",
+        ".agentic/state/status.md",
+        ".agentic/state/handoff/README.md",
         ".agentic/ci/agentic-gate.yaml",
         ".agentic/ci/pre-commit-snippet.yaml",
         ".agentic/INITIAL_LLM_PROMPT.md",
@@ -103,6 +111,34 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
     prompt = (tmp_path / ".agentic/INITIAL_LLM_PROMPT.md").read_text(encoding="utf-8")
     assert "repository `demo`" in prompt
     assert ".agentic/transfer/inbox/" in prompt
+
+
+def test_init_workspace_roundtrip_with_namespace_resolvers(tmp_path: Path) -> None:
+    result = CliRunner().invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
+
+    assert result.exit_code == 0, result.output
+    workspace = load_workspace(tmp_path)
+    existing_paths = (
+        workspace.tmp(),
+        workspace.agentic_tmp(),
+        workspace.transfer_inbox(),
+        workspace.transfer_outbox(),
+        workspace.status_path(),
+        workspace.doc_registry_path(),
+        workspace.rule_registry_path(),
+        workspace.rules_dir(),
+        workspace.handoff_dir(),
+        workspace.handoff_packages_latest(),
+        workspace.reports_dir(),
+        workspace.terminal_reports_dir(),
+        workspace.transfer_handoff_report_file("latest.json").parent,
+    )
+    for path in existing_paths:
+        assert path.exists(), path
+
+    assert workspace.workspace_lock_path().parent.exists()
+    status = workspace.status_path().read_text(encoding="utf-8")
+    assert "Current state: initialized workspace." in status
 
 
 def test_init_gitignore_append_is_idempotent(tmp_path: Path) -> None:
