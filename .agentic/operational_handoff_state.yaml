@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: de11f55638f4f935f3d2225fe7f13548abac55e8
-  short: de11f556
-  subject: 'LC3: Remediate mutation lock coverage (#1843)'
+  full: 6776f7f745832abbe975a5b7c416c9235cd4d835
+  short: 6776f7f7
+  subject: 'TH1: Harden negative paths (#1845)'
 last_substantive_work_state:
-  full: de11f55638f4f935f3d2225fe7f13548abac55e8
-  short: de11f556
-  subject: 'LC3: Remediate mutation lock coverage (#1843)'
+  full: 6776f7f745832abbe975a5b7c416c9235cd4d835
+  short: 6776f7f7
+  subject: 'TH1: Harden negative paths (#1845)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
