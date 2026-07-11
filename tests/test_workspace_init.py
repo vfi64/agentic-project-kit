@@ -3,9 +3,11 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import yaml
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
+from agentic_project_kit.command_manifest import load_manifest
 from agentic_project_kit.workspace import load_workspace
 from agentic_project_kit.workspace_adopt import PRIVATE_PUBLIC_BOUNDARY
 
@@ -25,6 +27,15 @@ def _snapshot(root: Path) -> tuple[tuple[str, ...], dict[str, bytes]]:
         if path.is_file()
     }
     return dirs, files
+
+
+def _command_inventory() -> set[str]:
+    manifest = load_manifest(Path(".").resolve())
+    return {
+        str(command.get("qualified_name"))
+        for command in manifest.get("commands", [])
+        if isinstance(command, dict)
+    }
 
 
 def test_init_dry_run_writes_nothing_and_prints_tree(tmp_path: Path) -> None:
@@ -113,6 +124,61 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
     assert ".agentic/transfer/inbox/" in prompt
     assert "COMMAND_MANIFEST_ACK" in prompt
     assert "agentic-kit command-for" in prompt
+
+
+def test_init_ci_template_yaml_matches_cli_inventory(tmp_path: Path) -> None:
+    result = CliRunner().invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
+
+    assert result.exit_code == 0, result.output
+    template = tmp_path / ".agentic/ci/agentic-gate.yaml"
+    data = yaml.safe_load(template.read_text(encoding="utf-8"))
+    gate_command = "agentic-kit standard-gates-audit-suite"
+    assert data == {
+        "name": "Agentic Gate",
+        "on": {
+            "pull_request": None,
+            "push": None,
+        },
+        "jobs": {
+            "agentic-gate": {
+                "runs-on": "ubuntu-latest",
+                "steps": [
+                    {"uses": "actions/checkout@v4"},
+                    {"uses": "actions/setup-python@v5", "with": {"python-version": "3.12"}},
+                    {"run": "python -m pip install --upgrade pip"},
+                    {"run": "python -m pip install agentic-project-kit"},
+                    {"run": gate_command},
+                ],
+            }
+        },
+    }
+    assert gate_command in _command_inventory()
+
+
+def test_init_pre_commit_template_yaml_matches_cli_inventory(tmp_path: Path) -> None:
+    result = CliRunner().invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
+
+    assert result.exit_code == 0, result.output
+    template = tmp_path / ".agentic/ci/pre-commit-snippet.yaml"
+    data = yaml.safe_load(template.read_text(encoding="utf-8"))
+    gate_command = "agentic-kit standard-gates-audit-suite"
+    assert data == {
+        "repos": [
+            {
+                "repo": "local",
+                "hooks": [
+                    {
+                        "id": "agentic-standard-gates",
+                        "name": "agentic standard gates",
+                        "entry": gate_command,
+                        "language": "system",
+                        "pass_filenames": False,
+                    }
+                ],
+            }
+        ]
+    }
+    assert gate_command in _command_inventory()
 
 
 def test_init_workspace_roundtrip_with_namespace_resolvers(tmp_path: Path) -> None:

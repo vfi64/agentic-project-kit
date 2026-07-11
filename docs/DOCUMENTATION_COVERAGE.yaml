@@ -372,12 +372,12 @@ rules:
   documents:
   - path: README.md
     terms:
-    - Workspace operating-layer mode
+    - Govern an existing repository (operating layer)
     - agentic-kit workspace adopt --root PATH
-    - analyzes an existing repository without writing files
+    - '`workspace adopt` is read-only'
     - .agentic/config.yaml
     - private/public boundary
-    - foreign .agentic/ directory
+    - foreign `.agentic/` directory
     - implicit legacy profile
     - legacy profile deprecation warning
     - AGENTIC_KIT_SUPPRESS_LEGACY_PROFILE_WARNING

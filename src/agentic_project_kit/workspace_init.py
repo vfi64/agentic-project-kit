@@ -302,7 +302,7 @@ def _planned_files(project: ProjectSuggestion, manifest_yaml: str) -> dict[str, 
 
 def _ci_template() -> str:
     return """name: Agentic Gate
-on:
+"on":
   pull_request:
   push:
 
