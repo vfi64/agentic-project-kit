@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `6776f7f745832abbe975a5b7c416c9235cd4d835` (`6776f7f7`)
-- Handoff freshness marker: `6776f7f7`
-- Branch at generation: `docs/post-pr1845-handoff-refresh`
+- HEAD: `5e18a18db33ceea9cac9dafd1871fae7346b2a2a` (`5e18a18d`)
+- Handoff freshness marker: `5e18a18d`
+- Branch at generation: `docs/post-pr1847-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -80,6 +80,11 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 - `gui-gatekeeper-workbench` (planned): Build the local gatekeeper/workbench GUI over deterministic actions for GUI
 - `documentation-artifact-governance-os` (planned): Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance
 - `master-implementation-q` (active): Master Implementation Q2 rest sequence
+- `doc-lifecycle-metadata` (active): Add documentation lifecycle metadata and report-only consistency gate
+- `doc-lifecycle-signals` (planned): Add documentation lifecycle obsolescence signals
+- `doc-lifecycle-sweep` (planned): Add guided documentation lifecycle sweep workflows
+- `doc-lifecycle-strict-adoption` (planned): Adopt documentation lifecycle enforcement gradually
+- `hygiene-manifest-adopt-baseline` (planned): Add manifest hygiene and adopt baseline lifecycle support
 - `governance-doc-backfill` (active): Backfill reviewed governance document registry entries
 - `planning-ideas-residual-cleanup` (planned): Resolve remaining planning and idea residual documents
 - `pre-gui-hardening-plan` (active): Execute the pre-GUI hardening backlog in small wrapper-first slices for v0.4.12

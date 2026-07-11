@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1845-handoff-refresh`
+- branch: `docs/post-pr1847-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -233,6 +233,51 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
+      "id": "doc-lifecycle-metadata",
+      "status": "active",
+      "summary": "Add documentation lifecycle metadata and report-only consistency gate"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "doc-lifecycle-signals",
+      "status": "planned",
+      "summary": "Add documentation lifecycle obsolescence signals"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "doc-lifecycle-sweep",
+      "status": "planned",
+      "summary": "Add guided documentation lifecycle sweep workflows"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "doc-lifecycle-strict-adoption",
+      "status": "planned",
+      "summary": "Adopt documentation lifecycle enforcement gradually"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "hygiene-manifest-adopt-baseline",
+      "status": "planned",
+      "summary": "Add manifest hygiene and adopt baseline lifecycle support"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
       "id": "governance-doc-backfill",
       "status": "active",
       "summary": "Backfill reviewed governance document registry entries"
@@ -383,14 +428,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1845-handoff-refresh",
+    "branch": "docs/post-pr1847-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "6776f7f745832abbe975a5b7c416c9235cd4d835",
+    "head": "5e18a18db33ceea9cac9dafd1871fae7346b2a2a",
     "head_matches_origin_main": true,
-    "head_short": "6776f7f7",
+    "head_short": "5e18a18d",
     "local_path": "cd /path/to/",
-    "origin_main": "6776f7f745832abbe975a5b7c416c9235cd4d835",
-    "origin_main_short": "6776f7f7",
+    "origin_main": "5e18a18db33ceea9cac9dafd1871fae7346b2a2a",
+    "origin_main_short": "5e18a18d",
     "worktree_clean": false
   }
 }
