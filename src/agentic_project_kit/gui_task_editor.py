@@ -50,6 +50,7 @@ COMMUNICATION_MODE_ALIASES = {
     "copy-and-paste": "copy_paste",
 }
 COMMAND_MANIFEST_RELATIVE_PATH = COMMAND_MANIFEST_JSON_PATH.as_posix()
+INITIAL_LLM_PROMPT_RELATIVE_PATH = Path(".agentic/INITIAL_LLM_PROMPT.md")
 
 
 class TaskEditorState(StrEnum):
@@ -396,7 +397,26 @@ Do not guess. Do not improvise. Stop and report.
 def build_initial_llm_prompt(
     task_path: Path = CURRENT_USER_TASK_PATH,
     task_ref: str = GUI_TRANSFER_TASK_REF,
+    project_root: Path | str = Path("."),
 ) -> InitialLlmPrompt:
+    root = Path(project_root)
+    target_prompt = root / INITIAL_LLM_PROMPT_RELATIVE_PATH
+    if target_prompt.exists():
+        prompt_text = ensure_command_reference_in_prompt(
+            target_prompt.read_text(encoding="utf-8").rstrip() + "\n",
+            root,
+        )
+        return InitialLlmPrompt(
+            result_status="PASS",
+            kind="initial_llm_prompt",
+            prompt_text=prompt_text,
+            copy_paste_instruction=(
+                "Copy the prompt_text from the selected project's initial prompt "
+                "and paste it once into the LLM chat at the start of a new session."
+            ),
+            task_path=task_path.as_posix(),
+            task_ref=task_ref,
+        )
     prompt = "\n\n".join(
         (
             _initial_prompt_bootstrap_block().strip(),
@@ -408,7 +428,7 @@ def build_initial_llm_prompt(
     return InitialLlmPrompt(
         result_status="PASS",
         kind="initial_llm_prompt",
-        prompt_text=ensure_command_reference_in_prompt(prompt + "\n"),
+        prompt_text=ensure_command_reference_in_prompt(prompt + "\n", root),
         copy_paste_instruction=(
             "Copy the prompt_text and paste it once into the LLM chat at the start "
             "of a new session. The LLM must read the bootstrap files before any work."

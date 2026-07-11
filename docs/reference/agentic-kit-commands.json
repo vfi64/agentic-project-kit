@@ -3460,6 +3460,20 @@
       "name": "initial-llm-prompt",
       "params": [
         {
+          "default": "PosixPath('.')",
+          "help": "Project root whose GUI prompt should be rendered.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
           "default": false,
           "help": "Print machine-readable JSON.",
           "is_flag": true,
@@ -13872,7 +13886,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "cd4c92123d4f",
+    "manifest_sha": "645e8d63880d",
     "schema_version": 1
   },
   "schema_version": 2,

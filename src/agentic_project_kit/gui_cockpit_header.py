@@ -63,6 +63,7 @@ class CockpitHeaderMixin:
 
         frame = tk.Frame(parent, bg=THEME.color_panel_bg, padx=16, pady=10)
         self._register_group_frame("work_cycle", frame)
+        self.start_from_ref_picker = None
         frame.pack(fill=tk.X)
         title = tk.Label(
             frame,
@@ -105,6 +106,7 @@ class CockpitHeaderMixin:
                 width=18,
                 state="readonly",
             )
+            self.start_from_ref_picker = ref_picker
             ref_picker.pack(side=tk.TOP, anchor=tk.W)
             attach_tooltip(
                 ref_picker,
@@ -146,6 +148,24 @@ class CockpitHeaderMixin:
             "Runs agentic-kit work finish --execute only after a successful dry-run preview.",
         )
         self.work_finish_confirm_button.pack(side=tk.RIGHT)
+        self.open_project_button = ttk.Button(
+            frame,
+            text="Open project...",
+            command=self.open_project,
+        )
+        attach_tooltip(
+            self.open_project_button,
+            "Select a local Git repository. The cockpit switches context without initializing it.",
+        )
+        self.open_project_button.pack(side=tk.RIGHT, padx=(0, 8))
+        self.project_status_label = tk.Label(
+            frame,
+            textvariable=self.project_status_var,
+            bg=THEME.color_panel_bg,
+            fg=THEME.color_muted_text,
+            font=THEME.small_font,
+        )
+        self.project_status_label.pack(side=tk.RIGHT, padx=(0, 12))
         ttk.Separator(parent, orient=tk.HORIZONTAL).pack(fill=tk.X)
 
     def _start_from_ref_options(self) -> tuple[str, ...]:

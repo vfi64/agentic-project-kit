@@ -18,6 +18,7 @@ from agentic_project_kit.gui_task_editor import (
     CANONICAL_TRANSFER_OUTBOX_PATH,
     CURRENT_USER_TASK_PATH,
     GUI_TRANSFER_TASK_REF,
+    INITIAL_LLM_PROMPT_RELATIVE_PATH,
     REMOTE_STATUS_COMMAND,
     TRANSFER_CONTINUE_COMMAND,
     TaskEditorState,
@@ -158,6 +159,31 @@ def test_gui_initial_llm_prompt_cli_json() -> None:
     assert data["copy_paste_instruction"]
     assert data["task_ref"] == GUI_TRANSFER_TASK_REF
     assert GUI_TRANSFER_TASK_REF in data["prompt_text"]
+
+
+def test_initial_prompt_prefers_target_file(tmp_path: Path) -> None:
+    target = tmp_path / INITIAL_LLM_PROMPT_RELATIVE_PATH
+    target.parent.mkdir(parents=True)
+    target.write_text("CUSTOM TARGET PROMPT\n", encoding="utf-8")
+
+    result = build_initial_llm_prompt(project_root=tmp_path)
+
+    assert result.prompt_text.startswith("CUSTOM TARGET PROMPT")
+    assert "NEXT_CHAT_BOOTSTRAP.md" not in result.prompt_text
+    assert "must_not_reconstruct_commands_from_memory" in result.prompt_text
+
+
+def test_gui_initial_llm_prompt_cli_json_accepts_root(tmp_path: Path) -> None:
+    target = tmp_path / INITIAL_LLM_PROMPT_RELATIVE_PATH
+    target.parent.mkdir(parents=True)
+    target.write_text("TARGET CLI PROMPT\n", encoding="utf-8")
+
+    result = CliRunner().invoke(app, ["gui", "initial-llm-prompt", "--root", str(tmp_path), "--json"])
+
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.output)
+    assert data["result_status"] == "PASS"
+    assert data["prompt_text"].startswith("TARGET CLI PROMPT")
 
 
 def test_initial_llm_prompt_points_go_to_gui_transfer_task_ref() -> None:
