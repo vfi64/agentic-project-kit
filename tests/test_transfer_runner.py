@@ -9,10 +9,14 @@ import yaml
 
 from agentic_project_kit.command_manifest import load_manifest
 from agentic_project_kit.instruction_lint import command_manifest_ack_line
+from agentic_project_kit.instruction_lint import lint_instruction_text
 from agentic_project_kit.transfer_runner import (
+    ACTION_RUN_COMMAND,
     RESULT_FAIL,
     RESULT_PASS,
     RESULT_PENDING,
+    TransferAction,
+    TransferOrder,
     apply_transfer_order,
     inspect_transfer_order,
     load_transfer_order,
@@ -182,6 +186,103 @@ def test_apply_transfer_order_writes_target_and_report(tmp_path):
     assert (tmp_path / "docs/reports/command_runs/LATEST_COMMAND_RUN.txt").read_text(
         encoding="utf-8"
     ) == "docs/reports/command_runs/example-transfer.md\n"
+
+
+def test_apply_lints_raw_text_before_ack_strip(tmp_path, monkeypatch):
+    order_path = _write_order(tmp_path, "written\n")
+    order = load_transfer_order(order_path)
+    captured: dict[str, str] = {}
+
+    def capture_lint(text, **kwargs):
+        captured["text"] = text
+        return lint_instruction_text(text, **kwargs)
+
+    monkeypatch.setattr("agentic_project_kit.transfer_runner.lint_instruction_text", capture_lint)
+
+    result = apply_transfer_order(order, tmp_path)
+
+    assert result.result_status == RESULT_PASS
+    assert captured["text"].startswith("COMMAND_MANIFEST_ACK ")
+    assert (tmp_path / "generated/example.txt").exists()
+
+    stale_root = tmp_path / "stale"
+    stale_order_path = _write_order(stale_root, "blocked\n")
+    stale_order_path.write_text(
+        stale_order_path.read_text(encoding="utf-8").replace(
+            stale_order_path.read_text(encoding="utf-8").splitlines()[0],
+            "COMMAND_MANIFEST_ACK stale",
+            1,
+        ),
+        encoding="utf-8",
+    )
+    stale_order = load_transfer_order(stale_order_path)
+
+    stale_result = apply_transfer_order(stale_order, stale_root)
+
+    assert stale_result.result_status == RESULT_FAIL
+    assert stale_result.returncode == 2
+    assert stale_result.instruction_lint is not None
+    assert "ACK" in stale_result.instruction_lint.blockers
+    assert "Instruction lint refused transfer apply." in stale_result.message
+    assert not (stale_root / "generated/example.txt").exists()
+
+
+def test_apply_refuses_order_without_lint_context(tmp_path, monkeypatch):
+    called = False
+
+    def fail_if_called(root, action):
+        nonlocal called
+        called = True
+        raise AssertionError("apply must refuse before executing actions")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_runner._run_command_action", fail_if_called)
+    order = TransferOrder(
+        transfer_id="missing-lint-context",
+        title="Missing lint context",
+        safety="bounded-local-command",
+        report_path="docs/reports/command_runs/missing-lint-context.md",
+        actions=(TransferAction(ACTION_RUN_COMMAND, command=("git", "status", "--short")),),
+        raw_text=None,
+    )
+
+    result = apply_transfer_order(order, tmp_path)
+
+    assert result.result_status == RESULT_FAIL
+    assert result.returncode == 2
+    assert "Instruction lint context missing" in result.message
+    assert called is False
+    assert (tmp_path / "docs/reports/command_runs/missing-lint-context.md").exists()
+
+
+def test_existing_inspect_path_remains_read_only_for_lint_blockable_order(
+    tmp_path, monkeypatch
+):
+    _seed_manifest(tmp_path)
+    order = TransferOrder(
+        transfer_id="inspect-blockable",
+        title="Inspect blockable order",
+        safety="bounded-local-command",
+        report_path="docs/reports/command_runs/inspect-blockable.md",
+        actions=(TransferAction(ACTION_RUN_COMMAND, command=("git", "push")),),
+        raw_text=f"{_ack(tmp_path)}\nagentic-kit transfer repo-status --json\n",
+        checked_path=".agentic/transfer/inbox/current.yaml",
+    )
+    called = False
+
+    def fail_if_called(root, action):
+        nonlocal called
+        called = True
+        raise AssertionError("inspect must not execute commands")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_runner._run_command_action", fail_if_called)
+
+    result = inspect_transfer_order(order, tmp_path)
+
+    assert result.result_status == RESULT_PENDING
+    assert result.returncode == 0
+    assert result.action_results[0]["would_run"] is True
+    assert called is False
+    assert not (tmp_path / "docs/reports/command_runs/inspect-blockable.md").exists()
 
 
 def test_apply_transfer_order_runs_bounded_command_and_writes_report(tmp_path):
