@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6776f7f745832abbe975a5b7c416c9235cd4d835
-  short: 6776f7f7
-  subject: 'TH1: Harden negative paths (#1845)'
+  full: 5e18a18db33ceea9cac9dafd1871fae7346b2a2a
+  short: 5e18a18d
+  subject: 'L0: Add lifecycle direction items (#1847)'
 last_substantive_work_state:
-  full: 6776f7f745832abbe975a5b7c416c9235cd4d835
-  short: 6776f7f7
-  subject: 'TH1: Harden negative paths (#1845)'
+  full: 5e18a18db33ceea9cac9dafd1871fae7346b2a2a
+  short: 5e18a18d
+  subject: 'L0: Add lifecycle direction items (#1847)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-11T20:47:12.071724+00:00",
+  "generated_at_utc": "2026-07-11T21:06:12.365066+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,14 +56,14 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1845-handoff-refresh",
+    "branch": "docs/post-pr1847-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "6776f7f745832abbe975a5b7c416c9235cd4d835",
+    "head": "5e18a18db33ceea9cac9dafd1871fae7346b2a2a",
     "head_matches_origin_main": true,
-    "head_short": "6776f7f7",
+    "head_short": "5e18a18d",
     "local_path": "cd /path/to/",
-    "origin_main": "6776f7f745832abbe975a5b7c416c9235cd4d835",
-    "origin_main_short": "6776f7f7",
+    "origin_main": "5e18a18db33ceea9cac9dafd1871fae7346b2a2a",
+    "origin_main_short": "5e18a18d",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -149,6 +149,51 @@
         "id": "master-implementation-q",
         "status": "active",
         "summary": "Master Implementation Q2 rest sequence"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "doc-lifecycle-metadata",
+        "status": "active",
+        "summary": "Add documentation lifecycle metadata and report-only consistency gate"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "doc-lifecycle-signals",
+        "status": "planned",
+        "summary": "Add documentation lifecycle obsolescence signals"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "doc-lifecycle-sweep",
+        "status": "planned",
+        "summary": "Add guided documentation lifecycle sweep workflows"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "doc-lifecycle-strict-adoption",
+        "status": "planned",
+        "summary": "Adopt documentation lifecycle enforcement gradually"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "hygiene-manifest-adopt-baseline",
+        "status": "planned",
+        "summary": "Add manifest hygiene and adopt baseline lifecycle support"
       },
       {
         "files": [
