@@ -7,9 +7,9 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `5e18a18d` (`L0: Add lifecycle direction items (#1847)`).
-Latest substantive work: PR #1847 (`L0: Add lifecycle direction items (#1847)`).
-Post-merge handoff status: PASS/NOOP after PR #1847 administrative refresh.
+Current verified main: `3cb150c7` (`L1: Add doc lifecycle metadata audit (#1849)`).
+Latest substantive work: PR #1849 (`L1: Add doc lifecycle metadata audit (#1849)`).
+Post-merge handoff status: PASS/NOOP after PR #1849 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1847
+## Operational documentation refresh state after PR #1849
 
-Current administrative handoff refresh state is `5e18a18d` (`L0: Add lifecycle direction items (#1847)`). Continue next only after this post-PR1847 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `3cb150c7` (`L1: Add doc lifecycle metadata audit (#1849)`). Continue next only after this post-PR1849 refresh is committed and merged; the next substantive slice must be created from fresh main.
