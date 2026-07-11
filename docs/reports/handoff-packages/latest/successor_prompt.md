@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1823-handoff-refresh`
+- branch: `docs/post-pr1825-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -82,7 +82,7 @@ Arbeite nicht aus Chat-Erinnerung. Quelle der Wahrheit ist der aktuelle Remote-S
 ## Pflichtstart
 
 ```bash
-cd /path/to/agentic-project-kit
+cd /path/to/
 ./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile
 ./.venv/bin/agentic-kit rules acknowledge
 ./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile
@@ -269,15 +269,6 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "repo-identity-literals",
-      "status": "active",
-      "summary": "Derive repository identity literals from workspace context"
-    },
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
       "id": "governance-doc-backfill",
       "status": "active",
       "summary": "Backfill reviewed governance document registry entries"
@@ -428,14 +419,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1823-handoff-refresh",
+    "branch": "docs/post-pr1825-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "eb293cead2aaf9d5113c6bfffec85383adad99b5",
+    "head": "6f881b2dab7d45cef9262003e9eb258a53010b15",
     "head_matches_origin_main": true,
-    "head_short": "eb293cea",
-    "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "eb293cead2aaf9d5113c6bfffec85383adad99b5",
-    "origin_main_short": "eb293cea",
+    "head_short": "6f881b2d",
+    "local_path": "cd /path/to/",
+    "origin_main": "6f881b2dab7d45cef9262003e9eb258a53010b15",
+    "origin_main_short": "6f881b2d",
     "worktree_clean": false
   }
 }

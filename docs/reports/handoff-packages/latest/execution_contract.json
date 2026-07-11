@@ -136,15 +136,6 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "repo-identity-literals",
-        "status": "active",
-        "summary": "Derive repository identity literals from workspace context"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
         "id": "governance-doc-backfill",
         "status": "active",
         "summary": "Backfill reviewed governance document registry entries"
@@ -296,13 +287,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1823-handoff-refresh",
+      "branch": "docs/post-pr1825-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "eb293cead2aaf9d5113c6bfffec85383adad99b5",
+      "head": "6f881b2dab7d45cef9262003e9eb258a53010b15",
       "head_matches_origin_main": true,
-      "local_path": "cd /path/to/agentic-project-kit",
-      "origin_main": "eb293cead2aaf9d5113c6bfffec85383adad99b5",
+      "local_path": "cd /path/to/",
+      "origin_main": "6f881b2dab7d45cef9262003e9eb258a53010b15",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -379,13 +370,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1823-handoff-refresh",
+    "branch": "docs/post-pr1825-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "eb293cead2aaf9d5113c6bfffec85383adad99b5",
+    "head": "6f881b2dab7d45cef9262003e9eb258a53010b15",
     "head_matches_origin_main": true,
-    "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "eb293cead2aaf9d5113c6bfffec85383adad99b5",
+    "local_path": "cd /path/to/",
+    "origin_main": "6f881b2dab7d45cef9262003e9eb258a53010b15",
     "worktree_clean": false
   },
   "rules": [
