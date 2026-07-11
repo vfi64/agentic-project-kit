@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1837-handoff-refresh`
+- branch: `docs/post-pr1839-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -162,7 +162,7 @@ Wenn der Bootstrap grün ist:
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
       "id": "p6-gui-project-selection-and-ci-recipe",
-      "status": "planned",
+      "status": "next",
       "summary": "Add GUI project selection and harden CI recipe follow-ups for P6"
     },
     {
@@ -401,14 +401,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1837-handoff-refresh",
+    "branch": "docs/post-pr1839-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "5621417f54be6e90f7a294a92b597f904e3f1a99",
+    "head": "dfe1c970812b155a0d2d9b60505c10b088a920a9",
     "head_matches_origin_main": true,
-    "head_short": "5621417f",
+    "head_short": "dfe1c970",
     "local_path": "cd /path/to/",
-    "origin_main": "5621417f54be6e90f7a294a92b597f904e3f1a99",
-    "origin_main_short": "5621417f",
+    "origin_main": "dfe1c970812b155a0d2d9b60505c10b088a920a9",
+    "origin_main_short": "dfe1c970",
     "worktree_clean": false
   }
 }
@@ -434,7 +434,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: cd4c92123d4f). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK cd4c92123d4f. Consult `agentic-kit command-for` before proposing commands.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 645e8d63880d). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 645e8d63880d. Consult `agentic-kit command-for` before proposing commands.
 - Before proposing ANY command run/consult `agentic-kit command-for`.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -444,5 +444,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 6836bb315848282982018e9a22c6dc6c4b2360104baab54111ec031bffda9663
-- docs/reference/agentic-kit-commands.json: 39dfc067cf24592d0bc6544a15810ccbfe46e3ba2af9325efeec64aaecd7f07c
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 29deda60edf9e1c2db8f90b1b93baa6d432850b54813e844727626156f59925d
+- docs/reference/agentic-kit-commands.json: 18722f309b8e6a86bf46beb1ebaad27bc7136df75f3d282aa26c72361ebcdc06
