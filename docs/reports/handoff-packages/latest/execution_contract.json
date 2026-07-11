@@ -100,15 +100,6 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "lock-coverage-remediation",
-        "status": "planned",
-        "summary": "Remediate mutation-lock coverage gaps"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
         "id": "governance-doc-backfill",
         "status": "active",
         "summary": "Backfill reviewed governance document registry entries"
@@ -260,13 +251,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1841-handoff-refresh",
+      "branch": "docs/post-pr1843-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "0afa9726b6de8cb69ac03a0a8936e1e04b031456",
+      "head": "de11f55638f4f935f3d2225fe7f13548abac55e8",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "0afa9726b6de8cb69ac03a0a8936e1e04b031456",
+      "origin_main": "de11f55638f4f935f3d2225fe7f13548abac55e8",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -343,13 +334,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1841-handoff-refresh",
+    "branch": "docs/post-pr1843-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "0afa9726b6de8cb69ac03a0a8936e1e04b031456",
+    "head": "de11f55638f4f935f3d2225fe7f13548abac55e8",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "0afa9726b6de8cb69ac03a0a8936e1e04b031456",
+    "origin_main": "de11f55638f4f935f3d2225fe7f13548abac55e8",
     "worktree_clean": false
   },
   "rules": [
