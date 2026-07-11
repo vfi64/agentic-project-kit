@@ -2,16 +2,16 @@ schema_version: 1
 meta:
   master_plan: docs/planning/MASTER_IMPLEMENTATION_Q.md
   master_sequence: 'Q2 rest: CM3 -> CM4 -> LC/ID/K3 -> P5b/P5d/P5c-PLAN/P6 -> LC3/TH1 -> L'
-  master_plan_anchor_pr: 1776
+  master_plan_anchor_pr: 1807
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1805
+  updated_after_pr: 1807
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1805
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1807
 strategy:
 - id: governed-operating-model
   status: active

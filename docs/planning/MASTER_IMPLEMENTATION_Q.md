@@ -21,6 +21,7 @@ Merge commit: 7ef6ba8cf3b782c5b521e8ee1ad45b473c6a2bb8
 P4b resolver sweep was merged by PR #1803.
 P5a self-hosting manifest was merged by PR #1805.
 Post-PR1805 handoff refresh was merged by PR #1806.
+Q2 rest-plan adoption is tracked by PR #1807.
 
 ## Binding sequence
 
