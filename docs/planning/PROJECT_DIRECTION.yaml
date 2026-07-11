@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1843
+  updated_after_pr: 1845
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1843
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1845
 strategy:
 - id: governed-operating-model
   status: active
@@ -705,6 +705,31 @@ plans:
   - Runtime mutators identified by LC1 follow the LC2 lock policy.
   - False-positive metadata and report-writer findings remain visible but non-blocking.
   - The mutation-lock audit can be promoted safely after remediation.
+- id: negative-path-hardening
+  status: done
+  title: Harden Q2 TH1 negative paths
+  completed_by_pr: 1845
+  depends_on:
+  - lock-coverage-remediation
+  rationale: >-
+    PR #1845 captures missing-source, malformed-input, and collision failure
+    paths with deterministic tmp_path tests, then hardens only unclear or
+    unstructured failure output.
+  source_files:
+  - src/agentic_project_kit/successor_handoff_package.py
+  - src/agentic_project_kit/instruction_lint.py
+  - src/agentic_project_kit/cli_commands/instruction.py
+  - src/agentic_project_kit/workspace_init.py
+  - src/agentic_project_kit/workspace_upgrade.py
+  - tests/test_th1_negative_path_hardening.py
+  evidence:
+  - PR #1845
+  acceptance:
+  - Missing successor handoff sources produce named validation findings.
+  - Broken YAML handoff sources and empty documentation registries produce named validation findings.
+  - Workspace init and upgrade negative paths return structured failures without tracebacks.
+  - Instruction lint reports empty and unreadable input through structured lint findings.
+  - Prose-only acknowledged instruction input remains a PASS.
 - id: repo-identity-literals
   status: done
   title: Derive repository identity literals from workspace context

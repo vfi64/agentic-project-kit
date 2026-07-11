@@ -7,6 +7,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 from agentic_project_kit.chat_entrypoint_contract import (
     command_reference_contract,
     ensure_command_reference_in_prompt,
@@ -231,7 +233,19 @@ def _file_info(root: Path, rel: str) -> dict[str, Any]:
     if not path.exists():
         return {"path": rel, "exists": False, "bytes": None}
     data = path.read_bytes()
-    return {"path": rel, "exists": True, "bytes": len(data)}
+    info: dict[str, Any] = {"path": rel, "exists": True, "bytes": len(data)}
+    if path.suffix in {".yaml", ".yml"}:
+        try:
+            loaded = yaml.safe_load(path.read_text(encoding="utf-8"))
+        except yaml.YAMLError as exc:
+            info["yaml_valid"] = False
+            info["yaml_error"] = str(exc)
+        else:
+            info["yaml_valid"] = True
+            if rel.endswith("DOCUMENTATION_REGISTRY.yaml"):
+                documents = loaded.get("documents") if isinstance(loaded, dict) else None
+                info["registry_document_count"] = len(documents) if isinstance(documents, list) else None
+    return info
 
 
 def _json_block(data: dict[str, Any]) -> str:
@@ -391,6 +405,7 @@ def validate_successor_outputs(
 ) -> dict[str, Any]:
     ws = ws or _LEGACY_WORKSPACE
     findings: list[dict[str, str]] = []
+    findings.extend(_source_manifest_validation_findings(outputs, ws))
     for name, text in outputs.items():
         for marker in STALE_MARKERS:
             if marker in text:
@@ -588,12 +603,7 @@ def validate_successor_outputs(
     repo = context["repo"]
     if repo["head"] == "UNKNOWN":
         findings.append({"severity": "error", "file": "successor_context.yaml", "code": "unknown_head", "message": "Cannot determine current HEAD."})
-    missing_sources = [
-        item["path"]
-        for item in context["long_term_memory"]["mandatory_sources"]
-        if False
-    ]
-    status = "PASS" if not findings and not missing_sources else "FAIL"
+    status = "PASS" if not findings else "FAIL"
     return {
         "schema_version": 1,
         "kind": "successor_handoff_validation_report",
@@ -602,6 +612,83 @@ def validate_successor_outputs(
         "generated_head": repo["head"],
         "generated_head_short": repo["head_short"],
     }
+
+
+def _source_manifest_validation_findings(
+    outputs: dict[str, str],
+    ws: Workspace,
+) -> list[dict[str, str]]:
+    manifest_text = (
+        outputs.get("source_manifest.json")
+        or outputs.get(_workspace_path_text(ws, ws.package_file("source_manifest.json")))
+    )
+    if manifest_text is None:
+        return []
+
+    findings: list[dict[str, str]] = []
+    try:
+        manifest = json.loads(manifest_text)
+    except json.JSONDecodeError as exc:
+        return [
+            {
+                "severity": "error",
+                "file": "source_manifest.json",
+                "code": "invalid_source_manifest_json",
+                "message": f"source_manifest.json is not valid JSON: {exc}",
+            }
+        ]
+
+    sources = manifest.get("sources") if isinstance(manifest, dict) else None
+    if not isinstance(sources, list):
+        return [
+            {
+                "severity": "error",
+                "file": "source_manifest.json",
+                "code": "invalid_source_manifest_sources",
+                "message": "source_manifest.json must contain a sources list.",
+            }
+        ]
+
+    for source in sources:
+        if not isinstance(source, dict):
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "source_manifest.json",
+                    "code": "invalid_source_manifest_source",
+                    "message": "source_manifest.json sources entries must be mappings.",
+                }
+            )
+            continue
+        path = str(source.get("path") or "<unknown>")
+        if source.get("exists") is False:
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": path,
+                    "code": "missing_handoff_source",
+                    "message": f"Missing mandatory handoff source: {path}",
+                }
+            )
+        if source.get("yaml_valid") is False:
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": path,
+                    "code": "invalid_handoff_source_yaml",
+                    "message": f"Invalid YAML in mandatory handoff source {path}: {source.get('yaml_error')}",
+                }
+            )
+        if path.endswith("DOCUMENTATION_REGISTRY.yaml") and source.get("registry_document_count") == 0:
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": path,
+                    "code": "empty_documentation_registry",
+                    "message": f"Documentation registry must not be empty: {path}",
+                }
+            )
+    return findings
 
 
 def build_execution_contract(context: dict[str, Any], ws: Workspace | None = None) -> dict[str, object]:
@@ -1330,6 +1417,7 @@ def _build_successor_handoff_package(root_path: Path, ws: Workspace) -> Successo
             _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md")): next_chat_bootstrap,
             _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md")): start_prompt,
             _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")): closeout_prompt,
+            "source_manifest.json": _json_block(source_manifest),
             "successor_prompt.md": successor_prompt,
             "execution_contract.json": _json_block(provisional_execution_contract),
         },

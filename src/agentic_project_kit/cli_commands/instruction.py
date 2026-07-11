@@ -8,8 +8,10 @@ import typer
 
 from agentic_project_kit.command_manifest import load_manifest
 from agentic_project_kit.instruction_lint import (
+    lint_instruction_file,
     lint_instruction_text,
     render_instruction_lint_result,
+    unreadable_instruction_result,
 )
 
 instruction_app = typer.Typer(help="Lint LLM instruction text before applying it.")
@@ -38,23 +40,33 @@ def instruction_lint_command(
         raise typer.Exit(code=2)
     checked_path = "<stdin>"
     if stdin_input:
-        text = sys.stdin.read()
+        try:
+            text = sys.stdin.read()
+        except Exception as exc:
+            result = unreadable_instruction_result(
+                checked_path=checked_path,
+                message=str(exc),
+            )
+            if json_output:
+                typer.echo(json.dumps(result.to_dict(), indent=2, sort_keys=True))
+            else:
+                typer.echo(render_instruction_lint_result(result), nl=False)
+            raise typer.Exit(code=result.returncode) from exc
+        result = lint_instruction_text(
+            text,
+            manifest=load_manifest(root.resolve()),
+            checked_path=checked_path,
+            require_ack=require_ack,
+            strict_unknown=strict_unknown,
+        )
     else:
         assert file_path is not None
-        checked_path = str(file_path)
-        try:
-            text = file_path.read_text(encoding="utf-8")
-        except Exception as exc:
-            typer.echo(f"Instruction input is unreadable: {exc}", err=True)
-            raise typer.Exit(code=2) from exc
-
-    result = lint_instruction_text(
-        text,
-        manifest=load_manifest(root.resolve()),
-        checked_path=checked_path,
-        require_ack=require_ack,
-        strict_unknown=strict_unknown,
-    )
+        result = lint_instruction_file(
+            file_path,
+            root=root,
+            require_ack=require_ack,
+            strict_unknown=strict_unknown,
+        )
     if json_output:
         typer.echo(json.dumps(result.to_dict(), indent=2, sort_keys=True))
     else:

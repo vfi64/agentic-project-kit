@@ -270,6 +270,28 @@ def _finding(
     )
 
 
+def unreadable_instruction_result(
+    *,
+    checked_path: str,
+    message: str,
+    manifest_sha: str = "",
+) -> InstructionLintResult:
+    return InstructionLintResult(
+        result_status="BLOCKED",
+        findings=(
+            InstructionLintFinding(
+                line=1,
+                severity="BLOCK",
+                rule="INPUT_UNREADABLE",
+                message=f"REJECTED: instruction input is unreadable: {message}",
+                command="",
+            ),
+        ),
+        checked_path=checked_path,
+        manifest_sha=manifest_sha,
+    )
+
+
 def lint_instruction_text(
     text: str,
     *,
@@ -281,7 +303,17 @@ def lint_instruction_text(
 ) -> InstructionLintResult:
     manifest_sha = manifest_sha_from_manifest(manifest)
     findings: list[InstructionLintFinding] = []
-    if require_ack and _first_non_empty_line(text) != command_manifest_ack_line(manifest):
+    if not text.strip():
+        findings.append(
+            InstructionLintFinding(
+                line=1,
+                severity="BLOCK",
+                rule="EMPTY_INPUT",
+                message="REJECTED: instruction input is empty",
+                command="",
+            )
+        )
+    elif require_ack and _first_non_empty_line(text) != command_manifest_ack_line(manifest):
         findings.append(
             InstructionLintFinding(
                 line=1,
@@ -385,19 +417,9 @@ def lint_instruction_file(
     try:
         text = payload_path.read_text(encoding="utf-8")
     except Exception as exc:
-        return InstructionLintResult(
-            result_status="BLOCKED",
-            findings=(
-                InstructionLintFinding(
-                    line=1,
-                    severity="BLOCK",
-                    rule="INPUT_UNREADABLE",
-                    message=f"REJECTED: instruction input is unreadable: {exc}",
-                    command="",
-                ),
-            ),
+        return unreadable_instruction_result(
             checked_path=str(payload_path),
-            manifest_sha="",
+            message=str(exc),
         )
     return lint_instruction_text(
         text,
