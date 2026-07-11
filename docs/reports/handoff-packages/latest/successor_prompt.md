@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1834-handoff-refresh`
+- branch: `docs/post-pr1837-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -153,7 +153,7 @@ Wenn der Bootstrap grün ist:
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
       "id": "p5c-physical-migration",
-      "status": "planned",
+      "status": "blocked",
       "summary": "Plan physical migration after legacy profile deprecation for P5"
     },
     {
@@ -401,14 +401,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1834-handoff-refresh",
+    "branch": "docs/post-pr1837-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "e4a632879c22531bed89aa2f87c25efa9bf6bcd6",
+    "head": "5621417f54be6e90f7a294a92b597f904e3f1a99",
     "head_matches_origin_main": true,
-    "head_short": "e4a63287",
+    "head_short": "5621417f",
     "local_path": "cd /path/to/",
-    "origin_main": "e4a632879c22531bed89aa2f87c25efa9bf6bcd6",
-    "origin_main_short": "e4a63287",
+    "origin_main": "5621417f54be6e90f7a294a92b597f904e3f1a99",
+    "origin_main_short": "5621417f",
     "worktree_clean": false
   }
 }

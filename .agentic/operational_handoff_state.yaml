@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e4a632879c22531bed89aa2f87c25efa9bf6bcd6
-  short: e4a63287
-  subject: 'P5d: Deprecate implicit legacy profile (#1834)'
+  full: 5621417f54be6e90f7a294a92b597f904e3f1a99
+  short: 5621417f
+  subject: 'P5c: Add physical migration plan (#1837)'
 last_substantive_work_state:
-  full: e4a632879c22531bed89aa2f87c25efa9bf6bcd6
-  short: e4a63287
-  subject: 'P5d: Deprecate implicit legacy profile (#1834)'
+  full: 5621417f54be6e90f7a294a92b597f904e3f1a99
+  short: 5621417f
+  subject: 'P5c: Add physical migration plan (#1837)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
