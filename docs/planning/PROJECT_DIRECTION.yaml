@@ -646,12 +646,12 @@ plans:
   - Current direct lock callsites and marker-only references are distinguished.
   - Runtime mutator gaps stay visible for LC2/LC3 without gating the standard suite.
 - id: lock-reentrancy-decision
-  status: planned
+  status: active
   title: Decide mutation-lock reentrancy and inherited-lock policy
   depends_on:
   - lock-contract-audit
-  rationale: Decide whether outer wrapper locks, inherited core locks, or a reentrant
-    lock primitive are the durable policy for nested mutation flows.
+  rationale: Select same-PID reentrancy as the durable lock policy so protected
+    primitives can remain safe when called directly or by higher-level orchestrators.
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
   acceptance:
@@ -662,8 +662,9 @@ plans:
   title: Remediate mutation-lock coverage gaps
   depends_on:
   - lock-reentrancy-decision
-  rationale: Apply the LC2 decision to runtime mutators while keeping read-only audits
-    and non-blocking report writers from acquiring unnecessary locks.
+  rationale: Apply the LC2 same-PID-reentrant lock decision to runtime mutators
+    while keeping read-only audits and non-blocking report writers from acquiring
+    unnecessary locks.
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
   acceptance:

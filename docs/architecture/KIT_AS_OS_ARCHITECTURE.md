@@ -122,7 +122,9 @@ Hard rules:
    independent processes over the same L1 workspace (the GUI itself invokes
    the CLI as subprocesses), concurrent mutation is the normal case, not an
    edge case. The kernel serializes mutating operations through a workspace
-   lock (§5.5); read-only operations never take the lock.
+   lock (§5.5); this covers workspace-state writes, git worktree/history
+   mutations, and remote git/GitHub mutations. Read-only status, audit, and
+   report-only operations never take the lock.
 
 ## 5. The workspace: `.agentic/`
 
@@ -207,9 +209,30 @@ P1 onward:
   taken over with a logged warning; if it exists, the second process fails
   fast with a clear message naming the holder ("workspace is busy:
   <command> pid <n> since <t>") instead of corrupting state.
+- **Reentrancy mode:** the normative target is same-PID reentrancy. If a
+  process that already holds the workspace lock calls another mutating
+  primitive in the same workspace, the nested acquire is a no-op for that PID
+  and the outer lock owner remains responsible for the final release. A live
+  lock held by a different PID still fails fast. This keeps directly invoked
+  primitives protected while allowing orchestrators to call protected
+  primitives without self-deadlock.
+- The same-PID rule is chosen over a top-level-only contract because LC1 found
+  already protected primitives (`branch_create`, `commit_paths`,
+  `push_current`) and unprotected orchestrators that can call them
+  (`pr_create`, `admin_refresh_pr`, and PR completion flows). Making only the
+  top-level wrappers lock would leave direct CLI primitive calls unprotected;
+  making every primitive lock without same-PID reentrancy would deadlock nested
+  mutation flows.
+- The lock holder is the sole writer of wrapper live status for the locked
+  section. Nested same-PID operations may contribute local step detail, but
+  must not publish a conflicting holder, phase, or `safe_to_interrupt` signal.
+  This complements the live-status signal; it does not replace lock ownership.
 - The lock is machine-local (under git-ignored `tmp/`), simple (atomic
   create), and complements — not replaces — the existing wrapper live-status
   `safe_to_interrupt` signal.
+- Coverage remediation for the LC1 gap classes is tracked as
+  `lock-coverage-remediation` (LC3). Until that slice, the audit remains
+  report-only and standard gates stay unchanged.
 
 ## 6. The two governance spaces and the litmus test
 
