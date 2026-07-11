@@ -210,6 +210,12 @@ manifest diff, reports when a workspace is already at schema v1, and with
 It tells manifest-less repositories to run `workspace init` and tells
 newer-schema repositories to upgrade the kit instead of guessing.
 
+Manifest-less repositories still use the implicit legacy profile for the 1.x
+line, but that fallback is deprecated. The resolver emits a suppressible
+legacy profile deprecation warning only when `.agentic/config.yaml` is absent;
+set `AGENTIC_KIT_SUPPRESS_LEGACY_PROFILE_WARNING=1` for temporary quiet
+compatibility while planning `workspace init`.
+
 ## Documentation registry
 
 `agentic-kit docs-registry` shows the read-only documentation registry summary.

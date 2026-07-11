@@ -7,6 +7,8 @@ import subprocess
 from dataclasses import dataclass, asdict
 from pathlib import Path
 
+import yaml
+
 from agentic_project_kit.transfer_operation_monitor import MonitorDecision
 from agentic_project_kit.transfer_operation_monitor import guard_branch
 from agentic_project_kit.transfer_operation_monitor import guard_pr_create
@@ -1392,6 +1394,18 @@ def _refresh_status_current_state_block(text: str, *, after_pr: int, short: str,
     return text[: match.start()] + block + text[match.end() :]
 
 
+def _yaml_inline_scalar(value: str) -> str:
+    dumped = yaml.safe_dump(
+        value,
+        allow_unicode=True,
+        default_flow_style=True,
+        width=4096,
+    ).strip()
+    if dumped.endswith("\n..."):
+        dumped = dumped.removesuffix("\n...").strip()
+    return dumped
+
+
 def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = None) -> subprocess.CompletedProcess[str]:
     command = ["admin-refresh-operational-handoff-docs", "--after-pr", str(after_pr)]
     workspace = ws or load_workspace(Path("."))
@@ -1399,6 +1413,7 @@ def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = N
         full = _run(["git", "rev-parse", "HEAD"]).stdout.strip()
         short = _run(["git", "rev-parse", "--short=8", "HEAD"]).stdout.strip() or full[:8]
         subject = _run(["git", "log", "-1", "--format=%s"]).stdout.strip()
+        subject_yaml = _yaml_inline_scalar(subject)
         prompt_path = _admin_refresh_successor_prompt_path(after_pr, ws=workspace)
 
         touched: list[str] = []
@@ -1419,8 +1434,8 @@ def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = N
             if file_path == workspace.handoff_state_path():
                 updated = re.sub(r"^(\s*commit:\s*)[0-9a-f]{7,40}\s*$", rf"\g<1>{short}", updated, count=1, flags=re.MULTILINE)
                 updated = re.sub(r"^(\s*current_head:\s*)[0-9a-f]{7,40}\s*$", rf"\g<1>{short}", updated, count=1, flags=re.MULTILINE)
-                updated = re.sub(r"^(\s*commit_subject:\s*).*$", rf"\g<1>{subject}", updated, count=1, flags=re.MULTILINE)
-                updated = re.sub(r"^(\s*current_head_subject:\s*).*$", rf"\g<1>{subject}", updated, count=1, flags=re.MULTILINE)
+                updated = re.sub(r"^(\s*commit_subject:\s*).*$", rf"\g<1>{subject_yaml}", updated, count=1, flags=re.MULTILINE)
+                updated = re.sub(r"^(\s*current_head_subject:\s*).*$", rf"\g<1>{subject_yaml}", updated, count=1, flags=re.MULTILINE)
                 updated = re.sub(
                     r"^(\s*latest_successor_prompt:\s*).*$",
                     rf"\g<1>{prompt_path}",
@@ -1444,7 +1459,7 @@ def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = N
             if file_path == workspace.operational_handoff_state_path():
                 updated = re.sub(r"^(\s*full:\s*)[0-9a-f]{40}\s*$", rf"\g<1>{full}", updated, flags=re.MULTILINE)
                 updated = re.sub(r"^(\s*short:\s*)[0-9a-f]{7,40}\s*$", rf"\g<1>{short}", updated, flags=re.MULTILINE)
-                updated = re.sub(r"^(\s*subject:\s*).*$", rf"\g<1>{subject}", updated, flags=re.MULTILINE)
+                updated = re.sub(r"^(\s*subject:\s*).*$", rf"\g<1>{subject_yaml}", updated, flags=re.MULTILINE)
             if updated != current:
                 file_path.write_text(updated, encoding="utf-8")
                 touched.append(file_name)

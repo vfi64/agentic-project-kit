@@ -671,3 +671,7 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: P5b active-class path and repository identity literal enforcement evidence with standard-gate adoption and manual reference_or_message samples.
+  - path: docs/architecture/evidence/legacy-profile-deprecation-2026-07-11-p5d.md
+    class: evidence/log
+    owner: maintainers
+    notes: P5d implicit legacy profile deprecation evidence with suppressible warning behavior and admin-refresh YAML subject hardening.

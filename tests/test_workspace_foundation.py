@@ -6,13 +6,20 @@ import json
 import os
 from pathlib import Path
 import re
+import warnings
 
 import pytest
 import yaml
 
 from agentic_project_kit.transfer_repo_actions import RepoActionResult
 import agentic_project_kit.transfer_repo_actions as transfer_repo_actions
-from agentic_project_kit.workspace import LEGACY_DEFAULTS, NAMESPACE_DEFAULTS, load_workspace
+from agentic_project_kit.workspace import (
+    LEGACY_DEFAULTS,
+    LEGACY_PROFILE_WARNING_ENV,
+    NAMESPACE_DEFAULTS,
+    LegacyProfileDeprecationWarning,
+    load_workspace,
+)
 from agentic_project_kit.workspace_lock import WorkspaceLockBusy, acquire_workspace_lock
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -61,7 +68,7 @@ def test_kit_repo_manifest_yields_legacy_paths() -> None:
 
 
 def test_legacy_workspace_paths_match_todays_literals() -> None:
-    ws = load_workspace(Path("."))
+    ws = load_workspace(Path("."), suppress_legacy_profile_warning=True)
 
     assert _rel(ws.root_file("README.md")) == "README.md"
     assert _rel(ws.docs_root()) == "docs"
@@ -128,6 +135,66 @@ def test_legacy_workspace_paths_match_todays_literals() -> None:
     assert _rel(ws.pyproject_path()) == "pyproject.toml"
     assert ws.admin_refresh_branch_prefix() == "docs/post-pr"
     assert ws.admin_refresh_branch(123) == "docs/post-pr123-handoff-refresh"
+
+
+def test_manifestless_workspace_emits_legacy_profile_deprecation_warning(
+    tmp_path: Path,
+) -> None:
+    with pytest.warns(
+        LegacyProfileDeprecationWarning,
+        match="implicit legacy profile is deprecated",
+    ):
+        ws = load_workspace(tmp_path)
+
+    assert ws.profile == "implicit-legacy"
+
+
+def test_manifest_workspace_does_not_emit_legacy_profile_deprecation_warning(
+    tmp_path: Path,
+) -> None:
+    _write_manifest(tmp_path, "kit_schema_version: 1\nprofile: generic\n")
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        ws = load_workspace(tmp_path)
+
+    assert ws.profile == "generic"
+    assert not [
+        warning
+        for warning in caught
+        if issubclass(warning.category, LegacyProfileDeprecationWarning)
+    ]
+
+
+def test_legacy_profile_warning_can_be_suppressed_by_parameter(tmp_path: Path) -> None:
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        ws = load_workspace(tmp_path, suppress_legacy_profile_warning=True)
+
+    assert ws.profile == "implicit-legacy"
+    assert not [
+        warning
+        for warning in caught
+        if issubclass(warning.category, LegacyProfileDeprecationWarning)
+    ]
+
+
+def test_legacy_profile_warning_can_be_suppressed_by_env(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv(LEGACY_PROFILE_WARNING_ENV, "1")
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        ws = load_workspace(tmp_path)
+
+    assert ws.profile == "implicit-legacy"
+    assert not [
+        warning
+        for warning in caught
+        if issubclass(warning.category, LegacyProfileDeprecationWarning)
+    ]
 
 
 def test_manifest_happy_path_overrides_paths(tmp_path: Path) -> None:
@@ -395,7 +462,7 @@ def test_manifest_invalid_yaml_fails_loud(tmp_path: Path) -> None:
 
 
 def test_no_manifest_keeps_legacy_golden(tmp_path: Path) -> None:
-    ws = load_workspace(tmp_path)
+    ws = load_workspace(tmp_path, suppress_legacy_profile_warning=True)
 
     assert ws.profile == "implicit-legacy"
     assert _rel(ws.status_path().relative_to(tmp_path)) == "docs/STATUS.md"

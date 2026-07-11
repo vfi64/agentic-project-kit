@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+import yaml
 
 from typer.testing import CliRunner
 
@@ -2396,7 +2397,7 @@ last_substantive_work_state:
 
     full = "1234567890abcdef1234567890abcdef12345678"
     short = "12345678"
-    subject = "New admin refresh behavior (#2222)"
+    subject = "P5d: New admin refresh behavior (#2222)"
 
     def fake_run(command, cwd=None):
         if command == ["git", "rev-parse", "HEAD"]:
@@ -2447,21 +2448,27 @@ last_substantive_work_state:
         lambda: "agentic-kit",
     )
 
-    result = transfer_repo_actions._refresh_operational_handoff_docs(2222)
+    result = transfer_repo_actions._refresh_operational_handoff_docs(
+        2222,
+        ws=transfer_repo_actions._LEGACY_WORKSPACE,
+    )
 
     assert result.returncode == 0, result.stderr
     handoff_text = Path(".agentic/handoff_state.yaml").read_text(encoding="utf-8")
     operational_text = Path(".agentic/operational_handoff_state.yaml").read_text(encoding="utf-8")
+    handoff_data = yaml.safe_load(handoff_text)
+    operational_data = yaml.safe_load(operational_text)
     assert "commit: 12345678" in handoff_text
     assert "current_head: 12345678" in handoff_text
-    assert "commit_subject: New admin refresh behavior (#2222)" in handoff_text
-    assert "current_head_subject: New admin refresh behavior (#2222)" in handoff_text
+    assert handoff_data["safe_state"]["commit_subject"] == subject
+    assert handoff_data["administrative_evidence_state"]["current_head_subject"] == subject
     assert "post-pr2222-successor-chat-handoff.md" in handoff_text
     assert "post-PR2222" in handoff_text
     assert "historical post-PR1111 must stay untouched" in handoff_text
-    assert full in operational_text
-    assert "short: 12345678" in operational_text
-    assert "subject: New admin refresh behavior (#2222)" in operational_text
+    assert operational_data["current_head"]["full"] == full
+    assert str(operational_data["current_head"]["short"]) == short
+    assert operational_data["current_head"]["subject"] == subject
+    assert operational_data["last_substantive_work_state"]["subject"] == subject
     assert Path("docs/reports/terminal/post-pr2222-successor-chat-handoff.md").read_text(encoding="utf-8") == "successor prompt\n"
     assert "Operational documentation refresh state after PR #2222" in Path("docs/STATUS.md").read_text(encoding="utf-8")
     assert "Updated operational handoff docs:" in result.stdout
