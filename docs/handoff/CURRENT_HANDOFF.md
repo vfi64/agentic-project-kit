@@ -317,6 +317,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1825
+## Operational documentation refresh state after PR #1827
 
-Current administrative handoff refresh state is `6f881b2d` (`Derive successor handoff repo identity (#1825)`). Continue next only after this post-PR1825 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `08c88271` (`Classify repository identity literals (#1827)`). Continue next only after this post-PR1827 refresh is committed and merged; the next substantive slice must be created from fresh main.
