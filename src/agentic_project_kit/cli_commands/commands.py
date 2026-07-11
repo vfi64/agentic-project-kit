@@ -12,11 +12,13 @@ from agentic_project_kit.command_selector import (
 )
 from agentic_project_kit.command_manifest import (
     MD_PATH,
+    build_current_reference,
     evaluate_command_manifest,
     load_manifest,
     render_command_manifest_audit,
     render_markdown,
 )
+from agentic_project_kit.chat_entrypoint_contract import sync_entrypoint_files
 
 
 commands_app = typer.Typer(help="Inspect and render the agentic-kit command manifest.")
@@ -52,6 +54,29 @@ def commands_render_md_command(
             typer.echo(f"COMMANDS_RENDER_MD\nSTATUS=PASS\nWRITTEN={path.as_posix()}\n")
         else:
             typer.echo(rendered, nl=False)
+
+
+@commands_app.command("sync-entrypoints")
+def commands_sync_entrypoints_command(
+    root: Path = typer.Option(Path("."), "--root", help="Repository root."),
+    execute: bool = typer.Option(False, "--execute", help="Write synchronized entrypoint files."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    """Synchronize command reference files and command-manifest entrypoint headers."""
+    root = root.resolve()
+    data = build_current_reference()
+    rendered = render_markdown(data)
+    payload = sync_entrypoint_files(root, manifest=data, markdown=rendered, execute=execute)
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+        return
+    status = "CHANGED" if payload["changed"] else "CURRENT"
+    typer.echo(
+        "COMMANDS_SYNC_ENTRYPOINTS\n"
+        f"STATUS=PASS\nSTATE={status}\n"
+        f"MANIFEST_SHA={payload['manifest_sha']}\n"
+        f"EXECUTE={str(execute).lower()}\n"
+    )
 
 
 def audit_command_manifest_command(

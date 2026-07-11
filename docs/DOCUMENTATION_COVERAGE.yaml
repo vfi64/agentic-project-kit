@@ -181,6 +181,9 @@ rules:
     - agentic-kit workflow upload-output
     - agentic-kit workflow state
     - agentic-kit instruction lint
+    - agentic-kit chat refresher
+    - agentic-kit chat session-start
+    - agentic-kit commands sync-entrypoints
     - agentic-kit workflow list
     - agentic-kit workflow show
     - agentic-kit workflow upload
@@ -311,6 +314,23 @@ rules:
     - 'Declared exception modules: 2'
     - Path Literal Classifications
     - Repo Identity Literals
+- id: command-manifest-entrypoint-coverage
+  description: Command manifest entrypoints must keep ACK headers, chat refreshers,
+    and initial prompt sources synchronized with the generated command manifest.
+  documents:
+  - path: README.md
+    terms:
+    - agentic-kit chat refresher
+    - agentic-kit chat session-start
+    - agentic-kit commands sync-entrypoints
+    - command manifest
+  - path: docs/architecture/evidence/command-manifest-audit-2026-07-11-cm4.md
+    terms:
+    - Command Manifest Audit Evidence
+    - 'Command: `./.venv/bin/agentic-kit audit-command-manifest --json`'
+    - 'Manifest sha: `9a377188be24`'
+    - 'Status: PASS'
+    - 'Blocker count: 0'
 - id: kit-os-architecture-coverage
   description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, and evidence policy.
   documents:

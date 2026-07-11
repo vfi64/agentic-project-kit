@@ -343,6 +343,9 @@ Use `workflow status --explain` when you are unsure what to do next. It is read-
 Quick command guide:
 
 - `agentic-kit instruction lint --file PATH` or `--stdin`: lint LLM instruction text against the current command manifest before applying transfer orders.
+- `agentic-kit chat refresher --mode copy-paste`: print the six-line command-manifest refresher for chat replies that may include commands.
+- `agentic-kit chat session-start --mode copy-paste`: print the refresher plus the full inline command manifest for a new session.
+- `agentic-kit commands sync-entrypoints --execute`: synchronize command reference files and command-manifest entrypoint headers.
 - `agentic-kit work start --from-ref REF`: create a fresh work branch based on a selected release tag or branch.
 - `agentic-kit work discard-changes`: preview the explicitly destructive feature-branch discard flow; `--execute` requires a deliberate confirmation path.
 - `agentic-kit transfer list-refs --json`: list local release tags and branches for the guided work-start picker.

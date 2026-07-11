@@ -111,6 +111,8 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
     prompt = (tmp_path / ".agentic/INITIAL_LLM_PROMPT.md").read_text(encoding="utf-8")
     assert "repository `demo`" in prompt
     assert ".agentic/transfer/inbox/" in prompt
+    assert "COMMAND_MANIFEST_ACK" in prompt
+    assert "agentic-kit command-for" in prompt
 
 
 def test_init_workspace_roundtrip_with_namespace_resolvers(tmp_path: Path) -> None:

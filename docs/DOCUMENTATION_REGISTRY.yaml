@@ -655,3 +655,7 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Post-P4b report-only path literal inventory showing resolver-sweep classifications, declared exceptions, zero active path literals, and repo identity literals for follow-up visibility.
+  - path: docs/architecture/evidence/command-manifest-audit-2026-07-11-cm4.md
+    class: evidence/log
+    owner: maintainers
+    notes: CM4 command-manifest audit evidence showing chat entrypoint manifest references are current and non-blocking.
