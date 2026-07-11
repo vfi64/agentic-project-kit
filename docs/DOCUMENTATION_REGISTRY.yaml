@@ -663,3 +663,7 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: LC1 report-only mutation-lock coverage evidence with current audit classifications, gap inventory, and branch_create recheck.
+  - path: docs/architecture/evidence/remote-branch-hygiene-2026-07-11.md
+    class: evidence/log
+    owner: maintainers
+    notes: K3 remote branch hygiene evidence recording post-prune inventory, guarded wrapper deletions, protected open PR branches, and maintainer-decision leftovers.
