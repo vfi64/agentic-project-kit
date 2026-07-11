@@ -667,3 +667,7 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: K3 remote branch hygiene evidence recording post-prune inventory, guarded wrapper deletions, protected open PR branches, and maintainer-decision leftovers.
+  - path: docs/architecture/evidence/path-literal-active-enforcement-2026-07-11-p5b.md
+    class: evidence/log
+    owner: maintainers
+    notes: P5b active-class path and repository identity literal enforcement evidence with standard-gate adoption and manual reference_or_message samples.

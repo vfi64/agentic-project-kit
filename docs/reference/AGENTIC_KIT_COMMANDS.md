@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 9a377188be24
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: cd4c92123d4f
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -138,6 +138,7 @@ Report hardcoded docs/tmp path literals in source modules.
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+| `enforce_active` | `TyperOption` | --enforce-active | `False` | `False` | Fail when active path or repository identity literals remain. |
 
 ### `agentic-kit audit-planning-docs-consolidation`
 
