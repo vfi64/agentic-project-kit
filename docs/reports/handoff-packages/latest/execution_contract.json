@@ -28,15 +28,6 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "p5d-legacy-path-deprecation",
-        "status": "planned",
-        "summary": "Deprecate legacy top-level paths in line with legacy-profile removal for P5"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
         "id": "p6-gui-project-selection-and-ci-recipe",
         "status": "planned",
         "summary": "Add GUI project selection and harden CI recipe follow-ups for P6"
@@ -278,13 +269,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1832-handoff-refresh",
+      "branch": "docs/post-pr1834-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "f693c5f9df3b2ba2d101c29195d949eb57be17da",
+      "head": "e4a632879c22531bed89aa2f87c25efa9bf6bcd6",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "f693c5f9df3b2ba2d101c29195d949eb57be17da",
+      "origin_main": "e4a632879c22531bed89aa2f87c25efa9bf6bcd6",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -361,13 +352,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1832-handoff-refresh",
+    "branch": "docs/post-pr1834-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f693c5f9df3b2ba2d101c29195d949eb57be17da",
+    "head": "e4a632879c22531bed89aa2f87c25efa9bf6bcd6",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "f693c5f9df3b2ba2d101c29195d949eb57be17da",
+    "origin_main": "e4a632879c22531bed89aa2f87c25efa9bf6bcd6",
     "worktree_clean": false
   },
   "rules": [

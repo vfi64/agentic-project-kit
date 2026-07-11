@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `f693c5f9df3b2ba2d101c29195d949eb57be17da` (`f693c5f9`)
-- Handoff freshness marker: `f693c5f9`
-- Branch at generation: `docs/post-pr1832-handoff-refresh`
+- HEAD: `e4a632879c22531bed89aa2f87c25efa9bf6bcd6` (`e4a63287`)
+- Handoff freshness marker: `e4a63287`
+- Branch at generation: `docs/post-pr1834-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -72,7 +72,6 @@ Wenn der Bootstrap grün ist:
 Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 
 - `p5c-physical-migration` (planned): Plan physical migration after legacy profile deprecation for P5
-- `p5d-legacy-path-deprecation` (planned): Deprecate legacy top-level paths in line with legacy-profile removal for P5
 - `p6-gui-project-selection-and-ci-recipe` (planned): Add GUI project selection and harden CI recipe follow-ups for P6
 - `v1-0-milestone` (planned): Reach the 1.0 operating-layer stability milestone for unphased
 - `v2-0-legacy-profile-removal` (planned): Remove the implicit legacy profile in 2.0.0 for unphased
