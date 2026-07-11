@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1807
+  updated_after_pr: 1809
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1807
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1809
 strategy:
 - id: governed-operating-model
   status: active
@@ -562,14 +562,18 @@ plans:
   - Generated Markdown is reproducible from the manifest.
   - audit-command-manifest is part of the standard gates.
 - id: command-for-selector
-  status: active
+  status: done
   title: Deterministic command selector
+  completed_by_pr: 1809
   depends_on:
   - command-manifest-hardening
   rationale: Use the hardened manifest to map raw command requests to approved
     wrappers deterministically.
   source_files:
   - docs/planning/MASTER_IMPLEMENTATION_Q.md
+  evidence:
+  - tests/test_command_selector.py
+  - agentic-kit command-for --raw "git push origin main" --json
   acceptance:
   - command-for maps raw commands and task tags without mutating the manifest.
 - id: instruction-lint-gate
