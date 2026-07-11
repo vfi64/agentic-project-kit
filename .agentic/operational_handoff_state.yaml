@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: ee9942a55fb64d43976f06506e52f5b85c96fbb4
-  short: ee9942a5
-  subject: Close command-for selector direction item (#1809)
+  full: 20a583bb189ec7a418beaaeaac0f10bc4e6a568d
+  short: 20a583bb
+  subject: Add instruction lint gate (#1811)
 last_substantive_work_state:
-  full: ee9942a55fb64d43976f06506e52f5b85c96fbb4
-  short: ee9942a5
-  subject: Close command-for selector direction item (#1809)
+  full: 20a583bb189ec7a418beaaeaac0f10bc4e6a568d
+  short: 20a583bb
+  subject: Add instruction lint gate (#1811)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
