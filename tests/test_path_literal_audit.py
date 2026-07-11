@@ -69,6 +69,8 @@ def test_audit_path_literals_json_shape(tmp_path: Path) -> None:
     assert payload["classification_summary"]["reference_or_message"]["literal_count"] == 1
     assert payload["modules"][0]["path"] == "src/demo.py"
     assert payload["modules"][0]["classification"]["kind"] == "reference_or_message"
+    assert payload["active_repo_identity_module_count"] == 0
+    assert payload["active_repo_identity_literal_count"] == 0
 
 
 def test_audit_path_literals_always_exit_zero(tmp_path: Path) -> None:
@@ -125,12 +127,41 @@ def test_audit_path_literals_reports_repo_identity_literals(tmp_path: Path) -> N
 
     assert result.literal_count == 0
     assert result.repo_identity_literal_count == 3
+    assert result.active_repo_identity_literal_count == 3
     assert result.repo_identity_modules[0].patterns == {
         "github_url": 1,
         "repo_slug_prefix": 2,
     }
+    assert result.repo_identity_modules[0].classification.kind == "active"
     assert "REPO_IDENTITY_LITERALS:" in rendered
-    assert "REPO_IDENTITY=3|src/demo.py" in rendered
+    assert "ACTIVE_IDENTITY_MODULES=1" in rendered
+    assert "REPO_IDENTITY=3|src/demo.py|classification=active|disposition=active" in rendered
+
+
+def test_audit_path_literals_classifies_declared_identity_exceptions(tmp_path: Path) -> None:
+    help_module = tmp_path / "src" / "agentic_project_kit" / "gui_cockpit_actions.py"
+    prompt_module = tmp_path / "src" / "agentic_project_kit" / "gui_task_editor.py"
+    help_module.parent.mkdir(parents=True)
+    help_module.write_text(
+        'HELP = "https://github.com/vfi64/agentic-project-kit"\n',
+        encoding="utf-8",
+    )
+    prompt_module.write_text(
+        'PROMPT = "You are working in the repository vfi64/agentic-project-kit."\n',
+        encoding="utf-8",
+    )
+
+    result = audit_path_literals(tmp_path)
+    payload = result.as_dict()
+    rendered = render_path_literal_audit(result)
+
+    assert result.repo_identity_literal_count == 3
+    assert result.active_repo_identity_module_count == 0
+    assert result.active_repo_identity_literal_count == 0
+    assert payload["repo_identity_classification_summary"]["reference"]["literal_count"] == 2
+    assert payload["repo_identity_classification_summary"]["template"]["literal_count"] == 1
+    assert len(payload["declared_identity_exception_modules"]) == 2
+    assert "DECLARED_IDENTITY_EXCEPTIONS:" in rendered
 
 
 def test_path_literal_evidence_report_includes_classification_and_repo_identity(tmp_path: Path) -> None:
@@ -147,3 +178,5 @@ def test_path_literal_evidence_report_includes_classification_and_repo_identity(
     assert "reference_or_message" in report
     assert "## Repo Identity Literals" in report
     assert "Repo identity literal count: 1" in report
+    assert "Active repo identity literal count: 1" in report
+    assert "| src/demo.py | active | active | 1 |" in report

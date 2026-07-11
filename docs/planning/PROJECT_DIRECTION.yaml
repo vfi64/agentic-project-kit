@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1825
+  updated_after_pr: 1827
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1825
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1827
 strategy:
 - id: governed-operating-model
   status: active
@@ -690,6 +690,23 @@ plans:
   - Repository full name and default local path are derived from workspace or git
     context where active behavior needs them.
   - Remaining identity literals are declared as reference, template, or test data.
+- id: repo-identity-sweep
+  status: done
+  title: Classify remaining repository identity literals
+  completed_by_pr: 1827
+  depends_on:
+  - repo-identity-literals
+  rationale: >-
+    PR #1827 classified remaining source-level repository identity literals into
+    active, reference, template, and declared-exception groups; active identity
+    literal modules are zero before active identity-literal enforcement tightens
+    in P5b.
+  source_files:
+  - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  acceptance:
+  - Active repository identity literal modules are zero.
+  - Reference and template identity literals remain visible with explicit rationale.
+  - Shared repository identity derivation is reused by active runtime surfaces.
 - id: direction-schema-command-migration
   status: done
   title: Introduce direction schema, command, migration, cleanup, scope, and gate

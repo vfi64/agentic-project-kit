@@ -12,6 +12,7 @@ from agentic_project_kit.rule_ack import (
     acknowledgement_from_json_data,
     validate_rule_acknowledgement,
 )
+from agentic_project_kit.repo_identity import detect_repo_full_name
 from agentic_project_kit.rule_snapshot import build_derived_rule_snapshot
 from agentic_project_kit.workspace import load_workspace
 
@@ -72,14 +73,7 @@ def _run_git(project_root: Path, *args: str) -> str:
 
 
 def _read_repo_name(project_root: Path) -> str:
-    remote_url = _run_git(project_root, "config", "--get", "remote.origin.url")
-    if remote_url.endswith(".git"):
-        remote_url = remote_url[:-4]
-    if ":" in remote_url and "/" in remote_url:
-        return remote_url.rsplit(":", 1)[-1]
-    if "github.com/" in remote_url:
-        return remote_url.rsplit("github.com/", 1)[-1]
-    return Path(project_root).name
+    return detect_repo_full_name(project_root)
 
 
 def _read_latest_result(project_root: Path) -> dict[str, Any] | None:
