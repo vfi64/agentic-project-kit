@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 05ffdd7c2eafe9e709bb8d9c459d6d4e12a4dba0
-  short: 05ffdd7c
-  subject: Close transfer apply lint gate tests (#1819)
+  full: bdbfcce52a56ed937d71838cab09694b70a65c0d
+  short: bdbfcce5
+  subject: Add mutation lock coverage evidence (#1821)
 last_substantive_work_state:
-  full: 05ffdd7c2eafe9e709bb8d9c459d6d4e12a4dba0
-  short: 05ffdd7c
-  subject: Close transfer apply lint gate tests (#1819)
+  full: bdbfcce52a56ed937d71838cab09694b70a65c0d
+  short: bdbfcce5
+  subject: Add mutation lock coverage evidence (#1821)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

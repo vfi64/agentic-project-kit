@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `05ffdd7c2eafe9e709bb8d9c459d6d4e12a4dba0` (`05ffdd7c`)
-- Handoff freshness marker: `05ffdd7c`
-- Branch at generation: `docs/post-pr1819-handoff-refresh`
+- HEAD: `bdbfcce52a56ed937d71838cab09694b70a65c0d` (`bdbfcce5`)
+- Handoff freshness marker: `bdbfcce5`
+- Branch at generation: `docs/post-pr1821-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -83,6 +83,9 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 - `gui-gatekeeper-workbench` (planned): Build the local gatekeeper/workbench GUI over deterministic actions for GUI
 - `documentation-artifact-governance-os` (planned): Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance
 - `master-implementation-q` (active): Master Implementation Q2 rest sequence
+- `lock-reentrancy-decision` (planned): Decide mutation-lock reentrancy and inherited-lock policy
+- `lock-coverage-remediation` (planned): Remediate mutation-lock coverage gaps
+- `repo-identity-literals` (active): Derive repository identity literals from workspace context
 - `governance-doc-backfill` (active): Backfill reviewed governance document registry entries
 - `planning-ideas-residual-cleanup` (planned): Resolve remaining planning and idea residual documents
 - `pre-gui-hardening-plan` (active): Execute the pre-GUI hardening backlog in small wrapper-first slices for v0.4.12
