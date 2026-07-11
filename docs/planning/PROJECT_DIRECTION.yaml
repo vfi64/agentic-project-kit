@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1819
+  updated_after_pr: 1821
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1819
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1821
 strategy:
 - id: governed-operating-model
   status: active
@@ -629,12 +629,14 @@ plans:
   - Chat entrypoints carry the current manifest pointer and hash.
   - audit-command-manifest blocks stale entrypoint manifest references.
 - id: lock-contract-audit
-  status: active
+  status: done
   title: Audit workspace mutation-lock coverage
+  completed_by_pr: 1821
   depends_on:
   - chat-entrypoint-contract
-  rationale: Capture the current mutation-lock coverage and gap list before LC2
-    decides the reentrancy and wrapper-boundary policy.
+  rationale: >-
+    Captured the current mutation-lock coverage and gap list in PR #1821 before
+    LC2 decides the reentrancy and wrapper-boundary policy.
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
   evidence:
