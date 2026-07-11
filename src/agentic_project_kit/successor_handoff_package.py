@@ -5,6 +5,7 @@ import subprocess
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlparse
 from agentic_project_kit.chat_entrypoint_contract import (
     command_reference_contract,
     ensure_command_reference_in_prompt,
@@ -14,9 +15,6 @@ from typing import Any
 from agentic_project_kit import __version__ as PACKAGE_VERSION
 from agentic_project_kit.project_direction import load_project_direction
 from agentic_project_kit.workspace import KitConfig, Workspace, load_workspace
-
-REPO_FULL_NAME = "vfi64/agentic-project-kit"
-DEFAULT_LOCAL_PATH = "cd /path/to/agentic-project-kit"
 
 _LEGACY_WORKSPACE = Workspace(root=Path("."), config=KitConfig())
 
@@ -70,8 +68,7 @@ def _long_term_sources(ws: Workspace) -> tuple[str, ...]:
 
 LONG_TERM_SOURCES: tuple[str, ...] = _long_term_sources(_LEGACY_WORKSPACE)
 
-STARTUP_COMMANDS: tuple[str, ...] = (
-    "cd /path/to/agentic-project-kit",
+STARTUP_COMMAND_TAIL: tuple[str, ...] = (
     "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile",
     "./.venv/bin/agentic-kit rules acknowledge",
     "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile",
@@ -244,14 +241,72 @@ def _head_short(head: str) -> str:
     return head[:8] if head and head != "UNKNOWN" else "UNKNOWN"
 
 
+def _strip_dot_git(value: str) -> str:
+    return value[:-4] if value.endswith(".git") else value
+
+
+def _repo_name_from_path(value: str) -> str | None:
+    path = _strip_dot_git(value.strip().strip("/"))
+    parts = [part for part in path.split("/") if part]
+    if len(parts) != 2:
+        return None
+    owner, repo = parts
+    if not owner or not repo:
+        return None
+    return f"{owner}/{repo}"
+
+
+def _repo_name_from_remote_url(remote_url: str) -> str | None:
+    url = remote_url.strip()
+    if not url:
+        return None
+
+    scp_prefix = "git@github.com:"
+    if url.startswith(scp_prefix):
+        return _repo_name_from_path(url[len(scp_prefix) :])
+
+    parsed = urlparse(url)
+    if parsed.hostname != "github.com":
+        return None
+    return _repo_name_from_path(parsed.path)
+
+
+def _repo_identity_fallback(root: Path, reason: str) -> str:
+    return f"{Path(root).name} ({reason})"
+
+
+def _detect_repo_full_name(root: Path) -> str:
+    completed = subprocess.run(
+        ["git", "-C", str(root), "remote", "get-url", "origin"],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if completed.returncode != 0:
+        return _repo_identity_fallback(root, "no git remote 'origin'")
+
+    full_name = _repo_name_from_remote_url(completed.stdout)
+    if full_name is None:
+        return _repo_identity_fallback(root, "unrecognized git remote 'origin'")
+    return full_name
+
+
+def _default_local_path_hint(root: Path) -> str:
+    return f"cd /path/to/{Path(root).name}"
+
+
+def _startup_commands(local_path_hint: str) -> tuple[str, ...]:
+    return (local_path_hint, *STARTUP_COMMAND_TAIL)
+
+
 def _build_repo_state(root: Path) -> dict[str, Any]:
     head = _run_git(root, ["rev-parse", "HEAD"])
     origin_main = _run_git(root, ["rev-parse", "origin/main"])
     status_short = _run_git(root, ["status", "--short"])
     branch = _run_git(root, ["branch", "--show-current"])
     return {
-        "full_name": REPO_FULL_NAME,
-        "local_path": DEFAULT_LOCAL_PATH,
+        "full_name": _detect_repo_full_name(root),
+        "local_path": _default_local_path_hint(root),
         "branch": branch,
         "head": head,
         "head_short": _head_short(head),
@@ -331,6 +386,7 @@ def _open_tasks_from_project_direction(root: Path, ws: Workspace) -> list[dict[s
 
 def _build_context(root: Path, ws: Workspace) -> dict[str, Any]:
     repo_state = _build_repo_state(root)
+    startup_commands = _startup_commands(repo_state["local_path"])
     successor_context_path = _workspace_path_text(ws, ws.package_file("successor_context.yaml"))
     successor_prompt_path = _workspace_path_text(ws, ws.package_file("successor_prompt.md"))
     next_chat_bootstrap_path = _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md"))
@@ -355,7 +411,7 @@ def _build_context(root: Path, ws: Workspace) -> dict[str, Any]:
         "long_term_memory": {
             "source": "repository files and command references",
             "mandatory_sources": list(_long_term_sources(ws)),
-            "required_startup_commands": list(STARTUP_COMMANDS),
+            "required_startup_commands": list(startup_commands),
         },
         "short_term_memory": {
             "source": "current local/repo state at package generation time",
@@ -641,8 +697,8 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
     current_state_contract = {
         "scope": "current-continuation-state",
         "repo": {
-            "full_name": repo.get("full_name", "vfi64/agentic-project-kit"),
-            "local_path": repo.get("local_path", "cd /path/to/agentic-project-kit"),
+            "full_name": repo.get("full_name", _detect_repo_full_name(ws.root)),
+            "local_path": repo.get("local_path", _default_local_path_hint(ws.root)),
             "branch": branch,
             "head": head,
             "origin_main": origin_main,
@@ -1004,6 +1060,12 @@ def render_successor_prompt(context: dict[str, Any], ws: Workspace | None = None
     contract = build_execution_contract(context, ws)
     contract_projection = render_execution_contract_projection(contract)
     repo = context["repo"]
+    repo_full_name = str(repo.get("full_name", _detect_repo_full_name(ws.root)))
+    startup_commands = context.get("long_term_memory", {}).get("required_startup_commands")
+    if not isinstance(startup_commands, list) or not all(isinstance(command, str) for command in startup_commands):
+        startup_commands = list(
+            _startup_commands(str(repo.get("local_path", _default_local_path_hint(ws.root))))
+        )
     package_files = [
         ws.package_file("successor_context.yaml"),
         ws.package_file("source_manifest.json"),
@@ -1019,14 +1081,14 @@ def render_successor_prompt(context: dict[str, Any], ws: Workspace | None = None
         [
             "# Successor Chat Prompt",
             "",
-            "Du bist ein neuer LLM-/Coding-Chat für das Repo `vfi64/agentic-project-kit`.",
+            f"Du bist ein neuer LLM-/Coding-Chat für das Repo `{repo_full_name}`.",
             "",
             "Arbeite nicht aus Chat-Erinnerung. Quelle der Wahrheit ist der aktuelle Remote-Stand von `main`, der lokale Repo-Zustand, repo-/log-backed Evidenz und das maschinenlesbare Successor-Paket.",
             "",
             "## Pflichtstart",
             "",
             "```bash",
-            *STARTUP_COMMANDS,
+            *startup_commands,
             "```",
             "",
             "## Zuerst lesen",
@@ -1248,6 +1310,8 @@ def render_start_prompt_from_context(context: dict[str, Any], ws: Workspace | No
 
 def render_closeout_prompt_from_context(context: dict[str, Any], ws: Workspace | None = None) -> str:
     ws = ws or _LEGACY_WORKSPACE
+    repo = context["repo"]
+    local_path = str(repo.get("local_path", _default_local_path_hint(ws.root)))
     next_chat_bootstrap_path = _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md"))
     successor_context_path = _workspace_path_text(ws, ws.package_file("successor_context.yaml"))
     start_prompt_path = _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md"))
@@ -1286,7 +1350,7 @@ def render_closeout_prompt_from_context(context: dict[str, Any], ws: Workspace |
             "Before leaving a chat, run the deterministic successor handoff package command:",
             "",
             "```bash",
-            "cd /path/to/agentic-project-kit",
+            local_path,
             "./.venv/bin/agentic-kit transfer chat-switch-complete --render-prompt",
             "```",
             "",
