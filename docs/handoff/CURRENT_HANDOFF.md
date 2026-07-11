@@ -317,6 +317,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1811
+## Operational documentation refresh state after PR #1813
 
-Current administrative handoff refresh state is `20a583bb` (`Add instruction lint gate (#1811)`). Continue next only after this post-PR1811 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `c9a26f18` (`Close CM3 direction item (#1813)`). Continue next only after this post-PR1813 refresh is committed and merged; the next substantive slice must be created from fresh main.

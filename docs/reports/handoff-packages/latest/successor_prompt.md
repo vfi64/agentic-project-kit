@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1811-handoff-refresh`
+- branch: `docs/post-pr1813-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -260,15 +260,6 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "instruction-lint-gate",
-      "status": "planned",
-      "summary": "Instruction lint gate"
-    },
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
       "id": "chat-entrypoint-contract",
       "status": "planned",
       "summary": "Chat entrypoint manifest contract"
@@ -428,14 +419,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1811-handoff-refresh",
+    "branch": "docs/post-pr1813-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "20a583bb189ec7a418beaaeaac0f10bc4e6a568d",
+    "head": "c9a26f189a772f7a2e0d446990824a1813bda6d2",
     "head_matches_origin_main": true,
-    "head_short": "20a583bb",
+    "head_short": "c9a26f18",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "20a583bb189ec7a418beaaeaac0f10bc4e6a568d",
-    "origin_main_short": "20a583bb",
+    "origin_main": "c9a26f189a772f7a2e0d446990824a1813bda6d2",
+    "origin_main_short": "c9a26f18",
     "worktree_clean": false
   }
 }
