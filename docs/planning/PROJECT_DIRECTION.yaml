@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1809
+  updated_after_pr: 1811
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1809
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1811
 strategy:
 - id: governed-operating-model
   status: active
@@ -577,16 +577,29 @@ plans:
   acceptance:
   - command-for maps raw commands and task tags without mutating the manifest.
 - id: instruction-lint-gate
-  status: planned
+  status: done
   title: Instruction lint gate
+  completed_by_pr: 1811
   depends_on:
   - command-for-selector
   rationale: Reject unsafe or stale instruction payloads before transfer apply can
     execute them.
   source_files:
   - docs/planning/MASTER_IMPLEMENTATION_Q.md
+  evidence:
+  - tests/test_instruction_lint_gate.py
+  - tests/test_transfer_cli.py
+  - tests/test_gui_task_editor.py
+  - tests/test_v040_gui_tkinter_shell.py
+  - agentic-kit instruction lint --stdin --json
   acceptance:
-  - Non-conforming order text is rejected before application.
+  - instruction lint JSON and text output classify ACK, RAW_REPLACED, UNKNOWN_SUBCOMMAND,
+    UNKNOWN_RAW, and DESTRUCTIVE_NO_DRYRUN findings.
+  - Transfer apply blocks BLOCKED lint results, logs WARN lint results, and continues
+    on non-blocking findings.
+  - Runtime mutators using replaced raw git/gh commands remain hard blocks.
+  - GUI exposes Lint Clipboard as a read-only action backed by instruction lint --stdin.
+  - SEND task carriers include the command manifest path and manifest_sha.
 - id: chat-entrypoint-contract
   status: planned
   title: Chat entrypoint manifest contract
