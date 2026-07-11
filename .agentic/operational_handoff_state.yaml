@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 0afa9726b6de8cb69ac03a0a8936e1e04b031456
-  short: 0afa9726
-  subject: Add operating-layer quickstart and template checks (#1841)
+  full: de11f55638f4f935f3d2225fe7f13548abac55e8
+  short: de11f556
+  subject: 'LC3: Remediate mutation lock coverage (#1843)'
 last_substantive_work_state:
-  full: 0afa9726b6de8cb69ac03a0a8936e1e04b031456
-  short: 0afa9726
-  subject: Add operating-layer quickstart and template checks (#1841)
+  full: de11f55638f4f935f3d2225fe7f13548abac55e8
+  short: de11f556
+  subject: 'LC3: Remediate mutation lock coverage (#1843)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

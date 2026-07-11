@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1841-handoff-refresh`
+- branch: `docs/post-pr1843-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -233,15 +233,6 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "lock-coverage-remediation",
-      "status": "planned",
-      "summary": "Remediate mutation-lock coverage gaps"
-    },
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
       "id": "governance-doc-backfill",
       "status": "active",
       "summary": "Backfill reviewed governance document registry entries"
@@ -392,14 +383,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1841-handoff-refresh",
+    "branch": "docs/post-pr1843-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "0afa9726b6de8cb69ac03a0a8936e1e04b031456",
+    "head": "de11f55638f4f935f3d2225fe7f13548abac55e8",
     "head_matches_origin_main": true,
-    "head_short": "0afa9726",
+    "head_short": "de11f556",
     "local_path": "cd /path/to/",
-    "origin_main": "0afa9726b6de8cb69ac03a0a8936e1e04b031456",
-    "origin_main_short": "0afa9726",
+    "origin_main": "de11f55638f4f935f3d2225fe7f13548abac55e8",
+    "origin_main_short": "de11f556",
     "worktree_clean": false
   }
 }
