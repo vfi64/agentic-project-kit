@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `046a6a5a51cfda7af6041183925e0de9dea270f3` (`046a6a5a`)
-- Handoff freshness marker: `046a6a5a`
-- Branch at generation: `docs/post-pr1807-handoff-refresh`
+- HEAD: `ee9942a55fb64d43976f06506e52f5b85c96fbb4` (`ee9942a5`)
+- Handoff freshness marker: `ee9942a5`
+- Branch at generation: `docs/post-pr1809-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -83,7 +83,6 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 - `gui-gatekeeper-workbench` (planned): Build the local gatekeeper/workbench GUI over deterministic actions for GUI
 - `documentation-artifact-governance-os` (planned): Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance
 - `master-implementation-q` (active): Master Implementation Q2 rest sequence
-- `command-for-selector` (active): Deterministic command selector
 - `instruction-lint-gate` (planned): Instruction lint gate
 - `chat-entrypoint-contract` (planned): Chat entrypoint manifest contract
 - `governance-doc-backfill` (active): Backfill reviewed governance document registry entries
