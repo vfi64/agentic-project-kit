@@ -101,7 +101,7 @@ def test_core_branch_switch_remains_runtime_mutation() -> None:
     assert classification.counts_as_blocking is True
 
 
-def test_unknown_finding_stays_blocking() -> None:
+def test_filesystem_side_effect_finding_stays_visible_but_non_blocking() -> None:
     finding = _finding(
         path="src/agentic_project_kit/some_new_file.py",
         symbol="some_new_mutator",
@@ -112,8 +112,8 @@ def test_unknown_finding_stays_blocking() -> None:
 
     classification = classify_mutation_lock_finding(finding)
 
-    assert classification.kind == "unknown"
-    assert classification.counts_as_blocking is True
+    assert classification.kind == "filesystem_side_effect"
+    assert classification.counts_as_blocking is False
 
 
 def test_audit_payload_exposes_classification_summary(tmp_path: Path) -> None:

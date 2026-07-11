@@ -614,43 +614,42 @@ def branch_create(branch: str, *, start_point: str = "main", push: bool = False)
 
 
 def branch_switch(branch: str, *, pull: bool = False) -> RepoActionResult:
-    mutation_lock_contract = "workspace_mutation_lock"
-    _ = mutation_lock_contract
-    monitor = guard_branch(
-        command_kind="branch-switch",
-        required_branch=branch,
-        allow_main_mutation=True,
-        auto_switch=True,
-    )
-    if monitor.decision == MonitorDecision.BLOCK:
-        return _monitor_block_result(
-            action="branch-switch",
+    with workspace_mutation_lock(Path("."), "branch_switch"):
+        monitor = guard_branch(
             command_kind="branch-switch",
             required_branch=branch,
-            monitor=monitor,
-            next_action="Inspect transfer operation monitor block before switching branch.",
+            allow_main_mutation=True,
+            auto_switch=True,
         )
+        if monitor.decision == MonitorDecision.BLOCK:
+            return _monitor_block_result(
+                action="branch-switch",
+                command_kind="branch-switch",
+                required_branch=branch,
+                monitor=monitor,
+                next_action="Inspect transfer operation monitor block before switching branch.",
+            )
 
-    command = ["git", "switch", branch]
-    completed = _run(command)
-    if completed.returncode != 0:
-        return _result("branch-switch", command, completed, "Inspect branch state before continuing.")
+        command = ["git", "switch", branch]
+        completed = _run(command)
+        if completed.returncode != 0:
+            return _result("branch-switch", command, completed, "Inspect branch state before continuing.")
 
-    drift = _verify_current_branch("branch-switch", branch, command=command)
-    if drift is not None:
-        return drift
-
-    if pull:
-        pull_command = ["git", "pull", "--ff-only", "origin", branch]
-        pulled = _run(pull_command)
-        if pulled.returncode != 0:
-            return _result("branch-switch", pull_command, pulled, "Inspect pull failure before continuing.")
-        drift = _verify_current_branch("branch-switch", branch, command=pull_command)
+        drift = _verify_current_branch("branch-switch", branch, command=command)
         if drift is not None:
             return drift
-        return _result("branch-switch", pull_command, pulled, "Run transfer state or continue with queued work.")
 
-    return _result("branch-switch", command, completed, "Run transfer state or continue with queued work.")
+        if pull:
+            pull_command = ["git", "pull", "--ff-only", "origin", branch]
+            pulled = _run(pull_command)
+            if pulled.returncode != 0:
+                return _result("branch-switch", pull_command, pulled, "Inspect pull failure before continuing.")
+            drift = _verify_current_branch("branch-switch", branch, command=pull_command)
+            if drift is not None:
+                return drift
+            return _result("branch-switch", pull_command, pulled, "Run transfer state or continue with queued work.")
+
+        return _result("branch-switch", command, completed, "Run transfer state or continue with queued work.")
 
 
 def _current_branch_result(action: str = "commit") -> tuple[str, RepoActionResult | None]:
@@ -1014,6 +1013,11 @@ def ensure_remote_head(
 
 
 def pr_create(*, base: str, head: str, title: str, body: str) -> RepoActionResult:
+    with workspace_mutation_lock(Path("."), "pr_create"):
+        return _pr_create_unlocked(base=base, head=head, title=title, body=body)
+
+
+def _pr_create_unlocked(*, base: str, head: str, title: str, body: str) -> RepoActionResult:
     if head == "current":
         branch_result = _run(["git", "branch", "--show-current"])
         resolved_head = branch_result.stdout.strip()
@@ -1161,32 +1165,34 @@ def fetch_origin(branch: str = "main") -> RepoActionResult:
 
 
 def pull_current() -> RepoActionResult:
-    branch_completed = _run(["git", "branch", "--show-current"])
-    if branch_completed.returncode != 0:
-        return _result("pull-current", ["git", "branch", "--show-current"], branch_completed, "Inspect repository state.")
-    branch = branch_completed.stdout.strip()
-    if not branch:
-        completed = subprocess.CompletedProcess(["git", "pull"], 2, "", "No current branch detected.\n")
-        return _result("pull-current", ["git", "pull"], completed, "Switch to a named branch first.")
-    command = ["git", "pull", "--ff-only", "origin", branch]
-    completed = _run(command)
-    return _result("pull-current", command, completed, "Run transfer state or continue with queued work.")
+    with workspace_mutation_lock(Path("."), "pull_current"):
+        branch_completed = _run(["git", "branch", "--show-current"])
+        if branch_completed.returncode != 0:
+            return _result("pull-current", ["git", "branch", "--show-current"], branch_completed, "Inspect repository state.")
+        branch = branch_completed.stdout.strip()
+        if not branch:
+            completed = subprocess.CompletedProcess(["git", "pull"], 2, "", "No current branch detected.\n")
+            return _result("pull-current", ["git", "pull"], completed, "Switch to a named branch first.")
+        command = ["git", "pull", "--ff-only", "origin", branch]
+        completed = _run(command)
+        return _result("pull-current", command, completed, "Run transfer state or continue with queued work.")
 
 
 def branch_delete(branch: str, *, remote: bool = False, force: bool = False) -> RepoActionResult:
-    if remote:
-        preflight = _remote_mutation_preflight(
-            action="branch-delete",
-            mutation="delete-remote-branch",
-        )
-        if preflight is not None:
-            return preflight
-        command = ["git", "push", "origin", "--delete", branch]
+    with workspace_mutation_lock(Path("."), "branch_delete"):
+        if remote:
+            preflight = _remote_mutation_preflight(
+                action="branch-delete",
+                mutation="delete-remote-branch",
+            )
+            if preflight is not None:
+                return preflight
+            command = ["git", "push", "origin", "--delete", branch]
+            completed = _run(command)
+            return _result("branch-delete", command, completed, "Inspect local and remote branch state.")
+        command = ["git", "branch", "-D" if force else "-d", branch]
         completed = _run(command)
-        return _result("branch-delete", command, completed, "Inspect local and remote branch state.")
-    command = ["git", "branch", "-D" if force else "-d", branch]
-    completed = _run(command)
-    return _result("branch-delete", command, completed, "Inspect local branch state.")
+        return _result("branch-delete", command, completed, "Inspect local branch state.")
 
 
 def pr_wait_ci(
@@ -1222,6 +1228,28 @@ def pr_wait_ci(
 
 
 def pr_merge_safe(
+    pr_number: int,
+    *,
+    expected_head_sha: str = "",
+    main_branch: str = "main",
+    merge_method: str = "squash",
+    no_verify_main: bool = False,
+    merge_state_timeout_seconds: int = 60,
+    merge_state_poll_seconds: int = 5,
+) -> RepoActionResult:
+    with workspace_mutation_lock(Path("."), "pr_merge_safe"):
+        return _pr_merge_safe_unlocked(
+            pr_number,
+            expected_head_sha=expected_head_sha,
+            main_branch=main_branch,
+            merge_method=merge_method,
+            no_verify_main=no_verify_main,
+            merge_state_timeout_seconds=merge_state_timeout_seconds,
+            merge_state_poll_seconds=merge_state_poll_seconds,
+        )
+
+
+def _pr_merge_safe_unlocked(
     pr_number: int,
     *,
     expected_head_sha: str = "",
@@ -1608,6 +1636,16 @@ def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionR
             "admin_refresh_skipped_refresh_only_pr",
         )
 
+    with workspace_mutation_lock(Path("."), "admin_refresh_pr"):
+        return _admin_refresh_pr_unlocked(after_pr, main_branch=main_branch, ws=ws)
+
+
+def _admin_refresh_pr_unlocked(
+    after_pr: int,
+    *,
+    main_branch: str = "main",
+    ws: Workspace,
+) -> RepoActionResult:
     monitor = guard_branch(
         command_kind="admin-refresh-pr",
         required_branch=main_branch,

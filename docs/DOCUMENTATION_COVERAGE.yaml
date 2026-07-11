@@ -324,6 +324,33 @@ rules:
     - 'Declared exception modules: 2'
     - Path Literal Classifications
     - Repo Identity Literals
+- id: mutation-lock-coverage-audit
+  description: Mutation-lock coverage audit must remain visible and standard-gated
+    while separating blocking core runtime mutators from non-blocking false positives.
+  documents:
+  - path: README.md
+    terms:
+    - Mutation-lock coverage audit
+    - agentic-kit audit-mutation-lock-coverage
+    - standard gate suite
+    - core runtime git or GitHub mutators
+    - non-blocking review data
+    - docs/architecture/evidence/mutation-lock-coverage-2026-07-11-post-lc3.md
+  - path: docs/TEST_GATES.md
+    terms:
+    - Mutation Lock Coverage Gate
+    - agentic-kit audit-mutation-lock-coverage
+    - blocking and non-blocking groups
+    - unlocked core runtime git/GitHub mutators block
+    - delegated runtime references remain visible but non-blocking
+    - Same-PID nested lock acquisition
+  - path: docs/architecture/evidence/mutation-lock-coverage-2026-07-11-post-lc3.md
+    terms:
+    - Mutation Lock Coverage Evidence (Post-LC3)
+    - 'Command: `./.venv/bin/agentic-kit audit-mutation-lock-coverage --json`'
+    - 'Status: PASS'
+    - 'Blocking findings: 0'
+    - LC2 same-PID reentrancy decision
 - id: command-manifest-entrypoint-coverage
   description: Command manifest entrypoints must keep ACK headers, chat refreshers,
     and initial prompt sources synchronized with the generated command manifest.

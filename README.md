@@ -472,9 +472,7 @@ The hard checks currently cover version mismatches, stale current-state wording,
 
 `agentic-kit doc-mesh-audit --report doc-mesh-report.json` writes a machine-readable JSON report for CI, review tools, or later workflow evidence.
 
-`agentic-kit doc-mesh-audit --repair-plan doc-mesh-repair-plan.json` writes a bounded repair plan. `agentic-kit doc-mesh-repair` currently applies only one safe automatic repair class: inserting missing historical-source-of-truth banners into known historical-plan documents. Version, DOI, stale-state, and missing-document findings remain manual review items.
-
-Future repair tools should stay bounded to mechanical edits and must not rewrite semantics.
+`agentic-kit doc-mesh-audit --repair-plan doc-mesh-repair-plan.json` writes a bounded repair plan. `agentic-kit doc-mesh-repair` only inserts missing historical-source-of-truth banners; version, DOI, stale-state, and missing-document findings remain manual review items.
 
 ## Status current-state audit
 
@@ -482,11 +480,17 @@ Future repair tools should stay bounded to mechanical edits and must not rewrite
 
 ## Path literal audit
 
-`agentic-kit audit-path-literals` is report-only by default and exits 0 so reference
-and message literals stay visible. `agentic-kit audit-path-literals --enforce-active`
-is part of the standard gate suite and blocks active path or repository identity
-literals outside the workspace resolver and declared exceptions. Historical evidence
-is recorded in `docs/architecture/evidence/path-literal-audit-2026-07-04.md`.
+`agentic-kit audit-path-literals` is report-only. `agentic-kit audit-path-literals --enforce-active`
+is in the standard gate suite and blocks active path or repository identity
+literals outside the resolver and declared exceptions. Evidence:
+`docs/architecture/evidence/path-literal-audit-2026-07-04.md`.
+
+## Mutation-lock coverage audit
+
+`agentic-kit audit-mutation-lock-coverage` is in the standard gate suite. It
+hard-blocks unlocked core runtime git or GitHub mutators; filesystem, metadata,
+report-writer, and delegated runtime findings remain non-blocking review data. Evidence:
+`docs/architecture/evidence/mutation-lock-coverage-2026-07-11-post-lc3.md`.
 
 ## Documentation system audit
 

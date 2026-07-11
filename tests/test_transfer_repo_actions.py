@@ -4,6 +4,7 @@ import json
 import subprocess
 import sys
 import yaml
+from contextlib import contextmanager
 
 from typer.testing import CliRunner
 
@@ -1153,6 +1154,97 @@ def test_branch_switch_refuses_branch_drift_after_pull(monkeypatch):
     assert result.result_status == "FAIL"
     assert "current branch drifted" in result.stderr
     assert result.next_action == "Inspect branch drift before continuing."
+
+
+def test_lc3_branch_lifecycle_mutators_acquire_workspace_mutation_lock(monkeypatch):
+    events: list[str] = []
+
+    class PassingMonitor:
+        decision = transfer_repo_actions.MonitorDecision.CONTINUE
+        actual_branch = "feature/demo"
+        required_branch = "feature/demo"
+        reason = "test_monitor_pass"
+
+    @contextmanager
+    def fake_lock(root: Path, command: str):
+        events.append(f"enter:{command}:{root.as_posix()}")
+        try:
+            yield root / ".agentic" / "tmp" / "workspace.lock"
+        finally:
+            events.append(f"exit:{command}:{root.as_posix()}")
+
+    def fake_guard_branch(**kwargs):
+        return PassingMonitor()
+
+    def fake_run(command, cwd=None):
+        if command == ["git", "switch", "feature/demo"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "pull", "--ff-only", "origin", "feature/demo"]:
+            return subprocess.CompletedProcess(command, 0, "Already up to date.\n", "")
+        if command == ["git", "branch", "-d", "feature/delete-me"]:
+            return subprocess.CompletedProcess(command, 0, "deleted\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "workspace_mutation_lock", fake_lock)
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    assert branch_switch("feature/demo").returncode == 0
+    assert pull_current().returncode == 0
+    assert branch_delete("feature/delete-me").returncode == 0
+
+    assert events == [
+        "enter:branch_switch:.",
+        "exit:branch_switch:.",
+        "enter:pull_current:.",
+        "exit:pull_current:.",
+        "enter:branch_delete:.",
+        "exit:branch_delete:.",
+    ]
+
+
+def test_lc3_pr_orchestrators_acquire_workspace_mutation_lock(monkeypatch):
+    events: list[str] = []
+
+    @contextmanager
+    def fake_lock(root: Path, command: str):
+        events.append(f"enter:{command}:{root.as_posix()}")
+        try:
+            yield root / ".agentic" / "tmp" / "workspace.lock"
+        finally:
+            events.append(f"exit:{command}:{root.as_posix()}")
+
+    def fake_pr_create_unlocked(**kwargs):
+        return transfer_repo_actions.RepoActionResult("pr-create", "PASS", 0, ["gh", "pr", "create"], "", "", "next")
+
+    def fake_pr_merge_safe_unlocked(pr_number, **kwargs):
+        assert pr_number == 123
+        return transfer_repo_actions.RepoActionResult("pr-merge-safe", "PASS", 0, ["gh", "pr", "merge"], "", "", "next")
+
+    def fake_admin_refresh_pr_unlocked(after_pr, **kwargs):
+        assert after_pr == 123
+        return transfer_repo_actions.RepoActionResult("admin-refresh-pr", "PASS", 0, ["admin-refresh-pr"], "", "", "next")
+
+    monkeypatch.setattr(transfer_repo_actions, "workspace_mutation_lock", fake_lock)
+    monkeypatch.setattr(transfer_repo_actions, "_pr_create_unlocked", fake_pr_create_unlocked)
+    monkeypatch.setattr(transfer_repo_actions, "_pr_merge_safe_unlocked", fake_pr_merge_safe_unlocked)
+    monkeypatch.setattr(transfer_repo_actions, "_admin_refresh_pr_unlocked", fake_admin_refresh_pr_unlocked)
+    monkeypatch.setattr(transfer_repo_actions, "_is_refresh_only_pr", lambda after_pr, ws=None: False)
+
+    assert transfer_repo_actions.pr_create(base="main", head="feature/demo", title="Title", body="Body").returncode == 0
+    assert transfer_repo_actions.pr_merge_safe(123, expected_head_sha="a" * 40).returncode == 0
+    assert transfer_repo_actions.admin_refresh_pr(123).returncode == 0
+
+    assert events == [
+        "enter:pr_create:.",
+        "exit:pr_create:.",
+        "enter:pr_merge_safe:.",
+        "exit:pr_merge_safe:.",
+        "enter:admin_refresh_pr:.",
+        "exit:admin_refresh_pr:.",
+    ]
 
 
 def test_push_current_refuses_branch_drift_after_push(monkeypatch):
