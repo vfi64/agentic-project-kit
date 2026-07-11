@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-11T21:39:56.985576+00:00",
+  "generated_at_utc": "2026-07-11T22:50:37.823052+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,14 +56,14 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1849-handoff-refresh",
+    "branch": "docs/post-pr1852-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "3cb150c70a16a50ed6f7d1bf6270d37bff46758c",
+    "head": "ef88a86fb3920a17e1a75139ed59611ff51f5eaf",
     "head_matches_origin_main": true,
-    "head_short": "3cb150c7",
+    "head_short": "ef88a86f",
     "local_path": "cd /path/to/",
-    "origin_main": "3cb150c70a16a50ed6f7d1bf6270d37bff46758c",
-    "origin_main_short": "3cb150c7",
+    "origin_main": "ef88a86fb3920a17e1a75139ed59611ff51f5eaf",
+    "origin_main_short": "ef88a86f",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -149,15 +149,6 @@
         "id": "master-implementation-q",
         "status": "active",
         "summary": "Master Implementation Q2 rest sequence"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "doc-lifecycle-signals",
-        "status": "planned",
-        "summary": "Add documentation lifecycle obsolescence signals"
       },
       {
         "files": [
