@@ -562,7 +562,7 @@ plans:
   - Generated Markdown is reproducible from the manifest.
   - audit-command-manifest is part of the standard gates.
 - id: command-for-selector
-  status: active
+  status: done
   title: Deterministic command selector
   depends_on:
   - command-manifest-hardening
@@ -570,6 +570,9 @@ plans:
     wrappers deterministically.
   source_files:
   - docs/planning/MASTER_IMPLEMENTATION_Q.md
+  evidence:
+  - tests/test_command_selector.py
+  - agentic-kit command-for --raw "git push origin main" --json
   acceptance:
   - command-for maps raw commands and task tags without mutating the manifest.
 - id: instruction-lint-gate
