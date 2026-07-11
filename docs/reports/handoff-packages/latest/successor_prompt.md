@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1813-handoff-refresh`
+- branch: `docs/post-pr1815-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -260,15 +260,6 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "chat-entrypoint-contract",
-      "status": "planned",
-      "summary": "Chat entrypoint manifest contract"
-    },
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
       "id": "governance-doc-backfill",
       "status": "active",
       "summary": "Backfill reviewed governance document registry entries"
@@ -419,14 +410,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1813-handoff-refresh",
+    "branch": "docs/post-pr1815-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "c9a26f189a772f7a2e0d446990824a1813bda6d2",
+    "head": "c340dade608d705156a4355f204f1f2ee5109bc9",
     "head_matches_origin_main": true,
-    "head_short": "c9a26f18",
+    "head_short": "c340dade",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "c9a26f189a772f7a2e0d446990824a1813bda6d2",
-    "origin_main_short": "c9a26f18",
+    "origin_main": "c340dade608d705156a4355f204f1f2ee5109bc9",
+    "origin_main_short": "c340dade",
     "worktree_clean": false
   }
 }
@@ -451,11 +442,16 @@ Wenn der Bootstrap grün ist:
 2. Wenn der Arbeitsbaum dirty ist: nur explizite WIP-Dateien prüfen und abschließen oder sauber dokumentieren.
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` bearbeiten.
 
+Command manifest entrypoint:
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 9a377188be24). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 9a377188be24. Consult `agentic-kit command-for` before proposing commands.
+- Before proposing ANY command run/consult `agentic-kit command-for`.
+- raw git/gh commands with a mapped wrapper are rejected by instruction lint.
+
 Command reference contract:
 - Read `docs/reference/agentic-kit-commands.json` before composing agentic-kit commands.
 - Read `docs/reference/AGENTIC_KIT_COMMANDS.md` before composing agentic-kit commands.
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: a1c57d2d8632f5133c5b099c9c3e776b32e851d97b864f9b3ef15c07aa299fa9
-- docs/reference/agentic-kit-commands.json: 1bcebd7595dbf92af0907370117f70979fe699d99c000fe6e5d25c2feddd2c14
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 6b71cbc8a610c3e3ac198a853b57812d3a61d782df45c099c0267be1e3c7904f
+- docs/reference/agentic-kit-commands.json: 65a33bb85ca9978953128602dbd4d470fe62bdbc8dccbc906a769b1617185e9e

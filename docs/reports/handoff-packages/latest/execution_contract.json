@@ -1,11 +1,13 @@
 {
   "command_reference": {
+    "ack": "COMMAND_MANIFEST_ACK 9a377188be24",
     "json": "docs/reference/agentic-kit-commands.json",
+    "manifest_sha": "9a377188be24",
     "markdown": "docs/reference/AGENTIC_KIT_COMMANDS.md",
     "must_not_reconstruct_commands_from_memory": true,
     "source_hashes": {
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "a1c57d2d8632f5133c5b099c9c3e776b32e851d97b864f9b3ef15c07aa299fa9",
-      "docs/reference/agentic-kit-commands.json": "1bcebd7595dbf92af0907370117f70979fe699d99c000fe6e5d25c2feddd2c14"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "6b71cbc8a610c3e3ac198a853b57812d3a61d782df45c099c0267be1e3c7904f",
+      "docs/reference/agentic-kit-commands.json": "65a33bb85ca9978953128602dbd4d470fe62bdbc8dccbc906a769b1617185e9e"
     }
   },
   "current_state_contract": {
@@ -119,15 +121,6 @@
         "id": "master-implementation-q",
         "status": "active",
         "summary": "Master Implementation Q2 rest sequence"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "chat-entrypoint-contract",
-        "status": "planned",
-        "summary": "Chat entrypoint manifest contract"
       },
       {
         "files": [
@@ -285,13 +278,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1813-handoff-refresh",
+      "branch": "docs/post-pr1815-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "c9a26f189a772f7a2e0d446990824a1813bda6d2",
+      "head": "c340dade608d705156a4355f204f1f2ee5109bc9",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/agentic-project-kit",
-      "origin_main": "c9a26f189a772f7a2e0d446990824a1813bda6d2",
+      "origin_main": "c340dade608d705156a4355f204f1f2ee5109bc9",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -368,13 +361,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1813-handoff-refresh",
+    "branch": "docs/post-pr1815-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "c9a26f189a772f7a2e0d446990824a1813bda6d2",
+    "head": "c340dade608d705156a4355f204f1f2ee5109bc9",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "c9a26f189a772f7a2e0d446990824a1813bda6d2",
+    "origin_main": "c340dade608d705156a4355f204f1f2ee5109bc9",
     "worktree_clean": false
   },
   "rules": [
@@ -597,8 +590,8 @@
   ],
   "schema_version": 1,
   "source_hashes": {
-    "docs/reference/AGENTIC_KIT_COMMANDS.md": "a1c57d2d8632f5133c5b099c9c3e776b32e851d97b864f9b3ef15c07aa299fa9",
-    "docs/reference/agentic-kit-commands.json": "1bcebd7595dbf92af0907370117f70979fe699d99c000fe6e5d25c2feddd2c14"
+    "docs/reference/AGENTIC_KIT_COMMANDS.md": "6b71cbc8a610c3e3ac198a853b57812d3a61d782df45c099c0267be1e3c7904f",
+    "docs/reference/agentic-kit-commands.json": "65a33bb85ca9978953128602dbd4d470fe62bdbc8dccbc906a769b1617185e9e"
   },
   "validation": {
     "path": ".agentic/successor_handoff_package/validation_report.json",
