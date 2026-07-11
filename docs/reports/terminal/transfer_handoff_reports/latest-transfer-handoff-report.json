@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-07-10T21:01:47.573734+00:00",
+    "created_at_utc": "2026-07-11T22:39:24.416277+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -95,7 +95,7 @@
       "status": "active"
     },
     "command_reference": {
-      "command_count": 217,
+      "command_count": 222,
       "generated_by": "scripts/generate_agentic_kit_command_reference.py",
       "important_wrappers": [
         {
@@ -291,11 +291,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-07-10T21:01:47.776595+00:00",
+    "generated_at_utc": "2026-07-11T22:39:24.647707+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/p4b-resolver-sweep",
-      "head": "9cf180783d11c8d650f830806174943a4ec11cdc",
+      "branch": "codex/l2-doc-lifecycle-signals",
+      "head": "b30ce66fc139f0c8be9eebe5e8a8cce6b420b00b",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -355,8 +355,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "3523be071e72434ad25c6c6283a801ffdb194ed1ecb43c4da720522cfde89cbb",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "e9c8f9fee2165ebd71ccd9ffa649acb5af68a05aaf6ec6293b927f74facf73a2",
-      "docs/reference/agentic-kit-commands.json": "ecae8ecbcdc93567f96ab0ad78954473db54a78487225e019d254044dee19d34"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "97f37a04a1f2356d40aaa841ef39805901c4275cb5e981960f4a0c1a4fabed6b",
+      "docs/reference/agentic-kit-commands.json": "8ca92eade8b4c23d27702ec9d0a136dccf7df5abf8bd49832b002257493e3aa7"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -396,11 +396,11 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "1fc4e1b1dbf3c1a2dec46b08156b417ad6aa5e041254cc22266d596950e97b42"
+        "sha256": "094502d49a1bb0670ca037a3b883db66386dbb8d3e0f9375ae483105738f54c8"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "8c541e2c539fc5995517f3fe29dd7a75a45c395b4584f909f6e4c97f667e2ef0"
+        "sha256": "965f72f902315da5608c921cf7e39437b25bbf90c21f89ad7b0ff78493297a81"
       }
     ],
     "canonical_cli_usage": {
@@ -901,12 +901,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/p4b-resolver-sweep",
+      "branch": "codex/l2-doc-lifecycle-signals",
       "dirty_status": "",
-      "head": "9cf180783d11c8d650f830806174943a4ec11cdc",
-      "head_matches_upstream": false,
-      "upstream": "",
-      "upstream_head": ""
+      "head": "b30ce66fc139f0c8be9eebe5e8a8cce6b420b00b",
+      "head_matches_upstream": true,
+      "upstream": "origin/codex/l2-doc-lifecycle-signals",
+      "upstream_head": "b30ce66fc139f0c8be9eebe5e8a8cce6b420b00b"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -968,11 +968,11 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "1fc4e1b1dbf3c1a2dec46b08156b417ad6aa5e041254cc22266d596950e97b42"
+        "sha256": "094502d49a1bb0670ca037a3b883db66386dbb8d3e0f9375ae483105738f54c8"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "8c541e2c539fc5995517f3fe29dd7a75a45c395b4584f909f6e4c97f667e2ef0"
+        "sha256": "965f72f902315da5608c921cf7e39437b25bbf90c21f89ad7b0ff78493297a81"
       }
     ],
     "canonical_cli_usage": {
@@ -1473,12 +1473,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/p4b-resolver-sweep",
+      "branch": "codex/l2-doc-lifecycle-signals",
       "dirty_status": "",
-      "head": "9cf180783d11c8d650f830806174943a4ec11cdc",
-      "head_matches_upstream": false,
-      "upstream": "",
-      "upstream_head": ""
+      "head": "b30ce66fc139f0c8be9eebe5e8a8cce6b420b00b",
+      "head_matches_upstream": true,
+      "upstream": "origin/codex/l2-doc-lifecycle-signals",
+      "upstream_head": "b30ce66fc139f0c8be9eebe5e8a8cce6b420b00b"
     },
     "schema_version": 1,
     "terminal_block_rules": {
