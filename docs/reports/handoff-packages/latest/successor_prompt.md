@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1805-handoff-refresh`
+- branch: `docs/post-pr1807-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -154,7 +154,7 @@ Wenn der Bootstrap grün ist:
       ],
       "id": "p5b-resolver-aliases",
       "status": "planned",
-      "summary": "Route self-hosted accesses through resolver-backed aliases for P5"
+      "summary": "Enforce active path and identity literal classes for P5"
     },
     {
       "files": [
@@ -163,7 +163,7 @@ Wenn der Bootstrap grün ist:
       ],
       "id": "p5c-physical-migration",
       "status": "planned",
-      "summary": "Optionally migrate physical paths after resolver decoupling for P5"
+      "summary": "Plan physical migration after legacy profile deprecation for P5"
     },
     {
       "files": [
@@ -253,7 +253,7 @@ Wenn der Bootstrap grün ist:
       ],
       "id": "master-implementation-q",
       "status": "active",
-      "summary": "Master Implementation Q sequence"
+      "summary": "Master Implementation Q2 rest sequence"
     },
     {
       "files": [
@@ -437,14 +437,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1805-handoff-refresh",
+    "branch": "docs/post-pr1807-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "323e6ea5219c9f6ddfc1c9e6af5a9bcd4377aea3",
+    "head": "046a6a5a51cfda7af6041183925e0de9dea270f3",
     "head_matches_origin_main": true,
-    "head_short": "323e6ea5",
+    "head_short": "046a6a5a",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "323e6ea5219c9f6ddfc1c9e6af5a9bcd4377aea3",
-    "origin_main_short": "323e6ea5",
+    "origin_main": "046a6a5a51cfda7af6041183925e0de9dea270f3",
+    "origin_main_short": "046a6a5a",
     "worktree_clean": false
   }
 }

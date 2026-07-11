@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `323e6ea5219c9f6ddfc1c9e6af5a9bcd4377aea3` (`323e6ea5`)
-- Handoff freshness marker: `323e6ea5`
-- Branch at generation: `docs/post-pr1805-handoff-refresh`
+- HEAD: `046a6a5a51cfda7af6041183925e0de9dea270f3` (`046a6a5a`)
+- Handoff freshness marker: `046a6a5a`
+- Branch at generation: `docs/post-pr1807-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -71,8 +71,8 @@ Wenn der Bootstrap grün ist:
 
 Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 
-- `p5b-resolver-aliases` (planned): Route self-hosted accesses through resolver-backed aliases for P5
-- `p5c-physical-migration` (planned): Optionally migrate physical paths after resolver decoupling for P5
+- `p5b-resolver-aliases` (planned): Enforce active path and identity literal classes for P5
+- `p5c-physical-migration` (planned): Plan physical migration after legacy profile deprecation for P5
 - `p5d-legacy-path-deprecation` (planned): Deprecate legacy top-level paths in line with legacy-profile removal for P5
 - `p6-gui-project-selection-and-ci-recipe` (planned): Add GUI project selection and harden CI recipe follow-ups for P6
 - `v1-0-milestone` (planned): Reach the 1.0 operating-layer stability milestone for unphased
@@ -82,7 +82,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 - `release-and-doi-governance` (planned): Keep release metadata, publish, and DOI closeout behind authoritative commands for pre-GUI
 - `gui-gatekeeper-workbench` (planned): Build the local gatekeeper/workbench GUI over deterministic actions for GUI
 - `documentation-artifact-governance-os` (planned): Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance
-- `master-implementation-q` (active): Master Implementation Q sequence
+- `master-implementation-q` (active): Master Implementation Q2 rest sequence
 - `command-for-selector` (active): Deterministic command selector
 - `instruction-lint-gate` (planned): Instruction lint gate
 - `chat-entrypoint-contract` (planned): Chat entrypoint manifest contract

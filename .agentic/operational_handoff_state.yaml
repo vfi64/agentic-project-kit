@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 323e6ea5219c9f6ddfc1c9e6af5a9bcd4377aea3
-  short: 323e6ea5
-  subject: Add self-hosting workspace manifest (#1805)
+  full: 046a6a5a51cfda7af6041183925e0de9dea270f3
+  short: 046a6a5a
+  subject: Update Q2 master implementation plan (#1807)
 last_substantive_work_state:
-  full: 323e6ea5219c9f6ddfc1c9e6af5a9bcd4377aea3
-  short: 323e6ea5
-  subject: Add self-hosting workspace manifest (#1805)
+  full: 046a6a5a51cfda7af6041183925e0de9dea270f3
+  short: 046a6a5a
+  subject: Update Q2 master implementation plan (#1807)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
