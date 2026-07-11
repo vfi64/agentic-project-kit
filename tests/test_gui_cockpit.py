@@ -161,6 +161,12 @@ class _FakeTkWidget:
     def update_idletasks(self) -> None:
         return
 
+    def mainloop(self) -> None:
+        return
+
+    def clipboard_get(self) -> str:
+        return str(self.config.get("clipboard", ""))
+
     def clipboard_clear(self) -> None:
         self.config["clipboard"] = ""
 
@@ -227,6 +233,7 @@ class _FakeRoot(_FakeTkWidget):
 
 
 def _install_fake_tk(monkeypatch) -> None:
+    filedialog = types.SimpleNamespace(askdirectory=lambda **_kwargs: "")
     ttk = types.SimpleNamespace(
         Button=_FakeTkWidget,
         Combobox=_FakeTkWidget,
@@ -246,6 +253,7 @@ def _install_fake_tk(monkeypatch) -> None:
         Listbox=_FakeTkWidget,
         StringVar=_FakeStringVar,
         ttk=ttk,
+        filedialog=filedialog,
         BOTH="both",
         X="x",
         Y="y",
@@ -266,6 +274,7 @@ def _install_fake_tk(monkeypatch) -> None:
     )
     monkeypatch.setitem(sys.modules, "tkinter", fake_tk)
     monkeypatch.setitem(sys.modules, "tkinter.ttk", ttk)
+    monkeypatch.setitem(sys.modules, "tkinter.filedialog", filedialog)
 
 
 def _mode_option(gui: CockpitGui, mode_id: str) -> str:
@@ -279,6 +288,7 @@ def _build_headless_cockpit(
     communication_mode: str,
     access_level: str,
     panel_state: dict[str, bool] | None = None,
+    project_root: Path | None = None,
 ) -> CockpitGui:
     _install_fake_tk(monkeypatch)
     monkeypatch.setattr(CockpitHeaderMixin, "_start_from_ref_options", lambda _self: ("latest main",))
@@ -292,7 +302,7 @@ def _build_headless_cockpit(
 
     monkeypatch.setattr("agentic_project_kit.gui_cockpit.write_panel_state", write_state)
     root = _FakeRoot()
-    gui = CockpitGui(root, project_root=Path("."))
+    gui = CockpitGui(root, project_root=project_root or Path("."))
     gui.mode_var.set(_mode_option(gui, communication_mode))
     gui.update_mode_explanation()
     gui.access_level_var.set(access_level)
@@ -328,6 +338,22 @@ def _visibility_matrix_expected() -> dict[tuple[str, str], dict[str, bool]]:
     return expected
 
 
+def _init_git_repo(path: Path, *, branch: str = "main") -> Path:
+    path.mkdir(parents=True, exist_ok=True)
+    initialized = subprocess.run(
+        ["git", "init", "-b", branch],
+        cwd=path,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if initialized.returncode != 0:
+        subprocess.run(["git", "init"], cwd=path, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+        subprocess.run(["git", "checkout", "-B", branch], cwd=path, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+    return path
+
+
 def test_visibility_matrix_covers_all_nine_combinations() -> None:
     expected = _visibility_matrix_expected()
 
@@ -344,6 +370,78 @@ def test_gui_builds_headless_for_every_mode_and_level(monkeypatch) -> None:
 
             assert gui.basic_view.communication_mode == mode
             assert gui.basic_view.access_level == level
+
+
+class _AgenticCommandHarness(CockpitTaskMixin):
+    def __init__(self, project_root: Path) -> None:
+        self.project_root = project_root
+        self.busy: list[tuple[str, bool]] = []
+
+    def _set_busy(self, text: str, *, running: bool) -> None:
+        self.busy.append((text, running))
+
+
+def test_bridge_uses_project_root_cwd(monkeypatch, tmp_path: Path) -> None:
+    calls: list[dict[str, object]] = []
+
+    def fake_run(command: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+        calls.append({"command": command, "cwd": kwargs.get("cwd")})
+        return subprocess.CompletedProcess(command, 0, "{}", "")
+
+    monkeypatch.setattr("agentic_project_kit.gui_cockpit_task.subprocess.run", fake_run)
+    harness = _AgenticCommandHarness(tmp_path)
+
+    result = harness._agentic_command("workflow", "state", "--json")
+
+    assert result.returncode == 0
+    assert calls == [{"command": ["agentic-kit", "workflow", "state", "--json"], "cwd": tmp_path}]
+    assert harness.busy[-1] == ("Done", False)
+
+
+def test_open_project_validates_git_and_updates_state(monkeypatch, tmp_path: Path) -> None:
+    source = _init_git_repo(tmp_path / "source", branch="main")
+    target = _init_git_repo(tmp_path / "target", branch="feature-target")
+    manifest = target / ".agentic" / "config.yaml"
+    manifest.parent.mkdir(parents=True)
+    manifest.write_text(
+        "kit_schema_version: 1\n"
+        "project:\n"
+        "  name: target\n"
+        "  type: generic\n"
+        "profile: generic\n",
+        encoding="utf-8",
+    )
+    gui = _build_headless_cockpit(
+        monkeypatch,
+        communication_mode="file_transfer",
+        access_level="basic",
+        project_root=source,
+    )
+    non_repo = tmp_path / "not-repo"
+    non_repo.mkdir()
+
+    assert gui.switch_project_root(non_repo) is False
+    assert gui.project_root == source.resolve()
+    assert "not a git repository" in gui._activity_transcript()
+
+    assert gui.switch_project_root(target) is True
+    assert gui.project_root == target.resolve()
+    assert target.name in str(gui.root.config["title"])
+    assert "feature-target" in str(gui.root.config["title"])
+    assert gui.project_status_var.get() == "target | feature-target | initialized"
+
+
+def test_title_shows_project_and_branch(monkeypatch, tmp_path: Path) -> None:
+    project = _init_git_repo(tmp_path / "project-alpha", branch="branch-alpha")
+
+    gui = _build_headless_cockpit(
+        monkeypatch,
+        communication_mode="file_transfer",
+        access_level="basic",
+        project_root=project,
+    )
+
+    assert gui.root.config["title"] == f"{HEADER_TEXT} - project-alpha - branch-alpha"
 
 
 def test_visibility_matrix_core_groups_always_visible(monkeypatch) -> None:
@@ -693,6 +791,21 @@ def test_format_action_result_preserves_blocked_action_message() -> None:
 
 def test_gui_module_main_is_importable_without_starting_tk() -> None:
     assert callable(main)
+
+
+def test_gui_module_main_accepts_root_argument(monkeypatch, tmp_path: Path) -> None:
+    _install_fake_tk(monkeypatch)
+    calls: list[Path | None] = []
+
+    class FakeCockpitGui:
+        def __init__(self, _root: object, project_root: Path | None = None) -> None:
+            calls.append(project_root)
+
+    monkeypatch.setattr("agentic_project_kit.gui_cockpit.CockpitGui", FakeCockpitGui)
+
+    main(["--root", str(tmp_path)])
+
+    assert calls == [tmp_path]
 
 
 def test_basic_cockpit_window_uses_option_menu_traffic_light_and_tooltips() -> None:

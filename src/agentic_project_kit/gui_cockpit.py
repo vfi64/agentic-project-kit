@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import argparse
 from pathlib import Path
+import subprocess
 from typing import Any
 
 from agentic_project_kit.gui_action_views import (
@@ -36,6 +38,7 @@ from agentic_project_kit.gui_cockpit_task import CockpitTaskMixin
 from agentic_project_kit.gui_panel_state import read_panel_state, write_panel_state
 from agentic_project_kit.gui_tk_widgets import maximize_root_window
 from agentic_project_kit.gui_viewmodel import build_basic_cockpit_view_model
+from agentic_project_kit.workspace_adopt import analyze_workspace_adoption
 
 
 GUI_GROUP_IDS = (
@@ -70,13 +73,11 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
         self.project_root = (project_root or Path(".")).resolve()
         self.activity_log = ActivityLog()
         self.gui_group_frames: dict[str, Any | None] = dict.fromkeys(GUI_GROUP_IDS)
-        self.panel_expanded_state = read_panel_state(self.project_root)
-        self.basic_view = build_basic_cockpit_view_model(self.project_root)
-        self.actions = ordered_action_views(
-            build_gui_action_views(access_level=self.basic_view.access_level)
-        )
-        self.recovery_action_id = recommended_recovery_action_id(self.basic_view)
-        self.root.title(HEADER_TEXT)
+        self.panel_expanded_state: dict[str, bool] = {}
+        self.actions: tuple[GuiActionView, ...] = ()
+        self.recovery_action_id = RECOVERY_ACTION_ID
+        self._reload_project_view_state()
+        self.root.title(self._window_title())
         maximize_root_window(self.root, fallback_geometry=THEME.window_geometry)
         if hasattr(self.root, "minsize"):
             self.root.minsize(1040, 680)
@@ -90,6 +91,8 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
         self.work_discard_confirm_button: Any | None = None
         self.release_confirm_button: Any | None = None
         self.start_from_ref_value = tk.StringVar(value="latest main")
+        self.start_from_ref_picker: Any | None = None
+        self.project_status_var = tk.StringVar(value=self._project_status_text())
         self.release_version_var = tk.StringVar(value="")
 
         shell = tk.Frame(
@@ -114,6 +117,7 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
         )
         sidebar.pack(side=tk.LEFT, fill=tk.Y)
         sidebar.pack_propagate(False)
+        self.sidebar = sidebar
 
         separator = ttk.Separator(body, orient=tk.VERTICAL)
         separator.pack(side=tk.LEFT, fill=tk.Y)
@@ -147,6 +151,116 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
         self._build_main_content()
 
         self.write_output(format_basic_cockpit_summary(self.basic_view) + "\n")
+
+    def _reload_project_view_state(
+        self,
+        *,
+        communication_mode: str | None = None,
+        access_level: str | None = None,
+    ) -> None:
+        try:
+            self.panel_expanded_state = read_panel_state(self.project_root)
+        except RuntimeError:
+            self.panel_expanded_state = {}
+        self.basic_view = build_basic_cockpit_view_model(
+            self.project_root,
+            communication_mode=communication_mode,
+            access_level=access_level,
+        )
+        self.actions = ordered_action_views(
+            build_gui_action_views(access_level=self.basic_view.access_level)
+        )
+        self.recovery_action_id = recommended_recovery_action_id(self.basic_view)
+
+    def _manifest_status(self) -> str:
+        try:
+            report = analyze_workspace_adoption(self.project_root)
+        except RuntimeError:
+            return "invalid"
+        return {
+            "already_initialized": "initialized",
+            "ready_for_workspace_init": "ready-for-init",
+            "foreign_agentic_directory": "foreign",
+            "invalid_workspace_manifest": "invalid",
+        }.get(report.agentic.status, report.agentic.status.replace("_", "-"))
+
+    def _project_branch_label(self) -> str:
+        try:
+            completed = subprocess.run(
+                ["git", "branch", "--show-current"],
+                cwd=self.project_root,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+        except OSError:
+            return "unknown"
+        branch = completed.stdout.strip() if completed.returncode == 0 else ""
+        return branch or "detached"
+
+    def _project_status_text(self) -> str:
+        return f"{self.project_root.name} | {self._project_branch_label()} | {self._manifest_status()}"
+
+    def _window_title(self) -> str:
+        return f"{HEADER_TEXT} - {self.project_root.name} - {self._project_branch_label()}"
+
+    def _update_project_chrome(self) -> None:
+        self.root.title(self._window_title())
+        if hasattr(self, "project_status_var"):
+            self.project_status_var.set(self._project_status_text())
+
+    def _is_git_repository(self, path: Path) -> bool:
+        try:
+            completed = subprocess.run(
+                ["git", "rev-parse", "--show-toplevel"],
+                cwd=path,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+        except OSError:
+            return False
+        return completed.returncode == 0
+
+    def open_project(self) -> None:
+        from tkinter import filedialog
+
+        selected = filedialog.askdirectory(
+            parent=self.root,
+            initialdir=str(self.project_root),
+            title="Open project",
+        )
+        if not selected:
+            return
+        self.switch_project_root(Path(selected))
+
+    def switch_project_root(self, path: Path | str) -> bool:
+        candidate = Path(path).expanduser().resolve()
+        if not candidate.exists() or not candidate.is_dir():
+            self.log_result("Open project", "BLOCKED", f"Folder does not exist: {candidate}")
+            return False
+        if not self._is_git_repository(candidate):
+            self.log_result("Open project", "BLOCKED", f"Selected folder is not a git repository: {candidate}")
+            return False
+        communication_mode = self.current_communication_mode() if hasattr(self, "mode_var") else None
+        access_level = self.basic_view.access_level
+        self.project_root = candidate
+        self._reload_project_view_state(communication_mode=communication_mode, access_level=access_level)
+        self._update_project_chrome()
+        if hasattr(self, "start_from_ref_value"):
+            self.start_from_ref_value.set("latest main")
+        if self.start_from_ref_picker is not None:
+            self.start_from_ref_picker.configure(values=self._start_from_ref_options())
+        if hasattr(self, "sidebar"):
+            self._rebuild_sidebar()
+        if hasattr(self, "main_area"):
+            self._rebuild_main_content()
+        status = self._manifest_status()
+        hint = " Foreign .agentic directory detected; workspace init is intentionally not run." if status == "foreign" else ""
+        self.log_result("Open project", "PASS", f"Project switched to {candidate}\nStatus: {status}.{hint}")
+        return True
 
     def _advanced_access_visible(self) -> bool:
         return self.basic_view.access_level in {"advanced", "maintainer"}
@@ -234,10 +348,18 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
             child.destroy()
         self._build_main_content()
 
+    def _rebuild_sidebar(self) -> None:
+        for child in self.sidebar.winfo_children():
+            child.destroy()
+        self._build_sidebar(self.sidebar)
 
-def main() -> None:
+
+def main(argv: list[str] | None = None) -> None:
     import tkinter as tk
 
+    parser = argparse.ArgumentParser(prog="agentic-kit-gui")
+    parser.add_argument("--root", default=".", help="Project root to open in the cockpit.")
+    args = parser.parse_args(argv)
     root = tk.Tk()
-    CockpitGui(root)
+    CockpitGui(root, project_root=Path(args.root))
     root.mainloop()

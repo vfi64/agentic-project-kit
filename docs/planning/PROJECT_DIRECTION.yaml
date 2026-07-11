@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1837
+  updated_after_pr: 1839
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1837
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1839
 strategy:
 - id: governed-operating-model
   status: active
@@ -265,14 +265,18 @@ roadmap:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: p6-gui-project-selection-and-ci-recipe
   phase: P6
-  status: planned
+  status: next
   title: Add GUI project selection and harden CI recipe follow-ups
+  rationale: P6a GUI project selection is implemented by PR 1839; P6b operating-layer
+    docs and CI recipe hardening remain the open completion slice.
   depends_on:
   - p5d-legacy-path-deprecation
   acceptance:
   - The GUI can operate on a selected workspace root.
   - Initial prompts are parameterized per workspace.
   - CI recipes are hardened after the workspace lifecycle commands exist.
+  evidence:
+  - PR 1839 (P6a GUI project selection)
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: v1-0-milestone

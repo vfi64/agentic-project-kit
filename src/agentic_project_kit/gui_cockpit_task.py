@@ -225,7 +225,10 @@ class CockpitTaskMixin:
         self.refresh_file_browser(write_status=False)
 
     def _file_browser_roots(self) -> tuple[Path, ...]:
-        workspace = load_workspace(self.project_root)
+        try:
+            workspace = load_workspace(self.project_root)
+        except RuntimeError:
+            return ()
         return (
             workspace.tmp(),
             workspace.handoff_dir(),
@@ -646,7 +649,7 @@ class CockpitTaskMixin:
 
     def show_initial_llm_prompt(self) -> None:
         self.log_action("Initial prompt")
-        completed = self._agentic_command("gui", "initial-llm-prompt", "--json")
+        completed = self._agentic_command("gui", "initial-llm-prompt", "--root", str(self.project_root), "--json")
         self.log_result("Initial prompt", self._completed_status(completed), completed.stdout or completed.stderr)
 
     def open_transfer_terminal(self) -> None:
