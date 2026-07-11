@@ -20,6 +20,14 @@ from agentic_project_kit.doc_mesh import (
     write_doc_mesh_repair_result,
 )
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_report, render_doc_lifecycle_report, write_doc_lifecycle_json_report
+from agentic_project_kit.doc_lifecycle_signals import (
+    build_doc_orphan_report,
+    build_review_after_suggestions,
+    render_doc_orphan_report,
+    render_review_after_suggestions,
+    review_after_suggestions_to_dict,
+    write_doc_orphan_json_report,
+)
 from agentic_project_kit.documentation_registry import (
     build_documentation_registry_summary,
     render_documentation_registry_summary,
@@ -43,6 +51,7 @@ def register_check_commands(app: typer.Typer) -> None:
     app.command("docs-registry")(docs_registry_command)
     app.command("doc-mesh-audit")(doc_mesh_audit_command)
     app.command("doc-lifecycle-audit")(doc_lifecycle_audit_command)
+    app.command("audit-doc-orphans")(audit_doc_orphans_command)
     app.command("doc-mesh-repair")(doc_mesh_repair_command)
     app.command("doctor")(doctor_command)
 
@@ -90,8 +99,20 @@ def doc_lifecycle_audit_command(
     project_root: Annotated[Path, typer.Option("--root")] = Path("."),
     report_path: Annotated[Path | None, typer.Option("--report")] = None,
     json_output: Annotated[bool, typer.Option("--json", help="Print JSON instead of text.")] = False,
+    suggest_review_after: Annotated[
+        bool,
+        typer.Option("--suggest-review-after", help="Print report-only review_after suggestions from version target prose."),
+    ] = False,
 ) -> None:
     """Audit lifecycle status headers for planning, roadmap, strategy, and idea documents."""
+    if suggest_review_after:
+        suggestions = build_review_after_suggestions(project_root.resolve())
+        if json_output:
+            typer.echo(json.dumps(review_after_suggestions_to_dict(suggestions), indent=2, sort_keys=True))
+        else:
+            console.print(render_review_after_suggestions(suggestions), markup=False)
+        return
+
     report = build_doc_lifecycle_report(project_root.resolve())
     if report_path is not None:
         write_doc_lifecycle_json_report(report, report_path)
@@ -101,6 +122,21 @@ def doc_lifecycle_audit_command(
         console.print(render_doc_lifecycle_report(report), markup=False)
     if not report.ok:
         raise typer.Exit(code=1)
+
+
+def audit_doc_orphans_command(
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    report_path: Annotated[Path | None, typer.Option("--report")] = None,
+    json_output: Annotated[bool, typer.Option("--json", help="Print JSON instead of text.")] = False,
+) -> None:
+    """Report registered documents without incoming repository references."""
+    report = build_doc_orphan_report(project_root.resolve())
+    if report_path is not None:
+        write_doc_orphan_json_report(report, report_path)
+    if json_output:
+        typer.echo(json.dumps(report.to_dict(), indent=2, sort_keys=True))
+    else:
+        console.print(render_doc_orphan_report(report), markup=False)
 
 
 def doc_mesh_audit_command(

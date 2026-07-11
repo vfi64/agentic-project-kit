@@ -11,6 +11,11 @@ import yaml
 
 from agentic_project_kit.documentation_registry import build_doc_registry_reconcile_report
 from agentic_project_kit.documentation_registry import build_documentation_registry_summary
+from agentic_project_kit.doc_lifecycle_signals import (
+    build_review_after_findings,
+    load_direction_statuses,
+    resolve_current_version,
+)
 
 ALLOWED_STATUS_VALUES = {
     "idea-note",
@@ -120,11 +125,18 @@ class DocLifecycleReport:
         }
 
 
-def build_doc_lifecycle_report(project_root: Path, *, now: date | None = None) -> DocLifecycleReport:
+def build_doc_lifecycle_report(
+    project_root: Path,
+    *,
+    now: date | None = None,
+    current_version: str | None = None,
+) -> DocLifecycleReport:
     today = now or date.today()
     documents: list[DocLifecycleDocument] = []
     findings: list[DocLifecycleFinding] = []
     registry_entries = _load_documentation_registry_entries_by_path(project_root)
+    direction_statuses = load_direction_statuses(project_root)
+    resolved_current_version = resolve_current_version(project_root, current_version)
     visited_paths: set[str] = set()
     for relative_path in _iter_lifecycle_markdown_files(project_root):
         text = (project_root / relative_path).read_text(encoding="utf-8")
@@ -159,6 +171,8 @@ def build_doc_lifecycle_report(project_root: Path, *, now: date | None = None) -
                 status_date=status_date,
                 superseded_by=superseded_by,
                 now=today,
+                current_version=resolved_current_version,
+                direction_statuses=direction_statuses,
             )
         )
     for path_text, registry_entry in sorted(registry_entries.items()):
@@ -194,6 +208,8 @@ def build_doc_lifecycle_report(project_root: Path, *, now: date | None = None) -
                 status_date=status_date,
                 superseded_by=superseded_by,
                 now=today,
+                current_version=resolved_current_version,
+                direction_statuses=direction_statuses,
             )
         )
     return DocLifecycleReport(
@@ -323,12 +339,24 @@ def _audit_registry_header_consistency(
     status_date: str | None,
     superseded_by: str | None,
     now: date,
+    current_version: str | None,
+    direction_statuses: dict[str, str],
 ) -> list[DocLifecycleFinding]:
     if not registry_entry or _is_lifecycle_header_exempt(path_text):
         return []
 
     findings: list[DocLifecycleFinding] = []
     document_class = _entry_class(registry_entry)
+    for signal in build_review_after_findings(
+        path=path_text,
+        review_after=registry_entry.get("review_after"),
+        now=now,
+        current_version=current_version,
+        direction_statuses=direction_statuses,
+        document_class=document_class,
+    ):
+        findings.append(DocLifecycleFinding(**signal.to_finding_kwargs()))
+
     if status is None or status_date is None:
         missing = []
         if status is None:

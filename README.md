@@ -458,7 +458,7 @@ When adding a public command, workflow, gate, profile, policy pack, generated fi
 
 ## Documentation mesh audit
 
-`agentic-kit doc-mesh-audit` checks machine-readable drift across the project documentation mesh. It is stricter than plain term coverage, but it is still deliberately bounded and does not claim semantic proof.
+`agentic-kit doc-mesh-audit` checks machine-readable drift across the project documentation mesh. It is bounded and does not claim semantic proof.
 
 The first audit slice distinguishes four document classes:
 
@@ -475,6 +475,8 @@ The hard checks currently cover version mismatches, stale current-state wording,
 `agentic-kit doc-mesh-audit --repair-plan doc-mesh-repair-plan.json` writes a bounded repair plan. `agentic-kit doc-mesh-repair` currently applies only one safe automatic repair class: inserting missing historical-source-of-truth banners into known historical-plan documents. Version, DOI, stale-state, and missing-document findings remain manual review items.
 
 Future repair tools should stay bounded to mechanical edits and must not rewrite semantics.
+
+`agentic-kit doc-lifecycle-audit --json`; `agentic-kit doc-lifecycle-audit --suggest-review-after`; `agentic-kit audit-doc-orphans`.
 
 ## Status current-state audit
 

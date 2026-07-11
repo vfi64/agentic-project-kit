@@ -338,6 +338,66 @@
     {
       "dry_run_available": false,
       "group": "root",
+      "help": "Report registered documents without incoming repository references.",
+      "name": "audit-doc-orphans",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "report_path",
+          "opts": [
+            "--report"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "audit-doc-orphans"
+      ],
+      "qualified_name": "agentic-kit audit-doc-orphans",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Report registered documents without incoming repository references."
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
       "help": "Audit mutating entrypoints for workspace mutation-lock coverage.",
       "name": "audit-mutation-lock-coverage",
       "params": [
@@ -1781,6 +1841,20 @@
           "name": "json_output",
           "opts": [
             "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print report-only review_after suggestions from version target prose.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "suggest_review_after",
+          "opts": [
+            "--suggest-review-after"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -13900,7 +13974,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "da49759e8d28",
+    "manifest_sha": "dec749dbc55b",
     "schema_version": 1
   },
   "schema_version": 2,

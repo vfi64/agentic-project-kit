@@ -96,15 +96,22 @@ class DirectionDriftRecord:
     recommendation: str
     in_source_files: bool
     reference_count: int
+    item_id: str | None = None
+    item_status: str | None = None
 
     def as_dict(self) -> dict[str, object]:
-        return {
+        data: dict[str, object] = {
             "path": self.path,
             "classification": self.classification,
             "recommendation": self.recommendation,
             "in_source_files": self.in_source_files,
             "reference_count": self.reference_count,
         }
+        if self.item_id is not None:
+            data["item_id"] = self.item_id
+        if self.item_status is not None:
+            data["item_status"] = self.item_status
+        return data
 
 
 @dataclass(frozen=True)
@@ -331,6 +338,7 @@ def audit_project_direction_drift(root: Path | str = ".") -> DirectionDriftAudit
                 reference_count=reference_counts.get(relative, 0),
             )
         )
+    records.extend(_closed_item_active_source_records(direction.data, root_path, reference_counts))
     return DirectionDriftAuditResult(
         root=root_path.resolve().as_posix(),
         records=tuple(sorted(records, key=lambda record: record.path)),
@@ -359,10 +367,16 @@ def render_direction_drift_audit(result: DirectionDriftAuditResult) -> str:
     for missing in result.missing_source_files:
         lines.append(f"MISSING_SOURCE={missing}")
     for record in result.records:
+        item_suffix = (
+            f"|item={record.item_id}|item_status={record.item_status}"
+            if record.item_id is not None
+            else ""
+        )
         lines.append(
             "RECORD="
             f"{record.classification}|{record.recommendation}|{record.path}|"
             f"source={record.in_source_files}|refs={record.reference_count}"
+            f"{item_suffix}"
         )
     return "\n".join(lines) + "\n"
 
@@ -500,6 +514,68 @@ def _collect_source_file_entries(data: object) -> list[object]:
         for item in data:
             entries.extend(_collect_source_file_entries(item))
     return entries
+
+
+def _closed_item_active_source_records(
+    data: dict[str, Any],
+    root: Path,
+    reference_counts: dict[str, int],
+) -> list[DirectionDriftRecord]:
+    records: list[DirectionDriftRecord] = []
+    for section in ("strategy", "roadmap", "plans", "ideas", "done", "discarded"):
+        items = data.get(section)
+        if not isinstance(items, list):
+            continue
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            item_id = item.get("id")
+            if not isinstance(item_id, str) or not item_id:
+                continue
+            status = _direction_item_status(section, item)
+            if status not in {"done", "discarded"}:
+                continue
+            source_files = item.get("source_files")
+            if not isinstance(source_files, list):
+                continue
+            for source in source_files:
+                if not isinstance(source, str) or not source.endswith(".md"):
+                    continue
+                if _markdown_status(root / source) != "active":
+                    continue
+                records.append(
+                    DirectionDriftRecord(
+                        path=source,
+                        classification="SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE",
+                        recommendation="retire_source_header_or_reopen_direction_item",
+                        in_source_files=True,
+                        reference_count=reference_counts.get(source, 0),
+                        item_id=item_id,
+                        item_status=status,
+                    )
+                )
+    return records
+
+
+def _direction_item_status(section: str, item: dict[str, Any]) -> str:
+    if section in {"done", "discarded"}:
+        return section
+    status = item.get("status")
+    return status if isinstance(status, str) else ""
+
+
+def _markdown_status(path: Path) -> str | None:
+    if not path.exists() or not path.is_file():
+        return None
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return None
+    for line in text.splitlines():
+        if line.startswith("Status:"):
+            value = line.removeprefix("Status:").strip()
+            return value or None
+    return None
 
 
 def _validate_item_sources(
