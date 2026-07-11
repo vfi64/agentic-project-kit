@@ -8,12 +8,12 @@
       "path": ".agentic/compiled_agent_context.yaml"
     },
     {
-      "bytes": 20391,
+      "bytes": 20417,
       "exists": true,
       "path": ".agentic/handoff_state.yaml"
     },
     {
-      "bytes": 1580,
+      "bytes": 1606,
       "exists": true,
       "path": ".agentic/operational_handoff_state.yaml"
     },
@@ -33,12 +33,12 @@
       "path": ".agentic/rule_preservation.yaml"
     },
     {
-      "bytes": 20209,
+      "bytes": 20414,
       "exists": true,
       "path": "AGENTS.md"
     },
     {
-      "bytes": 29979,
+      "bytes": 30380,
       "exists": true,
       "path": "README.md"
     },
@@ -48,17 +48,17 @@
       "path": "SECURITY.md"
     },
     {
-      "bytes": 29464,
+      "bytes": 30250,
       "exists": true,
       "path": "docs/DOCUMENTATION_COVERAGE.yaml"
     },
     {
-      "bytes": 33939,
+      "bytes": 34185,
       "exists": true,
       "path": "docs/DOCUMENTATION_REGISTRY.yaml"
     },
     {
-      "bytes": 31680,
+      "bytes": 31719,
       "exists": true,
       "path": "docs/STATUS.md"
     },
@@ -68,17 +68,17 @@
       "path": "docs/TEST_GATES.md"
     },
     {
-      "bytes": 30005,
+      "bytes": 30018,
       "exists": true,
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
     {
-      "bytes": 6079,
+      "bytes": 6020,
       "exists": true,
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
     {
-      "bytes": 4107,
+      "bytes": 4120,
       "exists": true,
       "path": "docs/handoff/START_NEW_CHAT_PROMPT.md"
     },
@@ -108,17 +108,17 @@
       "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md"
     },
     {
-      "bytes": 119672,
+      "bytes": 120076,
       "exists": true,
       "path": "docs/planning/PROJECT_DIRECTION.yaml"
     },
     {
-      "bytes": 127888,
+      "bytes": 129347,
       "exists": true,
       "path": "docs/reference/AGENTIC_KIT_COMMANDS.md"
     },
     {
-      "bytes": 362600,
+      "bytes": 366097,
       "exists": true,
       "path": "docs/reference/agentic-kit-commands.json"
     }
