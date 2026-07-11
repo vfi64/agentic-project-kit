@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5621417f54be6e90f7a294a92b597f904e3f1a99
-  short: 5621417f
-  subject: 'P5c: Add physical migration plan (#1837)'
+  full: dfe1c970812b155a0d2d9b60505c10b088a920a9
+  short: dfe1c970
+  subject: Add GUI project root selection (#1839)
 last_substantive_work_state:
-  full: 5621417f54be6e90f7a294a92b597f904e3f1a99
-  short: 5621417f
-  subject: 'P5c: Add physical migration plan (#1837)'
+  full: dfe1c970812b155a0d2d9b60505c10b088a920a9
+  short: dfe1c970
+  subject: Add GUI project root selection (#1839)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
