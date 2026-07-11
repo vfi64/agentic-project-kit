@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `5e18a18db33ceea9cac9dafd1871fae7346b2a2a` (`5e18a18d`)
-- Handoff freshness marker: `5e18a18d`
-- Branch at generation: `docs/post-pr1847-handoff-refresh`
+- HEAD: `3cb150c70a16a50ed6f7d1bf6270d37bff46758c` (`3cb150c7`)
+- Handoff freshness marker: `3cb150c7`
+- Branch at generation: `docs/post-pr1849-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -80,7 +80,6 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 - `gui-gatekeeper-workbench` (planned): Build the local gatekeeper/workbench GUI over deterministic actions for GUI
 - `documentation-artifact-governance-os` (planned): Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance
 - `master-implementation-q` (active): Master Implementation Q2 rest sequence
-- `doc-lifecycle-metadata` (active): Add documentation lifecycle metadata and report-only consistency gate
 - `doc-lifecycle-signals` (planned): Add documentation lifecycle obsolescence signals
 - `doc-lifecycle-sweep` (planned): Add guided documentation lifecycle sweep workflows
 - `doc-lifecycle-strict-adoption` (planned): Adopt documentation lifecycle enforcement gradually
