@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1841
+  updated_after_pr: 1843
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1841
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1843
 strategy:
 - id: governed-operating-model
   status: active
@@ -686,15 +686,21 @@ plans:
   - The architecture document states the selected reentrancy and inherited-lock rule.
   - The decision names the affected LC1 gap classes.
 - id: lock-coverage-remediation
-  status: planned
+  status: done
   title: Remediate mutation-lock coverage gaps
+  completed_by_pr: 1843
   depends_on:
   - lock-reentrancy-decision
-  rationale: Apply the LC2 same-PID-reentrant lock decision to runtime mutators
-    while keeping read-only audits and non-blocking report writers from acquiring
-    unnecessary locks.
+  rationale: >-
+    PR #1843 applies the LC2 same-PID-reentrant lock decision to runtime
+    mutators, promotes the mutation-lock audit into the standard suite, and keeps
+    false-positive-prone findings visible but non-blocking.
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  - docs/architecture/evidence/mutation-lock-coverage-2026-07-11-post-lc3.md
+  evidence:
+  - PR #1843
+  - docs/architecture/evidence/mutation-lock-coverage-2026-07-11-post-lc3.md
   acceptance:
   - Runtime mutators identified by LC1 follow the LC2 lock policy.
   - False-positive metadata and report-writer findings remain visible but non-blocking.

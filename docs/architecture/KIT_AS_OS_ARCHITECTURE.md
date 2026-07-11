@@ -230,9 +230,11 @@ P1 onward:
 - The lock is machine-local (under git-ignored `tmp/`), simple (atomic
   create), and complements — not replaces — the existing wrapper live-status
   `safe_to_interrupt` signal.
-- Coverage remediation for the LC1 gap classes is tracked as
-  `lock-coverage-remediation` (LC3). Until that slice, the audit remains
-  report-only and standard gates stay unchanged.
+- Coverage remediation for the LC1 gap classes is completed by
+  `lock-coverage-remediation` (LC3, PR #1843). The standard gate suite now runs
+  the mutation-lock coverage audit; it blocks unlocked core runtime mutators
+  while keeping false-positive-prone findings visible as non-blocking review
+  data.
 
 ## 6. The two governance spaces and the litmus test
 
