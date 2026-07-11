@@ -127,15 +127,6 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "lock-reentrancy-decision",
-        "status": "planned",
-        "summary": "Decide mutation-lock reentrancy and inherited-lock policy"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
         "id": "lock-coverage-remediation",
         "status": "planned",
         "summary": "Remediate mutation-lock coverage gaps"
@@ -305,13 +296,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1821-handoff-refresh",
+      "branch": "docs/post-pr1823-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "bdbfcce52a56ed937d71838cab09694b70a65c0d",
+      "head": "eb293cead2aaf9d5113c6bfffec85383adad99b5",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/agentic-project-kit",
-      "origin_main": "bdbfcce52a56ed937d71838cab09694b70a65c0d",
+      "origin_main": "eb293cead2aaf9d5113c6bfffec85383adad99b5",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -388,13 +379,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1821-handoff-refresh",
+    "branch": "docs/post-pr1823-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "bdbfcce52a56ed937d71838cab09694b70a65c0d",
+    "head": "eb293cead2aaf9d5113c6bfffec85383adad99b5",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "bdbfcce52a56ed937d71838cab09694b70a65c0d",
+    "origin_main": "eb293cead2aaf9d5113c6bfffec85383adad99b5",
     "worktree_clean": false
   },
   "rules": [
