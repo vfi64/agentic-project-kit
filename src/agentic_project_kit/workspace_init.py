@@ -17,6 +17,7 @@ from agentic_project_kit.workspace_adopt import (
     ProjectSuggestion,
     analyze_workspace_adoption,
 )
+from agentic_project_kit.chat_entrypoint_contract import command_reference_prompt_block
 from agentic_project_kit.workspace_lock import acquire_workspace_lock
 
 
@@ -344,6 +345,8 @@ Current state: initialized workspace.
 
 def _initial_llm_prompt(project: ProjectSuggestion) -> str:
     return f"""# Initial LLM Prompt
+
+{command_reference_prompt_block()}
 
 You are working in repository `{project.name}`.
 

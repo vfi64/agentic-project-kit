@@ -182,7 +182,9 @@ def infer_safety(command: dict[str, Any]) -> str:
         "protected-diff-plan",
         "post-merge-check",
         "command-for",
+        "refresher",
         "render-md",
+        "session-start",
     }
     read_only_prefixes = (
         "agentic-kit audit-",
@@ -437,6 +439,10 @@ def evaluate_command_manifest(root: Path = Path(".")) -> CommandManifestAudit:
         findings.append(
             CommandManifestFinding("BLOCK", "MD_DRIFT", f"{md_path.as_posix()} differs from generator")
         )
+    from agentic_project_kit.chat_entrypoint_contract import audit_entrypoint_manifest_references
+
+    for finding in audit_entrypoint_manifest_references(root, committed):
+        findings.append(CommandManifestFinding("BLOCK", finding["code"], finding["message"]))
 
     return CommandManifestAudit(root=root.as_posix(), findings=tuple(findings))
 

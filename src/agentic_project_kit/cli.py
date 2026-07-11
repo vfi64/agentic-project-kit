@@ -3,6 +3,7 @@ import typer
 from agentic_project_kit.cli_commands.actions import actions_app
 from agentic_project_kit.cli_commands.boot import boot_app
 from agentic_project_kit.cli_commands.checks import register_check_commands
+from agentic_project_kit.cli_commands.chat import chat_app
 from agentic_project_kit.cli_commands.cockpit import cockpit_app
 from agentic_project_kit.cli_commands.commands import (
     audit_command_manifest_command,
@@ -106,6 +107,7 @@ app.add_typer(workflow_guard_app, name="workflow-guard")
 app.add_typer(rule_registry_app, name="rule-registry")
 app.add_typer(doc_registry_app, name="doc-registry")
 app.add_typer(docs_app, name="docs")
+app.add_typer(chat_app, name="chat")
 app.add_typer(instruction_app, name="instruction")
 app.add_typer(handoff_app, name="handoff")
 app.add_typer(boot_app, name="boot")

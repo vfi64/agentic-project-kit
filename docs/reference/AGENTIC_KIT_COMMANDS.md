@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: e58478cb6b5c
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 9a377188be24
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `218`
+- Command count: `221`
 
 ## Commands
 
@@ -232,6 +232,30 @@ Audit STATUS.md current-state claims against handoff, release, and origin/main s
 | `root` | `TyperOption` | --root | `False` | `.` |  |
 | `include_state` | `TyperOption` | --include-state, --no-include-state | `False` | `False` |  |
 
+### `agentic-kit chat refresher`
+
+- Safety: `READ_ONLY`
+- When to use: Render the compact six-line command manifest refresher.
+- Dry-run available: `False`
+
+Render the compact six-line command manifest refresher.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `mode` | `TyperOption` | --mode | `False` | `copy-paste` | copy-paste, remote, or file-transfer. |
+
+### `agentic-kit chat session-start`
+
+- Safety: `READ_ONLY`
+- When to use: Render the session-start refresher and full inline command list.
+- Dry-run available: `False`
+
+Render the session-start refresher and full inline command list.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `mode` | `TyperOption` | --mode | `False` | `copy-paste` | copy-paste, remote, or file-transfer. |
+
 ### `agentic-kit check`
 
 - Safety: `READ_ONLY`
@@ -354,6 +378,20 @@ Render docs/reference/AGENTIC_KIT_COMMANDS.md from the JSON manifest.
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write generated Markdown. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit commands sync-entrypoints`
+
+- Safety: `BOUNDED`
+- When to use: Synchronize command reference files and command-manifest entrypoint headers.
+- Dry-run available: `True`
+
+Synchronize command reference files and command-manifest entrypoint headers.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write synchronized entrypoint files. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit dev local-feature-gate`

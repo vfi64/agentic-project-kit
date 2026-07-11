@@ -887,6 +887,74 @@
     },
     {
       "dry_run_available": false,
+      "group": "chat",
+      "help": "Render the compact six-line command manifest refresher.",
+      "name": "refresher",
+      "params": [
+        {
+          "default": "copy-paste",
+          "help": "copy-paste, remote, or file-transfer.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "mode",
+          "opts": [
+            "--mode"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "chat",
+        "refresher"
+      ],
+      "qualified_name": "agentic-kit chat refresher",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "chat",
+        "read-only"
+      ],
+      "when_to_use": "Render the compact six-line command manifest refresher."
+    },
+    {
+      "dry_run_available": false,
+      "group": "chat",
+      "help": "Render the session-start refresher and full inline command list.",
+      "name": "session-start",
+      "params": [
+        {
+          "default": "copy-paste",
+          "help": "copy-paste, remote, or file-transfer.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "mode",
+          "opts": [
+            "--mode"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "chat",
+        "session-start"
+      ],
+      "qualified_name": "agentic-kit chat session-start",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "chat",
+        "read-only"
+      ],
+      "when_to_use": "Render the session-start refresher and full inline command list."
+    },
+    {
+      "dry_run_available": false,
       "group": "root",
       "help": "",
       "name": "check",
@@ -1373,6 +1441,68 @@
         "read-only"
       ],
       "when_to_use": "Render docs/reference/AGENTIC_KIT_COMMANDS.md from the JSON manifest."
+    },
+    {
+      "dry_run_available": true,
+      "group": "commands",
+      "help": "Synchronize command reference files and command-manifest entrypoint headers.",
+      "name": "sync-entrypoints",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write synchronized entrypoint files.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "commands",
+        "sync-entrypoints"
+      ],
+      "qualified_name": "agentic-kit commands sync-entrypoints",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "commands"
+      ],
+      "when_to_use": "Synchronize command reference files and command-manifest entrypoint headers."
     },
     {
       "dry_run_available": false,
@@ -13728,7 +13858,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "e58478cb6b5c",
+    "manifest_sha": "9a377188be24",
     "schema_version": 1
   },
   "schema_version": 2,

@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1811
+  updated_after_pr: 1815
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1811
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1815
 strategy:
 - id: governed-operating-model
   status: active
@@ -601,16 +601,25 @@ plans:
   - GUI exposes Lint Clipboard as a read-only action backed by instruction lint --stdin.
   - SEND task carriers include the command manifest path and manifest_sha.
 - id: chat-entrypoint-contract
-  status: planned
+  status: done
   title: Chat entrypoint manifest contract
+  completed_by_pr: 1815
   depends_on:
   - instruction-lint-gate
   rationale: Keep AGENTS, initial prompts, refresher output, and carrier headers
     pinned to the current command manifest.
   source_files:
   - docs/planning/MASTER_IMPLEMENTATION_Q.md
+  evidence:
+  - tests/test_chat_entrypoint_contract.py
+  - tests/test_workspace_init.py
+  - agentic-kit chat refresher --mode copy-paste
+  - agentic-kit chat session-start --mode copy-paste
+  - agentic-kit commands sync-entrypoints --json
+  - docs/architecture/evidence/command-manifest-audit-2026-07-11-cm4.md
   acceptance:
   - Chat entrypoints carry the current manifest pointer and hash.
+  - audit-command-manifest blocks stale entrypoint manifest references.
 - id: direction-schema-command-migration
   status: done
   title: Introduce direction schema, command, migration, cleanup, scope, and gate
