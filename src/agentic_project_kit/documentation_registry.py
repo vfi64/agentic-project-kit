@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from collections import Counter
 from dataclasses import dataclass
+from datetime import date
 from fnmatch import fnmatchcase
 from pathlib import Path
 from typing import Any
@@ -47,6 +48,11 @@ REQUIRED_DOCUMENT_FIELDS = (
     "path",
     "class",
     "owner",
+)
+
+OPTIONAL_DOCUMENT_FIELDS = (
+    "review_after",
+    "deferred_until",
 )
 
 DOCUMENT_REGISTRATION_SCAN_SUFFIXES = frozenset({".md", ".yaml", ".yml"})
@@ -1068,4 +1074,37 @@ def _check_document_entries(project_root: Path, registry: dict[str, Any]) -> lis
                     f"{REGISTRY_PATH}: registered document does not exist: {relative_path}"
                 )
 
+        review_after = entry.get("review_after")
+        if review_after is not None and not _is_coarse_review_after(review_after):
+            errors.append(
+                f"{REGISTRY_PATH}: {relative_path or index} "
+                "field 'review_after' must be a non-empty date:, release:, or direction: string"
+            )
+
+        deferred_until = entry.get("deferred_until")
+        if deferred_until is not None and not _is_iso_date_string(deferred_until):
+            errors.append(
+                f"{REGISTRY_PATH}: {relative_path or index} "
+                "field 'deferred_until' must be an ISO date string"
+            )
+
     return errors
+
+
+def _is_coarse_review_after(value: Any) -> bool:
+    if not isinstance(value, str):
+        return False
+    stripped = value.strip()
+    if not stripped or "\n" in stripped:
+        return False
+    return stripped.startswith(("date:", "release:", "direction:"))
+
+
+def _is_iso_date_string(value: Any) -> bool:
+    if not isinstance(value, str):
+        return False
+    try:
+        date.fromisoformat(value)
+    except ValueError:
+        return False
+    return True

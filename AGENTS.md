@@ -12,7 +12,7 @@ rule_source_boundary: pointer_not_duplicate_rule_book
 # Agent Instructions
 
 <!-- command-manifest-entrypoint:start -->
-MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 645e8d63880d). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 645e8d63880d. Consult `agentic-kit command-for` before proposing commands.
+MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: da49759e8d28). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK da49759e8d28. Consult `agentic-kit command-for` before proposing commands.
 <!-- command-manifest-entrypoint:end -->
 
 > Outer-doc currency note: Operational chat handoff now uses the deterministic Successor Handoff Package. Treat `docs/reports/handoff-packages/latest/successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` as the canonical generated handoff package. The markdown prompts are projections, not independent sources of truth.

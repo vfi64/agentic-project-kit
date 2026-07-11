@@ -1,4 +1,5 @@
 import json
+from datetime import date, timedelta
 from pathlib import Path
 
 import pytest
@@ -30,6 +31,16 @@ def _write_registry(root: Path) -> None:
             {"path": "docs/ideas/EXAMPLE.md", "class": "planning", "owner": "maintainers"},
             {"path": "docs/strategy/NOW.md", "class": "operational/automation", "owner": "maintainers"},
         ],
+    }
+    _write(root / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+
+def _write_registry_documents(root: Path, documents: list[dict[str, str]]) -> None:
+    registry = {
+        "version": 1,
+        "status": {"lifecycle": "initial", "broad_migration_allowed": False},
+        "class_rules": _class_rules(),
+        "documents": documents,
     }
     _write(root / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
 
@@ -125,3 +136,147 @@ def test_doc_lifecycle_cli_command_writes_report(tmp_path: Path) -> None:
     payload = json.loads(output_path.read_text(encoding="utf-8"))
     assert payload["ok"] is False
     assert payload["findings"][0]["code"] == "invalid-status"
+
+
+def test_doc_lifecycle_reports_missing_registry_headers_without_blocking(tmp_path: Path) -> None:
+    _write(tmp_path / "docs/governance/RULE.md", "# Rule\n")
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/RULE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+            }
+        ],
+    )
+
+    report = build_doc_lifecycle_report(tmp_path)
+
+    assert report.ok
+    finding = next(item for item in report.findings if item.code == "HEADER_MISSING")
+    assert finding.severity == "WARN"
+    assert finding.document_class == "governance/system"
+
+
+def test_doc_lifecycle_reports_header_registry_status_mismatch(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "docs/governance/RULE.md",
+        "# Rule\n\nStatus: superseded\nStatus-date: 2026-07-11\n",
+    )
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/RULE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+            }
+        ],
+    )
+
+    report = build_doc_lifecycle_report(tmp_path)
+
+    assert any(item.code == "HEADER_REGISTRY_MISMATCH" for item in report.findings)
+
+
+def test_doc_lifecycle_reports_missing_superseded_target(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "docs/governance/OLD.md",
+        "# Old\n\nStatus: superseded\nStatus-date: 2026-07-11\nSuperseded-by: docs/governance/NEW.md\n",
+    )
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/OLD.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "superseded",
+            }
+        ],
+    )
+
+    report = build_doc_lifecycle_report(tmp_path)
+
+    assert any(item.code == "SUPERSEDED_TARGET_MISSING" for item in report.findings)
+
+
+def test_doc_lifecycle_stale_budget_boundary_uses_injected_now(tmp_path: Path) -> None:
+    now = date(2026, 7, 11)
+    at_budget = now - timedelta(days=180)
+    over_budget = now - timedelta(days=181)
+    _write(
+        tmp_path / "docs/governance/OK.md",
+        f"# OK\n\nStatus: active\nStatus-date: {at_budget.isoformat()}\n",
+    )
+    _write(
+        tmp_path / "docs/governance/STALE.md",
+        f"# Stale\n\nStatus: active\nStatus-date: {over_budget.isoformat()}\n",
+    )
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/OK.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+            },
+            {
+                "path": "docs/governance/STALE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+            },
+        ],
+    )
+
+    report = build_doc_lifecycle_report(tmp_path, now=now)
+
+    stale_findings = [item for item in report.findings if item.code == "STALE_BY_BUDGET"]
+    assert [item.path for item in stale_findings] == ["docs/governance/STALE.md"]
+    assert stale_findings[0].age_days == 181
+
+
+def test_doc_lifecycle_exempts_reports_archive_and_examples_from_header_audit(tmp_path: Path) -> None:
+    for relative in (
+        "docs/reports/REPORT.md",
+        "docs/archive/OLD.md",
+        "docs/examples/EXAMPLE.md",
+    ):
+        _write(tmp_path / relative, "# Exempt\n")
+    _write_registry_documents(
+        tmp_path,
+        [
+            {"path": "docs/reports/REPORT.md", "class": "evidence/log", "owner": "maintainers"},
+            {"path": "docs/archive/OLD.md", "class": "historical archive", "owner": "maintainers"},
+            {"path": "docs/examples/EXAMPLE.md", "class": "user-facing description", "owner": "maintainers"},
+        ],
+    )
+
+    report = build_doc_lifecycle_report(tmp_path)
+
+    assert report.findings == ()
+
+
+def test_doc_lifecycle_audit_json_groups_findings_by_code(tmp_path: Path) -> None:
+    _write(tmp_path / "docs/governance/RULE.md", "# Rule\n")
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/RULE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+            }
+        ],
+    )
+
+    result = CliRunner().invoke(app, ["doc-lifecycle-audit", "--root", str(tmp_path), "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["ok"] is True
+    assert payload["findings_by_code"]["HEADER_MISSING"][0]["class"] == "governance/system"

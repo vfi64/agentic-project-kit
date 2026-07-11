@@ -738,6 +738,21 @@ plans:
     signals or sweep automation depend on it.
   source_files:
   - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+  - docs/DOCUMENTATION_REGISTRY.yaml
+  - docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md
+  - src/agentic_project_kit/doc_lifecycle.py
+  - src/agentic_project_kit/documentation_registry.py
+  - src/agentic_project_kit/documentation_system_audit.py
+  - src/agentic_project_kit/doctor.py
+  - src/agentic_project_kit/cli_commands/checks.py
+  - tests/test_doc_lifecycle.py
+  - tests/test_documentation_registry.py
+  - tests/test_doctor.py
+  acceptance:
+  - Registry entries accept optional review_after and deferred_until metadata without breaking existing entries.
+  - Lifecycle audit JSON groups report-only findings by type and includes file, class, and age metadata.
+  - Header, registry-status, superseded-target, and stale-budget findings stay visible without failing L1 gates.
+  - Stale-budget checks use an injected date in tests and do not depend on wall-clock time.
 - id: doc-lifecycle-signals
   status: planned
   title: Add documentation lifecycle obsolescence signals

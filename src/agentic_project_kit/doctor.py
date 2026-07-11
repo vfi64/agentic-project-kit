@@ -159,9 +159,16 @@ def _docs_check(project_root: Path) -> DoctorCheck:
 
 def _doc_lifecycle_check(project_root: Path) -> DoctorCheck:
     report = build_doc_lifecycle_report(project_root)
-    if report.findings:
-        details = "; ".join(f"{finding.path}: {finding.message}" for finding in report.findings)
+    blockers = [finding for finding in report.findings if finding.severity in {"FAIL", "BLOCK"}]
+    if blockers:
+        details = "; ".join(f"{finding.path}: {finding.message}" for finding in blockers)
         return DoctorCheck("document lifecycle audit", DoctorStatus.FAIL, details)
+    if report.findings:
+        return DoctorCheck(
+            "document lifecycle audit",
+            DoctorStatus.WARN,
+            f"{len(report.findings)} report-only finding(s)",
+        )
     return DoctorCheck("document lifecycle audit", DoctorStatus.PASS, "passed")
 
 

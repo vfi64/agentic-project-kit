@@ -43,6 +43,18 @@ Every class rule must define:
 
 The exact machine-readable field names are stored in `docs/DOCUMENTATION_REGISTRY.yaml` and validated by the registry guard.
 
+## Optional document lifecycle fields
+
+Registered document entries may also carry lifecycle scheduling metadata:
+
+- `review_after`: optional non-empty string with a coarse `date:`, `release:`, or
+  `direction:` prefix. The exact grammar and due-signal interpretation belongs
+  to the lifecycle-signal layer.
+- `deferred_until`: optional ISO date string used to record a bounded deferral.
+
+These fields are additive and optional. Existing registry entries without them
+remain valid.
+
 ## First-slice guard
 
 The first guard validates only deterministic structure:
@@ -55,6 +67,8 @@ The first guard validates only deterministic structure:
 - registered paths are unique;
 - registered paths exist in the repository;
 - registered classes are known.
+- optional `review_after` values are non-empty prefixed strings;
+- optional `deferred_until` values are ISO date strings.
 
 The guard intentionally does not claim semantic documentation quality. It cannot prove that a document is well-written, complete, or architecturally optimal.
 

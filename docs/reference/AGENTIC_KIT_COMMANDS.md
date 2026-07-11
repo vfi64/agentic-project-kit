@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 645e8d63880d
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: da49759e8d28
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -461,6 +461,7 @@ Audit lifecycle status headers for planning, roadmap, strategy, and idea documen
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `report_path` | `TyperOption` | --report | `False` |  |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit doc-mesh-audit`
 

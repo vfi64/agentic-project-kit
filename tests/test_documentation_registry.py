@@ -10,6 +10,7 @@ from agentic_project_kit.checks import check_docs
 from agentic_project_kit.cli import app
 from agentic_project_kit.documentation_registry import (
     DOCUMENT_CLASSES,
+    OPTIONAL_DOCUMENT_FIELDS,
     REGISTRY_PATH,
     SCOPE_PATH,
     REQUIRED_CLASS_RULE_FIELDS,
@@ -149,6 +150,7 @@ def _repo_documents() -> dict[str, dict[str, object]]:
 def test_documentation_registry_declares_all_required_classes_and_fields() -> None:
     registry = load_documentation_registry(ROOT)
     assert registry["version"] == 1
+    assert set(registry["schema"]["optional_document_fields"]) == set(OPTIONAL_DOCUMENT_FIELDS)
     assert set(registry["class_rules"]) == set(DOCUMENT_CLASSES)
     for class_name in DOCUMENT_CLASSES:
         rules = registry["class_rules"][class_name]
@@ -231,6 +233,33 @@ def test_documentation_registry_guard_reports_missing_class_rule_field(tmp_path:
     errors = check_documentation_registry(project)
 
     assert f"{REGISTRY_PATH}: 'planning' missing class rule field 'freshness'" in errors
+
+
+def test_documentation_registry_accepts_optional_lifecycle_fields(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    registry = _read_registry(project)
+    documents = registry["documents"]
+    assert isinstance(documents, list)
+    documents[0]["review_after"] = "release:>=0.4.13"
+    documents[0]["deferred_until"] = "2026-12-31"
+    _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+    assert check_documentation_registry(project) == []
+
+
+def test_documentation_registry_rejects_invalid_optional_lifecycle_fields(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    registry = _read_registry(project)
+    documents = registry["documents"]
+    assert isinstance(documents, list)
+    documents[0]["review_after"] = "after next release"
+    documents[0]["deferred_until"] = "31-12-2026"
+    _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+    errors = check_documentation_registry(project)
+
+    assert any("field 'review_after' must be a non-empty date:, release:, or direction: string" in error for error in errors)
+    assert any("field 'deferred_until' must be an ISO date string" in error for error in errors)
 
 
 def test_docs_registry_cli_reports_summary() -> None:

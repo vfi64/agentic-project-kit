@@ -29,6 +29,9 @@ schema:
     - path
     - class
     - owner
+  optional_document_fields:
+    - review_after
+    - deferred_until
 
 class_rules:
   governance/system:
