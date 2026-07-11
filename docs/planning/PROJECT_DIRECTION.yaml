@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1827
+  updated_after_pr: 1831
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1827
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1831
 strategy:
 - id: governed-operating-model
   status: active
@@ -209,8 +209,9 @@ roadmap:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: p5b-resolver-aliases
   phase: P5
-  status: planned
+  status: done
   title: Enforce active path and identity literal classes
+  completed_by_pr: 1831
   depends_on:
   - p5a-self-hosting-manifest
   acceptance:
@@ -218,6 +219,9 @@ roadmap:
   - Active identity literals outside declared exceptions are blocking.
   - Reference and message literals remain visible but non-blocking.
   - Evidence records path, identity, and classification samples before suite enforcement.
+  evidence:
+  - PR
+  - docs/architecture/evidence/path-literal-active-enforcement-2026-07-11-p5b.md
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: p5c-physical-migration
