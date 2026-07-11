@@ -28,15 +28,6 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "p6-gui-project-selection-and-ci-recipe",
-        "status": "next",
-        "summary": "Add GUI project selection and harden CI recipe follow-ups for P6"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
         "id": "v1-0-milestone",
         "status": "planned",
         "summary": "Reach the 1.0 operating-layer stability milestone for unphased"
@@ -269,13 +260,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1839-handoff-refresh",
+      "branch": "docs/post-pr1841-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "dfe1c970812b155a0d2d9b60505c10b088a920a9",
+      "head": "0afa9726b6de8cb69ac03a0a8936e1e04b031456",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "dfe1c970812b155a0d2d9b60505c10b088a920a9",
+      "origin_main": "0afa9726b6de8cb69ac03a0a8936e1e04b031456",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -352,13 +343,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1839-handoff-refresh",
+    "branch": "docs/post-pr1841-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "dfe1c970812b155a0d2d9b60505c10b088a920a9",
+    "head": "0afa9726b6de8cb69ac03a0a8936e1e04b031456",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "dfe1c970812b155a0d2d9b60505c10b088a920a9",
+    "origin_main": "0afa9726b6de8cb69ac03a0a8936e1e04b031456",
     "worktree_clean": false
   },
   "rules": [
