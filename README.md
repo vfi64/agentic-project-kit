@@ -193,15 +193,18 @@ It also updates the canonical chat-switch prompt projections in `docs/handoff/`.
 
 `agentic-kit direction validate`, `agentic-kit direction render`, and `agentic-kit direction audit-drift` guard `docs/planning/PROJECT_DIRECTION.yaml`.
 
-## Workspace operating-layer mode
+## Govern an existing repository (operating layer)
 
-`agentic-kit workspace adopt --root PATH` analyzes an existing repository without writing files. It proposes a schema-validated `.agentic/config.yaml`, reports docs registration candidates, lists existing `.github/workflows/*.yml` files, prints the `.agentic/` private/public boundary, and tells whether the repository is ready for `workspace init`, already initialized, or blocked by a foreign .agentic/ directory.
+For an existing Git repo, add `.agentic/` governance; use `agentic-kit init` only for new scaffolds.
 
-`agentic-kit workspace init --root PATH` is a dry-run by default. With
-`--execute`, it creates the bounded `.agentic/` workspace, appends
-`.agentic/tmp/` to `.gitignore`, seeds `.agentic/state/status.md`, creates
-`.agentic/state/handoff/`, and leaves existing repository files alone unless
-`--inject-ci` or `--inject-pre-commit` is explicitly requested.
+```bash
+pip install agentic-project-kit
+agentic-kit workspace adopt --root PATH
+agentic-kit workspace init --root PATH --execute [--inject-ci|--inject-pre-commit]
+agentic-kit-gui --root PATH
+```
+
+`workspace adopt` is read-only: it proposes `.agentic/config.yaml`, reports docs/CI, prints the private/public boundary, and flags initialized/foreign `.agentic/` directory. `workspace init` dry-runs; `--execute` creates `.agentic/state/status.md`, `.agentic/state/handoff/`, transfer, CI-template, and prompt files, appends `.agentic/tmp/` to `.gitignore`, and preserves other files. No secrets, credentials, chat fragments, or logs in versioned `.agentic/`; local state uses ignored `.agentic/tmp/`.
 
 `agentic-kit workspace upgrade --root PATH` is also a dry-run by default. It
 plans deterministic manifest schema migrations step by step, prints the
