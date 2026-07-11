@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3cb150c70a16a50ed6f7d1bf6270d37bff46758c
-  short: 3cb150c7
-  subject: 'L1: Add doc lifecycle metadata audit (#1849)'
+  full: ef88a86fb3920a17e1a75139ed59611ff51f5eaf
+  short: ef88a86f
+  subject: 'L2: Add documentation lifecycle signals (#1852)'
 last_substantive_work_state:
-  full: 3cb150c70a16a50ed6f7d1bf6270d37bff46758c
-  short: 3cb150c7
-  subject: 'L1: Add doc lifecycle metadata audit (#1849)'
+  full: ef88a86fb3920a17e1a75139ed59611ff51f5eaf
+  short: ef88a86f
+  subject: 'L2: Add documentation lifecycle signals (#1852)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

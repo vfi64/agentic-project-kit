@@ -1,13 +1,13 @@
 {
   "command_reference": {
-    "ack": "COMMAND_MANIFEST_ACK da49759e8d28",
+    "ack": "COMMAND_MANIFEST_ACK dec749dbc55b",
     "json": "docs/reference/agentic-kit-commands.json",
-    "manifest_sha": "da49759e8d28",
+    "manifest_sha": "dec749dbc55b",
     "markdown": "docs/reference/AGENTIC_KIT_COMMANDS.md",
     "must_not_reconstruct_commands_from_memory": true,
     "source_hashes": {
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "3440c786e83fe37f69c45f9ce4f448b1c45139d67516281eacea07a651db5d9c",
-      "docs/reference/agentic-kit-commands.json": "06c4a5bfa6f48e3d3345fca90e99a1a33a3cf5756a1242b34b650e0f365c4419"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "97f37a04a1f2356d40aaa841ef39805901c4275cb5e981960f4a0c1a4fabed6b",
+      "docs/reference/agentic-kit-commands.json": "8ca92eade8b4c23d27702ec9d0a136dccf7df5abf8bd49832b002257493e3aa7"
     }
   },
   "current_state_contract": {
@@ -94,15 +94,6 @@
         "id": "master-implementation-q",
         "status": "active",
         "summary": "Master Implementation Q2 rest sequence"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "doc-lifecycle-signals",
-        "status": "planned",
-        "summary": "Add documentation lifecycle obsolescence signals"
       },
       {
         "files": [
@@ -287,13 +278,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1849-handoff-refresh",
+      "branch": "docs/post-pr1852-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "3cb150c70a16a50ed6f7d1bf6270d37bff46758c",
+      "head": "ef88a86fb3920a17e1a75139ed59611ff51f5eaf",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "3cb150c70a16a50ed6f7d1bf6270d37bff46758c",
+      "origin_main": "ef88a86fb3920a17e1a75139ed59611ff51f5eaf",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -370,13 +361,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1849-handoff-refresh",
+    "branch": "docs/post-pr1852-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "3cb150c70a16a50ed6f7d1bf6270d37bff46758c",
+    "head": "ef88a86fb3920a17e1a75139ed59611ff51f5eaf",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "3cb150c70a16a50ed6f7d1bf6270d37bff46758c",
+    "origin_main": "ef88a86fb3920a17e1a75139ed59611ff51f5eaf",
     "worktree_clean": false
   },
   "rules": [
@@ -599,8 +590,8 @@
   ],
   "schema_version": 1,
   "source_hashes": {
-    "docs/reference/AGENTIC_KIT_COMMANDS.md": "3440c786e83fe37f69c45f9ce4f448b1c45139d67516281eacea07a651db5d9c",
-    "docs/reference/agentic-kit-commands.json": "06c4a5bfa6f48e3d3345fca90e99a1a33a3cf5756a1242b34b650e0f365c4419"
+    "docs/reference/AGENTIC_KIT_COMMANDS.md": "97f37a04a1f2356d40aaa841ef39805901c4275cb5e981960f4a0c1a4fabed6b",
+    "docs/reference/agentic-kit-commands.json": "8ca92eade8b4c23d27702ec9d0a136dccf7df5abf8bd49832b002257493e3aa7"
   },
   "validation": {
     "path": ".agentic/successor_handoff_package/validation_report.json",
