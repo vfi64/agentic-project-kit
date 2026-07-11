@@ -1,66 +1,89 @@
-# Master Implementation Q — CM → LC/ID → P4–P6 → LC3/TH1 → L
+# Master Implementation Q2 — Restumsetzung
 
 Status: active
-Status-date: 2026-07-10
+Status-date: 2026-07-11
 Decision status: accepted
 Review policy: review_after:release:>=0.4.13
-Supersedes: previous direct P4/P5/P6 ordering
+Supersedes: previous Master Implementation Q ordering after PR #1806
 Repository: vfi64/agentic-project-kit
 
-This document is the central planning anchor for Master Implementation Q.
+This document is the central planning anchor for Master Implementation Q2.
+The Q2 update adopts the maintainer-supplied `CODEX_AUFTRAG_Q2_VERBESSERT.md`
+input as the current rest-implementation order after verifying the repository state.
+Historical appendices in this file remain useful baseline detail. Where they
+conflict with the Q2 update below, the Q2 update and current repository state
+take precedence.
 
 ## Evidence anchor
 
 K3 closeout documentation was merged by PR #1776.
 Merge commit: 7ef6ba8cf3b782c5b521e8ee1ad45b473c6a2bb8
+P4b resolver sweep was merged by PR #1803.
+P5a self-hosting manifest was merged by PR #1805.
+Post-PR1805 handoff refresh was merged by PR #1806.
+Q2 rest-plan adoption is tracked by PR #1807.
 
 ## Binding sequence
 
 One slice equals one branch and one PR.
 
-1. CM1 → CM2 → CM3 → CM4
-2. LC1 → LC2 → ID1
-3. K3 → P4a → P4b → P5a → P5b → P5d → P5c-PLAN → P6a → P6b
-4. LC3 → TH1
-5. L0 → L1 → L2 → L3 → L4 → L5
+1. Stufe A, Schutzschirm: CM3 → CM4.
+2. Stufe B, Lock-Vertrag, Repo-Identität, Hygiene: LC1 → LC2 → ID1 → ID2 → K3.
+3. Stufe C, Self-hosting-Abschluss und Operating Layer: P5b → P5d → P5c-PLAN → P6a → P6b.
+4. Stufe D, Lock-Nachrüstung und Negativpfade: LC3 → TH1.
+5. Stufe E, Doc Lifecycle: L0 → L1 → L2 → L3 → L4 → L5.
 
-K3 is completed by PR #1776.
+CM1, CM2, P4a, P4b, and P5a are not active Q2 rest-work slices. Their state
+is still verified by Turn 0 probes before depending on them.
 
-## Updated planning consequence for P4, P5, and P6
+## Q2 Pflichtstart
 
-P4, P5, and P6 are no longer the next immediate workstream after K3.
-They now run only after CM1 through CM4, LC1 through LC2, and ID1 are completed or verified done by Turn 0.
+Before each new Q2 work session, read the generated handoff package and current
+state documents named by the Q2 Auftrag, then run these gates before mutation:
 
-New P4 through P6 order:
+- `agentic-kit transfer fetch-origin`
+- branch, HEAD, `origin/main`, ahead/behind, and worktree checks
+- `agentic-kit transfer repo-status`
+- `agentic-kit transfer post-merge-check`
+- `agentic-kit docs-audit`
+- `agentic-kit direction validate`
+- `agentic-kit direction audit-drift`
+- `agentic-kit doc-registry check-unregistered --strict-scope`
+- `agentic-kit standard-gates-audit-suite`
 
-1. P4a namespace defaults.
-2. P4b resolver sweep and closeout evidence.
-3. P5a self-hosting manifest.
-4. P5b resolver alias evidence and suite guard.
-5. P5d legacy profile deprecation.
-6. P5c physical migration plan only; execution remains blocked.
-7. P6a GUI project selection.
-8. P6b operating-layer quickstart and CI template tests.
+If any required startup result is not PASS or an explicit PASS/NOOP, stop with
+diagnosis before product work.
 
-## Turn-0 generated handoff report hygiene
+## Turn 0 Entry Rule
 
-Before Turn-0 state probes are evaluated, the executor must inspect the worktree.
+Turn 0 is read-only except for the Q2-allowed mini-slice that may mark
+`command-for-selector` done when the command is already functionally merged and
+only the Direction item remains active.
 
-If and only if the only dirty tracked files are these generated transfer handoff reports, they are restored before continuing:
+The next Q2 slice is the first item in the binding sequence whose Direction item
+is not `done`, whose code or evidence probe is negative, or whose acceptance is
+not demonstrably satisfied. Items created by their own slice are treated as
+absent until that slice runs: LC items by LC1, `repo-identity-sweep` by ID2,
+`negative-path-hardening` by TH1, and L items by L0.
 
-- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
-- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log
+An item marked done while its probe is negative, or code that exists while its
+Direction status is absent or stale, is an inconsistent state and a hard stop.
 
-Any other dirty file remains a hard stop.
+## Updated P5 Consequence
 
-CM1 must fix this durably: a successful transfer refresh-llm-context-carriers run must not leave tracked generated transfer handoff reports dirty. The fix needs a regression test.
+P4b and P5a are complete. The remaining P5 work is no longer a generic resolver
+alias sweep. Q2 narrows it to:
 
-## Delta Q0
-
-The generated handoff report dirty-state bug is handled operationally in Turn 0 and fixed durably in CM1.
+1. P5b: enforce active path and identity literal classes, while non-active
+   references and message literals remain visible but non-blocking.
+2. P5d: deprecate the implicit legacy profile and warn only in manifest-less
+   legacy workspaces.
+3. P5c-PLAN: produce the physical migration plan only, then mark execution as
+   maintainer-gated.
 
 ## Maintainer-gated stops
 
+- LC2 Turn 1 reentrancy decision.
 - P5c physical migration execution.
 - strict lifecycle switch in the kit repository.
 - --strict-unknown.
@@ -68,7 +91,11 @@ The generated handoff report dirty-state bug is handled operationally in Turn 0 
 - first Comm-SCI adoption.
 - the 2.0 line.
 
-## Authoritative full text
+## Historical Full Text
+
+The following Masterauftrag Q text and appendices remain historical baseline
+material. The Q2 update above supersedes them when the order or acceptance
+differs from the verified repository state.
 
 MASTERAUFTRAG Q — Gesamtumsetzung: CM → LC/ID → P4–P6 → LC3/TH1 → L
 Repo: vfi64/agentic-project-kit
@@ -966,20 +993,29 @@ Manifest selbst via doc-registry register erfasst (falls Schema das
 vorsieht; sonst im PR begründen); direction: p5a → done. Gates PASS.
 
 ════════════════════════════════════════════════════════════════
-P5b — Resolver-Alias-Evidence
+P5b — Enforce-Check auf aktive Klassen
 ════════════════════════════════════════════════════════════════
 Branch: codex/p5b-resolver-evidence
 Label: p5b-resolver-evidence
-AUFGABE: Abschlussnachweis, dass jeder Kit-Governance-Zugriff über den
-Resolver läuft: (1) audit-path-literals-Report frisch (post-P4b/P5a) als
-Evidence committen+registrieren; (2) ein neuer fokussierter Audit-Check
-(oder Erweiterung des bestehenden): FAIL, wenn ein src-Modul außerhalb
-workspace.py + deklarierter Template-Ausnahmen ein docs/- oder
-tmp/-Literal einführt — und diesen Check in die Standard-Suite (das macht
-P4b-Erfolg dauerhaft, statt einmalig). (3) Nachzügler, die der Check
-findet, sofort migrieren.
-AKZEPTANZ: Neuer Suite-Check aktiv und grün; Evidence registriert;
-direction: p5b-resolver-aliases → done. Gates PASS.
+ZUERST LESEN: Audit-Implementierung, P4b-Evidence, ID2-Identity-
+Klassifikation, standard_gates_audit_suite.
+AUFGABE: Den Enforce-Modus auf aktive Klassen begrenzen. FAIL entsteht,
+wenn aktive Pfad-Literale außerhalb workspace.py und deklarierter
+Ausnahmen > 0 sind oder aktive Identity-Literale außerhalb deklarierter
+Ausnahmen > 0 sind. Nicht auf Gesamtliterale prüfen. False Positives und
+reference_or_message-Fälle bleiben sichtbar, blockieren aber nicht.
+HEURISTIK-STICHPROBE: Mindestens drei reference_or_message-Fälle manuell
+prüfen und dokumentieren: wirklich nur Meldungstext, kein aktiver
+Pfadzugriff, keine Verhaltenssteuerung.
+SUITE-AUFNAHME: Erst wenn der Enforce-Lauf auf aktuellem main sauber ist;
+main darf nie absichtlich rot werden.
+EVIDENCE: Frische P5b-Evidence für path, identity und
+Klassifikationsstichprobe erzeugen und registrieren.
+TESTS: aktives Pfadliteral → FAIL; Referenzliteral → PASS; aktives
+Identity-Literal → FAIL; deklarierte Identity-Ausnahme → PASS; sauberer
+Baum → PASS.
+AKZEPTANZ: Enforce in Suite aktiv und grün; Evidence registriert;
+Stichprobe dokumentiert; direction: p5b-resolver-aliases → done. Gates PASS.
 
 ════════════════════════════════════════════════════════════════
 P5d — Legacy-Profil-Deprecation dokumentieren
