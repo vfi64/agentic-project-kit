@@ -342,18 +342,31 @@ rules:
     - 'Status: PASS'
     - 'Blocker count: 0'
 - id: kit-os-architecture-coverage
-  description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, legacy-profile deprecation, and evidence policy.
+  description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, legacy-profile deprecation, P5c physical migration planning, and evidence policy.
   documents:
   - path: docs/architecture/KIT_AS_OS_ARCHITECTURE.md
     terms:
     - operating-layer mode
     - implicit legacy profile
     - legacy profile deprecation warning
+    - P5C_PHYSICAL_MIGRATION_PLAN.md
     - manifest-less workspaces
     - suppressible
     - workspace lock
     - workspace resolver
     - Evidence policy for current-state claims
+- id: p5c-physical-migration-plan-coverage
+  description: P5c physical migration execution must remain visibly maintainer-gated and projection-first.
+  documents:
+  - path: docs/architecture/P5C_PHYSICAL_MIGRATION_PLAN.md
+    terms:
+    - P5c Physical Migration Plan
+    - maintainer-gated
+    - Reference Scan Baseline
+    - '`docs/STATUS.md`'
+    - '`.agentic/state/status.md`'
+    - projection
+    - No physical files moved
 - id: workspace-adopt-readme-coverage
   description: Read-only workspace adoption analysis must remain visible as the first operating-layer command for existing repositories.
   documents:

@@ -369,6 +369,9 @@ manifest-less repos (until 2.0.0).
 - **P5c** optional physical migration, only once all references, docs, and
   tests are resolver-based. Public surfaces like `docs/STATUS.md` may remain
   as **projections** of `.agentic/state/status.md` rather than being moved.
+  The decision-ready P5c plan lives in
+  `docs/architecture/P5C_PHYSICAL_MIGRATION_PLAN.md`; execution remains
+  maintainer-gated.
 - **P5d** deprecation of legacy top-level paths inside the kit repo, aligned
   with the 2.0.0 removal of the implicit legacy profile. The deprecation
   warning must fire only for manifest-less workspaces and must be suppressible
