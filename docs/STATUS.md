@@ -7,9 +7,9 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `08c88271` (`Classify repository identity literals (#1827)`).
-Latest substantive work: PR #1827 (`Classify repository identity literals (#1827)`).
-Post-merge handoff status: PASS/NOOP after PR #1827 administrative refresh.
+Current verified main: `2688490c` (`Record remote branch hygiene evidence (#1829)`).
+Latest substantive work: PR #1829 (`Record remote branch hygiene evidence (#1829)`).
+Post-merge handoff status: PASS/NOOP after PR #1829 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1827
+## Operational documentation refresh state after PR #1829
 
-Current administrative handoff refresh state is `08c88271` (`Classify repository identity literals (#1827)`). Continue next only after this post-PR1827 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `2688490c` (`Record remote branch hygiene evidence (#1829)`). Continue next only after this post-PR1829 refresh is committed and merged; the next substantive slice must be created from fresh main.
