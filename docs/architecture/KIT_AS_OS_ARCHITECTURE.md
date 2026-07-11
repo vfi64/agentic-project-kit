@@ -326,7 +326,9 @@ generic knowledge of the historical default layout, on the same footing as
 explicitly bounded: **supported through the entire 1.x line, removed in
 2.0.0.** From 2.0.0 on, `.agentic/config.yaml` is hard-required, and
 `workspace init` creates it in seconds for any straggler repo. This document
-is the deprecation announcement.
+is the deprecation announcement. P5d makes that announcement executable:
+manifest-less repositories emit a suppressible legacy profile deprecation warning,
+while manifest-bearing repositories remain quiet.
 
 ## 9. Versioning
 
@@ -368,7 +370,9 @@ manifest-less repos (until 2.0.0).
   tests are resolver-based. Public surfaces like `docs/STATUS.md` may remain
   as **projections** of `.agentic/state/status.md` rather than being moved.
 - **P5d** deprecation of legacy top-level paths inside the kit repo, aligned
-  with the 2.0.0 removal of the implicit legacy profile.
+  with the 2.0.0 removal of the implicit legacy profile. The deprecation
+  warning must fire only for manifest-less workspaces and must be suppressible
+  during the 1.x compatibility window.
 
 **P6 — Interface follow-ups.** GUI project selection (cockpit on a chosen
 root), initial-prompt parameterization per workspace, CI recipe hardening.

@@ -2,15 +2,23 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass, field, fields, replace
+import os
 from pathlib import Path
 from types import MappingProxyType
 from typing import Any
+import warnings
 
 import yaml
 
 
 SUPPORTED_MANIFEST_SCHEMA_VERSION = 1
 WORKSPACE_MANIFEST_FIX_HINT = "run `agentic-kit workspace upgrade`, or fix the manifest"
+LEGACY_PROFILE_WARNING_ENV = "AGENTIC_KIT_SUPPRESS_LEGACY_PROFILE_WARNING"
+LEGACY_PROFILE_DEPRECATION_MESSAGE = (
+    "agentic-kit implicit legacy profile is deprecated for manifest-less workspaces "
+    "and will be removed in 2.0.0; run `agentic-kit workspace init --root PATH` "
+    f"or set {LEGACY_PROFILE_WARNING_ENV}=1 to suppress this warning."
+)
 ALLOWED_PROJECT_TYPES = frozenset({"python", "node", "generic"})
 ALLOWED_PROFILES = frozenset({"python-default", "generic"})
 ALLOWED_MODULES = frozenset(
@@ -28,6 +36,10 @@ ALLOWED_TOP_LEVEL_KEYS = frozenset(
         "gates",
     }
 )
+
+
+class LegacyProfileDeprecationWarning(UserWarning):
+    """Warning emitted when a manifest-less workspace uses the implicit legacy profile."""
 
 
 def _default_modules() -> Mapping[str, bool]:
@@ -347,7 +359,11 @@ class Workspace:
         return f"{self.config.admin_refresh_branch_prefix}{after_pr}-handoff-refresh"
 
 
-def load_workspace(root: Path = Path(".")) -> Workspace:
+def load_workspace(
+    root: Path = Path("."),
+    *,
+    suppress_legacy_profile_warning: bool | None = None,
+) -> Workspace:
     """Load the workspace using the implicit legacy profile or a schema-v1 manifest."""
 
     config = LEGACY_DEFAULTS
@@ -355,7 +371,24 @@ def load_workspace(root: Path = Path(".")) -> Workspace:
     manifest_path = root / config.workspace_manifest_file
     if manifest_path.exists():
         return _load_manifest_workspace(root, manifest_path, NAMESPACE_DEFAULTS)
+    if not _suppress_legacy_profile_warning(suppress_legacy_profile_warning):
+        warnings.warn(
+            LEGACY_PROFILE_DEPRECATION_MESSAGE,
+            LegacyProfileDeprecationWarning,
+            stacklevel=1,
+        )
     return Workspace(root=root, config=config)
+
+
+def _suppress_legacy_profile_warning(explicit: bool | None) -> bool:
+    if explicit is not None:
+        return explicit
+    return os.environ.get(LEGACY_PROFILE_WARNING_ENV, "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
 
 
 def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig) -> Workspace:

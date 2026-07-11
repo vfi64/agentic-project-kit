@@ -342,12 +342,15 @@ rules:
     - 'Status: PASS'
     - 'Blocker count: 0'
 - id: kit-os-architecture-coverage
-  description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, and evidence policy.
+  description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, legacy-profile deprecation, and evidence policy.
   documents:
   - path: docs/architecture/KIT_AS_OS_ARCHITECTURE.md
     terms:
     - operating-layer mode
     - implicit legacy profile
+    - legacy profile deprecation warning
+    - manifest-less workspaces
+    - suppressible
     - workspace lock
     - workspace resolver
     - Evidence policy for current-state claims
@@ -362,6 +365,9 @@ rules:
     - .agentic/config.yaml
     - private/public boundary
     - foreign .agentic/ directory
+    - implicit legacy profile
+    - legacy profile deprecation warning
+    - AGENTIC_KIT_SUPPRESS_LEGACY_PROFILE_WARNING
 - id: workspace-init-readme-coverage
   description: Bounded workspace init behavior must remain visible with dry-run and opt-in injection boundaries.
   documents:
