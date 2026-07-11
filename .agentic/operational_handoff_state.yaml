@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c340dade608d705156a4355f204f1f2ee5109bc9
-  short: c340dade
-  subject: Add chat entrypoint manifest contract (#1815)
+  full: 3e1512ee268c3c804085eebcc6777991dc26ab38
+  short: 3e1512ee
+  subject: Gate transfer apply with instruction lint (#1817)
 last_substantive_work_state:
-  full: c340dade608d705156a4355f204f1f2ee5109bc9
-  short: c340dade
-  subject: Add chat entrypoint manifest contract (#1815)
+  full: 3e1512ee268c3c804085eebcc6777991dc26ab38
+  short: 3e1512ee
+  subject: Gate transfer apply with instruction lint (#1817)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
