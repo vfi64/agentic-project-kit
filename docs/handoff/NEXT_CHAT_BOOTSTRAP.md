@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `2688490ce1e4729fc5acc9e6dc37e0097f7b96db` (`2688490c`)
-- Handoff freshness marker: `2688490c`
-- Branch at generation: `docs/post-pr1829-handoff-refresh`
+- HEAD: `09e3dab02b9fc7418378edff3a4e0a77a3069366` (`09e3dab0`)
+- Handoff freshness marker: `09e3dab0`
+- Branch at generation: `docs/post-pr1831-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -71,7 +71,6 @@ Wenn der Bootstrap grün ist:
 
 Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 
-- `p5b-resolver-aliases` (planned): Enforce active path and identity literal classes for P5
 - `p5c-physical-migration` (planned): Plan physical migration after legacy profile deprecation for P5
 - `p5d-legacy-path-deprecation` (planned): Deprecate legacy top-level paths in line with legacy-profile removal for P5
 - `p6-gui-project-selection-and-ci-recipe` (planned): Add GUI project selection and harden CI recipe follow-ups for P6

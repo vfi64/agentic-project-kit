@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1829-handoff-refresh`
+- branch: `docs/post-pr1831-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -147,15 +147,6 @@ Wenn der Bootstrap grün ist:
 ```json
 {
   "open_tasks": [
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "p5b-resolver-aliases",
-      "status": "planned",
-      "summary": "Enforce active path and identity literal classes for P5"
-    },
     {
       "files": [
         "docs/planning/PROJECT_DIRECTION.yaml",
@@ -419,14 +410,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1829-handoff-refresh",
+    "branch": "docs/post-pr1831-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "2688490ce1e4729fc5acc9e6dc37e0097f7b96db",
+    "head": "09e3dab02b9fc7418378edff3a4e0a77a3069366",
     "head_matches_origin_main": true,
-    "head_short": "2688490c",
+    "head_short": "09e3dab0",
     "local_path": "cd /path/to/",
-    "origin_main": "2688490ce1e4729fc5acc9e6dc37e0097f7b96db",
-    "origin_main_short": "2688490c",
+    "origin_main": "09e3dab02b9fc7418378edff3a4e0a77a3069366",
+    "origin_main_short": "09e3dab0",
     "worktree_clean": false
   }
 }
@@ -452,7 +443,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 9a377188be24). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 9a377188be24. Consult `agentic-kit command-for` before proposing commands.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: cd4c92123d4f). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK cd4c92123d4f. Consult `agentic-kit command-for` before proposing commands.
 - Before proposing ANY command run/consult `agentic-kit command-for`.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -462,5 +453,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 6b71cbc8a610c3e3ac198a853b57812d3a61d782df45c099c0267be1e3c7904f
-- docs/reference/agentic-kit-commands.json: 65a33bb85ca9978953128602dbd4d470fe62bdbc8dccbc906a769b1617185e9e
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 6836bb315848282982018e9a22c6dc6c4b2360104baab54111ec031bffda9663
+- docs/reference/agentic-kit-commands.json: 39dfc067cf24592d0bc6544a15810ccbfe46e3ba2af9325efeec64aaecd7f07c
