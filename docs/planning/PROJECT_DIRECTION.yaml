@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1834
+  updated_after_pr: 1837
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1834
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1837
 strategy:
 - id: governed-operating-model
   status: active
@@ -226,16 +226,26 @@ roadmap:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: p5c-physical-migration
   phase: P5
-  status: planned
+  status: blocked
   title: Plan physical migration after legacy profile deprecation
+  completed_by_pr: 1837
+  block_reason: 'awaiting maintainer decision (plan: docs/architecture/P5C_PHYSICAL_MIGRATION_PLAN.md)'
+  rationale: >-
+    PR #1837 completes the Q2 P5c-PLAN requirement. Physical migration execution
+    remains maintainer-gated; the Q2 sequence continues with P6.
   depends_on:
   - p5d-legacy-path-deprecation
   acceptance:
   - The slice creates and registers a decision-ready migration plan only.
   - No physical files move in the Q2 P5c-PLAN slice.
   - Execution remains maintainer-gated after the plan.
+  - The Direction item remains blocked for P5c-Exec while later Q2 slices may proceed.
+  evidence:
+  - PR #1837
+  - docs/architecture/P5C_PHYSICAL_MIGRATION_PLAN.md
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  - docs/architecture/P5C_PHYSICAL_MIGRATION_PLAN.md
 - id: p5d-legacy-path-deprecation
   phase: P5
   status: done
