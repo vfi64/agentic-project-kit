@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: dd695b73dc3a
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: e58478cb6b5c
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `217`
+- Command count: `218`
 
 ## Commands
 
@@ -853,6 +853,23 @@ _No parameters._
 | `github_owner` | `TyperOption` | --owner | `False` |  |  |
 | `visibility` | `TyperOption` | --visibility | `False` | `private` | private or public |
 | `kit_source` | `TyperOption` | --kit-source | `False` | `pypi` | agentic-kit install source for generated CI: pypi, testpypi, or none |
+
+### `agentic-kit instruction lint`
+
+- Safety: `READ_ONLY`
+- When to use: Lint instruction text against the current command manifest.
+- Dry-run available: `False`
+
+Lint instruction text against the current command manifest.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `file_path` | `TyperOption` | --file | `False` |  | Instruction text file to lint. |
+| `stdin_input` | `TyperOption` | --stdin | `False` | `False` | Read instruction text from stdin. |
+| `require_ack` | `TyperOption` | --require-ack, --no-require-ack | `False` | `True` | Require the current COMMAND_MANIFEST_ACK line. |
+| `strict_unknown` | `TyperOption` | --strict-unknown | `False` | `False` | Treat unknown raw git/gh commands as blocking. |
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit pass-already-done classify`
 

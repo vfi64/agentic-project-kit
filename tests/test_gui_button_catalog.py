@@ -22,6 +22,7 @@ def test_gui_button_catalog_covers_communication_and_workflow_surface():
         "bootstrap-show",
         "terminal-remote-preflight",
         "workflow-guard-check",
+        "instruction-lint-clipboard",
         "protected-change-plan",
         "merge-if-green",
         "agent-run",

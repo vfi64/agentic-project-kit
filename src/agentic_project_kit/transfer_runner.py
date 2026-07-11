@@ -9,6 +9,7 @@ from typing import Any
 
 import yaml
 
+from agentic_project_kit.instruction_lint import strip_command_manifest_ack_header
 from agentic_project_kit.workspace import load_workspace
 
 DEFAULT_INBOX = Path(".agentic/transfer/inbox/current.yaml")
@@ -116,7 +117,7 @@ def parse_transfer_order(data: dict[str, Any]) -> TransferOrder:
 
 
 def load_transfer_order(path: Path = DEFAULT_INBOX) -> TransferOrder:
-    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    data = yaml.safe_load(strip_command_manifest_ack_header(path.read_text(encoding="utf-8"))) or {}
     if not isinstance(data, dict):
         raise ValueError(f"transfer order must be a mapping: {path}")
     return parse_transfer_order(data)

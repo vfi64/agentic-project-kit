@@ -688,8 +688,8 @@ def _run_status_refresh() -> tuple[int, str]:
     return 0, render_gui_gatekeeper_status(build_gui_gatekeeper_status(Path.cwd()))
 
 
-def _agentic_kit_command(*args: str) -> list[str]:
-    root = Path.cwd()
+def _agentic_kit_command(*args: str, project_root: Path | str | None = None) -> list[str]:
+    root = Path(project_root) if project_root is not None else Path.cwd()
     candidates = (
         root / ".venv" / "bin" / "agentic-kit",
         root / ".venv" / "Scripts" / "agentic-kit.exe",
@@ -712,6 +712,60 @@ def _run_restore_volatile() -> tuple[int, str]:
     )
     output_parts = [part.strip() for part in (completed.stdout, completed.stderr) if part.strip()]
     return completed.returncode, "\n".join(output_parts)
+
+
+def _run_instruction_lint_stdin(text: str, *, project_root: Path | str = ".") -> tuple[int, str]:
+    completed = subprocess.run(
+        _agentic_kit_command("instruction", "lint", "--stdin", project_root=project_root),
+        input=text,
+        text=True,
+        capture_output=True,
+        check=False,
+        cwd=Path(project_root),
+    )
+    output_parts = [part.strip() for part in (completed.stdout, completed.stderr) if part.strip()]
+    return completed.returncode, "\n".join(output_parts)
+
+
+def run_instruction_lint_clipboard(
+    clipboard_getter: Callable[[], str] | None = None,
+    *,
+    project_root: Path | str = ".",
+) -> str:
+    try:
+        clipboard_text = clipboard_getter() if clipboard_getter is not None else ""
+    except Exception:
+        return _catalog_action_result(
+            "instruction-lint-clipboard",
+            "read-only",
+            allowed=True,
+            executed=False,
+            returncode=1,
+            message="clipboard empty/unavailable",
+        )
+    if not str(clipboard_text or "").strip():
+        return _catalog_action_result(
+            "instruction-lint-clipboard",
+            "read-only",
+            allowed=True,
+            executed=False,
+            returncode=1,
+            message="clipboard empty/unavailable",
+        )
+    returncode, output = _run_instruction_lint_stdin(str(clipboard_text), project_root=project_root)
+    return _catalog_action_result(
+        "instruction-lint-clipboard",
+        "read-only",
+        allowed=True,
+        executed=True,
+        returncode=returncode,
+        message="Action executed through agentic-kit instruction lint --stdin.",
+        output=output,
+    )
+
+
+def _run_instruction_lint_clipboard_unavailable() -> tuple[int, str]:
+    return 1, "clipboard empty/unavailable"
 
 
 def _run_work_order_show() -> tuple[int, str]:
@@ -756,6 +810,7 @@ MANUAL_GUI_READONLY_RUNNERS: dict[str, Callable[[], tuple[int, str]]] = {
     "gui-dry-run": _run_gui_dry_run,
     "handoff-check": _run_handoff_check,
     "handoff-prompt": _run_handoff_prompt,
+    "instruction-lint-clipboard": _run_instruction_lint_clipboard_unavailable,
     "last-result": _run_last_result,
     "next-turn-status": _run_next_turn_status,
     "patch-preflight": _run_patch_preflight,
@@ -840,7 +895,13 @@ def render_manual_launch_content(root: object) -> None:
     def run_action_click(command_id: str) -> None:
         set_status(f"Status: running | branch: main | action: {command_id}")
         try:
-            value = run_manual_gui_catalog_action(command_id)
+            if command_id == "instruction-lint-clipboard":
+                value = run_instruction_lint_clipboard(
+                    lambda: root.clipboard_get(),
+                    project_root=Path.cwd(),
+                )
+            else:
+                value = run_manual_gui_catalog_action(command_id)
             write_output(value)
             if "returncode=0" in value:
                 set_status(f"Status: success | branch: main | action: {command_id}")

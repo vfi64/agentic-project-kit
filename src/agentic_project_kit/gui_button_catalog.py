@@ -259,6 +259,14 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         "governance",
     ),
     _button(
+        "instruction-lint-clipboard",
+        "Lint Clipboard",
+        "Quality Gates",
+        "Lint the current clipboard through agentic-kit instruction lint --stdin without executing it.",
+        "lint",
+        wrapper_command=("agentic-kit", "instruction", "lint", "--stdin"),
+    ),
+    _button(
         "state-freshness",
         "State Freshness",
         "Quality Gates",

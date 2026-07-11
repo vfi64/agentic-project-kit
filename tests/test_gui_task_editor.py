@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 import subprocess
 
 from typer.testing import CliRunner
@@ -10,6 +11,7 @@ from agentic_project_kit.cli import app
 from agentic_project_kit.communication_rule_context import REQUIRED_LOADED_SECTIONS
 from agentic_project_kit import transfer_repo_actions
 from agentic_project_kit import gui_transfer_contract
+from agentic_project_kit.command_manifest import load_manifest
 from agentic_project_kit.gui_task_editor import (
     CANONICAL_REMOTE_TRANSFER_REPORT_PATH,
     CANONICAL_TRANSFER_PAYLOAD_PATH,
@@ -208,6 +210,9 @@ def test_submit_user_task_writes_canonical_transfer_inbox(tmp_path) -> None:
     assert result.button_next_state == TaskEditorState.BLOCKED.value
     assert payload["title"] == "Demo"
     assert payload["kind"] == "gui_user_task_transfer_order"
+    assert payload["manifest"] == "docs/reference/agentic-kit-commands.json"
+    manifest = load_manifest(Path(".").resolve())
+    assert payload["manifest_sha"] == manifest["meta"]["manifest_sha"]
     assert payload["id"] == result.task_id
     assert payload["status"] == "submitted"
     assert "remote_readable" not in payload

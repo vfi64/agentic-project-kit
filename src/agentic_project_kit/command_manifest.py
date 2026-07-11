@@ -170,6 +170,7 @@ def infer_safety(command: dict[str, Any]) -> str:
         "report",
         "inspect",
         "head-sha",
+        "lint",
         "repo-log",
         "repo-diff",
         "divergence-status",

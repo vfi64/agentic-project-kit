@@ -70,20 +70,27 @@ def apply(
     from agentic_project_kit.instruction_lint import lint_transfer_instruction
 
     lint_result = lint_transfer_instruction(path)
-    if lint_result.result_status != "PASS":
+    if lint_result.result_status == "BLOCKED":
         payload = lint_result.to_dict()
         if json_output:
             print(json.dumps(payload, indent=2, sort_keys=True))
         else:
-            print("INSTRUCTION_LINT_GATE")
-            print(f"STATE: {lint_result.result_status}")
-            print("BLOCKERS:")
-            for blocker in lint_result.blockers:
-                print(f"- {blocker}")
+            from agentic_project_kit.instruction_lint import render_instruction_lint_result
+
+            print(render_instruction_lint_result(lint_result), end="")
         raise typer.Exit(2)
+    warning_text = ""
+    if lint_result.result_status == "WARN":
+        from agentic_project_kit.instruction_lint import render_instruction_lint_result
+
+        warning_text = render_instruction_lint_result(lint_result)
 
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
     require_capability("run_next_command")
+    if warning_text:
+        warning_path = Path("tmp/instruction-lint-warnings.log")
+        warning_path.parent.mkdir(parents=True, exist_ok=True)
+        warning_path.write_text(warning_text, encoding="utf-8")
     order = _load_or_exit(path)
     result = apply_transfer_order(order, Path("."))
     _emit_result(result, json_output)

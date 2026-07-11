@@ -14,6 +14,8 @@ from typing import Callable
 
 import yaml
 
+from agentic_project_kit.command_manifest import JSON_PATH as COMMAND_MANIFEST_JSON_PATH
+from agentic_project_kit.command_manifest import load_manifest
 from agentic_project_kit.communication_rule_context import REQUIRED_LOADED_SECTIONS
 from agentic_project_kit import transfer_repo_actions
 from agentic_project_kit.gui_transfer_contract import (
@@ -47,6 +49,7 @@ COMMUNICATION_MODE_ALIASES = {
     "copy_paste": "copy_paste",
     "copy-and-paste": "copy_paste",
 }
+COMMAND_MANIFEST_RELATIVE_PATH = COMMAND_MANIFEST_JSON_PATH.as_posix()
 
 
 class TaskEditorState(StrEnum):
@@ -165,6 +168,19 @@ def standard_command_description_for_communication_mode(mode: str) -> str:
             "and paste the LLM-provided recovery block."
         ),
     }[normalized]
+
+
+def _command_manifest_sha_for_carrier(project_root: Path) -> str:
+    for candidate in (project_root, Path.cwd()):
+        try:
+            manifest = load_manifest(candidate.resolve())
+        except Exception:
+            continue
+        meta = manifest.get("meta") if isinstance(manifest.get("meta"), dict) else {}
+        manifest_sha = str(meta.get("manifest_sha") or "")
+        if manifest_sha:
+            return manifest_sha
+    return ""
 
 
 def communication_reply_contract(mode: str) -> dict[str, object]:
@@ -447,9 +463,12 @@ def submit_user_task(
     reply_contract = communication_reply_contract(normalized_mode)
     local_execution_command = standard_command_for_communication_mode(normalized_mode)
     local_execution_description = standard_command_description_for_communication_mode(normalized_mode)
+    command_manifest_sha = _command_manifest_sha_for_carrier(root)
     payload = {
         "schema_version": 1,
         "kind": "gui_user_task_transfer_order",
+        "manifest": COMMAND_MANIFEST_RELATIVE_PATH,
+        "manifest_sha": command_manifest_sha,
         "id": task_id,
         "command_id": task_id,
         "task_id": task_id,
