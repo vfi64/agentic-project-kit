@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-11T14:04:39.658065+00:00",
+  "generated_at_utc": "2026-07-11T14:32:19.825003+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,14 +56,14 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1819-handoff-refresh",
+    "branch": "docs/post-pr1821-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "05ffdd7c2eafe9e709bb8d9c459d6d4e12a4dba0",
+    "head": "bdbfcce52a56ed937d71838cab09694b70a65c0d",
     "head_matches_origin_main": true,
-    "head_short": "05ffdd7c",
+    "head_short": "bdbfcce5",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "05ffdd7c2eafe9e709bb8d9c459d6d4e12a4dba0",
-    "origin_main_short": "05ffdd7c",
+    "origin_main": "bdbfcce52a56ed937d71838cab09694b70a65c0d",
+    "origin_main_short": "bdbfcce5",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -176,6 +176,33 @@
         "id": "master-implementation-q",
         "status": "active",
         "summary": "Master Implementation Q2 rest sequence"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "lock-reentrancy-decision",
+        "status": "planned",
+        "summary": "Decide mutation-lock reentrancy and inherited-lock policy"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "lock-coverage-remediation",
+        "status": "planned",
+        "summary": "Remediate mutation-lock coverage gaps"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "repo-identity-literals",
+        "status": "active",
+        "summary": "Derive repository identity literals from workspace context"
       },
       {
         "files": [
