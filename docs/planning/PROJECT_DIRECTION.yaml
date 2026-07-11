@@ -730,6 +730,54 @@ plans:
   - Workspace init and upgrade negative paths return structured failures without tracebacks.
   - Instruction lint reports empty and unreadable input through structured lint findings.
   - Prose-only acknowledged instruction input remains a PASS.
+- id: doc-lifecycle-metadata
+  status: active
+  title: Add documentation lifecycle metadata and report-only consistency gate
+  rationale: >-
+    L1 will make registry-backed lifecycle metadata explicit before lifecycle
+    signals or sweep automation depend on it.
+  source_files:
+  - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+- id: doc-lifecycle-signals
+  status: planned
+  title: Add documentation lifecycle obsolescence signals
+  depends_on:
+  - doc-lifecycle-metadata
+  rationale: >-
+    L2 will turn review-after values, Direction coupling, and orphan indicators
+    into non-time-fragile lifecycle findings.
+  source_files:
+  - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+- id: doc-lifecycle-sweep
+  status: planned
+  title: Add guided documentation lifecycle sweep workflows
+  depends_on:
+  - doc-lifecycle-signals
+  rationale: >-
+    L3 will use lifecycle findings to produce bounded archive, confirm-current,
+    defer, and bootstrap actions without destructive defaults.
+  source_files:
+  - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+- id: doc-lifecycle-strict-adoption
+  status: planned
+  title: Adopt documentation lifecycle enforcement gradually
+  depends_on:
+  - doc-lifecycle-sweep
+  rationale: >-
+    L4 will promote lifecycle audit coverage through WARN and strict modes
+    without making current kit cleanup a hidden prerequisite.
+  source_files:
+  - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+- id: hygiene-manifest-adopt-baseline
+  status: planned
+  title: Add manifest hygiene and adopt baseline lifecycle support
+  depends_on:
+  - doc-lifecycle-strict-adoption
+  rationale: >-
+    L5 will connect lifecycle hygiene to workspace manifests, init seeds, and
+    adopt baselines after strict adoption is staged.
+  source_files:
+  - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
 - id: repo-identity-literals
   status: done
   title: Derive repository identity literals from workspace context
