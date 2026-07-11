@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 08c882712f561034eea5d6db575df5b40d972365
-  short: 08c88271
-  subject: Classify repository identity literals (#1827)
+  full: 2688490ce1e4729fc5acc9e6dc37e0097f7b96db
+  short: 2688490c
+  subject: Record remote branch hygiene evidence (#1829)
 last_substantive_work_state:
-  full: 08c882712f561034eea5d6db575df5b40d972365
-  short: 08c88271
-  subject: Classify repository identity literals (#1827)
+  full: 2688490ce1e4729fc5acc9e6dc37e0097f7b96db
+  short: 2688490c
+  subject: Record remote branch hygiene evidence (#1829)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
