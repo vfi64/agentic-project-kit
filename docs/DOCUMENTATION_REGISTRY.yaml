@@ -659,3 +659,7 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: CM4 command-manifest audit evidence showing chat entrypoint manifest references are current and non-blocking.
+  - path: docs/architecture/evidence/mutation-lock-coverage-2026-07-11-lc1.md
+    class: evidence/log
+    owner: maintainers
+    notes: LC1 report-only mutation-lock coverage evidence with current audit classifications, gap inventory, and branch_create recheck.

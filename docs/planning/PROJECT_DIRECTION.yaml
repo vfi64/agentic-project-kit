@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1819
+  updated_after_pr: 1821
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1819
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1821
 strategy:
 - id: governed-operating-model
   status: active
@@ -628,6 +628,61 @@ plans:
   acceptance:
   - Chat entrypoints carry the current manifest pointer and hash.
   - audit-command-manifest blocks stale entrypoint manifest references.
+- id: lock-contract-audit
+  status: done
+  title: Audit workspace mutation-lock coverage
+  completed_by_pr: 1821
+  depends_on:
+  - chat-entrypoint-contract
+  rationale: >-
+    Captured the current mutation-lock coverage and gap list in PR #1821 before
+    LC2 decides the reentrancy and wrapper-boundary policy.
+  source_files:
+  - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  evidence:
+  - docs/architecture/evidence/mutation-lock-coverage-2026-07-11-lc1.md
+  acceptance:
+  - Evidence records the exact audit and grep methodology.
+  - Current direct lock callsites and marker-only references are distinguished.
+  - Runtime mutator gaps stay visible for LC2/LC3 without gating the standard suite.
+- id: lock-reentrancy-decision
+  status: planned
+  title: Decide mutation-lock reentrancy and inherited-lock policy
+  depends_on:
+  - lock-contract-audit
+  rationale: Decide whether outer wrapper locks, inherited core locks, or a reentrant
+    lock primitive are the durable policy for nested mutation flows.
+  source_files:
+  - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  acceptance:
+  - The architecture document states the selected reentrancy and inherited-lock rule.
+  - The decision names the affected LC1 gap classes.
+- id: lock-coverage-remediation
+  status: planned
+  title: Remediate mutation-lock coverage gaps
+  depends_on:
+  - lock-reentrancy-decision
+  rationale: Apply the LC2 decision to runtime mutators while keeping read-only audits
+    and non-blocking report writers from acquiring unnecessary locks.
+  source_files:
+  - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  acceptance:
+  - Runtime mutators identified by LC1 follow the LC2 lock policy.
+  - False-positive metadata and report-writer findings remain visible but non-blocking.
+  - The mutation-lock audit can be promoted safely after remediation.
+- id: repo-identity-literals
+  status: active
+  title: Derive repository identity literals from workspace context
+  depends_on:
+  - lock-contract-audit
+  rationale: Replace self-hosting repository identity literals with resolver-backed
+    workspace identity before path and identity literal enforcement tightens.
+  source_files:
+  - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  acceptance:
+  - Repository full name and default local path are derived from workspace or git
+    context where active behavior needs them.
+  - Remaining identity literals are declared as reference, template, or test data.
 - id: direction-schema-command-migration
   status: done
   title: Introduce direction schema, command, migration, cleanup, scope, and gate
