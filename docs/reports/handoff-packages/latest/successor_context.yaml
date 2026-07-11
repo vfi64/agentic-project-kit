@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-11T16:28:41.895151+00:00",
+  "generated_at_utc": "2026-07-11T17:14:00.757574+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,28 +56,19 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1829-handoff-refresh",
+    "branch": "docs/post-pr1831-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "2688490ce1e4729fc5acc9e6dc37e0097f7b96db",
+    "head": "09e3dab02b9fc7418378edff3a4e0a77a3069366",
     "head_matches_origin_main": true,
-    "head_short": "2688490c",
+    "head_short": "09e3dab0",
     "local_path": "cd /path/to/",
-    "origin_main": "2688490ce1e4729fc5acc9e6dc37e0097f7b96db",
-    "origin_main_short": "2688490c",
+    "origin_main": "09e3dab02b9fc7418378edff3a4e0a77a3069366",
+    "origin_main_short": "09e3dab0",
     "worktree_clean": false
   },
   "schema_version": 1,
   "short_term_memory": {
     "open_tasks": [
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "p5b-resolver-aliases",
-        "status": "planned",
-        "summary": "Enforce active path and identity literal classes for P5"
-      },
       {
         "files": [
           "docs/planning/PROJECT_DIRECTION.yaml",
