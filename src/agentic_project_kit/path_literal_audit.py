@@ -35,6 +35,16 @@ class PathLiteralClassification:
         return asdict(self)
 
 
+@dataclass(frozen=True)
+class RepoIdentityLiteralClassification:
+    kind: str
+    counts_as_active_identity_literal: bool
+    rationale: str
+
+    def as_dict(self) -> dict[str, object]:
+        return asdict(self)
+
+
 DECLARED_PATH_LITERAL_CLASSIFICATIONS = MappingProxyType(
     {
         "src/agentic_project_kit/workspace.py": PathLiteralClassification(
@@ -46,6 +56,26 @@ DECLARED_PATH_LITERAL_CLASSIFICATIONS = MappingProxyType(
             kind="template_data",
             counts_as_active_path_literal=False,
             rationale="generated project template contents are data, not kit runtime path access",
+        ),
+    }
+)
+
+DECLARED_REPO_IDENTITY_EXCEPTIONS = MappingProxyType(
+    {
+        "src/agentic_project_kit/gui_cockpit_actions.py": RepoIdentityLiteralClassification(
+            kind="reference",
+            counts_as_active_identity_literal=False,
+            rationale="GUI help text points users to the kit source repository; it is not runtime workspace identity",
+        ),
+        "src/agentic_project_kit/gui_task_editor.py": RepoIdentityLiteralClassification(
+            kind="template",
+            counts_as_active_identity_literal=False,
+            rationale="GUI initial-prompt template is fixed kit bootstrap copy until P6 parameterizes selected workspaces",
+        ),
+        "src/agentic_project_kit/templates.py": RepoIdentityLiteralClassification(
+            kind="template",
+            counts_as_active_identity_literal=False,
+            rationale="generated project template contents are data and package metadata, not runtime repository identity",
         ),
     }
 )
@@ -69,9 +99,12 @@ class RepoIdentityLiteralModuleCount:
     path: str
     total: int
     patterns: dict[str, int]
+    classification: RepoIdentityLiteralClassification
 
     def as_dict(self) -> dict[str, object]:
-        return asdict(self)
+        data = asdict(self)
+        data["classification"] = self.classification.as_dict()
+        return data
 
 
 @dataclass(frozen=True)
@@ -127,6 +160,30 @@ class PathLiteralAuditResult:
         return sum(module.total for module in self.repo_identity_modules)
 
     @property
+    def active_repo_identity_modules(self) -> tuple[RepoIdentityLiteralModuleCount, ...]:
+        return tuple(
+            module
+            for module in self.repo_identity_modules
+            if module.classification.counts_as_active_identity_literal
+        )
+
+    @property
+    def active_repo_identity_module_count(self) -> int:
+        return len(self.active_repo_identity_modules)
+
+    @property
+    def active_repo_identity_literal_count(self) -> int:
+        return sum(module.total for module in self.active_repo_identity_modules)
+
+    @property
+    def declared_identity_exception_modules(self) -> tuple[RepoIdentityLiteralModuleCount, ...]:
+        return tuple(
+            module
+            for module in self.repo_identity_modules
+            if module.path in DECLARED_REPO_IDENTITY_EXCEPTIONS
+        )
+
+    @property
     def classification_summary(self) -> dict[str, dict[str, object]]:
         summary: dict[str, dict[str, object]] = {}
         for module in self.modules:
@@ -137,6 +194,23 @@ class PathLiteralAuditResult:
                     "module_count": 0,
                     "literal_count": 0,
                     "counts_as_active_path_literal": classification.counts_as_active_path_literal,
+                },
+            )
+            entry["module_count"] = int(entry["module_count"]) + 1
+            entry["literal_count"] = int(entry["literal_count"]) + module.total
+        return dict(sorted(summary.items()))
+
+    @property
+    def repo_identity_classification_summary(self) -> dict[str, dict[str, object]]:
+        summary: dict[str, dict[str, object]] = {}
+        for module in self.repo_identity_modules:
+            classification = module.classification
+            entry = summary.setdefault(
+                classification.kind,
+                {
+                    "module_count": 0,
+                    "literal_count": 0,
+                    "counts_as_active_identity_literal": classification.counts_as_active_identity_literal,
                 },
             )
             entry["module_count"] = int(entry["module_count"]) + 1
@@ -162,9 +236,21 @@ class PathLiteralAuditResult:
                 module.as_dict() for module in self.declared_exception_modules
             ],
             "repo_identity_literal_count": self.repo_identity_literal_count,
+            "active_repo_identity_module_count": self.active_repo_identity_module_count,
+            "active_repo_identity_literal_count": self.active_repo_identity_literal_count,
+            "declared_identity_exception_module_count": len(
+                self.declared_identity_exception_modules
+            ),
+            "repo_identity_classification_summary": self.repo_identity_classification_summary,
             "repo_identity_patterns": [asdict(pattern) for pattern in self.repo_identity_patterns],
             "repo_identity_modules": [
                 module.as_dict() for module in self.repo_identity_modules
+            ],
+            "active_repo_identity_modules": [
+                module.as_dict() for module in self.active_repo_identity_modules
+            ],
+            "declared_identity_exception_modules": [
+                module.as_dict() for module in self.declared_identity_exception_modules
             ],
         }
 
@@ -204,6 +290,10 @@ def audit_path_literals(
                             path=relative_path,
                             total=repo_identity_total,
                             patterns=repo_identity_counts,
+                            classification=_classify_repo_identity_literal_module(
+                                relative_path,
+                                repo_identity_counts,
+                            ),
                         )
                     )
 
@@ -229,6 +319,9 @@ def render_path_literal_audit(result: PathLiteralAuditResult) -> str:
         f"DECLARED_EXCEPTION_MODULES={len(result.declared_exception_modules)}",
         f"REPO_IDENTITY_MODULES={len(result.repo_identity_modules)}",
         f"REPO_IDENTITY_LITERAL_COUNT={result.repo_identity_literal_count}",
+        f"ACTIVE_IDENTITY_MODULES={result.active_repo_identity_module_count}",
+        f"ACTIVE_IDENTITY_LITERAL_COUNT={result.active_repo_identity_literal_count}",
+        f"DECLARED_IDENTITY_EXCEPTION_MODULES={len(result.declared_identity_exception_modules)}",
     ]
     if result.classification_summary:
         lines.append("CLASSIFICATION_SUMMARY:")
@@ -261,7 +354,19 @@ def render_path_literal_audit(result: PathLiteralAuditResult) -> str:
                 f"{pattern.name}={module.patterns.get(pattern.name, 0)}"
                 for pattern in result.repo_identity_patterns
             )
-            lines.append(f"REPO_IDENTITY={module.total}|{module.path}|{pattern_summary}")
+            disposition = (
+                "active" if module.classification.counts_as_active_identity_literal else "non-active"
+            )
+            lines.append(
+                f"REPO_IDENTITY={module.total}|{module.path}|classification={module.classification.kind}|"
+                f"disposition={disposition}|{pattern_summary}"
+            )
+    if result.declared_identity_exception_modules:
+        lines.append("DECLARED_IDENTITY_EXCEPTIONS:")
+        for module in result.declared_identity_exception_modules:
+            lines.append(
+                f"- {module.path}: {module.classification.kind} — {module.classification.rationale}"
+            )
     return "\n".join(lines) + "\n"
 
 
@@ -315,17 +420,42 @@ def render_path_literal_evidence_report(
             "Repo identity literals are listed for follow-up visibility and are not migrated by P4b.",
             "",
             f"Repo identity literal count: {result.repo_identity_literal_count}",
+            f"Active repo identity modules: {result.active_repo_identity_module_count}",
+            f"Active repo identity literal count: {result.active_repo_identity_literal_count}",
             "",
         ]
     )
     repo_pattern_headers = [pattern.name for pattern in result.repo_identity_patterns]
-    lines.append("| module | total | " + " | ".join(repo_pattern_headers) + " |")
-    lines.append("|---|---:|" + "|".join("---:" for _ in repo_pattern_headers) + "|")
+    lines.append(
+        "| module | classification | disposition | total | "
+        + " | ".join(repo_pattern_headers)
+        + " |"
+    )
+    lines.append("|---|---|---|---:|" + "|".join("---:" for _ in repo_pattern_headers) + "|")
     for module in result.repo_identity_modules:
         counts = [str(module.patterns.get(name, 0)) for name in repo_pattern_headers]
-        lines.append(f"| {module.path} | {module.total} | " + " | ".join(counts) + " |")
+        disposition = (
+            "active" if module.classification.counts_as_active_identity_literal else "non-active"
+        )
+        lines.append(
+            f"| {module.path} | {module.classification.kind} | {disposition} | {module.total} | "
+            + " | ".join(counts)
+            + " |"
+        )
     if not result.repo_identity_modules:
-        lines.append("| none | 0 | " + " | ".join("0" for _ in repo_pattern_headers) + " |")
+        lines.append(
+            "| none | none | non-active | 0 | "
+            + " | ".join("0" for _ in repo_pattern_headers)
+            + " |"
+        )
+    lines.extend(["", "## Declared Identity Exceptions", ""])
+    if result.declared_identity_exception_modules:
+        for module in result.declared_identity_exception_modules:
+            lines.append(
+                f"- `{module.path}`: `{module.classification.kind}` — {module.classification.rationale}"
+            )
+    else:
+        lines.append("- none")
     return "\n".join(lines) + "\n"
 
 
@@ -346,6 +476,26 @@ def _classify_path_literal_module(
         kind="reference_or_message",
         counts_as_active_path_literal=False,
         rationale="quoted docs/tmp text is report, policy, prompt, or diagnostic vocabulary rather than direct Path construction",
+    )
+
+
+def _classify_repo_identity_literal_module(
+    relative_path: str,
+    counts: dict[str, int],
+) -> RepoIdentityLiteralClassification:
+    declared = DECLARED_REPO_IDENTITY_EXCEPTIONS.get(relative_path)
+    if declared is not None:
+        return declared
+    if relative_path.endswith("templates.py") or "template" in relative_path:
+        return RepoIdentityLiteralClassification(
+            kind="template",
+            counts_as_active_identity_literal=False,
+            rationale="repository identity literal appears in generated template data",
+        )
+    return RepoIdentityLiteralClassification(
+        kind="active",
+        counts_as_active_identity_literal=True,
+        rationale="repository identity literal is not declared as reference or template data",
     )
 
 

@@ -690,6 +690,21 @@ plans:
   - Repository full name and default local path are derived from workspace or git
     context where active behavior needs them.
   - Remaining identity literals are declared as reference, template, or test data.
+- id: repo-identity-sweep
+  status: active
+  title: Classify remaining repository identity literals
+  depends_on:
+  - repo-identity-literals
+  rationale: >-
+    ID2 classifies remaining source-level repository identity literals into
+    active, reference, template, and declared-exception groups before active
+    identity-literal enforcement tightens in P5b.
+  source_files:
+  - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  acceptance:
+  - Active repository identity literal modules are zero.
+  - Reference and template identity literals remain visible with explicit rationale.
+  - Shared repository identity derivation is reused by active runtime surfaces.
 - id: direction-schema-command-migration
   status: done
   title: Introduce direction schema, command, migration, cleanup, scope, and gate

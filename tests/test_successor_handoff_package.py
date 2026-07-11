@@ -17,7 +17,7 @@ def _init_git_repo(path, origin_url: str | None = None) -> None:
 
 
 def test_repo_identity_parses_https_url(tmp_path):
-    from agentic_project_kit import successor_handoff_package as package
+    from agentic_project_kit.repo_identity import detect_repo_full_name
 
     with_dot_git = tmp_path / "https-dot-git"
     _init_git_repo(with_dot_git, "https://github.com/example-owner/example-repo.git")
@@ -25,12 +25,12 @@ def test_repo_identity_parses_https_url(tmp_path):
     without_dot_git = tmp_path / "https-no-dot-git"
     _init_git_repo(without_dot_git, "https://github.com/example-owner/example-repo")
 
-    assert package._detect_repo_full_name(with_dot_git) == "example-owner/example-repo"
-    assert package._detect_repo_full_name(without_dot_git) == "example-owner/example-repo"
+    assert detect_repo_full_name(with_dot_git) == "example-owner/example-repo"
+    assert detect_repo_full_name(without_dot_git) == "example-owner/example-repo"
 
 
 def test_repo_identity_parses_ssh_url(tmp_path):
-    from agentic_project_kit import successor_handoff_package as package
+    from agentic_project_kit.repo_identity import detect_repo_full_name
 
     scp_style = tmp_path / "ssh-scp"
     _init_git_repo(scp_style, "git@github.com:example-owner/example-repo.git")
@@ -38,26 +38,26 @@ def test_repo_identity_parses_ssh_url(tmp_path):
     ssh_url = tmp_path / "ssh-url"
     _init_git_repo(ssh_url, "ssh://git@github.com/example-owner/example-repo.git")
 
-    assert package._detect_repo_full_name(scp_style) == "example-owner/example-repo"
-    assert package._detect_repo_full_name(ssh_url) == "example-owner/example-repo"
+    assert detect_repo_full_name(scp_style) == "example-owner/example-repo"
+    assert detect_repo_full_name(ssh_url) == "example-owner/example-repo"
 
 
 def test_repo_identity_no_origin_falls_back(tmp_path):
-    from agentic_project_kit import successor_handoff_package as package
+    from agentic_project_kit.repo_identity import detect_repo_full_name
 
     repo = tmp_path / "foreign-project"
     _init_git_repo(repo)
 
-    assert package._detect_repo_full_name(repo) == "foreign-project (no git remote 'origin')"
+    assert detect_repo_full_name(repo) == "foreign-project (no git remote 'origin')"
 
 
 def test_local_path_hint_uses_workspace_dirname(tmp_path):
-    from agentic_project_kit import successor_handoff_package as package
+    from agentic_project_kit.repo_identity import default_local_path_hint
 
     repo = tmp_path / "foreign-project"
     repo.mkdir()
 
-    assert package._default_local_path_hint(repo) == "cd /path/to/foreign-project"
+    assert default_local_path_hint(repo) == "cd /path/to/foreign-project"
 
 
 def test_kit_identity_preserved_with_origin(tmp_path):

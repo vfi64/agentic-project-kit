@@ -104,6 +104,21 @@ def test_transfer_state_waits_without_pending_order(tmp_path, monkeypatch):
     assert "missing_rule_acknowledgement" in snapshot.reasons
 
 
+def test_transfer_state_uses_shared_repo_identity_for_foreign_origin(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    subprocess.run(
+        ["git", "remote", "set-url", "origin", "https://github.com/example/foreign.git"],
+        cwd=tmp_path,
+        check=True,
+    )
+    _write_and_commit_minimal_sources(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    snapshot = build_transfer_state(tmp_path)
+
+    assert snapshot.repo == "example/foreign"
+
+
 def test_transfer_state_blocks_dirty_worktree(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     _write_and_commit_minimal_sources(tmp_path)
