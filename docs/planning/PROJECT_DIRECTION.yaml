@@ -1,9 +1,9 @@
 schema_version: 1
 meta:
   master_plan: docs/planning/MASTER_IMPLEMENTATION_Q.md
-  master_sequence: CM -> LC/ID -> K3 -> P4-P6 -> LC3/TH1 -> L
+  master_sequence: 'Q2 rest: CM3 -> CM4 -> LC/ID/K3 -> P5b/P5d/P5c-PLAN/P6 -> LC3/TH1 -> L'
   master_plan_anchor_pr: 1776
-  planning_note: Master Implementation Q supersedes earlier direct P4/P5/P6 ordering.
+  planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
   updated_after_pr: 1805
@@ -210,23 +210,26 @@ roadmap:
 - id: p5b-resolver-aliases
   phase: P5
   status: planned
-  title: Route self-hosted accesses through resolver-backed aliases
+  title: Enforce active path and identity literal classes
   depends_on:
   - p5a-self-hosting-manifest
   acceptance:
-  - Kit-repo access uses the resolver while physical paths remain stable.
-  - Tests cover alias behavior before any physical migration.
+  - Active path literals outside workspace.py and declared exceptions are blocking.
+  - Active identity literals outside declared exceptions are blocking.
+  - Reference and message literals remain visible but non-blocking.
+  - Evidence records path, identity, and classification samples before suite enforcement.
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: p5c-physical-migration
   phase: P5
   status: planned
-  title: Optionally migrate physical paths after resolver decoupling
+  title: Plan physical migration after legacy profile deprecation
   depends_on:
-  - p5b-resolver-aliases
+  - p5d-legacy-path-deprecation
   acceptance:
-  - Physical migration starts only after references, docs, and tests are resolver-based.
-  - Public surfaces may remain projections instead of being moved.
+  - The slice creates and registers a decision-ready migration plan only.
+  - No physical files move in the Q2 P5c-PLAN slice.
+  - Execution remains maintainer-gated after the plan.
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: p5d-legacy-path-deprecation
@@ -234,10 +237,11 @@ roadmap:
   status: planned
   title: Deprecate legacy top-level paths in line with legacy-profile removal
   depends_on:
-  - p5c-physical-migration
+  - p5b-resolver-aliases
   acceptance:
   - Legacy top-level path deprecation is explicit and reviewable.
   - The timing aligns with the 2.0.0 removal of the implicit legacy profile.
+  - Legacy-profile warning appears only for manifest-less workspaces and is suppressible.
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: p6-gui-project-selection-and-ci-recipe
@@ -533,14 +537,15 @@ roadmap:
 plans:
 - id: master-implementation-q
   status: active
-  title: Master Implementation Q sequence
-  rationale: Central ordering authority for CM -> LC/ID -> K3 -> P4-P6 -> LC3/TH1 -> L.
+  title: Master Implementation Q2 rest sequence
+  rationale: 'Central ordering authority for the Q2 rest sequence after PR1806: CM3/CM4, LC/ID/K3, P5b/P5d/P5c-PLAN/P6, LC3/TH1, and L.'
   source_files:
   - docs/planning/MASTER_IMPLEMENTATION_Q.md
   acceptance:
-  - Master Q is the central planning anchor.
-  - P4/P5/P6 are planned after CM and LC/ID prerequisites.
-  - The generated handoff report dirty-state bug is handled in Turn 0 and fixed durably in CM1.
+  - Master Q2 is the central planning anchor for remaining Q work.
+  - P4b and P5a remain completed prerequisites and are verified by Turn 0 probes.
+  - P5b enforces active path and identity classes; false positives remain visible but non-blocking.
+  - P5c remains plan-only and maintainer-gated for execution.
 - id: command-manifest-hardening
   status: done
   title: Command manifest hardening
