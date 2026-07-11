@@ -317,6 +317,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1832
+## Operational documentation refresh state after PR #1834
 
-Current administrative handoff refresh state is `f693c5f9` (`Refresh handoff state after PR1831 (#1832)`). Continue next only after this post-PR1832 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `e4a63287` (`P5d: Deprecate implicit legacy profile (#1834)`). Continue next only after this post-PR1834 refresh is committed and merged; the next substantive slice must be created from fresh main.
