@@ -3,13 +3,18 @@ from __future__ import annotations
 import hashlib
 import json
 import subprocess
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
 import yaml
 
-from agentic_project_kit.instruction_lint import strip_command_manifest_ack_header
+from agentic_project_kit.command_manifest import load_manifest
+from agentic_project_kit.instruction_lint import (
+    InstructionLintResult,
+    lint_instruction_text,
+    strip_command_manifest_ack_header,
+)
 from agentic_project_kit.workspace import load_workspace
 
 DEFAULT_INBOX = Path(".agentic/transfer/inbox/current.yaml")
@@ -37,6 +42,8 @@ class TransferOrder:
     safety: str
     report_path: str
     actions: tuple[TransferAction, ...]
+    raw_text: str | None = None
+    checked_path: str = ""
 
 
 @dataclass(frozen=True)
@@ -48,6 +55,7 @@ class TransferResult:
     report_path: str
     message: str = ""
     action_results: tuple[dict[str, Any], ...] = field(default_factory=tuple)
+    instruction_lint: InstructionLintResult | None = None
 
 
 def _require_string(data: dict[str, Any], key: str) -> str:
@@ -88,8 +96,14 @@ def _parse_command(data: dict[str, Any]) -> tuple[str, ...]:
 def _parse_action(data: dict[str, Any]) -> TransferAction:
     kind = _require_string(data, "type")
     if kind == ACTION_WRITE_TEXT_FILE:
-        target_path = str(_safe_repo_relative_path(_require_string(data, "target_path"), field_name="target_path"))
-        payload_path = str(_safe_repo_relative_path(_require_string(data, "payload_path"), field_name="payload_path"))
+        target_path = str(
+            _safe_repo_relative_path(_require_string(data, "target_path"), field_name="target_path")
+        )
+        payload_path = str(
+            _safe_repo_relative_path(
+                _require_string(data, "payload_path"), field_name="payload_path"
+            )
+        )
         sha = data.get("sha256")
         if sha is not None and (not isinstance(sha, str) or len(sha) != 64):
             raise ValueError("sha256 must be a 64 character hex string when provided")
@@ -103,7 +117,9 @@ def parse_transfer_order(data: dict[str, Any]) -> TransferOrder:
     actions_data = data.get("actions")
     if not isinstance(actions_data, list) or not actions_data:
         raise ValueError("transfer order requires at least one action")
-    report_path = str(_safe_repo_relative_path(_require_string(data, "report_path"), field_name="report_path"))
+    report_path = str(
+        _safe_repo_relative_path(_require_string(data, "report_path"), field_name="report_path")
+    )
     if not report_path.startswith("docs/reports/command_runs/"):
         raise ValueError("report_path must be under docs/reports/command_runs/")
     actions = tuple(_parse_action(action) for action in actions_data)
@@ -117,10 +133,12 @@ def parse_transfer_order(data: dict[str, Any]) -> TransferOrder:
 
 
 def load_transfer_order(path: Path = DEFAULT_INBOX) -> TransferOrder:
-    data = yaml.safe_load(strip_command_manifest_ack_header(path.read_text(encoding="utf-8"))) or {}
+    raw_text = path.read_text(encoding="utf-8")
+    data = yaml.safe_load(strip_command_manifest_ack_header(raw_text)) or {}
     if not isinstance(data, dict):
         raise ValueError(f"transfer order must be a mapping: {path}")
-    return parse_transfer_order(data)
+    order = parse_transfer_order(data)
+    return replace(order, raw_text=raw_text, checked_path=str(path))
 
 
 def transfer_result_next_action(result: TransferResult) -> str:
@@ -145,6 +163,9 @@ def transfer_result_as_json_data(result: TransferResult) -> dict[str, Any]:
         "report_path": result.report_path,
         "message": result.message,
         "action_results": list(result.action_results),
+        "instruction_lint": (
+            result.instruction_lint.to_dict() if result.instruction_lint is not None else None
+        ),
     }
 
 
@@ -153,17 +174,51 @@ def inspect_transfer_order(order: TransferOrder, project_root: Path = Path("."))
     action_results: list[dict[str, Any]] = []
     for action in order.actions:
         if action.kind == ACTION_RUN_COMMAND:
-            action_results.append({"type": action.kind, "command": list(action.command), "would_run": True})
+            action_results.append(
+                {"type": action.kind, "command": list(action.command), "would_run": True}
+            )
             continue
         payload = root / action.payload_path
         target = root / action.target_path
         if not payload.exists():
-            return TransferResult(order.transfer_id, RESULT_FAIL, 2, order.safety, order.report_path, message=f"missing payload: {action.payload_path}", action_results=tuple(action_results))
+            return TransferResult(
+                order.transfer_id,
+                RESULT_FAIL,
+                2,
+                order.safety,
+                order.report_path,
+                message=f"missing payload: {action.payload_path}",
+                action_results=tuple(action_results),
+            )
         digest = hashlib.sha256(payload.read_bytes()).hexdigest()
         if action.sha256 and digest != action.sha256:
-            return TransferResult(order.transfer_id, RESULT_FAIL, 3, order.safety, order.report_path, message=f"sha256 mismatch: {action.payload_path}", action_results=tuple(action_results))
-        action_results.append({"type": action.kind, "target_path": action.target_path, "payload_path": action.payload_path, "sha256": digest, "would_write": str(target.relative_to(root))})
-    return TransferResult(order.transfer_id, RESULT_PENDING, 0, order.safety, order.report_path, message="Transfer order inspected. Re-run apply to write files or run commands.", action_results=tuple(action_results))
+            return TransferResult(
+                order.transfer_id,
+                RESULT_FAIL,
+                3,
+                order.safety,
+                order.report_path,
+                message=f"sha256 mismatch: {action.payload_path}",
+                action_results=tuple(action_results),
+            )
+        action_results.append(
+            {
+                "type": action.kind,
+                "target_path": action.target_path,
+                "payload_path": action.payload_path,
+                "sha256": digest,
+                "would_write": str(target.relative_to(root)),
+            }
+        )
+    return TransferResult(
+        order.transfer_id,
+        RESULT_PENDING,
+        0,
+        order.safety,
+        order.report_path,
+        message="Transfer order inspected. Re-run apply to write files or run commands.",
+        action_results=tuple(action_results),
+    )
 
 
 def _write_report(project_root: Path, result: TransferResult) -> None:
@@ -210,6 +265,41 @@ def _run_command_action(root: Path, action: TransferAction) -> dict[str, Any]:
 
 def apply_transfer_order(order: TransferOrder, project_root: Path = Path(".")) -> TransferResult:
     root = project_root.resolve()
+    if order.raw_text is None:
+        result = TransferResult(
+            order.transfer_id,
+            RESULT_FAIL,
+            2,
+            order.safety,
+            order.report_path,
+            message="Instruction lint context missing; transfer apply refused.",
+        )
+        _write_report(root, result)
+        return result
+    lint_result = lint_instruction_text(
+        order.raw_text,
+        manifest=load_manifest(root),
+        checked_path=order.checked_path or "<transfer-order>",
+        require_ack=True,
+        strict_unknown=False,
+        include_structured_commands=True,
+    )
+    if lint_result.returncode == 2:
+        rejection = lint_result.rejection_block()
+        message = "Instruction lint refused transfer apply."
+        if rejection:
+            message = message + "\n" + rejection
+        result = TransferResult(
+            order.transfer_id,
+            RESULT_FAIL,
+            2,
+            order.safety,
+            order.report_path,
+            message=message,
+            instruction_lint=lint_result,
+        )
+        _write_report(root, result)
+        return result
     inspected = inspect_transfer_order(order, root)
     if inspected.result_status == RESULT_FAIL:
         _write_report(root, inspected)
@@ -234,7 +324,24 @@ def apply_transfer_order(order: TransferOrder, project_root: Path = Path(".")) -
         text = payload_path.read_text(encoding="utf-8")
         target_path.write_text(text, encoding="utf-8")
         digest = hashlib.sha256(payload_path.read_bytes()).hexdigest()
-        action_results.append({"type": action.kind, "target_path": action.target_path, "payload_path": action.payload_path, "sha256": digest, "written": True})
-    result = TransferResult(order.transfer_id, result_status, returncode, order.safety, order.report_path, message=message, action_results=tuple(action_results))
+        action_results.append(
+            {
+                "type": action.kind,
+                "target_path": action.target_path,
+                "payload_path": action.payload_path,
+                "sha256": digest,
+                "written": True,
+            }
+        )
+    result = TransferResult(
+        order.transfer_id,
+        result_status,
+        returncode,
+        order.safety,
+        order.report_path,
+        message=message,
+        action_results=tuple(action_results),
+        instruction_lint=lint_result,
+    )
     _write_report(root, result)
     return result
