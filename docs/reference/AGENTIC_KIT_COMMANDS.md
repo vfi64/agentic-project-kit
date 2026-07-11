@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: da49759e8d28
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: dec749dbc55b
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `221`
+- Command count: `222`
 
 ## Commands
 
@@ -86,6 +86,20 @@ Audit current release/documentation currency across handoff and release docs.
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
+### `agentic-kit audit-doc-orphans`
+
+- Safety: `READ_ONLY`
+- When to use: Report registered documents without incoming repository references.
+- Dry-run available: `False`
+
+Report registered documents without incoming repository references.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `report_path` | `TyperOption` | --report | `False` |  |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit audit-mutation-lock-coverage`
 
@@ -462,6 +476,7 @@ Audit lifecycle status headers for planning, roadmap, strategy, and idea documen
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `report_path` | `TyperOption` | --report | `False` |  |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+| `suggest_review_after` | `TyperOption` | --suggest-review-after | `False` | `False` | Print report-only review_after suggestions from version target prose. |
 
 ### `agentic-kit doc-mesh-audit`
 

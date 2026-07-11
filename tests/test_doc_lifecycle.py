@@ -280,3 +280,193 @@ def test_doc_lifecycle_audit_json_groups_findings_by_code(tmp_path: Path) -> Non
     payload = json.loads(result.output)
     assert payload["ok"] is True
     assert payload["findings_by_code"]["HEADER_MISSING"][0]["class"] == "governance/system"
+
+
+def test_doc_lifecycle_reports_due_and_invalid_review_after_signals(tmp_path: Path) -> None:
+    now = date(2026, 7, 11)
+    _write(tmp_path / "docs/governance/DATE.md", "# Date\n\nStatus: active\nStatus-date: 2026-07-11\n")
+    _write(tmp_path / "docs/governance/FUTURE.md", "# Future\n\nStatus: active\nStatus-date: 2026-07-11\n")
+    _write(tmp_path / "docs/governance/RELEASE.md", "# Release\n\nStatus: active\nStatus-date: 2026-07-11\n")
+    _write(tmp_path / "docs/governance/INVALID.md", "# Invalid\n\nStatus: active\nStatus-date: 2026-07-11\n")
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/DATE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+                "review_after": "date:2026-07-11",
+            },
+            {
+                "path": "docs/governance/FUTURE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+                "review_after": "date:2026-07-12",
+            },
+            {
+                "path": "docs/governance/RELEASE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+                "review_after": "release:>=0.4.12",
+            },
+            {
+                "path": "docs/governance/INVALID.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+                "review_after": "after next release",
+            },
+        ],
+    )
+
+    report = build_doc_lifecycle_report(tmp_path, now=now, current_version="0.4.12")
+
+    by_path = {(finding.path, finding.code) for finding in report.findings}
+    assert ("docs/governance/DATE.md", "REVIEW_DUE_DATE") in by_path
+    assert ("docs/governance/RELEASE.md", "REVIEW_DUE_RELEASE") in by_path
+    assert ("docs/governance/INVALID.md", "REVIEW_AFTER_INVALID") in by_path
+    assert ("docs/governance/FUTURE.md", "REVIEW_DUE_DATE") not in by_path
+    assert report.ok
+
+
+def test_doc_lifecycle_reports_due_direction_review_after(tmp_path: Path) -> None:
+    _write(tmp_path / "docs/governance/RULE.md", "# Rule\n\nStatus: active\nStatus-date: 2026-07-11\n")
+    _write(
+        tmp_path / "docs/planning/PROJECT_DIRECTION.yaml",
+        yaml.safe_dump(
+            {
+                "schema_version": 1,
+                "meta": {"status": "active", "authority": "docs/planning/PROJECT_DIRECTION.yaml"},
+                "strategy": [],
+                "roadmap": [],
+                "plans": [],
+                "ideas": [],
+                "done": [{"id": "finished", "source_files": ["docs/governance/RULE.md"]}],
+                "discarded": [],
+            },
+            sort_keys=False,
+        ),
+    )
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/RULE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+                "review_after": "direction:finished",
+            }
+        ],
+    )
+
+    report = build_doc_lifecycle_report(tmp_path)
+
+    assert any(finding.code == "REVIEW_DUE_DIRECTION" for finding in report.findings)
+    assert report.ok
+
+
+def test_doc_lifecycle_reports_unknown_direction_review_after_as_invalid(tmp_path: Path) -> None:
+    _write(tmp_path / "docs/governance/RULE.md", "# Rule\n\nStatus: active\nStatus-date: 2026-07-11\n")
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/RULE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+                "review_after": "direction:missing",
+            }
+        ],
+    )
+
+    report = build_doc_lifecycle_report(tmp_path)
+
+    assert any(finding.code == "REVIEW_AFTER_INVALID" for finding in report.findings)
+    assert report.ok
+
+
+def test_audit_doc_orphans_reports_unreferenced_registered_docs(tmp_path: Path) -> None:
+    _write(tmp_path / "docs/kept.md", "# Kept\n")
+    _write(tmp_path / "docs/orphan.md", "# Orphan\n")
+    _write(tmp_path / "docs/index.md", "See docs/kept.md\n")
+    _write_registry_documents(
+        tmp_path,
+        [
+            {"path": "docs/kept.md", "class": "user-facing description", "owner": "maintainers"},
+            {"path": "docs/orphan.md", "class": "user-facing description", "owner": "maintainers"},
+        ],
+    )
+
+    result = CliRunner().invoke(app, ["audit-doc-orphans", "--root", str(tmp_path), "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert [candidate["path"] for candidate in payload["candidates"]] == ["docs/orphan.md"]
+
+
+def test_audit_doc_orphans_exempts_configured_and_canonical_paths(tmp_path: Path) -> None:
+    exempt_paths = [
+        "README.md",
+        "CHANGELOG.md",
+        "CITATION.cff",
+        "SECURITY.md",
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/planning/PROJECT_DIRECTION.md",
+        "docs/archive/OLD.md",
+        "docs/reports/REPORT.md",
+        "docs/examples/EXAMPLE.md",
+        "docs/required/KEEP.md",
+    ]
+    for relative in exempt_paths:
+        _write(tmp_path / relative, "# Exempt\n")
+    _write(
+        tmp_path / "docs/DOC_REGISTRY_SCOPE.yaml",
+        yaml.safe_dump(
+            {"schema_version": 1, "required_files": ["docs/required/KEEP.md"], "required_paths": [], "exempt_paths": []},
+            sort_keys=False,
+        ),
+    )
+    _write_registry_documents(
+        tmp_path,
+        [{"path": relative, "class": "user-facing description", "owner": "maintainers"} for relative in exempt_paths],
+    )
+
+    result = CliRunner().invoke(app, ["audit-doc-orphans", "--root", str(tmp_path), "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["candidates"] == []
+
+
+def test_doc_lifecycle_suggest_review_after_reports_version_targets(tmp_path: Path) -> None:
+    _write(tmp_path / "docs/roadmap/PLAN.md", "# Plan\n\nTarget v0.4.13\n")
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/roadmap/PLAN.md",
+                "class": "planning",
+                "owner": "maintainers",
+            }
+        ],
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["doc-lifecycle-audit", "--root", str(tmp_path), "--suggest-review-after", "--json"],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["suggestions"] == [
+        {
+            "matched_text": "Target v0.4.13",
+            "path": "docs/roadmap/PLAN.md",
+            "review_after": "release:>=0.4.13",
+        }
+    ]

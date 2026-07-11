@@ -759,7 +759,7 @@ plans:
   - Header, registry-status, superseded-target, and stale-budget findings stay visible without failing L1 gates.
   - Stale-budget checks use an injected date in tests and do not depend on wall-clock time.
 - id: doc-lifecycle-signals
-  status: planned
+  status: active
   title: Add documentation lifecycle obsolescence signals
   depends_on:
   - doc-lifecycle-metadata
@@ -768,6 +768,22 @@ plans:
     into non-time-fragile lifecycle findings.
   source_files:
   - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+  - README.md
+  - docs/DOCUMENTATION_COVERAGE.yaml
+  - docs/reference/AGENTIC_KIT_COMMANDS.md
+  - docs/reference/agentic-kit-commands.json
+  - src/agentic_project_kit/doc_lifecycle.py
+  - src/agentic_project_kit/doc_lifecycle_signals.py
+  - src/agentic_project_kit/project_direction.py
+  - src/agentic_project_kit/cli_commands/checks.py
+  - tests/test_doc_lifecycle.py
+  - tests/test_project_direction.py
+  acceptance:
+  - review_after supports date, release, and direction selectors with invalid syntax reported as REVIEW_AFTER_INVALID.
+  - doc-lifecycle-audit emits review_after due findings as report-only L2 signals.
+  - direction audit-drift reports SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE for active source documents attached to closed Direction items.
+  - audit-doc-orphans reports registered unreferenced documents with class and last commit date while honoring required exemptions.
+  - --suggest-review-after prints read-only review_after suggestions from version target wording.
 - id: doc-lifecycle-sweep
   status: planned
   title: Add guided documentation lifecycle sweep workflows

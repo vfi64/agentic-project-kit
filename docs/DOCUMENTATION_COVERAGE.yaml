@@ -170,6 +170,9 @@ rules:
     - agentic-kit doctor
     - agentic-kit doc-mesh-audit
     - agentic-kit doc-mesh-repair
+    - agentic-kit doc-lifecycle-audit --json
+    - agentic-kit doc-lifecycle-audit --suggest-review-after
+    - agentic-kit audit-doc-orphans
     - agentic-kit release-plan
     - agentic-kit release-check
     - agentic-kit post-release-check

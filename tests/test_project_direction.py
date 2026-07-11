@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import yaml
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
@@ -113,6 +114,12 @@ def _minimal_direction() -> dict[str, object]:
     }
 
 
+def _write_project_direction_fixture(root: Path, direction: dict[str, object]) -> None:
+    path = root / "docs/planning/PROJECT_DIRECTION.yaml"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(yaml.safe_dump(direction, sort_keys=False), encoding="utf-8")
+
+
 def test_direction_validate_cli_passes_current_project_direction() -> None:
     result = CliRunner().invoke(app, ["direction", "validate", "--json"])
 
@@ -138,6 +145,27 @@ def test_direction_validate_rejects_duplicate_ids(tmp_path: Path) -> None:
 
     assert result.status == "FAIL"
     assert any(finding.code == "duplicate-id" for finding in result.findings)
+
+
+def test_direction_audit_drift_reports_active_source_of_closed_item(tmp_path: Path) -> None:
+    direction = _minimal_direction()
+    done_items = direction["done"]
+    assert isinstance(done_items, list)
+    done_items[0]["source_files"] = ["docs/planning/CLOSED.md"]
+    _write_project_direction_fixture(tmp_path, direction)
+    (tmp_path / "docs/planning/CLOSED.md").write_text(
+        "# Closed\n\nStatus: active\nStatus-date: 2026-07-11\n",
+        encoding="utf-8",
+    )
+
+    result = audit_project_direction_drift(tmp_path)
+
+    record = next(
+        item for item in result.records if item.classification == "SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE"
+    )
+    assert record.path == "docs/planning/CLOSED.md"
+    assert record.item_id == "done-a"
+    assert record.item_status == "done"
 
 
 def test_direction_validate_rejects_unknown_dependency(tmp_path: Path) -> None:
