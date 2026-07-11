@@ -1,6 +1,89 @@
 from __future__ import annotations
 
 
+def _init_git_repo(path, origin_url: str | None = None) -> None:
+    import subprocess
+
+    path.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["git", "init"], cwd=path, check=True, capture_output=True, text=True)
+    if origin_url is not None:
+        subprocess.run(
+            ["git", "remote", "add", "origin", origin_url],
+            cwd=path,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+
+def test_repo_identity_parses_https_url(tmp_path):
+    from agentic_project_kit import successor_handoff_package as package
+
+    with_dot_git = tmp_path / "https-dot-git"
+    _init_git_repo(with_dot_git, "https://github.com/example-owner/example-repo.git")
+
+    without_dot_git = tmp_path / "https-no-dot-git"
+    _init_git_repo(without_dot_git, "https://github.com/example-owner/example-repo")
+
+    assert package._detect_repo_full_name(with_dot_git) == "example-owner/example-repo"
+    assert package._detect_repo_full_name(without_dot_git) == "example-owner/example-repo"
+
+
+def test_repo_identity_parses_ssh_url(tmp_path):
+    from agentic_project_kit import successor_handoff_package as package
+
+    scp_style = tmp_path / "ssh-scp"
+    _init_git_repo(scp_style, "git@github.com:example-owner/example-repo.git")
+
+    ssh_url = tmp_path / "ssh-url"
+    _init_git_repo(ssh_url, "ssh://git@github.com/example-owner/example-repo.git")
+
+    assert package._detect_repo_full_name(scp_style) == "example-owner/example-repo"
+    assert package._detect_repo_full_name(ssh_url) == "example-owner/example-repo"
+
+
+def test_repo_identity_no_origin_falls_back(tmp_path):
+    from agentic_project_kit import successor_handoff_package as package
+
+    repo = tmp_path / "foreign-project"
+    _init_git_repo(repo)
+
+    assert package._detect_repo_full_name(repo) == "foreign-project (no git remote 'origin')"
+
+
+def test_local_path_hint_uses_workspace_dirname(tmp_path):
+    from agentic_project_kit import successor_handoff_package as package
+
+    repo = tmp_path / "foreign-project"
+    repo.mkdir()
+
+    assert package._default_local_path_hint(repo) == "cd /path/to/foreign-project"
+
+
+def test_kit_identity_preserved_with_origin(tmp_path):
+    from agentic_project_kit import successor_handoff_package as package
+
+    repo = tmp_path / "agentic-project-kit"
+    _init_git_repo(repo, "https://github.com/vfi64/agentic-project-kit.git")
+
+    state = package._build_repo_state(repo)
+
+    assert state["full_name"] == "vfi64/agentic-project-kit"
+    assert state["local_path"] == "cd /path/to/agentic-project-kit"
+
+
+def test_successor_handoff_package_has_no_hard_coded_self_hosting_repo_identity():
+    from pathlib import Path
+
+    source = Path("src/agentic_project_kit/successor_handoff_package.py").read_text(
+        encoding="utf-8"
+    )
+
+    assert "vfi64/agentic-project-kit" not in source
+    assert "REPO_FULL_NAME" not in source
+    assert "DEFAULT_LOCAL_PATH" not in source
+
+
 def test_successor_execution_contract_projection_contains_hard_start_rules():
     from agentic_project_kit.successor_handoff_package import (
         build_execution_contract,
