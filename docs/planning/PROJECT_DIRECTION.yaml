@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1849
+  updated_after_pr: 1852
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1849
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1852
 strategy:
 - id: governed-operating-model
   status: active
@@ -759,13 +759,15 @@ plans:
   - Header, registry-status, superseded-target, and stale-budget findings stay visible without failing L1 gates.
   - Stale-budget checks use an injected date in tests and do not depend on wall-clock time.
 - id: doc-lifecycle-signals
-  status: active
+  status: done
   title: Add documentation lifecycle obsolescence signals
+  completed_by_pr: 1852
   depends_on:
   - doc-lifecycle-metadata
   rationale: >-
-    L2 will turn review-after values, Direction coupling, and orphan indicators
-    into non-time-fragile lifecycle findings.
+    PR #1852 turns review-after values, Direction coupling, and orphan
+    indicators into report-only lifecycle findings so L3 can sweep visible
+    signals without weakening existing gates.
   source_files:
   - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
   - README.md
@@ -778,6 +780,8 @@ plans:
   - src/agentic_project_kit/cli_commands/checks.py
   - tests/test_doc_lifecycle.py
   - tests/test_project_direction.py
+  evidence:
+  - PR #1852
   acceptance:
   - review_after supports date, release, and direction selectors with invalid syntax reported as REVIEW_AFTER_INVALID.
   - doc-lifecycle-audit emits review_after due findings as report-only L2 signals.
