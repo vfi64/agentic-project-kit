@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from pathlib import Path
 
 import pytest
 import yaml
 
+from agentic_project_kit.command_manifest import load_manifest
+from agentic_project_kit.instruction_lint import command_manifest_ack_line
 from agentic_project_kit.transfer_runner import (
     RESULT_FAIL,
     RESULT_PASS,
@@ -16,6 +19,21 @@ from agentic_project_kit.transfer_runner import (
     parse_transfer_order,
     transfer_result_as_json_data,
 )
+
+
+def _seed_manifest(root: Path) -> dict[str, object]:
+    manifest = load_manifest(Path("."))
+    target = root / "docs/reference/agentic-kit-commands.json"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return manifest
+
+
+def _ack(root: Path) -> str:
+    return command_manifest_ack_line(_seed_manifest(root))
 
 
 def _write_order(root: Path, payload_text: str = "hello\n") -> Path:
@@ -39,7 +57,10 @@ def _write_order(root: Path, payload_text: str = "hello\n") -> Path:
     }
     path = root / ".agentic/transfer/inbox/current.yaml"
     path.parent.mkdir(parents=True)
-    path.write_text(yaml.safe_dump(order, sort_keys=False), encoding="utf-8")
+    path.write_text(
+        _ack(root) + "\n" + yaml.safe_dump(order, sort_keys=False),
+        encoding="utf-8",
+    )
     return path
 
 
@@ -53,7 +74,10 @@ def _write_command_order(root: Path, command: list[str]) -> Path:
     }
     path = root / ".agentic/transfer/inbox/current.yaml"
     path.parent.mkdir(parents=True)
-    path.write_text(yaml.safe_dump(order, sort_keys=False), encoding="utf-8")
+    path.write_text(
+        _ack(root) + "\n" + yaml.safe_dump(order, sort_keys=False),
+        encoding="utf-8",
+    )
     return path
 
 
@@ -155,10 +179,9 @@ def test_apply_transfer_order_writes_target_and_report(tmp_path):
     assert result.returncode == 0
     assert (tmp_path / "generated/example.txt").read_text(encoding="utf-8") == "written\n"
     assert (tmp_path / "docs/reports/command_runs/example-transfer.md").exists()
-    assert (
-        (tmp_path / "docs/reports/command_runs/LATEST_COMMAND_RUN.txt").read_text(encoding="utf-8")
-        == "docs/reports/command_runs/example-transfer.md\n"
-    )
+    assert (tmp_path / "docs/reports/command_runs/LATEST_COMMAND_RUN.txt").read_text(
+        encoding="utf-8"
+    ) == "docs/reports/command_runs/example-transfer.md\n"
 
 
 def test_apply_transfer_order_runs_bounded_command_and_writes_report(tmp_path):
@@ -219,7 +242,9 @@ def test_transfer_report_exposes_state_next_and_command_id(tmp_path):
     order = load_transfer_order(order_path)
 
     apply_transfer_order(order, tmp_path)
-    report = (tmp_path / "docs/reports/command_runs/example-transfer.md").read_text(encoding="utf-8")
+    report = (tmp_path / "docs/reports/command_runs/example-transfer.md").read_text(
+        encoding="utf-8"
+    )
 
     assert "COMMAND_ID=example-transfer" in report
     assert "STATE=PASS" in report

@@ -9,6 +9,8 @@ import yaml
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
+from agentic_project_kit.command_manifest import load_manifest
+from agentic_project_kit.instruction_lint import command_manifest_ack_line
 from agentic_project_kit.transfer_local_runner import run_local_transfer
 from tests.test_rule_source_validator import write_minimal_sources
 
@@ -30,7 +32,19 @@ def _init_repo(root: Path) -> None:
     )
 
 
-def _write_transfer_order(root: Path) -> None:
+def _seed_command_manifest(root: Path) -> str:
+    manifest = load_manifest(Path("."))
+    target = root / "docs/reference/agentic-kit-commands.json"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return command_manifest_ack_line(manifest)
+
+
+def _write_transfer_order(root: Path, *, include_ack: bool = True) -> None:
+    ack = _seed_command_manifest(root)
     payload = root / ".agentic/transfer/payloads/example.txt"
     payload.parent.mkdir(parents=True)
     payload.write_text("example payload\n", encoding="utf-8")
@@ -51,7 +65,10 @@ def _write_transfer_order(root: Path) -> None:
     }
     inbox = root / ".agentic/transfer/inbox/current.yaml"
     inbox.parent.mkdir(parents=True)
-    inbox.write_text(yaml.safe_dump(order, sort_keys=False), encoding="utf-8")
+    body = yaml.safe_dump(order, sort_keys=False)
+    if include_ack:
+        body = ack + "\n" + body
+    inbox.write_text(body, encoding="utf-8")
 
 
 def _commit_all(root: Path, message: str) -> None:
@@ -109,7 +126,7 @@ def test_run_local_help_lists_command():
 
 def test_run_local_blocks_without_rule_acknowledgement(tmp_path, monkeypatch):
     _init_repo(tmp_path)
-    _write_transfer_order(tmp_path)
+    _write_transfer_order(tmp_path, include_ack=False)
     _commit_all(tmp_path, "Add transfer order without acknowledgement")
     monkeypatch.chdir(tmp_path)
 
@@ -121,3 +138,61 @@ def test_run_local_blocks_without_rule_acknowledgement(tmp_path, monkeypatch):
     assert result.next_action == "Transfer blocked because run_next_command is false."
     assert "missing_rule_acknowledgement" in result.state["reasons"]
     assert not (tmp_path / "generated/example.txt").exists()
+
+
+def test_run_local_refuses_instruction_lint_block_before_command(
+    tmp_path,
+    monkeypatch,
+):
+    _init_repo(tmp_path)
+    write_minimal_sources(tmp_path)
+    _seed_command_manifest(tmp_path)
+
+    order = {
+        "id": "local-run-lint-block",
+        "title": "Local run lint block",
+        "safety": "bounded-local-command",
+        "report_path": "docs/reports/command_runs/local-run-lint-block.md",
+        "actions": [
+            {
+                "type": "run_command",
+                "command": ["git", "push"],
+            }
+        ],
+    }
+    inbox = tmp_path / ".agentic/transfer/inbox/current.yaml"
+    inbox.parent.mkdir(parents=True, exist_ok=True)
+    manifest = load_manifest(tmp_path)
+    inbox.write_text(
+        command_manifest_ack_line(manifest) + "\n" + yaml.safe_dump(order, sort_keys=False),
+        encoding="utf-8",
+    )
+    _commit_all(tmp_path, "Add blocked transfer order")
+
+    result = CliRunner().invoke(
+        app,
+        ["rules", "acknowledge", "--root", str(tmp_path)],
+    )
+    assert result.exit_code == 0, result.output
+
+    called = False
+
+    def fake_run_command_action(root, action):
+        nonlocal called
+        called = True
+        raise AssertionError("blocked command must not execute")
+
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_runner._run_command_action",
+        fake_run_command_action,
+    )
+    monkeypatch.chdir(tmp_path)
+
+    result = run_local_transfer(tmp_path)
+
+    assert result.result_status == "FAIL"
+    assert result.returncode == 2
+    assert result.apply is not None
+    assert result.apply["instruction_lint"]["result_status"] == "BLOCKED"
+    assert "RAW_REPLACED" in result.apply["instruction_lint"]["blockers"]
+    assert called is False
