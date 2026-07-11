@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1847
+  updated_after_pr: 1849
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1847
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1849
 strategy:
 - id: governed-operating-model
   status: active
@@ -731,13 +731,33 @@ plans:
   - Instruction lint reports empty and unreadable input through structured lint findings.
   - Prose-only acknowledged instruction input remains a PASS.
 - id: doc-lifecycle-metadata
-  status: active
+  status: done
   title: Add documentation lifecycle metadata and report-only consistency gate
+  completed_by_pr: 1849
   rationale: >-
-    L1 will make registry-backed lifecycle metadata explicit before lifecycle
-    signals or sweep automation depend on it.
+    PR #1849 makes registry-backed lifecycle metadata explicit before lifecycle
+    signals or sweep automation depend on it, extending the existing lifecycle
+    audit with report-only JSON findings rather than adding a duplicate audit
+    path.
   source_files:
   - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+  - docs/DOCUMENTATION_REGISTRY.yaml
+  - docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md
+  - src/agentic_project_kit/doc_lifecycle.py
+  - src/agentic_project_kit/documentation_registry.py
+  - src/agentic_project_kit/documentation_system_audit.py
+  - src/agentic_project_kit/doctor.py
+  - src/agentic_project_kit/cli_commands/checks.py
+  - tests/test_doc_lifecycle.py
+  - tests/test_documentation_registry.py
+  - tests/test_doctor.py
+  evidence:
+  - PR #1849
+  acceptance:
+  - Registry entries accept optional review_after and deferred_until metadata without breaking existing entries.
+  - Lifecycle audit JSON groups report-only findings by type and includes file, class, and age metadata.
+  - Header, registry-status, superseded-target, and stale-budget findings stay visible without failing L1 gates.
+  - Stale-budget checks use an injected date in tests and do not depend on wall-clock time.
 - id: doc-lifecycle-signals
   status: planned
   title: Add documentation lifecycle obsolescence signals

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Annotated
 
@@ -88,12 +89,16 @@ def docs_registry_command(
 def doc_lifecycle_audit_command(
     project_root: Annotated[Path, typer.Option("--root")] = Path("."),
     report_path: Annotated[Path | None, typer.Option("--report")] = None,
+    json_output: Annotated[bool, typer.Option("--json", help="Print JSON instead of text.")] = False,
 ) -> None:
     """Audit lifecycle status headers for planning, roadmap, strategy, and idea documents."""
     report = build_doc_lifecycle_report(project_root.resolve())
     if report_path is not None:
         write_doc_lifecycle_json_report(report, report_path)
-    console.print(render_doc_lifecycle_report(report), markup=False)
+    if json_output:
+        typer.echo(json.dumps(report.to_dict(), indent=2, sort_keys=True))
+    else:
+        console.print(render_doc_lifecycle_report(report), markup=False)
     if not report.ok:
         raise typer.Exit(code=1)
 

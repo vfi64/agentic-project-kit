@@ -164,10 +164,7 @@ def _correctness_dimension(
 ) -> DocumentationAuditDimension:
     findings = list(check_doc_errors)
     findings.extend(f"doc-mesh:{finding.code}:{finding.path}: {finding.message}" for finding in mesh_report.findings)
-    findings.extend(
-        f"doc-lifecycle:{finding.code}:{finding.path}: {finding.message}"
-        for finding in lifecycle_report.findings
-    )
+    findings.extend(_blocking_lifecycle_findings(lifecycle_report))
     return DocumentationAuditDimension("Korrektheit", ok=not findings, findings=tuple(findings))
 
 
@@ -280,11 +277,16 @@ def _consistency_dimension(mesh_report: Any, lifecycle_report: Any) -> Documenta
     findings = [
         f"doc-mesh:{finding.code}:{finding.path}: {finding.message}" for finding in mesh_report.findings
     ]
-    findings.extend(
+    findings.extend(_blocking_lifecycle_findings(lifecycle_report))
+    return DocumentationAuditDimension("Konsistenz", ok=not findings, findings=tuple(findings))
+
+
+def _blocking_lifecycle_findings(lifecycle_report: Any) -> list[str]:
+    return [
         f"doc-lifecycle:{finding.code}:{finding.path}: {finding.message}"
         for finding in lifecycle_report.findings
-    )
-    return DocumentationAuditDimension("Konsistenz", ok=not findings, findings=tuple(findings))
+        if getattr(finding, "severity", "FAIL") in {"FAIL", "BLOCK"}
+    ]
 
 
 def _contains_long_rule_duplication(text: str) -> bool:

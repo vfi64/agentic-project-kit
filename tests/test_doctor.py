@@ -1,6 +1,9 @@
 from pathlib import Path
 
+import yaml
+
 from agentic_project_kit.contract import build_contract_data, render_contract_yaml
+from agentic_project_kit.documentation_registry import DOCUMENT_CLASSES, REGISTRY_PATH, REQUIRED_CLASS_RULE_FIELDS
 from agentic_project_kit.doctor import DoctorStatus, build_doctor_report, render_doctor_report
 
 
@@ -88,6 +91,21 @@ def _write_readme(root: Path) -> None:
 
 def _write_agent_docs(root: Path) -> None:
     (root / "AGENTS.md").write_text("# AGENTS\n\nFixture agent instructions.\n", encoding="utf-8")
+
+
+def _write_documentation_registry(root: Path, documents: list[dict[str, str]]) -> None:
+    registry = {
+        "version": 1,
+        "status": {"lifecycle": "test", "broad_migration_allowed": False},
+        "class_rules": {
+            class_name: {field: f"{class_name} {field}" for field in REQUIRED_CLASS_RULE_FIELDS}
+            for class_name in DOCUMENT_CLASSES
+        },
+        "documents": documents,
+    }
+    path = root / REGISTRY_PATH
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(yaml.safe_dump(registry, sort_keys=False), encoding="utf-8")
 
 
 def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
@@ -246,3 +264,27 @@ def test_doctor_report_fails_on_document_lifecycle_findings(tmp_path: Path):
     assert lifecycle_check.status == DoctorStatus.FAIL
     assert "docs/ideas/BAD.md" in lifecycle_check.detail
     assert "status must be one of" in lifecycle_check.detail
+
+
+def test_doctor_report_warns_on_report_only_document_lifecycle_findings(tmp_path: Path):
+    _write_readme(tmp_path)
+    _write_state_docs(tmp_path)
+    (tmp_path / "docs/governance").mkdir(parents=True)
+    (tmp_path / "docs/governance/RULE.md").write_text("# Rule\n", encoding="utf-8")
+    _write_documentation_registry(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/RULE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+            }
+        ],
+    )
+
+    report = build_doctor_report(tmp_path)
+
+    assert report.ok
+    lifecycle_check = next(check for check in report.checks if check.name == "document lifecycle audit")
+    assert lifecycle_check.status == DoctorStatus.WARN
+    assert "report-only" in lifecycle_check.detail

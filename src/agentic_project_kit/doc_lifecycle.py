@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 
-import yaml
 import json
 from typing import Any
+
+import yaml
 
 from agentic_project_kit.documentation_registry import build_doc_registry_reconcile_report
 from agentic_project_kit.documentation_registry import build_documentation_registry_summary
@@ -28,18 +30,50 @@ LIFECYCLE_DIRS = (
     "docs/strategy",
 )
 
+HEADER_AUDIT_EXEMPT_PREFIXES = (
+    "docs/archive/",
+    "docs/reports/",
+    "docs/examples/",
+)
+
+STALE_BUDGETS_DAYS = {
+    "governance": 180,
+    "reference": 365,
+    "workflow": 270,
+}
+
+STALE_BUDGET_CLASS_GROUPS = {
+    "architecture": "governance",
+    "governance/system": "governance",
+    "operational/automation": "workflow",
+    "release": "workflow",
+    "user-facing description": "reference",
+}
+
+PLANNING_CLASS = "planning"
+
 
 @dataclass(frozen=True)
 class DocLifecycleDocument:
     path: str
     status: str | None
     decision_status: str | None
+    status_date: str | None = None
+    superseded_by: str | None = None
+    document_class: str | None = None
+    registry_status: str | None = None
+    age_days: int | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "path": self.path,
             "status": self.status,
             "decision_status": self.decision_status,
+            "status_date": self.status_date,
+            "superseded_by": self.superseded_by,
+            "class": self.document_class,
+            "registry_status": self.registry_status,
+            "age_days": self.age_days,
         }
 
 
@@ -48,13 +82,22 @@ class DocLifecycleFinding:
     code: str
     path: str
     message: str
+    severity: str = "FAIL"
+    document_class: str | None = None
+    age_days: int | None = None
 
-    def to_dict(self) -> dict[str, str]:
-        return {
+    def to_dict(self) -> dict[str, Any]:
+        data: dict[str, Any] = {
             "code": self.code,
             "path": self.path,
             "message": self.message,
+            "severity": self.severity,
         }
+        if self.document_class is not None:
+            data["class"] = self.document_class
+        if self.age_days is not None:
+            data["age_days"] = self.age_days
+        return data
 
 
 @dataclass(frozen=True)
@@ -65,28 +108,96 @@ class DocLifecycleReport:
 
     @property
     def ok(self) -> bool:
-        return not self.findings
+        return not any(finding.severity in {"FAIL", "BLOCK"} for finding in self.findings)
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "ok": self.ok,
             "documents": [document.to_dict() for document in self.documents],
             "findings": [finding.to_dict() for finding in self.findings],
+            "findings_by_code": _findings_by_code(self.findings),
             "registry_summary": self.registry_summary,
         }
 
 
-def build_doc_lifecycle_report(project_root: Path) -> DocLifecycleReport:
+def build_doc_lifecycle_report(project_root: Path, *, now: date | None = None) -> DocLifecycleReport:
+    today = now or date.today()
     documents: list[DocLifecycleDocument] = []
     findings: list[DocLifecycleFinding] = []
+    registry_entries = _load_documentation_registry_entries_by_path(project_root)
+    visited_paths: set[str] = set()
     for relative_path in _iter_lifecycle_markdown_files(project_root):
         text = (project_root / relative_path).read_text(encoding="utf-8")
         status = _first_header_value(text, "Status")
         decision_status = _first_header_value(text, "Decision status")
-        documents.append(DocLifecycleDocument(str(relative_path), status, decision_status))
+        status_date = _first_header_value(text, "Status-date")
+        superseded_by = _first_header_value(text, "Superseded-by")
+        path_text = str(relative_path)
+        registry_entry = registry_entries.get(path_text, {})
+        age_days = _age_days(status_date, today)
+        documents.append(
+            DocLifecycleDocument(
+                path_text,
+                status,
+                decision_status,
+                status_date=status_date,
+                superseded_by=superseded_by,
+                document_class=_entry_class(registry_entry),
+                registry_status=_entry_status(registry_entry),
+                age_days=age_days,
+            )
+        )
+        visited_paths.add(path_text)
         findings.extend(_audit_document(relative_path, text, status, decision_status))
+        findings.extend(
+            _audit_registry_header_consistency(
+                project_root=project_root,
+                path_text=path_text,
+                text=text,
+                registry_entry=registry_entry,
+                status=status,
+                status_date=status_date,
+                superseded_by=superseded_by,
+                now=today,
+            )
+        )
+    for path_text, registry_entry in sorted(registry_entries.items()):
+        if path_text in visited_paths or not path_text.endswith(".md"):
+            continue
+        document_path = project_root / path_text
+        if not document_path.exists() or not document_path.is_file():
+            continue
+        text = document_path.read_text(encoding="utf-8")
+        status = _first_header_value(text, "Status")
+        status_date = _first_header_value(text, "Status-date")
+        superseded_by = _first_header_value(text, "Superseded-by")
+        age_days = _age_days(status_date, today)
+        documents.append(
+            DocLifecycleDocument(
+                path_text,
+                status,
+                _first_header_value(text, "Decision status"),
+                status_date=status_date,
+                superseded_by=superseded_by,
+                document_class=_entry_class(registry_entry),
+                registry_status=_entry_status(registry_entry),
+                age_days=age_days,
+            )
+        )
+        findings.extend(
+            _audit_registry_header_consistency(
+                project_root=project_root,
+                path_text=path_text,
+                text=text,
+                registry_entry=registry_entry,
+                status=status,
+                status_date=status_date,
+                superseded_by=superseded_by,
+                now=today,
+            )
+        )
     return DocLifecycleReport(
-        documents=tuple(documents),
+        documents=tuple(sorted(documents, key=lambda document: document.path)),
         findings=tuple(findings),
         registry_summary=_load_registry_summary(project_root),
     )
@@ -97,13 +208,22 @@ def write_doc_lifecycle_json_report(report: DocLifecycleReport, output_path: Pat
     output_path.write_text(json.dumps(report.to_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def _findings_by_code(findings: tuple[DocLifecycleFinding, ...]) -> dict[str, list[dict[str, Any]]]:
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for finding in findings:
+        grouped.setdefault(finding.code, []).append(finding.to_dict())
+    return dict(sorted(grouped.items()))
+
+
 def render_doc_lifecycle_report(report: DocLifecycleReport) -> str:
     lines = ["Documentation lifecycle audit", "", "Documents:"]
     if not report.documents:
         lines.append("- none")
     for document in report.documents:
         status = document.status if document.status is not None else "MISSING"
-        lines.append(f"- {document.path}: {status}")
+        class_suffix = f" | class={document.document_class}" if document.document_class else ""
+        age_suffix = f" | age_days={document.age_days}" if document.age_days is not None else ""
+        lines.append(f"- {document.path}: {status}{class_suffix}{age_suffix}")
     if report.registry_summary is not None:
         lines.extend([
             "",
@@ -121,7 +241,12 @@ def render_doc_lifecycle_report(report: DocLifecycleReport) -> str:
     if report.findings:
         lines.extend(["", "Findings:"])
         for finding in report.findings:
-            lines.append(f"- [{finding.code}] {finding.path}: {finding.message}")
+            class_suffix = f" | class={finding.document_class}" if finding.document_class else ""
+            age_suffix = f" | age_days={finding.age_days}" if finding.age_days is not None else ""
+            lines.append(
+                f"- [{finding.severity}|{finding.code}] {finding.path}: "
+                f"{finding.message}{class_suffix}{age_suffix}"
+            )
     lines.extend(["", f"Overall: {'PASS' if report.ok else 'FAIL'}"])
     return "\n".join(lines)
 
@@ -188,6 +313,82 @@ def _audit_document(
     return findings
 
 
+def _audit_registry_header_consistency(
+    *,
+    project_root: Path,
+    path_text: str,
+    text: str,
+    registry_entry: dict[str, Any],
+    status: str | None,
+    status_date: str | None,
+    superseded_by: str | None,
+    now: date,
+) -> list[DocLifecycleFinding]:
+    if not registry_entry or _is_lifecycle_header_exempt(path_text):
+        return []
+
+    findings: list[DocLifecycleFinding] = []
+    document_class = _entry_class(registry_entry)
+    if status is None or status_date is None:
+        missing = []
+        if status is None:
+            missing.append("Status")
+        if status_date is None:
+            missing.append("Status-date")
+        findings.append(
+            DocLifecycleFinding(
+                "HEADER_MISSING",
+                path_text,
+                "missing lifecycle header field(s): " + ", ".join(missing),
+                severity="WARN",
+                document_class=document_class,
+            )
+        )
+
+    registry_status = _entry_status(registry_entry)
+    if status is not None and registry_status is not None and status != registry_status:
+        findings.append(
+            DocLifecycleFinding(
+                "HEADER_REGISTRY_MISMATCH",
+                path_text,
+                f"header status {status!r} differs from registry status {registry_status!r}",
+                severity="WARN",
+                document_class=document_class,
+            )
+        )
+
+    if superseded_by and superseded_by != "n/a":
+        target = project_root / superseded_by
+        if not target.exists():
+            findings.append(
+                DocLifecycleFinding(
+                    "SUPERSEDED_TARGET_MISSING",
+                    path_text,
+                    f"Superseded-by target does not exist: {superseded_by}",
+                    severity="WARN",
+                    document_class=document_class,
+                )
+            )
+
+    age_days = _age_days(status_date, now)
+    budget_group = _stale_budget_group(document_class)
+    if age_days is not None and budget_group is not None:
+        budget_days = STALE_BUDGETS_DAYS[budget_group]
+        if age_days > budget_days:
+            findings.append(
+                DocLifecycleFinding(
+                    "STALE_BY_BUDGET",
+                    path_text,
+                    f"Status-date is {age_days} days old; {budget_group} budget is {budget_days} days",
+                    severity="WARN",
+                    document_class=document_class,
+                    age_days=age_days,
+                )
+            )
+
+    return findings
+
+
 def _first_header_value(text: str, key: str) -> str | None:
     prefix = f"{key}:"
     for line in text.splitlines():
@@ -195,6 +396,36 @@ def _first_header_value(text: str, key: str) -> str | None:
             value = line[len(prefix):].strip()
             return value or None
     return None
+
+
+def _entry_class(entry: dict[str, Any]) -> str | None:
+    value = entry.get("class")
+    return value if isinstance(value, str) and value else None
+
+
+def _entry_status(entry: dict[str, Any]) -> str | None:
+    value = entry.get("status")
+    return value if isinstance(value, str) and value else None
+
+
+def _is_lifecycle_header_exempt(path_text: str) -> bool:
+    return any(path_text.startswith(prefix) for prefix in HEADER_AUDIT_EXEMPT_PREFIXES)
+
+
+def _stale_budget_group(document_class: str | None) -> str | None:
+    if document_class == PLANNING_CLASS:
+        return None
+    return STALE_BUDGET_CLASS_GROUPS.get(document_class or "")
+
+
+def _age_days(status_date: str | None, now: date) -> int | None:
+    if status_date is None:
+        return None
+    try:
+        parsed = date.fromisoformat(status_date)
+    except ValueError:
+        return None
+    return (now - parsed).days
 
 
 def build_doc_lifecycle_triage_payload(project_root: Path) -> dict[str, Any]:
@@ -237,7 +468,7 @@ def build_doc_lifecycle_triage_payload(project_root: Path) -> dict[str, Any]:
         )
 
     reconcile_actions = _reconcile_actions(reconcile)
-    finding_paths = {finding["path"] for finding in findings}
+    finding_paths = {finding["path"] for finding in findings if finding["severity"] == "FAIL"}
     for document in report.documents:
         if document.path in finding_paths:
             continue
