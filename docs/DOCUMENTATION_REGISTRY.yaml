@@ -622,6 +622,10 @@ documents:
     class: architecture
     owner: maintainers
     notes: Governing kit-as-operating-layer architecture authority for the workspace resolver and P1 migration line.
+  - path: docs/architecture/P5C_PHYSICAL_MIGRATION_PLAN.md
+    class: architecture
+    owner: maintainers
+    notes: P5c decision-ready physical migration plan; execution remains maintainer-gated and public docs paths may stay as projections.
   - path: docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6.md
     class: evidence/log
     owner: maintainers
