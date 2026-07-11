@@ -1,5 +1,25 @@
 from __future__ import annotations
 
+from pathlib import Path
+
+
+def _seed_successor_long_term_sources(root: Path) -> None:
+    from agentic_project_kit.successor_handoff_package import LONG_TERM_SOURCES
+
+    for relative in LONG_TERM_SOURCES:
+        source = Path(relative)
+        target = root / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if source.exists():
+            target.write_bytes(source.read_bytes())
+            continue
+        if source.suffix == ".json":
+            target.write_text("{}\n", encoding="utf-8")
+        elif source.suffix in {".yaml", ".yml"}:
+            target.write_text("schema_version: 1\n", encoding="utf-8")
+        else:
+            target.write_text("fixture\n", encoding="utf-8")
+
 
 def _init_git_repo(path, origin_url: str | None = None) -> None:
     import subprocess
@@ -340,6 +360,7 @@ def test_successor_handoff_package_e2e_start_decision_contract(tmp_path, monkeyp
         return "UNKNOWN"
 
     monkeypatch.setattr(package, "_run_git", fake_run_git)
+    _seed_successor_long_term_sources(tmp_path)
 
     result = package.write_successor_handoff_package(
         tmp_path,
@@ -448,6 +469,7 @@ def test_successor_package_refresh_does_not_rewrite_start_new_chat_prompt(tmp_pa
         return "UNKNOWN"
 
     monkeypatch.setattr(package, "_run_git", fake_git)
+    _seed_successor_long_term_sources(tmp_path)
 
     start_prompt = tmp_path / "docs" / "handoff" / "START_NEW_CHAT_PROMPT.md"
     start_prompt.parent.mkdir(parents=True, exist_ok=True)
