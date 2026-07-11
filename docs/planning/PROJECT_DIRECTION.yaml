@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1821
+  updated_after_pr: 1823
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1821
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1823
 strategy:
 - id: governed-operating-model
   status: active
@@ -646,12 +646,15 @@ plans:
   - Current direct lock callsites and marker-only references are distinguished.
   - Runtime mutator gaps stay visible for LC2/LC3 without gating the standard suite.
 - id: lock-reentrancy-decision
-  status: planned
+  status: done
   title: Decide mutation-lock reentrancy and inherited-lock policy
+  completed_by_pr: 1823
   depends_on:
   - lock-contract-audit
-  rationale: Decide whether outer wrapper locks, inherited core locks, or a reentrant
-    lock primitive are the durable policy for nested mutation flows.
+  rationale: >-
+    Selected same-PID reentrancy in PR #1823 as the durable lock policy so
+    protected primitives can remain safe when called directly or by higher-level
+    orchestrators.
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
   acceptance:
@@ -662,8 +665,9 @@ plans:
   title: Remediate mutation-lock coverage gaps
   depends_on:
   - lock-reentrancy-decision
-  rationale: Apply the LC2 decision to runtime mutators while keeping read-only audits
-    and non-blocking report writers from acquiring unnecessary locks.
+  rationale: Apply the LC2 same-PID-reentrant lock decision to runtime mutators
+    while keeping read-only audits and non-blocking report writers from acquiring
+    unnecessary locks.
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
   acceptance:
