@@ -13,6 +13,7 @@ from agentic_project_kit.standard_gates_audit_suite import (
 
 REQUIRED_NAMES = {
     "audit-patch-failure-discipline",
+    "audit-path-literals",
     "command-taxonomy-check",
     "direction",
     "doc-registry",
@@ -27,6 +28,7 @@ REQUIRED_NAMES = {
 
 
 STRICT_SCOPE_COMMAND = ("doc-registry", "check-unregistered", "--strict-scope")
+PATH_LITERAL_ENFORCE_COMMAND = ("audit-path-literals", "--enforce-active")
 
 
 def test_standard_gates_audit_suite_contains_required_gates() -> None:
@@ -39,10 +41,30 @@ def test_suite_contains_strict_scope_step() -> None:
     assert STRICT_SCOPE_COMMAND in REQUIRED_STANDARD_GATE_COMMANDS
 
 
-def test_path_literal_audit_is_report_only_not_standard_gate() -> None:
-    command_names = {command[0] for command in REQUIRED_STANDARD_GATE_COMMANDS}
+def test_path_literal_enforce_is_standard_gate() -> None:
+    assert PATH_LITERAL_ENFORCE_COMMAND in REQUIRED_STANDARD_GATE_COMMANDS
 
-    assert "audit-path-literals" not in command_names
+
+def test_standard_gates_suite_blocks_active_path_literal_failure(tmp_path: Path) -> None:
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        if args[-2:] == PATH_LITERAL_ENFORCE_COMMAND:
+            return (
+                1,
+                "PATH_LITERAL_ACTIVE_CLASS_ENFORCEMENT\n"
+                "STATUS=FAIL\n"
+                "BLOCKER=active_path_literal|src/demo.py|literals=1\n",
+            )
+        return 0, "PASS\n"
+
+    result = evaluate_standard_gates_audit_suite(tmp_path, runner=runner)
+
+    assert result.ok is False
+    blocker = next(
+        check
+        for check in result.blockers
+        if check.name == "audit-path-literals --enforce-active"
+    )
+    assert blocker.detail.startswith("BLOCKER=active_path_literal")
 
 
 def test_standard_gates_audit_suite_passes_when_commands_pass(tmp_path: Path) -> None:

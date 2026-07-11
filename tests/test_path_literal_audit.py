@@ -8,6 +8,8 @@ from typer.testing import CliRunner
 from agentic_project_kit.cli import app
 from agentic_project_kit.path_literal_audit import (
     audit_path_literals,
+    enforce_active_literal_classes,
+    render_path_literal_active_class_enforcement,
     render_path_literal_audit,
     render_path_literal_evidence_report,
 )
@@ -136,6 +138,85 @@ def test_audit_path_literals_reports_repo_identity_literals(tmp_path: Path) -> N
     assert "REPO_IDENTITY_LITERALS:" in rendered
     assert "ACTIVE_IDENTITY_MODULES=1" in rendered
     assert "REPO_IDENTITY=3|src/demo.py|classification=active|disposition=active" in rendered
+
+
+def test_enforce_active_path_literal_fails(tmp_path: Path) -> None:
+    module = tmp_path / "src" / "demo.py"
+    module.parent.mkdir()
+    module.write_text('from pathlib import Path\nDOCS = Path("docs") / "guide.md"\n', encoding="utf-8")
+
+    result = CliRunner().invoke(
+        app,
+        ["audit-path-literals", "--root", str(tmp_path), "--enforce-active"],
+    )
+
+    assert result.exit_code == 1
+    assert "PATH_LITERAL_ACTIVE_CLASS_ENFORCEMENT" in result.output
+    assert "STATUS=FAIL" in result.output
+    assert "BLOCKER=active_path_literal|src/demo.py|literals=1" in result.output
+
+
+def test_enforce_reference_path_literal_passes(tmp_path: Path) -> None:
+    module = tmp_path / "src" / "demo.py"
+    module.parent.mkdir()
+    module.write_text('DOCS_MESSAGE = "docs/guide.md"\n', encoding="utf-8")
+
+    result = CliRunner().invoke(
+        app,
+        ["audit-path-literals", "--root", str(tmp_path), "--enforce-active", "--json"],
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.output)
+    assert payload["kind"] == "path_literal_active_class_enforcement"
+    assert payload["status"] == "PASS"
+    assert payload["active_path_literal_count"] == 0
+    assert payload["non_blocking_path_literal_count"] == 1
+
+
+def test_enforce_active_identity_literal_fails(tmp_path: Path) -> None:
+    module = tmp_path / "src" / "demo.py"
+    module.parent.mkdir()
+    module.write_text('REPO = "vfi64/agentic-project-kit"\n', encoding="utf-8")
+
+    result = CliRunner().invoke(
+        app,
+        ["audit-path-literals", "--root", str(tmp_path), "--enforce-active"],
+    )
+
+    assert result.exit_code == 1
+    assert "STATUS=FAIL" in result.output
+    assert "BLOCKER=active_identity_literal|src/demo.py|literals=1" in result.output
+
+
+def test_enforce_declared_identity_exception_passes(tmp_path: Path) -> None:
+    module = tmp_path / "src" / "agentic_project_kit" / "gui_cockpit_actions.py"
+    module.parent.mkdir(parents=True)
+    module.write_text('HELP = "https://github.com/vfi64/agentic-project-kit"\n', encoding="utf-8")
+
+    result = CliRunner().invoke(
+        app,
+        ["audit-path-literals", "--root", str(tmp_path), "--enforce-active"],
+    )
+
+    assert result.exit_code == 0
+    assert "STATUS=PASS" in result.output
+    assert "ACTIVE_IDENTITY_LITERAL_COUNT=0" in result.output
+    assert "NON_BLOCKING_IDENTITY_LITERAL_COUNT=2" in result.output
+
+
+def test_enforce_clean_tree_passes(tmp_path: Path) -> None:
+    module = tmp_path / "src" / "demo.py"
+    module.parent.mkdir()
+    module.write_text("VALUE = 1\n", encoding="utf-8")
+
+    enforcement = enforce_active_literal_classes(audit_path_literals(tmp_path))
+    rendered = render_path_literal_active_class_enforcement(enforcement)
+
+    assert enforcement.returncode == 0
+    assert enforcement.as_dict()["status"] == "PASS"
+    assert "STATUS=PASS" in rendered
+    assert "BLOCKER_COUNT=0" in rendered
 
 
 def test_audit_path_literals_classifies_declared_identity_exceptions(tmp_path: Path) -> None:

@@ -255,6 +255,59 @@ class PathLiteralAuditResult:
         }
 
 
+@dataclass(frozen=True)
+class PathLiteralActiveClassEnforcementResult:
+    audit: PathLiteralAuditResult
+
+    @property
+    def status(self) -> str:
+        return "PASS" if self.blocker_count == 0 else "FAIL"
+
+    @property
+    def returncode(self) -> int:
+        return 0 if self.status == "PASS" else 1
+
+    @property
+    def blocker_count(self) -> int:
+        return self.audit.active_path_module_count + self.audit.active_repo_identity_module_count
+
+    @property
+    def active_path_literal_count(self) -> int:
+        return self.audit.active_path_literal_count
+
+    @property
+    def active_identity_literal_count(self) -> int:
+        return self.audit.active_repo_identity_literal_count
+
+    @property
+    def non_blocking_path_literal_count(self) -> int:
+        return self.audit.literal_count - self.audit.active_path_literal_count
+
+    @property
+    def non_blocking_identity_literal_count(self) -> int:
+        return self.audit.repo_identity_literal_count - self.audit.active_repo_identity_literal_count
+
+    def as_dict(self) -> dict[str, object]:
+        return {
+            "schema_version": 1,
+            "kind": "path_literal_active_class_enforcement",
+            "status": self.status,
+            "returncode": self.returncode,
+            "blocker_count": self.blocker_count,
+            "active_path_literal_count": self.active_path_literal_count,
+            "active_identity_literal_count": self.active_identity_literal_count,
+            "non_blocking_path_literal_count": self.non_blocking_path_literal_count,
+            "non_blocking_identity_literal_count": self.non_blocking_identity_literal_count,
+            "active_path_modules": [
+                module.as_dict() for module in self.audit.active_path_modules
+            ],
+            "active_identity_modules": [
+                module.as_dict() for module in self.audit.active_repo_identity_modules
+            ],
+            "audit": self.audit.as_dict(),
+        }
+
+
 def audit_path_literals(
     root: Path = Path("."),
     *,
@@ -306,6 +359,12 @@ def audit_path_literals(
         repo_identity_patterns=repo_identity_patterns,
         repo_identity_modules=tuple(repo_identity_modules),
     )
+
+
+def enforce_active_literal_classes(
+    result: PathLiteralAuditResult,
+) -> PathLiteralActiveClassEnforcementResult:
+    return PathLiteralActiveClassEnforcementResult(audit=result)
 
 
 def render_path_literal_audit(result: PathLiteralAuditResult) -> str:
@@ -366,6 +425,49 @@ def render_path_literal_audit(result: PathLiteralAuditResult) -> str:
         for module in result.declared_identity_exception_modules:
             lines.append(
                 f"- {module.path}: {module.classification.kind} — {module.classification.rationale}"
+            )
+    return "\n".join(lines) + "\n"
+
+
+def render_path_literal_active_class_enforcement(
+    result: PathLiteralActiveClassEnforcementResult,
+) -> str:
+    lines = [
+        "PATH_LITERAL_ACTIVE_CLASS_ENFORCEMENT",
+        f"STATUS={result.status}",
+        f"BLOCKER_COUNT={result.blocker_count}",
+        f"ACTIVE_PATH_LITERAL_COUNT={result.active_path_literal_count}",
+        f"ACTIVE_IDENTITY_LITERAL_COUNT={result.active_identity_literal_count}",
+        f"NON_BLOCKING_PATH_LITERAL_COUNT={result.non_blocking_path_literal_count}",
+        f"NON_BLOCKING_IDENTITY_LITERAL_COUNT={result.non_blocking_identity_literal_count}",
+    ]
+    for module in result.audit.active_path_modules:
+        lines.append(
+            f"BLOCKER=active_path_literal|{module.path}|literals={module.total}|"
+            f"classification={module.classification.kind}"
+        )
+    for module in result.audit.active_repo_identity_modules:
+        lines.append(
+            f"BLOCKER=active_identity_literal|{module.path}|literals={module.total}|"
+            f"classification={module.classification.kind}"
+        )
+    if result.audit.modules:
+        lines.append("PATH_LITERAL_CLASSIFICATION_SUMMARY:")
+        for kind, summary in result.audit.classification_summary.items():
+            disposition = "active" if summary["counts_as_active_path_literal"] else "non-active"
+            lines.append(
+                f"- {kind}: modules={summary['module_count']} literals={summary['literal_count']} "
+                f"disposition={disposition}"
+            )
+    if result.audit.repo_identity_modules:
+        lines.append("REPO_IDENTITY_CLASSIFICATION_SUMMARY:")
+        for kind, summary in result.audit.repo_identity_classification_summary.items():
+            disposition = (
+                "active" if summary["counts_as_active_identity_literal"] else "non-active"
+            )
+            lines.append(
+                f"- {kind}: modules={summary['module_count']} literals={summary['literal_count']} "
+                f"disposition={disposition}"
             )
     return "\n".join(lines) + "\n"
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 # ruff: noqa: F403,F405
 
 from agentic_project_kit.cli_commands.transfer_shared import *
+from agentic_project_kit.workspace import load_workspace
 
 
 @transfer_app.command("run-local")
@@ -88,7 +89,7 @@ def apply(
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
     require_capability("run_next_command")
     if warning_text:
-        warning_path = Path("tmp/instruction-lint-warnings.log")
+        warning_path = load_workspace(Path(".")).tmp_file("instruction-lint-warnings.log")
         warning_path.parent.mkdir(parents=True, exist_ok=True)
         warning_path.write_text(warning_text, encoding="utf-8")
     order = _load_or_exit(path)

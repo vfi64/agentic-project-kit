@@ -473,7 +473,11 @@ Future repair tools should stay bounded to mechanical edits and must not rewrite
 
 ## Path literal audit
 
-`agentic-kit audit-path-literals` is report-only, exits 0, is not part of the standard gate suite, and records evidence in `docs/architecture/evidence/path-literal-audit-2026-07-04.md`.
+`agentic-kit audit-path-literals` is report-only by default and exits 0 so reference
+and message literals stay visible. `agentic-kit audit-path-literals --enforce-active`
+is part of the standard gate suite and blocks active path or repository identity
+literals outside the workspace resolver and declared exceptions. Historical evidence
+is recorded in `docs/architecture/evidence/path-literal-audit-2026-07-04.md`.
 
 ## Documentation system audit
 

@@ -268,16 +268,26 @@ rules:
     - release-status
     - origin/main
 - id: path-literal-audit-coverage
-  description: Path literal audit must remain visible as report-only workspace
-    migration evidence, not a standard-suite gate.
+  description: Path literal audit must keep report-only visibility while standard
+    gates enforce only active path and repository identity literal classes.
   documents:
   - path: README.md
     terms:
     - Path literal audit
     - agentic-kit audit-path-literals
     - report-only
-    - not part of the standard gate suite
+    - agentic-kit audit-path-literals --enforce-active
+    - standard gate suite
+    - repository identity
     - docs/architecture/evidence/path-literal-audit-2026-07-04.md
+  - path: docs/TEST_GATES.md
+    terms:
+    - Path Literal Active-Class Gate
+    - agentic-kit audit-path-literals
+    - agentic-kit audit-path-literals --enforce-active
+    - active path literals
+    - active repository identity literals
+    - non-blocking
   - path: docs/architecture/evidence/path-literal-audit-2026-07-04.md
     terms:
     - Path Literal Audit Evidence

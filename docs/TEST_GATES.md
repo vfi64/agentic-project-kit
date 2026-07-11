@@ -215,6 +215,15 @@ Use `agentic-kit audit-status-current-state` when changing `docs/STATUS.md`, cur
 
 The gate compares `docs/STATUS.md`, `CHANGELOG.md`, `docs/reports/handoff-packages/latest/validation_report.json`, `release-status`, and `origin/main`. It must allow a bounded administrative refresh commit after the validated substantive safe-state, but block stale Current verified main claims, duplicate live current-state markers, release-version drift, stale pending DOI lines in the current CHANGELOG block after STATUS records a verified Zenodo version DOI, and validation reports that are no longer reachable from `origin/main`.
 
+## Path Literal Active-Class Gate
+
+`agentic-kit audit-path-literals` remains report-only by default so reference and
+message literals stay visible. The standard gate suite runs
+`agentic-kit audit-path-literals --enforce-active`, which blocks active path literals
+outside `workspace.py` and declared exceptions, and active repository identity literals
+outside declared exceptions. Reference, message, template, and declared exception
+literals remain visible but non-blocking.
+
 ## Rule Hardening Gate
 
 Every new or changed governance rule must be backed by at least one explicit hardening mechanism in the same change.
