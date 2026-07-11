@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: bdbfcce52a56ed937d71838cab09694b70a65c0d
-  short: bdbfcce5
-  subject: Add mutation lock coverage evidence (#1821)
+  full: eb293cead2aaf9d5113c6bfffec85383adad99b5
+  short: eb293cea
+  subject: Document mutation lock reentrancy policy (#1823)
 last_substantive_work_state:
-  full: bdbfcce52a56ed937d71838cab09694b70a65c0d
-  short: bdbfcce5
-  subject: Add mutation lock coverage evidence (#1821)
+  full: eb293cead2aaf9d5113c6bfffec85383adad99b5
+  short: eb293cea
+  subject: Document mutation lock reentrancy policy (#1823)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

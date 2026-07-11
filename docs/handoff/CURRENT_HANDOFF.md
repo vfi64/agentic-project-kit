@@ -317,6 +317,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1821
+## Operational documentation refresh state after PR #1823
 
-Current administrative handoff refresh state is `bdbfcce5` (`Add mutation lock coverage evidence (#1821)`). Continue next only after this post-PR1821 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `eb293cea` (`Document mutation lock reentrancy policy (#1823)`). Continue next only after this post-PR1823 refresh is committed and merged; the next substantive slice must be created from fresh main.
