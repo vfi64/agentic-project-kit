@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-11T15:06:34.233622+00:00",
+  "generated_at_utc": "2026-07-11T15:28:50.951120+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -40,7 +40,7 @@
       "docs/reference/agentic-kit-commands.json"
     ],
     "required_startup_commands": [
-      "cd /path/to/agentic-project-kit",
+      "cd /path/to/",
       "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile",
       "./.venv/bin/agentic-kit rules acknowledge",
       "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile",
@@ -56,14 +56,14 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1823-handoff-refresh",
+    "branch": "docs/post-pr1825-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "eb293cead2aaf9d5113c6bfffec85383adad99b5",
+    "head": "6f881b2dab7d45cef9262003e9eb258a53010b15",
     "head_matches_origin_main": true,
-    "head_short": "eb293cea",
-    "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "eb293cead2aaf9d5113c6bfffec85383adad99b5",
-    "origin_main_short": "eb293cea",
+    "head_short": "6f881b2d",
+    "local_path": "cd /path/to/",
+    "origin_main": "6f881b2dab7d45cef9262003e9eb258a53010b15",
+    "origin_main_short": "6f881b2d",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -185,15 +185,6 @@
         "id": "lock-coverage-remediation",
         "status": "planned",
         "summary": "Remediate mutation-lock coverage gaps"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "repo-identity-literals",
-        "status": "active",
-        "summary": "Derive repository identity literals from workspace context"
       },
       {
         "files": [

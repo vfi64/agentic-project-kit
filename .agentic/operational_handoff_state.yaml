@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: eb293cead2aaf9d5113c6bfffec85383adad99b5
-  short: eb293cea
-  subject: Document mutation lock reentrancy policy (#1823)
+  full: 6f881b2dab7d45cef9262003e9eb258a53010b15
+  short: 6f881b2d
+  subject: Derive successor handoff repo identity (#1825)
 last_substantive_work_state:
-  full: eb293cead2aaf9d5113c6bfffec85383adad99b5
-  short: eb293cea
-  subject: Document mutation lock reentrancy policy (#1823)
+  full: 6f881b2dab7d45cef9262003e9eb258a53010b15
+  short: 6f881b2d
+  subject: Derive successor handoff repo identity (#1825)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

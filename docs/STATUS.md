@@ -7,9 +7,9 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `eb293cea` (`Document mutation lock reentrancy policy (#1823)`).
-Latest substantive work: PR #1823 (`Document mutation lock reentrancy policy (#1823)`).
-Post-merge handoff status: PASS/NOOP after PR #1823 administrative refresh.
+Current verified main: `6f881b2d` (`Derive successor handoff repo identity (#1825)`).
+Latest substantive work: PR #1825 (`Derive successor handoff repo identity (#1825)`).
+Post-merge handoff status: PASS/NOOP after PR #1825 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1823
+## Operational documentation refresh state after PR #1825
 
-Current administrative handoff refresh state is `eb293cea` (`Document mutation lock reentrancy policy (#1823)`). Continue next only after this post-PR1823 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `6f881b2d` (`Derive successor handoff repo identity (#1825)`). Continue next only after this post-PR1825 refresh is committed and merged; the next substantive slice must be created from fresh main.
