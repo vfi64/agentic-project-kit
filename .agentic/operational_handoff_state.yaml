@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: dfe1c970812b155a0d2d9b60505c10b088a920a9
-  short: dfe1c970
-  subject: Add GUI project root selection (#1839)
+  full: 0afa9726b6de8cb69ac03a0a8936e1e04b031456
+  short: 0afa9726
+  subject: Add operating-layer quickstart and template checks (#1841)
 last_substantive_work_state:
-  full: dfe1c970812b155a0d2d9b60505c10b088a920a9
-  short: dfe1c970
-  subject: Add GUI project root selection (#1839)
+  full: 0afa9726b6de8cb69ac03a0a8936e1e04b031456
+  short: 0afa9726
+  subject: Add operating-layer quickstart and template checks (#1841)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
