@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 09e3dab02b9fc7418378edff3a4e0a77a3069366
-  short: 09e3dab0
-  subject: "P5b: Enforce active path literal classes (#1831)"
+  full: f693c5f9df3b2ba2d101c29195d949eb57be17da
+  short: f693c5f9
+  subject: Refresh handoff state after PR1831 (#1832)
 last_substantive_work_state:
-  full: 09e3dab02b9fc7418378edff3a4e0a77a3069366
-  short: 09e3dab0
-  subject: "P5b: Enforce active path literal classes (#1831)"
+  full: f693c5f9df3b2ba2d101c29195d949eb57be17da
+  short: f693c5f9
+  subject: Refresh handoff state after PR1831 (#1832)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
