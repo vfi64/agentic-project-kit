@@ -13,6 +13,7 @@ from agentic_project_kit.standard_gates_audit_suite import (
 
 REQUIRED_NAMES = {
     "audit-patch-failure-discipline",
+    "audit-mutation-lock-coverage",
     "audit-path-literals",
     "command-taxonomy-check",
     "direction",
@@ -29,6 +30,7 @@ REQUIRED_NAMES = {
 
 STRICT_SCOPE_COMMAND = ("doc-registry", "check-unregistered", "--strict-scope")
 PATH_LITERAL_ENFORCE_COMMAND = ("audit-path-literals", "--enforce-active")
+MUTATION_LOCK_AUDIT_COMMAND = ("audit-mutation-lock-coverage",)
 
 
 def test_standard_gates_audit_suite_contains_required_gates() -> None:
@@ -43,6 +45,10 @@ def test_suite_contains_strict_scope_step() -> None:
 
 def test_path_literal_enforce_is_standard_gate() -> None:
     assert PATH_LITERAL_ENFORCE_COMMAND in REQUIRED_STANDARD_GATE_COMMANDS
+
+
+def test_mutation_lock_audit_is_standard_gate() -> None:
+    assert MUTATION_LOCK_AUDIT_COMMAND in REQUIRED_STANDARD_GATE_COMMANDS
 
 
 def test_standard_gates_suite_blocks_active_path_literal_failure(tmp_path: Path) -> None:

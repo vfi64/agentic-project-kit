@@ -13,6 +13,7 @@ from agentic_project_kit.workspace import KitConfig
 
 
 LOGGER = logging.getLogger(__name__)
+_REENTRANT_LOCK_DEPTHS: dict[str, int] = {}
 
 
 class WorkspaceLockBusy(RuntimeError):
@@ -49,9 +50,14 @@ def _holder_field(payload: dict[str, Any], key: str, fallback: str) -> str:
     return str(value) if value not in (None, "") else fallback
 
 
+def _lock_key(path: Path) -> str:
+    return path.resolve().as_posix()
+
+
 @contextmanager
 def acquire_workspace_lock(root: Path, command: str) -> Iterator[Path]:
     path = _workspace_lock_path(Path(root))
+    path_key = _lock_key(path)
     payload = {
         "pid": os.getpid(),
         "command": command,
@@ -67,6 +73,17 @@ def acquire_workspace_lock(root: Path, command: str) -> Iterator[Path]:
             holder_pid = int(holder.get("pid") or -1)
             holder_command = _holder_field(holder, "command", "unknown")
             holder_acquired_at = _holder_field(holder, "acquired_at", "unknown")
+            if holder_pid == os.getpid() and _REENTRANT_LOCK_DEPTHS.get(path_key, 0) > 0:
+                _REENTRANT_LOCK_DEPTHS[path_key] += 1
+                try:
+                    yield path
+                finally:
+                    depth = _REENTRANT_LOCK_DEPTHS.get(path_key, 0) - 1
+                    if depth > 0:
+                        _REENTRANT_LOCK_DEPTHS[path_key] = depth
+                    else:
+                        _REENTRANT_LOCK_DEPTHS.pop(path_key, None)
+                return
             if holder_pid > 0 and _pid_is_alive(holder_pid):
                 raise WorkspaceLockBusy(
                     f"workspace is busy: {holder_command} pid {holder_pid} since {holder_acquired_at}"
@@ -86,12 +103,14 @@ def acquire_workspace_lock(root: Path, command: str) -> Iterator[Path]:
             with os.fdopen(fd, "w", encoding="utf-8") as lock_file:
                 lock_file.write(json.dumps(payload, sort_keys=True) + "\n")
             acquired = True
+            _REENTRANT_LOCK_DEPTHS[path_key] = 1
             break
 
     try:
         yield path
     finally:
         if acquired:
+            _REENTRANT_LOCK_DEPTHS.pop(path_key, None)
             try:
                 path.unlink()
             except FileNotFoundError as exc:

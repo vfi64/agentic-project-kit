@@ -59,6 +59,17 @@ def test_guard_blocks_branch_switch_when_worktree_dirty(tmp_path: Path) -> None:
     assert read_git_state(repo).branch == "main"
 
 
+def test_git_state_ignores_workspace_runtime_lock_file(tmp_path: Path) -> None:
+    repo = init_repo(tmp_path)
+    lock = repo / ".agentic" / "tmp" / "workspace.lock"
+    lock.parent.mkdir(parents=True)
+    lock.write_text('{"pid": 1}\n', encoding="utf-8")
+
+    state = read_git_state(repo)
+
+    assert state.dirty_status == ""
+
+
 def test_guard_blocks_feature_mutation_on_main_without_explicit_allowance(tmp_path: Path) -> None:
     repo = init_repo(tmp_path)
 

@@ -450,9 +450,9 @@ Agents should start with `AGENTS.md`, `.agentic/project.yaml`, `docs/PROJECT_STA
 
 ## Documentation coverage and drift checks
 
-The repository uses `docs/DOCUMENTATION_COVERAGE.yaml` as a machine-checkable documentation coverage matrix.
+`docs/DOCUMENTATION_COVERAGE.yaml` is the machine-checkable documentation coverage matrix.
 
-`agentic-kit check-docs` validates that important public commands, workflows, governance concepts, safety rules, release commands, and evidence expectations remain visible in the expected documents. This prevents features such as `agentic-kit doctor` from being implemented but invisible to new users.
+`agentic-kit check-docs` validates that important public commands, workflows, governance concepts, safety rules, release commands, and evidence expectations remain visible in the expected documents. This keeps features such as `agentic-kit doctor` visible to new users.
 
 When adding a public command, workflow, gate, profile, policy pack, generated file, architecture concept, or release-visible feature, update the coverage matrix and the affected documentation in the same change.
 
@@ -482,11 +482,17 @@ Future repair tools should stay bounded to mechanical edits and must not rewrite
 
 ## Path literal audit
 
-`agentic-kit audit-path-literals` is report-only by default and exits 0 so reference
-and message literals stay visible. `agentic-kit audit-path-literals --enforce-active`
-is part of the standard gate suite and blocks active path or repository identity
-literals outside the workspace resolver and declared exceptions. Historical evidence
-is recorded in `docs/architecture/evidence/path-literal-audit-2026-07-04.md`.
+`agentic-kit audit-path-literals` is report-only. `agentic-kit audit-path-literals --enforce-active`
+runs in the standard gate suite and blocks active path/repository identity
+literals outside resolver exceptions. Evidence:
+`docs/architecture/evidence/path-literal-audit-2026-07-04.md`.
+
+## Mutation-lock coverage audit
+
+`agentic-kit audit-mutation-lock-coverage` runs in the standard gate suite. It
+blocks unlocked core runtime git or GitHub mutators; others stay
+non-blocking review data. Evidence:
+`docs/architecture/evidence/mutation-lock-coverage-2026-07-11-post-lc3.md`.
 
 ## Documentation system audit
 

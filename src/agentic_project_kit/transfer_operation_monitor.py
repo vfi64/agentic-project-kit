@@ -50,6 +50,10 @@ MAIN_MUTATION_ALLOWLIST = {
     "branch-switch",
 }
 
+IGNORED_RUNTIME_STATUS_PATHS = {
+    ".agentic/tmp/workspace.lock",
+}
+
 
 def _run_git(root: Path, args: list[str]) -> subprocess.CompletedProcess[str]:
     return subprocess.run(["git", *args], cwd=root, text=True, capture_output=True, check=False)
@@ -58,7 +62,10 @@ def _run_git(root: Path, args: list[str]) -> subprocess.CompletedProcess[str]:
 def read_git_state(root: Path | str = ".") -> GitState:
     root_path = Path(root)
     branch = _run_git(root_path, ["branch", "--show-current"]).stdout.strip()
-    dirty_status = _run_git(root_path, ["status", "--short"]).stdout.strip()
+    status_lines = _run_git(root_path, ["status", "--short", "--untracked-files=all"]).stdout.splitlines()
+    dirty_status = "\n".join(
+        line for line in status_lines if line[3:] not in IGNORED_RUNTIME_STATUS_PATHS
+    ).strip()
     head = _run_git(root_path, ["rev-parse", "HEAD"]).stdout.strip()
     return GitState(branch=branch, dirty_status=dirty_status, head=head)
 

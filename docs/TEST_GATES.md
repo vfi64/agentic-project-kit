@@ -224,6 +224,15 @@ outside `workspace.py` and declared exceptions, and active repository identity l
 outside declared exceptions. Reference, message, template, and declared exception
 literals remain visible but non-blocking.
 
+## Mutation Lock Coverage Gate
+
+`agentic-kit audit-mutation-lock-coverage` is part of the standard gate suite.
+Its JSON and text output classify findings into blocking and non-blocking groups:
+unlocked core runtime git/GitHub mutators block, while filesystem side effects,
+metadata literals, report writers, generated references, and delegated runtime references remain visible but non-blocking. Same-PID nested lock acquisition is
+the expected runtime policy for mutating orchestrators that call protected
+primitives.
+
 ## Rule Hardening Gate
 
 Every new or changed governance rule must be backed by at least one explicit hardening mechanism in the same change.

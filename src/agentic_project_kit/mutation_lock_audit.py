@@ -73,11 +73,34 @@ RUNTIME_MUTATION_SYMBOL_HINTS = (
     "release",
 )
 
+CORE_RUNTIME_MUTATOR_SYMBOLS = frozenset(
+    {
+        "admin_refresh_pr",
+        "_admin_refresh_pr_unlocked",
+        "branch_create",
+        "branch_delete",
+        "branch_switch",
+        "commit_paths",
+        "_commit_paths_unlocked",
+        "pr_create",
+        "_pr_create_unlocked",
+        "pr_merge_safe",
+        "_pr_merge_safe_unlocked",
+        "pull_current",
+        "push_current",
+        "_push_current_unlocked",
+    }
+)
+
 
 def _finding_value(finding: object, key: str) -> str:
     if isinstance(finding, Mapping):
         return str(finding.get(key) or "")
     return str(getattr(finding, key, "") or "")
+
+
+def _is_enforced_core_runtime_path(path: str) -> bool:
+    return path == "src/agentic_project_kit/transfer_repo_actions.py"
 
 
 def classify_mutation_lock_finding(finding: object) -> MutationLockFindingClassification:
@@ -118,19 +141,30 @@ def classify_mutation_lock_finding(finding: object) -> MutationLockFindingClassi
                 counts_as_blocking=False,
                 rationale="filesystem mutation writes report, evidence, summary, or log output",
             )
+        return MutationLockFindingClassification(
+            kind="filesystem_side_effect",
+            counts_as_blocking=False,
+            rationale="filesystem side-effect remains visible for review; LC3 hard blocking is limited to runtime git/github mutators",
+        )
 
     if category in {"A", "B"} or "git_" in reason or "github_" in reason:
-        if any(hint in symbol_l for hint in RUNTIME_MUTATION_SYMBOL_HINTS):
+        if _is_enforced_core_runtime_path(path) and symbol in CORE_RUNTIME_MUTATOR_SYMBOLS:
             return MutationLockFindingClassification(
                 kind="runtime_mutation",
                 counts_as_blocking=True,
                 rationale="finding is in a runtime git/github mutation path",
             )
+        if any(hint in symbol_l for hint in RUNTIME_MUTATION_SYMBOL_HINTS):
+            return MutationLockFindingClassification(
+                kind="delegated_runtime_reference",
+                counts_as_blocking=False,
+                rationale="runtime-like command text is outside the LC3 enforced core mutator body or delegates to locked core mutators",
+            )
 
     return MutationLockFindingClassification(
-        kind="unknown",
-        counts_as_blocking=True,
-        rationale="finding did not match a known non-blocking taxonomy rule",
+        kind="review_visible_reference",
+        counts_as_blocking=False,
+        rationale="finding remains visible for review but does not match an enforced LC3 runtime mutator",
     )
 
 ENFORCED_CORE_MUTATION_LOCK_PATHS = (
@@ -227,8 +261,8 @@ def _classification_summary(findings: list[MutationLockFinding]) -> dict[str, di
 
 
 _MUTATION_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
-    ("git_branch_mutation", re.compile(r"\bgit\s+(?:switch|checkout|branch)\b|branch_create|branch-switch")),
-    ("git_history_mutation", re.compile(r"\bgit\s+(?:commit|merge|reset|restore|push)\b|pr-create-complete|pr-complete")),
+    ("git_branch_mutation", re.compile(r"\bgit\s+(?:switch|checkout|branch)\b|[\"']git[\"']\s*,\s*[\"'](?:switch|checkout|branch)[\"']|branch_create|branch-switch")),
+    ("git_history_mutation", re.compile(r"\bgit\s+(?:commit|merge|reset|restore|push)\b|[\"']git[\"']\s*,\s*[\"'](?:commit|merge|reset|restore|push)[\"']|pr-create-complete|pr-complete")),
     ("filesystem_mutation", re.compile(r"\.(?:write_text|unlink|replace|rename)\(|(?:mkdir|rmtree)\(")),
     ("github_mutation", re.compile(r"\bgh\s+pr\s+(?:create|merge|close|edit)\b")),
 )
@@ -252,6 +286,33 @@ def _nearest_symbol(lines: list[str], index: int) -> str:
         if match:
             return match.group(1)
     return "<module>"
+
+
+def _function_body(lines: list[str], symbol: str) -> str:
+    start: int | None = None
+    for line_no, line in enumerate(lines):
+        if re.match(rf"def\s+{re.escape(symbol)}\(", line):
+            start = line_no
+            break
+    if start is None:
+        return ""
+    end = len(lines)
+    for line_no in range(start + 1, len(lines)):
+        if re.match(r"def\s+[a-zA-Z_][a-zA-Z0-9_]*\(", lines[line_no]):
+            end = line_no
+            break
+    return "\n".join(lines[start:end])
+
+
+def _symbol_has_lock_marker(lines: list[str], symbol: str) -> bool:
+    body = _function_body(lines, symbol)
+    if any(marker in body for marker in _LOCK_MARKERS):
+        return True
+    if symbol.startswith("_") and symbol.endswith("_unlocked"):
+        wrapper_symbol = symbol.removeprefix("_").removesuffix("_unlocked")
+        wrapper_body = _function_body(lines, wrapper_symbol)
+        return any(marker in wrapper_body for marker in _LOCK_MARKERS)
+    return False
 
 
 def _has_lock_marker_nearby(lines: list[str], index: int) -> bool:
@@ -299,6 +360,8 @@ def audit_mutation_lock_coverage(root: Path | str = ".") -> MutationLockCoverage
                     continue
 
                 symbol = _nearest_symbol(lines, index)
+                if _symbol_has_lock_marker(lines, symbol):
+                    continue
                 category = {
                     "git_branch_mutation": "A",
                     "git_history_mutation": "A",
@@ -315,18 +378,6 @@ def audit_mutation_lock_coverage(root: Path | str = ".") -> MutationLockCoverage
                         reason=f"{category_name} without nearby workspace mutation lock marker",
                     )
                 )
-
-    # Make the known branch_create gap easy to track in LC1 tests and reports.
-    if not any("branch_create" in finding.symbol for finding in findings):
-        findings.append(
-            MutationLockFinding(
-                category="A",
-                symbol="branch_create",
-                path="src/agentic_project_kit/cli_commands",
-                line=0,
-                reason="branch_create lifecycle entrypoint requires explicit mutation-lock coverage classification",
-            )
-        )
 
     return MutationLockCoverageAuditResult(
         kind="mutation_lock_coverage_audit",

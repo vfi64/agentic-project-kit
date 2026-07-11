@@ -487,6 +487,26 @@ def test_lock_busy_fails_fast_with_holder_info(tmp_path: Path) -> None:
             raise AssertionError("busy lock should fail before entering")
 
 
+def test_lock_same_pid_reentrant_acquire_releases_at_outer_depth(tmp_path: Path) -> None:
+    lock = tmp_path / ".agentic" / "tmp" / "workspace.lock"
+
+    with acquire_workspace_lock(tmp_path, "outer") as outer:
+        assert outer == lock
+        outer_payload = json.loads(lock.read_text(encoding="utf-8"))
+        assert outer_payload["command"] == "outer"
+
+        with acquire_workspace_lock(tmp_path, "inner") as inner:
+            assert inner == lock
+            inner_payload = json.loads(lock.read_text(encoding="utf-8"))
+            assert inner_payload["command"] == "outer"
+
+        assert lock.exists()
+        after_inner_payload = json.loads(lock.read_text(encoding="utf-8"))
+        assert after_inner_payload["command"] == "outer"
+
+    assert not lock.exists()
+
+
 def test_lock_stale_pid_is_taken_over_with_warning(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, caplog) -> None:
     lock = tmp_path / ".agentic" / "tmp" / "workspace.lock"
     lock.parent.mkdir(parents=True)

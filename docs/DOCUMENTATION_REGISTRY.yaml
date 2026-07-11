@@ -667,6 +667,10 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: LC1 report-only mutation-lock coverage evidence with current audit classifications, gap inventory, and branch_create recheck.
+  - path: docs/architecture/evidence/mutation-lock-coverage-2026-07-11-post-lc3.md
+    class: evidence/log
+    owner: maintainers
+    notes: LC3 mutation-lock remediation evidence showing zero blocking findings, same-PID reentrant runtime mutator coverage, non-blocking false-positive visibility, and standard-suite adoption.
   - path: docs/architecture/evidence/remote-branch-hygiene-2026-07-11.md
     class: evidence/log
     owner: maintainers
