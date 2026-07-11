@@ -125,15 +125,6 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "instruction-lint-gate",
-        "status": "planned",
-        "summary": "Instruction lint gate"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
         "id": "chat-entrypoint-contract",
         "status": "planned",
         "summary": "Chat entrypoint manifest contract"
@@ -294,13 +285,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1811-handoff-refresh",
+      "branch": "docs/post-pr1813-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "20a583bb189ec7a418beaaeaac0f10bc4e6a568d",
+      "head": "c9a26f189a772f7a2e0d446990824a1813bda6d2",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/agentic-project-kit",
-      "origin_main": "20a583bb189ec7a418beaaeaac0f10bc4e6a568d",
+      "origin_main": "c9a26f189a772f7a2e0d446990824a1813bda6d2",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -377,13 +368,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1811-handoff-refresh",
+    "branch": "docs/post-pr1813-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "20a583bb189ec7a418beaaeaac0f10bc4e6a568d",
+    "head": "c9a26f189a772f7a2e0d446990824a1813bda6d2",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "20a583bb189ec7a418beaaeaac0f10bc4e6a568d",
+    "origin_main": "c9a26f189a772f7a2e0d446990824a1813bda6d2",
     "worktree_clean": false
   },
   "rules": [

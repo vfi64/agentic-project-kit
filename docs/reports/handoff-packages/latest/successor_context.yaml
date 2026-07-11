@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-11T08:51:25.442048+00:00",
+  "generated_at_utc": "2026-07-11T09:04:50.574369+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,14 +56,14 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1811-handoff-refresh",
+    "branch": "docs/post-pr1813-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "20a583bb189ec7a418beaaeaac0f10bc4e6a568d",
+    "head": "c9a26f189a772f7a2e0d446990824a1813bda6d2",
     "head_matches_origin_main": true,
-    "head_short": "20a583bb",
+    "head_short": "c9a26f18",
     "local_path": "cd /path/to/agentic-project-kit",
-    "origin_main": "20a583bb189ec7a418beaaeaac0f10bc4e6a568d",
-    "origin_main_short": "20a583bb",
+    "origin_main": "c9a26f189a772f7a2e0d446990824a1813bda6d2",
+    "origin_main_short": "c9a26f18",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -176,15 +176,6 @@
         "id": "master-implementation-q",
         "status": "active",
         "summary": "Master Implementation Q2 rest sequence"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "instruction-lint-gate",
-        "status": "planned",
-        "summary": "Instruction lint gate"
       },
       {
         "files": [
