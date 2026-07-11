@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-11T17:23:09.137691+00:00",
+  "generated_at_utc": "2026-07-11T17:50:11.631974+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,14 +56,14 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1832-handoff-refresh",
+    "branch": "docs/post-pr1834-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f693c5f9df3b2ba2d101c29195d949eb57be17da",
+    "head": "e4a632879c22531bed89aa2f87c25efa9bf6bcd6",
     "head_matches_origin_main": true,
-    "head_short": "f693c5f9",
+    "head_short": "e4a63287",
     "local_path": "cd /path/to/",
-    "origin_main": "f693c5f9df3b2ba2d101c29195d949eb57be17da",
-    "origin_main_short": "f693c5f9",
+    "origin_main": "e4a632879c22531bed89aa2f87c25efa9bf6bcd6",
+    "origin_main_short": "e4a63287",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -77,15 +77,6 @@
         "id": "p5c-physical-migration",
         "status": "planned",
         "summary": "Plan physical migration after legacy profile deprecation for P5"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "p5d-legacy-path-deprecation",
-        "status": "planned",
-        "summary": "Deprecate legacy top-level paths in line with legacy-profile removal for P5"
       },
       {
         "files": [
