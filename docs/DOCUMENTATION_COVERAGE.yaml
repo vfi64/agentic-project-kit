@@ -180,6 +180,7 @@ rules:
     - agentic-kit workflow go
     - agentic-kit workflow upload-output
     - agentic-kit workflow state
+    - agentic-kit instruction lint
     - agentic-kit workflow list
     - agentic-kit workflow show
     - agentic-kit workflow upload

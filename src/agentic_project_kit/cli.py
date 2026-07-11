@@ -18,6 +18,7 @@ from agentic_project_kit.cli_commands.gui import gui_app
 from agentic_project_kit.cli_commands.handoff import handoff_app
 from agentic_project_kit.cli_commands.human_workflows import release_flow_app, work_app
 from agentic_project_kit.cli_commands.init import register_init_command
+from agentic_project_kit.cli_commands.instruction import instruction_app
 from agentic_project_kit.cli_commands.pass_already_done import app as pass_already_done_app
 from agentic_project_kit.cli_commands.patterns import patterns_app
 from agentic_project_kit.cli_commands.pr import pr_app, register_pr_closeout_alias
@@ -105,6 +106,7 @@ app.add_typer(workflow_guard_app, name="workflow-guard")
 app.add_typer(rule_registry_app, name="rule-registry")
 app.add_typer(doc_registry_app, name="doc-registry")
 app.add_typer(docs_app, name="docs")
+app.add_typer(instruction_app, name="instruction")
 app.add_typer(handoff_app, name="handoff")
 app.add_typer(boot_app, name="boot")
 app.add_typer(commands_app, name="commands")

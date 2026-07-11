@@ -3798,6 +3798,112 @@
     },
     {
       "dry_run_available": false,
+      "group": "instruction",
+      "help": "Lint instruction text against the current command manifest.",
+      "name": "lint",
+      "params": [
+        {
+          "default": null,
+          "help": "Instruction text file to lint.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "file_path",
+          "opts": [
+            "--file"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Read instruction text from stdin.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "stdin_input",
+          "opts": [
+            "--stdin"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": true,
+          "help": "Require the current COMMAND_MANIFEST_ACK line.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_ack",
+          "opts": [
+            "--require-ack"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-require-ack"
+          ]
+        },
+        {
+          "default": false,
+          "help": "Treat unknown raw git/gh commands as blocking.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "strict_unknown",
+          "opts": [
+            "--strict-unknown"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "instruction",
+        "lint"
+      ],
+      "qualified_name": "agentic-kit instruction lint",
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "task_tags": [
+        "instruction",
+        "read-only"
+      ],
+      "when_to_use": "Lint instruction text against the current command manifest."
+    },
+    {
+      "dry_run_available": false,
       "group": "pass-already-done",
       "help": "",
       "name": "classify",
@@ -13622,7 +13728,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "dd695b73dc3a",
+    "manifest_sha": "e58478cb6b5c",
     "schema_version": 1
   },
   "schema_version": 2,

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from agentic_project_kit.gui_tkinter_shell import (
     WORK_ORDER_STRIP_COMMAND_IDS,
     build_tkinter_shell_spec,
@@ -6,6 +8,7 @@ from agentic_project_kit.gui_tkinter_shell import (
     create_tkinter_root,
     main,
     render_tkinter_shell_summary,
+    run_instruction_lint_clipboard,
 )
 from agentic_project_kit.gui_button_catalog import (
     all_gui_buttons,
@@ -462,6 +465,32 @@ def test_manual_gui_catalog_runs_communication_buttons_readonly():
         assert "safety_class=read-only" in output
         assert "allowed=true" in output
         assert "executed=true" in output
+
+
+def test_manual_gui_instruction_lint_clipboard_smoke_headless():
+    from agentic_project_kit.command_manifest import load_manifest
+    from agentic_project_kit.instruction_lint import command_manifest_ack_line
+
+    manifest = load_manifest(Path(".").resolve())
+    text = f"{command_manifest_ack_line(manifest)}\nagentic-kit transfer repo-status --json\n"
+
+    output = run_instruction_lint_clipboard(lambda: text)
+
+    assert "action=instruction-lint-clipboard" in output
+    assert "safety_class=read-only" in output
+    assert "allowed=true" in output
+    assert "executed=true" in output
+    assert "returncode=0" in output
+    assert "STATUS=PASS" in output
+
+
+def test_manual_gui_instruction_lint_clipboard_reports_empty_clipboard():
+    output = run_instruction_lint_clipboard(lambda: "")
+
+    assert "action=instruction-lint-clipboard" in output
+    assert "executed=false" in output
+    assert "returncode=1" in output
+    assert "clipboard empty/unavailable" in output
 
 
 def test_manual_gui_catalog_runs_work_order_validation_readonly():
