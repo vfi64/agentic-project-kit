@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1823
+  updated_after_pr: 1825
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1823
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1825
 strategy:
 - id: governed-operating-model
   status: active
@@ -675,12 +675,15 @@ plans:
   - False-positive metadata and report-writer findings remain visible but non-blocking.
   - The mutation-lock audit can be promoted safely after remediation.
 - id: repo-identity-literals
-  status: active
+  status: done
   title: Derive repository identity literals from workspace context
+  completed_by_pr: 1825
   depends_on:
   - lock-contract-audit
-  rationale: Replace self-hosting repository identity literals with resolver-backed
-    workspace identity before path and identity literal enforcement tightens.
+  rationale: >-
+    Replaced successor handoff self-hosting identity literals with git-origin
+    repository identity derivation in PR #1825 before path and identity literal
+    enforcement tightens.
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
   acceptance:
