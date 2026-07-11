@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1847-handoff-refresh`
+- branch: `docs/post-pr1849-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -233,15 +233,6 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "doc-lifecycle-metadata",
-      "status": "active",
-      "summary": "Add documentation lifecycle metadata and report-only consistency gate"
-    },
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
       "id": "doc-lifecycle-signals",
       "status": "planned",
       "summary": "Add documentation lifecycle obsolescence signals"
@@ -428,14 +419,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1847-handoff-refresh",
+    "branch": "docs/post-pr1849-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "5e18a18db33ceea9cac9dafd1871fae7346b2a2a",
+    "head": "3cb150c70a16a50ed6f7d1bf6270d37bff46758c",
     "head_matches_origin_main": true,
-    "head_short": "5e18a18d",
+    "head_short": "3cb150c7",
     "local_path": "cd /path/to/",
-    "origin_main": "5e18a18db33ceea9cac9dafd1871fae7346b2a2a",
-    "origin_main_short": "5e18a18d",
+    "origin_main": "3cb150c70a16a50ed6f7d1bf6270d37bff46758c",
+    "origin_main_short": "3cb150c7",
     "worktree_clean": false
   }
 }
@@ -461,7 +452,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 645e8d63880d). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 645e8d63880d. Consult `agentic-kit command-for` before proposing commands.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: da49759e8d28). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK da49759e8d28. Consult `agentic-kit command-for` before proposing commands.
 - Before proposing ANY command run/consult `agentic-kit command-for`.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -471,5 +462,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 29deda60edf9e1c2db8f90b1b93baa6d432850b54813e844727626156f59925d
-- docs/reference/agentic-kit-commands.json: 18722f309b8e6a86bf46beb1ebaad27bc7136df75f3d282aa26c72361ebcdc06
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 3440c786e83fe37f69c45f9ce4f448b1c45139d67516281eacea07a651db5d9c
+- docs/reference/agentic-kit-commands.json: 06c4a5bfa6f48e3d3345fca90e99a1a33a3cf5756a1242b34b650e0f365c4419

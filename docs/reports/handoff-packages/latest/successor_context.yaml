@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-11T21:06:12.365066+00:00",
+  "generated_at_utc": "2026-07-11T21:45:47.707708+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,14 +56,14 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1847-handoff-refresh",
+    "branch": "docs/post-pr1849-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "5e18a18db33ceea9cac9dafd1871fae7346b2a2a",
+    "head": "3cb150c70a16a50ed6f7d1bf6270d37bff46758c",
     "head_matches_origin_main": true,
-    "head_short": "5e18a18d",
+    "head_short": "3cb150c7",
     "local_path": "cd /path/to/",
-    "origin_main": "5e18a18db33ceea9cac9dafd1871fae7346b2a2a",
-    "origin_main_short": "5e18a18d",
+    "origin_main": "3cb150c70a16a50ed6f7d1bf6270d37bff46758c",
+    "origin_main_short": "3cb150c7",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -149,15 +149,6 @@
         "id": "master-implementation-q",
         "status": "active",
         "summary": "Master Implementation Q2 rest sequence"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "doc-lifecycle-metadata",
-        "status": "active",
-        "summary": "Add documentation lifecycle metadata and report-only consistency gate"
       },
       {
         "files": [
