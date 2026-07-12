@@ -9,7 +9,12 @@ from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
 from agentic_project_kit.cli_commands.checks import doc_lifecycle_audit_command
-from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_report, render_doc_lifecycle_report, write_doc_lifecycle_json_report
+from agentic_project_kit.doc_lifecycle import (
+    build_doc_lifecycle_report,
+    build_doc_lifecycle_strict_findings,
+    render_doc_lifecycle_report,
+    write_doc_lifecycle_json_report,
+)
 from agentic_project_kit.documentation_registry import DOCUMENT_CLASSES, REGISTRY_PATH, REQUIRED_CLASS_RULE_FIELDS
 
 
@@ -181,6 +186,33 @@ def test_doc_lifecycle_reports_header_registry_status_mismatch(tmp_path: Path) -
     assert any(item.code == "HEADER_REGISTRY_MISMATCH" for item in report.findings)
 
 
+def test_doc_lifecycle_strict_cli_blocks_header_registry_status_mismatch(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "docs/governance/RULE.md",
+        "# Rule\n\nStatus: superseded\nStatus-date: 2026-07-11\n",
+    )
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/RULE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+            }
+        ],
+    )
+
+    result = CliRunner().invoke(app, ["doc-lifecycle-audit", "--root", str(tmp_path), "--strict", "--json"])
+
+    assert result.exit_code == 1, result.output
+    payload = json.loads(result.output)
+    assert payload["ok"] is True
+    assert payload["strict"]["ok"] is False
+    assert payload["strict"]["blocker_count"] == 1
+    assert payload["strict"]["blockers"][0]["code"] == "HEADER_REGISTRY_MISMATCH"
+
+
 def test_doc_lifecycle_reports_missing_superseded_target(tmp_path: Path) -> None:
     _write(
         tmp_path / "docs/governance/OLD.md",
@@ -201,6 +233,42 @@ def test_doc_lifecycle_reports_missing_superseded_target(tmp_path: Path) -> None
     report = build_doc_lifecycle_report(tmp_path)
 
     assert any(item.code == "SUPERSEDED_TARGET_MISSING" for item in report.findings)
+
+
+def test_doc_lifecycle_strict_blocks_release_due_selector(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "docs/governance/RELEASE.md",
+        "# Release\n\nStatus: active\nStatus-date: 2026-07-11\n",
+    )
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/RELEASE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+                "review_after": "release:>=0.5.0",
+            }
+        ],
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "doc-lifecycle-audit",
+            "--root",
+            str(tmp_path),
+            "--current-version",
+            "0.5.0",
+            "--strict",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 1, result.output
+    payload = json.loads(result.output)
+    assert payload["strict"]["blockers"][0]["code"] == "REVIEW_DUE_RELEASE"
 
 
 def test_doc_lifecycle_stale_budget_boundary_uses_injected_now(tmp_path: Path) -> None:
@@ -238,6 +306,43 @@ def test_doc_lifecycle_stale_budget_boundary_uses_injected_now(tmp_path: Path) -
     stale_findings = [item for item in report.findings if item.code == "STALE_BY_BUDGET"]
     assert [item.path for item in stale_findings] == ["docs/governance/STALE.md"]
     assert stale_findings[0].age_days == 181
+
+
+def test_time_based_findings_never_fail_strict(tmp_path: Path) -> None:
+    now = date(2026, 7, 12)
+    old_status_date = now - timedelta(days=181)
+    _write(
+        tmp_path / "docs/governance/STALE.md",
+        f"# Stale\n\nStatus: active\nStatus-date: {old_status_date.isoformat()}\n",
+    )
+    _write(
+        tmp_path / "docs/governance/DATE.md",
+        "# Date\n\nStatus: active\nStatus-date: 2026-07-12\n",
+    )
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/STALE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+            },
+            {
+                "path": "docs/governance/DATE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+                "review_after": "date:2026-07-12",
+            },
+        ],
+    )
+
+    report = build_doc_lifecycle_report(tmp_path, now=now)
+
+    codes = {finding.code for finding in report.findings}
+    assert {"STALE_BY_BUDGET", "REVIEW_DUE_DATE"} <= codes
+    assert build_doc_lifecycle_strict_findings(tmp_path, report=report) == ()
 
 
 def test_doc_lifecycle_exempts_reports_archive_and_examples_from_header_audit(tmp_path: Path) -> None:
@@ -367,6 +472,47 @@ def test_doc_lifecycle_reports_due_direction_review_after(tmp_path: Path) -> Non
 
     assert any(finding.code == "REVIEW_DUE_DIRECTION" for finding in report.findings)
     assert report.ok
+
+
+def test_doc_lifecycle_strict_blocks_direction_and_closed_item_sources(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "docs/governance/RULE.md",
+        "# Rule\n\nStatus: active\nStatus-date: 2026-07-11\n",
+    )
+    _write(
+        tmp_path / "docs/planning/PROJECT_DIRECTION.yaml",
+        yaml.safe_dump(
+            {
+                "schema_version": 1,
+                "meta": {"status": "active", "authority": "docs/planning/PROJECT_DIRECTION.yaml"},
+                "strategy": [],
+                "roadmap": [],
+                "plans": [],
+                "ideas": [],
+                "done": [{"id": "finished", "source_files": ["docs/governance/RULE.md"]}],
+                "discarded": [],
+            },
+            sort_keys=False,
+        ),
+    )
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/RULE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+                "review_after": "direction:finished",
+            }
+        ],
+    )
+
+    report = build_doc_lifecycle_report(tmp_path)
+    strict_findings = build_doc_lifecycle_strict_findings(tmp_path, report=report)
+
+    codes = {finding.code for finding in strict_findings}
+    assert {"REVIEW_DUE_DIRECTION", "SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE"} <= codes
 
 
 def test_doc_lifecycle_reports_unknown_direction_review_after_as_invalid(tmp_path: Path) -> None:

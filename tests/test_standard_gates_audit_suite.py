@@ -17,6 +17,7 @@ REQUIRED_NAMES = {
     "audit-path-literals",
     "command-taxonomy-check",
     "direction",
+    "doc-lifecycle-audit",
     "doc-registry",
     "audit-ns-legacy-references",
     "audit-absolute-path-portability",
@@ -31,6 +32,7 @@ REQUIRED_NAMES = {
 STRICT_SCOPE_COMMAND = ("doc-registry", "check-unregistered", "--strict-scope")
 PATH_LITERAL_ENFORCE_COMMAND = ("audit-path-literals", "--enforce-active")
 MUTATION_LOCK_AUDIT_COMMAND = ("audit-mutation-lock-coverage",)
+DOC_LIFECYCLE_WARN_COMMAND = ("doc-lifecycle-audit", "--json")
 
 
 def test_standard_gates_audit_suite_contains_required_gates() -> None:
@@ -49,6 +51,24 @@ def test_path_literal_enforce_is_standard_gate() -> None:
 
 def test_mutation_lock_audit_is_standard_gate() -> None:
     assert MUTATION_LOCK_AUDIT_COMMAND in REQUIRED_STANDARD_GATE_COMMANDS
+
+
+def test_lifecycle_audit_warn_step_is_standard_gate() -> None:
+    assert DOC_LIFECYCLE_WARN_COMMAND in REQUIRED_STANDARD_GATE_COMMANDS
+
+
+def test_lifecycle_audit_findings_are_visible_without_blocking_suite(tmp_path: Path) -> None:
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        if args[-2:] == DOC_LIFECYCLE_WARN_COMMAND:
+            return 0, '{"findings":[{"code":"HEADER_MISSING"}]}\n'
+        return 0, "PASS\n"
+
+    result = evaluate_standard_gates_audit_suite(tmp_path, runner=runner)
+
+    assert result.ok is True
+    check = next(check for check in result.checks if check.name == "doc-lifecycle-audit --json")
+    assert check.status == "PASS"
+    assert check.detail == "FINDING_COUNT=1"
 
 
 def test_standard_gates_suite_blocks_active_path_literal_failure(tmp_path: Path) -> None:

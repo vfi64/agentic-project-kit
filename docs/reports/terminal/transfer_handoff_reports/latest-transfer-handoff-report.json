@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-07-11T22:39:24.416277+00:00",
+    "created_at_utc": "2026-07-12T00:39:52.610893+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -95,7 +95,7 @@
       "status": "active"
     },
     "command_reference": {
-      "command_count": 222,
+      "command_count": 225,
       "generated_by": "scripts/generate_agentic_kit_command_reference.py",
       "important_wrappers": [
         {
@@ -291,11 +291,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-07-11T22:39:24.647707+00:00",
+    "generated_at_utc": "2026-07-12T00:39:52.820623+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/l2-doc-lifecycle-signals",
-      "head": "b30ce66fc139f0c8be9eebe5e8a8cce6b420b00b",
+      "branch": "codex/l4-lifecycle-strict-adoption",
+      "head": "abe3b311b84f88cb689d1a092bbb437ce6e3af46",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -355,8 +355,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "3523be071e72434ad25c6c6283a801ffdb194ed1ecb43c4da720522cfde89cbb",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "97f37a04a1f2356d40aaa841ef39805901c4275cb5e981960f4a0c1a4fabed6b",
-      "docs/reference/agentic-kit-commands.json": "8ca92eade8b4c23d27702ec9d0a136dccf7df5abf8bd49832b002257493e3aa7"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "bbead931ffde648c57f6b596e3e7807f62194443d79fbda374bac2fe8c38782c",
+      "docs/reference/agentic-kit-commands.json": "469f7f2fdc5a027c50c6271eaa775f8bebe5f41e50ffdbcd943f3d14057b0268"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -400,7 +400,7 @@
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "965f72f902315da5608c921cf7e39437b25bbf90c21f89ad7b0ff78493297a81"
+        "sha256": "23cbe18abaa9679243aa6005898120dd503ad2a96d0f4ec6eb330626156dbfc8"
       }
     ],
     "canonical_cli_usage": {
@@ -901,12 +901,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/l2-doc-lifecycle-signals",
+      "branch": "codex/l4-lifecycle-strict-adoption",
       "dirty_status": "",
-      "head": "b30ce66fc139f0c8be9eebe5e8a8cce6b420b00b",
+      "head": "abe3b311b84f88cb689d1a092bbb437ce6e3af46",
       "head_matches_upstream": true,
-      "upstream": "origin/codex/l2-doc-lifecycle-signals",
-      "upstream_head": "b30ce66fc139f0c8be9eebe5e8a8cce6b420b00b"
+      "upstream": "origin/codex/l4-lifecycle-strict-adoption",
+      "upstream_head": "abe3b311b84f88cb689d1a092bbb437ce6e3af46"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -972,7 +972,7 @@
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "965f72f902315da5608c921cf7e39437b25bbf90c21f89ad7b0ff78493297a81"
+        "sha256": "23cbe18abaa9679243aa6005898120dd503ad2a96d0f4ec6eb330626156dbfc8"
       }
     ],
     "canonical_cli_usage": {
@@ -1473,12 +1473,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/l2-doc-lifecycle-signals",
+      "branch": "codex/l4-lifecycle-strict-adoption",
       "dirty_status": "",
-      "head": "b30ce66fc139f0c8be9eebe5e8a8cce6b420b00b",
+      "head": "abe3b311b84f88cb689d1a092bbb437ce6e3af46",
       "head_matches_upstream": true,
-      "upstream": "origin/codex/l2-doc-lifecycle-signals",
-      "upstream_head": "b30ce66fc139f0c8be9eebe5e8a8cce6b420b00b"
+      "upstream": "origin/codex/l4-lifecycle-strict-adoption",
+      "upstream_head": "abe3b311b84f88cb689d1a092bbb437ce6e3af46"
     },
     "schema_version": 1,
     "terminal_block_rules": {

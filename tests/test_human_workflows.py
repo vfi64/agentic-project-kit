@@ -6,6 +6,8 @@ import subprocess
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
+from agentic_project_kit.doc_lifecycle import DocLifecycleFinding
+from agentic_project_kit.cli_commands import human_workflows
 
 
 def _completed(argv: list[str], stdout: str = '{"result_status": "PASS"}\n', stderr: str = "", returncode: int = 0):
@@ -236,6 +238,43 @@ def test_release_ready_requires_target_version_and_derives_tag(monkeypatch):
     assert "1.2.3" in scan_call
     assert "--from-tag" in scan_call
     assert "v1.2.2" in scan_call
+
+
+def test_release_ready_includes_passing_doc_lifecycle_release_review(monkeypatch):
+    monkeypatch.setattr(
+        human_workflows,
+        "build_doc_lifecycle_release_blockers",
+        lambda root, *, version: (),
+    )
+
+    step = human_workflows._doc_lifecycle_release_review_step("1.2.3")
+
+    assert step["name"] == "doc-lifecycle-release-review"
+    assert step["ok"] is True
+    assert step["returncode"] == 0
+    assert "STATUS=PASS" in step["stdout"]
+
+
+def test_release_ready_blocks_due_doc_lifecycle_release_review(monkeypatch):
+    monkeypatch.setattr(
+        human_workflows,
+        "build_doc_lifecycle_release_blockers",
+        lambda root, *, version: (
+            DocLifecycleFinding(
+                "REVIEW_DUE_RELEASE",
+                "docs/roadmap/PLAN.md",
+                "review_after release selector is due: current 1.2.3 >= 1.2.3",
+            ),
+        ),
+    )
+
+    step = human_workflows._doc_lifecycle_release_review_step("1.2.3")
+
+    assert step["name"] == "doc-lifecycle-release-review"
+    assert step["ok"] is False
+    assert step["returncode"] == 2
+    assert "BLOCKER=REVIEW_DUE_RELEASE|docs/roadmap/PLAN.md|" in step["stdout"]
+    assert "Run docs lifecycle sweep before release readiness." in step["stdout"]
 
 
 def test_release_prepare_is_dry_run_by_default_and_derives_tag(monkeypatch):

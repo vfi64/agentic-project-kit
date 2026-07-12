@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 6d3f8d04bcce
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: c59cb1700291
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -476,6 +476,8 @@ Audit lifecycle status headers for planning, roadmap, strategy, and idea documen
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `report_path` | `TyperOption` | --report | `False` |  |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+| `strict` | `TyperOption` | --strict | `False` | `False` | Fail on deterministic lifecycle blocker findings. |
+| `current_version` | `TyperOption` | --current-version | `False` |  | Override the version used for release review_after checks. |
 | `suggest_review_after` | `TyperOption` | --suggest-review-after | `False` | `False` | Print report-only review_after suggestions from version target prose. |
 
 ### `agentic-kit doc-mesh-audit`

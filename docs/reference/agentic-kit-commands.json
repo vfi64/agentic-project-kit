@@ -1848,6 +1848,34 @@
         },
         {
           "default": false,
+          "help": "Fail on deterministic lifecycle blocker findings.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "strict",
+          "opts": [
+            "--strict"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Override the version used for release review_after checks.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "current_version",
+          "opts": [
+            "--current-version"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
           "help": "Print report-only review_after suggestions from version target prose.",
           "is_flag": true,
           "metavar": null,
@@ -14195,7 +14223,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "6d3f8d04bcce",
+    "manifest_sha": "c59cb1700291",
     "schema_version": 1
   },
   "schema_version": 2,

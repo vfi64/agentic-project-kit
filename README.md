@@ -476,7 +476,7 @@ The hard checks currently cover version mismatches, stale current-state wording,
 
 Future repair tools should stay bounded to mechanical edits and must not rewrite semantics.
 
-`agentic-kit doc-lifecycle-audit --json`; `agentic-kit doc-lifecycle-audit --suggest-review-after`; `agentic-kit audit-doc-orphans`; `agentic-kit docs lifecycle sweep --dry-run`; `agentic-kit docs lifecycle bootstrap --dry-run`; `agentic-kit docs lifecycle propose-delete`.
+`agentic-kit doc-lifecycle-audit --json`; `agentic-kit doc-lifecycle-audit --strict`; `agentic-kit doc-lifecycle-audit --suggest-review-after`; `agentic-kit audit-doc-orphans`; `agentic-kit docs lifecycle sweep --dry-run`; `agentic-kit docs lifecycle bootstrap --dry-run`; `agentic-kit docs lifecycle propose-delete`.
 
 ## Status current-state audit
 
