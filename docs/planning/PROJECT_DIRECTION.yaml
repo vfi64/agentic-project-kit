@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1857
+  updated_after_pr: 1860
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1857
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1860
 strategy:
 - id: governed-operating-model
   status: active
@@ -876,13 +876,16 @@ plans:
   - doc-lifecycle-audit --strict is clean on the kit repository before suite-level strict adoption.
   - standard-gates-audit-suite may promote lifecycle strict blocking only after the clean evidence exists.
 - id: hygiene-manifest-adopt-baseline
-  status: active
+  status: done
   title: Add manifest hygiene and adopt baseline lifecycle support
+  completed_by_pr: 1860
   depends_on:
   - doc-lifecycle-strict-adoption
   rationale: >-
-    L5 connects lifecycle hygiene to workspace manifests, init seeds, and
-    adopt baselines after strict adoption is staged.
+    PR #1860 connects lifecycle hygiene to workspace manifests, init seeds, and
+    adopt baselines after strict adoption is staged. The current kit manifest
+    intentionally keeps using default hygiene settings until a later explicit
+    strict-cleanup decision.
   source_files:
   - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
   - docs/planning/MASTER_IMPLEMENTATION_Q.md
@@ -896,6 +899,15 @@ plans:
   - tests/test_workspace_init.py
   - tests/test_workspace_adopt.py
   - tests/test_doc_lifecycle.py
+  evidence:
+  - PR #1860
+  - pytest 2548 passed in 196.49s
+  - standard-gates-audit-suite PASS with doc-lifecycle-audit --json FINDING_COUNT=45
+  acceptance:
+  - Optional hygiene manifest parsing supports warn, strict, off, and review budgets with loud invalid-value failures.
+  - workspace init seeds .agentic/DOC_LIFECYCLE.md, docs/archive/README.md, and warn-mode hygiene defaults.
+  - workspace adopt remains read-only and reports a documentation age baseline.
+  - doc-lifecycle-audit reads workspace hygiene mode and review budgets while preserving visible report-only findings.
 - id: repo-identity-literals
   status: done
   title: Derive repository identity literals from workspace context
