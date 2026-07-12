@@ -686,3 +686,7 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: P5d implicit legacy profile deprecation evidence with suppressible warning behavior and admin-refresh YAML subject hardening.
+  - path: docs/architecture/evidence/doc-lifecycle-audit-2026-07-12-post-l5.json
+    class: evidence/log
+    owner: maintainers
+    notes: Post-L5 documentation lifecycle audit evidence in warn mode showing 45 visible non-blocking findings, zero blocking findings, and strict adoption left maintainer-gated.
