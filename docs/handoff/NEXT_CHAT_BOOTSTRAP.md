@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `9a3b87ddaea9a2833ccc54ad24668cad5284fe5e` (`9a3b87dd`)
-- Handoff freshness marker: `9a3b87dd`
-- Branch at generation: `docs/post-pr1857-handoff-refresh`
+- HEAD: `8c970adf2a18debe329bd29df6b5c15d89cf4719` (`8c970adf`)
+- Handoff freshness marker: `8c970adf`
+- Branch at generation: `docs/post-pr1860-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -81,7 +81,6 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 - `documentation-artifact-governance-os` (planned): Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance
 - `master-implementation-q` (active): Master Implementation Q2 rest sequence
 - `lifecycle-backlog-clearance` (active): Clear current documentation lifecycle backlog before suite-level strict mode
-- `hygiene-manifest-adopt-baseline` (planned): Add manifest hygiene and adopt baseline lifecycle support
 - `governance-doc-backfill` (active): Backfill reviewed governance document registry entries
 - `planning-ideas-residual-cleanup` (planned): Resolve remaining planning and idea residual documents
 - `pre-gui-hardening-plan` (active): Execute the pre-GUI hardening backlog in small wrapper-first slices for v0.4.12
