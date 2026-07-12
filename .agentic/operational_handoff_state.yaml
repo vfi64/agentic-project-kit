@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: ef88a86fb3920a17e1a75139ed59611ff51f5eaf
-  short: ef88a86f
-  subject: 'L2: Add documentation lifecycle signals (#1852)'
+  full: 3e26d18f5f5315e43bc86833a695cd2acf23380a
+  short: 3e26d18f
+  subject: Add documentation lifecycle sweep workflows (#1854)
 last_substantive_work_state:
-  full: ef88a86fb3920a17e1a75139ed59611ff51f5eaf
-  short: ef88a86f
-  subject: 'L2: Add documentation lifecycle signals (#1852)'
+  full: 3e26d18f5f5315e43bc86833a695cd2acf23380a
+  short: 3e26d18f
+  subject: Add documentation lifecycle sweep workflows (#1854)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
