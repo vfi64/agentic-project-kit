@@ -8,7 +8,9 @@ import yaml
 from agentic_project_kit.workspace import (
     ALLOWED_PROFILES,
     ALLOWED_PROJECT_TYPES,
+    DEFAULT_REVIEW_BUDGETS,
     SUPPORTED_MANIFEST_SCHEMA_VERSION,
+    default_hygiene_manifest,
     load_workspace,
 )
 from agentic_project_kit.workspace_adopt import (
@@ -99,8 +101,10 @@ def build_workspace_init_plan(
     )
     manifest = _manifest_for(project)
     manifest_yaml = yaml.safe_dump(manifest, sort_keys=False)
-    files = _planned_files(project, manifest_yaml)
+    files = _planned_files(root_path, project, manifest_yaml)
     directories = (
+        "docs",
+        "docs/archive",
         ".agentic",
         ".agentic/registries",
         ".agentic/rules",
@@ -275,6 +279,7 @@ def _manifest_for(project: ProjectSuggestion) -> dict[str, object]:
         "transfer": {
             "visibility": "repo",
         },
+        "hygiene": default_hygiene_manifest(),
         "paths": {
             "docs_root": "docs",
         },
@@ -285,9 +290,10 @@ def _manifest_for(project: ProjectSuggestion) -> dict[str, object]:
     }
 
 
-def _planned_files(project: ProjectSuggestion, manifest_yaml: str) -> dict[str, str]:
-    return {
+def _planned_files(root: Path, project: ProjectSuggestion, manifest_yaml: str) -> dict[str, str]:
+    files = {
         ".agentic/config.yaml": manifest_yaml,
+        ".agentic/DOC_LIFECYCLE.md": _doc_lifecycle_seed(),
         ".agentic/registries/documentation.yaml": "schema_version: 1\ndocuments: []\n",
         ".agentic/registries/rules.yaml": "schema_version: 1\nrules: []\n",
         ".agentic/rules/README.md": "# Workspace Rules\n\nAdd reviewed project rule capsules here.\n",
@@ -298,6 +304,35 @@ def _planned_files(project: ProjectSuggestion, manifest_yaml: str) -> dict[str, 
         PRE_COMMIT_TEMPLATE_PATH: _pre_commit_template(),
         ".agentic/INITIAL_LLM_PROMPT.md": _initial_llm_prompt(project),
     }
+    if not (root / "docs" / "archive" / "README.md").exists():
+        files["docs/archive/README.md"] = _archive_readme_seed()
+    return files
+
+
+def _doc_lifecycle_seed() -> str:
+    budgets = "\n".join(
+        f"- {name}: {days} days" for name, days in DEFAULT_REVIEW_BUDGETS.items()
+    )
+    return f"""# Documentation Lifecycle
+
+Status header convention:
+
+- Status: active
+- Status-date: YYYY-MM-DD
+- Superseded-by: n/a
+
+Profile review budgets:
+
+{budgets}
+"""
+
+
+def _archive_readme_seed() -> str:
+    return """# Documentation Archive
+
+Historical, superseded, or review-only documentation belongs here when it must
+remain discoverable but should not drive active project state.
+"""
 
 
 def _ci_template() -> str:

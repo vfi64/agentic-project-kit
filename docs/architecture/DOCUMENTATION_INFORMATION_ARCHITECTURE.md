@@ -47,6 +47,12 @@ Superseded or archived documents should use Status: superseded or Status: archiv
 
 Generated reports, evidence bundles, examples, and legacy compatibility anchors may have specialized metadata, but they must not contradict the registry. A missing or conflicting lifecycle header is a documentation hygiene finding, not a license to infer semantic truth.
 
+Manifest-bearing workspaces may set `hygiene.doc_lifecycle` to `off`, `warn`, or
+`strict` and may tune `hygiene.review_budgets` for governance, reference, and
+workflow documents. `workspace init` seeds the default warn-mode convention in
+`.agentic/DOC_LIFECYCLE.md`; `workspace adopt` stays read-only and reports a
+documentation age baseline before maintainers run bootstrap or sweep commands.
+
 ## Handoff model
 
 The current handoff model is package-first.

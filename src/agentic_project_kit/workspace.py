@@ -25,6 +25,15 @@ ALLOWED_MODULES = frozenset(
     {"release_governance", "doc_registry", "rule_registry", "transfer"}
 )
 ALLOWED_TRANSFER_VISIBILITIES = frozenset({"repo", "local"})
+ALLOWED_DOC_LIFECYCLE_MODES = frozenset({"off", "warn", "strict"})
+DEFAULT_DOC_LIFECYCLE_MODE = "warn"
+DEFAULT_REVIEW_BUDGETS = MappingProxyType(
+    {
+        "governance": 180,
+        "reference": 365,
+        "workflow": 270,
+    }
+)
 ALLOWED_TOP_LEVEL_KEYS = frozenset(
     {
         "kit_schema_version",
@@ -32,6 +41,7 @@ ALLOWED_TOP_LEVEL_KEYS = frozenset(
         "profile",
         "modules",
         "transfer",
+        "hygiene",
         "paths",
         "gates",
     }
@@ -44,6 +54,17 @@ class LegacyProfileDeprecationWarning(UserWarning):
 
 def _default_modules() -> Mapping[str, bool]:
     return MappingProxyType({name: True for name in sorted(ALLOWED_MODULES)})
+
+
+def default_review_budgets() -> Mapping[str, int]:
+    return MappingProxyType(dict(DEFAULT_REVIEW_BUDGETS))
+
+
+def default_hygiene_manifest() -> dict[str, object]:
+    return {
+        "doc_lifecycle": DEFAULT_DOC_LIFECYCLE_MODE,
+        "review_budgets": dict(DEFAULT_REVIEW_BUDGETS),
+    }
 
 
 @dataclass(frozen=True)
@@ -152,6 +173,8 @@ class Workspace:
     project_type: str = "generic"
     modules: Mapping[str, bool] = field(default_factory=_default_modules)
     transfer_visibility: str = "repo"
+    hygiene_doc_lifecycle: str = DEFAULT_DOC_LIFECYCLE_MODE
+    hygiene_review_budgets: Mapping[str, int] = field(default_factory=default_review_budgets)
     gates_extra: tuple[str, ...] = ()
     gates_skip: tuple[str, ...] = ()
 
@@ -400,6 +423,7 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
     profile = _parse_profile(manifest.get("profile", "python-default"), location)
     modules = _parse_modules(manifest.get("modules"), location)
     transfer_visibility = _parse_transfer_visibility(manifest.get("transfer"), location)
+    hygiene_doc_lifecycle, hygiene_review_budgets = _parse_hygiene(manifest.get("hygiene"), location)
     config = _apply_path_overrides(config, manifest.get("paths"), location)
     gates_extra, gates_skip = _parse_gates(manifest.get("gates"), location)
     return Workspace(
@@ -410,6 +434,8 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
         project_type=project_type,
         modules=modules,
         transfer_visibility=transfer_visibility,
+        hygiene_doc_lifecycle=hygiene_doc_lifecycle,
+        hygiene_review_budgets=hygiene_review_budgets,
         gates_extra=gates_extra,
         gates_skip=gates_skip,
     )
@@ -518,6 +544,55 @@ def _parse_transfer_visibility(transfer: object, location: str) -> str:
             )
         )
     return visibility
+
+
+def _parse_hygiene(hygiene: object, location: str) -> tuple[str, Mapping[str, int]]:
+    if hygiene is None:
+        return DEFAULT_DOC_LIFECYCLE_MODE, default_review_budgets()
+    if not isinstance(hygiene, dict):
+        raise RuntimeError(_manifest_error(f"{location}:hygiene", "expected mapping"))
+
+    for key in hygiene:
+        if key not in {"doc_lifecycle", "review_budgets"}:
+            raise RuntimeError(
+                _manifest_error(f"{location}:hygiene.{key}", "unknown hygiene key")
+            )
+
+    mode = hygiene.get("doc_lifecycle", DEFAULT_DOC_LIFECYCLE_MODE)
+    if not isinstance(mode, str) or mode not in ALLOWED_DOC_LIFECYCLE_MODES:
+        allowed = ", ".join(sorted(ALLOWED_DOC_LIFECYCLE_MODES))
+        raise RuntimeError(
+            _manifest_error(
+                f"{location}:hygiene.doc_lifecycle",
+                f"invalid doc_lifecycle mode {mode!r}; expected one of {allowed}",
+            )
+        )
+
+    budgets = dict(DEFAULT_REVIEW_BUDGETS)
+    review_budgets = hygiene.get("review_budgets")
+    if review_budgets is not None:
+        if not isinstance(review_budgets, dict):
+            raise RuntimeError(
+                _manifest_error(f"{location}:hygiene.review_budgets", "expected mapping")
+            )
+        for name, days in review_budgets.items():
+            if not isinstance(name, str) or name not in DEFAULT_REVIEW_BUDGETS:
+                raise RuntimeError(
+                    _manifest_error(
+                        f"{location}:hygiene.review_budgets.{name}",
+                        "unknown review budget key",
+                    )
+                )
+            if type(days) is not int or days <= 0:
+                raise RuntimeError(
+                    _manifest_error(
+                        f"{location}:hygiene.review_budgets.{name}",
+                        "expected positive int",
+                    )
+                )
+            budgets[name] = days
+
+    return mode, MappingProxyType(budgets)
 
 
 def _apply_path_overrides(config: KitConfig, paths: object, location: str) -> KitConfig:

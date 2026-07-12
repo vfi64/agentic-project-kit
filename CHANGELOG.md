@@ -55,6 +55,7 @@
 - Compact cockpit primary layout
 - Fix cockpit action visibility and card alignment
 - Make cockpit action list separately scrollable
+- Add workspace hygiene manifest defaults; `hygiene` requires kit >= 0.4.12
 
 Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.4.12 DOI `10.5281/zenodo.21135030`.
 

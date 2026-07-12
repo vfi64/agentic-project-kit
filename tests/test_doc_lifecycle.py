@@ -23,6 +23,10 @@ def _write(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
+def _write_manifest(root: Path, content: str) -> None:
+    _write(root / ".agentic" / "config.yaml", content)
+
+
 def _class_rules() -> dict[str, dict[str, str]]:
     return {name: {field: f"{name} {field}" for field in REQUIRED_CLASS_RULE_FIELDS} for name in DOCUMENT_CLASSES}
 
@@ -306,6 +310,94 @@ def test_doc_lifecycle_stale_budget_boundary_uses_injected_now(tmp_path: Path) -
     stale_findings = [item for item in report.findings if item.code == "STALE_BY_BUDGET"]
     assert [item.path for item in stale_findings] == ["docs/governance/STALE.md"]
     assert stale_findings[0].age_days == 181
+
+
+def test_doc_lifecycle_stale_budget_uses_workspace_hygiene_budget(tmp_path: Path) -> None:
+    now = date(2026, 7, 11)
+    old_status_date = now - timedelta(days=31)
+    _write_manifest(
+        tmp_path,
+        """
+kit_schema_version: 1
+hygiene:
+  review_budgets:
+    governance: 30
+""",
+    )
+    _write(
+        tmp_path / "docs/governance/STALE.md",
+        f"# Stale\n\nStatus: active\nStatus-date: {old_status_date.isoformat()}\n",
+    )
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/STALE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+            }
+        ],
+    )
+
+    report = build_doc_lifecycle_report(tmp_path, now=now)
+
+    stale = next(item for item in report.findings if item.code == "STALE_BY_BUDGET")
+    assert report.review_budgets["governance"] == 30
+    assert stale.message.endswith("governance budget is 30 days")
+
+
+def test_doc_lifecycle_hygiene_off_suppresses_lifecycle_findings(tmp_path: Path) -> None:
+    _write_manifest(
+        tmp_path,
+        """
+kit_schema_version: 1
+hygiene:
+  doc_lifecycle: 'off'
+""",
+    )
+    _write(tmp_path / "docs/ideas/ISSUE.md", "# Issue\n\nStatus: idea note\n")
+
+    report = build_doc_lifecycle_report(tmp_path)
+
+    assert report.hygiene_mode == "off"
+    assert report.documents[0].path == "docs/ideas/ISSUE.md"
+    assert report.findings == ()
+    assert report.ok
+
+
+def test_doc_lifecycle_workspace_strict_mode_blocks_cli_without_flag(tmp_path: Path) -> None:
+    _write_manifest(
+        tmp_path,
+        """
+kit_schema_version: 1
+hygiene:
+  doc_lifecycle: strict
+""",
+    )
+    _write(
+        tmp_path / "docs/governance/RULE.md",
+        "# Rule\n\nStatus: superseded\nStatus-date: 2026-07-11\n",
+    )
+    _write_registry_documents(
+        tmp_path,
+        [
+            {
+                "path": "docs/governance/RULE.md",
+                "class": "governance/system",
+                "owner": "maintainers",
+                "status": "active",
+            }
+        ],
+    )
+
+    result = CliRunner().invoke(app, ["doc-lifecycle-audit", "--root", str(tmp_path), "--json"])
+
+    assert result.exit_code == 1, result.output
+    payload = json.loads(result.output)
+    assert payload["hygiene"]["doc_lifecycle"] == "strict"
+    assert payload["strict"]["source"] == "workspace hygiene"
+    assert payload["strict"]["blockers"][0]["code"] == "HEADER_REGISTRY_MISMATCH"
 
 
 def test_time_based_findings_never_fail_strict(tmp_path: Path) -> None:

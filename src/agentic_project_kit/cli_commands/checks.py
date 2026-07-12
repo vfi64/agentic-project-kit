@@ -129,23 +129,29 @@ def doc_lifecycle_audit_command(
 
     root = project_root.resolve()
     report = build_doc_lifecycle_report(root, current_version=current_version)
-    strict_findings = build_doc_lifecycle_strict_findings(root, report=report) if strict else ()
+    strict_requested = strict or report.hygiene_mode == "strict"
+    strict_findings = (
+        build_doc_lifecycle_strict_findings(root, report=report)
+        if strict_requested
+        else ()
+    )
     if report_path is not None:
         write_doc_lifecycle_json_report(report, report_path)
     if json_output:
         payload = report.to_dict()
-        if strict:
+        if strict_requested:
             payload["strict"] = {
                 "ok": not strict_findings,
                 "blocker_count": len(strict_findings),
                 "blockers": [finding.to_dict() for finding in strict_findings],
+                "source": "--strict" if strict else "workspace hygiene",
             }
         typer.echo(json.dumps(payload, indent=2, sort_keys=True))
     else:
         console.print(render_doc_lifecycle_report(report), markup=False)
-        if strict:
+        if strict_requested:
             console.print(render_doc_lifecycle_strict_findings(strict_findings), markup=False)
-    if strict and strict_findings:
+    if strict_requested and strict_findings:
         raise typer.Exit(code=1)
     if not report.ok:
         raise typer.Exit(code=1)

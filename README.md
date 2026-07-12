@@ -204,7 +204,7 @@ agentic-kit workspace init --root PATH --execute [--inject-ci|--inject-pre-commi
 agentic-kit-gui --root PATH
 ```
 
-`workspace adopt` is read-only: it proposes `.agentic/config.yaml`, reports docs/CI, prints the private/public boundary, and flags initialized/foreign `.agentic/` directory. `workspace init` dry-runs; `--execute` creates `.agentic/state/status.md`, `.agentic/state/handoff/`, transfer, CI-template, and prompt files, appends `.agentic/tmp/` to `.gitignore`, and preserves other files. No secrets, credentials, chat fragments, or logs in versioned `.agentic/`; local state uses ignored `.agentic/tmp/`.
+`workspace adopt` is read-only: it proposes `.agentic/config.yaml`, reports the private/public boundary, a documentation age baseline, and foreign `.agentic/` directory. `workspace init` is dry-run by default; `--execute` creates `.agentic/state/status.md`, `.agentic/state/handoff/`, `.agentic/DOC_LIFECYCLE.md`, `docs/archive/README.md`, transfer/CI/prompt files, and a `hygiene` manifest block with warn-mode doc lifecycle defaults. It appends `.agentic/tmp/`; versioned `.agentic/` must not hold secrets, chat fragments, or logs.
 
 `agentic-kit workspace upgrade --root PATH` is also a dry-run by default. It
 plans deterministic manifest schema migrations step by step, prints the

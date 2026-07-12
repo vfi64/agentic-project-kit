@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
@@ -63,6 +64,7 @@ def test_adopt_proposed_manifest_passes_p2_validation(tmp_path: Path) -> None:
     assert workspace.project_name == "valid-manifest"
     assert workspace.project_type == "python"
     assert workspace.profile == "python-default"
+    assert workspace.hygiene_doc_lifecycle == "warn"
 
 
 def test_adopt_reports_foreign_agentic_dir(tmp_path: Path) -> None:
@@ -126,10 +128,72 @@ def test_adopt_json_shape(tmp_path: Path) -> None:
     assert payload["agentic"]["status"] == "ready_for_workspace_init"
     assert payload["project"]["type"] == "generic"
     assert payload["ci_workflows"] == [".github/workflows/ci.yml"]
-    assert payload["init_tree"][0] == ".agentic/"
+    assert "docs/archive/README.md" in payload["init_tree"]
+    assert ".agentic/" in payload["init_tree"]
+    assert payload["proposed_manifest"]["hygiene"]["doc_lifecycle"] == "warn"
     docs_counts = {
         row["docs_path"]: row["registration_candidates"]
         for row in payload["docs_preview"]
     }
     assert docs_counts == {"docs/": 1, "docs/ops/": 1}
+    baseline_counts = {
+        row["docs_path"]: row["file_count"]
+        for row in payload["documentation_age_baseline"]
+    }
+    assert baseline_counts == {"docs/": 1, "docs/ops/": 1}
     assert payload["privacy_boundary"] == PRIVATE_PUBLIC_BOUNDARY
+
+
+def test_adopt_documentation_age_baseline_empty_docs(tmp_path: Path) -> None:
+    result = CliRunner().invoke(app, ["workspace", "adopt", "--root", str(tmp_path)])
+
+    assert result.exit_code == 0, result.output
+    assert "Documentation age baseline:" in result.output
+    assert "- none" in result.output
+    assert "bootstrap lifecycle headers" in result.output
+    assert analyze_workspace_adoption(tmp_path).documentation_age_baseline == ()
+
+
+def test_adopt_documentation_age_baseline_counts_status_headers(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _write(tmp_path / "docs" / "guide.md", "# Guide\n\nStatus: active\n")
+    monkeypatch.setattr(
+        "agentic_project_kit.workspace_adopt._last_commit_dates",
+        lambda root, paths: {path: "2026-07-01" for path in paths},
+    )
+
+    row = analyze_workspace_adoption(tmp_path).documentation_age_baseline[0]
+
+    assert row.docs_path == "docs/"
+    assert row.file_count == 1
+    assert row.status_header_count == 1
+    assert row.status_header_share == 1.0
+    assert row.last_commit_median == "2026-07-01"
+    assert row.last_commit_max == "2026-07-01"
+
+
+def test_adopt_documentation_age_baseline_reports_old_headerless_docs(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _write(tmp_path / "docs" / "legacy" / "old.md", "# Old\n")
+    _write(tmp_path / "docs" / "legacy" / "new.md", "# New\n")
+    dates = {
+        "docs/legacy/old.md": "2025-01-01",
+        "docs/legacy/new.md": "2026-01-01",
+    }
+    monkeypatch.setattr(
+        "agentic_project_kit.workspace_adopt._last_commit_dates",
+        lambda root, paths: {path: dates[path] for path in paths},
+    )
+
+    row = analyze_workspace_adoption(tmp_path).documentation_age_baseline[0]
+
+    assert row.docs_path == "docs/legacy/"
+    assert row.file_count == 2
+    assert row.status_header_count == 0
+    assert row.status_header_share == 0.0
+    assert row.last_commit_median == "2025-01-01"
+    assert row.last_commit_max == "2026-01-01"

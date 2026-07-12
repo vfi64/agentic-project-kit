@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import json
 from pathlib import Path
+import subprocess
 import tomllib
 from typing import Any
 
@@ -11,7 +12,11 @@ import yaml
 from agentic_project_kit.documentation_registry import (
     build_doc_registry_scope_decision_rows,
 )
-from agentic_project_kit.workspace import SUPPORTED_MANIFEST_SCHEMA_VERSION, load_workspace
+from agentic_project_kit.workspace import (
+    SUPPORTED_MANIFEST_SCHEMA_VERSION,
+    default_hygiene_manifest,
+    load_workspace,
+)
 
 
 PRIVATE_PUBLIC_BOUNDARY = (
@@ -24,8 +29,12 @@ PRIVATE_PUBLIC_BOUNDARY = (
 )
 
 WORKSPACE_INIT_TREE = (
+    "docs/",
+    "docs/archive/",
+    "docs/archive/README.md",
     ".agentic/",
     ".agentic/config.yaml",
+    ".agentic/DOC_LIFECYCLE.md",
     ".agentic/registries/",
     ".agentic/registries/documentation.yaml",
     ".agentic/registries/rules.yaml",
@@ -96,12 +105,33 @@ class DocsPreviewRow:
 
 
 @dataclass(frozen=True)
+class DocumentationAgeBaselineRow:
+    docs_path: str
+    file_count: int
+    status_header_count: int
+    status_header_share: float
+    last_commit_median: str | None
+    last_commit_max: str | None
+
+    def as_json_data(self) -> dict[str, object]:
+        return {
+            "docs_path": self.docs_path,
+            "file_count": self.file_count,
+            "status_header_count": self.status_header_count,
+            "status_header_share": self.status_header_share,
+            "last_commit_median": self.last_commit_median,
+            "last_commit_max": self.last_commit_max,
+        }
+
+
+@dataclass(frozen=True)
 class WorkspaceAdoptReport:
     root: Path
     project: ProjectSuggestion
     manifest: dict[str, object]
     manifest_yaml: str
     docs_preview: tuple[DocsPreviewRow, ...]
+    documentation_age_baseline: tuple[DocumentationAgeBaselineRow, ...]
     ci_workflows: tuple[str, ...]
     agentic: AgenticCollision
     init_tree: tuple[str, ...] = WORKSPACE_INIT_TREE
@@ -117,6 +147,9 @@ class WorkspaceAdoptReport:
             "proposed_manifest": self.manifest,
             "proposed_manifest_yaml": self.manifest_yaml,
             "docs_preview": [row.as_json_data() for row in self.docs_preview],
+            "documentation_age_baseline": [
+                row.as_json_data() for row in self.documentation_age_baseline
+            ],
             "ci_workflows": list(self.ci_workflows),
             "agentic": self.agentic.as_json_data(),
             "init_tree": list(self.init_tree),
@@ -136,6 +169,7 @@ def analyze_workspace_adoption(root: Path | str = Path(".")) -> WorkspaceAdoptRe
         manifest=manifest,
         manifest_yaml=manifest_yaml,
         docs_preview=_docs_preview(root_path),
+        documentation_age_baseline=_documentation_age_baseline(root_path),
         ci_workflows=_ci_workflows(root_path),
         agentic=_agentic_collision(root_path),
     )
@@ -165,6 +199,21 @@ def render_workspace_adopt_report(report: WorkspaceAdoptReport) -> str:
             lines.append(f"- {row.docs_path}: {row.registration_candidates}")
     else:
         lines.append("- none")
+
+    lines.extend(["", "Documentation age baseline:"])
+    if report.documentation_age_baseline:
+        for row in report.documentation_age_baseline:
+            percentage = round(row.status_header_share * 100)
+            median = row.last_commit_median or "unknown"
+            maximum = row.last_commit_max or "unknown"
+            lines.append(
+                f"- {row.docs_path}: files={row.file_count}; "
+                f"status_headers={row.status_header_count}/{row.file_count} ({percentage}%); "
+                f"median_last_commit={median}; max_last_commit={maximum}"
+            )
+    else:
+        lines.append("- none")
+    lines.append("- next: bootstrap lifecycle headers before a lifecycle sweep")
 
     lines.extend(["", "Existing CI workflows:"])
     if report.ci_workflows:
@@ -238,6 +287,7 @@ def _proposed_manifest(project: ProjectSuggestion) -> dict[str, object]:
         "transfer": {
             "visibility": "repo",
         },
+        "hygiene": default_hygiene_manifest(),
         "paths": {
             "docs_root": "docs",
         },
@@ -258,6 +308,94 @@ def _docs_preview(root: Path) -> tuple[DocsPreviewRow, ...]:
         for row in rows
         if int(row["md_files"]) > 0
     )
+
+
+def _documentation_age_baseline(root: Path) -> tuple[DocumentationAgeBaselineRow, ...]:
+    docs_root = root / "docs"
+    if not docs_root.exists():
+        return ()
+    grouped: dict[str, list[tuple[str, Path]]] = {}
+    relative_paths: list[str] = []
+    for path in sorted(docs_root.rglob("*.md")):
+        if not path.is_file() or path.is_symlink():
+            continue
+        parent = path.parent.relative_to(root).as_posix()
+        docs_path = "docs/" if parent == "docs" else f"{parent}/"
+        relative_path = path.relative_to(root).as_posix()
+        grouped.setdefault(docs_path, []).append((relative_path, path))
+        relative_paths.append(relative_path)
+
+    commit_dates = _last_commit_dates(root, tuple(relative_paths))
+    rows: list[DocumentationAgeBaselineRow] = []
+    for docs_path, entries in sorted(grouped.items()):
+        status_count = sum(1 for _, path in entries if _has_status_header(path))
+        dates = sorted(
+            date
+            for relative_path, _ in entries
+            if (date := commit_dates.get(relative_path)) is not None
+        )
+        rows.append(
+            DocumentationAgeBaselineRow(
+                docs_path=docs_path,
+                file_count=len(entries),
+                status_header_count=status_count,
+                status_header_share=status_count / len(entries),
+                last_commit_median=_median_date(dates),
+                last_commit_max=max(dates) if dates else None,
+            )
+        )
+    return tuple(rows)
+
+
+def _has_status_header(path: Path) -> bool:
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return False
+    return any(line.startswith("Status:") for line in text.splitlines())
+
+
+def _last_commit_dates(root: Path, relative_paths: tuple[str, ...]) -> dict[str, str]:
+    if not relative_paths:
+        return {}
+    try:
+        result = subprocess.run(
+            ["git", "log", "--format=__AGENTIC_DATE__%cs", "--name-only", "--", *relative_paths],
+            cwd=root,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    except OSError:
+        return {}
+    if result.returncode != 0:
+        return {}
+
+    wanted = set(relative_paths)
+    dates: dict[str, str] = {}
+    current_date: str | None = None
+    for raw_line in result.stdout.splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+        if line.startswith("__AGENTIC_DATE__"):
+            current_date = line.removeprefix("__AGENTIC_DATE__").strip()
+            continue
+        if current_date is not None and line in wanted and line not in dates:
+            dates[line] = current_date
+            if len(dates) == len(wanted):
+                break
+    return dates
+
+
+def _last_commit_date(root: Path, relative_path: str) -> str | None:
+    return _last_commit_dates(root, (relative_path,)).get(relative_path)
+
+
+def _median_date(dates: list[str]) -> str | None:
+    if not dates:
+        return None
+    return dates[(len(dates) - 1) // 2]
 
 
 def _ci_workflows(root: Path) -> tuple[str, ...]:

@@ -71,6 +71,8 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
 
     assert result.exit_code == 0, result.output
     expected_dirs = {
+        "docs",
+        "docs/archive",
         ".agentic",
         ".agentic/ci",
         ".agentic/registries",
@@ -94,7 +96,9 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
     }
     assert expected_dirs <= actual_dirs
     expected_files = {
+        "docs/archive/README.md",
         ".agentic/config.yaml",
+        ".agentic/DOC_LIFECYCLE.md",
         ".agentic/registries/documentation.yaml",
         ".agentic/registries/rules.yaml",
         ".agentic/rules/README.md",
@@ -116,6 +120,17 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
     assert workspace.project_name == "demo"
     assert workspace.project_type == "python"
     assert workspace.profile == "python-default"
+    assert workspace.hygiene_doc_lifecycle == "warn"
+    assert dict(workspace.hygiene_review_budgets) == {
+        "governance": 180,
+        "reference": 365,
+        "workflow": 270,
+    }
+    lifecycle_seed = (tmp_path / ".agentic/DOC_LIFECYCLE.md").read_text(encoding="utf-8")
+    assert "Status header convention:" in lifecycle_seed
+    assert "- governance: 180 days" in lifecycle_seed
+    archive_seed = (tmp_path / "docs/archive/README.md").read_text(encoding="utf-8")
+    assert "Documentation Archive" in archive_seed
     assert "agentic-kit standard-gates-audit-suite" in (
         tmp_path / ".agentic/ci/agentic-gate.yaml"
     ).read_text(encoding="utf-8")
@@ -252,8 +267,48 @@ def test_init_without_inject_touches_only_namespace_and_gitignore(tmp_path: Path
         if path not in before_files or before_files[path] != after_files[path]
     }
     assert changed
-    assert all(path.startswith(".agentic/") or path == ".gitignore" for path in changed)
+    assert all(
+        path.startswith(".agentic/")
+        or path == ".gitignore"
+        or path == "docs/archive/README.md"
+        for path in changed
+    )
     assert before_files["README.md"] == after_files["README.md"]
+
+
+def test_init_preserves_existing_archive_readme(tmp_path: Path) -> None:
+    _write(tmp_path / "docs" / "archive" / "README.md", "# Existing Archive\n")
+
+    result = CliRunner().invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
+
+    assert result.exit_code == 0, result.output
+    assert (tmp_path / "docs/archive/README.md").read_text(encoding="utf-8") == "# Existing Archive\n"
+
+
+def test_init_bootstrap_audit_sweep_smoke_on_foreign_repo(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "docs" / "planning" / "PLAN.md",
+        "# Plan\n\nStatus: active\nDecision status: current\nReview policy: keep current\n",
+    )
+
+    init = CliRunner().invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
+    bootstrap = CliRunner().invoke(
+        app,
+        ["docs", "lifecycle", "bootstrap", "--root", str(tmp_path), "--dry-run", "--json"],
+    )
+    audit = CliRunner().invoke(app, ["doc-lifecycle-audit", "--root", str(tmp_path), "--json"])
+    sweep = CliRunner().invoke(
+        app,
+        ["docs", "lifecycle", "sweep", "--root", str(tmp_path), "--dry-run", "--json"],
+    )
+
+    assert init.exit_code == 0, init.output
+    assert bootstrap.exit_code == 0, bootstrap.output
+    assert json.loads(bootstrap.output)["result_status"] == "PASS"
+    assert audit.exit_code == 0, audit.output
+    assert json.loads(audit.output)["hygiene"]["doc_lifecycle"] == "warn"
+    assert sweep.exit_code == 0, sweep.output
+    assert json.loads(sweep.output)["result_status"] == "PASS"
 
 
 def test_inject_ci_copies_template_with_header_and_refuses_overwrite(tmp_path: Path) -> None:
