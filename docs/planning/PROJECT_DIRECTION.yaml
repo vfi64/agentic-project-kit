@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1852
+  updated_after_pr: 1854
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1852
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1854
 strategy:
 - id: governed-operating-model
   status: active
@@ -789,15 +789,40 @@ plans:
   - audit-doc-orphans reports registered unreferenced documents with class and last commit date while honoring required exemptions.
   - --suggest-review-after prints read-only review_after suggestions from version target wording.
 - id: doc-lifecycle-sweep
-  status: planned
+  status: done
   title: Add guided documentation lifecycle sweep workflows
+  completed_by_pr: 1854
   depends_on:
   - doc-lifecycle-signals
   rationale: >-
-    L3 will use lifecycle findings to produce bounded archive, confirm-current,
-    defer, and bootstrap actions without destructive defaults.
+    PR #1854 uses lifecycle findings to produce bounded archive,
+    confirm-current, defer, bootstrap, and GUI dry-run actions without
+    destructive defaults.
   source_files:
   - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+  - README.md
+  - docs/DOCUMENTATION_COVERAGE.yaml
+  - docs/reference/AGENTIC_KIT_COMMANDS.md
+  - docs/reference/agentic-kit-commands.json
+  - src/agentic_project_kit/doc_lifecycle.py
+  - src/agentic_project_kit/doc_lifecycle_sweep.py
+  - src/agentic_project_kit/cli_commands/docs.py
+  - src/agentic_project_kit/gui_button_catalog.py
+  - src/agentic_project_kit/gui_tkinter_shell.py
+  - tests/test_doc_lifecycle.py
+  - tests/test_doc_lifecycle_sweep.py
+  - tests/test_gui_basic_cockpit.py
+  - tests/test_gui_button_catalog.py
+  evidence:
+  - PR #1854
+  - live docs lifecycle sweep dry-run PASS with 50 actions, 5 archive, 18 confirm_current, 27 defer, mutation none
+  acceptance:
+  - docs lifecycle sweep emits a dry-run action plan and requires --execute plus explicit --only ids before mutation.
+  - Archive actions move files to docs/archive, stamp lifecycle headers, update the registry path/class, and rewrite Direction source_files.
+  - Confirm-current and defer actions round-trip through headers or registry metadata, with deferred findings still visible as DEFERRED audit lines.
+  - Bootstrap stamps missing lifecycle headers conservatively without claiming semantic currency.
+  - propose-delete remains report-only and lists only old unreferenced archive candidates.
+  - GUI exposes a read-only lifecycle badge and a Sweep (dry-run) button through the shared agentic-kit bridge.
 - id: doc-lifecycle-strict-adoption
   status: planned
   title: Adopt documentation lifecycle enforcement gradually

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
+import json
 from pathlib import Path
 import shutil
 import subprocess
@@ -13,6 +14,7 @@ from agentic_project_kit.documentation_system_audit import (
     build_documentation_system_audit,
     render_documentation_system_audit,
 )
+from agentic_project_kit.doc_lifecycle_sweep import lifecycle_badge_from_audit_payload
 from agentic_project_kit.doctor import build_doctor_report, render_doctor_report
 from agentic_project_kit.gui_action_execution import (
     normalize_safety_class,
@@ -703,15 +705,21 @@ def _agentic_kit_command(*args: str, project_root: Path | str | None = None) -> 
     return ["agentic-kit", *args]
 
 
-def _run_restore_volatile() -> tuple[int, str]:
+def run_kit_command(*args: str, project_root: Path | str = ".") -> tuple[int, str]:
+    root = Path(project_root)
     completed = subprocess.run(
-        _agentic_kit_command("transfer", "restore-known-volatile", "--json"),
+        _agentic_kit_command(*args, project_root=root),
         text=True,
         capture_output=True,
         check=False,
+        cwd=root,
     )
     output_parts = [part.strip() for part in (completed.stdout, completed.stderr) if part.strip()]
     return completed.returncode, "\n".join(output_parts)
+
+
+def _run_restore_volatile() -> tuple[int, str]:
+    return run_kit_command("transfer", "restore-known-volatile", "--json", project_root=Path.cwd())
 
 
 def _run_instruction_lint_stdin(text: str, *, project_root: Path | str = ".") -> tuple[int, str]:
@@ -725,6 +733,23 @@ def _run_instruction_lint_stdin(text: str, *, project_root: Path | str = ".") ->
     )
     output_parts = [part.strip() for part in (completed.stdout, completed.stderr) if part.strip()]
     return completed.returncode, "\n".join(output_parts)
+
+
+def _run_doc_lifecycle_sweep_dry_run() -> tuple[int, str]:
+    return run_kit_command("docs", "lifecycle", "sweep", "--dry-run", project_root=Path.cwd())
+
+
+def lifecycle_badge_text(project_root: Path | str = ".") -> str:
+    returncode, output = run_kit_command("doc-lifecycle-audit", "--json", project_root=project_root)
+    if returncode not in {0, 1}:
+        return "lifecycle: unavailable"
+    try:
+        payload = json.loads(output)
+    except json.JSONDecodeError:
+        return "lifecycle: unavailable"
+    if not isinstance(payload, dict):
+        return "lifecycle: unavailable"
+    return lifecycle_badge_from_audit_payload(payload)
 
 
 def run_instruction_lint_clipboard(
@@ -804,6 +829,7 @@ MANUAL_GUI_READONLY_RUNNERS: dict[str, Callable[[], tuple[int, str]]] = {
     "branch-status-check": _run_branch_status,
     "check-docs": _run_check_docs,
     "cockpit-readiness": _run_cockpit_readiness,
+    "doc-lifecycle-sweep-dry-run": _run_doc_lifecycle_sweep_dry_run,
     "docs-audit": _run_docs_audit,
     "doctor": _run_doctor,
     "governance-check": _run_governance_check,
@@ -850,11 +876,12 @@ def render_manual_launch_content(root: object) -> None:
     buttons = spec.design.action_buttons
     enabled_count = len([button for button in buttons if button.enabled])
     disabled_count = len([button for button in buttons if not button.enabled])
+    lifecycle_badge = lifecycle_badge_text(Path.cwd())
     safety = ttk.Label(
         root,
         text=(
             f"State: {basic_view.traffic_light_state} | mode: {basic_view.communication_mode} | "
-            f"next: {basic_view.next_safe_action} | catalog: {enabled_count} enabled, "
+            f"next: {basic_view.next_safe_action} | {lifecycle_badge} | catalog: {enabled_count} enabled, "
             f"{disabled_count} disabled; remote/destructive/parameterized buttons disabled."
         ),
         anchor="w",

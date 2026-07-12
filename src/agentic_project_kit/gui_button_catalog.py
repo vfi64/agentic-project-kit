@@ -267,6 +267,14 @@ GUI_BUTTON_CATALOG: tuple[GuiButtonDefinition, ...] = (
         wrapper_command=("agentic-kit", "instruction", "lint", "--stdin"),
     ),
     _button(
+        "doc-lifecycle-sweep-dry-run",
+        "Sweep (dry-run)",
+        "Quality Gates",
+        "Show the documentation lifecycle sweep plan without applying changes.",
+        "sweep",
+        wrapper_command=("agentic-kit", "docs", "lifecycle", "sweep", "--dry-run"),
+    ),
+    _button(
         "state-freshness",
         "State Freshness",
         "Quality Gates",

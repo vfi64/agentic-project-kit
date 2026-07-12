@@ -23,6 +23,7 @@ def test_gui_button_catalog_covers_communication_and_workflow_surface():
         "terminal-remote-preflight",
         "workflow-guard-check",
         "instruction-lint-clipboard",
+        "doc-lifecycle-sweep-dry-run",
         "protected-change-plan",
         "merge-if-green",
         "agent-run",
@@ -91,6 +92,22 @@ def test_gui_button_lookup_preserves_button_metadata():
     assert button.implementation_state == "planned"
     assert button.enabled is False
     assert "diff" in button.disabled_reason
+
+
+def test_doc_lifecycle_sweep_button_is_read_only_wrapper():
+    button = get_gui_button("doc-lifecycle-sweep-dry-run")
+
+    assert button is not None
+    assert button.category == "Quality Gates"
+    assert button.safety_class == "read-only"
+    assert button.enabled is True
+    assert button.wrapper_command == (
+        "agentic-kit",
+        "docs",
+        "lifecycle",
+        "sweep",
+        "--dry-run",
+    )
 
 def test_gui_button_catalog_mutations_have_explicit_wrapper_and_gate_metadata():
     deferred_remote_execution = {"agent-next", "agent-run"}

@@ -173,6 +173,9 @@ rules:
     - agentic-kit doc-lifecycle-audit --json
     - agentic-kit doc-lifecycle-audit --suggest-review-after
     - agentic-kit audit-doc-orphans
+    - agentic-kit docs lifecycle sweep --dry-run
+    - agentic-kit docs lifecycle bootstrap --dry-run
+    - agentic-kit docs lifecycle propose-delete
     - agentic-kit release-plan
     - agentic-kit release-check
     - agentic-kit post-release-check

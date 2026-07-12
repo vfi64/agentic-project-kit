@@ -452,7 +452,7 @@ Agents should start with `AGENTS.md`, `.agentic/project.yaml`, `docs/PROJECT_STA
 
 `docs/DOCUMENTATION_COVERAGE.yaml` is the machine-checkable documentation coverage matrix.
 
-`agentic-kit check-docs` validates that important public commands, workflows, governance concepts, safety rules, release commands, and evidence expectations remain visible in the expected documents. This keeps features such as `agentic-kit doctor` visible to new users.
+`agentic-kit check-docs` validates that important commands, workflows, governance concepts, safety rules, release commands, and evidence expectations remain visible.
 
 When adding a public command, workflow, gate, profile, policy pack, generated file, architecture concept, or release-visible feature, update the coverage matrix and the affected documentation in the same change.
 
@@ -476,7 +476,7 @@ The hard checks currently cover version mismatches, stale current-state wording,
 
 Future repair tools should stay bounded to mechanical edits and must not rewrite semantics.
 
-`agentic-kit doc-lifecycle-audit --json`; `agentic-kit doc-lifecycle-audit --suggest-review-after`; `agentic-kit audit-doc-orphans`.
+`agentic-kit doc-lifecycle-audit --json`; `agentic-kit doc-lifecycle-audit --suggest-review-after`; `agentic-kit audit-doc-orphans`; `agentic-kit docs lifecycle sweep --dry-run`; `agentic-kit docs lifecycle bootstrap --dry-run`; `agentic-kit docs lifecycle propose-delete`.
 
 ## Status current-state audit
 

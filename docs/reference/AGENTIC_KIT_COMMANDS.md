@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: dec749dbc55b
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 6d3f8d04bcce
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `222`
+- Command count: `225`
 
 ## Commands
 
@@ -565,6 +565,20 @@ Apply one safe documentation lifecycle plan step.
 | `execute` | `TyperOption` | --execute | `False` | `False` | Required explicit execution flag. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
+### `agentic-kit docs lifecycle bootstrap`
+
+- Safety: `BOUNDED`
+- When to use: Stamp missing lifecycle headers without claiming semantic currency.
+- Dry-run available: `True`
+
+Stamp missing lifecycle headers without claiming semantic currency.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `dry_run` | `TyperOption` | --dry-run, --execute | `False` | `True` | Preview or stamp missing lifecycle headers. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+
 ### `agentic-kit docs lifecycle plan`
 
 - Safety: `READ_ONLY`
@@ -577,6 +591,19 @@ Build a dry-run lifecycle plan for one documentation scope.
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
 | `scope` | `TyperOption` | --scope | `False` | `docs` | Repository-relative documentation scope. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+
+### `agentic-kit docs lifecycle propose-delete`
+
+- Safety: `DESTRUCTIVE`
+- When to use: List archive documents that may be old enough for manual deletion review.
+- Dry-run available: `False`
+
+List archive documents that may be old enough for manual deletion review.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit docs lifecycle report`
@@ -593,6 +620,23 @@ Build or write one documentation lifecycle evidence report.
 | `scope` | `TyperOption` | --scope | `False` | `docs` | Repository-relative documentation scope. |
 | `output` | `TyperOption` | --output | `False` | `PosixPath('docs/architecture/evidence/doc-lifecycle-report.json')` | Evidence JSON output path. |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write the evidence report. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+
+### `agentic-kit docs lifecycle sweep`
+
+- Safety: `BOUNDED`
+- When to use: Build or apply a bounded documentation lifecycle sweep plan.
+- Dry-run available: `True`
+
+Build or apply a bounded documentation lifecycle sweep plan.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `dry_run` | `TyperOption` | --dry-run, --execute | `False` | `True` | Preview or apply selected lifecycle hygiene actions. |
+| `only` | `TyperOption` | --only | `False` | `` | Comma-separated finding id(s) to execute. Required with --execute. |
+| `until` | `TyperOption` | --until | `False` |  | YYYY-MM-DD deferral date for selected defer actions. |
+| `review_after` | `TyperOption` | --review-after | `False` |  | Optional registry review_after value for confirm-current actions. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit docs lifecycle triage`
