@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Mapping
+from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 
@@ -17,6 +18,12 @@ from agentic_project_kit.doc_lifecycle_signals import (
     resolve_current_version,
 )
 from agentic_project_kit.project_direction import audit_project_direction_drift
+from agentic_project_kit.workspace import (
+    DEFAULT_DOC_LIFECYCLE_MODE,
+    DEFAULT_REVIEW_BUDGETS,
+    default_review_budgets,
+    load_workspace,
+)
 
 ALLOWED_STATUS_VALUES = {
     "idea-note",
@@ -42,11 +49,7 @@ HEADER_AUDIT_EXEMPT_PREFIXES = (
     "docs/examples/",
 )
 
-STALE_BUDGETS_DAYS = {
-    "governance": 180,
-    "reference": 365,
-    "workflow": 270,
-}
+STALE_BUDGETS_DAYS = dict(DEFAULT_REVIEW_BUDGETS)
 
 STALE_BUDGET_CLASS_GROUPS = {
     "architecture": "governance",
@@ -139,6 +142,8 @@ class DocLifecycleReport:
     findings: tuple[DocLifecycleFinding, ...]
     registry_summary: dict[str, Any] | None = None
     deferred: tuple[DocLifecycleDeferred, ...] = ()
+    hygiene_mode: str = DEFAULT_DOC_LIFECYCLE_MODE
+    review_budgets: Mapping[str, int] = field(default_factory=default_review_budgets)
 
     @property
     def ok(self) -> bool:
@@ -152,6 +157,10 @@ class DocLifecycleReport:
             "findings_by_code": _findings_by_code(self.findings),
             "deferred": [item.to_dict() for item in self.deferred],
             "registry_summary": self.registry_summary,
+            "hygiene": {
+                "doc_lifecycle": self.hygiene_mode,
+                "review_budgets": dict(self.review_budgets),
+            },
         }
 
 
@@ -162,6 +171,7 @@ def build_doc_lifecycle_report(
     current_version: str | None = None,
 ) -> DocLifecycleReport:
     today = now or date.today()
+    hygiene_mode, review_budgets = _workspace_lifecycle_hygiene(project_root)
     documents: list[DocLifecycleDocument] = []
     findings: list[DocLifecycleFinding] = []
     deferred: list[DocLifecycleDeferred] = []
@@ -194,7 +204,7 @@ def build_doc_lifecycle_report(
         deferred_item = _deferred_lifecycle_entry(path_text, registry_entry, today)
         if deferred_item is not None:
             deferred.append(deferred_item)
-        else:
+        elif hygiene_mode != "off":
             findings.extend(_audit_document(relative_path, text, status, decision_status))
             findings.extend(
                 _audit_registry_header_consistency(
@@ -208,6 +218,7 @@ def build_doc_lifecycle_report(
                     now=today,
                     current_version=resolved_current_version,
                     direction_statuses=direction_statuses,
+                    review_budgets=review_budgets,
                 )
             )
     for path_text, registry_entry in sorted(registry_entries.items()):
@@ -236,7 +247,7 @@ def build_doc_lifecycle_report(
         deferred_item = _deferred_lifecycle_entry(path_text, registry_entry, today)
         if deferred_item is not None:
             deferred.append(deferred_item)
-        else:
+        elif hygiene_mode != "off":
             findings.extend(
                 _audit_registry_header_consistency(
                     project_root=project_root,
@@ -249,6 +260,7 @@ def build_doc_lifecycle_report(
                     now=today,
                     current_version=resolved_current_version,
                     direction_statuses=direction_statuses,
+                    review_budgets=review_budgets,
                 )
             )
     return DocLifecycleReport(
@@ -256,6 +268,8 @@ def build_doc_lifecycle_report(
         findings=tuple(findings),
         registry_summary=_load_registry_summary(project_root),
         deferred=tuple(sorted(deferred, key=lambda item: item.path)),
+        hygiene_mode=hygiene_mode,
+        review_budgets=dict(review_budgets),
     )
 
 
@@ -276,6 +290,8 @@ def build_doc_lifecycle_strict_findings(
         now=now,
         current_version=current_version,
     )
+    if lifecycle_report.hygiene_mode == "off":
+        return ()
     blockers = [
         finding
         for finding in lifecycle_report.findings
@@ -363,6 +379,15 @@ def render_doc_lifecycle_report(report: DocLifecycleReport) -> str:
         for item in report.deferred:
             class_suffix = f" | class={item.document_class}" if item.document_class else ""
             lines.append(f"- [DEFERRED] {item.path}: until {item.deferred_until}; {item.reason}{class_suffix}")
+    lines.extend(
+        [
+            "",
+            "Hygiene:",
+            f"- doc_lifecycle: {report.hygiene_mode}",
+            "- review_budgets: "
+            + ", ".join(f"{name}={days}" for name, days in sorted(report.review_budgets.items())),
+        ]
+    )
     lines.extend(["", f"Overall: {'PASS' if report.ok else 'FAIL'}"])
     return "\n".join(lines)
 
@@ -441,6 +466,7 @@ def _audit_registry_header_consistency(
     now: date,
     current_version: str | None,
     direction_statuses: dict[str, str],
+    review_budgets: Mapping[str, int],
 ) -> list[DocLifecycleFinding]:
     if not registry_entry or _is_lifecycle_header_exempt(path_text):
         return []
@@ -501,7 +527,7 @@ def _audit_registry_header_consistency(
     age_days = _age_days(status_date, now)
     budget_group = _stale_budget_group(document_class)
     if age_days is not None and budget_group is not None:
-        budget_days = STALE_BUDGETS_DAYS[budget_group]
+        budget_days = review_budgets[budget_group]
         if age_days > budget_days:
             findings.append(
                 DocLifecycleFinding(
@@ -515,6 +541,11 @@ def _audit_registry_header_consistency(
             )
 
     return findings
+
+
+def _workspace_lifecycle_hygiene(project_root: Path) -> tuple[str, Mapping[str, int]]:
+    workspace = load_workspace(project_root, suppress_legacy_profile_warning=True)
+    return workspace.hygiene_doc_lifecycle, workspace.hygiene_review_budgets
 
 
 def _first_header_value(text: str, key: str) -> str | None:

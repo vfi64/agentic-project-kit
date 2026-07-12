@@ -14,6 +14,7 @@ import yaml
 from agentic_project_kit.transfer_repo_actions import RepoActionResult
 import agentic_project_kit.transfer_repo_actions as transfer_repo_actions
 from agentic_project_kit.workspace import (
+    DEFAULT_REVIEW_BUDGETS,
     LEGACY_DEFAULTS,
     LEGACY_PROFILE_WARNING_ENV,
     NAMESPACE_DEFAULTS,
@@ -41,6 +42,7 @@ def test_kit_repo_manifest_yields_legacy_paths() -> None:
     assert manifest["kit_schema_version"] == 1
     assert manifest["project"] == {"name": "agentic-project-kit", "type": "python"}
     assert manifest["profile"] == "python-default"
+    assert "hygiene" not in manifest
 
     expected_overrides = {
         field.name: getattr(LEGACY_DEFAULTS, field.name)
@@ -61,6 +63,8 @@ def test_kit_repo_manifest_yields_legacy_paths() -> None:
     assert ws.project_name == "agentic-project-kit"
     assert ws.project_type == "python"
     assert ws.profile == "python-default"
+    assert ws.hygiene_doc_lifecycle == "warn"
+    assert dict(ws.hygiene_review_budgets) == dict(DEFAULT_REVIEW_BUDGETS)
     assert _rel(ws.status_path().relative_to(ROOT)) == "docs/STATUS.md"
     assert _rel(ws.doc_registry_path().relative_to(ROOT)) == "docs/DOCUMENTATION_REGISTRY.yaml"
     assert _rel(ws.handoff_state_path().relative_to(ROOT)) == ".agentic/handoff_state.yaml"
@@ -223,6 +227,8 @@ gates:
     assert _rel(ws.handoff_dir().relative_to(tmp_path)) == ".agentic/state/handoff"
     assert ws.gates_extra == ("custom-gate",)
     assert ws.gates_skip == ("slow-gate",)
+    assert ws.hygiene_doc_lifecycle == "warn"
+    assert dict(ws.hygiene_review_budgets) == dict(DEFAULT_REVIEW_BUDGETS)
 
 
 def test_manifest_defaults_resolve_into_namespace(tmp_path: Path) -> None:
@@ -230,6 +236,8 @@ def test_manifest_defaults_resolve_into_namespace(tmp_path: Path) -> None:
 
     ws = load_workspace(tmp_path)
 
+    assert ws.hygiene_doc_lifecycle == "warn"
+    assert dict(ws.hygiene_review_budgets) == dict(DEFAULT_REVIEW_BUDGETS)
     assert _rel(ws.docs_root().relative_to(tmp_path)) == "docs"
     assert _rel(ws.tmp().relative_to(tmp_path)) == ".agentic/tmp"
     assert _rel(ws.wrapper_status_path().relative_to(tmp_path)) == ".agentic/tmp/current-wrapper-status.json"
@@ -355,6 +363,70 @@ transfer:
     assert ws.transfer_visibility == "local"
     assert _rel(ws.transfer_inbox().relative_to(tmp_path)) == ".agentic/transfer/inbox"
     assert _rel(ws.transfer_outbox().relative_to(tmp_path)) == ".agentic/transfer/outbox"
+
+
+def test_manifest_hygiene_accepts_explicit_mode_and_budgets(tmp_path: Path) -> None:
+    _write_manifest(
+        tmp_path,
+        """
+kit_schema_version: 1
+hygiene:
+  doc_lifecycle: strict
+  review_budgets:
+    governance: 30
+    reference: 60
+    workflow: 45
+""",
+    )
+
+    ws = load_workspace(tmp_path)
+
+    assert ws.hygiene_doc_lifecycle == "strict"
+    assert dict(ws.hygiene_review_budgets) == {
+        "governance": 30,
+        "reference": 60,
+        "workflow": 45,
+    }
+
+
+@pytest.mark.parametrize(
+    ("manifest", "message"),
+    [
+        (
+            "kit_schema_version: 1\nhygiene: true\n",
+            ".agentic/config.yaml:hygiene: expected mapping",
+        ),
+        (
+            "kit_schema_version: 1\nhygiene:\n  surprise: true\n",
+            ".agentic/config.yaml:hygiene.surprise: unknown hygiene key",
+        ),
+        (
+            "kit_schema_version: 1\nhygiene:\n  doc_lifecycle: maybe\n",
+            ".agentic/config.yaml:hygiene.doc_lifecycle: invalid doc_lifecycle mode",
+        ),
+        (
+            "kit_schema_version: 1\nhygiene:\n  review_budgets: soon\n",
+            ".agentic/config.yaml:hygiene.review_budgets: expected mapping",
+        ),
+        (
+            "kit_schema_version: 1\nhygiene:\n  review_budgets:\n    random: 1\n",
+            ".agentic/config.yaml:hygiene.review_budgets.random: unknown review budget key",
+        ),
+        (
+            "kit_schema_version: 1\nhygiene:\n  review_budgets:\n    governance: yes\n",
+            ".agentic/config.yaml:hygiene.review_budgets.governance: expected positive int",
+        ),
+        (
+            "kit_schema_version: 1\nhygiene:\n  review_budgets:\n    governance: 0\n",
+            ".agentic/config.yaml:hygiene.review_budgets.governance: expected positive int",
+        ),
+    ],
+)
+def test_manifest_invalid_hygiene_fails_loud(tmp_path: Path, manifest: str, message: str) -> None:
+    _write_manifest(tmp_path, manifest)
+
+    with pytest.raises(RuntimeError, match=re.escape(message)):
+        load_workspace(tmp_path)
 
 
 def test_manifest_missing_schema_version_fails_naming_upgrade(tmp_path: Path) -> None:

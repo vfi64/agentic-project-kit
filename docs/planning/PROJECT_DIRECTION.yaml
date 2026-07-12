@@ -876,15 +876,26 @@ plans:
   - doc-lifecycle-audit --strict is clean on the kit repository before suite-level strict adoption.
   - standard-gates-audit-suite may promote lifecycle strict blocking only after the clean evidence exists.
 - id: hygiene-manifest-adopt-baseline
-  status: planned
+  status: active
   title: Add manifest hygiene and adopt baseline lifecycle support
   depends_on:
   - doc-lifecycle-strict-adoption
   rationale: >-
-    L5 will connect lifecycle hygiene to workspace manifests, init seeds, and
+    L5 connects lifecycle hygiene to workspace manifests, init seeds, and
     adopt baselines after strict adoption is staged.
   source_files:
   - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+  - docs/planning/MASTER_IMPLEMENTATION_Q.md
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - src/agentic_project_kit/workspace.py
+  - src/agentic_project_kit/workspace_init.py
+  - src/agentic_project_kit/workspace_adopt.py
+  - src/agentic_project_kit/doc_lifecycle.py
+  - src/agentic_project_kit/cli_commands/checks.py
+  - tests/test_workspace_foundation.py
+  - tests/test_workspace_init.py
+  - tests/test_workspace_adopt.py
+  - tests/test_doc_lifecycle.py
 - id: repo-identity-literals
   status: done
   title: Derive repository identity literals from workspace context

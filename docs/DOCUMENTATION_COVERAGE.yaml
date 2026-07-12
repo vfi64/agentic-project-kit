@@ -410,6 +410,7 @@ rules:
     - agentic-kit workspace adopt --root PATH
     - '`workspace adopt` is read-only'
     - .agentic/config.yaml
+    - documentation age baseline
     - private/public boundary
     - foreign `.agentic/` directory
     - implicit legacy profile
@@ -426,6 +427,10 @@ rules:
     - .agentic/tmp/
     - .agentic/state/status.md
     - .agentic/state/handoff/
+    - .agentic/DOC_LIFECYCLE.md
+    - docs/archive/README.md
+    - '`hygiene` manifest block'
+    - warn-mode doc lifecycle defaults
     - --inject-ci
     - --inject-pre-commit
 - id: workspace-upgrade-readme-coverage
