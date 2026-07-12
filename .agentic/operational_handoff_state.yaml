@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3e26d18f5f5315e43bc86833a695cd2acf23380a
-  short: 3e26d18f
-  subject: Add documentation lifecycle sweep workflows (#1854)
+  full: 9a3b87ddaea9a2833ccc54ad24668cad5284fe5e
+  short: 9a3b87dd
+  subject: Adopt lifecycle strict gate staging (#1857)
 last_substantive_work_state:
-  full: 3e26d18f5f5315e43bc86833a695cd2acf23380a
-  short: 3e26d18f
-  subject: Add documentation lifecycle sweep workflows (#1854)
+  full: 9a3b87ddaea9a2833ccc54ad24668cad5284fe5e
+  short: 9a3b87dd
+  subject: Adopt lifecycle strict gate staging (#1857)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
