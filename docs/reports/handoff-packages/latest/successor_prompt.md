@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1857-handoff-refresh`
+- branch: `docs/post-pr1860-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -242,15 +242,6 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "hygiene-manifest-adopt-baseline",
-      "status": "planned",
-      "summary": "Add manifest hygiene and adopt baseline lifecycle support"
-    },
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
       "id": "governance-doc-backfill",
       "status": "active",
       "summary": "Backfill reviewed governance document registry entries"
@@ -401,14 +392,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1857-handoff-refresh",
+    "branch": "docs/post-pr1860-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "9a3b87ddaea9a2833ccc54ad24668cad5284fe5e",
+    "head": "8c970adf2a18debe329bd29df6b5c15d89cf4719",
     "head_matches_origin_main": true,
-    "head_short": "9a3b87dd",
+    "head_short": "8c970adf",
     "local_path": "cd /path/to/",
-    "origin_main": "9a3b87ddaea9a2833ccc54ad24668cad5284fe5e",
-    "origin_main_short": "9a3b87dd",
+    "origin_main": "8c970adf2a18debe329bd29df6b5c15d89cf4719",
+    "origin_main_short": "8c970adf",
     "worktree_clean": false
   }
 }

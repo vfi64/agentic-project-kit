@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-12T00:46:33.832705+00:00",
+  "generated_at_utc": "2026-07-12T01:37:10.035981+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,14 +56,14 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1857-handoff-refresh",
+    "branch": "docs/post-pr1860-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "9a3b87ddaea9a2833ccc54ad24668cad5284fe5e",
+    "head": "8c970adf2a18debe329bd29df6b5c15d89cf4719",
     "head_matches_origin_main": true,
-    "head_short": "9a3b87dd",
+    "head_short": "8c970adf",
     "local_path": "cd /path/to/",
-    "origin_main": "9a3b87ddaea9a2833ccc54ad24668cad5284fe5e",
-    "origin_main_short": "9a3b87dd",
+    "origin_main": "8c970adf2a18debe329bd29df6b5c15d89cf4719",
+    "origin_main_short": "8c970adf",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -158,15 +158,6 @@
         "id": "lifecycle-backlog-clearance",
         "status": "active",
         "summary": "Clear current documentation lifecycle backlog before suite-level strict mode"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "hygiene-manifest-adopt-baseline",
-        "status": "planned",
-        "summary": "Add manifest hygiene and adopt baseline lifecycle support"
       },
       {
         "files": [
