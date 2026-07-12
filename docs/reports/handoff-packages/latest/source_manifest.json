@@ -9,13 +9,13 @@
       "yaml_valid": true
     },
     {
-      "bytes": 20429,
+      "bytes": 20413,
       "exists": true,
       "path": ".agentic/handoff_state.yaml",
       "yaml_valid": true
     },
     {
-      "bytes": 1618,
+      "bytes": 1602,
       "exists": true,
       "path": ".agentic/operational_handoff_state.yaml",
       "yaml_valid": true
@@ -44,7 +44,7 @@
       "path": "AGENTS.md"
     },
     {
-      "bytes": 31346,
+      "bytes": 31390,
       "exists": true,
       "path": "README.md"
     },
@@ -54,7 +54,7 @@
       "path": "SECURITY.md"
     },
     {
-      "bytes": 32768,
+      "bytes": 33315,
       "exists": true,
       "path": "docs/DOCUMENTATION_COVERAGE.yaml",
       "yaml_valid": true
@@ -67,27 +67,27 @@
       "yaml_valid": true
     },
     {
-      "bytes": 31737,
+      "bytes": 31713,
       "exists": true,
       "path": "docs/STATUS.md"
     },
     {
-      "bytes": 37536,
+      "bytes": 38469,
       "exists": true,
       "path": "docs/TEST_GATES.md"
     },
     {
-      "bytes": 30024,
+      "bytes": 30016,
       "exists": true,
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
     {
-      "bytes": 5904,
+      "bytes": 5818,
       "exists": true,
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
     {
-      "bytes": 4126,
+      "bytes": 4118,
       "exists": true,
       "path": "docs/handoff/START_NEW_CHAT_PROMPT.md"
     },
@@ -117,18 +117,18 @@
       "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md"
     },
     {
-      "bytes": 131743,
+      "bytes": 133971,
       "exists": true,
       "path": "docs/planning/PROJECT_DIRECTION.yaml",
       "yaml_valid": true
     },
     {
-      "bytes": 132554,
+      "bytes": 132798,
       "exists": true,
       "path": "docs/reference/AGENTIC_KIT_COMMANDS.md"
     },
     {
-      "bytes": 375266,
+      "bytes": 376065,
       "exists": true,
       "path": "docs/reference/agentic-kit-commands.json"
     }
