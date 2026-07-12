@@ -6,12 +6,12 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1852
+  updated_after_pr: 1854
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1852
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1854
 strategy:
 - id: governed-operating-model
   status: active
@@ -789,13 +789,15 @@ plans:
   - audit-doc-orphans reports registered unreferenced documents with class and last commit date while honoring required exemptions.
   - --suggest-review-after prints read-only review_after suggestions from version target wording.
 - id: doc-lifecycle-sweep
-  status: active
+  status: done
   title: Add guided documentation lifecycle sweep workflows
+  completed_by_pr: 1854
   depends_on:
   - doc-lifecycle-signals
   rationale: >-
-    L3 uses lifecycle findings to produce bounded archive, confirm-current,
-    defer, bootstrap, and GUI dry-run actions without destructive defaults.
+    PR #1854 uses lifecycle findings to produce bounded archive,
+    confirm-current, defer, bootstrap, and GUI dry-run actions without
+    destructive defaults.
   source_files:
   - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
   - README.md
@@ -811,6 +813,9 @@ plans:
   - tests/test_doc_lifecycle_sweep.py
   - tests/test_gui_basic_cockpit.py
   - tests/test_gui_button_catalog.py
+  evidence:
+  - PR #1854
+  - live docs lifecycle sweep dry-run PASS with 50 actions, 5 archive, 18 confirm_current, 27 defer, mutation none
   acceptance:
   - docs lifecycle sweep emits a dry-run action plan and requires --execute plus explicit --only ids before mutation.
   - Archive actions move files to docs/archive, stamp lifecycle headers, update the registry path/class, and rewrite Direction source_files.
