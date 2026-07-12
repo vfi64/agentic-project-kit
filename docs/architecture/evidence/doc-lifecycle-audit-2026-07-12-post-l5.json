@@ -1,0 +1,2431 @@
+{
+  "deferred": [],
+  "documents": [
+    {
+      "age_days": null,
+      "class": "release",
+      "decision_status": null,
+      "path": "CHANGELOG.md",
+      "registry_status": null,
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "user-facing description",
+      "decision_status": null,
+      "path": "README.md",
+      "registry_status": null,
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 46,
+      "class": "planning",
+      "decision_status": null,
+      "path": "docs/STATUS.md",
+      "registry_status": null,
+      "status": null,
+      "status_date": "2026-05-27",
+      "superseded_by": null
+    },
+    {
+      "age_days": 49,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/TEST_GATES.md",
+      "registry_status": null,
+      "status": null,
+      "status_date": "2026-05-24",
+      "superseded_by": null
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": null,
+      "path": "docs/WORKFLOW_OUTPUT_CYCLE.md",
+      "registry_status": null,
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": null,
+      "class": "architecture",
+      "decision_status": null,
+      "path": "docs/architecture/ARCHITECTURE_CONTRACT.md",
+      "registry_status": null,
+      "status": "Draft contract",
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "architecture",
+      "decision_status": null,
+      "path": "docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md",
+      "registry_status": "active",
+      "status": "architecture contract",
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "architecture",
+      "decision_status": null,
+      "path": "docs/architecture/KIT_AS_OS_ARCHITECTURE.md",
+      "registry_status": null,
+      "status": "ACCEPTED (v4, angenommen 2026-07-04) \u2014 P1 foundation implemented",
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 1,
+      "class": "architecture",
+      "decision_status": "awaiting maintainer decision",
+      "path": "docs/architecture/P5C_PHYSICAL_MIGRATION_PLAN.md",
+      "registry_status": null,
+      "status": "proposed plan",
+      "status_date": "2026-07-11",
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "evidence/log",
+      "decision_status": null,
+      "path": "docs/architecture/evidence/command-manifest-audit-2026-07-11-cm4.md",
+      "registry_status": null,
+      "status": "PASS",
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "evidence/log",
+      "decision_status": null,
+      "path": "docs/architecture/evidence/legacy-profile-deprecation-2026-07-11-p5d.md",
+      "registry_status": null,
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "evidence/log",
+      "decision_status": null,
+      "path": "docs/architecture/evidence/mutation-lock-coverage-2026-07-11-lc1.md",
+      "registry_status": null,
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "evidence/log",
+      "decision_status": null,
+      "path": "docs/architecture/evidence/mutation-lock-coverage-2026-07-11-post-lc3.md",
+      "registry_status": null,
+      "status": "PASS",
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "evidence/log",
+      "decision_status": null,
+      "path": "docs/architecture/evidence/path-literal-active-enforcement-2026-07-11-p5b.md",
+      "registry_status": null,
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "evidence/log",
+      "decision_status": null,
+      "path": "docs/architecture/evidence/path-literal-audit-2026-07-04-post-p1.md",
+      "registry_status": null,
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "evidence/log",
+      "decision_status": null,
+      "path": "docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6-transfer-split.md",
+      "registry_status": null,
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "evidence/log",
+      "decision_status": null,
+      "path": "docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6.md",
+      "registry_status": null,
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "evidence/log",
+      "decision_status": null,
+      "path": "docs/architecture/evidence/path-literal-audit-2026-07-04.md",
+      "registry_status": null,
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "evidence/log",
+      "decision_status": null,
+      "path": "docs/architecture/evidence/path-literal-audit-2026-07-10-post-p4b.md",
+      "registry_status": null,
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "evidence/log",
+      "decision_status": null,
+      "path": "docs/architecture/evidence/remote-branch-hygiene-2026-07-11.md",
+      "registry_status": null,
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 4,
+      "class": "historical archive",
+      "decision_status": "accepted",
+      "path": "docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md",
+      "registry_status": "superseded",
+      "status": "active",
+      "status_date": "2026-07-08",
+      "superseded_by": "docs/governance/COMMAND_SAFETY_POLICY.md and docs/planning/PROJECT_DIRECTION.yaml"
+    },
+    {
+      "age_days": 3,
+      "class": "historical archive",
+      "decision_status": null,
+      "path": "docs/archive/DESIGN.md",
+      "registry_status": "superseded",
+      "status": "superseded",
+      "status_date": "2026-07-09",
+      "superseded_by": "docs/architecture/ARCHITECTURE_CONTRACT.md, docs/architecture/KIT_AS_OS_ARCHITECTURE.md"
+    },
+    {
+      "age_days": 4,
+      "class": "historical archive",
+      "decision_status": "proposed for phased implementation",
+      "path": "docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md",
+      "registry_status": "archived",
+      "status": "proposed",
+      "status_date": "2026-07-08",
+      "superseded_by": "docs/planning/PROJECT_DIRECTION.yaml"
+    },
+    {
+      "age_days": 4,
+      "class": "historical archive",
+      "decision_status": "accepted",
+      "path": "docs/archive/KIT_AS_OS_MASTERPLAN.md",
+      "registry_status": "archived",
+      "status": "active",
+      "status_date": "2026-07-08",
+      "superseded_by": "docs/architecture/KIT_AS_OS_ARCHITECTURE.md"
+    },
+    {
+      "age_days": 3,
+      "class": "historical archive",
+      "decision_status": null,
+      "path": "docs/archive/LOCAL_COCKPIT_FOUNDATION.md",
+      "registry_status": "superseded",
+      "status": "superseded",
+      "status_date": "2026-07-09",
+      "superseded_by": "docs/architecture/KIT_AS_OS_ARCHITECTURE.md"
+    },
+    {
+      "age_days": 3,
+      "class": "historical archive",
+      "decision_status": null,
+      "path": "docs/archive/PRE_GUI_EXECUTION_HARDENING.md",
+      "registry_status": "superseded",
+      "status": "superseded",
+      "status_date": "2026-07-09",
+      "superseded_by": "docs/archive/PRE_GUI_HARDENING_TASKS.md"
+    },
+    {
+      "age_days": 4,
+      "class": "historical archive",
+      "decision_status": "accepted",
+      "path": "docs/archive/PRE_GUI_HARDENING_TASKS.md",
+      "registry_status": "archived",
+      "status": "active",
+      "status_date": "2026-07-08",
+      "superseded_by": "docs/planning/PROJECT_DIRECTION.yaml"
+    },
+    {
+      "age_days": 4,
+      "class": "historical archive",
+      "decision_status": "accepted",
+      "path": "docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md",
+      "registry_status": "superseded",
+      "status": "active",
+      "status_date": "2026-07-08",
+      "superseded_by": "docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md and docs/planning/PROJECT_DIRECTION.yaml"
+    },
+    {
+      "age_days": 4,
+      "class": "historical archive",
+      "decision_status": "accepted",
+      "path": "docs/archive/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
+      "registry_status": "superseded",
+      "status": "active",
+      "status_date": "2026-07-08",
+      "superseded_by": "docs/planning/PROJECT_DIRECTION.yaml"
+    },
+    {
+      "age_days": 4,
+      "class": "historical archive",
+      "decision_status": "proposed as the highest-priority implementation track after current closeout evidence is recorded",
+      "path": "docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md",
+      "registry_status": "superseded",
+      "status": "proposed",
+      "status_date": "2026-07-08",
+      "superseded_by": "docs/planning/PROJECT_DIRECTION.yaml"
+    },
+    {
+      "age_days": 3,
+      "class": "historical archive",
+      "decision_status": null,
+      "path": "docs/archive/V0.3.36_REMAINING_WORKPLAN.md",
+      "registry_status": "superseded",
+      "status": "superseded",
+      "status_date": "2026-07-09",
+      "superseded_by": "docs/planning/PROJECT_DIRECTION.yaml"
+    },
+    {
+      "age_days": 3,
+      "class": "historical archive",
+      "decision_status": null,
+      "path": "docs/archive/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md",
+      "registry_status": "superseded",
+      "status": "superseded",
+      "status_date": "2026-07-09",
+      "superseded_by": "docs/archive/WORKFLOW_REDUCTION_FOCUS.md"
+    },
+    {
+      "age_days": 3,
+      "class": "historical archive",
+      "decision_status": "proposed",
+      "path": "docs/archive/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md",
+      "registry_status": "superseded",
+      "status": "superseded",
+      "status_date": "2026-07-09",
+      "superseded_by": "docs/governance/GUI_ACTION_READINESS_CONTRACT.md, docs/archive/LOCAL_COCKPIT_FOUNDATION.md"
+    },
+    {
+      "age_days": 4,
+      "class": "historical archive",
+      "decision_status": "accepted",
+      "path": "docs/archive/WORKFLOW_REDUCTION_FOCUS.md",
+      "registry_status": "superseded",
+      "status": "superseded",
+      "status_date": "2026-07-08",
+      "superseded_by": "docs/archive/PRE_GUI_HARDENING_TASKS.md and docs/planning/PROJECT_DIRECTION.yaml"
+    },
+    {
+      "age_days": 48,
+      "class": "historical archive",
+      "decision_status": "accepted",
+      "path": "docs/archive/planning/NEXT_TURN_A0_STANDARD_ERROR_ADDITIONS.md",
+      "registry_status": "archived",
+      "status": "active",
+      "status_date": "2026-05-25",
+      "superseded_by": null
+    },
+    {
+      "age_days": 50,
+      "class": "historical archive",
+      "decision_status": null,
+      "path": "docs/archive/planning/V040_DOCUMENTATION_FOLLOW_UP.md",
+      "registry_status": "archived",
+      "status": "superseded",
+      "status_date": "2026-05-23",
+      "superseded_by": null
+    },
+    {
+      "age_days": 51,
+      "class": "historical archive",
+      "decision_status": "accepted",
+      "path": "docs/archive/planning/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md",
+      "registry_status": "superseded",
+      "status": "superseded",
+      "status_date": "2026-05-22",
+      "superseded_by": null
+    },
+    {
+      "age_days": 49,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
+      "registry_status": "active",
+      "status": "normative governance contract",
+      "status_date": "2026-05-24",
+      "superseded_by": null
+    },
+    {
+      "age_days": 51,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
+      "registry_status": "active",
+      "status": "normative governance contract",
+      "status_date": "2026-05-22",
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/COMMAND_REFERENCE_REGISTRY_CONTRACT.md",
+      "registry_status": "active",
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 4,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/COMMAND_SAFETY_POLICY.md",
+      "registry_status": "active",
+      "status": null,
+      "status_date": "2026-07-08",
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "governance/system",
+      "decision_status": "accepted",
+      "path": "docs/governance/COMPILED_AGENT_CONTEXT.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 50,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md",
+      "registry_status": null,
+      "status": "experimental governance schema baseline",
+      "status_date": "2026-05-23",
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md",
+      "registry_status": "active",
+      "status": "active governance contract",
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 4,
+      "class": "governance/system",
+      "decision_status": "decided 2026-07-08",
+      "path": "docs/governance/DOC_REGISTRY_SCOPE_DECISION.md",
+      "registry_status": "active",
+      "status": "decided",
+      "status_date": "2026-07-08",
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/FINAL_SUMMARY_CONTRACT.md",
+      "registry_status": "active",
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 48,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/FINAL_SUMMARY_CONTRACT_FINALIZE_LOG_ADDENDUM.md",
+      "registry_status": "active",
+      "status": "active governance addendum",
+      "status_date": "2026-05-25",
+      "superseded_by": null
+    },
+    {
+      "age_days": 3,
+      "class": "governance/system",
+      "decision_status": "accepted",
+      "path": "docs/governance/GOVERNANCE_CHECK.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 50,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md",
+      "registry_status": "active",
+      "status": "normative governance contract",
+      "status_date": "2026-05-23",
+      "superseded_by": null
+    },
+    {
+      "age_days": 50,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/MERGE_READINESS_CONTRACT.md",
+      "registry_status": "active",
+      "status": null,
+      "status_date": "2026-05-23",
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/PATCH_FAILURE_DIAGNOSIS_POLICY.md",
+      "registry_status": "active",
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 3,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/PORTABILITY_AND_OPERATIONAL_RULES.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 49,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
+      "registry_status": "active",
+      "status": "normative governance contract",
+      "status_date": "2026-05-24",
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/PROTECTED_CONTROL_FILE_CHANGE_CONTRACT.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 3,
+      "class": "governance/system",
+      "decision_status": "accepted",
+      "path": "docs/governance/PR_CLOSEOUT_GATE.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/REMOTE_INSPECTION_EVIDENCE_RULES.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": null,
+      "path": "docs/governance/RULE_GOVERNANCE.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 4,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md",
+      "registry_status": "active",
+      "status": null,
+      "status_date": "2026-07-08",
+      "superseded_by": null
+    },
+    {
+      "age_days": 4,
+      "class": "governance/system",
+      "decision_status": "accepted",
+      "path": "docs/governance/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-08",
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/STANDARD_ERROR_PREVENTION.md",
+      "registry_status": "active",
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 3,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/TERMINAL_LOG_HANDOFF_RULE.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": null,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/TERMINAL_SAFETY.md",
+      "registry_status": "active",
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 3,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/governance/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 4,
+      "class": "governance/system",
+      "decision_status": "accepted",
+      "path": "docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-08",
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "operational/automation",
+      "decision_status": null,
+      "path": "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+      "registry_status": "active",
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 46,
+      "class": "planning",
+      "decision_status": null,
+      "path": "docs/handoff/CURRENT_HANDOFF.md",
+      "registry_status": null,
+      "status": null,
+      "status_date": "2026-05-27",
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "generated artifact",
+      "decision_status": null,
+      "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+      "registry_status": "active",
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "generated artifact",
+      "decision_status": null,
+      "path": "docs/handoff/START_NEW_CHAT_PROMPT.md",
+      "registry_status": "active",
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 1,
+      "class": "planning",
+      "decision_status": "accepted",
+      "path": "docs/planning/MASTER_IMPLEMENTATION_Q.md",
+      "registry_status": null,
+      "status": "active",
+      "status_date": "2026-07-11",
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "planning",
+      "decision_status": "accepted",
+      "path": "docs/planning/PROJECT_DIRECTION.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 3,
+      "class": "architecture",
+      "decision_status": null,
+      "path": "docs/reference/AGENTIC_CODING_RESEARCH_INPUTS.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": null,
+      "class": "user-facing description",
+      "decision_status": null,
+      "path": "docs/reference/AGENTIC_KIT_COMMANDS.md",
+      "registry_status": "active",
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 4,
+      "class": "user-facing description",
+      "decision_status": "proposed",
+      "path": "docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md",
+      "registry_status": "active",
+      "status": "proposed",
+      "status_date": "2026-07-08",
+      "superseded_by": null
+    },
+    {
+      "age_days": null,
+      "class": "user-facing description",
+      "decision_status": null,
+      "path": "docs/reference/HUMAN_WORKFLOW_COMMANDS.md",
+      "registry_status": "active",
+      "status": null,
+      "status_date": null,
+      "superseded_by": null
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": null,
+      "path": "docs/reference/TRANSFER_TEST_PLAN.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": null,
+      "path": "docs/reference/bounded-workflow-evidence.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "governance/system",
+      "decision_status": null,
+      "path": "docs/reference/hidden-autopilot.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "release",
+      "decision_status": null,
+      "path": "docs/releases/VERIFIED_RELEASES.md",
+      "registry_status": null,
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": null,
+      "path": "docs/workflow/COMMUNICATION_ARTIFACT_GC.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": null,
+      "path": "docs/workflow/CONTROL_MODEL.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": "accepted",
+      "path": "docs/workflow/HANDOFF_STATE.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": "accepted",
+      "path": "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": "accepted",
+      "path": "docs/workflow/PARAMETERIZED_ACTIONS.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": null,
+      "path": "docs/workflow/REPO_COMMAND_RUNNER.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": null,
+      "path": "docs/workflow/TEXT_TRANSFER_RUNNER.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": null,
+      "path": "docs/workflow/WORKFLOW_GUARD.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": "accepted",
+      "path": "docs/workflow/WORK_ORDERS.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": "accepted",
+      "path": "docs/workflow/WORK_ORDER_PREPARE.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    },
+    {
+      "age_days": 3,
+      "class": "operational/automation",
+      "decision_status": "accepted",
+      "path": "docs/workflow/WORK_ORDER_TEMPLATES.md",
+      "registry_status": "active",
+      "status": "active",
+      "status_date": "2026-07-09",
+      "superseded_by": "n/a"
+    }
+  ],
+  "findings": [
+    {
+      "class": "planning",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status-date",
+      "path": "docs/planning/PROJECT_DIRECTION.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "release",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "CHANGELOG.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "user-facing description",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "README.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "planning",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status",
+      "path": "docs/STATUS.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status",
+      "path": "docs/TEST_GATES.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "architecture",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status-date",
+      "path": "docs/architecture/ARCHITECTURE_CONTRACT.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "architecture",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status-date",
+      "path": "docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "architecture",
+      "code": "HEADER_REGISTRY_MISMATCH",
+      "message": "header status 'architecture contract' differs from registry status 'active'",
+      "path": "docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "architecture",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status-date",
+      "path": "docs/architecture/KIT_AS_OS_ARCHITECTURE.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "evidence/log",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status-date",
+      "path": "docs/architecture/evidence/command-manifest-audit-2026-07-11-cm4.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "evidence/log",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/architecture/evidence/legacy-profile-deprecation-2026-07-11-p5d.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "evidence/log",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/architecture/evidence/mutation-lock-coverage-2026-07-11-lc1.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "evidence/log",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status-date",
+      "path": "docs/architecture/evidence/mutation-lock-coverage-2026-07-11-post-lc3.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "evidence/log",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/architecture/evidence/path-literal-active-enforcement-2026-07-11-p5b.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "evidence/log",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/architecture/evidence/path-literal-audit-2026-07-04-post-p1.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "evidence/log",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6-transfer-split.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "evidence/log",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "evidence/log",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/architecture/evidence/path-literal-audit-2026-07-04.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "evidence/log",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/architecture/evidence/path-literal-audit-2026-07-10-post-p4b.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "evidence/log",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/architecture/evidence/remote-branch-hygiene-2026-07-11.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_REGISTRY_MISMATCH",
+      "message": "header status 'normative governance contract' differs from registry status 'active'",
+      "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_REGISTRY_MISMATCH",
+      "message": "header status 'normative governance contract' differs from registry status 'active'",
+      "path": "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/governance/COMMAND_REFERENCE_REGISTRY_CONTRACT.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status",
+      "path": "docs/governance/COMMAND_SAFETY_POLICY.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status-date",
+      "path": "docs/governance/COMPILED_AGENT_CONTEXT.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status-date",
+      "path": "docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_REGISTRY_MISMATCH",
+      "message": "header status 'active governance contract' differs from registry status 'active'",
+      "path": "docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_REGISTRY_MISMATCH",
+      "message": "header status 'decided' differs from registry status 'active'",
+      "path": "docs/governance/DOC_REGISTRY_SCOPE_DECISION.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/governance/FINAL_SUMMARY_CONTRACT.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_REGISTRY_MISMATCH",
+      "message": "header status 'active governance addendum' differs from registry status 'active'",
+      "path": "docs/governance/FINAL_SUMMARY_CONTRACT_FINALIZE_LOG_ADDENDUM.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_REGISTRY_MISMATCH",
+      "message": "header status 'normative governance contract' differs from registry status 'active'",
+      "path": "docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status",
+      "path": "docs/governance/MERGE_READINESS_CONTRACT.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/governance/PATCH_FAILURE_DIAGNOSIS_POLICY.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_REGISTRY_MISMATCH",
+      "message": "header status 'normative governance contract' differs from registry status 'active'",
+      "path": "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status-date",
+      "path": "docs/governance/PROTECTED_CONTROL_FILE_CHANGE_CONTRACT.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status",
+      "path": "docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/governance/STANDARD_ERROR_PREVENTION.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "governance/system",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/governance/TERMINAL_SAFETY.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "operational/automation",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "planning",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status",
+      "path": "docs/handoff/CURRENT_HANDOFF.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "generated artifact",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "generated artifact",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/handoff/START_NEW_CHAT_PROMPT.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "user-facing description",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/reference/AGENTIC_KIT_COMMANDS.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "user-facing description",
+      "code": "HEADER_REGISTRY_MISMATCH",
+      "message": "header status 'proposed' differs from registry status 'active'",
+      "path": "docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md",
+      "severity": "WARN"
+    },
+    {
+      "class": "user-facing description",
+      "code": "HEADER_MISSING",
+      "message": "missing lifecycle header field(s): Status, Status-date",
+      "path": "docs/reference/HUMAN_WORKFLOW_COMMANDS.md",
+      "severity": "WARN"
+    }
+  ],
+  "findings_by_code": {
+    "HEADER_MISSING": [
+      {
+        "class": "planning",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status-date",
+        "path": "docs/planning/PROJECT_DIRECTION.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "release",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "CHANGELOG.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "user-facing description",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "README.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "planning",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status",
+        "path": "docs/STATUS.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status",
+        "path": "docs/TEST_GATES.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "architecture",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status-date",
+        "path": "docs/architecture/ARCHITECTURE_CONTRACT.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "architecture",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status-date",
+        "path": "docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "architecture",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status-date",
+        "path": "docs/architecture/KIT_AS_OS_ARCHITECTURE.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "evidence/log",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status-date",
+        "path": "docs/architecture/evidence/command-manifest-audit-2026-07-11-cm4.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "evidence/log",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/architecture/evidence/legacy-profile-deprecation-2026-07-11-p5d.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "evidence/log",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/architecture/evidence/mutation-lock-coverage-2026-07-11-lc1.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "evidence/log",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status-date",
+        "path": "docs/architecture/evidence/mutation-lock-coverage-2026-07-11-post-lc3.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "evidence/log",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/architecture/evidence/path-literal-active-enforcement-2026-07-11-p5b.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "evidence/log",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/architecture/evidence/path-literal-audit-2026-07-04-post-p1.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "evidence/log",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6-transfer-split.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "evidence/log",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "evidence/log",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/architecture/evidence/path-literal-audit-2026-07-04.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "evidence/log",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/architecture/evidence/path-literal-audit-2026-07-10-post-p4b.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "evidence/log",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/architecture/evidence/remote-branch-hygiene-2026-07-11.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/governance/COMMAND_REFERENCE_REGISTRY_CONTRACT.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status",
+        "path": "docs/governance/COMMAND_SAFETY_POLICY.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status-date",
+        "path": "docs/governance/COMPILED_AGENT_CONTEXT.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status-date",
+        "path": "docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/governance/FINAL_SUMMARY_CONTRACT.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status",
+        "path": "docs/governance/MERGE_READINESS_CONTRACT.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/governance/PATCH_FAILURE_DIAGNOSIS_POLICY.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status-date",
+        "path": "docs/governance/PROTECTED_CONTROL_FILE_CHANGE_CONTRACT.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status",
+        "path": "docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/governance/STANDARD_ERROR_PREVENTION.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/governance/TERMINAL_SAFETY.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "operational/automation",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "planning",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status",
+        "path": "docs/handoff/CURRENT_HANDOFF.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "generated artifact",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "generated artifact",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "user-facing description",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/reference/AGENTIC_KIT_COMMANDS.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "user-facing description",
+        "code": "HEADER_MISSING",
+        "message": "missing lifecycle header field(s): Status, Status-date",
+        "path": "docs/reference/HUMAN_WORKFLOW_COMMANDS.md",
+        "severity": "WARN"
+      }
+    ],
+    "HEADER_REGISTRY_MISMATCH": [
+      {
+        "class": "architecture",
+        "code": "HEADER_REGISTRY_MISMATCH",
+        "message": "header status 'architecture contract' differs from registry status 'active'",
+        "path": "docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_REGISTRY_MISMATCH",
+        "message": "header status 'normative governance contract' differs from registry status 'active'",
+        "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_REGISTRY_MISMATCH",
+        "message": "header status 'normative governance contract' differs from registry status 'active'",
+        "path": "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_REGISTRY_MISMATCH",
+        "message": "header status 'active governance contract' differs from registry status 'active'",
+        "path": "docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_REGISTRY_MISMATCH",
+        "message": "header status 'decided' differs from registry status 'active'",
+        "path": "docs/governance/DOC_REGISTRY_SCOPE_DECISION.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_REGISTRY_MISMATCH",
+        "message": "header status 'active governance addendum' differs from registry status 'active'",
+        "path": "docs/governance/FINAL_SUMMARY_CONTRACT_FINALIZE_LOG_ADDENDUM.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_REGISTRY_MISMATCH",
+        "message": "header status 'normative governance contract' differs from registry status 'active'",
+        "path": "docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "governance/system",
+        "code": "HEADER_REGISTRY_MISMATCH",
+        "message": "header status 'normative governance contract' differs from registry status 'active'",
+        "path": "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
+        "severity": "WARN"
+      },
+      {
+        "class": "user-facing description",
+        "code": "HEADER_REGISTRY_MISMATCH",
+        "message": "header status 'proposed' differs from registry status 'active'",
+        "path": "docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md",
+        "severity": "WARN"
+      }
+    ]
+  },
+  "hygiene": {
+    "doc_lifecycle": "warn",
+    "review_budgets": {
+      "governance": 180,
+      "reference": 365,
+      "workflow": 270
+    }
+  },
+  "ok": true,
+  "registry_summary": {
+    "artifact_policy": {
+      "default_action_counts": {
+        "delete-if-untracked": 1,
+        "dry-run": 1,
+        "inspect": 1,
+        "keep": 3,
+        "keep-or-repair": 1
+      },
+      "delete_allowed_counts": {
+        "False": 4,
+        "True": 1,
+        "conditional": 2
+      },
+      "policy_path": ".agentic/communication_artifacts.yaml",
+      "present": true,
+      "protected_rule_ids": [
+        "agent-command-inbox",
+        "command-run-reports",
+        "repo-terminal-logs",
+        "terminal-latest-pointer"
+      ],
+      "rule_count": 7,
+      "schema_version": 1
+    },
+    "broad_migration_allowed": false,
+    "class_counts": {
+      "architecture": 5,
+      "evidence/log": 14,
+      "generated artifact": 3,
+      "governance/system": 32,
+      "historical archive": 18,
+      "operational/automation": 17,
+      "planning": 5,
+      "release": 2,
+      "user-facing description": 4
+    },
+    "document_count": 100,
+    "entries_by_path": {
+      ".agentic/communication_artifacts.yaml": {
+        "class": "operational/automation",
+        "notes": "Machine-readable communication artifact allowlist and retention policy.",
+        "owner": "maintainers",
+        "path": ".agentic/communication_artifacts.yaml"
+      },
+      ".agentic/config.yaml": {
+        "class": "governance/system",
+        "notes": "Self-hosting workspace manifest that keeps physical legacy paths stable during P5a.",
+        "owner": "maintainers",
+        "path": ".agentic/config.yaml"
+      },
+      "CHANGELOG.md": {
+        "class": "release",
+        "notes": "Long-term release history.",
+        "owner": "maintainers",
+        "path": "CHANGELOG.md"
+      },
+      "README.md": {
+        "class": "user-facing description",
+        "notes": "Public entry point and command visibility anchor.",
+        "owner": "maintainers",
+        "path": "README.md"
+      },
+      "docs/DOCUMENTATION_COVERAGE.yaml": {
+        "class": "governance/system",
+        "notes": "Existing coverage matrix remains active and is not replaced by this registry.",
+        "owner": "maintainers",
+        "path": "docs/DOCUMENTATION_COVERAGE.yaml"
+      },
+      "docs/DOCUMENTATION_REGISTRY.yaml": {
+        "class": "governance/system",
+        "notes": "Self-registers the additive registry schema baseline.",
+        "owner": "maintainers",
+        "path": "docs/DOCUMENTATION_REGISTRY.yaml"
+      },
+      "docs/DOC_REGISTRY_SCOPE.yaml": {
+        "class": "governance/system",
+        "notes": "Declarative opt-in scope for making selected documentation registry areas strict.",
+        "owner": "maintainers",
+        "path": "docs/DOC_REGISTRY_SCOPE.yaml"
+      },
+      "docs/STATUS.md": {
+        "class": "planning",
+        "notes": "Concise current-state dashboard, not a long-term history file.",
+        "owner": "maintainers",
+        "path": "docs/STATUS.md"
+      },
+      "docs/TEST_GATES.md": {
+        "class": "governance/system",
+        "notes": "Defines required evidence for documentation registry and governance changes.",
+        "owner": "maintainers",
+        "path": "docs/TEST_GATES.md"
+      },
+      "docs/WORKFLOW_OUTPUT_CYCLE.md": {
+        "class": "operational/automation",
+        "notes": "Active workflow-output handoff and state behavior runbook.",
+        "owner": "maintainers",
+        "path": "docs/WORKFLOW_OUTPUT_CYCLE.md"
+      },
+      "docs/architecture/ARCHITECTURE_CONTRACT.md": {
+        "class": "architecture",
+        "notes": "Governing architecture contract.",
+        "owner": "maintainers",
+        "path": "docs/architecture/ARCHITECTURE_CONTRACT.md"
+      },
+      "docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md": {
+        "class": "architecture",
+        "notes": "Documentation information architecture and lifecycle baseline.",
+        "owner": "maintainers",
+        "path": "docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md",
+        "status": "active"
+      },
+      "docs/architecture/KIT_AS_OS_ARCHITECTURE.md": {
+        "class": "architecture",
+        "notes": "Governing kit-as-operating-layer architecture authority for the workspace resolver and P1 migration line.",
+        "owner": "maintainers",
+        "path": "docs/architecture/KIT_AS_OS_ARCHITECTURE.md"
+      },
+      "docs/architecture/P5C_PHYSICAL_MIGRATION_PLAN.md": {
+        "class": "architecture",
+        "notes": "P5c decision-ready physical migration plan; execution remains maintainer-gated and public docs paths may stay as projections.",
+        "owner": "maintainers",
+        "path": "docs/architecture/P5C_PHYSICAL_MIGRATION_PLAN.md"
+      },
+      "docs/architecture/evidence/command-manifest-audit-2026-07-11-cm4.md": {
+        "class": "evidence/log",
+        "notes": "CM4 command-manifest audit evidence showing chat entrypoint manifest references are current and non-blocking.",
+        "owner": "maintainers",
+        "path": "docs/architecture/evidence/command-manifest-audit-2026-07-11-cm4.md"
+      },
+      "docs/architecture/evidence/doc-lifecycle-audit-2026-07-12-post-l5.json": {
+        "class": "evidence/log",
+        "notes": "Post-L5 documentation lifecycle audit evidence in warn mode showing 45 visible non-blocking findings, zero blocking findings, and strict adoption left maintainer-gated.",
+        "owner": "maintainers",
+        "path": "docs/architecture/evidence/doc-lifecycle-audit-2026-07-12-post-l5.json"
+      },
+      "docs/architecture/evidence/legacy-profile-deprecation-2026-07-11-p5d.md": {
+        "class": "evidence/log",
+        "notes": "P5d implicit legacy profile deprecation evidence with suppressible warning behavior and admin-refresh YAML subject hardening.",
+        "owner": "maintainers",
+        "path": "docs/architecture/evidence/legacy-profile-deprecation-2026-07-11-p5d.md"
+      },
+      "docs/architecture/evidence/mutation-lock-coverage-2026-07-11-lc1.md": {
+        "class": "evidence/log",
+        "notes": "LC1 report-only mutation-lock coverage evidence with current audit classifications, gap inventory, and branch_create recheck.",
+        "owner": "maintainers",
+        "path": "docs/architecture/evidence/mutation-lock-coverage-2026-07-11-lc1.md"
+      },
+      "docs/architecture/evidence/mutation-lock-coverage-2026-07-11-post-lc3.md": {
+        "class": "evidence/log",
+        "notes": "LC3 mutation-lock remediation evidence showing zero blocking findings, same-PID reentrant runtime mutator coverage, non-blocking false-positive visibility, and standard-suite adoption.",
+        "owner": "maintainers",
+        "path": "docs/architecture/evidence/mutation-lock-coverage-2026-07-11-post-lc3.md"
+      },
+      "docs/architecture/evidence/path-literal-active-enforcement-2026-07-11-p5b.md": {
+        "class": "evidence/log",
+        "notes": "P5b active-class path and repository identity literal enforcement evidence with standard-gate adoption and manual reference_or_message samples.",
+        "owner": "maintainers",
+        "path": "docs/architecture/evidence/path-literal-active-enforcement-2026-07-11-p5b.md"
+      },
+      "docs/architecture/evidence/path-literal-audit-2026-07-04-post-p1.md": {
+        "class": "evidence/log",
+        "notes": "Post-P1 report-only path literal inventory showing the P1 top-3 modules migrated to zero and workspace.py as the central literal source.",
+        "owner": "maintainers",
+        "path": "docs/architecture/evidence/path-literal-audit-2026-07-04-post-p1.md"
+      },
+      "docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6-transfer-split.md": {
+        "class": "evidence/log",
+        "notes": "Post-S6 report-only path literal inventory after transfer CLI modularization.",
+        "owner": "maintainers",
+        "path": "docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6-transfer-split.md"
+      },
+      "docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6.md": {
+        "class": "evidence/log",
+        "notes": "Post-S6 report-only path literal inventory used to derive the P1 migration order.",
+        "owner": "maintainers",
+        "path": "docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6.md"
+      },
+      "docs/architecture/evidence/path-literal-audit-2026-07-04.md": {
+        "class": "evidence/log",
+        "notes": "Machine-generated report-only path literal inventory for workspace migration planning.",
+        "owner": "maintainers",
+        "path": "docs/architecture/evidence/path-literal-audit-2026-07-04.md"
+      },
+      "docs/architecture/evidence/path-literal-audit-2026-07-10-post-p4b.md": {
+        "class": "evidence/log",
+        "notes": "Post-P4b report-only path literal inventory showing resolver-sweep classifications, declared exceptions, zero active path literals, and repo identity literals for follow-up visibility.",
+        "owner": "maintainers",
+        "path": "docs/architecture/evidence/path-literal-audit-2026-07-10-post-p4b.md"
+      },
+      "docs/architecture/evidence/remote-branch-hygiene-2026-07-11.md": {
+        "class": "evidence/log",
+        "notes": "K3 remote branch hygiene evidence recording post-prune inventory, guarded wrapper deletions, protected open PR branches, and maintainer-decision leftovers.",
+        "owner": "maintainers",
+        "path": "docs/architecture/evidence/remote-branch-hygiene-2026-07-11.md"
+      },
+      "docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md": {
+        "archived_from": "docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md",
+        "class": "historical archive",
+        "notes": "Historical command-safety hardening plan; normative command-safety rules are now in COMMAND_SAFETY_POLICY.md and remaining actionable work is tracked in PROJECT_DIRECTION.yaml.",
+        "owner": "maintainers",
+        "path": "docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md",
+        "status": "superseded",
+        "superseded_by": "docs/governance/COMMAND_SAFETY_POLICY.md"
+      },
+      "docs/archive/DESIGN.md": {
+        "archived_from": "docs/archive/DESIGN.md",
+        "class": "historical archive",
+        "owner": "maintainers",
+        "path": "docs/archive/DESIGN.md",
+        "source_files": [
+          "docs/archive/DESIGN.md",
+          "docs/architecture/ARCHITECTURE_CONTRACT.md",
+          "docs/architecture/KIT_AS_OS_ARCHITECTURE.md"
+        ],
+        "status": "superseded",
+        "summary": "Historical early generator design note retained as archive context.",
+        "superseded_by": "docs/architecture/ARCHITECTURE_CONTRACT.md, docs/architecture/KIT_AS_OS_ARCHITECTURE.md"
+      },
+      "docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md": {
+        "class": "historical archive",
+        "moved_from": "docs/planning/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md",
+        "notes": "Historical phased failure-mode review automation plan; residual work belongs in PROJECT_DIRECTION.yaml and must not be implemented in K2b.",
+        "owner": "maintainers",
+        "path": "docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md",
+        "status": "archived"
+      },
+      "docs/archive/KIT_AS_OS_MASTERPLAN.md": {
+        "class": "historical archive",
+        "moved_from": "docs/planning/KIT_AS_OS_MASTERPLAN.md",
+        "notes": "Historical operating-layer master plan; normative architecture is docs/architecture/KIT_AS_OS_ARCHITECTURE.md and residual follow-up is tracked in PROJECT_DIRECTION.yaml.",
+        "owner": "maintainers",
+        "path": "docs/archive/KIT_AS_OS_MASTERPLAN.md",
+        "status": "archived"
+      },
+      "docs/archive/LOCAL_COCKPIT_FOUNDATION.md": {
+        "archived_from": "docs/architecture/LOCAL_COCKPIT_FOUNDATION.md",
+        "class": "historical archive",
+        "notes": "Archived local cockpit foundation; current architecture is covered by KIT_AS_OS_ARCHITECTURE.md.",
+        "owner": "maintainers",
+        "path": "docs/archive/LOCAL_COCKPIT_FOUNDATION.md",
+        "status": "superseded",
+        "superseded_by": "docs/architecture/KIT_AS_OS_ARCHITECTURE.md"
+      },
+      "docs/archive/PRE_GUI_EXECUTION_HARDENING.md": {
+        "archived_from": "docs/workflow/PRE_GUI_EXECUTION_HARDENING.md",
+        "class": "historical archive",
+        "owner": "maintainers",
+        "path": "docs/archive/PRE_GUI_EXECUTION_HARDENING.md",
+        "review_policy": "required",
+        "source_files": [
+          "docs/workflow/PRE_GUI_EXECUTION_HARDENING.md"
+        ],
+        "status": "superseded",
+        "summary": "Superseded workflow document retained as historical archive context."
+      },
+      "docs/archive/PRE_GUI_HARDENING_TASKS.md": {
+        "class": "historical archive",
+        "moved_from": "docs/planning/PRE_GUI_HARDENING_TASKS.md",
+        "notes": "Historical pre-GUI hardening plan; canonical planning target is PROJECT_DIRECTION.yaml.",
+        "owner": "maintainers",
+        "path": "docs/archive/PRE_GUI_HARDENING_TASKS.md",
+        "status": "archived"
+      },
+      "docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md": {
+        "archived_from": "docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md",
+        "class": "historical archive",
+        "notes": "Historical rule-refresh handshake plan; normative handshake rules are now in RULE_REFRESH_HANDSHAKE_CONTRACT.md and remaining actionable work is tracked in PROJECT_DIRECTION.yaml.",
+        "owner": "maintainers",
+        "path": "docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md",
+        "status": "superseded",
+        "superseded_by": "docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md"
+      },
+      "docs/archive/RULE_REGISTRY_IMPROVEMENT_PLAN.md": {
+        "archived_from": "docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
+        "class": "historical archive",
+        "notes": "Accepted backlog for reducing remaining rule-registry weaknesses after baseline completion; remaining actionable items are tracked in PROJECT_DIRECTION.yaml.",
+        "owner": "maintainers",
+        "path": "docs/archive/RULE_REGISTRY_IMPROVEMENT_PLAN.md",
+        "status": "superseded",
+        "superseded_by": "docs/planning/PROJECT_DIRECTION.yaml"
+      },
+      "docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md": {
+        "archived_from": "docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md",
+        "class": "historical archive",
+        "notes": "Full structured Tkinter workbench GUI plan archived after the GUI was implemented differently as a progressive-disclosure cockpit.",
+        "owner": "maintainers",
+        "path": "docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md",
+        "status": "superseded",
+        "superseded_by": "docs/planning/PROJECT_DIRECTION.yaml"
+      },
+      "docs/archive/V0.3.36_REMAINING_WORKPLAN.md": {
+        "archived_from": "docs/workflow/V0.3.36_REMAINING_WORKPLAN.md",
+        "class": "historical archive",
+        "owner": "maintainers",
+        "path": "docs/archive/V0.3.36_REMAINING_WORKPLAN.md",
+        "review_policy": "required",
+        "source_files": [
+          "docs/workflow/V0.3.36_REMAINING_WORKPLAN.md"
+        ],
+        "status": "superseded",
+        "summary": "Superseded workflow document retained as historical archive context."
+      },
+      "docs/archive/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md": {
+        "archived_from": "docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md",
+        "class": "historical archive",
+        "owner": "maintainers",
+        "path": "docs/archive/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md",
+        "review_policy": "required",
+        "source_files": [
+          "docs/workflow/V0.3.36_SHELL_ADAPTER_INVENTORY_BASELINE.md"
+        ],
+        "status": "superseded",
+        "summary": "Superseded workflow document retained as historical archive context."
+      },
+      "docs/archive/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md": {
+        "archived_from": "docs/gui/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md",
+        "class": "historical archive",
+        "owner": "maintainers",
+        "path": "docs/archive/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md",
+        "source_files": [
+          "docs/gui/V0.4.0_GUI_ACTION_READINESS_CONTRACT.md"
+        ],
+        "status": "superseded",
+        "summary": "Superseded GUI readiness contract retained as historical archive context."
+      },
+      "docs/archive/WORKFLOW_REDUCTION_FOCUS.md": {
+        "archived_from": "docs/planning/WORKFLOW_REDUCTION_FOCUS.md",
+        "class": "historical archive",
+        "notes": "Historical near-term focus document. Pre-GUI hardening tasks moved to PRE_GUI_HARDENING_TASKS.md; durable strategy/roadmap authority remains project_direction.yaml.",
+        "owner": "maintainers",
+        "path": "docs/archive/WORKFLOW_REDUCTION_FOCUS.md",
+        "status": "superseded",
+        "superseded_by": "docs/archive/PRE_GUI_HARDENING_TASKS.md"
+      },
+      "docs/archive/planning/NEXT_TURN_A0_STANDARD_ERROR_ADDITIONS.md": {
+        "archived_from": "docs/planning/NEXT_TURN_A0_STANDARD_ERROR_ADDITIONS.md",
+        "class": "historical archive",
+        "owner": "maintainers",
+        "path": "docs/archive/planning/NEXT_TURN_A0_STANDARD_ERROR_ADDITIONS.md",
+        "review_policy": "required",
+        "status": "archived",
+        "summary": "Archived next-turn planning note; current direction is governed by project_direction.yaml.",
+        "superseded_by": "docs/planning/project_direction.yaml"
+      },
+      "docs/archive/planning/RULE_REGISTRY_IMPLEMENTATION_PLAN.yaml": {
+        "archived_from": "docs/planning/RULE_REGISTRY_IMPLEMENTATION_PLAN.yaml",
+        "class": "historical archive",
+        "owner": "maintainers",
+        "path": "docs/archive/planning/RULE_REGISTRY_IMPLEMENTATION_PLAN.yaml",
+        "review_policy": "required",
+        "status": "superseded",
+        "summary": "Historical rule-registry implementation plan retained as context.",
+        "superseded_by": "docs/planning/project_direction.yaml"
+      },
+      "docs/archive/planning/V040_DOCUMENTATION_FOLLOW_UP.md": {
+        "archived_from": "docs/plans/V040_DOCUMENTATION_FOLLOW_UP.md",
+        "class": "historical archive",
+        "owner": "maintainers",
+        "path": "docs/archive/planning/V040_DOCUMENTATION_FOLLOW_UP.md",
+        "review_policy": "required",
+        "status": "archived",
+        "summary": "Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.",
+        "superseded_by": "docs/planning/project_direction.yaml"
+      },
+      "docs/archive/planning/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md": {
+        "archived_from": "docs/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md",
+        "class": "historical archive",
+        "owner": "maintainers",
+        "path": "docs/archive/planning/roadmap/V0.4.0_PORTABLE_LLM_COMMUNICATION_BOOTSTRAP_ROADMAP.md",
+        "review_policy": "required",
+        "status": "superseded",
+        "summary": "Superseded strategy, roadmap, or plan document retained as historical context after project_direction.yaml became authoritative.",
+        "superseded_by": "docs/planning/project_direction.yaml"
+      },
+      "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md": {
+        "class": "governance/system",
+        "notes": "Required chat bootstrap and drift governance contract.",
+        "owner": "maintainers",
+        "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md",
+        "status": "active"
+      },
+      "docs/governance/CHAT_COMMUNICATION_CONTRACT.md": {
+        "class": "governance/system",
+        "notes": "Required chat communication governance contract.",
+        "owner": "maintainers",
+        "path": "docs/governance/CHAT_COMMUNICATION_CONTRACT.md",
+        "status": "active"
+      },
+      "docs/governance/COMMAND_REFERENCE_REGISTRY_CONTRACT.md": {
+        "class": "governance/system",
+        "notes": "Required command-reference registry contract.",
+        "owner": "maintainers",
+        "path": "docs/governance/COMMAND_REFERENCE_REGISTRY_CONTRACT.md",
+        "status": "active"
+      },
+      "docs/governance/COMMAND_SAFETY_POLICY.md": {
+        "class": "governance/system",
+        "notes": "Normative command-safety policy for deterministic results, evidence, idempotence, GUI gating, and command reclassification.",
+        "owner": "maintainers",
+        "path": "docs/governance/COMMAND_SAFETY_POLICY.md",
+        "status": "active"
+      },
+      "docs/governance/COMPILED_AGENT_CONTEXT.md": {
+        "class": "governance/system",
+        "notes": "Required compiled-agent-context governance contract.",
+        "owner": "maintainers",
+        "path": "docs/governance/COMPILED_AGENT_CONTEXT.md",
+        "status": "active"
+      },
+      "docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md": {
+        "class": "governance/system",
+        "notes": "Human-readable contract for the first registry slice.",
+        "owner": "maintainers",
+        "path": "docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md"
+      },
+      "docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md": {
+        "class": "governance/system",
+        "notes": "Required documentation-system audit contract.",
+        "owner": "maintainers",
+        "path": "docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md",
+        "status": "active"
+      },
+      "docs/governance/DOC_REGISTRY_SCOPE_DECISION.md": {
+        "class": "governance/system",
+        "moved_from": "docs/planning/DOC_REGISTRY_SCOPE_DECISION.md",
+        "notes": "Governance decision evidence for documentation registry scope; active declarative scope is docs/DOC_REGISTRY_SCOPE.yaml.",
+        "owner": "maintainers",
+        "path": "docs/governance/DOC_REGISTRY_SCOPE_DECISION.md",
+        "status": "active"
+      },
+      "docs/governance/FINAL_SUMMARY_CONTRACT.md": {
+        "class": "governance/system",
+        "notes": "Required final-summary contract.",
+        "owner": "maintainers",
+        "path": "docs/governance/FINAL_SUMMARY_CONTRACT.md",
+        "status": "active"
+      },
+      "docs/governance/FINAL_SUMMARY_CONTRACT_FINALIZE_LOG_ADDENDUM.md": {
+        "class": "governance/system",
+        "notes": "Required addendum for finalize-log summary behavior.",
+        "owner": "maintainers",
+        "path": "docs/governance/FINAL_SUMMARY_CONTRACT_FINALIZE_LOG_ADDENDUM.md",
+        "status": "active"
+      },
+      "docs/governance/GOVERNANCE_CHECK.md": {
+        "class": "governance/system",
+        "moved_from": "docs/workflow/GOVERNANCE_CHECK.md",
+        "owner": "maintainers",
+        "path": "docs/governance/GOVERNANCE_CHECK.md",
+        "review_policy": "required",
+        "source_files": [
+          "docs/workflow/GOVERNANCE_CHECK.md"
+        ],
+        "status": "active",
+        "summary": "Active governance check contract for read-only constitutional validation."
+      },
+      "docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md": {
+        "class": "governance/system",
+        "notes": "Required handoff prompt freshness guard.",
+        "owner": "maintainers",
+        "path": "docs/governance/HANDOFF_PROMPT_FRESHNESS_GUARD.md",
+        "status": "active"
+      },
+      "docs/governance/MERGE_READINESS_CONTRACT.md": {
+        "class": "governance/system",
+        "notes": "Required merge readiness contract.",
+        "owner": "maintainers",
+        "path": "docs/governance/MERGE_READINESS_CONTRACT.md",
+        "status": "active"
+      },
+      "docs/governance/PATCH_FAILURE_DIAGNOSIS_POLICY.md": {
+        "class": "governance/system",
+        "notes": "Required patch failure diagnosis policy.",
+        "owner": "maintainers",
+        "path": "docs/governance/PATCH_FAILURE_DIAGNOSIS_POLICY.md",
+        "status": "active"
+      },
+      "docs/governance/PORTABILITY_AND_OPERATIONAL_RULES.md": {
+        "class": "governance/system",
+        "moved_from": "docs/agent_rules/PORTABILITY_AND_OPERATIONAL_RULES.md",
+        "owner": "maintainers",
+        "path": "docs/governance/PORTABILITY_AND_OPERATIONAL_RULES.md",
+        "source_files": [
+          "docs/agent_rules/PORTABILITY_AND_OPERATIONAL_RULES.md"
+        ],
+        "status": "active",
+        "summary": "Active governance rule set for portability and operational behavior."
+      },
+      "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md": {
+        "class": "governance/system",
+        "notes": "Required portable chat execution contract.",
+        "owner": "maintainers",
+        "path": "docs/governance/PORTABLE_CHAT_EXECUTION_CONTRACT.md",
+        "status": "active"
+      },
+      "docs/governance/PROTECTED_CONTROL_FILE_CHANGE_CONTRACT.md": {
+        "class": "governance/system",
+        "notes": "Required protected control-file change contract.",
+        "owner": "maintainers",
+        "path": "docs/governance/PROTECTED_CONTROL_FILE_CHANGE_CONTRACT.md",
+        "status": "active"
+      },
+      "docs/governance/PR_CLOSEOUT_GATE.md": {
+        "class": "governance/system",
+        "moved_from": "docs/workflow/PR_CLOSEOUT_GATE.md",
+        "owner": "maintainers",
+        "path": "docs/governance/PR_CLOSEOUT_GATE.md",
+        "review_policy": "required",
+        "source_files": [
+          "docs/workflow/PR_CLOSEOUT_GATE.md"
+        ],
+        "status": "active",
+        "summary": "Active governance gate preventing ready PRs from being treated as generic continuation work."
+      },
+      "docs/governance/REMOTE_INSPECTION_EVIDENCE_RULES.md": {
+        "class": "governance/system",
+        "notes": "Required evidence rule source for remote inspection and follow-up analysis.",
+        "owner": "maintainers",
+        "path": "docs/governance/REMOTE_INSPECTION_EVIDENCE_RULES.md",
+        "status": "active"
+      },
+      "docs/governance/RULE_GOVERNANCE.md": {
+        "class": "operational/automation",
+        "owner": "maintainers",
+        "path": "docs/governance/RULE_GOVERNANCE.md",
+        "review_policy": "required",
+        "status": "active",
+        "summary": "Active workflow runbook; workflow authority is not folded into project_direction.yaml."
+      },
+      "docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md": {
+        "class": "governance/system",
+        "notes": "Normative rule-refresh handshake contract for canonical rule sources, deterministic transfer outbox context, LLM acknowledgement, fail-closed rule freshness, and GUI gate downstream behavior.",
+        "owner": "maintainers",
+        "path": "docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md",
+        "status": "active"
+      },
+      "docs/governance/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md": {
+        "class": "governance/system",
+        "notes": "Stable JSON contract for the read-only canonical rule source validator consumed by rule-refresh, transfer-state, and GUI gates.",
+        "owner": "maintainers",
+        "path": "docs/governance/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md",
+        "status": "active"
+      },
+      "docs/governance/STANDARD_ERROR_PREVENTION.md": {
+        "class": "governance/system",
+        "notes": "Required standard-error prevention governance contract.",
+        "owner": "maintainers",
+        "path": "docs/governance/STANDARD_ERROR_PREVENTION.md",
+        "status": "active"
+      },
+      "docs/governance/TERMINAL_LOG_HANDOFF_RULE.md": {
+        "class": "governance/system",
+        "moved_from": "docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md",
+        "owner": "maintainers",
+        "path": "docs/governance/TERMINAL_LOG_HANDOFF_RULE.md",
+        "review_policy": "required",
+        "source_files": [
+          "docs/workflow/TERMINAL_LOG_HANDOFF_RULE.md"
+        ],
+        "status": "active",
+        "summary": "Active governance rule for bounded terminal-log evidence handoff after long local runs."
+      },
+      "docs/governance/TERMINAL_SAFETY.md": {
+        "class": "governance/system",
+        "notes": "Required terminal safety governance contract.",
+        "owner": "maintainers",
+        "path": "docs/governance/TERMINAL_SAFETY.md",
+        "status": "active"
+      },
+      "docs/governance/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md": {
+        "class": "governance/system",
+        "moved_from": "docs/workflow/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md",
+        "owner": "maintainers",
+        "path": "docs/governance/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md",
+        "review_policy": "required",
+        "source_files": [
+          "docs/workflow/TYPED_WORK_ORDER_EVIDENCE_CONTRACT.md"
+        ],
+        "status": "active",
+        "summary": "Active governance contract for typed work orders and required execution evidence."
+      },
+      "docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md": {
+        "class": "governance/system",
+        "moved_from": "docs/planning/NEXT_TURN_WORK_ORDER_WORKFLOW_PLAN.md",
+        "notes": "Normative work-order workflow contract for fixed-slot next-turn execution, state machine, safety classes, result/evidence lookup, no-chat-decision boundaries, and GUI-ready command routing.",
+        "owner": "maintainers",
+        "path": "docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md",
+        "status": "active"
+      },
+      "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md": {
+        "class": "operational/automation",
+        "notes": "Required closeout prompt for chat-switch workflows.",
+        "owner": "maintainers",
+        "path": "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+        "status": "active"
+      },
+      "docs/handoff/CURRENT_HANDOFF.md": {
+        "class": "planning",
+        "notes": "Current handoff pointer with preserved compatibility anchors.",
+        "owner": "maintainers",
+        "path": "docs/handoff/CURRENT_HANDOFF.md"
+      },
+      "docs/handoff/NEXT_CHAT_BOOTSTRAP.md": {
+        "class": "generated artifact",
+        "notes": "Generated next-chat bootstrap projection.",
+        "owner": "automation",
+        "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "status": "active"
+      },
+      "docs/handoff/START_NEW_CHAT_PROMPT.md": {
+        "class": "generated artifact",
+        "notes": "Generated start-new-chat prompt projection.",
+        "owner": "automation",
+        "path": "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "status": "active"
+      },
+      "docs/planning/MASTER_IMPLEMENTATION_Q.md": {
+        "class": "planning",
+        "owner": "maintainers",
+        "path": "docs/planning/MASTER_IMPLEMENTATION_Q.md"
+      },
+      "docs/planning/PROJECT_DIRECTION.md": {
+        "class": "planning",
+        "owner": "maintainers",
+        "path": "docs/planning/PROJECT_DIRECTION.md",
+        "review_policy": "required",
+        "status": "active",
+        "summary": "Human-readable orientation view pointing to PROJECT_DIRECTION.yaml; not an independent planning authority."
+      },
+      "docs/planning/PROJECT_DIRECTION.yaml": {
+        "class": "planning",
+        "owner": "maintainers",
+        "path": "docs/planning/PROJECT_DIRECTION.yaml",
+        "review_policy": "required",
+        "status": "active",
+        "summary": "Canonical machine-readable source of truth for project strategy, roadmap, plans, ideas, done items, and discarded choices."
+      },
+      "docs/reference/AGENTIC_CODING_RESEARCH_INPUTS.md": {
+        "class": "architecture",
+        "notes": "Architecture research input retained under reference scope.",
+        "owner": "maintainers",
+        "path": "docs/reference/AGENTIC_CODING_RESEARCH_INPUTS.md",
+        "status": "active"
+      },
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": {
+        "class": "user-facing description",
+        "notes": "Generated command reference for agentic-kit.",
+        "owner": "maintainers",
+        "path": "docs/reference/AGENTIC_KIT_COMMANDS.md",
+        "status": "active"
+      },
+      "docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md": {
+        "class": "user-facing description",
+        "notes": "Read-only implementation-surface inventory for the GUI deterministic gatekeeper migration.",
+        "owner": "maintainers",
+        "path": "docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md",
+        "status": "active"
+      },
+      "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": {
+        "class": "user-facing description",
+        "notes": "Human workflow command reference.",
+        "owner": "maintainers",
+        "path": "docs/reference/HUMAN_WORKFLOW_COMMANDS.md",
+        "status": "active"
+      },
+      "docs/reference/TRANSFER_TEST_PLAN.md": {
+        "class": "operational/automation",
+        "moved_from": "docs/testing/TRANSFER_TEST_PLAN.md",
+        "owner": "maintainers",
+        "path": "docs/reference/TRANSFER_TEST_PLAN.md",
+        "source_files": [
+          "docs/testing/TRANSFER_TEST_PLAN.md"
+        ],
+        "status": "active",
+        "summary": "Active transfer-mode test reference for remote, file-transfer, and Copy-and-Paste recovery paths."
+      },
+      "docs/reference/bounded-workflow-evidence.md": {
+        "class": "operational/automation",
+        "moved_from": "docs/patterns/bounded-workflow-evidence.md",
+        "owner": "maintainers",
+        "path": "docs/reference/bounded-workflow-evidence.md",
+        "source_files": [
+          "docs/patterns/bounded-workflow-evidence.md"
+        ],
+        "status": "active",
+        "summary": "Reference pattern for bounded workflow evidence capture."
+      },
+      "docs/reference/hidden-autopilot.md": {
+        "class": "governance/system",
+        "notes": "Required hidden-autopilot anti-pattern.",
+        "owner": "maintainers",
+        "path": "docs/reference/hidden-autopilot.md",
+        "status": "active"
+      },
+      "docs/releases/VERIFIED_RELEASES.md": {
+        "class": "release",
+        "notes": "Historical Zenodo DOI archive.",
+        "owner": "maintainers",
+        "path": "docs/releases/VERIFIED_RELEASES.md"
+      },
+      "docs/reports/terminal/LATEST_TERMINAL_LOG.txt": {
+        "class": "generated artifact",
+        "notes": "Protected generated pointer to the latest terminal evidence log; artifact GC must not collect it.",
+        "owner": "automation",
+        "path": "docs/reports/terminal/LATEST_TERMINAL_LOG.txt"
+      },
+      "docs/reports/terminal/v041-final-main-verify-after-pr689.log": {
+        "class": "evidence/log",
+        "notes": "Final v0.4.1 verification evidence before registry work.",
+        "owner": "maintainers",
+        "path": "docs/reports/terminal/v041-final-main-verify-after-pr689.log"
+      },
+      "docs/reports/terminal/v041-handoff-after-pr690.log": {
+        "class": "evidence/log",
+        "notes": "Handoff refresh evidence before registry work.",
+        "owner": "maintainers",
+        "path": "docs/reports/terminal/v041-handoff-after-pr690.log"
+      },
+      "docs/workflow/COMMUNICATION_ARTIFACT_GC.md": {
+        "class": "operational/automation",
+        "notes": "Active communication artifact GC runbook and protected-artifact policy.",
+        "owner": "maintainers",
+        "path": "docs/workflow/COMMUNICATION_ARTIFACT_GC.md",
+        "status": "active"
+      },
+      "docs/workflow/CONTROL_MODEL.md": {
+        "class": "operational/automation",
+        "owner": "maintainers",
+        "path": "docs/workflow/CONTROL_MODEL.md",
+        "review_policy": "required",
+        "status": "active",
+        "summary": "Active workflow runbook; workflow authority is not folded into project_direction.yaml."
+      },
+      "docs/workflow/HANDOFF_STATE.md": {
+        "class": "operational/automation",
+        "owner": "maintainers",
+        "path": "docs/workflow/HANDOFF_STATE.md",
+        "review_policy": "required",
+        "status": "active",
+        "summary": "Active workflow runbook; workflow authority is not folded into project_direction.yaml."
+      },
+      "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md": {
+        "class": "operational/automation",
+        "notes": "Active no-copy terminal evidence policy for d/f handoff.",
+        "owner": "maintainers",
+        "path": "docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md",
+        "status": "active"
+      },
+      "docs/workflow/PARAMETERIZED_ACTIONS.md": {
+        "class": "operational/automation",
+        "owner": "maintainers",
+        "path": "docs/workflow/PARAMETERIZED_ACTIONS.md",
+        "review_policy": "required",
+        "status": "active",
+        "summary": "Active workflow runbook; workflow authority is not folded into project_direction.yaml."
+      },
+      "docs/workflow/REPO_COMMAND_RUNNER.md": {
+        "class": "operational/automation",
+        "owner": "maintainers",
+        "path": "docs/workflow/REPO_COMMAND_RUNNER.md",
+        "review_policy": "required",
+        "status": "active",
+        "summary": "Active workflow runbook; workflow authority is not folded into project_direction.yaml."
+      },
+      "docs/workflow/TEXT_TRANSFER_RUNNER.md": {
+        "class": "operational/automation",
+        "owner": "maintainers",
+        "path": "docs/workflow/TEXT_TRANSFER_RUNNER.md",
+        "review_policy": "required",
+        "status": "active",
+        "summary": "Active workflow runbook; workflow authority is not folded into project_direction.yaml."
+      },
+      "docs/workflow/WORKFLOW_GUARD.md": {
+        "class": "operational/automation",
+        "owner": "maintainers",
+        "path": "docs/workflow/WORKFLOW_GUARD.md",
+        "review_policy": "required",
+        "status": "active",
+        "summary": "Active workflow runbook; workflow authority is not folded into project_direction.yaml."
+      },
+      "docs/workflow/WORK_ORDERS.md": {
+        "class": "operational/automation",
+        "owner": "maintainers",
+        "path": "docs/workflow/WORK_ORDERS.md",
+        "review_policy": "required",
+        "status": "active",
+        "summary": "Active workflow runbook; workflow authority is not folded into project_direction.yaml."
+      },
+      "docs/workflow/WORK_ORDER_PREPARE.md": {
+        "class": "operational/automation",
+        "owner": "maintainers",
+        "path": "docs/workflow/WORK_ORDER_PREPARE.md",
+        "review_policy": "required",
+        "status": "active",
+        "summary": "Active workflow runbook; workflow authority is not folded into project_direction.yaml."
+      },
+      "docs/workflow/WORK_ORDER_TEMPLATES.md": {
+        "class": "operational/automation",
+        "owner": "maintainers",
+        "path": "docs/workflow/WORK_ORDER_TEMPLATES.md",
+        "review_policy": "required",
+        "status": "active",
+        "summary": "Active workflow runbook; workflow authority is not folded into project_direction.yaml."
+      }
+    },
+    "lifecycle": "experimental-schema-baseline",
+    "owner_counts": {
+      "automation": 3,
+      "maintainers": 97
+    },
+    "registration_policy": {
+      "allowed_command": "agentic-kit doc-registry register",
+      "mutation_allowed": true,
+      "next_step": "Review unregistered candidates, classify them, then register one explicit path/class entry through the normal PR lifecycle.",
+      "status": "reviewed_register_command_available"
+    },
+    "registry_path": "docs/DOCUMENTATION_REGISTRY.yaml",
+    "unregistered_candidate_count": 66,
+    "unregistered_candidates": [
+      "docs/examples/minimal-python-cli.md",
+      "docs/reports/CURRENT_WORKFLOW_OUTPUT.md",
+      "docs/reports/GUI_COCKPIT_ACTION_READINESS_INVENTORY.md",
+      "docs/reports/V0.3.36_FINAL_GUI_CONTRACT_READINESS_AUDIT.md",
+      "docs/reports/V0.3.37_FINAL_GUI_PREPARATION_CLOSEOUT.md",
+      "docs/reports/branch_cleanup/obsolete_branch_cleanup_plan_20260518-193335.md",
+      "docs/reports/command_runs/20260519-agent-next-idempotent-inspection.md",
+      "docs/reports/command_runs/20260519-agent-next-queue-health.md",
+      "docs/reports/command_runs/20260519-compiled-agent-context-v1.md",
+      "docs/reports/command_runs/20260519-compiled-context-fast-path.md",
+      "docs/reports/command_runs/20260519-final-summary-contract.md",
+      "docs/reports/command_runs/20260519-final-summary-runner-inspection.md",
+      "docs/reports/command_runs/20260519-idempotent-already-executed-inbox.md",
+      "docs/reports/command_runs/20260519-merge-pr444-remote-first-no-guess.md",
+      "docs/reports/command_runs/20260519-next-development-inspection.md",
+      "docs/reports/command_runs/20260519-remote-command-first-rule.md",
+      "docs/reports/command_runs/20260519-verify-main-after-final-summary-contract.md",
+      "docs/reports/command_runs/20260519-verify-main-after-pr445.md",
+      "docs/reports/command_runs/20260519-verify-main-after-pr449-summary-contract.md",
+      "docs/reports/command_runs/20260519-verify-main-after-pr449.md",
+      "docs/reports/command_runs/20260520-discover-communication-artifact-gc.md",
+      "docs/reports/command_runs/agent-next-fail-smoke-004.md",
+      "docs/reports/command_runs/agent-next-smoke-001.md",
+      "docs/reports/command_runs/agent-next-smoke-002.md",
+      "docs/reports/command_runs/agent-next-smoke-003.md",
+      "docs/reports/command_runs/finalize-after-agent-next-001.md",
+      "docs/reports/command_runs/finalize-after-repo-command-runner-001.md",
+      "docs/reports/command_runs/finalize-no-copy-after-pr423-001.md",
+      "docs/reports/command_runs/harden-agent-run-fail-marker-001.md",
+      "docs/reports/command_runs/harden-inbox-completed-command-guard-001.md",
+      "docs/reports/command_runs/harden-inbox-lifecycle-cleanup-001.md",
+      "docs/reports/command_runs/no-copy-e2e-protocol-001.md",
+      "docs/reports/command_runs/post-pr914-closeout-precheck.md",
+      "docs/reports/command_runs/post707-state-refresh-v2.md",
+      "docs/reports/command_runs/post707-state-refresh-v3.md",
+      "docs/reports/command_runs/post707-state-refresh.md",
+      "docs/reports/command_runs/slice-a-transfer-state.md",
+      "docs/reports/command_runs/smoke-agent-run-missing-script-001.md",
+      "docs/reports/command_runs/transfer-closeout-mvp.md",
+      "docs/reports/command_runs/transfer-remote-next-mvp.md",
+      "docs/reports/command_runs/transfer-run-local-mvp.md",
+      "docs/reports/command_runs/verify-agent-next-footer-pf-001.md",
+      "docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md",
+      "docs/reports/didactic_guidance_diff.md",
+      "docs/reports/didactic_guidance_inspection.md",
+      "docs/reports/documentation-system-closeout-20260612.md",
+      "docs/reports/evidence_upload_shortcuts_mvp_contract.md",
+      "docs/reports/evidence_upload_shortcuts_mvp_diff.md",
+      "docs/reports/gui/agentic_kit_transfer_gui_concept.md",
+      "docs/reports/gui/comm_sci_control_gui_structure_analysis.md",
+      "docs/reports/handoff_rules/CURRENT_HANDOFF_RULES.md",
+      "docs/reports/idempotent_finalization_guard_inspection.md",
+      "docs/reports/ns-migration/ns_active_replacement_and_dev_go_up_removal.md",
+      "docs/reports/ns-migration/ns_to_agentic_kit_audit.md",
+      "docs/reports/ns-migration/ns_to_agentic_kit_plan.md",
+      "docs/reports/ns-migration/ns_to_agentic_kit_replacement_table.md",
+      "docs/reports/pattern_advisor_mvp_contract.md",
+      "docs/reports/post_didactic_guidance_state_diff.md",
+      "docs/reports/protected-change-decisions/2026-07-05-remove-obsolete-planning-docs.md",
+      "docs/reports/release/release_notes_generator_mvp_analysis.md",
+      "docs/reports/release/release_process_state_analysis.md",
+      "docs/reports/remote-branch-hygiene/K3_CLOSEOUT.md",
+      "docs/reports/report_schema_docs_slice_20260512.md",
+      "docs/reports/report_schema_e2e_and_collab_rules_20260512.md",
+      "docs/reports/status_roadmap_summary_after_pr105_20260512.md",
+      "docs/reports/workflows/patch_cycle_workflow_analysis.md"
+    ],
+    "version": 1
+  }
+}
