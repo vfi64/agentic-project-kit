@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9a3b87ddaea9a2833ccc54ad24668cad5284fe5e
-  short: 9a3b87dd
-  subject: Adopt lifecycle strict gate staging (#1857)
+  full: 8c970adf2a18debe329bd29df6b5c15d89cf4719
+  short: 8c970adf
+  subject: 'L5: add workspace hygiene baseline (#1860)'
 last_substantive_work_state:
-  full: 9a3b87ddaea9a2833ccc54ad24668cad5284fe5e
-  short: 9a3b87dd
-  subject: Adopt lifecycle strict gate staging (#1857)
+  full: 8c970adf2a18debe329bd29df6b5c15d89cf4719
+  short: 8c970adf
+  subject: 'L5: add workspace hygiene baseline (#1860)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
