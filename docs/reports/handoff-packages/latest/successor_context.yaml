@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-12T00:14:07.736869+00:00",
+  "generated_at_utc": "2026-07-12T00:52:14.099288+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,14 +56,14 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1854-handoff-refresh",
+    "branch": "docs/post-pr1857-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "3e26d18f5f5315e43bc86833a695cd2acf23380a",
+    "head": "9a3b87ddaea9a2833ccc54ad24668cad5284fe5e",
     "head_matches_origin_main": true,
-    "head_short": "3e26d18f",
+    "head_short": "9a3b87dd",
     "local_path": "cd /path/to/",
-    "origin_main": "3e26d18f5f5315e43bc86833a695cd2acf23380a",
-    "origin_main_short": "3e26d18f",
+    "origin_main": "9a3b87ddaea9a2833ccc54ad24668cad5284fe5e",
+    "origin_main_short": "9a3b87dd",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -155,9 +155,9 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "doc-lifecycle-strict-adoption",
-        "status": "planned",
-        "summary": "Adopt documentation lifecycle enforcement gradually"
+        "id": "lifecycle-backlog-clearance",
+        "status": "active",
+        "summary": "Clear current documentation lifecycle backlog before suite-level strict mode"
       },
       {
         "files": [
