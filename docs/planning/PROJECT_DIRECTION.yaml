@@ -771,6 +771,7 @@ plans:
   source_files:
   - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
   - README.md
+  - AGENTS.md
   - docs/DOCUMENTATION_COVERAGE.yaml
   - docs/reference/AGENTIC_KIT_COMMANDS.md
   - docs/reference/agentic-kit-commands.json
@@ -824,15 +825,50 @@ plans:
   - propose-delete remains report-only and lists only old unreferenced archive candidates.
   - GUI exposes a read-only lifecycle badge and a Sweep (dry-run) button through the shared agentic-kit bridge.
 - id: doc-lifecycle-strict-adoption
-  status: planned
+  status: active
   title: Adopt documentation lifecycle enforcement gradually
   depends_on:
   - doc-lifecycle-sweep
   rationale: >-
-    L4 will promote lifecycle audit coverage through WARN and strict modes
-    without making current kit cleanup a hidden prerequisite.
+    L4 promotes lifecycle audit coverage through WARN and strict modes
+    without making current kit cleanup a hidden prerequisite. The current kit
+    repository still carries visible lifecycle hygiene findings, so strict
+    standard-suite adoption remains gated by lifecycle-backlog-clearance.
   source_files:
   - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+  - README.md
+  - docs/DOCUMENTATION_COVERAGE.yaml
+  - docs/TEST_GATES.md
+  - docs/reference/AGENTIC_KIT_COMMANDS.md
+  - docs/reference/agentic-kit-commands.json
+  - src/agentic_project_kit/doc_lifecycle.py
+  - src/agentic_project_kit/cli_commands/checks.py
+  - src/agentic_project_kit/cli_commands/human_workflows.py
+  - src/agentic_project_kit/standard_gates_audit_suite.py
+  - tests/test_doc_lifecycle.py
+  - tests/test_human_workflows.py
+  - tests/test_standard_gates_audit_suite.py
+  acceptance:
+  - standard-gates-audit-suite runs doc-lifecycle-audit --json as a visible non-blocking lifecycle step.
+  - doc-lifecycle-audit --strict fails deterministic lifecycle blockers while report-only audit output stays available.
+  - STALE_BY_BUDGET and REVIEW_DUE_DATE remain non-blocking in strict mode.
+  - release ready blocks due REVIEW_DUE_RELEASE lifecycle findings for the requested version.
+- id: lifecycle-backlog-clearance
+  status: active
+  title: Clear current documentation lifecycle backlog before suite-level strict mode
+  depends_on:
+  - doc-lifecycle-strict-adoption
+  rationale: >-
+    The L4 strict switch exists, but the current repository is intentionally not
+    strict-clean yet. Keep the standard gate suite in visible WARN mode until a
+    documented sweep clears or defers existing lifecycle findings.
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+  acceptance:
+  - Current doc-lifecycle-audit findings are either resolved or explicitly deferred by documented sweep evidence.
+  - doc-lifecycle-audit --strict is clean on the kit repository before suite-level strict adoption.
+  - standard-gates-audit-suite may promote lifecycle strict blocking only after the clean evidence exists.
 - id: hygiene-manifest-adopt-baseline
   status: planned
   title: Add manifest hygiene and adopt baseline lifecycle support

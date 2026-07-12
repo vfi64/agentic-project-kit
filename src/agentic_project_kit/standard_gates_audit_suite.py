@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 from dataclasses import asdict, dataclass
+import json
 from pathlib import Path
 import shutil
 import subprocess
@@ -19,6 +20,7 @@ REQUIRED_STANDARD_GATE_COMMANDS: tuple[tuple[str, ...], ...] = (
     ("audit-path-literals", "--enforce-active"),
     ("direction", "validate"),
     ("doc-registry", "check-unregistered", "--strict-scope"),
+    ("doc-lifecycle-audit", "--json"),
     ("project-direction", "--section", "all", "--format", "json"),
     ("audit-ns-legacy-references",),
     ("audit-absolute-path-portability",),
@@ -105,6 +107,12 @@ def _diagnostic_line(output: str) -> str:
     stripped = output.strip()
     if not stripped:
         return "no output"
+    try:
+        payload = json.loads(stripped)
+    except json.JSONDecodeError:
+        payload = None
+    if isinstance(payload, dict) and isinstance(payload.get("findings"), list):
+        return f"FINDING_COUNT={len(payload['findings'])}"
     lines = stripped.splitlines()
     for prefix in ("BLOCKER=", "STATUS=FAIL", "ERROR=", "FAIL"):
         for line in lines:

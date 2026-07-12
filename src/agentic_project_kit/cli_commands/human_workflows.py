@@ -7,6 +7,7 @@ import subprocess
 
 import typer
 
+from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_release_blockers
 from agentic_project_kit.work_discard_changes import discard_all_changes
 from agentic_project_kit.workspace import load_workspace
 
@@ -87,6 +88,28 @@ def _path_args(paths: list[Path]) -> list[str]:
     for path in paths:
         args.extend(["--path", str(path)])
     return args
+
+
+def _doc_lifecycle_release_review_step(version: str) -> dict[str, object]:
+    blockers = build_doc_lifecycle_release_blockers(Path("."), version=version)
+    lines = [
+        "DOC_LIFECYCLE_RELEASE_REVIEW",
+        f"STATUS={'BLOCKED' if blockers else 'PASS'}",
+        f"BLOCKER_COUNT={len(blockers)}",
+    ]
+    for finding in blockers:
+        lines.append(f"BLOCKER={finding.code}|{finding.path}|{finding.message}")
+    if blockers:
+        lines.append("NEXT=Run docs lifecycle sweep before release readiness.")
+    return {
+        "name": "doc-lifecycle-release-review",
+        "argv": ["agentic-kit", "doc-lifecycle-audit", "--json", "--current-version", version],
+        "returncode": 2 if blockers else 0,
+        "ok": not blockers,
+        "allowed_returncodes": [0],
+        "stdout": "\n".join(lines) + "\n",
+        "stderr": "",
+    }
 
 
 @work_app.command("start")
@@ -247,6 +270,7 @@ def release_ready_command(
     steps = [
         _run_step("sync-main", _agentic("transfer", "sync-main")),
         _run_step("standard-error-scan", _agentic("transfer", "standard-error-scan", "--before-release", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--date", release_date, "--json"), allowed_returncodes={0}),
+        _doc_lifecycle_release_review_step(version),
         _run_step("release-status", _agentic("release-status", "--include-remote", "--json"), allowed_returncodes={0, 2}),
     ]
     payload = _payload("release-ready", steps, extra={"version": version, "from_tag": effective_from_tag, "to_ref": to_ref, "date": release_date})

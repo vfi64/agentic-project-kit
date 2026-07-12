@@ -363,6 +363,14 @@ For `planning-doc`, the gate must run targeted tests plus `agentic-kit handoff c
 
 Run `agentic-kit direction validate` when changing `docs/planning/PROJECT_DIRECTION.yaml`. `agentic-kit standard-gates-audit-suite` also runs `agentic-kit direction validate` so invalid direction YAML, dead source files, duplicate IDs, and missing dependencies block the standard gate. Use `agentic-kit direction render` only for stdout or temporary `tmp/` views, and run `agentic-kit direction audit-drift` before migrating, archiving, or deleting scattered planning documents.
 
+## Documentation Lifecycle Gate
+
+`agentic-kit standard-gates-audit-suite` runs `agentic-kit doc-lifecycle-audit --json` as a visible warning-style step. Existing lifecycle hygiene findings must remain visible through the check detail, but a zero-exit lifecycle report must not fail the suite merely because report-only findings exist.
+
+`agentic-kit doc-lifecycle-audit --strict` fails on deterministic lifecycle blockers: `HEADER_REGISTRY_MISMATCH`, `SUPERSEDED_TARGET_MISSING`, `REVIEW_DUE_RELEASE`, `REVIEW_DUE_DIRECTION`, and `SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE`. Time-based lifecycle findings, including `STALE_BY_BUDGET` and `REVIEW_DUE_DATE`, must stay non-blocking in strict mode.
+
+`agentic-kit release ready` must include a documentation lifecycle release review step that blocks `REVIEW_DUE_RELEASE` findings for the requested version and directs maintainers to `agentic-kit docs lifecycle sweep` before release readiness.
+
 ## Doctor Gate
 
 Run this command when changing project health diagnostics:

@@ -16,6 +16,7 @@ from agentic_project_kit.doc_lifecycle_signals import (
     load_direction_statuses,
     resolve_current_version,
 )
+from agentic_project_kit.project_direction import audit_project_direction_drift
 
 ALLOWED_STATUS_VALUES = {
     "idea-note",
@@ -56,6 +57,15 @@ STALE_BUDGET_CLASS_GROUPS = {
 }
 
 PLANNING_CLASS = "planning"
+STRICT_BLOCKING_CODES = frozenset(
+    {
+        "HEADER_REGISTRY_MISMATCH",
+        "SUPERSEDED_TARGET_MISSING",
+        "REVIEW_DUE_RELEASE",
+        "REVIEW_DUE_DIRECTION",
+        "SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -252,6 +262,61 @@ def build_doc_lifecycle_report(
 def write_doc_lifecycle_json_report(report: DocLifecycleReport, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(report.to_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def build_doc_lifecycle_strict_findings(
+    project_root: Path,
+    *,
+    report: DocLifecycleReport | None = None,
+    now: date | None = None,
+    current_version: str | None = None,
+) -> tuple[DocLifecycleFinding, ...]:
+    lifecycle_report = report or build_doc_lifecycle_report(
+        project_root,
+        now=now,
+        current_version=current_version,
+    )
+    blockers = [
+        finding
+        for finding in lifecycle_report.findings
+        if finding.code in STRICT_BLOCKING_CODES
+    ]
+    try:
+        direction_audit = audit_project_direction_drift(project_root)
+    except (OSError, ValueError, yaml.YAMLError):
+        direction_audit = None
+    if direction_audit is not None:
+        for record in direction_audit.records:
+            if record.classification != "SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE":
+                continue
+            blockers.append(
+                DocLifecycleFinding(
+                    "SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE",
+                    record.path,
+                    f"source file belongs to closed Direction item {record.item_id}",
+                    severity="FAIL",
+                )
+            )
+    return tuple(blockers)
+
+
+def build_doc_lifecycle_release_blockers(
+    project_root: Path,
+    *,
+    version: str,
+    now: date | None = None,
+) -> tuple[DocLifecycleFinding, ...]:
+    report = build_doc_lifecycle_report(project_root, now=now, current_version=version)
+    return tuple(finding for finding in report.findings if finding.code == "REVIEW_DUE_RELEASE")
+
+
+def render_doc_lifecycle_strict_findings(findings: tuple[DocLifecycleFinding, ...]) -> str:
+    lines = ["Strict lifecycle blockers:", f"- blocker_count: {len(findings)}"]
+    if not findings:
+        lines.append("- none")
+    for finding in findings:
+        lines.append(f"- [{finding.code}] {finding.path}: {finding.message}")
+    return "\n".join(lines)
 
 
 def _findings_by_code(findings: tuple[DocLifecycleFinding, ...]) -> dict[str, list[dict[str, Any]]]:
