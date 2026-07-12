@@ -789,15 +789,35 @@ plans:
   - audit-doc-orphans reports registered unreferenced documents with class and last commit date while honoring required exemptions.
   - --suggest-review-after prints read-only review_after suggestions from version target wording.
 - id: doc-lifecycle-sweep
-  status: planned
+  status: active
   title: Add guided documentation lifecycle sweep workflows
   depends_on:
   - doc-lifecycle-signals
   rationale: >-
-    L3 will use lifecycle findings to produce bounded archive, confirm-current,
-    defer, and bootstrap actions without destructive defaults.
+    L3 uses lifecycle findings to produce bounded archive, confirm-current,
+    defer, bootstrap, and GUI dry-run actions without destructive defaults.
   source_files:
   - docs/architecture/DOCUMENTATION_INFORMATION_ARCHITECTURE.md
+  - README.md
+  - docs/DOCUMENTATION_COVERAGE.yaml
+  - docs/reference/AGENTIC_KIT_COMMANDS.md
+  - docs/reference/agentic-kit-commands.json
+  - src/agentic_project_kit/doc_lifecycle.py
+  - src/agentic_project_kit/doc_lifecycle_sweep.py
+  - src/agentic_project_kit/cli_commands/docs.py
+  - src/agentic_project_kit/gui_button_catalog.py
+  - src/agentic_project_kit/gui_tkinter_shell.py
+  - tests/test_doc_lifecycle.py
+  - tests/test_doc_lifecycle_sweep.py
+  - tests/test_gui_basic_cockpit.py
+  - tests/test_gui_button_catalog.py
+  acceptance:
+  - docs lifecycle sweep emits a dry-run action plan and requires --execute plus explicit --only ids before mutation.
+  - Archive actions move files to docs/archive, stamp lifecycle headers, update the registry path/class, and rewrite Direction source_files.
+  - Confirm-current and defer actions round-trip through headers or registry metadata, with deferred findings still visible as DEFERRED audit lines.
+  - Bootstrap stamps missing lifecycle headers conservatively without claiming semantic currency.
+  - propose-delete remains report-only and lists only old unreferenced archive candidates.
+  - GUI exposes a read-only lifecycle badge and a Sweep (dry-run) button through the shared agentic-kit bridge.
 - id: doc-lifecycle-strict-adoption
   status: planned
   title: Adopt documentation lifecycle enforcement gradually

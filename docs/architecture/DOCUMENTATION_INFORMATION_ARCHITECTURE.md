@@ -161,7 +161,9 @@ Stage 2: advisory findings and migration recommendations.
 Stage 3: guided migration plans with dry-run output.
 Stage 4: garbage-collection candidates with dry-run output.
 
-Destructive documentation automation must require explicit human approval. Garbage collection must default to dry-run and must prefer archiving over deletion until references and audit value are checked.
+Guided lifecycle sweep automation may offer exactly bounded archive, confirm-current, or defer actions. Dry-run is the default. Execution must name explicit finding ids, and deferrals must remain visible as deferred audit lines rather than disappearing silently.
+
+Destructive documentation automation must require explicit human approval. Garbage collection must default to dry-run and must prefer archiving over deletion until references and audit value are checked. Deletion tooling may only propose old, unreferenced archive candidates for manual review.
 
 ## Current classification baseline
 

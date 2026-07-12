@@ -16,6 +16,15 @@ from agentic_project_kit.doc_lifecycle import (
     render_doc_lifecycle_plan_report,
     render_doc_lifecycle_triage_report,
 )
+from agentic_project_kit.doc_lifecycle_sweep import (
+    build_doc_lifecycle_bootstrap_payload,
+    build_doc_lifecycle_propose_delete_payload,
+    build_doc_lifecycle_sweep_payload,
+    json_dumps,
+    render_doc_lifecycle_bootstrap,
+    render_doc_lifecycle_propose_delete,
+    render_doc_lifecycle_sweep,
+)
 from agentic_project_kit.removed_source_audit import (
     DEFAULT_CENTRAL_TARGET,
     build_removed_source_audit,
@@ -25,6 +34,78 @@ from agentic_project_kit.removed_source_audit import (
 docs_app = typer.Typer(help="Documentation maintenance and migration guards.")
 lifecycle_app = typer.Typer(help="Safe documentation lifecycle triage and planning.")
 docs_app.add_typer(lifecycle_app, name="lifecycle")
+
+
+@lifecycle_app.command("bootstrap")
+def docs_lifecycle_bootstrap_command(
+    root: Annotated[Path, typer.Option("--root", help="Repository root.")] = Path("."),
+    dry_run: Annotated[
+        bool,
+        typer.Option("--dry-run/--execute", help="Preview or stamp missing lifecycle headers."),
+    ] = True,
+    json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
+) -> None:
+    """Stamp missing lifecycle headers without claiming semantic currency."""
+    payload = build_doc_lifecycle_bootstrap_payload(
+        root.resolve(),
+        execute=not dry_run,
+    )
+    if json_output:
+        typer.echo(json_dumps(payload))
+    else:
+        typer.echo(render_doc_lifecycle_bootstrap(payload), nl=False)
+    if payload["result_status"] == "BLOCK":
+        raise typer.Exit(code=2)
+
+
+@lifecycle_app.command("propose-delete")
+def docs_lifecycle_propose_delete_command(
+    root: Annotated[Path, typer.Option("--root", help="Repository root.")] = Path("."),
+    json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
+) -> None:
+    """List archive documents that may be old enough for manual deletion review."""
+    payload = build_doc_lifecycle_propose_delete_payload(root.resolve())
+    if json_output:
+        typer.echo(json_dumps(payload))
+    else:
+        typer.echo(render_doc_lifecycle_propose_delete(payload), nl=False)
+
+
+@lifecycle_app.command("sweep")
+def docs_lifecycle_sweep_command(
+    root: Annotated[Path, typer.Option("--root", help="Repository root.")] = Path("."),
+    dry_run: Annotated[
+        bool,
+        typer.Option("--dry-run/--execute", help="Preview or apply selected lifecycle hygiene actions."),
+    ] = True,
+    only: Annotated[
+        str,
+        typer.Option("--only", help="Comma-separated finding id(s) to execute. Required with --execute."),
+    ] = "",
+    until: Annotated[
+        str | None,
+        typer.Option("--until", help="YYYY-MM-DD deferral date for selected defer actions."),
+    ] = None,
+    review_after: Annotated[
+        str | None,
+        typer.Option("--review-after", help="Optional registry review_after value for confirm-current actions."),
+    ] = None,
+    json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
+) -> None:
+    """Build or apply a bounded documentation lifecycle sweep plan."""
+    payload = build_doc_lifecycle_sweep_payload(
+        root.resolve(),
+        execute=not dry_run,
+        only=only,
+        until=until,
+        review_after=review_after,
+    )
+    if json_output:
+        typer.echo(json_dumps(payload))
+    else:
+        typer.echo(render_doc_lifecycle_sweep(payload), nl=False)
+    if payload["result_status"] == "BLOCK":
+        raise typer.Exit(code=2)
 
 
 

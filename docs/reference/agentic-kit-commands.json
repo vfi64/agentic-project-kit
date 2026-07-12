@@ -2284,6 +2284,71 @@
       "when_to_use": "Apply one safe documentation lifecycle plan step."
     },
     {
+      "dry_run_available": true,
+      "group": "docs lifecycle",
+      "help": "Stamp missing lifecycle headers without claiming semantic currency.",
+      "name": "bootstrap",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": true,
+          "help": "Preview or stamp missing lifecycle headers.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "dry_run",
+          "opts": [
+            "--dry-run"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--execute"
+          ]
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "docs",
+        "lifecycle",
+        "bootstrap"
+      ],
+      "qualified_name": "agentic-kit docs lifecycle bootstrap",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "docs-lifecycle"
+      ],
+      "when_to_use": "Stamp missing lifecycle headers without claiming semantic currency."
+    },
+    {
       "dry_run_available": false,
       "group": "docs lifecycle",
       "help": "Build a dry-run lifecycle plan for one documentation scope.",
@@ -2345,6 +2410,55 @@
         "read-only"
       ],
       "when_to_use": "Build a dry-run lifecycle plan for one documentation scope."
+    },
+    {
+      "dry_run_available": false,
+      "group": "docs lifecycle",
+      "help": "List archive documents that may be old enough for manual deletion review.",
+      "name": "propose-delete",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "docs",
+        "lifecycle",
+        "propose-delete"
+      ],
+      "qualified_name": "agentic-kit docs lifecycle propose-delete",
+      "replaces_raw": [],
+      "safety": "DESTRUCTIVE",
+      "task_tags": [
+        "destructive",
+        "docs-lifecycle"
+      ],
+      "when_to_use": "List archive documents that may be old enough for manual deletion review."
     },
     {
       "dry_run_available": true,
@@ -2436,6 +2550,113 @@
         "read-only"
       ],
       "when_to_use": "Build or write one documentation lifecycle evidence report."
+    },
+    {
+      "dry_run_available": true,
+      "group": "docs lifecycle",
+      "help": "Build or apply a bounded documentation lifecycle sweep plan.",
+      "name": "sweep",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": true,
+          "help": "Preview or apply selected lifecycle hygiene actions.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "dry_run",
+          "opts": [
+            "--dry-run"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--execute"
+          ]
+        },
+        {
+          "default": "",
+          "help": "Comma-separated finding id(s) to execute. Required with --execute.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "only",
+          "opts": [
+            "--only"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "YYYY-MM-DD deferral date for selected defer actions.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "until",
+          "opts": [
+            "--until"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional registry review_after value for confirm-current actions.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "review_after",
+          "opts": [
+            "--review-after"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "docs",
+        "lifecycle",
+        "sweep"
+      ],
+      "qualified_name": "agentic-kit docs lifecycle sweep",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "docs-lifecycle"
+      ],
+      "when_to_use": "Build or apply a bounded documentation lifecycle sweep plan."
     },
     {
       "dry_run_available": false,
@@ -13974,7 +14195,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "dec749dbc55b",
+    "manifest_sha": "6d3f8d04bcce",
     "schema_version": 1
   },
   "schema_version": 2,

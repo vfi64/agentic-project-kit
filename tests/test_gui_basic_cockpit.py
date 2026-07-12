@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import inspect
+import json
 from pathlib import Path
 
 from agentic_project_kit import gui_tkinter_shell
@@ -724,6 +725,50 @@ def test_basic_button_execution_revalidates_gatekeeper_before_dispatch() -> None
     assert "action=communication-rules-refresh" in output
     assert "allowed=false" in output
     assert "executed=false" in output
+
+
+def test_doc_lifecycle_sweep_runner_uses_agentic_kit_wrapper(monkeypatch) -> None:
+    calls: list[tuple[str, ...]] = []
+
+    def fake_run_kit_command(*args: str, project_root: Path | str = ".") -> tuple[int, str]:
+        calls.append(args)
+        assert project_root == Path.cwd()
+        return 0, "DOC_LIFECYCLE_SWEEP"
+
+    monkeypatch.setattr(gui_tkinter_shell, "run_kit_command", fake_run_kit_command)
+
+    returncode, output = gui_tkinter_shell.MANUAL_GUI_READONLY_RUNNERS[
+        "doc-lifecycle-sweep-dry-run"
+    ]()
+
+    assert returncode == 0
+    assert output == "DOC_LIFECYCLE_SWEEP"
+    assert calls == [("docs", "lifecycle", "sweep", "--dry-run")]
+
+
+def test_lifecycle_badge_text_reads_audit_json(monkeypatch) -> None:
+    payload = {
+        "findings": [
+            {"code": "HEADER_MISSING"},
+            {"code": "REVIEW_DUE_DATE"},
+            {"code": "SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE"},
+        ]
+    }
+
+    def fake_run_kit_command(*args: str, project_root: Path | str = ".") -> tuple[int, str]:
+        assert args == ("doc-lifecycle-audit", "--json")
+        return 0, json.dumps(payload)
+
+    monkeypatch.setattr(gui_tkinter_shell, "run_kit_command", fake_run_kit_command)
+
+    assert gui_tkinter_shell.lifecycle_badge_text(Path.cwd()) == "lifecycle: 3 warn / 2 due"
+
+
+def test_manual_launch_status_contains_lifecycle_badge() -> None:
+    source = Path("src/agentic_project_kit/gui_tkinter_shell.py").read_text(encoding="utf-8")
+
+    assert "lifecycle_badge_text(Path.cwd())" in source
+    assert "{lifecycle_badge}" in source
 
 
 def test_inspect_selected_shows_structured_explanation() -> None:

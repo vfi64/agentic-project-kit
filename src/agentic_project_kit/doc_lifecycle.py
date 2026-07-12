@@ -106,10 +106,29 @@ class DocLifecycleFinding:
 
 
 @dataclass(frozen=True)
+class DocLifecycleDeferred:
+    path: str
+    deferred_until: str
+    reason: str
+    document_class: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        data = {
+            "path": self.path,
+            "deferred_until": self.deferred_until,
+            "reason": self.reason,
+        }
+        if self.document_class is not None:
+            data["class"] = self.document_class
+        return data
+
+
+@dataclass(frozen=True)
 class DocLifecycleReport:
     documents: tuple[DocLifecycleDocument, ...]
     findings: tuple[DocLifecycleFinding, ...]
     registry_summary: dict[str, Any] | None = None
+    deferred: tuple[DocLifecycleDeferred, ...] = ()
 
     @property
     def ok(self) -> bool:
@@ -121,6 +140,7 @@ class DocLifecycleReport:
             "documents": [document.to_dict() for document in self.documents],
             "findings": [finding.to_dict() for finding in self.findings],
             "findings_by_code": _findings_by_code(self.findings),
+            "deferred": [item.to_dict() for item in self.deferred],
             "registry_summary": self.registry_summary,
         }
 
@@ -134,6 +154,7 @@ def build_doc_lifecycle_report(
     today = now or date.today()
     documents: list[DocLifecycleDocument] = []
     findings: list[DocLifecycleFinding] = []
+    deferred: list[DocLifecycleDeferred] = []
     registry_entries = _load_documentation_registry_entries_by_path(project_root)
     direction_statuses = load_direction_statuses(project_root)
     resolved_current_version = resolve_current_version(project_root, current_version)
@@ -160,21 +181,25 @@ def build_doc_lifecycle_report(
             )
         )
         visited_paths.add(path_text)
-        findings.extend(_audit_document(relative_path, text, status, decision_status))
-        findings.extend(
-            _audit_registry_header_consistency(
-                project_root=project_root,
-                path_text=path_text,
-                text=text,
-                registry_entry=registry_entry,
-                status=status,
-                status_date=status_date,
-                superseded_by=superseded_by,
-                now=today,
-                current_version=resolved_current_version,
-                direction_statuses=direction_statuses,
+        deferred_item = _deferred_lifecycle_entry(path_text, registry_entry, today)
+        if deferred_item is not None:
+            deferred.append(deferred_item)
+        else:
+            findings.extend(_audit_document(relative_path, text, status, decision_status))
+            findings.extend(
+                _audit_registry_header_consistency(
+                    project_root=project_root,
+                    path_text=path_text,
+                    text=text,
+                    registry_entry=registry_entry,
+                    status=status,
+                    status_date=status_date,
+                    superseded_by=superseded_by,
+                    now=today,
+                    current_version=resolved_current_version,
+                    direction_statuses=direction_statuses,
+                )
             )
-        )
     for path_text, registry_entry in sorted(registry_entries.items()):
         if path_text in visited_paths or not path_text.endswith(".md"):
             continue
@@ -198,24 +223,29 @@ def build_doc_lifecycle_report(
                 age_days=age_days,
             )
         )
-        findings.extend(
-            _audit_registry_header_consistency(
-                project_root=project_root,
-                path_text=path_text,
-                text=text,
-                registry_entry=registry_entry,
-                status=status,
-                status_date=status_date,
-                superseded_by=superseded_by,
-                now=today,
-                current_version=resolved_current_version,
-                direction_statuses=direction_statuses,
+        deferred_item = _deferred_lifecycle_entry(path_text, registry_entry, today)
+        if deferred_item is not None:
+            deferred.append(deferred_item)
+        else:
+            findings.extend(
+                _audit_registry_header_consistency(
+                    project_root=project_root,
+                    path_text=path_text,
+                    text=text,
+                    registry_entry=registry_entry,
+                    status=status,
+                    status_date=status_date,
+                    superseded_by=superseded_by,
+                    now=today,
+                    current_version=resolved_current_version,
+                    direction_statuses=direction_statuses,
+                )
             )
-        )
     return DocLifecycleReport(
         documents=tuple(sorted(documents, key=lambda document: document.path)),
         findings=tuple(findings),
         registry_summary=_load_registry_summary(project_root),
+        deferred=tuple(sorted(deferred, key=lambda item: item.path)),
     )
 
 
@@ -263,6 +293,11 @@ def render_doc_lifecycle_report(report: DocLifecycleReport) -> str:
                 f"- [{finding.severity}|{finding.code}] {finding.path}: "
                 f"{finding.message}{class_suffix}{age_suffix}"
             )
+    if report.deferred:
+        lines.extend(["", "Deferred:"])
+        for item in report.deferred:
+            class_suffix = f" | class={item.document_class}" if item.document_class else ""
+            lines.append(f"- [DEFERRED] {item.path}: until {item.deferred_until}; {item.reason}{class_suffix}")
     lines.extend(["", f"Overall: {'PASS' if report.ok else 'FAIL'}"])
     return "\n".join(lines)
 
@@ -434,6 +469,28 @@ def _entry_class(entry: dict[str, Any]) -> str | None:
 def _entry_status(entry: dict[str, Any]) -> str | None:
     value = entry.get("status")
     return value if isinstance(value, str) and value else None
+
+
+def _deferred_lifecycle_entry(
+    path_text: str,
+    registry_entry: dict[str, Any],
+    now: date,
+) -> DocLifecycleDeferred | None:
+    deferred_until = registry_entry.get("deferred_until")
+    if not isinstance(deferred_until, str) or not deferred_until:
+        return None
+    try:
+        parsed_until = date.fromisoformat(deferred_until)
+    except ValueError:
+        return None
+    if now > parsed_until:
+        return None
+    return DocLifecycleDeferred(
+        path=path_text,
+        deferred_until=deferred_until,
+        reason="registry deferred_until suppresses lifecycle findings until this date",
+        document_class=_entry_class(registry_entry),
+    )
 
 
 def _is_lifecycle_header_exempt(path_text: str) -> bool:
