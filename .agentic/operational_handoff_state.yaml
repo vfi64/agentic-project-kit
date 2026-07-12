@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 8c970adf2a18debe329bd29df6b5c15d89cf4719
-  short: 8c970adf
-  subject: 'L5: add workspace hygiene baseline (#1860)'
+  full: 5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d
+  short: 5d4ea12d
+  subject: Add post-L5 lifecycle audit evidence (#1863)
 last_substantive_work_state:
-  full: 8c970adf2a18debe329bd29df6b5c15d89cf4719
-  short: 8c970adf
-  subject: 'L5: add workspace hygiene baseline (#1860)'
+  full: 5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d
+  short: 5d4ea12d
+  subject: Add post-L5 lifecycle audit evidence (#1863)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
