@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d` (`5d4ea12d`)
-- Handoff freshness marker: `5d4ea12d`
-- Branch at generation: `docs/post-pr1863-handoff-refresh`
+- HEAD: `be91ba4866602b830d9841f36d5e6d4793069ef7` (`be91ba48`)
+- Handoff freshness marker: `be91ba48`
+- Branch at generation: `codex/refresh-handoff-after-dpa-tracker`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -97,5 +97,6 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 - `mechanize-pre-gui-hardening-readiness` (planned): Mechanize pre-GUI hardening readiness
 - `mechanize-operating-layer-public-onboarding-evidence` (planned): Mechanize operating-layer public onboarding and evidence
 - `reports-retention-policy` (planned): Mechanize report and evidence retention policy
+- `agf-dpa-adoption-tracker` (blocked): Track AGF/DPA Package-G adoption evaluation without implementation claims
 
 ### RESULT: PASS ###

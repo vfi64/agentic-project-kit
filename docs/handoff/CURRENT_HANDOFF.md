@@ -200,6 +200,12 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 
 ## Current State
 
+- Current verified main: `be91ba48` (`Merge pull request #1869 from vfi64/codex/track-agf-dpa-adoption`).
+- Latest substantive work: PR #1869 (`Track AGF DPA adoption evaluation`).
+- Successor handoff package validation is PASS at `be91ba48`.
+- This refresh records the AGF/DPA Package-G adoption-evaluation tracker only. It
+  does not claim DPA import, AGF adoption or production runtime mutation.
+
 - Current verified release: 0.4.12.
 - Current release tag: v0.4.12.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.

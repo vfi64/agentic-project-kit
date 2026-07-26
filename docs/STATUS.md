@@ -7,9 +7,9 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `5d4ea12d` (`Add post-L5 lifecycle audit evidence (#1863)`).
-Latest substantive work: PR #1863 (`Add post-L5 lifecycle audit evidence (#1863)`).
-Post-merge handoff status: PASS/NOOP after PR #1863 administrative refresh.
+Current verified main: `be91ba48` (`Merge pull request #1869 from vfi64/codex/track-agf-dpa-adoption`).
+Latest substantive work: PR #1869 (`Track AGF DPA adoption evaluation`).
+Post-merge handoff status: refreshed after PR #1869; successor handoff package validation PASS at `be91ba48`.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
