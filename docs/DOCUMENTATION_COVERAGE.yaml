@@ -628,6 +628,15 @@ rules:
     - ruff_check
     - check_docs
     - doctor
+- id: ruff-gate-scope-coverage
+  description: The Ruff gate rule scope must stay explicit so CI does not drift with upstream defaults.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms:
+    - Ruff Gate Contract
+    - explicit rule scope in `pyproject.toml`
+    - historical default rule families E4, E7, E9, and F
+    - Do not rely on Ruff's upstream defaults
 - id: cli-package-readme-coverage
   description: CLI package modularization must remain visible after the monolith split.
   documents:

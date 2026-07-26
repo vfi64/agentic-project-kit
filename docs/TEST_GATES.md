@@ -39,6 +39,13 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | TestPyPI validation | TestPyPI upload, fresh venv install, CLI smoke command |
 | Handoff/state change | Update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md |
 
+## Ruff Gate Contract
+
+The standard lint gate is `ruff check .` with the explicit rule scope in `pyproject.toml`.
+That scope intentionally preserves the historical default rule families E4, E7, E9, and F.
+Do not rely on Ruff's upstream defaults for CI behavior, because new Ruff releases may expand
+their defaults and turn unrelated repository-wide style findings into gate failures.
+
 ## Architecture Contract Gate
 
 `docs/architecture/ARCHITECTURE_CONTRACT.md` is a required project gate document.
