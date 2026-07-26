@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-12T02:09:08.870133+00:00",
+  "generated_at_utc": "2026-07-26T20:40:30.632818+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,14 +56,14 @@
     "package_version": "0.4.12"
   },
   "repo": {
-    "branch": "docs/post-pr1863-handoff-refresh",
+    "branch": "codex/refresh-handoff-after-dpa-tracker",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d",
+    "head": "be91ba4866602b830d9841f36d5e6d4793069ef7",
     "head_matches_origin_main": true,
-    "head_short": "5d4ea12d",
+    "head_short": "be91ba48",
     "local_path": "cd /path/to/",
-    "origin_main": "5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d",
-    "origin_main_short": "5d4ea12d",
+    "origin_main": "be91ba4866602b830d9841f36d5e6d4793069ef7",
+    "origin_main_short": "be91ba48",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -302,6 +302,15 @@
         "id": "reports-retention-policy",
         "status": "planned",
         "summary": "Mechanize report and evidence retention policy"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "agf-dpa-adoption-tracker",
+        "status": "blocked",
+        "summary": "Track AGF/DPA Package-G adoption evaluation without implementation claims"
       }
     ],
     "recent_lessons": [

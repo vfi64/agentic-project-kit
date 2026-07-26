@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1863-handoff-refresh`
+- branch: `codex/refresh-handoff-after-dpa-tracker`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -380,6 +380,15 @@ Wenn der Bootstrap grün ist:
       "id": "reports-retention-policy",
       "status": "planned",
       "summary": "Mechanize report and evidence retention policy"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "agf-dpa-adoption-tracker",
+      "status": "blocked",
+      "summary": "Track AGF/DPA Package-G adoption evaluation without implementation claims"
     }
   ],
   "recent_lessons": [
@@ -392,14 +401,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1863-handoff-refresh",
+    "branch": "codex/refresh-handoff-after-dpa-tracker",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d",
+    "head": "be91ba4866602b830d9841f36d5e6d4793069ef7",
     "head_matches_origin_main": true,
-    "head_short": "5d4ea12d",
+    "head_short": "be91ba48",
     "local_path": "cd /path/to/",
-    "origin_main": "5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d",
-    "origin_main_short": "5d4ea12d",
+    "origin_main": "be91ba4866602b830d9841f36d5e6d4793069ef7",
+    "origin_main_short": "be91ba48",
     "worktree_clean": false
   }
 }
