@@ -7,9 +7,9 @@ Current verified release: 0.4.12.
 Current release tag: v0.4.12.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
-Current verified main: `be91ba48` (`Merge pull request #1869 from vfi64/codex/track-agf-dpa-adoption`).
-Latest substantive work: PR #1869 (`Track AGF DPA adoption evaluation`).
-Post-merge handoff status: refreshed after PR #1869; successor handoff package validation PASS at `be91ba48`.
+Current verified main: `174f2247` (`Merge pull request #1870 from vfi64/codex/refresh-handoff-after-dpa-tracker`).
+Latest substantive work: PR #1870 (`Merge pull request #1870 from vfi64/codex/refresh-handoff-after-dpa-tracker`).
+Post-merge handoff status: PASS/NOOP after PR #1870 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1863
+## Operational documentation refresh state after PR #1870
 
-Current administrative handoff refresh state is `5d4ea12d` (`Add post-L5 lifecycle audit evidence (#1863)`). Continue next only after this post-PR1863 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `174f2247` (`Merge pull request #1870 from vfi64/codex/refresh-handoff-after-dpa-tracker`). Continue next only after this post-PR1870 refresh is committed and merged; the next substantive slice must be created from fresh main.
