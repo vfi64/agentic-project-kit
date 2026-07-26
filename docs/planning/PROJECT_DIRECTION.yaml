@@ -2135,6 +2135,53 @@ plans:
   - Archive, reports, examples, required files, and handoff-package evidence keep
     explicit exemptions where needed.
   - No retention gate depends on wall-clock time as a hard FAIL condition.
+- id: agf-dpa-adoption-tracker
+  status: blocked
+  title: Track AGF/DPA Package-G adoption evaluation without implementation claims
+  depends_on:
+  - documentation-artifact-governance-os
+  block_reason: Await DPA Lab Package-G independent review, Maintainer adjudication,
+    and an explicit Kit adoption decision before any AGF, DPA, ROS, capture-ledger,
+    or projection-runtime adoption work proceeds.
+  summary: Durable Kit-side tracker for the AGF/DPA/ROS adoption obligation surfaced
+    by the DPA Lab Package-G gate.
+  rationale: The Kit must not silently adopt AGF, DPA or ROS artifacts from external
+    repositories, draft PRs or chat context. A repository-local tracker keeps the
+    obligation visible while preserving Kit authority over its planning, runtime,
+    gates, registries, lifecycle, handoff state and implementation evidence.
+  scope:
+  - Track the need to evaluate AGF framework requirements against current Kit rules
+    before adoption.
+  - Track that DPA Lab Package G remains a precondition for substantive DPA resume
+    and for Kit adoption claims.
+  - "Track existing Kit Draft PR #1867 as pre-existing, unadjudicated capture-ledger
+    work, not as adoption."
+  - "Track existing Kit Draft PR #1865 as non-normative research input, not as adoption."
+  - Require exact Kit main evidence, local gates, and Maintainer adjudication before
+    any follow-up implementation or governed import.
+  non_goals:
+  - Do not implement AGF, DPA or ROS behavior in this tracker.
+  - Do not continue or merge Draft PR #1867 through this item.
+  - Do not create a second Kit runtime, registry, lifecycle, evidence, handoff, state
+    or gate authority.
+  - Do not modify command-generated handoff outputs or successor handoff packages.
+  evidence:
+  - https://github.com/vfi64/agentic-project-kit-dpa-lab/pull/10
+  - https://github.com/vfi64/agentic-project-kit/pull/1867
+  - https://github.com/vfi64/agentic-project-kit/pull/1865
+  acceptance:
+  - The Kit records an explicit adopt, adapt, already-equivalent, superseded, not-applicable,
+    defer or reject disposition for every applicable AGF requirement before adoption.
+  - Existing Kit controls are mapped before new governance controls are proposed.
+  - "Draft PR #1867 is adjudicated as pre-existing unadopted work before it is continued,
+    replaced or closed."
+  - "Draft PR #1865 remains research-only unless a later governed item promotes a specific
+    finding."
+  - No copied framework text creates a second independently evolving Kit authority.
+  - No AGF/DPA/ROS implementation or conformance claim is made before local Kit gates
+    and Maintainer adjudication pass.
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
 ideas:
 - id: project-direction-gui-panel
   status: accepted
