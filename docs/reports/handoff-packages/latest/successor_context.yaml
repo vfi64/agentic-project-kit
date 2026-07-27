@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-27T19:57:19.946150+00:00",
+  "generated_at_utc": "2026-07-27T20:12:21.424440+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -56,14 +56,14 @@
     "package_version": "0.4.13"
   },
   "repo": {
-    "branch": "fix/release-prepare-v0.4.13",
+    "branch": "docs/post-pr1874-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "05bb8a1924fa8add399560853319c9bff6b837e5",
+    "head": "69e3adafece6eaaea307fdba5bcd2e2ea8c51c7c",
     "head_matches_origin_main": true,
-    "head_short": "05bb8a19",
+    "head_short": "69e3adaf",
     "local_path": "cd /path/to/",
-    "origin_main": "05bb8a1924fa8add399560853319c9bff6b837e5",
-    "origin_main_short": "05bb8a19",
+    "origin_main": "69e3adafece6eaaea307fdba5bcd2e2ea8c51c7c",
+    "origin_main_short": "69e3adaf",
     "worktree_clean": false
   },
   "schema_version": 1,

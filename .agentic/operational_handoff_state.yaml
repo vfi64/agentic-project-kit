@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b000ba1337c13fb0c8d531459c4ccfad90d3f5f1
-  short: b000ba13
-  subject: Harden release notes PR evidence classification (#1872)
+  full: 69e3adafece6eaaea307fdba5bcd2e2ea8c51c7c
+  short: 69e3adaf
+  subject: Prepare v0.4.13 safety release (#1874)
 last_substantive_work_state:
-  full: b000ba1337c13fb0c8d531459c4ccfad90d3f5f1
-  short: b000ba13
-  subject: Harden release notes PR evidence classification (#1872)
+  full: 69e3adafece6eaaea307fdba5bcd2e2ea8c51c7c
+  short: 69e3adaf
+  subject: Prepare v0.4.13 safety release (#1874)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
