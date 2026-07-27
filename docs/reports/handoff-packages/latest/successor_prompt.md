@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1872-handoff-refresh`
+- branch: `fix/release-prepare-v0.4.13`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -401,14 +401,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1872-handoff-refresh",
+    "branch": "fix/release-prepare-v0.4.13",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "b000ba1337c13fb0c8d531459c4ccfad90d3f5f1",
+    "head": "05bb8a1924fa8add399560853319c9bff6b837e5",
     "head_matches_origin_main": true,
-    "head_short": "b000ba13",
+    "head_short": "05bb8a19",
     "local_path": "cd /path/to/",
-    "origin_main": "b000ba1337c13fb0c8d531459c4ccfad90d3f5f1",
-    "origin_main_short": "b000ba13",
+    "origin_main": "05bb8a1924fa8add399560853319c9bff6b837e5",
+    "origin_main_short": "05bb8a19",
     "worktree_clean": false
   }
 }
@@ -434,7 +434,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: c59cb1700291). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK c59cb1700291. Consult `agentic-kit command-for` before proposing commands.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 8610cfd2990a). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 8610cfd2990a. Consult `agentic-kit command-for` before proposing commands.
 - Before proposing ANY command run/consult `agentic-kit command-for`.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -444,5 +444,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: bbead931ffde648c57f6b596e3e7807f62194443d79fbda374bac2fe8c38782c
-- docs/reference/agentic-kit-commands.json: 469f7f2fdc5a027c50c6271eaa775f8bebe5f41e50ffdbcd943f3d14057b0268
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 55a7e99ae5c027b5012b63f039fd4267d2ab67c32211d41033bd533d96cfa3bc
+- docs/reference/agentic-kit-commands.json: 1518aa40751ef0dfd171f7427e4dc7eb40449e6f8ac1dc714a6e4ad488bd8e91

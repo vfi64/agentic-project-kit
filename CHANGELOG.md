@@ -1,3 +1,99 @@
+## v0.4.13 - 2026-07-27
+
+- Zenodo DOI verification pending for v0.4.13.
+- Close out v0.4.12 DOI metadata
+- Add kit operating-layer master plan
+- Add idempotent PR closeout wrapper
+- Fix pr-closeout-complete PR state lookup
+- Block post-merge-complete on failing noop check
+- Add composed wrapper pass invariant
+- Add composite short-circuit invariant
+- Harden refresh-only handoff bootstrap evidence
+- Fix stale pending-DOI line and gate CHANGELOG/STATUS consistency
+- Remove unreachable release publish core body
+- Add declarative registry scope and decision template for docs coverage
+- Add machine-generated path-literal evidence report for workspace migration
+- Retire if-False contract sentinels in deprecated transfer alias
+- Split transfer CLI monolith into focused command modules
+- Add post-S6 path literal audit evidence
+- Register kit OS architecture and refresh path literal evidence
+- Add workspace resolver foundation and mutation lock
+- Resolve successor handoff paths through the workspace resolver
+- Resolve transfer repo action paths through the workspace resolver
+- Resolve documentation audit paths through the workspace resolver
+- Record P1 path literal migration evidence
+- Mark OS architecture accepted
+- Parse workspace manifests with schema gate
+- Add canonical project direction schema
+- Add project direction validation and drift audit commands
+- Migrate active planning content into project direction
+- Remove obsolete scattered planning documents
+- Enforce documentation registry scope after direction cleanup
+- Add project direction validation to standard gates
+- Refresh project direction after P2 and planning consolidation
+- Add read-only workspace adopt analysis
+- Add bounded workspace init
+- Add workspace upgrade skeleton with stepwise schema migration frame
+- Add strict documentation scope to standard gates
+- Centralize migrated planning and handoff remnants
+- Clean up planning documentation taxonomy
+- Add doc registry reconcile dry-run command
+- Complete documentation taxonomy cleanup
+- Add docs lifecycle triage command
+- Add docs lifecycle plan command
+- Enrich docs lifecycle reports with registry metadata
+- Integrate doc registry reconcile findings into docs lifecycle
+- Add safe docs lifecycle apply command
+- Add docs lifecycle evidence report command
+- Add handoff context to docs lifecycle reports
+- Add K3 remote branch hygiene dry-run command
+- Add K3 remote branch hygiene evidence report
+- Add K3 remote branch hygiene safe apply
+- Document K3 remote branch hygiene closeout
+- Record Master Implementation Q planning sequence
+- Materialize Masterplan Q full text
+- Harden command manifest contract
+- Add command selector support for CM2
+- Add instruction lint gate for transfer apply
+- Add chat entrypoint command reference contract
+- Add mutation lock coverage audit
+- Automate PR preflight context refresh
+- Enforce mutation lock core contract
+- Classify mutation lock audit findings
+- Classify mutation lock audit findings
+- Add namespace defaults for manifest workspaces
+- Complete P4b resolver sweep
+- Add self-hosting workspace manifest
+- Update Q2 master implementation plan
+- Close command-for selector direction item
+- Add instruction lint gate
+- Close CM3 direction item
+- Add chat entrypoint manifest contract
+- Gate transfer apply with instruction lint
+- Close transfer apply lint gate tests
+- Add mutation lock coverage evidence
+- Document mutation lock reentrancy policy
+- Derive successor handoff repo identity
+- Classify repository identity literals
+- Record remote branch hygiene evidence
+- P5b: Enforce active path literal classes
+- P5d: Deprecate implicit legacy profile
+- P5c: Add physical migration plan
+- Add GUI project root selection
+- Add operating-layer quickstart and template checks
+- LC3: Remediate mutation lock coverage
+- TH1: Harden negative paths
+- L0: Add lifecycle direction items
+- L1: Add doc lifecycle metadata audit
+- L2: Add documentation lifecycle signals
+- Add documentation lifecycle sweep workflows
+- Adopt lifecycle strict gate staging
+- L5: add workspace hygiene baseline
+- Add post-L5 lifecycle audit evidence
+- Track AGF DPA adoption evaluation
+- Stabilize Ruff gate defaults
+- Harden release notes PR evidence classification
+
 ## v0.4.12 - 2026-07-02
 
 - Close out v0.4.11 DOI release state
