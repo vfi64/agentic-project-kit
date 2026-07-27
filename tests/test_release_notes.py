@@ -25,11 +25,19 @@ class FakeRunner:
         refs_exist: bool = True,
         github_metadata: dict[int, dict[str, object]] | None = None,
         github_available: bool = True,
+        parents_by_index: dict[int, tuple[str, ...]] | None = None,
+        rev_list_by_range: dict[str, list[str]] | None = None,
+        commit_pull_metadata: dict[str, list[dict[str, object]]] | None = None,
+        repo_full_name: str = "example-owner/example-repo",
     ) -> None:
         self.subjects = subjects
         self.refs_exist = refs_exist
         self.github_metadata = github_metadata or {}
         self.github_available = github_available
+        self.parents_by_index = parents_by_index or {}
+        self.rev_list_by_range = rev_list_by_range or {}
+        self.commit_pull_metadata = commit_pull_metadata or {}
+        self.repo_full_name = repo_full_name
 
     def __call__(self, _root: Path, argv: Sequence[str]) -> CommandResult:
         command = list(argv)
@@ -37,11 +45,23 @@ class FakeRunner:
             return CommandResult(0, "sha\n", "") if self.refs_exist else CommandResult(128, "", "missing ref")
         if command[:4] == ["git", "show", "-s", "--format=%cI"]:
             return CommandResult(0, "2026-06-20T12:00:00+00:00\n", "")
-        if command[:4] == ["git", "log", "--reverse", "--format=%H%x1f%s%x1f%cI%x1e"]:
+        if command[:4] == ["git", "log", "--reverse", "--format=%H%x1f%P%x1f%s%x1f%cI%x1e"]:
             records = []
             for index, subject in enumerate(self.subjects, start=1):
-                records.append(f"{index:040x}\x1f{subject}\x1f2026-06-20T12:00:0{index}+00:00")
+                parents = " ".join(self.parents_by_index.get(index, ()))
+                records.append(f"{index:040x}\x1f{parents}\x1f{subject}\x1f2026-06-20T12:00:0{index}+00:00")
             return CommandResult(0, "\x1e".join(records) + "\x1e", "")
+        if command[:2] == ["git", "rev-list"]:
+            return CommandResult(0, "\n".join(self.rev_list_by_range.get(command[2], [])) + "\n", "")
+        if command == ["gh", "repo", "view", "--json", "nameWithOwner", "--jq", ".nameWithOwner"]:
+            if not self.github_available:
+                return CommandResult(1, "", "gh metadata unavailable")
+            return CommandResult(0, f"{self.repo_full_name}\n", "")
+        if command[:2] == ["gh", "api"] and len(command) == 3 and command[2].startswith("repos/"):
+            if not self.github_available:
+                return CommandResult(1, "", "gh metadata unavailable")
+            sha = command[2].split("/commits/", 1)[1].split("/pulls", 1)[0]
+            return CommandResult(0, json.dumps(self.commit_pull_metadata.get(sha, [])), "")
         if command[:3] == ["gh", "pr", "view"]:
             if not self.github_available:
                 return CommandResult(1, "", "gh metadata unavailable")
@@ -168,6 +188,76 @@ def test_release_notes_generator_classifies_current_gui_and_workflow_titles(tmp_
 
     assert report.validation.status == "PASS"
     assert report.unclassified_items == ()
+
+
+def test_release_notes_generator_classifies_current_q_and_dpa_titles(tmp_path: Path) -> None:
+    branch_commit = f"{17:040x}"
+    report = build_release_notes_report(
+        tmp_path,
+        version="0.4.13",
+        from_tag="v0.4.12",
+        command_runner=FakeRunner(
+            subjects=[
+                "Block post-merge-complete on failing noop check (#1688)",
+                "Register kit OS architecture and refresh path literal evidence (#1709)",
+                "Record P1 path literal migration evidence (#1719)",
+                "Mark OS architecture accepted (#1721)",
+                "Automate PR preflight context refresh (#1792)",
+                "Complete P4b resolver sweep (#1803)",
+                "Close command-for selector direction item (#1809)",
+                "Close CM3 direction item (#1813)",
+                "Classify repository identity literals (#1827)",
+                "Record remote branch hygiene evidence (#1829)",
+                "P5b: Enforce active path literal classes (#1831)",
+                "P5d: Deprecate implicit legacy profile (#1834)",
+                "LC3: Remediate mutation lock coverage (#1843)",
+                "TH1: Harden negative paths (#1845)",
+                "L0: Add lifecycle direction items (#1847)",
+                "L5: add workspace hygiene baseline (#1860)",
+                "Track AGF DPA adoption evaluation",
+            ],
+            commit_pull_metadata={
+                branch_commit: [
+                    {
+                        "number": 1869,
+                        "title": "Track AGF/DPA adoption evaluation",
+                        "url": "https://example.invalid/pull/1869",
+                    }
+                ]
+            },
+        ),
+        include_github_metadata=True,
+    )
+
+    assert report.validation.status == "PASS"
+    assert report.unclassified_items == ()
+    assert report.items[-1].pr_number == 1869
+    assert any(evidence["type"] == "github_commit_pull_request_coverage" for evidence in report.items[-1].evidence)
+
+
+def test_release_notes_generator_uses_merge_pr_coverage_for_branch_commits(tmp_path: Path) -> None:
+    first_parent = "a" * 40
+    branch_sha = f"{1:040x}"
+    merge_sha = f"{2:040x}"
+    report = build_release_notes_report(
+        tmp_path,
+        version="0.4.13",
+        from_tag="v0.4.12",
+        command_runner=FakeRunner(
+            subjects=[
+                "Stabilize Ruff gate defaults",
+                "Merge pull request #1869 from vfi64/codex/track-agf-dpa-adoption",
+            ],
+            parents_by_index={2: (first_parent, branch_sha)},
+            rev_list_by_range={f"{first_parent}..{branch_sha}": [branch_sha]},
+        ),
+    )
+
+    assert report.validation.status == "PASS"
+    assert [item.pr_number for item in report.items] == [1869]
+    assert report.administrative_items[0].pr_number == 1869
+    assert any(evidence["type"] == "merge_commit_pr_coverage" for evidence in report.items[0].evidence)
+    assert report.administrative_items[0].commit_sha == merge_sha
 
 
 def test_release_notes_generator_treats_report_projection_commits_as_administrative(
