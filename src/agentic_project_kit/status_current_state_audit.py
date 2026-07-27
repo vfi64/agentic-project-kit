@@ -146,14 +146,18 @@ def audit_status_current_state(
         pyproject_version=pyproject_version,
         status_version=status_version,
         status_verified_version_doi=status_verified_version_doi,
+        release_current_state=release_current_state,
     )
     _audit_status_main_marker(
+        root=root,
+        run_git=run_git,
         findings=findings,
         blockers=blockers,
         status_text=status_text,
         current_block=current_block,
         status_main=status_main,
         validation_head=validation_head,
+        release_current_state=release_current_state,
     )
     _finding(
         findings,
@@ -318,6 +322,7 @@ def _audit_changelog_current_pending_doi(
     pyproject_version: str | None,
     status_version: str | None,
     status_verified_version_doi: tuple[str, int] | None,
+    release_current_state: str | None,
 ) -> None:
     changelog_path = root / "CHANGELOG.md"
     changelog_text = _read_text(changelog_path)
@@ -340,6 +345,7 @@ def _audit_changelog_current_pending_doi(
         pending_lines
         and status_version == pyproject_version
         and status_verified_version_doi is not None
+        and release_current_state != "prepared"
     )
     if stale_pending:
         doi, status_line = status_verified_version_doi
@@ -354,7 +360,8 @@ def _audit_changelog_current_pending_doi(
         detail = (
             f"version={pyproject_version}; pending_lines={len(pending_lines)}; "
             f"status_version={status_version}; "
-            f"status_verified_doi={status_verified_version_doi[0] if status_verified_version_doi else None}"
+            f"status_verified_doi={status_verified_version_doi[0] if status_verified_version_doi else None}; "
+            f"release_state={release_current_state}"
         )
     _finding(
         findings,
@@ -411,12 +418,15 @@ def _warning(
 
 def _audit_status_main_marker(
     *,
+    root: Path,
+    run_git: GitRunner,
     findings: list[StatusCurrentStateFinding],
     blockers: list[StatusCurrentStateFinding],
     status_text: str,
     current_block: str,
     status_main: str | None,
     validation_head: str | None,
+    release_current_state: str | None,
 ) -> None:
     live_text = status_text.split("## Historical State Snapshots", 1)[0]
     live_markers = _marker_values(live_text, _CURRENT_VERIFIED_MAIN_PATTERN)
@@ -466,13 +476,16 @@ def _audit_status_main_marker(
         f"live_head_values={live_head_unique}",
     )
     matches_validation = bool(status_main and validation_head and validation_head.startswith(status_main))
+    if not matches_validation and release_current_state == "prepared" and status_main and validation_head:
+        ancestor = run_git(root, ("merge-base", "--is-ancestor", status_main, validation_head))
+        matches_validation = ancestor.returncode == 0
     _finding(
         findings,
         blockers,
         "docs/STATUS.md",
         "status_current_verified_main_matches_handoff_validation_head",
         matches_validation,
-        f"status_main={status_main}, validation_head={validation_head}",
+        f"status_main={status_main}, validation_head={validation_head}, release_state={release_current_state}",
     )
 
 
