@@ -296,6 +296,7 @@ def _metadata_updaters(version: str, doi: str, concept_doi: str) -> dict[str, Ca
         return text.rstrip() + "\n" + line + "\n"
 
     def update_changelog(text: str) -> str:
+        text = _remove_current_changelog_pending_doi_markers(text, version=version)
         if f"Zenodo {tag} DOI: {doi}" in text:
             return text
         first_next = text.find("\n## v", 1)
@@ -383,3 +384,22 @@ def _update_current_release_block(text: str, *, version: str, tag: str, doi: str
         )
 
     return before + block + after
+
+
+def _remove_current_changelog_pending_doi_markers(text: str, *, version: str) -> str:
+    pattern = re.compile(rf"(?ms)^## v{re.escape(version)}\b.*?(?=^## v|\Z)")
+    match = pattern.search(text)
+    if not match:
+        return text
+    block = match.group(0)
+    kept_lines = [
+        line
+        for line in block.splitlines()
+        if not re.search(
+            rf"\bzenodo\b.*\bdoi\b.*\bverification\b.*\bpending\b.*\bv?{re.escape(version)}\b",
+            line,
+            re.IGNORECASE,
+        )
+    ]
+    new_block = "\n".join(kept_lines).rstrip() + "\n"
+    return text[: match.start()] + new_block + text[match.end() :]

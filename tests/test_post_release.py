@@ -274,6 +274,9 @@ def test_post_release_doi_closeout_write_updates_metadata_files(tmp_path: Path):
     assert "- `v1.2.3` / `1.2.3`: Zenodo version DOI `10.5281/zenodo.99999999`; concept DOI `10.5281/zenodo.20101359`." in (
         tmp_path / "docs/releases/VERIFIED_RELEASES.md"
     ).read_text(encoding="utf-8")
+    changelog = (tmp_path / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert "- Zenodo DOI verification pending for v1.2.3." not in changelog
+    assert "Zenodo v1.2.3 DOI: 10.5281/zenodo.99999999" in changelog
 
 
 def test_render_post_release_doi_closeout_result_lists_changes(tmp_path: Path):
@@ -333,6 +336,7 @@ def _write_closeout_files(root: Path, version: str) -> None:
     )
     (root / "CHANGELOG.md").write_text(
         f"## v{version} - 2026-06-08\n\n"
+        f"- Zenodo DOI verification pending for v{version}.\n"
         "- Documentation: pending verification for GitHub Release publication and post-release Zenodo checks.\n\n"
         "## v0.4.5 - 2026-05-30\n",
         encoding="utf-8",
@@ -365,4 +369,3 @@ def _closeout_zenodo_payload(version: str, doi: str) -> dict[str, object]:
             ]
         }
     }
-
