@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 174f2247acecfa0c1687b32578c50defa955d55e
-  short: 174f2247
-  subject: 'Merge pull request #1870 from vfi64/codex/refresh-handoff-after-dpa-tracker'
+  full: b000ba1337c13fb0c8d531459c4ccfad90d3f5f1
+  short: b000ba13
+  subject: Harden release notes PR evidence classification (#1872)
 last_substantive_work_state:
-  full: 174f2247acecfa0c1687b32578c50defa955d55e
-  short: 174f2247
-  subject: 'Merge pull request #1870 from vfi64/codex/refresh-handoff-after-dpa-tracker'
+  full: b000ba1337c13fb0c8d531459c4ccfad90d3f5f1
+  short: b000ba13
+  subject: Harden release notes PR evidence classification (#1872)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
