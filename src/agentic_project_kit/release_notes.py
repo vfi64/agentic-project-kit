@@ -101,8 +101,15 @@ class ReleaseNotesReport:
 @dataclass(frozen=True)
 class _GitCommit:
     sha: str
+    parents: tuple[str, ...]
     subject: str
     committed_at: str
+
+
+@dataclass(frozen=True)
+class _PrCoverage:
+    number: int
+    evidence: dict[str, object]
 
 
 def build_release_notes_report(
@@ -117,6 +124,16 @@ def build_release_notes_report(
     runner = command_runner or run_command
     plain_version = version.removeprefix("v")
     commits, evidence_errors = _collect_commits(project_root, from_tag=from_tag, to_ref=to_ref, runner=runner)
+    pr_coverage, coverage_evidence = _collect_merge_pr_coverage(project_root, commits=commits, runner=runner)
+    if include_github_metadata:
+        github_coverage, github_coverage_evidence = _collect_github_commit_pr_coverage(
+            project_root,
+            commits=commits,
+            existing_coverage=pr_coverage,
+            runner=runner,
+        )
+        pr_coverage = {**pr_coverage, **github_coverage}
+        coverage_evidence += github_coverage_evidence
     generated_at = _deterministic_generated_at(project_root, to_ref=to_ref, runner=runner)
     items: list[ReleaseNoteItem] = []
     administrative_items: list[ReleaseNoteItem] = []
@@ -125,7 +142,8 @@ def build_release_notes_report(
     github_metadata_available = include_github_metadata
 
     for commit in commits:
-        pr_number = _pr_number_from_subject(commit.subject)
+        coverage = pr_coverage.get(commit.sha)
+        pr_number = _pr_number_from_subject(commit.subject) or (coverage.number if coverage is not None else None)
         github_metadata, github_missing_evidence = _github_metadata_for_pr(
             project_root,
             pr_number=pr_number,
@@ -139,6 +157,7 @@ def build_release_notes_report(
             from_tag=from_tag,
             to_ref=to_ref,
             github_metadata=github_metadata,
+            pr_coverage=coverage,
         )
         if item.category == "Administrative Handoff Refresh":
             administrative_items.append(item)
@@ -149,6 +168,7 @@ def build_release_notes_report(
         missing_evidence.extend(item_missing_evidence)
         missing_evidence.extend(github_missing_evidence)
 
+    missing_evidence.extend(coverage_evidence)
     missing_evidence.extend(evidence_errors)
     validation = _validate_release_notes(
         items=tuple(items),
@@ -267,7 +287,7 @@ def _collect_commits(
     if runner(project_root, ["git", "rev-parse", "--verify", to_ref]).returncode != 0:
         missing_evidence.append({"type": "missing_ref", "ref": to_ref})
         return (), tuple(missing_evidence)
-    result = runner(project_root, ["git", "log", "--reverse", "--format=%H%x1f%s%x1f%cI%x1e", f"{from_tag}..{to_ref}"])
+    result = runner(project_root, ["git", "log", "--reverse", "--format=%H%x1f%P%x1f%s%x1f%cI%x1e", f"{from_tag}..{to_ref}"])
     if result.returncode != 0:
         missing_evidence.append({"type": "git_log_failed", "range": f"{from_tag}..{to_ref}", "stderr": result.stderr.strip()})
         return (), tuple(missing_evidence)
@@ -276,10 +296,16 @@ def _collect_commits(
         if not record.strip():
             continue
         parts = record.strip("\n").split("\x1f")
-        if len(parts) != 3:
+        if len(parts) == 4:
+            sha, parents_text, subject, committed_at = parts
+            parents = tuple(parent for parent in parents_text.split() if parent)
+        elif len(parts) == 3:
+            sha, subject, committed_at = parts
+            parents = ()
+        else:
             missing_evidence.append({"type": "unparseable_git_log_record", "record": record[:160]})
             continue
-        commits.append(_GitCommit(sha=parts[0], subject=parts[1], committed_at=parts[2]))
+        commits.append(_GitCommit(sha=sha, parents=parents, subject=subject, committed_at=committed_at))
     return tuple(commits), tuple(missing_evidence)
 
 
@@ -303,8 +329,10 @@ def _item_from_commit(
     from_tag: str,
     to_ref: str,
     github_metadata: dict[str, object] | None,
+    pr_coverage: _PrCoverage | None,
 ) -> tuple[ReleaseNoteItem, tuple[dict[str, object], ...]]:
-    pr_number = _pr_number_from_subject(commit.subject)
+    direct_pr_number = _pr_number_from_subject(commit.subject)
+    pr_number = direct_pr_number or (pr_coverage.number if pr_coverage is not None else None)
     title = _title_from_subject(commit.subject)
     category = _classify_with_metadata(commit.subject, github_metadata)
     missing_evidence: list[dict[str, object]] = []
@@ -316,6 +344,8 @@ def _item_from_commit(
     ]
     if pr_number is not None:
         evidence.append({"type": "pull_request", "number": pr_number})
+    if pr_coverage is not None:
+        evidence.append(pr_coverage.evidence)
     if github_metadata is not None:
         evidence.append(
             {
@@ -340,6 +370,139 @@ def _item_from_commit(
         ),
         tuple(missing_evidence),
     )
+
+
+def _collect_merge_pr_coverage(
+    project_root: Path,
+    *,
+    commits: tuple[_GitCommit, ...],
+    runner: ReleaseNotesRunner,
+) -> tuple[dict[str, _PrCoverage], tuple[dict[str, object], ...]]:
+    commit_shas = {commit.sha for commit in commits}
+    coverage: dict[str, _PrCoverage] = {}
+    missing_evidence: list[dict[str, object]] = []
+    for commit in commits:
+        pr_number = _merge_pr_number_from_subject(commit.subject)
+        if pr_number is None or len(commit.parents) < 2:
+            continue
+        first_parent, second_parent = commit.parents[0], commit.parents[1]
+        result = runner(project_root, ["git", "rev-list", f"{first_parent}..{second_parent}"])
+        if result.returncode != 0:
+            missing_evidence.append(
+                {
+                    "type": "merge_pr_coverage_unavailable",
+                    "severity": "WARN",
+                    "merge_commit_sha": commit.sha,
+                    "pr_number": pr_number,
+                    "stderr": result.stderr.strip(),
+                }
+            )
+            continue
+        for covered_sha in (line.strip() for line in result.stdout.splitlines()):
+            if covered_sha and covered_sha in commit_shas:
+                coverage[covered_sha] = _PrCoverage(
+                    number=pr_number,
+                    evidence={
+                        "type": "merge_commit_pr_coverage",
+                        "number": pr_number,
+                        "merge_commit_sha": commit.sha,
+                        "first_parent": first_parent,
+                        "second_parent": second_parent,
+                    },
+                )
+    return coverage, tuple(missing_evidence)
+
+
+def _collect_github_commit_pr_coverage(
+    project_root: Path,
+    *,
+    commits: tuple[_GitCommit, ...],
+    existing_coverage: dict[str, _PrCoverage],
+    runner: ReleaseNotesRunner,
+) -> tuple[dict[str, _PrCoverage], tuple[dict[str, object], ...]]:
+    unresolved = [
+        commit
+        for commit in commits
+        if _pr_number_from_subject(commit.subject) is None
+        and commit.sha not in existing_coverage
+        and not _is_administrative_subject(commit.subject)
+    ]
+    if not unresolved:
+        return {}, ()
+    repo, repo_evidence = _github_repo_full_name(project_root, runner=runner)
+    if repo is None:
+        return {}, repo_evidence
+    coverage: dict[str, _PrCoverage] = {}
+    missing_evidence: list[dict[str, object]] = list(repo_evidence)
+    for commit in unresolved:
+        result = runner(project_root, ["gh", "api", f"repos/{repo}/commits/{commit.sha}/pulls"])
+        if result.returncode != 0:
+            missing_evidence.append(
+                {
+                    "type": "github_commit_pr_lookup_unavailable",
+                    "severity": "WARN",
+                    "commit_sha": commit.sha,
+                    "stderr": result.stderr.strip(),
+                }
+            )
+            continue
+        try:
+            payload = json.loads(result.stdout or "[]")
+        except json.JSONDecodeError as exc:
+            missing_evidence.append(
+                {
+                    "type": "github_commit_pr_lookup_unparseable",
+                    "severity": "WARN",
+                    "commit_sha": commit.sha,
+                    "error": str(exc),
+                }
+            )
+            continue
+        if not isinstance(payload, list) or not payload:
+            continue
+        first = payload[0]
+        if not isinstance(first, dict):
+            continue
+        try:
+            pr_number = int(first["number"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        coverage[commit.sha] = _PrCoverage(
+            number=pr_number,
+            evidence={
+                "type": "github_commit_pull_request_coverage",
+                "number": pr_number,
+                "commit_sha": commit.sha,
+                "url": first.get("url") or first.get("html_url"),
+            },
+        )
+    return coverage, tuple(missing_evidence)
+
+
+def _github_repo_full_name(
+    project_root: Path,
+    *,
+    runner: ReleaseNotesRunner,
+) -> tuple[str | None, tuple[dict[str, object], ...]]:
+    result = runner(project_root, ["gh", "repo", "view", "--json", "nameWithOwner", "--jq", ".nameWithOwner"])
+    if result.returncode != 0:
+        return None, (
+            {
+                "type": "github_repo_metadata_unavailable",
+                "severity": "WARN",
+                "stderr": result.stderr.strip(),
+            },
+        )
+    repo = result.stdout.strip()
+    if not re.match(r"^[^/\s]+/[^/\s]+$", repo):
+        return None, (
+            {
+                "type": "github_repo_metadata_unparseable",
+                "severity": "WARN",
+                "stdout": result.stdout.strip(),
+            },
+        )
+    return repo, ()
 
 
 def _github_metadata_for_pr(
@@ -405,6 +568,13 @@ def _github_metadata_for_pr(
 
 def _pr_number_from_subject(subject: str) -> int | None:
     match = re.search(r"\(#(\d+)\)\s*$", subject)
+    if match:
+        return int(match.group(1))
+    return _merge_pr_number_from_subject(subject)
+
+
+def _merge_pr_number_from_subject(subject: str) -> int | None:
+    match = re.search(r"^Merge pull request #(\d+) from ", subject, re.I)
     return int(match.group(1)) if match else None
 
 
@@ -413,14 +583,8 @@ def _title_from_subject(subject: str) -> str:
 
 
 def _classify_subject(subject: str) -> str:
-    lowered = subject.lower()
-    if (
-        re.search(r"^refresh handoff state after pr\d+", lowered)
-        or "administrative handoff" in lowered
-        or "publish remote-next transfer report" in lowered
-        or "publish final remote-next report projection" in lowered
-        or lowered.startswith("refresh successor package")
-    ):
+    lowered = _classification_subject(subject)
+    if _is_administrative_subject(lowered):
         return "Administrative Handoff Refresh"
     if "breaking" in lowered or lowered.startswith("remove "):
         return "Breaking"
@@ -432,6 +596,7 @@ def _classify_subject(subject: str) -> str:
             "handoff",
             "transfer",
             "patch cycle",
+            "post-merge",
             "sync-main",
             "outbox",
             "communication",
@@ -439,13 +604,27 @@ def _classify_subject(subject: str) -> str:
         )
     ):
         return "Transfer / Handoff"
-    if any(token in lowered for token in ("governance", "policy", "contract", "authority")):
+    if any(
+        token in lowered
+        for token in (
+            "governance",
+            "policy",
+            "contract",
+            "authority",
+            "architecture",
+            "direction",
+            "profile",
+            "path literal",
+            "repository identity",
+            "mutation lock",
+        )
+    ):
         return "Governance"
-    if any(token in lowered for token in ("test", "gate", "audit", "ruff", "pytest")):
+    if any(token in lowered for token in ("test", "gate", "audit", "ruff", "pytest", "preflight", "check", "coverage", "hygiene")):
         return "Tests / Gates"
     if any(token in lowered for token in ("doc", "documentation", "planning", "concept", "analysis", "plan ", "roadmap")):
         return "Docs"
-    if lowered.startswith(("fix ", "repair ", "harden ", "resolve ", "recheck ", "detect ", "keep ")):
+    if lowered.startswith(("fix ", "repair ", "harden ", "resolve ", "recheck ", "detect ", "keep ", "block ", "remediate ")):
         return "Fixed"
     if lowered.startswith(("add ", "build ")):
         return "Added"
@@ -463,6 +642,17 @@ def _classify_subject(subject: str) -> str:
             "compact ",
             "simplify ",
             "render ",
+            "register ",
+            "record ",
+            "mark ",
+            "automate ",
+            "complete ",
+            "close ",
+            "classify ",
+            "enforce ",
+            "deprecate ",
+            "track ",
+            "stabilize ",
         )
     ):
         return "Changed"
@@ -472,6 +662,8 @@ def _classify_subject(subject: str) -> str:
 
 
 def _classify_with_metadata(subject: str, github_metadata: dict[str, object] | None) -> str:
+    if _is_structural_merge_subject(subject):
+        return "Administrative Handoff Refresh"
     if github_metadata is not None:
         body_category = _category_from_body(str(github_metadata.get("body", "")))
         if body_category:
@@ -534,6 +726,28 @@ def _normalize_category(value: str) -> str | None:
     return aliases.get(normalized)
 
 
+def _classification_subject(subject: str) -> str:
+    lowered = subject.lower().strip()
+    return re.sub(r"^[a-z]{1,4}\d+[a-z]?:\s+", "", lowered)
+
+
+def _is_structural_merge_subject(subject: str) -> bool:
+    return re.search(r"^merge pull request #\d+ from ", subject.strip(), re.I) is not None
+
+
+def _is_administrative_subject(subject: str) -> bool:
+    lowered = subject.lower().strip()
+    return (
+        re.search(r"^refresh handoff state after pr\d+", lowered) is not None
+        or lowered.startswith("refresh handoff after ")
+        or "administrative handoff" in lowered
+        or "publish remote-next transfer report" in lowered
+        or "publish final remote-next report projection" in lowered
+        or lowered.startswith("refresh successor package")
+        or _is_structural_merge_subject(lowered)
+    )
+
+
 def _validate_release_notes(
     *,
     items: tuple[ReleaseNoteItem, ...],
@@ -557,14 +771,7 @@ def _validate_release_notes(
 
 
 def _is_product_commit(evidence: dict[str, object]) -> bool:
-    title = str(evidence.get("title", "")).lower()
-    return not (
-        re.search(r"^refresh handoff state after pr\d+", title)
-        or "administrative handoff" in title
-        or "publish remote-next transfer report" in title
-        or "publish final remote-next report projection" in title
-        or title.startswith("refresh successor package")
-    )
+    return not _is_administrative_subject(str(evidence.get("title", "")))
 
 
 def _render_item(item: ReleaseNoteItem) -> str:
