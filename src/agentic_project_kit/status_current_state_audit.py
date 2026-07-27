@@ -308,8 +308,7 @@ def _current_changelog_block(changelog_text: str, version: str) -> tuple[str, in
 def _pending_doi_lines(block: str, *, start_line: int) -> list[tuple[int, str]]:
     lines: list[tuple[int, str]] = []
     for offset, line in enumerate(block.splitlines()):
-        lowered = line.lower()
-        if "doi" in lowered and "pending" in lowered:
+        if re.search(r"\bzenodo\b.*\bdoi\b.*\bverification\b.*\bpending\b", line, re.IGNORECASE):
             lines.append((start_line + offset, line.strip()))
     return lines
 

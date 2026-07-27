@@ -3,10 +3,10 @@
 ## Current State
 
 Current version: 0.4.13
-Current verified release: 0.4.12.
-Current release tag: v0.4.12.
+Current verified release: 0.4.13.
+Current release tag: v0.4.13.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.21135030`.
+Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
 Current verified main: `69e3adaf` (`Prepare v0.4.13 safety release (#1874)`).
 Latest substantive work: PR #1874 (`Prepare v0.4.13 safety release (#1874)`).
 Post-merge handoff status: PASS/NOOP after PR #1874 administrative refresh.

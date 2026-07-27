@@ -1,6 +1,5 @@
 ## v0.4.13 - 2026-07-27
 
-- Zenodo DOI verification pending for v0.4.13.
 - Close out v0.4.12 DOI metadata
 - Add kit operating-layer master plan
 - Add idempotent PR closeout wrapper
@@ -94,6 +93,9 @@
 - Stabilize Ruff gate defaults
 - Harden release notes PR evidence classification
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.4.13 DOI `10.5281/zenodo.21631484`.
+
+Zenodo v0.4.13 DOI: 10.5281/zenodo.21631484
 ## v0.4.12 - 2026-07-02
 
 - Close out v0.4.11 DOI release state

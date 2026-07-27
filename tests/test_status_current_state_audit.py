@@ -397,6 +397,33 @@ def test_changelog_pending_without_status_doi_passes(tmp_path: Path) -> None:
     assert not any(finding.check == "changelog_stale_pending_doi" for finding in result.blockers)
 
 
+def test_changelog_pending_doi_title_is_not_pending_marker(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    changelog = tmp_path / "CHANGELOG.md"
+    changelog.write_text(
+        "\n".join(
+            [
+                "## v1.2.3 - 2026-06-28",
+                "",
+                "- Fix stale pending-DOI line and gate CHANGELOG/STATUS consistency",
+                "",
+                "Post-release verification complete: verified v1.2.3 DOI `10.5281/zenodo.123`.",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=_git_runner(),
+        release_status_builder=lambda _root: _release_status(),
+    )
+
+    assert result.ok is True
+    assert not any(finding.check == "changelog_stale_pending_doi" for finding in result.blockers)
+
+
 def test_changelog_older_version_blocks_ignored(tmp_path: Path) -> None:
     _write_project(tmp_path)
     changelog = tmp_path / "CHANGELOG.md"
