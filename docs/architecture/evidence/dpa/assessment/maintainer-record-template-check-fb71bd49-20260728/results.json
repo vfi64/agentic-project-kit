@@ -1,0 +1,47 @@
+{
+  "action_item_count": 4,
+  "action_items": [
+    {
+      "id": "complete-probe-dispositions",
+      "message": "Record satisfied or explicitly-not-applicable dispositions for PROBE-002, RENDERER, PROBE-003 and PROBE-004."
+    },
+    {
+      "id": "select-or-defer-writers",
+      "message": "Select or defer WRT-CH-001 through WRT-CH-004 for the first DP2 target scope."
+    },
+    {
+      "id": "prove-rollback-cleanup",
+      "message": "Attach rollback and cleanup evidence for the selected target before authorization."
+    },
+    {
+      "id": "record-maintainer-authorization",
+      "message": "Only a Maintainer-owned non-template record with decision_token DPA_DP2_AUTHORIZED may authorize DP2."
+    }
+  ],
+  "claims": {
+    "dp2_authorized": false,
+    "generated_outputs_manually_patched": false,
+    "kit_conformance_claimed": false,
+    "maintainer_assessment_recorded": false,
+    "maintainer_authorization_recorded": false,
+    "production_mutation_performed": false,
+    "runtime_behavior_changed": false
+  },
+  "finding_count": 0,
+  "findings": [],
+  "kind": "dpa_dp2_maintainer_record_check",
+  "record_path": "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_TEMPLATE_20260728.json",
+  "record_status": "TEMPLATE_NOT_ASSESSED",
+  "record_summary": {
+    "decision_token": "PENDING_DECISION",
+    "maintainer": "PENDING_MAINTAINER",
+    "rollback_cleanup_status": "NOT_PROVEN",
+    "target_path": "docs/handoff/CURRENT_HANDOFF.md",
+    "target_scope_status": "UNSELECTED",
+    "template": true
+  },
+  "result_status": "TEMPLATE_READY_DP2_BLOCKED",
+  "schema_version": 1,
+  "structural_ok": true,
+  "validation_ref": "fb71bd49e24d357baea73a00248e32de0ac04c15"
+}

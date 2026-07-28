@@ -3056,6 +3056,138 @@
     {
       "dry_run_available": true,
       "group": "dpa",
+      "help": "Validate a DP2 Maintainer Assessment record without authorizing DP2.",
+      "name": "maintainer-record-check",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_TEMPLATE_20260728.json')",
+          "help": "DPA DP2 Maintainer Assessment record to inspect.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "record",
+          "opts": [
+            "--record"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')",
+          "help": "DPA Assessment readiness JSON record that the Maintainer record must bind to.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "readiness_record",
+          "opts": [
+            "--readiness-record"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional exact target ref to record instead of the current repository HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "validation_ref",
+          "opts": [
+            "--validation-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write --output when supplied.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_json",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail unless the record is a valid DP2 authorization record.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_authorization",
+          "opts": [
+            "--require-authorization"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "dpa",
+        "maintainer-record-check"
+      ],
+      "qualified_name": "agentic-kit dpa maintainer-record-check",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "dpa"
+      ],
+      "when_to_use": "Validate a DP2 Maintainer Assessment record without authorizing DP2."
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
       "help": "Inspect PROBE-002 lifecycle and selected-writer readiness without production mutation.",
       "name": "probe-002-readiness",
       "params": [
@@ -15153,7 +15285,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "f6919e347655",
+    "manifest_sha": "0a7072ca7b72",
     "schema_version": 1
   },
   "schema_version": 2,

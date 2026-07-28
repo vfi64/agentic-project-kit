@@ -851,6 +851,18 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable DP2 decision-readiness preflight evidence; preserves all DP2 blockers and false authorization claims.
+  - path: docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_TEMPLATE_20260728.json
+    class: evidence/log
+    owner: maintainers
+    notes: Blocked template for a future Maintainer-owned DP2 Assessment record; not Assessment or authorization evidence.
+  - path: docs/architecture/evidence/dpa/assessment/maintainer-record-template-check-fb71bd49-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit DP2 Maintainer-record template check summary; TEMPLATE_READY_DP2_BLOCKED only.
+  - path: docs/architecture/evidence/dpa/assessment/maintainer-record-template-check-fb71bd49-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable Maintainer-record template check evidence; not Maintainer Assessment or DP2 authorization.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

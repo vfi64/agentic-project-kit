@@ -160,6 +160,11 @@ actions for review. It may write bounded Assessment evidence, but it does not
 record Maintainer Assessment, select DP2 scope, prove rollback cleanup or
 authorize DP2.
 
+The read-only wrapper `agentic-kit dpa maintainer-record-check` validates a
+future DP2 Maintainer Assessment record or the current blocked template. It
+fails closed for premature authorization claims, missing Probe dispositions,
+unselected target scope and missing rollback proof.
+
 ## Generated-output and command-updated boundary
 
 The generated or command-updated Kit outputs boundary keeps those files owned by

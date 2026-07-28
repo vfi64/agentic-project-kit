@@ -19,8 +19,8 @@ not main-repository conformance.
 
 | Role | Ref or path | Assessment use |
 |---|---|---|
-| Current Kit baseline for this record | `8ceadc8a0ab5f61f5aac6549cd440c47999a18de` | Governs the repository state assessed by this readiness record. |
-| Current command manifest acknowledgement | `COMMAND_MANIFEST_ACK f6919e347655` | Confirms this record uses the current Kit command manifest boundary. |
+| Current Kit baseline for this record | `fb71bd49e24d357baea73a00248e32de0ac04c15` | Governs the repository state assessed by this readiness record. |
+| Current command manifest acknowledgement | `COMMAND_MANIFEST_ACK 0a7072ca7b72` | Confirms this record uses the current Kit command manifest boundary. |
 | DPA Lab closeout source | `0cf944cc153e65a272c773286791f8891efdd1bc` | Preserved architecture source package only. |
 | DPA Lab merge commit | `6f927efd625b4239f9ab0e710b48e7d9534fdfec` | Preserved Lab closeout merge evidence only. |
 | Kit DPA-IMPORT-3 baseline | `e89b0fac21c5599f8e531a937c550134469716cf` | Import slice baseline before Probe-package staging. |
@@ -32,6 +32,7 @@ not main-repository conformance.
 | Current Kit Renderer Probe readiness preflight | `docs/architecture/evidence/dpa/probes/renderer-readiness-d88491c9-20260728/` | Current renderer candidate source/test/control-surface preflight, result `PARTIAL_BLOCKED_FOR_DP2`. |
 | Current Kit PROBE-004 migration and rollback readiness preflight | `docs/architecture/evidence/dpa/probes/probe-004-migration-readiness-3dd2a616-20260728/` | Current migration and rollback source/test/control-surface preflight, result `PARTIAL_BLOCKED_FOR_DP2`. |
 | Current Kit DP2 decision-readiness preflight | `docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-8ceadc8a-20260728/` | Current decision-package preflight, result `READY_FOR_MAINTAINER_DECISION_DP2_BLOCKED`; not Maintainer Assessment or DP2 authorization. |
+| Current Kit DP2 Maintainer-record template check | `docs/architecture/evidence/dpa/assessment/maintainer-record-template-check-fb71bd49-20260728/` | Current template validation, result `TEMPLATE_READY_DP2_BLOCKED`; not a Maintainer-owned record or DP2 authorization. |
 | Historical Lab read-only baseline | `docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/` | Historical Assessment input, result `PASS_WITH_LIMITATIONS`. |
 | Historical Lab mutation sandbox | `docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/` | Historical sandbox-only Assessment input, result `PARTIAL`. |
 | Prepared fixture manifest | `docs/architecture/dpa/probes/fixtures/DP1_PROBE_FIXTURE_MANIFEST_20260727.json` | Fixture family and writer planning input, status `prepared-not-executed`. |
@@ -49,8 +50,8 @@ projections, release outputs or any future command-updated DPA touchpoint.
 | Renderer Probes | `PARTIAL_BLOCKED_FOR_DP2` | Current readiness preflight confirms candidate renderer source, test and control surfaces are present, but approved DPA renderer-map, identity/version and side-effect fixtures remain incomplete. |
 | PROBE-003 workflow serialization | `PARTIAL_BLOCKED_FOR_DP2` | Current readiness preflight confirms workflow serialization source, test and control surfaces are present, but branch, PR, integration and stale-plan mutation fixtures have not been executed under a current disposable authorization package. |
 | PROBE-004 migration and rollback | `PARTIAL_BLOCKED_FOR_DP2` | Current readiness preflight confirms migration and rollback source, test and control surfaces are present, including command-owned successor-handoff package inputs. Rollback-package, migration-form, renderer-semantic-version rollback and generated-output rollback fixtures are not complete. |
-| Assessment | `NOT_COMPLETE` | Current decision-readiness preflight packages the remaining blockers and candidate first DP2 target scope for Maintainer review, but Maintainer Assessment has not adjudicated the partial and blocked fixture states. |
-| Maintainer authorization | `NOT_RECORDED` | No DP2 authorization token is recorded; the decision-readiness package is explicitly not authorization. |
+| Assessment | `NOT_COMPLETE` | Current decision-readiness preflight packages the remaining blockers and candidate first DP2 target scope for Maintainer review, and the template check validates the future record shape. Maintainer Assessment has not adjudicated the partial and blocked fixture states. |
+| Maintainer authorization | `NOT_RECORDED` | No DP2 authorization token is recorded; the decision-readiness package and Maintainer-record template are explicitly not authorization. |
 
 ## Selected-writer disposition snapshot
 
