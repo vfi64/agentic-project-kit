@@ -104,13 +104,21 @@ not supersede the specification files and do not prove Kit conformance.
   plan, validation checklist and fixture/cleanup package.
 - `../evidence/dpa/probes/` contains selected historical Lab evidence
   snapshots: read-only baseline evidence with result `PASS_WITH_LIMITATIONS`
-  and mutation-sandbox evidence with result `PARTIAL`.
+  and mutation-sandbox evidence with result `PARTIAL`. It also contains the
+  current Kit read-only DP1 baseline refresh at
+  `46deae72c2d37ae18331203bc3a6be19c9a67f64` with result
+  `PASS_WITH_LIMITATIONS`.
 
 These materials are historical and preparatory. They preserve Lab validation ref
 `c788a8c530eb0984d088a86e8e7951145581abbe` and older command manifest
 acknowledgement `COMMAND_MANIFEST_ACK 8610cfd2990a` as evidence inputs. Any
 future Probe execution in this Kit must freeze a fresh current validation ref
 and command manifest acknowledgement before running.
+
+The Kit-side DP1 read-only baseline refresh evidence under
+`../evidence/dpa/probes/dp1-readonly-46deae7-20260728/` satisfies current
+baseline command-health refresh only. Mutation-scoped fixtures remain unrun, and
+the full Probe PASS claim boundary remains closed.
 
 ## Generated-output and command-updated boundary
 

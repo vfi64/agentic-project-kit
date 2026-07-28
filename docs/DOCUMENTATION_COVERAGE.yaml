@@ -403,6 +403,8 @@ rules:
     - architecture index and registry staging
     - Imported architecture package
     - Probe package staging
+    - DP1 read-only baseline refresh
+    - 46deae72c2d37ae18331203bc3a6be19c9a67f64
     - PASS_WITH_LIMITATIONS
     - PARTIAL
     - specifications
