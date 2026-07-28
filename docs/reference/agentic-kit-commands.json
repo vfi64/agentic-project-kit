@@ -3056,6 +3056,166 @@
     {
       "dry_run_available": true,
       "group": "dpa",
+      "help": "Execute authorized non-production DPA fixture evidence cases.",
+      "name": "fixture-evidence",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/dpa/probes/fixtures/DP1_PROBE_FIXTURE_MANIFEST_20260727.json')",
+          "help": "DPA DP1 Probe fixture manifest to execute.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "fixture_manifest",
+          "opts": [
+            "--fixture-manifest"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional exact target ref to record instead of the current repository HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "validation_ref",
+          "opts": [
+            "--validation-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Maintainer/operator authorization identity for non-production fixture execution.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "authorized_by",
+          "opts": [
+            "--authorized-by"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Required token for non-production fixture execution: DPA_FIXTURE_EXECUTION_AUTHORIZED.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "authorization_token",
+          "opts": [
+            "--authorization-token"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional DPA probe evidence JSON path under docs/architecture/evidence/dpa/probes/.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write --output when supplied.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Classify fixture cases without executing temporary/disposable fixture actions.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "plan_only",
+          "opts": [
+            "--plan-only"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_json",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail unless every fixture case executes and all full-evidence families are satisfied.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_full_evidence",
+          "opts": [
+            "--require-full-evidence"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "dpa",
+        "fixture-evidence"
+      ],
+      "qualified_name": "agentic-kit dpa fixture-evidence",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "dpa"
+      ],
+      "when_to_use": "Execute authorized non-production DPA fixture evidence cases."
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
       "help": "Validate a DP2 Maintainer Assessment record without authorizing DP2.",
       "name": "maintainer-record-check",
       "params": [
@@ -15431,7 +15591,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "563f4d7f9925",
+    "manifest_sha": "bafee944ae1d",
     "schema_version": 1
   },
   "schema_version": 2,

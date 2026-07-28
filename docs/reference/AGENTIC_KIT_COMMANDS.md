@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 563f4d7f9925
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: bafee944ae1d
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `235`
+- Command count: `236`
 
 ## Commands
 
@@ -724,6 +724,27 @@ Prepare DP2 decision readiness without recording Maintainer authorization.
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
 | `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 | `require_ready` | `TyperOption` | --require-ready | `False` | `False` | Fail unless the decision package is structurally ready for Maintainer review. |
+
+### `agentic-kit dpa fixture-evidence`
+
+- Safety: `BOUNDED`
+- When to use: Execute authorized non-production DPA fixture evidence cases.
+- Dry-run available: `True`
+
+Execute authorized non-production DPA fixture evidence cases.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `fixture_manifest` | `TyperOption` | --fixture-manifest | `False` | `PosixPath('docs/architecture/dpa/probes/fixtures/DP1_PROBE_FIXTURE_MANIFEST_20260727.json')` | DPA DP1 Probe fixture manifest to execute. |
+| `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact target ref to record instead of the current repository HEAD. |
+| `authorized_by` | `TyperOption` | --authorized-by | `False` |  | Maintainer/operator authorization identity for non-production fixture execution. |
+| `authorization_token` | `TyperOption` | --authorization-token | `False` |  | Required token for non-production fixture execution: DPA_FIXTURE_EXECUTION_AUTHORIZED. |
+| `output` | `TyperOption` | --output | `False` |  | Optional DPA probe evidence JSON path under docs/architecture/evidence/dpa/probes/. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
+| `plan_only` | `TyperOption` | --plan-only | `False` | `False` | Classify fixture cases without executing temporary/disposable fixture actions. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `require_full_evidence` | `TyperOption` | --require-full-evidence | `False` | `False` | Fail unless every fixture case executes and all full-evidence families are satisfied. |
 
 ### `agentic-kit dpa maintainer-record-check`
 
