@@ -1,13 +1,13 @@
 {
   "command_reference": {
-    "ack": "COMMAND_MANIFEST_ACK 8610cfd2990a",
+    "ack": "COMMAND_MANIFEST_ACK fd31723f571b",
     "json": "docs/reference/agentic-kit-commands.json",
-    "manifest_sha": "8610cfd2990a",
+    "manifest_sha": "fd31723f571b",
     "markdown": "docs/reference/AGENTIC_KIT_COMMANDS.md",
     "must_not_reconstruct_commands_from_memory": true,
     "source_hashes": {
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "55a7e99ae5c027b5012b63f039fd4267d2ab67c32211d41033bd533d96cfa3bc",
-      "docs/reference/agentic-kit-commands.json": "1518aa40751ef0dfd171f7427e4dc7eb40449e6f8ac1dc714a6e4ad488bd8e91"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "c4b6b7f36186c4b7af9b6a8c2226c02f452782509aad59435564bf1ef5d160a4",
+      "docs/reference/agentic-kit-commands.json": "9162f7e9ab8a0d5445251131f500ef9b29572d2db8c662230c046588c67fe56f"
     }
   },
   "current_state_contract": {
@@ -269,13 +269,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1880-handoff-refresh",
+      "branch": "docs/post-pr1882-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "d049dda6698d1665c55796f56a9652701520c86d",
+      "head": "03a3ab94403f8e3f1571d77e8221d3605f025195",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "d049dda6698d1665c55796f56a9652701520c86d",
+      "origin_main": "03a3ab94403f8e3f1571d77e8221d3605f025195",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -352,13 +352,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1880-handoff-refresh",
+    "branch": "docs/post-pr1882-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "d049dda6698d1665c55796f56a9652701520c86d",
+    "head": "03a3ab94403f8e3f1571d77e8221d3605f025195",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "d049dda6698d1665c55796f56a9652701520c86d",
+    "origin_main": "03a3ab94403f8e3f1571d77e8221d3605f025195",
     "worktree_clean": false
   },
   "rules": [
@@ -438,7 +438,7 @@
         "Commit through transfer commit, then run rules acknowledge.",
         "Before PR completion, regenerate and publish fresh successor/LLM handoff context.",
         "Use transfer pr-create-complete with --post-merge-complete for the normal PR lifecycle.",
-        "After merge, sync main, restore known volatile files, run post-merge-check on main, repo-status, audits, standard gates, and final successor handoff."
+        "After merge, sync main, restore known volatile files, run post-merge-settle on main, repo-status, audits, standard gates, and final successor handoff."
       ],
       "priority": "critical",
       "rule_id": "wrapper-first-complete-development-cycle",
@@ -581,8 +581,8 @@
   ],
   "schema_version": 1,
   "source_hashes": {
-    "docs/reference/AGENTIC_KIT_COMMANDS.md": "55a7e99ae5c027b5012b63f039fd4267d2ab67c32211d41033bd533d96cfa3bc",
-    "docs/reference/agentic-kit-commands.json": "1518aa40751ef0dfd171f7427e4dc7eb40449e6f8ac1dc714a6e4ad488bd8e91"
+    "docs/reference/AGENTIC_KIT_COMMANDS.md": "c4b6b7f36186c4b7af9b6a8c2226c02f452782509aad59435564bf1ef5d160a4",
+    "docs/reference/agentic-kit-commands.json": "9162f7e9ab8a0d5445251131f500ef9b29572d2db8c662230c046588c67fe56f"
   },
   "validation": {
     "path": ".agentic/successor_handoff_package/validation_report.json",

@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1880-handoff-refresh`
+- branch: `docs/post-pr1882-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -47,7 +47,7 @@ Critical rule IDs:
 
 ## Wrapper-first complete development cycle
 
-Normal feature lifecycle: feature branch -> tests/audits -> `transfer protected-diff-plan` -> `transfer commit` -> `rules acknowledge` -> fresh successor/LLM context -> `transfer pr-create-complete ... --post-merge-complete` -> sync main -> `transfer post-merge-check` on main -> `transfer repo-status` -> docs/program/standard gates -> final successor handoff package.
+Normal feature lifecycle: feature branch -> tests/audits -> `transfer protected-diff-plan` -> `transfer commit` -> `rules acknowledge` -> fresh successor/LLM context -> `transfer pr-create-complete ... --post-merge-complete` -> sync main -> `transfer post-merge-settle` on main -> `transfer repo-status` -> docs/program/standard gates -> final successor handoff package.
 
 `transfer post-merge-check` is a main/post-merge lifecycle check, not a feature-branch pre-PR gate. Use `transfer repo-status` for feature-branch cleanliness.
 
@@ -89,6 +89,7 @@ cd /path/to/
 git branch --show-current
 git status -sb
 git status --short
+./.venv/bin/agentic-kit transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output
 ./.venv/bin/agentic-kit transfer post-merge-check
 ./.venv/bin/agentic-kit transfer repo-status
 ```
@@ -401,14 +402,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1880-handoff-refresh",
+    "branch": "docs/post-pr1882-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "d049dda6698d1665c55796f56a9652701520c86d",
+    "head": "03a3ab94403f8e3f1571d77e8221d3605f025195",
     "head_matches_origin_main": true,
-    "head_short": "d049dda6",
+    "head_short": "03a3ab94",
     "local_path": "cd /path/to/",
-    "origin_main": "d049dda6698d1665c55796f56a9652701520c86d",
-    "origin_main_short": "d049dda6",
+    "origin_main": "03a3ab94403f8e3f1571d77e8221d3605f025195",
+    "origin_main_short": "03a3ab94",
     "worktree_clean": false
   }
 }
@@ -434,7 +435,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 8610cfd2990a). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 8610cfd2990a. Consult `agentic-kit command-for` before proposing commands.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: fd31723f571b). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK fd31723f571b. Consult `agentic-kit command-for` before proposing commands.
 - Before proposing ANY command run/consult `agentic-kit command-for`.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -444,5 +445,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 55a7e99ae5c027b5012b63f039fd4267d2ab67c32211d41033bd533d96cfa3bc
-- docs/reference/agentic-kit-commands.json: 1518aa40751ef0dfd171f7427e4dc7eb40449e6f8ac1dc714a6e4ad488bd8e91
+- docs/reference/AGENTIC_KIT_COMMANDS.md: c4b6b7f36186c4b7af9b6a8c2226c02f452782509aad59435564bf1ef5d160a4
+- docs/reference/agentic-kit-commands.json: 9162f7e9ab8a0d5445251131f500ef9b29572d2db8c662230c046588c67fe56f
