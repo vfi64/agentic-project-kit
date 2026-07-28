@@ -60,10 +60,10 @@
       "yaml_valid": true
     },
     {
-      "bytes": 64657,
+      "bytes": 65457,
       "exists": true,
       "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-      "registry_document_count": 210,
+      "registry_document_count": 213,
       "yaml_valid": true
     },
     {
@@ -123,12 +123,12 @@
       "yaml_valid": true
     },
     {
-      "bytes": 145392,
+      "bytes": 145383,
       "exists": true,
       "path": "docs/reference/AGENTIC_KIT_COMMANDS.md"
     },
     {
-      "bytes": 410834,
+      "bytes": 410825,
       "exists": true,
       "path": "docs/reference/agentic-kit-commands.json"
     }
