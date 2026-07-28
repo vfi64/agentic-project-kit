@@ -323,6 +323,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1912
+## Operational documentation refresh state after PR #1914
 
-Current administrative handoff refresh state is `b62bbd4b` (`Add DPA DP2 decision readiness preflight (#1912)`). Continue next only after this post-PR1912 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `8ed8ef2e` (`Add DPA DP2 maintainer record check (#1914)`). Continue next only after this post-PR1914 refresh is committed and merged; the next substantive slice must be created from fresh main.

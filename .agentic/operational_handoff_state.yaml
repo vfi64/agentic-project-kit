@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b62bbd4b0d6f2b565fca7bf6325d3c52c93cf81d
-  short: b62bbd4b
-  subject: Add DPA DP2 decision readiness preflight (#1912)
+  full: 8ed8ef2ecff99b43de651aec63b9c1377e2e7179
+  short: 8ed8ef2e
+  subject: Add DPA DP2 maintainer record check (#1914)
 last_substantive_work_state:
-  full: b62bbd4b0d6f2b565fca7bf6325d3c52c93cf81d
-  short: b62bbd4b
-  subject: Add DPA DP2 decision readiness preflight (#1912)
+  full: 8ed8ef2ecff99b43de651aec63b9c1377e2e7179
+  short: 8ed8ef2e
+  subject: Add DPA DP2 maintainer record check (#1914)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
