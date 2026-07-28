@@ -148,6 +148,12 @@ bounded DPA probe evidence and preserves the full Renderer Probe PASS boundary
 until an approved DPA renderer map, identity/version fixtures and side-effect
 fixtures exist.
 
+The read-only wrapper `agentic-kit dpa probe-004-readiness` validates current
+PROBE-004 migration and rollback source, test and control surfaces, optionally
+writes bounded DPA probe evidence and preserves the full PROBE-004 PASS
+boundary until Maintainer-scoped migration-form, rollback-package, renderer
+rollback and generated-output rollback fixtures execute.
+
 ## Generated-output and command-updated boundary
 
 The generated or command-updated Kit outputs boundary keeps those files owned by

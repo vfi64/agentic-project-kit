@@ -49,9 +49,17 @@ renderer source, test and control surfaces are present, but it records
 `PARTIAL_BLOCKED_FOR_DP2` because an approved DPA renderer map, renderer
 identity/version fixtures and side-effect fixtures remain open.
 
+The current PROBE-004 migration and rollback readiness preflight records Kit
+validation ref `3dd2a616aaa47995e333059e80912ae0bea55656`. It confirms current
+migration and rollback source, test and control surfaces are present, including
+command-owned successor-handoff package inputs, but it records
+`PARTIAL_BLOCKED_FOR_DP2` because migration-form, rollback-package,
+renderer-semantic-version rollback and generated-output rollback fixtures remain
+open.
+
 The current Assessment readiness record consolidates those evidence inputs into
 a DP2 blocker map at current Kit baseline
-`d88491c904ea55d08fefeaa950a89014117b7084`. It records `DP2_BLOCKED`, keeps the
+`3dd2a616aaa47995e333059e80912ae0bea55656`. It records `DP2_BLOCKED`, keeps the
 full Probe PASS claim boundary closed and names the remaining Probe, writer,
 rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
 
@@ -77,6 +85,9 @@ rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
   `PARTIAL_BLOCKED_FOR_DP2`.
 - `probes/renderer-readiness-d88491c9-20260728/` records current Kit Renderer
   Probe readiness preflight evidence with result `PARTIAL_BLOCKED_FOR_DP2`.
+- `probes/probe-004-migration-readiness-3dd2a616-20260728/` records current
+  Kit PROBE-004 migration and rollback readiness preflight evidence with result
+  `PARTIAL_BLOCKED_FOR_DP2`.
 - `assessment/DP1_ASSESSMENT_READINESS_20260728.md` records the current DP1
   Assessment readiness decision surface with status `DP2_BLOCKED`.
 
