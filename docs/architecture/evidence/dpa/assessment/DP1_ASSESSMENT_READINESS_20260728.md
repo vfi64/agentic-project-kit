@@ -19,12 +19,13 @@ not main-repository conformance.
 
 | Role | Ref or path | Assessment use |
 |---|---|---|
-| Current Kit baseline for this record | `a9670da65b9f3f91344272735f5947ccc5655583` | Governs the repository state assessed by this readiness record. |
+| Current Kit baseline for this record | `9ca806dba1c92b83514beba2b49f0a083c9bdc9a` | Governs the repository state assessed by this readiness record. |
 | Current command manifest acknowledgement | `COMMAND_MANIFEST_ACK ff86b5a8c9f1` | Confirms this record uses the current Kit command manifest boundary. |
 | DPA Lab closeout source | `0cf944cc153e65a272c773286791f8891efdd1bc` | Preserved architecture source package only. |
 | DPA Lab merge commit | `6f927efd625b4239f9ab0e710b48e7d9534fdfec` | Preserved Lab closeout merge evidence only. |
 | Kit DPA-IMPORT-3 baseline | `e89b0fac21c5599f8e531a937c550134469716cf` | Import slice baseline before Probe-package staging. |
 | Current Kit read-only refresh | `docs/architecture/evidence/dpa/probes/dp1-readonly-46deae7-20260728/` | Current command-health evidence, result `PASS_WITH_LIMITATIONS`. |
+| Current Kit PROBE-001 registry compatibility | `docs/architecture/evidence/dpa/probes/probe-001-registry-compatibility-9ca806db-20260728/` | Current registry parser and DPA registry-contract compatibility evidence, result `SATISFIED_FOR_CURRENT_KIT_REF`. |
 | Historical Lab read-only baseline | `docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/` | Historical Assessment input, result `PASS_WITH_LIMITATIONS`. |
 | Historical Lab mutation sandbox | `docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/` | Historical sandbox-only Assessment input, result `PARTIAL`. |
 | Prepared fixture manifest | `docs/architecture/dpa/probes/fixtures/DP1_PROBE_FIXTURE_MANIFEST_20260727.json` | Fixture family and writer planning input, status `prepared-not-executed`. |
@@ -37,7 +38,7 @@ projections, release outputs or any future command-updated DPA touchpoint.
 
 | Family | Current readiness | Reason |
 |---|---|---|
-| PROBE-001 registry, projection and partition compatibility | `PARTIAL_BLOCKED_FOR_DP2` | Current read-only command checks passed, but DPA-specific `ProjectionContract` and `PartitionContract` fixture execution is not recorded against the current Kit baseline. |
+| PROBE-001 registry, projection and partition compatibility | `SATISFIED_FOR_CURRENT_KIT_REF` | PR #1896 added structural DPA `ProjectionContract` and `PartitionContract` registry validation with parser tests for required positive and negative cases; PR #1897 refreshed generated handoff state. |
 | PROBE-002 lifecycle, acceptance and writer routing | `PARTIAL_BLOCKED_FOR_DP2` | Read-only lifecycle checks and historical sandbox writer checks exist, but mutation-scoped writer fixtures are not complete against the current Kit baseline. |
 | Renderer Probes | `PARTIAL_BLOCKED_FOR_DP2` | Existing renderer tests provide command-health evidence, but DPA renderer identity, semantic-version and side-effect fixture execution is not complete. |
 | PROBE-003 workflow serialization | `PARTIAL_BLOCKED_FOR_DP2` | Read-only transfer and gate checks exist, but branch, PR, integration and stale-plan mutation fixtures have not been executed under a current disposable authorization package. |
@@ -63,7 +64,7 @@ projections, release outputs or any future command-updated DPA touchpoint.
 | DPA specifications imported and visible in Kit | `SATISFIED_FOR_ARCHITECTURE_STAGING` |
 | DPA-000 through DPA-900 carry Lab closeout/review-ready state | `SATISFIED_FOR_ARCHITECTURE_STAGING` |
 | Fresh exact Kit baseline recorded for current Assessment | `SATISFIED_FOR_THIS_RECORD` |
-| PROBE-001 full applicable evidence | `BLOCKED` |
+| PROBE-001 full applicable evidence | `SATISFIED_FOR_CURRENT_KIT_REF` |
 | PROBE-002 full applicable evidence | `BLOCKED` |
 | Renderer Probe full applicable evidence | `BLOCKED` |
 | PROBE-003 full applicable evidence | `BLOCKED` |
@@ -82,8 +83,8 @@ execution package against a fresh Kit baseline. It should:
 
 1. freeze the current Kit head and command manifest acknowledgement;
 2. select the first DP2 target and writer scope before executing fixtures;
-3. execute PROBE-001 `ProjectionContract` and `PartitionContract` parser
-   compatibility fixtures;
+3. preserve the current PROBE-001 registry compatibility evidence or re-run it
+   if the documentation registry parser or DPA contract schema changes;
 4. execute PROBE-002 selected-writer lifecycle fixtures for WRT-CH-001 and any
    Maintainer-selected WRT-CH-002 through WRT-CH-004 cases;
 5. execute Renderer Probe side-effect, renderer identity and semantic-version
