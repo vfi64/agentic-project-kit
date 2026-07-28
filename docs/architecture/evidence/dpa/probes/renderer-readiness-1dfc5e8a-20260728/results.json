@@ -1,0 +1,175 @@
+{
+  "blocker_count": 5,
+  "blockers": [
+    {
+      "id": "renderer-family-not-satisfied",
+      "message": "Readiness record reports RENDERER as PARTIAL_BLOCKED_FOR_DP2."
+    },
+    {
+      "id": "renderer-dp2-entry-blocked",
+      "message": "DP2 entry record reports renderer_full_evidence as BLOCKED."
+    },
+    {
+      "id": "renderer-approved-map-and-identity-missing",
+      "message": "No approved DPA renderer map, renderer identity or interface-version fixture is recorded."
+    },
+    {
+      "id": "renderer-executable-fixture-run",
+      "message": "Renderer Probes have not been executed as full exact-ref renderer-boundary fixtures."
+    },
+    {
+      "id": "renderer-side-effect-fixtures",
+      "message": "Filesystem, network, subprocess, workflow, state, evidence and nested-renderer side-effect fixtures remain unexecuted."
+    }
+  ],
+  "claims": {
+    "approved_dpa_renderer_identity_claimed": false,
+    "dp2_authorized": false,
+    "full_renderer_probe_pass_claimed": false,
+    "generated_outputs_manually_patched": false,
+    "production_mutation_performed": false,
+    "renderer_conformance_claimed": false,
+    "renderer_probe_execution_claimed": false
+  },
+  "control_surfaces": [
+    {
+      "path": "docs/architecture/dpa/probes/DP1_PROBE_MANUALS_20260727.md",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/dpa/probes/DP1_PROBE_EXECUTION_PACKAGE_DRAFT_20260727.md",
+      "present": true
+    }
+  ],
+  "finding_count": 0,
+  "findings": [],
+  "full_evidence_satisfied": false,
+  "kind": "dpa_renderer_probe_readiness",
+  "readiness_dp2_entry_status": "BLOCKED",
+  "readiness_probe_family_status": "PARTIAL_BLOCKED_FOR_DP2",
+  "readiness_record": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+  "required_groups": [
+    {
+      "id": "RP-G01",
+      "label": "static renderer-map resolution",
+      "status": "BLOCKED_REQUIRES_APPROVED_DPA_RENDERER_MAP"
+    },
+    {
+      "id": "RP-G02",
+      "label": "unknown renderer identifier",
+      "status": "BLOCKED_REQUIRES_APPROVED_DPA_RENDERER_MAP"
+    },
+    {
+      "id": "RP-G03",
+      "label": "duplicate or ambiguous renderer identifier",
+      "status": "BLOCKED_REQUIRES_APPROVED_DPA_RENDERER_MAP"
+    },
+    {
+      "id": "RP-G04",
+      "label": "interface-version incompatibility",
+      "status": "BLOCKED_REQUIRES_RENDERER_IDENTITY_AND_VERSION_FIXTURE"
+    },
+    {
+      "id": "RP-G05",
+      "label": "semantic-version mismatch",
+      "status": "BLOCKED_REQUIRES_RENDERER_IDENTITY_AND_VERSION_FIXTURE"
+    },
+    {
+      "id": "RP-G06",
+      "label": "implementation-evidence-only change",
+      "status": "BLOCKED_REQUIRES_RENDERER_IDENTITY_AND_VERSION_FIXTURE"
+    },
+    {
+      "id": "RP-G07",
+      "label": "immutable lifecycle-resolved inputs",
+      "status": "BLOCKED_REQUIRES_RENDERER_BOUNDARY_FIXTURE_EXECUTION"
+    },
+    {
+      "id": "RP-G08",
+      "label": "deterministic repeat execution",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "RP-G09",
+      "label": "output type and target scope",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "RP-G10",
+      "label": "prohibited filesystem writes",
+      "status": "BLOCKED_REQUIRES_SIDE_EFFECT_FIXTURE_EXECUTION"
+    },
+    {
+      "id": "RP-G11",
+      "label": "prohibited network access",
+      "status": "BLOCKED_REQUIRES_SIDE_EFFECT_FIXTURE_EXECUTION"
+    },
+    {
+      "id": "RP-G12",
+      "label": "prohibited subprocess execution",
+      "status": "BLOCKED_REQUIRES_SIDE_EFFECT_FIXTURE_EXECUTION"
+    },
+    {
+      "id": "RP-G13",
+      "label": "prohibited lock, workflow, state and evidence writes",
+      "status": "BLOCKED_REQUIRES_SIDE_EFFECT_FIXTURE_EXECUTION"
+    },
+    {
+      "id": "RP-G14",
+      "label": "nested-renderer prohibition",
+      "status": "BLOCKED_REQUIRES_SIDE_EFFECT_FIXTURE_EXECUTION"
+    },
+    {
+      "id": "RP-G15",
+      "label": "deterministic semantic resource bounds",
+      "status": "BLOCKED_REQUIRES_RENDERER_BOUNDARY_FIXTURE_EXECUTION"
+    },
+    {
+      "id": "RP-G16",
+      "label": "non-semantic operational abort",
+      "status": "BLOCKED_REQUIRES_RENDERER_BOUNDARY_FIXTURE_EXECUTION"
+    },
+    {
+      "id": "RP-G17",
+      "label": "bounded failure diagnostics",
+      "status": "BLOCKED_REQUIRES_RENDERER_BOUNDARY_FIXTURE_EXECUTION"
+    }
+  ],
+  "result_status": "PARTIAL_BLOCKED_FOR_DP2",
+  "schema_version": 1,
+  "source_surfaces": [
+    {
+      "path": "src/agentic_project_kit/gui_tkinter_renderer.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/gui_action_renderer.py",
+      "present": true
+    }
+  ],
+  "structural_ok": true,
+  "test_surfaces": [
+    {
+      "matches": [
+        "tests/test_v040_gui_tkinter_renderer.py"
+      ],
+      "path": "tests/test_v040_gui_tkinter_renderer.py",
+      "present": true
+    },
+    {
+      "matches": [
+        "tests/test_v040_gui_dry_run_renderer_integration.py"
+      ],
+      "path": "tests/test_v040_gui_dry_run_renderer_integration.py",
+      "present": true
+    },
+    {
+      "matches": [
+        "tests/test_v040_gui_action_renderer.py"
+      ],
+      "path": "tests/test_v040_gui_action_renderer.py",
+      "present": true
+    }
+  ],
+  "validation_ref": "1dfc5e8a75ffc37677b9f85da9e972812da95c04"
+}

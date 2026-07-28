@@ -1,0 +1,163 @@
+{
+  "blocker_count": 4,
+  "blockers": [
+    {
+      "id": "probe-003-family-not-satisfied",
+      "message": "Readiness record reports PROBE-003 as PARTIAL_BLOCKED_FOR_DP2."
+    },
+    {
+      "id": "probe-003-dp2-entry-blocked",
+      "message": "DP2 entry record reports probe_003_full_evidence as BLOCKED."
+    },
+    {
+      "id": "probe-003-executable-fixture-run",
+      "message": "PROBE-003 has not been executed as a full exact-ref workflow serialization fixture run."
+    },
+    {
+      "id": "probe-003-mutable-workflow-authorization",
+      "message": "Branch, PR, push or integration fixtures require Maintainer authorization and rollback instructions."
+    }
+  ],
+  "claims": {
+    "dp2_authorized": false,
+    "generated_outputs_manually_patched": false,
+    "probe_execution_claimed": false,
+    "production_mutation_performed": false,
+    "workflow_queue_conformance_claimed": false
+  },
+  "control_surfaces": [
+    {
+      "path": "docs/architecture/dpa/probes/DP1_PROBE_MANUALS_20260727.md",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/dpa/probes/DP1_PROBE_EXECUTION_PACKAGE_DRAFT_20260727.md",
+      "present": true
+    }
+  ],
+  "finding_count": 0,
+  "findings": [],
+  "full_evidence_satisfied": false,
+  "kind": "dpa_probe_003_workflow_serialization_readiness",
+  "readiness_dp2_entry_status": "BLOCKED",
+  "readiness_probe_family_status": "PARTIAL_BLOCKED_FOR_DP2",
+  "readiness_record": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+  "required_groups": [
+    {
+      "id": "P3-G01",
+      "label": "branch/worktree/ref identity capture",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P3-G02",
+      "label": "branch switch stale-plan rejection",
+      "status": "BLOCKED_REQUIRES_AUTHORIZED_DISPOSABLE_WORKFLOW_FIXTURE"
+    },
+    {
+      "id": "P3-G03",
+      "label": "rebase/reset stale-plan rejection",
+      "status": "BLOCKED_REQUIRES_AUTHORIZED_DISPOSABLE_WORKFLOW_FIXTURE"
+    },
+    {
+      "id": "P3-G04",
+      "label": "pull-request head/base identity comparison",
+      "status": "BLOCKED_REQUIRES_AUTHORIZED_DISPOSABLE_WORKFLOW_FIXTURE"
+    },
+    {
+      "id": "P3-G05",
+      "label": "required-check evidence bound to the exact PR head",
+      "status": "BLOCKED_REQUIRES_AUTHORIZED_DISPOSABLE_WORKFLOW_FIXTURE"
+    },
+    {
+      "id": "P3-G06",
+      "label": "merge eligibility blocked by stale source, target, contract, renderer, ownership, partition, gate-set or base-context dependency",
+      "status": "BLOCKED_REQUIRES_AUTHORIZED_DISPOSABLE_WORKFLOW_FIXTURE"
+    },
+    {
+      "id": "P3-G07",
+      "label": "integration-time revalidation before acceptance-bearing workflow completion",
+      "status": "BLOCKED_REQUIRES_AUTHORIZED_DISPOSABLE_WORKFLOW_FIXTURE"
+    },
+    {
+      "id": "P3-G08",
+      "label": "clean textual Git merge rejected as projection-freshness evidence",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P3-G09",
+      "label": "deterministic regeneration from current validation ref after stale-plan detection",
+      "status": "BLOCKED_REQUIRES_AUTHORIZED_DISPOSABLE_WORKFLOW_FIXTURE"
+    },
+    {
+      "id": "P3-G10",
+      "label": "competing projection refresh conflict across shared targets or registered partitions",
+      "status": "BLOCKED_REQUIRES_AUTHORIZED_DISPOSABLE_WORKFLOW_FIXTURE"
+    },
+    {
+      "id": "P3-G11",
+      "label": "post-integration refresh bound to the accepted integration ref",
+      "status": "BLOCKED_REQUIRES_AUTHORIZED_DISPOSABLE_WORKFLOW_FIXTURE"
+    },
+    {
+      "id": "P3-G12",
+      "label": "acceptance-bearing evidence publication blocked while workflow identity is stale",
+      "status": "BLOCKED_REQUIRES_AUTHORIZED_DISPOSABLE_WORKFLOW_FIXTURE"
+    }
+  ],
+  "result_status": "PARTIAL_BLOCKED_FOR_DP2",
+  "schema_version": 1,
+  "source_surfaces": [
+    {
+      "path": "src/agentic_project_kit/transfer_repo_actions.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/gatekeeper_core.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/local_feature_gate.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/workspace_lock.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/handoff_freshness.py",
+      "present": true
+    }
+  ],
+  "structural_ok": true,
+  "test_surfaces": [
+    {
+      "matches": [
+        "tests/test_transfer_repo_actions.py"
+      ],
+      "path": "tests/test_transfer_repo_actions.py",
+      "present": true
+    },
+    {
+      "matches": [
+        "tests/test_gatekeeper_core.py"
+      ],
+      "path": "tests/test_gatekeeper_core.py",
+      "present": true
+    },
+    {
+      "matches": [
+        "tests/test_local_feature_gate_contract.py"
+      ],
+      "path": "tests/test_local_feature_gate_contract.py",
+      "present": true
+    },
+    {
+      "matches": [
+        "tests/test_handoff_freshness.py"
+      ],
+      "path": "tests/test_handoff_freshness.py",
+      "present": true
+    }
+  ],
+  "validation_ref": "1dfc5e8a75ffc37677b9f85da9e972812da95c04"
+}

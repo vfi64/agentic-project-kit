@@ -4,7 +4,7 @@
   "status": "DP2_BLOCKED",
   "status_date": "2026-07-28",
   "command_manifest_ack": "COMMAND_MANIFEST_ACK 0a7072ca7b72",
-  "kit_baseline_ref": "fb71bd49e24d357baea73a00248e32de0ac04c15",
+  "kit_baseline_ref": "1dfc5e8a75ffc37677b9f85da9e972812da95c04",
   "dpa_lab_source_ref": "0cf944cc153e65a272c773286791f8891efdd1bc",
   "dpa_lab_merge_ref": "6f927efd625b4239f9ab0e710b48e7d9534fdfec",
   "kit_import_3_baseline_ref": "e89b0fac21c5599f8e531a937c550134469716cf",
@@ -21,37 +21,37 @@
     },
     {
       "id": "current-kit-probe-002-lifecycle-readiness-preflight",
-      "path": "docs/architecture/evidence/dpa/probes/probe-002-lifecycle-readiness-5fd5f47c-20260728/",
+      "path": "docs/architecture/evidence/dpa/probes/probe-002-lifecycle-readiness-1dfc5e8a-20260728/",
       "result": "PARTIAL_BLOCKED_FOR_DP2"
     },
     {
       "id": "current-kit-wrt-ch001-admin-refresh-observation",
-      "path": "docs/architecture/evidence/dpa/probes/wrt-ch001-admin-refresh-observation-d0d2f537-20260728/",
+      "path": "docs/architecture/evidence/dpa/probes/wrt-ch001-admin-refresh-observation-1dfc5e8a-20260728/",
       "result": "OBSERVED_ADMIN_REFRESH_NOT_DISPOSABLE_FIXTURE"
     },
     {
       "id": "current-kit-probe-003-workflow-readiness-preflight",
-      "path": "docs/architecture/evidence/dpa/probes/probe-003-workflow-readiness-b65dc1c8-20260728/",
+      "path": "docs/architecture/evidence/dpa/probes/probe-003-workflow-readiness-1dfc5e8a-20260728/",
       "result": "PARTIAL_BLOCKED_FOR_DP2"
     },
     {
       "id": "current-kit-renderer-probe-readiness-preflight",
-      "path": "docs/architecture/evidence/dpa/probes/renderer-readiness-d88491c9-20260728/",
+      "path": "docs/architecture/evidence/dpa/probes/renderer-readiness-1dfc5e8a-20260728/",
       "result": "PARTIAL_BLOCKED_FOR_DP2"
     },
     {
       "id": "current-kit-probe-004-migration-readiness-preflight",
-      "path": "docs/architecture/evidence/dpa/probes/probe-004-migration-readiness-3dd2a616-20260728/",
+      "path": "docs/architecture/evidence/dpa/probes/probe-004-migration-readiness-1dfc5e8a-20260728/",
       "result": "PARTIAL_BLOCKED_FOR_DP2"
     },
     {
       "id": "current-kit-dp2-decision-readiness-preflight",
-      "path": "docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-8ceadc8a-20260728/",
+      "path": "docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-1dfc5e8a-20260728/",
       "result": "READY_FOR_MAINTAINER_DECISION_DP2_BLOCKED"
     },
     {
       "id": "current-kit-dp2-maintainer-record-template-check",
-      "path": "docs/architecture/evidence/dpa/assessment/maintainer-record-template-check-fb71bd49-20260728/",
+      "path": "docs/architecture/evidence/dpa/assessment/maintainer-record-template-check-1dfc5e8a-20260728/",
       "result": "TEMPLATE_READY_DP2_BLOCKED"
     },
     {
