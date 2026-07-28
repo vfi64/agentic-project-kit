@@ -1,0 +1,263 @@
+{
+  "blocker_count": 3,
+  "blockers": [
+    {
+      "id": "selected-writer-current-fixtures",
+      "message": "Selected writers still require current disposable fixture execution: WRT-CH-001"
+    },
+    {
+      "id": "selected-writer-maintainer-decisions",
+      "message": "Write-capable paths still need Maintainer select/defer decisions: WRT-CH-002, WRT-CH-003, WRT-CH-004"
+    },
+    {
+      "id": "probe-002-executable-fixture-run",
+      "message": "PROBE-002 has not been executed as a full exact-ref disposable fixture run."
+    }
+  ],
+  "claims": {
+    "dp2_authorized": false,
+    "generated_outputs_manually_patched": false,
+    "probe_execution_claimed": false,
+    "production_mutation_performed": false
+  },
+  "control_surfaces": [
+    {
+      "path": "docs/architecture/dpa/probes/DP1_SELECTED_WRITER_FIXTURE_PLAN_20260727.md",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/dpa/probes/DP1_PROBE_MANUALS_20260727.md",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/dpa/probes/DP1_PROBE_EXECUTION_PACKAGE_DRAFT_20260727.md",
+      "present": true
+    }
+  ],
+  "finding_count": 0,
+  "findings": [],
+  "full_evidence_satisfied": false,
+  "kind": "dpa_probe_002_lifecycle_readiness",
+  "readiness_record": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+  "required_groups": [
+    {
+      "id": "P2-G01",
+      "label": "immutable plan capture",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P2-G02",
+      "label": "source, target, base, contract, renderer, partition and ownership guards",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P2-G03",
+      "label": "local Workspace lock and same-process reentrancy rejection",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P2-G04",
+      "label": "stale-plan rejection before Write and under lock",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P2-G05",
+      "label": "atomic complete-target or partition-preserving replacement",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P2-G06",
+      "label": "post-Write verification",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P2-G07",
+      "label": "acceptance-state creation, tamper detection and scope validation",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P2-G08",
+      "label": "conditional accepted-base persistence",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P2-G09",
+      "label": "base-independent post-acceptance evaluation",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P2-G10",
+      "label": "gate-set re-acceptance without renderer invocation or target mutation",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P2-G11",
+      "label": "layered acceptance for registered-region projections",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P2-G12",
+      "label": "lifecycle finding and severity compatibility",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P2-G13",
+      "label": "every then-known selected writer for selected targets",
+      "status": "BLOCKED_REQUIRES_FIXTURE_OR_ADJUDICATION"
+    },
+    {
+      "id": "P2-G14",
+      "label": "explicit out-of-scope adjudication for write-capable paths",
+      "status": "BLOCKED_REQUIRES_FIXTURE_OR_ADJUDICATION"
+    }
+  ],
+  "result_status": "PARTIAL_BLOCKED_FOR_DP2",
+  "schema_version": 1,
+  "selected_writers": [
+    {
+      "fixture_status": "BLOCKED_REQUIRES_CURRENT_DISPOSABLE_FIXTURE_EXECUTION",
+      "id": "WRT-CH-001",
+      "status": "SELECTED_FOR_FIXTURE"
+    },
+    {
+      "fixture_status": "BLOCKED_REQUIRES_MAINTAINER_DECISION",
+      "id": "WRT-CH-002",
+      "status": "NEEDS_MAINTAINER_DECISION"
+    },
+    {
+      "fixture_status": "BLOCKED_REQUIRES_MAINTAINER_DECISION",
+      "id": "WRT-CH-003",
+      "status": "NEEDS_MAINTAINER_DECISION"
+    },
+    {
+      "fixture_status": "BLOCKED_REQUIRES_MAINTAINER_DECISION",
+      "id": "WRT-CH-004",
+      "status": "NEEDS_MAINTAINER_DECISION"
+    },
+    {
+      "fixture_status": "OUT_OF_SCOPE_FOR_FIRST_SELF_HOSTING_TARGET",
+      "id": "WRT-CH-005",
+      "status": "EXTERNAL_HABITABILITY_ONLY"
+    },
+    {
+      "fixture_status": "DEFERRED_TO_PROBE_004_GENERATED_OUTPUT_CONTRACT",
+      "id": "WRT-CH-006",
+      "status": "GENERATED_OUTPUT_CONTRACT_ONLY"
+    }
+  ],
+  "source_surfaces": [
+    {
+      "path": "src/agentic_project_kit/doc_lifecycle.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/doc_lifecycle_sweep.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/cli_commands/docs.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/workspace.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/workspace_lock.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/transfer_repo_actions.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/release_prepare.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/post_release_closeout.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/action_specs.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/workspace_init.py",
+      "present": true
+    }
+  ],
+  "structural_ok": true,
+  "test_surfaces": [
+    {
+      "matches": [
+        "tests/test_doc_lifecycle.py"
+      ],
+      "path": "tests/test_doc_lifecycle.py",
+      "present": true
+    },
+    {
+      "matches": [
+        "tests/test_docs_lifecycle_apply_cli.py",
+        "tests/test_docs_lifecycle_cli.py",
+        "tests/test_docs_lifecycle_handoff_context_cli.py",
+        "tests/test_docs_lifecycle_metadata_cli.py",
+        "tests/test_docs_lifecycle_plan_cli.py",
+        "tests/test_docs_lifecycle_reconcile_cli.py",
+        "tests/test_docs_lifecycle_report_cli.py"
+      ],
+      "path": "tests/test_docs_lifecycle_*.py",
+      "present": true
+    },
+    {
+      "matches": [
+        "tests/test_transfer_repo_actions.py"
+      ],
+      "path": "tests/test_transfer_repo_actions.py",
+      "present": true
+    },
+    {
+      "matches": [
+        "tests/test_release_prepare_command.py"
+      ],
+      "path": "tests/test_release_prepare_command.py",
+      "present": true
+    },
+    {
+      "matches": [
+        "tests/test_release_command_authority.py"
+      ],
+      "path": "tests/test_release_command_authority.py",
+      "present": true
+    },
+    {
+      "matches": [
+        "tests/test_release_prep_core.py"
+      ],
+      "path": "tests/test_release_prep_core.py",
+      "present": true
+    },
+    {
+      "matches": [
+        "tests/test_post_release.py"
+      ],
+      "path": "tests/test_post_release.py",
+      "present": true
+    },
+    {
+      "matches": [
+        "tests/test_post_release_doi_closeout_atomicity.py"
+      ],
+      "path": "tests/test_post_release_doi_closeout_atomicity.py",
+      "present": true
+    },
+    {
+      "matches": [
+        "tests/test_action_specs.py"
+      ],
+      "path": "tests/test_action_specs.py",
+      "present": true
+    }
+  ],
+  "validation_ref": "5fd5f47c1201ceddd021838190327624346b8547"
+}

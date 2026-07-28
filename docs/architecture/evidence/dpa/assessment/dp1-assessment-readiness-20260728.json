@@ -3,8 +3,8 @@
   "kind": "dpa_dp1_assessment_readiness",
   "status": "DP2_BLOCKED",
   "status_date": "2026-07-28",
-  "command_manifest_ack": "COMMAND_MANIFEST_ACK ff86b5a8c9f1",
-  "kit_baseline_ref": "9ca806dba1c92b83514beba2b49f0a083c9bdc9a",
+  "command_manifest_ack": "COMMAND_MANIFEST_ACK d88e2b8b73e7",
+  "kit_baseline_ref": "5fd5f47c1201ceddd021838190327624346b8547",
   "dpa_lab_source_ref": "0cf944cc153e65a272c773286791f8891efdd1bc",
   "dpa_lab_merge_ref": "6f927efd625b4239f9ab0e710b48e7d9534fdfec",
   "kit_import_3_baseline_ref": "e89b0fac21c5599f8e531a937c550134469716cf",
@@ -18,6 +18,11 @@
       "id": "current-kit-probe-001-registry-compatibility",
       "path": "docs/architecture/evidence/dpa/probes/probe-001-registry-compatibility-9ca806db-20260728/",
       "result": "SATISFIED_FOR_CURRENT_KIT_REF"
+    },
+    {
+      "id": "current-kit-probe-002-lifecycle-readiness-preflight",
+      "path": "docs/architecture/evidence/dpa/probes/probe-002-lifecycle-readiness-5fd5f47c-20260728/",
+      "result": "PARTIAL_BLOCKED_FOR_DP2"
     },
     {
       "id": "historical-lab-readonly-baseline",
