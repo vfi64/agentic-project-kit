@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4ad4292eb737f54806f263018dbdc0f4363f6aeb
-  short: 4ad4292e
-  subject: Add DPA read-only probe execution wrapper (#1918)
+  full: 0cefcd3fa76ec2bbb58451958296c5c4c45c1886
+  short: 0cefcd3f
+  subject: Refresh successor package after PR1920 (#1921)
 last_substantive_work_state:
-  full: 4ad4292eb737f54806f263018dbdc0f4363f6aeb
-  short: 4ad4292e
-  subject: Add DPA read-only probe execution wrapper (#1918)
+  full: 0cefcd3fa76ec2bbb58451958296c5c4c45c1886
+  short: 0cefcd3f
+  subject: Refresh successor package after PR1920 (#1921)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
