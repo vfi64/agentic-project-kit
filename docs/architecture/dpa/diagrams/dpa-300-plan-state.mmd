@@ -1,0 +1,37 @@
+stateDiagram-v2
+    state "Refresh execution machine" as REM {
+        [*] --> Recovering
+        Recovering --> Resolved: no interruption or prior instance disposed
+        Recovering --> AbandonedExecution: recovery cannot establish safe state
+        Resolved --> Validated: registry, authority, target and renderer checks pass
+        Resolved --> AbandonedExecution: resolution fails
+        Validated --> Rendered: renderer returns valid payload
+        Rendered --> Planned: immutable plan and identity captured
+        Rendered --> AbandonedExecution: output violates target semantics
+        Planned --> AbandonedExecution: Preflight detects drift
+        Planned --> Locked: Preflight passes and lock acquired
+        Locked --> AbandonedExecution: under-lock revalidation fails
+        Locked --> Written: atomic complete-target Write succeeds
+        Written --> Verified: post-write verification succeeds
+        Written --> AbandonedExecution: verification fails
+        Verified --> Recorded: lifecycle state and evidence recorded
+        Recorded --> Released: lock released
+        Released --> [*]
+        AbandonedExecution --> [*]
+    }
+
+    note right of Rendered
+      Trust milestone: computed
+    end note
+    note right of Planned
+      Trust milestone: plan-captured
+    end note
+    note right of Written
+      Trust milestone: written-unverified
+    end note
+    note right of Verified
+      Remains written-unverified until DPA-500
+    end note
+    note right of AbandonedExecution
+      Refresh trust state: abandoned
+    end note

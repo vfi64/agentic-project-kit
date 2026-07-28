@@ -632,7 +632,171 @@ documents:
   - path: docs/architecture/dpa/README.md
     class: architecture
     owner: maintainers
-    notes: Document Projection Architecture import staging index; DPA-IMPORT-1 is architecture and registry staging only.
+    notes: Document Projection Architecture import staging index; staged through DPA-IMPORT-2 as architecture-only package import with no runtime behavior change, Probe PASS, stable claim, or Kit conformance claim.
+  - path: docs/architecture/dpa/specs/README.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 architecture specification file map; planning architecture only until implemented through governed Kit slices.
+  - path: docs/architecture/dpa/specs/DPA-000-VISION.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 architecture specification snapshot; no runtime behavior change, Probe PASS, stable promotion or Kit conformance claim.
+  - path: docs/architecture/dpa/specs/DPA-100-FOUNDATIONS.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 architecture specification snapshot; no runtime behavior change, Probe PASS, stable promotion or Kit conformance claim.
+  - path: docs/architecture/dpa/specs/DPA-200-DOCUMENT-MODEL.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 architecture specification snapshot; no runtime behavior change, Probe PASS, stable promotion or Kit conformance claim.
+  - path: docs/architecture/dpa/specs/DPA-200-DOCUMENT-FORM-MATRIX.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 architecture specification snapshot; no runtime behavior change, Probe PASS, stable promotion or Kit conformance claim.
+  - path: docs/architecture/dpa/specs/DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 architecture specification snapshot; no runtime behavior change, Probe PASS, stable promotion or Kit conformance claim.
+  - path: docs/architecture/dpa/specs/DPA-400-RENDERER-CONTRACT.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 architecture specification snapshot; no runtime behavior change, Probe PASS, stable promotion or Kit conformance claim.
+  - path: docs/architecture/dpa/specs/DPA-500-FRESHNESS-AND-GATES.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 architecture specification snapshot; no runtime behavior change, Probe PASS, stable promotion or Kit conformance claim.
+  - path: docs/architecture/dpa/specs/DPA-600-CONCURRENCY.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 architecture specification snapshot; no runtime behavior change, Probe PASS, stable promotion or Kit conformance claim.
+  - path: docs/architecture/dpa/specs/DPA-700-MIGRATION.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 architecture specification snapshot; no runtime behavior change, Probe PASS, stable promotion or Kit conformance claim.
+  - path: docs/architecture/dpa/specs/DPA-800-DP1-DP5.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 architecture specification snapshot; no runtime behavior change, Probe PASS, stable promotion or Kit conformance claim.
+  - path: docs/architecture/dpa/specs/DPA-900-FUTURE.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 architecture specification snapshot; no runtime behavior change, Probe PASS, stable promotion or Kit conformance claim.
+  - path: docs/architecture/dpa/decisions/DPA-ADR-013-DOCUMENT-FORM-PARTITION-AND-BOUNDARIES.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 DPA architecture decision; planning architecture only until implemented through governed Kit slices.
+  - path: docs/architecture/dpa/decisions/DPA-ADR-014-CONSUMER-TRUST-STATE-MODEL.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 DPA architecture decision; planning architecture only until implemented through governed Kit slices.
+  - path: docs/architecture/dpa/decisions/DPA-ADR-015-EARLY-DP1-DISCOVERY.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 DPA architecture decision; planning architecture only until implemented through governed Kit slices.
+  - path: docs/architecture/dpa/decisions/DPA-ADR-016-ACCEPTANCE-STATE-AND-INTERRUPTED-RECOVERY.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 DPA architecture decision; planning architecture only until implemented through governed Kit slices.
+  - path: docs/architecture/dpa/decisions/DPA-ADR-017-PARENT-ENTRY-PARTITION-CONTRACT.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 DPA architecture decision; planning architecture only until implemented through governed Kit slices.
+  - path: docs/architecture/dpa/decisions/deferred/DPA-ADR-018-INDEPENDENT-VERIFICATION-CONTEXT.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 deferred non-normative DPA proposal; not accepted Kit governance.
+  - path: docs/architecture/dpa/decisions/DPA-ADR-019-RENDERER-INPUT-RESOURCE-AND-VERSION-MODEL.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 DPA architecture decision; planning architecture only until implemented through governed Kit slices.
+  - path: docs/architecture/dpa/decisions/DPA-ADR-020-PROMOTION-COMMIT-AND-EQUIVALENCE-VERIFICATION.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 DPA architecture decision; planning architecture only until implemented through governed Kit slices.
+  - path: docs/architecture/dpa/decisions/DPA-ADR-021-FRESHNESS-REACCEPTANCE-AND-LAYERED-ACCEPTANCE.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 DPA architecture decision; planning architecture only until implemented through governed Kit slices.
+  - path: docs/architecture/dpa/traceability/DPA-200_TRACEABILITY.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 traceability support matrix; supports planning and review, not Kit runtime conformance.
+  - path: docs/architecture/dpa/traceability/DPA-300_TRACEABILITY.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 traceability support matrix; supports planning and review, not Kit runtime conformance.
+  - path: docs/architecture/dpa/traceability/DPA-400_TRACEABILITY.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 traceability support matrix; supports planning and review, not Kit runtime conformance.
+  - path: docs/architecture/dpa/traceability/DPA-500_TRACEABILITY.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 traceability support matrix; supports planning and review, not Kit runtime conformance.
+  - path: docs/architecture/dpa/traceability/DPA-600_TRACEABILITY.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 traceability support matrix; supports planning and review, not Kit runtime conformance.
+  - path: docs/architecture/dpa/traceability/DPA-700_TRACEABILITY.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 traceability support matrix; supports planning and review, not Kit runtime conformance.
+  - path: docs/architecture/dpa/traceability/DPA-800_TRACEABILITY.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 traceability support matrix; supports planning and review, not Kit runtime conformance.
+  - path: docs/architecture/dpa/traceability/DPA-900_TRACEABILITY.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 traceability support matrix; supports planning and review, not Kit runtime conformance.
+  - path: docs/architecture/dpa/diagrams/architecture.mmd
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 Mermaid architecture diagram; support material only, not implementation evidence.
+  - path: docs/architecture/dpa/diagrams/dpa-200-region-ownership.mmd
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 Mermaid architecture diagram; support material only, not implementation evidence.
+  - path: docs/architecture/dpa/diagrams/dpa-200-trust-states.mmd
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 Mermaid architecture diagram; support material only, not implementation evidence.
+  - path: docs/architecture/dpa/diagrams/dpa-300-command-integration.mmd
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 Mermaid architecture diagram; support material only, not implementation evidence.
+  - path: docs/architecture/dpa/diagrams/dpa-300-plan-state.mmd
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 Mermaid architecture diagram; support material only, not implementation evidence.
+  - path: docs/architecture/dpa/diagrams/dpa-300-registry-lifecycle.mmd
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 Mermaid architecture diagram; support material only, not implementation evidence.
+  - path: docs/architecture/dpa/diagrams/dpa-400-renderer-boundary.mmd
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 Mermaid architecture diagram; support material only, not implementation evidence.
+  - path: docs/architecture/dpa/diagrams/dpa-500-freshness-gates.mmd
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 Mermaid architecture diagram; support material only, not implementation evidence.
+  - path: docs/architecture/dpa/diagrams/dpa-600-concurrency.mmd
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 Mermaid architecture diagram; support material only, not implementation evidence.
+  - path: docs/architecture/dpa/diagrams/dpa-700-migration-rollback.mmd
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 Mermaid architecture diagram; support material only, not implementation evidence.
+  - path: docs/architecture/dpa/diagrams/dpa-800-dp1-dp5.mmd
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 Mermaid architecture diagram; support material only, not implementation evidence.
+  - path: docs/architecture/dpa/diagrams/dpa-900-governance-economics.mmd
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-2 Mermaid architecture diagram; support material only, not implementation evidence.
   - path: docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6.md
     class: evidence/log
     owner: maintainers

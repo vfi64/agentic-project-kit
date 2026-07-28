@@ -1,0 +1,39 @@
+flowchart TD
+  DOC[Registered Document]
+  DOC --> FORM{Primary form}
+  FORM --> MAN[Manual Document]
+  FORM --> FULL[Full Projection]
+  FORM --> SPLIT[Split Projection: multiple target identities]
+  FORM --> HYB[Hybrid Document: one document, mixed regions]
+  HYB --> MH[Managed-head: exceptional hybrid subtype]
+
+  FULL --> FL[Existing Document Lifecycle]
+  FL -->|sole writer| FT[Full Projected Target]
+
+  HYB --> PART[Document-level Partition Contract]
+  PART -->|owns boundary markers, separators, order and normalization| PB[Partition Bytes]
+  PART --> PR[Projected Region]
+  PART --> MR[Manual Region]
+  PART --> HR[Historical Region]
+
+  FL -->|sole writer| PB
+  FL -->|validated write| PR
+  GM[Governed Manual Editor] -->|manual payload only| MR
+  GH[Governed Historical Writer] -->|historical payload only| HR
+
+  R[Static Renderer] -->|projected payload bytes only; no partition bytes| FL
+  WF[Workflow Orchestration] -->|authorization, serialization and stale-plan guards| FL
+
+  PR --> TS[Projected-byte Trust State]
+  FT --> TS
+  PB --> PV[Partition Validity]
+  MR --> MA[Declared Manual Authority]
+  HR --> HA[Declared Historical Role]
+
+  TS --> CTB[Consumer Trust Boundary]
+  PV --> CTB
+  MA --> CTB
+  HA --> CTB
+  CTB --> C[Consumers]
+
+  E[Evidence] -. supports claims; no runtime authority .-> DOC

@@ -1,0 +1,15 @@
+flowchart LR
+  CS[Canonical State] -->|declared canonical input| R[Static Renderer]
+  REG[Existing Documentation Registry] -->|projection contract| LC[Existing Document Lifecycle]
+  REG -->|renderer identifier, sources, target semantics| R
+  CFG[Contract-declared Configuration] --> R
+  R -->|text or bytes only| LC
+  LC -->|validated plan, lock, atomic write| T[Registered Projection Target]
+  WF[Workflow / PR Orchestration] -->|cross-ref serialization and stale-plan guards| LC
+  LC -->|findings and bounded records| E[Evidence]
+  E -. no runtime authority .-> CS
+  CS --> FG[Existing Freshness and Gate Integration]
+  REG --> FG
+  T --> FG
+  T --> C[Bootloader / GUI / LLM / Humans]
+  FG -->|accept, warn, or block| C

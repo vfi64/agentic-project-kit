@@ -1,0 +1,30 @@
+stateDiagram-v2
+  [*] --> Computed
+  Computed --> PlanCaptured: lifecycle plan recorded
+  PlanCaptured --> WrittenUnverified: governed write applied
+  WrittenUnverified --> Accepted: required validation, reproducibility and gates pass
+
+  Computed --> Abandoned: render or contract validation fails
+  PlanCaptured --> Abandoned: stale, unauthorized, cancelled or superseded
+  WrittenUnverified --> Abandoned: post-write validation or gate fails
+
+  Abandoned --> Computed: new refresh attempt
+  Accepted --> Computed: new refresh attempt after source, target, base or contract change
+
+  note right of Accepted
+    Acceptance applies to its recorded scope.
+    Drift starts a new attempt and does not silently
+    rewrite the prior recorded trust state.
+    DPA-500 may explicitly invalidate a scope through
+    a governed finding or gate rule.
+  end note
+
+  note right of PlanCaptured
+    This is a consumer trust state.
+    The document-status token planned is not used here.
+  end note
+
+  note right of Abandoned
+    Non-accepted attempt only.
+    Its bytes must never be presented as accepted.
+  end note

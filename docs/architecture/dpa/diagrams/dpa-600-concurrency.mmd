@@ -1,0 +1,70 @@
+flowchart TD
+    PLAN[Immutable projection plan]
+    LOCAL[Local Workspace lock]
+    WRITE[Lifecycle Write and Verify]
+    BRANCH[Branch context]
+    PR[Pull request head and base]
+    INTEG[Integration ref]
+    CHECKS[Required checks and evidence]
+    MERGE{Merge eligible?}
+    POST[Post-integration refresh]
+    CURRENT[Current successor state/status evidence]
+
+    REVAL1{Preflight identities match?}
+    REVAL2{Under-lock identities match?}
+    REVAL3{Branch identities match?}
+    REVAL4{PR head/base/checks match?}
+    REVAL5{Integration dependencies current?}
+
+    STALE[Stale or indeterminate]
+    BLOCK[Block mutation or integration]
+    REGEN[Regenerate from current validation ref]
+    ACCEPT[Accepted workflow result]
+
+    PLAN --> REVAL1
+    REVAL1 -->|yes| LOCAL
+    REVAL1 -->|no| STALE
+
+    LOCAL --> REVAL2
+    REVAL2 -->|yes| WRITE
+    REVAL2 -->|no| STALE
+
+    WRITE --> BRANCH
+    BRANCH --> REVAL3
+    REVAL3 -->|yes| PR
+    REVAL3 -->|no| STALE
+
+    PR --> REVAL4
+    CHECKS --> REVAL4
+    REVAL4 -->|yes| INTEG
+    REVAL4 -->|no| STALE
+
+    INTEG --> REVAL5
+    REVAL5 -->|yes| MERGE
+    REVAL5 -->|no| STALE
+
+    MERGE -->|yes| ACCEPT
+    MERGE -->|no| BLOCK
+    ACCEPT --> POST
+    POST -->|accepted ref and dependencies current| CURRENT
+    POST -->|stale or unavailable comparison| BLOCK
+
+    STALE --> BLOCK
+    BLOCK --> REGEN
+    REGEN --> PLAN
+
+    NOTE1[Local lock protects only local Write]
+    NOTE2[Workflow serializes branches, PRs and integration]
+    NOTE3[Clean textual merge is not freshness proof]
+    NOTE4[Historical prose is never auto-merged]
+    NOTE5[Evidence explains decisions but is not authority]
+    NOTE6[Post-integration refresh runs on the accepted integration ref]
+
+    NOTE1 -. boundary .-> LOCAL
+    NOTE2 -. authority .-> BRANCH
+    NOTE2 -. authority .-> PR
+    NOTE2 -. authority .-> INTEG
+    NOTE3 -. warning .-> MERGE
+    NOTE4 -. recovery .-> REGEN
+    NOTE5 -. evidence .-> CHECKS
+    NOTE6 -. refresh .-> POST

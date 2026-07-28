@@ -1,0 +1,74 @@
+flowchart TD
+    START[Candidate existing document]
+    DP1[DP1 exact-ref evidence]
+    AUTH{Authority, readers, writers, gates and rollback proven?}
+    FULL{Every byte canonical-source reconstructable?}
+    SPLIT{Current and history can use separate targets?}
+    HYBRID{One document still required with complete partition ownership?}
+    HEAD{Managed-head constraints proven?}
+
+    NOMIG[no migration]
+    MANUAL[manual document]
+    FULLFORM[full projection]
+    SPLITFORM[split projection]
+    HYBRIDFORM[hybrid document]
+    HEADFORM[managed-head projection]
+
+    PLAN[Immutable migration plan]
+    RBP[Rollback package]
+    LIFE[DPA-300 lifecycle mutation]
+    GATES[DPA-500 gates]
+    SER[DPA-600 integration revalidation]
+    ACCEPT[accepted migration]
+    FAIL[blocked or abandoned migration]
+    RB{Rollback required?}
+    RESTORE[Restore exact prior bytes, contracts and state]
+    INVALIDATE[Invalidate acceptance for non-reproducible exact-byte restore]
+    REMED[Maintainer-governed remediation]
+
+    START --> DP1
+    DP1 --> AUTH
+    AUTH -->|no| NOMIG
+    AUTH -->|manual remains safest| MANUAL
+    AUTH -->|yes| FULL
+
+    FULL -->|yes| FULLFORM
+    FULL -->|no| SPLIT
+    SPLIT -->|yes| SPLITFORM
+    SPLIT -->|no| HYBRID
+    HYBRID -->|no| NOMIG
+    HYBRID -->|yes| HEAD
+    HEAD -->|yes| HEADFORM
+    HEAD -->|no, other hybrid proven| HYBRIDFORM
+    HEAD -->|no safe hybrid| NOMIG
+
+    FULLFORM --> PLAN
+    SPLITFORM --> PLAN
+    HYBRIDFORM --> PLAN
+    HEADFORM --> PLAN
+
+    PLAN --> RBP
+    RBP -->|recoverable| LIFE
+    RBP -->|not recoverable| NOMIG
+    LIFE --> GATES
+    GATES -->|pass| SER
+    GATES -->|warning/failure| FAIL
+    SER -->|current| ACCEPT
+    SER -->|stale or indeterminate| FAIL
+
+    FAIL --> RB
+    RB -->|exact rollback inputs available| RESTORE
+    RESTORE -->|renderer reproducibility not claimed| INVALIDATE
+    RB -->|rollback unproven| REMED
+
+    NOTE1[No new canonical history source]
+    NOTE2[Historical prose is never auto-merged]
+    NOTE3[Renderer semantic version controls reproducibility]
+    NOTE4[Evidence explains but does not select authority]
+
+    NOTE1 -. constraint .-> RBP
+    NOTE2 -. preservation .-> HEADFORM
+    NOTE2 -. recovery .-> RESTORE
+    NOTE3 -. rollback .-> RBP
+    NOTE3 -. acceptance consequence .-> INVALIDATE
+    NOTE4 -. boundary .-> DP1

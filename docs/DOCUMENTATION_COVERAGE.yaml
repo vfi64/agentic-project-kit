@@ -398,7 +398,14 @@ rules:
     - Document Projection Architecture
     - DPA_PRE_IMPORT_CLOSEOUT_COMPLETE
     - DPA-IMPORT-1
+    - DPA-IMPORT-2
     - architecture index and registry staging
+    - Imported architecture package
+    - specifications
+    - decisions
+    - traceability
+    - diagrams
+    - ADR-018
     - no runtime behavior change
     - generated or command-updated Kit outputs
     - DP2 implementation blocked
