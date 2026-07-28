@@ -7,9 +7,9 @@ Current verified release: 0.4.13.
 Current release tag: v0.4.13.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
-Current verified main: `aff29cd5` (`Refresh successor package after PR1903 (#1904)`).
-Latest substantive work: PR #1904 (`Refresh successor package after PR1903 (#1904)`).
-Post-merge handoff status: PASS/NOOP after PR #1904 administrative refresh.
+Current verified main: `3d887fbc` (`Add DPA PROBE-003 workflow readiness preflight (#1906)`).
+Latest substantive work: PR #1906 (`Add DPA PROBE-003 workflow readiness preflight (#1906)`).
+Post-merge handoff status: PASS/NOOP after PR #1906 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1904
+## Operational documentation refresh state after PR #1906
 
-Current administrative handoff refresh state is `aff29cd5` (`Refresh successor package after PR1903 (#1904)`). Continue next only after this post-PR1904 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `3d887fbc` (`Add DPA PROBE-003 workflow readiness preflight (#1906)`). Continue next only after this post-PR1906 refresh is committed and merged; the next substantive slice must be created from fresh main.

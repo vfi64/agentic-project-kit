@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: aff29cd5b27dea36205bb3f086da8f6def4c053c
-  short: aff29cd5
-  subject: Refresh successor package after PR1903 (#1904)
+  full: 3d887fbc61c60e8c810f49a1e087023f3474b444
+  short: 3d887fbc
+  subject: Add DPA PROBE-003 workflow readiness preflight (#1906)
 last_substantive_work_state:
-  full: aff29cd5b27dea36205bb3f086da8f6def4c053c
-  short: aff29cd5
-  subject: Refresh successor package after PR1903 (#1904)
+  full: 3d887fbc61c60e8c810f49a1e087023f3474b444
+  short: 3d887fbc
+  subject: Add DPA PROBE-003 workflow readiness preflight (#1906)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
