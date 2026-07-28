@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-07-28T09:18:27.194504+00:00",
+  "generated_at_utc": "2026-07-28T10:22:00.945163+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -47,6 +47,7 @@
       "git branch --show-current",
       "git status -sb",
       "git status --short",
+      "./.venv/bin/agentic-kit transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output",
       "./.venv/bin/agentic-kit transfer post-merge-check",
       "./.venv/bin/agentic-kit transfer repo-status"
     ],
@@ -56,14 +57,14 @@
     "package_version": "0.4.13"
   },
   "repo": {
-    "branch": "docs/post-pr1880-handoff-refresh",
+    "branch": "docs/post-pr1882-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "d049dda6698d1665c55796f56a9652701520c86d",
+    "head": "03a3ab94403f8e3f1571d77e8221d3605f025195",
     "head_matches_origin_main": true,
-    "head_short": "d049dda6",
+    "head_short": "03a3ab94",
     "local_path": "cd /path/to/",
-    "origin_main": "d049dda6698d1665c55796f56a9652701520c86d",
-    "origin_main_short": "d049dda6",
+    "origin_main": "03a3ab94403f8e3f1571d77e8221d3605f025195",
+    "origin_main_short": "03a3ab94",
     "worktree_clean": false
   },
   "schema_version": 1,
