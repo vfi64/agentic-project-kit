@@ -879,6 +879,18 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable current Maintainer-record template check; not Maintainer Assessment or DP2 authorization.
+  - path: docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json
+    class: evidence/log
+    owner: maintainers
+    notes: Current blocked DP2 Maintainer Assessment record; selects first handoff target scope but does not authorize DP2.
+  - path: docs/architecture/evidence/dpa/assessment/maintainer-record-check-d99b69aa-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current blocked DP2 Maintainer Assessment record check summary; VALID_BLOCKED_RECORD only.
+  - path: docs/architecture/evidence/dpa/assessment/maintainer-record-check-d99b69aa-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable blocked DP2 Maintainer Assessment record check; not DP2 authorization or conformance evidence.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

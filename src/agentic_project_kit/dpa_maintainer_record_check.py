@@ -15,7 +15,7 @@ DEFAULT_MAINTAINER_RECORD_PATH = (
     / "evidence"
     / "dpa"
     / "assessment"
-    / "DP2_MAINTAINER_ASSESSMENT_RECORD_TEMPLATE_20260728.json"
+    / "DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json"
 )
 EXPECTED_KIND = "dpa_dp2_maintainer_assessment_record"
 EXPECTED_SCHEMA_VERSION = 1
@@ -527,11 +527,7 @@ def _validate_claims(
                 )
             )
     if data.get("status") != STATUS_AUTHORIZED:
-        for claim in (
-            "maintainer_assessment_recorded",
-            "maintainer_authorization_recorded",
-            "dp2_authorized",
-        ):
+        for claim in ("maintainer_authorization_recorded", "dp2_authorized"):
             if claims.get(claim) is not False:
                 findings.append(
                     MaintainerRecordFinding(
@@ -540,6 +536,14 @@ def _validate_claims(
                         path=path,
                     )
                 )
+    if data.get("status") == STATUS_TEMPLATE and claims.get("maintainer_assessment_recorded") is not False:
+        findings.append(
+            MaintainerRecordFinding(
+                code="premature-assessment-claim",
+                message="claim 'maintainer_assessment_recorded' must be false for template records",
+                path=path,
+            )
+        )
 
 
 def _validate_authorization(
@@ -646,24 +650,46 @@ def _record_summary(data: dict[str, Any]) -> dict[str, Any]:
 def _action_items(data: dict[str, Any]) -> list[dict[str, str]]:
     if data.get("status") == STATUS_AUTHORIZED:
         return []
-    return [
-        {
-            "id": "complete-probe-dispositions",
-            "message": "Record satisfied or explicitly-not-applicable dispositions for PROBE-002, RENDERER, PROBE-003 and PROBE-004.",
-        },
-        {
-            "id": "select-or-defer-writers",
-            "message": "Select or defer WRT-CH-001 through WRT-CH-004 for the first DP2 target scope.",
-        },
-        {
-            "id": "prove-rollback-cleanup",
-            "message": "Attach rollback and cleanup evidence for the selected target before authorization.",
-        },
+    items: list[dict[str, str]] = []
+    dispositions = data.get("probe_dispositions")
+    if not isinstance(dispositions, dict) or any(
+        not isinstance(dispositions.get(family), dict)
+        or dispositions[family].get("status") == "BLOCKED"
+        for family in REQUIRED_PROBE_DISPOSITIONS
+    ):
+        items.append(
+            {
+                "id": "complete-probe-dispositions",
+                "message": "Record satisfied or explicitly-not-applicable dispositions for PROBE-002, RENDERER, PROBE-003 and PROBE-004.",
+            }
+        )
+    scope = data.get("first_dp2_target_scope")
+    scope_ready = False
+    if isinstance(scope, dict) and scope.get("status") == "SELECTED":
+        covered = set(scope.get("selected_writers", ())) | set(scope.get("deferred_writers", ()))
+        scope_ready = set(SELF_HOSTING_WRITERS) <= covered
+    if not scope_ready:
+        items.append(
+            {
+                "id": "select-or-defer-writers",
+                "message": "Select or defer WRT-CH-001 through WRT-CH-004 for the first DP2 target scope.",
+            }
+        )
+    rollback = data.get("rollback_cleanup")
+    if not isinstance(rollback, dict) or rollback.get("status") != "PROVEN":
+        items.append(
+            {
+                "id": "prove-rollback-cleanup",
+                "message": "Attach rollback and cleanup evidence for the selected target before authorization.",
+            }
+        )
+    items.append(
         {
             "id": "record-maintainer-authorization",
             "message": "Only a Maintainer-owned non-template record with decision_token DPA_DP2_AUTHORIZED may authorize DP2.",
-        },
-    ]
+        }
+    )
+    return items
 
 
 def _string_list(value: Any) -> bool:

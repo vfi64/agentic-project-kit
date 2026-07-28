@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: aa03fbe18988
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 563f4d7f9925
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -736,7 +736,7 @@ Validate a DP2 Maintainer Assessment record without authorizing DP2.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
-| `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_TEMPLATE_20260728.json')` | DPA DP2 Maintainer Assessment record to inspect. |
+| `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json')` | DPA DP2 Maintainer Assessment record to inspect. |
 | `readiness_record` | `TyperOption` | --readiness-record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')` | DPA Assessment readiness JSON record that the Maintainer record must bind to. |
 | `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact target ref to record instead of the current repository HEAD. |
 | `output` | `TyperOption` | --output | `False` |  | Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/. |
