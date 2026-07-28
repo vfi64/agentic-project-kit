@@ -1,0 +1,490 @@
+{
+  "schema_version": 1,
+  "status": "prepared-not-executed",
+  "status_date": "2026-07-27",
+  "target_repository": "vfi64/agentic-project-kit",
+  "current_validation_ref": "c788a8c530eb0984d088a86e8e7951145581abbe",
+  "historical_discovery_ref": "6a9da7d363ae3f97f347b79a2679f6f848d8cdf3",
+  "command_manifest_ack": "COMMAND_MANIFEST_ACK 8610cfd2990a",
+  "authority": [
+    "DPA-300",
+    "DPA-400",
+    "DPA-500",
+    "DPA-600",
+    "DPA-700",
+    "DPA-800",
+    "DPA-900"
+  ],
+  "scope": "Fixture package for later DP1 Probe execution. This is not Probe evidence, not Kit import, not production mutation and not a conformance claim.",
+  "evidence_layout": {
+    "kit_path": "docs/architecture/evidence/dpa/probes/<probe-id>-<validation-short>-<date>/",
+    "lab_mirror_path": "evidence/probes/<probe-id>-<validation-short>-<date>/",
+    "cleanup_plan": "integration/probe-fixtures/DP1_PROBE_CLEANUP_AND_ASSESSMENT_PLAN_20260727.md"
+  },
+  "families": [
+    {
+      "id": "PROBE-001",
+      "title": "Registry compatibility",
+      "primary_sources": [
+        "src/agentic_project_kit/documentation_registry.py",
+        "src/agentic_project_kit/cli_commands/doc_registry.py",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "baseline_commands": [
+        "./.venv/bin/agentic-kit docs-registry",
+        "./.venv/bin/agentic-kit doc-registry check-unregistered --json",
+        "./.venv/bin/python -m pytest -q tests/test_documentation_registry.py tests/test_doc_mesh.py"
+      ],
+      "cases": [
+        {
+          "id": "P001-REG-001",
+          "title": "Existing manual registry entries remain accepted",
+          "mutation_scope": "READ_ONLY",
+          "authorization": "NOT_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "expected_result": "existing entries parse and validate without broad migration",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P001-REG-002",
+          "title": "Valid optional ProjectionContract is accepted",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "projection contract fixture validates and does not affect existing entries",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P001-REG-003",
+          "title": "Valid parent-entry PartitionContract is accepted",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "partition contract fixture validates with explicit parent relationship",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P001-REG-004",
+          "title": "Unknown projection schema version fails loud",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "registry check rejects fixture with schema-version diagnostic",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P001-REG-005",
+          "title": "Unknown projection field fails loud",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "registry check rejects unknown field without accepting partial projection state",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P001-REG-006",
+          "title": "Missing required projection field fails loud",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "registry check reports the missing required field",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P001-REG-007",
+          "title": "Dangling registered-region reference fails loud",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "registry check rejects dangling or inconsistent registered-region reference",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P001-REG-008",
+          "title": "Unsupported target semantics and partition combination fails loud",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "registry check rejects unsupported target-semantics and partition combination",
+          "execution_status": "NOT_RUN"
+        }
+      ]
+    },
+    {
+      "id": "PROBE-002",
+      "title": "Lifecycle, acceptance and writer routing",
+      "primary_sources": [
+        "src/agentic_project_kit/doc_lifecycle.py",
+        "src/agentic_project_kit/doc_lifecycle_sweep.py",
+        "src/agentic_project_kit/cli_commands/docs.py",
+        "src/agentic_project_kit/transfer_repo_actions.py",
+        "src/agentic_project_kit/release_prepare.py",
+        "src/agentic_project_kit/post_release_closeout.py",
+        "src/agentic_project_kit/action_specs.py",
+        "src/agentic_project_kit/workspace_init.py"
+      ],
+      "baseline_commands": [
+        "./.venv/bin/agentic-kit docs lifecycle plan --scope docs/handoff --json",
+        "./.venv/bin/agentic-kit docs lifecycle triage --json",
+        "./.venv/bin/agentic-kit docs lifecycle report --scope docs/handoff --json",
+        "./.venv/bin/python -m pytest -q tests/test_doc_lifecycle.py tests/test_docs_lifecycle_cli.py tests/test_docs_lifecycle_apply_cli.py tests/test_docs_lifecycle_plan_cli.py tests/test_docs_lifecycle_report_cli.py tests/test_transfer_repo_actions.py",
+        "./.venv/bin/python -m pytest -q tests/test_release_prepare_command.py tests/test_release_command_authority.py tests/test_release_prep_core.py tests/test_post_release.py tests/test_post_release_doi_closeout_atomicity.py tests/test_action_specs.py"
+      ],
+      "cases": [
+        {
+          "id": "P002-LIFE-001",
+          "title": "Immutable lifecycle plan capture",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "plan records source, target, base, contract, renderer, partition and ownership fingerprints",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P002-LIFE-002",
+          "title": "Stale-plan rejection before Write and under lock",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "write and under-lock continuation reject stale target, source or context",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P002-LIFE-003",
+          "title": "Atomic target or partition-preserving replacement",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "write is complete-target atomic or preserves declared partition boundaries",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P002-LIFE-004",
+          "title": "Acceptance state creation and tamper detection",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "accepted state is scoped and tamper detection blocks stale or altered evidence",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P002-LIFE-005",
+          "title": "Gate-set re-acceptance without renderer invocation",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "gate-only re-acceptance does not rerender or mutate target bytes",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P002-LIFE-006",
+          "title": "Layered acceptance for registered-region projections",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "region acceptance does not overclaim full-document acceptance",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P002-WRT-001",
+          "title": "Administrative handoff refresh writer routing",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "expected_result": "WRT-CH-001 writes are either lifecycle-routed or classified as existing unadapted writer behavior",
+          "execution_status": "NOT_RUN",
+          "writer_id": "WRT-CH-001"
+        },
+        {
+          "id": "P002-WRT-002",
+          "title": "Release preparation writer routing",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "expected_result": "WRT-CH-002 dry-run and write-mode behavior are bounded and not mistaken for DPA conformance",
+          "execution_status": "NOT_RUN",
+          "writer_id": "WRT-CH-002"
+        },
+        {
+          "id": "P002-WRT-003",
+          "title": "Post-release DOI closeout writer routing",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "expected_result": "WRT-CH-003 allowed paths and cleanup are bounded before any DPA reliance",
+          "execution_status": "NOT_RUN",
+          "writer_id": "WRT-CH-003"
+        },
+        {
+          "id": "P002-WRT-004",
+          "title": "Action-spec surfaced mutation authority",
+          "mutation_scope": "READ_ONLY",
+          "authorization": "NOT_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "expected_result": "WRT-CH-004 cannot become a bypass around selected writer lifecycle routing",
+          "execution_status": "NOT_RUN",
+          "writer_id": "WRT-CH-004"
+        },
+        {
+          "id": "P002-WRT-005",
+          "title": "Workspace initialization template writer boundary",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "WRT-CH-005 is contained to disposable generated target roots",
+          "execution_status": "NOT_RUN",
+          "writer_id": "WRT-CH-005"
+        },
+        {
+          "id": "P002-WRT-006",
+          "title": "Generated successor package output boundary",
+          "mutation_scope": "READ_ONLY",
+          "authorization": "NOT_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "expected_result": "WRT-CH-006 remains generator-owned and is not treated as CURRENT_HANDOFF.md target-byte writing",
+          "execution_status": "NOT_RUN",
+          "writer_id": "WRT-CH-006"
+        }
+      ]
+    },
+    {
+      "id": "RENDERER",
+      "title": "Renderer identity and purity",
+      "primary_sources": [
+        "src/agentic_project_kit/gui_tkinter_renderer.py",
+        "src/agentic_project_kit/gui_action_renderer.py"
+      ],
+      "baseline_commands": [
+        "./.venv/bin/python -m pytest -q tests/test_v040_gui_tkinter_renderer.py tests/test_v040_gui_dry_run_renderer_integration.py tests/test_v040_gui_action_renderer.py"
+      ],
+      "cases": [
+        {
+          "id": "REN-001",
+          "title": "Renderer map identity is explicit",
+          "mutation_scope": "READ_ONLY",
+          "authorization": "NOT_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "expected_result": "approved renderer identity and interface version are resolved without fallback guessing",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "REN-002",
+          "title": "Renderer rejects semantic-version mismatch",
+          "mutation_scope": "READ_ONLY",
+          "authorization": "NOT_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "expected_result": "semantic-version mismatch blocks acceptance rather than silently rerendering",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "REN-003",
+          "title": "Renderer deterministic repeat output",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "same immutable inputs produce byte-identical or explicitly declared equivalent output",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "REN-004",
+          "title": "Renderer side-effect prohibition",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "renderer does not mutate filesystem, network, subprocess, workflow, state or evidence outside declared output",
+          "execution_status": "NOT_RUN"
+        }
+      ]
+    },
+    {
+      "id": "PROBE-003",
+      "title": "Workflow serialization",
+      "primary_sources": [
+        "src/agentic_project_kit/transfer_repo_actions.py",
+        "src/agentic_project_kit/gatekeeper_core.py",
+        "src/agentic_project_kit/local_feature_gate.py",
+        "src/agentic_project_kit/workspace_lock.py",
+        "src/agentic_project_kit/handoff_freshness.py"
+      ],
+      "baseline_commands": [
+        "./.venv/bin/agentic-kit transfer divergence-status --json",
+        "./.venv/bin/agentic-kit transfer repo-status --json",
+        "./.venv/bin/python -m pytest -q tests/test_transfer_repo_actions.py tests/test_gatekeeper_core.py tests/test_local_feature_gate_contract.py tests/test_handoff_freshness.py"
+      ],
+      "cases": [
+        {
+          "id": "P003-WF-001",
+          "title": "Branch and worktree exact-ref identity",
+          "mutation_scope": "READ_ONLY",
+          "authorization": "NOT_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "expected_result": "local branch, upstream and worktree state are captured before any mutable Probe",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P003-WF-002",
+          "title": "Branch switch or rebase rejects stale plan",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "expected_result": "branch movement invalidates stale projection plan before write or evidence publication",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P003-WF-003",
+          "title": "PR head/base and required-check identity",
+          "mutation_scope": "READ_ONLY",
+          "authorization": "NOT_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "expected_result": "PR identity and required-check evidence are exact-ref scoped",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P003-WF-004",
+          "title": "Integration-time revalidation before merge eligibility",
+          "mutation_scope": "READ_ONLY",
+          "authorization": "NOT_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "expected_result": "merge eligibility cannot rely on stale Probe evidence",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P003-WF-005",
+          "title": "Competing projection refresh conflict",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "expected_result": "competing refresh blocks or invalidates stale projection write rather than silently overwriting",
+          "execution_status": "NOT_RUN"
+        }
+      ]
+    },
+    {
+      "id": "PROBE-004",
+      "title": "Migration and rollback",
+      "primary_sources": [
+        "src/agentic_project_kit/successor_handoff_package.py",
+        "src/agentic_project_kit/transfer_repo_actions.py",
+        "docs/reports/handoff-packages/latest/execution_contract.json",
+        "docs/reports/handoff-packages/latest/source_manifest.json",
+        "docs/reports/handoff-packages/latest/validation_report.json"
+      ],
+      "baseline_commands": [
+        "./.venv/bin/agentic-kit handoff check",
+        "./.venv/bin/python -m pytest -q tests/test_successor_handoff_package.py tests/test_transfer_repo_actions.py"
+      ],
+      "cases": [
+        {
+          "id": "P004-MIG-001",
+          "title": "No-migration selection is explicit",
+          "mutation_scope": "READ_ONLY",
+          "authorization": "NOT_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "expected_result": "no-migration is recorded as a safety result when migration evidence is insufficient",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P004-MIG-002",
+          "title": "Rollback package capture before Write",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "pre-write bytes, refs, source inputs and generated metadata are captured before mutation",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P004-MIG-003",
+          "title": "Exact-byte rollback after Write",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "post-write rollback restores exact bytes without claiming renderer reproducibility",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P004-MIG-004",
+          "title": "Exact-byte rollback after acceptance invalidates acceptance when needed",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "accepted state is invalidated when current renderer reproducibility is not proven",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P004-MIG-005",
+          "title": "Renderer semantic-version rollback consequence",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "renderer-version rollback consequence is explicit and does not preserve invalid acceptance",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P004-MIG-006",
+          "title": "Interrupted migration recovery",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "interrupted migration stops in recoverable state with bounded evidence",
+          "execution_status": "NOT_RUN"
+        },
+        {
+          "id": "P004-MIG-007",
+          "title": "Generated-output rollback uses command contract",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "authorization": "MAINTAINER_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "expected_result": "generated or command-updated outputs are restored through source/generator/command contract or explicitly classified temporary repair",
+          "execution_status": "NOT_RUN"
+        }
+      ]
+    }
+  ],
+  "selected_writers": [
+    {
+      "writer_id": "WRT-CH-001",
+      "disposition": "SELECTED_FOR_FIXTURE",
+      "fixture_case_id": "P002-WRT-001",
+      "decision_status": "PREPARED_PENDING_AUTHORIZATION"
+    },
+    {
+      "writer_id": "WRT-CH-002",
+      "disposition": "NEEDS_MAINTAINER_DECISION",
+      "fixture_case_id": "P002-WRT-002",
+      "decision_status": "PREPARED_OR_DEFER"
+    },
+    {
+      "writer_id": "WRT-CH-003",
+      "disposition": "NEEDS_MAINTAINER_DECISION",
+      "fixture_case_id": "P002-WRT-003",
+      "decision_status": "PREPARED_OR_DEFER"
+    },
+    {
+      "writer_id": "WRT-CH-004",
+      "disposition": "NEEDS_MAINTAINER_DECISION",
+      "fixture_case_id": "P002-WRT-004",
+      "decision_status": "PREPARED_OR_DEFER"
+    },
+    {
+      "writer_id": "WRT-CH-005",
+      "disposition": "EXTERNAL_HABITABILITY_ONLY",
+      "fixture_case_id": "P002-WRT-005",
+      "decision_status": "PREPARED_FOR_LATER_SCOPE"
+    },
+    {
+      "writer_id": "WRT-CH-006",
+      "disposition": "GENERATED_OUTPUT_CONTRACT_ONLY",
+      "fixture_case_id": "P002-WRT-006",
+      "decision_status": "PREPARED_UNDER_PROBE_004"
+    }
+  ],
+  "stop_states": [
+    "CURRENT_REF_CHANGED",
+    "COMMAND_MANIFEST_CHANGED",
+    "CHECKED_IN_SUCCESSOR_PACKAGE_NOT_EXACT_OR_REFRESH_ONLY",
+    "FIXTURE_FILE_MISSING",
+    "MUTATION_WITHOUT_MAINTAINER_AUTHORIZATION",
+    "CLEANUP_NOT_PROVEN",
+    "EVIDENCE_SCOPE_TOO_BROAD"
+  ]
+}

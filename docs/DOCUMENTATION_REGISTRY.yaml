@@ -797,6 +797,110 @@ documents:
     class: architecture
     owner: maintainers
     notes: Imported DPA-IMPORT-2 Mermaid architecture diagram; support material only, not implementation evidence.
+  - path: docs/architecture/dpa/probes/README.md
+    class: architecture
+    owner: maintainers
+    notes: DPA-IMPORT-3 Probe package staging index; preparation only, not Probe execution, DP2 implementation or Kit conformance.
+  - path: docs/architecture/dpa/probes/DP1_PROBE_BACKLOG.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 Probe backlog snapshot; future execution requires fresh exact-ref validation.
+  - path: docs/architecture/dpa/probes/DP1_PROBE_MANUALS_20260727.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 DP1 Probe manuals; prepared-provisional, not Probe evidence or conformance.
+  - path: docs/architecture/dpa/probes/DP1_PROBE_EXECUTION_PACKAGE_DRAFT_20260727.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 execution-package draft; command lines are historical planning candidates until refreshed.
+  - path: docs/architecture/dpa/probes/DP1_SELECTED_WRITER_FIXTURE_PLAN_20260727.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 selected-writer fixture plan; no writer fixture execution or DP2 authorization.
+  - path: docs/architecture/dpa/probes/MAIN_REPO_VALIDATION_CHECKLIST.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 validation checklist snapshot; open items still block Probe execution and Kit mutation.
+  - path: docs/architecture/dpa/probes/fixtures/DP1_PROBE_CLEANUP_AND_ASSESSMENT_PLAN_20260727.md
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 cleanup and Assessment rules for future DP1 Probe execution.
+  - path: docs/architecture/dpa/probes/fixtures/DP1_PROBE_FIXTURE_MANIFEST_20260727.json
+    class: architecture
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 prepared fixture manifest; execution_status values remain NOT_RUN unless separately evidenced.
+  - path: docs/architecture/evidence/dpa/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: DPA-IMPORT-3 evidence staging index for historical Lab Probe-preparation evidence snapshots.
+  - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 read-only DP1 baseline evidence summary; PASS_WITH_LIMITATIONS only.
+  - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/assessment-input.md
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 read-only baseline Assessment input; does not satisfy full Probe PASS.
+  - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/cleanup.md
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 read-only baseline cleanup evidence.
+  - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/command-manifest.md
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 historical command-manifest evidence for read-only baseline.
+  - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/fixture-plan.md
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 read-only fixture-plan evidence summary.
+  - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 machine-readable read-only baseline results; historical ref only.
+  - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/terminal.log
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 bounded read-only baseline terminal log; not current Kit conformance evidence.
+  - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 mutation-sandbox evidence summary; PARTIAL only and no production mutation.
+  - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/assessment-input.md
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 mutation-sandbox Assessment input; does not satisfy full Probe PASS.
+  - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/cleanup.md
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 mutation-sandbox cleanup evidence.
+  - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/command-manifest.md
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 historical command-manifest evidence for mutation-sandbox run.
+  - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/preflight.json
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 machine-readable mutation-sandbox preflight evidence.
+  - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 machine-readable mutation-sandbox results; PARTIAL only.
+  - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/selected-writers.json
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 selected-writer sandbox evidence; planning and Assessment input only.
+  - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/terminal.log
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 bounded mutation-sandbox terminal log; no production branch, PR, tag or release mutation.
+  - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/writer-dispositions.md
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 selected-writer disposition evidence summary.
+  - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/writer-fixture-results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Imported DPA-IMPORT-3 machine-readable writer-fixture sandbox results; not DP2 authorization.
   - path: docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6.md
     class: evidence/log
     owner: maintainers

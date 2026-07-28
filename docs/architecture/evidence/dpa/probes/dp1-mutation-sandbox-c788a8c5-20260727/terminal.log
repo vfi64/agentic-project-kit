@@ -1,0 +1,730 @@
+$ git clone --no-local <KIT_ROOT> <SANDBOX_KIT_ROOT>
+returncode=0 duration=1.443
+[stderr]
+Cloning into '<SANDBOX_KIT_ROOT>'...
+
+$ git checkout c788a8c530eb0984d088a86e8e7951145581abbe
+returncode=0 duration=0.114
+[stderr]
+Note: switching to 'c788a8c530eb0984d088a86e8e7951145581abbe'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at c788a8c5 Refresh handoff state after PR1876 (#1877)
+
+$ prepare-sandbox-runtime
+returncode=0 duration=0.0
+[stdout]
+prepared .venv sandbox runtime symlink
+
+$ <KIT_PYTHON> -m agentic_project_kit.cli transfer command-reference-check --json
+returncode=0 duration=0.965
+[stdout]
+{
+  "schema_version": 1,
+  "kind": "transfer_command_reference_check_result",
+  "action": "command-reference-check",
+  "result_status": "PASS",
+  "final_signal": "d",
+  "next_action": "Command reference is current.",
+  "result": {
+    "argv": [
+      "./.venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_agentic_kit_command_reference_is_current.py"
+    ],
+    "returncode": 0,
+    "stdout": "..                                                                       [100%]\n2 passed in 0.23s\n",
+    "stderr": "",
+    "ok": true
+  }
+}
+
+$ <KIT_PYTHON> -m agentic_project_kit.cli handoff refresh .agentic/handoff_state.yaml --write
+returncode=0 duration=0.29
+[stdout]
+Current safe_state: 70403d19 Close out v0.4.13 DOI metadata (#1876)
+Refreshed safe_state: 70403d19 Close out v0.4.13 DOI metadata (#1876)
+Updated .agentic/handoff_state.yaml
+
+$ <KIT_PYTHON> -m agentic_project_kit.cli transfer chat-switch-complete --json --no-update-canonical-prompts --output-dir <TMP_SUCCESSOR_PACKAGE>
+returncode=0 duration=0.687
+[stdout]
+{
+  "context_path": "<TMP_SUCCESSOR_PACKAGE>/successor_context.yaml",
+  "findings": [],
+  "generated_head": "c788a8c530eb0984d088a86e8e7951145581abbe",
+  "generated_head_short": "c788a8c5",
+  "kind": "transfer_chat_switch_complete_result",
+  "open_tasks": [
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "p5c-physical-migration",
+      "status": "blocked",
+      "summary": "Plan physical migration after legacy profile deprecation for P5"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "v1-0-milestone",
+      "status": "planned",
+      "summary": "Reach the 1.0 operating-layer stability milestone for unphased"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "v2-0-legacy-profile-removal",
+      "status": "planned",
+      "summary": "Remove the implicit legacy profile in 2.0.0 for unphased"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "pre-gui-hardening-line",
+      "status": "next",
+      "summary": "Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "workflow-kernel-and-transfer-hardening",
+      "status": "planned",
+      "summary": "Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "release-and-doi-governance",
+      "status": "planned",
+      "summary": "Keep release metadata, publish, and DOI closeout behind authoritative commands for pre-GUI"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "gui-gatekeeper-workbench",
+      "status": "planned",
+      "summary": "Build the local gatekeeper/workbench GUI over deterministic actions for GUI"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "documentation-artifact-governance-os",
+      "status": "planned",
+      "summary": "Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "master-implementation-q",
+      "status": "active",
+      "summary": "Master Implementation Q2 rest sequence"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "lifecycle-backlog-clearance",
+      "status": "active",
+      "summary": "Clear current documentation lifecycle backlog before suite-level strict mode"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "governance-doc-backfill",
+      "status": "active",
+      "summary": "Backfill reviewed governance document registry entries"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "planning-ideas-residual-cleanup",
+      "status": "planned",
+      "summary": "Resolve remaining planning and idea residual documents"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "pre-gui-hardening-plan",
+      "status": "active",
+      "summary": "Execute the pre-GUI hardening backlog in small wrapper-first slices for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "next-turn-workflow-kernel",
+      "status": "active",
+      "summary": "Move recurring next-step execution from chat discipline into a deterministic local workflow kernel for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "release-command-authority",
+      "status": "active",
+      "summary": "Keep release preparation, publishing, and DOI closeout under explicit command authority for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "rule-registry-hardening",
+      "status": "active",
+      "summary": "Preserve active rule identity, source validation, and refresh handshakes"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "portability-and-ns-closeout",
+      "status": "planned",
+      "summary": "Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "gui-workbench-plan",
+      "status": "planned",
+      "summary": "Implement the GUI gatekeeper/workbench as a view over governed action specs for v0.4.x"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "docs-centralize-and-remove-command",
+      "status": "planned",
+      "summary": "Build governed docs centralize-and-remove command before K3"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "standard-error-hardening-backlog",
+      "status": "active",
+      "summary": "Standard-error hardening backlog and legacy ns command coverage map"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "post-merge-lifecycle-state-model",
+      "status": "active",
+      "summary": "Post-merge lifecycle state model and command authority"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "mechanize-doc-registry-scope-reconcile",
+      "status": "planned",
+      "summary": "Mechanize documentation registry scope reconciliation"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "mechanize-failure-mode-review-automation",
+      "status": "planned",
+      "summary": "Mechanize failure-mode review automation"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "mechanize-pre-gui-hardening-readiness",
+      "status": "planned",
+      "summary": "Mechanize pre-GUI hardening readiness"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "mechanize-operating-layer-public-onboarding-evidence",
+      "status": "planned",
+      "summary": "Mechanize operating-layer public onboarding and evidence"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "reports-retention-policy",
+      "status": "planned",
+      "summary": "Mechanize report and evidence retention policy"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "agf-dpa-adoption-tracker",
+      "status": "blocked",
+      "summary": "Track AGF/DPA Package-G adoption evaluation without implementation claims"
+    }
+  ],
+  "result_status": "PASS",
+  "schema_version": 1,
+  "source_manifest_path": "<TMP_SUCCESSOR_PACKAGE>/source_manifest.json",
+  "successor_prompt_path": "<TMP_SUCCESSOR_PACKAGE>/successor_prompt.md",
+  "updated_canonical_prompts": false,
+  "validation_report_path": "<TMP_SUCCESSOR_PACKAGE>/validation_report.json"
+}
+
+$ <KIT_PYTHON> -m agentic_project_kit.cli transfer chat-switch-complete --json --output-dir docs/reports/handoff-packages/latest
+returncode=0 duration=0.577
+[stdout]
+{
+  "context_path": "docs/reports/handoff-packages/latest/successor_context.yaml",
+  "findings": [],
+  "generated_head": "c788a8c530eb0984d088a86e8e7951145581abbe",
+  "generated_head_short": "c788a8c5",
+  "kind": "transfer_chat_switch_complete_result",
+  "open_tasks": [
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "p5c-physical-migration",
+      "status": "blocked",
+      "summary": "Plan physical migration after legacy profile deprecation for P5"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "v1-0-milestone",
+      "status": "planned",
+      "summary": "Reach the 1.0 operating-layer stability milestone for unphased"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "v2-0-legacy-profile-removal",
+      "status": "planned",
+      "summary": "Remove the implicit legacy profile in 2.0.0 for unphased"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "pre-gui-hardening-line",
+      "status": "next",
+      "summary": "Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "workflow-kernel-and-transfer-hardening",
+      "status": "planned",
+      "summary": "Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "release-and-doi-governance",
+      "status": "planned",
+      "summary": "Keep release metadata, publish, and DOI closeout behind authoritative commands for pre-GUI"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "gui-gatekeeper-workbench",
+      "status": "planned",
+      "summary": "Build the local gatekeeper/workbench GUI over deterministic actions for GUI"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "documentation-artifact-governance-os",
+      "status": "planned",
+      "summary": "Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "master-implementation-q",
+      "status": "active",
+      "summary": "Master Implementation Q2 rest sequence"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "lifecycle-backlog-clearance",
+      "status": "active",
+      "summary": "Clear current documentation lifecycle backlog before suite-level strict mode"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "governance-doc-backfill",
+      "status": "active",
+      "summary": "Backfill reviewed governance document registry entries"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "planning-ideas-residual-cleanup",
+      "status": "planned",
+      "summary": "Resolve remaining planning and idea residual documents"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "pre-gui-hardening-plan",
+      "status": "active",
+      "summary": "Execute the pre-GUI hardening backlog in small wrapper-first slices for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "next-turn-workflow-kernel",
+      "status": "active",
+      "summary": "Move recurring next-step execution from chat discipline into a deterministic local workflow kernel for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "release-command-authority",
+      "status": "active",
+      "summary": "Keep release preparation, publishing, and DOI closeout under explicit command authority for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "rule-registry-hardening",
+      "status": "active",
+      "summary": "Preserve active rule identity, source validation, and refresh handshakes"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "portability-and-ns-closeout",
+      "status": "planned",
+      "summary": "Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands for v0.4.12"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "gui-workbench-plan",
+      "status": "planned",
+      "summary": "Implement the GUI gatekeeper/workbench as a view over governed action specs for v0.4.x"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "docs-centralize-and-remove-command",
+      "status": "planned",
+      "summary": "Build governed docs centralize-and-remove command before K3"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "standard-error-hardening-backlog",
+      "status": "active",
+      "summary": "Standard-error hardening backlog and legacy ns command coverage map"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "post-merge-lifecycle-state-model",
+      "status": "active",
+      "summary": "Post-merge lifecycle state model and command authority"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "mechanize-doc-registry-scope-reconcile",
+      "status": "planned",
+      "summary": "Mechanize documentation registry scope reconciliation"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "mechanize-failure-mode-review-automation",
+      "status": "planned",
+      "summary": "Mechanize failure-mode review automation"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "mechanize-pre-gui-hardening-readiness",
+      "status": "planned",
+      "summary": "Mechanize pre-GUI hardening readiness"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "mechanize-operating-layer-public-onboarding-evidence",
+      "status": "planned",
+      "summary": "Mechanize operating-layer public onboarding and evidence"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "reports-retention-policy",
+      "status": "planned",
+      "summary": "Mechanize report and evidence retention policy"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "agf-dpa-adoption-tracker",
+      "status": "blocked",
+      "summary": "Track AGF/DPA Package-G adoption evaluation without implementation claims"
+    }
+  ],
+  "result_status": "PASS",
+  "schema_version": 1,
+  "source_manifest_path": "docs/reports/handoff-packages/latest/source_manifest.json",
+  "successor_prompt_path": "docs/reports/handoff-packages/latest/successor_prompt.md",
+  "updated_canonical_prompts": true,
+  "validation_report_path": "docs/reports/handoff-packages/latest/validation_report.json"
+}
+
+$ <KIT_PYTHON> -m agentic_project_kit.cli release-prep --version 0.4.14 --date 2026-07-27 --summary-line DPA mutation-sandbox release metadata probe. --json
+returncode=0 duration=0.237
+[stdout]
+{
+  "changed_paths": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py"
+  ],
+  "date": "2026-07-27",
+  "dry_run": false,
+  "ok": true,
+  "version": "0.4.14"
+}
+
+$ <KIT_PYTHON> -m agentic_project_kit.cli workspace init --root <EXTERNAL_WORKSPACE_ROOT> --name dpa-mutation-sandbox --type generic --execute --json
+returncode=0 duration=0.247
+[stdout]
+{
+  "directories": [
+    "docs",
+    "docs/archive",
+    ".agentic",
+    ".agentic/registries",
+    ".agentic/rules",
+    ".agentic/state",
+    ".agentic/state/handoff",
+    ".agentic/state/handoff/packages",
+    ".agentic/state/handoff/packages/latest",
+    ".agentic/state/handoff/reports",
+    ".agentic/state/handoff/terminal",
+    ".agentic/state/handoff/transfer_handoff_reports",
+    ".agentic/transfer",
+    ".agentic/transfer/inbox",
+    ".agentic/transfer/outbox",
+    ".agentic/tmp",
+    ".agentic/ci"
+  ],
+  "files": [
+    ".agentic/DOC_LIFECYCLE.md",
+    ".agentic/INITIAL_LLM_PROMPT.md",
+    ".agentic/ci/agentic-gate.yaml",
+    ".agentic/ci/pre-commit-snippet.yaml",
+    ".agentic/config.yaml",
+    ".agentic/registries/documentation.yaml",
+    ".agentic/registries/rules.yaml",
+    ".agentic/rules/README.md",
+    ".agentic/state/README.md",
+    ".agentic/state/handoff/README.md",
+    ".agentic/state/status.md",
+    "docs/archive/README.md"
+  ],
+  "final_signal": "d",
+  "gitignore_diff": [
+    "+ .agentic/tmp/"
+  ],
+  "injection_targets": [],
+  "kind": "workspace_init_plan",
+  "manifest": {
+    "gates": {
+      "extra": [],
+      "skip": []
+    },
+    "hygiene": {
+      "doc_lifecycle": "warn",
+      "review_budgets": {
+        "governance": 180,
+        "reference": 365,
+        "workflow": 270
+      }
+    },
+    "kit_schema_version": 1,
+    "modules": {
+      "doc_registry": true,
+      "release_governance": true,
+      "rule_registry": true,
+      "transfer": true
+    },
+    "paths": {
+      "docs_root": "docs"
+    },
+    "profile": "generic",
+    "project": {
+      "name": "dpa-mutation-sandbox",
+      "type": "generic"
+    },
+    "transfer": {
+      "visibility": "repo"
+    }
+  },
+  "manifest_yaml": "kit_schema_version: 1\nproject:\n  name: dpa-mutation-sandbox\n  type: generic\nprofile: generic\nmodules:\n  doc_registry: true\n  release_governance: true\n  rule_registry: true\n  transfer: true\ntransfer:\n  visibility: repo\nhygiene:\n  doc_lifecycle: warn\n  review_budgets:\n    governance: 180\n    reference: 365\n    workflow: 270\npaths:\n  docs_root: docs\ngates:\n  extra: []\n  skip: []\n",
+  "mode": "execute",
+  "privacy_boundary": "Regardless of mode: **no secrets, credentials, private chat fragments, or\npersonal logs belong in any versioned part of `.agentic/`.** The task carrier\ncontains the work order the user knowingly publishes \u2014 `SEND` already makes\nthe push explicit. Machine-local state lives under `.agentic/tmp/` and is\nignored by construction. `workspace adopt` and `workspace init` must print\nthis boundary; documentation for public target repos must repeat it.",
+  "project": {
+    "name": "dpa-mutation-sandbox",
+    "profile": "generic",
+    "type": "generic"
+  },
+  "result_status": "PASS",
+  "root": "<EXTERNAL_WORKSPACE_ROOT>",
+  "schema_version": 1,
+  "tree": [
+    "docs/",
+    "docs/archive/",
+    "docs/archive/README.md",
+    ".agentic/",
+    ".agentic/config.yaml",
+    ".agentic/DOC_LIFECYCLE.md",
+    ".agentic/registries/",
+    ".agentic/registries/documentation.yaml",
+    ".agentic/registries/rules.yaml",
+    ".agentic/rules/",
+    ".agentic/rules/README.md",
+    ".agentic/state/",
+    ".agentic/state/README.md",
+    ".agentic/state/status.md",
+    ".agentic/state/handoff/",
+    ".agentic/state/handoff/README.md",
+    ".agentic/state/handoff/packages/",
+    ".agentic/state/handoff/packages/latest/",
+    ".agentic/state/handoff/reports/",
+    ".agentic/state/handoff/terminal/",
+    ".agentic/state/handoff/transfer_handoff_reports/",
+    ".agentic/transfer/",
+    ".agentic/transfer/inbox/",
+    ".agentic/transfer/outbox/",
+    ".agentic/tmp/",
+    ".agentic/ci/",
+    ".agentic/ci/agentic-gate.yaml",
+    ".agentic/ci/pre-commit-snippet.yaml",
+    ".agentic/INITIAL_LLM_PROMPT.md",
+    ".gitignore"
+  ],
+  "written": true
+}
+[stderr]
+<SANDBOX_KIT_ROOT>/src/agentic_project_kit/workspace.py:398: LegacyProfileDeprecationWarning: agentic-kit implicit legacy profile is deprecated for manifest-less workspaces and will be removed in 2.0.0; run `agentic-kit workspace init --root PATH` or set AGENTIC_KIT_SUPPRESS_LEGACY_PROFILE_WARNING=1 to suppress this warning.
+  warnings.warn(
