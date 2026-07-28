@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6bc57ac6f3f82d19e0f8c60aadf40321ebcbfbf2
-  short: 6bc57ac6
-  subject: Import DPA architecture package (#1887)
+  full: 70243c9609485b2b489f1fa6e338b23a2fc25ed9
+  short: 70243c96
+  subject: Import DPA probe package (#1889)
 last_substantive_work_state:
-  full: 6bc57ac6f3f82d19e0f8c60aadf40321ebcbfbf2
-  short: 6bc57ac6
-  subject: Import DPA architecture package (#1887)
+  full: 70243c9609485b2b489f1fa6e338b23a2fc25ed9
+  short: 70243c96
+  subject: Import DPA probe package (#1889)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
