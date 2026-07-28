@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c1e7db1d4dabf675dd7b80179c95f3c25f94452a
-  short: c1e7db1d
-  subject: Refresh successor package after PR1898 (#1899)
+  full: c1f62937751027fa1f5de1472550aef0612be98c
+  short: c1f62937
+  subject: Add DPA PROBE-002 lifecycle readiness preflight (#1901)
 last_substantive_work_state:
-  full: c1e7db1d4dabf675dd7b80179c95f3c25f94452a
-  short: c1e7db1d
-  subject: Refresh successor package after PR1898 (#1899)
+  full: c1f62937751027fa1f5de1472550aef0612be98c
+  short: c1f62937
+  subject: Add DPA PROBE-002 lifecycle readiness preflight (#1901)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
