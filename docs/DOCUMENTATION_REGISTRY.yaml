@@ -907,6 +907,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable PROBE-001 registry compatibility evidence for PR1896 and generated handoff PR1897; not DP2 authorization or conformance evidence.
+  - path: docs/architecture/evidence/dpa/probes/probe-002-lifecycle-readiness-5fd5f47c-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit PROBE-002 lifecycle readiness preflight summary; PARTIAL_BLOCKED_FOR_DP2 only, not full Probe PASS evidence.
+  - path: docs/architecture/evidence/dpa/probes/probe-002-lifecycle-readiness-5fd5f47c-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable PROBE-002 lifecycle readiness preflight evidence; records selected-writer fixture and Maintainer-decision blockers.
   - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

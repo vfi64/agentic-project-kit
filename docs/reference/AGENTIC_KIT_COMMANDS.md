@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: ff86b5a8c9f1
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: d88e2b8b73e7
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `227`
+- Command count: `228`
 
 ## Commands
 
@@ -706,6 +706,23 @@ Run a compact project health check.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+
+### `agentic-kit dpa probe-002-readiness`
+
+- Safety: `BOUNDED`
+- When to use: Inspect PROBE-002 lifecycle and selected-writer readiness without production mutation.
+- Dry-run available: `True`
+
+Inspect PROBE-002 lifecycle and selected-writer readiness without production mutation.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')` | DPA Assessment readiness JSON record to inspect. |
+| `output` | `TyperOption` | --output | `False` |  | Optional DPA probe evidence JSON path under docs/architecture/evidence/dpa/probes/. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `require_full_evidence` | `TyperOption` | --require-full-evidence | `False` | `False` | Fail unless PROBE-002 full evidence is structurally satisfied. |
 
 ### `agentic-kit dpa readiness`
 

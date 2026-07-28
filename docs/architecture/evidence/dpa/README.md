@@ -25,9 +25,15 @@ ref `9ca806dba1c92b83514beba2b49f0a083c9bdc9a` after PR #1896 and its generated
 handoff refresh PR #1897. It satisfies the registry-compatibility DP2 entry
 field for the current Kit ref only.
 
+The current PROBE-002 lifecycle readiness preflight records Kit validation ref
+`5fd5f47c1201ceddd021838190327624346b8547`. It deterministically confirms the
+current lifecycle, writer-routing and selected-writer surfaces are present, but
+it records `PARTIAL_BLOCKED_FOR_DP2` because current disposable writer fixtures
+and Maintainer select/defer decisions remain open.
+
 The current Assessment readiness record consolidates those evidence inputs into
 a DP2 blocker map at current Kit baseline
-`9ca806dba1c92b83514beba2b49f0a083c9bdc9a`. It records `DP2_BLOCKED`, keeps the
+`5fd5f47c1201ceddd021838190327624346b8547`. It records `DP2_BLOCKED`, keeps the
 full Probe PASS claim boundary closed and names the remaining Probe, writer,
 rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
 
@@ -42,6 +48,9 @@ rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
 - `probes/probe-001-registry-compatibility-9ca806db-20260728/` records current
   Kit PROBE-001 registry compatibility evidence with result
   `SATISFIED_FOR_CURRENT_KIT_REF`.
+- `probes/probe-002-lifecycle-readiness-5fd5f47c-20260728/` records current
+  Kit PROBE-002 lifecycle readiness preflight evidence with result
+  `PARTIAL_BLOCKED_FOR_DP2`.
 - `assessment/DP1_ASSESSMENT_READINESS_20260728.md` records the current DP1
   Assessment readiness decision surface with status `DP2_BLOCKED`.
 

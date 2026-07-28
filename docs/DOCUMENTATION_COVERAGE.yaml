@@ -192,6 +192,7 @@ rules:
     - agentic-kit chat session-start
     - agentic-kit commands sync-entrypoints
     - agentic-kit dpa readiness
+    - agentic-kit dpa probe-002-readiness
     - agentic-kit workflow list
     - agentic-kit workflow show
     - agentic-kit workflow upload
