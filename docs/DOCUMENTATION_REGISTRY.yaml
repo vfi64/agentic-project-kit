@@ -915,6 +915,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable PROBE-002 lifecycle readiness preflight evidence; records selected-writer fixture and Maintainer-decision blockers.
+  - path: docs/architecture/evidence/dpa/probes/wrt-ch001-admin-refresh-observation-d0d2f537-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit WRT-CH-001 admin-refresh observation summary; not disposable fixture execution or full PROBE-002 PASS evidence.
+  - path: docs/architecture/evidence/dpa/probes/wrt-ch001-admin-refresh-observation-d0d2f537-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable WRT-CH-001 observation evidence from merged admin refresh PR #1902; records no DP2 authorization.
   - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

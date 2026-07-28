@@ -19,14 +19,15 @@ not main-repository conformance.
 
 | Role | Ref or path | Assessment use |
 |---|---|---|
-| Current Kit baseline for this record | `5fd5f47c1201ceddd021838190327624346b8547` | Governs the repository state assessed by this readiness record. |
-| Current command manifest acknowledgement | `COMMAND_MANIFEST_ACK d88e2b8b73e7` | Confirms this record uses the current Kit command manifest boundary. |
+| Current Kit baseline for this record | `d0d2f537ccb21666a42562d3bc7c07087ff9622d` | Governs the repository state assessed by this readiness record. |
+| Current command manifest acknowledgement | `COMMAND_MANIFEST_ACK dc3f7327229c` | Confirms this record uses the current Kit command manifest boundary. |
 | DPA Lab closeout source | `0cf944cc153e65a272c773286791f8891efdd1bc` | Preserved architecture source package only. |
 | DPA Lab merge commit | `6f927efd625b4239f9ab0e710b48e7d9534fdfec` | Preserved Lab closeout merge evidence only. |
 | Kit DPA-IMPORT-3 baseline | `e89b0fac21c5599f8e531a937c550134469716cf` | Import slice baseline before Probe-package staging. |
 | Current Kit read-only refresh | `docs/architecture/evidence/dpa/probes/dp1-readonly-46deae7-20260728/` | Current command-health evidence, result `PASS_WITH_LIMITATIONS`. |
 | Current Kit PROBE-001 registry compatibility | `docs/architecture/evidence/dpa/probes/probe-001-registry-compatibility-9ca806db-20260728/` | Current registry parser and DPA registry-contract compatibility evidence, result `SATISFIED_FOR_CURRENT_KIT_REF`. |
 | Current Kit PROBE-002 lifecycle readiness preflight | `docs/architecture/evidence/dpa/probes/probe-002-lifecycle-readiness-5fd5f47c-20260728/` | Current lifecycle and selected-writer surface preflight, result `PARTIAL_BLOCKED_FOR_DP2`. |
+| Current WRT-CH-001 admin refresh observation | `docs/architecture/evidence/dpa/probes/wrt-ch001-admin-refresh-observation-d0d2f537-20260728/` | Current observation of merged PR #1902 handoff refresh after PR #1901, result `OBSERVED_ADMIN_REFRESH_NOT_DISPOSABLE_FIXTURE`. |
 | Historical Lab read-only baseline | `docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/` | Historical Assessment input, result `PASS_WITH_LIMITATIONS`. |
 | Historical Lab mutation sandbox | `docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/` | Historical sandbox-only Assessment input, result `PARTIAL`. |
 | Prepared fixture manifest | `docs/architecture/dpa/probes/fixtures/DP1_PROBE_FIXTURE_MANIFEST_20260727.json` | Fixture family and writer planning input, status `prepared-not-executed`. |
@@ -40,7 +41,7 @@ projections, release outputs or any future command-updated DPA touchpoint.
 | Family | Current readiness | Reason |
 |---|---|---|
 | PROBE-001 registry, projection and partition compatibility | `SATISFIED_FOR_CURRENT_KIT_REF` | PR #1896 added structural DPA `ProjectionContract` and `PartitionContract` registry validation with parser tests for required positive and negative cases; PR #1897 refreshed generated handoff state. |
-| PROBE-002 lifecycle, acceptance and writer routing | `PARTIAL_BLOCKED_FOR_DP2` | Current read-only lifecycle readiness preflight confirms required surfaces are present, but WRT-CH-001 still needs current disposable fixture execution, WRT-CH-002 through WRT-CH-004 need Maintainer select/defer decisions and full PROBE-002 execution remains incomplete. |
+| PROBE-002 lifecycle, acceptance and writer routing | `PARTIAL_BLOCKED_FOR_DP2` | Current readiness preflight confirms required surfaces are present, and PR #1902 observes the WRT-CH-001 administrative refresh path. WRT-CH-001 still needs disposable fixture execution, WRT-CH-002 through WRT-CH-004 need Maintainer select/defer decisions and full PROBE-002 execution remains incomplete. |
 | Renderer Probes | `PARTIAL_BLOCKED_FOR_DP2` | Existing renderer tests provide command-health evidence, but DPA renderer identity, semantic-version and side-effect fixture execution is not complete. |
 | PROBE-003 workflow serialization | `PARTIAL_BLOCKED_FOR_DP2` | Read-only transfer and gate checks exist, but branch, PR, integration and stale-plan mutation fixtures have not been executed under a current disposable authorization package. |
 | PROBE-004 migration and rollback | `PARTIAL_BLOCKED_FOR_DP2` | Historical generated-output handling input exists, but rollback-package, migration-form and renderer-semantic-version rollback fixtures are not complete. |
@@ -51,7 +52,7 @@ projections, release outputs or any future command-updated DPA touchpoint.
 
 | Writer | Current disposition | DP2 consequence |
 |---|---|---|
-| WRT-CH-001 administrative handoff refresh | `SELECTED_FOR_FIXTURE` | Must receive current disposable fixture evidence before a `CURRENT_HANDOFF.md` DP2 target can rely on it. |
+| WRT-CH-001 administrative handoff refresh | `OBSERVED_ADMIN_REFRESH_REQUIRES_DISPOSABLE_FIXTURE` | PR #1902 confirms the current admin-refresh path shape, but disposable fixture evidence is still required before a `CURRENT_HANDOFF.md` DP2 target can rely on it. |
 | WRT-CH-002 release preparation writer | `NEEDS_MAINTAINER_DECISION` | Must be selected for fixture execution or explicitly deferred from the first DP2 target. |
 | WRT-CH-003 post-release DOI closeout writer | `NEEDS_MAINTAINER_DECISION` | Must be selected or explicitly deferred; current plan keeps it deferred from the first DP2 target. |
 | WRT-CH-004 action-spec surfaced mutation authority | `NEEDS_MAINTAINER_DECISION` | Must be covered when action surfaces can trigger or authorize selected writer behavior. |

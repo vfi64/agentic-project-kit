@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: d88e2b8b73e7
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: dc3f7327229c
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `228`
+- Command count: `229`
 
 ## Commands
 
@@ -738,6 +738,25 @@ Validate the DPA DP1 Assessment readiness record without mutating files.
 | `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')` | DPA Assessment readiness JSON record to inspect. |
 | `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 | `require_dp2_ready` | `TyperOption` | --require-dp2-ready | `False` | `False` | Fail unless the readiness record structurally authorizes DP2. |
+
+### `agentic-kit dpa wrt-ch001-evidence`
+
+- Safety: `BOUNDED`
+- When to use: Observe a WRT-CH-001 admin refresh PR without claiming disposable fixture PASS.
+- Dry-run available: `True`
+
+Observe a WRT-CH-001 admin refresh PR without claiming disposable fixture PASS.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `source_pr` | `TyperOption` | --source-pr | `True` |  | Substantive PR that triggered the admin refresh. |
+| `admin_pr` | `TyperOption` | --admin-pr | `True` |  | Administrative handoff refresh PR to observe. |
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `input_path` | `TyperOption` | --input | `False` |  | Optional gh-pr-view JSON input. If omitted, gh pr view is used. |
+| `output` | `TyperOption` | --output | `False` |  | Optional DPA probe evidence JSON path under docs/architecture/evidence/dpa/probes/. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `require_disposable_fixture` | `TyperOption` | --require-disposable-fixture | `False` | `False` | Fail unless this evidence satisfies disposable WRT-CH-001 fixture execution. |
 
 ### `agentic-kit evidence classify-log`
 

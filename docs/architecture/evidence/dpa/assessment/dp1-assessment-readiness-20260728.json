@@ -3,8 +3,8 @@
   "kind": "dpa_dp1_assessment_readiness",
   "status": "DP2_BLOCKED",
   "status_date": "2026-07-28",
-  "command_manifest_ack": "COMMAND_MANIFEST_ACK d88e2b8b73e7",
-  "kit_baseline_ref": "5fd5f47c1201ceddd021838190327624346b8547",
+  "command_manifest_ack": "COMMAND_MANIFEST_ACK dc3f7327229c",
+  "kit_baseline_ref": "d0d2f537ccb21666a42562d3bc7c07087ff9622d",
   "dpa_lab_source_ref": "0cf944cc153e65a272c773286791f8891efdd1bc",
   "dpa_lab_merge_ref": "6f927efd625b4239f9ab0e710b48e7d9534fdfec",
   "kit_import_3_baseline_ref": "e89b0fac21c5599f8e531a937c550134469716cf",
@@ -23,6 +23,11 @@
       "id": "current-kit-probe-002-lifecycle-readiness-preflight",
       "path": "docs/architecture/evidence/dpa/probes/probe-002-lifecycle-readiness-5fd5f47c-20260728/",
       "result": "PARTIAL_BLOCKED_FOR_DP2"
+    },
+    {
+      "id": "current-kit-wrt-ch001-admin-refresh-observation",
+      "path": "docs/architecture/evidence/dpa/probes/wrt-ch001-admin-refresh-observation-d0d2f537-20260728/",
+      "result": "OBSERVED_ADMIN_REFRESH_NOT_DISPOSABLE_FIXTURE"
     },
     {
       "id": "historical-lab-readonly-baseline",
@@ -48,7 +53,7 @@
     "PROBE-004": "PARTIAL_BLOCKED_FOR_DP2"
   },
   "selected_writer_status": {
-    "WRT-CH-001": "SELECTED_FOR_FIXTURE",
+    "WRT-CH-001": "OBSERVED_ADMIN_REFRESH_REQUIRES_DISPOSABLE_FIXTURE",
     "WRT-CH-002": "NEEDS_MAINTAINER_DECISION",
     "WRT-CH-003": "NEEDS_MAINTAINER_DECISION",
     "WRT-CH-004": "NEEDS_MAINTAINER_DECISION",
