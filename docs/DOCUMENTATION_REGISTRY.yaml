@@ -939,6 +939,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable Renderer Probe readiness preflight evidence; records renderer map, identity/version and side-effect fixture blockers.
+  - path: docs/architecture/evidence/dpa/probes/probe-004-migration-readiness-3dd2a616-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit PROBE-004 migration and rollback readiness preflight summary; PARTIAL_BLOCKED_FOR_DP2 only, not full Probe PASS evidence.
+  - path: docs/architecture/evidence/dpa/probes/probe-004-migration-readiness-3dd2a616-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable PROBE-004 migration and rollback readiness preflight evidence; records migration-form, rollback-package, renderer-rollback and generated-output boundary blockers.
   - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

@@ -47,9 +47,10 @@ Assessment, DP2 entry, stable promotion or Kit conformance.
 Current Kit-side readiness preflights under
 `docs/architecture/evidence/dpa/probes/` now include PROBE-001 registry
 compatibility, PROBE-002 lifecycle readiness, WRT-CH-001 administrative refresh
-observation, PROBE-003 workflow serialization readiness and Renderer Probe
-readiness. Except for PROBE-001 registry compatibility, these remain partial or
-observation-only inputs and keep DP2 blocked.
+observation, PROBE-003 workflow serialization readiness, Renderer Probe
+readiness and PROBE-004 migration and rollback readiness. Except for PROBE-001
+registry compatibility, these remain partial or observation-only inputs and keep
+DP2 blocked.
 
 ## Generated-output boundary
 
