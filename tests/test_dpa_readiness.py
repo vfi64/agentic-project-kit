@@ -19,13 +19,20 @@ def _write(path: Path, payload: dict[str, object]) -> None:
 def _record(root: Path, overrides: dict[str, object] | None = None) -> Path:
     evidence_dir = root / "docs/architecture/evidence/dpa/probes/current"
     manifest = root / "docs/architecture/dpa/probes/fixtures/manifest.json"
+    command_reference = root / "docs/reference/agentic-kit-commands.json"
     evidence_dir.mkdir(parents=True)
     manifest.parent.mkdir(parents=True)
+    command_reference.parent.mkdir(parents=True)
     manifest.write_text("{}", encoding="utf-8")
+    command_reference.write_text(
+        json.dumps({"schema_version": 2, "meta": {"manifest_sha": "testsha"}}),
+        encoding="utf-8",
+    )
     payload: dict[str, object] = {
         "schema_version": 1,
         "kind": "dpa_dp1_assessment_readiness",
         "status": "DP2_BLOCKED",
+        "command_manifest_ack": "COMMAND_MANIFEST_ACK testsha",
         "evidence_inputs": [
             {
                 "id": "current",
@@ -74,6 +81,7 @@ def test_dpa_readiness_accepts_honest_blocked_record(tmp_path: Path) -> None:
     assert result.ok
     assert result.status == "DP2_BLOCKED"
     assert not result.dp2_ready
+    assert result.implementation_percent == 40
     assert "probe_001_full_evidence" in result.blockers
 
 
@@ -127,11 +135,21 @@ def test_dpa_readiness_rejects_missing_evidence_path(tmp_path: Path) -> None:
     assert [finding.code for finding in result.findings] == ["evidence-input-missing"]
 
 
+def test_dpa_readiness_rejects_command_manifest_ack_drift(tmp_path: Path) -> None:
+    record = _record(tmp_path, {"command_manifest_ack": "COMMAND_MANIFEST_ACK stale"})
+
+    result = evaluate_dpa_readiness(tmp_path, readiness_path=record)
+
+    assert not result.ok
+    assert [finding.code for finding in result.findings] == ["command-manifest-ack-drift"]
+
+
 def test_dpa_readiness_cli_reports_blocked_without_failure() -> None:
     result = runner.invoke(app, ["dpa", "readiness"])
 
     assert result.exit_code == 0
     assert "DPA readiness: DP2_BLOCKED" in result.stdout
+    assert "implementation: 40%" in result.stdout
     assert "maintainer_authorization" in result.stdout
 
 

@@ -5,8 +5,15 @@ import json
 from pathlib import Path
 from typing import Any
 
-DEFAULT_READINESS_PATH = Path(
-    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json"
+from agentic_project_kit.workspace import KitConfig, load_workspace
+
+_DEFAULT_CONFIG = KitConfig()
+DEFAULT_READINESS_PATH = (
+    Path(_DEFAULT_CONFIG.architecture_root)
+    / "evidence"
+    / "dpa"
+    / "assessment"
+    / "dp1-assessment-readiness-20260728.json"
 )
 EXPECTED_KIND = "dpa_dp1_assessment_readiness"
 EXPECTED_SCHEMA_VERSION = 1
@@ -21,6 +28,21 @@ REQUIRED_FALSE_CLAIMS = (
     "kit_conformance_claimed",
     "generated_outputs_manually_patched",
 )
+PROGRESS_MODEL = "dpa-readiness-v1"
+PROGRESS_WEIGHTS = (
+    ("architecture_staging", "Architecture package staged in Kit", 25),
+    ("dp1_evidence_staged", "DP1 evidence inputs staged", 10),
+    ("dp1_readiness_recorded", "DP1 Assessment readiness recorded", 5),
+    ("probe_001_full_evidence", "PROBE-001 full evidence", 8),
+    ("probe_002_full_evidence", "PROBE-002 full evidence", 8),
+    ("renderer_full_evidence", "Renderer Probe full evidence", 8),
+    ("probe_003_full_evidence", "PROBE-003 full evidence", 8),
+    ("probe_004_full_evidence", "PROBE-004 full evidence", 8),
+    ("maintainer_assessment", "Maintainer Assessment recorded", 7),
+    ("first_dp2_target_scope", "First DP2 target and writer scope selected", 4),
+    ("rollback_cleanup_proven", "Rollback and cleanup proven", 4),
+    ("maintainer_authorization", "Maintainer DP2 authorization recorded", 5),
+)
 
 
 @dataclass(frozen=True)
@@ -31,6 +53,24 @@ class DpaReadinessFinding:
 
     def as_dict(self) -> dict[str, str]:
         return {"code": self.code, "message": self.message, "path": self.path}
+
+
+@dataclass(frozen=True)
+class DpaProgressItem:
+    id: str
+    label: str
+    weight: int
+    earned: int
+    status: str
+
+    def as_dict(self) -> dict[str, object]:
+        return {
+            "id": self.id,
+            "label": self.label,
+            "weight": self.weight,
+            "earned": self.earned,
+            "status": self.status,
+        }
 
 
 @dataclass(frozen=True)
@@ -56,16 +96,29 @@ class DpaReadinessResult:
             return AUTHORIZED_STATUS
         return BLOCKED_STATUS
 
+    @property
+    def progress_items(self) -> tuple[DpaProgressItem, ...]:
+        if not self.ok:
+            return ()
+        return tuple(_progress_items(self.data))
+
+    @property
+    def implementation_percent(self) -> int:
+        return sum(item.earned for item in self.progress_items)
+
     def as_dict(self) -> dict[str, object]:
         return {
             "schema_version": 1,
             "kind": "dpa_readiness_check",
             "status": self.status,
+            "implementation_percent": self.implementation_percent,
+            "progress_model": PROGRESS_MODEL,
             "path": self.path,
             "finding_count": len(self.findings),
             "blocker_count": len(self.blockers),
             "findings": [finding.as_dict() for finding in self.findings],
             "blockers": list(self.blockers),
+            "progress": [item.as_dict() for item in self.progress_items],
             "claims": self.data.get("claims", {}),
         }
 
@@ -125,6 +178,7 @@ def evaluate_dpa_readiness(
     _validate_claims(data, findings, display_path)
     _validate_probe_family_status(data, findings, display_path)
     _validate_evidence_inputs(data, findings, display_path, base)
+    _validate_command_manifest_ack(data, findings, display_path, base)
     blockers = _collect_blockers(data)
     _validate_status_consistency(data, blockers, findings, display_path)
 
@@ -139,6 +193,7 @@ def evaluate_dpa_readiness(
 def render_dpa_readiness_result(result: DpaReadinessResult) -> str:
     lines = [
         f"DPA readiness: {result.status}",
+        f"implementation: {result.implementation_percent}%",
         f"record: {result.path}",
         f"findings: {len(result.findings)}",
         f"blockers: {len(result.blockers)}",
@@ -151,6 +206,13 @@ def render_dpa_readiness_result(result: DpaReadinessResult) -> str:
         lines.append("")
         lines.append("DP2 blockers:")
         lines.extend(f"- {blocker}" for blocker in result.blockers)
+    if result.progress_items:
+        lines.append("")
+        lines.append(f"Progress model: {PROGRESS_MODEL}")
+        lines.extend(
+            f"- {item.id}: {item.earned}/{item.weight} ({item.status})"
+            for item in result.progress_items
+        )
     if not result.findings and not result.blockers:
         lines.append("")
         lines.append("DP2 authorization evidence is structurally complete.")
@@ -286,6 +348,55 @@ def _validate_evidence_inputs(
             )
 
 
+def _validate_command_manifest_ack(
+    data: dict[str, Any], findings: list[DpaReadinessFinding], path: str, base: Path
+) -> None:
+    command_ref = load_workspace(base, suppress_legacy_profile_warning=True).reference_file(
+        "agentic-kit-commands.json"
+    )
+    command_ref_text = _display_path(command_ref, base)
+    if not command_ref.exists():
+        findings.append(
+            DpaReadinessFinding(
+                code="command-reference-missing",
+                message=f"command reference is missing: {command_ref_text}",
+                path=path,
+            )
+        )
+        return
+    try:
+        command_data = json.loads(command_ref.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        findings.append(
+            DpaReadinessFinding(
+                code="command-reference-json-invalid",
+                message=f"command reference is not valid JSON: {exc}",
+                path=path,
+            )
+        )
+        return
+    meta = command_data.get("meta")
+    manifest_sha = meta.get("manifest_sha") if isinstance(meta, dict) else None
+    if not isinstance(manifest_sha, str) or not manifest_sha:
+        findings.append(
+            DpaReadinessFinding(
+                code="command-reference-manifest-sha-missing",
+                message="command reference meta.manifest_sha must be a non-empty string",
+                path=path,
+            )
+        )
+        return
+    expected_ack = f"COMMAND_MANIFEST_ACK {manifest_sha}"
+    if data.get("command_manifest_ack") != expected_ack:
+        findings.append(
+            DpaReadinessFinding(
+                code="command-manifest-ack-drift",
+                message=f"command_manifest_ack must be {expected_ack!r}",
+                path=path,
+            )
+        )
+
+
 def _collect_blockers(data: dict[str, Any]) -> list[str]:
     dp2_entry = data.get("dp2_entry_status")
     if not isinstance(dp2_entry, dict):
@@ -320,3 +431,32 @@ def _validate_status_consistency(
                 path=path,
             )
         )
+
+
+def _progress_items(data: dict[str, Any]) -> list[DpaProgressItem]:
+    dp2_entry = data.get("dp2_entry_status")
+    evidence_inputs = data.get("evidence_inputs")
+    if not isinstance(dp2_entry, dict):
+        dp2_entry = {}
+    items: list[DpaProgressItem] = []
+    for item_id, label, weight in PROGRESS_WEIGHTS:
+        if item_id == "dp1_evidence_staged":
+            complete = isinstance(evidence_inputs, list) and bool(evidence_inputs)
+            status = "SATISFIED_FOR_STAGING" if complete else "BLOCKED"
+        elif item_id == "dp1_readiness_recorded":
+            complete = data.get("status") in {BLOCKED_STATUS, AUTHORIZED_STATUS}
+            status = str(data.get("status") or "BLOCKED")
+        else:
+            raw_status = dp2_entry.get(item_id)
+            complete = isinstance(raw_status, str) and raw_status != "BLOCKED"
+            status = str(raw_status or "BLOCKED")
+        items.append(
+            DpaProgressItem(
+                id=item_id,
+                label=label,
+                weight=weight,
+                earned=weight if complete else 0,
+                status=status,
+            )
+        )
+    return items

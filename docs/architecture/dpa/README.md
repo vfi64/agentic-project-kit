@@ -130,8 +130,9 @@ map. Mutation-scoped fixtures remain unrun, Maintainer Assessment remains
 unrecorded and the full Probe PASS claim boundary remains closed.
 
 The read-only wrapper `agentic-kit dpa readiness` validates that staged
-Assessment readiness record and reports the current DP2 blocker set without
-mutating repository files.
+Assessment readiness record, reports the deterministic implementation
+percentage and shows the current DP2 blocker set without mutating repository
+files.
 
 ## Generated-output and command-updated boundary
 
