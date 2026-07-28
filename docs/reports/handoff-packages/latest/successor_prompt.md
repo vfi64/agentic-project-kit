@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1904-handoff-refresh`
+- branch: `docs/post-pr1906-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -402,14 +402,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1904-handoff-refresh",
+    "branch": "docs/post-pr1906-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "aff29cd5b27dea36205bb3f086da8f6def4c053c",
+    "head": "3d887fbc61c60e8c810f49a1e087023f3474b444",
     "head_matches_origin_main": true,
-    "head_short": "aff29cd5",
+    "head_short": "3d887fbc",
     "local_path": "cd /path/to/",
-    "origin_main": "aff29cd5b27dea36205bb3f086da8f6def4c053c",
-    "origin_main_short": "aff29cd5",
+    "origin_main": "3d887fbc61c60e8c810f49a1e087023f3474b444",
+    "origin_main_short": "3d887fbc",
     "worktree_clean": false
   }
 }
@@ -435,7 +435,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: dc3f7327229c). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK dc3f7327229c. Consult `agentic-kit command-for` before proposing commands.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: f526f7b4e687). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK f526f7b4e687. Consult `agentic-kit command-for` before proposing commands.
 - Before proposing ANY command run/consult `agentic-kit command-for`.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -445,5 +445,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: ca83941977c900e5f10de3334b94e292bdf210df5e095548320cd9c94906a189
-- docs/reference/agentic-kit-commands.json: 61cf3c96a91bff2c433e5c779855bbf675bc183e2b526b9b2ec8a27de0462d4e
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 3387ab31b8f70d2b1a9bb7933ad8ccdec84302a91e00f4fbd7ad791cd01c2282
+- docs/reference/agentic-kit-commands.json: 6b4a89864763f4f85f69fb168170eaae8f39ad53add4df3f29d19a29d3311f38
