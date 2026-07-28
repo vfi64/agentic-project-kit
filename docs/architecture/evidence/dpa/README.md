@@ -43,9 +43,15 @@ workflow serialization source, test and control surfaces are present, but it
 records `PARTIAL_BLOCKED_FOR_DP2` because disposable branch/PR/integration
 fixtures and Maintainer authorization remain open.
 
+The current Renderer Probe readiness preflight records Kit validation ref
+`d88491c904ea55d08fefeaa950a89014117b7084`. It confirms current candidate
+renderer source, test and control surfaces are present, but it records
+`PARTIAL_BLOCKED_FOR_DP2` because an approved DPA renderer map, renderer
+identity/version fixtures and side-effect fixtures remain open.
+
 The current Assessment readiness record consolidates those evidence inputs into
 a DP2 blocker map at current Kit baseline
-`b65dc1c8ddc0e3b1b8f73ad35c6cf5c7cb8c6bba`. It records `DP2_BLOCKED`, keeps the
+`d88491c904ea55d08fefeaa950a89014117b7084`. It records `DP2_BLOCKED`, keeps the
 full Probe PASS claim boundary closed and names the remaining Probe, writer,
 rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
 
@@ -69,6 +75,8 @@ rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
 - `probes/probe-003-workflow-readiness-b65dc1c8-20260728/` records current Kit
   PROBE-003 workflow serialization readiness preflight evidence with result
   `PARTIAL_BLOCKED_FOR_DP2`.
+- `probes/renderer-readiness-d88491c9-20260728/` records current Kit Renderer
+  Probe readiness preflight evidence with result `PARTIAL_BLOCKED_FOR_DP2`.
 - `assessment/DP1_ASSESSMENT_READINESS_20260728.md` records the current DP1
   Assessment readiness decision surface with status `DP2_BLOCKED`.
 

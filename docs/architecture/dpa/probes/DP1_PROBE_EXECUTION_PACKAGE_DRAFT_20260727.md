@@ -219,9 +219,14 @@ Missing before execution:
 - approved DPA renderer-map location;
 - DPA renderer identity and interface-version fixtures;
 - semantic-version mismatch fixtures;
+- implementation-evidence-only change fixtures;
+- immutable lifecycle-resolved input snapshot fixtures;
 - deterministic repeat-output fixtures;
+- output type and target-scope fixtures;
 - side-effect prohibition fixtures for filesystem, network, subprocess,
   workflow, state, evidence and nested-renderer behavior.
+- deterministic semantic resource bound, operational abort and bounded failure
+  diagnostic fixtures.
 
 The observed GUI renderer tests are not DPA renderer conformance tests.
 

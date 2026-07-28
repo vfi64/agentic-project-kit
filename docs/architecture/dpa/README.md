@@ -111,7 +111,8 @@ not supersede the specification files and do not prove Kit conformance.
   `46deae72c2d37ae18331203bc3a6be19c9a67f64` with result
   `PASS_WITH_LIMITATIONS`, current PROBE-001 registry compatibility evidence,
   PROBE-002 lifecycle readiness preflight, the WRT-CH-001 admin-refresh
-  observation and PROBE-003 workflow serialization readiness preflight.
+  observation, PROBE-003 workflow serialization readiness preflight and Renderer
+  Probe readiness preflight.
 - `../evidence/dpa/assessment/DP1_ASSESSMENT_READINESS_20260728.md`
   consolidates the imported and current DP1 evidence into an Assessment
   readiness decision surface. It records `DP2_BLOCKED`, preserves the full
@@ -140,6 +141,12 @@ The read-only wrapper `agentic-kit dpa probe-003-readiness` validates current
 PROBE-003 workflow serialization source, test and control surfaces, optionally
 writes bounded DPA probe evidence and preserves the full Probe PASS boundary
 until authorized disposable workflow fixtures execute.
+
+The read-only wrapper `agentic-kit dpa renderer-readiness` validates current
+Renderer Probe candidate source, test and control surfaces, optionally writes
+bounded DPA probe evidence and preserves the full Renderer Probe PASS boundary
+until an approved DPA renderer map, identity/version fixtures and side-effect
+fixtures exist.
 
 ## Generated-output and command-updated boundary
 
