@@ -3604,6 +3604,152 @@
     {
       "dry_run_available": true,
       "group": "dpa",
+      "help": "Execute only non-mutating DP1 Probe fixture cases.",
+      "name": "readonly-probe-execution",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/dpa/probes/fixtures/DP1_PROBE_FIXTURE_MANIFEST_20260727.json')",
+          "help": "DPA DP1 Probe fixture manifest to inspect.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "fixture_manifest",
+          "opts": [
+            "--fixture-manifest"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional exact target ref to record instead of the current repository HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "validation_ref",
+          "opts": [
+            "--validation-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional DPA probe evidence JSON path under docs/architecture/evidence/dpa/probes/.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write --output when supplied.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Classify eligible read-only fixture cases without executing commands.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "plan_only",
+          "opts": [
+            "--plan-only"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_json",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 180,
+          "help": "Per-command timeout.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "timeout_seconds",
+          "opts": [
+            "--timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail unless every executed read-only command succeeds.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_no_command_failures",
+          "opts": [
+            "--require-no-command-failures"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "dpa",
+        "readonly-probe-execution"
+      ],
+      "qualified_name": "agentic-kit dpa readonly-probe-execution",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "dpa"
+      ],
+      "when_to_use": "Execute only non-mutating DP1 Probe fixture cases."
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
       "help": "Inspect Renderer Probe readiness without renderer conformance claims.",
       "name": "renderer-readiness",
       "params": [
@@ -15285,7 +15431,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "0a7072ca7b72",
+    "manifest_sha": "aa03fbe18988",
     "schema_version": 1
   },
   "schema_version": 2,
