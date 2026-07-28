@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 0133e185367f00cfcbd5873bc13c09843eafc283
-  short: 0133e185
-  subject: Add DPA registry contract validation (#1896)
+  full: c1e7db1d4dabf675dd7b80179c95f3c25f94452a
+  short: c1e7db1d
+  subject: Refresh successor package after PR1898 (#1899)
 last_substantive_work_state:
-  full: 0133e185367f00cfcbd5873bc13c09843eafc283
-  short: 0133e185
-  subject: Add DPA registry contract validation (#1896)
+  full: c1e7db1d4dabf675dd7b80179c95f3c25f94452a
+  short: c1e7db1d
+  subject: Refresh successor package after PR1898 (#1899)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
