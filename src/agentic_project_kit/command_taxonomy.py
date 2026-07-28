@@ -136,6 +136,7 @@ def _category_for(group: str, leaf: str, qualified: str) -> str:
 
 PREFERRED_COMPOSITE_COMMANDS: tuple[str, ...] = (
     "agentic-kit transfer pr-closeout-complete",
+    "agentic-kit transfer post-merge-settle",
     "agentic-kit transfer post-merge-complete",
     "agentic-kit transfer pr-create-complete",
     "agentic-kit work start",
@@ -153,6 +154,7 @@ def _composition_level_for(group: str, leaf: str, qualified: str) -> str:
         return "composite"
     if leaf in {
         "pr-closeout-complete",
+        "post-merge-settle",
         "post-merge-complete",
         "pr-create-complete",
         "patch-cycle-status",

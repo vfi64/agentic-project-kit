@@ -38,6 +38,9 @@ from agentic_project_kit.cli_commands.transfer import transfer_app
 from agentic_project_kit.cli_commands.transfer_post_merge_complete import (
     register_transfer_post_merge_complete_command,
 )
+from agentic_project_kit.cli_commands.transfer_post_merge_settle import (
+    register_transfer_post_merge_settle_command,
+)
 from agentic_project_kit.cli_commands.transfer_pr_closeout_complete import (
     register_transfer_pr_closeout_complete_command,
 )
@@ -98,6 +101,7 @@ register_rules_commands(app)
 register_validation_commands(app)
 register_patch_preflight_command(app)
 register_transfer_post_merge_complete_command(transfer_app)
+register_transfer_post_merge_settle_command(transfer_app)
 register_transfer_pr_closeout_complete_command(transfer_app)
 register_removed_ns_commands(transfer_app)
 app.add_typer(work_app, name="work")

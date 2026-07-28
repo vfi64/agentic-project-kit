@@ -484,8 +484,8 @@ roadmap:
         - complete PR
         - post-merge completion
         - post-merge check
-        authority: agentic-kit transfer pr-create-complete, pr-complete, post-merge-complete,
-          post-merge-check
+        authority: agentic-kit transfer pr-create-complete, pr-complete, post-merge-settle,
+          post-merge-complete, post-merge-check
         status: covered_by_transfer_wrappers
       file_transfer_carrier:
         examples:
@@ -1842,6 +1842,7 @@ plans:
       retained_requirement: complete post-merge lifecycle after merge, including admin
         refresh recovery handling and explicit chat reply state
       current_authority:
+      - agentic-kit transfer post-merge-settle
       - agentic-kit transfer post-merge-complete
       - src/agentic_project_kit/transfer_post_merge_lifecycle.py
       - tests/test_transfer_post_merge_complete_command.py
@@ -2863,6 +2864,7 @@ discarded:
       current_authority:
       - agentic-kit transfer pr-create-complete
       - agentic-kit transfer pr-complete
+      - agentic-kit transfer post-merge-settle
       - agentic-kit transfer post-merge-complete
       - agentic-kit transfer post-merge-check
       - agentic-kit pr merge-if-green

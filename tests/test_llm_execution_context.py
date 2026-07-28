@@ -25,13 +25,14 @@ def test_llm_execution_context_is_generated_from_current_repo_sources() -> None:
     for name in (
         "agentic-kit transfer pr-create-complete",
         "agentic-kit transfer pr-complete",
+        "agentic-kit transfer post-merge-settle",
         "agentic-kit transfer post-merge-complete",
         "agentic-kit transfer command-reference-refresh",
     ):
         assert wrappers[name]["present"] is True
 
     assert context["execution_policy"]["wrapper_first"] is True
-    assert context["execution_policy"]["post_merge_complete_required_after_merge"] is True
+    assert context["execution_policy"]["post_merge_settle_required_after_merge"] is True
 
 
 def test_llm_execution_context_records_placeholder_and_terminal_resilience_policy() -> None:
@@ -99,9 +100,9 @@ def test_llm_execution_context_encodes_pr_handoff_lifecycle_order(tmp_path: Path
     assert lifecycle["post_merge_checks_belong_to_main"] is True
     assert lifecycle["post_merge_check_after_merge_only"] is True
     assert lifecycle["do_not_use_stale_prompt_text_as_handoff_source"] is True
+    assert any("post-merge-settle --after-pr" in item for item in lifecycle["post_merge_requires_concrete_number"])
     assert lifecycle["fresh_llm_context_before_pr"] == [
         "./.venv/bin/agentic-kit transfer prepare-successor-handoff --render-prompt",
         "./.venv/bin/agentic-kit transfer publish-last-report",
         "./.venv/bin/agentic-kit transfer require-fresh-llm-context --json",
     ]
-

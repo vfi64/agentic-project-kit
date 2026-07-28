@@ -10,6 +10,7 @@ CRITICAL_TRANSFER_ACTIONS = (
     "push-current",
     "pr-create-complete",
     "pr-complete",
+    "post-merge-settle",
     "post-merge-complete",
     "post-merge-check",
 )

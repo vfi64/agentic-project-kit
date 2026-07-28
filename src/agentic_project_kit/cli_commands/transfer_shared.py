@@ -47,6 +47,7 @@ from agentic_project_kit.transfer_repo_actions import (
     repo_status,
     result_json,
     result_terminal,
+    successor_package_refresh_pr,
 )
 from agentic_project_kit.transfer_runner import (
     DEFAULT_INBOX,

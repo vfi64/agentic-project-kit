@@ -8,9 +8,9 @@ Current version: 0.4.13
 
 `agentic-project-kit` is a local Python package for generating GitHub-ready project skeletons for human-AI software development workflows.
 
-It creates a reusable development process: agent onboarding, project contract, policy selection, status discipline, test gates, task tracking, bounded logs, GitHub automation, workflow evidence, and release-state validation.
+It creates a reusable development process: onboarding, project contracts, policy selection, status discipline, test gates, task tracking, bounded logs, GitHub automation, workflow evidence, and release validation.
 
-In one sentence: `agentic-project-kit` is an early, dogfooded attempt to make AI-assisted repository work more reproducible through project contracts, documentation gates, release-state checks, task gates, policy expectations, workflow evidence, and bounded auditability.
+In one sentence: `agentic-project-kit` makes AI-assisted repository work more reproducible through explicit contracts, gates, workflow evidence, and bounded auditability.
 
 ## Why this exists
 
@@ -125,7 +125,7 @@ agentic-kit init my-docs-project \
 
 `agentic-kit doctor` also activates lightweight policy-pack checks from `.agentic/project.yaml`.
 
-These checks currently verify structural prerequisites:
+They verify structural prerequisites:
 
 - `solo-maintainer` expects status, handoff, sentinel, and task gate files.
 - `agentic-development` expects agent instructions, test gates, handoff, and the architecture contract.
@@ -133,7 +133,7 @@ These checks currently verify structural prerequisites:
 - `documentation-governed` expects the documentation coverage matrix and architecture contract.
 - `starter` and `prototype` expect basic README/status scaffolding.
 
-The policy-pack checks are deliberately structural. They prove that the selected policy pack has its required repository fixtures. They do not prove that the prose is complete or that release readiness has already been achieved.
+The policy-pack checks are structural. They prove that the selected policy pack has its required fixtures, not prose completeness or release readiness.
 
 ## Project health check
 
@@ -184,6 +184,8 @@ docs/reports/handoff-packages/latest/
 ```
 
 It also updates the canonical chat-switch prompt projections in `docs/handoff/`. A successor chat should use `docs/reports/handoff-packages/latest/successor_prompt.md` as the copy/paste prompt and must stop if `validation_report.json` is not `PASS`.
+
+After a PR merge, run `agentic-kit transfer post-merge-settle --after-pr PR_NUMBER`; it stops at READY/NOOP and blocks repeated generated/admin refresh loops.
 
 ## Planning-documentation slice gate
 

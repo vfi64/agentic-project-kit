@@ -10226,6 +10226,152 @@
     {
       "dry_run_available": false,
       "group": "transfer",
+      "help": "Deterministically settle post-merge generated-output refresh state.",
+      "name": "post-merge-settle",
+      "params": [
+        {
+          "default": null,
+          "help": "Merged PR number whose post-merge generated-output state should settle.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "after_pr",
+          "opts": [
+            "--after-pr"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "main",
+          "help": "Main branch to verify.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "main_branch",
+          "opts": [
+            "--main-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "squash",
+          "help": "Merge method for generated refresh PRs.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_method",
+          "opts": [
+            "--merge-method"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 300,
+          "help": "CI wait timeout.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "ci_timeout_seconds",
+          "opts": [
+            "--ci-timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 10,
+          "help": "CI polling interval.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "ci_poll_seconds",
+          "opts": [
+            "--ci-poll-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 60,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_state_timeout_seconds",
+          "opts": [
+            "--merge-state-timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 5,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge_state_poll_seconds",
+          "opts": [
+            "--merge-state-poll-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 2,
+          "help": "Maximum generated/admin refresh PRs allowed before blocking.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "refresh_limit",
+          "opts": [
+            "--refresh-limit"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of text.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "post-merge-settle"
+      ],
+      "qualified_name": "agentic-kit transfer post-merge-settle",
+      "replaces_raw": [],
+      "safety": "DESTRUCTIVE",
+      "task_tags": [
+        "destructive",
+        "transfer"
+      ],
+      "when_to_use": "Deterministically settle post-merge generated-output refresh state."
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
       "help": "",
       "name": "pr-closeout-complete",
       "params": [
@@ -14223,7 +14369,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "8610cfd2990a",
+    "manifest_sha": "fd31723f571b",
     "schema_version": 1
   },
   "schema_version": 2,

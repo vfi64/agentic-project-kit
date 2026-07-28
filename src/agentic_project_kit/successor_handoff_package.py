@@ -78,6 +78,7 @@ STARTUP_COMMAND_TAIL: tuple[str, ...] = (
     "git branch --show-current",
     "git status -sb",
     "git status --short",
+    "./.venv/bin/agentic-kit transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output",
     "./.venv/bin/agentic-kit transfer post-merge-check",
     "./.venv/bin/agentic-kit transfer repo-status",
 )
@@ -862,7 +863,7 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
                     "Commit through transfer commit, then run rules acknowledge.",
                     "Before PR completion, regenerate and publish fresh successor/LLM handoff context.",
                     "Use transfer pr-create-complete with --post-merge-complete for the normal PR lifecycle.",
-                    "After merge, sync main, restore known volatile files, run post-merge-check on main, repo-status, audits, standard gates, and final successor handoff.",
+                    "After merge, sync main, restore known volatile files, run post-merge-settle on main, repo-status, audits, standard gates, and final successor handoff.",
                 ],
                 "forbidden": [
                     "manual PR creation/merge when the wrapper can perform the lifecycle",
@@ -1058,7 +1059,7 @@ def render_execution_contract_projection(contract: dict[str, object]) -> str:
             "",
             "## Wrapper-first complete development cycle",
             "",
-            "Normal feature lifecycle: feature branch -> tests/audits -> `transfer protected-diff-plan` -> `transfer commit` -> `rules acknowledge` -> fresh successor/LLM context -> `transfer pr-create-complete ... --post-merge-complete` -> sync main -> `transfer post-merge-check` on main -> `transfer repo-status` -> docs/program/standard gates -> final successor handoff package.",
+            "Normal feature lifecycle: feature branch -> tests/audits -> `transfer protected-diff-plan` -> `transfer commit` -> `rules acknowledge` -> fresh successor/LLM context -> `transfer pr-create-complete ... --post-merge-complete` -> sync main -> `transfer post-merge-settle` on main -> `transfer repo-status` -> docs/program/standard gates -> final successor handoff package.",
             "",
             "`transfer post-merge-check` is a main/post-merge lifecycle check, not a feature-branch pre-PR gate. Use `transfer repo-status` for feature-branch cleanliness.",
             "",

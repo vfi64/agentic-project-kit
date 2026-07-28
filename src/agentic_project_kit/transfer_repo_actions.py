@@ -62,6 +62,19 @@ def _admin_refresh_paths(ws: Workspace) -> tuple[str, ...]:
     )
 
 
+def _successor_package_refresh_paths(ws: Workspace) -> tuple[str, ...]:
+    return (
+        _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md")),
+        _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md")),
+        _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")),
+        _workspace_path_text(ws, ws.package_file("execution_contract.json")),
+        _workspace_path_text(ws, ws.package_file("source_manifest.json")),
+        _workspace_path_text(ws, ws.package_file("successor_context.yaml")),
+        _workspace_path_text(ws, ws.package_file("successor_prompt.md")),
+        _workspace_path_text(ws, ws.package_file("validation_report.json")),
+    )
+
+
 def _agentic_kit_command() -> str:
     candidate = Path(sys.executable).parent / "agentic-kit"
     if candidate.exists():
@@ -202,6 +215,93 @@ def _existing_admin_refresh_pr(refresh_branch: str, *, action: str = "admin-refr
     )
     ok = subprocess.CompletedProcess(command, 0, out, "")
     return _result(action, command, ok, "Run transfer pr-status on the existing admin refresh PR.")
+
+
+def _existing_successor_package_refresh_pr(refresh_branch: str) -> RepoActionResult | None:
+    command = [
+        "gh",
+        "pr",
+        "list",
+        "--head",
+        refresh_branch,
+        "--state",
+        "open",
+        "--json",
+        "number,url,headRefName,headRefOid,state,title",
+    ]
+    completed = _run(command)
+    if completed.returncode != 0:
+        return _result(
+            "successor-package-refresh-pr",
+            command,
+            completed,
+            "Inspect existing successor package refresh PR lookup failure.",
+        )
+
+    try:
+        prs = json.loads(completed.stdout or "[]")
+    except json.JSONDecodeError as exc:
+        bad = subprocess.CompletedProcess(
+            command,
+            2,
+            completed.stdout,
+            f"Could not parse existing successor package refresh PR lookup JSON: {exc}\n",
+        )
+        return _result(
+            "successor-package-refresh-pr",
+            command,
+            bad,
+            "Inspect existing successor package refresh PR lookup output.",
+        )
+
+    if not isinstance(prs, list):
+        bad = subprocess.CompletedProcess(
+            command,
+            2,
+            completed.stdout,
+            "Existing successor package refresh PR lookup did not return a JSON list.\n",
+        )
+        return _result(
+            "successor-package-refresh-pr",
+            command,
+            bad,
+            "Inspect existing successor package refresh PR lookup output.",
+        )
+
+    if len(prs) > 1:
+        bad = subprocess.CompletedProcess(
+            command,
+            2,
+            completed.stdout,
+            f"Multiple open successor package refresh PRs found for branch {refresh_branch}.\n",
+        )
+        return _result(
+            "successor-package-refresh-pr",
+            command,
+            bad,
+            "Resolve duplicate successor package refresh PRs before continuing.",
+        )
+
+    if not prs:
+        return None
+
+    pr = prs[0]
+    out = (
+        "SUCCESSOR_PACKAGE_REFRESH_EXISTING_BRANCH_RECOVERY\n"
+        f"refresh_branch={refresh_branch}\n"
+        f"existing_pr={pr.get('number', '')}\n"
+        f"head_ref_oid={pr.get('headRefOid', '')}\n"
+        f"url={pr.get('url', '')}\n"
+        "result=PASS\n"
+    )
+    ok = subprocess.CompletedProcess(command, 0, out, "")
+    return _result(
+        "successor-package-refresh-pr",
+        command,
+        ok,
+        "Run transfer pr-status on the existing successor package refresh PR.",
+    )
+
 
 def _run(command: list[str], *, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
@@ -1614,7 +1714,10 @@ def _is_refresh_only_pr(after_pr: int, *, ws: Workspace | None = None) -> bool:
     head_ref = lines[1].strip() if len(lines) > 1 else ""
 
     return (
-        title.startswith("Refresh successor handoff after PR")
+        (
+            title.startswith("Refresh successor handoff after PR")
+            or title.startswith("Refresh handoff state after PR")
+        )
         and head_ref.startswith(workspace.admin_refresh_branch_prefix())
         and head_ref.endswith("-handoff-refresh")
     )
@@ -1816,6 +1919,205 @@ def _admin_refresh_pr_unlocked(
         "",
     )
     return _result("admin-refresh-pr", completed.args, completed, "Run transfer pr-status on the created admin refresh PR.")
+
+
+def _successor_package_refresh_branch(after_pr: int, *, ws: Workspace) -> str:
+    return f"{ws.admin_refresh_branch_prefix()}{after_pr}-successor-package-refresh"
+
+
+def successor_package_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionResult:
+    """Create a generated successor-handoff-package refresh PR from clean main."""
+
+    ws = load_workspace(Path("."))
+    with workspace_mutation_lock(Path("."), "successor_package_refresh_pr"):
+        monitor = guard_branch(
+            command_kind="successor-package-refresh-pr",
+            required_branch=main_branch,
+            allow_main_mutation=True,
+            auto_switch=True,
+        )
+        if monitor.decision == MonitorDecision.BLOCK:
+            return _monitor_block_result(
+                action="successor-package-refresh-pr",
+                command_kind="successor-package-refresh-pr",
+                required_branch=main_branch,
+                monitor=monitor,
+                next_action="Inspect transfer operation monitor block before successor package refresh.",
+            )
+
+        status_command = ["git", "status", "--short"]
+        status_completed = _run(status_command)
+        if status_completed.returncode != 0:
+            return _result(
+                "successor-package-refresh-pr",
+                status_command,
+                status_completed,
+                "Inspect worktree status.",
+            )
+        if status_completed.stdout.strip():
+            completed = subprocess.CompletedProcess(
+                status_command,
+                2,
+                status_completed.stdout,
+                "Refusing successor package refresh with dirty worktree. Commit, clean, or inspect first.\n",
+            )
+            return _result(
+                "successor-package-refresh-pr",
+                completed.args,
+                completed,
+                "Start successor package refresh from a clean main worktree.",
+            )
+
+        preflight = _remote_mutation_preflight(
+            action="successor-package-refresh-pr",
+            mutation="successor-package-refresh-pr",
+        )
+        if preflight is not None:
+            return preflight
+
+        refresh_branch = _successor_package_refresh_branch(after_pr, ws=ws)
+        transcript: list[str] = []
+
+        branch_create_step = ["git", "switch", "-c", refresh_branch, main_branch]
+        completed = _run(branch_create_step)
+        transcript.append(f"$ {' '.join(branch_create_step)}\n{completed.stdout}{completed.stderr}")
+        if completed.returncode != 0:
+            combined = f"{completed.stdout}{completed.stderr}"
+            if "already exists" in combined:
+                existing = _existing_successor_package_refresh_pr(refresh_branch)
+                if existing is not None:
+                    return existing
+                return _result(
+                    "successor-package-refresh-pr",
+                    branch_create_step,
+                    completed,
+                    "Resolve existing successor package refresh branch before continuing.",
+                )
+            return _result(
+                "successor-package-refresh-pr",
+                branch_create_step,
+                completed,
+                "Inspect successor package refresh branch state before continuing.",
+            )
+
+        refresh_command = [
+            _agentic_kit_command(),
+            "transfer",
+            "chat-switch-complete",
+            "--render-prompt",
+            "--json",
+        ]
+        refreshed = _run(refresh_command)
+        transcript.append(f"$ {' '.join(refresh_command)}\n{refreshed.stdout}{refreshed.stderr}")
+        if refreshed.returncode != 0:
+            return _result(
+                "successor-package-refresh-pr",
+                refresh_command,
+                refreshed,
+                "Inspect successor package generation failure before continuing.",
+            )
+
+        final_status = _run(["git", "status", "--short"])
+        changed = tuple(line.strip() for line in final_status.stdout.splitlines() if line.strip())
+        allowed_paths = _successor_package_refresh_paths(ws)
+        allowed = {f"M {path}" for path in allowed_paths} | {f"?? {path}" for path in allowed_paths}
+        changed_set = set(changed)
+        unexpected = sorted(changed_set - allowed)
+        if not changed_set or unexpected:
+            completed = subprocess.CompletedProcess(
+                ["git", "status", "--short"],
+                2,
+                final_status.stdout,
+                "Successor package refresh must change a non-empty subset of generated successor package paths "
+                "and no unexpected paths.\n",
+            )
+            return _result(
+                "successor-package-refresh-pr",
+                completed.args,
+                completed,
+                "Inspect unexpected successor package refresh diff before committing.",
+            )
+
+        commit_message = f"Refresh successor package after PR{after_pr}"
+        commit_result = commit_paths(
+            commit_message,
+            list(allowed_paths),
+            required_branch=refresh_branch,
+        )
+        transcript.append(
+            f"$ transfer commit --message {commit_message!r} --path <successor-package-refresh-paths>\n"
+            f"{commit_result.stdout}{commit_result.stderr}"
+        )
+        if commit_result.returncode != 0:
+            completed = subprocess.CompletedProcess(
+                commit_result.command,
+                commit_result.returncode,
+                commit_result.stdout,
+                commit_result.stderr,
+            )
+            return _result(
+                "successor-package-refresh-pr",
+                commit_result.command,
+                completed,
+                "Inspect successor package refresh commit failure before continuing.",
+            )
+
+        push_result = push_current(required_branch=refresh_branch)
+        transcript.append(
+            f"$ transfer push-current --branch {refresh_branch}\n"
+            f"{push_result.stdout}{push_result.stderr}"
+        )
+        if push_result.returncode != 0:
+            completed = subprocess.CompletedProcess(
+                push_result.command,
+                push_result.returncode,
+                push_result.stdout,
+                push_result.stderr,
+            )
+            return _result(
+                "successor-package-refresh-pr",
+                push_result.command,
+                completed,
+                "Inspect successor package refresh push failure before continuing.",
+            )
+
+        pr_body = f"Generated successor handoff package refresh after PR{after_pr}. No product-code changes."
+        pr_result = pr_create(
+            base=main_branch,
+            head=refresh_branch,
+            title=commit_message,
+            body=pr_body,
+        )
+        transcript.append(
+            f"$ transfer pr-create --base {main_branch} --head {refresh_branch}\n"
+            f"{pr_result.stdout}{pr_result.stderr}"
+        )
+        if pr_result.returncode != 0:
+            completed = subprocess.CompletedProcess(
+                pr_result.command,
+                pr_result.returncode,
+                pr_result.stdout,
+                pr_result.stderr,
+            )
+            return _result(
+                "successor-package-refresh-pr",
+                pr_result.command,
+                completed,
+                "Inspect successor package refresh PR creation failure.",
+            )
+
+        completed = subprocess.CompletedProcess(
+            ["agentic-kit", "transfer", "successor-package-refresh-pr", "--after-pr", str(after_pr)],
+            0,
+            "\n".join(transcript),
+            "",
+        )
+        return _result(
+            "successor-package-refresh-pr",
+            completed.args,
+            completed,
+            "Run transfer pr-status on the created successor package refresh PR.",
+        )
 
 
 def result_json(result: RepoActionResult) -> str:
