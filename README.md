@@ -357,6 +357,7 @@ Quick command guide:
 - `agentic-kit chat refresher --mode copy-paste`: print the six-line command-manifest refresher for chat replies that may include commands.
 - `agentic-kit chat session-start --mode copy-paste`: print the refresher plus the full inline command manifest for a new session.
 - `agentic-kit commands sync-entrypoints --execute`: synchronize command reference files and command-manifest entrypoint headers.
+- `agentic-kit dpa readiness`: validate the staged DPA DP1 Assessment readiness record and report whether DP2 remains blocked.
 - `agentic-kit work start --from-ref REF`: create a fresh work branch based on a selected release tag or branch.
 - `agentic-kit work discard-changes`: preview the explicitly destructive feature-branch discard flow; `--execute` requires a deliberate confirmation path.
 - `agentic-kit transfer list-refs --json`: list local release tags and branches for the guided work-start picker.

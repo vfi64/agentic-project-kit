@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: fd31723f571b
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: ff86b5a8c9f1
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `226`
+- Command count: `227`
 
 ## Commands
 
@@ -706,6 +706,21 @@ Run a compact project health check.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+
+### `agentic-kit dpa readiness`
+
+- Safety: `BOUNDED`
+- When to use: Validate the DPA DP1 Assessment readiness record without mutating files.
+- Dry-run available: `False`
+
+Validate the DPA DP1 Assessment readiness record without mutating files.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')` | DPA Assessment readiness JSON record to inspect. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `require_dp2_ready` | `TyperOption` | --require-dp2-ready | `False` | `False` | Fail unless the readiness record structurally authorizes DP2. |
 
 ### `agentic-kit evidence classify-log`
 

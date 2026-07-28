@@ -191,6 +191,7 @@ rules:
     - agentic-kit chat refresher
     - agentic-kit chat session-start
     - agentic-kit commands sync-entrypoints
+    - agentic-kit dpa readiness
     - agentic-kit workflow list
     - agentic-kit workflow show
     - agentic-kit workflow upload
@@ -403,6 +404,8 @@ rules:
     - architecture index and registry staging
     - Imported architecture package
     - Probe package staging
+    - DP1 Assessment readiness record
+    - DP2_BLOCKED
     - DP1 read-only baseline refresh
     - 46deae72c2d37ae18331203bc3a6be19c9a67f64
     - PASS_WITH_LIMITATIONS
