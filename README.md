@@ -358,6 +358,7 @@ Quick command guide:
 - `agentic-kit chat session-start --mode copy-paste`: print the refresher plus the full inline command manifest for a new session.
 - `agentic-kit commands sync-entrypoints --execute`: synchronize command reference files and command-manifest entrypoint headers.
 - `agentic-kit dpa readiness`: validate the staged DPA DP1 Assessment readiness record, report the deterministic implementation percentage, and show whether DP2 remains blocked.
+- `agentic-kit dpa dp2-decision-readiness`: prepare the DP2 decision package without recording Maintainer Assessment or authorization.
 - `agentic-kit dpa probe-002-readiness`: inspect PROBE-002 lifecycle and selected-writer readiness, optionally writing bounded DPA probe evidence under `docs/architecture/evidence/dpa/probes/`.
 - `agentic-kit dpa probe-003-readiness`: inspect PROBE-003 workflow serialization readiness, optionally writing bounded DPA probe evidence without workflow mutation.
 - `agentic-kit dpa renderer-readiness`: inspect Renderer Probe readiness, optionally writing bounded DPA probe evidence without renderer conformance claims.

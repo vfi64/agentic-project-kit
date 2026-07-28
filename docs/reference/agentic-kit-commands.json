@@ -2938,6 +2938,124 @@
     {
       "dry_run_available": true,
       "group": "dpa",
+      "help": "Prepare DP2 decision readiness without recording Maintainer authorization.",
+      "name": "dp2-decision-readiness",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')",
+          "help": "DPA Assessment readiness JSON record to inspect.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "record",
+          "opts": [
+            "--record"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional exact target ref to record instead of the current repository HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "validation_ref",
+          "opts": [
+            "--validation-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write --output when supplied.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_json",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail unless the decision package is structurally ready for Maintainer review.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_ready",
+          "opts": [
+            "--require-ready"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "dpa",
+        "dp2-decision-readiness"
+      ],
+      "qualified_name": "agentic-kit dpa dp2-decision-readiness",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "dpa"
+      ],
+      "when_to_use": "Prepare DP2 decision readiness without recording Maintainer authorization."
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
       "help": "Inspect PROBE-002 lifecycle and selected-writer readiness without production mutation.",
       "name": "probe-002-readiness",
       "params": [
@@ -15035,7 +15153,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "6238b5e0fcaa",
+    "manifest_sha": "f6919e347655",
     "schema_version": 1
   },
   "schema_version": 2,

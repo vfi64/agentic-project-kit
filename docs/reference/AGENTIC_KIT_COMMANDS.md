@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 6238b5e0fcaa
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: f6919e347655
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `232`
+- Command count: `233`
 
 ## Commands
 
@@ -706,6 +706,24 @@ Run a compact project health check.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+
+### `agentic-kit dpa dp2-decision-readiness`
+
+- Safety: `BOUNDED`
+- When to use: Prepare DP2 decision readiness without recording Maintainer authorization.
+- Dry-run available: `True`
+
+Prepare DP2 decision readiness without recording Maintainer authorization.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')` | DPA Assessment readiness JSON record to inspect. |
+| `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact target ref to record instead of the current repository HEAD. |
+| `output` | `TyperOption` | --output | `False` |  | Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `require_ready` | `TyperOption` | --require-ready | `False` | `False` | Fail unless the decision package is structurally ready for Maintainer review. |
 
 ### `agentic-kit dpa probe-002-readiness`
 

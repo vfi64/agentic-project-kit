@@ -843,6 +843,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable companion to the DP1 Assessment readiness record; not DP2 authorization or conformance evidence.
+  - path: docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-8ceadc8a-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit DP2 decision-readiness preflight summary; not Maintainer Assessment or DP2 authorization.
+  - path: docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-8ceadc8a-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable DP2 decision-readiness preflight evidence; preserves all DP2 blockers and false authorization claims.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

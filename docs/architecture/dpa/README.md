@@ -154,6 +154,12 @@ writes bounded DPA probe evidence and preserves the full PROBE-004 PASS
 boundary until Maintainer-scoped migration-form, rollback-package, renderer
 rollback and generated-output rollback fixtures execute.
 
+The read-only wrapper `agentic-kit dpa dp2-decision-readiness` packages the
+current blocker set, candidate first DP2 target scope and required Maintainer
+actions for review. It may write bounded Assessment evidence, but it does not
+record Maintainer Assessment, select DP2 scope, prove rollback cleanup or
+authorize DP2.
+
 ## Generated-output and command-updated boundary
 
 The generated or command-updated Kit outputs boundary keeps those files owned by
