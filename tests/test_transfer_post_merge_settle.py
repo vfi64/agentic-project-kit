@@ -63,6 +63,46 @@ def test_post_merge_settle_ready_stops_without_refresh(monkeypatch):
     assert calls == ["check"]
 
 
+def test_post_merge_settle_treats_legacy_blocked_refresh_as_handoff_refresh(monkeypatch):
+    post_merge_states = iter(
+        [
+            (
+                "POST_MERGE_HANDOFF_REFRESH\n"
+                "current_head=63c3a6eb\n"
+                "freshness_warning_present=True\n"
+                "refresh_required=True\n"
+                "result=REFRESH_REQUIRED\n"
+                "next_safe_action=create_administrative_handoff_refresh\n",
+                "STATE=BLOCKED; NEXT=diagnose_handoff_refresh_status",
+                1,
+            ),
+            ("POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", "", 0),
+        ]
+    )
+    calls: list[str] = []
+    _patch_common_pr_steps(monkeypatch, calls)
+
+    def fake_post_merge_check(**_kwargs):
+        calls.append("check")
+        stdout, next_action, returncode = next(post_merge_states)
+        return _result("post-merge-check", stdout, returncode=returncode, next_action=next_action)
+
+    def fake_handoff(after_pr: int, **_kwargs):
+        calls.append(f"handoff:{after_pr}")
+        return _result("admin-refresh-pr", "existing_pr=1883\n")
+
+    monkeypatch.setattr(f"{TARGET}.post_merge_check", fake_post_merge_check)
+    monkeypatch.setattr(f"{TARGET}.admin_refresh_pr", fake_handoff)
+
+    result = post_merge_settle(1882)
+
+    assert result.result_status == "PASS"
+    assert result.lifecycle_state == "COMPLETE"
+    assert result.refresh_prs == (1883,)
+    assert result.refresh_kinds == ("handoff-refresh",)
+    assert calls == ["check", "handoff:1882", "wait:1883", "merge:1883", "pull", "check"]
+
+
 def test_post_merge_settle_runs_successor_then_handoff_refresh(monkeypatch):
     post_merge_states = iter(
         [

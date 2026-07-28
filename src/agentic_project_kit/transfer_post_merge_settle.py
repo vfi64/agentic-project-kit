@@ -53,15 +53,17 @@ _REFRESHABLE_STATES = {
 
 def _post_merge_state(result: RepoActionResult) -> str:
     combined = f"{result.next_action}\n{result.stdout}\n{result.stderr}"
+    if "result=NOOP" in combined and result.returncode == 0 and result.result_status == "PASS":
+        return "READY"
+    if "result=REFRESH_REQUIRED" in combined:
+        # Legacy handoff status reports STATE=BLOCKED while still naming a safe refresh action.
+        return "NEEDS_HANDOFF_REFRESH"
+
     for match in re.finditer(r"^STATE=([A-Z_]+)", combined, flags=re.MULTILINE):
         state = match.group(1)
         if state in {"READY", "NEEDS_HANDOFF_REFRESH", "NEEDS_SUCCESSOR_PACKAGE_REFRESH", "BLOCKED"}:
             return state
 
-    if "result=NOOP" in combined and result.returncode == 0 and result.result_status == "PASS":
-        return "READY"
-    if "result=REFRESH_REQUIRED" in combined:
-        return "NEEDS_HANDOFF_REFRESH"
     if result.returncode != 0 or result.result_status != "PASS":
         return "CHECK_FAILED"
     return "UNKNOWN"
