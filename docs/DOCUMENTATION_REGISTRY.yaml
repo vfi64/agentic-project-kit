@@ -923,6 +923,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable WRT-CH-001 observation evidence from merged admin refresh PR #1902; records no DP2 authorization.
+  - path: docs/architecture/evidence/dpa/probes/probe-003-workflow-readiness-b65dc1c8-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit PROBE-003 workflow serialization readiness preflight summary; PARTIAL_BLOCKED_FOR_DP2 only, not full Probe PASS evidence.
+  - path: docs/architecture/evidence/dpa/probes/probe-003-workflow-readiness-b65dc1c8-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable PROBE-003 workflow serialization readiness preflight evidence; records disposable workflow fixture and Maintainer-authorization blockers.
   - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

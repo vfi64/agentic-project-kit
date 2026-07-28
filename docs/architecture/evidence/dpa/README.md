@@ -37,9 +37,15 @@ merge ref `d0d2f537ccb21666a42562d3bc7c07087ff9622d`. It confirms that PR
 passed CI. It is observation evidence only; it is not a disposable WRT-CH-001
 fixture and does not satisfy full PROBE-002.
 
+The current PROBE-003 workflow serialization readiness preflight records Kit
+validation ref `b65dc1c8ddc0e3b1b8f73ad35c6cf5c7cb8c6bba`. It confirms current
+workflow serialization source, test and control surfaces are present, but it
+records `PARTIAL_BLOCKED_FOR_DP2` because disposable branch/PR/integration
+fixtures and Maintainer authorization remain open.
+
 The current Assessment readiness record consolidates those evidence inputs into
 a DP2 blocker map at current Kit baseline
-`d0d2f537ccb21666a42562d3bc7c07087ff9622d`. It records `DP2_BLOCKED`, keeps the
+`b65dc1c8ddc0e3b1b8f73ad35c6cf5c7cb8c6bba`. It records `DP2_BLOCKED`, keeps the
 full Probe PASS claim boundary closed and names the remaining Probe, writer,
 rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
 
@@ -60,6 +66,9 @@ rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
 - `probes/wrt-ch001-admin-refresh-observation-d0d2f537-20260728/` records the
   WRT-CH-001 administrative handoff refresh observation for PR #1902 with
   result `OBSERVED_ADMIN_REFRESH_NOT_DISPOSABLE_FIXTURE`.
+- `probes/probe-003-workflow-readiness-b65dc1c8-20260728/` records current Kit
+  PROBE-003 workflow serialization readiness preflight evidence with result
+  `PARTIAL_BLOCKED_FOR_DP2`.
 - `assessment/DP1_ASSESSMENT_READINESS_20260728.md` records the current DP1
   Assessment readiness decision surface with status `DP2_BLOCKED`.
 

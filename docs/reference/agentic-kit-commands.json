@@ -3040,6 +3040,124 @@
       "when_to_use": "Inspect PROBE-002 lifecycle and selected-writer readiness without production mutation."
     },
     {
+      "dry_run_available": true,
+      "group": "dpa",
+      "help": "Inspect PROBE-003 workflow serialization readiness without workflow mutation.",
+      "name": "probe-003-readiness",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')",
+          "help": "DPA Assessment readiness JSON record to inspect.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "record",
+          "opts": [
+            "--record"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional exact target ref to record instead of the current repository HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "validation_ref",
+          "opts": [
+            "--validation-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional DPA probe evidence JSON path under docs/architecture/evidence/dpa/probes/.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write --output when supplied.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_json",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail unless PROBE-003 full evidence is structurally satisfied.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_full_evidence",
+          "opts": [
+            "--require-full-evidence"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "dpa",
+        "probe-003-readiness"
+      ],
+      "qualified_name": "agentic-kit dpa probe-003-readiness",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "dpa"
+      ],
+      "when_to_use": "Inspect PROBE-003 workflow serialization readiness without workflow mutation."
+    },
+    {
       "dry_run_available": false,
       "group": "dpa",
       "help": "Validate the DPA DP1 Assessment readiness record without mutating files.",
@@ -14681,7 +14799,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "dc3f7327229c",
+    "manifest_sha": "f526f7b4e687",
     "schema_version": 1
   },
   "schema_version": 2,

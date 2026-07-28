@@ -193,6 +193,7 @@ rules:
     - agentic-kit commands sync-entrypoints
     - agentic-kit dpa readiness
     - agentic-kit dpa probe-002-readiness
+    - agentic-kit dpa probe-003-readiness
     - agentic-kit dpa wrt-ch001-evidence
     - agentic-kit workflow list
     - agentic-kit workflow show
