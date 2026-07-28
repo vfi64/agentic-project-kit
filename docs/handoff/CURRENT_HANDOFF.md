@@ -323,6 +323,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1916
+## Operational documentation refresh state after PR #1918
 
-Current administrative handoff refresh state is `22c306c1` (`Refresh DPA readiness evidence for current main (#1916)`). Continue next only after this post-PR1916 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `4ad4292e` (`Add DPA read-only probe execution wrapper (#1918)`). Continue next only after this post-PR1918 refresh is committed and merged; the next substantive slice must be created from fresh main.

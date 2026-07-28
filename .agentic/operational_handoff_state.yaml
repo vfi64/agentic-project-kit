@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 22c306c199dda1cd452cda90c0c2f20e01df0590
-  short: 22c306c1
-  subject: Refresh DPA readiness evidence for current main (#1916)
+  full: 4ad4292eb737f54806f263018dbdc0f4363f6aeb
+  short: 4ad4292e
+  subject: Add DPA read-only probe execution wrapper (#1918)
 last_substantive_work_state:
-  full: 22c306c199dda1cd452cda90c0c2f20e01df0590
-  short: 22c306c1
-  subject: Refresh DPA readiness evidence for current main (#1916)
+  full: 4ad4292eb737f54806f263018dbdc0f4363f6aeb
+  short: 4ad4292e
+  subject: Add DPA read-only probe execution wrapper (#1918)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
