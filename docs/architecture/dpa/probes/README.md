@@ -44,6 +44,13 @@ The read-only baseline evidence is `PASS_WITH_LIMITATIONS`. The mutation
 sandbox evidence is `PARTIAL`. Neither result satisfies full DP1 Probe PASS,
 Assessment, DP2 entry, stable promotion or Kit conformance.
 
+Current Kit-side readiness preflights under
+`docs/architecture/evidence/dpa/probes/` now include PROBE-001 registry
+compatibility, PROBE-002 lifecycle readiness, WRT-CH-001 administrative refresh
+observation and PROBE-003 workflow serialization readiness. Except for
+PROBE-001 registry compatibility, these remain partial or observation-only
+inputs and keep DP2 blocked.
+
 ## Generated-output boundary
 
 Generated or command-updated Kit outputs remain source-owned, generator-owned or

@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: dc3f7327229c
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: f526f7b4e687
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `229`
+- Command count: `230`
 
 ## Commands
 
@@ -723,6 +723,24 @@ Inspect PROBE-002 lifecycle and selected-writer readiness without production mut
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
 | `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 | `require_full_evidence` | `TyperOption` | --require-full-evidence | `False` | `False` | Fail unless PROBE-002 full evidence is structurally satisfied. |
+
+### `agentic-kit dpa probe-003-readiness`
+
+- Safety: `BOUNDED`
+- When to use: Inspect PROBE-003 workflow serialization readiness without workflow mutation.
+- Dry-run available: `True`
+
+Inspect PROBE-003 workflow serialization readiness without workflow mutation.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')` | DPA Assessment readiness JSON record to inspect. |
+| `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact target ref to record instead of the current repository HEAD. |
+| `output` | `TyperOption` | --output | `False` |  | Optional DPA probe evidence JSON path under docs/architecture/evidence/dpa/probes/. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `require_full_evidence` | `TyperOption` | --require-full-evidence | `False` | `False` | Fail unless PROBE-003 full evidence is structurally satisfied. |
 
 ### `agentic-kit dpa readiness`
 

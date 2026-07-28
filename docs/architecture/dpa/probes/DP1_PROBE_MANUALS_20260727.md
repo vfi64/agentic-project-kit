@@ -276,8 +276,10 @@ Required fixture groups:
 9. deterministic regeneration from current validation ref after stale-plan
    detection;
 10. competing projection refresh conflict across shared targets or registered
-   partitions;
-11. post-integration refresh bound to the accepted integration ref.
+    partitions;
+11. post-integration refresh bound to the accepted integration ref;
+12. acceptance-bearing evidence publication blocked while plan, branch, PR or
+    integration identity remains stale.
 
 Candidate current-ref Kit surfaces:
 

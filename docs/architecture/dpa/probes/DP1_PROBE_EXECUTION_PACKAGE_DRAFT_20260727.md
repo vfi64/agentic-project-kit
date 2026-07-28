@@ -253,6 +253,7 @@ Missing before execution:
 - branch switch and rebase/reset stale-plan rejection fixtures;
 - pull-request head/base and required-check identity fixtures;
 - integration-time revalidation fixtures;
+- acceptance-bearing evidence publication stale-identity rejection fixtures;
 - competing projection refresh conflict fixtures.
 
 Any fixture that creates branches, opens PRs, pushes or mutates repository state
