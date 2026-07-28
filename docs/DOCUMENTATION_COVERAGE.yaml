@@ -389,6 +389,19 @@ rules:
     - workspace lock
     - workspace resolver
     - Evidence policy for current-state claims
+- id: document-projection-architecture-coverage
+  description: Document Projection Architecture staging must remain visible as architecture-only import staging without runtime, Probe PASS, stable or conformance overclaims.
+  documents:
+  - path: docs/architecture/dpa/README.md
+    terms:
+    - Document Projection Architecture
+    - DPA_PRE_IMPORT_CLOSEOUT_COMPLETE
+    - DPA-IMPORT-1
+    - architecture index and registry staging
+    - no runtime behavior change
+    - generated or command-updated Kit outputs
+    - DP2 implementation blocked
+    - full Probe PASS claim
 - id: p5c-physical-migration-plan-coverage
   description: P5c physical migration execution must remain visibly maintainer-gated and projection-first.
   documents:

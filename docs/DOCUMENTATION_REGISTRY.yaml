@@ -629,6 +629,10 @@ documents:
     class: architecture
     owner: maintainers
     notes: P5c decision-ready physical migration plan; execution remains maintainer-gated and public docs paths may stay as projections.
+  - path: docs/architecture/dpa/README.md
+    class: architecture
+    owner: maintainers
+    notes: Document Projection Architecture import staging index; DPA-IMPORT-1 is architecture and registry staging only.
   - path: docs/architecture/evidence/path-literal-audit-2026-07-04-post-s6.md
     class: evidence/log
     owner: maintainers

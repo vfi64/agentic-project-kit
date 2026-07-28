@@ -4,7 +4,7 @@ Status: decided
 Decision status: decided 2026-07-08
 Review policy: required
 Document class: governance/system
-Status-date: 2026-07-08
+Status-date: 2026-07-28
 Moved-from: docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
 Decision source: docs/DOC_REGISTRY_SCOPE.yaml
 
@@ -15,7 +15,7 @@ Decision outcome: active registry scope is declared in `docs/DOC_REGISTRY_SCOPE.
 | docs path | md files | registered | unregistered | proposed: required / exempt / undecided |
 |---|---:|---:|---:|---|
 | docs/ | 3 | 3 | 0 |  |
-| docs/architecture/ | 15 | 15 | 0 |  |
+| docs/architecture/ | 16 | 16 | 0 |  |
 | docs/archive/ | 17 | 17 | 0 |  |
 | docs/examples/ | 1 | 0 | 1 |  |
 | docs/governance/ | 27 | 27 | 0 |  |
