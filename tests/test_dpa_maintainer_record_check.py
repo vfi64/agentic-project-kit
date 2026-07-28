@@ -118,6 +118,35 @@ def _authorized_payload() -> dict[str, object]:
     return payload
 
 
+def _blocked_assessment_payload() -> dict[str, object]:
+    payload = _template_payload()
+    payload.update(
+        {
+            "status": "DP2_BLOCKED",
+            "template": False,
+            "maintainer": "Maintainer",
+            "decision_token": "DPA_DP2_BLOCKED_PENDING_PROBES",
+            "first_dp2_target_scope": {
+                "status": "SELECTED",
+                "target_path": "docs/handoff/CURRENT_HANDOFF.md",
+                "selected_writers": ["WRT-CH-001"],
+                "deferred_writers": ["WRT-CH-002", "WRT-CH-003", "WRT-CH-004"],
+                "excluded_writers": ["WRT-CH-005", "WRT-CH-006"],
+            },
+            "claims": {
+                "maintainer_assessment_recorded": True,
+                "maintainer_authorization_recorded": False,
+                "dp2_authorized": False,
+                "runtime_behavior_changed": False,
+                "production_mutation_performed": False,
+                "kit_conformance_claimed": False,
+                "generated_outputs_manually_patched": False,
+            },
+        }
+    )
+    return payload
+
+
 def test_maintainer_record_template_is_ready_but_blocked(tmp_path: Path) -> None:
     record = _minimal_record_root(tmp_path)
 
@@ -130,6 +159,23 @@ def test_maintainer_record_template_is_ready_but_blocked(tmp_path: Path) -> None
     assert payload["record_summary"]["decision_token"] == "PENDING_DECISION"
     assert payload["claims"]["dp2_authorized"] is False
     assert any(item["id"] == "record-maintainer-authorization" for item in payload["action_items"])
+
+
+def test_maintainer_record_check_accepts_recorded_blocked_assessment(tmp_path: Path) -> None:
+    record = _minimal_record_root(tmp_path, _blocked_assessment_payload())
+
+    result = evaluate_dp2_maintainer_record(tmp_path, record_path=record, validation_ref="test-ref")
+
+    assert result.structural_ok
+    assert result.result_status == "VALID_BLOCKED_RECORD"
+    payload = result.as_dict()
+    assert payload["record_status"] == "DP2_BLOCKED"
+    assert payload["record_summary"]["target_scope_status"] == "SELECTED"
+    assert payload["claims"]["maintainer_assessment_recorded"] is True
+    assert payload["claims"]["maintainer_authorization_recorded"] is False
+    assert payload["claims"]["dp2_authorized"] is False
+    assert payload["action_item_count"] == 3
+    assert not any(item["id"] == "select-or-defer-writers" for item in payload["action_items"])
 
 
 def test_maintainer_record_check_reports_missing_record(tmp_path: Path) -> None:
@@ -150,6 +196,19 @@ def test_maintainer_record_check_rejects_premature_authorization_claim(tmp_path:
 
     assert result.result_status == "STRUCTURAL_BLOCK"
     assert any(finding.code == "premature-authorization-claim" for finding in result.findings)
+
+
+def test_maintainer_record_check_rejects_template_assessment_claim(tmp_path: Path) -> None:
+    payload = _template_payload()
+    claims = dict(payload["claims"])  # type: ignore[arg-type]
+    claims["maintainer_assessment_recorded"] = True
+    payload["claims"] = claims
+    record = _minimal_record_root(tmp_path, payload)
+
+    result = evaluate_dp2_maintainer_record(tmp_path, record_path=record)
+
+    assert result.result_status == "STRUCTURAL_BLOCK"
+    assert any(finding.code == "premature-assessment-claim" for finding in result.findings)
 
 
 def test_maintainer_record_check_accepts_complete_authorization_record(tmp_path: Path) -> None:

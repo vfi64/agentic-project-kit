@@ -130,8 +130,11 @@ The Kit-side DP1 read-only baseline refresh evidence under
 `../evidence/dpa/probes/dp1-readonly-46deae7-20260728/` satisfies current
 baseline command-health refresh only. The Assessment readiness record under
 `../evidence/dpa/assessment/` turns that evidence into a precise DP2 blocker
-map. Mutation-scoped fixtures remain unrun, Maintainer Assessment remains
-unrecorded and the full Probe PASS claim boundary remains closed.
+map. The Maintainer Assessment is now recorded as `DP2_BLOCKED`, with
+`docs/handoff/CURRENT_HANDOFF.md` and writer `WRT-CH-001` selected as the first
+DP2 target scope. Mutation-scoped fixtures remain unrun, rollback cleanup proof
+remains absent, DP2 authorization remains unrecorded and the full Probe PASS
+claim boundary remains closed.
 
 The read-only wrapper `agentic-kit dpa readiness` validates that staged
 Assessment readiness record, reports the deterministic implementation
@@ -167,10 +170,11 @@ actions for review. It may write bounded Assessment evidence, but it does not
 record Maintainer Assessment, select DP2 scope, prove rollback cleanup or
 authorize DP2.
 
-The read-only wrapper `agentic-kit dpa maintainer-record-check` validates a
-future DP2 Maintainer Assessment record or the current blocked template. It
-fails closed for premature authorization claims, missing Probe dispositions,
-unselected target scope and missing rollback proof.
+The read-only wrapper `agentic-kit dpa maintainer-record-check` validates the
+current blocked DP2 Maintainer Assessment record or an explicitly supplied
+template/authorization record. It allows Assessment recording without DP2
+authorization, and still fails closed for premature authorization claims,
+missing Probe dispositions, unselected target scope and missing rollback proof.
 
 ## Generated-output and command-updated boundary
 

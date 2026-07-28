@@ -66,7 +66,7 @@ DP2.
 
 The current Assessment readiness record consolidates those evidence inputs into
 a DP2 blocker map at current Kit baseline
-`940fdfea4fec38a7d3b616717e7396a694f30b70`. It records `DP2_BLOCKED`, keeps the
+`d99b69aa55b1cf347c1dfcdef7781d2d9d3369d8`. It records `DP2_BLOCKED`, keeps the
 full Probe PASS claim boundary closed and names the remaining Probe, writer,
 rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
 
@@ -79,6 +79,13 @@ The current DP2 Maintainer-record template check records validation ref
 `1dfc5e8a75ffc37677b9f85da9e972812da95c04`. It validates the future
 Maintainer-owned record shape and keeps the template in `TEMPLATE_NOT_ASSESSED`
 state; it is not a Maintainer record and not DP2 authorization.
+
+The current DP2 Maintainer Assessment record records validation ref
+`d99b69aa55b1cf347c1dfcdef7781d2d9d3369d8`. It selects the first DP2 target
+scope as `docs/handoff/CURRENT_HANDOFF.md` with writer `WRT-CH-001`, defers
+WRT-CH-002 through WRT-CH-004 from that first target and keeps DP2 blocked
+pending full Probe evidence, rollback cleanup proof and Maintainer
+authorization.
 
 ## Imported Probe Evidence
 
@@ -116,6 +123,10 @@ state; it is not a Maintainer record and not DP2 authorization.
   the blocked template for a future Maintainer-owned DP2 Assessment record.
 - `assessment/maintainer-record-template-check-1dfc5e8a-20260728/` records the
   current template validation with result `TEMPLATE_READY_DP2_BLOCKED`.
+- `assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json` records the
+  current blocked Maintainer Assessment and selected first DP2 target scope.
+- `assessment/maintainer-record-check-d99b69aa-20260728/` records validation of
+  the blocked Maintainer Assessment record with result `VALID_BLOCKED_RECORD`.
 
 These packages preserve their limitation language. Future execution must freeze
 current refs, record command manifest currency, retain cleanup evidence and

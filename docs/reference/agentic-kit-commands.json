@@ -3074,7 +3074,7 @@
           "secondary_opts": []
         },
         {
-          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_TEMPLATE_20260728.json')",
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json')",
           "help": "DPA DP2 Maintainer Assessment record to inspect.",
           "is_flag": false,
           "metavar": null,
@@ -15431,7 +15431,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "aa03fbe18988",
+    "manifest_sha": "563f4d7f9925",
     "schema_version": 1
   },
   "schema_version": 2,

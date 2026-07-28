@@ -3,8 +3,8 @@
   "kind": "dpa_dp1_assessment_readiness",
   "status": "DP2_BLOCKED",
   "status_date": "2026-07-28",
-  "command_manifest_ack": "COMMAND_MANIFEST_ACK aa03fbe18988",
-  "kit_baseline_ref": "940fdfea4fec38a7d3b616717e7396a694f30b70",
+  "command_manifest_ack": "COMMAND_MANIFEST_ACK 563f4d7f9925",
+  "kit_baseline_ref": "d99b69aa55b1cf347c1dfcdef7781d2d9d3369d8",
   "dpa_lab_source_ref": "0cf944cc153e65a272c773286791f8891efdd1bc",
   "dpa_lab_merge_ref": "6f927efd625b4239f9ab0e710b48e7d9534fdfec",
   "kit_import_3_baseline_ref": "e89b0fac21c5599f8e531a937c550134469716cf",
@@ -60,6 +60,16 @@
       "result": "TEMPLATE_READY_DP2_BLOCKED"
     },
     {
+      "id": "current-kit-dp2-maintainer-assessment-record",
+      "path": "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+      "result": "DP2_BLOCKED_SCOPE_SELECTED"
+    },
+    {
+      "id": "current-kit-dp2-maintainer-assessment-record-check",
+      "path": "docs/architecture/evidence/dpa/assessment/maintainer-record-check-d99b69aa-20260728/",
+      "result": "VALID_BLOCKED_RECORD"
+    },
+    {
       "id": "historical-lab-readonly-baseline",
       "path": "docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/",
       "result": "PASS_WITH_LIMITATIONS"
@@ -98,8 +108,8 @@
     "renderer_full_evidence": "BLOCKED",
     "probe_003_full_evidence": "BLOCKED",
     "probe_004_full_evidence": "BLOCKED",
-    "maintainer_assessment": "BLOCKED",
-    "first_dp2_target_scope": "BLOCKED",
+    "maintainer_assessment": "RECORDED_DP2_BLOCKED",
+    "first_dp2_target_scope": "SELECTED_WRT_CH001_HANDOFF_SCOPE",
     "rollback_cleanup_proven": "BLOCKED",
     "maintainer_authorization": "BLOCKED"
   },

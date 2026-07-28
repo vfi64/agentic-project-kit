@@ -1,0 +1,43 @@
+{
+  "action_item_count": 3,
+  "action_items": [
+    {
+      "id": "complete-probe-dispositions",
+      "message": "Record satisfied or explicitly-not-applicable dispositions for PROBE-002, RENDERER, PROBE-003 and PROBE-004."
+    },
+    {
+      "id": "prove-rollback-cleanup",
+      "message": "Attach rollback and cleanup evidence for the selected target before authorization."
+    },
+    {
+      "id": "record-maintainer-authorization",
+      "message": "Only a Maintainer-owned non-template record with decision_token DPA_DP2_AUTHORIZED may authorize DP2."
+    }
+  ],
+  "claims": {
+    "dp2_authorized": false,
+    "generated_outputs_manually_patched": false,
+    "kit_conformance_claimed": false,
+    "maintainer_assessment_recorded": true,
+    "maintainer_authorization_recorded": false,
+    "production_mutation_performed": false,
+    "runtime_behavior_changed": false
+  },
+  "finding_count": 0,
+  "findings": [],
+  "kind": "dpa_dp2_maintainer_record_check",
+  "record_path": "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+  "record_status": "DP2_BLOCKED",
+  "record_summary": {
+    "decision_token": "DPA_DP2_BLOCKED_PENDING_PROBES",
+    "maintainer": "Maintainer instruction recorded in Codex DPA continuation, 2026-07-28",
+    "rollback_cleanup_status": "NOT_PROVEN",
+    "target_path": "docs/handoff/CURRENT_HANDOFF.md",
+    "target_scope_status": "SELECTED",
+    "template": false
+  },
+  "result_status": "VALID_BLOCKED_RECORD",
+  "schema_version": 1,
+  "structural_ok": true,
+  "validation_ref": "d99b69aa55b1cf347c1dfcdef7781d2d9d3369d8"
+}
