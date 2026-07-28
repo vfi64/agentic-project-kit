@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3d887fbc61c60e8c810f49a1e087023f3474b444
-  short: 3d887fbc
-  subject: Add DPA PROBE-003 workflow readiness preflight (#1906)
+  full: 830c559466d541ab03b4b6df0126504c1a002f60
+  short: 830c5594
+  subject: Add DPA Renderer Probe readiness preflight (#1908)
 last_substantive_work_state:
-  full: 3d887fbc61c60e8c810f49a1e087023f3474b444
-  short: 3d887fbc
-  subject: Add DPA PROBE-003 workflow readiness preflight (#1906)
+  full: 830c559466d541ab03b4b6df0126504c1a002f60
+  short: 830c5594
+  subject: Add DPA Renderer Probe readiness preflight (#1908)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
