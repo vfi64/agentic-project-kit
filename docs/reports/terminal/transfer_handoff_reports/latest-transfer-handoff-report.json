@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-07-28T20:57:51.211855+00:00",
+    "created_at_utc": "2026-07-28T21:32:07.861630+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -306,11 +306,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-07-28T20:57:51.450688+00:00",
+    "generated_at_utc": "2026-07-28T21:32:08.082692+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/dpa-readonly-probe-runner",
-      "head": "8ccf3c22688b141bbdac11a646910eee8350ed08",
+      "branch": "codex/dpa-authorized-probe-execution",
+      "head": "72d8b1209c09c1cc9abb2740f2fa6dc93769ed6c",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -370,8 +370,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "44d6cbcff3b727dea59ae5cfeaa491fce8851e9025949cf44d6e9ddebf60c8f7",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "470f1f2c5804ef267c463020168227c76d52cee4c64e2c0c444f1a24168c3bde",
-      "docs/reference/agentic-kit-commands.json": "03058e189c759ab9db1b8eef3dba09945a9038b6493553f559bbe6eae0ab2177"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "339783aaec07d80b084f5131681c6c86a4e149a45e549d91e10d9b244e7b4465",
+      "docs/reference/agentic-kit-commands.json": "817e3d00bbef0d5f821eba5b6c3f4801e90875231f3ebc3f46bc4c0505269357"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -411,7 +411,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "a6fb59a5a136074900cc04ec8f662217d38cb6d5b5c78a60e3bd5b326a0aa155"
+        "sha256": "e2bb747954ca7610416705d3655759db4f6b2f5e969670d93f6b2c53f6d1eedf"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -916,12 +916,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/dpa-readonly-probe-runner",
+      "branch": "codex/dpa-authorized-probe-execution",
       "dirty_status": "",
-      "head": "8ccf3c22688b141bbdac11a646910eee8350ed08",
+      "head": "72d8b1209c09c1cc9abb2740f2fa6dc93769ed6c",
       "head_matches_upstream": true,
-      "upstream": "origin/codex/dpa-readonly-probe-runner",
-      "upstream_head": "8ccf3c22688b141bbdac11a646910eee8350ed08"
+      "upstream": "origin/codex/dpa-authorized-probe-execution",
+      "upstream_head": "72d8b1209c09c1cc9abb2740f2fa6dc93769ed6c"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -983,7 +983,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "a6fb59a5a136074900cc04ec8f662217d38cb6d5b5c78a60e3bd5b326a0aa155"
+        "sha256": "e2bb747954ca7610416705d3655759db4f6b2f5e969670d93f6b2c53f6d1eedf"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -1488,12 +1488,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/dpa-readonly-probe-runner",
+      "branch": "codex/dpa-authorized-probe-execution",
       "dirty_status": "",
-      "head": "8ccf3c22688b141bbdac11a646910eee8350ed08",
+      "head": "72d8b1209c09c1cc9abb2740f2fa6dc93769ed6c",
       "head_matches_upstream": true,
-      "upstream": "origin/codex/dpa-readonly-probe-runner",
-      "upstream_head": "8ccf3c22688b141bbdac11a646910eee8350ed08"
+      "upstream": "origin/codex/dpa-authorized-probe-execution",
+      "upstream_head": "72d8b1209c09c1cc9abb2740f2fa6dc93769ed6c"
     },
     "schema_version": 1,
     "terminal_block_rules": {
