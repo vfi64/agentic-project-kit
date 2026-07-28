@@ -1,0 +1,37 @@
+sequenceDiagram
+    actor User
+    participant Cmd as Existing command entry point
+    participant WF as Workflow orchestration
+    participant Reg as Existing registry
+    participant LC as Existing lifecycle
+    participant Ren as Static renderer
+    participant State as Lifecycle state
+    participant Lock as Workspace mutation lock
+    participant T as Registered target
+    participant Ev as Evidence
+    participant Gate as DPA-500 gates
+
+    User->>Cmd: request governed refresh
+    Cmd->>WF: preserve governed command behavior
+    WF->>LC: request refresh
+    LC->>State: recover or abandon interrupted prior instance
+    LC->>Reg: resolve and validate projection + partition contracts
+    Reg-->>LC: validated declarative contracts
+    LC->>Ren: render exactly one target payload
+    Ren-->>LC: text or bytes only
+    LC-->>WF: immutable dry-run plan + identity
+    WF->>LC: execute exact plan
+    LC->>LC: Preflight all guards
+    LC->>Lock: acquire local mutation lock
+    LC->>Reg: revalidate contracts under lock
+    LC->>State: revalidate accepted state and interruption status
+    LC->>T: atomically replace complete target
+    LC-->>WF: written-unverified
+    LC->>T: reread and verify complete bytes
+    LC->>State: persist verification / acceptance-state candidate data
+    LC->>Ev: emit bounded non-authoritative evidence
+    LC->>Lock: release
+    WF->>Gate: request acceptance evaluation
+    Gate-->>State: accepted or remain non-accepted
+
+    Note over Cmd,T: For CURRENT_HANDOFF, adapt every then-known writer; DISC-003b confirms admin-refresh-pr as an observed writer and chat-switch-complete as not writing the target at the recorded ref.

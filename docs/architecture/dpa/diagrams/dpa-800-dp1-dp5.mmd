@@ -1,0 +1,76 @@
+flowchart TD
+    AUTH[Package B start authorization]
+    BASE[Current governed base]
+    PARKED[Parked stale DPA-800 branch]
+    DRAFT[DPA-800 draft]
+
+    DP1[DP1 Proof of Architecture]
+    DISC[Discovery read-only inventory]
+    PROBE[Probe exact-ref compatibility tests]
+    P001[PROBE-001 registry and contracts]
+    P002[PROBE-002 lifecycle and state]
+    P003[PROBE-003 workflow serialization]
+    P004[PROBE-004 migration and rollback]
+    RPROBE[Renderer Probes]
+    ASSESS[Assessment adjudication]
+
+    DP2[DP2 first production projection]
+    DP3[DP3 controlled rollout]
+    DP4[DP4 status-authority migration or no migration]
+    DP5[DP5 staged strict gates]
+    IMPORT[Controlled import mapping]
+
+    BLOCK[Blocked stop state]
+    EVID[Bounded evidence]
+    MAINT[Maintainer adjudication]
+
+    AUTH --> BASE
+    BASE --> DRAFT
+    PARKED -. excluded .-> DRAFT
+    DRAFT --> DP1
+
+    DP1 --> DISC
+    DISC -->|facts only| PROBE
+    PROBE --> P001
+    PROBE --> P002
+    PROBE --> P003
+    PROBE --> P004
+    PROBE --> RPROBE
+    P001 -->|PASS/FAIL/PARTIAL/BLOCKED| ASSESS
+    P002 -->|PASS/FAIL/PARTIAL/BLOCKED| ASSESS
+    P003 -->|PASS/FAIL/PARTIAL/BLOCKED| ASSESS
+    P004 -->|PASS/FAIL/PARTIAL/BLOCKED| ASSESS
+    RPROBE -->|PASS/FAIL/PARTIAL/BLOCKED| ASSESS
+    ASSESS -->|accepted and nonblocking| DP2
+    ASSESS -->|missing evidence or contradiction| BLOCK
+
+    DP2 -->|accepted first target and exit criteria| DP3
+    DP2 -->|blocked implementation| BLOCK
+    DP3 -->|per-target evidence and exit criteria| DP4
+    DP3 -->|unbounded rollout| BLOCK
+    DP4 -->|migration or no migration exit criteria| DP5
+    DP4 -->|reader/writer/rollback unproven| BLOCK
+    DP5 -->|observe/warn/block-new/strict exit criteria| IMPORT
+    DP5 -->|strict unsafe| BLOCK
+
+    DISC --> EVID
+    PROBE --> EVID
+    ASSESS --> EVID
+    DP2 --> EVID
+    DP3 --> EVID
+    DP4 --> EVID
+    DP5 --> EVID
+    EVID --> MAINT
+    BLOCK --> EVID
+
+    NOTE1[No Probe execution in the Lab draft]
+    NOTE2[No DP2 mutation before Probe and Assessment]
+    NOTE3[No wholesale Lab import]
+    NOTE4[Exact refs cannot be silently promoted]
+    NOTE5[Generated Kit outputs change through source or command contract]
+
+    NOTE1 -. boundary .-> PROBE
+    NOTE2 -. gate .-> DP2
+    NOTE3 -. boundary .-> IMPORT
+    NOTE4 -. evidence .-> EVID
+    NOTE5 -. boundary .-> DP4

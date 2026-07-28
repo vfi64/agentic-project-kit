@@ -1,0 +1,37 @@
+flowchart LR
+    CS[Canonical State]
+    REG[Existing Documentation Registry]
+    PC[Projection Contract]
+    PART[Parent Partition Contract]
+    LC[Existing Document Lifecycle]
+    R[Static Renderer]
+    PLAN[Immutable Mutation Plan]
+    LOCK[Existing Workspace Mutation Lock]
+    TARGET[Registered Target]
+    STATE[Workspace-resolved Acceptance State]
+    VERIFY[Post-write Verification]
+    EVID[Bounded Evidence]
+    GATE[DPA-500 Gates]
+
+    CS -->|declared sources| LC
+    REG -->|validated parent entry| PC
+    REG -->|one partition contract for regions| PART
+    PC --> LC
+    PART --> LC
+    LC -->|validated sources and configuration| R
+    R -->|payload text or bytes only| LC
+    LC --> PLAN
+    PLAN -->|preflight| LC
+    LC --> LOCK
+    LOCK -->|revalidate all guards| LC
+    LC -->|atomic complete-target write| TARGET
+    TARGET --> VERIFY
+    VERIFY -->|persist lifecycle state| STATE
+    VERIFY --> EVID
+    STATE -->|drift comparison; not renderer input| LC
+    VERIFY -->|written-unverified| GATE
+    GATE -->|accepted only after complete gate success| STATE
+
+    EVID -. no runtime authority .-> CS
+    STATE -. no canonical authority .-> CS
+    R -. no writes, partition bytes, locks or acceptance .-> TARGET

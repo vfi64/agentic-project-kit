@@ -1,0 +1,37 @@
+flowchart LR
+    REG[Existing Registry]
+    LC[Existing Lifecycle]
+    MAP[Static Renderer Map]
+    SRC[Immutable Declared Source Values or Snapshots]
+    CFG[Immutable Contract-declared Configuration]
+    VER[Identifier + Interface Version + Semantic Version]
+    REN[One Renderer Invocation]
+    PAYLOAD[One Text or Immutable-Bytes Payload]
+    PLAN[Immutable Mutation Plan]
+    PART[Parent PartitionContract]
+    TARGET[One Registered Target]
+    STATE[Lifecycle-owned Acceptance State]
+    GATE[DPA-500 Gates]
+
+    REG -->|validated contract and renderer identifier| LC
+    LC -->|resolve closed mapping| MAP
+    MAP -->|one reviewed implementation| REN
+    SRC -->|same bytes as lifecycle fingerprint| LC
+    CFG -->|validated immutable values| LC
+    VER --> LC
+    LC -->|closed immutable invocation context| REN
+    REN -->|exactly one payload| PAYLOAD
+    PAYLOAD --> LC
+    PART -->|lifecycle-owned reconstruction only| LC
+    LC --> PLAN
+    PLAN -->|DPA-300 governed mutation| TARGET
+    LC --> STATE
+    TARGET -->|observed bytes| GATE
+    STATE -->|accepted fingerprints and gate-set identity| GATE
+    PLAN -->|planned identities and fingerprints| GATE
+
+    REN -. no writes .-> TARGET
+    REN -. no partition bytes .-> PART
+    REN -. no locks or workflow orchestration .-> LC
+    REN -. no evidence or acceptance-state access .-> STATE
+    REN -. no renderer chaining .-> MAP

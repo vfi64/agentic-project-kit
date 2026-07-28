@@ -1,0 +1,70 @@
+flowchart TD
+    CHANGE[Proposed DPA or governance change]
+    CLASS[Classify change class]
+    RISK[Assign risk R0 through R5]
+
+    R0[R0 mechanical]
+    R1[R1 editorial]
+    R2[R2 derived synchronization]
+    R3[R3 bounded semantic]
+    R4[R4 high-impact semantic]
+    R5[R5 adoption or strict enforcement]
+
+    FAST[Fast mechanical path]
+    EDIT[Editorial path]
+    SYNC[Synchronization path]
+    AMEND[Bounded amendment path]
+    FULL[Full governed review path]
+    ADOPT[Adoption or strict-enforcement path]
+
+    EQUIV[Diff-scoped equivalence verification]
+    IND[Independent-context verification]
+    BLIND[Blind-first evaluation before finding-closure mapping]
+    CHECKS[Deterministic consistency checks]
+    MAINT[Maintainer adjudication]
+    PROBES[Exact-ref Probes and Assessment]
+    RECORD[Review-economy record]
+    PASS[Status-only promotion or accepted disposition]
+    BLOCK[Escalate, block or fall back to full review]
+
+    CHANGE --> CLASS --> RISK
+    RISK --> R0
+    RISK --> R1
+    RISK --> R2
+    RISK --> R3
+    RISK --> R4
+    RISK --> R5
+
+    R0 --> FAST --> CHECKS --> RECORD
+    R1 --> EDIT --> CHECKS --> RECORD
+    R2 --> SYNC --> CHECKS --> RECORD
+    R3 --> AMEND --> MAINT --> IND
+    R4 --> FULL --> MAINT --> IND
+    R5 --> ADOPT --> PROBES --> MAINT --> IND
+    IND -->|R4/R5 or primary finding closure| BLIND --> RECORD
+    IND -->|other lower-risk verification| RECORD
+
+    SYNC -->|semantic-preserving claim| EQUIV
+    AMEND -->|post-verification rewrite| EQUIV
+    FULL -->|restructure recovery| EQUIV
+    EQUIV -->|PASS| RECORD
+    EQUIV -->|cannot bound| BLOCK
+
+    CHECKS -->|failure| BLOCK
+    MAINT -->|rejected or deferred| BLOCK
+    IND -->|independence blocked or fail| BLOCK
+    BLIND -->|anchored before blind-first| BLOCK
+    PROBES -->|missing or blocked| BLOCK
+
+    RECORD --> PASS
+    BLOCK --> FULL
+
+    NOTE1[No review-cost shortcut may reduce required assurance]
+    NOTE2[Generated Kit outputs change through source, generator or command contract]
+    NOTE3[Metrics are evidence, not authority]
+    NOTE4[Lab gates do not prove main-repository conformance]
+
+    NOTE1 -. governs .-> RISK
+    NOTE2 -. boundary .-> FAST
+    NOTE3 -. boundary .-> RECORD
+    NOTE4 -. boundary .-> PASS

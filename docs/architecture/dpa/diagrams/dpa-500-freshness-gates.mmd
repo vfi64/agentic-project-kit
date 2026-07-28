@@ -1,0 +1,78 @@
+flowchart TD
+    REG[Validated registry contract]
+    SRC[Declared source fingerprints]
+    CFG[Configuration fingerprint]
+    REN[Renderer identifier / interface / semantic version]
+    OWN[Ownership contract and provenance]
+    PAY[Lifecycle-owned payload fingerprint]
+    PART[Lifecycle-owned partition bytes and boundaries]
+    WHOLE[Complete-target fingerprint]
+    PRES[Preserved-region fingerprint]
+    ACC[Acceptance state]
+    GSET[Required gate-set identity]
+    BASE[Plan / operation / declared base context]
+
+    EVAL[Lifecycle-owned freshness evaluation]
+    CLASS{Freshness classification}
+    FIND[Structured drift classes and finding subreasons]
+    GATE{Existing gate authority}
+
+    FRESH[fresh]
+    STALE[stale]
+    INVALID[invalid]
+    INDET[indeterminate]
+
+    PASS[pass]
+    WARNING[warning]
+    FAILURE[failure]
+
+    ACCEPT[Post-write acceptance]
+    REACC{Gate-set-only re-acceptance eligible?}
+    STATE[Update lifecycle-owned acceptance state only]
+    PRESERVE[Preserve target bytes and prior state]
+    ABANDON[Abandon active attempt]
+
+    REG --> EVAL
+    SRC --> EVAL
+    CFG --> EVAL
+    REN --> EVAL
+    OWN --> EVAL
+    PAY --> EVAL
+    PART --> EVAL
+    ACC --> EVAL
+    GSET --> EVAL
+    BASE --> EVAL
+
+    WHOLE -. complete-target freshness or mutation guard .-> EVAL
+    PRES -. mutation / verification / recovery guard .-> EVAL
+
+    EVAL --> CLASS
+    CLASS --> FRESH
+    CLASS --> STALE
+    CLASS --> INVALID
+    CLASS --> INDET
+    CLASS --> FIND
+    FIND --> GATE
+
+    GATE -->|all mandatory checks pass| PASS
+    GATE -->|only staged non-blocking findings| WARNING
+    GATE -->|mandatory mismatch or unavailable evaluation| FAILURE
+
+    PASS -->|post-write acceptance-bearing operation| ACCEPT
+    PASS --> REACC
+    REACC -->|all dimensions except old gate-set identity are fresh; no render or target write| STATE
+    REACC -->|not eligible| PRESERVE
+
+    WARNING --> PRESERVE
+    FAILURE --> PRESERVE
+    FAILURE --> ABANDON
+
+    NOTE1[Authorized declared non-lifecycle-owner region evolution is not projection drift]
+    NOTE2[Complete-target and preserved-region fingerprints remain plan / write / verify / recovery guards]
+    NOTE3[Renderer never assigns findings, classification, trust state, gate decision or acceptance]
+    NOTE4[Read-only pass does not update acceptance state]
+
+    NOTE1 -. layered acceptance .-> EVAL
+    NOTE2 -. guard boundary .-> EVAL
+    NOTE3 -. authority boundary .-> EVAL
+    NOTE4 -. operation scope .-> PASS
