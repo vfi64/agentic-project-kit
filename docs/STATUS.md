@@ -7,9 +7,9 @@ Current verified release: 0.4.13.
 Current release tag: v0.4.13.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
-Current verified main: `0b1fffe5` (`Stage DPA architecture import index (#1878)`).
-Latest substantive work: PR #1878 (`Stage DPA architecture import index (#1878)`).
-Post-merge handoff status: PASS/NOOP after PR #1878 administrative refresh.
+Current verified main: `d049dda6` (`Refresh successor package after PR1879 (#1880)`).
+Latest substantive work: PR #1880 (`Refresh successor package after PR1879 (#1880)`).
+Post-merge handoff status: PASS/NOOP after PR #1880 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1878
+## Operational documentation refresh state after PR #1880
 
-Current administrative handoff refresh state is `0b1fffe5` (`Stage DPA architecture import index (#1878)`). Continue next only after this post-PR1878 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `d049dda6` (`Refresh successor package after PR1879 (#1880)`). Continue next only after this post-PR1880 refresh is committed and merged; the next substantive slice must be created from fresh main.

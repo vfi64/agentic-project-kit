@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 0b1fffe5e6ff650d1eb8f287df2e34a6c8e4fcc7
-  short: 0b1fffe5
-  subject: Stage DPA architecture import index (#1878)
+  full: d049dda6698d1665c55796f56a9652701520c86d
+  short: d049dda6
+  subject: Refresh successor package after PR1879 (#1880)
 last_substantive_work_state:
-  full: 0b1fffe5e6ff650d1eb8f287df2e34a6c8e4fcc7
-  short: 0b1fffe5
-  subject: Stage DPA architecture import index (#1878)
+  full: d049dda6698d1665c55796f56a9652701520c86d
+  short: d049dda6
+  subject: Refresh successor package after PR1879 (#1880)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
