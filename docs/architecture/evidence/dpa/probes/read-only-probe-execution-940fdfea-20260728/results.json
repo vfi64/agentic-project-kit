@@ -1,0 +1,802 @@
+{
+  "blocked_case_count": 31,
+  "claims": {
+    "dp2_authorized": false,
+    "full_probe_pass_claimed": false,
+    "generated_outputs_manually_patched": false,
+    "production_mutation_performed": false,
+    "renderer_conformance_claimed": false,
+    "workflow_queue_conformance_claimed": false
+  },
+  "command_failure_count": 0,
+  "families": [
+    {
+      "cases": [
+        {
+          "authorization": "NOT_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "command_results": [
+            {
+              "argv": [
+                ".venv/bin/agentic-kit",
+                "docs-registry"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "Documentation registry summary\nregistry: docs/DOCUMENTATION_REGISTRY.yaml\nversion: 1\nlifecycle: experimental-schema-baseline\nbroad_migration_allowed: False\ndocuments: 208\nclasses:\n- architecture: 55\n- evidence/log: 72\n- generated artifact: 3\n- governance/system: 32\n- historical archive: 18\n- operational/automation: 17\n- planning: 5\n- release: 2\n- user-facing description: 4\nowners:\n- automation: 3\n- maintainers: 205\nregistration policy:\n- status: reviewed_register_command_available\n- mutation_allowed: True\n- allowed_command: agentic-kit doc-registry register\n- unregistered_candidates: 66\nartifact policy:\n- policy: .agentic/communication_artifacts.yaml\n- rules: 7\n- delete_allowed:\n  - False: 4\n  - True: 1\n  - conditional: 2\n- protected rules:\n  - agent-command-inbox\n  - command-run-reports\n  - repo-terminal-logs\n  - terminal-latest-pointer\n",
+              "timed_out": false
+            },
+            {
+              "argv": [
+                ".venv/bin/agentic-kit",
+                "doc-registry",
+                "check-unregistered",
+                "--json"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "{\n  \"candidate_count\": 0,\n  \"candidates\": [],\n  \"exempted_count\": 66,\n  \"final_signal\": \"d\",\n  \"kind\": \"documentation_registry_unregistered_candidates\",\n  \"next_action\": \"No unregistered document candidates found.\",\n  \"registry_path\": \"docs/DOCUMENTATION_REGISTRY.yaml\",\n  \"result_status\": \"PASS\",\n  \"schema_version\": 1,\n  \"scope_errors\": [],\n  \"scope_exempt_path_count\": 2,\n  \"scope_path\": \"docs/DOC_REGISTRY_SCOPE.yaml\",\n  \"scope_present\": true,\n  \"scope_required_file_count\": 2,\n  \"scope_required_path_count\": 11,\n  \"scope_violation_count\": 0,\n  \"scope_violations\": [],\n  \"strict_scope\": false\n}\n",
+              "timed_out": false
+            },
+            {
+              "argv": [
+                ".venv/bin/python",
+                "-m",
+                "pytest",
+                "-q",
+                "tests/test_documentation_registry.py",
+                "tests/test_doc_mesh.py"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "...........................................................              [100%]\n=============================== warnings summary ===============================\ntests/test_documentation_registry.py: 27 warnings\ntests/test_doc_mesh.py: 21 warnings\n  /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/workspace.py:398: LegacyProfileDeprecationWarning: agentic-kit implicit legacy profile is deprecated for manifest-less workspaces and will be removed in 2.0.0; run `agentic-kit workspace init --root PATH` or set AGENTIC_KIT_SUPPRESS_LEGACY_PROFILE_WARNING=1 to suppress this warning.\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n59 passed, 48 warnings in 2.38s\n",
+              "timed_out": false
+            }
+          ],
+          "commands": [
+            [
+              ".venv/bin/agentic-kit",
+              "docs-registry"
+            ],
+            [
+              ".venv/bin/agentic-kit",
+              "doc-registry",
+              "check-unregistered",
+              "--json"
+            ],
+            [
+              ".venv/bin/python",
+              "-m",
+              "pytest",
+              "-q",
+              "tests/test_documentation_registry.py",
+              "tests/test_doc_mesh.py"
+            ]
+          ],
+          "expected_result": "existing entries parse and validate without broad migration",
+          "id": "P001-REG-001",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "PASS",
+          "selected_for_readonly_execution": true,
+          "title": "Existing manual registry entries remain accepted",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "projection contract fixture validates and does not affect existing entries",
+          "id": "P001-REG-002",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Valid optional ProjectionContract is accepted",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "partition contract fixture validates with explicit parent relationship",
+          "id": "P001-REG-003",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Valid parent-entry PartitionContract is accepted",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "registry check rejects fixture with schema-version diagnostic",
+          "id": "P001-REG-004",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Unknown projection schema version fails loud",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "registry check rejects unknown field without accepting partial projection state",
+          "id": "P001-REG-005",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Unknown projection field fails loud",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "registry check reports the missing required field",
+          "id": "P001-REG-006",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Missing required projection field fails loud",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "registry check rejects dangling or inconsistent registered-region reference",
+          "id": "P001-REG-007",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Dangling registered-region reference fails loud",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "registry check rejects unsupported target-semantics and partition combination",
+          "id": "P001-REG-008",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Unsupported target semantics and partition combination fails loud",
+          "writer_id": null
+        }
+      ],
+      "id": "PROBE-001",
+      "title": "Registry compatibility"
+    },
+    {
+      "cases": [
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "plan records source, target, base, contract, renderer, partition and ownership fingerprints",
+          "id": "P002-LIFE-001",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Immutable lifecycle plan capture",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "write and under-lock continuation reject stale target, source or context",
+          "id": "P002-LIFE-002",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Stale-plan rejection before Write and under lock",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "write is complete-target atomic or preserves declared partition boundaries",
+          "id": "P002-LIFE-003",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Atomic target or partition-preserving replacement",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "accepted state is scoped and tamper detection blocks stale or altered evidence",
+          "id": "P002-LIFE-004",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Acceptance state creation and tamper detection",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "gate-only re-acceptance does not rerender or mutate target bytes",
+          "id": "P002-LIFE-005",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Gate-set re-acceptance without renderer invocation",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "region acceptance does not overclaim full-document acceptance",
+          "id": "P002-LIFE-006",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Layered acceptance for registered-region projections",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "commands": [],
+          "expected_result": "WRT-CH-001 writes are either lifecycle-routed or classified as existing unadapted writer behavior",
+          "id": "P002-WRT-001",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Administrative handoff refresh writer routing",
+          "writer_id": "WRT-CH-001"
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "commands": [],
+          "expected_result": "WRT-CH-002 dry-run and write-mode behavior are bounded and not mistaken for DPA conformance",
+          "id": "P002-WRT-002",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Release preparation writer routing",
+          "writer_id": "WRT-CH-002"
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "commands": [],
+          "expected_result": "WRT-CH-003 allowed paths and cleanup are bounded before any DPA reliance",
+          "id": "P002-WRT-003",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Post-release DOI closeout writer routing",
+          "writer_id": "WRT-CH-003"
+        },
+        {
+          "authorization": "NOT_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "command_results": [
+            {
+              "argv": [
+                ".venv/bin/agentic-kit",
+                "actions",
+                "list"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "pr-check-merge\tremote_mutation\tCheck and optionally merge a pull request\nrelease-verify\tread_only\tVerify an already published release\ndoi-record\tlocal_only\tRecord verified DOI metadata\nfinalize-release\tlocal_only\tFinalize repository state after release closeout\n",
+              "timed_out": false
+            },
+            {
+              "argv": [
+                ".venv/bin/python",
+                "-m",
+                "pytest",
+                "-q",
+                "tests/test_action_specs.py"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "......                                                                   [100%]\n6 passed in 0.30s\n",
+              "timed_out": false
+            }
+          ],
+          "commands": [
+            [
+              ".venv/bin/agentic-kit",
+              "actions",
+              "list"
+            ],
+            [
+              ".venv/bin/python",
+              "-m",
+              "pytest",
+              "-q",
+              "tests/test_action_specs.py"
+            ]
+          ],
+          "expected_result": "WRT-CH-004 cannot become a bypass around selected writer lifecycle routing",
+          "id": "P002-WRT-004",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "PASS",
+          "selected_for_readonly_execution": true,
+          "title": "Action-spec surfaced mutation authority",
+          "writer_id": "WRT-CH-004"
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "WRT-CH-005 is contained to disposable generated target roots",
+          "id": "P002-WRT-005",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Workspace initialization template writer boundary",
+          "writer_id": "WRT-CH-005"
+        },
+        {
+          "authorization": "NOT_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "command_results": [
+            {
+              "argv": [
+                ".venv/bin/agentic-kit",
+                "handoff",
+                "check"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "Persistent handoff state check passed\nDocumentation registry:\n- registry: docs/DOCUMENTATION_REGISTRY.yaml\n- version: 1\n- documents: 208\n- broad_migration_allowed: False\n- class:architecture: 55\n- class:evidence/log: 72\n- class:generated artifact: 3\n- class:governance/system: 32\n- class:historical archive: 18\n- class:operational/automation: 17\n- class:planning: 5\n- class:release: 2\n- class:user-facing description: 4\n",
+              "timed_out": false
+            },
+            {
+              "argv": [
+                ".venv/bin/python",
+                "-m",
+                "pytest",
+                "-q",
+                "tests/test_successor_handoff_package.py"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ".........................                                                [100%]\n=============================== warnings summary ===============================\ntests/test_successor_handoff_package.py::test_write_successor_handoff_package_writes_execution_contract_json\ntests/test_successor_handoff_package.py::test_write_successor_handoff_package_writes_execution_contract_json\ntests/test_successor_handoff_package.py::test_successor_handoff_artifacts_snapshot\ntests/test_successor_handoff_package.py::test_successor_handoff_artifacts_snapshot\ntests/test_successor_handoff_package.py::test_successor_handoff_package_e2e_start_decision_contract\ntests/test_successor_handoff_package.py::test_successor_handoff_package_e2e_start_decision_contract\ntests/test_successor_handoff_package.py::test_successor_package_refresh_does_not_rewrite_start_new_chat_prompt\ntests/test_successor_handoff_package.py::test_successor_package_refresh_does_not_rewrite_start_new_chat_prompt\n  /Users/hof/Dropbox/Privat/GitHub/agentic-project-kit/src/agentic_project_kit/workspace.py:398: LegacyProfileDeprecationWarning: agentic-kit implicit legacy profile is deprecated for manifest-less workspaces and will be removed in 2.0.0; run `agentic-kit workspace init --root PATH` or set AGENTIC_KIT_SUPPRESS_LEGACY_PROFILE_WARNING=1 to suppress this warning.\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n25 passed, 8 warnings in 2.67s\n",
+              "timed_out": false
+            }
+          ],
+          "commands": [
+            [
+              ".venv/bin/agentic-kit",
+              "handoff",
+              "check"
+            ],
+            [
+              ".venv/bin/python",
+              "-m",
+              "pytest",
+              "-q",
+              "tests/test_successor_handoff_package.py"
+            ]
+          ],
+          "expected_result": "WRT-CH-006 remains generator-owned and is not treated as CURRENT_HANDOFF.md target-byte writing",
+          "id": "P002-WRT-006",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "PASS",
+          "selected_for_readonly_execution": true,
+          "title": "Generated successor package output boundary",
+          "writer_id": "WRT-CH-006"
+        }
+      ],
+      "id": "PROBE-002",
+      "title": "Lifecycle, acceptance and writer routing"
+    },
+    {
+      "cases": [
+        {
+          "authorization": "NOT_REQUIRED",
+          "blocker": "approved_dpa_renderer_map_missing",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "commands": [],
+          "expected_result": "approved renderer identity and interface version are resolved without fallback guessing",
+          "id": "REN-001",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "BLOCKED_PENDING_CONTEXT",
+          "selected_for_readonly_execution": true,
+          "title": "Renderer map identity is explicit",
+          "writer_id": null
+        },
+        {
+          "authorization": "NOT_REQUIRED",
+          "blocker": "approved_dpa_renderer_map_missing",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "commands": [],
+          "expected_result": "semantic-version mismatch blocks acceptance rather than silently rerendering",
+          "id": "REN-002",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "BLOCKED_PENDING_CONTEXT",
+          "selected_for_readonly_execution": true,
+          "title": "Renderer rejects semantic-version mismatch",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "same immutable inputs produce byte-identical or explicitly declared equivalent output",
+          "id": "REN-003",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Renderer deterministic repeat output",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "renderer does not mutate filesystem, network, subprocess, workflow, state or evidence outside declared output",
+          "id": "REN-004",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Renderer side-effect prohibition",
+          "writer_id": null
+        }
+      ],
+      "id": "RENDERER",
+      "title": "Renderer identity and purity"
+    },
+    {
+      "cases": [
+        {
+          "authorization": "NOT_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "command_results": [
+            {
+              "argv": [
+                "git",
+                "branch",
+                "--show-current"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "codex/dpa-readonly-probe-runner\n",
+              "timed_out": false
+            },
+            {
+              "argv": [
+                "git",
+                "rev-parse",
+                "HEAD"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "940fdfea4fec38a7d3b616717e7396a694f30b70\n",
+              "timed_out": false
+            },
+            {
+              "argv": [
+                "git",
+                "status",
+                "--short"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "",
+              "timed_out": false
+            },
+            {
+              "argv": [
+                ".venv/bin/agentic-kit",
+                "transfer",
+                "repo-status",
+                "--json"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "{\n  \"action\": \"repo-status\",\n  \"command\": [\n    \"git\",\n    \"status\",\n    \"--short\"\n  ],\n  \"next_action\": \"Worktree clean; continue with the next planned slice.\",\n  \"result_status\": \"PASS\",\n  \"returncode\": 0,\n  \"stderr\": \"\",\n  \"stdout\": \"\"\n}\n",
+              "timed_out": false
+            },
+            {
+              "argv": [
+                ".venv/bin/agentic-kit",
+                "transfer",
+                "divergence-status",
+                "--json"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "{\n  \"schema_version\": 1,\n  \"kind\": \"transfer_divergence_status_result\",\n  \"action\": \"divergence-status\",\n  \"result_status\": \"PASS\",\n  \"final_signal\": \"d\",\n  \"next_action\": \"Divergence status reported; inspect ahead/behind before mutating branches.\",\n  \"repo\": {\n    \"branch\": \"codex/dpa-readonly-probe-runner\",\n    \"head\": \"940fdfea4fec38a7d3b616717e7396a694f30b70\",\n    \"upstream\": \"\",\n    \"upstream_head\": \"\",\n    \"head_matches_upstream\": false,\n    \"ahead\": null,\n    \"behind\": null\n  },\n  \"commands\": {\n    \"branch\": {\n      \"argv\": [\n        \"git\",\n        \"branch\",\n        \"--show-current\"\n      ],\n      \"returncode\": 0,\n      \"stdout\": \"codex/dpa-readonly-probe-runner\\n\",\n      \"stderr\": \"\",\n      \"ok\": true\n    },\n    \"head\": {\n      \"argv\": [\n        \"git\",\n        \"rev-parse\",\n        \"HEAD\"\n      ],\n      \"returncode\": 0,\n      \"stdout\": \"940fdfea4fec38a7d3b616717e7396a694f30b70\\n\",\n      \"stderr\": \"\",\n      \"ok\": true\n    },\n    \"upstream\": {\n      \"argv\": [\n        \"git\",\n        \"rev-parse\",\n        \"--abbrev-ref\",\n        \"--symbolic-full-name\",\n        \"@{u}\"\n      ],\n      \"returncode\": 128,\n      \"stdout\": \"\",\n      \"stderr\": \"fatal: no upstream configured for branch 'codex/dpa-readonly-probe-runner'\\n\",\n      \"ok\": false\n    },\n    \"upstream_head\": {\n      \"argv\": [\n        \"git\",\n        \"rev-parse\",\n        \"@{u}\"\n      ],\n      \"returncode\": 1,\n      \"stdout\": \"\",\n      \"stderr\": \"no upstream\",\n      \"ok\": false\n    },\n    \"ahead_behind\": {\n      \"argv\": [\n        \"git\",\n        \"rev-list\",\n        \"--left-right\",\n        \"--count\",\n        \"HEAD...@{u}\"\n      ],\n      \"returncode\": 1,\n      \"stdout\": \"\",\n      \"stderr\": \"no upstream\",\n      \"ok\": false\n    }\n  }\n}\n",
+              "timed_out": false
+            }
+          ],
+          "commands": [
+            [
+              "git",
+              "branch",
+              "--show-current"
+            ],
+            [
+              "git",
+              "rev-parse",
+              "HEAD"
+            ],
+            [
+              "git",
+              "status",
+              "--short"
+            ],
+            [
+              ".venv/bin/agentic-kit",
+              "transfer",
+              "repo-status",
+              "--json"
+            ],
+            [
+              ".venv/bin/agentic-kit",
+              "transfer",
+              "divergence-status",
+              "--json"
+            ]
+          ],
+          "expected_result": "local branch, upstream and worktree state are captured before any mutable Probe",
+          "id": "P003-WF-001",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "PASS",
+          "selected_for_readonly_execution": true,
+          "title": "Branch and worktree exact-ref identity",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "commands": [],
+          "expected_result": "branch movement invalidates stale projection plan before write or evidence publication",
+          "id": "P003-WF-002",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Branch switch or rebase rejects stale plan",
+          "writer_id": null
+        },
+        {
+          "authorization": "NOT_REQUIRED",
+          "blocker": "target_pr_context_required",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "commands": [],
+          "expected_result": "PR identity and required-check evidence are exact-ref scoped",
+          "id": "P003-WF-003",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "BLOCKED_PENDING_CONTEXT",
+          "selected_for_readonly_execution": true,
+          "title": "PR head/base and required-check identity",
+          "writer_id": null
+        },
+        {
+          "authorization": "NOT_REQUIRED",
+          "blocker": "integration_ref_context_required",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "commands": [],
+          "expected_result": "merge eligibility cannot rely on stale Probe evidence",
+          "id": "P003-WF-004",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "BLOCKED_PENDING_CONTEXT",
+          "selected_for_readonly_execution": true,
+          "title": "Integration-time revalidation before merge eligibility",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "commands": [],
+          "expected_result": "competing refresh blocks or invalidates stale projection write rather than silently overwriting",
+          "id": "P003-WF-005",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Competing projection refresh conflict",
+          "writer_id": null
+        }
+      ],
+      "id": "PROBE-003",
+      "title": "Workflow serialization"
+    },
+    {
+      "cases": [
+        {
+          "authorization": "NOT_REQUIRED",
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "command_results": [
+            {
+              "argv": [
+                ".venv/bin/agentic-kit",
+                "handoff",
+                "check"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "Persistent handoff state check passed\nDocumentation registry:\n- registry: docs/DOCUMENTATION_REGISTRY.yaml\n- version: 1\n- documents: 208\n- broad_migration_allowed: False\n- class:architecture: 55\n- class:evidence/log: 72\n- class:generated artifact: 3\n- class:governance/system: 32\n- class:historical archive: 18\n- class:operational/automation: 17\n- class:planning: 5\n- class:release: 2\n- class:user-facing description: 4\n",
+              "timed_out": false
+            },
+            {
+              "argv": [
+                ".venv/bin/agentic-kit",
+                "dpa",
+                "readiness",
+                "--json"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "{\n  \"schema_version\": 1,\n  \"kind\": \"dpa_readiness_check\",\n  \"status\": \"DP2_BLOCKED\",\n  \"implementation_percent\": 48,\n  \"progress_model\": \"dpa-readiness-v1\",\n  \"path\": \"docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json\",\n  \"finding_count\": 0,\n  \"blocker_count\": 8,\n  \"findings\": [],\n  \"blockers\": [\n    \"probe_002_full_evidence\",\n    \"renderer_full_evidence\",\n    \"probe_003_full_evidence\",\n    \"probe_004_full_evidence\",\n    \"maintainer_assessment\",\n    \"first_dp2_target_scope\",\n    \"rollback_cleanup_proven\",\n    \"maintainer_authorization\"\n  ],\n  \"progress\": [\n    {\n      \"id\": \"architecture_staging\",\n      \"label\": \"Architecture package staged in Kit\",\n      \"weight\": 25,\n      \"earned\": 25,\n      \"status\": \"SATISFIED_FOR_ARCHITECTURE_STAGING\"\n    },\n    {\n      \"id\": \"dp1_evidence_staged\",\n      \"label\": \"DP1 evidence inputs staged\",\n      \"weight\": 10,\n      \"earned\": 10,\n      \"status\": \"SATISFIED_FOR_STAGING\"\n    },\n    {\n      \"id\": \"dp1_readiness_recorded\",\n      \"label\": \"DP1 Assessment readiness recorded\",\n      \"weight\": 5,\n      \"earned\": 5,\n      \"status\": \"DP2_BLOCKED\"\n    },\n    {\n      \"id\": \"probe_001_full_evidence\",\n      \"label\": \"PROBE-001 full evidence\",\n      \"weight\": 8,\n      \"earned\": 8,\n      \"status\": \"SATISFIED_FOR_CURRENT_KIT_REF\"\n    },\n    {\n      \"id\": \"probe_002_full_evidence\",\n      \"label\": \"PROBE-002 full evidence\",\n      \"weight\": 8,\n      \"earned\": 0,\n      \"status\": \"BLOCKED\"\n    },\n    {\n      \"id\": \"renderer_full_evidence\",\n      \"label\": \"Renderer Probe full evidence\",\n      \"weight\": 8,\n      \"earned\": 0,\n      \"status\": \"BLOCKED\"\n    },\n    {\n      \"id\": \"probe_003_full_evidence\",\n      \"label\": \"PROBE-003 full evidence\",\n      \"weight\": 8,\n      \"earned\": 0,\n      \"status\": \"BLOCKED\"\n    },\n    {\n      \"id\": \"probe_004_full_evidence\",\n      \"label\": \"PROBE-004 full evidence\",\n      \"weight\": 8,\n      \"earned\": 0,\n      \"status\": \"BLOCKED\"\n    },\n    {\n      \"id\": \"maintainer_assessment\",\n      \"label\": \"Maintainer Assessment recorded\",\n      \"weight\": 7,\n      \"earned\": 0,\n      \"status\": \"BLOCKED\"\n    },\n    {\n      \"id\": \"first_dp2_target_scope\",\n      \"label\": \"First DP2 target and writer scope selected\",\n      \"weight\": 4,\n      \"earned\": 0,\n      \"status\": \"BLOCKED\"\n    },\n    {\n      \"id\": \"rollback_cleanup_proven\",\n      \"label\": \"Rollback and cleanup proven\",\n      \"weight\": 4,\n      \"earned\": 0,\n      \"status\": \"BLOCKED\"\n    },\n    {\n      \"id\": \"maintainer_authorization\",\n      \"label\": \"Maintainer DP2 authorization recorded\",\n      \"weight\": 5,\n      \"earned\": 0,\n      \"status\": \"BLOCKED\"\n    }\n  ],\n  \"claims\": {\n    \"full_probe_pass_claimed\": false,\n    \"dp2_authorized\": false,\n    \"runtime_behavior_changed\": false,\n    \"production_mutation_performed\": false,\n    \"kit_conformance_claimed\": false,\n    \"generated_outputs_manually_patched\": false\n  }\n}\n",
+              "timed_out": false
+            }
+          ],
+          "commands": [
+            [
+              ".venv/bin/agentic-kit",
+              "handoff",
+              "check"
+            ],
+            [
+              ".venv/bin/agentic-kit",
+              "dpa",
+              "readiness",
+              "--json"
+            ]
+          ],
+          "expected_result": "no-migration is recorded as a safety result when migration evidence is insufficient",
+          "id": "P004-MIG-001",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "PASS",
+          "selected_for_readonly_execution": true,
+          "title": "No-migration selection is explicit",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "pre-write bytes, refs, source inputs and generated metadata are captured before mutation",
+          "id": "P004-MIG-002",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Rollback package capture before Write",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "post-write rollback restores exact bytes without claiming renderer reproducibility",
+          "id": "P004-MIG-003",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Exact-byte rollback after Write",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "accepted state is invalidated when current renderer reproducibility is not proven",
+          "id": "P004-MIG-004",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Exact-byte rollback after acceptance invalidates acceptance when needed",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "renderer-version rollback consequence is explicit and does not preserve invalid acceptance",
+          "id": "P004-MIG-005",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Renderer semantic-version rollback consequence",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "interrupted migration stops in recoverable state with bounded evidence",
+          "id": "P004-MIG-006",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Interrupted migration recovery",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "blocker": "mutable_or_authorized_fixture_not_executed",
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "commands": [],
+          "expected_result": "generated or command-updated outputs are restored through source/generator/command contract or explicitly classified temporary repair",
+          "id": "P004-MIG-007",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "BLOCKED_PENDING_MAINTAINER_AUTHORIZATION",
+          "selected_for_readonly_execution": false,
+          "title": "Generated-output rollback uses command contract",
+          "writer_id": null
+        }
+      ],
+      "id": "PROBE-004",
+      "title": "Migration and rollback"
+    }
+  ],
+  "finding_count": 0,
+  "findings": [],
+  "fixture_manifest": "docs/architecture/dpa/probes/fixtures/DP1_PROBE_FIXTURE_MANIFEST_20260727.json",
+  "full_probe_pass_satisfied": false,
+  "kind": "dpa_readonly_probe_execution",
+  "limitations": [
+    "Only READ_ONLY fixtures with NOT_REQUIRED authorization are eligible for this wrapper.",
+    "Mutable, disposable-branch and temp-repository fixtures remain blocked pending Maintainer authorization.",
+    "This command does not satisfy full PROBE-002, Renderer, PROBE-003 or PROBE-004 evidence.",
+    "This command does not authorize DP2 implementation or claim Kit DPA conformance."
+  ],
+  "plan_only": false,
+  "result_status": "READ_ONLY_EXECUTED_WITH_LIMITATIONS",
+  "schema_version": 1,
+  "structural_ok": true,
+  "summary": {
+    "context_dependent_readonly_cases_blocked": 4,
+    "mutable_or_authorized_cases_blocked": 27,
+    "readonly_cases_executed": 5,
+    "readonly_cases_selected": 9
+  },
+  "validation_ref": "940fdfea4fec38a7d3b616717e7396a694f30b70"
+}

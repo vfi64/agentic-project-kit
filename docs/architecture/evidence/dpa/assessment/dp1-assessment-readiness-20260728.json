@@ -4,7 +4,7 @@
   "status": "DP2_BLOCKED",
   "status_date": "2026-07-28",
   "command_manifest_ack": "COMMAND_MANIFEST_ACK aa03fbe18988",
-  "kit_baseline_ref": "3b68287009e0c65380445b5c92ddb751d14da286",
+  "kit_baseline_ref": "940fdfea4fec38a7d3b616717e7396a694f30b70",
   "dpa_lab_source_ref": "0cf944cc153e65a272c773286791f8891efdd1bc",
   "dpa_lab_merge_ref": "6f927efd625b4239f9ab0e710b48e7d9534fdfec",
   "kit_import_3_baseline_ref": "e89b0fac21c5599f8e531a937c550134469716cf",
@@ -43,6 +43,11 @@
       "id": "current-kit-probe-004-migration-readiness-preflight",
       "path": "docs/architecture/evidence/dpa/probes/probe-004-migration-readiness-1dfc5e8a-20260728/",
       "result": "PARTIAL_BLOCKED_FOR_DP2"
+    },
+    {
+      "id": "current-kit-read-only-probe-execution",
+      "path": "docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/",
+      "result": "READ_ONLY_EXECUTED_WITH_LIMITATIONS"
     },
     {
       "id": "current-kit-dp2-decision-readiness-preflight",

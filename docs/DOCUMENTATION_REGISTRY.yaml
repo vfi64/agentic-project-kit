@@ -1023,6 +1023,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable current PROBE-004 migration and rollback readiness refresh; records rollback and generated-output fixture blockers.
+  - path: docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit DPA read-only Probe execution summary; limitations preserved, no full Probe PASS or DP2 authorization.
+  - path: docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable current DPA read-only Probe execution evidence with READ_ONLY_EXECUTED_WITH_LIMITATIONS.
   - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

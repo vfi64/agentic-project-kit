@@ -112,7 +112,8 @@ not supersede the specification files and do not prove Kit conformance.
   `PASS_WITH_LIMITATIONS`, current PROBE-001 registry compatibility evidence,
   PROBE-002 lifecycle readiness preflight, the WRT-CH-001 admin-refresh
   observation, PROBE-003 workflow serialization readiness preflight and Renderer
-  Probe readiness preflight.
+  Probe readiness preflight, plus current read-only Probe execution for
+  `READ_ONLY`/`NOT_REQUIRED` fixture cases.
 - `../evidence/dpa/assessment/DP1_ASSESSMENT_READINESS_20260728.md`
   consolidates the imported and current DP1 evidence into an Assessment
   readiness decision surface. It records `DP2_BLOCKED`, preserves the full
@@ -136,6 +137,12 @@ The read-only wrapper `agentic-kit dpa readiness` validates that staged
 Assessment readiness record, reports the deterministic implementation
 percentage and shows the current DP2 blocker set without mutating repository
 files.
+
+The read-only wrapper `agentic-kit dpa readonly-probe-execution` executes only
+DP1 Probe fixture-manifest cases whose mutation scope is `READ_ONLY` and whose
+authorization is `NOT_REQUIRED`. It records mutable or context-dependent cases
+as blocked, writes bounded Probe evidence when requested and preserves the full
+Probe PASS and DP2 authorization boundaries.
 
 The read-only wrapper `agentic-kit dpa probe-003-readiness` validates current
 PROBE-003 workflow serialization source, test and control surfaces, optionally

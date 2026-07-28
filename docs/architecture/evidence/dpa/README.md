@@ -57,9 +57,16 @@ command-owned successor-handoff package inputs, but it records
 renderer-semantic-version rollback and generated-output rollback fixtures remain
 open.
 
+The current DPA read-only Probe execution records Kit validation ref
+`940fdfea4fec38a7d3b616717e7396a694f30b70`. It executes only
+`READ_ONLY`/`NOT_REQUIRED` fixture cases from the prepared DP1 Probe fixture
+manifest and records `READ_ONLY_EXECUTED_WITH_LIMITATIONS`. It does not execute
+mutable fixtures, does not satisfy full Probe evidence and does not authorize
+DP2.
+
 The current Assessment readiness record consolidates those evidence inputs into
 a DP2 blocker map at current Kit baseline
-`1dfc5e8a75ffc37677b9f85da9e972812da95c04`. It records `DP2_BLOCKED`, keeps the
+`940fdfea4fec38a7d3b616717e7396a694f30b70`. It records `DP2_BLOCKED`, keeps the
 full Probe PASS claim boundary closed and names the remaining Probe, writer,
 rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
 
@@ -98,6 +105,8 @@ state; it is not a Maintainer record and not DP2 authorization.
 - `probes/probe-004-migration-readiness-1dfc5e8a-20260728/` records current
   Kit PROBE-004 migration and rollback readiness preflight evidence with result
   `PARTIAL_BLOCKED_FOR_DP2`.
+- `probes/read-only-probe-execution-940fdfea-20260728/` records current Kit
+  read-only Probe execution with result `READ_ONLY_EXECUTED_WITH_LIMITATIONS`.
 - `assessment/DP1_ASSESSMENT_READINESS_20260728.md` records the current DP1
   Assessment readiness decision surface with status `DP2_BLOCKED`.
 - `assessment/dp2-decision-readiness-1dfc5e8a-20260728/` records current DP2
