@@ -861,6 +861,34 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Imported DPA-IMPORT-3 bounded read-only baseline terminal log; not current Kit conformance evidence.
+  - path: docs/architecture/evidence/dpa/probes/dp1-readonly-46deae7-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit DP1 read-only baseline refresh summary; PASS_WITH_LIMITATIONS only, not full Probe PASS.
+  - path: docs/architecture/evidence/dpa/probes/dp1-readonly-46deae7-20260728/assessment-input.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit DP1 read-only baseline Assessment input; mutation-scoped fixtures remain NOT_RUN.
+  - path: docs/architecture/evidence/dpa/probes/dp1-readonly-46deae7-20260728/cleanup.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit DP1 read-only baseline cleanup evidence; no production mutation or generated-output patch.
+  - path: docs/architecture/evidence/dpa/probes/dp1-readonly-46deae7-20260728/command-manifest.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit DP1 read-only command-manifest evidence for validation ref 46deae72.
+  - path: docs/architecture/evidence/dpa/probes/dp1-readonly-46deae7-20260728/fixture-plan.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit DP1 read-only fixture-plan snapshot; mutation-scoped fixture IDs remain NOT_RUN.
+  - path: docs/architecture/evidence/dpa/probes/dp1-readonly-46deae7-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit DP1 read-only machine-readable baseline results; 22 bounded commands passed with limitations.
+  - path: docs/architecture/evidence/dpa/probes/dp1-readonly-46deae7-20260728/terminal.log
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit DP1 read-only bounded terminal log; not DP2 authorization or conformance evidence.
   - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers
