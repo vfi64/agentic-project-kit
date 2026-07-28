@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 70403d1906ce4788dca0c72b2ea133aa78a74f3b
-  short: 70403d19
-  subject: Close out v0.4.13 DOI metadata (#1876)
+  full: 0b1fffe5e6ff650d1eb8f287df2e34a6c8e4fcc7
+  short: 0b1fffe5
+  subject: Stage DPA architecture import index (#1878)
 last_substantive_work_state:
-  full: 70403d1906ce4788dca0c72b2ea133aa78a74f3b
-  short: 70403d19
-  subject: Close out v0.4.13 DOI metadata (#1876)
+  full: 0b1fffe5e6ff650d1eb8f287df2e34a6c8e4fcc7
+  short: 0b1fffe5
+  subject: Stage DPA architecture import index (#1878)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
