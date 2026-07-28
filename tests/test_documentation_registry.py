@@ -247,6 +247,273 @@ def test_documentation_registry_accepts_optional_lifecycle_fields(tmp_path: Path
     assert check_documentation_registry(project) == []
 
 
+def _valid_projection_contract(path: str) -> dict[str, object]:
+    return {
+        "schema_version": 1,
+        "target_identity": path,
+        "primary_document_form": "full",
+        "renderer_identifier": "dpa.test.renderer",
+        "renderer_interface_version": "1",
+        "renderer_semantic_version": "1.0.0",
+        "canonical_sources": ["docs/STATUS.md"],
+        "configuration": {"mode": "fixture"},
+        "target_semantics": "complete-document",
+        "target_semantics_version": "1",
+        "lifecycle_policy": "dpa-fixture-lifecycle",
+        "freshness_policy": "dpa-fixture-freshness",
+        "evidence_policy": "dpa-fixture-evidence",
+        "fingerprint_algorithm": "sha256",
+        "input_domain_version": "1",
+        "migration_compatibility_version": "1",
+    }
+
+
+def _valid_partition_contract() -> dict[str, object]:
+    return {
+        "contract_id": "partition:docs/hybrid.md",
+        "schema_version": 1,
+        "regions": [
+            {"identity": "summary", "owner_class": "manual"},
+            {"identity": "projection", "owner_class": "lifecycle"},
+        ],
+        "boundary_representation": "html-comments",
+        "boundary_ownership": "lifecycle",
+        "encoding": "utf-8",
+        "normalization": "lf",
+        "line_endings": "lf",
+        "ordering_constraints": "declared-order",
+        "malformed_boundary_behavior": "fail-closed",
+        "byte_ownership": {"all_bytes_explained": True},
+        "partition_fingerprint_algorithm": "sha256",
+        "input_domain": "complete-target",
+        "compatibility_version": "1",
+    }
+
+
+def _append_document(registry: dict[str, object], entry: dict[str, object]) -> None:
+    documents = registry["documents"]
+    assert isinstance(documents, list)
+    documents.append(entry)
+
+
+def test_documentation_registry_accepts_dpa_projection_contract(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write(project / "docs/projected.md", "# Projected\n")
+    registry = _read_registry(project)
+    _append_document(
+        registry,
+        {
+            "path": "docs/projected.md",
+            "class": "architecture",
+            "owner": "maintainers",
+            "projection_contract": _valid_projection_contract("docs/projected.md"),
+        },
+    )
+    _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+    assert check_documentation_registry(project) == []
+
+
+def test_documentation_registry_accepts_dpa_partition_and_region_projection(
+    tmp_path: Path,
+) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write(project / "docs/hybrid.md", "# Hybrid\n")
+    _write(project / "docs/projection.md", "# Projection\n")
+    registry = _read_registry(project)
+    _append_document(
+        registry,
+        {
+            "path": "docs/hybrid.md",
+            "class": "architecture",
+            "owner": "maintainers",
+            "partition_contract": _valid_partition_contract(),
+        },
+    )
+    projection = _valid_projection_contract("docs/projection.md")
+    projection.update(
+        {
+            "primary_document_form": "hybrid",
+            "target_semantics": "registered-region",
+            "parent_document_identity": "docs/hybrid.md",
+            "region_identity": "projection",
+            "parent_partition_contract_identity": "partition:docs/hybrid.md",
+            "projected_payload_target_semantics": "region-payload",
+        }
+    )
+    _append_document(
+        registry,
+        {
+            "path": "docs/projection.md",
+            "class": "architecture",
+            "owner": "maintainers",
+            "projection_contract": projection,
+        },
+    )
+    _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+    assert check_documentation_registry(project) == []
+
+
+def test_documentation_registry_rejects_unknown_dpa_projection_schema(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write(project / "docs/projected.md", "# Projected\n")
+    registry = _read_registry(project)
+    projection = _valid_projection_contract("docs/projected.md")
+    projection["schema_version"] = 99
+    _append_document(
+        registry,
+        {
+            "path": "docs/projected.md",
+            "class": "architecture",
+            "owner": "maintainers",
+            "projection_contract": projection,
+        },
+    )
+    _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+    errors = check_documentation_registry(project)
+
+    assert any("projection_contract schema_version must be 1" in error for error in errors)
+
+
+def test_documentation_registry_rejects_unknown_dpa_projection_field(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write(project / "docs/projected.md", "# Projected\n")
+    registry = _read_registry(project)
+    projection = _valid_projection_contract("docs/projected.md")
+    projection["surprise"] = "nope"
+    _append_document(
+        registry,
+        {
+            "path": "docs/projected.md",
+            "class": "architecture",
+            "owner": "maintainers",
+            "projection_contract": projection,
+        },
+    )
+    _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+    errors = check_documentation_registry(project)
+
+    assert any("projection_contract has unknown field 'surprise'" in error for error in errors)
+
+
+def test_documentation_registry_rejects_missing_dpa_projection_field(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write(project / "docs/projected.md", "# Projected\n")
+    registry = _read_registry(project)
+    projection = _valid_projection_contract("docs/projected.md")
+    del projection["renderer_identifier"]
+    _append_document(
+        registry,
+        {
+            "path": "docs/projected.md",
+            "class": "architecture",
+            "owner": "maintainers",
+            "projection_contract": projection,
+        },
+    )
+    _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+    errors = check_documentation_registry(project)
+
+    assert any("projection_contract missing field 'renderer_identifier'" in error for error in errors)
+
+
+def test_documentation_registry_rejects_dangling_region_reference(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write(project / "docs/projection.md", "# Projection\n")
+    registry = _read_registry(project)
+    projection = _valid_projection_contract("docs/projection.md")
+    projection.update(
+        {
+            "target_semantics": "registered-region",
+            "parent_document_identity": "docs/missing-parent.md",
+            "region_identity": "projection",
+            "parent_partition_contract_identity": "partition:docs/missing-parent.md",
+            "projected_payload_target_semantics": "region-payload",
+        }
+    )
+    _append_document(
+        registry,
+        {
+            "path": "docs/projection.md",
+            "class": "architecture",
+            "owner": "maintainers",
+            "projection_contract": projection,
+        },
+    )
+    _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+    errors = check_documentation_registry(project)
+
+    assert any("parent_document_identity is dangling" in error for error in errors)
+
+
+def test_documentation_registry_rejects_inconsistent_region_reference(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write(project / "docs/hybrid.md", "# Hybrid\n")
+    _write(project / "docs/projection.md", "# Projection\n")
+    registry = _read_registry(project)
+    _append_document(
+        registry,
+        {
+            "path": "docs/hybrid.md",
+            "class": "architecture",
+            "owner": "maintainers",
+            "partition_contract": _valid_partition_contract(),
+        },
+    )
+    projection = _valid_projection_contract("docs/projection.md")
+    projection.update(
+        {
+            "target_semantics": "registered-region",
+            "parent_document_identity": "docs/hybrid.md",
+            "region_identity": "missing-region",
+            "parent_partition_contract_identity": "partition:docs/hybrid.md",
+            "projected_payload_target_semantics": "region-payload",
+        }
+    )
+    _append_document(
+        registry,
+        {
+            "path": "docs/projection.md",
+            "class": "architecture",
+            "owner": "maintainers",
+            "projection_contract": projection,
+        },
+    )
+    _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+    errors = check_documentation_registry(project)
+
+    assert any("is not declared by parent partition_contract" in error for error in errors)
+
+
+def test_documentation_registry_rejects_unsupported_dpa_target_partition_combination(
+    tmp_path: Path,
+) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write(project / "docs/hybrid.md", "# Hybrid\n")
+    registry = _read_registry(project)
+    _append_document(
+        registry,
+        {
+            "path": "docs/hybrid.md",
+            "class": "architecture",
+            "owner": "maintainers",
+            "partition_contract": _valid_partition_contract(),
+            "projection_contract": _valid_projection_contract("docs/hybrid.md"),
+        },
+    )
+    _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+    errors = check_documentation_registry(project)
+
+    assert any("complete-document projection_contract is inconsistent" in error for error in errors)
+
+
 def test_documentation_registry_rejects_invalid_optional_lifecycle_fields(tmp_path: Path) -> None:
     project = _write_minimal_project(tmp_path)
     registry = _read_registry(project)

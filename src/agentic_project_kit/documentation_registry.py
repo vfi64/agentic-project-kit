@@ -10,6 +10,10 @@ from typing import Any
 
 import yaml
 
+from agentic_project_kit.dpa_registry_contracts import (
+    DPA_REGISTRY_OPTIONAL_DOCUMENT_FIELDS,
+    validate_dpa_registry_contracts,
+)
 from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
 REGISTRY_PATH = Path(LEGACY_DEFAULTS.docs_root) / LEGACY_DEFAULTS.documentation_registry_file
@@ -53,6 +57,7 @@ REQUIRED_DOCUMENT_FIELDS = (
 OPTIONAL_DOCUMENT_FIELDS = (
     "review_after",
     "deferred_until",
+    *DPA_REGISTRY_OPTIONAL_DOCUMENT_FIELDS,
 )
 
 DOCUMENT_REGISTRATION_SCAN_SUFFIXES = frozenset({".md", ".yaml", ".yml"})
@@ -1088,6 +1093,13 @@ def _check_document_entries(project_root: Path, registry: dict[str, Any]) -> lis
                 "field 'deferred_until' must be an ISO date string"
             )
 
+    errors.extend(
+        validate_dpa_registry_contracts(
+            project_root,
+            documents,
+            registry_path=REGISTRY_PATH,
+        )
+    )
     return errors
 
 
