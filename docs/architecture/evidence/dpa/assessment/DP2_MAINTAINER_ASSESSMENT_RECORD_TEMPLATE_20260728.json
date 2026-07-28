@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "kind": "dpa_dp2_maintainer_assessment_record",
+  "status": "TEMPLATE_NOT_ASSESSED",
+  "status_date": "2026-07-28",
+  "template": true,
+  "validation_ref": "fb71bd49e24d357baea73a00248e32de0ac04c15",
+  "readiness_record": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+  "decision_readiness_evidence": "docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-8ceadc8a-20260728/results.json",
+  "maintainer": "PENDING_MAINTAINER",
+  "decision_token": "PENDING_DECISION",
+  "probe_dispositions": {
+    "PROBE-002": {
+      "status": "BLOCKED",
+      "evidence": [],
+      "rationale": "Disposable selected-writer lifecycle fixture evidence remains blocked."
+    },
+    "RENDERER": {
+      "status": "BLOCKED",
+      "evidence": [],
+      "rationale": "Renderer map, identity/version and side-effect fixture evidence remain blocked."
+    },
+    "PROBE-003": {
+      "status": "BLOCKED",
+      "evidence": [],
+      "rationale": "Disposable workflow serialization fixture evidence remains blocked."
+    },
+    "PROBE-004": {
+      "status": "BLOCKED",
+      "evidence": [],
+      "rationale": "Migration-form, rollback-package and generated-output rollback fixture evidence remain blocked."
+    }
+  },
+  "first_dp2_target_scope": {
+    "status": "UNSELECTED",
+    "target_path": "docs/handoff/CURRENT_HANDOFF.md",
+    "selected_writers": [
+      "WRT-CH-001"
+    ],
+    "deferred_writers": [],
+    "excluded_writers": [
+      "WRT-CH-005",
+      "WRT-CH-006"
+    ],
+    "rationale": "Candidate self-hosting administrative handoff target only; Maintainer must select or revise before DP2."
+  },
+  "rollback_cleanup": {
+    "status": "NOT_PROVEN",
+    "evidence": [],
+    "rationale": "Rollback and cleanup proof must be attached after the selected target and disposable fixtures are authorized."
+  },
+  "claims": {
+    "maintainer_assessment_recorded": false,
+    "maintainer_authorization_recorded": false,
+    "dp2_authorized": false,
+    "runtime_behavior_changed": false,
+    "production_mutation_performed": false,
+    "kit_conformance_claimed": false,
+    "generated_outputs_manually_patched": false
+  }
+}

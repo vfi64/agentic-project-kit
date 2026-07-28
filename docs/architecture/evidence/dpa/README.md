@@ -68,6 +68,11 @@ The current DP2 decision-readiness preflight records validation ref
 candidate first DP2 target scope and required Maintainer actions for review, but
 it is not Maintainer Assessment, not DP2 authorization and not Probe execution.
 
+The current DP2 Maintainer-record template check records validation ref
+`fb71bd49e24d357baea73a00248e32de0ac04c15`. It validates the future
+Maintainer-owned record shape and keeps the template in `TEMPLATE_NOT_ASSESSED`
+state; it is not a Maintainer record and not DP2 authorization.
+
 ## Imported Probe Evidence
 
 - `probes/dp1-readonly-c788a8c5-20260727/` records read-only baseline evidence
@@ -98,6 +103,10 @@ it is not Maintainer Assessment, not DP2 authorization and not Probe execution.
 - `assessment/dp2-decision-readiness-8ceadc8a-20260728/` records current DP2
   decision-readiness preflight evidence with result
   `READY_FOR_MAINTAINER_DECISION_DP2_BLOCKED`.
+- `assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_TEMPLATE_20260728.json` records
+  the blocked template for a future Maintainer-owned DP2 Assessment record.
+- `assessment/maintainer-record-template-check-fb71bd49-20260728/` records the
+  current template validation with result `TEMPLATE_READY_DP2_BLOCKED`.
 
 Both packages preserve their original limitation language. Future execution must
 freeze current refs, record command manifest currency, retain cleanup evidence

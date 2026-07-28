@@ -3,8 +3,8 @@
   "kind": "dpa_dp1_assessment_readiness",
   "status": "DP2_BLOCKED",
   "status_date": "2026-07-28",
-  "command_manifest_ack": "COMMAND_MANIFEST_ACK f6919e347655",
-  "kit_baseline_ref": "8ceadc8a0ab5f61f5aac6549cd440c47999a18de",
+  "command_manifest_ack": "COMMAND_MANIFEST_ACK 0a7072ca7b72",
+  "kit_baseline_ref": "fb71bd49e24d357baea73a00248e32de0ac04c15",
   "dpa_lab_source_ref": "0cf944cc153e65a272c773286791f8891efdd1bc",
   "dpa_lab_merge_ref": "6f927efd625b4239f9ab0e710b48e7d9534fdfec",
   "kit_import_3_baseline_ref": "e89b0fac21c5599f8e531a937c550134469716cf",
@@ -48,6 +48,11 @@
       "id": "current-kit-dp2-decision-readiness-preflight",
       "path": "docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-8ceadc8a-20260728/",
       "result": "READY_FOR_MAINTAINER_DECISION_DP2_BLOCKED"
+    },
+    {
+      "id": "current-kit-dp2-maintainer-record-template-check",
+      "path": "docs/architecture/evidence/dpa/assessment/maintainer-record-template-check-fb71bd49-20260728/",
+      "result": "TEMPLATE_READY_DP2_BLOCKED"
     },
     {
       "id": "historical-lab-readonly-baseline",
