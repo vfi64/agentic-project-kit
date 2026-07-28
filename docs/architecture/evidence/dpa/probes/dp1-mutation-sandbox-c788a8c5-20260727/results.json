@@ -1,0 +1,455 @@
+{
+  "schema_version": 1,
+  "kind": "dp1_mutation_sandbox_probe_result",
+  "run_id": "dp1-mutation-sandbox-c788a8c5-20260727",
+  "status": "PARTIAL",
+  "started_at": "2026-07-27T21:42:53.858184+00:00",
+  "completed_at": "2026-07-27T21:42:58.939435+00:00",
+  "kit_root": "<KIT_ROOT>",
+  "sandbox_root": "<SANDBOX_KIT_ROOT>",
+  "kit_ref": "c788a8c530eb0984d088a86e8e7951145581abbe",
+  "command_manifest_ack": "COMMAND_MANIFEST_ACK 8610cfd2990a",
+  "fixture_manifest": "integration/probe-fixtures/DP1_PROBE_FIXTURE_MANIFEST_20260727.json",
+  "scope": "Sandbox-only mutable command execution in a temporary local Kit clone; no Kit production branch, PR, push, release or main mutation.",
+  "authorization_interpretation": "The current user instruction to continue DPA work is interpreted only as authorization for temporary local sandbox execution with cleanup.",
+  "preflight": {
+    "source_before_status": {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "returncode": 0,
+      "duration_seconds": 0.017,
+      "stdout": "",
+      "stderr": "",
+      "ok": true
+    },
+    "source_before_head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "duration_seconds": 0.011,
+      "stdout": "c788a8c530eb0984d088a86e8e7951145581abbe\n",
+      "stderr": "",
+      "ok": true
+    },
+    "source_after_status": {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "returncode": 0,
+      "duration_seconds": 0.016,
+      "stdout": "",
+      "stderr": "",
+      "ok": true
+    },
+    "source_after_head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "duration_seconds": 0.01,
+      "stdout": "c788a8c530eb0984d088a86e8e7951145581abbe\n",
+      "stderr": "",
+      "ok": true
+    },
+    "source_clean_ok": true,
+    "source_ref_ok": true,
+    "sandbox_ref_ok": true
+  },
+  "setup": [
+    {
+      "name": "clone-source-kit",
+      "argv": [
+        "git",
+        "clone",
+        "--no-local",
+        "<KIT_ROOT>",
+        "<SANDBOX_KIT_ROOT>"
+      ],
+      "returncode": 0,
+      "duration_seconds": 1.443,
+      "stdout": "",
+      "stderr": "Cloning into '<SANDBOX_KIT_ROOT>'...\n",
+      "ok": true
+    },
+    {
+      "name": "checkout-expected-ref",
+      "argv": [
+        "git",
+        "checkout",
+        "c788a8c530eb0984d088a86e8e7951145581abbe"
+      ],
+      "returncode": 0,
+      "duration_seconds": 0.114,
+      "stdout": "",
+      "stderr": "Note: switching to 'c788a8c530eb0984d088a86e8e7951145581abbe'.\n\nYou are in 'detached HEAD' state. You can look around, make experimental\nchanges and commit them, and you can discard any commits you make in this\nstate without impacting any branches by switching back to a branch.\n\nIf you want to create a new branch to retain commits you create, you may\ndo so (now or later) by using -c with the switch command. Example:\n\n  git switch -c <new-branch-name>\n\nOr undo this operation with:\n\n  git switch -\n\nTurn off this advice by setting config variable advice.detachedHead to false\n\nHEAD is now at c788a8c5 Refresh handoff state after PR1876 (#1877)\n",
+      "ok": true
+    },
+    {
+      "name": "prepare-sandbox-runtime",
+      "argv": [
+        "prepare-sandbox-runtime"
+      ],
+      "returncode": 0,
+      "duration_seconds": 0.0,
+      "stdout": "prepared .venv sandbox runtime symlink\n",
+      "stderr": "",
+      "ok": true
+    }
+  ],
+  "commands": [
+    {
+      "name": "command-reference-check",
+      "probe": "PREFLIGHT",
+      "fixture_ids": [
+        "P003-WF-001"
+      ],
+      "writer_ids": [],
+      "mutation_scope": "READ_ONLY_SANDBOX",
+      "description": "Confirm the sandbox checkout command reference is current before mutable checks.",
+      "argv": [
+        "<KIT_PYTHON>",
+        "-m",
+        "agentic_project_kit.cli",
+        "transfer",
+        "command-reference-check",
+        "--json"
+      ],
+      "returncode": 0,
+      "duration_seconds": 0.965,
+      "stdout": "{\n  \"schema_version\": 1,\n  \"kind\": \"transfer_command_reference_check_result\",\n  \"action\": \"command-reference-check\",\n  \"result_status\": \"PASS\",\n  \"final_signal\": \"d\",\n  \"next_action\": \"Command reference is current.\",\n  \"result\": {\n    \"argv\": [\n      \"./.venv/bin/python\",\n      \"-m\",\n      \"pytest\",\n      \"-q\",\n      \"tests/test_agentic_kit_command_reference_is_current.py\"\n    ],\n    \"returncode\": 0,\n    \"stdout\": \"..                                                                       [100%]\\n2 passed in 0.23s\\n\",\n    \"stderr\": \"\",\n    \"ok\": true\n  }\n}\n",
+      "stderr": "",
+      "ok": true
+    },
+    {
+      "name": "handoff-refresh-write",
+      "probe": "PROBE-002",
+      "fixture_ids": [
+        "P002-LIFE-001",
+        "P002-WRT-001"
+      ],
+      "writer_ids": [
+        "WRT-CH-001"
+      ],
+      "mutation_scope": "TEMP_REPO_MUTATION",
+      "description": "Exercise the bounded handoff-state writer component in the sandbox checkout.",
+      "argv": [
+        "<KIT_PYTHON>",
+        "-m",
+        "agentic_project_kit.cli",
+        "handoff",
+        "refresh",
+        ".agentic/handoff_state.yaml",
+        "--write"
+      ],
+      "returncode": 0,
+      "duration_seconds": 0.29,
+      "stdout": "Current safe_state: 70403d19 Close out v0.4.13 DOI metadata (#1876)\nRefreshed safe_state: 70403d19 Close out v0.4.13 DOI metadata (#1876)\nUpdated .agentic/handoff_state.yaml\n",
+      "stderr": "",
+      "ok": true
+    },
+    {
+      "name": "successor-package-noncanonical",
+      "probe": "PROBE-004",
+      "fixture_ids": [
+        "P004-MIG-001",
+        "P004-MIG-007"
+      ],
+      "writer_ids": [
+        "WRT-CH-006"
+      ],
+      "mutation_scope": "TEMP_OUTPUT_MUTATION",
+      "description": "Generate successor package outputs outside the repository without canonical prompt writes.",
+      "argv": [
+        "<KIT_PYTHON>",
+        "-m",
+        "agentic_project_kit.cli",
+        "transfer",
+        "chat-switch-complete",
+        "--json",
+        "--no-update-canonical-prompts",
+        "--output-dir",
+        "<TMP_SUCCESSOR_PACKAGE>"
+      ],
+      "returncode": 0,
+      "duration_seconds": 0.687,
+      "stdout": "{\n  \"context_path\": \"<TMP_SUCCESSOR_PACKAGE>/successor_context.yaml\",\n  \"findings\": [],\n  \"generated_head\": \"c788a8c530eb0984d088a86e8e7951145581abbe\",\n  \"generated_head_short\": \"c788a8c5\",\n  \"kind\": \"transfer_chat_switch_complete_result\",\n  \"open_tasks\": [\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"p5c-physical-migration\",\n      \"status\": \"blocked\",\n      \"summary\": \"Plan physical migration after legacy profile deprecation for P5\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"v1-0-milestone\",\n      \"status\": \"planned\",\n      \"summary\": \"Reach the 1.0 operating-layer stability milestone for unphased\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"v2-0-legacy-profile-removal\",\n      \"status\": \"planned\",\n      \"summary\": \"Remove the implicit legacy profile in 2.0.0 for unphased\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"pre-gui-hardening-line\",\n      \"status\": \"next\",\n      \"summary\": \"Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for v0.4.12\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"workflow-kernel-and-transfer-hardening\",\n      \"status\": \"planned\",\n      \"summary\": \"Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"release-and-doi-governance\",\n      \"status\": \"planned\",\n      \"summary\": \"Keep release metadata, publish, and DOI closeout behind authoritative commands for pre-GUI\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"gui-gatekeeper-workbench\",\n      \"status\": \"planned\",\n      \"summary\": \"Build the local gatekeeper/workbench GUI over deterministic actions for GUI\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"documentation-artifact-governance-os\",\n      \"status\": \"planned\",\n      \"summary\": \"Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"master-implementation-q\",\n      \"status\": \"active\",\n      \"summary\": \"Master Implementation Q2 rest sequence\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"lifecycle-backlog-clearance\",\n      \"status\": \"active\",\n      \"summary\": \"Clear current documentation lifecycle backlog before suite-level strict mode\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"governance-doc-backfill\",\n      \"status\": \"active\",\n      \"summary\": \"Backfill reviewed governance document registry entries\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"planning-ideas-residual-cleanup\",\n      \"status\": \"planned\",\n      \"summary\": \"Resolve remaining planning and idea residual documents\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"pre-gui-hardening-plan\",\n      \"status\": \"active\",\n      \"summary\": \"Execute the pre-GUI hardening backlog in small wrapper-first slices for v0.4.12\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"next-turn-workflow-kernel\",\n      \"status\": \"active\",\n      \"summary\": \"Move recurring next-step execution from chat discipline into a deterministic local workflow kernel for v0.4.12\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"release-command-authority\",\n      \"status\": \"active\",\n      \"summary\": \"Keep release preparation, publishing, and DOI closeout under explicit command authority for v0.4.12\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"rule-registry-hardening\",\n      \"status\": \"active\",\n      \"summary\": \"Preserve active rule identity, source validation, and refresh handshakes\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"portability-and-ns-closeout\",\n      \"status\": \"planned\",\n      \"summary\": \"Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands for v0.4.12\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"gui-workbench-plan\",\n      \"status\": \"planned\",\n      \"summary\": \"Implement the GUI gatekeeper/workbench as a view over governed action specs for v0.4.x\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"docs-centralize-and-remove-command\",\n      \"status\": \"planned\",\n      \"summary\": \"Build governed docs centralize-and-remove command before K3\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"standard-error-hardening-backlog\",\n      \"status\": \"active\",\n      \"summary\": \"Standard-error hardening backlog and legacy ns command coverage map\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"post-merge-lifecycle-state-model\",\n      \"status\": \"active\",\n      \"summary\": \"Post-merge lifecycle state model and command authority\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"mechanize-doc-registry-scope-reconcile\",\n      \"status\": \"planned\",\n      \"summary\": \"Mechanize documentation registry scope reconciliation\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"mechanize-failure-mode-review-automation\",\n      \"status\": \"planned\",\n      \"summary\": \"Mechanize failure-mode review automation\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"mechanize-pre-gui-hardening-readiness\",\n      \"status\": \"planned\",\n      \"summary\": \"Mechanize pre-GUI hardening readiness\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"mechanize-operating-layer-public-onboarding-evidence\",\n      \"status\": \"planned\",\n      \"summary\": \"Mechanize operating-layer public onboarding and evidence\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"reports-retention-policy\",\n      \"status\": \"planned\",\n      \"summary\": \"Mechanize report and evidence retention policy\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"agf-dpa-adoption-tracker\",\n      \"status\": \"blocked\",\n      \"summary\": \"Track AGF/DPA Package-G adoption evaluation without implementation claims\"\n    }\n  ],\n  \"result_status\": \"PASS\",\n  \"schema_version\": 1,\n  \"source_manifest_path\": \"<TMP_SUCCESSOR_PACKAGE>/source_manifest.json\",\n  \"successor_prompt_path\": \"<TMP_SUCCESSOR_PACKAGE>/successor_prompt.md\",\n  \"updated_canonical_prompts\": false,\n  \"validation_report_path\": \"<TMP_SUCCESSOR_PACKAGE>/validation_report.json\"\n}\n",
+      "stderr": "",
+      "ok": true
+    },
+    {
+      "name": "successor-package-canonical-sandbox",
+      "probe": "PROBE-004",
+      "fixture_ids": [
+        "P004-MIG-001",
+        "P004-MIG-007"
+      ],
+      "writer_ids": [
+        "WRT-CH-006"
+      ],
+      "mutation_scope": "TEMP_REPO_MUTATION",
+      "description": "Regenerate Kit-owned successor package and prompt projections in the sandbox only.",
+      "argv": [
+        "<KIT_PYTHON>",
+        "-m",
+        "agentic_project_kit.cli",
+        "transfer",
+        "chat-switch-complete",
+        "--json",
+        "--output-dir",
+        "docs/reports/handoff-packages/latest"
+      ],
+      "returncode": 0,
+      "duration_seconds": 0.577,
+      "stdout": "{\n  \"context_path\": \"docs/reports/handoff-packages/latest/successor_context.yaml\",\n  \"findings\": [],\n  \"generated_head\": \"c788a8c530eb0984d088a86e8e7951145581abbe\",\n  \"generated_head_short\": \"c788a8c5\",\n  \"kind\": \"transfer_chat_switch_complete_result\",\n  \"open_tasks\": [\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"p5c-physical-migration\",\n      \"status\": \"blocked\",\n      \"summary\": \"Plan physical migration after legacy profile deprecation for P5\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"v1-0-milestone\",\n      \"status\": \"planned\",\n      \"summary\": \"Reach the 1.0 operating-layer stability milestone for unphased\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"v2-0-legacy-profile-removal\",\n      \"status\": \"planned\",\n      \"summary\": \"Remove the implicit legacy profile in 2.0.0 for unphased\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"pre-gui-hardening-line\",\n      \"status\": \"next\",\n      \"summary\": \"Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for v0.4.12\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"workflow-kernel-and-transfer-hardening\",\n      \"status\": \"planned\",\n      \"summary\": \"Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"release-and-doi-governance\",\n      \"status\": \"planned\",\n      \"summary\": \"Keep release metadata, publish, and DOI closeout behind authoritative commands for pre-GUI\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"gui-gatekeeper-workbench\",\n      \"status\": \"planned\",\n      \"summary\": \"Build the local gatekeeper/workbench GUI over deterministic actions for GUI\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"documentation-artifact-governance-os\",\n      \"status\": \"planned\",\n      \"summary\": \"Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"master-implementation-q\",\n      \"status\": \"active\",\n      \"summary\": \"Master Implementation Q2 rest sequence\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"lifecycle-backlog-clearance\",\n      \"status\": \"active\",\n      \"summary\": \"Clear current documentation lifecycle backlog before suite-level strict mode\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"governance-doc-backfill\",\n      \"status\": \"active\",\n      \"summary\": \"Backfill reviewed governance document registry entries\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"planning-ideas-residual-cleanup\",\n      \"status\": \"planned\",\n      \"summary\": \"Resolve remaining planning and idea residual documents\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"pre-gui-hardening-plan\",\n      \"status\": \"active\",\n      \"summary\": \"Execute the pre-GUI hardening backlog in small wrapper-first slices for v0.4.12\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"next-turn-workflow-kernel\",\n      \"status\": \"active\",\n      \"summary\": \"Move recurring next-step execution from chat discipline into a deterministic local workflow kernel for v0.4.12\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"release-command-authority\",\n      \"status\": \"active\",\n      \"summary\": \"Keep release preparation, publishing, and DOI closeout under explicit command authority for v0.4.12\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"rule-registry-hardening\",\n      \"status\": \"active\",\n      \"summary\": \"Preserve active rule identity, source validation, and refresh handshakes\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"portability-and-ns-closeout\",\n      \"status\": \"planned\",\n      \"summary\": \"Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands for v0.4.12\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"gui-workbench-plan\",\n      \"status\": \"planned\",\n      \"summary\": \"Implement the GUI gatekeeper/workbench as a view over governed action specs for v0.4.x\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"docs-centralize-and-remove-command\",\n      \"status\": \"planned\",\n      \"summary\": \"Build governed docs centralize-and-remove command before K3\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"standard-error-hardening-backlog\",\n      \"status\": \"active\",\n      \"summary\": \"Standard-error hardening backlog and legacy ns command coverage map\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"post-merge-lifecycle-state-model\",\n      \"status\": \"active\",\n      \"summary\": \"Post-merge lifecycle state model and command authority\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"mechanize-doc-registry-scope-reconcile\",\n      \"status\": \"planned\",\n      \"summary\": \"Mechanize documentation registry scope reconciliation\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"mechanize-failure-mode-review-automation\",\n      \"status\": \"planned\",\n      \"summary\": \"Mechanize failure-mode review automation\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"mechanize-pre-gui-hardening-readiness\",\n      \"status\": \"planned\",\n      \"summary\": \"Mechanize pre-GUI hardening readiness\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"mechanize-operating-layer-public-onboarding-evidence\",\n      \"status\": \"planned\",\n      \"summary\": \"Mechanize operating-layer public onboarding and evidence\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"reports-retention-policy\",\n      \"status\": \"planned\",\n      \"summary\": \"Mechanize report and evidence retention policy\"\n    },\n    {\n      \"files\": [\n        \"docs/planning/PROJECT_DIRECTION.yaml\",\n        \"docs/DOCUMENTATION_REGISTRY.yaml\"\n      ],\n      \"id\": \"agf-dpa-adoption-tracker\",\n      \"status\": \"blocked\",\n      \"summary\": \"Track AGF/DPA Package-G adoption evaluation without implementation claims\"\n    }\n  ],\n  \"result_status\": \"PASS\",\n  \"schema_version\": 1,\n  \"source_manifest_path\": \"docs/reports/handoff-packages/latest/source_manifest.json\",\n  \"successor_prompt_path\": \"docs/reports/handoff-packages/latest/successor_prompt.md\",\n  \"updated_canonical_prompts\": true,\n  \"validation_report_path\": \"docs/reports/handoff-packages/latest/validation_report.json\"\n}\n",
+      "stderr": "",
+      "ok": true
+    },
+    {
+      "name": "release-prep-write-sandbox",
+      "probe": "PROBE-002",
+      "fixture_ids": [
+        "P002-WRT-002"
+      ],
+      "writer_ids": [
+        "WRT-CH-002",
+        "WRT-CH-004"
+      ],
+      "mutation_scope": "TEMP_REPO_MUTATION",
+      "description": "Exercise release metadata writer routing in a disposable Kit checkout.",
+      "argv": [
+        "<KIT_PYTHON>",
+        "-m",
+        "agentic_project_kit.cli",
+        "release-prep",
+        "--version",
+        "0.4.14",
+        "--date",
+        "2026-07-27",
+        "--summary-line",
+        "DPA mutation-sandbox release metadata probe.",
+        "--json"
+      ],
+      "returncode": 0,
+      "duration_seconds": 0.237,
+      "stdout": "{\n  \"changed_paths\": [\n    \"CHANGELOG.md\",\n    \"CITATION.cff\",\n    \"README.md\",\n    \"docs/STATUS.md\",\n    \"docs/handoff/CURRENT_HANDOFF.md\",\n    \"pyproject.toml\",\n    \"src/agentic_project_kit/__init__.py\"\n  ],\n  \"date\": \"2026-07-27\",\n  \"dry_run\": false,\n  \"ok\": true,\n  \"version\": \"0.4.14\"\n}\n",
+      "stderr": "",
+      "ok": true
+    },
+    {
+      "name": "workspace-init-external",
+      "probe": "PROBE-002",
+      "fixture_ids": [
+        "P002-WRT-005"
+      ],
+      "writer_ids": [
+        "WRT-CH-005"
+      ],
+      "mutation_scope": "TEMP_OUTPUT_MUTATION",
+      "description": "Exercise generated handoff template creation in an external disposable root.",
+      "argv": [
+        "<KIT_PYTHON>",
+        "-m",
+        "agentic_project_kit.cli",
+        "workspace",
+        "init",
+        "--root",
+        "<EXTERNAL_WORKSPACE_ROOT>",
+        "--name",
+        "dpa-mutation-sandbox",
+        "--type",
+        "generic",
+        "--execute",
+        "--json"
+      ],
+      "returncode": 0,
+      "duration_seconds": 0.247,
+      "stdout": "{\n  \"directories\": [\n    \"docs\",\n    \"docs/archive\",\n    \".agentic\",\n    \".agentic/registries\",\n    \".agentic/rules\",\n    \".agentic/state\",\n    \".agentic/state/handoff\",\n    \".agentic/state/handoff/packages\",\n    \".agentic/state/handoff/packages/latest\",\n    \".agentic/state/handoff/reports\",\n    \".agentic/state/handoff/terminal\",\n    \".agentic/state/handoff/transfer_handoff_reports\",\n    \".agentic/transfer\",\n    \".agentic/transfer/inbox\",\n    \".agentic/transfer/outbox\",\n    \".agentic/tmp\",\n    \".agentic/ci\"\n  ],\n  \"files\": [\n    \".agentic/DOC_LIFECYCLE.md\",\n    \".agentic/INITIAL_LLM_PROMPT.md\",\n    \".agentic/ci/agentic-gate.yaml\",\n    \".agentic/ci/pre-commit-snippet.yaml\",\n    \".agentic/config.yaml\",\n    \".agentic/registries/documentation.yaml\",\n    \".agentic/registries/rules.yaml\",\n    \".agentic/rules/README.md\",\n    \".agentic/state/README.md\",\n    \".agentic/state/handoff/README.md\",\n    \".agentic/state/status.md\",\n    \"docs/archive/README.md\"\n  ],\n  \"final_signal\": \"d\",\n  \"gitignore_diff\": [\n    \"+ .agentic/tmp/\"\n  ],\n  \"injection_targets\": [],\n  \"kind\": \"workspace_init_plan\",\n  \"manifest\": {\n    \"gates\": {\n      \"extra\": [],\n      \"skip\": []\n    },\n    \"hygiene\": {\n      \"doc_lifecycle\": \"warn\",\n      \"review_budgets\": {\n        \"governance\": 180,\n        \"reference\": 365,\n        \"workflow\": 270\n      }\n    },\n    \"kit_schema_version\": 1,\n    \"modules\": {\n      \"doc_registry\": true,\n      \"release_governance\": true,\n      \"rule_registry\": true,\n      \"transfer\": true\n    },\n    \"paths\": {\n      \"docs_root\": \"docs\"\n    },\n    \"profile\": \"generic\",\n    \"project\": {\n      \"name\": \"dpa-mutation-sandbox\",\n      \"type\": \"generic\"\n    },\n    \"transfer\": {\n      \"visibility\": \"repo\"\n    }\n  },\n  \"manifest_yaml\": \"kit_schema_version: 1\\nproject:\\n  name: dpa-mutation-sandbox\\n  type: generic\\nprofile: generic\\nmodules:\\n  doc_registry: true\\n  release_governance: true\\n  rule_registry: true\\n  transfer: true\\ntransfer:\\n  visibility: repo\\nhygiene:\\n  doc_lifecycle: warn\\n  review_budgets:\\n    governance: 180\\n    reference: 365\\n    workflow: 270\\npaths:\\n  docs_root: docs\\ngates:\\n  extra: []\\n  skip: []\\n\",\n  \"mode\": \"execute\",\n  \"privacy_boundary\": \"Regardless of mode: **no secrets, credentials, private chat fragments, or\\npersonal logs belong in any versioned part of `.agentic/`.** The task carrier\\ncontains the work order the user knowingly publishes \\u2014 `SEND` already makes\\nthe push explicit. Machine-local state lives under `.agentic/tmp/` and is\\nignored by construction. `workspace adopt` and `workspace init` must print\\nthis boundary; documentation for public target repos must repeat it.\",\n  \"project\": {\n    \"name\": \"dpa-mutation-sandbox\",\n    \"profile\": \"generic\",\n    \"type\": \"generic\"\n  },\n  \"result_status\": \"PASS\",\n  \"root\": \"<EXTERNAL_WORKSPACE_ROOT>\",\n  \"schema_version\": 1,\n  \"tree\": [\n    \"docs/\",\n    \"docs/archive/\",\n    \"docs/archive/README.md\",\n    \".agentic/\",\n    \".agentic/config.yaml\",\n    \".agentic/DOC_LIFECYCLE.md\",\n    \".agentic/registries/\",\n    \".agentic/registries/documentation.yaml\",\n    \".agentic/registries/rules.yaml\",\n    \".agentic/rules/\",\n    \".agentic/rules/README.md\",\n    \".agentic/state/\",\n    \".agentic/state/README.md\",\n    \".agentic/state/status.md\",\n    \".agentic/state/handoff/\",\n    \".agentic/state/handoff/README.md\",\n    \".agentic/state/handoff/packages/\",\n    \".agentic/state/handoff/packages/latest/\",\n    \".agentic/state/handoff/reports/\",\n    \".agentic/state/handoff/terminal/\",\n    \".agentic/state/handoff/transfer_handoff_reports/\",\n    \".agentic/transfer/\",\n    \".agentic/transfer/inbox/\",\n    \".agentic/transfer/outbox/\",\n    \".agentic/tmp/\",\n    \".agentic/ci/\",\n    \".agentic/ci/agentic-gate.yaml\",\n    \".agentic/ci/pre-commit-snippet.yaml\",\n    \".agentic/INITIAL_LLM_PROMPT.md\",\n    \".gitignore\"\n  ],\n  \"written\": true\n}\n",
+      "stderr": "<SANDBOX_KIT_ROOT>/src/agentic_project_kit/workspace.py:398: LegacyProfileDeprecationWarning: agentic-kit implicit legacy profile is deprecated for manifest-less workspaces and will be removed in 2.0.0; run `agentic-kit workspace init --root PATH` or set AGENTIC_KIT_SUPPRESS_LEGACY_PROFILE_WARNING=1 to suppress this warning.\n  warnings.warn(\n",
+      "ok": true
+    }
+  ],
+  "sandbox_snapshots": {
+    "before": {
+      "head": {
+        "argv": [
+          "git",
+          "rev-parse",
+          "HEAD"
+        ],
+        "returncode": 0,
+        "duration_seconds": 0.01,
+        "stdout": "c788a8c530eb0984d088a86e8e7951145581abbe\n",
+        "stderr": "",
+        "ok": true
+      },
+      "status": {
+        "argv": [
+          "git",
+          "status",
+          "--porcelain=v1"
+        ],
+        "returncode": 0,
+        "duration_seconds": 0.113,
+        "stdout": "?? .venv\n",
+        "stderr": "",
+        "ok": true
+      },
+      "diff_name_status": {
+        "argv": [
+          "git",
+          "diff",
+          "--name-status"
+        ],
+        "returncode": 0,
+        "duration_seconds": 0.108,
+        "stdout": "",
+        "stderr": "",
+        "ok": true
+      },
+      "diff_stat": {
+        "argv": [
+          "git",
+          "diff",
+          "--stat"
+        ],
+        "returncode": 0,
+        "duration_seconds": 0.107,
+        "stdout": "",
+        "stderr": "",
+        "ok": true
+      }
+    },
+    "after": {
+      "head": {
+        "argv": [
+          "git",
+          "rev-parse",
+          "HEAD"
+        ],
+        "returncode": 0,
+        "duration_seconds": 0.01,
+        "stdout": "c788a8c530eb0984d088a86e8e7951145581abbe\n",
+        "stderr": "",
+        "ok": true
+      },
+      "status": {
+        "argv": [
+          "git",
+          "status",
+          "--porcelain=v1"
+        ],
+        "returncode": 0,
+        "duration_seconds": 0.015,
+        "stdout": " M .agentic/handoff_state.yaml\n M CHANGELOG.md\n M CITATION.cff\n M README.md\n M docs/STATUS.md\n M docs/handoff/CURRENT_HANDOFF.md\n M docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n M docs/reports/handoff-packages/latest/execution_contract.json\n M docs/reports/handoff-packages/latest/source_manifest.json\n M docs/reports/handoff-packages/latest/successor_context.yaml\n M docs/reports/handoff-packages/latest/successor_prompt.md\n M docs/reports/handoff-packages/latest/validation_report.json\n M pyproject.toml\n M src/agentic_project_kit/__init__.py\n?? .venv\n",
+        "stderr": "",
+        "ok": true
+      },
+      "diff_name_status": {
+        "argv": [
+          "git",
+          "diff",
+          "--name-status"
+        ],
+        "returncode": 0,
+        "duration_seconds": 0.012,
+        "stdout": "M\t.agentic/handoff_state.yaml\nM\tCHANGELOG.md\nM\tCITATION.cff\nM\tREADME.md\nM\tdocs/STATUS.md\nM\tdocs/handoff/CURRENT_HANDOFF.md\nM\tdocs/handoff/NEXT_CHAT_BOOTSTRAP.md\nM\tdocs/reports/handoff-packages/latest/execution_contract.json\nM\tdocs/reports/handoff-packages/latest/source_manifest.json\nM\tdocs/reports/handoff-packages/latest/successor_context.yaml\nM\tdocs/reports/handoff-packages/latest/successor_prompt.md\nM\tdocs/reports/handoff-packages/latest/validation_report.json\nM\tpyproject.toml\nM\tsrc/agentic_project_kit/__init__.py\n",
+        "stderr": "",
+        "ok": true
+      },
+      "diff_stat": {
+        "argv": [
+          "git",
+          "diff",
+          "--stat"
+        ],
+        "returncode": 0,
+        "duration_seconds": 0.014,
+        "stdout": " .agentic/handoff_state.yaml                        | 33 ++++++++++------------\n CHANGELOG.md                                       |  5 ++++\n CITATION.cff                                       |  2 +-\n README.md                                          |  6 ++--\n docs/STATUS.md                                     |  2 +-\n docs/handoff/CURRENT_HANDOFF.md                    |  2 +-\n docs/handoff/NEXT_CHAT_BOOTSTRAP.md                |  8 +++---\n .../latest/execution_contract.json                 | 16 +++++------\n .../handoff-packages/latest/source_manifest.json   |  2 +-\n .../handoff-packages/latest/successor_context.yaml | 14 ++++-----\n .../handoff-packages/latest/successor_prompt.md    | 16 +++++------\n .../handoff-packages/latest/validation_report.json |  4 +--\n pyproject.toml                                     |  2 +-\n src/agentic_project_kit/__init__.py                |  2 +-\n 14 files changed, 58 insertions(+), 56 deletions(-)\n",
+        "stderr": "",
+        "ok": true
+      }
+    }
+  },
+  "selected_writer_results": [
+    {
+      "writer_id": "WRT-CH-001",
+      "result": "PASS_WITH_LIMITATIONS",
+      "scope": "sandbox-only",
+      "commands": [
+        "handoff-refresh-write"
+      ],
+      "full_dpa_conformance_claim": false
+    },
+    {
+      "writer_id": "WRT-CH-002",
+      "result": "PASS_WITH_LIMITATIONS",
+      "scope": "sandbox-only",
+      "commands": [
+        "release-prep-write-sandbox"
+      ],
+      "full_dpa_conformance_claim": false
+    },
+    {
+      "writer_id": "WRT-CH-004",
+      "result": "PASS_WITH_LIMITATIONS",
+      "scope": "sandbox-only",
+      "commands": [
+        "release-prep-write-sandbox"
+      ],
+      "full_dpa_conformance_claim": false
+    },
+    {
+      "writer_id": "WRT-CH-005",
+      "result": "PASS_WITH_LIMITATIONS",
+      "scope": "sandbox-only",
+      "commands": [
+        "workspace-init-external"
+      ],
+      "full_dpa_conformance_claim": false
+    },
+    {
+      "writer_id": "WRT-CH-006",
+      "result": "PASS_WITH_LIMITATIONS",
+      "scope": "sandbox-only",
+      "commands": [
+        "successor-package-noncanonical",
+        "successor-package-canonical-sandbox"
+      ],
+      "full_dpa_conformance_claim": false
+    },
+    {
+      "writer_id": "WRT-CH-003",
+      "result": "BLOCKED_NOT_EXECUTED",
+      "scope": "sandbox-only",
+      "commands": [],
+      "reason": "post-release DOI closeout write mode depends on real post-release DOI preconditions and is not safely synthesised by this autonomous sandbox run",
+      "full_dpa_conformance_claim": false
+    }
+  ],
+  "fixture_execution": {
+    "read_only_baseline_already_recorded": true,
+    "mutation_sandbox_executed": true,
+    "mutation_scoped_fixtures_executed_in_production": false,
+    "full_probe_success_claim": false,
+    "kit_import_claim": false,
+    "production_kit_mutated": false,
+    "sandbox_cleanup_removed": true
+  },
+  "manifest_families": [
+    "PROBE-001",
+    "PROBE-002",
+    "RENDERER",
+    "PROBE-003",
+    "PROBE-004"
+  ]
+}

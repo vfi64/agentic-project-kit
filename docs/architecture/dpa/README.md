@@ -1,6 +1,6 @@
 # Document Projection Architecture
 
-Status: architecture-package-staged
+Status: probe-package-staged
 
 Status-date: 2026-07-28
 
@@ -11,10 +11,11 @@ Document class: architecture
 This directory is the controlled Kit-side staging point for the Document
 Projection Architecture (DPA).
 
-This directory is staged through DPA-IMPORT-2. DPA-IMPORT-1 introduced the
+This directory is staged through DPA-IMPORT-3. DPA-IMPORT-1 introduced the
 architecture index and registry staging. DPA-IMPORT-2 imports the
 selected detailed architecture package: specifications, accepted and deferred
-DPA decisions, traceability matrices and diagrams.
+DPA decisions, traceability matrices and diagrams. DPA-IMPORT-3 imports Probe
+package staging material and selected DP1 evidence snapshots.
 
 This subtree introduces no runtime behavior change, no DP2 implementation, no
 full Probe PASS claim, no DPA stable claim and no main-repository conformance
@@ -31,6 +32,8 @@ The current source package is the DPA Lab PR carrying final pre-import closeout:
 - Kit freeze ref for closeout: `c788a8c530eb0984d088a86e8e7951145581abbe`;
 - Kit import baseline for DPA-IMPORT-2:
   `07656f4a94475a8394989467afc6937e04709478`;
+- Kit import baseline for DPA-IMPORT-3:
+  `e89b0fac21c5599f8e531a937c550134469716cf`;
 - closeout token: `DPA_PRE_IMPORT_CLOSEOUT_COMPLETE`.
 
 The Lab records DPA-000 and DPA-100 as `stable`, and DPA-200 through DPA-900 as
@@ -48,8 +51,10 @@ The selected destination family is:
 
 DPA-IMPORT-1 used only the architecture entry point and documentation registry
 staging. DPA-IMPORT-2 adds selected specifications, decisions, traceability and
-diagrams. Later imports may add Probe manuals, fixture manifests, evidence
-summaries or implementation plans only through separately reviewed slices.
+diagrams. DPA-IMPORT-3 adds Probe manuals, fixture manifests, selected-writer
+planning and historical DP1 evidence snapshots. Later imports may add refreshed
+Probe execution evidence, Assessment records or implementation plans only
+through separately reviewed slices.
 
 ## Imported architecture package
 
@@ -92,6 +97,21 @@ governance.
 Traceability and diagrams support review and implementation planning. They do
 not supersede the specification files and do not prove Kit conformance.
 
+### Probe Package Staging
+
+- `probes/` contains the DPA-IMPORT-3 Probe package staging index, Probe
+  backlog, DP1 Probe manuals, execution-package draft, selected-writer fixture
+  plan, validation checklist and fixture/cleanup package.
+- `../evidence/dpa/probes/` contains selected historical Lab evidence
+  snapshots: read-only baseline evidence with result `PASS_WITH_LIMITATIONS`
+  and mutation-sandbox evidence with result `PARTIAL`.
+
+These materials are historical and preparatory. They preserve Lab validation ref
+`c788a8c530eb0984d088a86e8e7951145581abbe` and older command manifest
+acknowledgement `COMMAND_MANIFEST_ACK 8610cfd2990a` as evidence inputs. Any
+future Probe execution in this Kit must freeze a fresh current validation ref
+and command manifest acknowledgement before running.
+
 ## Generated-output and command-updated boundary
 
 The generated or command-updated Kit outputs boundary keeps those files owned by
@@ -111,6 +131,6 @@ by the closeout restrictions:
 2. Keep WRT-CH-003 and the full WRT-CH-001 administrative refresh PR flow
    deferred from the first DP2 target.
 3. Keep DP2 implementation blocked until selected Probe and Assessment
-   prerequisites are recorded.
+   prerequisites are refreshed against current Kit refs and recorded.
 4. Run the Kit documentation, registry and release-relevant gates selected by
    each import slice.

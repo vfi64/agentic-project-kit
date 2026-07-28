@@ -1,0 +1,56 @@
+[
+  {
+    "writer_id": "WRT-CH-001",
+    "result": "PASS_WITH_LIMITATIONS",
+    "scope": "sandbox-only",
+    "commands": [
+      "handoff-refresh-write"
+    ],
+    "full_dpa_conformance_claim": false
+  },
+  {
+    "writer_id": "WRT-CH-002",
+    "result": "PASS_WITH_LIMITATIONS",
+    "scope": "sandbox-only",
+    "commands": [
+      "release-prep-write-sandbox"
+    ],
+    "full_dpa_conformance_claim": false
+  },
+  {
+    "writer_id": "WRT-CH-004",
+    "result": "PASS_WITH_LIMITATIONS",
+    "scope": "sandbox-only",
+    "commands": [
+      "release-prep-write-sandbox"
+    ],
+    "full_dpa_conformance_claim": false
+  },
+  {
+    "writer_id": "WRT-CH-005",
+    "result": "PASS_WITH_LIMITATIONS",
+    "scope": "sandbox-only",
+    "commands": [
+      "workspace-init-external"
+    ],
+    "full_dpa_conformance_claim": false
+  },
+  {
+    "writer_id": "WRT-CH-006",
+    "result": "PASS_WITH_LIMITATIONS",
+    "scope": "sandbox-only",
+    "commands": [
+      "successor-package-noncanonical",
+      "successor-package-canonical-sandbox"
+    ],
+    "full_dpa_conformance_claim": false
+  },
+  {
+    "writer_id": "WRT-CH-003",
+    "result": "BLOCKED_NOT_EXECUTED",
+    "scope": "sandbox-only",
+    "commands": [],
+    "reason": "post-release DOI closeout write mode depends on real post-release DOI preconditions and is not safely synthesised by this autonomous sandbox run",
+    "full_dpa_conformance_claim": false
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "source_before_status": {
+    "argv": [
+      "git",
+      "status",
+      "--porcelain=v1"
+    ],
+    "returncode": 0,
+    "duration_seconds": 0.017,
+    "stdout": "",
+    "stderr": "",
+    "ok": true
+  },
+  "source_before_head": {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "returncode": 0,
+    "duration_seconds": 0.011,
+    "stdout": "c788a8c530eb0984d088a86e8e7951145581abbe\n",
+    "stderr": "",
+    "ok": true
+  },
+  "source_after_status": {
+    "argv": [
+      "git",
+      "status",
+      "--porcelain=v1"
+    ],
+    "returncode": 0,
+    "duration_seconds": 0.016,
+    "stdout": "",
+    "stderr": "",
+    "ok": true
+  },
+  "source_after_head": {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "returncode": 0,
+    "duration_seconds": 0.01,
+    "stdout": "c788a8c530eb0984d088a86e8e7951145581abbe\n",
+    "stderr": "",
+    "ok": true
+  },
+  "source_clean_ok": true,
+  "source_ref_ok": true,
+  "sandbox_ref_ok": true
+}
