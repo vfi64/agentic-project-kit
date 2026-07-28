@@ -3,8 +3,8 @@
   "kind": "dpa_dp1_assessment_readiness",
   "status": "DP2_BLOCKED",
   "status_date": "2026-07-28",
-  "command_manifest_ack": "COMMAND_MANIFEST_ACK 6238b5e0fcaa",
-  "kit_baseline_ref": "3dd2a616aaa47995e333059e80912ae0bea55656",
+  "command_manifest_ack": "COMMAND_MANIFEST_ACK f6919e347655",
+  "kit_baseline_ref": "8ceadc8a0ab5f61f5aac6549cd440c47999a18de",
   "dpa_lab_source_ref": "0cf944cc153e65a272c773286791f8891efdd1bc",
   "dpa_lab_merge_ref": "6f927efd625b4239f9ab0e710b48e7d9534fdfec",
   "kit_import_3_baseline_ref": "e89b0fac21c5599f8e531a937c550134469716cf",
@@ -43,6 +43,11 @@
       "id": "current-kit-probe-004-migration-readiness-preflight",
       "path": "docs/architecture/evidence/dpa/probes/probe-004-migration-readiness-3dd2a616-20260728/",
       "result": "PARTIAL_BLOCKED_FOR_DP2"
+    },
+    {
+      "id": "current-kit-dp2-decision-readiness-preflight",
+      "path": "docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-8ceadc8a-20260728/",
+      "result": "READY_FOR_MAINTAINER_DECISION_DP2_BLOCKED"
     },
     {
       "id": "historical-lab-readonly-baseline",

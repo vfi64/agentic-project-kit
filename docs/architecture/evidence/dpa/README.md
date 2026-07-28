@@ -59,9 +59,14 @@ open.
 
 The current Assessment readiness record consolidates those evidence inputs into
 a DP2 blocker map at current Kit baseline
-`3dd2a616aaa47995e333059e80912ae0bea55656`. It records `DP2_BLOCKED`, keeps the
+`8ceadc8a0ab5f61f5aac6549cd440c47999a18de`. It records `DP2_BLOCKED`, keeps the
 full Probe PASS claim boundary closed and names the remaining Probe, writer,
 rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
+
+The current DP2 decision-readiness preflight records validation ref
+`8ceadc8a0ab5f61f5aac6549cd440c47999a18de`. It packages the remaining blockers,
+candidate first DP2 target scope and required Maintainer actions for review, but
+it is not Maintainer Assessment, not DP2 authorization and not Probe execution.
 
 ## Imported Probe Evidence
 
@@ -90,6 +95,9 @@ rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
   `PARTIAL_BLOCKED_FOR_DP2`.
 - `assessment/DP1_ASSESSMENT_READINESS_20260728.md` records the current DP1
   Assessment readiness decision surface with status `DP2_BLOCKED`.
+- `assessment/dp2-decision-readiness-8ceadc8a-20260728/` records current DP2
+  decision-readiness preflight evidence with result
+  `READY_FOR_MAINTAINER_DECISION_DP2_BLOCKED`.
 
 Both packages preserve their original limitation language. Future execution must
 freeze current refs, record command manifest currency, retain cleanup evidence

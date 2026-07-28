@@ -192,6 +192,7 @@ rules:
     - agentic-kit chat session-start
     - agentic-kit commands sync-entrypoints
     - agentic-kit dpa readiness
+    - agentic-kit dpa dp2-decision-readiness
     - agentic-kit dpa probe-002-readiness
     - agentic-kit dpa probe-003-readiness
     - agentic-kit dpa renderer-readiness

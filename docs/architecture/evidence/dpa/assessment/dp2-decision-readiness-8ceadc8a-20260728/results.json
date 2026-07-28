@@ -1,0 +1,198 @@
+{
+  "blocker_count": 8,
+  "candidate_first_dp2_target_scope": {
+    "excluded_from_candidate": {
+      "WRT-CH-005": "external-habitability/template writer, not current self-hosting target",
+      "WRT-CH-006": "generated successor-package outputs; covered through source command and rollback boundaries"
+    },
+    "not_authorization": true,
+    "requires_select_or_defer_decision": [
+      "WRT-CH-002",
+      "WRT-CH-003",
+      "WRT-CH-004"
+    ],
+    "selected_writers_for_candidate": [
+      "WRT-CH-001"
+    ],
+    "status": "CANDIDATE_REQUIRES_MAINTAINER_RATIFICATION",
+    "target_kind": "current self-hosting administrative handoff surface",
+    "target_path": "docs/handoff/CURRENT_HANDOFF.md"
+  },
+  "claims": {
+    "dp2_authorized": false,
+    "first_dp2_target_selected": false,
+    "generated_outputs_manually_patched": false,
+    "kit_conformance_claimed": false,
+    "maintainer_assessment_recorded": false,
+    "maintainer_authorization_recorded": false,
+    "probe_execution_claimed": false,
+    "production_mutation_performed": false,
+    "rollback_cleanup_proven": false
+  },
+  "control_surfaces": [
+    {
+      "path": "docs/architecture/evidence/dpa/assessment/DP1_ASSESSMENT_READINESS_20260728.md",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/dpa/probes/DP1_PROBE_MANUALS_20260727.md",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/dpa/probes/DP1_PROBE_EXECUTION_PACKAGE_DRAFT_20260727.md",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/dpa/probes/DP1_SELECTED_WRITER_FIXTURE_PLAN_20260727.md",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/dpa/probes/fixtures/DP1_PROBE_CLEANUP_AND_ASSESSMENT_PLAN_20260727.md",
+      "present": true
+    }
+  ],
+  "decision_requirements": [
+    {
+      "id": "probe_002_full_evidence",
+      "required_before_dp2": "true",
+      "status": "BLOCKED"
+    },
+    {
+      "id": "renderer_full_evidence",
+      "required_before_dp2": "true",
+      "status": "BLOCKED"
+    },
+    {
+      "id": "probe_003_full_evidence",
+      "required_before_dp2": "true",
+      "status": "BLOCKED"
+    },
+    {
+      "id": "probe_004_full_evidence",
+      "required_before_dp2": "true",
+      "status": "BLOCKED"
+    },
+    {
+      "id": "maintainer_assessment",
+      "required_before_dp2": "true",
+      "status": "BLOCKED"
+    },
+    {
+      "id": "first_dp2_target_scope",
+      "required_before_dp2": "true",
+      "status": "BLOCKED"
+    },
+    {
+      "id": "rollback_cleanup_proven",
+      "required_before_dp2": "true",
+      "status": "BLOCKED"
+    },
+    {
+      "id": "maintainer_authorization",
+      "required_before_dp2": "true",
+      "status": "BLOCKED"
+    }
+  ],
+  "evidence_inputs": [
+    {
+      "id": "current-kit-readonly-refresh",
+      "path": "docs/architecture/evidence/dpa/probes/dp1-readonly-46deae7-20260728/",
+      "result": "PASS_WITH_LIMITATIONS"
+    },
+    {
+      "id": "current-kit-probe-001-registry-compatibility",
+      "path": "docs/architecture/evidence/dpa/probes/probe-001-registry-compatibility-9ca806db-20260728/",
+      "result": "SATISFIED_FOR_CURRENT_KIT_REF"
+    },
+    {
+      "id": "current-kit-probe-002-lifecycle-readiness-preflight",
+      "path": "docs/architecture/evidence/dpa/probes/probe-002-lifecycle-readiness-5fd5f47c-20260728/",
+      "result": "PARTIAL_BLOCKED_FOR_DP2"
+    },
+    {
+      "id": "current-kit-wrt-ch001-admin-refresh-observation",
+      "path": "docs/architecture/evidence/dpa/probes/wrt-ch001-admin-refresh-observation-d0d2f537-20260728/",
+      "result": "OBSERVED_ADMIN_REFRESH_NOT_DISPOSABLE_FIXTURE"
+    },
+    {
+      "id": "current-kit-probe-003-workflow-readiness-preflight",
+      "path": "docs/architecture/evidence/dpa/probes/probe-003-workflow-readiness-b65dc1c8-20260728/",
+      "result": "PARTIAL_BLOCKED_FOR_DP2"
+    },
+    {
+      "id": "current-kit-renderer-probe-readiness-preflight",
+      "path": "docs/architecture/evidence/dpa/probes/renderer-readiness-d88491c9-20260728/",
+      "result": "PARTIAL_BLOCKED_FOR_DP2"
+    },
+    {
+      "id": "current-kit-probe-004-migration-readiness-preflight",
+      "path": "docs/architecture/evidence/dpa/probes/probe-004-migration-readiness-3dd2a616-20260728/",
+      "result": "PARTIAL_BLOCKED_FOR_DP2"
+    },
+    {
+      "id": "historical-lab-readonly-baseline",
+      "path": "docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/",
+      "result": "PASS_WITH_LIMITATIONS"
+    },
+    {
+      "id": "historical-lab-mutation-sandbox",
+      "path": "docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/",
+      "result": "PARTIAL"
+    },
+    {
+      "id": "prepared-fixture-manifest",
+      "path": "docs/architecture/dpa/probes/fixtures/DP1_PROBE_FIXTURE_MANIFEST_20260727.json",
+      "result": "PREPARED_NOT_EXECUTED"
+    }
+  ],
+  "finding_count": 0,
+  "findings": [],
+  "implementation_percent": 48,
+  "kind": "dpa_dp2_decision_readiness",
+  "readiness_blockers": [
+    "probe_002_full_evidence",
+    "renderer_full_evidence",
+    "probe_003_full_evidence",
+    "probe_004_full_evidence",
+    "maintainer_assessment",
+    "first_dp2_target_scope",
+    "rollback_cleanup_proven",
+    "maintainer_authorization"
+  ],
+  "readiness_record": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+  "readiness_status": "DP2_BLOCKED",
+  "required_maintainer_actions": [
+    {
+      "action": "Adjudicate every partial or blocked Probe family before DP2.",
+      "current_status": "BLOCKED",
+      "dp2_entry_requirement": "maintainer_assessment",
+      "id": "assess_partial_probe_evidence"
+    },
+    {
+      "action": "Select or revise the first DP2 target and writer scope.",
+      "current_status": "BLOCKED",
+      "dp2_entry_requirement": "first_dp2_target_scope",
+      "id": "ratify_first_dp2_target_scope"
+    },
+    {
+      "action": "Preserve rollback and cleanup evidence for the selected target.",
+      "current_status": "BLOCKED",
+      "dp2_entry_requirement": "rollback_cleanup_proven",
+      "id": "require_rollback_cleanup_proof"
+    },
+    {
+      "action": "Record explicit Maintainer authorization only after prerequisites close.",
+      "current_status": "BLOCKED",
+      "dp2_entry_requirement": "maintainer_authorization",
+      "id": "record_dp2_authorization_token"
+    }
+  ],
+  "result_status": "READY_FOR_MAINTAINER_DECISION_DP2_BLOCKED",
+  "schema_version": 1,
+  "structural_ok": true,
+  "validation_ref": "8ceadc8a0ab5f61f5aac6549cd440c47999a18de"
+}
