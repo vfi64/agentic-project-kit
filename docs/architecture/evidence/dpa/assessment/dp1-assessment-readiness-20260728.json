@@ -4,7 +4,7 @@
   "status": "DP2_BLOCKED",
   "status_date": "2026-07-28",
   "command_manifest_ack": "COMMAND_MANIFEST_ACK ff86b5a8c9f1",
-  "kit_baseline_ref": "a9670da65b9f3f91344272735f5947ccc5655583",
+  "kit_baseline_ref": "9ca806dba1c92b83514beba2b49f0a083c9bdc9a",
   "dpa_lab_source_ref": "0cf944cc153e65a272c773286791f8891efdd1bc",
   "dpa_lab_merge_ref": "6f927efd625b4239f9ab0e710b48e7d9534fdfec",
   "kit_import_3_baseline_ref": "e89b0fac21c5599f8e531a937c550134469716cf",
@@ -13,6 +13,11 @@
       "id": "current-kit-readonly-refresh",
       "path": "docs/architecture/evidence/dpa/probes/dp1-readonly-46deae7-20260728/",
       "result": "PASS_WITH_LIMITATIONS"
+    },
+    {
+      "id": "current-kit-probe-001-registry-compatibility",
+      "path": "docs/architecture/evidence/dpa/probes/probe-001-registry-compatibility-9ca806db-20260728/",
+      "result": "SATISFIED_FOR_CURRENT_KIT_REF"
     },
     {
       "id": "historical-lab-readonly-baseline",
@@ -31,7 +36,7 @@
     }
   ],
   "probe_family_status": {
-    "PROBE-001": "PARTIAL_BLOCKED_FOR_DP2",
+    "PROBE-001": "SATISFIED_FOR_CURRENT_KIT_REF",
     "PROBE-002": "PARTIAL_BLOCKED_FOR_DP2",
     "RENDERER": "PARTIAL_BLOCKED_FOR_DP2",
     "PROBE-003": "PARTIAL_BLOCKED_FOR_DP2",
@@ -48,7 +53,7 @@
   "dp2_entry_status": {
     "architecture_staging": "SATISFIED_FOR_ARCHITECTURE_STAGING",
     "fresh_kit_baseline_recorded": "SATISFIED_FOR_THIS_RECORD",
-    "probe_001_full_evidence": "BLOCKED",
+    "probe_001_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
     "probe_002_full_evidence": "BLOCKED",
     "renderer_full_evidence": "BLOCKED",
     "probe_003_full_evidence": "BLOCKED",
@@ -69,7 +74,7 @@
   "next_controlled_execution": [
     "freeze_current_kit_head_and_command_manifest",
     "select_first_dp2_target_and_writer_scope",
-    "execute_probe_001_projection_and_partition_fixtures",
+    "preserve_probe_001_registry_compatibility_evidence_or_rerun_on_registry_schema_change",
     "execute_probe_002_selected_writer_lifecycle_fixtures",
     "execute_renderer_identity_semantic_version_and_side_effect_fixtures",
     "execute_probe_003_workflow_serialization_fixtures",

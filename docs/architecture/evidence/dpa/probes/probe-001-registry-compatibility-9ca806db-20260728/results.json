@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "kind": "dpa_probe_001_registry_compatibility_result",
+  "run_id": "probe-001-registry-compatibility-9ca806db-20260728",
+  "status": "SATISFIED_FOR_CURRENT_KIT_REF",
+  "status_date": "2026-07-28",
+  "kit_validation_ref": "9ca806dba1c92b83514beba2b49f0a083c9bdc9a",
+  "implementation_pr": 1896,
+  "implementation_merge_ref": "0133e185367f00cfcbd5873bc13c09843eafc283",
+  "handoff_refresh_pr": 1897,
+  "handoff_refresh_merge_ref": "9ca806dba1c92b83514beba2b49f0a083c9bdc9a",
+  "command_manifest_ack": "COMMAND_MANIFEST_ACK ff86b5a8c9f1",
+  "scope": "Structural registry compatibility for optional DPA ProjectionContract and PartitionContract metadata; no DP2 production mutation or conformance claim.",
+  "claims": {
+    "probe_001_registry_compatibility_satisfied_for_current_ref": true,
+    "full_dpa_probe_pass_claimed": false,
+    "dp2_authorized": false,
+    "runtime_behavior_changed": false,
+    "production_mutation_performed": false,
+    "kit_conformance_claimed": false,
+    "generated_outputs_manually_patched": false
+  },
+  "fixture_coverage": [
+    {
+      "id": "P001-REG-001",
+      "required_case": "existing manual registry entries unchanged",
+      "evidence": "agentic-kit docs-registry passed with 177 registered documents",
+      "status": "PASS"
+    },
+    {
+      "id": "P001-REG-002",
+      "required_case": "valid optional ProjectionContract",
+      "evidence": "test_documentation_registry_accepts_dpa_projection_contract",
+      "status": "PASS"
+    },
+    {
+      "id": "P001-REG-003",
+      "required_case": "valid parent-entry PartitionContract",
+      "evidence": "test_documentation_registry_accepts_dpa_partition_and_region_projection",
+      "status": "PASS"
+    },
+    {
+      "id": "P001-REG-004",
+      "required_case": "unknown projection schema version",
+      "evidence": "test_documentation_registry_rejects_unknown_dpa_projection_schema",
+      "status": "PASS"
+    },
+    {
+      "id": "P001-REG-005",
+      "required_case": "unknown projection field",
+      "evidence": "test_documentation_registry_rejects_unknown_dpa_projection_field",
+      "status": "PASS"
+    },
+    {
+      "id": "P001-REG-006",
+      "required_case": "missing required projection field",
+      "evidence": "test_documentation_registry_rejects_missing_dpa_projection_field",
+      "status": "PASS"
+    },
+    {
+      "id": "P001-REG-007",
+      "required_case": "missing, dangling or inconsistent registered-region reference",
+      "evidence": "test_documentation_registry_rejects_dangling_region_reference; test_documentation_registry_rejects_inconsistent_region_reference",
+      "status": "PASS"
+    },
+    {
+      "id": "P001-REG-008",
+      "required_case": "unsupported target-semantics and partition combination",
+      "evidence": "test_documentation_registry_rejects_unsupported_dpa_target_partition_combination",
+      "status": "PASS"
+    }
+  ],
+  "commands": [
+    {
+      "name": "head",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stdout": "9ca806dba1c92b83514beba2b49f0a083c9bdc9a",
+      "ok": true
+    },
+    {
+      "name": "origin-main",
+      "argv": [
+        "git",
+        "rev-parse",
+        "origin/main"
+      ],
+      "returncode": 0,
+      "stdout": "9ca806dba1c92b83514beba2b49f0a083c9bdc9a",
+      "ok": true
+    },
+    {
+      "name": "status-before-evidence-mutation",
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "ok": true
+    },
+    {
+      "name": "documentation-registry-tests",
+      "argv": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_documentation_registry.py"
+      ],
+      "returncode": 0,
+      "stdout_summary": "38 passed, 27 warnings",
+      "ok": true
+    },
+    {
+      "name": "docs-registry-summary",
+      "argv": [
+        ".venv/bin/agentic-kit",
+        "docs-registry"
+      ],
+      "returncode": 0,
+      "stdout_summary": "Documentation registry summary; documents: 177; unregistered_candidates: 66",
+      "ok": true
+    },
+    {
+      "name": "readiness-before-evidence-update",
+      "argv": [
+        ".venv/bin/agentic-kit",
+        "dpa",
+        "readiness",
+        "--json"
+      ],
+      "returncode": 0,
+      "stdout_summary": "DP2_BLOCKED; implementation_percent: 40; blocker_count: 9",
+      "ok": true
+    }
+  ],
+  "result": {
+    "probe_001_dp2_entry_status": "SATISFIED_FOR_CURRENT_KIT_REF",
+    "remaining_dp2_status": "DP2_BLOCKED"
+  }
+}
