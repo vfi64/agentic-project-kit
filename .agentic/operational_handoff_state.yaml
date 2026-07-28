@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 8ed8ef2ecff99b43de651aec63b9c1377e2e7179
-  short: 8ed8ef2e
-  subject: Add DPA DP2 maintainer record check (#1914)
+  full: 22c306c199dda1cd452cda90c0c2f20e01df0590
+  short: 22c306c1
+  subject: Refresh DPA readiness evidence for current main (#1916)
 last_substantive_work_state:
-  full: 8ed8ef2ecff99b43de651aec63b9c1377e2e7179
-  short: 8ed8ef2e
-  subject: Add DPA DP2 maintainer record check (#1914)
+  full: 22c306c199dda1cd452cda90c0c2f20e01df0590
+  short: 22c306c1
+  subject: Refresh DPA readiness evidence for current main (#1916)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
