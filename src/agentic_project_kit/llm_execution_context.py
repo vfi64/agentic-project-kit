@@ -41,6 +41,7 @@ IMPORTANT_WRAPPERS = (
     "agentic-kit transfer pr-create-complete",
     "agentic-kit transfer pr-create-complete --post-merge-complete",
     "agentic-kit transfer pr-complete",
+    "agentic-kit transfer post-merge-settle",
     "agentic-kit transfer post-merge-complete",
     "agentic-kit transfer post-merge-check",
     "agentic-kit transfer repo-status",
@@ -130,9 +131,7 @@ def build_llm_execution_context(root: str | Path = ".") -> dict[str, Any]:
             ],
             "post_merge_requires_concrete_number": [
                 "./.venv/bin/agentic-kit transfer sync-main",
-                "./.venv/bin/agentic-kit transfer post-merge-complete --after-pr use-the-concrete-pr-number-from-wrapper-output",
-                "./.venv/bin/agentic-kit transfer sync-main",
-                "./.venv/bin/agentic-kit transfer post-merge-check",
+                "./.venv/bin/agentic-kit transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output",
                 "./.venv/bin/agentic-kit transfer repo-status",
             ],
             "shell_placeholder_policy": {
@@ -264,6 +263,7 @@ def _execution_policy(transfer_rules: dict[str, Any], protocol: dict[str, Any]) 
         "wrapper_first": "wrapper-first" in encoded or "wrapper_first" in encoded,
         "transfer_file_second": "transfer-file second" in encoded or "transfer_file_second" in encoded,
         "copy_paste_last": "copy/paste shell only as fallback" in encoded or "copy_paste" in encoded,
+        "post_merge_settle_required_after_merge": "post-merge-settle --after-pr" in encoded,
         "post_merge_complete_required_after_merge": "post-merge-complete --after-pr" in encoded,
         "run_and_log_is_diagnostic_only": "run-and-log only for diagnostics" in encoded or "not as replacement for post-merge-complete" in encoded,
         "read_remote_report_before_planning_after_g": "continue_from_chat_memory" in encoded and "read_latest_remote_transfer_report_first" in encoded,

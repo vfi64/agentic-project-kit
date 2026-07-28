@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 8610cfd2990a
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: fd31723f571b
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `225`
+- Command count: `226`
 
 ## Commands
 
@@ -2126,6 +2126,26 @@ Render the current four-slice patch/handoff workflow state.
 | `ci_poll_seconds` | `TyperOption` | --ci-poll-seconds | `False` | `10` | CI polling interval. |
 | `merge_state_timeout_seconds` | `TyperOption` | --merge-state-timeout-seconds | `False` | `60` |  |
 | `merge_state_poll_seconds` | `TyperOption` | --merge-state-poll-seconds | `False` | `5` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+
+### `agentic-kit transfer post-merge-settle`
+
+- Safety: `DESTRUCTIVE`
+- When to use: Deterministically settle post-merge generated-output refresh state.
+- Dry-run available: `False`
+
+Deterministically settle post-merge generated-output refresh state.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `after_pr` | `TyperOption` | --after-pr | `True` |  | Merged PR number whose post-merge generated-output state should settle. |
+| `main_branch` | `TyperOption` | --main-branch | `False` | `main` | Main branch to verify. |
+| `merge_method` | `TyperOption` | --merge-method | `False` | `squash` | Merge method for generated refresh PRs. |
+| `ci_timeout_seconds` | `TyperOption` | --ci-timeout-seconds | `False` | `300` | CI wait timeout. |
+| `ci_poll_seconds` | `TyperOption` | --ci-poll-seconds | `False` | `10` | CI polling interval. |
+| `merge_state_timeout_seconds` | `TyperOption` | --merge-state-timeout-seconds | `False` | `60` |  |
+| `merge_state_poll_seconds` | `TyperOption` | --merge-state-poll-seconds | `False` | `5` |  |
+| `refresh_limit` | `TyperOption` | --refresh-limit | `False` | `2` | Maximum generated/admin refresh PRs allowed before blocking. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer pr-closeout-complete`

@@ -315,8 +315,8 @@ canonical_cli_usage:
     required_behavior:
     - resolve the concrete PR number internally
     - run pr-complete
-    - run post-merge-complete with the concrete PR number
-    - run post-merge-check and repo-status
+    - run post-merge-settle with the concrete PR number
+    - run repo-status after settle reports READY/NOOP
     - avoid chat or user propagation of PR number placeholders
   verify_llm_context_refresh:
     command: ./.venv/bin/agentic-kit transfer verify-llm-context-refresh
@@ -382,6 +382,7 @@ workflow_precedence:
   - transfer pr-create-complete
   - transfer pr-status
   - transfer pr-complete
+  - transfer post-merge-settle
   - transfer post-merge-complete
   - transfer post-merge-check
   - transfer protected-diff-plan
@@ -404,16 +405,14 @@ workflow_precedence:
     - Use wrapper-first, transfer-file second, copy/paste shell only as fallback.
     - Use transfer pr-create-complete for new PRs.
     - Use transfer pr-complete for existing PRs.
-    - After merge, always run transfer post-merge-complete --after-pr <PR_NUMBER>.
+    - After merge, always run transfer post-merge-settle --after-pr <PR_NUMBER>.
     - Use run-and-log only for diagnostics or fallback evidence, not as replacement
-      for post-merge-complete.
+      for post-merge-settle.
     - Clean known volatile transfer outputs before branch switches and merge-safe
       operations when they are not target changes.
     canonical_post_merge_sequence:
     - ./.venv/bin/agentic-kit transfer sync-main
-    - ./.venv/bin/agentic-kit transfer post-merge-complete --after-pr <PR_NUMBER>
-    - ./.venv/bin/agentic-kit transfer sync-main
-    - ./.venv/bin/agentic-kit transfer post-merge-check
+    - ./.venv/bin/agentic-kit transfer post-merge-settle --after-pr <PR_NUMBER>
     - ./.venv/bin/agentic-kit transfer repo-status
 running_chat_refresh_contract:
   status: active

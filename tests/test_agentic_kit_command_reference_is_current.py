@@ -30,10 +30,12 @@ def test_agentic_kit_command_reference_is_current() -> None:
     assert ("transfer", "pr-complete") in names
     assert ("transfer", "pr-wait-ci") in names
     assert ("transfer", "pr-merge-safe") in names
+    assert ("transfer", "post-merge-settle") in names
     assert ("transfer", "post-merge-complete") in names
 
     qualified = {item["qualified_name"] for item in generated["commands"]}
     assert "agentic-kit transfer pr-complete" in qualified
+    assert "agentic-kit transfer post-merge-settle" in qualified
     assert "agentic-kit transfer post-merge-complete" in qualified
     assert "agentic-kit release-plan" in qualified
     assert "agentic-kit release-preflight" in qualified

@@ -211,6 +211,7 @@ rules:
     - agentic-kit rule-registry register
     - agentic-kit patterns list
     - agentic-kit patterns show
+    - agentic-kit transfer post-merge-settle --after-pr
     - agentic-kit slice gate --kind planning-doc
     - agentic-kit workflow-guard check
 - id: documentation-registry-scope-coverage
