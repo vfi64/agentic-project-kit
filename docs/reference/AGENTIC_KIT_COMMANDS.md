@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: f526f7b4e687
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: f68e70636826
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `230`
+- Command count: `231`
 
 ## Commands
 
@@ -756,6 +756,24 @@ Validate the DPA DP1 Assessment readiness record without mutating files.
 | `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')` | DPA Assessment readiness JSON record to inspect. |
 | `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 | `require_dp2_ready` | `TyperOption` | --require-dp2-ready | `False` | `False` | Fail unless the readiness record structurally authorizes DP2. |
+
+### `agentic-kit dpa renderer-readiness`
+
+- Safety: `BOUNDED`
+- When to use: Inspect Renderer Probe readiness without renderer conformance claims.
+- Dry-run available: `True`
+
+Inspect Renderer Probe readiness without renderer conformance claims.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')` | DPA Assessment readiness JSON record to inspect. |
+| `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact target ref to record instead of the current repository HEAD. |
+| `output` | `TyperOption` | --output | `False` |  | Optional DPA probe evidence JSON path under docs/architecture/evidence/dpa/probes/. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `require_full_evidence` | `TyperOption` | --require-full-evidence | `False` | `False` | Fail unless Renderer Probe full evidence is structurally satisfied. |
 
 ### `agentic-kit dpa wrt-ch001-evidence`
 

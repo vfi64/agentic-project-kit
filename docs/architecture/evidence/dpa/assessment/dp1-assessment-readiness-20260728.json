@@ -3,8 +3,8 @@
   "kind": "dpa_dp1_assessment_readiness",
   "status": "DP2_BLOCKED",
   "status_date": "2026-07-28",
-  "command_manifest_ack": "COMMAND_MANIFEST_ACK f526f7b4e687",
-  "kit_baseline_ref": "b65dc1c8ddc0e3b1b8f73ad35c6cf5c7cb8c6bba",
+  "command_manifest_ack": "COMMAND_MANIFEST_ACK f68e70636826",
+  "kit_baseline_ref": "d88491c904ea55d08fefeaa950a89014117b7084",
   "dpa_lab_source_ref": "0cf944cc153e65a272c773286791f8891efdd1bc",
   "dpa_lab_merge_ref": "6f927efd625b4239f9ab0e710b48e7d9534fdfec",
   "kit_import_3_baseline_ref": "e89b0fac21c5599f8e531a937c550134469716cf",
@@ -32,6 +32,11 @@
     {
       "id": "current-kit-probe-003-workflow-readiness-preflight",
       "path": "docs/architecture/evidence/dpa/probes/probe-003-workflow-readiness-b65dc1c8-20260728/",
+      "result": "PARTIAL_BLOCKED_FOR_DP2"
+    },
+    {
+      "id": "current-kit-renderer-probe-readiness-preflight",
+      "path": "docs/architecture/evidence/dpa/probes/renderer-readiness-d88491c9-20260728/",
       "result": "PARTIAL_BLOCKED_FOR_DP2"
     },
     {

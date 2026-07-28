@@ -230,15 +230,18 @@ Required fixture groups:
 3. duplicate or ambiguous renderer identifier;
 4. interface-version incompatibility;
 5. semantic-version mismatch;
-6. immutable lifecycle-resolved input snapshot;
-7. deterministic repeat execution;
-8. output type and target scope;
-9. filesystem, network, subprocess, lock, workflow, state and evidence write
-   prohibition;
-10. nested-renderer prohibition;
-11. deterministic resource bounds;
-12. non-semantic operational abort;
-13. bounded failure diagnostics.
+6. implementation-evidence-only change;
+7. immutable lifecycle-resolved input snapshot;
+8. deterministic repeat execution;
+9. output type and target scope;
+10. prohibited filesystem writes;
+11. prohibited network access;
+12. prohibited subprocess execution;
+13. prohibited lock, workflow, state and evidence writes;
+14. nested-renderer prohibition;
+15. deterministic semantic resource bounds;
+16. non-semantic operational abort;
+17. bounded failure diagnostics.
 
 Candidate current-ref Kit surfaces:
 
