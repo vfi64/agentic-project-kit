@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "kind": "dpa_dp1_assessment_readiness",
+  "status": "DP2_BLOCKED",
+  "status_date": "2026-07-28",
+  "command_manifest_ack": "COMMAND_MANIFEST_ACK ff86b5a8c9f1",
+  "kit_baseline_ref": "a9670da65b9f3f91344272735f5947ccc5655583",
+  "dpa_lab_source_ref": "0cf944cc153e65a272c773286791f8891efdd1bc",
+  "dpa_lab_merge_ref": "6f927efd625b4239f9ab0e710b48e7d9534fdfec",
+  "kit_import_3_baseline_ref": "e89b0fac21c5599f8e531a937c550134469716cf",
+  "evidence_inputs": [
+    {
+      "id": "current-kit-readonly-refresh",
+      "path": "docs/architecture/evidence/dpa/probes/dp1-readonly-46deae7-20260728/",
+      "result": "PASS_WITH_LIMITATIONS"
+    },
+    {
+      "id": "historical-lab-readonly-baseline",
+      "path": "docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/",
+      "result": "PASS_WITH_LIMITATIONS"
+    },
+    {
+      "id": "historical-lab-mutation-sandbox",
+      "path": "docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/",
+      "result": "PARTIAL"
+    },
+    {
+      "id": "prepared-fixture-manifest",
+      "path": "docs/architecture/dpa/probes/fixtures/DP1_PROBE_FIXTURE_MANIFEST_20260727.json",
+      "result": "PREPARED_NOT_EXECUTED"
+    }
+  ],
+  "probe_family_status": {
+    "PROBE-001": "PARTIAL_BLOCKED_FOR_DP2",
+    "PROBE-002": "PARTIAL_BLOCKED_FOR_DP2",
+    "RENDERER": "PARTIAL_BLOCKED_FOR_DP2",
+    "PROBE-003": "PARTIAL_BLOCKED_FOR_DP2",
+    "PROBE-004": "PARTIAL_BLOCKED_FOR_DP2"
+  },
+  "selected_writer_status": {
+    "WRT-CH-001": "SELECTED_FOR_FIXTURE",
+    "WRT-CH-002": "NEEDS_MAINTAINER_DECISION",
+    "WRT-CH-003": "NEEDS_MAINTAINER_DECISION",
+    "WRT-CH-004": "NEEDS_MAINTAINER_DECISION",
+    "WRT-CH-005": "EXTERNAL_HABITABILITY_ONLY",
+    "WRT-CH-006": "GENERATED_OUTPUT_CONTRACT_ONLY"
+  },
+  "dp2_entry_status": {
+    "architecture_staging": "SATISFIED_FOR_ARCHITECTURE_STAGING",
+    "fresh_kit_baseline_recorded": "SATISFIED_FOR_THIS_RECORD",
+    "probe_001_full_evidence": "BLOCKED",
+    "probe_002_full_evidence": "BLOCKED",
+    "renderer_full_evidence": "BLOCKED",
+    "probe_003_full_evidence": "BLOCKED",
+    "probe_004_full_evidence": "BLOCKED",
+    "maintainer_assessment": "BLOCKED",
+    "first_dp2_target_scope": "BLOCKED",
+    "rollback_cleanup_proven": "BLOCKED",
+    "maintainer_authorization": "BLOCKED"
+  },
+  "claims": {
+    "full_probe_pass_claimed": false,
+    "dp2_authorized": false,
+    "runtime_behavior_changed": false,
+    "production_mutation_performed": false,
+    "kit_conformance_claimed": false,
+    "generated_outputs_manually_patched": false
+  },
+  "next_controlled_execution": [
+    "freeze_current_kit_head_and_command_manifest",
+    "select_first_dp2_target_and_writer_scope",
+    "execute_probe_001_projection_and_partition_fixtures",
+    "execute_probe_002_selected_writer_lifecycle_fixtures",
+    "execute_renderer_identity_semantic_version_and_side_effect_fixtures",
+    "execute_probe_003_workflow_serialization_fixtures",
+    "execute_probe_004_migration_and_rollback_fixtures",
+    "preserve_cleanup_evidence",
+    "record_maintainer_assessment_before_dp2"
+  ]
+}

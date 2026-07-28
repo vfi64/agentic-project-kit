@@ -833,6 +833,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: DPA-IMPORT-3 evidence staging index for historical Lab Probe-preparation evidence snapshots.
+  - path: docs/architecture/evidence/dpa/assessment/DP1_ASSESSMENT_READINESS_20260728.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit DP1 Assessment readiness record; records DP2_BLOCKED and no full Probe PASS claim.
+  - path: docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable companion to the DP1 Assessment readiness record; not DP2 authorization or conformance evidence.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

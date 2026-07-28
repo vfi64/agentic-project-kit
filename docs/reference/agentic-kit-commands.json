@@ -2937,6 +2937,82 @@
     },
     {
       "dry_run_available": false,
+      "group": "dpa",
+      "help": "Validate the DPA DP1 Assessment readiness record without mutating files.",
+      "name": "readiness",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')",
+          "help": "DPA Assessment readiness JSON record to inspect.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "record",
+          "opts": [
+            "--record"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_json",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail unless the readiness record structurally authorizes DP2.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_dp2_ready",
+          "opts": [
+            "--require-dp2-ready"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "dpa",
+        "readiness"
+      ],
+      "qualified_name": "agentic-kit dpa readiness",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "dpa"
+      ],
+      "when_to_use": "Validate the DPA DP1 Assessment readiness record without mutating files."
+    },
+    {
+      "dry_run_available": false,
       "group": "evidence",
       "help": "Classify a terminal/evidence log for deterministic gatekeeper decisions.",
       "name": "classify-log",
@@ -14369,7 +14445,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "fd31723f571b",
+    "manifest_sha": "ff86b5a8c9f1",
     "schema_version": 1
   },
   "schema_version": 2,

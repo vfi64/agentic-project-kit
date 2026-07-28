@@ -52,9 +52,11 @@ The selected destination family is:
 DPA-IMPORT-1 used only the architecture entry point and documentation registry
 staging. DPA-IMPORT-2 adds selected specifications, decisions, traceability and
 diagrams. DPA-IMPORT-3 adds Probe manuals, fixture manifests, selected-writer
-planning and historical DP1 evidence snapshots. Later imports may add refreshed
-Probe execution evidence, Assessment records or implementation plans only
-through separately reviewed slices.
+planning and historical DP1 evidence snapshots. The current Kit line also
+records a DP1 Assessment readiness record that consolidates the staged evidence
+and keeps DP2 implementation blocked. Later slices may add refreshed Probe
+execution evidence, Assessment records or implementation plans only through
+separately reviewed slices.
 
 ## Imported architecture package
 
@@ -108,6 +110,11 @@ not supersede the specification files and do not prove Kit conformance.
   current Kit read-only DP1 baseline refresh at
   `46deae72c2d37ae18331203bc3a6be19c9a67f64` with result
   `PASS_WITH_LIMITATIONS`.
+- `../evidence/dpa/assessment/DP1_ASSESSMENT_READINESS_20260728.md`
+  consolidates the imported and current DP1 evidence into an Assessment
+  readiness decision surface. It records `DP2_BLOCKED`, preserves the full
+  Probe PASS claim boundary and names the exact Probe, writer, rollback and
+  Maintainer authorization gaps that must close before DP2 can start.
 
 These materials are historical and preparatory. They preserve Lab validation ref
 `c788a8c530eb0984d088a86e8e7951145581abbe` and older command manifest
@@ -117,8 +124,15 @@ and command manifest acknowledgement before running.
 
 The Kit-side DP1 read-only baseline refresh evidence under
 `../evidence/dpa/probes/dp1-readonly-46deae7-20260728/` satisfies current
-baseline command-health refresh only. Mutation-scoped fixtures remain unrun, and
-the full Probe PASS claim boundary remains closed.
+baseline command-health refresh only. The Assessment readiness record under
+`../evidence/dpa/assessment/` turns that evidence into a precise DP2 blocker
+map. Mutation-scoped fixtures remain unrun, Maintainer Assessment remains
+unrecorded and the full Probe PASS claim boundary remains closed.
+
+The read-only wrapper `agentic-kit dpa readiness` validates that staged
+Assessment readiness record, reports the deterministic implementation
+percentage and shows the current DP2 blocker set without mutating repository
+files.
 
 ## Generated-output and command-updated boundary
 
@@ -132,13 +146,15 @@ touchpoint that is classified as command-updated by the Kit.
 
 ## Next governed step
 
-After this index and registry staging slice, the next DPA work remains governed
-by the closeout restrictions:
+After this index, registry staging and Assessment-readiness slice, the next DPA
+work remains governed by the closeout restrictions:
 
 1. Preserve the DPA Lab source ref and Kit import baseline in every import slice.
 2. Keep WRT-CH-003 and the full WRT-CH-001 administrative refresh PR flow
    deferred from the first DP2 target.
 3. Keep DP2 implementation blocked until selected Probe and Assessment
    prerequisites are refreshed against current Kit refs and recorded.
-4. Run the Kit documentation, registry and release-relevant gates selected by
+4. Run a disposable, mutation-scoped DP1 Probe execution package before any
+   production runtime mutation.
+5. Run the Kit documentation, registry and release-relevant gates selected by
    each import slice.
