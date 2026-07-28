@@ -50,8 +50,80 @@
     "next_action": "Inspect the published remote-next diagnostic report before retrying.",
     "post_report_actions": {
       "attempted": true,
+      "blocked_reason": "git_push_failed",
+      "branch": "docs/post-pr1878-handoff-refresh",
+      "commit_head": "597ce1ad",
+      "committed": true,
+      "final_head": "597ce1ad",
+      "final_status_short": "",
+      "paths": [
+        "docs/reports/transfer_runs/latest-remote-next-report.json",
+        "docs/reports/transfer_runs/latest-remote-next-report.log",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+      ],
+      "pushed": false,
+      "rule_ack_after_report_commit": {
+        "blocking_reasons": [],
+        "confirmed": true,
+        "head": "597ce1ad",
+        "path": ".agentic/rule_ack/current.json",
+        "present": true
+      },
+      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "status": "pending_until_report_files_are_written"
+      "steps": [
+        {
+          "argv": [
+            "git",
+            "add",
+            "-f",
+            "docs/reports/transfer_runs/latest-remote-next-report.json",
+            "docs/reports/transfer_runs/latest-remote-next-report.log",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+          ],
+          "name": "git_add_force_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        },
+        {
+          "argv": [
+            "git",
+            "commit",
+            "-m",
+            "Publish remote-next transfer report"
+          ],
+          "name": "git_commit_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "[docs/post-pr1878-handoff-refresh 597ce1ad] Publish remote-next transfer report\n 4 files changed, 1998 insertions(+), 423 deletions(-)"
+        },
+        {
+          "argv": [
+            "./.venv/bin/agentic-kit",
+            "rules",
+            "acknowledge"
+          ],
+          "name": "rules_acknowledge_after_report_commit",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=e6f098bdca9245e80836073afdc8245b6917f12926fc63416c9dd13b7ed29b39\nrepo_head=597ce1ad\ndeclared_next_allowed_action=run_next_command"
+        },
+        {
+          "argv": [
+            "git",
+            "push",
+            "origin",
+            "docs/post-pr1878-handoff-refresh"
+          ],
+          "name": "git_push_report_commit",
+          "returncode": 128,
+          "stderr": "fatal: unable to access 'https://github.com/vfi64/agentic-project-kit.git/': Could not resolve host: github.com",
+          "stdout": ""
+        }
+      ]
     },
     "preflight": {
       "current_branch": "docs/post-pr1878-handoff-refresh",
@@ -366,11 +438,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-07-28T08:46:28.192067+00:00",
+    "generated_at_utc": "2026-07-28T08:46:28.776350+00:00",
     "generated_from_current_repo": true,
     "git_state": {
       "branch": "docs/post-pr1878-handoff-refresh",
-      "head": "5201df76b0296d57c08b44fe26f0e9b2125f06cd",
+      "head": "597ce1adc0be47c314e9894b69a2f8f8d47ecc67",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -978,8 +1050,8 @@
     "repo_state": {
       "branch": "docs/post-pr1878-handoff-refresh",
       "dirty_status": "",
-      "head": "5201df76b0296d57c08b44fe26f0e9b2125f06cd",
-      "head_matches_upstream": true,
+      "head": "597ce1adc0be47c314e9894b69a2f8f8d47ecc67",
+      "head_matches_upstream": false,
       "upstream": "origin/docs/post-pr1878-handoff-refresh",
       "upstream_head": "5201df76b0296d57c08b44fe26f0e9b2125f06cd"
     },
@@ -1072,8 +1144,80 @@
     "next_action": "Inspect the published remote-next diagnostic report before retrying.",
     "post_report_actions": {
       "attempted": true,
+      "blocked_reason": "git_push_failed",
+      "branch": "docs/post-pr1878-handoff-refresh",
+      "commit_head": "597ce1ad",
+      "committed": true,
+      "final_head": "597ce1ad",
+      "final_status_short": "",
+      "paths": [
+        "docs/reports/transfer_runs/latest-remote-next-report.json",
+        "docs/reports/transfer_runs/latest-remote-next-report.log",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+      ],
+      "pushed": false,
+      "rule_ack_after_report_commit": {
+        "blocking_reasons": [],
+        "confirmed": true,
+        "head": "597ce1ad",
+        "path": ".agentic/rule_ack/current.json",
+        "present": true
+      },
+      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "status": "pending_until_report_files_are_written"
+      "steps": [
+        {
+          "argv": [
+            "git",
+            "add",
+            "-f",
+            "docs/reports/transfer_runs/latest-remote-next-report.json",
+            "docs/reports/transfer_runs/latest-remote-next-report.log",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+          ],
+          "name": "git_add_force_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        },
+        {
+          "argv": [
+            "git",
+            "commit",
+            "-m",
+            "Publish remote-next transfer report"
+          ],
+          "name": "git_commit_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "[docs/post-pr1878-handoff-refresh 597ce1ad] Publish remote-next transfer report\n 4 files changed, 1998 insertions(+), 423 deletions(-)"
+        },
+        {
+          "argv": [
+            "./.venv/bin/agentic-kit",
+            "rules",
+            "acknowledge"
+          ],
+          "name": "rules_acknowledge_after_report_commit",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=e6f098bdca9245e80836073afdc8245b6917f12926fc63416c9dd13b7ed29b39\nrepo_head=597ce1ad\ndeclared_next_allowed_action=run_next_command"
+        },
+        {
+          "argv": [
+            "git",
+            "push",
+            "origin",
+            "docs/post-pr1878-handoff-refresh"
+          ],
+          "name": "git_push_report_commit",
+          "returncode": 128,
+          "stderr": "fatal: unable to access 'https://github.com/vfi64/agentic-project-kit.git/': Could not resolve host: github.com",
+          "stdout": ""
+        }
+      ]
     },
     "preflight": {
       "current_branch": "docs/post-pr1878-handoff-refresh",
@@ -1635,8 +1779,8 @@
     "repo_state": {
       "branch": "docs/post-pr1878-handoff-refresh",
       "dirty_status": "",
-      "head": "5201df76b0296d57c08b44fe26f0e9b2125f06cd",
-      "head_matches_upstream": true,
+      "head": "597ce1adc0be47c314e9894b69a2f8f8d47ecc67",
+      "head_matches_upstream": false,
       "upstream": "origin/docs/post-pr1878-handoff-refresh",
       "upstream_head": "5201df76b0296d57c08b44fe26f0e9b2125f06cd"
     },
