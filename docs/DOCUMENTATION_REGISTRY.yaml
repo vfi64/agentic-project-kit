@@ -32,6 +32,8 @@ schema:
   optional_document_fields:
     - review_after
     - deferred_until
+    - projection_contract
+    - partition_contract
 
 class_rules:
   governance/system:

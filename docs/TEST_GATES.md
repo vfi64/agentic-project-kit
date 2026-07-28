@@ -92,7 +92,7 @@ Update it when adding or changing:
 
 `docs/DOCUMENTATION_REGISTRY.yaml` is the additive documentation-governance registry for classifying documents and artifacts before broad migration.
 
-The registry validates only structural, machine-checkable registry rules: registry version, allowed classes, required class-rule fields, registered document fields, duplicate paths, and existence of registered files. It does not prove semantic documentation quality and must not trigger broad document migration by itself.
+The registry validates only structural, machine-checkable registry rules: registry version, allowed classes, required class-rule fields, registered document fields, duplicate paths, existence of registered files, and optional DPA registry-contract compatibility fields. It does not prove semantic documentation quality, DPA Probe success, production mutation, or Kit conformance, and must not trigger broad document migration by itself.
 
 Required class-level rule fields are ownership, freshness, language policy, redundancy boundary, machine readability, retention / GC behavior, update triggers, portability/local-path scanning, and gate coverage.
 

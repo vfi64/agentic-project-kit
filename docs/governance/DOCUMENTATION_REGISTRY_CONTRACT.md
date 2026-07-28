@@ -1,6 +1,6 @@
 # Documentation Registry Contract
 
-Status-date: 2026-05-23
+Status-date: 2026-07-28
 Status: experimental governance schema baseline
 Scope: documentation and artifact classification for agentic-project-kit
 
@@ -43,7 +43,7 @@ Every class rule must define:
 
 The exact machine-readable field names are stored in `docs/DOCUMENTATION_REGISTRY.yaml` and validated by the registry guard.
 
-## Optional document lifecycle fields
+## Optional document fields
 
 Registered document entries may also carry lifecycle scheduling metadata:
 
@@ -52,8 +52,17 @@ Registered document entries may also carry lifecycle scheduling metadata:
   to the lifecycle-signal layer.
 - `deferred_until`: optional ISO date string used to record a bounded deferral.
 
+Registered document entries may also carry DPA projection metadata:
+
+- `projection_contract`: optional DPA ProjectionContract metadata for a
+  registered projected document.
+- `partition_contract`: optional DPA PartitionContract metadata for a parent
+  registered document that owns registered regions.
+
 These fields are additive and optional. Existing registry entries without them
-remain valid.
+remain valid. DPA contract validation is structural compatibility validation
+only; it does not claim Probe success, production mutation, Kit conformance, or
+semantic projection correctness.
 
 ## First-slice guard
 
@@ -69,6 +78,9 @@ The first guard validates only deterministic structure:
 - registered classes are known.
 - optional `review_after` values are non-empty prefixed strings;
 - optional `deferred_until` values are ISO date strings.
+- optional DPA `projection_contract` and `partition_contract` mappings use the
+  supported schema version, known fields, required fields, and internally
+  consistent parent/region references.
 
 The guard intentionally does not claim semantic documentation quality. It cannot prove that a document is well-written, complete, or architecturally optimal.
 
@@ -122,6 +134,8 @@ The registry is hardened through:
 
 - `docs/DOCUMENTATION_REGISTRY.yaml` as the machine-readable source;
 - `src/agentic_project_kit/documentation_registry.py` as the validation core;
+- `src/agentic_project_kit/dpa_registry_contracts.py` as the DPA registry-contract
+  compatibility validator;
 - `agentic-kit check-docs` integration;
 - `agentic-kit doc-registry register` tests for reviewed additive entries;
 - `agentic-kit doc-registry check-unregistered --strict-scope` tests for
