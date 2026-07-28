@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3be4ce59e22543d9b164394a95ace15511056c1b
-  short: 3be4ce59
-  subject: Extend README word limit (#1885)
+  full: 6bc57ac6f3f82d19e0f8c60aadf40321ebcbfbf2
+  short: 6bc57ac6
+  subject: Import DPA architecture package (#1887)
 last_substantive_work_state:
-  full: 3be4ce59e22543d9b164394a95ace15511056c1b
-  short: 3be4ce59
-  subject: Extend README word limit (#1885)
+  full: 6bc57ac6f3f82d19e0f8c60aadf40321ebcbfbf2
+  short: 6bc57ac6
+  subject: Import DPA architecture package (#1887)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

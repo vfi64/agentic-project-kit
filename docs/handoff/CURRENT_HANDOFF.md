@@ -323,6 +323,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1885
+## Operational documentation refresh state after PR #1887
 
-Current administrative handoff refresh state is `3be4ce59` (`Extend README word limit (#1885)`). Continue next only after this post-PR1885 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `6bc57ac6` (`Import DPA architecture package (#1887)`). Continue next only after this post-PR1887 refresh is committed and merged; the next substantive slice must be created from fresh main.
