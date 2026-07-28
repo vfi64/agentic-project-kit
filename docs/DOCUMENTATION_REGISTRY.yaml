@@ -851,6 +851,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable DP2 decision-readiness preflight evidence; preserves all DP2 blockers and false authorization claims.
+  - path: docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-1dfc5e8a-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit DP2 decision-readiness refresh summary for validation ref 1dfc5e8a; not Maintainer Assessment or DP2 authorization.
+  - path: docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-1dfc5e8a-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable current DP2 decision-readiness refresh; preserves all DP2 blockers and false authorization claims.
   - path: docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_TEMPLATE_20260728.json
     class: evidence/log
     owner: maintainers
@@ -863,6 +871,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable Maintainer-record template check evidence; not Maintainer Assessment or DP2 authorization.
+  - path: docs/architecture/evidence/dpa/assessment/maintainer-record-template-check-1dfc5e8a-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit DP2 Maintainer-record template check refresh summary; TEMPLATE_READY_DP2_BLOCKED only.
+  - path: docs/architecture/evidence/dpa/assessment/maintainer-record-template-check-1dfc5e8a-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable current Maintainer-record template check; not Maintainer Assessment or DP2 authorization.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers
@@ -967,6 +983,46 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable PROBE-004 migration and rollback readiness preflight evidence; records migration-form, rollback-package, renderer-rollback and generated-output boundary blockers.
+  - path: docs/architecture/evidence/dpa/probes/probe-002-lifecycle-readiness-1dfc5e8a-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit PROBE-002 lifecycle readiness refresh summary; PARTIAL_BLOCKED_FOR_DP2 only.
+  - path: docs/architecture/evidence/dpa/probes/probe-002-lifecycle-readiness-1dfc5e8a-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable current PROBE-002 lifecycle readiness refresh; records selected-writer and Maintainer-decision blockers.
+  - path: docs/architecture/evidence/dpa/probes/wrt-ch001-admin-refresh-observation-1dfc5e8a-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit WRT-CH-001 admin-refresh observation summary for PR #1915; not disposable fixture execution.
+  - path: docs/architecture/evidence/dpa/probes/wrt-ch001-admin-refresh-observation-1dfc5e8a-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable WRT-CH-001 observation evidence from merged admin refresh PR #1915; records no DP2 authorization.
+  - path: docs/architecture/evidence/dpa/probes/probe-003-workflow-readiness-1dfc5e8a-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit PROBE-003 workflow serialization readiness refresh summary; PARTIAL_BLOCKED_FOR_DP2 only.
+  - path: docs/architecture/evidence/dpa/probes/probe-003-workflow-readiness-1dfc5e8a-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable current PROBE-003 workflow serialization readiness refresh; records disposable workflow fixture blockers.
+  - path: docs/architecture/evidence/dpa/probes/renderer-readiness-1dfc5e8a-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit Renderer Probe readiness refresh summary; PARTIAL_BLOCKED_FOR_DP2 only.
+  - path: docs/architecture/evidence/dpa/probes/renderer-readiness-1dfc5e8a-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable current Renderer Probe readiness refresh; records renderer-map and side-effect fixture blockers.
+  - path: docs/architecture/evidence/dpa/probes/probe-004-migration-readiness-1dfc5e8a-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit PROBE-004 migration and rollback readiness refresh summary; PARTIAL_BLOCKED_FOR_DP2 only.
+  - path: docs/architecture/evidence/dpa/probes/probe-004-migration-readiness-1dfc5e8a-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable current PROBE-004 migration and rollback readiness refresh; records rollback and generated-output fixture blockers.
   - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

@@ -4,9 +4,9 @@
   "status": "TEMPLATE_NOT_ASSESSED",
   "status_date": "2026-07-28",
   "template": true,
-  "validation_ref": "fb71bd49e24d357baea73a00248e32de0ac04c15",
+  "validation_ref": "1dfc5e8a75ffc37677b9f85da9e972812da95c04",
   "readiness_record": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
-  "decision_readiness_evidence": "docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-8ceadc8a-20260728/results.json",
+  "decision_readiness_evidence": "docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-1dfc5e8a-20260728/results.json",
   "maintainer": "PENDING_MAINTAINER",
   "decision_token": "PENDING_DECISION",
   "probe_dispositions": {

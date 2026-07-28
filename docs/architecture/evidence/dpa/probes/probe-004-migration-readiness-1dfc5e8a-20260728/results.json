@@ -1,0 +1,163 @@
+{
+  "blocker_count": 7,
+  "blockers": [
+    {
+      "id": "probe-004-family-not-satisfied",
+      "message": "Readiness record reports PROBE-004 as PARTIAL_BLOCKED_FOR_DP2."
+    },
+    {
+      "id": "probe-004-dp2-entry-blocked",
+      "message": "DP2 entry record reports probe_004_full_evidence as BLOCKED."
+    },
+    {
+      "id": "probe-004-migration-form-fixtures",
+      "message": "Migration-form selection and lower-risk rejection fixtures have not been executed."
+    },
+    {
+      "id": "probe-004-rollback-package-fixtures",
+      "message": "Rollback-package identity and recoverability fixtures have not been executed."
+    },
+    {
+      "id": "probe-004-renderer-rollback-fixtures",
+      "message": "Renderer semantic-version rollback and unavailable-renderer fail-closed fixtures remain unexecuted."
+    },
+    {
+      "id": "probe-004-generated-output-boundary-fixtures",
+      "message": "Generated or command-updated output rollback fixtures require source-command execution evidence."
+    },
+    {
+      "id": "probe-004-maintainer-authorization",
+      "message": "Migration and rollback fixtures require Maintainer-scoped target selection and rollback instructions."
+    }
+  ],
+  "claims": {
+    "dp2_authorized": false,
+    "generated_outputs_manually_patched": false,
+    "kit_conformance_claimed": false,
+    "migration_probe_execution_claimed": false,
+    "production_mutation_performed": false,
+    "renderer_semantic_version_rollback_claimed": false,
+    "rollback_package_recoverability_claimed": false
+  },
+  "control_surfaces": [
+    {
+      "path": "docs/architecture/dpa/probes/DP1_PROBE_MANUALS_20260727.md",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/dpa/probes/DP1_PROBE_EXECUTION_PACKAGE_DRAFT_20260727.md",
+      "present": true
+    }
+  ],
+  "finding_count": 0,
+  "findings": [],
+  "full_evidence_satisfied": false,
+  "kind": "dpa_probe_004_migration_rollback_readiness",
+  "readiness_dp2_entry_status": "BLOCKED",
+  "readiness_probe_family_status": "PARTIAL_BLOCKED_FOR_DP2",
+  "readiness_record": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+  "required_groups": [
+    {
+      "id": "P4-G01",
+      "label": "migration-form precondition evaluation including no migration",
+      "status": "BLOCKED_REQUIRES_SELECTED_MIGRATION_SCOPE_FIXTURE"
+    },
+    {
+      "id": "P4-G02",
+      "label": "lower-risk migration-form rejection before hybrid or managed-head selection",
+      "status": "BLOCKED_REQUIRES_SELECTED_MIGRATION_SCOPE_FIXTURE"
+    },
+    {
+      "id": "P4-G03",
+      "label": "migration plan identity and immutable rollback-package capture",
+      "status": "BLOCKED_REQUIRES_IMMUTABLE_ROLLBACK_PACKAGE_FIXTURE"
+    },
+    {
+      "id": "P4-G04",
+      "label": "target bytes, registry/contracts, acceptance state, gate-set identity, routing and exact-ref recovery",
+      "status": "BLOCKED_REQUIRES_IMMUTABLE_ROLLBACK_PACKAGE_FIXTURE"
+    },
+    {
+      "id": "P4-G05",
+      "label": "rollback before Write",
+      "status": "BLOCKED_REQUIRES_AUTHORIZED_DISPOSABLE_ROLLBACK_FIXTURE"
+    },
+    {
+      "id": "P4-G06",
+      "label": "rollback after Write before acceptance",
+      "status": "BLOCKED_REQUIRES_AUTHORIZED_DISPOSABLE_ROLLBACK_FIXTURE"
+    },
+    {
+      "id": "P4-G07",
+      "label": "rollback after acceptance with acceptance invalidation when renderer reproducibility is unavailable",
+      "status": "BLOCKED_REQUIRES_AUTHORIZED_DISPOSABLE_ROLLBACK_FIXTURE"
+    },
+    {
+      "id": "P4-G08",
+      "label": "renderer semantic-version rollback with retained prior renderer",
+      "status": "BLOCKED_REQUIRES_RENDERER_VERSION_ROLLBACK_FIXTURE"
+    },
+    {
+      "id": "P4-G09",
+      "label": "fail-closed unavailable-renderer rollback paths",
+      "status": "BLOCKED_REQUIRES_RENDERER_VERSION_ROLLBACK_FIXTURE"
+    },
+    {
+      "id": "P4-G10",
+      "label": "interrupted migration recovery without inferring success from markers, prose or evidence alone",
+      "status": "BLOCKED_REQUIRES_INTERRUPTION_RECOVERY_FIXTURE"
+    },
+    {
+      "id": "P4-G11",
+      "label": "prohibition of new canonical history sources for migration convenience",
+      "status": "PREFLIGHT_SURFACE_PRESENT_NOT_EXECUTED"
+    },
+    {
+      "id": "P4-G12",
+      "label": "generated or command-updated candidates changed only through source authority or command contract",
+      "status": "BLOCKED_REQUIRES_SOURCE_COMMAND_ROLLBACK_EVIDENCE"
+    }
+  ],
+  "result_status": "PARTIAL_BLOCKED_FOR_DP2",
+  "schema_version": 1,
+  "source_surfaces": [
+    {
+      "path": "src/agentic_project_kit/successor_handoff_package.py",
+      "present": true
+    },
+    {
+      "path": "src/agentic_project_kit/transfer_repo_actions.py",
+      "present": true
+    },
+    {
+      "path": "docs/reports/handoff-packages/latest/execution_contract.json",
+      "present": true
+    },
+    {
+      "path": "docs/reports/handoff-packages/latest/source_manifest.json",
+      "present": true
+    },
+    {
+      "path": "docs/reports/handoff-packages/latest/validation_report.json",
+      "present": true
+    }
+  ],
+  "structural_ok": true,
+  "test_surfaces": [
+    {
+      "matches": [
+        "tests/test_successor_handoff_package.py"
+      ],
+      "path": "tests/test_successor_handoff_package.py",
+      "present": true
+    },
+    {
+      "matches": [
+        "tests/test_transfer_repo_actions.py"
+      ],
+      "path": "tests/test_transfer_repo_actions.py",
+      "present": true
+    }
+  ],
+  "validation_ref": "1dfc5e8a75ffc37677b9f85da9e972812da95c04"
+}

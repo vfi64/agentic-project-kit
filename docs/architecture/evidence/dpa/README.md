@@ -26,31 +26,31 @@ handoff refresh PR #1897. It satisfies the registry-compatibility DP2 entry
 field for the current Kit ref only.
 
 The current PROBE-002 lifecycle readiness preflight records Kit validation ref
-`5fd5f47c1201ceddd021838190327624346b8547`. It deterministically confirms the
+`1dfc5e8a75ffc37677b9f85da9e972812da95c04`. It deterministically confirms the
 current lifecycle, writer-routing and selected-writer surfaces are present, but
 it records `PARTIAL_BLOCKED_FOR_DP2` because current disposable writer fixtures
 and Maintainer select/defer decisions remain open.
 
 The current WRT-CH-001 administrative handoff refresh observation records Kit
-merge ref `d0d2f537ccb21666a42562d3bc7c07087ff9622d`. It confirms that PR
-#1902 performed the expected command-updated handoff refresh after PR #1901 and
+merge ref `1dfc5e8a75ffc37677b9f85da9e972812da95c04`. It confirms that PR
+#1915 performed the expected command-updated handoff refresh after PR #1914 and
 passed CI. It is observation evidence only; it is not a disposable WRT-CH-001
 fixture and does not satisfy full PROBE-002.
 
 The current PROBE-003 workflow serialization readiness preflight records Kit
-validation ref `b65dc1c8ddc0e3b1b8f73ad35c6cf5c7cb8c6bba`. It confirms current
+validation ref `1dfc5e8a75ffc37677b9f85da9e972812da95c04`. It confirms current
 workflow serialization source, test and control surfaces are present, but it
 records `PARTIAL_BLOCKED_FOR_DP2` because disposable branch/PR/integration
 fixtures and Maintainer authorization remain open.
 
 The current Renderer Probe readiness preflight records Kit validation ref
-`d88491c904ea55d08fefeaa950a89014117b7084`. It confirms current candidate
+`1dfc5e8a75ffc37677b9f85da9e972812da95c04`. It confirms current candidate
 renderer source, test and control surfaces are present, but it records
 `PARTIAL_BLOCKED_FOR_DP2` because an approved DPA renderer map, renderer
 identity/version fixtures and side-effect fixtures remain open.
 
 The current PROBE-004 migration and rollback readiness preflight records Kit
-validation ref `3dd2a616aaa47995e333059e80912ae0bea55656`. It confirms current
+validation ref `1dfc5e8a75ffc37677b9f85da9e972812da95c04`. It confirms current
 migration and rollback source, test and control surfaces are present, including
 command-owned successor-handoff package inputs, but it records
 `PARTIAL_BLOCKED_FOR_DP2` because migration-form, rollback-package,
@@ -59,17 +59,17 @@ open.
 
 The current Assessment readiness record consolidates those evidence inputs into
 a DP2 blocker map at current Kit baseline
-`8ceadc8a0ab5f61f5aac6549cd440c47999a18de`. It records `DP2_BLOCKED`, keeps the
+`1dfc5e8a75ffc37677b9f85da9e972812da95c04`. It records `DP2_BLOCKED`, keeps the
 full Probe PASS claim boundary closed and names the remaining Probe, writer,
 rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
 
 The current DP2 decision-readiness preflight records validation ref
-`8ceadc8a0ab5f61f5aac6549cd440c47999a18de`. It packages the remaining blockers,
+`1dfc5e8a75ffc37677b9f85da9e972812da95c04`. It packages the remaining blockers,
 candidate first DP2 target scope and required Maintainer actions for review, but
 it is not Maintainer Assessment, not DP2 authorization and not Probe execution.
 
 The current DP2 Maintainer-record template check records validation ref
-`fb71bd49e24d357baea73a00248e32de0ac04c15`. It validates the future
+`1dfc5e8a75ffc37677b9f85da9e972812da95c04`. It validates the future
 Maintainer-owned record shape and keeps the template in `TEMPLATE_NOT_ASSESSED`
 state; it is not a Maintainer record and not DP2 authorization.
 
@@ -84,30 +84,30 @@ state; it is not a Maintainer record and not DP2 authorization.
 - `probes/probe-001-registry-compatibility-9ca806db-20260728/` records current
   Kit PROBE-001 registry compatibility evidence with result
   `SATISFIED_FOR_CURRENT_KIT_REF`.
-- `probes/probe-002-lifecycle-readiness-5fd5f47c-20260728/` records current
+- `probes/probe-002-lifecycle-readiness-1dfc5e8a-20260728/` records current
   Kit PROBE-002 lifecycle readiness preflight evidence with result
   `PARTIAL_BLOCKED_FOR_DP2`.
-- `probes/wrt-ch001-admin-refresh-observation-d0d2f537-20260728/` records the
-  WRT-CH-001 administrative handoff refresh observation for PR #1902 with
+- `probes/wrt-ch001-admin-refresh-observation-1dfc5e8a-20260728/` records the
+  WRT-CH-001 administrative handoff refresh observation for PR #1915 with
   result `OBSERVED_ADMIN_REFRESH_NOT_DISPOSABLE_FIXTURE`.
-- `probes/probe-003-workflow-readiness-b65dc1c8-20260728/` records current Kit
+- `probes/probe-003-workflow-readiness-1dfc5e8a-20260728/` records current Kit
   PROBE-003 workflow serialization readiness preflight evidence with result
   `PARTIAL_BLOCKED_FOR_DP2`.
-- `probes/renderer-readiness-d88491c9-20260728/` records current Kit Renderer
+- `probes/renderer-readiness-1dfc5e8a-20260728/` records current Kit Renderer
   Probe readiness preflight evidence with result `PARTIAL_BLOCKED_FOR_DP2`.
-- `probes/probe-004-migration-readiness-3dd2a616-20260728/` records current
+- `probes/probe-004-migration-readiness-1dfc5e8a-20260728/` records current
   Kit PROBE-004 migration and rollback readiness preflight evidence with result
   `PARTIAL_BLOCKED_FOR_DP2`.
 - `assessment/DP1_ASSESSMENT_READINESS_20260728.md` records the current DP1
   Assessment readiness decision surface with status `DP2_BLOCKED`.
-- `assessment/dp2-decision-readiness-8ceadc8a-20260728/` records current DP2
+- `assessment/dp2-decision-readiness-1dfc5e8a-20260728/` records current DP2
   decision-readiness preflight evidence with result
   `READY_FOR_MAINTAINER_DECISION_DP2_BLOCKED`.
 - `assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_TEMPLATE_20260728.json` records
   the blocked template for a future Maintainer-owned DP2 Assessment record.
-- `assessment/maintainer-record-template-check-fb71bd49-20260728/` records the
+- `assessment/maintainer-record-template-check-1dfc5e8a-20260728/` records the
   current template validation with result `TEMPLATE_READY_DP2_BLOCKED`.
 
-Both packages preserve their original limitation language. Future execution must
-freeze current refs, record command manifest currency, retain cleanup evidence
-and pass Maintainer Assessment before any DP2 implementation relies on them.
+These packages preserve their limitation language. Future execution must freeze
+current refs, record command manifest currency, retain cleanup evidence and
+pass Maintainer Assessment before any DP2 implementation relies on them.
