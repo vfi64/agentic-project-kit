@@ -19,8 +19,8 @@ not main-repository conformance.
 
 | Role | Ref or path | Assessment use |
 |---|---|---|
-| Current Kit baseline for this record | `1dfc5e8a75ffc37677b9f85da9e972812da95c04` | Governs the repository state assessed by this readiness record. |
-| Current command manifest acknowledgement | `COMMAND_MANIFEST_ACK 0a7072ca7b72` | Confirms this record uses the current Kit command manifest boundary. |
+| Current Kit baseline for this record | `3b68287009e0c65380445b5c92ddb751d14da286` | Governs the repository state assessed by this readiness record. |
+| Current command manifest acknowledgement | `COMMAND_MANIFEST_ACK aa03fbe18988` | Confirms this record uses the current Kit command manifest boundary. |
 | DPA Lab closeout source | `0cf944cc153e65a272c773286791f8891efdd1bc` | Preserved architecture source package only. |
 | DPA Lab merge commit | `6f927efd625b4239f9ab0e710b48e7d9534fdfec` | Preserved Lab closeout merge evidence only. |
 | Kit DPA-IMPORT-3 baseline | `e89b0fac21c5599f8e531a937c550134469716cf` | Import slice baseline before Probe-package staging. |
