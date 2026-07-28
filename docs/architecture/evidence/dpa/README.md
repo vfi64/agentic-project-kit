@@ -31,9 +31,15 @@ current lifecycle, writer-routing and selected-writer surfaces are present, but
 it records `PARTIAL_BLOCKED_FOR_DP2` because current disposable writer fixtures
 and Maintainer select/defer decisions remain open.
 
+The current WRT-CH-001 administrative handoff refresh observation records Kit
+merge ref `d0d2f537ccb21666a42562d3bc7c07087ff9622d`. It confirms that PR
+#1902 performed the expected command-updated handoff refresh after PR #1901 and
+passed CI. It is observation evidence only; it is not a disposable WRT-CH-001
+fixture and does not satisfy full PROBE-002.
+
 The current Assessment readiness record consolidates those evidence inputs into
 a DP2 blocker map at current Kit baseline
-`5fd5f47c1201ceddd021838190327624346b8547`. It records `DP2_BLOCKED`, keeps the
+`d0d2f537ccb21666a42562d3bc7c07087ff9622d`. It records `DP2_BLOCKED`, keeps the
 full Probe PASS claim boundary closed and names the remaining Probe, writer,
 rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
 
@@ -51,6 +57,9 @@ rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
 - `probes/probe-002-lifecycle-readiness-5fd5f47c-20260728/` records current
   Kit PROBE-002 lifecycle readiness preflight evidence with result
   `PARTIAL_BLOCKED_FOR_DP2`.
+- `probes/wrt-ch001-admin-refresh-observation-d0d2f537-20260728/` records the
+  WRT-CH-001 administrative handoff refresh observation for PR #1902 with
+  result `OBSERVED_ADMIN_REFRESH_NOT_DISPOSABLE_FIXTURE`.
 - `assessment/DP1_ASSESSMENT_READINESS_20260728.md` records the current DP1
   Assessment readiness decision surface with status `DP2_BLOCKED`.
 

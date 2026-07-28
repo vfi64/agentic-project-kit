@@ -1,0 +1,168 @@
+{
+  "admin_pr": 1902,
+  "admin_refresh_head_oid": "eb0989929f3df20e0adbc194b5f6ca05bb80cf18",
+  "admin_refresh_head_ref": "docs/post-pr1901-handoff-refresh",
+  "claims": {
+    "admin_refresh_observed": true,
+    "disposable_fixture_claimed": false,
+    "dp2_authorized": false,
+    "full_probe_002_claimed": false,
+    "generated_outputs_manually_patched": false,
+    "production_mutation_performed_by_this_command": false
+  },
+  "commit_headlines": [
+    "Refresh handoff state after PR1901"
+  ],
+  "expected_files": [
+    ".agentic/handoff_state.yaml",
+    ".agentic/operational_handoff_state.yaml",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/reports/terminal/post-pr1901-successor-chat-handoff.md"
+  ],
+  "finding_count": 0,
+  "findings": [],
+  "full_wrt_ch001_fixture_satisfied": false,
+  "kind": "dpa_wrt_ch001_admin_refresh_observation",
+  "limitations": [
+    "This observes the merged Kit administrative handoff refresh PR.",
+    "It is not a disposable WRT-CH-001 fixture execution.",
+    "It does not satisfy full PROBE-002 evidence or authorize DP2."
+  ],
+  "observed_files": [
+    ".agentic/handoff_state.yaml",
+    ".agentic/operational_handoff_state.yaml",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/reports/terminal/post-pr1901-successor-chat-handoff.md"
+  ],
+  "raw_pr": {
+    "baseRefName": "main",
+    "commits": [
+      {
+        "authoredDate": "2026-07-28T15:29:07Z",
+        "authors": [
+          {
+            "email": "141268803+vfi64@users.noreply.github.com",
+            "id": "U_kgDOCGuXQw",
+            "login": "vfi64",
+            "name": "vfi64"
+          }
+        ],
+        "committedDate": "2026-07-28T15:29:07Z",
+        "messageBody": "",
+        "messageHeadline": "Refresh handoff state after PR1901",
+        "oid": "eb0989929f3df20e0adbc194b5f6ca05bb80cf18"
+      }
+    ],
+    "files": [
+      {
+        "additions": 6,
+        "deletions": 6,
+        "path": ".agentic/handoff_state.yaml"
+      },
+      {
+        "additions": 6,
+        "deletions": 6,
+        "path": ".agentic/operational_handoff_state.yaml"
+      },
+      {
+        "additions": 5,
+        "deletions": 5,
+        "path": "docs/STATUS.md"
+      },
+      {
+        "additions": 2,
+        "deletions": 2,
+        "path": "docs/handoff/CURRENT_HANDOFF.md"
+      },
+      {
+        "additions": 3,
+        "deletions": 3,
+        "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
+      },
+      {
+        "additions": 2,
+        "deletions": 2,
+        "path": "docs/handoff/START_NEW_CHAT_PROMPT.md"
+      },
+      {
+        "additions": 12,
+        "deletions": 12,
+        "path": "docs/reports/handoff-packages/latest/execution_contract.json"
+      },
+      {
+        "additions": 12,
+        "deletions": 12,
+        "path": "docs/reports/handoff-packages/latest/source_manifest.json"
+      },
+      {
+        "additions": 6,
+        "deletions": 6,
+        "path": "docs/reports/handoff-packages/latest/successor_context.yaml"
+      },
+      {
+        "additions": 9,
+        "deletions": 9,
+        "path": "docs/reports/handoff-packages/latest/successor_prompt.md"
+      },
+      {
+        "additions": 2,
+        "deletions": 2,
+        "path": "docs/reports/handoff-packages/latest/validation_report.json"
+      },
+      {
+        "additions": 209,
+        "deletions": 0,
+        "path": "docs/reports/terminal/post-pr1901-successor-chat-handoff.md"
+      }
+    ],
+    "headRefName": "docs/post-pr1901-handoff-refresh",
+    "headRefOid": "eb0989929f3df20e0adbc194b5f6ca05bb80cf18",
+    "mergeCommit": {
+      "oid": "d0d2f537ccb21666a42562d3bc7c07087ff9622d"
+    },
+    "number": 1902,
+    "state": "MERGED",
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-07-28T15:32:12Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/vfi64/agentic-project-kit/actions/runs/30373601412/job/90323493851",
+        "name": "test",
+        "startedAt": "2026-07-28T15:29:20Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      }
+    ],
+    "title": "Refresh handoff state after PR1901"
+  },
+  "result_status": "OBSERVED_ADMIN_REFRESH_NOT_DISPOSABLE_FIXTURE",
+  "schema_version": 1,
+  "source_pr": 1901,
+  "status_checks": [
+    {
+      "conclusion": "SUCCESS",
+      "name": "test",
+      "status": "COMPLETED",
+      "workflowName": "CI"
+    }
+  ],
+  "structural_ok": true,
+  "validation_ref": "d0d2f537ccb21666a42562d3bc7c07087ff9622d"
+}
