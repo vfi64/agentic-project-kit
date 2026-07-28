@@ -36,6 +36,12 @@ from agentic_project_kit.dpa_readiness import (
     evaluate_dpa_readiness,
     render_dpa_readiness_result,
 )
+from agentic_project_kit.dpa_readonly_probe_execution import (
+    DEFAULT_FIXTURE_MANIFEST_PATH,
+    evaluate_dpa_readonly_probe_execution,
+    render_dpa_readonly_probe_execution,
+    write_dpa_readonly_probe_execution_json,
+)
 from agentic_project_kit.dpa_renderer_readiness import (
     evaluate_renderer_probe_readiness,
     render_renderer_probe_readiness,
@@ -74,6 +80,79 @@ def dpa_readiness_command(
     else:
         typer.echo(render_dpa_readiness_result(result), nl=False)
     if result.findings or (require_dp2_ready and not result.dp2_ready):
+        raise typer.Exit(1)
+
+
+@dpa_app.command("readonly-probe-execution")
+def dpa_readonly_probe_execution_command(
+    root: Path = typer.Option(Path("."), "--root", help="Repository root."),
+    fixture_manifest: Path = typer.Option(
+        DEFAULT_FIXTURE_MANIFEST_PATH,
+        "--fixture-manifest",
+        help="DPA DP1 Probe fixture manifest to inspect.",
+    ),
+    validation_ref: str | None = typer.Option(
+        None,
+        "--validation-ref",
+        help="Optional exact target ref to record instead of the current repository HEAD.",
+    ),
+    output: Path | None = typer.Option(
+        None,
+        "--output",
+        help="Optional DPA probe evidence JSON path under docs/architecture/evidence/dpa/probes/.",
+    ),
+    execute: bool = typer.Option(False, "--execute", help="Write --output when supplied."),
+    plan_only: bool = typer.Option(
+        False,
+        "--plan-only",
+        help="Classify eligible read-only fixture cases without executing commands.",
+    ),
+    output_json: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+    timeout_seconds: int = typer.Option(180, "--timeout-seconds", min=1, help="Per-command timeout."),
+    require_no_command_failures: bool = typer.Option(
+        False,
+        "--require-no-command-failures",
+        help="Fail unless every executed read-only command succeeds.",
+    ),
+) -> None:
+    """Execute only non-mutating DP1 Probe fixture cases."""
+    resolved_root = root.resolve()
+    result = evaluate_dpa_readonly_probe_execution(
+        resolved_root,
+        fixture_manifest_path=fixture_manifest,
+        validation_ref=validation_ref,
+        plan_only=plan_only,
+        timeout_seconds=timeout_seconds,
+    )
+    write_result = None
+    if output is not None:
+        write_result = write_dpa_readonly_probe_execution_json(
+            result,
+            resolved_root,
+            output,
+            execute=execute,
+        )
+    payload = result.as_dict()
+    if write_result is not None:
+        payload["evidence_write"] = write_result
+    if output_json:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        typer.echo(render_dpa_readonly_probe_execution(result), nl=False)
+        if write_result is not None:
+            reason = f"|reason={write_result['reason']}" if "reason" in write_result else ""
+            typer.echo(
+                "EVIDENCE_WRITE="
+                f"{write_result['result_status']}|"
+                f"path={write_result['output_path']}|"
+                f"written={str(write_result.get('written', False)).lower()}"
+                f"{reason}"
+            )
+    if write_result is not None and write_result["result_status"] == "BLOCK":
+        raise typer.Exit(2)
+    if result.findings or result.command_failures:
+        raise typer.Exit(2)
+    if require_no_command_failures and result.command_failures:
         raise typer.Exit(1)
 
 

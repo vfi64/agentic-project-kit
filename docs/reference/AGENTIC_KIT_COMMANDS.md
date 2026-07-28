@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 0a7072ca7b72
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: aa03fbe18988
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `234`
+- Command count: `235`
 
 ## Commands
 
@@ -811,6 +811,26 @@ Validate the DPA DP1 Assessment readiness record without mutating files.
 | `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')` | DPA Assessment readiness JSON record to inspect. |
 | `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 | `require_dp2_ready` | `TyperOption` | --require-dp2-ready | `False` | `False` | Fail unless the readiness record structurally authorizes DP2. |
+
+### `agentic-kit dpa readonly-probe-execution`
+
+- Safety: `BOUNDED`
+- When to use: Execute only non-mutating DP1 Probe fixture cases.
+- Dry-run available: `True`
+
+Execute only non-mutating DP1 Probe fixture cases.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `fixture_manifest` | `TyperOption` | --fixture-manifest | `False` | `PosixPath('docs/architecture/dpa/probes/fixtures/DP1_PROBE_FIXTURE_MANIFEST_20260727.json')` | DPA DP1 Probe fixture manifest to inspect. |
+| `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact target ref to record instead of the current repository HEAD. |
+| `output` | `TyperOption` | --output | `False` |  | Optional DPA probe evidence JSON path under docs/architecture/evidence/dpa/probes/. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
+| `plan_only` | `TyperOption` | --plan-only | `False` | `False` | Classify eligible read-only fixture cases without executing commands. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `timeout_seconds` | `TyperOption` | --timeout-seconds | `False` | `180` | Per-command timeout. |
+| `require_no_command_failures` | `TyperOption` | --require-no-command-failures | `False` | `False` | Fail unless every executed read-only command succeeds. |
 
 ### `agentic-kit dpa renderer-readiness`
 

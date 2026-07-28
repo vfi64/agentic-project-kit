@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-07-28T19:23:44.503007+00:00",
+    "created_at_utc": "2026-07-28T20:57:51.211855+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -93,7 +93,7 @@
       "status": "active"
     },
     "command_reference": {
-      "command_count": 234,
+      "command_count": 235,
       "generated_by": "scripts/generate_agentic_kit_command_reference.py",
       "important_wrappers": [
         {
@@ -306,11 +306,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-07-28T19:23:44.731697+00:00",
+    "generated_at_utc": "2026-07-28T20:57:51.450688+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/dpa-maintainer-record-check",
-      "head": "708f388276da029a74f7e3a3d06468633216cbf8",
+      "branch": "codex/dpa-readonly-probe-runner",
+      "head": "8ccf3c22688b141bbdac11a646910eee8350ed08",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -370,8 +370,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "44d6cbcff3b727dea59ae5cfeaa491fce8851e9025949cf44d6e9ddebf60c8f7",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "10a151a18ea24574afc17cff8545d9a03c982f9ee85d9dbcf5f71f9adb51ceda",
-      "docs/reference/agentic-kit-commands.json": "a9c3ab7eb0513a8cff91eed0c01f3647968d71bf05544db6454f81dd9a986c3e"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "470f1f2c5804ef267c463020168227c76d52cee4c64e2c0c444f1a24168c3bde",
+      "docs/reference/agentic-kit-commands.json": "03058e189c759ab9db1b8eef3dba09945a9038b6493553f559bbe6eae0ab2177"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -411,7 +411,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "3dcc4d5d7ccf47f731d679abcd857c889fb18ab970991ba768b6468f2c2d0f90"
+        "sha256": "a6fb59a5a136074900cc04ec8f662217d38cb6d5b5c78a60e3bd5b326a0aa155"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -916,12 +916,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/dpa-maintainer-record-check",
+      "branch": "codex/dpa-readonly-probe-runner",
       "dirty_status": "",
-      "head": "708f388276da029a74f7e3a3d06468633216cbf8",
+      "head": "8ccf3c22688b141bbdac11a646910eee8350ed08",
       "head_matches_upstream": true,
-      "upstream": "origin/codex/dpa-maintainer-record-check",
-      "upstream_head": "708f388276da029a74f7e3a3d06468633216cbf8"
+      "upstream": "origin/codex/dpa-readonly-probe-runner",
+      "upstream_head": "8ccf3c22688b141bbdac11a646910eee8350ed08"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -983,7 +983,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "3dcc4d5d7ccf47f731d679abcd857c889fb18ab970991ba768b6468f2c2d0f90"
+        "sha256": "a6fb59a5a136074900cc04ec8f662217d38cb6d5b5c78a60e3bd5b326a0aa155"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -1488,12 +1488,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/dpa-maintainer-record-check",
+      "branch": "codex/dpa-readonly-probe-runner",
       "dirty_status": "",
-      "head": "708f388276da029a74f7e3a3d06468633216cbf8",
+      "head": "8ccf3c22688b141bbdac11a646910eee8350ed08",
       "head_matches_upstream": true,
-      "upstream": "origin/codex/dpa-maintainer-record-check",
-      "upstream_head": "708f388276da029a74f7e3a3d06468633216cbf8"
+      "upstream": "origin/codex/dpa-readonly-probe-runner",
+      "upstream_head": "8ccf3c22688b141bbdac11a646910eee8350ed08"
     },
     "schema_version": 1,
     "terminal_block_rules": {
