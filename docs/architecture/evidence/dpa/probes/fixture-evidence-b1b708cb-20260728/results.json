@@ -17,7 +17,7 @@
     "runtime_behavior_changed": false,
     "workflow_queue_conformance_claimed": false
   },
-  "completed_at_utc": "2026-07-28T22:05:13.243303+00:00",
+  "completed_at_utc": "2026-07-29T03:55:01.779129+00:00",
   "failed_case_count": 0,
   "families": [
     {
@@ -677,7 +677,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "Initialized empty Git repository in /private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/dpa-p002-wrt-001-7g2ywy97/.git/\n"
+              "stdout_summary": "Initialized empty Git repository in <DPA_FIXTURE_TEMP_ROOT>/.git/\n"
             },
             {
               "argv": [
@@ -724,7 +724,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "[main (root-commit) 2889803] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
+              "stdout_summary": "[main (root-commit) 24df6f9] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
             },
             {
               "argv": [
@@ -759,7 +759,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "[dpa-fixture-branch bdec59f] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+              "stdout_summary": "[dpa-fixture-branch ccab65d] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
             },
             {
               "argv": [
@@ -782,7 +782,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "Deleted branch dpa-fixture-branch (was bdec59f).\n"
+              "stdout_summary": "Deleted branch dpa-fixture-branch (was ccab65d).\n"
             }
           ],
           "expected_result": "WRT-CH-001 writes are either lifecycle-routed or classified as existing unadapted writer behavior",
@@ -836,7 +836,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "Initialized empty Git repository in /private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/dpa-p002-wrt-002-42tlbv0i/.git/\n"
+              "stdout_summary": "Initialized empty Git repository in <DPA_FIXTURE_TEMP_ROOT>/.git/\n"
             },
             {
               "argv": [
@@ -883,7 +883,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "[main (root-commit) 2889803] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
+              "stdout_summary": "[main (root-commit) 24df6f9] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
             },
             {
               "argv": [
@@ -918,7 +918,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "[dpa-fixture-branch bdec59f] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+              "stdout_summary": "[dpa-fixture-branch ccab65d] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
             },
             {
               "argv": [
@@ -941,7 +941,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "Deleted branch dpa-fixture-branch (was bdec59f).\n"
+              "stdout_summary": "Deleted branch dpa-fixture-branch (was ccab65d).\n"
             }
           ],
           "expected_result": "WRT-CH-002 dry-run and write-mode behavior are bounded and not mistaken for DPA conformance",
@@ -995,7 +995,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "Initialized empty Git repository in /private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/dpa-p002-wrt-003-tptc9594/.git/\n"
+              "stdout_summary": "Initialized empty Git repository in <DPA_FIXTURE_TEMP_ROOT>/.git/\n"
             },
             {
               "argv": [
@@ -1042,7 +1042,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "[main (root-commit) 2889803] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
+              "stdout_summary": "[main (root-commit) 24df6f9] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
             },
             {
               "argv": [
@@ -1077,7 +1077,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "[dpa-fixture-branch bdec59f] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+              "stdout_summary": "[dpa-fixture-branch ccab65d] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
             },
             {
               "argv": [
@@ -1100,7 +1100,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "Deleted branch dpa-fixture-branch (was bdec59f).\n"
+              "stdout_summary": "Deleted branch dpa-fixture-branch (was ccab65d).\n"
             }
           ],
           "expected_result": "WRT-CH-003 allowed paths and cleanup are bounded before any DPA reliance",
@@ -1473,7 +1473,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "Initialized empty Git repository in /private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/dpa-p003-wf-002-of478m12/.git/\n"
+              "stdout_summary": "Initialized empty Git repository in <DPA_FIXTURE_TEMP_ROOT>/.git/\n"
             },
             {
               "argv": [
@@ -1520,7 +1520,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "[main (root-commit) 727211b] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
+              "stdout_summary": "[main (root-commit) 24df6f9] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
             },
             {
               "argv": [
@@ -1555,7 +1555,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "[dpa-fixture-branch a66a1eb] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+              "stdout_summary": "[dpa-fixture-branch ccab65d] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
             },
             {
               "argv": [
@@ -1578,7 +1578,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "Deleted branch dpa-fixture-branch (was a66a1eb).\n"
+              "stdout_summary": "Deleted branch dpa-fixture-branch (was ccab65d).\n"
             }
           ],
           "expected_result": "branch movement invalidates stale projection plan before write or evidence publication",
@@ -1702,7 +1702,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "Initialized empty Git repository in /private/var/folders/vt/mg470w8172qbk3zm85xgjzdh0000gn/T/dpa-p003-wf-005-p_3yge9p/.git/\n"
+              "stdout_summary": "Initialized empty Git repository in <DPA_FIXTURE_TEMP_ROOT>/.git/\n"
             },
             {
               "argv": [
@@ -1749,7 +1749,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "[main (root-commit) 727211b] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
+              "stdout_summary": "[main (root-commit) 24df6f9] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
             },
             {
               "argv": [
@@ -1784,7 +1784,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "[dpa-fixture-branch a66a1eb] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+              "stdout_summary": "[dpa-fixture-branch ccab65d] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
             },
             {
               "argv": [
@@ -1807,7 +1807,7 @@
               "ok": true,
               "returncode": 0,
               "stderr_summary": "",
-              "stdout_summary": "Deleted branch dpa-fixture-branch (was a66a1eb).\n"
+              "stdout_summary": "Deleted branch dpa-fixture-branch (was ccab65d).\n"
             }
           ],
           "expected_result": "competing refresh blocks or invalidates stale projection write rather than silently overwriting",
@@ -2148,7 +2148,7 @@
   "result_status": "FULL_FIXTURE_EVIDENCE_RECORDED",
   "rollback_cleanup_proven": true,
   "schema_version": 1,
-  "started_at_utc": "2026-07-28T22:05:12.508577+00:00",
+  "started_at_utc": "2026-07-29T03:55:00.937163+00:00",
   "structural_ok": true,
   "summary": {
     "blocked_count": 0,

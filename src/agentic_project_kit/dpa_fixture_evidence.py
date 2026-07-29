@@ -526,8 +526,8 @@ def _run_git(root: Path, argv: tuple[str, ...]) -> dict[str, Any]:
         "argv": ["git", *argv],
         "returncode": completed.returncode,
         "ok": completed.returncode == 0,
-        "stdout_summary": _truncate(completed.stdout),
-        "stderr_summary": _truncate(completed.stderr),
+        "stdout_summary": _truncate(_sanitize_fixture_output(completed.stdout, root)),
+        "stderr_summary": _truncate(_sanitize_fixture_output(completed.stderr, root)),
     }
 
 
@@ -669,3 +669,12 @@ def _truncate(value: str, limit: int = 2000) -> str:
     if len(value) <= limit:
         return value
     return value[:limit] + "\n...[truncated]"
+
+
+def _sanitize_fixture_output(value: str, root: Path) -> str:
+    sanitized = value
+    replacements = {root.as_posix(), root.resolve(strict=False).as_posix()}
+    for item in sorted(replacements, key=len, reverse=True):
+        if item:
+            sanitized = sanitized.replace(item, "<DPA_FIXTURE_TEMP_ROOT>")
+    return sanitized
