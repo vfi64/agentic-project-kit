@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 8c2e729869312e95feecacf537eb17bb18aa85a0
-  short: 8c2e7298
-  subject: Authorize DPA DP2 entry (#1928)
+  full: 39ab81df73626b8325bc3310e6cafca1020307e1
+  short: 39ab81df
+  subject: Route WRT-CH001 through generated handoff block (#1930)
 last_substantive_work_state:
-  full: 8c2e729869312e95feecacf537eb17bb18aa85a0
-  short: 8c2e7298
-  subject: Authorize DPA DP2 entry (#1928)
+  full: 39ab81df73626b8325bc3310e6cafca1020307e1
+  short: 39ab81df
+  subject: Route WRT-CH001 through generated handoff block (#1930)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
