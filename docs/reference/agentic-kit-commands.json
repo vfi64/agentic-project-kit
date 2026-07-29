@@ -2938,6 +2938,138 @@
     {
       "dry_run_available": true,
       "group": "dpa",
+      "help": "Refresh CURRENT_HANDOFF through DPA freshness, locking and acceptance-state gates.",
+      "name": "current-handoff-refresh",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional registered CURRENT_HANDOFF target override; defaults to the workspace handoff resolver.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "target",
+          "opts": [
+            "--target"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional DPA acceptance-state record override; legacy default is .agentic/dpa/acceptance/current_handoff_operational_state.json.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "acceptance_state",
+          "opts": [
+            "--acceptance-state"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')",
+          "help": "DPA Assessment readiness record that must authorize DP2.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "readiness_record",
+          "opts": [
+            "--readiness-record"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional exact repository ref; when supplied it must match current HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "validation_ref",
+          "opts": [
+            "--validation-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Allow first acceptance-state creation when no prior DPA state exists.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "initialize_acceptance",
+          "opts": [
+            "--initialize-acceptance"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write target bytes and acceptance state.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_json",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "dpa",
+        "current-handoff-refresh"
+      ],
+      "qualified_name": "agentic-kit dpa current-handoff-refresh",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "dpa"
+      ],
+      "when_to_use": "Refresh CURRENT_HANDOFF through DPA freshness, locking and acceptance-state gates."
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
       "help": "Prepare DP2 decision readiness without recording Maintainer authorization.",
       "name": "dp2-decision-readiness",
       "params": [
@@ -15605,7 +15737,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "59c1700c2d4f",
+    "manifest_sha": "56f24aba6681",
     "schema_version": 1
   },
   "schema_version": 2,

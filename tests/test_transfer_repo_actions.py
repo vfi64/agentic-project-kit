@@ -2792,6 +2792,7 @@ def test_transfer_repo_actions_path_contract_snapshot(tmp_path: Path, monkeypatc
         if path.is_file()
     )
     assert relative_files == [
+        ".agentic/dpa/acceptance/current_handoff_operational_state.json",
         ".agentic/handoff_state.yaml",
         ".agentic/operational_handoff_state.yaml",
         "docs/STATUS.md",
@@ -2811,6 +2812,7 @@ def test_transfer_repo_actions_path_contract_snapshot(tmp_path: Path, monkeypatc
         "- .agentic/operational_handoff_state.yaml",
         "- docs/STATUS.md",
         "- docs/handoff/CURRENT_HANDOFF.md",
+        "- .agentic/dpa/acceptance/current_handoff_operational_state.json",
         "- docs/handoff/START_NEW_CHAT_PROMPT.md",
         "- docs/reports/handoff-packages/latest/execution_contract.json",
         "- docs/reports/handoff-packages/latest/source_manifest.json",

@@ -102,6 +102,7 @@ class KitConfig:
     rules_root: str = ".agentic/rules"
     handoff_state_file: str = "handoff_state.yaml"
     operational_handoff_state_file: str = "operational_handoff_state.yaml"
+    dpa_current_handoff_acceptance_state_file: str = "dpa/acceptance/current_handoff_operational_state.json"
 
 
 # Legacy->namespace mapping for manifest-bearing workspaces:
@@ -150,6 +151,7 @@ PATH_OVERRIDE_ALIASES = MappingProxyType(
         "rule_registry_path": "rule_registry_file",
         "handoff_state_path": "handoff_state_file",
         "operational_handoff_state_path": "operational_handoff_state_file",
+        "dpa_current_handoff_acceptance_state_path": "dpa_current_handoff_acceptance_state_file",
         "handoff_packages_latest": "handoff_packages_latest_root",
         "handoff_packages_latest_path": "handoff_packages_latest_root",
     }
@@ -260,6 +262,9 @@ class Workspace:
 
     def operational_handoff_state_path(self) -> Path:
         return self._agentic_file_or_path(self.config.operational_handoff_state_file)
+
+    def dpa_current_handoff_acceptance_state_path(self) -> Path:
+        return self._agentic_file_or_path(self.config.dpa_current_handoff_acceptance_state_file)
 
     def compiled_agent_context_path(self) -> Path:
         return self.agentic_file("compiled_agent_context.yaml")

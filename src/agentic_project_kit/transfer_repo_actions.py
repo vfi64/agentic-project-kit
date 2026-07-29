@@ -9,9 +9,10 @@ from pathlib import Path
 
 import yaml
 
-from agentic_project_kit.operational_handoff_projection import (
-    ensure_generated_operational_handoff_block,
-    render_current_operational_handoff_state,
+from agentic_project_kit.dpa_current_handoff_lifecycle import (
+    DEFAULT_READINESS_PATH,
+    evaluate_current_handoff_lifecycle,
+    render_current_handoff_lifecycle_result,
 )
 from agentic_project_kit.transfer_operation_monitor import MonitorDecision
 from agentic_project_kit.transfer_operation_monitor import guard_branch
@@ -1627,19 +1628,35 @@ def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = N
                 )
                 refreshed = operational_refresh_marker_pattern.sub("", current).rstrip() + marker
             elif file_path == workspace.handoff_file("CURRENT_HANDOFF.md"):
-                current = operational_refresh_marker_pattern.sub("", current).rstrip() + "\n"
-                refreshed = ensure_generated_operational_handoff_block(
-                    current,
-                    render_current_operational_handoff_state(
-                        workspace.root,
-                        path=workspace.operational_handoff_state_path(),
-                    ),
+                lifecycle = evaluate_current_handoff_lifecycle(
+                    workspace.root,
+                    target_path=file_path,
+                    acceptance_state_path=workspace.dpa_current_handoff_acceptance_state_path(),
+                    validation_ref=full,
+                    execute=True,
+                    initialize_acceptance=True,
+                    require_dp2_authorized=(workspace.root / DEFAULT_READINESS_PATH).exists(),
                 )
+                if not lifecycle.ok:
+                    return subprocess.CompletedProcess(
+                        command,
+                        2,
+                        render_current_handoff_lifecycle_result(lifecycle),
+                        "",
+                    )
+                refreshed = file_path.read_text(encoding="utf-8")
+                current = refreshed
             else:
                 refreshed = operational_refresh_marker_pattern.sub("", current).rstrip() + marker
             if refreshed != current:
                 file_path.write_text(refreshed, encoding="utf-8")
                 touched.append(file_name)
+            if file_path == workspace.handoff_file("CURRENT_HANDOFF.md") and file_name not in touched:
+                touched.append(file_name)
+            if file_path == workspace.handoff_file("CURRENT_HANDOFF.md"):
+                acceptance_name = _workspace_path_text(workspace, workspace.dpa_current_handoff_acceptance_state_path())
+                if acceptance_name not in touched:
+                    touched.append(acceptance_name)
 
         package_refresh = _run([_agentic_kit_command(), "transfer", "prepare-successor-handoff", "--render-prompt"])
         if package_refresh.returncode != 0:
