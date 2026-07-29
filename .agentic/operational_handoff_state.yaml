@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7c4b55e8961ea89adb731bbe30bc1baa2d55c033
-  short: 7c4b55e8
-  subject: Route release-prep handoff writes through DPA (#1951)
+  full: 1bac32fea72107e99cc6ed115f14c97849a6cf1e
+  short: 1bac32fe
+  subject: Route DOI closeout handoff writes through DPA (#1953)
 last_substantive_work_state:
-  full: 7c4b55e8961ea89adb731bbe30bc1baa2d55c033
-  short: 7c4b55e8
-  subject: Route release-prep handoff writes through DPA (#1951)
+  full: 1bac32fea72107e99cc6ed115f14c97849a6cf1e
+  short: 1bac32fe
+  subject: Route DOI closeout handoff writes through DPA (#1953)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
