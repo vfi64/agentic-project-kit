@@ -192,8 +192,9 @@ The read-only wrapper `agentic-kit dpa readiness` now reports DPA
 implementation readiness at 100% for the current authorization record: all DP2
 entry evidence fields are satisfied for the current Kit ref and no DP2 entry
 blockers remain. The current selected self-hosting writer scope is
-`WRT-CH-001` plus `WRT-CH-002` plus `WRT-CH-003`; `WRT-CH-004` remains deferred
-until their own scope-extension slices close.
+`WRT-CH-001` plus `WRT-CH-002` plus `WRT-CH-003` plus `WRT-CH-004`; no current
+self-hosting `CURRENT_HANDOFF.md` writer remains deferred. `WRT-CH-005` and
+`WRT-CH-006` remain outside that selected target scope.
 
 The current WRT-CH-001 observation package under
 `../evidence/dpa/probes/wrt-ch001-admin-refresh-observation-57a892e4-20260729/`
@@ -224,6 +225,17 @@ for the WRT-CH-003 post-release DOI closeout writer only inside the selected
 `docs/handoff/CURRENT_HANDOFF.md` target scope; it does not publish DOI
 metadata, mutate production metadata or claim Kit conformance.
 
+The WRT-CH-004 scope-extension package under
+`../evidence/dpa/probes/fixture-evidence-be37f052-wrt-ch004-20260729/`
+records a fresh authorized non-production fixture run at Kit validation ref
+`be37f052d67cc2646d56c103cef962823a01cee5`. The matching Maintainer-record
+check under
+`../evidence/dpa/assessment/maintainer-record-check-be37f052-wrt-ch004-20260729/`
+validates the updated DP2 authorization record. This authorizes DPA reliance
+for the WRT-CH-004 action-spec surfaced mutation-authority writer only inside
+the selected `docs/handoff/CURRENT_HANDOFF.md` target scope; it does not execute
+any surfaced action, mutate production state or claim Kit conformance.
+
 Historical evidence packages still preserve earlier `DP2_BLOCKED` and
 "DP2 implementation blocked" states. Those records remain part of the audit trail;
 they do not override the current `DP2_AUTHORIZED` Assessment record.
@@ -244,11 +256,11 @@ After this index, registry staging and Assessment-readiness slice, the next DPA
 work remains governed by the closeout restrictions:
 
 1. Preserve the DPA Lab source ref and Kit import baseline in every import slice.
-2. Keep WRT-CH-004 and the full WRT-CH-001 administrative refresh
-   PR flow deferred until their own scope-extension slices close.
-3. Keep DP2 implementation within the authorized WRT-CH-001/WRT-CH-002/WRT-CH-003 target
-   scope unless a later Maintainer Assessment selects or authorizes another
-   target.
+2. Keep the full WRT-CH-001 administrative refresh PR-flow evidence boundary
+   separate until that observation is explicitly closed.
+3. Keep DP2 implementation within the authorized
+   WRT-CH-001/WRT-CH-002/WRT-CH-003/WRT-CH-004 target scope unless a later
+   Maintainer Assessment selects or authorizes another target.
 4. Re-run the fixture evidence package before any production runtime mutation if
    Probe manuals, fixture manifest, selected target, command manifest or DPA
    implementation code changes.
