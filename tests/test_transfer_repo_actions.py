@@ -2512,7 +2512,13 @@ last_substantive_work_state:
         if command == ["agentic-kit", "boot", "write"]:
             Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md").write_text("bootstrap\n", encoding="utf-8")
             return subprocess.CompletedProcess(command, 0, "WROTE docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n", "")
-        if command == ["agentic-kit", "handoff", "prompt"]:
+        if command == [
+            "agentic-kit",
+            "handoff",
+            "prompt",
+            "--intended-output",
+            "docs/reports/terminal/post-pr2222-successor-chat-handoff.md",
+        ]:
             return subprocess.CompletedProcess(command, 0, "successor prompt\n", "")
         if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
             state = Path(".agentic/handoff_state.yaml").read_text(encoding="utf-8")
@@ -2667,7 +2673,12 @@ def test_admin_refresh_replaces_existing_operational_refresh_marker(tmp_path: Pa
             (tmp_path / "docs/handoff/NEXT_CHAT_BOOTSTRAP.md").parent.mkdir(parents=True, exist_ok=True)
             (tmp_path / "docs/handoff/NEXT_CHAT_BOOTSTRAP.md").write_text("bootstrap eed934fe\n", encoding="utf-8")
             return subprocess.CompletedProcess(argv, 0, "", "")
-        if argv[-2:] == ["handoff", "prompt"]:
+        if argv[-4:] == [
+            "handoff",
+            "prompt",
+            "--intended-output",
+            "docs/reports/terminal/post-pr1338-successor-chat-handoff.md",
+        ]:
             return subprocess.CompletedProcess(argv, 0, "successor prompt eed934fe\n", "")
         if argv[-2:] == ["post-merge-refresh-status"]:
             return subprocess.CompletedProcess(argv, 0, "result=NOOP\n", "")
@@ -2759,7 +2770,12 @@ def test_transfer_repo_actions_path_contract_snapshot(tmp_path: Path, monkeypatc
             bootstrap.parent.mkdir(parents=True, exist_ok=True)
             bootstrap.write_text("bootstrap contract\n", encoding="utf-8")
             return subprocess.CompletedProcess(argv, 0, "WROTE docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n", "")
-        if argv[-2:] == ["handoff", "prompt"]:
+        if argv[-4:] == [
+            "handoff",
+            "prompt",
+            "--intended-output",
+            "docs/reports/terminal/post-pr2468-successor-chat-handoff.md",
+        ]:
             return subprocess.CompletedProcess(argv, 0, "successor prompt contract\n", "")
         if argv[-2:] == ["handoff", "post-merge-refresh-status"]:
             return subprocess.CompletedProcess(argv, 0, "result=NOOP\nrefresh_required=False\n", "")

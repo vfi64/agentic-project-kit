@@ -31,6 +31,7 @@ def assess_handoff_prompt_freshness(
     current_head: str | None = None,
     current_subject: str | None = None,
     successor_prompt_text: str | None = None,
+    intended_successor_prompt_path: str | Path | None = None,
 ) -> list[str]:
     """Return warnings when a successor handoff prompt may be stale.
 
@@ -87,9 +88,11 @@ def assess_handoff_prompt_freshness(
         return warnings
 
     if not successor_prompt_path.exists():
-        relative_prompt = _relative_to_project(successor_prompt_path, project_root)
-        warnings.append(f"latest successor handoff prompt is missing: {relative_prompt}")
-        return warnings
+        intended_path = _resolve_project_path(project_root, intended_successor_prompt_path)
+        if successor_prompt_text is None or intended_path != successor_prompt_path:
+            relative_prompt = _relative_to_project(successor_prompt_path, project_root)
+            warnings.append(f"latest successor handoff prompt is missing: {relative_prompt}")
+            return warnings
 
     marker_commits = expected_commits if admin_refresh_head else ([detected_head] if detected_head else expected_commits)
     if successor_prompt_text is None:
@@ -173,6 +176,15 @@ def _project_root_for_handoff_path(path: Path) -> Path:
     if path.name == "handoff_state.yaml" and path.parent.name == ".agentic":
         return path.parent.parent
     return Path.cwd()
+
+
+def _resolve_project_path(project_root: Path, path: str | Path | None) -> Path | None:
+    if path is None:
+        return None
+    candidate = Path(path)
+    if candidate.is_absolute():
+        return candidate
+    return project_root / candidate
 
 
 def _git_short_head(project_root: Path) -> str:
