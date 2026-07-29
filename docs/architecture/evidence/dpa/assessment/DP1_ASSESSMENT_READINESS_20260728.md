@@ -2,7 +2,7 @@
 
 Status: assessment-readiness-recorded
 
-Status-date: 2026-07-28
+Status-date: 2026-07-29
 
 Document class: evidence/log
 
@@ -20,7 +20,7 @@ not main-repository conformance.
 | Role | Ref or path | Assessment use |
 |---|---|---|
 | Current Kit baseline for this record | `680ee206b2ade5b475d005127f0ea32f0a028689` | Governs the repository state assessed by this readiness record. |
-| Current command manifest acknowledgement | `COMMAND_MANIFEST_ACK bafee944ae1d` | Confirms this record uses the current Kit command manifest boundary. |
+| Current command manifest acknowledgement | `COMMAND_MANIFEST_ACK 59c1700c2d4f` | Confirms this record uses the current Kit command manifest boundary. |
 | DPA Lab closeout source | `0cf944cc153e65a272c773286791f8891efdd1bc` | Preserved architecture source package only. |
 | DPA Lab merge commit | `6f927efd625b4239f9ab0e710b48e7d9534fdfec` | Preserved Lab closeout merge evidence only. |
 | Kit DPA-IMPORT-3 baseline | `e89b0fac21c5599f8e531a937c550134469716cf` | Import slice baseline before Probe-package staging. |
