@@ -26,6 +26,8 @@ def test_handoff_cli_commands():
     prompt_result = runner.invoke(app, ["handoff", "prompt"])
     assert prompt_result.exit_code == 0
     assert "Übergabeprompt" in prompt_result.output
+    assert prompt_result.output.endswith("\n")
+    assert not prompt_result.output.endswith("\n\n")
 
 
 def test_handoff_prompt_contains_successor_chat_bootstrap_sections() -> None:

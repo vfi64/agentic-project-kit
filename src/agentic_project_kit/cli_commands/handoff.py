@@ -74,8 +74,8 @@ def prompt(
         )
     )
     if guard:
-        typer.echo(guard)
-    typer.echo(rendered_prompt)
+        typer.echo(guard, nl=False)
+    typer.echo(rendered_prompt, nl=False)
 
 
 @handoff_app.command("refresh")
