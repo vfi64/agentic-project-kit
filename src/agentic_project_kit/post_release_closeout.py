@@ -2,11 +2,16 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
+import hashlib
+import json
 from pathlib import Path
 import re
 
+from agentic_project_kit.dpa_current_handoff_lifecycle import evaluate_current_handoff_text_lifecycle
+from agentic_project_kit.dpa_readiness import DEFAULT_READINESS_PATH
 from agentic_project_kit.post_release import build_post_release_report
 from agentic_project_kit.release import CommandResult
+from agentic_project_kit.workspace import load_workspace
 
 
 CommandRunner = Callable[[Path, Sequence[str]], CommandResult]
@@ -22,6 +27,13 @@ EXPECTED_DOI_CLOSEOUT_PATHS: tuple[str, ...] = (
 )
 
 _ALLOWED_WRITE_PATHS = frozenset(EXPECTED_DOI_CLOSEOUT_PATHS)
+CURRENT_HANDOFF_RELATIVE_PATH = "docs/handoff/CURRENT_HANDOFF.md"
+DPA_DOI_CLOSEOUT_CONTRACT_ID = "DPA-CURRENT-HANDOFF-POST-RELEASE-DOI-CLOSEOUT-v1"
+DPA_DOI_CLOSEOUT_TARGET_SCOPE = "CURRENT_HANDOFF_POST_RELEASE_DOI_METADATA"
+DPA_DOI_CLOSEOUT_WRITER_ID = "WRT-CH-003"
+DPA_DOI_CLOSEOUT_RENDERER_ID = "agentic_project_kit.post_release_closeout"
+DPA_DOI_CLOSEOUT_RENDERER_SEMANTIC_VERSION = "1"
+DPA_DOI_CLOSEOUT_SOURCE_PATH = "<agentic-kit-post-release-doi-closeout-inputs>"
 
 
 @dataclass(frozen=True)
@@ -126,12 +138,26 @@ def post_release_doi_closeout(
         )
     )
 
+    handoff_candidate = candidate_texts.get(CURRENT_HANDOFF_RELATIVE_PATH)
+    if handoff_candidate is not None:
+        blockers.extend(
+            _dpa_current_handoff_preflight_blockers(
+                project_root,
+                projected_text=handoff_candidate,
+                version=version,
+                version_doi=version_doi,
+                concept_doi=concept_doi,
+            )
+        )
+
     if blockers:
         next_action = "Create the missing release metadata files before DOI closeout."
         if any(blocker.startswith("unexpected_write_path:") for blocker in blockers):
             next_action = "Refuse --write until DOI closeout only targets the approved release metadata files."
         elif any(blocker.startswith("current_release_metadata_inconsistent:") for blocker in blockers):
             next_action = "Fix current-release DOI metadata consistency before DOI closeout can write."
+        elif any(blocker.startswith("dpa_current_handoff_lifecycle:") for blocker in blockers):
+            next_action = "Resolve DPA CURRENT_HANDOFF lifecycle blockers before DOI closeout can write."
         return PostReleaseDoiCloseoutResult(
             version,
             "BLOCKED",
@@ -146,7 +172,31 @@ def post_release_doi_closeout(
         )
 
     if write:
+        handoff_text = changed_texts.get(CURRENT_HANDOFF_RELATIVE_PATH)
+        if handoff_text is not None:
+            dpa_write_blockers = _write_current_handoff_through_dpa(
+                project_root,
+                projected_text=handoff_text,
+                version=version,
+                version_doi=version_doi,
+                concept_doi=concept_doi,
+            )
+            if dpa_write_blockers:
+                return PostReleaseDoiCloseoutResult(
+                    version,
+                    "BLOCKED",
+                    2,
+                    write,
+                    dpa_write_blockers,
+                    tuple(changed_paths),
+                    EXPECTED_DOI_CLOSEOUT_PATHS,
+                    version_doi,
+                    concept_doi,
+                    "Resolve DPA CURRENT_HANDOFF lifecycle blockers before DOI closeout can write.",
+                )
         for relative_path, text in changed_texts.items():
+            if relative_path == CURRENT_HANDOFF_RELATIVE_PATH:
+                continue
             (project_root / relative_path).write_text(text, encoding="utf-8")
 
     next_action = (
@@ -200,6 +250,97 @@ def _check_detail(report, name: str) -> tuple[str, str]:
 def _extract_zenodo_doi(text: str) -> str:
     match = re.search(r"10\.5281/zenodo\.\d+", text)
     return match.group(0) if match else ""
+
+
+def _dpa_current_handoff_lifecycle_enabled(root: Path) -> bool:
+    workspace = load_workspace(root)
+    return (root / DEFAULT_READINESS_PATH).exists() or workspace.dpa_current_handoff_acceptance_state_path().exists()
+
+
+def _doi_closeout_source_fingerprint(*, version: str, version_doi: str, concept_doi: str) -> str:
+    payload = {
+        "schema_version": 1,
+        "kind": "post_release_doi_closeout_current_handoff_inputs",
+        "version": version,
+        "version_doi": version_doi,
+        "concept_doi": concept_doi,
+    }
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def _evaluate_doi_closeout_current_handoff_lifecycle(
+    root: Path,
+    *,
+    projected_text: str,
+    version: str,
+    version_doi: str,
+    concept_doi: str,
+    execute: bool,
+):
+    return evaluate_current_handoff_text_lifecycle(
+        root,
+        target_path=root / CURRENT_HANDOFF_RELATIVE_PATH,
+        projected_text=projected_text,
+        source_path=DPA_DOI_CLOSEOUT_SOURCE_PATH,
+        source_fingerprint=_doi_closeout_source_fingerprint(
+            version=version,
+            version_doi=version_doi,
+            concept_doi=concept_doi,
+        ),
+        writer_id=DPA_DOI_CLOSEOUT_WRITER_ID,
+        renderer_id=DPA_DOI_CLOSEOUT_RENDERER_ID,
+        renderer_semantic_version=DPA_DOI_CLOSEOUT_RENDERER_SEMANTIC_VERSION,
+        contract_id=DPA_DOI_CLOSEOUT_CONTRACT_ID,
+        target_scope=DPA_DOI_CLOSEOUT_TARGET_SCOPE,
+        execute=execute,
+        initialize_acceptance=False,
+        require_dp2_authorized=(root / DEFAULT_READINESS_PATH).exists(),
+        lock_command="agentic-kit post-release-doi-closeout current-handoff",
+    )
+
+
+def _dpa_current_handoff_preflight_blockers(
+    root: Path,
+    *,
+    projected_text: str,
+    version: str,
+    version_doi: str,
+    concept_doi: str,
+) -> tuple[str, ...]:
+    if not _dpa_current_handoff_lifecycle_enabled(root):
+        return ()
+    result = _evaluate_doi_closeout_current_handoff_lifecycle(
+        root,
+        projected_text=projected_text,
+        version=version,
+        version_doi=version_doi,
+        concept_doi=concept_doi,
+        execute=False,
+    )
+    return tuple(f"dpa_current_handoff_lifecycle:{finding.code}" for finding in result.findings)
+
+
+def _write_current_handoff_through_dpa(
+    root: Path,
+    *,
+    projected_text: str,
+    version: str,
+    version_doi: str,
+    concept_doi: str,
+) -> tuple[str, ...]:
+    if not _dpa_current_handoff_lifecycle_enabled(root):
+        (root / CURRENT_HANDOFF_RELATIVE_PATH).write_text(projected_text, encoding="utf-8")
+        return ()
+    result = _evaluate_doi_closeout_current_handoff_lifecycle(
+        root,
+        projected_text=projected_text,
+        version=version,
+        version_doi=version_doi,
+        concept_doi=concept_doi,
+        execute=True,
+    )
+    return tuple(f"dpa_current_handoff_lifecycle:{finding.code}" for finding in result.findings)
 
 
 def _current_release_metadata_consistency_blockers(

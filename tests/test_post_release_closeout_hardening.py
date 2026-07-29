@@ -1,9 +1,14 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+import hashlib
 import json
 from pathlib import Path
 
+from agentic_project_kit.dpa_current_handoff_lifecycle import (
+    DEFAULT_ACCEPTANCE_STATE_PATH,
+    evaluate_current_handoff_text_lifecycle,
+)
 from agentic_project_kit.post_release_closeout import post_release_doi_closeout
 from agentic_project_kit.release import CommandResult
 
@@ -86,6 +91,47 @@ def test_post_release_doi_closeout_preserves_historical_doi_anchors(tmp_path: Pa
     assert "# Verified v0.4.5 version DOI: 10.5281/zenodo.20467371" in citation
 
 
+def test_post_release_doi_closeout_routes_current_handoff_through_dpa_lifecycle(tmp_path: Path) -> None:
+    _write_closeout_files(tmp_path, "1.2.3")
+    _accept_current_handoff_for_dpa(tmp_path)
+
+    report = post_release_doi_closeout(
+        tmp_path,
+        version="1.2.3",
+        write=True,
+        command_runner=_runner(github_release=CommandResult(0, "v1.2.3\n", "")),
+        http_getter=_http_getter(json.dumps(_closeout_zenodo_payload("1.2.3", "10.5281/zenodo.99999999"))),
+    )
+
+    state = json.loads((tmp_path / DEFAULT_ACCEPTANCE_STATE_PATH).read_text(encoding="utf-8"))
+    assert report.ok
+    assert state["writer_id"] == "WRT-CH-003"
+    assert state["renderer"]["id"] == "agentic_project_kit.post_release_closeout"
+    assert state["target_scope"] == "CURRENT_HANDOFF_POST_RELEASE_DOI_METADATA"
+    assert state["claims"]["generated_outputs_manually_patched"] is False
+
+
+def test_post_release_doi_closeout_blocks_current_handoff_drift_before_metadata_writes(tmp_path: Path) -> None:
+    _write_closeout_files(tmp_path, "1.2.3")
+    _accept_current_handoff_for_dpa(tmp_path)
+    readme_before = (tmp_path / "README.md").read_text(encoding="utf-8")
+    target = tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md"
+    target.write_text(target.read_text(encoding="utf-8") + "\nmanual tamper\n", encoding="utf-8")
+
+    report = post_release_doi_closeout(
+        tmp_path,
+        version="1.2.3",
+        write=True,
+        command_runner=_runner(github_release=CommandResult(0, "v1.2.3\n", "")),
+        http_getter=_http_getter(json.dumps(_closeout_zenodo_payload("1.2.3", "10.5281/zenodo.99999999"))),
+    )
+
+    assert not report.ok
+    assert "dpa_current_handoff_lifecycle:target-drift" in report.blockers
+    assert (tmp_path / "README.md").read_text(encoding="utf-8") == readme_before
+    assert "manual tamper" in target.read_text(encoding="utf-8")
+
+
 def test_post_release_doi_closeout_blocks_unapproved_write_path(tmp_path: Path, monkeypatch) -> None:
     from agentic_project_kit import post_release_closeout
 
@@ -128,6 +174,23 @@ def test_post_release_doi_closeout_approved_write_path_guard_is_explicit() -> No
             "docs/releases/VERIFIED_RELEASES.md",
         }
     )
+
+
+def _accept_current_handoff_for_dpa(root: Path) -> None:
+    target = root / "docs" / "handoff" / "CURRENT_HANDOFF.md"
+    result = evaluate_current_handoff_text_lifecycle(
+        root,
+        target_path=target,
+        projected_text=target.read_text(encoding="utf-8"),
+        source_path="<test-initial-current-handoff>",
+        source_fingerprint=hashlib.sha256(b"initial-current-handoff").hexdigest(),
+        writer_id="WRT-CH-001",
+        renderer_id="tests.initial_current_handoff",
+        execute=True,
+        initialize_acceptance=True,
+        require_dp2_authorized=False,
+    )
+    assert result.result_status == "ACCEPTED"
 
 
 def _write_closeout_files(root: Path, version: str) -> None:
