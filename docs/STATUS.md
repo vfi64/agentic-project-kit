@@ -7,9 +7,9 @@ Current verified release: 0.4.13.
 Current release tag: v0.4.13.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
-Current verified main: `e391a048` (`Refresh successor package after PR1934 (#1935)`).
-Latest substantive work: PR #1935 (`Refresh successor package after PR1934 (#1935)`).
-Post-merge handoff status: PASS/NOOP after PR #1935 administrative refresh.
+Current verified main: `d38fc365` (`Avoid extra handoff prompt trailing newline (#1937)`).
+Latest substantive work: PR #1937 (`Avoid extra handoff prompt trailing newline (#1937)`).
+Post-merge handoff status: PASS/NOOP after PR #1937 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1935
+## Operational documentation refresh state after PR #1937
 
-Current administrative handoff refresh state is `e391a048` (`Refresh successor package after PR1934 (#1935)`). Continue next only after this post-PR1935 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `d38fc365` (`Avoid extra handoff prompt trailing newline (#1937)`). Continue next only after this post-PR1937 refresh is committed and merged; the next substantive slice must be created from fresh main.
