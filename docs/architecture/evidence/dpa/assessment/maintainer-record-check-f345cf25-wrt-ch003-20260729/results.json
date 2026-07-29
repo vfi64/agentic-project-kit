@@ -1,0 +1,30 @@
+{
+  "action_item_count": 0,
+  "action_items": [],
+  "claims": {
+    "dp2_authorized": true,
+    "generated_outputs_manually_patched": false,
+    "kit_conformance_claimed": false,
+    "maintainer_assessment_recorded": true,
+    "maintainer_authorization_recorded": true,
+    "production_mutation_performed": false,
+    "runtime_behavior_changed": false
+  },
+  "finding_count": 0,
+  "findings": [],
+  "kind": "dpa_dp2_maintainer_record_check",
+  "record_path": "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+  "record_status": "DP2_AUTHORIZED",
+  "record_summary": {
+    "decision_token": "DPA_DP2_AUTHORIZED",
+    "maintainer": "Maintainer instruction recorded in Codex chat, 2026-07-29: authorize WRT-CH-003 DP2 scope extension after WRT-CH-002.",
+    "rollback_cleanup_status": "PROVEN",
+    "target_path": "docs/handoff/CURRENT_HANDOFF.md",
+    "target_scope_status": "SELECTED",
+    "template": false
+  },
+  "result_status": "VALID_AUTHORIZATION_RECORD",
+  "schema_version": 1,
+  "structural_ok": true,
+  "validation_ref": "f345cf252f16843f92c45577523ef877cdd04355"
+}

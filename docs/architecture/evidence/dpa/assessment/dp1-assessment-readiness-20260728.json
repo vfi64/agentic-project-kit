@@ -4,7 +4,7 @@
   "status": "DP2_AUTHORIZED",
   "status_date": "2026-07-29",
   "command_manifest_ack": "COMMAND_MANIFEST_ACK 59c1700c2d4f",
-  "kit_baseline_ref": "38df3ee1810a8731058f2f1971df317c2ab7b3ca",
+  "kit_baseline_ref": "f345cf252f16843f92c45577523ef877cdd04355",
   "dpa_lab_source_ref": "0cf944cc153e65a272c773286791f8891efdd1bc",
   "dpa_lab_merge_ref": "6f927efd625b4239f9ab0e710b48e7d9534fdfec",
   "kit_import_3_baseline_ref": "e89b0fac21c5599f8e531a937c550134469716cf",
@@ -51,7 +51,7 @@
     },
     {
       "id": "current-kit-dpa-fixture-evidence",
-      "path": "docs/architecture/evidence/dpa/probes/fixture-evidence-38df3ee1-wrt-ch002-20260729/",
+      "path": "docs/architecture/evidence/dpa/probes/fixture-evidence-f345cf25-wrt-ch003-20260729/",
       "result": "FULL_FIXTURE_EVIDENCE_RECORDED"
     },
     {
@@ -76,7 +76,7 @@
     },
     {
       "id": "current-kit-dp2-maintainer-assessment-record-check-current",
-      "path": "docs/architecture/evidence/dpa/assessment/maintainer-record-check-38df3ee1-wrt-ch002-20260729/",
+      "path": "docs/architecture/evidence/dpa/assessment/maintainer-record-check-f345cf25-wrt-ch003-20260729/",
       "result": "VALID_AUTHORIZATION_RECORD"
     },
     {
@@ -105,7 +105,7 @@
   "selected_writer_status": {
     "WRT-CH-001": "FIXTURE_EVIDENCE_RECORDED_FOR_FIRST_DP2_TARGET",
     "WRT-CH-002": "AUTHORIZED_FOR_DP2_TARGET",
-    "WRT-CH-003": "NEEDS_MAINTAINER_DECISION",
+    "WRT-CH-003": "AUTHORIZED_FOR_DP2_TARGET",
     "WRT-CH-004": "NEEDS_MAINTAINER_DECISION",
     "WRT-CH-005": "EXTERNAL_HABITABILITY_ONLY",
     "WRT-CH-006": "GENERATED_OUTPUT_CONTRACT_ONLY"
@@ -119,7 +119,7 @@
     "probe_003_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
     "probe_004_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
     "maintainer_assessment": "RECORDED_DP2_AUTHORIZED",
-    "first_dp2_target_scope": "SELECTED_WRT_CH001_CH002_HANDOFF_SCOPE",
+    "first_dp2_target_scope": "SELECTED_WRT_CH001_CH002_CH003_HANDOFF_SCOPE",
     "rollback_cleanup_proven": "PROVEN_BY_NON_PRODUCTION_FIXTURE_EVIDENCE",
     "maintainer_authorization": "AUTHORIZED_BY_MAINTAINER_RECORD"
   },
