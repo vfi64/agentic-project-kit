@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `9695da8b4f03cb4cfdc3f36913d4e43fd67cc6d3` (`9695da8b`), after `Authorize DPA WRT-CH-004 scope (#1943)`.
-Last substantive work state is `9695da8b4f03cb4cfdc3f36913d4e43fd67cc6d3` (`9695da8b`), after `Authorize DPA WRT-CH-004 scope (#1943)`.
+Current verified main/admin HEAD is `13b18685337c0bd1305a3301ab17975d4329648c` (`13b18685`), after `Route current handoff refresh through DPA lifecycle (#1945)`.
+Last substantive work state is `13b18685337c0bd1305a3301ab17975d4329648c` (`13b18685`), after `Route current handoff refresh through DPA lifecycle (#1945)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
