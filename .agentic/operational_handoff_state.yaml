@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 44352347bff23bfa5ed18079aba1797c1f990f15
-  short: 44352347
-  subject: Sanitize DPA fixture evidence paths (#1926)
+  full: 8c2e729869312e95feecacf537eb17bb18aa85a0
+  short: 8c2e7298
+  subject: Authorize DPA DP2 entry (#1928)
 last_substantive_work_state:
-  full: 44352347bff23bfa5ed18079aba1797c1f990f15
-  short: 44352347
-  subject: Sanitize DPA fixture evidence paths (#1926)
+  full: 8c2e729869312e95feecacf537eb17bb18aa85a0
+  short: 8c2e7298
+  subject: Authorize DPA DP2 entry (#1928)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
