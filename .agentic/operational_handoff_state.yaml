@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6c34f53e9f2136910d34f8bb53f7520022a7ae5c
-  short: 6c34f53e
-  subject: Guard DPA action-surface handoff routing (#1955)
+  full: f653bbbb6f056fde3fe9be07a92c0189b12f1700
+  short: f653bbbb
+  subject: Classify workspace init handoff templates for DPA (#1957)
 last_substantive_work_state:
-  full: 6c34f53e9f2136910d34f8bb53f7520022a7ae5c
-  short: 6c34f53e
-  subject: Guard DPA action-surface handoff routing (#1955)
+  full: f653bbbb6f056fde3fe9be07a92c0189b12f1700
+  short: f653bbbb
+  subject: Classify workspace init handoff templates for DPA (#1957)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

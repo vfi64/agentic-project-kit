@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `6c34f53e9f2136910d34f8bb53f7520022a7ae5c` (`6c34f53e`), after `Guard DPA action-surface handoff routing (#1955)`.
-Last substantive work state is `6c34f53e9f2136910d34f8bb53f7520022a7ae5c` (`6c34f53e`), after `Guard DPA action-surface handoff routing (#1955)`.
+Current verified main/admin HEAD is `f653bbbb6f056fde3fe9be07a92c0189b12f1700` (`f653bbbb`), after `Classify workspace init handoff templates for DPA (#1957)`.
+Last substantive work state is `f653bbbb6f056fde3fe9be07a92c0189b12f1700` (`f653bbbb`), after `Classify workspace init handoff templates for DPA (#1957)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
