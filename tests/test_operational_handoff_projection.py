@@ -6,6 +6,7 @@ import yaml
 from agentic_project_kit.operational_handoff_projection import (
     GENERATED_BLOCK_BEGIN,
     GENERATED_BLOCK_END,
+    ensure_generated_operational_handoff_block,
     load_operational_handoff_state,
     render_current_operational_handoff_state,
     replace_generated_operational_handoff_block,
@@ -80,6 +81,7 @@ def test_rendered_operational_handoff_state_has_generated_block_markers(tmp_path
     assert rendered.count(GENERATED_BLOCK_BEGIN) == 1
     assert rendered.count(GENERATED_BLOCK_END) == 1
 
+
 def test_replace_generated_operational_handoff_block_preserves_curated_text() -> None:
     document = "\n".join(
         [
@@ -110,3 +112,21 @@ def test_replace_generated_operational_handoff_block_requires_exactly_one_block(
     with pytest.raises(ValueError, match="exactly one"):
         replace_generated_operational_handoff_block("no generated block\n", [GENERATED_BLOCK_BEGIN, "x", GENERATED_BLOCK_END])
 
+
+def test_ensure_generated_operational_handoff_block_inserts_missing_block() -> None:
+    updated = ensure_generated_operational_handoff_block(
+        "Curated handoff text.\n",
+        [GENERATED_BLOCK_BEGIN, "generated line", GENERATED_BLOCK_END, ""],
+    )
+
+    assert updated.startswith(GENERATED_BLOCK_BEGIN)
+    assert "generated line" in updated
+    assert updated.endswith("Curated handoff text.\n")
+
+
+def test_ensure_generated_operational_handoff_block_rejects_partial_markers() -> None:
+    with pytest.raises(ValueError, match="both generated operational handoff block markers"):
+        ensure_generated_operational_handoff_block(
+            f"{GENERATED_BLOCK_BEGIN}\nmissing end\n",
+            [GENERATED_BLOCK_BEGIN, "generated line", GENERATED_BLOCK_END],
+        )
