@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `39ab81df73626b8325bc3310e6cafca1020307e1` (`39ab81df`), after `Route WRT-CH001 through generated handoff block (#1930)`.
-Last substantive work state is `39ab81df73626b8325bc3310e6cafca1020307e1` (`39ab81df`), after `Route WRT-CH001 through generated handoff block (#1930)`.
+Current verified main/admin HEAD is `3ea4f73316771a0e3b4237cb5ed520c76d012edc` (`3ea4f733`), after `Avoid self-stale post-PR handoff prompts (#1932)`.
+Last substantive work state is `3ea4f73316771a0e3b4237cb5ed520c76d012edc` (`3ea4f733`), after `Avoid self-stale post-PR handoff prompts (#1932)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
