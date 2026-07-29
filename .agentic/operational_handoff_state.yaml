@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 861f7e14d5330db2cade6e559bd6071f62260677
-  short: 861f7e14
-  subject: Allow DPA acceptance state in refresh-only checks (#1949)
+  full: 7c4b55e8961ea89adb731bbe30bc1baa2d55c033
+  short: 7c4b55e8
+  subject: Route release-prep handoff writes through DPA (#1951)
 last_substantive_work_state:
-  full: 861f7e14d5330db2cade6e559bd6071f62260677
-  short: 861f7e14
-  subject: Allow DPA acceptance state in refresh-only checks (#1949)
+  full: 7c4b55e8961ea89adb731bbe30bc1baa2d55c033
+  short: 7c4b55e8
+  subject: Route release-prep handoff writes through DPA (#1951)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
