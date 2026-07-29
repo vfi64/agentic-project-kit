@@ -149,7 +149,7 @@ def test_dpa_readiness_cli_reports_blocked_without_failure() -> None:
 
     assert result.exit_code == 0
     assert "DPA readiness: DP2_BLOCKED" in result.stdout
-    assert "implementation: 59%" in result.stdout
+    assert "implementation: 95%" in result.stdout
     assert "maintainer_authorization" in result.stdout
 
 

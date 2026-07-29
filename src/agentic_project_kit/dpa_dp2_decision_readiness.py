@@ -331,15 +331,20 @@ def _required_maintainer_actions(dp2_entry_status: dict[str, Any]) -> list[dict[
             "Record explicit Maintainer authorization only after prerequisites close.",
         ),
     )
-    return [
-        {
-            "id": action_id,
-            "dp2_entry_requirement": requirement,
-            "current_status": str(dp2_entry_status.get(requirement, "MISSING")),
-            "action": action,
-        }
-        for action_id, requirement, action in actions
-    ]
+    records: list[dict[str, str]] = []
+    for action_id, requirement, action in actions:
+        status = str(dp2_entry_status.get(requirement, "MISSING"))
+        if status != "BLOCKED" and status != "MISSING":
+            continue
+        records.append(
+            {
+                "id": action_id,
+                "dp2_entry_requirement": requirement,
+                "current_status": status,
+                "action": action,
+            }
+        )
+    return records
 
 
 def _git_head(root: Path) -> str:

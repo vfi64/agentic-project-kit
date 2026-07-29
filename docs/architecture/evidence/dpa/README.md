@@ -64,16 +64,24 @@ manifest and records `READ_ONLY_EXECUTED_WITH_LIMITATIONS`. It does not execute
 mutable fixtures, does not satisfy full Probe evidence and does not authorize
 DP2.
 
+The current DPA full fixture evidence records Kit validation ref
+`b1b708cb5d185f117aea936bd5d49592b6e319d9`. It executes 36 authorized
+non-production fixture cases with zero failures, satisfies PROBE-002, Renderer,
+PROBE-003 and PROBE-004 for the current Kit ref, and proves rollback cleanup in
+temporary/disposable fixture state. It is not DP2 authorization, not production
+mutation and not Kit conformance.
+
 The current Assessment readiness record consolidates those evidence inputs into
 a DP2 blocker map at current Kit baseline
-`d99b69aa55b1cf347c1dfcdef7781d2d9d3369d8`. It records `DP2_BLOCKED`, keeps the
-full Probe PASS claim boundary closed and names the remaining Probe, writer,
-rollback, cleanup and Maintainer authorization gaps before DP2 implementation.
+`b1b708cb5d185f117aea936bd5d49592b6e319d9`. It records `DP2_BLOCKED`, keeps the
+full Probe PASS claim boundary closed and names Maintainer authorization as the
+remaining blocker before DP2 implementation.
 
 The current DP2 decision-readiness preflight records validation ref
-`1dfc5e8a75ffc37677b9f85da9e972812da95c04`. It packages the remaining blockers,
-candidate first DP2 target scope and required Maintainer actions for review, but
-it is not Maintainer Assessment, not DP2 authorization and not Probe execution.
+`b1b708cb5d185f117aea936bd5d49592b6e319d9`. It packages the remaining
+Maintainer authorization blocker, candidate first DP2 target scope and required
+Maintainer action for review, but it is not Maintainer Assessment, not DP2
+authorization and not Probe execution.
 
 The current DP2 Maintainer-record template check records validation ref
 `1dfc5e8a75ffc37677b9f85da9e972812da95c04`. It validates the future
@@ -81,11 +89,11 @@ Maintainer-owned record shape and keeps the template in `TEMPLATE_NOT_ASSESSED`
 state; it is not a Maintainer record and not DP2 authorization.
 
 The current DP2 Maintainer Assessment record records validation ref
-`d99b69aa55b1cf347c1dfcdef7781d2d9d3369d8`. It selects the first DP2 target
+`b1b708cb5d185f117aea936bd5d49592b6e319d9`. It selects the first DP2 target
 scope as `docs/handoff/CURRENT_HANDOFF.md` with writer `WRT-CH-001`, defers
-WRT-CH-002 through WRT-CH-004 from that first target and keeps DP2 blocked
-pending full Probe evidence, rollback cleanup proof and Maintainer
-authorization.
+WRT-CH-002 through WRT-CH-004 from that first target, records Probe/Cleanup
+evidence as satisfied for the current Kit ref and keeps DP2 blocked pending
+Maintainer authorization.
 
 ## Imported Probe Evidence
 
@@ -114,20 +122,31 @@ authorization.
   `PARTIAL_BLOCKED_FOR_DP2`.
 - `probes/read-only-probe-execution-940fdfea-20260728/` records current Kit
   read-only Probe execution with result `READ_ONLY_EXECUTED_WITH_LIMITATIONS`.
+- `probes/fixture-evidence-b1b708cb-20260728/` records current Kit authorized
+  non-production fixture evidence with result
+  `FULL_FIXTURE_EVIDENCE_RECORDED`.
 - `assessment/DP1_ASSESSMENT_READINESS_20260728.md` records the current DP1
   Assessment readiness decision surface with status `DP2_BLOCKED`.
 - `assessment/dp2-decision-readiness-1dfc5e8a-20260728/` records current DP2
   decision-readiness preflight evidence with result
   `READY_FOR_MAINTAINER_DECISION_DP2_BLOCKED`.
+- `assessment/dp2-decision-readiness-b1b708cb-20260728/` records the current
+  DP2 decision-readiness refresh with result
+  `READY_FOR_MAINTAINER_DECISION_DP2_BLOCKED`; implementation percent is `95`
+  with only Maintainer authorization open.
 - `assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_TEMPLATE_20260728.json` records
   the blocked template for a future Maintainer-owned DP2 Assessment record.
 - `assessment/maintainer-record-template-check-1dfc5e8a-20260728/` records the
   current template validation with result `TEMPLATE_READY_DP2_BLOCKED`.
 - `assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json` records the
-  current blocked Maintainer Assessment and selected first DP2 target scope.
+  current blocked Maintainer Assessment, selected first DP2 target scope,
+  satisfied Probe dispositions and rollback cleanup proof.
 - `assessment/maintainer-record-check-d99b69aa-20260728/` records validation of
   the blocked Maintainer Assessment record with result `VALID_BLOCKED_RECORD`.
+- `assessment/maintainer-record-check-b1b708cb-20260728/` records validation of
+  the current blocked Maintainer Assessment record with result
+  `VALID_BLOCKED_RECORD`; only Maintainer authorization remains open.
 
 These packages preserve their limitation language. Future execution must freeze
 current refs, record command manifest currency, retain cleanup evidence and
-pass Maintainer Assessment before any DP2 implementation relies on them.
+record Maintainer authorization before any DP2 implementation relies on them.

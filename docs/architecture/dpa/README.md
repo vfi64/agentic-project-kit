@@ -53,10 +53,11 @@ DPA-IMPORT-1 used only the architecture entry point and documentation registry
 staging. DPA-IMPORT-2 adds selected specifications, decisions, traceability and
 diagrams. DPA-IMPORT-3 adds Probe manuals, fixture manifests, selected-writer
 planning and historical DP1 evidence snapshots. The current Kit line also
-records a DP1 Assessment readiness record that consolidates the staged evidence
-and keeps DP2 implementation blocked. Later slices may add refreshed Probe
-execution evidence, Assessment records or implementation plans only through
-separately reviewed slices.
+records a DP1 Assessment readiness record that consolidates staged and current
+fixture evidence and keeps DP2 implementation blocked pending Maintainer
+authorization. Later slices may add refreshed Probe execution evidence,
+Assessment records or implementation plans only through separately reviewed
+slices.
 
 ## Imported architecture package
 
@@ -113,7 +114,8 @@ not supersede the specification files and do not prove Kit conformance.
   PROBE-002 lifecycle readiness preflight, the WRT-CH-001 admin-refresh
   observation, PROBE-003 workflow serialization readiness preflight and Renderer
   Probe readiness preflight, plus current read-only Probe execution for
-  `READ_ONLY`/`NOT_REQUIRED` fixture cases.
+  `READ_ONLY`/`NOT_REQUIRED` fixture cases and current authorized
+  non-production fixture evidence for the remaining Probe families.
 - `../evidence/dpa/assessment/DP1_ASSESSMENT_READINESS_20260728.md`
   consolidates the imported and current DP1 evidence into an Assessment
   readiness decision surface. It records `DP2_BLOCKED`, preserves the full
@@ -128,13 +130,16 @@ and command manifest acknowledgement before running.
 
 The Kit-side DP1 read-only baseline refresh evidence under
 `../evidence/dpa/probes/dp1-readonly-46deae7-20260728/` satisfies current
-baseline command-health refresh only. The Assessment readiness record under
+baseline command-health refresh only. The full fixture evidence under
+`../evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/` records 36
+authorized non-production fixture passes and rollback cleanup proof for the
+current Kit ref. The Assessment readiness record under
 `../evidence/dpa/assessment/` turns that evidence into a precise DP2 blocker
 map. The Maintainer Assessment is now recorded as `DP2_BLOCKED`, with
 `docs/handoff/CURRENT_HANDOFF.md` and writer `WRT-CH-001` selected as the first
-DP2 target scope. Mutation-scoped fixtures remain unrun, rollback cleanup proof
-remains absent, DP2 authorization remains unrecorded and the full Probe PASS
-claim boundary remains closed.
+DP2 target scope. Probe-family and rollback-cleanup evidence are satisfied for
+the current Kit ref, DP2 authorization remains unrecorded and the full Probe
+PASS claim boundary remains closed.
 
 The read-only wrapper `agentic-kit dpa readiness` validates that staged
 Assessment readiness record, reports the deterministic implementation
@@ -146,6 +151,13 @@ DP1 Probe fixture-manifest cases whose mutation scope is `READ_ONLY` and whose
 authorization is `NOT_REQUIRED`. It records mutable or context-dependent cases
 as blocked, writes bounded Probe evidence when requested and preserves the full
 Probe PASS and DP2 authorization boundaries.
+
+The controlled wrapper `agentic-kit dpa fixture-evidence` executes DP1 fixture
+manifest cases in read-only source state, temporary fixture roots and
+disposable branch simulations after an explicit non-production fixture
+authorization token. It can write bounded Probe evidence, prove rollback
+cleanup for fixture state and still preserves the DP2 authorization, production
+mutation, Kit conformance and generated-output boundaries.
 
 The read-only wrapper `agentic-kit dpa probe-003-readiness` validates current
 PROBE-003 workflow serialization source, test and control surfaces, optionally
@@ -176,6 +188,11 @@ template/authorization record. It allows Assessment recording without DP2
 authorization, and still fails closed for premature authorization claims,
 missing Probe dispositions, unselected target scope and missing rollback proof.
 
+The read-only wrapper `agentic-kit dpa readiness` now reports DPA implementation
+readiness at 95% for the current blocked record: all objective DP2 entry
+evidence fields are satisfied for the current Kit ref, while
+`maintainer_authorization` remains the only DP2 blocker.
+
 ## Generated-output and command-updated boundary
 
 The generated or command-updated Kit outputs boundary keeps those files owned by
@@ -195,8 +212,10 @@ work remains governed by the closeout restrictions:
 2. Keep WRT-CH-003 and the full WRT-CH-001 administrative refresh PR flow
    deferred from the first DP2 target.
 3. Keep DP2 implementation blocked until selected Probe and Assessment
-   prerequisites are refreshed against current Kit refs and recorded.
-4. Run a disposable, mutation-scoped DP1 Probe execution package before any
-   production runtime mutation.
+   prerequisites are preserved or refreshed against current Kit refs and a
+   Maintainer authorization token is recorded.
+4. Re-run the fixture evidence package before any production runtime mutation if
+   Probe manuals, fixture manifest, selected target, command manifest or DPA
+   implementation code changes.
 5. Run the Kit documentation, registry and release-relevant gates selected by
    each import slice.

@@ -3,8 +3,8 @@
   "kind": "dpa_dp1_assessment_readiness",
   "status": "DP2_BLOCKED",
   "status_date": "2026-07-28",
-  "command_manifest_ack": "COMMAND_MANIFEST_ACK 563f4d7f9925",
-  "kit_baseline_ref": "d99b69aa55b1cf347c1dfcdef7781d2d9d3369d8",
+  "command_manifest_ack": "COMMAND_MANIFEST_ACK bafee944ae1d",
+  "kit_baseline_ref": "b1b708cb5d185f117aea936bd5d49592b6e319d9",
   "dpa_lab_source_ref": "0cf944cc153e65a272c773286791f8891efdd1bc",
   "dpa_lab_merge_ref": "6f927efd625b4239f9ab0e710b48e7d9534fdfec",
   "kit_import_3_baseline_ref": "e89b0fac21c5599f8e531a937c550134469716cf",
@@ -50,8 +50,13 @@
       "result": "READ_ONLY_EXECUTED_WITH_LIMITATIONS"
     },
     {
+      "id": "current-kit-dpa-fixture-evidence",
+      "path": "docs/architecture/evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/",
+      "result": "FULL_FIXTURE_EVIDENCE_RECORDED"
+    },
+    {
       "id": "current-kit-dp2-decision-readiness-preflight",
-      "path": "docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-1dfc5e8a-20260728/",
+      "path": "docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-b1b708cb-20260728/",
       "result": "READY_FOR_MAINTAINER_DECISION_DP2_BLOCKED"
     },
     {
@@ -62,11 +67,16 @@
     {
       "id": "current-kit-dp2-maintainer-assessment-record",
       "path": "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
-      "result": "DP2_BLOCKED_SCOPE_SELECTED"
+      "result": "DP2_BLOCKED_PENDING_AUTHORIZATION"
     },
     {
       "id": "current-kit-dp2-maintainer-assessment-record-check",
       "path": "docs/architecture/evidence/dpa/assessment/maintainer-record-check-d99b69aa-20260728/",
+      "result": "VALID_BLOCKED_RECORD"
+    },
+    {
+      "id": "current-kit-dp2-maintainer-assessment-record-check-current",
+      "path": "docs/architecture/evidence/dpa/assessment/maintainer-record-check-b1b708cb-20260728/",
       "result": "VALID_BLOCKED_RECORD"
     },
     {
@@ -87,13 +97,13 @@
   ],
   "probe_family_status": {
     "PROBE-001": "SATISFIED_FOR_CURRENT_KIT_REF",
-    "PROBE-002": "PARTIAL_BLOCKED_FOR_DP2",
-    "RENDERER": "PARTIAL_BLOCKED_FOR_DP2",
-    "PROBE-003": "PARTIAL_BLOCKED_FOR_DP2",
-    "PROBE-004": "PARTIAL_BLOCKED_FOR_DP2"
+    "PROBE-002": "SATISFIED_FOR_CURRENT_KIT_REF",
+    "RENDERER": "SATISFIED_FOR_CURRENT_KIT_REF",
+    "PROBE-003": "SATISFIED_FOR_CURRENT_KIT_REF",
+    "PROBE-004": "SATISFIED_FOR_CURRENT_KIT_REF"
   },
   "selected_writer_status": {
-    "WRT-CH-001": "OBSERVED_ADMIN_REFRESH_REQUIRES_DISPOSABLE_FIXTURE",
+    "WRT-CH-001": "FIXTURE_EVIDENCE_RECORDED_FOR_FIRST_DP2_TARGET",
     "WRT-CH-002": "NEEDS_MAINTAINER_DECISION",
     "WRT-CH-003": "NEEDS_MAINTAINER_DECISION",
     "WRT-CH-004": "NEEDS_MAINTAINER_DECISION",
@@ -104,13 +114,13 @@
     "architecture_staging": "SATISFIED_FOR_ARCHITECTURE_STAGING",
     "fresh_kit_baseline_recorded": "SATISFIED_FOR_THIS_RECORD",
     "probe_001_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
-    "probe_002_full_evidence": "BLOCKED",
-    "renderer_full_evidence": "BLOCKED",
-    "probe_003_full_evidence": "BLOCKED",
-    "probe_004_full_evidence": "BLOCKED",
+    "probe_002_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
+    "renderer_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
+    "probe_003_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
+    "probe_004_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
     "maintainer_assessment": "RECORDED_DP2_BLOCKED",
     "first_dp2_target_scope": "SELECTED_WRT_CH001_HANDOFF_SCOPE",
-    "rollback_cleanup_proven": "BLOCKED",
+    "rollback_cleanup_proven": "PROVEN_BY_NON_PRODUCTION_FIXTURE_EVIDENCE",
     "maintainer_authorization": "BLOCKED"
   },
   "claims": {
@@ -123,13 +133,8 @@
   },
   "next_controlled_execution": [
     "freeze_current_kit_head_and_command_manifest",
-    "select_first_dp2_target_and_writer_scope",
     "preserve_probe_001_registry_compatibility_evidence_or_rerun_on_registry_schema_change",
-    "execute_probe_002_selected_writer_lifecycle_fixtures",
-    "execute_renderer_identity_semantic_version_and_side_effect_fixtures",
-    "execute_probe_003_workflow_serialization_fixtures",
-    "execute_probe_004_migration_and_rollback_fixtures",
-    "preserve_cleanup_evidence",
-    "record_maintainer_assessment_before_dp2"
+    "preserve_current_full_fixture_evidence_or_rerun_on_probe_or_target_change",
+    "record_maintainer_authorization_before_dp2"
   ]
 }
