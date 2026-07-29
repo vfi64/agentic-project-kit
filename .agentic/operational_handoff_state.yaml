@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d38fc3656ae67f5c1b06353678d8425b7bb859f0
-  short: d38fc365
-  subject: Avoid extra handoff prompt trailing newline (#1937)
+  full: 87cb359002b1e53f1e741ff9a029c0a8d152de91
+  short: 87cb3590
+  subject: Authorize DPA WRT-CH-002 scope (#1939)
 last_substantive_work_state:
-  full: d38fc3656ae67f5c1b06353678d8425b7bb859f0
-  short: d38fc365
-  subject: Avoid extra handoff prompt trailing newline (#1937)
+  full: 87cb359002b1e53f1e741ff9a029c0a8d152de91
+  short: 87cb3590
+  subject: Authorize DPA WRT-CH-002 scope (#1939)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
