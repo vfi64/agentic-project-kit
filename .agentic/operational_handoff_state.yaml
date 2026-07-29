@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 13b18685337c0bd1305a3301ab17975d4329648c
-  short: 13b18685
-  subject: Route current handoff refresh through DPA lifecycle (#1945)
+  full: 1f47adab2d434c28442300e53dc291b5dec02515
+  short: 1f47adab
+  subject: Refresh successor package after PR1946 (#1947)
 last_substantive_work_state:
-  full: 13b18685337c0bd1305a3301ab17975d4329648c
-  short: 13b18685
-  subject: Route current handoff refresh through DPA lifecycle (#1945)
+  full: 1f47adab2d434c28442300e53dc291b5dec02515
+  short: 1f47adab
+  subject: Refresh successor package after PR1946 (#1947)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
