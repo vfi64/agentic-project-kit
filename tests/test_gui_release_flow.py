@@ -28,6 +28,14 @@ def test_release_gui_command_args_use_existing_wrappers() -> None:
     assert "tag" not in release_prepare_args("0.5.0")
 
 
+def test_release_gui_confirm_uses_dpa_routed_release_prepare_writer() -> None:
+    args = release_prepare_args("0.5.0")
+
+    assert args[:2] == ("release", "prepare")
+    assert "--write" in args
+    assert "release-prep" not in args
+
+
 def test_release_preview_signature_includes_version_and_state() -> None:
     assert release_preview_signature(version="0.5.0", state_signature="main::clean") == "0.5.0::main::clean"
 
@@ -50,4 +58,3 @@ def test_release_humanizer_blocks_failed_preview() -> None:
 
     assert message.allow_confirm is False
     assert message.blockers == ("standard-error-scan",)
-
