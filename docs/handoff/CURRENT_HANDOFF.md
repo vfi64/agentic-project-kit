@@ -1,3 +1,24 @@
+<!-- agentic:generated operational-handoff-state begin -->
+## Current Operational Handoff State
+
+Current verified main/admin HEAD is `39ab81df73626b8325bc3310e6cafca1020307e1` (`39ab81df`), after `Route WRT-CH001 through generated handoff block (#1930)`.
+Last substantive work state is `39ab81df73626b8325bc3310e6cafca1020307e1` (`39ab81df`), after `Route WRT-CH001 through generated handoff block (#1930)`.
+
+PR #1257 hardened admin-refresh-pr and pr-complete recovery.
+PR #1255 added generated operational handoff block replacement.
+PR #1253 added generated operational handoff block markers.
+PR #1250 refreshed the post-PR1249 operational handoff state and successor prompt markers.
+PR #1250 refreshed the operational handoff state after PR #1249 and preserved the first generated bootstrap projection path.
+PR #1248 fixes the administrative handoff refresh loop for loop-fix squash commits.
+PR #1247 accepts administrative handoff squash refresh heads.
+PR #1246 refreshed operational handoff after PR #1245.
+PR #1245 is an administrative handoff/evidence refresh after PR #1244.
+
+A successor chat must treat operational documentation freshness as part of handoff freshness: STATUS, CURRENT_HANDOFF, START_NEW_CHAT_PROMPT, NEXT_CHAT_BOOTSTRAP, and the active roadmap must mention current safe/admin markers before they are used as authoritative orientation.
+Continue with the next governed DPA DP2 slice from fresh main after post-merge closeout reports NOOP. Preserve the WRT-CH-001 generated-block boundary and do not manually patch generated successor handoff projections.
+
+<!-- agentic:generated operational-handoff-state end -->
+
 ## Post-PR1245 Administrative Handoff Refresh State
 
 Current main/admin HEAD: `e97af592` (`Refresh handoff state after PR1244 (#1245)`).
@@ -323,6 +344,3 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1928
-
-Current administrative handoff refresh state is `8c2e7298` (`Authorize DPA DP2 entry (#1928)`). Continue next only after this post-PR1928 refresh is committed and merged; the next substantive slice must be created from fresh main.
