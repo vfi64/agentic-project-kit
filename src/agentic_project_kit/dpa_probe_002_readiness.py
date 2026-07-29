@@ -159,6 +159,8 @@ def evaluate_probe_002_lifecycle_readiness(
 
     readiness_data = _load_readiness_data(record_path, base, findings)
     selected_writers = _selected_writer_records(readiness_data)
+    readiness_status = _probe_family_status(readiness_data, record_path, base, findings)
+    dp2_entry_status = _probe_002_dp2_entry_status(readiness_data, record_path, base, findings)
     missing_writers = sorted(set(EXPECTED_WRITERS) - {item["id"] for item in selected_writers})
     for writer in missing_writers:
         findings.append(
@@ -169,7 +171,7 @@ def evaluate_probe_002_lifecycle_readiness(
             )
         )
 
-    blockers = _blockers_for(selected_writers)
+    blockers = _blockers_for(selected_writers, readiness_status, dp2_entry_status)
     groups = _group_records(blockers)
     validation = validation_ref or _git_head(base)
     data = {
@@ -184,6 +186,8 @@ def evaluate_probe_002_lifecycle_readiness(
             },
         ],
         "required_groups": groups,
+        "readiness_probe_family_status": readiness_status,
+        "readiness_dp2_entry_status": dp2_entry_status,
         "selected_writers": selected_writers,
         "blockers": blockers,
         "claims": {
@@ -344,6 +348,8 @@ def _fixture_status_for(writer_id: str, status: str) -> str:
         return "DEFERRED_TO_PROBE_004_GENERATED_OUTPUT_CONTRACT"
     if status == "EXTERNAL_HABITABILITY_ONLY":
         return "OUT_OF_SCOPE_FOR_FIRST_SELF_HOSTING_TARGET"
+    if status in {"FIXTURE_EVIDENCE_RECORDED_FOR_FIRST_DP2_TARGET", "AUTHORIZED_FOR_DP2_TARGET"}:
+        return "SATISFIED_FOR_CURRENT_DP2_SCOPE"
     if status == "NEEDS_MAINTAINER_DECISION":
         return "BLOCKED_REQUIRES_MAINTAINER_DECISION"
     if status in {"SELECTED_FOR_FIXTURE", "OBSERVED_ADMIN_REFRESH_REQUIRES_DISPOSABLE_FIXTURE"}:
@@ -351,8 +357,84 @@ def _fixture_status_for(writer_id: str, status: str) -> str:
     return "BLOCKED_REQUIRES_REVALIDATION"
 
 
-def _blockers_for(selected_writers: list[dict[str, str]]) -> list[dict[str, str]]:
+def _probe_family_status(
+    readiness_data: dict[str, Any],
+    record_path: Path,
+    root: Path,
+    findings: list[Probe002Finding],
+) -> str:
+    raw = readiness_data.get("probe_family_status")
+    if not isinstance(raw, dict):
+        findings.append(
+            Probe002Finding(
+                code="probe-family-status-missing",
+                message="readiness record must contain probe_family_status mapping",
+                path=_display_path(record_path, root),
+            )
+        )
+        return "MISSING"
+    status = raw.get("PROBE-002")
+    if not isinstance(status, str):
+        findings.append(
+            Probe002Finding(
+                code="probe-002-status-missing",
+                message="readiness record must contain probe_family_status.PROBE-002",
+                path=_display_path(record_path, root),
+            )
+        )
+        return "MISSING"
+    return status
+
+
+def _probe_002_dp2_entry_status(
+    readiness_data: dict[str, Any],
+    record_path: Path,
+    root: Path,
+    findings: list[Probe002Finding],
+) -> str:
+    raw = readiness_data.get("dp2_entry_status")
+    if not isinstance(raw, dict):
+        findings.append(
+            Probe002Finding(
+                code="dp2-entry-status-missing",
+                message="readiness record must contain dp2_entry_status mapping",
+                path=_display_path(record_path, root),
+            )
+        )
+        return "MISSING"
+    status = raw.get("probe_002_full_evidence")
+    if not isinstance(status, str):
+        findings.append(
+            Probe002Finding(
+                code="probe-002-dp2-entry-status-missing",
+                message="readiness record must contain dp2_entry_status.probe_002_full_evidence",
+                path=_display_path(record_path, root),
+            )
+        )
+        return "MISSING"
+    return status
+
+
+def _blockers_for(
+    selected_writers: list[dict[str, str]],
+    readiness_status: str,
+    dp2_entry_status: str,
+) -> list[dict[str, str]]:
     blockers: list[dict[str, str]] = []
+    if readiness_status != "SATISFIED_FOR_CURRENT_KIT_REF":
+        blockers.append(
+            {
+                "id": "probe-002-family-not-satisfied",
+                "message": f"Readiness record reports PROBE-002 as {readiness_status}.",
+            }
+        )
+    if dp2_entry_status != "SATISFIED_FOR_CURRENT_KIT_REF":
+        blockers.append(
+            {
+                "id": "probe-002-dp2-entry-blocked",
+                "message": f"DP2 entry record reports probe_002_full_evidence as {dp2_entry_status}.",
+            }
+        )
     selected_fixture_ids = [
         item["id"]
         for item in selected_writers
@@ -379,18 +461,30 @@ def _blockers_for(selected_writers: list[dict[str, str]]) -> list[dict[str, str]
                 + ", ".join(maintainer_decision_ids),
             }
         )
-    blockers.append(
-        {
-            "id": "probe-002-executable-fixture-run",
-            "message": "PROBE-002 has not been executed as a full exact-ref disposable fixture run.",
-        }
-    )
+    revalidation_ids = [
+        item["id"]
+        for item in selected_writers
+        if item["fixture_status"] == "BLOCKED_REQUIRES_REVALIDATION"
+    ]
+    if revalidation_ids:
+        blockers.append(
+            {
+                "id": "selected-writer-revalidation",
+                "message": "Selected writers have statuses that require explicit PROBE-002 revalidation: "
+                + ", ".join(revalidation_ids),
+            }
+        )
     return blockers
 
 
 def _group_records(blockers: list[dict[str, str]]) -> list[dict[str, str]]:
     has_writer_blocker = any(item["id"].startswith("selected-writer") for item in blockers)
     records: list[dict[str, str]] = []
+    if not blockers:
+        return [
+            {"id": group_id, "label": label, "status": "SATISFIED_FOR_CURRENT_KIT_REF"}
+            for group_id, label, _category in REQUIRED_GROUPS
+        ]
     for group_id, label, category in REQUIRED_GROUPS:
         if category == "selected-writers" and has_writer_blocker:
             status = "BLOCKED_REQUIRES_FIXTURE_OR_ADJUDICATION"
