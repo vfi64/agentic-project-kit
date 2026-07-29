@@ -61,6 +61,28 @@ def replace_generated_operational_handoff_block(
     return "\n".join(new_lines) + trailing_newline
 
 
+def ensure_generated_operational_handoff_block(
+    document_text: str,
+    replacement_lines: Iterable[str],
+) -> str:
+    """Insert or replace the operational handoff generated block."""
+
+    lines = document_text.splitlines()
+    begin_count = sum(1 for line in lines if line.strip() == GENERATED_BLOCK_BEGIN)
+    end_count = sum(1 for line in lines if line.strip() == GENERATED_BLOCK_END)
+    if begin_count == 1 and end_count == 1:
+        return replace_generated_operational_handoff_block(document_text, replacement_lines)
+    if begin_count or end_count:
+        raise ValueError("document must contain both generated operational handoff block markers or none")
+
+    replacement = list(replacement_lines)
+    if not replacement or replacement[0] != GENERATED_BLOCK_BEGIN or GENERATED_BLOCK_END not in replacement:
+        raise ValueError("replacement must include generated operational handoff block markers")
+
+    block = "\n".join(replacement).rstrip() + "\n\n"
+    return block + document_text
+
+
 def render_current_operational_handoff_state(
     root: Path | str = ".",
     *,

@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-07-29T03:37:37.100208+00:00",
+    "created_at_utc": "2026-07-29T05:11:07.742183+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -306,11 +306,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-07-29T03:37:37.368058+00:00",
+    "generated_at_utc": "2026-07-29T05:11:07.974457+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/dpa-fixture-evidence-runner",
-      "head": "5058f97be33ab72c3eb684d7a9c96e21aa716cfa",
+      "branch": "codex/dpa-wrt-ch001-generated-block",
+      "head": "438b03e07817b894f7875e36f77d3dd997ddc1e8",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -411,7 +411,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "4dbbf0b73f212d24569bcbb5eb2dd083f50f6442b60335970818af4efebbf7b1"
+        "sha256": "24b07998733f2a03d85448b91f68cd5ec49178b3ac4f57317c7ab21cdfc4483f"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -916,12 +916,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/dpa-fixture-evidence-runner",
+      "branch": "codex/dpa-wrt-ch001-generated-block",
       "dirty_status": "",
-      "head": "5058f97be33ab72c3eb684d7a9c96e21aa716cfa",
+      "head": "438b03e07817b894f7875e36f77d3dd997ddc1e8",
       "head_matches_upstream": true,
-      "upstream": "origin/codex/dpa-fixture-evidence-runner",
-      "upstream_head": "5058f97be33ab72c3eb684d7a9c96e21aa716cfa"
+      "upstream": "origin/codex/dpa-wrt-ch001-generated-block",
+      "upstream_head": "438b03e07817b894f7875e36f77d3dd997ddc1e8"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -983,7 +983,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "4dbbf0b73f212d24569bcbb5eb2dd083f50f6442b60335970818af4efebbf7b1"
+        "sha256": "24b07998733f2a03d85448b91f68cd5ec49178b3ac4f57317c7ab21cdfc4483f"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -1488,12 +1488,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/dpa-fixture-evidence-runner",
+      "branch": "codex/dpa-wrt-ch001-generated-block",
       "dirty_status": "",
-      "head": "5058f97be33ab72c3eb684d7a9c96e21aa716cfa",
+      "head": "438b03e07817b894f7875e36f77d3dd997ddc1e8",
       "head_matches_upstream": true,
-      "upstream": "origin/codex/dpa-fixture-evidence-runner",
-      "upstream_head": "5058f97be33ab72c3eb684d7a9c96e21aa716cfa"
+      "upstream": "origin/codex/dpa-wrt-ch001-generated-block",
+      "upstream_head": "438b03e07817b894f7875e36f77d3dd997ddc1e8"
     },
     "schema_version": 1,
     "terminal_block_rules": {

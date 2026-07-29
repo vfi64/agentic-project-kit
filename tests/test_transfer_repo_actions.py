@@ -2523,14 +2523,14 @@ last_substantive_work_state:
                 "main at 12345678",
             ]:
                 assert required in state
-            for file_name in [
-                "docs/STATUS.md",
-                "docs/handoff/CURRENT_HANDOFF.md",
-                "docs/handoff/START_NEW_CHAT_PROMPT.md",
-            ]:
+            for file_name in ["docs/STATUS.md", "docs/handoff/START_NEW_CHAT_PROMPT.md"]:
                 content = Path(file_name).read_text(encoding="utf-8")
                 assert "Operational documentation refresh state after PR #2222" in content
                 assert "12345678" in content
+            handoff = Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
+            assert "<!-- agentic:generated operational-handoff-state begin -->" in handoff
+            assert "Current verified main/admin HEAD is `1234567890abcdef1234567890abcdef12345678` (`12345678`)" in handoff
+            assert "Operational documentation refresh state after PR #2222" not in handoff
             return subprocess.CompletedProcess(command, 0, "result=NOOP\nrefresh_required=False\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
@@ -2563,6 +2563,7 @@ last_substantive_work_state:
     assert operational_data["last_substantive_work_state"]["subject"] == subject
     assert Path("docs/reports/terminal/post-pr2222-successor-chat-handoff.md").read_text(encoding="utf-8") == "successor prompt\n"
     assert "Operational documentation refresh state after PR #2222" in Path("docs/STATUS.md").read_text(encoding="utf-8")
+    assert "Current Operational Handoff State" in Path("docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
     assert "Updated operational handoff docs:" in result.stdout
 
 
@@ -2620,7 +2621,12 @@ def test_admin_refresh_replaces_existing_operational_refresh_marker(tmp_path: Pa
         encoding="utf-8",
     )
     (tmp_path / ".agentic/operational_handoff_state.yaml").write_text(
-        "main_head:\n"
+        "schema_version: 1\n"
+        "current_head:\n"
+        "  full: 979825da00000000000000000000000000000000\n"
+        "  short: 979825da\n"
+        "  subject: Old refresh (#1338)\n"
+        "last_substantive_work_state:\n"
         "  full: 979825da00000000000000000000000000000000\n"
         "  short: 979825da\n"
         "  subject: Old refresh (#1338)\n",
@@ -2672,15 +2678,16 @@ def test_admin_refresh_replaces_existing_operational_refresh_marker(tmp_path: Pa
     result = transfer_repo_actions._refresh_operational_handoff_docs(1338)
 
     assert result.returncode == 0
-    for rel in (
-        "docs/STATUS.md",
-        "docs/handoff/CURRENT_HANDOFF.md",
-        "docs/handoff/START_NEW_CHAT_PROMPT.md",
-    ):
+    for rel in ("docs/STATUS.md", "docs/handoff/START_NEW_CHAT_PROMPT.md"):
         content = (tmp_path / rel).read_text(encoding="utf-8")
         assert "979825da" not in content
         assert "eed934fe" in content
         assert content.count("Operational documentation refresh state after PR #1338") == 1
+    handoff = (tmp_path / "docs/handoff/CURRENT_HANDOFF.md").read_text(encoding="utf-8")
+    assert "979825da" not in handoff
+    assert "eed934fe" in handoff
+    assert "Current Operational Handoff State" in handoff
+    assert "Operational documentation refresh state after PR #1338" not in handoff
 
 
 
@@ -2705,7 +2712,12 @@ def test_transfer_repo_actions_path_contract_snapshot(tmp_path: Path, monkeypatc
         encoding="utf-8",
     )
     (tmp_path / ".agentic/operational_handoff_state.yaml").write_text(
+        "schema_version: 1\n"
         "current_head:\n"
+        "  full: 0000000000000000000000000000000000000000\n"
+        "  short: oldhead1\n"
+        "  subject: Old subject\n"
+        "last_substantive_work_state:\n"
         "  full: 0000000000000000000000000000000000000000\n"
         "  short: oldhead1\n"
         "  subject: Old subject\n",

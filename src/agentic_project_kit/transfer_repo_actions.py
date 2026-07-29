@@ -9,6 +9,10 @@ from pathlib import Path
 
 import yaml
 
+from agentic_project_kit.operational_handoff_projection import (
+    ensure_generated_operational_handoff_block,
+    render_current_operational_handoff_state,
+)
 from agentic_project_kit.transfer_operation_monitor import MonitorDecision
 from agentic_project_kit.transfer_operation_monitor import guard_branch
 from agentic_project_kit.transfer_operation_monitor import guard_pr_create
@@ -1621,7 +1625,18 @@ def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = N
                     short=short,
                     subject=subject,
                 )
-            refreshed = operational_refresh_marker_pattern.sub("", current).rstrip() + marker
+                refreshed = operational_refresh_marker_pattern.sub("", current).rstrip() + marker
+            elif file_path == workspace.handoff_file("CURRENT_HANDOFF.md"):
+                current = operational_refresh_marker_pattern.sub("", current).rstrip() + "\n"
+                refreshed = ensure_generated_operational_handoff_block(
+                    current,
+                    render_current_operational_handoff_state(
+                        workspace.root,
+                        path=workspace.operational_handoff_state_path(),
+                    ),
+                )
+            else:
+                refreshed = operational_refresh_marker_pattern.sub("", current).rstrip() + marker
             if refreshed != current:
                 file_path.write_text(refreshed, encoding="utf-8")
                 touched.append(file_name)

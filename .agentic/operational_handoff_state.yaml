@@ -25,6 +25,6 @@ freshness_policy:
     markers before they are used as authoritative orientation.
 next_safe_substantive_slice:
   text: >-
-    Continue with documentation projection Slice 2: add generated-block markers
-    and update only the generated operational handoff block while preserving
-    curated documentation.
+    Continue with the next governed DPA DP2 slice from fresh main after
+    post-merge closeout reports NOOP. Preserve the WRT-CH-001 generated-block
+    boundary and do not manually patch generated successor handoff projections.
