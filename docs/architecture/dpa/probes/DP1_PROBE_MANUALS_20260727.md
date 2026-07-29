@@ -100,7 +100,7 @@ fixture revisions, evidence paths and cleanup.
 | Probe | Candidate sources | Candidate tests or checks |
 |---|---|---|
 | PROBE-001 | `src/agentic_project_kit/documentation_registry.py`; `src/agentic_project_kit/cli_commands/doc_registry.py`; `docs/DOCUMENTATION_REGISTRY.yaml` | `tests/test_documentation_registry.py`; `tests/test_doc_mesh.py`; `agentic-kit docs-registry`; `agentic-kit doc-registry check-unregistered` |
-| PROBE-002 | `src/agentic_project_kit/doc_lifecycle.py`; `src/agentic_project_kit/doc_lifecycle_sweep.py`; `src/agentic_project_kit/cli_commands/docs.py`; `src/agentic_project_kit/workspace.py`; `src/agentic_project_kit/workspace_lock.py`; `src/agentic_project_kit/transfer_repo_actions.py`; `src/agentic_project_kit/release_prepare.py`; `src/agentic_project_kit/post_release_closeout.py`; `src/agentic_project_kit/action_specs.py`; `src/agentic_project_kit/workspace_init.py` | `tests/test_doc_lifecycle.py`; `tests/test_docs_lifecycle_*.py`; `tests/test_transfer_repo_actions.py`; `tests/test_release_prepare_command.py`; `tests/test_release_command_authority.py`; `tests/test_release_prep_core.py`; `tests/test_post_release.py`; `tests/test_post_release_doi_closeout_atomicity.py`; `tests/test_action_specs.py`; `agentic-kit docs lifecycle plan`; `agentic-kit docs lifecycle triage`; `agentic-kit docs lifecycle report` |
+| PROBE-002 | `src/agentic_project_kit/doc_lifecycle.py`; `src/agentic_project_kit/doc_lifecycle_sweep.py`; `src/agentic_project_kit/cli_commands/docs.py`; `src/agentic_project_kit/workspace.py`; `src/agentic_project_kit/workspace_lock.py`; `src/agentic_project_kit/transfer_repo_actions.py`; `src/agentic_project_kit/release_prepare.py`; `src/agentic_project_kit/post_release_closeout.py`; `src/agentic_project_kit/action_specs.py`; `src/agentic_project_kit/dpa_workspace_init_projection.py`; `src/agentic_project_kit/templates.py`; `src/agentic_project_kit/workspace_init.py` | `tests/test_doc_lifecycle.py`; `tests/test_docs_lifecycle_*.py`; `tests/test_transfer_repo_actions.py`; `tests/test_release_prepare_command.py`; `tests/test_release_command_authority.py`; `tests/test_release_prep_core.py`; `tests/test_post_release.py`; `tests/test_post_release_doi_closeout_atomicity.py`; `tests/test_action_specs.py`; `tests/test_generator.py`; `tests/test_workspace_init.py`; `agentic-kit docs lifecycle plan`; `agentic-kit docs lifecycle triage`; `agentic-kit docs lifecycle report` |
 | Renderer Probes | `src/agentic_project_kit/gui_tkinter_renderer.py`; `src/agentic_project_kit/gui_action_renderer.py`; any later DPA renderer map | `tests/test_v040_gui_tkinter_renderer.py`; `tests/test_v040_gui_dry_run_renderer_integration.py`; `tests/test_v040_gui_action_renderer.py` |
 | PROBE-003 | `src/agentic_project_kit/transfer_repo_actions.py`; `src/agentic_project_kit/gatekeeper_core.py`; `src/agentic_project_kit/local_feature_gate.py`; `src/agentic_project_kit/workspace_lock.py`; `src/agentic_project_kit/handoff_freshness.py` | `tests/test_transfer_repo_actions.py`; `tests/test_gatekeeper_core.py`; `tests/test_local_feature_gate_contract.py`; `tests/test_handoff_freshness.py`; `agentic-kit transfer divergence-status`; `agentic-kit transfer repo-status` |
 | PROBE-004 | Git exact-ref history; `src/agentic_project_kit/transfer_repo_actions.py`; successor-package freshness helpers; generated-output contracts | `tests/test_transfer_repo_actions.py` successor-package freshness cases; later disposable rollback fixtures |
@@ -198,6 +198,8 @@ Candidate current-ref Kit surfaces:
 - `src/agentic_project_kit/release_prepare.py`;
 - `src/agentic_project_kit/post_release_closeout.py`;
 - `src/agentic_project_kit/action_specs.py`;
+- `src/agentic_project_kit/dpa_workspace_init_projection.py`;
+- `src/agentic_project_kit/templates.py`;
 - `src/agentic_project_kit/workspace_init.py`;
 - `tests/test_doc_lifecycle.py`;
 - `tests/test_docs_lifecycle_*.py`;
@@ -207,7 +209,9 @@ Candidate current-ref Kit surfaces:
 - `tests/test_release_prep_core.py`;
 - `tests/test_post_release.py`;
 - `tests/test_post_release_doi_closeout_atomicity.py`;
-- `tests/test_action_specs.py`.
+- `tests/test_action_specs.py`;
+- `tests/test_generator.py`;
+- `tests/test_workspace_init.py`.
 
 Candidate preflight commands are listed in
 `integration/DP1_PROBE_EXECUTION_PACKAGE_DRAFT_20260727.md`.

@@ -8,6 +8,10 @@ from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
 from agentic_project_kit.command_manifest import load_manifest
+from agentic_project_kit.dpa_workspace_init_projection import (
+    DPA_WORKSPACE_INIT_MANIFEST_PATH,
+    validate_workspace_init_projection_manifest,
+)
 from agentic_project_kit.workspace import load_workspace
 from agentic_project_kit.workspace_adopt import PRIVATE_PUBLIC_BOUNDARY
 
@@ -48,6 +52,8 @@ def test_init_dry_run_writes_nothing_and_prints_tree(tmp_path: Path) -> None:
     assert "MODE=dry-run" in result.output
     assert ".agentic/config.yaml" in result.output
     assert "+ .agentic/tmp/" in result.output
+    assert "DPA workspace-init projection boundary:" in result.output
+    assert "writer: WRT-CH-005" in result.output
     assert PRIVATE_PUBLIC_BOUNDARY in result.output
 
 
@@ -75,6 +81,7 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
         "docs/archive",
         ".agentic",
         ".agentic/ci",
+        ".agentic/dpa",
         ".agentic/registries",
         ".agentic/rules",
         ".agentic/state",
@@ -105,6 +112,7 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
         ".agentic/state/README.md",
         ".agentic/state/status.md",
         ".agentic/state/handoff/README.md",
+        DPA_WORKSPACE_INIT_MANIFEST_PATH,
         ".agentic/ci/agentic-gate.yaml",
         ".agentic/ci/pre-commit-snippet.yaml",
         ".agentic/INITIAL_LLM_PROMPT.md",
@@ -139,6 +147,15 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
     assert ".agentic/transfer/inbox/" in prompt
     assert "COMMAND_MANIFEST_ACK" in prompt
     assert "agentic-kit command-for" in prompt
+    dpa_manifest = json.loads(
+        (tmp_path / DPA_WORKSPACE_INIT_MANIFEST_PATH).read_text(encoding="utf-8")
+    )
+    assert validate_workspace_init_projection_manifest(dpa_manifest) == ()
+    assert dpa_manifest["writer_id"] == "WRT-CH-005"
+    assert dpa_manifest["generated_target_paths"] == [".agentic/state/handoff/README.md"]
+    assert dpa_manifest["emits_current_handoff_template"] is False
+    assert dpa_manifest["self_hosting_current_handoff"] is False
+    assert dpa_manifest["kit_conformance_claimed"] is False
 
 
 def test_init_ci_template_yaml_matches_cli_inventory(tmp_path: Path) -> None:

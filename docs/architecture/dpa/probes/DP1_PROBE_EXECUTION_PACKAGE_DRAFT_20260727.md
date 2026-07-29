@@ -158,6 +158,8 @@ Current source/test candidates:
 - `src/agentic_project_kit/release_prepare.py`;
 - `src/agentic_project_kit/post_release_closeout.py`;
 - `src/agentic_project_kit/action_specs.py`;
+- `src/agentic_project_kit/dpa_workspace_init_projection.py`;
+- `src/agentic_project_kit/templates.py`;
 - `src/agentic_project_kit/workspace_init.py`;
 - `tests/test_doc_lifecycle.py`;
 - `tests/test_docs_lifecycle_*.py`;
@@ -167,7 +169,9 @@ Current source/test candidates:
 - `tests/test_release_prep_core.py`;
 - `tests/test_post_release.py`;
 - `tests/test_post_release_doi_closeout_atomicity.py`;
-- `tests/test_action_specs.py`.
+- `tests/test_action_specs.py`;
+- `tests/test_generator.py`;
+- `tests/test_workspace_init.py`.
 
 Current executable preflight candidates:
 
@@ -176,7 +180,7 @@ Current executable preflight candidates:
 ./.venv/bin/agentic-kit docs lifecycle triage --json
 ./.venv/bin/agentic-kit docs lifecycle report --scope docs/handoff --json
 ./.venv/bin/python -m pytest -q tests/test_doc_lifecycle.py tests/test_docs_lifecycle_cli.py tests/test_docs_lifecycle_apply_cli.py tests/test_docs_lifecycle_plan_cli.py tests/test_docs_lifecycle_report_cli.py tests/test_transfer_repo_actions.py
-./.venv/bin/python -m pytest -q tests/test_release_prepare_command.py tests/test_release_command_authority.py tests/test_release_prep_core.py tests/test_post_release.py tests/test_post_release_doi_closeout_atomicity.py tests/test_action_specs.py
+./.venv/bin/python -m pytest -q tests/test_release_prepare_command.py tests/test_release_command_authority.py tests/test_release_prep_core.py tests/test_post_release.py tests/test_post_release_doi_closeout_atomicity.py tests/test_action_specs.py tests/test_generator.py tests/test_workspace_init.py
 ```
 
 Missing before execution:

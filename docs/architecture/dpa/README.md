@@ -271,6 +271,15 @@ mentions a `CURRENT_HANDOFF.md` mutation must declare WRT-CH-004, name the
 selected lifecycle writer it dispatches through and expose the route in
 `agentic-kit actions show <id>`.
 
+The WRT-CH-005 workspace-initialization/template boundary is implemented by the
+projection manifest at `.agentic/dpa/workspace_init_projection.json` in newly
+generated or initialized target workspaces. `agentic-kit init` classifies its
+generated `docs/handoff/CURRENT_HANDOFF.md` bytes as external workspace
+initialization output, and `agentic-kit workspace init` records that it creates
+workspace handoff state under `.agentic/state/handoff/` without emitting a live
+Kit self-hosting `CURRENT_HANDOFF.md` acceptance state. The manifest keeps all
+Kit conformance, full Probe PASS and production mutation claims false.
+
 Historical evidence packages still preserve earlier `DP2_BLOCKED` and
 "DP2 implementation blocked" states. Those records remain part of the audit trail;
 they do not override the current `DP2_AUTHORIZED` Assessment record.

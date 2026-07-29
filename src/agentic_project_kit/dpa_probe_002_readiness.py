@@ -27,6 +27,8 @@ PROBE_002_SOURCE_PATHS = (
     "src/agentic_project_kit/release_prepare.py",
     "src/agentic_project_kit/post_release_closeout.py",
     "src/agentic_project_kit/action_specs.py",
+    "src/agentic_project_kit/dpa_workspace_init_projection.py",
+    "src/agentic_project_kit/templates.py",
     "src/agentic_project_kit/workspace_init.py",
 )
 PROBE_002_TEST_GLOBS = (
@@ -39,6 +41,8 @@ PROBE_002_TEST_GLOBS = (
     "tests/test_post_release.py",
     "tests/test_post_release_doi_closeout_atomicity.py",
     "tests/test_action_specs.py",
+    "tests/test_generator.py",
+    "tests/test_workspace_init.py",
 )
 SELECTED_WRITER_PLAN_PATH = "docs/architecture/dpa/probes/DP1_SELECTED_WRITER_FIXTURE_PLAN_20260727.md"
 PROBE_MANUAL_PATH = "docs/architecture/dpa/probes/DP1_PROBE_MANUALS_20260727.md"

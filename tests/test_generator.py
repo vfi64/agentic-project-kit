@@ -1,5 +1,12 @@
+import json
 from pathlib import Path
 
+from agentic_project_kit.dpa_workspace_init_projection import (
+    DPA_WORKSPACE_INIT_HANDOFF_TEMPLATE_PATH,
+    DPA_WORKSPACE_INIT_MANIFEST_PATH,
+    render_workspace_init_projection_manifest,
+    validate_workspace_init_projection_manifest,
+)
 from agentic_project_kit.models import ProjectOptions
 from agentic_project_kit.templates import create_project
 
@@ -23,8 +30,57 @@ def test_create_project_generates_core_files(tmp_path: Path):
     assert (target / "README.md").exists()
     assert (target / "AGENTS.md").exists()
     assert (target / "docs/PROJECT_START.md").exists()
+    assert (target / DPA_WORKSPACE_INIT_HANDOFF_TEMPLATE_PATH).exists()
+    assert (target / DPA_WORKSPACE_INIT_MANIFEST_PATH).exists()
     assert (target / ".agentic/todo.yaml").exists()
     assert (target / ".github/workflows/ci.yml").exists()
+
+
+def test_generated_project_dpa_manifest_classifies_handoff_as_external_template(
+    tmp_path: Path,
+) -> None:
+    target = tmp_path / "demo-dpa"
+    create_project(
+        ProjectOptions(
+            name="demo-dpa",
+            description="Demo DPA project",
+            project_type="python-cli",
+            license_name="MIT",
+            github_actions=True,
+            pre_commit=True,
+            agent_docs=True,
+            logging_evidence=True,
+            target_dir=target,
+        )
+    )
+
+    data = json.loads((target / DPA_WORKSPACE_INIT_MANIFEST_PATH).read_text(encoding="utf-8"))
+
+    assert validate_workspace_init_projection_manifest(data) == ()
+    assert data["writer_id"] == "WRT-CH-005"
+    assert data["target_scope"] == "EXTERNAL_WORKSPACE_INITIALIZATION_TEMPLATE"
+    assert data["generated_target_paths"] == [DPA_WORKSPACE_INIT_HANDOFF_TEMPLATE_PATH]
+    assert data["emits_current_handoff_template"] is True
+    assert data["self_hosting_current_handoff"] is False
+    assert data["kit_live_acceptance_state"] is False
+    assert data["kit_conformance_claimed"] is False
+    assert data["production_mutation_claimed"] is False
+
+
+def test_workspace_init_dpa_manifest_rejects_paths_outside_generated_root() -> None:
+    data = json.loads(
+        render_workspace_init_projection_manifest(
+            project_name="demo",
+            project_type="python-cli",
+            profile="",
+            generated_target_paths=("../docs/handoff/CURRENT_HANDOFF.md",),
+            emits_current_handoff_template=True,
+        )
+    )
+
+    errors = validate_workspace_init_projection_manifest(data)
+
+    assert "generated_target_paths must stay inside the generated target root" in errors
 
 def test_generated_ci_uses_pypi_kit_source_by_default(tmp_path):
     from agentic_project_kit.models import ProjectOptions

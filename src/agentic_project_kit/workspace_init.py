@@ -20,6 +20,10 @@ from agentic_project_kit.workspace_adopt import (
     analyze_workspace_adoption,
 )
 from agentic_project_kit.chat_entrypoint_contract import command_reference_prompt_block
+from agentic_project_kit.dpa_workspace_init_projection import (
+    DPA_WORKSPACE_INIT_MANIFEST_PATH,
+    render_workspace_init_projection_manifest,
+)
 from agentic_project_kit.workspace_lock import acquire_workspace_lock
 
 
@@ -106,6 +110,7 @@ def build_workspace_init_plan(
         "docs",
         "docs/archive",
         ".agentic",
+        ".agentic/dpa",
         ".agentic/registries",
         ".agentic/rules",
         ".agentic/state",
@@ -201,6 +206,16 @@ def render_workspace_init_plan(plan: WorkspaceInitPlan, *, written: bool = False
         lines.extend(f"- {target}" for target in plan.injection_targets)
     else:
         lines.append("- none")
+    lines.extend(
+        [
+            "",
+            "DPA workspace-init projection boundary:",
+            f"- manifest: {DPA_WORKSPACE_INIT_MANIFEST_PATH}",
+            "- writer: WRT-CH-005",
+            "- generated target root only: true",
+            "- Kit self-hosting CURRENT_HANDOFF acceptance: false",
+        ]
+    )
     lines.extend(["", "Private/public boundary:", plan.privacy_boundary])
     return "\n".join(lines) + "\n"
 
@@ -300,6 +315,13 @@ def _planned_files(root: Path, project: ProjectSuggestion, manifest_yaml: str) -
         ".agentic/state/README.md": "# Workspace State\n\nMachine-readable governed state belongs here.\n",
         ".agentic/state/status.md": _workspace_status_seed(project),
         ".agentic/state/handoff/README.md": "# Workspace Handoff\n\nValidated handoff packages belong here.\n",
+        DPA_WORKSPACE_INIT_MANIFEST_PATH: render_workspace_init_projection_manifest(
+            project_name=project.name,
+            project_type=project.type,
+            profile=project.profile,
+            generated_target_paths=(".agentic/state/handoff/README.md",),
+            emits_current_handoff_template=False,
+        ),
         CI_TEMPLATE_PATH: _ci_template(),
         PRE_COMMIT_TEMPLATE_PATH: _pre_commit_template(),
         ".agentic/INITIAL_LLM_PROMPT.md": _initial_llm_prompt(project),
