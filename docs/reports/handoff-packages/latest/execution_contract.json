@@ -269,13 +269,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr1957-handoff-refresh",
+      "branch": "docs/post-pr1959-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "f653bbbb6f056fde3fe9be07a92c0189b12f1700",
+      "head": "644f470a42e9c1970f3ace966abf13dd5210d90f",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "f653bbbb6f056fde3fe9be07a92c0189b12f1700",
+      "origin_main": "644f470a42e9c1970f3ace966abf13dd5210d90f",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -319,7 +319,70 @@
       "Add or update tests and validation for new handoff content.",
       "Run agentic-kit transfer prepare-successor-handoff --render-prompt to regenerate projections."
     ],
+    "dedicated_update_only_paths": [
+      "docs/handoff/START_NEW_CHAT_PROMPT.md",
+      "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+      "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+    ],
+    "default_direct_write_paths": [
+      "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+      "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+      "docs/reports/handoff-packages/latest/execution_contract.json",
+      "docs/reports/handoff-packages/latest/source_manifest.json",
+      "docs/reports/handoff-packages/latest/successor_context.yaml",
+      "docs/reports/handoff-packages/latest/successor_prompt.md",
+      "docs/reports/handoff-packages/latest/validation_report.json"
+    ],
     "do_not_use_uploaded_or_copied_prompt_text_as_sole_source": true,
+    "dpa_generated_output_contract": {
+      "acceptance_state_invalidated_without_renderer_reproducibility": true,
+      "contract_id": "DPA-GENERATED-SUCCESSOR-HANDOFF-PROJECTION-v1",
+      "current_generator_command": "agentic-kit transfer chat-switch-complete --render-prompt",
+      "current_handoff_target_byte_writer": false,
+      "dedicated_update_only_paths": [
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+      ],
+      "default_direct_write_paths": [
+        "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+        "docs/reports/handoff-packages/latest/execution_contract.json",
+        "docs/reports/handoff-packages/latest/source_manifest.json",
+        "docs/reports/handoff-packages/latest/successor_context.yaml",
+        "docs/reports/handoff-packages/latest/successor_prompt.md",
+        "docs/reports/handoff-packages/latest/validation_report.json"
+      ],
+      "exact_byte_rollback_claims_renderer_reproducibility": false,
+      "full_probe_pass_claimed": false,
+      "generated_output_class": "command_generated_successor_handoff_projection",
+      "generated_outputs_manually_patched": false,
+      "generated_projection_paths": [
+        "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+        "docs/reports/handoff-packages/latest/execution_contract.json",
+        "docs/reports/handoff-packages/latest/source_manifest.json",
+        "docs/reports/handoff-packages/latest/successor_context.yaml",
+        "docs/reports/handoff-packages/latest/successor_prompt.md",
+        "docs/reports/handoff-packages/latest/validation_report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+      ],
+      "generator_command": "agentic-kit transfer prepare-successor-handoff --render-prompt",
+      "kind": "dpa_generated_successor_handoff_projection_contract",
+      "kit_conformance_claimed": false,
+      "manual_durable_target_patches_allowed": false,
+      "production_mutation_claimed": false,
+      "schema_version": 1,
+      "source_command_contract_required": true,
+      "source_paths": [
+        "src/agentic_project_kit/successor_handoff_package.py",
+        "src/agentic_project_kit/cli_commands/transfer_handoff_flow.py"
+      ],
+      "target_scope": "GENERATED_SUCCESSOR_HANDOFF_PACKAGE_AND_PROMPT_PROJECTIONS",
+      "writer_id": "WRT-CH-006"
+    },
     "forbidden_update_path": [
       "manual direct edits to generated handoff projections",
       "adding durable rules only to docs/handoff/*.md",
@@ -352,13 +415,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr1957-handoff-refresh",
+    "branch": "docs/post-pr1959-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f653bbbb6f056fde3fe9be07a92c0189b12f1700",
+    "head": "644f470a42e9c1970f3ace966abf13dd5210d90f",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "f653bbbb6f056fde3fe9be07a92c0189b12f1700",
+    "origin_main": "644f470a42e9c1970f3ace966abf13dd5210d90f",
     "worktree_clean": false
   },
   "rules": [
