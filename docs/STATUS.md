@@ -7,9 +7,9 @@ Current verified release: 0.4.13.
 Current release tag: v0.4.13.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
-Current verified main: `9982b91b` (`Authorize DPA WRT-CH-003 scope (#1941)`).
-Latest substantive work: PR #1941 (`Authorize DPA WRT-CH-003 scope (#1941)`).
-Post-merge handoff status: PASS/NOOP after PR #1941 administrative refresh.
+Current verified main: `9695da8b` (`Authorize DPA WRT-CH-004 scope (#1943)`).
+Latest substantive work: PR #1943 (`Authorize DPA WRT-CH-004 scope (#1943)`).
+Post-merge handoff status: PASS/NOOP after PR #1943 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1941
+## Operational documentation refresh state after PR #1943
 
-Current administrative handoff refresh state is `9982b91b` (`Authorize DPA WRT-CH-003 scope (#1941)`). Continue next only after this post-PR1941 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `9695da8b` (`Authorize DPA WRT-CH-004 scope (#1943)`). Continue next only after this post-PR1943 refresh is committed and merged; the next substantive slice must be created from fresh main.

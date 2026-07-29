@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9982b91b30b96df901f5036fe24cba406942b9b5
-  short: 9982b91b
-  subject: Authorize DPA WRT-CH-003 scope (#1941)
+  full: 9695da8b4f03cb4cfdc3f36913d4e43fd67cc6d3
+  short: 9695da8b
+  subject: Authorize DPA WRT-CH-004 scope (#1943)
 last_substantive_work_state:
-  full: 9982b91b30b96df901f5036fe24cba406942b9b5
-  short: 9982b91b
-  subject: Authorize DPA WRT-CH-003 scope (#1941)
+  full: 9695da8b4f03cb4cfdc3f36913d4e43fd67cc6d3
+  short: 9695da8b
+  subject: Authorize DPA WRT-CH-004 scope (#1943)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
