@@ -100,6 +100,13 @@ workspace-initialization/template boundary records generated handoff templates
 as external target-root initialization output and keeps live Kit
 self-hosting `CURRENT_HANDOFF.md` acceptance-state claims closed.
 
+The current WRT-CH-006 fixture evidence records Kit validation ref
+`9cd4a7fcc69fd9db252133b3226696ce5bf6cada`. It confirms the generated
+successor-handoff projection boundary is represented in the execution contract,
+keeps generated package/prompt files source-command owned and keeps manual
+durable target-byte patching, production mutation and Kit conformance claims
+closed.
+
 ## Imported Probe Evidence
 
 - `probes/dp1-readonly-c788a8c5-20260727/` records read-only baseline evidence
@@ -145,6 +152,10 @@ self-hosting `CURRENT_HANDOFF.md` acceptance-state claims closed.
 - `probes/fixture-evidence-0b985a22-wrt-ch005-20260729/` records authorized
   non-production fixture evidence for the WRT-CH-005
   workspace-initialization/template boundary slice with result
+  `FULL_FIXTURE_EVIDENCE_RECORDED`.
+- `probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/` records authorized
+  non-production fixture evidence for the WRT-CH-006 generated
+  successor-handoff projection boundary slice with result
   `FULL_FIXTURE_EVIDENCE_RECORDED`.
 - `assessment/DP1_ASSESSMENT_READINESS_20260728.md` records the current DP1
   Assessment readiness decision surface with status `DP2_AUTHORIZED`.

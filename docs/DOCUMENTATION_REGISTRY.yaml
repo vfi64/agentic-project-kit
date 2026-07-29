@@ -971,6 +971,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable WRT-CH-005 boundary fixture evidence; records 36 fixture passes and cleanup proof.
+  - path: docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: WRT-CH-006 generated successor-handoff projection boundary fixture evidence summary; non-production only, no manual generated-output patch or Kit conformance claim.
+  - path: docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable WRT-CH-006 boundary fixture evidence; records 36 fixture passes and cleanup proof.
   - path: docs/architecture/evidence/dpa/assessment/maintainer-record-check-be37f052-wrt-ch004-20260729/README.md
     class: evidence/log
     owner: maintainers
