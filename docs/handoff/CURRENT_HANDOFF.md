@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `1f47adab2d434c28442300e53dc291b5dec02515` (`1f47adab`), after `Refresh successor package after PR1946 (#1947)`.
-Last substantive work state is `1f47adab2d434c28442300e53dc291b5dec02515` (`1f47adab`), after `Refresh successor package after PR1946 (#1947)`.
+Current verified main/admin HEAD is `861f7e14d5330db2cade6e559bd6071f62260677` (`861f7e14`), after `Allow DPA acceptance state in refresh-only checks (#1949)`.
+Last substantive work state is `861f7e14d5330db2cade6e559bd6071f62260677` (`861f7e14`), after `Allow DPA acceptance state in refresh-only checks (#1949)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
