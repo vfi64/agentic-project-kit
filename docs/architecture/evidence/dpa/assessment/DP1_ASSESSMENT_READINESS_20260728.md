@@ -19,7 +19,7 @@ not main-repository conformance.
 
 | Role | Ref or path | Assessment use |
 |---|---|---|
-| Current Kit baseline for this record | `b1b708cb5d185f117aea936bd5d49592b6e319d9` | Governs the repository state assessed by this readiness record. |
+| Current Kit baseline for this record | `680ee206b2ade5b475d005127f0ea32f0a028689` | Governs the repository state assessed by this readiness record. |
 | Current command manifest acknowledgement | `COMMAND_MANIFEST_ACK bafee944ae1d` | Confirms this record uses the current Kit command manifest boundary. |
 | DPA Lab closeout source | `0cf944cc153e65a272c773286791f8891efdd1bc` | Preserved architecture source package only. |
 | DPA Lab merge commit | `6f927efd625b4239f9ab0e710b48e7d9534fdfec` | Preserved Lab closeout merge evidence only. |
@@ -33,10 +33,11 @@ not main-repository conformance.
 | Current Kit PROBE-004 migration and rollback readiness preflight | `docs/architecture/evidence/dpa/probes/probe-004-migration-readiness-1dfc5e8a-20260728/` | Current migration and rollback source/test/control-surface preflight, result `PARTIAL_BLOCKED_FOR_DP2`. |
 | Current Kit read-only Probe execution | `docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/` | Current wrapper execution for read-only, non-authorized Probe fixture cases, result `READ_ONLY_EXECUTED_WITH_LIMITATIONS`; not full Probe PASS. |
 | Current Kit full fixture evidence | `docs/architecture/evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/` | Authorized non-production fixture execution for PROBE-002, Renderer, PROBE-003 and PROBE-004, result `FULL_FIXTURE_EVIDENCE_RECORDED`; not DP2 authorization or Kit conformance. |
-| Current Kit DP2 decision-readiness preflight | `docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-b1b708cb-20260728/` | Current decision-package preflight, result `READY_FOR_MAINTAINER_DECISION_DP2_BLOCKED`; implementation percent `95`, with only Maintainer authorization open. |
+| Current Kit DP2 decision-readiness preflight | `docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-680ee206-20260729/` | Current decision-package preflight, result `DP2_AUTHORIZED_ALREADY`; implementation percent `100`, with no DP2 entry blockers. |
 | Current Kit DP2 Maintainer-record template check | `docs/architecture/evidence/dpa/assessment/maintainer-record-template-check-1dfc5e8a-20260728/` | Current template validation, result `TEMPLATE_READY_DP2_BLOCKED`; not a Maintainer-owned record or DP2 authorization. |
-| Current Kit DP2 Maintainer Assessment record | `docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json` | Maintainer Assessment record, result `DP2_BLOCKED_PENDING_AUTHORIZATION`; selects the first DP2 target scope, records Probe/Cleanup evidence and does not authorize DP2. |
-| Current Kit DP2 Maintainer Assessment record check | `docs/architecture/evidence/dpa/assessment/maintainer-record-check-b1b708cb-20260728/` | Structural validation for the current blocked Maintainer Assessment record, result `VALID_BLOCKED_RECORD`; only authorization remains open. |
+| Current Kit DP2 Maintainer Assessment record | `docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json` | Maintainer Assessment record, result `DP2_AUTHORIZED`; selects the first DP2 target scope, records Probe/Cleanup evidence and authorizes DP2. |
+| Current Kit DP2 Maintainer Assessment record check | `docs/architecture/evidence/dpa/assessment/maintainer-record-check-680ee206-20260729/` | Structural validation for the current Maintainer Assessment authorization record, result `VALID_AUTHORIZATION_RECORD`. |
+| Previous Kit DP2 Maintainer Assessment record check | `docs/architecture/evidence/dpa/assessment/maintainer-record-check-b1b708cb-20260728/` | Earlier validation of the blocked Maintainer Assessment record before authorization, result `VALID_BLOCKED_RECORD`. |
 | Previous Kit DP2 Maintainer Assessment record check | `docs/architecture/evidence/dpa/assessment/maintainer-record-check-d99b69aa-20260728/` | Earlier validation of the blocked Maintainer Assessment record before fixture evidence, result `VALID_BLOCKED_RECORD`. |
 | Historical Lab read-only baseline | `docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/` | Historical Assessment input, result `PASS_WITH_LIMITATIONS`. |
 | Historical Lab mutation sandbox | `docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/` | Historical sandbox-only Assessment input, result `PARTIAL`. |
@@ -55,14 +56,14 @@ projections, release outputs or any future command-updated DPA touchpoint.
 | Renderer Probes | `SATISFIED_FOR_CURRENT_KIT_REF` | Current readiness preflight, read-only execution and authorized non-production fixture evidence satisfy renderer identity, semantic-version and side-effect fixture coverage for Assessment. |
 | PROBE-003 workflow serialization | `SATISFIED_FOR_CURRENT_KIT_REF` | Current readiness preflight, read-only execution and authorized disposable branch simulation evidence satisfy workflow serialization coverage for the current Kit ref. |
 | PROBE-004 migration and rollback | `SATISFIED_FOR_CURRENT_KIT_REF` | Current readiness preflight, read-only execution and authorized non-production fixture evidence satisfy migration, rollback-package, renderer rollback and generated-output rollback coverage for Assessment. |
-| Assessment | `RECORDED_DP2_BLOCKED` | Current Maintainer Assessment selects the first DP2 target scope and records Probe/Cleanup evidence as satisfied for this Kit ref. DP2 remains blocked pending Maintainer authorization only. |
-| Maintainer authorization | `NOT_RECORDED` | No DP2 authorization token is recorded; the decision-readiness package and Maintainer-record template are explicitly not authorization. |
+| Assessment | `RECORDED_DP2_AUTHORIZED` | Current Maintainer Assessment selects the first DP2 target scope, records Probe/Cleanup evidence as satisfied for this Kit ref and records the DP2 authorization token. |
+| Maintainer authorization | `RECORDED_DPA_DP2_AUTHORIZED` | The Maintainer-owned record sets decision token `DPA_DP2_AUTHORIZED`; DP2 authorization is structurally validated by `maintainer-record-check-680ee206-20260729`. |
 
 ## Selected-writer disposition snapshot
 
 | Writer | Current disposition | DP2 consequence |
 |---|---|---|
-| WRT-CH-001 administrative handoff refresh | `FIXTURE_EVIDENCE_RECORDED_FOR_FIRST_DP2_TARGET` | Selected for the first self-hosting `CURRENT_HANDOFF.md` DP2 target; authorized non-production fixture evidence is now recorded, while DP2 authorization remains separate. |
+| WRT-CH-001 administrative handoff refresh | `AUTHORIZED_FOR_FIRST_DP2_TARGET` | Selected for the first self-hosting `CURRENT_HANDOFF.md` DP2 target; authorized non-production fixture evidence and DP2 authorization are now recorded. |
 | WRT-CH-002 release preparation writer | `DEFERRED_FROM_FIRST_DP2_TARGET` | Deferred from the first handoff target; requires a later target-specific Probe and Assessment record before DPA reliance. |
 | WRT-CH-003 post-release DOI closeout writer | `DEFERRED_FROM_FIRST_DP2_TARGET` | Deferred from the first handoff target; remains outside this DP2 slice. |
 | WRT-CH-004 action-spec surfaced mutation authority | `DEFERRED_FROM_FIRST_DP2_TARGET` | Deferred from the first handoff target unless a later slice selects action-surfaced mutation authority explicitly. |
@@ -81,20 +82,21 @@ projections, release outputs or any future command-updated DPA touchpoint.
 | Renderer Probe full applicable evidence | `SATISFIED_FOR_CURRENT_KIT_REF` |
 | PROBE-003 full applicable evidence | `SATISFIED_FOR_CURRENT_KIT_REF` |
 | PROBE-004 full applicable evidence | `SATISFIED_FOR_CURRENT_KIT_REF` |
-| Assessment adjudicates all partial, blocked and non-applicable states | `RECORDED_DP2_BLOCKED` |
+| Assessment adjudicates all partial, blocked and non-applicable states | `RECORDED_DP2_AUTHORIZED` |
 | First DP2 target selected with explicit writer scope | `SELECTED_WRT_CH001_HANDOFF_SCOPE` |
 | Rollback and cleanup plan proven against that target | `PROVEN_BY_NON_PRODUCTION_FIXTURE_EVIDENCE` |
-| Maintainer authorization token recorded | `BLOCKED` |
+| Maintainer authorization token recorded | `AUTHORIZED_BY_MAINTAINER_RECORD` |
 
-DP2 remains blocked. The full Probe PASS claim boundary remains closed. The
-implementation percentage can now advance to 95% because the Probe-family and
-rollback-cleanup blockers are resolved for the current Kit ref, while the
-Maintainer authorization blocker remains explicit.
+DP2 is authorized for the selected first target scope. The full Probe PASS claim
+boundary remains closed: this is DP2 authorization for controlled
+implementation, not Kit-wide DPA conformance. The implementation percentage can
+now advance to 100% because all DP2 entry evidence fields are recorded and no
+DP2 entry blockers remain.
 
 ## Next controlled execution package
 
-The next safe implementation slice is Maintainer authorization against a fresh
-Kit baseline. It should:
+The next safe implementation slice is the first DP2 implementation branch
+against a fresh Kit baseline. It should:
 
 1. freeze the current Kit head and command manifest acknowledgement;
 2. preserve the current PROBE-001 registry compatibility evidence or re-run it
@@ -102,12 +104,13 @@ Kit baseline. It should:
 3. preserve the current full fixture evidence or re-run it if Probe manuals,
    fixture manifest, selected target, command manifest or DPA implementation
    code changes;
-4. record a Maintainer-owned authorization decision before any DP2
-   implementation relies on this evidence.
+4. begin only from the authorized first target scope:
+   `docs/handoff/CURRENT_HANDOFF.md` with writer `WRT-CH-001`.
 
 ## Conclusion
 
 Current DPA implementation readiness is improved from imported architecture and
 raw evidence staging to an explicit DP1 Assessment decision surface with full
-current fixture evidence. The remaining work is no longer ambiguous: DP2 still
-requires Maintainer authorization before implementation can begin.
+current fixture evidence and Maintainer authorization. DP2 may now begin for the
+selected first target scope only; production mutation and Kit-wide DPA
+conformance remain unclaimed.

@@ -1,13 +1,102 @@
 {
-  "schema_version": 1,
-  "kind": "dpa_dp1_assessment_readiness",
-  "status": "DP2_AUTHORIZED",
-  "status_date": "2026-07-29",
-  "command_manifest_ack": "COMMAND_MANIFEST_ACK bafee944ae1d",
-  "kit_baseline_ref": "680ee206b2ade5b475d005127f0ea32f0a028689",
-  "dpa_lab_source_ref": "0cf944cc153e65a272c773286791f8891efdd1bc",
-  "dpa_lab_merge_ref": "6f927efd625b4239f9ab0e710b48e7d9534fdfec",
-  "kit_import_3_baseline_ref": "e89b0fac21c5599f8e531a937c550134469716cf",
+  "blocker_count": 0,
+  "candidate_first_dp2_target_scope": {
+    "excluded_from_candidate": {
+      "WRT-CH-005": "external-habitability/template writer, not current self-hosting target",
+      "WRT-CH-006": "generated successor-package outputs; covered through source command and rollback boundaries"
+    },
+    "not_authorization": true,
+    "requires_select_or_defer_decision": [
+      "WRT-CH-002",
+      "WRT-CH-003",
+      "WRT-CH-004"
+    ],
+    "selected_writers_for_candidate": [
+      "WRT-CH-001"
+    ],
+    "status": "CANDIDATE_REQUIRES_MAINTAINER_RATIFICATION",
+    "target_kind": "current self-hosting administrative handoff surface",
+    "target_path": "docs/handoff/CURRENT_HANDOFF.md"
+  },
+  "claims": {
+    "dp2_authorized": false,
+    "first_dp2_target_selected": false,
+    "generated_outputs_manually_patched": false,
+    "kit_conformance_claimed": false,
+    "maintainer_assessment_recorded": false,
+    "maintainer_authorization_recorded": false,
+    "probe_execution_claimed": false,
+    "production_mutation_performed": false,
+    "rollback_cleanup_proven": false
+  },
+  "control_surfaces": [
+    {
+      "path": "docs/architecture/evidence/dpa/assessment/DP1_ASSESSMENT_READINESS_20260728.md",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/dpa/probes/DP1_PROBE_MANUALS_20260727.md",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/dpa/probes/DP1_PROBE_EXECUTION_PACKAGE_DRAFT_20260727.md",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/dpa/probes/DP1_SELECTED_WRITER_FIXTURE_PLAN_20260727.md",
+      "present": true
+    },
+    {
+      "path": "docs/architecture/dpa/probes/fixtures/DP1_PROBE_CLEANUP_AND_ASSESSMENT_PLAN_20260727.md",
+      "present": true
+    }
+  ],
+  "decision_requirements": [
+    {
+      "id": "probe_002_full_evidence",
+      "required_before_dp2": "true",
+      "status": "SATISFIED_FOR_CURRENT_KIT_REF"
+    },
+    {
+      "id": "renderer_full_evidence",
+      "required_before_dp2": "true",
+      "status": "SATISFIED_FOR_CURRENT_KIT_REF"
+    },
+    {
+      "id": "probe_003_full_evidence",
+      "required_before_dp2": "true",
+      "status": "SATISFIED_FOR_CURRENT_KIT_REF"
+    },
+    {
+      "id": "probe_004_full_evidence",
+      "required_before_dp2": "true",
+      "status": "SATISFIED_FOR_CURRENT_KIT_REF"
+    },
+    {
+      "id": "maintainer_assessment",
+      "required_before_dp2": "true",
+      "status": "RECORDED_DP2_AUTHORIZED"
+    },
+    {
+      "id": "first_dp2_target_scope",
+      "required_before_dp2": "true",
+      "status": "SELECTED_WRT_CH001_HANDOFF_SCOPE"
+    },
+    {
+      "id": "rollback_cleanup_proven",
+      "required_before_dp2": "true",
+      "status": "PROVEN_BY_NON_PRODUCTION_FIXTURE_EVIDENCE"
+    },
+    {
+      "id": "maintainer_authorization",
+      "required_before_dp2": "true",
+      "status": "AUTHORIZED_BY_MAINTAINER_RECORD"
+    }
+  ],
   "evidence_inputs": [
     {
       "id": "current-kit-readonly-refresh",
@@ -95,47 +184,16 @@
       "result": "PREPARED_NOT_EXECUTED"
     }
   ],
-  "probe_family_status": {
-    "PROBE-001": "SATISFIED_FOR_CURRENT_KIT_REF",
-    "PROBE-002": "SATISFIED_FOR_CURRENT_KIT_REF",
-    "RENDERER": "SATISFIED_FOR_CURRENT_KIT_REF",
-    "PROBE-003": "SATISFIED_FOR_CURRENT_KIT_REF",
-    "PROBE-004": "SATISFIED_FOR_CURRENT_KIT_REF"
-  },
-  "selected_writer_status": {
-    "WRT-CH-001": "FIXTURE_EVIDENCE_RECORDED_FOR_FIRST_DP2_TARGET",
-    "WRT-CH-002": "NEEDS_MAINTAINER_DECISION",
-    "WRT-CH-003": "NEEDS_MAINTAINER_DECISION",
-    "WRT-CH-004": "NEEDS_MAINTAINER_DECISION",
-    "WRT-CH-005": "EXTERNAL_HABITABILITY_ONLY",
-    "WRT-CH-006": "GENERATED_OUTPUT_CONTRACT_ONLY"
-  },
-  "dp2_entry_status": {
-    "architecture_staging": "SATISFIED_FOR_ARCHITECTURE_STAGING",
-    "fresh_kit_baseline_recorded": "SATISFIED_FOR_THIS_RECORD",
-    "probe_001_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
-    "probe_002_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
-    "renderer_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
-    "probe_003_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
-    "probe_004_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
-    "maintainer_assessment": "RECORDED_DP2_AUTHORIZED",
-    "first_dp2_target_scope": "SELECTED_WRT_CH001_HANDOFF_SCOPE",
-    "rollback_cleanup_proven": "PROVEN_BY_NON_PRODUCTION_FIXTURE_EVIDENCE",
-    "maintainer_authorization": "AUTHORIZED_BY_MAINTAINER_RECORD"
-  },
-  "claims": {
-    "full_probe_pass_claimed": false,
-    "dp2_authorized": true,
-    "maintainer_authorization_recorded": true,
-    "runtime_behavior_changed": false,
-    "production_mutation_performed": false,
-    "kit_conformance_claimed": false,
-    "generated_outputs_manually_patched": false
-  },
-  "next_controlled_execution": [
-    "freeze_current_kit_head_and_command_manifest",
-    "preserve_probe_001_registry_compatibility_evidence_or_rerun_on_registry_schema_change",
-    "preserve_current_full_fixture_evidence_or_rerun_on_probe_or_target_change",
-    "begin_first_dp2_implementation_slice_from_authorized_scope"
-  ]
+  "finding_count": 0,
+  "findings": [],
+  "implementation_percent": 100,
+  "kind": "dpa_dp2_decision_readiness",
+  "readiness_blockers": [],
+  "readiness_record": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+  "readiness_status": "DP2_AUTHORIZED",
+  "required_maintainer_actions": [],
+  "result_status": "DP2_AUTHORIZED_ALREADY",
+  "schema_version": 1,
+  "structural_ok": true,
+  "validation_ref": "680ee206b2ade5b475d005127f0ea32f0a028689"
 }

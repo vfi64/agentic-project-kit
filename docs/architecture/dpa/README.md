@@ -54,8 +54,8 @@ staging. DPA-IMPORT-2 adds selected specifications, decisions, traceability and
 diagrams. DPA-IMPORT-3 adds Probe manuals, fixture manifests, selected-writer
 planning and historical DP1 evidence snapshots. The current Kit line also
 records a DP1 Assessment readiness record that consolidates staged and current
-fixture evidence and keeps DP2 implementation blocked pending Maintainer
-authorization. Later slices may add refreshed Probe execution evidence,
+fixture evidence and records DP2 authorization for the selected first target
+scope. Later slices may add refreshed Probe execution evidence,
 Assessment records or implementation plans only through separately reviewed
 slices.
 
@@ -118,9 +118,9 @@ not supersede the specification files and do not prove Kit conformance.
   non-production fixture evidence for the remaining Probe families.
 - `../evidence/dpa/assessment/DP1_ASSESSMENT_READINESS_20260728.md`
   consolidates the imported and current DP1 evidence into an Assessment
-  readiness decision surface. It records `DP2_BLOCKED`, preserves the full
-  Probe PASS claim boundary and names the exact Probe, writer, rollback and
-  Maintainer authorization gaps that must close before DP2 can start.
+  readiness decision surface. It records `DP2_AUTHORIZED`, preserves the full
+  Probe PASS claim boundary and authorizes DP2 only for the selected first
+  target scope.
 
 These materials are historical and preparatory. They preserve Lab validation ref
 `c788a8c530eb0984d088a86e8e7951145581abbe` and older command manifest
@@ -134,17 +134,17 @@ baseline command-health refresh only. The full fixture evidence under
 `../evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/` records 36
 authorized non-production fixture passes and rollback cleanup proof for the
 current Kit ref. The Assessment readiness record under
-`../evidence/dpa/assessment/` turns that evidence into a precise DP2 blocker
-map. The Maintainer Assessment is now recorded as `DP2_BLOCKED`, with
+`../evidence/dpa/assessment/` turns that evidence into a precise DP2
+authorization map. The Maintainer Assessment is now recorded as `DP2_AUTHORIZED`, with
 `docs/handoff/CURRENT_HANDOFF.md` and writer `WRT-CH-001` selected as the first
 DP2 target scope. Probe-family and rollback-cleanup evidence are satisfied for
-the current Kit ref, DP2 authorization remains unrecorded and the full Probe
-PASS claim boundary remains closed.
+the current Kit ref, DP2 authorization is recorded and the full Probe PASS claim
+boundary remains closed.
 
 The read-only wrapper `agentic-kit dpa readiness` validates that staged
 Assessment readiness record, reports the deterministic implementation
-percentage and shows the current DP2 blocker set without mutating repository
-files.
+percentage and shows the current DP2 authorization state without mutating
+repository files.
 
 The read-only wrapper `agentic-kit dpa readonly-probe-execution` executes only
 DP1 Probe fixture-manifest cases whose mutation scope is `READ_ONLY` and whose
@@ -188,10 +188,14 @@ template/authorization record. It allows Assessment recording without DP2
 authorization, and still fails closed for premature authorization claims,
 missing Probe dispositions, unselected target scope and missing rollback proof.
 
-The read-only wrapper `agentic-kit dpa readiness` now reports DPA implementation
-readiness at 95% for the current blocked record: all objective DP2 entry
-evidence fields are satisfied for the current Kit ref, while
-`maintainer_authorization` remains the only DP2 blocker.
+The read-only wrapper `agentic-kit dpa readiness` now reports DPA
+implementation readiness at 100% for the current authorization record: all DP2
+entry evidence fields are satisfied for the current Kit ref and no DP2 entry
+blockers remain.
+
+Historical evidence packages still preserve earlier `DP2_BLOCKED` and
+"DP2 implementation blocked" states. Those records remain part of the audit trail;
+they do not override the current `DP2_AUTHORIZED` Assessment record.
 
 ## Generated-output and command-updated boundary
 
@@ -211,9 +215,8 @@ work remains governed by the closeout restrictions:
 1. Preserve the DPA Lab source ref and Kit import baseline in every import slice.
 2. Keep WRT-CH-003 and the full WRT-CH-001 administrative refresh PR flow
    deferred from the first DP2 target.
-3. Keep DP2 implementation blocked until selected Probe and Assessment
-   prerequisites are preserved or refreshed against current Kit refs and a
-   Maintainer authorization token is recorded.
+3. Keep DP2 implementation within the authorized first target scope unless a
+   later Maintainer Assessment selects or authorizes another target.
 4. Re-run the fixture evidence package before any production runtime mutation if
    Probe manuals, fixture manifest, selected target, command manifest or DPA
    implementation code changes.

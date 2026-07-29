@@ -106,13 +106,77 @@ def test_dpa_readiness_rejects_unsafe_claim(tmp_path: Path) -> None:
     assert [finding.code for finding in result.findings] == ["unsafe-claim"]
 
 
+def test_dpa_readiness_rejects_premature_dp2_authorization_claim(tmp_path: Path) -> None:
+    record = _record(
+        tmp_path,
+        {
+            "claims": {
+                "full_probe_pass_claimed": False,
+                "dp2_authorized": True,
+                "runtime_behavior_changed": False,
+                "production_mutation_performed": False,
+                "kit_conformance_claimed": False,
+                "generated_outputs_manually_patched": False,
+            }
+        },
+    )
+
+    result = evaluate_dpa_readiness(tmp_path, readiness_path=record)
+
+    assert not result.ok
+    assert [finding.code for finding in result.findings] == ["premature-authorization-claim"]
+
+
+def test_dpa_readiness_accepts_complete_authorized_record(tmp_path: Path) -> None:
+    dp2_entry_status = {
+        "architecture_staging": "SATISFIED_FOR_ARCHITECTURE_STAGING",
+        "fresh_kit_baseline_recorded": "SATISFIED_FOR_THIS_RECORD",
+        "probe_001_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
+        "probe_002_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
+        "renderer_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
+        "probe_003_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
+        "probe_004_full_evidence": "SATISFIED_FOR_CURRENT_KIT_REF",
+        "maintainer_assessment": "RECORDED_DP2_AUTHORIZED",
+        "first_dp2_target_scope": "SELECTED_WRT_CH001_HANDOFF_SCOPE",
+        "rollback_cleanup_proven": "PROVEN_BY_NON_PRODUCTION_FIXTURE_EVIDENCE",
+        "maintainer_authorization": "AUTHORIZED_BY_MAINTAINER_RECORD",
+    }
+    record = _record(
+        tmp_path,
+        {
+            "status": "DP2_AUTHORIZED",
+            "dp2_entry_status": dp2_entry_status,
+            "claims": {
+                "full_probe_pass_claimed": False,
+                "dp2_authorized": True,
+                "maintainer_authorization_recorded": True,
+                "runtime_behavior_changed": False,
+                "production_mutation_performed": False,
+                "kit_conformance_claimed": False,
+                "generated_outputs_manually_patched": False,
+            },
+        },
+    )
+
+    result = evaluate_dpa_readiness(tmp_path, readiness_path=record)
+
+    assert result.ok
+    assert result.status == "DP2_AUTHORIZED"
+    assert result.dp2_ready
+    assert result.implementation_percent == 100
+    assert result.blockers == ()
+
+
 def test_dpa_readiness_rejects_authorized_record_with_blockers(tmp_path: Path) -> None:
     record = _record(tmp_path, {"status": "DP2_AUTHORIZED"})
 
     result = evaluate_dpa_readiness(tmp_path, readiness_path=record)
 
     assert not result.ok
-    assert [finding.code for finding in result.findings] == ["authorized-with-blockers"]
+    assert [finding.code for finding in result.findings] == [
+        "authorization-claim-missing",
+        "authorized-with-blockers",
+    ]
 
 
 def test_dpa_readiness_rejects_missing_evidence_path(tmp_path: Path) -> None:
@@ -144,17 +208,17 @@ def test_dpa_readiness_rejects_command_manifest_ack_drift(tmp_path: Path) -> Non
     assert [finding.code for finding in result.findings] == ["command-manifest-ack-drift"]
 
 
-def test_dpa_readiness_cli_reports_blocked_without_failure() -> None:
+def test_dpa_readiness_cli_reports_authorized_without_failure() -> None:
     result = runner.invoke(app, ["dpa", "readiness"])
 
     assert result.exit_code == 0
-    assert "DPA readiness: DP2_BLOCKED" in result.stdout
-    assert "implementation: 95%" in result.stdout
-    assert "maintainer_authorization" in result.stdout
+    assert "DPA readiness: DP2_AUTHORIZED" in result.stdout
+    assert "implementation: 100%" in result.stdout
+    assert "DP2 authorization evidence is structurally complete." in result.stdout
 
 
 def test_dpa_readiness_cli_can_require_dp2_ready() -> None:
     result = runner.invoke(app, ["dpa", "readiness", "--require-dp2-ready"])
 
-    assert result.exit_code == 1
-    assert "DPA readiness: DP2_BLOCKED" in result.stdout
+    assert result.exit_code == 0
+    assert "DPA readiness: DP2_AUTHORIZED" in result.stdout
