@@ -94,6 +94,12 @@ The current DP2 Maintainer Assessment record records validation ref
 `WRT-CH-003` and `WRT-CH-004`, records Probe/Cleanup evidence as satisfied
 for the current Kit ref and records decision token `DPA_DP2_AUTHORIZED`.
 
+The current WRT-CH-005 fixture evidence records Kit validation ref
+`0b985a22d4a39577f6f829b48df00180871c02cc`. It confirms the
+workspace-initialization/template boundary records generated handoff templates
+as external target-root initialization output and keeps live Kit
+self-hosting `CURRENT_HANDOFF.md` acceptance-state claims closed.
+
 ## Imported Probe Evidence
 
 - `probes/dp1-readonly-c788a8c5-20260727/` records read-only baseline evidence
@@ -136,6 +142,10 @@ for the current Kit ref and records decision token `DPA_DP2_AUTHORIZED`.
 - `probes/fixture-evidence-be37f052-wrt-ch004-20260729/` records authorized
   non-production fixture evidence for the WRT-CH-004 scope-extension slice with
   result `FULL_FIXTURE_EVIDENCE_RECORDED`.
+- `probes/fixture-evidence-0b985a22-wrt-ch005-20260729/` records authorized
+  non-production fixture evidence for the WRT-CH-005
+  workspace-initialization/template boundary slice with result
+  `FULL_FIXTURE_EVIDENCE_RECORDED`.
 - `assessment/DP1_ASSESSMENT_READINESS_20260728.md` records the current DP1
   Assessment readiness decision surface with status `DP2_AUTHORIZED`.
 - `assessment/dp2-decision-readiness-1dfc5e8a-20260728/` records previous DP2

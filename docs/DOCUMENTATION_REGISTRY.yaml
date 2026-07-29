@@ -963,6 +963,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable WRT-CH-004 DP2 scope-extension fixture evidence; records 36 fixture passes and cleanup proof.
+  - path: docs/architecture/evidence/dpa/probes/fixture-evidence-0b985a22-wrt-ch005-20260729/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: WRT-CH-005 workspace-initialization/template boundary fixture evidence summary; non-production only, no self-hosting acceptance or Kit conformance claim.
+  - path: docs/architecture/evidence/dpa/probes/fixture-evidence-0b985a22-wrt-ch005-20260729/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable WRT-CH-005 boundary fixture evidence; records 36 fixture passes and cleanup proof.
   - path: docs/architecture/evidence/dpa/assessment/maintainer-record-check-be37f052-wrt-ch004-20260729/README.md
     class: evidence/log
     owner: maintainers

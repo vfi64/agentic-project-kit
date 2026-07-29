@@ -2,6 +2,11 @@ from dataclasses import asdict
 import subprocess
 
 from agentic_project_kit.contract import build_contract_data, render_contract_yaml
+from agentic_project_kit.dpa_workspace_init_projection import (
+    DPA_WORKSPACE_INIT_HANDOFF_TEMPLATE_PATH,
+    DPA_WORKSPACE_INIT_MANIFEST_PATH,
+    render_workspace_init_projection_manifest,
+)
 from agentic_project_kit.models import ProjectOptions
 from agentic_project_kit.rendering import render_template_string, write_file
 
@@ -231,7 +236,15 @@ def create_project(options: ProjectOptions, overwrite: bool = False) -> None:
         )
     )
     files["docs/STATUS.md"] = GENERATED_STATUS
-    files["docs/handoff/CURRENT_HANDOFF.md"] = GENERATED_HANDOFF
+    files[DPA_WORKSPACE_INIT_HANDOFF_TEMPLATE_PATH] = GENERATED_HANDOFF
+    files[DPA_WORKSPACE_INIT_MANIFEST_PATH] = render_workspace_init_projection_manifest(
+        project_name=options.name,
+        project_type=options.project_type,
+        profile="",
+        profiles=options.profiles,
+        generated_target_paths=(DPA_WORKSPACE_INIT_HANDOFF_TEMPLATE_PATH,),
+        emits_current_handoff_template=True,
+    )
     files["docs/architecture/ARCHITECTURE_CONTRACT.md"] = ARCHITECTURE_CONTRACT
     files["docs/DOCUMENTATION_COVERAGE.yaml"] = DOCUMENTATION_COVERAGE
     files["CHANGELOG.md"] = CHANGELOG
