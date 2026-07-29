@@ -361,6 +361,7 @@ def _is_refresh_only_successor_package_head(generated_head: str, current_head: s
 
     fixed_refresh_paths = set(_admin_refresh_paths(ws))
     fixed_refresh_paths.add(_workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")))
+    fixed_refresh_paths.add(_workspace_path_text(ws, ws.dpa_current_handoff_acceptance_state_path()))
     package_prefix = _workspace_path_text(ws, ws.handoff_packages_latest()) + "/"
 
     def allowed(path: str) -> bool:
