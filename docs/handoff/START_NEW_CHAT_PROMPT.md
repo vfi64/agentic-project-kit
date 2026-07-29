@@ -54,6 +54,6 @@ Current administrative handoff refresh state is `a7a0b6a2` (`Audit ns to agentic
 Current administrative handoff refresh state is `c6ab40da` (`Classify ns migration docs before GUI (#1334)`). Continue next only after this post-PR1334 refresh is committed and merged; the next substantive slice must be created from fresh main.## Operational documentation refresh state after PR #1338
 
 Current administrative handoff refresh state is `979825da` (`Remove ns dev go up shortcuts (#1338)`). Continue next only after this post-PR1338 refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1937
+## Operational documentation refresh state after PR #1939
 
-Current administrative handoff refresh state is `d38fc365` (`Avoid extra handoff prompt trailing newline (#1937)`). Continue next only after this post-PR1937 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `87cb3590` (`Authorize DPA WRT-CH-002 scope (#1939)`). Continue next only after this post-PR1939 refresh is committed and merged; the next substantive slice must be created from fresh main.
