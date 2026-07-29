@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 1bac32fea72107e99cc6ed115f14c97849a6cf1e
-  short: 1bac32fe
-  subject: Route DOI closeout handoff writes through DPA (#1953)
+  full: 6c34f53e9f2136910d34f8bb53f7520022a7ae5c
+  short: 6c34f53e
+  subject: Guard DPA action-surface handoff routing (#1955)
 last_substantive_work_state:
-  full: 1bac32fea72107e99cc6ed115f14c97849a6cf1e
-  short: 1bac32fe
-  subject: Route DOI closeout handoff writes through DPA (#1953)
+  full: 6c34f53e9f2136910d34f8bb53f7520022a7ae5c
+  short: 6c34f53e
+  subject: Guard DPA action-surface handoff routing (#1955)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
