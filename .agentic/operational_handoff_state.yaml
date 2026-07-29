@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 1ffe7d4ed78cea42a8a904f153c342280392d7f9
-  short: 1ffe7d4e
-  subject: Refresh successor package after PR1923 (#1924)
+  full: 44352347bff23bfa5ed18079aba1797c1f990f15
+  short: 44352347
+  subject: Sanitize DPA fixture evidence paths (#1926)
 last_substantive_work_state:
-  full: 1ffe7d4ed78cea42a8a904f153c342280392d7f9
-  short: 1ffe7d4e
-  subject: Refresh successor package after PR1923 (#1924)
+  full: 44352347bff23bfa5ed18079aba1797c1f990f15
+  short: 44352347
+  subject: Sanitize DPA fixture evidence paths (#1926)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

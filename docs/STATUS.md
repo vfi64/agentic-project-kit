@@ -7,9 +7,9 @@ Current verified release: 0.4.13.
 Current release tag: v0.4.13.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
-Current verified main: `1ffe7d4e` (`Refresh successor package after PR1923 (#1924)`).
-Latest substantive work: PR #1924 (`Refresh successor package after PR1923 (#1924)`).
-Post-merge handoff status: PASS/NOOP after PR #1924 administrative refresh.
+Current verified main: `44352347` (`Sanitize DPA fixture evidence paths (#1926)`).
+Latest substantive work: PR #1926 (`Sanitize DPA fixture evidence paths (#1926)`).
+Post-merge handoff status: PASS/NOOP after PR #1926 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1924
+## Operational documentation refresh state after PR #1926
 
-Current administrative handoff refresh state is `1ffe7d4e` (`Refresh successor package after PR1923 (#1924)`). Continue next only after this post-PR1924 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `44352347` (`Sanitize DPA fixture evidence paths (#1926)`). Continue next only after this post-PR1926 refresh is committed and merged; the next substantive slice must be created from fresh main.
