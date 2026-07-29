@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import tempfile
 from pathlib import Path
 
 from typer.testing import CliRunner
@@ -124,6 +125,10 @@ def test_fixture_evidence_executes_authorized_non_production_cases(tmp_path: Pat
     assert payload["claims"]["generated_outputs_manually_patched"] is False
     assert payload["rollback_cleanup_proven"] is True
     assert all(payload["full_evidence_by_family"].values())
+    rendered = json.dumps(payload, sort_keys=True)
+    assert "<DPA_FIXTURE_TEMP_ROOT>" in rendered
+    assert tempfile.gettempdir() not in rendered
+    assert "/private/var/" not in rendered
 
 
 def test_fixture_evidence_plan_only_does_not_satisfy_full_evidence(tmp_path: Path) -> None:
