@@ -22,7 +22,6 @@ AUTHORIZED_STATUS = "DP2_AUTHORIZED"
 REQUIRED_PROBE_FAMILIES = ("PROBE-001", "PROBE-002", "RENDERER", "PROBE-003", "PROBE-004")
 REQUIRED_FALSE_CLAIMS = (
     "full_probe_pass_claimed",
-    "dp2_authorized",
     "runtime_behavior_changed",
     "production_mutation_performed",
     "kit_conformance_claimed",
@@ -266,6 +265,42 @@ def _validate_claims(data: dict[str, Any], findings: list[DpaReadinessFinding], 
                 DpaReadinessFinding(
                     code="unsafe-claim",
                     message=f"claim {claim!r} must be false in the current DPA readiness record",
+                    path=path,
+                )
+            )
+    dp2_authorized = claims.get("dp2_authorized")
+    if data.get("status") == AUTHORIZED_STATUS:
+        if dp2_authorized is not True:
+            findings.append(
+                DpaReadinessFinding(
+                    code="authorization-claim-missing",
+                    message="claim 'dp2_authorized' must be true when status is DP2_AUTHORIZED",
+                    path=path,
+                )
+            )
+    elif dp2_authorized is not False:
+        findings.append(
+            DpaReadinessFinding(
+                code="premature-authorization-claim",
+                message="claim 'dp2_authorized' must be false unless status is DP2_AUTHORIZED",
+                path=path,
+            )
+        )
+    maintainer_authorized = claims.get("maintainer_authorization_recorded")
+    if maintainer_authorized is not None:
+        if data.get("status") == AUTHORIZED_STATUS and maintainer_authorized is not True:
+            findings.append(
+                DpaReadinessFinding(
+                    code="maintainer-authorization-claim-missing",
+                    message="claim 'maintainer_authorization_recorded' must be true when status is DP2_AUTHORIZED",
+                    path=path,
+                )
+            )
+        if data.get("status") != AUTHORIZED_STATUS and maintainer_authorized is not False:
+            findings.append(
+                DpaReadinessFinding(
+                    code="premature-maintainer-authorization-claim",
+                    message="claim 'maintainer_authorization_recorded' must be false unless status is DP2_AUTHORIZED",
                     path=path,
                 )
             )

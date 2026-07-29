@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
   "kind": "dpa_dp2_maintainer_assessment_record",
-  "status": "DP2_BLOCKED",
-  "status_date": "2026-07-28",
+  "status": "DP2_AUTHORIZED",
+  "status_date": "2026-07-29",
   "template": false,
-  "validation_ref": "b1b708cb5d185f117aea936bd5d49592b6e319d9",
+  "validation_ref": "680ee206b2ade5b475d005127f0ea32f0a028689",
   "readiness_record": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
-  "decision_readiness_evidence": "docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-1dfc5e8a-20260728/results.json",
-  "maintainer": "Maintainer instruction recorded in Codex DPA continuation, 2026-07-28",
-  "decision_token": "DPA_DP2_BLOCKED_PENDING_AUTHORIZATION",
+  "decision_readiness_evidence": "docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-680ee206-20260729/results.json",
+  "maintainer": "Maintainer instruction recorded in Codex DPA continuation, 2026-07-29: no more halts; finish DPA.",
+  "decision_token": "DPA_DP2_AUTHORIZED",
   "probe_dispositions": {
     "PROBE-002": {
       "status": "SATISFIED_FOR_CURRENT_KIT_REF",
@@ -73,8 +73,8 @@
   },
   "claims": {
     "maintainer_assessment_recorded": true,
-    "maintainer_authorization_recorded": false,
-    "dp2_authorized": false,
+    "maintainer_authorization_recorded": true,
+    "dp2_authorized": true,
     "runtime_behavior_changed": false,
     "production_mutation_performed": false,
     "kit_conformance_claimed": false,

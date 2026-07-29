@@ -838,11 +838,11 @@ documents:
   - path: docs/architecture/evidence/dpa/assessment/DP1_ASSESSMENT_READINESS_20260728.md
     class: evidence/log
     owner: maintainers
-    notes: Current Kit DP1 Assessment readiness record; records DP2_BLOCKED and no full Probe PASS claim.
+    notes: Current Kit DP1 Assessment readiness record; records DP2_AUTHORIZED for the selected first target and no full Probe PASS claim.
   - path: docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json
     class: evidence/log
     owner: maintainers
-    notes: Machine-readable companion to the DP1 Assessment readiness record; not DP2 authorization or conformance evidence.
+    notes: Machine-readable companion to the DP1 Assessment readiness record; records selected-target DP2 authorization, not conformance evidence.
   - path: docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-8ceadc8a-20260728/README.md
     class: evidence/log
     owner: maintainers
@@ -867,6 +867,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable current DP2 decision-readiness refresh; preserves false DP2 authorization and production mutation claims.
+  - path: docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-680ee206-20260729/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current DP2 decision-readiness authorization summary; implementation percent 100 with no blockers.
+  - path: docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-680ee206-20260729/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable current DP2 decision-readiness authorization evidence; reports DP2_AUTHORIZED_ALREADY.
   - path: docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_TEMPLATE_20260728.json
     class: evidence/log
     owner: maintainers
@@ -907,6 +915,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable current DP2 Maintainer Assessment record check; Probe/Cleanup evidence satisfied, no DP2 authorization.
+  - path: docs/architecture/evidence/dpa/assessment/maintainer-record-check-680ee206-20260729/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current DP2 Maintainer authorization check summary; VALID_AUTHORIZATION_RECORD.
+  - path: docs/architecture/evidence/dpa/assessment/maintainer-record-check-680ee206-20260729/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable current DP2 Maintainer authorization check; records DPA_DP2_AUTHORIZED and no action items.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers
