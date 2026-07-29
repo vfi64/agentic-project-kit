@@ -306,6 +306,12 @@ command with sufficient output, add a reviewed read-only wrapper before Probe
 execution, or record Maintainer authorization for the internal helper as
 diagnostic evidence.
 
+Current WRT-CH-006 implementation adds
+`src/agentic_project_kit/dpa_successor_projection.py` as the generated-output
+contract surface for successor-handoff package and prompt projections. It is
+source evidence for PROBE-004 generated-output and rollback-boundary checks,
+not manual target-byte evidence for generated files.
+
 ## 6. Current diagnostic command observations
 
 The following commands were run read-only at Kit ref

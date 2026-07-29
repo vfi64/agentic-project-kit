@@ -596,17 +596,82 @@ def test_handoff_projection_contract_names_generated_paths_and_update_policy() -
 
     contract = build_execution_contract(_minimal_successor_context())
     projection = contract["handoff_projection_contract"]
+    dpa_contract = projection["dpa_generated_output_contract"]
 
     assert "docs/handoff/NEXT_CHAT_BOOTSTRAP.md" in projection["generated_projection_paths"]
     assert "docs/reports/handoff-packages/latest/execution_contract.json" in projection["generated_projection_paths"]
+    assert "docs/handoff/NEXT_CHAT_BOOTSTRAP.md" in projection["default_direct_write_paths"]
+    assert "docs/handoff/START_NEW_CHAT_PROMPT.md" in projection["dedicated_update_only_paths"]
     assert projection["source_of_truth"] == "generator_and_machine_readable_successor_package"
     assert projection["generator_command"] == "agentic-kit transfer prepare-successor-handoff --render-prompt"
     assert "manual direct edits to generated handoff projections" in projection["forbidden_update_path"]
+    assert dpa_contract["writer_id"] == "WRT-CH-006"
+    assert dpa_contract["target_scope"] == "GENERATED_SUCCESSOR_HANDOFF_PACKAGE_AND_PROMPT_PROJECTIONS"
+    assert dpa_contract["manual_durable_target_patches_allowed"] is False
+    assert dpa_contract["current_handoff_target_byte_writer"] is False
+    assert dpa_contract["default_direct_write_paths"] == projection["default_direct_write_paths"]
+    assert dpa_contract["dedicated_update_only_paths"] == projection["dedicated_update_only_paths"]
     assert {
         "generated-handoff-projection-update-policy",
         "patch-cycle-diagnostic-gate",
         "copy-paste-output-discipline",
     } <= set(contract["general_contract"]["rule_ids"])
+
+
+def test_validate_successor_outputs_requires_dpa_generated_output_contract() -> None:
+    import json
+
+    from agentic_project_kit.successor_handoff_package import (
+        build_execution_contract,
+        validate_successor_outputs,
+    )
+
+    contract = build_execution_contract(_minimal_successor_context())
+    del contract["handoff_projection_contract"]["dpa_generated_output_contract"]
+
+    report = validate_successor_outputs(
+        {
+            "successor_prompt.md": "# prompt",
+            "execution_contract.json": json.dumps(contract),
+        },
+        _minimal_successor_context(),
+    )
+
+    assert report["status"] == "FAIL"
+    assert any(
+        finding["code"] == "invalid_dpa_generated_output_contract"
+        and "must be a mapping" in finding["message"]
+        for finding in report["findings"]
+    )
+
+
+def test_validate_successor_outputs_rejects_manual_durable_projection_patches() -> None:
+    import json
+
+    from agentic_project_kit.successor_handoff_package import (
+        build_execution_contract,
+        validate_successor_outputs,
+    )
+
+    contract = build_execution_contract(_minimal_successor_context())
+    contract["handoff_projection_contract"]["dpa_generated_output_contract"][
+        "manual_durable_target_patches_allowed"
+    ] = True
+
+    report = validate_successor_outputs(
+        {
+            "successor_prompt.md": "# prompt",
+            "execution_contract.json": json.dumps(contract),
+        },
+        _minimal_successor_context(),
+    )
+
+    assert report["status"] == "FAIL"
+    assert any(
+        finding["code"] == "invalid_dpa_generated_output_contract"
+        and "manual_durable_target_patches_allowed must be false" in finding["message"]
+        for finding in report["findings"]
+    )
 
 
 def test_successor_prompt_renders_machine_readable_precedence_and_state_separation() -> None:

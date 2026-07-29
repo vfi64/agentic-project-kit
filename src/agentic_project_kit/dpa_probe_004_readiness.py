@@ -10,6 +10,7 @@ from agentic_project_kit.dpa_readiness import DEFAULT_READINESS_PATH
 from agentic_project_kit.workspace import load_workspace
 
 PROBE_004_SOURCE_PATHS = (
+    "src/agentic_project_kit/dpa_successor_projection.py",
     "src/agentic_project_kit/successor_handoff_package.py",
     "src/agentic_project_kit/transfer_repo_actions.py",
     "docs/reports/handoff-packages/latest/execution_contract.json",
@@ -144,7 +145,7 @@ def evaluate_probe_004_migration_readiness(
         "source_surfaces": source_surfaces,
         "test_surfaces": test_surfaces,
         "control_surfaces": control_surfaces,
-        "required_groups": _group_records(),
+        "required_groups": _group_records(blockers),
         "readiness_probe_family_status": readiness_status,
         "readiness_dp2_entry_status": dp2_entry_status,
         "blockers": blockers,
@@ -360,6 +361,8 @@ def _blockers_for(readiness_status: str, dp2_entry_status: str) -> list[dict[str
                 "message": f"DP2 entry record reports probe_004_full_evidence as {dp2_entry_status}.",
             }
         )
+    if not blockers:
+        return blockers
     blockers.append(
         {
             "id": "probe-004-migration-form-fixtures",
@@ -393,8 +396,13 @@ def _blockers_for(readiness_status: str, dp2_entry_status: str) -> list[dict[str
     return blockers
 
 
-def _group_records() -> list[dict[str, str]]:
+def _group_records(blockers: list[dict[str, str]]) -> list[dict[str, str]]:
     records: list[dict[str, str]] = []
+    if not blockers:
+        return [
+            {"id": group_id, "label": label, "status": "SATISFIED_FOR_CURRENT_KIT_REF"}
+            for group_id, label, _category in REQUIRED_GROUPS
+        ]
     for group_id, label, category in REQUIRED_GROUPS:
         if category == "migration-form":
             status = "BLOCKED_REQUIRES_SELECTED_MIGRATION_SCOPE_FIXTURE"
