@@ -112,7 +112,7 @@ not supersede the specification files and do not prove Kit conformance.
   `46deae72c2d37ae18331203bc3a6be19c9a67f64` with result
   `PASS_WITH_LIMITATIONS`, current PROBE-001 registry compatibility evidence,
   PROBE-002 lifecycle readiness preflight, the WRT-CH-001 admin-refresh
-  observation, PROBE-003 workflow serialization readiness preflight and Renderer
+  observations, PROBE-003 workflow serialization readiness preflight and Renderer
   Probe readiness preflight, plus current read-only Probe execution for
   `READ_ONLY`/`NOT_REQUIRED` fixture cases and current authorized
   non-production fixture evidence for the remaining Probe families.
@@ -192,6 +192,13 @@ The read-only wrapper `agentic-kit dpa readiness` now reports DPA
 implementation readiness at 100% for the current authorization record: all DP2
 entry evidence fields are satisfied for the current Kit ref and no DP2 entry
 blockers remain.
+
+The current WRT-CH-001 observation package under
+`../evidence/dpa/probes/wrt-ch001-admin-refresh-observation-57a892e4-20260729/`
+records the merged post-PR1932 handoff refresh PR #1933 after the
+self-stale successor-prompt fix. It is administrative refresh observation
+evidence only; it does not expand the selected first DP2 target scope and does
+not claim disposable fixture execution or Kit conformance.
 
 Historical evidence packages still preserve earlier `DP2_BLOCKED` and
 "DP2 implementation blocked" states. Those records remain part of the audit trail;

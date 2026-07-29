@@ -1043,6 +1043,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable WRT-CH-001 observation evidence from merged admin refresh PR #1915; records no DP2 authorization.
+  - path: docs/architecture/evidence/dpa/probes/wrt-ch001-admin-refresh-observation-57a892e4-20260729/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current Kit WRT-CH-001 admin-refresh observation summary for PR #1933; not disposable fixture execution.
+  - path: docs/architecture/evidence/dpa/probes/wrt-ch001-admin-refresh-observation-57a892e4-20260729/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable WRT-CH-001 observation evidence from merged admin refresh PR #1933; records no DP2 authorization.
   - path: docs/architecture/evidence/dpa/probes/probe-003-workflow-readiness-1dfc5e8a-20260728/README.md
     class: evidence/log
     owner: maintainers
