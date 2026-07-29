@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr1957-handoff-refresh`
+- branch: `docs/post-pr1959-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -402,14 +402,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr1957-handoff-refresh",
+    "branch": "docs/post-pr1959-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f653bbbb6f056fde3fe9be07a92c0189b12f1700",
+    "head": "644f470a42e9c1970f3ace966abf13dd5210d90f",
     "head_matches_origin_main": true,
-    "head_short": "f653bbbb",
+    "head_short": "644f470a",
     "local_path": "cd /path/to/",
-    "origin_main": "f653bbbb6f056fde3fe9be07a92c0189b12f1700",
-    "origin_main_short": "f653bbbb",
+    "origin_main": "644f470a42e9c1970f3ace966abf13dd5210d90f",
+    "origin_main_short": "644f470a",
     "worktree_clean": false
   }
 }
