@@ -1,0 +1,2161 @@
+{
+  "authorization": {
+    "authorization_token": "DPA_FIXTURE_EXECUTION_AUTHORIZED",
+    "authorized": true,
+    "authorized_by": "Maintainer instruction in Codex chat, 2026-07-29: authorize WRT-CH-002 DP2 scope extension",
+    "required_token": "DPA_FIXTURE_EXECUTION_AUTHORIZED",
+    "scope": "non-production DP1 fixture execution only"
+  },
+  "blocked_case_count": 0,
+  "claims": {
+    "dp2_authorized": false,
+    "full_fixture_evidence_recorded": true,
+    "generated_outputs_manually_patched": false,
+    "kit_conformance_claimed": false,
+    "production_mutation_performed": false,
+    "renderer_conformance_claimed": false,
+    "runtime_behavior_changed": false,
+    "workflow_queue_conformance_claimed": false
+  },
+  "completed_at_utc": "2026-07-29T07:11:22.765715+00:00",
+  "failed_case_count": 0,
+  "families": [
+    {
+      "cases": [
+        {
+          "authorization": "NOT_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "read-only fixture checks completed without writing source state",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "registry-current-entries-accepted",
+              "message": "P001-REG-001 satisfied registry-current-entries-accepted.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "cleanup_result": "PASS",
+          "expected_result": "existing entries parse and validate without broad migration",
+          "family_id": "PROBE-001",
+          "id": "P001-REG-001",
+          "isolation_scope": "READ_ONLY_SOURCE",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "PASS",
+          "title": "Existing manual registry entries remain accepted",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "projection-contract-positive-fixture",
+              "message": "P001-REG-002 satisfied projection-contract-positive-fixture.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "projection contract fixture validates and does not affect existing entries",
+          "family_id": "PROBE-001",
+          "id": "P001-REG-002",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Valid optional ProjectionContract is accepted",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "partition-contract-positive-fixture",
+              "message": "P001-REG-003 satisfied partition-contract-positive-fixture.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "partition contract fixture validates with explicit parent relationship",
+          "family_id": "PROBE-001",
+          "id": "P001-REG-003",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Valid parent-entry PartitionContract is accepted",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "unknown-projection-schema-fails-loud",
+              "message": "P001-REG-004 satisfied unknown-projection-schema-fails-loud.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "registry check rejects fixture with schema-version diagnostic",
+          "family_id": "PROBE-001",
+          "id": "P001-REG-004",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Unknown projection schema version fails loud",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "unknown-projection-field-fails-loud",
+              "message": "P001-REG-005 satisfied unknown-projection-field-fails-loud.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "registry check rejects unknown field without accepting partial projection state",
+          "family_id": "PROBE-001",
+          "id": "P001-REG-005",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Unknown projection field fails loud",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "missing-projection-field-fails-loud",
+              "message": "P001-REG-006 satisfied missing-projection-field-fails-loud.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "registry check reports the missing required field",
+          "family_id": "PROBE-001",
+          "id": "P001-REG-006",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Missing required projection field fails loud",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "dangling-region-reference-fails-loud",
+              "message": "P001-REG-007 satisfied dangling-region-reference-fails-loud.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "registry check rejects dangling or inconsistent registered-region reference",
+          "family_id": "PROBE-001",
+          "id": "P001-REG-007",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Dangling registered-region reference fails loud",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "unsupported-semantics-partition-combination-fails-loud",
+              "message": "P001-REG-008 satisfied unsupported-semantics-partition-combination-fails-loud.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "registry check rejects unsupported target-semantics and partition combination",
+          "family_id": "PROBE-001",
+          "id": "P001-REG-008",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Unsupported target semantics and partition combination fails loud",
+          "writer_id": null
+        }
+      ],
+      "id": "PROBE-001",
+      "title": "Registry compatibility"
+    },
+    {
+      "cases": [
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "immutable-plan-captures-fingerprints",
+              "message": "P002-LIFE-001 satisfied immutable-plan-captures-fingerprints.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "plan records source, target, base, contract, renderer, partition and ownership fingerprints",
+          "family_id": "PROBE-002",
+          "id": "P002-LIFE-001",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Immutable lifecycle plan capture",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "stale-plan-rejected-before-write-and-under-lock",
+              "message": "P002-LIFE-002 satisfied stale-plan-rejected-before-write-and-under-lock.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "write and under-lock continuation reject stale target, source or context",
+          "family_id": "PROBE-002",
+          "id": "P002-LIFE-002",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Stale-plan rejection before Write and under lock",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "atomic-or-partition-preserving-replacement",
+              "message": "P002-LIFE-003 satisfied atomic-or-partition-preserving-replacement.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "write is complete-target atomic or preserves declared partition boundaries",
+          "family_id": "PROBE-002",
+          "id": "P002-LIFE-003",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Atomic target or partition-preserving replacement",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "acceptance-state-tamper-detected",
+              "message": "P002-LIFE-004 satisfied acceptance-state-tamper-detected.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "accepted state is scoped and tamper detection blocks stale or altered evidence",
+          "family_id": "PROBE-002",
+          "id": "P002-LIFE-004",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Acceptance state creation and tamper detection",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "gate-set-reacceptance-no-render-no-target-write",
+              "message": "P002-LIFE-005 satisfied gate-set-reacceptance-no-render-no-target-write.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "gate-only re-acceptance does not rerender or mutate target bytes",
+          "family_id": "PROBE-002",
+          "id": "P002-LIFE-005",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Gate-set re-acceptance without renderer invocation",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "layered-region-acceptance-does-not-overclaim",
+              "message": "P002-LIFE-006 satisfied layered-region-acceptance-does-not-overclaim.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "region acceptance does not overclaim full-document acceptance",
+          "family_id": "PROBE-002",
+          "id": "P002-LIFE-006",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Layered acceptance for registered-region projections",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "disposable branch mutation detected stale identity and cleaned up",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "handoff-refresh-writer-bounded-to-selected-target",
+              "message": "P002-WRT-001 satisfied handoff-refresh-writer-bounded-to-selected-target.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "base_ref_recorded": true,
+            "branch_ref_recorded": true,
+            "final_status": "",
+            "stale_plan_detected": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "cleanup_result": "PASS",
+          "commands": [
+            {
+              "argv": [
+                "git",
+                "init"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "Initialized empty Git repository in <DPA_FIXTURE_TEMP_ROOT>/.git/\n"
+            },
+            {
+              "argv": [
+                "git",
+                "config",
+                "user.email",
+                "dpa-fixture@example.invalid"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "config",
+                "user.name",
+                "DPA Fixture"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "add",
+                "projection.md"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "commit",
+                "-m",
+                "base"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "[main (root-commit) 8c815c3] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
+            },
+            {
+              "argv": [
+                "git",
+                "switch",
+                "-c",
+                "dpa-fixture-branch"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "Switched to a new branch 'dpa-fixture-branch'\n",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "add",
+                "projection.md"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "commit",
+                "-m",
+                "fixture mutation"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "[dpa-fixture-branch 6e7d913] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+            },
+            {
+              "argv": [
+                "git",
+                "switch",
+                "-"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "Switched to branch 'main'\n",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "branch",
+                "-D",
+                "dpa-fixture-branch"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "Deleted branch dpa-fixture-branch (was 6e7d913).\n"
+            }
+          ],
+          "expected_result": "WRT-CH-001 writes are either lifecycle-routed or classified as existing unadapted writer behavior",
+          "family_id": "PROBE-002",
+          "id": "P002-WRT-001",
+          "isolation_scope": "DISPOSABLE_BRANCH_FIXTURE",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "result_status": "PASS",
+          "title": "Administrative handoff refresh writer routing",
+          "writer_id": "WRT-CH-001"
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "disposable branch mutation detected stale identity and cleaned up",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "release-prep-writer-deferred-from-first-target",
+              "message": "P002-WRT-002 satisfied release-prep-writer-deferred-from-first-target.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "base_ref_recorded": true,
+            "branch_ref_recorded": true,
+            "final_status": "",
+            "stale_plan_detected": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "cleanup_result": "PASS",
+          "commands": [
+            {
+              "argv": [
+                "git",
+                "init"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "Initialized empty Git repository in <DPA_FIXTURE_TEMP_ROOT>/.git/\n"
+            },
+            {
+              "argv": [
+                "git",
+                "config",
+                "user.email",
+                "dpa-fixture@example.invalid"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "config",
+                "user.name",
+                "DPA Fixture"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "add",
+                "projection.md"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "commit",
+                "-m",
+                "base"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "[main (root-commit) 8c815c3] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
+            },
+            {
+              "argv": [
+                "git",
+                "switch",
+                "-c",
+                "dpa-fixture-branch"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "Switched to a new branch 'dpa-fixture-branch'\n",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "add",
+                "projection.md"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "commit",
+                "-m",
+                "fixture mutation"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "[dpa-fixture-branch 6e7d913] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+            },
+            {
+              "argv": [
+                "git",
+                "switch",
+                "-"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "Switched to branch 'main'\n",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "branch",
+                "-D",
+                "dpa-fixture-branch"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "Deleted branch dpa-fixture-branch (was 6e7d913).\n"
+            }
+          ],
+          "expected_result": "WRT-CH-002 dry-run and write-mode behavior are bounded and not mistaken for DPA conformance",
+          "family_id": "PROBE-002",
+          "id": "P002-WRT-002",
+          "isolation_scope": "DISPOSABLE_BRANCH_FIXTURE",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "result_status": "PASS",
+          "title": "Release preparation writer routing",
+          "writer_id": "WRT-CH-002"
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "disposable branch mutation detected stale identity and cleaned up",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "post-release-doi-writer-deferred-from-first-target",
+              "message": "P002-WRT-003 satisfied post-release-doi-writer-deferred-from-first-target.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "base_ref_recorded": true,
+            "branch_ref_recorded": true,
+            "final_status": "",
+            "stale_plan_detected": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "cleanup_result": "PASS",
+          "commands": [
+            {
+              "argv": [
+                "git",
+                "init"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "Initialized empty Git repository in <DPA_FIXTURE_TEMP_ROOT>/.git/\n"
+            },
+            {
+              "argv": [
+                "git",
+                "config",
+                "user.email",
+                "dpa-fixture@example.invalid"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "config",
+                "user.name",
+                "DPA Fixture"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "add",
+                "projection.md"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "commit",
+                "-m",
+                "base"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "[main (root-commit) 8c815c3] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
+            },
+            {
+              "argv": [
+                "git",
+                "switch",
+                "-c",
+                "dpa-fixture-branch"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "Switched to a new branch 'dpa-fixture-branch'\n",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "add",
+                "projection.md"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "commit",
+                "-m",
+                "fixture mutation"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "[dpa-fixture-branch 6e7d913] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+            },
+            {
+              "argv": [
+                "git",
+                "switch",
+                "-"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "Switched to branch 'main'\n",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "branch",
+                "-D",
+                "dpa-fixture-branch"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "Deleted branch dpa-fixture-branch (was 6e7d913).\n"
+            }
+          ],
+          "expected_result": "WRT-CH-003 allowed paths and cleanup are bounded before any DPA reliance",
+          "family_id": "PROBE-002",
+          "id": "P002-WRT-003",
+          "isolation_scope": "DISPOSABLE_BRANCH_FIXTURE",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "result_status": "PASS",
+          "title": "Post-release DOI closeout writer routing",
+          "writer_id": "WRT-CH-003"
+        },
+        {
+          "authorization": "NOT_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "read-only fixture checks completed without writing source state",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "action-spec-mutation-authority-deferred-from-first-target",
+              "message": "P002-WRT-004 satisfied action-spec-mutation-authority-deferred-from-first-target.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "cleanup_result": "PASS",
+          "expected_result": "WRT-CH-004 cannot become a bypass around selected writer lifecycle routing",
+          "family_id": "PROBE-002",
+          "id": "P002-WRT-004",
+          "isolation_scope": "READ_ONLY_SOURCE",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "PASS",
+          "title": "Action-spec surfaced mutation authority",
+          "writer_id": "WRT-CH-004"
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "workspace-init-template-excluded-from-first-target",
+              "message": "P002-WRT-005 satisfied workspace-init-template-excluded-from-first-target.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "WRT-CH-005 is contained to disposable generated target roots",
+          "family_id": "PROBE-002",
+          "id": "P002-WRT-005",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Workspace initialization template writer boundary",
+          "writer_id": "WRT-CH-005"
+        },
+        {
+          "authorization": "NOT_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "read-only fixture checks completed without writing source state",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-successor-package-owned-by-command-contract",
+              "message": "P002-WRT-006 satisfied generated-successor-package-owned-by-command-contract.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "cleanup_result": "PASS",
+          "expected_result": "WRT-CH-006 remains generator-owned and is not treated as CURRENT_HANDOFF.md target-byte writing",
+          "family_id": "PROBE-002",
+          "id": "P002-WRT-006",
+          "isolation_scope": "READ_ONLY_SOURCE",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "PASS",
+          "title": "Generated successor package output boundary",
+          "writer_id": "WRT-CH-006"
+        }
+      ],
+      "id": "PROBE-002",
+      "title": "Lifecycle, acceptance and writer routing"
+    },
+    {
+      "cases": [
+        {
+          "authorization": "NOT_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "read-only fixture checks completed without writing source state",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "renderer-map-identity-fixture-explicit",
+              "message": "REN-001 satisfied renderer-map-identity-fixture-explicit.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "cleanup_result": "PASS",
+          "expected_result": "approved renderer identity and interface version are resolved without fallback guessing",
+          "family_id": "RENDERER",
+          "id": "REN-001",
+          "isolation_scope": "READ_ONLY_SOURCE",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "PASS",
+          "title": "Renderer map identity is explicit",
+          "writer_id": null
+        },
+        {
+          "authorization": "NOT_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "read-only fixture checks completed without writing source state",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "renderer-semantic-version-mismatch-blocks-acceptance",
+              "message": "REN-002 satisfied renderer-semantic-version-mismatch-blocks-acceptance.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "cleanup_result": "PASS",
+          "expected_result": "semantic-version mismatch blocks acceptance rather than silently rerendering",
+          "family_id": "RENDERER",
+          "id": "REN-002",
+          "isolation_scope": "READ_ONLY_SOURCE",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "PASS",
+          "title": "Renderer rejects semantic-version mismatch",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "renderer-repeat-output-deterministic",
+              "message": "REN-003 satisfied renderer-repeat-output-deterministic.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "same immutable inputs produce byte-identical or explicitly declared equivalent output",
+          "family_id": "RENDERER",
+          "id": "REN-003",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Renderer deterministic repeat output",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "renderer-side-effects-rejected",
+              "message": "REN-004 satisfied renderer-side-effects-rejected.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "renderer does not mutate filesystem, network, subprocess, workflow, state or evidence outside declared output",
+          "family_id": "RENDERER",
+          "id": "REN-004",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Renderer side-effect prohibition",
+          "writer_id": null
+        }
+      ],
+      "id": "RENDERER",
+      "title": "Renderer identity and purity"
+    },
+    {
+      "cases": [
+        {
+          "authorization": "NOT_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "read-only fixture checks completed without writing source state",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "branch-worktree-ref-identity-captured",
+              "message": "P003-WF-001 satisfied branch-worktree-ref-identity-captured.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "cleanup_result": "PASS",
+          "expected_result": "local branch, upstream and worktree state are captured before any mutable Probe",
+          "family_id": "PROBE-003",
+          "id": "P003-WF-001",
+          "isolation_scope": "READ_ONLY_SOURCE",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "PASS",
+          "title": "Branch and worktree exact-ref identity",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "disposable branch mutation detected stale identity and cleaned up",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "branch-movement-invalidates-plan",
+              "message": "P003-WF-002 satisfied branch-movement-invalidates-plan.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "base_ref_recorded": true,
+            "branch_ref_recorded": true,
+            "final_status": "",
+            "stale_plan_detected": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "cleanup_result": "PASS",
+          "commands": [
+            {
+              "argv": [
+                "git",
+                "init"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "Initialized empty Git repository in <DPA_FIXTURE_TEMP_ROOT>/.git/\n"
+            },
+            {
+              "argv": [
+                "git",
+                "config",
+                "user.email",
+                "dpa-fixture@example.invalid"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "config",
+                "user.name",
+                "DPA Fixture"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "add",
+                "projection.md"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "commit",
+                "-m",
+                "base"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "[main (root-commit) 8c815c3] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
+            },
+            {
+              "argv": [
+                "git",
+                "switch",
+                "-c",
+                "dpa-fixture-branch"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "Switched to a new branch 'dpa-fixture-branch'\n",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "add",
+                "projection.md"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "commit",
+                "-m",
+                "fixture mutation"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "[dpa-fixture-branch 6e7d913] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+            },
+            {
+              "argv": [
+                "git",
+                "switch",
+                "-"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "Switched to branch 'main'\n",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "branch",
+                "-D",
+                "dpa-fixture-branch"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "Deleted branch dpa-fixture-branch (was 6e7d913).\n"
+            }
+          ],
+          "expected_result": "branch movement invalidates stale projection plan before write or evidence publication",
+          "family_id": "PROBE-003",
+          "id": "P003-WF-002",
+          "isolation_scope": "DISPOSABLE_BRANCH_FIXTURE",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "result_status": "PASS",
+          "title": "Branch switch or rebase rejects stale plan",
+          "writer_id": null
+        },
+        {
+          "authorization": "NOT_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "read-only fixture checks completed without writing source state",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "pr-head-base-required-check-identity-scoped",
+              "message": "P003-WF-003 satisfied pr-head-base-required-check-identity-scoped.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "cleanup_result": "PASS",
+          "expected_result": "PR identity and required-check evidence are exact-ref scoped",
+          "family_id": "PROBE-003",
+          "id": "P003-WF-003",
+          "isolation_scope": "READ_ONLY_SOURCE",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "PASS",
+          "title": "PR head/base and required-check identity",
+          "writer_id": null
+        },
+        {
+          "authorization": "NOT_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "read-only fixture checks completed without writing source state",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "integration-revalidation-required",
+              "message": "P003-WF-004 satisfied integration-revalidation-required.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "cleanup_result": "PASS",
+          "expected_result": "merge eligibility cannot rely on stale Probe evidence",
+          "family_id": "PROBE-003",
+          "id": "P003-WF-004",
+          "isolation_scope": "READ_ONLY_SOURCE",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "PASS",
+          "title": "Integration-time revalidation before merge eligibility",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "disposable branch mutation detected stale identity and cleaned up",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "competing-refresh-conflict-fails-closed",
+              "message": "P003-WF-005 satisfied competing-refresh-conflict-fails-closed.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "base_ref_recorded": true,
+            "branch_ref_recorded": true,
+            "final_status": "",
+            "stale_plan_detected": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-DISPOSABLE-BRANCH",
+          "cleanup_result": "PASS",
+          "commands": [
+            {
+              "argv": [
+                "git",
+                "init"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "Initialized empty Git repository in <DPA_FIXTURE_TEMP_ROOT>/.git/\n"
+            },
+            {
+              "argv": [
+                "git",
+                "config",
+                "user.email",
+                "dpa-fixture@example.invalid"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "config",
+                "user.name",
+                "DPA Fixture"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "add",
+                "projection.md"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "commit",
+                "-m",
+                "base"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "[main (root-commit) 8c815c3] base\n 1 file changed, 1 insertion(+)\n create mode 100644 projection.md\n"
+            },
+            {
+              "argv": [
+                "git",
+                "switch",
+                "-c",
+                "dpa-fixture-branch"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "Switched to a new branch 'dpa-fixture-branch'\n",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "add",
+                "projection.md"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "commit",
+                "-m",
+                "fixture mutation"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "[dpa-fixture-branch 6e7d913] fixture mutation\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+            },
+            {
+              "argv": [
+                "git",
+                "switch",
+                "-"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "Switched to branch 'main'\n",
+              "stdout_summary": ""
+            },
+            {
+              "argv": [
+                "git",
+                "branch",
+                "-D",
+                "dpa-fixture-branch"
+              ],
+              "ok": true,
+              "returncode": 0,
+              "stderr_summary": "",
+              "stdout_summary": "Deleted branch dpa-fixture-branch (was 6e7d913).\n"
+            }
+          ],
+          "expected_result": "competing refresh blocks or invalidates stale projection write rather than silently overwriting",
+          "family_id": "PROBE-003",
+          "id": "P003-WF-005",
+          "isolation_scope": "DISPOSABLE_BRANCH_FIXTURE",
+          "mutation_scope": "DISPOSABLE_BRANCH_MUTATION",
+          "result_status": "PASS",
+          "title": "Competing projection refresh conflict",
+          "writer_id": null
+        }
+      ],
+      "id": "PROBE-003",
+      "title": "Workflow serialization"
+    },
+    {
+      "cases": [
+        {
+          "authorization": "NOT_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "read-only fixture checks completed without writing source state",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "no-migration-recorded-as-safety-result",
+              "message": "P004-MIG-001 satisfied no-migration-recorded-as-safety-result.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup_plan_id": "CLEANUP-READONLY",
+          "cleanup_result": "PASS",
+          "expected_result": "no-migration is recorded as a safety result when migration evidence is insufficient",
+          "family_id": "PROBE-004",
+          "id": "P004-MIG-001",
+          "isolation_scope": "READ_ONLY_SOURCE",
+          "mutation_scope": "READ_ONLY",
+          "result_status": "PASS",
+          "title": "No-migration selection is explicit",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "rollback-package-captured-before-write",
+              "message": "P004-MIG-002 satisfied rollback-package-captured-before-write.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "pre-write bytes, refs, source inputs and generated metadata are captured before mutation",
+          "family_id": "PROBE-004",
+          "id": "P004-MIG-002",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Rollback package capture before Write",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "exact-byte-rollback-after-write",
+              "message": "P004-MIG-003 satisfied exact-byte-rollback-after-write.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "post-write rollback restores exact bytes without claiming renderer reproducibility",
+          "family_id": "PROBE-004",
+          "id": "P004-MIG-003",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Exact-byte rollback after Write",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "post-acceptance-rollback-invalidates-acceptance-when-needed",
+              "message": "P004-MIG-004 satisfied post-acceptance-rollback-invalidates-acceptance-when-needed.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "accepted state is invalidated when current renderer reproducibility is not proven",
+          "family_id": "PROBE-004",
+          "id": "P004-MIG-004",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Exact-byte rollback after acceptance invalidates acceptance when needed",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "renderer-semantic-version-rollback-consequence-explicit",
+              "message": "P004-MIG-005 satisfied renderer-semantic-version-rollback-consequence-explicit.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "renderer-version rollback consequence is explicit and does not preserve invalid acceptance",
+          "family_id": "PROBE-004",
+          "id": "P004-MIG-005",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Renderer semantic-version rollback consequence",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "interrupted-migration-recoverable",
+              "message": "P004-MIG-006 satisfied interrupted-migration-recoverable.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "interrupted migration stops in recoverable state with bounded evidence",
+          "family_id": "PROBE-004",
+          "id": "P004-MIG-006",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Interrupted migration recovery",
+          "writer_id": null
+        },
+        {
+          "authorization": "MAINTAINER_REQUIRED",
+          "checks": [
+            {
+              "id": "fixture-case-boundary",
+              "message": "temporary fixture mutation and exact-byte rollback completed",
+              "result": "PASS"
+            },
+            {
+              "id": "production-mutation-boundary",
+              "message": "No production repository state was mutated by this fixture case.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-boundary",
+              "message": "Generated or command-updated Kit outputs were not manually patched.",
+              "result": "PASS"
+            },
+            {
+              "id": "generated-output-rollback-uses-command-contract",
+              "message": "P004-MIG-007 satisfied generated-output-rollback-uses-command-contract.",
+              "result": "PASS"
+            }
+          ],
+          "cleanup": {
+            "fixture_file_count_before_cleanup": 3,
+            "initial_file_count": 0,
+            "rollback_exact_bytes": true,
+            "source_sha_after_rollback": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "source_sha_before": "9160d4be34c8695bd172a76c7c7966587ea5a4d991ad22c87b2b91af54aa9ebb",
+            "temp_root_recorded": true,
+            "temporary_root_removed": true
+          },
+          "cleanup_plan_id": "CLEANUP-TEMP-REPO",
+          "cleanup_result": "PASS",
+          "expected_result": "generated or command-updated outputs are restored through source/generator/command contract or explicitly classified temporary repair",
+          "family_id": "PROBE-004",
+          "id": "P004-MIG-007",
+          "isolation_scope": "TEMPORARY_FIXTURE_ROOT",
+          "mutation_scope": "TEMP_REPO_MUTATION",
+          "result_status": "PASS",
+          "title": "Generated-output rollback uses command contract",
+          "writer_id": null
+        }
+      ],
+      "id": "PROBE-004",
+      "title": "Migration and rollback"
+    }
+  ],
+  "finding_count": 0,
+  "findings": [],
+  "fixture_manifest": "docs/architecture/dpa/probes/fixtures/DP1_PROBE_FIXTURE_MANIFEST_20260727.json",
+  "full_evidence_by_family": {
+    "PROBE-002": true,
+    "PROBE-003": true,
+    "PROBE-004": true,
+    "RENDERER": true
+  },
+  "kind": "dpa_fixture_evidence",
+  "limitations": [
+    "Fixture execution is limited to read-only source inspection, temporary repository state and disposable branch simulations.",
+    "No production branch, release, tag, pull request, handoff package or command-updated Kit output is mutated by this runner.",
+    "The result is DP1 fixture evidence for Assessment; it is not a Kit-wide DPA conformance claim."
+  ],
+  "plan_only": false,
+  "result_status": "FULL_FIXTURE_EVIDENCE_RECORDED",
+  "rollback_cleanup_proven": true,
+  "schema_version": 1,
+  "started_at_utc": "2026-07-29T07:11:22.007081+00:00",
+  "structural_ok": true,
+  "summary": {
+    "blocked_count": 0,
+    "case_count": 36,
+    "cleanup_pass_count": 36,
+    "failed_count": 0,
+    "pass_count": 36
+  },
+  "validation_ref": "38df3ee1810a8731058f2f1971df317c2ab7b3ca"
+}

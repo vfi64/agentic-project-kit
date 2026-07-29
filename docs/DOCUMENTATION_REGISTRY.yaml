@@ -923,6 +923,22 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable current DP2 Maintainer authorization check; records DPA_DP2_AUTHORIZED and no action items.
+  - path: docs/architecture/evidence/dpa/probes/fixture-evidence-38df3ee1-wrt-ch002-20260729/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: WRT-CH-002 DP2 scope-extension fixture evidence summary; non-production only, no release mutation or Kit conformance claim.
+  - path: docs/architecture/evidence/dpa/probes/fixture-evidence-38df3ee1-wrt-ch002-20260729/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable WRT-CH-002 DP2 scope-extension fixture evidence; records 36 fixture passes and cleanup proof.
+  - path: docs/architecture/evidence/dpa/assessment/maintainer-record-check-38df3ee1-wrt-ch002-20260729/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: WRT-CH-002 DP2 Maintainer Assessment record check summary; validates selected WRT-CH-001/WRT-CH-002 scope.
+  - path: docs/architecture/evidence/dpa/assessment/maintainer-record-check-38df3ee1-wrt-ch002-20260729/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable WRT-CH-002 DP2 Maintainer Assessment record check; VALID_AUTHORIZATION_RECORD.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers
