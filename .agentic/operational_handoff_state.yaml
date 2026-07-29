@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e391a04803d44da51f59d8c1dcd27f6e8a78d51b
-  short: e391a048
-  subject: Refresh successor package after PR1934 (#1935)
+  full: d38fc3656ae67f5c1b06353678d8425b7bb859f0
+  short: d38fc365
+  subject: Avoid extra handoff prompt trailing newline (#1937)
 last_substantive_work_state:
-  full: e391a04803d44da51f59d8c1dcd27f6e8a78d51b
-  short: e391a048
-  subject: Refresh successor package after PR1934 (#1935)
+  full: d38fc3656ae67f5c1b06353678d8425b7bb859f0
+  short: d38fc365
+  subject: Avoid extra handoff prompt trailing newline (#1937)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
