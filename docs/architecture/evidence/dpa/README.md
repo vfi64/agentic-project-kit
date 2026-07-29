@@ -32,8 +32,8 @@ it records `PARTIAL_BLOCKED_FOR_DP2` because current disposable writer fixtures
 and Maintainer select/defer decisions remain open.
 
 The current WRT-CH-001 administrative handoff refresh observation records Kit
-merge ref `1dfc5e8a75ffc37677b9f85da9e972812da95c04`. It confirms that PR
-#1915 performed the expected command-updated handoff refresh after PR #1914 and
+merge ref `57a892e420e0e79ce519e711a31a2619672d8d27`. It confirms that PR
+#1933 performed the expected command-updated handoff refresh after PR #1932 and
 passed CI. It is observation evidence only; it is not a disposable WRT-CH-001
 fixture and does not satisfy full PROBE-002.
 
@@ -111,6 +111,9 @@ evidence as satisfied for the current Kit ref and records decision token
   `PARTIAL_BLOCKED_FOR_DP2`.
 - `probes/wrt-ch001-admin-refresh-observation-1dfc5e8a-20260728/` records the
   WRT-CH-001 administrative handoff refresh observation for PR #1915 with
+  result `OBSERVED_ADMIN_REFRESH_NOT_DISPOSABLE_FIXTURE`.
+- `probes/wrt-ch001-admin-refresh-observation-57a892e4-20260729/` records the
+  WRT-CH-001 administrative handoff refresh observation for PR #1933 with
   result `OBSERVED_ADMIN_REFRESH_NOT_DISPOSABLE_FIXTURE`.
 - `probes/probe-003-workflow-readiness-1dfc5e8a-20260728/` records current Kit
   PROBE-003 workflow serialization readiness preflight evidence with result
