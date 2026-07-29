@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3ea4f73316771a0e3b4237cb5ed520c76d012edc
-  short: 3ea4f733
-  subject: Avoid self-stale post-PR handoff prompts (#1932)
+  full: e391a04803d44da51f59d8c1dcd27f6e8a78d51b
+  short: e391a048
+  subject: Refresh successor package after PR1934 (#1935)
 last_substantive_work_state:
-  full: 3ea4f73316771a0e3b4237cb5ed520c76d012edc
-  short: 3ea4f733
-  subject: Avoid self-stale post-PR handoff prompts (#1932)
+  full: e391a04803d44da51f59d8c1dcd27f6e8a78d51b
+  short: e391a048
+  subject: Refresh successor package after PR1934 (#1935)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
