@@ -73,7 +73,7 @@ mutation and not Kit conformance.
 
 The current Assessment readiness record consolidates those evidence inputs into
 a DP2 blocker map at current Kit baseline
-`f345cf252f16843f92c45577523ef877cdd04355`. It records `DP2_AUTHORIZED`, keeps
+`be37f052d67cc2646d56c103cef962823a01cee5`. It records `DP2_AUTHORIZED`, keeps
 the full Probe PASS claim boundary closed and records no remaining DP2 entry
 blockers.
 
@@ -89,9 +89,9 @@ Maintainer-owned record shape and keeps the template in `TEMPLATE_NOT_ASSESSED`
 state; it is not a Maintainer record and not DP2 authorization.
 
 The current DP2 Maintainer Assessment record records validation ref
-`f345cf252f16843f92c45577523ef877cdd04355`. It selects the DP2 target scope as
-`docs/handoff/CURRENT_HANDOFF.md` with writers `WRT-CH-001`, `WRT-CH-002` and
-`WRT-CH-003`, defers WRT-CH-004, records Probe/Cleanup evidence as satisfied
+`be37f052d67cc2646d56c103cef962823a01cee5`. It selects the DP2 target scope as
+`docs/handoff/CURRENT_HANDOFF.md` with writers `WRT-CH-001`, `WRT-CH-002`,
+`WRT-CH-003` and `WRT-CH-004`, records Probe/Cleanup evidence as satisfied
 for the current Kit ref and records decision token `DPA_DP2_AUTHORIZED`.
 
 ## Imported Probe Evidence
@@ -133,6 +133,9 @@ for the current Kit ref and records decision token `DPA_DP2_AUTHORIZED`.
 - `probes/fixture-evidence-f345cf25-wrt-ch003-20260729/` records authorized
   non-production fixture evidence for the WRT-CH-003 scope-extension slice with
   result `FULL_FIXTURE_EVIDENCE_RECORDED`.
+- `probes/fixture-evidence-be37f052-wrt-ch004-20260729/` records authorized
+  non-production fixture evidence for the WRT-CH-004 scope-extension slice with
+  result `FULL_FIXTURE_EVIDENCE_RECORDED`.
 - `assessment/DP1_ASSESSMENT_READINESS_20260728.md` records the current DP1
   Assessment readiness decision surface with status `DP2_AUTHORIZED`.
 - `assessment/dp2-decision-readiness-1dfc5e8a-20260728/` records previous DP2
@@ -165,6 +168,9 @@ for the current Kit ref and records decision token `DPA_DP2_AUTHORIZED`.
   result `VALID_AUTHORIZATION_RECORD`.
 - `assessment/maintainer-record-check-f345cf25-wrt-ch003-20260729/` records
   validation of the WRT-CH-003 scope-extension Maintainer Assessment record with
+  result `VALID_AUTHORIZATION_RECORD`.
+- `assessment/maintainer-record-check-be37f052-wrt-ch004-20260729/` records
+  validation of the WRT-CH-004 scope-extension Maintainer Assessment record with
   result `VALID_AUTHORIZATION_RECORD`.
 
 These packages preserve their limitation language. Future execution must freeze
