@@ -2,7 +2,7 @@
 
 Status: probe-package-staged
 
-Status-date: 2026-07-28
+Status-date: 2026-07-29
 
 Document class: architecture
 
@@ -54,8 +54,8 @@ staging. DPA-IMPORT-2 adds selected specifications, decisions, traceability and
 diagrams. DPA-IMPORT-3 adds Probe manuals, fixture manifests, selected-writer
 planning and historical DP1 evidence snapshots. The current Kit line also
 records a DP1 Assessment readiness record that consolidates staged and current
-fixture evidence and records DP2 authorization for the selected first target
-scope. Later slices may add refreshed Probe execution evidence,
+fixture evidence and records DP2 authorization for the selected self-hosting
+target scope. Later slices may add refreshed Probe execution evidence,
 Assessment records or implementation plans only through separately reviewed
 slices.
 
@@ -119,8 +119,8 @@ not supersede the specification files and do not prove Kit conformance.
 - `../evidence/dpa/assessment/DP1_ASSESSMENT_READINESS_20260728.md`
   consolidates the imported and current DP1 evidence into an Assessment
   readiness decision surface. It records `DP2_AUTHORIZED`, preserves the full
-  Probe PASS claim boundary and authorizes DP2 only for the selected first
-  target scope.
+  Probe PASS claim boundary and authorizes DP2 only for the selected
+  self-hosting target scope.
 
 These materials are historical and preparatory. They preserve Lab validation ref
 `c788a8c530eb0984d088a86e8e7951145581abbe` and older command manifest
@@ -191,7 +191,9 @@ missing Probe dispositions, unselected target scope and missing rollback proof.
 The read-only wrapper `agentic-kit dpa readiness` now reports DPA
 implementation readiness at 100% for the current authorization record: all DP2
 entry evidence fields are satisfied for the current Kit ref and no DP2 entry
-blockers remain.
+blockers remain. The current selected self-hosting writer scope is
+`WRT-CH-001` plus `WRT-CH-002`; `WRT-CH-003` and `WRT-CH-004` remain deferred
+until their own scope-extension slices close.
 
 The current WRT-CH-001 observation package under
 `../evidence/dpa/probes/wrt-ch001-admin-refresh-observation-57a892e4-20260729/`
@@ -199,6 +201,17 @@ records the merged post-PR1932 handoff refresh PR #1933 after the
 self-stale successor-prompt fix. It is administrative refresh observation
 evidence only; it does not expand the selected first DP2 target scope and does
 not claim disposable fixture execution or Kit conformance.
+
+The WRT-CH-002 scope-extension package under
+`../evidence/dpa/probes/fixture-evidence-38df3ee1-wrt-ch002-20260729/`
+records a fresh authorized non-production fixture run at Kit validation ref
+`38df3ee1810a8731058f2f1971df317c2ab7b3ca`. The matching Maintainer-record
+check under
+`../evidence/dpa/assessment/maintainer-record-check-38df3ee1-wrt-ch002-20260729/`
+validates the updated DP2 authorization record. This authorizes DPA reliance
+for the WRT-CH-002 release-preparation writer only inside the selected
+`docs/handoff/CURRENT_HANDOFF.md` target scope; it does not execute a release,
+mutate production metadata or claim Kit conformance.
 
 Historical evidence packages still preserve earlier `DP2_BLOCKED` and
 "DP2 implementation blocked" states. Those records remain part of the audit trail;
@@ -220,10 +233,11 @@ After this index, registry staging and Assessment-readiness slice, the next DPA
 work remains governed by the closeout restrictions:
 
 1. Preserve the DPA Lab source ref and Kit import baseline in every import slice.
-2. Keep WRT-CH-003 and the full WRT-CH-001 administrative refresh PR flow
-   deferred from the first DP2 target.
-3. Keep DP2 implementation within the authorized first target scope unless a
-   later Maintainer Assessment selects or authorizes another target.
+2. Keep WRT-CH-003, WRT-CH-004 and the full WRT-CH-001 administrative refresh
+   PR flow deferred until their own scope-extension slices close.
+3. Keep DP2 implementation within the authorized WRT-CH-001/WRT-CH-002 target
+   scope unless a later Maintainer Assessment selects or authorizes another
+   target.
 4. Re-run the fixture evidence package before any production runtime mutation if
    Probe manuals, fixture manifest, selected target, command manifest or DPA
    implementation code changes.

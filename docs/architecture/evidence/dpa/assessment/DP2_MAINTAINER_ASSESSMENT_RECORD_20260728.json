@@ -4,10 +4,10 @@
   "status": "DP2_AUTHORIZED",
   "status_date": "2026-07-29",
   "template": false,
-  "validation_ref": "680ee206b2ade5b475d005127f0ea32f0a028689",
+  "validation_ref": "38df3ee1810a8731058f2f1971df317c2ab7b3ca",
   "readiness_record": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
   "decision_readiness_evidence": "docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-680ee206-20260729/results.json",
-  "maintainer": "Maintainer instruction recorded in Codex DPA continuation, 2026-07-29: no more halts; finish DPA.",
+  "maintainer": "Maintainer instruction recorded in Codex chat, 2026-07-29: authorize WRT-CH-002 DP2 scope extension after WRT-CH-001.",
   "decision_token": "DPA_DP2_AUTHORIZED",
   "probe_dispositions": {
     "PROBE-002": {
@@ -15,16 +15,16 @@
       "evidence": [
         "docs/architecture/evidence/dpa/probes/probe-002-lifecycle-readiness-1dfc5e8a-20260728/results.json",
         "docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/results.json",
-        "docs/architecture/evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/results.json"
+        "docs/architecture/evidence/dpa/probes/fixture-evidence-38df3ee1-wrt-ch002-20260729/results.json"
       ],
-      "rationale": "Lifecycle readiness, read-only execution and authorized non-production fixture evidence satisfy the current PROBE-002 family for the selected first target scope."
+      "rationale": "Lifecycle readiness, read-only execution and authorized non-production fixture evidence satisfy the current PROBE-002 family for the selected WRT-CH-001 and WRT-CH-002 target scope."
     },
     "RENDERER": {
       "status": "SATISFIED_FOR_CURRENT_KIT_REF",
       "evidence": [
         "docs/architecture/evidence/dpa/probes/renderer-readiness-1dfc5e8a-20260728/results.json",
         "docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/results.json",
-        "docs/architecture/evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/results.json"
+        "docs/architecture/evidence/dpa/probes/fixture-evidence-38df3ee1-wrt-ch002-20260729/results.json"
       ],
       "rationale": "Renderer readiness, read-only execution and authorized non-production fixture evidence satisfy renderer identity, semantic-version and side-effect fixture coverage for Assessment."
     },
@@ -33,7 +33,7 @@
       "evidence": [
         "docs/architecture/evidence/dpa/probes/probe-003-workflow-readiness-1dfc5e8a-20260728/results.json",
         "docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/results.json",
-        "docs/architecture/evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/results.json"
+        "docs/architecture/evidence/dpa/probes/fixture-evidence-38df3ee1-wrt-ch002-20260729/results.json"
       ],
       "rationale": "Workflow readiness, read-only execution and authorized disposable branch simulation evidence satisfy current PROBE-003 workflow serialization coverage."
     },
@@ -42,7 +42,7 @@
       "evidence": [
         "docs/architecture/evidence/dpa/probes/probe-004-migration-readiness-1dfc5e8a-20260728/results.json",
         "docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/results.json",
-        "docs/architecture/evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/results.json"
+        "docs/architecture/evidence/dpa/probes/fixture-evidence-38df3ee1-wrt-ch002-20260729/results.json"
       ],
       "rationale": "Migration readiness, read-only execution and authorized non-production fixture evidence satisfy rollback-package, renderer rollback and generated-output rollback coverage for Assessment."
     }
@@ -51,10 +51,10 @@
     "status": "SELECTED",
     "target_path": "docs/handoff/CURRENT_HANDOFF.md",
     "selected_writers": [
-      "WRT-CH-001"
+      "WRT-CH-001",
+      "WRT-CH-002"
     ],
     "deferred_writers": [
-      "WRT-CH-002",
       "WRT-CH-003",
       "WRT-CH-004"
     ],
@@ -62,12 +62,12 @@
       "WRT-CH-005",
       "WRT-CH-006"
     ],
-    "rationale": "First DP2 target scope is limited to the self-hosting administrative handoff target. Release preparation, post-release DOI closeout and action-spec surfaced mutation paths remain deferred until later target-specific Probe and Assessment records. Workspace initialization templates and generated successor package outputs remain excluded from the first target scope."
+    "rationale": "DP2 target scope now includes the self-hosting administrative handoff refresh writer and the release-preparation writer that can touch CURRENT_HANDOFF.md. Post-release DOI closeout and action-spec surfaced mutation paths remain deferred until later target-specific Probe and Assessment records. Workspace initialization templates and generated successor package outputs remain excluded from this self-hosting target scope."
   },
   "rollback_cleanup": {
     "status": "PROVEN",
     "evidence": [
-      "docs/architecture/evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/results.json"
+      "docs/architecture/evidence/dpa/probes/fixture-evidence-38df3ee1-wrt-ch002-20260729/results.json"
     ],
     "rationale": "Authorized non-production fixture execution recorded 36 cleanup passes, exact-byte rollback for temporary fixture state and disposal of temporary roots/branches."
   },

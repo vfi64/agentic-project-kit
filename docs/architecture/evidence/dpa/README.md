@@ -73,7 +73,7 @@ mutation and not Kit conformance.
 
 The current Assessment readiness record consolidates those evidence inputs into
 a DP2 blocker map at current Kit baseline
-`680ee206b2ade5b475d005127f0ea32f0a028689`. It records `DP2_AUTHORIZED`, keeps
+`38df3ee1810a8731058f2f1971df317c2ab7b3ca`. It records `DP2_AUTHORIZED`, keeps
 the full Probe PASS claim boundary closed and records no remaining DP2 entry
 blockers.
 
@@ -89,11 +89,10 @@ Maintainer-owned record shape and keeps the template in `TEMPLATE_NOT_ASSESSED`
 state; it is not a Maintainer record and not DP2 authorization.
 
 The current DP2 Maintainer Assessment record records validation ref
-`680ee206b2ade5b475d005127f0ea32f0a028689`. It selects the first DP2 target
-scope as `docs/handoff/CURRENT_HANDOFF.md` with writer `WRT-CH-001`, defers
-WRT-CH-002 through WRT-CH-004 from that first target, records Probe/Cleanup
-evidence as satisfied for the current Kit ref and records decision token
-`DPA_DP2_AUTHORIZED`.
+`38df3ee1810a8731058f2f1971df317c2ab7b3ca`. It selects the DP2 target scope as
+`docs/handoff/CURRENT_HANDOFF.md` with writers `WRT-CH-001` and `WRT-CH-002`,
+defers WRT-CH-003 and WRT-CH-004, records Probe/Cleanup evidence as satisfied
+for the current Kit ref and records decision token `DPA_DP2_AUTHORIZED`.
 
 ## Imported Probe Evidence
 
@@ -128,6 +127,9 @@ evidence as satisfied for the current Kit ref and records decision token
 - `probes/fixture-evidence-b1b708cb-20260728/` records current Kit authorized
   non-production fixture evidence with result
   `FULL_FIXTURE_EVIDENCE_RECORDED`.
+- `probes/fixture-evidence-38df3ee1-wrt-ch002-20260729/` records authorized
+  non-production fixture evidence for the WRT-CH-002 scope-extension slice with
+  result `FULL_FIXTURE_EVIDENCE_RECORDED`.
 - `assessment/DP1_ASSESSMENT_READINESS_20260728.md` records the current DP1
   Assessment readiness decision surface with status `DP2_AUTHORIZED`.
 - `assessment/dp2-decision-readiness-1dfc5e8a-20260728/` records previous DP2
@@ -155,8 +157,11 @@ evidence as satisfied for the current Kit ref and records decision token
 - `assessment/maintainer-record-check-680ee206-20260729/` records validation of
   the current Maintainer Assessment authorization record with result
   `VALID_AUTHORIZATION_RECORD`.
+- `assessment/maintainer-record-check-38df3ee1-wrt-ch002-20260729/` records
+  validation of the WRT-CH-002 scope-extension Maintainer Assessment record with
+  result `VALID_AUTHORIZATION_RECORD`.
 
 These packages preserve their limitation language. Future execution must freeze
 current refs, record command manifest currency, retain cleanup evidence and
-stay within the authorized first DP2 target scope before any implementation
-relies on them.
+stay within the authorized DP2 target scope before any implementation relies on
+them.
