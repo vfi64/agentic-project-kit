@@ -209,6 +209,15 @@ write behavior. This records WRT-CH-002 as the acceptance-state writer for that
 target mutation; it does not execute a release, publish a tag, publish a DOI or
 claim Kit-wide DPA conformance.
 
+The post-release DOI closeout writer `agentic-kit post-release-doi-closeout
+--write` now routes its `docs/handoff/CURRENT_HANDOFF.md` verified-release and
+DOI metadata mutation through the same DPA target-drift, Workspace-lock,
+under-lock revalidation, post-Write verification and acceptance-state path
+whenever the current workspace carries DPA readiness or DPA acceptance state.
+Non-DPA workspaces retain the prior DOI metadata write behavior. This records
+WRT-CH-003 as the acceptance-state writer for that target mutation; it does not
+publish a release, create DOI records or claim Kit-wide DPA conformance.
+
 The read-only wrapper `agentic-kit dpa readiness` now reports DPA
 implementation readiness at 100% for the current authorization record: all DP2
 entry evidence fields are satisfied for the current Kit ref and no DP2 entry
@@ -274,12 +283,14 @@ touchpoint that is classified as command-updated by the Kit.
 ## Next governed step
 
 After this index, registry staging, Assessment-readiness, initial lifecycle
-wrapper slice and WRT-CH-002 release-preparation routing, the next DPA work
-remains governed by the closeout restrictions:
+wrapper slice, WRT-CH-002 release-preparation routing and WRT-CH-003
+post-release DOI closeout routing, the next DPA work remains governed by the
+closeout restrictions:
 
 1. Preserve the DPA Lab source ref and Kit import baseline in every import slice.
-2. Keep WRT-CH-001 administrative refresh and WRT-CH-002 release preparation on
-   the lifecycle-owned `CURRENT_HANDOFF.md` acceptance-state path.
+2. Keep WRT-CH-001 administrative refresh, WRT-CH-002 release preparation and
+   WRT-CH-003 post-release DOI closeout on the lifecycle-owned
+   `CURRENT_HANDOFF.md` acceptance-state path.
 3. Keep the full WRT-CH-001 administrative refresh PR-flow evidence boundary
    separate until that observation is explicitly closed.
 4. Keep DP2 implementation within the authorized
