@@ -3005,6 +3005,7 @@ def test_successor_package_freshness_allows_refresh_only_head_drift(monkeypatch,
             return subprocess.CompletedProcess(
                 command,
                 0,
+                ".agentic/dpa/acceptance/current_handoff_operational_state.json\n"
                 "docs/reports/handoff-packages/latest/validation_report.json\n"
                 "docs/reports/handoff-packages/latest/execution_contract.json\n"
                 "docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n",
