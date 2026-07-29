@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 59c1700c2d4f
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 56f24aba6681
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `236`
+- Command count: `237`
 
 ## Commands
 
@@ -706,6 +706,25 @@ Run a compact project health check.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+
+### `agentic-kit dpa current-handoff-refresh`
+
+- Safety: `BOUNDED`
+- When to use: Refresh CURRENT_HANDOFF through DPA freshness, locking and acceptance-state gates.
+- Dry-run available: `True`
+
+Refresh CURRENT_HANDOFF through DPA freshness, locking and acceptance-state gates.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `target` | `TyperOption` | --target | `False` |  | Optional registered CURRENT_HANDOFF target override; defaults to the workspace handoff resolver. |
+| `acceptance_state` | `TyperOption` | --acceptance-state | `False` |  | Optional DPA acceptance-state record override; legacy default is .agentic/dpa/acceptance/current_handoff_operational_state.json. |
+| `readiness_record` | `TyperOption` | --readiness-record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')` | DPA Assessment readiness record that must authorize DP2. |
+| `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact repository ref; when supplied it must match current HEAD. |
+| `initialize_acceptance` | `TyperOption` | --initialize-acceptance | `False` | `False` | Allow first acceptance-state creation when no prior DPA state exists. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write target bytes and acceptance state. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit dpa dp2-decision-readiness`
 

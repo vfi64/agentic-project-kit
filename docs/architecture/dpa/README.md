@@ -188,6 +188,18 @@ template/authorization record. It allows Assessment recording without DP2
 authorization, and still fails closed for premature authorization claims,
 missing Probe dispositions, unselected target scope and missing rollback proof.
 
+The controlled wrapper `agentic-kit dpa current-handoff-refresh` is the first
+DP2 lifecycle implementation guard for the selected `docs/handoff/CURRENT_HANDOFF.md`
+target. It renders the current operational handoff block from
+`.agentic/operational_handoff_state.yaml`, checks the DP2 authorization record,
+uses the existing Workspace mutation lock, rejects stale validation refs,
+rejects target drift against persisted DPA acceptance state, revalidates source,
+target and HEAD under lock, verifies written bytes and records lifecycle-owned
+acceptance state under `.agentic/dpa/acceptance/`. Initial acceptance requires
+the explicit `--initialize-acceptance` flag. The wrapper does not mutate
+successor-handoff packages, does not claim Kit-wide DPA conformance and does not
+replace the existing post-merge Handoff PR workflow.
+
 The read-only wrapper `agentic-kit dpa readiness` now reports DPA
 implementation readiness at 100% for the current authorization record: all DP2
 entry evidence fields are satisfied for the current Kit ref and no DP2 entry
@@ -252,17 +264,20 @@ touchpoint that is classified as command-updated by the Kit.
 
 ## Next governed step
 
-After this index, registry staging and Assessment-readiness slice, the next DPA
-work remains governed by the closeout restrictions:
+After this index, registry staging, Assessment-readiness and initial lifecycle
+wrapper slice, the next DPA work remains governed by the closeout restrictions:
 
 1. Preserve the DPA Lab source ref and Kit import baseline in every import slice.
-2. Keep the full WRT-CH-001 administrative refresh PR-flow evidence boundary
+2. Route the WRT-CH-001 administrative `CURRENT_HANDOFF.md` block write through
+   `agentic-kit dpa current-handoff-refresh` before claiming productive DPA
+   reliance for that writer.
+3. Keep the full WRT-CH-001 administrative refresh PR-flow evidence boundary
    separate until that observation is explicitly closed.
-3. Keep DP2 implementation within the authorized
+4. Keep DP2 implementation within the authorized
    WRT-CH-001/WRT-CH-002/WRT-CH-003/WRT-CH-004 target scope unless a later
    Maintainer Assessment selects or authorizes another target.
-4. Re-run the fixture evidence package before any production runtime mutation if
+5. Re-run the fixture evidence package before any production runtime mutation if
    Probe manuals, fixture manifest, selected target, command manifest or DPA
    implementation code changes.
-5. Run the Kit documentation, registry and release-relevant gates selected by
+6. Run the Kit documentation, registry and release-relevant gates selected by
    each import slice.

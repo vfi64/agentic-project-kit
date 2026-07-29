@@ -22,6 +22,11 @@ from agentic_project_kit.dpa_maintainer_record_check import (
     render_dp2_maintainer_record_check,
     write_dp2_maintainer_record_check_json,
 )
+from agentic_project_kit.dpa_current_handoff_lifecycle import (
+    DEFAULT_ACCEPTANCE_STATE_PATH,
+    evaluate_current_handoff_lifecycle,
+    render_current_handoff_lifecycle_result,
+)
 from agentic_project_kit.dpa_probe_002_readiness import (
     evaluate_probe_002_lifecycle_readiness,
     render_probe_002_lifecycle_readiness,
@@ -87,6 +92,56 @@ def dpa_readiness_command(
         typer.echo(render_dpa_readiness_result(result), nl=False)
     if result.findings or (require_dp2_ready and not result.dp2_ready):
         raise typer.Exit(1)
+
+
+@dpa_app.command("current-handoff-refresh")
+def dpa_current_handoff_refresh_command(
+    root: Path = typer.Option(Path("."), "--root", help="Repository root."),
+    target: Path | None = typer.Option(
+        None,
+        "--target",
+        help="Optional registered CURRENT_HANDOFF target override; defaults to the workspace handoff resolver.",
+    ),
+    acceptance_state: Path | None = typer.Option(
+        None,
+        "--acceptance-state",
+        help=f"Optional DPA acceptance-state record override; legacy default is {DEFAULT_ACCEPTANCE_STATE_PATH.as_posix()}.",
+    ),
+    readiness_record: Path = typer.Option(
+        DEFAULT_READINESS_PATH,
+        "--readiness-record",
+        help="DPA Assessment readiness record that must authorize DP2.",
+    ),
+    validation_ref: str | None = typer.Option(
+        None,
+        "--validation-ref",
+        help="Optional exact repository ref; when supplied it must match current HEAD.",
+    ),
+    initialize_acceptance: bool = typer.Option(
+        False,
+        "--initialize-acceptance",
+        help="Allow first acceptance-state creation when no prior DPA state exists.",
+    ),
+    execute: bool = typer.Option(False, "--execute", help="Write target bytes and acceptance state."),
+    output_json: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    """Refresh CURRENT_HANDOFF through DPA freshness, locking and acceptance-state gates."""
+    resolved_root = root.resolve()
+    result = evaluate_current_handoff_lifecycle(
+        resolved_root,
+        target_path=target,
+        acceptance_state_path=acceptance_state,
+        readiness_path=readiness_record,
+        validation_ref=validation_ref,
+        execute=execute,
+        initialize_acceptance=initialize_acceptance,
+    )
+    if output_json:
+        typer.echo(json.dumps(result.as_dict(), indent=2, sort_keys=True))
+    else:
+        typer.echo(render_current_handoff_lifecycle_result(result), nl=False)
+    if not result.ok:
+        raise typer.Exit(2)
 
 
 @dpa_app.command("readonly-probe-execution")

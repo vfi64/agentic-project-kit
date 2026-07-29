@@ -93,6 +93,7 @@ def test_legacy_workspace_paths_match_todays_literals() -> None:
     assert _rel(ws.transfer_outbox()) == ".agentic/transfer/outbox"
     assert _rel(ws.handoff_state_path()) == ".agentic/handoff_state.yaml"
     assert _rel(ws.operational_handoff_state_path()) == ".agentic/operational_handoff_state.yaml"
+    assert _rel(ws.dpa_current_handoff_acceptance_state_path()) == ".agentic/dpa/acceptance/current_handoff_operational_state.json"
     assert _rel(ws.compiled_agent_context_path()) == ".agentic/compiled_agent_context.yaml"
     assert _rel(ws.status_path()) == "docs/STATUS.md"
     assert _rel(ws.test_gates_path()) == "docs/TEST_GATES.md"
