@@ -155,7 +155,7 @@ def evaluate_probe_003_workflow_readiness(
         "source_surfaces": source_surfaces,
         "test_surfaces": test_surfaces,
         "control_surfaces": control_surfaces,
-        "required_groups": _group_records(),
+        "required_groups": _group_records(blockers),
         "readiness_probe_family_status": readiness_status,
         "readiness_dp2_entry_status": dp2_entry_status,
         "blockers": blockers,
@@ -369,6 +369,8 @@ def _blockers_for(readiness_status: str, dp2_entry_status: str) -> list[dict[str
                 "message": f"DP2 entry record reports probe_003_full_evidence as {dp2_entry_status}.",
             }
         )
+    if not blockers:
+        return blockers
     blockers.append(
         {
             "id": "probe-003-executable-fixture-run",
@@ -384,8 +386,13 @@ def _blockers_for(readiness_status: str, dp2_entry_status: str) -> list[dict[str
     return blockers
 
 
-def _group_records() -> list[dict[str, str]]:
+def _group_records(blockers: list[dict[str, str]]) -> list[dict[str, str]]:
     records: list[dict[str, str]] = []
+    if not blockers:
+        return [
+            {"id": group_id, "label": label, "status": "SATISFIED_FOR_CURRENT_KIT_REF"}
+            for group_id, label, _category in REQUIRED_GROUPS
+        ]
     for group_id, label, category in REQUIRED_GROUPS:
         if category in {"mutable-fixture", "pr-fixture", "integration-fixture"}:
             status = "BLOCKED_REQUIRES_AUTHORIZED_DISPOSABLE_WORKFLOW_FIXTURE"

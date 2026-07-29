@@ -13,6 +13,10 @@ from agentic_project_kit.chat_entrypoint_contract import (
     command_reference_contract,
     ensure_command_reference_in_prompt,
 )
+from agentic_project_kit.dpa_successor_projection import (
+    render_successor_projection_dpa_contract,
+    validate_successor_projection_dpa_contract,
+)
 
 from agentic_project_kit import __version__ as PACKAGE_VERSION
 from agentic_project_kit.project_direction import load_project_direction
@@ -151,6 +155,26 @@ def _generated_handoff_projection_paths(ws: Workspace) -> tuple[str, ...]:
 
 
 GENERATED_HANDOFF_PROJECTION_PATHS: tuple[str, ...] = _generated_handoff_projection_paths(_LEGACY_WORKSPACE)
+
+
+def _default_successor_projection_direct_write_paths(ws: Workspace) -> tuple[str, ...]:
+    return (
+        _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md")),
+        _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")),
+        _workspace_path_text(ws, ws.package_file("execution_contract.json")),
+        _workspace_path_text(ws, ws.package_file("source_manifest.json")),
+        _workspace_path_text(ws, ws.package_file("successor_context.yaml")),
+        _workspace_path_text(ws, ws.package_file("successor_prompt.md")),
+        _workspace_path_text(ws, ws.package_file("validation_report.json")),
+    )
+
+
+def _dedicated_successor_projection_update_paths(ws: Workspace) -> tuple[str, ...]:
+    return (
+        _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md")),
+        _workspace_path_text(ws, ws.transfer_handoff_report_file("latest-transfer-handoff-report.json")),
+        _workspace_path_text(ws, ws.transfer_handoff_report_file("latest-transfer-handoff-report.log")),
+    )
 
 
 def _general_source_authorities(ws: Workspace) -> tuple[str, ...]:
@@ -589,6 +613,17 @@ def validate_successor_outputs(
                     "message": "handoff_projection_contract must forbid manual direct edits to generated handoff projections.",
                 }
             )
+        dpa_contract = projection_contract.get("dpa_generated_output_contract")
+        dpa_contract_errors = validate_successor_projection_dpa_contract(dpa_contract)
+        for error in dpa_contract_errors:
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "invalid_dpa_generated_output_contract",
+                    "message": error,
+                }
+            )
 
         forbidden_text = execution_contract_text + "\n" + outputs.get("successor_prompt.md", "")
         for forbidden in _forbidden_local_command_recommendations(forbidden_text):
@@ -752,6 +787,8 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
         "prompt_is_projection_only": True,
         "machine_readable_files_take_precedence": True,
         "generated_projection_paths": list(_generated_handoff_projection_paths(ws)),
+        "default_direct_write_paths": list(_default_successor_projection_direct_write_paths(ws)),
+        "dedicated_update_only_paths": list(_dedicated_successor_projection_update_paths(ws)),
         "source_of_truth": "generator_and_machine_readable_successor_package",
         "allowed_update_path": [
             "Change successor_handoff_package.py, execution contract inputs, or repo-backed rule sources.",
@@ -774,6 +811,13 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
         "stale_local_prompt_files_are_not_authoritative": True,
         "do_not_use_uploaded_or_copied_prompt_text_as_sole_source": True,
     }
+    handoff_projection_contract["dpa_generated_output_contract"] = (
+        render_successor_projection_dpa_contract(
+            generated_projection_paths=_generated_handoff_projection_paths(ws),
+            default_direct_write_paths=_default_successor_projection_direct_write_paths(ws),
+            dedicated_update_only_paths=_dedicated_successor_projection_update_paths(ws),
+        )
+    )
 
     return {
         "schema_version": 1,

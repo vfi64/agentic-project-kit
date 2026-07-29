@@ -294,17 +294,26 @@ Lab.
 This boundary includes successor-handoff package outputs and any future DPA
 touchpoint that is classified as command-updated by the Kit.
 
+The WRT-CH-006 generated successor-handoff projection boundary is implemented
+inside `execution_contract.json` through
+`handoff_projection_contract.dpa_generated_output_contract`. The contract
+classifies successor package files and projected prompt files as
+command-generated outputs, records the generator/source-command authority, keeps
+manual durable target-byte patching forbidden and preserves the no-conformance,
+no-production-mutation and no-full-Probe-claim boundaries.
+
 ## Next governed step
 
-After this index, registry staging, Assessment-readiness, initial lifecycle
-wrapper slice, WRT-CH-002 release-preparation routing and WRT-CH-003
-post-release DOI closeout routing, the next DPA work remains governed by the
-closeout restrictions:
+After this index, registry staging, Assessment-readiness, the lifecycle wrapper
+slice, WRT-CH-002 release-preparation routing, WRT-CH-003 post-release DOI
+closeout routing, WRT-CH-004 action-surface routing, WRT-CH-005 workspace-init
+classification and WRT-CH-006 generated-successor projection classification,
+the next DPA work remains governed by the closeout restrictions:
 
 1. Preserve the DPA Lab source ref and Kit import baseline in every import slice.
-2. Keep WRT-CH-001 administrative refresh, WRT-CH-002 release preparation and
-   WRT-CH-003 post-release DOI closeout on the lifecycle-owned
-   `CURRENT_HANDOFF.md` acceptance-state path.
+2. Keep WRT-CH-001 administrative refresh, WRT-CH-002 release preparation,
+   WRT-CH-003 post-release DOI closeout and WRT-CH-004 action-surface mutation
+   authority on the lifecycle-owned `CURRENT_HANDOFF.md` acceptance-state path.
 3. Keep the full WRT-CH-001 administrative refresh PR-flow evidence boundary
    separate until that observation is explicitly closed.
 4. Keep DP2 implementation within the authorized

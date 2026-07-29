@@ -58,3 +58,8 @@ Generated or command-updated Kit outputs remain source-owned, generator-owned or
 command-owned. Probe planning and later Probe execution must not manually patch
 generated successor-handoff package files, prompt projections or other
 command-updated outputs as durable target bytes.
+
+WRT-CH-006 records this boundary in the successor execution contract via
+`handoff_projection_contract.dpa_generated_output_contract`, with
+`src/agentic_project_kit/dpa_successor_projection.py` as the explicit DPA
+validation surface.
