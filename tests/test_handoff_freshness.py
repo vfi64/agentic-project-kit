@@ -170,6 +170,40 @@ def test_handoff_freshness_guard_accepts_freshly_rendered_successor_prompt_text(
 
     assert warnings == []
 
+
+def test_handoff_freshness_guard_allows_missing_intended_successor_output(
+    tmp_path: Path,
+) -> None:
+    handoff_path = tmp_path / ".agentic" / "handoff_state.yaml"
+    _write(tmp_path / "docs" / "STATUS.md", "status for abc8790\n")
+    _write(tmp_path / "docs" / "handoff" / "CURRENT_HANDOFF.md", "handoff for abc8790\n")
+    _write(handoff_path, "schema_version: 1\n")
+    data = {
+        "safe_state": {"commit": "abc8790"},
+        "handoff_maintenance": {
+            "latest_successor_prompt": "docs/reports/terminal/after-pr879.md",
+        },
+    }
+
+    warnings = assess_handoff_prompt_freshness(
+        data,
+        handoff_path,
+        current_head="abc8790",
+        successor_prompt_text="fresh prompt for abc8790\n",
+        intended_successor_prompt_path="docs/reports/terminal/after-pr879.md",
+    )
+    wrong_path_warnings = assess_handoff_prompt_freshness(
+        data,
+        handoff_path,
+        current_head="abc8790",
+        successor_prompt_text="fresh prompt for abc8790\n",
+        intended_successor_prompt_path="docs/reports/terminal/other.md",
+    )
+
+    assert warnings == []
+    assert any("latest successor handoff prompt is missing" in item for item in wrong_path_warnings)
+
+
 def test_handoff_freshness_guard_accepts_administrative_github_merge_commit(
     tmp_path: Path,
     monkeypatch,

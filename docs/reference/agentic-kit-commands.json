@@ -5192,6 +5192,20 @@
           "param_type": "TyperOption",
           "required": false,
           "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Prompt path that this render will write after generation.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "intended_output",
+          "opts": [
+            "--intended-output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -15591,7 +15605,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "bafee944ae1d",
+    "manifest_sha": "59c1700c2d4f",
     "schema_version": 1
   },
   "schema_version": 2,

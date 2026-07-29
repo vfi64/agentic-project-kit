@@ -1669,7 +1669,15 @@ def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = N
         if bootstrap_path.exists() and bootstrap_name not in touched:
             touched.append(bootstrap_name)
 
-        prompt = _run([_agentic_kit_command(), "handoff", "prompt"])
+        prompt = _run(
+            [
+                _agentic_kit_command(),
+                "handoff",
+                "prompt",
+                "--intended-output",
+                prompt_path,
+            ]
+        )
         if prompt.returncode != 0:
             return subprocess.CompletedProcess(command, prompt.returncode, prompt.stdout, prompt.stderr)
 

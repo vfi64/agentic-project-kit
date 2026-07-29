@@ -48,7 +48,16 @@ def check(path: str = ".agentic/handoff_state.yaml") -> None:
 
 
 @handoff_app.command("prompt")
-def prompt(path: str = ".agentic/handoff_state.yaml") -> None:
+def prompt(
+    path: str = ".agentic/handoff_state.yaml",
+    intended_output: Annotated[
+        str | None,
+        typer.Option(
+            "--intended-output",
+            help="Prompt path that this render will write after generation.",
+        ),
+    ] = None,
+) -> None:
     data = load_handoff_state(path)
     errors = validate_handoff_state(data)
     if errors:
@@ -57,7 +66,12 @@ def prompt(path: str = ".agentic/handoff_state.yaml") -> None:
         raise typer.Exit(code=1)
     rendered_prompt = render_handoff_prompt(data)
     guard = render_freshness_guard(
-        assess_handoff_prompt_freshness(data, path, successor_prompt_text=rendered_prompt)
+        assess_handoff_prompt_freshness(
+            data,
+            path,
+            successor_prompt_text=rendered_prompt,
+            intended_successor_prompt_path=intended_output,
+        )
     )
     if guard:
         typer.echo(guard)
@@ -164,4 +178,3 @@ def post_merge_refresh_status() -> None:
     typer.echo(render_post_merge_handoff_refresh_status(status), nl=False)
     if status.refresh_required:
         raise typer.Exit(1)
-

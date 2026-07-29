@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: bafee944ae1d
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 59c1700c2d4f
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -1094,6 +1094,7 @@ _No parameters._
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `path` | `TyperOption` | --path | `False` | `.agentic/handoff_state.yaml` |  |
+| `intended_output` | `TyperOption` | --intended-output | `False` |  | Prompt path that this render will write after generation. |
 
 ### `agentic-kit handoff refresh`
 
