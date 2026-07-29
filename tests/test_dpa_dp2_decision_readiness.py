@@ -122,6 +122,25 @@ def test_dp2_decision_readiness_reports_ready_but_blocked(tmp_path: Path) -> Non
     assert payload["claims"]["dp2_authorized"] is False
 
 
+def test_dp2_decision_readiness_filters_satisfied_actions(tmp_path: Path) -> None:
+    record = _minimal_decision_root(tmp_path)
+    data = json.loads(record.read_text(encoding="utf-8"))
+    dp2_entry = data["dp2_entry_status"]
+    dp2_entry.update(
+        {
+            "maintainer_assessment": "RECORDED_DP2_BLOCKED",
+            "first_dp2_target_scope": "SELECTED_WRT_CH001_HANDOFF_SCOPE",
+            "rollback_cleanup_proven": "PROVEN_BY_NON_PRODUCTION_FIXTURE_EVIDENCE",
+        }
+    )
+    record.write_text(json.dumps(data, indent=2), encoding="utf-8")
+
+    result = evaluate_dp2_decision_readiness(tmp_path)
+
+    actions = result.as_dict()["required_maintainer_actions"]
+    assert [item["id"] for item in actions] == ["record_dp2_authorization_token"]
+
+
 def test_dp2_decision_readiness_blocks_missing_control_surface(tmp_path: Path) -> None:
     _minimal_decision_root(tmp_path)
     (tmp_path / "docs/architecture/dpa/probes/DP1_SELECTED_WRITER_FIXTURE_PLAN_20260727.md").unlink()

@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-07-28T21:32:07.861630+00:00",
+    "created_at_utc": "2026-07-29T03:37:37.100208+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -93,7 +93,7 @@
       "status": "active"
     },
     "command_reference": {
-      "command_count": 235,
+      "command_count": 236,
       "generated_by": "scripts/generate_agentic_kit_command_reference.py",
       "important_wrappers": [
         {
@@ -306,11 +306,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-07-28T21:32:08.082692+00:00",
+    "generated_at_utc": "2026-07-29T03:37:37.368058+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/dpa-authorized-probe-execution",
-      "head": "72d8b1209c09c1cc9abb2740f2fa6dc93769ed6c",
+      "branch": "codex/dpa-fixture-evidence-runner",
+      "head": "5058f97be33ab72c3eb684d7a9c96e21aa716cfa",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -370,8 +370,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "44d6cbcff3b727dea59ae5cfeaa491fce8851e9025949cf44d6e9ddebf60c8f7",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "339783aaec07d80b084f5131681c6c86a4e149a45e549d91e10d9b244e7b4465",
-      "docs/reference/agentic-kit-commands.json": "817e3d00bbef0d5f821eba5b6c3f4801e90875231f3ebc3f46bc4c0505269357"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "9df576f9326d83245477ced49958e9a2bf22b5f560be83fc892b2e3639db4136",
+      "docs/reference/agentic-kit-commands.json": "3334fe9948d608596fb4b5799985c3c68141029162c182a03c8a9461fa11c316"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -411,7 +411,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "e2bb747954ca7610416705d3655759db4f6b2f5e969670d93f6b2c53f6d1eedf"
+        "sha256": "4dbbf0b73f212d24569bcbb5eb2dd083f50f6442b60335970818af4efebbf7b1"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -916,12 +916,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/dpa-authorized-probe-execution",
+      "branch": "codex/dpa-fixture-evidence-runner",
       "dirty_status": "",
-      "head": "72d8b1209c09c1cc9abb2740f2fa6dc93769ed6c",
+      "head": "5058f97be33ab72c3eb684d7a9c96e21aa716cfa",
       "head_matches_upstream": true,
-      "upstream": "origin/codex/dpa-authorized-probe-execution",
-      "upstream_head": "72d8b1209c09c1cc9abb2740f2fa6dc93769ed6c"
+      "upstream": "origin/codex/dpa-fixture-evidence-runner",
+      "upstream_head": "5058f97be33ab72c3eb684d7a9c96e21aa716cfa"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -983,7 +983,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "e2bb747954ca7610416705d3655759db4f6b2f5e969670d93f6b2c53f6d1eedf"
+        "sha256": "4dbbf0b73f212d24569bcbb5eb2dd083f50f6442b60335970818af4efebbf7b1"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -1488,12 +1488,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/dpa-authorized-probe-execution",
+      "branch": "codex/dpa-fixture-evidence-runner",
       "dirty_status": "",
-      "head": "72d8b1209c09c1cc9abb2740f2fa6dc93769ed6c",
+      "head": "5058f97be33ab72c3eb684d7a9c96e21aa716cfa",
       "head_matches_upstream": true,
-      "upstream": "origin/codex/dpa-authorized-probe-execution",
-      "upstream_head": "72d8b1209c09c1cc9abb2740f2fa6dc93769ed6c"
+      "upstream": "origin/codex/dpa-fixture-evidence-runner",
+      "upstream_head": "5058f97be33ab72c3eb684d7a9c96e21aa716cfa"
     },
     "schema_version": 1,
     "terminal_block_rules": {

@@ -1,0 +1,35 @@
+{
+  "action_item_count": 1,
+  "action_items": [
+    {
+      "id": "record-maintainer-authorization",
+      "message": "Only a Maintainer-owned non-template record with decision_token DPA_DP2_AUTHORIZED may authorize DP2."
+    }
+  ],
+  "claims": {
+    "dp2_authorized": false,
+    "generated_outputs_manually_patched": false,
+    "kit_conformance_claimed": false,
+    "maintainer_assessment_recorded": true,
+    "maintainer_authorization_recorded": false,
+    "production_mutation_performed": false,
+    "runtime_behavior_changed": false
+  },
+  "finding_count": 0,
+  "findings": [],
+  "kind": "dpa_dp2_maintainer_record_check",
+  "record_path": "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+  "record_status": "DP2_BLOCKED",
+  "record_summary": {
+    "decision_token": "DPA_DP2_BLOCKED_PENDING_AUTHORIZATION",
+    "maintainer": "Maintainer instruction recorded in Codex DPA continuation, 2026-07-28",
+    "rollback_cleanup_status": "PROVEN",
+    "target_path": "docs/handoff/CURRENT_HANDOFF.md",
+    "target_scope_status": "SELECTED",
+    "template": false
+  },
+  "result_status": "VALID_BLOCKED_RECORD",
+  "schema_version": 1,
+  "structural_ok": true,
+  "validation_ref": "b1b708cb5d185f117aea936bd5d49592b6e319d9"
+}

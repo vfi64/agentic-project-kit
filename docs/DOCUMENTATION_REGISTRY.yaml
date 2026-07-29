@@ -859,6 +859,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable current DP2 decision-readiness refresh; preserves all DP2 blockers and false authorization claims.
+  - path: docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-b1b708cb-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current DP2 decision-readiness refresh summary; implementation percent 95 with only Maintainer authorization open.
+  - path: docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-b1b708cb-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable current DP2 decision-readiness refresh; preserves false DP2 authorization and production mutation claims.
   - path: docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_TEMPLATE_20260728.json
     class: evidence/log
     owner: maintainers
@@ -891,6 +899,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable blocked DP2 Maintainer Assessment record check; not DP2 authorization or conformance evidence.
+  - path: docs/architecture/evidence/dpa/assessment/maintainer-record-check-b1b708cb-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current blocked DP2 Maintainer Assessment record check summary; only Maintainer authorization remains open.
+  - path: docs/architecture/evidence/dpa/assessment/maintainer-record-check-b1b708cb-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable current DP2 Maintainer Assessment record check; Probe/Cleanup evidence satisfied, no DP2 authorization.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers
@@ -1043,6 +1059,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable current DPA read-only Probe execution evidence with READ_ONLY_EXECUTED_WITH_LIMITATIONS.
+  - path: docs/architecture/evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Current DPA full fixture evidence summary; non-production fixture execution only, not DP2 authorization.
+  - path: docs/architecture/evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable DPA fixture evidence; full evidence families satisfied without production mutation or conformance claim.
   - path: docs/architecture/evidence/dpa/probes/dp1-mutation-sandbox-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

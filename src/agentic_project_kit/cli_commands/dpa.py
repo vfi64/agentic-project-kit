@@ -10,6 +10,12 @@ from agentic_project_kit.dpa_dp2_decision_readiness import (
     render_dp2_decision_readiness,
     write_dp2_decision_readiness_json,
 )
+from agentic_project_kit.dpa_fixture_evidence import (
+    AUTHORIZATION_TOKEN,
+    evaluate_dpa_fixture_evidence,
+    render_dpa_fixture_evidence,
+    write_dpa_fixture_evidence_json,
+)
 from agentic_project_kit.dpa_maintainer_record_check import (
     DEFAULT_MAINTAINER_RECORD_PATH,
     evaluate_dp2_maintainer_record,
@@ -153,6 +159,93 @@ def dpa_readonly_probe_execution_command(
     if result.findings or result.command_failures:
         raise typer.Exit(2)
     if require_no_command_failures and result.command_failures:
+        raise typer.Exit(1)
+
+
+@dpa_app.command("fixture-evidence")
+def dpa_fixture_evidence_command(
+    root: Path = typer.Option(Path("."), "--root", help="Repository root."),
+    fixture_manifest: Path = typer.Option(
+        DEFAULT_FIXTURE_MANIFEST_PATH,
+        "--fixture-manifest",
+        help="DPA DP1 Probe fixture manifest to execute.",
+    ),
+    validation_ref: str | None = typer.Option(
+        None,
+        "--validation-ref",
+        help="Optional exact target ref to record instead of the current repository HEAD.",
+    ),
+    authorized_by: str | None = typer.Option(
+        None,
+        "--authorized-by",
+        help="Maintainer/operator authorization identity for non-production fixture execution.",
+    ),
+    authorization_token: str | None = typer.Option(
+        None,
+        "--authorization-token",
+        help=f"Required token for non-production fixture execution: {AUTHORIZATION_TOKEN}.",
+    ),
+    output: Path | None = typer.Option(
+        None,
+        "--output",
+        help="Optional DPA probe evidence JSON path under docs/architecture/evidence/dpa/probes/.",
+    ),
+    execute: bool = typer.Option(False, "--execute", help="Write --output when supplied."),
+    plan_only: bool = typer.Option(
+        False,
+        "--plan-only",
+        help="Classify fixture cases without executing temporary/disposable fixture actions.",
+    ),
+    output_json: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+    require_full_evidence: bool = typer.Option(
+        False,
+        "--require-full-evidence",
+        help="Fail unless every fixture case executes and all full-evidence families are satisfied.",
+    ),
+) -> None:
+    """Execute authorized non-production DPA fixture evidence cases."""
+    resolved_root = root.resolve()
+    result = evaluate_dpa_fixture_evidence(
+        resolved_root,
+        fixture_manifest_path=fixture_manifest,
+        validation_ref=validation_ref,
+        authorized_by=authorized_by,
+        authorization_token=authorization_token,
+        plan_only=plan_only,
+    )
+    write_result = None
+    if output is not None:
+        write_result = write_dpa_fixture_evidence_json(
+            result,
+            resolved_root,
+            output,
+            execute=execute,
+        )
+    payload = result.as_dict()
+    if write_result is not None:
+        payload["evidence_write"] = write_result
+    if output_json:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        typer.echo(render_dpa_fixture_evidence(result), nl=False)
+        if write_result is not None:
+            reason = f"|reason={write_result['reason']}" if "reason" in write_result else ""
+            typer.echo(
+                "EVIDENCE_WRITE="
+                f"{write_result['result_status']}|"
+                f"path={write_result['output_path']}|"
+                f"written={str(write_result.get('written', False)).lower()}"
+                f"{reason}"
+            )
+    if write_result is not None and write_result["result_status"] == "BLOCK":
+        raise typer.Exit(2)
+    if result.findings or not result.authorization_ok or result.failed_cases:
+        raise typer.Exit(2)
+    if require_full_evidence and (
+        result.result_status != "FULL_FIXTURE_EVIDENCE_RECORDED"
+        or not all(result.full_evidence_by_family.values())
+        or not result.rollback_cleanup_proven
+    ):
         raise typer.Exit(1)
 
 

@@ -4,43 +4,47 @@
   "status": "DP2_BLOCKED",
   "status_date": "2026-07-28",
   "template": false,
-  "validation_ref": "d99b69aa55b1cf347c1dfcdef7781d2d9d3369d8",
+  "validation_ref": "b1b708cb5d185f117aea936bd5d49592b6e319d9",
   "readiness_record": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
   "decision_readiness_evidence": "docs/architecture/evidence/dpa/assessment/dp2-decision-readiness-1dfc5e8a-20260728/results.json",
   "maintainer": "Maintainer instruction recorded in Codex DPA continuation, 2026-07-28",
-  "decision_token": "DPA_DP2_BLOCKED_PENDING_PROBES",
+  "decision_token": "DPA_DP2_BLOCKED_PENDING_AUTHORIZATION",
   "probe_dispositions": {
     "PROBE-002": {
-      "status": "BLOCKED",
+      "status": "SATISFIED_FOR_CURRENT_KIT_REF",
       "evidence": [
         "docs/architecture/evidence/dpa/probes/probe-002-lifecycle-readiness-1dfc5e8a-20260728/results.json",
-        "docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/results.json"
+        "docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/results.json",
+        "docs/architecture/evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/results.json"
       ],
-      "rationale": "Lifecycle readiness and read-only execution evidence exist, but full disposable selected-writer lifecycle fixture execution remains blocked."
+      "rationale": "Lifecycle readiness, read-only execution and authorized non-production fixture evidence satisfy the current PROBE-002 family for the selected first target scope."
     },
     "RENDERER": {
-      "status": "BLOCKED",
+      "status": "SATISFIED_FOR_CURRENT_KIT_REF",
       "evidence": [
         "docs/architecture/evidence/dpa/probes/renderer-readiness-1dfc5e8a-20260728/results.json",
-        "docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/results.json"
+        "docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/results.json",
+        "docs/architecture/evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/results.json"
       ],
-      "rationale": "Renderer readiness evidence exists, but approved renderer-map, identity/version and side-effect fixture execution remain blocked."
+      "rationale": "Renderer readiness, read-only execution and authorized non-production fixture evidence satisfy renderer identity, semantic-version and side-effect fixture coverage for Assessment."
     },
     "PROBE-003": {
-      "status": "BLOCKED",
+      "status": "SATISFIED_FOR_CURRENT_KIT_REF",
       "evidence": [
         "docs/architecture/evidence/dpa/probes/probe-003-workflow-readiness-1dfc5e8a-20260728/results.json",
-        "docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/results.json"
+        "docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/results.json",
+        "docs/architecture/evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/results.json"
       ],
-      "rationale": "Workflow readiness and read-only execution evidence exist, but disposable branch and PR/integration serialization fixtures remain blocked."
+      "rationale": "Workflow readiness, read-only execution and authorized disposable branch simulation evidence satisfy current PROBE-003 workflow serialization coverage."
     },
     "PROBE-004": {
-      "status": "BLOCKED",
+      "status": "SATISFIED_FOR_CURRENT_KIT_REF",
       "evidence": [
         "docs/architecture/evidence/dpa/probes/probe-004-migration-readiness-1dfc5e8a-20260728/results.json",
-        "docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/results.json"
+        "docs/architecture/evidence/dpa/probes/read-only-probe-execution-940fdfea-20260728/results.json",
+        "docs/architecture/evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/results.json"
       ],
-      "rationale": "Migration readiness and read-only execution evidence exist, but rollback-package, renderer rollback and generated-output rollback fixtures remain blocked."
+      "rationale": "Migration readiness, read-only execution and authorized non-production fixture evidence satisfy rollback-package, renderer rollback and generated-output rollback coverage for Assessment."
     }
   },
   "first_dp2_target_scope": {
@@ -61,9 +65,11 @@
     "rationale": "First DP2 target scope is limited to the self-hosting administrative handoff target. Release preparation, post-release DOI closeout and action-spec surfaced mutation paths remain deferred until later target-specific Probe and Assessment records. Workspace initialization templates and generated successor package outputs remain excluded from the first target scope."
   },
   "rollback_cleanup": {
-    "status": "NOT_PROVEN",
-    "evidence": [],
-    "rationale": "Rollback and cleanup proof is intentionally not claimed until disposable mutation fixtures execute and return clean evidence."
+    "status": "PROVEN",
+    "evidence": [
+      "docs/architecture/evidence/dpa/probes/fixture-evidence-b1b708cb-20260728/results.json"
+    ],
+    "rationale": "Authorized non-production fixture execution recorded 36 cleanup passes, exact-byte rollback for temporary fixture state and disposal of temporary roots/branches."
   },
   "claims": {
     "maintainer_assessment_recorded": true,
