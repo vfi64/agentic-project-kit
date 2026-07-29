@@ -265,6 +265,11 @@ validates the updated DP2 authorization record. This authorizes DPA reliance
 for the WRT-CH-004 action-spec surfaced mutation-authority writer only inside
 the selected `docs/handoff/CURRENT_HANDOFF.md` target scope; it does not execute
 any surfaced action, mutate production state or claim Kit conformance.
+The source implementation is the parameterized action-spec guard in
+`src/agentic_project_kit/action_specs.py`: every built-in action surface that
+mentions a `CURRENT_HANDOFF.md` mutation must declare WRT-CH-004, name the
+selected lifecycle writer it dispatches through and expose the route in
+`agentic-kit actions show <id>`.
 
 Historical evidence packages still preserve earlier `DP2_BLOCKED` and
 "DP2 implementation blocked" states. Those records remain part of the audit trail;

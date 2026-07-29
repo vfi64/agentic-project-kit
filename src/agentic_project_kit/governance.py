@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from agentic_project_kit.action_specs import built_in_action_specs
+from agentic_project_kit.action_specs import (
+    built_in_action_specs,
+    validate_current_handoff_action_surfaces,
+)
 from agentic_project_kit.handoff_state import load_handoff_state, validate_handoff_state
 from agentic_project_kit.work_orders import check_work_orders
 
@@ -33,9 +36,19 @@ def governance_check() -> list[str]:
         errors.extend(f"handoff: {error}" for error in validate_handoff_state(handoff_state))
     errors.extend(f"work-order: {error}" for error in check_work_orders())
     action_specs = built_in_action_specs()
-    for required in ("pr-check-merge", "release-verify", "doi-record", "finalize-release"):
+    required_actions = (
+        "pr-check-merge",
+        "release-verify",
+        "release-prepare",
+        "doi-record",
+        "finalize-release",
+    )
+    for required in required_actions:
         if required not in action_specs:
             errors.append(f"missing action spec: {required}")
+    errors.extend(
+        f"action-spec: {error}" for error in validate_current_handoff_action_surfaces(action_specs)
+    )
     return errors
 
 def render_governance_check(errors: list[str]) -> str:
