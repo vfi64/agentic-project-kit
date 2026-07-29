@@ -200,6 +200,15 @@ the explicit `--initialize-acceptance` flag. The wrapper does not mutate
 successor-handoff packages, does not claim Kit-wide DPA conformance and does not
 replace the existing post-merge Handoff PR workflow.
 
+The release-preparation writer `agentic-kit release-prep` now routes its
+`docs/handoff/CURRENT_HANDOFF.md` version-line mutation through the same DPA
+target-drift, Workspace-lock, under-lock revalidation, post-Write verification
+and acceptance-state path whenever the current workspace carries DPA readiness
+or DPA acceptance state. Non-DPA workspaces retain the prior release metadata
+write behavior. This records WRT-CH-002 as the acceptance-state writer for that
+target mutation; it does not execute a release, publish a tag, publish a DOI or
+claim Kit-wide DPA conformance.
+
 The read-only wrapper `agentic-kit dpa readiness` now reports DPA
 implementation readiness at 100% for the current authorization record: all DP2
 entry evidence fields are satisfied for the current Kit ref and no DP2 entry
@@ -264,13 +273,13 @@ touchpoint that is classified as command-updated by the Kit.
 
 ## Next governed step
 
-After this index, registry staging, Assessment-readiness and initial lifecycle
-wrapper slice, the next DPA work remains governed by the closeout restrictions:
+After this index, registry staging, Assessment-readiness, initial lifecycle
+wrapper slice and WRT-CH-002 release-preparation routing, the next DPA work
+remains governed by the closeout restrictions:
 
 1. Preserve the DPA Lab source ref and Kit import baseline in every import slice.
-2. Route the WRT-CH-001 administrative `CURRENT_HANDOFF.md` block write through
-   `agentic-kit dpa current-handoff-refresh` before claiming productive DPA
-   reliance for that writer.
+2. Keep WRT-CH-001 administrative refresh and WRT-CH-002 release preparation on
+   the lifecycle-owned `CURRENT_HANDOFF.md` acceptance-state path.
 3. Keep the full WRT-CH-001 administrative refresh PR-flow evidence boundary
    separate until that observation is explicitly closed.
 4. Keep DP2 implementation within the authorized

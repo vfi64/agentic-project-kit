@@ -176,6 +176,11 @@ def _build_acceptance_state(
     target_text: str,
     branch: str,
     validation_ref: str,
+    contract_id: str = CONTRACT_ID,
+    target_scope: str = TARGET_SCOPE,
+    writer_id: str = WRITER_ID,
+    renderer_id: str = RENDERER_ID,
+    renderer_semantic_version: str = RENDERER_SEMANTIC_VERSION,
 ) -> dict[str, Any]:
     now = datetime.now(timezone.utc).isoformat()
     return {
@@ -188,12 +193,12 @@ def _build_acceptance_state(
         "accepted_gate_set_id": GATE_SET_ID,
         "branch": branch,
         "validation_ref": validation_ref,
-        "contract_id": CONTRACT_ID,
-        "target_scope": TARGET_SCOPE,
-        "writer_id": WRITER_ID,
+        "contract_id": contract_id,
+        "target_scope": target_scope,
+        "writer_id": writer_id,
         "renderer": {
-            "id": RENDERER_ID,
-            "semantic_version": RENDERER_SEMANTIC_VERSION,
+            "id": renderer_id,
+            "semantic_version": renderer_semantic_version,
         },
         "source": {
             "path": plan.source_path,
@@ -238,17 +243,79 @@ def evaluate_current_handoff_lifecycle(
     resolved_root = Path(root).resolve()
     workspace = load_workspace(resolved_root)
     target = _resolve(resolved_root, target_path) if target_path is not None else workspace.handoff_file(DEFAULT_CURRENT_HANDOFF_FILENAME)
+    source = workspace.operational_handoff_state_path()
+
+    try:
+        projected_text = _render_target_text(resolved_root, target, source)
+    except (OSError, ValueError) as exc:
+        projected_text = _read_text(target)
+        preflight_findings = (_acceptance_finding("render-failed", str(exc), path=target, root=resolved_root),)
+    else:
+        preflight_findings = ()
+
+    return evaluate_current_handoff_text_lifecycle(
+        resolved_root,
+        target_path=target,
+        acceptance_state_path=acceptance_state_path,
+        readiness_path=readiness_path,
+        validation_ref=validation_ref,
+        execute=execute,
+        initialize_acceptance=initialize_acceptance,
+        require_dp2_authorized=require_dp2_authorized,
+        projected_text=projected_text,
+        source_path=source,
+        writer_id=WRITER_ID,
+        renderer_id=RENDERER_ID,
+        renderer_semantic_version=RENDERER_SEMANTIC_VERSION,
+        contract_id=CONTRACT_ID,
+        target_scope=TARGET_SCOPE,
+        lock_command="dpa current-handoff-refresh",
+        preflight_findings=preflight_findings,
+    )
+
+
+def evaluate_current_handoff_text_lifecycle(
+    root: Path | str = ".",
+    *,
+    projected_text: str,
+    writer_id: str,
+    renderer_id: str,
+    renderer_semantic_version: str = RENDERER_SEMANTIC_VERSION,
+    contract_id: str = CONTRACT_ID,
+    target_scope: str = TARGET_SCOPE,
+    source_path: Path | str | None = None,
+    source_fingerprint: str | None = None,
+    target_path: Path | None = None,
+    acceptance_state_path: Path | None = None,
+    readiness_path: Path = DEFAULT_READINESS_PATH,
+    validation_ref: str | None = None,
+    execute: bool = False,
+    initialize_acceptance: bool = False,
+    require_dp2_authorized: bool = True,
+    lock_command: str = "dpa current-handoff-lifecycle",
+    preflight_findings: tuple[DpaCurrentHandoffFinding, ...] = (),
+) -> DpaCurrentHandoffResult:
+    resolved_root = Path(root).resolve()
+    workspace = load_workspace(resolved_root)
+    target = _resolve(resolved_root, target_path) if target_path is not None else workspace.handoff_file(DEFAULT_CURRENT_HANDOFF_FILENAME)
     acceptance_path = (
         _resolve(resolved_root, acceptance_state_path)
         if acceptance_state_path is not None
         else workspace.dpa_current_handoff_acceptance_state_path()
     )
-    source = workspace.operational_handoff_state_path()
     target_rel = _repo_rel(resolved_root, target)
-    source_rel = _repo_rel(resolved_root, source)
     acceptance_rel = _repo_rel(resolved_root, acceptance_path)
+    source_file: Path | None = None
+    if source_fingerprint is None:
+        if source_path is None:
+            raise ValueError("source_path or source_fingerprint is required")
+        source_file = _resolve(resolved_root, Path(source_path))
+        source_rel = _repo_rel(resolved_root, source_file)
+        source_fingerprint = _sha256_bytes(_read_bytes(source_file))
+    else:
+        source_rel = str(source_path or "<declared-inputs>")
 
-    findings: list[DpaCurrentHandoffFinding] = []
+    findings: list[DpaCurrentHandoffFinding] = list(preflight_findings)
     branch = _git(resolved_root, ["branch", "--show-current"])
     current_head = _git(resolved_root, ["rev-parse", "HEAD"])
     effective_ref = validation_ref or current_head
@@ -281,16 +348,8 @@ def evaluate_current_handoff_lifecycle(
         previous_acceptance = None
         findings.append(_acceptance_finding("acceptance-state-invalid", str(exc), path=acceptance_path, root=resolved_root))
 
-    try:
-        projected_text = _render_target_text(resolved_root, target, source)
-    except (OSError, ValueError) as exc:
-        projected_text = _read_text(target)
-        findings.append(_acceptance_finding("render-failed", str(exc), path=target, root=resolved_root))
-
     target_bytes = _read_bytes(target)
-    source_bytes = _read_bytes(source)
     target_before = _sha256_bytes(target_bytes)
-    source_fingerprint = _sha256_bytes(source_bytes)
     projected_fingerprint = _sha256_bytes(projected_text.encode("utf-8"))
     would_change = target_bytes != projected_text.encode("utf-8")
 
@@ -309,6 +368,7 @@ def evaluate_current_handoff_lifecycle(
     else:
         accepted_target = str((previous_acceptance.get("target") or {}).get("complete_target_fingerprint") or "")
         accepted_source = str((previous_acceptance.get("source") or {}).get("fingerprint") or "")
+        accepted_source_path = str((previous_acceptance.get("source") or {}).get("path") or "")
         accepted_target_path = str((previous_acceptance.get("target") or {}).get("path") or "")
         if accepted_target_path != target_rel:
             findings.append(
@@ -329,8 +389,10 @@ def evaluate_current_handoff_lifecycle(
                 )
             )
             freshness = "stale"
-        elif accepted_source != source_fingerprint or would_change:
+        elif would_change:
             freshness = "stale"
+        elif accepted_source_path == source_rel and accepted_source == source_fingerprint:
+            freshness = "fresh"
         else:
             freshness = "fresh"
 
@@ -372,7 +434,7 @@ def evaluate_current_handoff_lifecycle(
         )
 
     try:
-        with workspace_mutation_lock(resolved_root, "dpa current-handoff-refresh"):
+        with workspace_mutation_lock(resolved_root, lock_command):
             lock_head = _git(resolved_root, ["rev-parse", "HEAD"])
             if current_head != "UNKNOWN" and lock_head != current_head:
                 findings.append(
@@ -392,12 +454,12 @@ def evaluate_current_handoff_lifecycle(
                         root=resolved_root,
                     )
                 )
-            if _sha256_bytes(_read_bytes(source)) != source_fingerprint:
+            if source_file is not None and _sha256_bytes(_read_bytes(source_file)) != source_fingerprint:
                 findings.append(
                     _acceptance_finding(
                         "under-lock-source-changed",
                         "Source bytes changed between preflight and under-lock revalidation",
-                        path=source,
+                        path=source_file,
                         root=resolved_root,
                     )
                 )
@@ -437,6 +499,11 @@ def evaluate_current_handoff_lifecycle(
                 target_text=projected_text,
                 branch=branch,
                 validation_ref=effective_ref,
+                contract_id=contract_id,
+                target_scope=target_scope,
+                writer_id=writer_id,
+                renderer_id=renderer_id,
+                renderer_semantic_version=renderer_semantic_version,
             )
             _write_json_atomic(acceptance_path, acceptance)
     except WorkspaceLockBusy as exc:

@@ -2,9 +2,15 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from datetime import date as Date
+import hashlib
+import json
 from pathlib import Path
 import shutil
 
+from agentic_project_kit.dpa_current_handoff_lifecycle import (
+    DEFAULT_ACCEPTANCE_STATE_PATH,
+    evaluate_current_handoff_text_lifecycle,
+)
 from agentic_project_kit.release import CommandResult, build_release_state_report
 from agentic_project_kit.release_prepare import prepare_release_state
 from agentic_project_kit import release_metadata_prep
@@ -86,6 +92,23 @@ def _copy_release_state_files(tmp_path: Path) -> Path:
     return project
 
 
+def _accept_current_handoff_for_dpa(project: Path) -> None:
+    target = project / "docs" / "handoff" / "CURRENT_HANDOFF.md"
+    result = evaluate_current_handoff_text_lifecycle(
+        project,
+        target_path=target,
+        projected_text=target.read_text(encoding="utf-8"),
+        source_path="<test-initial-current-handoff>",
+        source_fingerprint=hashlib.sha256(b"initial-current-handoff").hexdigest(),
+        writer_id="WRT-CH-001",
+        renderer_id="tests.initial_current_handoff",
+        execute=True,
+        initialize_acceptance=True,
+        require_dp2_authorized=False,
+    )
+    assert result.result_status == "ACCEPTED"
+
+
 def test_prepare_release_state_updates_expected_files(tmp_path: Path) -> None:
     project = _copy_release_state_files(tmp_path)
 
@@ -131,6 +154,37 @@ def test_prepare_release_state_updates_expected_files(tmp_path: Path) -> None:
     assert SUMMARY_LINES[0] in changelog
     assert SUMMARY_LINES[1] in changelog
     assert "./ns release-prep" not in changelog.split(f"## v{TARGET_VERSION}", 1)[1].split("\n## v", 1)[0]
+
+
+def test_prepare_release_state_routes_current_handoff_write_through_dpa_lifecycle(tmp_path: Path) -> None:
+    project = _copy_release_state_files(tmp_path)
+    _accept_current_handoff_for_dpa(project)
+
+    result = prepare_release_state(project, version=TARGET_VERSION, date=TARGET_DATE, summary_lines=SUMMARY_LINES)
+
+    assert "docs/handoff/CURRENT_HANDOFF.md" in result.changed_paths
+    state = json.loads((project / DEFAULT_ACCEPTANCE_STATE_PATH).read_text(encoding="utf-8"))
+    assert state["writer_id"] == "WRT-CH-002"
+    assert state["renderer"]["id"] == "agentic_project_kit.release_prepare"
+    assert state["target_scope"] == "CURRENT_HANDOFF_RELEASE_METADATA"
+    assert state["claims"]["generated_outputs_manually_patched"] is False
+
+
+def test_prepare_release_state_blocks_current_handoff_drift_before_metadata_writes(tmp_path: Path) -> None:
+    project = _copy_release_state_files(tmp_path)
+    _accept_current_handoff_for_dpa(project)
+    pyproject_before = (project / "pyproject.toml").read_text(encoding="utf-8")
+    target = project / "docs" / "handoff" / "CURRENT_HANDOFF.md"
+    target.write_text(target.read_text(encoding="utf-8") + "\nmanual tamper\n", encoding="utf-8")
+
+    try:
+        prepare_release_state(project, version=TARGET_VERSION, date=TARGET_DATE, summary_lines=SUMMARY_LINES)
+    except ValueError as exc:
+        assert "target-drift" in str(exc)
+    else:
+        raise AssertionError("release-prep accepted a drifted DPA CURRENT_HANDOFF target")
+
+    assert (project / "pyproject.toml").read_text(encoding="utf-8") == pyproject_before
 
 
 def test_prepare_release_state_is_idempotent(tmp_path: Path) -> None:

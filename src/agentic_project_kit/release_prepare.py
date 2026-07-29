@@ -2,11 +2,24 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass
+import hashlib
+import json
 from pathlib import Path
 import re
 
+from agentic_project_kit.dpa_current_handoff_lifecycle import evaluate_current_handoff_text_lifecycle
+from agentic_project_kit.dpa_readiness import DEFAULT_READINESS_PATH
+from agentic_project_kit.workspace import load_workspace
+
 
 VERSION_RE = r"\d+\.\d+\.\d+"
+CURRENT_HANDOFF_RELATIVE_PATH = "docs/handoff/CURRENT_HANDOFF.md"
+DPA_RELEASE_PREP_CONTRACT_ID = "DPA-CURRENT-HANDOFF-RELEASE-PREP-v1"
+DPA_RELEASE_PREP_TARGET_SCOPE = "CURRENT_HANDOFF_RELEASE_METADATA"
+DPA_RELEASE_PREP_WRITER_ID = "WRT-CH-002"
+DPA_RELEASE_PREP_RENDERER_ID = "agentic_project_kit.release_prepare"
+DPA_RELEASE_PREP_RENDERER_SEMANTIC_VERSION = "1"
+DPA_RELEASE_PREP_SOURCE_PATH = "<agentic-kit-release-prep-inputs>"
 
 
 @dataclass(frozen=True)
@@ -170,6 +183,115 @@ def _update_changelog(text: str, version: str, date: str, *, summary_lines: Sequ
     return text[:index] + section + "\n" + text[index:]
 
 
+def _release_prep_source_fingerprint(*, version: str, date: str, summary_lines: Sequence[str]) -> str:
+    payload = {
+        "schema_version": 1,
+        "kind": "release_prep_current_handoff_inputs",
+        "version": version,
+        "date": date,
+        "summary_lines": list(summary_lines),
+    }
+    return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+
+
+def _dpa_current_handoff_lifecycle_enabled(root: Path) -> bool:
+    workspace = load_workspace(root)
+    return (root / DEFAULT_READINESS_PATH).exists() or workspace.dpa_current_handoff_acceptance_state_path().exists()
+
+
+def _evaluate_release_prep_current_handoff_lifecycle(
+    root: Path,
+    *,
+    target_path: Path,
+    projected_text: str,
+    version: str,
+    date: str,
+    summary_lines: Sequence[str],
+    execute: bool,
+):
+    return evaluate_current_handoff_text_lifecycle(
+        root,
+        target_path=target_path,
+        projected_text=projected_text,
+        source_path=DPA_RELEASE_PREP_SOURCE_PATH,
+        source_fingerprint=_release_prep_source_fingerprint(
+            version=version,
+            date=date,
+            summary_lines=summary_lines,
+        ),
+        writer_id=DPA_RELEASE_PREP_WRITER_ID,
+        renderer_id=DPA_RELEASE_PREP_RENDERER_ID,
+        renderer_semantic_version=DPA_RELEASE_PREP_RENDERER_SEMANTIC_VERSION,
+        contract_id=DPA_RELEASE_PREP_CONTRACT_ID,
+        target_scope=DPA_RELEASE_PREP_TARGET_SCOPE,
+        execute=execute,
+        initialize_acceptance=False,
+        require_dp2_authorized=(root / DEFAULT_READINESS_PATH).exists(),
+        lock_command="agentic-kit release-prep current-handoff",
+    )
+
+
+def _require_dpa_current_handoff_preflight(
+    root: Path,
+    *,
+    target_path: Path,
+    projected_text: str,
+    version: str,
+    date: str,
+    summary_lines: Sequence[str],
+) -> None:
+    if not _dpa_current_handoff_lifecycle_enabled(root):
+        return
+    result = _evaluate_release_prep_current_handoff_lifecycle(
+        root,
+        target_path=target_path,
+        projected_text=projected_text,
+        version=version,
+        date=date,
+        summary_lines=summary_lines,
+        execute=False,
+    )
+    if result.ok:
+        return
+    details = "; ".join(f"{finding.code}: {finding.message}" for finding in result.findings)
+    raise ValueError(f"DPA CURRENT_HANDOFF lifecycle blocked release-prep preflight: {details}")
+
+
+def _write_current_handoff_if_changed(
+    path: Path,
+    text: str,
+    *,
+    dry_run: bool,
+    changed: list[str],
+    root: Path,
+    version: str,
+    date: str,
+    summary_lines: Sequence[str],
+) -> None:
+    old = _read(path)
+    if old == text:
+        return
+    changed.append(path.relative_to(root).as_posix())
+    if dry_run:
+        return
+    if not _dpa_current_handoff_lifecycle_enabled(root):
+        path.write_text(text, encoding="utf-8")
+        return
+    result = _evaluate_release_prep_current_handoff_lifecycle(
+        root,
+        target_path=path,
+        projected_text=text,
+        version=version,
+        date=date,
+        summary_lines=summary_lines,
+        execute=True,
+    )
+    if result.ok:
+        return
+    details = "; ".join(f"{finding.code}: {finding.message}" for finding in result.findings)
+    raise ValueError(f"DPA CURRENT_HANDOFF lifecycle blocked release-prep write: {details}")
+
+
 def prepare_release_state(
     project_root: Path | str = ".",
     *,
@@ -190,6 +312,8 @@ def prepare_release_state(
 
     root = Path(project_root).resolve()
     changed: list[str] = []
+    normalized_summary_lines = _normalize_changelog_summary_lines(summary_lines)
+    handoff_path = root / CURRENT_HANDOFF_RELATIVE_PATH
 
     updates = {
         root / "pyproject.toml": _update_pyproject(_read(root / "pyproject.toml"), version),
@@ -204,8 +328,8 @@ def prepare_release_state(
             version,
             label="docs/STATUS.md current version",
         ),
-        root / "docs" / "handoff" / "CURRENT_HANDOFF.md": _update_current_version_doc(
-            _read(root / "docs" / "handoff" / "CURRENT_HANDOFF.md"),
+        handoff_path: _update_current_version_doc(
+            _read(handoff_path),
             version,
             label="docs/handoff/CURRENT_HANDOFF.md current version",
         ),
@@ -213,11 +337,32 @@ def prepare_release_state(
             _read(root / "CHANGELOG.md"),
             version,
             date,
-            summary_lines=summary_lines,
+            summary_lines=normalized_summary_lines,
         ),
     }
 
+    _require_dpa_current_handoff_preflight(
+        root,
+        target_path=handoff_path,
+        projected_text=updates[handoff_path],
+        version=version,
+        date=date,
+        summary_lines=normalized_summary_lines,
+    )
+
+    _write_current_handoff_if_changed(
+        handoff_path,
+        updates[handoff_path],
+        dry_run=dry_run,
+        changed=changed,
+        root=root,
+        version=version,
+        date=date,
+        summary_lines=normalized_summary_lines,
+    )
     for path, text in updates.items():
+        if path == handoff_path:
+            continue
         _write_if_changed(path, text, dry_run=dry_run, changed=changed, root=root)
 
     return ReleasePrepareResult(version=version, date=date, changed_paths=sorted(changed), dry_run=dry_run)
