@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "kind": "dpa_dp5_stage_record",
+  "status": "DP5_BLOCK_NEW_STAGE_ADOPTED",
+  "stage": "block-new",
+  "status_date": "2026-08-01",
+  "validation_ref": "511788214c97291bd8ba04d07f46b79aa8cc6549",
+  "maintainer": "Maintainer instruction recorded in Codex chat, 2026-08-01: continue DPA implementation autonomously through bounded DP3-DP5 slices with exact-ref evidence, rollback path and no global strict/conformance claim before DP3-DP5 closeout criteria are truly satisfied.",
+  "decision_token": "DPA_DP5_BLOCK_NEW_STAGE_AUTHORIZED",
+  "target_scope": {
+    "id": "DPA_POST_DP2_DP3_DP4_ACCEPTED_SCOPE",
+    "enforcement_stage": "block-new",
+    "previous_stage_record": "docs/architecture/evidence/dpa/assessment/DP5_WARN_STAGE_RECORD_20260801.json",
+    "baseline_assessment": "docs/architecture/evidence/dpa/assessment/post-dp2-scope-51178821-pre-dp5-block-new-20260801/results.json",
+    "accepted_dp2_record": "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+    "accepted_dp3_dp4_record": "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
+    "evidence": [
+      "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+      "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
+      "docs/architecture/evidence/dpa/assessment/dp5-warn-stage-check-51178821-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/post-dp2-scope-51178821-pre-dp5-block-new-20260801/results.json"
+    ],
+    "limitations": [
+      "Block-new applies only to the post-DP2, DP3/DP4-adjudicated DPA scope.",
+      "The gate blocks new nonconformance relative to the accepted warn-stage baseline.",
+      "Existing strict-stage blockers remain visible and do not become Kit-wide conformance or strict-enforcement claims.",
+      "Strict remains blocked pending its own exact stage record, rollback evidence and accepted gate behavior."
+    ]
+  },
+  "gate_set": {
+    "id": "DPA_DP5_BLOCK_NEW_GATE_SET_V1",
+    "stage_behavior": "block-new",
+    "blocks_unrelated_work": false,
+    "blocks_new_noncompliance": true,
+    "baseline_evidence": [
+      "docs/architecture/evidence/dpa/assessment/post-dp2-scope-51178821-pre-dp5-block-new-20260801/results.json"
+    ],
+    "commands": [
+      {
+        "command": "agentic-kit dpa readiness --require-dp2-ready",
+        "role": "confirm DP2 selected self-hosting scope remains authorized and separate from Kit-wide DPA conformance",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json"
+        ]
+      },
+      {
+        "command": "agentic-kit dpa dp3-dp4-adjudication-check --require-valid",
+        "role": "confirm bounded DP3 rollout and DP4 no-migration/manual-preservation adjudication",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/dp3-dp4-adjudication-check-3fd8bcc8-20260801/results.json"
+        ]
+      },
+      {
+        "command": "agentic-kit dpa dp5-stage-check --record docs/architecture/evidence/dpa/assessment/DP5_WARN_STAGE_RECORD_20260801.json --require-valid",
+        "role": "confirm warn is the previous less strict stage before block-new",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/dp5-warn-stage-check-51178821-20260801/results.json"
+        ]
+      },
+      {
+        "command": "agentic-kit dpa post-dp2-scope-assessment --dp5-stage-record docs/architecture/evidence/dpa/assessment/DP5_WARN_STAGE_RECORD_20260801.json",
+        "role": "record accepted warn baseline for block-new comparison",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/post-dp2-scope-51178821-pre-dp5-block-new-20260801/results.json"
+        ]
+      },
+      {
+        "command": "agentic-kit dpa dp5-block-new-gate --require-pass",
+        "role": "block new nonconformance against the accepted warn-stage baseline",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/post-dp2-scope-51178821-pre-dp5-block-new-20260801/results.json"
+        ]
+      }
+    ]
+  },
+  "findings_mapping": {
+    "unknown_mutation_safety_finding": {
+      "disposition": "fail_closed_for_mutation_safety",
+      "rationale": "Block-new does not weaken existing mutation-safety fail-closed behavior. Unknown findings that affect mutation safety, authority interpretation, target identity, byte ownership or acceptance remain hard blockers for mutation claims."
+    },
+    "stage_decision": "block_new_nonconforming_projection_states",
+    "observed_noncompliance": {
+      "disposition": "block_new_nonconformance_with_baseline_allowlist",
+      "rationale": "The block-new gate compares current DPA scope nonconformance to the accepted warn-stage baseline and fails when new nonconformance appears. Existing strict-stage blockers remain visible for the later strict stage."
+    }
+  },
+  "rollback": {
+    "less_strict_stage": "warn",
+    "tested_or_adjudicated": true,
+    "evidence": [
+      "docs/architecture/evidence/dpa/assessment/DP5_WARN_STAGE_RECORD_20260801.json",
+      "docs/architecture/evidence/dpa/assessment/dp5-warn-stage-check-51178821-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/post-dp2-scope-51178821-pre-dp5-block-new-20260801/results.json"
+    ],
+    "rationale": "Rollback from block-new is record-selection only: select the warn stage record and the post-DP2 assessment returns to DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE with block-new blocked. No production target mutation, strict gate state or generated-output patch is introduced by block-new."
+  },
+  "documentation_sync": {
+    "required": true,
+    "surfaces": [
+      "README.md",
+      "docs/architecture/dpa/README.md",
+      "docs/architecture/evidence/dpa/README.md",
+      "docs/DOCUMENTATION_COVERAGE.yaml",
+      "docs/DOCUMENTATION_REGISTRY.yaml"
+    ]
+  },
+  "claims": {
+    "observe_stage_active": true,
+    "warn_stage_active": true,
+    "block_new_stage_active": true,
+    "strict_stage_active": false,
+    "kit_wide_dpa_conformance_claimed": false,
+    "production_mutation_performed": false,
+    "generated_outputs_manually_patched": false,
+    "stable_dpa_claimed": false
+  }
+}

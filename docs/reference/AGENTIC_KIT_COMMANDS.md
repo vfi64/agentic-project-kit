@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 17720e1a6386
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 37305274c433
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `240`
+- Command count: `241`
 
 ## Commands
 
@@ -762,18 +762,37 @@ Validate a bounded DP3/DP4 adjudication record without authorizing DP5.
 | `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 | `require_valid` | `TyperOption` | --require-valid | `False` | `False` | Fail unless the record structurally accepts the bounded DP3/DP4 slice. |
 
-### `agentic-kit dpa dp5-stage-check`
+### `agentic-kit dpa dp5-block-new-gate`
 
 - Safety: `BOUNDED`
-- When to use: Validate a bounded DP5 stage record without enabling block-new or strict.
+- When to use: Block new DP5 noncompliance against the accepted warn-stage baseline.
 - Dry-run available: `True`
 
-Validate a bounded DP5 stage record without enabling block-new or strict.
+Block new DP5 noncompliance against the accepted warn-stage baseline.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
-| `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/DP5_WARN_STAGE_RECORD_20260801.json')` | DPA DP5 stage-adoption record to inspect. |
+| `baseline` | `TyperOption` | --baseline | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/post-dp2-scope-51178821-pre-dp5-block-new-20260801/results.json')` | Accepted DP5 warn-stage baseline assessment to compare against. |
+| `dp5_stage_record` | `TyperOption` | --dp5-stage-record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/DP5_BLOCK_NEW_STAGE_RECORD_20260801.json')` | DP5 block-new stage-adoption record to inspect. |
+| `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact current ref to record instead of repository HEAD. |
+| `output` | `TyperOption` | --output | `False` |  | Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `require_pass` | `TyperOption` | --require-pass | `False` | `False` | Fail unless no new DP5 noncompliance is present against the accepted warn baseline. |
+
+### `agentic-kit dpa dp5-stage-check`
+
+- Safety: `BOUNDED`
+- When to use: Validate a bounded DP5 stage record without enabling strict.
+- Dry-run available: `True`
+
+Validate a bounded DP5 stage record without enabling strict.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/DP5_BLOCK_NEW_STAGE_RECORD_20260801.json')` | DPA DP5 stage-adoption record to inspect. |
 | `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact current ref to record instead of repository HEAD. |
 | `output` | `TyperOption` | --output | `False` |  | Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/. |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
@@ -833,7 +852,7 @@ Assess post-DP2 DP3-DP5 rollout, migration and strict-gate scope.
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
 | `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')` | DPA Assessment readiness JSON record to inspect. |
 | `adjudication_record` | `TyperOption` | --adjudication-record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json')` | Optional DP3/DP4 adjudication record to inspect when clearing post-DP2 blockers. |
-| `dp5_stage_record` | `TyperOption` | --dp5-stage-record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/DP5_WARN_STAGE_RECORD_20260801.json')` | Optional DP5 stage-adoption record to inspect when clearing stage blockers. |
+| `dp5_stage_record` | `TyperOption` | --dp5-stage-record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/DP5_BLOCK_NEW_STAGE_RECORD_20260801.json')` | Optional DP5 stage-adoption record to inspect when clearing stage blockers. |
 | `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact target ref to record instead of the current repository HEAD. |
 | `output` | `TyperOption` | --output | `False` |  | Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/. |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
