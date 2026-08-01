@@ -9,7 +9,7 @@ from typing import Any
 from agentic_project_kit.workspace import load_workspace
 
 DEFAULT_DP5_STAGE_RECORD_PATH = Path(
-    "docs/architecture/evidence/dpa/assessment/DP5_WARN_STAGE_RECORD_20260801.json"
+    "docs/architecture/evidence/dpa/assessment/DP5_BLOCK_NEW_STAGE_RECORD_20260801.json"
 )
 DP5_STAGE_MODEL = "dpa-dp5-stage-adoption-v1"
 VALID_STATUS = "VALID_DP5_STAGE_RECORD"
@@ -17,9 +17,11 @@ ACCEPTED_OBSERVE_STATUS = "DP5_OBSERVE_STAGE_ADOPTED"
 ACCEPTED_OBSERVE_TOKEN = "DPA_DP5_OBSERVE_STAGE_AUTHORIZED"
 ACCEPTED_WARN_STATUS = "DP5_WARN_STAGE_ADOPTED"
 ACCEPTED_WARN_TOKEN = "DPA_DP5_WARN_STAGE_AUTHORIZED"
+ACCEPTED_BLOCK_NEW_STATUS = "DP5_BLOCK_NEW_STAGE_ADOPTED"
+ACCEPTED_BLOCK_NEW_TOKEN = "DPA_DP5_BLOCK_NEW_STAGE_AUTHORIZED"
 EVIDENCE_OUTPUT_ROOT_PARTS = ("evidence", "dpa", "assessment")
 STAGE_SEQUENCE = ("observe", "warn", "block-new", "strict")
-SUPPORTED_STAGES = ("observe", "warn")
+SUPPORTED_STAGES = ("observe", "warn", "block-new")
 STAGE_CONTRACTS = {
     "observe": {
         "status": ACCEPTED_OBSERVE_STATUS,
@@ -36,6 +38,14 @@ STAGE_CONTRACTS = {
         "stage_behavior": "warn-only",
         "stage_decision": "warn_without_blocking_compatibility",
         "rollback_stage": "observe",
+    },
+    "block-new": {
+        "status": ACCEPTED_BLOCK_NEW_STATUS,
+        "decision_token": ACCEPTED_BLOCK_NEW_TOKEN,
+        "gate_set_id": "DPA_DP5_BLOCK_NEW_GATE_SET_V1",
+        "stage_behavior": "block-new",
+        "stage_decision": "block_new_nonconforming_projection_states",
+        "rollback_stage": "warn",
     },
 }
 
@@ -309,6 +319,17 @@ def _validate_stage_scope(
             _finding(findings, "previous-stage-record-missing", "warn scope must name previous_stage_record", path)
         elif not (root / previous).exists():
             _finding(findings, "previous-stage-record-missing", f"missing previous stage record: {previous}", path)
+    if stage == "block-new":
+        previous = str(scope.get("previous_stage_record", "")).strip()
+        if not previous:
+            _finding(findings, "previous-stage-record-missing", "block-new scope must name previous_stage_record", path)
+        elif not (root / previous).exists():
+            _finding(findings, "previous-stage-record-missing", f"missing previous stage record: {previous}", path)
+        baseline = str(scope.get("baseline_assessment", "")).strip()
+        if not baseline:
+            _finding(findings, "baseline-assessment-missing", "block-new scope must name baseline_assessment", path)
+        elif not (root / baseline).exists():
+            _finding(findings, "baseline-assessment-missing", f"missing baseline assessment: {baseline}", path)
     _require_existing_paths(scope.get("evidence"), root, findings, path, "target-scope-evidence-missing")
 
 
@@ -338,6 +359,21 @@ def _validate_gate_set(
             _finding(findings, "gate-set-warning-disabled", "warn gate set must enable noncompliance warnings", path)
         if not _string_list(gate_set.get("warning_surfaces")):
             _finding(findings, "gate-set-warning-surfaces-missing", "warn gate set must list warning_surfaces", path)
+    if stage == "block-new":
+        if gate_set.get("blocks_new_noncompliance") is not True:
+            _finding(
+                findings,
+                "gate-set-block-new-disabled",
+                "block-new gate set must enable new noncompliance blocking",
+                path,
+            )
+        _require_existing_paths(
+            gate_set.get("baseline_evidence"),
+            root,
+            findings,
+            path,
+            "gate-set-baseline-evidence-missing",
+        )
     commands = _list_of_mappings(gate_set.get("commands"))
     if not commands:
         _finding(findings, "gate-set-commands-missing", "gate_set.commands must not be empty", path)
@@ -377,6 +413,15 @@ def _validate_findings_mapping(
                 findings,
                 "observed-noncompliance-disposition-invalid",
                 "warn mapping must emit warnings without blocking unrelated work",
+                path,
+            )
+    if stage == "block-new":
+        observed = _mapping(mapping.get("observed_noncompliance"))
+        if observed.get("disposition") != "block_new_nonconformance_with_baseline_allowlist":
+            _finding(
+                findings,
+                "observed-noncompliance-disposition-invalid",
+                "block-new mapping must block new nonconformance against the accepted baseline",
                 path,
             )
 

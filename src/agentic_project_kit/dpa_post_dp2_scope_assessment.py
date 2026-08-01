@@ -41,11 +41,13 @@ KIT_WIDE_DPA_STATUS = "DP3_DP5_NOT_COMPLETE"
 KIT_WIDE_DPA_STATUS_DP5_ONLY = "DP5_NOT_COMPLETE"
 KIT_WIDE_DPA_STATUS_DP5_OBSERVE = "DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE"
 KIT_WIDE_DPA_STATUS_DP5_WARN = "DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE"
+KIT_WIDE_DPA_STATUS_DP5_BLOCK_NEW = "DP5_BLOCK_NEW_ACTIVE_STRICT_NOT_COMPLETE"
 EVIDENCE_OUTPUT_ROOT_PARTS = ("evidence", "dpa", "assessment")
 DP5_STAGE_SEQUENCE = ("observe", "warn", "block-new", "strict")
 DP5_ADOPTED_STAGE_STATUS = {
     "observe": "ADOPTED_OBSERVE",
     "warn": "ADOPTED_WARN",
+    "block-new": "ADOPTED_BLOCK_NEW",
 }
 
 
@@ -214,6 +216,8 @@ class PostDp2ScopeAssessmentResult:
     def kit_wide_dpa_status(self) -> str:
         if self.final_closeout_ready:
             return "READY_FOR_FINAL_CLOSEOUT_RECORD"
+        if self.dp5_stage_record.stage_accepted("block-new") and self.dp5_blockers:
+            return KIT_WIDE_DPA_STATUS_DP5_BLOCK_NEW
         if self.dp5_stage_record.stage_accepted("warn") and self.dp5_blockers:
             return KIT_WIDE_DPA_STATUS_DP5_WARN
         if self.dp5_stage_record.stage_accepted("observe") and self.dp5_blockers:
@@ -290,6 +294,8 @@ class PostDp2ScopeAssessmentResult:
         }
 
     def _dp5_status(self) -> str:
+        if self.dp5_stage_record.stage_accepted("block-new"):
+            return "BLOCK_NEW_ACTIVE_STRICT_LIFECYCLE_NOT_COMPLETE"
         if self.dp5_stage_record.stage_accepted("warn"):
             return "WARN_ACTIVE_STRICT_LIFECYCLE_NOT_COMPLETE"
         if self.dp5_stage_record.stage_accepted("observe"):

@@ -139,6 +139,14 @@ scope. The paired post-DP2 scope assessment records
 and strict remain blocked, and the remaining DP5 blockers are surfaced as
 warnings without claiming Kit-wide conformance or strict enforcement.
 
+The current DP5 block-new-stage record records validation ref
+`511788214c97291bd8ba04d07f46b79aa8cc6549` and status
+`DP5_BLOCK_NEW_STAGE_ADOPTED`. It selects block-new behavior for the same
+bounded scope. The paired post-DP2 scope assessment records
+`DP5_BLOCK_NEW_ACTIVE_STRICT_NOT_COMPLETE`: observe, warn and block-new are
+adopted, strict remains blocked, and the block-new gate records `PASS` with no
+new nonconformance against the accepted warn-stage baseline.
+
 ## Imported Probe Evidence
 
 - `probes/dp1-readonly-c788a8c5-20260727/` records read-only baseline evidence
@@ -251,6 +259,17 @@ warnings without claiming Kit-wide conformance or strict enforcement.
 - `assessment/post-dp2-scope-4305dcee-post-dp5-warn-20260801/` records the
   post-warn assessment with `DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE` and four DP5
   warning entries for block-new/strict stage blockers.
+- `assessment/dp5-warn-stage-check-51178821-20260801/` validates the warn-stage
+  record at the pre-block-new ref with result `VALID_DP5_STAGE_RECORD`.
+- `assessment/post-dp2-scope-51178821-pre-dp5-block-new-20260801/` records the
+  accepted warn-stage baseline used by the block-new gate.
+- `assessment/dp5-block-new-stage-check-51178821-20260801/` validates the DP5
+  block-new-stage record with result `VALID_DP5_STAGE_RECORD`.
+- `assessment/post-dp2-scope-51178821-post-dp5-block-new-20260801/` records the
+  post-block-new assessment with `DP5_BLOCK_NEW_ACTIVE_STRICT_NOT_COMPLETE`.
+- `assessment/dp5-block-new-gate-51178821-20260801/` records the bounded
+  block-new gate with result `PASS` and zero new nonconformance against the
+  accepted warn-stage baseline.
 
 These packages preserve their limitation language. Future execution must freeze
 current refs, record command manifest currency, retain cleanup evidence and

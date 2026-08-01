@@ -1079,6 +1079,50 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable post-warn assessment; records DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE warnings.
+  - path: docs/architecture/evidence/dpa/assessment/DP5_BLOCK_NEW_STAGE_RECORD_20260801.json
+    class: evidence/log
+    owner: maintainers
+    notes: Bounded DP5 block-new-stage adoption record; strict and Kit-wide conformance claims remain false.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-warn-stage-check-51178821-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: DP5 warn-stage validation package summary at the pre-block-new ref.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-warn-stage-check-51178821-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable warn-stage validation result used as block-new rollback evidence.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-51178821-pre-dp5-block-new-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Accepted warn-stage baseline summary for the DP5 block-new gate.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-51178821-pre-dp5-block-new-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable accepted warn-stage baseline for block-new comparison.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-block-new-stage-check-51178821-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: DP5 block-new-stage validation package summary; VALID_DP5_STAGE_RECORD.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-block-new-stage-check-51178821-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable DP5 block-new-stage validation result; strict remains blocked.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-51178821-post-dp5-block-new-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Post-block-new post-DP2 scope assessment summary; strict remains blocked.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-51178821-post-dp5-block-new-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable post-block-new assessment; records DP5_BLOCK_NEW_ACTIVE_STRICT_NOT_COMPLETE.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-block-new-gate-51178821-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: DP5 block-new gate package summary; PASS with zero new nonconformance.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-block-new-gate-51178821-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable DP5 block-new gate result; baseline nonconformance 4, current 2, new 0.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers
