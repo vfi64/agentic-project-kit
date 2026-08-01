@@ -9,10 +9,10 @@ Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
 Current verified main: `9cfb13fb` (`Promote DPA stable readiness (#1977)`).
 Latest substantive work: PR #1977 (`Promote DPA stable readiness (#1977)`).
-Current governed slice: `codex/dpa-stable-readiness` records bounded Stable-DPA
-promotion readiness and promotion evidence; not merged yet.
+Current governed slice: `codex/dpa-repo-adoption-assessment` adds deterministic
+DPA repository adoption assessment for foreign or newly initialized repositories.
 Post-merge handoff status: PASS/NOOP after PR #1977 administrative refresh.
-Next safe step: continue from fresh main with the next planned governed slice.
+Next safe step: finish this DPA repo-adoption assessment slice, then run PR
 post-merge closeout and a generated handoff refresh if required.
 
 ## Historical State Snapshots

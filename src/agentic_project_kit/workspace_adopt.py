@@ -12,6 +12,10 @@ import yaml
 from agentic_project_kit.documentation_registry import (
     build_doc_registry_scope_decision_rows,
 )
+from agentic_project_kit.dpa_repo_adoption_assessment import (
+    DpaRepoAdoptionAssessment,
+    evaluate_dpa_repo_adoption_assessment,
+)
 from agentic_project_kit.workspace import (
     SUPPORTED_MANIFEST_SCHEMA_VERSION,
     default_hygiene_manifest,
@@ -134,6 +138,7 @@ class WorkspaceAdoptReport:
     documentation_age_baseline: tuple[DocumentationAgeBaselineRow, ...]
     ci_workflows: tuple[str, ...]
     agentic: AgenticCollision
+    dpa_repo_adoption: DpaRepoAdoptionAssessment
     init_tree: tuple[str, ...] = WORKSPACE_INIT_TREE
     privacy_boundary: str = PRIVATE_PUBLIC_BOUNDARY
 
@@ -152,6 +157,7 @@ class WorkspaceAdoptReport:
             ],
             "ci_workflows": list(self.ci_workflows),
             "agentic": self.agentic.as_json_data(),
+            "dpa_repo_adoption_assessment": self.dpa_repo_adoption.as_dict(),
             "init_tree": list(self.init_tree),
             "privacy_boundary": self.privacy_boundary,
             "final_signal": "d",
@@ -172,6 +178,7 @@ def analyze_workspace_adoption(root: Path | str = Path(".")) -> WorkspaceAdoptRe
         documentation_age_baseline=_documentation_age_baseline(root_path),
         ci_workflows=_ci_workflows(root_path),
         agentic=_agentic_collision(root_path),
+        dpa_repo_adoption=evaluate_dpa_repo_adoption_assessment(root_path),
     )
 
 
@@ -221,6 +228,22 @@ def render_workspace_adopt_report(report: WorkspaceAdoptReport) -> str:
             lines.append(f"- {workflow}")
     else:
         lines.append("- none")
+
+    dpa = report.dpa_repo_adoption
+    lines.extend(
+        [
+            "",
+            "DPA repo-adoption assessment:",
+            f"- status: {dpa.result_status}",
+            f"- current_validation_ref: {dpa.current_validation_ref}",
+            f"- surfaces: {len(dpa.surfaces)}",
+            f"- high_authority_surfaces: {dpa.high_authority_surface_count}",
+            f"- blockers: {dpa.blocker_count}",
+            "- external_repo_conformance_claimed: false",
+            "- automatic_migration_performed: false",
+            "- next: maintainer-adjudicate bounded scope before migration or conformance claims",
+        ]
+    )
 
     lines.extend(["", "Workspace init would create:"])
     lines.extend(f"- {entry}" for entry in report.init_tree)

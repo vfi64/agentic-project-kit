@@ -52,6 +52,8 @@ def test_init_dry_run_writes_nothing_and_prints_tree(tmp_path: Path) -> None:
     assert "MODE=dry-run" in result.output
     assert ".agentic/config.yaml" in result.output
     assert "+ .agentic/tmp/" in result.output
+    assert "DPA repo-adoption assessment:" in result.output
+    assert "external_repo_conformance_claimed: false" in result.output
     assert "DPA workspace-init projection boundary:" in result.output
     assert "writer: WRT-CH-005" in result.output
     assert PRIVATE_PUBLIC_BOUNDARY in result.output
@@ -156,6 +158,14 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
     assert dpa_manifest["emits_current_handoff_template"] is False
     assert dpa_manifest["self_hosting_current_handoff"] is False
     assert dpa_manifest["kit_conformance_claimed"] is False
+    plan = json.loads(
+        CliRunner()
+        .invoke(app, ["workspace", "init", "--root", str(tmp_path / "fresh"), "--json"])
+        .output
+    )
+    assert plan["dpa_repo_adoption_assessment"]["claims"][
+        "external_repo_conformance_claimed"
+    ] is False
 
 
 def test_init_ci_template_yaml_matches_cli_inventory(tmp_path: Path) -> None:

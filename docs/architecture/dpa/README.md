@@ -169,6 +169,16 @@ validator reports `VALID_DPA_STABLE_PROMOTION_RECORD` when the bounded stable
 claim is structurally valid. Foreign-repository management remains
 `DPA_CAPABLE_WITH_FRESH_PER_REPO_ASSESSMENT`, not automatically conformant.
 
+The read-only wrapper `agentic-kit dpa repo-adoption-assessment` is the
+per-repository DPA intake gate for foreign or newly initialized repositories. It
+records fresh per-repo inventory, source authority, target identity, generated
+or command-updated output classification, DPA-600/DPA-700 evidence requirements
+and exact-ref readiness while keeping `external_repo_conformance_claimed=false`
+and `automatic_migration_performed=false`. A PASS status means
+`READY_FOR_DPA_REPO_ADOPTION_ADJUDICATION`, not automatic conformance; a
+Maintainer-authorized bounded scope is still required before migration,
+strict-gate adoption or external-repo conformance claims.
+
 The read-only wrapper `agentic-kit dpa readonly-probe-execution` executes only
 DP1 Probe fixture-manifest cases whose mutation scope is `READ_ONLY` and whose
 authorization is `NOT_REQUIRED`. It records mutable or context-dependent cases

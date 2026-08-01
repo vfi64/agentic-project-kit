@@ -295,6 +295,29 @@ roadmap:
     bump.
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+- id: dpa-repo-adoption-assessment
+  phase: unphased
+  status: done
+  title: Add deterministic DPA repository adoption assessment
+  completed_by_pr: pending-pr-dpa-repo-adoption-assessment
+  depends_on:
+  - p6-gui-project-selection-and-ci-recipe
+  acceptance:
+  - agentic-kit dpa repo-adoption-assessment inventories foreign or new repository
+    DPA candidate surfaces without mutation.
+  - The assessment records source authority, target identity, DPA-600/DPA-700
+    evidence requirements and exact-ref readiness.
+  - workspace adopt and workspace init surface the DPA repo-adoption assessment
+    boundary during takeover or new workspace planning.
+  - external-repo conformance and automatic migration claims remain false until a
+    Maintainer-authorized bounded scope exists.
+  evidence:
+  - tests/test_dpa_repo_adoption_assessment.py
+  - tests/test_workspace_adopt.py
+  - tests/test_workspace_init.py
+  source_files:
+  - docs/architecture/dpa/README.md
+  - docs/planning/PROJECT_DIRECTION.yaml
 - id: v2-0-legacy-profile-removal
   phase: unphased
   status: planned
@@ -2105,6 +2128,9 @@ plans:
     glossary, and private/public boundary docs as future work.
   - Preserve external-repo validation and workspace evidence generation as future
     deterministic evidence work.
+  - Treat `agentic-kit dpa repo-adoption-assessment` as the implemented initial
+    DPA intake gate; website, repository onboarding guide, troubleshooting and
+    first real external adoption evidence remain separate work.
   - Ensure future docs do not claim operating-layer maturity before implemented and
     tested phases.
   non_goals:

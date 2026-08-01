@@ -192,6 +192,7 @@ rules:
     - agentic-kit chat session-start
     - agentic-kit commands sync-entrypoints
     - agentic-kit dpa readiness
+    - agentic-kit dpa repo-adoption-assessment
     - agentic-kit dpa post-dp2-scope-assessment
     - agentic-kit dpa dp3-dp4-adjudication-check
     - agentic-kit dpa dp5-stage-check
@@ -435,7 +436,11 @@ rules:
     - DPA_STABLE_PROMOTION_RECORDED
     - VALID_DPA_STABLE_PROMOTION_RECORD
     - agentic-kit dpa stable-readiness-check
+    - agentic-kit dpa repo-adoption-assessment
     - DPA_CAPABLE_WITH_FRESH_PER_REPO_ASSESSMENT
+    - READY_FOR_DPA_REPO_ADOPTION_ADJUDICATION
+    - external_repo_conformance_claimed=false
+    - automatic_migration_performed=false
     - kit_wide_dpa_conformance_claimed
     - DP1 read-only baseline refresh
     - 46deae72c2d37ae18331203bc3a6be19c9a67f64
@@ -469,9 +474,12 @@ rules:
     terms:
     - Govern an existing repository (operating layer)
     - agentic-kit workspace adopt --root PATH
+    - agentic-kit dpa repo-adoption-assessment --root PATH
     - '`workspace adopt` is read-only'
     - .agentic/config.yaml
+    - DPA repo-adoption assessment
     - documentation age baseline
+    - exact-ref evidence
     - private/public boundary
     - foreign `.agentic/` directory
     - implicit legacy profile
@@ -490,6 +498,7 @@ rules:
     - .agentic/state/handoff/
     - .agentic/DOC_LIFECYCLE.md
     - docs/archive/README.md
+    - DPA repo-adoption assessment
     - '`hygiene` manifest block'
     - warn-mode doc lifecycle defaults
     - --inject-ci

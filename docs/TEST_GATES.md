@@ -35,6 +35,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Post-release archive check | Unit tests plus agentic-kit post-release-check CLI smoke command |
 | TODO validation change | Unit tests plus agentic-kit check-todo CLI smoke command |
 | Project health check change | Unit tests plus agentic-kit doctor CLI smoke command |
+| DPA repository adoption gate change | Unit tests plus CLI smoke command for `agentic-kit dpa repo-adoption-assessment`; confirm it remains read-only and does not claim external-repo conformance |
 | Planning-documentation slice gate | Unit tests plus CLI smoke command for `agentic-kit slice gate --kind planning-doc`; output must distinguish helper-local PASS from slice PASS |
 | TestPyPI validation | TestPyPI upload, fresh venv install, CLI smoke command |
 | Handoff/state change | Update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md |
