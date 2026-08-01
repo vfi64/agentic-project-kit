@@ -13,9 +13,15 @@ from agentic_project_kit.dpa_dp3_dp4_adjudication import (
 )
 from agentic_project_kit.dpa_dp5_block_new_gate import (
     DEFAULT_DP5_BLOCK_NEW_BASELINE_PATH,
+    DEFAULT_DP5_BLOCK_NEW_STAGE_RECORD_PATH,
     evaluate_dp5_block_new_gate,
     render_dp5_block_new_gate,
     write_dp5_block_new_gate_json,
+)
+from agentic_project_kit.dpa_dp5_strict_gate import (
+    evaluate_dp5_strict_gate,
+    render_dp5_strict_gate,
+    write_dp5_strict_gate_json,
 )
 from agentic_project_kit.dpa_dp5_stage_adoption import (
     DEFAULT_DP5_STAGE_RECORD_PATH,
@@ -285,7 +291,7 @@ def dpa_dp5_stage_check_command(
         help="Fail unless the DP5 stage record is structurally valid.",
     ),
 ) -> None:
-    """Validate a bounded DP5 stage record without enabling strict."""
+    """Validate a bounded DP5 lifecycle stage record."""
     resolved_root = root.resolve()
     result = evaluate_dp5_stage_record(
         resolved_root,
@@ -333,7 +339,7 @@ def dpa_dp5_block_new_gate_command(
         help="Accepted DP5 warn-stage baseline assessment to compare against.",
     ),
     dp5_stage_record: Path = typer.Option(
-        DEFAULT_DP5_STAGE_RECORD_PATH,
+        DEFAULT_DP5_BLOCK_NEW_STAGE_RECORD_PATH,
         "--dp5-stage-record",
         help="DP5 block-new stage-adoption record to inspect.",
     ),
@@ -378,6 +384,71 @@ def dpa_dp5_block_new_gate_command(
         typer.echo(json.dumps(payload, indent=2, sort_keys=True))
     else:
         typer.echo(render_dp5_block_new_gate(result), nl=False)
+        if write_result is not None:
+            reason = f"|reason={write_result['reason']}" if "reason" in write_result else ""
+            typer.echo(
+                "EVIDENCE_WRITE="
+                f"{write_result['result_status']}|"
+                f"path={write_result['output_path']}|"
+                f"written={str(write_result.get('written', False)).lower()}"
+                f"{reason}"
+            )
+    if write_result is not None and write_result["result_status"] == "BLOCK":
+        raise typer.Exit(2)
+    if result.findings:
+        raise typer.Exit(2)
+    if require_pass and not result.ok:
+        raise typer.Exit(1)
+
+
+@dpa_app.command("dp5-strict-gate")
+def dpa_dp5_strict_gate_command(
+    root: Path = typer.Option(Path("."), "--root", help="Repository root."),
+    dp5_stage_record: Path = typer.Option(
+        DEFAULT_DP5_STAGE_RECORD_PATH,
+        "--dp5-stage-record",
+        help="DP5 strict stage-adoption record to inspect.",
+    ),
+    validation_ref: str | None = typer.Option(
+        None,
+        "--validation-ref",
+        help="Optional exact current ref to record instead of repository HEAD.",
+    ),
+    output: Path | None = typer.Option(
+        None,
+        "--output",
+        help="Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/.",
+    ),
+    execute: bool = typer.Option(False, "--execute", help="Write --output when supplied."),
+    output_json: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+    require_pass: bool = typer.Option(
+        False,
+        "--require-pass",
+        help="Fail unless strict has zero configured noncompliance in the accepted DPA scope.",
+    ),
+) -> None:
+    """Block all configured DP5 noncompliance in the accepted DPA scope."""
+    resolved_root = root.resolve()
+    result = evaluate_dp5_strict_gate(
+        resolved_root,
+        dp5_stage_record_path=dp5_stage_record,
+        validation_ref=validation_ref,
+    )
+    write_result = None
+    if output is not None:
+        write_result = write_dp5_strict_gate_json(
+            result,
+            resolved_root,
+            output,
+            execute=execute,
+        )
+    payload = result.as_dict()
+    if write_result is not None:
+        payload["evidence_write"] = write_result
+    if output_json:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        typer.echo(render_dp5_strict_gate(result), nl=False)
         if write_result is not None:
             reason = f"|reason={write_result['reason']}" if "reason" in write_result else ""
             typer.echo(

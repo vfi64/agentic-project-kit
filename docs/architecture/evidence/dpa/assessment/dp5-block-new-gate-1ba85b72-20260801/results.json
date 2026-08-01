@@ -1,0 +1,36 @@
+{
+  "active_stage": "block-new",
+  "baseline_kit_wide_status": "DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE",
+  "baseline_noncompliance": [
+    "block-new:exact-stage-authorization-record-missing",
+    "block-new:rollback-to-less-strict-stage-evidence-missing",
+    "strict:exact-stage-authorization-record-missing",
+    "strict:rollback-to-less-strict-stage-evidence-missing"
+  ],
+  "baseline_noncompliance_count": 4,
+  "baseline_path": "docs/architecture/evidence/dpa/assessment/post-dp2-scope-51178821-pre-dp5-block-new-20260801/results.json",
+  "baseline_present": true,
+  "baseline_validation_ref": "511788214c97291bd8ba04d07f46b79aa8cc6549",
+  "claims": {
+    "blocks_new_noncompliance": true,
+    "generated_outputs_manually_patched": false,
+    "kit_wide_dpa_conformance_claimed": false,
+    "production_mutation_performed": false,
+    "stable_dpa_claimed": false,
+    "strict_stage_active": false
+  },
+  "current_kit_wide_status": "DP5_BLOCK_NEW_ACTIVE_STRICT_NOT_COMPLETE",
+  "current_noncompliance": [
+    "strict:exact-stage-authorization-record-missing",
+    "strict:rollback-to-less-strict-stage-evidence-missing"
+  ],
+  "current_noncompliance_count": 2,
+  "current_validation_ref": "1ba85b723b9a838121e781ad9ecbc8bcd5beaad1",
+  "finding_count": 0,
+  "findings": [],
+  "kind": "dpa_dp5_block_new_gate",
+  "new_noncompliance": [],
+  "new_noncompliance_count": 0,
+  "result_status": "PASS",
+  "schema_version": 1
+}

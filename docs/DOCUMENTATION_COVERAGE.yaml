@@ -196,6 +196,7 @@ rules:
     - agentic-kit dpa dp3-dp4-adjudication-check
     - agentic-kit dpa dp5-stage-check
     - agentic-kit dpa dp5-block-new-gate
+    - agentic-kit dpa dp5-strict-gate
     - agentic-kit dpa dp2-decision-readiness
     - agentic-kit dpa maintainer-record-check
     - agentic-kit dpa probe-002-readiness
@@ -425,6 +426,8 @@ rules:
     - DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE
     - DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE
     - DP5_BLOCK_NEW_ACTIVE_STRICT_NOT_COMPLETE
+    - DP5_STRICT_STAGE_ADOPTED
+    - READY_FOR_FINAL_CLOSEOUT_RECORD
     - kit_wide_dpa_conformance_claimed
     - DP1 read-only baseline refresh
     - 46deae72c2d37ae18331203bc3a6be19c9a67f64

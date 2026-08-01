@@ -147,6 +147,15 @@ bounded scope. The paired post-DP2 scope assessment records
 adopted, strict remains blocked, and the block-new gate records `PASS` with no
 new nonconformance against the accepted warn-stage baseline.
 
+The current DP5 strict-stage record records validation ref
+`1ba85b723b9a838121e781ad9ecbc8bcd5beaad1` and status
+`DP5_STRICT_STAGE_ADOPTED`. It selects strict behavior for the same bounded
+scope. The paired post-DP2 scope assessment records
+`READY_FOR_FINAL_CLOSEOUT_RECORD`: observe, warn, block-new and strict are
+adopted, blocker count is 0, warning count is 0 and the strict gate records
+`PASS`. This is readiness for a separate final closeout record only; it does not
+claim Kit-wide DPA conformance or stable DPA.
+
 ## Imported Probe Evidence
 
 - `probes/dp1-readonly-c788a8c5-20260727/` records read-only baseline evidence
@@ -270,6 +279,18 @@ new nonconformance against the accepted warn-stage baseline.
 - `assessment/dp5-block-new-gate-51178821-20260801/` records the bounded
   block-new gate with result `PASS` and zero new nonconformance against the
   accepted warn-stage baseline.
+- `assessment/dp5-block-new-stage-check-1ba85b72-20260801/` validates the
+  accepted block-new-stage record immediately before strict adoption.
+- `assessment/dp5-block-new-gate-1ba85b72-20260801/` records the pre-strict
+  block-new gate with result `PASS` and zero new nonconformance.
+- `assessment/post-dp2-scope-1ba85b72-pre-dp5-strict-20260801/` records the
+  pre-strict assessment with `DP5_BLOCK_NEW_ACTIVE_STRICT_NOT_COMPLETE`.
+- `assessment/dp5-strict-stage-check-1ba85b72-20260801/` validates the DP5
+  strict-stage record with result `VALID_DP5_STAGE_RECORD`.
+- `assessment/post-dp2-scope-1ba85b72-post-dp5-strict-20260801/` records the
+  post-strict assessment with `READY_FOR_FINAL_CLOSEOUT_RECORD`.
+- `assessment/dp5-strict-gate-1ba85b72-20260801/` records the bounded strict
+  gate with result `PASS`, zero blockers and final-closeout readiness.
 
 These packages preserve their limitation language. Future execution must freeze
 current refs, record command manifest currency, retain cleanup evidence and

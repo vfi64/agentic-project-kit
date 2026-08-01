@@ -1,0 +1,31 @@
+{
+  "active_stage": "block-new",
+  "claims": {
+    "block_new_stage_active": true,
+    "generated_outputs_manually_patched": false,
+    "kit_wide_dpa_conformance_claimed": false,
+    "observe_stage_active": true,
+    "production_mutation_performed": false,
+    "stable_dpa_claimed": false,
+    "strict_stage_active": false,
+    "warn_stage_active": true
+  },
+  "current_validation_ref": "1ba85b723b9a838121e781ad9ecbc8bcd5beaad1",
+  "decision_token": "DPA_DP5_BLOCK_NEW_STAGE_AUTHORIZED",
+  "finding_count": 0,
+  "findings": [],
+  "kind": "dpa_dp5_stage_check",
+  "record_path": "docs/architecture/evidence/dpa/assessment/DP5_BLOCK_NEW_STAGE_RECORD_20260801.json",
+  "record_present": true,
+  "record_status": "DP5_BLOCK_NEW_STAGE_ADOPTED",
+  "record_validation_ref": "511788214c97291bd8ba04d07f46b79aa8cc6549",
+  "result_status": "VALID_DP5_STAGE_RECORD",
+  "schema_version": 1,
+  "stage_model": "dpa-dp5-stage-adoption-v1",
+  "stage_status": {
+    "block-new": "ADOPTED",
+    "observe": "ADOPTED",
+    "strict": "BLOCKED",
+    "warn": "ADOPTED"
+  }
+}
