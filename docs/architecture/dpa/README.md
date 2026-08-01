@@ -248,18 +248,21 @@ conformance.
 
 The read-only wrapper `agentic-kit dpa dp5-stage-check` validates the bounded
 DP5 stage-adoption record. The current stage status is
-`DP5_BLOCK_NEW_STAGE_ADOPTED`: observe, warn and block-new are adopted for the
-bounded post-DP2 DP3/DP4-adjudicated scope. Warn surfaces remaining DP5 stage
-blockers prominently through post-DP2 assessment warnings while preserving
-compatibility. The read-only wrapper `agentic-kit dpa dp5-block-new-gate`
-compares the current DPA scope to the accepted warn-stage baseline and fails
-when new nonconformance appears. Strict remains blocked pending its own exact
-stage record, rollback-to-less-strict-stage evidence and Maintainer
-authorization. The paired post-DP2 scope assessment records
-`DP5_BLOCK_NEW_ACTIVE_STRICT_NOT_COMPLETE`. The prior observe-stage assessment
-status remains `DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE`, and the prior
-warn-stage assessment status remains `DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE`;
-both are preserved as rollback/baseline evidence.
+`DP5_STRICT_STAGE_ADOPTED`: observe, warn, block-new and strict are adopted for
+the bounded post-DP2 DP3/DP4-adjudicated scope. Warn and block-new remain
+preserved as rollback/baseline evidence. The read-only wrapper
+`agentic-kit dpa dp5-block-new-gate` compares the current DPA scope to the
+accepted warn-stage baseline and fails when new nonconformance appears. The
+read-only wrapper `agentic-kit dpa dp5-strict-gate` fails when any configured
+noncompliance remains in the accepted scope. The paired post-DP2 scope
+assessment now records `READY_FOR_FINAL_CLOSEOUT_RECORD`: blocker count is 0,
+warning count is 0 and `final_closeout_ready` is true. This is readiness for a
+separate final closeout record only; it is not a Kit-wide DPA conformance,
+stable DPA or production-mutation claim. The prior observe-stage assessment
+status remains `DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE`, the prior warn-stage
+assessment status remains `DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE`, and the prior
+block-new-stage assessment status remains
+`DP5_BLOCK_NEW_ACTIVE_STRICT_NOT_COMPLETE`.
 
 The current WRT-CH-001 observation package under
 `../evidence/dpa/probes/wrt-ch001-admin-refresh-observation-57a892e4-20260729/`
@@ -343,8 +346,8 @@ After this index, registry staging, Assessment-readiness, the lifecycle wrapper
 slice, WRT-CH-002 release-preparation routing, WRT-CH-003 post-release DOI
 closeout routing, WRT-CH-004 action-surface routing, WRT-CH-005 workspace-init
 classification, WRT-CH-006 generated-successor projection classification,
-the bounded DP3/DP4 adjudication record and DP5 observe/warn/block-new-stage adoption,
-the next DPA work remains governed by the closeout restrictions:
+the bounded DP3/DP4 adjudication record and DP5 observe/warn/block-new/strict-stage adoption,
+the next DPA work remains governed by the final-closeout restrictions:
 
 1. Preserve the DPA Lab source ref and Kit import baseline in every import slice.
 2. Keep WRT-CH-001 administrative refresh, WRT-CH-002 release preparation,
@@ -352,9 +355,8 @@ the next DPA work remains governed by the closeout restrictions:
    authority on the lifecycle-owned `CURRENT_HANDOFF.md` acceptance-state path.
 3. Keep the full WRT-CH-001 administrative refresh PR-flow evidence boundary
    separate until that observation is explicitly closed.
-4. Keep DP5 strict transition blocked unless exact stage scope, gate evidence,
-   rollback-to-less-strict-stage evidence and Maintainer authorization are
-   recorded for that stage.
+4. Keep Kit-wide DPA conformance and stable-DPA claims closed unless a final
+   closeout record is explicitly produced from exact strict-stage evidence.
 5. Re-run the fixture evidence package before any production runtime mutation if
    Probe manuals, fixture manifest, selected target, command manifest or DPA
    implementation code changes.

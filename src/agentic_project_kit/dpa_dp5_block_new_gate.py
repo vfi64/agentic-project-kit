@@ -5,12 +5,14 @@ import json
 from pathlib import Path
 from typing import Any
 
-from agentic_project_kit.dpa_dp5_stage_adoption import DEFAULT_DP5_STAGE_RECORD_PATH
 from agentic_project_kit.dpa_post_dp2_scope_assessment import (
     evaluate_post_dp2_scope_assessment,
 )
 from agentic_project_kit.workspace import load_workspace
 
+DEFAULT_DP5_BLOCK_NEW_STAGE_RECORD_PATH = Path(
+    "docs/architecture/evidence/dpa/assessment/DP5_BLOCK_NEW_STAGE_RECORD_20260801.json"
+)
 DEFAULT_DP5_BLOCK_NEW_BASELINE_PATH = Path(
     "docs/architecture/evidence/dpa/assessment/post-dp2-scope-51178821-pre-dp5-block-new-20260801/results.json"
 )
@@ -87,7 +89,7 @@ def evaluate_dp5_block_new_gate(
     root: Path | str = ".",
     *,
     baseline_path: Path | str = DEFAULT_DP5_BLOCK_NEW_BASELINE_PATH,
-    dp5_stage_record_path: Path | str = DEFAULT_DP5_STAGE_RECORD_PATH,
+    dp5_stage_record_path: Path | str = DEFAULT_DP5_BLOCK_NEW_STAGE_RECORD_PATH,
     validation_ref: str | None = None,
 ) -> Dp5BlockNewGateResult:
     base = Path(root).resolve()

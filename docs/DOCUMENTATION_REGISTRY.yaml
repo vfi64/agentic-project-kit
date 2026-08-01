@@ -1123,6 +1123,58 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable DP5 block-new gate result; baseline nonconformance 4, current 2, new 0.
+  - path: docs/architecture/evidence/dpa/assessment/DP5_STRICT_STAGE_RECORD_20260801.json
+    class: evidence/log
+    owner: maintainers
+    notes: Bounded DP5 strict-stage adoption record; final Kit-wide conformance claim remains false.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-block-new-stage-check-1ba85b72-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Pre-strict DP5 block-new-stage validation package summary.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-block-new-stage-check-1ba85b72-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable pre-strict DP5 block-new-stage validation result; strict remains blocked.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-block-new-gate-1ba85b72-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Pre-strict DP5 block-new gate package summary; PASS with zero new nonconformance.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-block-new-gate-1ba85b72-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable pre-strict DP5 block-new gate result; baseline 4, current 2, new 0.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-1ba85b72-pre-dp5-strict-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Pre-strict post-DP2 scope assessment summary; strict blockers remain visible.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-1ba85b72-pre-dp5-strict-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable pre-strict post-DP2 assessment; records DP5_BLOCK_NEW_ACTIVE_STRICT_NOT_COMPLETE.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-strict-stage-check-1ba85b72-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: DP5 strict-stage validation package summary; VALID_DP5_STAGE_RECORD.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-strict-stage-check-1ba85b72-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable DP5 strict-stage validation result; observe, warn, block-new and strict adopted.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-1ba85b72-post-dp5-strict-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Post-strict post-DP2 scope assessment summary; ready for final closeout record.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-1ba85b72-post-dp5-strict-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable post-strict assessment; records READY_FOR_FINAL_CLOSEOUT_RECORD.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-strict-gate-1ba85b72-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: DP5 strict gate package summary; PASS with zero blockers.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-strict-gate-1ba85b72-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable DP5 strict gate result; final_closeout_ready true without conformance claim.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

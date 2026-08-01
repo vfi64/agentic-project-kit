@@ -48,6 +48,7 @@ DP5_ADOPTED_STAGE_STATUS = {
     "observe": "ADOPTED_OBSERVE",
     "warn": "ADOPTED_WARN",
     "block-new": "ADOPTED_BLOCK_NEW",
+    "strict": "ADOPTED_STRICT",
 }
 
 
@@ -294,6 +295,8 @@ class PostDp2ScopeAssessmentResult:
         }
 
     def _dp5_status(self) -> str:
+        if self.dp5_stage_record.stage_accepted("strict"):
+            return "STRICT_ACTIVE_READY_FOR_FINAL_CLOSEOUT"
         if self.dp5_stage_record.stage_accepted("block-new"):
             return "BLOCK_NEW_ACTIVE_STRICT_LIFECYCLE_NOT_COMPLETE"
         if self.dp5_stage_record.stage_accepted("warn"):

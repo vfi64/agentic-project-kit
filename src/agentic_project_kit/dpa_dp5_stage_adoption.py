@@ -9,7 +9,7 @@ from typing import Any
 from agentic_project_kit.workspace import load_workspace
 
 DEFAULT_DP5_STAGE_RECORD_PATH = Path(
-    "docs/architecture/evidence/dpa/assessment/DP5_BLOCK_NEW_STAGE_RECORD_20260801.json"
+    "docs/architecture/evidence/dpa/assessment/DP5_STRICT_STAGE_RECORD_20260801.json"
 )
 DP5_STAGE_MODEL = "dpa-dp5-stage-adoption-v1"
 VALID_STATUS = "VALID_DP5_STAGE_RECORD"
@@ -19,9 +19,11 @@ ACCEPTED_WARN_STATUS = "DP5_WARN_STAGE_ADOPTED"
 ACCEPTED_WARN_TOKEN = "DPA_DP5_WARN_STAGE_AUTHORIZED"
 ACCEPTED_BLOCK_NEW_STATUS = "DP5_BLOCK_NEW_STAGE_ADOPTED"
 ACCEPTED_BLOCK_NEW_TOKEN = "DPA_DP5_BLOCK_NEW_STAGE_AUTHORIZED"
+ACCEPTED_STRICT_STATUS = "DP5_STRICT_STAGE_ADOPTED"
+ACCEPTED_STRICT_TOKEN = "DPA_DP5_STRICT_STAGE_AUTHORIZED"
 EVIDENCE_OUTPUT_ROOT_PARTS = ("evidence", "dpa", "assessment")
 STAGE_SEQUENCE = ("observe", "warn", "block-new", "strict")
-SUPPORTED_STAGES = ("observe", "warn", "block-new")
+SUPPORTED_STAGES = ("observe", "warn", "block-new", "strict")
 STAGE_CONTRACTS = {
     "observe": {
         "status": ACCEPTED_OBSERVE_STATUS,
@@ -46,6 +48,14 @@ STAGE_CONTRACTS = {
         "stage_behavior": "block-new",
         "stage_decision": "block_new_nonconforming_projection_states",
         "rollback_stage": "warn",
+    },
+    "strict": {
+        "status": ACCEPTED_STRICT_STATUS,
+        "decision_token": ACCEPTED_STRICT_TOKEN,
+        "gate_set_id": "DPA_DP5_STRICT_GATE_SET_V1",
+        "stage_behavior": "strict",
+        "stage_decision": "block_all_configured_noncompliant_states",
+        "rollback_stage": "block-new",
     },
 }
 
@@ -330,6 +340,12 @@ def _validate_stage_scope(
             _finding(findings, "baseline-assessment-missing", "block-new scope must name baseline_assessment", path)
         elif not (root / baseline).exists():
             _finding(findings, "baseline-assessment-missing", f"missing baseline assessment: {baseline}", path)
+    if stage == "strict":
+        previous = str(scope.get("previous_stage_record", "")).strip()
+        if not previous:
+            _finding(findings, "previous-stage-record-missing", "strict scope must name previous_stage_record", path)
+        elif not (root / previous).exists():
+            _finding(findings, "previous-stage-record-missing", f"missing previous stage record: {previous}", path)
     _require_existing_paths(scope.get("evidence"), root, findings, path, "target-scope-evidence-missing")
 
 
@@ -374,6 +390,21 @@ def _validate_gate_set(
             path,
             "gate-set-baseline-evidence-missing",
         )
+    if stage == "strict":
+        if gate_set.get("blocks_all_configured_noncompliance") is not True:
+            _finding(
+                findings,
+                "gate-set-strict-disabled",
+                "strict gate set must block all configured noncompliance",
+                path,
+            )
+        if gate_set.get("strict_scope_limited") is not True:
+            _finding(
+                findings,
+                "gate-set-strict-scope-unbounded",
+                "strict gate set must declare strict_scope_limited=true",
+                path,
+            )
     commands = _list_of_mappings(gate_set.get("commands"))
     if not commands:
         _finding(findings, "gate-set-commands-missing", "gate_set.commands must not be empty", path)
@@ -422,6 +453,15 @@ def _validate_findings_mapping(
                 findings,
                 "observed-noncompliance-disposition-invalid",
                 "block-new mapping must block new nonconformance against the accepted baseline",
+                path,
+            )
+    if stage == "strict":
+        observed = _mapping(mapping.get("observed_noncompliance"))
+        if observed.get("disposition") != "block_all_configured_noncompliance":
+            _finding(
+                findings,
+                "observed-noncompliance-disposition-invalid",
+                "strict mapping must block all configured noncompliance in the accepted scope",
                 path,
             )
 

@@ -3438,7 +3438,7 @@
     {
       "dry_run_available": true,
       "group": "dpa",
-      "help": "Validate a bounded DP5 stage record without enabling strict.",
+      "help": "Validate a bounded DP5 lifecycle stage record.",
       "name": "dp5-stage-check",
       "params": [
         {
@@ -3456,7 +3456,7 @@
           "secondary_opts": []
         },
         {
-          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP5_BLOCK_NEW_STAGE_RECORD_20260801.json')",
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP5_STRICT_STAGE_RECORD_20260801.json')",
           "help": "DPA DP5 stage-adoption record to inspect.",
           "is_flag": false,
           "metavar": null,
@@ -3551,7 +3551,125 @@
         "bounded",
         "dpa"
       ],
-      "when_to_use": "Validate a bounded DP5 stage record without enabling strict."
+      "when_to_use": "Validate a bounded DP5 lifecycle stage record."
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "help": "Block all configured DP5 noncompliance in the accepted DPA scope.",
+      "name": "dp5-strict-gate",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP5_STRICT_STAGE_RECORD_20260801.json')",
+          "help": "DP5 strict stage-adoption record to inspect.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "dp5_stage_record",
+          "opts": [
+            "--dp5-stage-record"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional exact current ref to record instead of repository HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "validation_ref",
+          "opts": [
+            "--validation-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write --output when supplied.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_json",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail unless strict has zero configured noncompliance in the accepted DPA scope.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_pass",
+          "opts": [
+            "--require-pass"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "dpa",
+        "dp5-strict-gate"
+      ],
+      "qualified_name": "agentic-kit dpa dp5-strict-gate",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "dpa"
+      ],
+      "when_to_use": "Block all configured DP5 noncompliance in the accepted DPA scope."
     },
     {
       "dry_run_available": true,
@@ -3894,7 +4012,7 @@
           "secondary_opts": []
         },
         {
-          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP5_BLOCK_NEW_STAGE_RECORD_20260801.json')",
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP5_STRICT_STAGE_RECORD_20260801.json')",
           "help": "Optional DP5 stage-adoption record to inspect when clearing stage blockers.",
           "is_flag": false,
           "metavar": null,
@@ -16251,7 +16369,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "37305274c433",
+    "manifest_sha": "c66426f3ddf0",
     "schema_version": 1
   },
   "schema_version": 2,
