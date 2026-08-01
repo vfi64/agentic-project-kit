@@ -275,6 +275,61 @@ def _validate_scope(
             _finding(findings, f"{key.replace('_', '-')}-missing", f"closeout_scope.{key} must be set", path)
         elif not (root / value).exists():
             _finding(findings, f"{key.replace('_', '-')}-missing", f"missing closeout scope path: {value}", path)
+    _validate_accepted_prs(scope.get("accepted_prs"), root, findings, path)
+
+
+def _validate_accepted_prs(
+    value: Any,
+    root: Path,
+    findings: list[DpaFinalCloseoutFinding],
+    path: str,
+) -> None:
+    if not isinstance(value, list) or not value:
+        _finding(findings, "accepted-prs-missing", "closeout_scope.accepted_prs must be a non-empty list", path)
+        return
+
+    seen: set[int] = set()
+    for index, item in enumerate(value):
+        entry_path = f"{path}:closeout_scope.accepted_prs[{index}]"
+        entry = _mapping(item)
+        pr_number = entry.get("pr")
+        if not isinstance(pr_number, int) or pr_number <= 0:
+            _finding(findings, "accepted-pr-number-invalid", "accepted PR entry must record a positive integer pr", entry_path)
+            continue
+        if pr_number in seen:
+            _finding(findings, "accepted-pr-duplicate", f"accepted PR #{pr_number} is duplicated", entry_path)
+        seen.add(pr_number)
+
+        if not str(entry.get("scope", "")).strip():
+            _finding(findings, "accepted-pr-scope-missing", f"accepted PR #{pr_number} must record scope", entry_path)
+
+        merge_commit = str(entry.get("merge_commit", "")).strip()
+        if not merge_commit:
+            _finding(findings, "accepted-pr-merge-commit-missing", f"accepted PR #{pr_number} must record merge_commit", entry_path)
+            continue
+        if _git_ref_exists(root, merge_commit) is False:
+            _finding(
+                findings,
+                "accepted-pr-merge-commit-unresolvable",
+                f"accepted PR #{pr_number} merge_commit is not a known commit: {merge_commit}",
+                entry_path,
+            )
+            continue
+        if _git_ref_is_ancestor(root, merge_commit, "HEAD") is False:
+            _finding(
+                findings,
+                "accepted-pr-merge-commit-not-ancestor",
+                f"accepted PR #{pr_number} merge_commit is not an ancestor of HEAD: {merge_commit}",
+                entry_path,
+            )
+        subject = _git_commit_subject(root, merge_commit)
+        if subject is not None and f"(#{pr_number})" not in subject:
+            _finding(
+                findings,
+                "accepted-pr-merge-commit-pr-mismatch",
+                f"accepted PR #{pr_number} merge_commit subject does not match PR number: {subject}",
+                entry_path,
+            )
 
 
 def _validate_post_dp2_payload(
@@ -519,6 +574,38 @@ def _git_ref_exists(root: Path, ref: str) -> bool | None:
         check=False,
     )
     return completed.returncode == 0
+
+
+def _git_ref_is_ancestor(root: Path, ref: str, descendant: str) -> bool | None:
+    if not (root / ".git").exists():
+        return None
+    completed = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", ref, descendant],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if completed.returncode == 0:
+        return True
+    if completed.returncode == 1:
+        return False
+    return None
+
+
+def _git_commit_subject(root: Path, ref: str) -> str | None:
+    if not (root / ".git").exists():
+        return None
+    completed = subprocess.run(
+        ["git", "show", "--no-patch", "--format=%s", ref],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if completed.returncode != 0:
+        return ""
+    return completed.stdout.strip()
 
 
 def _resolve_under_root(root: Path, path: Path | str) -> Path:

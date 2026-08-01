@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 from pathlib import Path
 
 from typer.testing import CliRunner
@@ -359,6 +360,13 @@ def _write_valid_final_closeout_record(root: Path) -> Path:
                 "dp5_strict_stage_record": DEFAULT_DP5_STAGE_RECORD_PATH.as_posix(),
                 "post_dp2_scope_assessment": post_path.as_posix(),
                 "dp5_strict_gate": strict_gate_path.as_posix(),
+                "accepted_prs": [
+                    {
+                        "pr": 1,
+                        "scope": "fixture final closeout prerequisite",
+                        "merge_commit": "test-ref",
+                    }
+                ],
                 "evidence": [
                     DEFAULT_READINESS_PATH.as_posix(),
                     "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
@@ -1014,6 +1022,32 @@ def test_dpa_final_closeout_record_blocks_when_post_dp2_not_ready(tmp_path: Path
     assert any(finding.code == "post-dp2-not-closeout-ready" for finding in result.findings)
 
 
+def test_dpa_final_closeout_record_blocks_accepted_pr_commit_mismatch(tmp_path: Path) -> None:
+    _fixture_root(tmp_path)
+    record_path = _write_valid_final_closeout_record(tmp_path)
+    commit = _git_commit_all(tmp_path, "Fixture final closeout prerequisite (#1961)")
+    payload = json.loads((tmp_path / record_path).read_text(encoding="utf-8"))
+    payload["validation_ref"] = commit
+    payload["closeout_scope"]["current_validation_ref"] = commit
+    payload["closeout_scope"]["accepted_prs"] = [
+        {
+            "pr": 1962,
+            "scope": "fixture mismatch",
+            "merge_commit": commit,
+        }
+    ]
+    _write(tmp_path / record_path, payload)
+
+    result = evaluate_dpa_final_closeout_record(
+        tmp_path,
+        record_path=record_path,
+        validation_ref=commit,
+    )
+
+    assert result.result_status == "INVALID_DPA_FINAL_CLOSEOUT_RECORD"
+    assert any(finding.code == "accepted-pr-merge-commit-pr-mismatch" for finding in result.findings)
+
+
 def test_dpa_final_closeout_cli_reports_valid(tmp_path: Path) -> None:
     _fixture_root(tmp_path)
     _write_valid_final_closeout_record(tmp_path)
@@ -1036,6 +1070,22 @@ def test_dpa_final_closeout_cli_reports_valid(tmp_path: Path) -> None:
     assert "STATUS=VALID_DPA_FINAL_CLOSEOUT_RECORD" in result.stdout
     assert "KIT_WIDE_DPA_CONFORMANCE_CLAIMED=true" in result.stdout
     assert "STABLE_DPA_CLAIMED=false" in result.stdout
+
+
+def _git_commit_all(root: Path, subject: str) -> str:
+    subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=root, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=root, check=True)
+    subprocess.run(["git", "add", "."], cwd=root, check=True)
+    subprocess.run(["git", "commit", "-m", subject], cwd=root, check=True, capture_output=True, text=True)
+    completed = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return completed.stdout.strip()
 
 
 def test_post_dp2_scope_assessment_blocks_missing_candidate_evidence(tmp_path: Path) -> None:
