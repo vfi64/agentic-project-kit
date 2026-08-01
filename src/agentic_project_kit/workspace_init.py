@@ -20,6 +20,7 @@ from agentic_project_kit.workspace_adopt import (
     analyze_workspace_adoption,
 )
 from agentic_project_kit.chat_entrypoint_contract import command_reference_prompt_block
+from agentic_project_kit.dpa_repo_adoption_assessment import DpaRepoAdoptionAssessment
 from agentic_project_kit.dpa_workspace_init_projection import (
     DPA_WORKSPACE_INIT_MANIFEST_PATH,
     render_workspace_init_projection_manifest,
@@ -57,6 +58,7 @@ class WorkspaceInitPlan:
     inject_pre_commit: bool
     injection_targets: tuple[str, ...]
     execute: bool
+    dpa_repo_adoption: DpaRepoAdoptionAssessment
     privacy_boundary: str = PRIVATE_PUBLIC_BOUNDARY
 
     @property
@@ -79,6 +81,7 @@ class WorkspaceInitPlan:
             "files": sorted(self.files),
             "gitignore_diff": list(self.gitignore_diff),
             "injection_targets": list(self.injection_targets),
+            "dpa_repo_adoption_assessment": self.dpa_repo_adoption.as_dict(),
             "privacy_boundary": self.privacy_boundary,
             "final_signal": "d",
         }
@@ -148,6 +151,7 @@ def build_workspace_init_plan(
         inject_pre_commit=inject_pre_commit,
         injection_targets=injection_targets,
         execute=execute,
+        dpa_repo_adoption=adopted.dpa_repo_adoption,
     )
 
 
@@ -206,6 +210,19 @@ def render_workspace_init_plan(plan: WorkspaceInitPlan, *, written: bool = False
         lines.extend(f"- {target}" for target in plan.injection_targets)
     else:
         lines.append("- none")
+    dpa = plan.dpa_repo_adoption
+    lines.extend(
+        [
+            "",
+            "DPA repo-adoption assessment:",
+            f"- status: {dpa.result_status}",
+            f"- current_validation_ref: {dpa.current_validation_ref}",
+            f"- surfaces: {len(dpa.surfaces)}",
+            f"- blockers: {dpa.blocker_count}",
+            "- external_repo_conformance_claimed: false",
+            "- automatic_migration_performed: false",
+        ]
+    )
     lines.extend(
         [
             "",

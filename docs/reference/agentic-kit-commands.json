@@ -4910,6 +4910,110 @@
     {
       "dry_run_available": true,
       "group": "dpa",
+      "help": "Assess a foreign or new repo for DPA-governed adoption without mutation.",
+      "name": "repo-adoption-assessment",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Target repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional exact current ref to record instead of repository HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "validation_ref",
+          "opts": [
+            "--validation-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write --output when supplied.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_json",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail unless the target repo is ready for DPA adoption adjudication.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_ready",
+          "opts": [
+            "--require-ready"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "dpa",
+        "repo-adoption-assessment"
+      ],
+      "qualified_name": "agentic-kit dpa repo-adoption-assessment",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "dpa"
+      ],
+      "when_to_use": "Assess a foreign or new repo for DPA-governed adoption without mutation."
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
       "help": "Validate Stable-DPA readiness and the bounded Stable Promotion record.",
       "name": "stable-readiness-check",
       "params": [
@@ -16619,7 +16723,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "48a94c612311",
+    "manifest_sha": "c1487bde81c7",
     "schema_version": 1
   },
   "schema_version": 2,

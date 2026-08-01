@@ -109,6 +109,8 @@ def test_adopt_prints_privacy_boundary(tmp_path: Path) -> None:
     assert result.exit_code == 0, result.output
     assert PRIVATE_PUBLIC_BOUNDARY in result.output
     assert "no secrets, credentials, private chat fragments" in result.output
+    assert "DPA repo-adoption assessment:" in result.output
+    assert "external_repo_conformance_claimed: false" in result.output
 
 
 def test_adopt_json_shape(tmp_path: Path) -> None:
@@ -128,6 +130,11 @@ def test_adopt_json_shape(tmp_path: Path) -> None:
     assert payload["agentic"]["status"] == "ready_for_workspace_init"
     assert payload["project"]["type"] == "generic"
     assert payload["ci_workflows"] == [".github/workflows/ci.yml"]
+    assert payload["dpa_repo_adoption_assessment"]["kind"] == "dpa_repo_adoption_assessment"
+    assert payload["dpa_repo_adoption_assessment"]["claims"][
+        "external_repo_conformance_claimed"
+    ] is False
+    assert payload["dpa_repo_adoption_assessment"]["claims"]["automatic_migration_performed"] is False
     assert "docs/archive/README.md" in payload["init_tree"]
     assert ".agentic/" in payload["init_tree"]
     assert payload["proposed_manifest"]["hygiene"]["doc_lifecycle"] == "warn"

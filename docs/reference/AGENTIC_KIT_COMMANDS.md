@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 48a94c612311
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: c1487bde81c7
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `244`
+- Command count: `245`
 
 ## Commands
 
@@ -1000,6 +1000,23 @@ Inspect Renderer Probe readiness without renderer conformance claims.
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
 | `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 | `require_full_evidence` | `TyperOption` | --require-full-evidence | `False` | `False` | Fail unless Renderer Probe full evidence is structurally satisfied. |
+
+### `agentic-kit dpa repo-adoption-assessment`
+
+- Safety: `BOUNDED`
+- When to use: Assess a foreign or new repo for DPA-governed adoption without mutation.
+- Dry-run available: `True`
+
+Assess a foreign or new repo for DPA-governed adoption without mutation.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Target repository root. |
+| `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact current ref to record instead of repository HEAD. |
+| `output` | `TyperOption` | --output | `False` |  | Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `require_ready` | `TyperOption` | --require-ready | `False` | `False` | Fail unless the target repo is ready for DPA adoption adjudication. |
 
 ### `agentic-kit dpa stable-readiness-check`
 
