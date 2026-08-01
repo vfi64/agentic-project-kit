@@ -1,0 +1,273 @@
+{
+  "assessment_model": "dpa-post-dp2-scope-assessment-v1",
+  "blocker_count": 4,
+  "claims": {
+    "dp3_complete": false,
+    "dp4_complete": false,
+    "dp5_strict_enforced": false,
+    "generated_outputs_manually_patched": false,
+    "kit_wide_dpa_conformance_claimed": false,
+    "production_mutation_performed": false
+  },
+  "dp2_implementation_percent": 100,
+  "dp2_scope": "SELECTED_WRT_CH001_CH002_CH003_CH004_HANDOFF_SCOPE",
+  "dp2_status": "DP2_AUTHORIZED",
+  "dp3": {
+    "blockers": [],
+    "bounded_slice_adjudicated": true,
+    "rollout_candidates": [
+      {
+        "adjudication_record": "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
+        "adjudication_status": "ACCEPTED_FOR_BOUNDED_DP3_ROLLOUT",
+        "claims": {
+          "dp3_complete": false,
+          "dp4_complete": false,
+          "dp5_strict_enforced": false,
+          "generated_outputs_manually_patched": false,
+          "kit_wide_dpa_conformance_claimed": false,
+          "production_mutation_performed": false
+        },
+        "completion_blockers": [],
+        "document_form": "external-generated-initialization-manifest",
+        "dpa_600_evidence": {
+          "evidence_path": "docs/architecture/evidence/dpa/probes/fixture-evidence-0b985a22-wrt-ch005-20260729/results.json",
+          "probe_family": "PROBE-003",
+          "satisfied": true
+        },
+        "dpa_700_evidence": {
+          "evidence_path": "docs/architecture/evidence/dpa/probes/fixture-evidence-0b985a22-wrt-ch005-20260729/results.json",
+          "probe_family": "PROBE-004",
+          "rollback_cleanup_proven": true,
+          "satisfied": true
+        },
+        "entry_blockers": [],
+        "entry_ready": true,
+        "implementation_ref_verified": true,
+        "implementation_result_ref": "f653bbbb",
+        "readiness_record_status": "EXTERNAL_HABITABILITY_ONLY",
+        "rollback": "no production migration; fixture cleanup covers disposable generated target roots",
+        "source_authority": "DPA-WORKSPACE-INIT-HANDOFF-TEMPLATE-v1",
+        "source_paths": [
+          "src/agentic_project_kit/templates.py",
+          "src/agentic_project_kit/workspace_init.py"
+        ],
+        "status": "ADJUDICATED_FOR_BOUNDED_DP3_ROLLOUT",
+        "target_identity": "EXTERNAL_WORKSPACE_INITIALIZATION_TEMPLATE",
+        "target_path": ".agentic/dpa/workspace_init_projection.json",
+        "writer_id": "WRT-CH-005"
+      },
+      {
+        "adjudication_record": "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
+        "adjudication_status": "ACCEPTED_FOR_BOUNDED_DP3_ROLLOUT",
+        "claims": {
+          "dp3_complete": false,
+          "dp4_complete": false,
+          "dp5_strict_enforced": false,
+          "generated_outputs_manually_patched": false,
+          "kit_wide_dpa_conformance_claimed": false,
+          "production_mutation_performed": false
+        },
+        "completion_blockers": [],
+        "document_form": "command-generated-successor-handoff-projection",
+        "dpa_600_evidence": {
+          "evidence_path": "docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json",
+          "probe_family": "PROBE-003",
+          "satisfied": true
+        },
+        "dpa_700_evidence": {
+          "evidence_path": "docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json",
+          "probe_family": "PROBE-004",
+          "rollback_cleanup_proven": true,
+          "satisfied": true
+        },
+        "entry_blockers": [],
+        "entry_ready": true,
+        "implementation_ref_verified": true,
+        "implementation_result_ref": "644f470a",
+        "readiness_record_status": "GENERATED_OUTPUT_CONTRACT_ONLY",
+        "rollback": "source command contract and exact-byte rollback classification; no durable manual patches",
+        "source_authority": "DPA-GENERATED-SUCCESSOR-HANDOFF-PROJECTION-v1",
+        "source_paths": [
+          "src/agentic_project_kit/successor_handoff_package.py",
+          "src/agentic_project_kit/cli_commands/transfer_handoff_flow.py"
+        ],
+        "status": "ADJUDICATED_FOR_BOUNDED_DP3_ROLLOUT",
+        "target_identity": "GENERATED_SUCCESSOR_HANDOFF_PACKAGE_AND_PROMPT_PROJECTIONS",
+        "target_path": "docs/reports/handoff-packages/latest/",
+        "writer_id": "WRT-CH-006"
+      }
+    ],
+    "status": "ADJUDICATED_FOR_BOUNDED_SLICE"
+  },
+  "dp3_dp4_adjudication": {
+    "adjudication_model": "dpa-dp3-dp4-adjudication-record-v1",
+    "claims": {
+      "dp3_complete": false,
+      "dp4_complete": false,
+      "dp5_strict_enforced": false,
+      "generated_outputs_manually_patched": false,
+      "kit_wide_dpa_conformance_claimed": false,
+      "production_mutation_performed": false,
+      "stable_dpa_claimed": false
+    },
+    "current_validation_ref": "4305dceec10a9681331e522d70fb31275612ed69",
+    "decision_token": "DPA_DP3_DP4_BOUNDED_ADJUDICATION_ACCEPTED",
+    "dp3_target_status": {
+      "WRT-CH-005": "ACCEPTED_FOR_BOUNDED_DP3_ROLLOUT",
+      "WRT-CH-006": "ACCEPTED_FOR_BOUNDED_DP3_ROLLOUT"
+    },
+    "dp4_candidate_status": {
+      "DP4-CURRENT-HANDOFF": "ACCEPTED_FOR_BOUNDED_DP4_NO_MIGRATION_OR_MANUAL_PRESERVATION",
+      "DP4-STATUS": "ACCEPTED_FOR_BOUNDED_DP4_NO_MIGRATION_OR_MANUAL_PRESERVATION",
+      "DP4-SUCCESSOR-PROJECTIONS": "ACCEPTED_FOR_BOUNDED_DP4_NO_MIGRATION_OR_MANUAL_PRESERVATION"
+    },
+    "dp5_next_stage_authorized": false,
+    "finding_count": 0,
+    "findings": [],
+    "kind": "dpa_dp3_dp4_adjudication_check",
+    "record_path": "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
+    "record_present": true,
+    "record_status": "DP3_DP4_BOUNDED_ADJUDICATION_ACCEPTED",
+    "record_validation_ref": "3fd8bcc8dfe89965b98a783954f36609836bd094",
+    "result_status": "VALID_DP3_DP4_ADJUDICATION_RECORD",
+    "schema_version": 1
+  },
+  "dp4": {
+    "blockers": [],
+    "bounded_slice_adjudicated": true,
+    "status": "ADJUDICATED_FOR_BOUNDED_STATUS_AUTHORITY_SLICE",
+    "status_authority_candidates": [
+      {
+        "adjudication_record": "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
+        "adjudication_status": "ACCEPTED_FOR_BOUNDED_DP4_NO_MIGRATION_OR_MANUAL_PRESERVATION",
+        "blockers": [],
+        "decision": "manual-preservation-required-for-non-lifecycle-owned-bytes",
+        "document_form": "hybrid-current-state-document",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json"
+        ],
+        "generated_or_command_updated": true,
+        "id": "DP4-CURRENT-HANDOFF",
+        "path": "docs/handoff/CURRENT_HANDOFF.md",
+        "source_authority": ".agentic/operational_handoff_state.yaml plus curated manual regions",
+        "status": "ADJUDICATED_FOR_BOUNDED_DP4_EXIT",
+        "target_identity": "CURRENT_HANDOFF_SELF_HOSTING_TARGET"
+      },
+      {
+        "adjudication_record": "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
+        "adjudication_status": "ACCEPTED_FOR_BOUNDED_DP4_NO_MIGRATION_OR_MANUAL_PRESERVATION",
+        "blockers": [],
+        "decision": "no-migration-until-reader-writer-inventory-is-recorded",
+        "document_form": "manual-current-state-dashboard",
+        "evidence": [],
+        "generated_or_command_updated": false,
+        "id": "DP4-STATUS",
+        "path": "docs/STATUS.md",
+        "source_authority": "manual-maintainer-current-state-update",
+        "status": "ADJUDICATED_FOR_BOUNDED_DP4_EXIT",
+        "target_identity": "PROJECT_STATUS_CURRENT_STATE"
+      },
+      {
+        "adjudication_record": "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
+        "adjudication_status": "ACCEPTED_FOR_BOUNDED_DP4_NO_MIGRATION_OR_MANUAL_PRESERVATION",
+        "blockers": [],
+        "decision": "no-migration-generated-output-command-contract-boundary",
+        "document_form": "command-generated-successor-handoff-projection-family",
+        "evidence": [
+          "docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json"
+        ],
+        "generated_or_command_updated": true,
+        "id": "DP4-SUCCESSOR-PROJECTIONS",
+        "path": "docs/reports/handoff-packages/latest/ and docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "source_authority": "DPA-GENERATED-SUCCESSOR-HANDOFF-PROJECTION-v1",
+        "status": "ADJUDICATED_FOR_BOUNDED_DP4_EXIT",
+        "target_identity": "GENERATED_SUCCESSOR_HANDOFF_PACKAGE_AND_PROMPT_PROJECTIONS"
+      }
+    ]
+  },
+  "dp5": {
+    "blockers": [
+      "block-new:exact-stage-authorization-record-missing",
+      "block-new:rollback-to-less-strict-stage-evidence-missing",
+      "strict:exact-stage-authorization-record-missing",
+      "strict:rollback-to-less-strict-stage-evidence-missing"
+    ],
+    "status": "WARN_ACTIVE_STRICT_LIFECYCLE_NOT_COMPLETE",
+    "strict_lifecycle_stages": [
+      {
+        "blockers": [],
+        "stage": "observe",
+        "status": "ADOPTED_OBSERVE"
+      },
+      {
+        "blockers": [],
+        "stage": "warn",
+        "status": "ADOPTED_WARN"
+      },
+      {
+        "blockers": [
+          "exact-stage-authorization-record-missing",
+          "rollback-to-less-strict-stage-evidence-missing"
+        ],
+        "stage": "block-new",
+        "status": "BLOCKED_BEFORE_STAGE_TRANSITION"
+      },
+      {
+        "blockers": [
+          "exact-stage-authorization-record-missing",
+          "rollback-to-less-strict-stage-evidence-missing"
+        ],
+        "stage": "strict",
+        "status": "BLOCKED_BEFORE_STAGE_TRANSITION"
+      }
+    ],
+    "warning_count": 4,
+    "warnings": [
+      "DP5_WARN:block-new:exact-stage-authorization-record-missing",
+      "DP5_WARN:block-new:rollback-to-less-strict-stage-evidence-missing",
+      "DP5_WARN:strict:exact-stage-authorization-record-missing",
+      "DP5_WARN:strict:rollback-to-less-strict-stage-evidence-missing"
+    ]
+  },
+  "dp5_stage_adoption": {
+    "active_stage": "warn",
+    "claims": {
+      "block_new_stage_active": false,
+      "generated_outputs_manually_patched": false,
+      "kit_wide_dpa_conformance_claimed": false,
+      "observe_stage_active": true,
+      "production_mutation_performed": false,
+      "stable_dpa_claimed": false,
+      "strict_stage_active": false,
+      "warn_stage_active": true
+    },
+    "current_validation_ref": "4305dceec10a9681331e522d70fb31275612ed69",
+    "decision_token": "DPA_DP5_WARN_STAGE_AUTHORIZED",
+    "finding_count": 0,
+    "findings": [],
+    "kind": "dpa_dp5_stage_check",
+    "record_path": "docs/architecture/evidence/dpa/assessment/DP5_WARN_STAGE_RECORD_20260801.json",
+    "record_present": true,
+    "record_status": "DP5_WARN_STAGE_ADOPTED",
+    "record_validation_ref": "4305dceec10a9681331e522d70fb31275612ed69",
+    "result_status": "VALID_DP5_STAGE_RECORD",
+    "schema_version": 1,
+    "stage_model": "dpa-dp5-stage-adoption-v1",
+    "stage_status": {
+      "block-new": "BLOCKED",
+      "observe": "ADOPTED",
+      "strict": "BLOCKED",
+      "warn": "ADOPTED"
+    }
+  },
+  "final_closeout_ready": false,
+  "finding_count": 0,
+  "findings": [],
+  "kind": "dpa_post_dp2_scope_assessment",
+  "kit_wide_dpa_conformance_claimed": false,
+  "kit_wide_dpa_status": "DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE",
+  "readiness_record": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+  "result_status": "POST_DP2_SCOPE_ASSESSMENT_RECORDED",
+  "schema_version": 1,
+  "validation_ref": "4305dceec10a9681331e522d70fb31275612ed69"
+}

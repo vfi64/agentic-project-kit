@@ -40,7 +40,13 @@ RESULT_STATUS = "POST_DP2_SCOPE_ASSESSMENT_RECORDED"
 KIT_WIDE_DPA_STATUS = "DP3_DP5_NOT_COMPLETE"
 KIT_WIDE_DPA_STATUS_DP5_ONLY = "DP5_NOT_COMPLETE"
 KIT_WIDE_DPA_STATUS_DP5_OBSERVE = "DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE"
+KIT_WIDE_DPA_STATUS_DP5_WARN = "DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE"
 EVIDENCE_OUTPUT_ROOT_PARTS = ("evidence", "dpa", "assessment")
+DP5_STAGE_SEQUENCE = ("observe", "warn", "block-new", "strict")
+DP5_ADOPTED_STAGE_STATUS = {
+    "observe": "ADOPTED_OBSERVE",
+    "warn": "ADOPTED_WARN",
+}
 
 
 @dataclass(frozen=True)
@@ -208,11 +214,19 @@ class PostDp2ScopeAssessmentResult:
     def kit_wide_dpa_status(self) -> str:
         if self.final_closeout_ready:
             return "READY_FOR_FINAL_CLOSEOUT_RECORD"
+        if self.dp5_stage_record.stage_accepted("warn") and self.dp5_blockers:
+            return KIT_WIDE_DPA_STATUS_DP5_WARN
         if self.dp5_stage_record.stage_accepted("observe") and self.dp5_blockers:
             return KIT_WIDE_DPA_STATUS_DP5_OBSERVE
         if not self.dp3_blockers and not self.dp4_blockers and self.dp5_blockers:
             return KIT_WIDE_DPA_STATUS_DP5_ONLY
         return KIT_WIDE_DPA_STATUS
+
+    @property
+    def dp5_warnings(self) -> tuple[str, ...]:
+        if self.dp5_stage_record.stage_accepted("warn") and self.dp5_blockers:
+            return tuple(f"DP5_WARN:{blocker}" for blocker in self.dp5_blockers)
+        return ()
 
     @property
     def result_status(self) -> str:
@@ -266,16 +280,21 @@ class PostDp2ScopeAssessmentResult:
                 ],
             },
             "dp5": {
-                "status": (
-                    "OBSERVE_ADOPTED_STRICT_LIFECYCLE_NOT_COMPLETE"
-                    if self.dp5_stage_record.stage_accepted("observe")
-                    else "BLOCKED_BEFORE_STAGE_TRANSITION"
-                ),
+                "status": self._dp5_status(),
                 "blockers": list(self.dp5_blockers),
+                "warning_count": len(self.dp5_warnings),
+                "warnings": list(self.dp5_warnings),
                 "strict_lifecycle_stages": [stage.as_dict() for stage in self.strict_lifecycle_stages],
             },
             "claims": _false_claims(),
         }
+
+    def _dp5_status(self) -> str:
+        if self.dp5_stage_record.stage_accepted("warn"):
+            return "WARN_ACTIVE_STRICT_LIFECYCLE_NOT_COMPLETE"
+        if self.dp5_stage_record.stage_accepted("observe"):
+            return "OBSERVE_ADOPTED_STRICT_LIFECYCLE_NOT_COMPLETE"
+        return "BLOCKED_BEFORE_STAGE_TRANSITION"
 
 
 def evaluate_post_dp2_scope_assessment(
@@ -349,6 +368,7 @@ def render_post_dp2_scope_assessment(result: PostDp2ScopeAssessmentResult) -> st
         f"FINAL_CLOSEOUT_READY={str(payload['final_closeout_ready']).lower()}",
         f"FINDINGS={payload['finding_count']}",
         f"BLOCKERS={payload['blocker_count']}",
+        f"WARNINGS={payload['dp5']['warning_count']}",
     ]
     for candidate in payload["dp3"]["rollout_candidates"]:
         lines.append(
@@ -364,6 +384,8 @@ def render_post_dp2_scope_assessment(result: PostDp2ScopeAssessmentResult) -> st
         lines.append(f"DP5_STAGE={stage['stage']}|status={stage['status']}")
     for blocker in (*payload["dp3"]["blockers"], *payload["dp4"]["blockers"], *payload["dp5"]["blockers"]):
         lines.append(f"BLOCKER={blocker}")
+    for warning in payload["dp5"]["warnings"]:
+        lines.append(f"WARNING={warning}")
     for finding in payload["findings"]:
         lines.append(f"FINDING={finding['code']}|path={finding['path']}|{finding['message']}")
     return "\n".join(lines) + "\n"
@@ -600,27 +622,23 @@ def _strict_lifecycle_stages(
     adjudication: Dp3Dp4AdjudicationResult,
     dp5_stage: Dp5StageAdoptionResult,
 ) -> tuple[StrictLifecycleStage, ...]:
-    blockers = []
+    shared_blockers = []
     if not adjudication.ok:
-        blockers.append("accepted-dp3-and-dp4-results-missing")
-    blockers.extend(
-        (
-            "exact-stage-authorization-record-missing",
-            "rollback-to-less-strict-stage-evidence-missing",
-        )
+        shared_blockers.append("accepted-dp3-and-dp4-results-missing")
+    transition_blockers = (
+        "exact-stage-authorization-record-missing",
+        "rollback-to-less-strict-stage-evidence-missing",
     )
-    blocker_tuple = tuple(blockers)
-    observe = (
-        StrictLifecycleStage("observe", "ADOPTED_OBSERVE", ())
-        if dp5_stage.stage_accepted("observe")
-        else StrictLifecycleStage("observe", "BLOCKED_BEFORE_STAGE_TRANSITION", blocker_tuple)
-    )
-    return (
-        observe,
-        StrictLifecycleStage("warn", "BLOCKED_BEFORE_STAGE_TRANSITION", blocker_tuple),
-        StrictLifecycleStage("block-new", "BLOCKED_BEFORE_STAGE_TRANSITION", blocker_tuple),
-        StrictLifecycleStage("strict", "BLOCKED_BEFORE_STAGE_TRANSITION", blocker_tuple),
-    )
+    stages: list[StrictLifecycleStage] = []
+    for stage in DP5_STAGE_SEQUENCE:
+        if adjudication.ok and dp5_stage.stage_accepted(stage) and stage in DP5_ADOPTED_STAGE_STATUS:
+            stages.append(StrictLifecycleStage(stage, DP5_ADOPTED_STAGE_STATUS[stage], ()))
+            continue
+        blockers = list(shared_blockers)
+        if not dp5_stage.stage_accepted(stage):
+            blockers.extend(transition_blockers)
+        stages.append(StrictLifecycleStage(stage, "BLOCKED_BEFORE_STAGE_TRANSITION", tuple(blockers)))
+    return tuple(stages)
 
 
 def _evidence_summary(root: Path, evidence_path: str) -> dict[str, Any]:

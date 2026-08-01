@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "kind": "dpa_dp5_stage_record",
+  "status": "DP5_WARN_STAGE_ADOPTED",
+  "stage": "warn",
+  "status_date": "2026-08-01",
+  "validation_ref": "4305dceec10a9681331e522d70fb31275612ed69",
+  "maintainer": "Maintainer instruction recorded in Codex chat, 2026-08-01: continue DPA implementation autonomously through bounded DP3-DP5 slices with exact-ref evidence, rollback path and no global strict/conformance claim before DP3-DP5 closeout criteria are truly satisfied.",
+  "decision_token": "DPA_DP5_WARN_STAGE_AUTHORIZED",
+  "target_scope": {
+    "id": "DPA_POST_DP2_DP3_DP4_ACCEPTED_SCOPE",
+    "enforcement_stage": "warn",
+    "previous_stage_record": "docs/architecture/evidence/dpa/assessment/DP5_OBSERVE_STAGE_RECORD_20260801.json",
+    "accepted_dp2_record": "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+    "accepted_dp3_dp4_record": "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
+    "pre_warn_scope_assessment": "docs/architecture/evidence/dpa/assessment/post-dp2-scope-4305dcee-pre-dp5-warn-20260801/results.json",
+    "evidence": [
+      "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+      "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
+      "docs/architecture/evidence/dpa/assessment/dp5-observe-stage-check-4305dcee-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/post-dp2-scope-4305dcee-pre-dp5-warn-20260801/results.json"
+    ],
+    "limitations": [
+      "Warn applies only to the post-DP2 assessment and bounded DP3/DP4 adjudicated scope.",
+      "Warn surfaces remaining DP5 noncompliance prominently without blocking unrelated work.",
+      "Block-new and strict remain blocked pending their own exact stage records and rollback evidence."
+    ]
+  },
+  "gate_set": {
+    "id": "DPA_DP5_WARN_GATE_SET_V1",
+    "stage_behavior": "warn-only",
+    "blocks_unrelated_work": false,
+    "warns_on_noncompliance": true,
+    "warning_surfaces": [
+      "agentic-kit dpa post-dp2-scope-assessment text output",
+      "agentic-kit dpa post-dp2-scope-assessment JSON dp5.warnings"
+    ],
+    "commands": [
+      {
+        "command": "agentic-kit dpa readiness --require-dp2-ready",
+        "role": "confirm DP2 selected self-hosting scope remains authorized and separate from Kit-wide DPA conformance",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json"
+        ]
+      },
+      {
+        "command": "agentic-kit dpa dp3-dp4-adjudication-check --require-valid",
+        "role": "confirm bounded DP3 rollout and DP4 no-migration/manual-preservation adjudication",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/dp3-dp4-adjudication-check-3fd8bcc8-20260801/results.json"
+        ]
+      },
+      {
+        "command": "agentic-kit dpa dp5-stage-check --record docs/architecture/evidence/dpa/assessment/DP5_OBSERVE_STAGE_RECORD_20260801.json --require-valid",
+        "role": "confirm observe is the previous less strict stage before warn",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/dp5-observe-stage-check-4305dcee-20260801/results.json"
+        ]
+      },
+      {
+        "command": "agentic-kit dpa post-dp2-scope-assessment --dp5-stage-record docs/architecture/evidence/dpa/assessment/DP5_OBSERVE_STAGE_RECORD_20260801.json",
+        "role": "record pre-warn rollback baseline with observe adopted and warn blocked",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/post-dp2-scope-4305dcee-pre-dp5-warn-20260801/results.json"
+        ]
+      },
+      {
+        "command": "agentic-kit transfer post-merge-check",
+        "role": "confirm handoff/status synchronization after the observe-stage closeout refresh",
+        "evidence": [
+          "docs/reports/handoff-packages/latest/validation_report.json"
+        ]
+      }
+    ]
+  },
+  "findings_mapping": {
+    "unknown_mutation_safety_finding": {
+      "disposition": "fail_closed_for_mutation_safety",
+      "rationale": "Warn does not weaken existing mutation-safety fail-closed behavior. Unknown findings that affect mutation safety, authority interpretation, target identity, byte ownership or acceptance remain hard blockers for mutation claims."
+    },
+    "stage_decision": "warn_without_blocking_compatibility",
+    "observed_noncompliance": {
+      "disposition": "emit_warning_without_blocking_unrelated_work",
+      "rationale": "Warn-stage findings are emitted in DPA assessment output and JSON while preserving compatibility and avoiding unrelated-work blocking."
+    }
+  },
+  "rollback": {
+    "less_strict_stage": "observe",
+    "tested_or_adjudicated": true,
+    "evidence": [
+      "docs/architecture/evidence/dpa/assessment/DP5_OBSERVE_STAGE_RECORD_20260801.json",
+      "docs/architecture/evidence/dpa/assessment/dp5-observe-stage-check-4305dcee-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/post-dp2-scope-4305dcee-pre-dp5-warn-20260801/results.json"
+    ],
+    "rationale": "Rollback from warn is record-selection only: select the observe stage record and the post-DP2 assessment returns to DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE with warn blocked. No production target mutation, strict gate state or generated-output patch is introduced by warn."
+  },
+  "documentation_sync": {
+    "required": true,
+    "surfaces": [
+      "README.md",
+      "docs/architecture/dpa/README.md",
+      "docs/architecture/evidence/dpa/README.md",
+      "docs/DOCUMENTATION_COVERAGE.yaml",
+      "docs/DOCUMENTATION_REGISTRY.yaml"
+    ]
+  },
+  "claims": {
+    "observe_stage_active": true,
+    "warn_stage_active": true,
+    "block_new_stage_active": false,
+    "strict_stage_active": false,
+    "kit_wide_dpa_conformance_claimed": false,
+    "production_mutation_performed": false,
+    "generated_outputs_manually_patched": false,
+    "stable_dpa_claimed": false
+  }
+}
