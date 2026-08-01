@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 67b93589045441044420191c081a25392e6c7077
-  short: 67b93589
-  subject: Record DPA DP3 DP4 adjudication (#1963)
+  full: d06eb27545b3c613094e23e46c7d58d2cd076b97
+  short: d06eb275
+  subject: Adopt DPA DP5 observe stage (#1965)
 last_substantive_work_state:
-  full: 67b93589045441044420191c081a25392e6c7077
-  short: 67b93589
-  subject: Record DPA DP3 DP4 adjudication (#1963)
+  full: d06eb27545b3c613094e23e46c7d58d2cd076b97
+  short: d06eb275
+  subject: Adopt DPA DP5 observe stage (#1965)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
