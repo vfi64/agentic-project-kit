@@ -995,6 +995,26 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable post-DP2 DP3-DP5 scope assessment; records rollout, migration and strict-gate blockers.
+  - path: docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json
+    class: evidence/log
+    owner: maintainers
+    notes: Bounded DP3/DP4 adjudication record accepting WRT-CH-005/WRT-CH-006 rollout classification and selected DP4 no-migration/manual-preservation outcomes; no DP5 stage authorization.
+  - path: docs/architecture/evidence/dpa/assessment/dp3-dp4-adjudication-check-3fd8bcc8-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: DP3/DP4 adjudication-record validation package summary; VALID_DP3_DP4_ADJUDICATION_RECORD.
+  - path: docs/architecture/evidence/dpa/assessment/dp3-dp4-adjudication-check-3fd8bcc8-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable DP3/DP4 adjudication-record validation result; records no DP5 stage authorization.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-3fd8bcc8-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Post-DP2 scope assessment summary after bounded DP3/DP4 adjudication; DP5 remains blocked before stage transition.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-3fd8bcc8-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable post-DP2 scope assessment after DP3/DP4 adjudication; records remaining DP5 stage-transition blockers.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

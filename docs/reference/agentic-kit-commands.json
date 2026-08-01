@@ -3188,6 +3188,124 @@
     {
       "dry_run_available": true,
       "group": "dpa",
+      "help": "Validate a bounded DP3/DP4 adjudication record without authorizing DP5.",
+      "name": "dp3-dp4-adjudication-check",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json')",
+          "help": "DPA DP3/DP4 bounded adjudication record to inspect.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "record",
+          "opts": [
+            "--record"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional exact current ref to record instead of repository HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "validation_ref",
+          "opts": [
+            "--validation-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write --output when supplied.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_json",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail unless the record structurally accepts the bounded DP3/DP4 slice.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_valid",
+          "opts": [
+            "--require-valid"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "dpa",
+        "dp3-dp4-adjudication-check"
+      ],
+      "qualified_name": "agentic-kit dpa dp3-dp4-adjudication-check",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "dpa"
+      ],
+      "when_to_use": "Validate a bounded DP3/DP4 adjudication record without authorizing DP5."
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
       "help": "Execute authorized non-production DPA fixture evidence cases.",
       "name": "fixture-evidence",
       "params": [
@@ -3506,6 +3624,20 @@
           "name": "record",
           "opts": [
             "--record"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json')",
+          "help": "Optional DP3/DP4 adjudication record to inspect when clearing post-DP2 blockers.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "adjudication_record",
+          "opts": [
+            "--adjudication-record"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -15855,7 +15987,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "f6031c749e80",
+    "manifest_sha": "9336aa528d00",
     "schema_version": 1
   },
   "schema_version": 2,

@@ -115,6 +115,15 @@ blockers after the selected DP2 self-hosting scope reached 100%. It records
 not execute migration, strict enforcement, production mutation or generated
 output manual patching.
 
+The current DP3/DP4 adjudication record records validation ref
+`3fd8bcc8dfe89965b98a783954f36609836bd094` and status
+`DP3_DP4_BOUNDED_ADJUDICATION_ACCEPTED`. It accepts the bounded DP3 rollout
+classification for `WRT-CH-005` and `WRT-CH-006`, and accepts the bounded DP4
+no-migration/manual-preservation or command-contract-boundary decisions for
+`CURRENT_HANDOFF.md`, `STATUS.md` and generated successor-handoff projections.
+The paired post-DP2 scope assessment keeps DP5 blocked before any observe, warn,
+block-new or strict stage transition and records `DP5_NOT_COMPLETE`.
+
 ## Imported Probe Evidence
 
 - `probes/dp1-readonly-c788a8c5-20260727/` records read-only baseline evidence
@@ -204,6 +213,13 @@ output manual patching.
 - `assessment/post-dp2-scope-6a59bf43-20260801/` records the post-DP2 DP3-DP5
   scope assessment with result `POST_DP2_SCOPE_ASSESSMENT_RECORDED` and
   `DP3_DP5_NOT_COMPLETE`.
+- `assessment/dp3-dp4-adjudication-check-3fd8bcc8-20260801/` validates the
+  bounded DP3/DP4 adjudication record with result
+  `VALID_DP3_DP4_ADJUDICATION_RECORD`.
+- `assessment/post-dp2-scope-3fd8bcc8-20260801/` records the post-DP2 scope
+  assessment after DP3/DP4 adjudication: DP3 and DP4 are bounded-slice
+  adjudicated, while DP5 remains blocked before stage transition with
+  `DP5_NOT_COMPLETE`.
 
 These packages preserve their limitation language. Future execution must freeze
 current refs, record command manifest currency, retain cleanup evidence and
