@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 0fdc3415ca3eea96265d15f91254bf104c1bfe6c
-  short: 0fdc3415
-  subject: Add DPA post-DP2 scope assessment (#1961)
+  full: 67b93589045441044420191c081a25392e6c7077
+  short: 67b93589
+  subject: Record DPA DP3 DP4 adjudication (#1963)
 last_substantive_work_state:
-  full: 0fdc3415ca3eea96265d15f91254bf104c1bfe6c
-  short: 0fdc3415
-  subject: Add DPA post-DP2 scope assessment (#1961)
+  full: 67b93589045441044420191c081a25392e6c7077
+  short: 67b93589
+  subject: Record DPA DP3 DP4 adjudication (#1963)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
