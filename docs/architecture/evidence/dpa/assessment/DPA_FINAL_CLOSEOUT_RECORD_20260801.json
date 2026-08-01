@@ -99,7 +99,7 @@
     ],
     "limitations": [
       "The conformance claim is bounded to the accepted Kit-side DP1-DP5 implementation and evidence scope.",
-      "Stable DPA remains unclaimed because the imported DPA specifications retain their review-ready status.",
+      "Stable DPA remains unclaimed by this final closeout record; Stable Promotion is owned by docs/architecture/evidence/dpa/assessment/DPA_STABLE_PROMOTION_RECORD_20260801.json.",
       "The record does not perform production mutation and does not manually patch generated or command-updated outputs.",
       "Future target expansion, migration, release or stable-promotion work requires fresh exact-ref evidence."
     ]

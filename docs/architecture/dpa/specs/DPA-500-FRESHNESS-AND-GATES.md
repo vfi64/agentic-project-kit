@@ -1,10 +1,10 @@
 # DPA-500 — Freshness and Gates
 
-Status: review-ready
+Status: stable
 
-Status-date: 2026-07-17
+Status-date: 2026-08-01
 
-Authority: normative DPA specification, review-ready after primary review, Maintainer adjudication and independent post-adjudication verification; stability remains subject to applicable Probe evidence
+Authority: normative DPA specification; stable for the accepted Kit-side DP1-DP5 scope through `docs/architecture/evidence/dpa/assessment/DPA_STABLE_PROMOTION_RECORD_20260801.json`
 
 ## 1. Purpose
 
@@ -496,9 +496,9 @@ The following are invalid:
 25. re-acceptance invoking a renderer or writing target bytes;
 26. a lab gate represented as main-repository runtime conformance.
 
-## 23. Review-ready criteria
+## 23. Stable criteria
 
-DPA-500 may become `review-ready` when:
+DPA-500 is `stable` for the accepted Kit-side DP1-DP5 scope when:
 
 1. freshness dimensions and classifications are complete and consistent with DPA-100 through DPA-400 and ADR-021;
 2. DPA-100 drift classes and DPA-500 finding subreasons are cleanly separated;
@@ -511,6 +511,10 @@ DPA-500 may become `review-ready` when:
 9. every requirement is traced to invariants, tests, later implementation, evidence and rollback;
 10. diagrams are synchronized;
 11. repository-specific mappings remain exact-ref fenced;
-12. primary review, Maintainer adjudication and independent post-adjudication verification are complete.
+12. primary review, Maintainer adjudication and independent post-adjudication verification are complete;
+13. applicable freshness, finding, gate, recovery, re-acceptance,
+    layered-acceptance and strict-adoption evidence is exact-ref recorded in the
+    Stable Promotion record.
 
-DPA-500 MUST NOT become `stable` before applicable freshness, finding, gate, recovery, re-acceptance, layered-acceptance and strict-adoption Probes have evidence at an exact main-repository validation ref.
+Future target or gate expansion requires fresh exact-ref evidence before it can
+inherit this stable scope.

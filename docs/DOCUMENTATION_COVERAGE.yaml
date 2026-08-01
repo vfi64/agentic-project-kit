@@ -198,6 +198,7 @@ rules:
     - agentic-kit dpa dp5-block-new-gate
     - agentic-kit dpa dp5-strict-gate
     - agentic-kit dpa final-closeout-check
+    - agentic-kit dpa stable-readiness-check
     - agentic-kit dpa dp2-decision-readiness
     - agentic-kit dpa maintainer-record-check
     - agentic-kit dpa probe-002-readiness
@@ -405,7 +406,7 @@ rules:
     - workspace resolver
     - Evidence policy for current-state claims
 - id: document-projection-architecture-coverage
-  description: Document Projection Architecture staging must remain visible as architecture-only import staging without runtime, Probe PASS, stable or conformance overclaims.
+  description: Document Projection Architecture staging and Stable Promotion must remain visible without production mutation, generated-output manual patching, full Probe PASS or foreign-repository overclaims.
   documents:
   - path: docs/architecture/dpa/README.md
     terms:
@@ -431,6 +432,10 @@ rules:
     - READY_FOR_FINAL_CLOSEOUT_RECORD
     - DPA_DP3_DP5_FINAL_CLOSEOUT_RECORDED
     - VALID_DPA_FINAL_CLOSEOUT_RECORD
+    - DPA_STABLE_PROMOTION_RECORDED
+    - VALID_DPA_STABLE_PROMOTION_RECORD
+    - agentic-kit dpa stable-readiness-check
+    - DPA_CAPABLE_WITH_FRESH_PER_REPO_ASSESSMENT
     - kit_wide_dpa_conformance_claimed
     - DP1 read-only baseline refresh
     - 46deae72c2d37ae18331203bc3a6be19c9a67f64

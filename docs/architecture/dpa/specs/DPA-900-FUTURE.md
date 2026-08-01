@@ -1,10 +1,10 @@
 # DPA-900 — Future Evolution and Review Economics
 
-Status: review-ready
+Status: stable
 
-Status-date: 2026-07-27
+Status-date: 2026-08-01
 
-Authority: normative DPA specification; review-ready after Package C primary review, Maintainer adjudication and independent post-adjudication verification; not stable, not implementation evidence and not a main-repository conformance claim
+Authority: normative DPA specification; stable for the accepted Kit-side DP1-DP5 scope through `docs/architecture/evidence/dpa/assessment/DPA_STABLE_PROMOTION_RECORD_20260801.json`
 
 ## 1. Purpose
 
@@ -537,9 +537,9 @@ The following are invalid:
 15. DPA final closeout recorded while unresolved architecture-design blockers
     remain hidden by status wording.
 
-## 23. Review-ready criteria
+## 23. Stable criteria
 
-DPA-900 may become `review-ready` when:
+DPA-900 is `stable` for the accepted Kit-side DP1-DP5 scope when:
 
 1. change classes and risk levels are complete and non-overlapping enough for
    reviewer use;
@@ -563,8 +563,10 @@ DPA-900 may become `review-ready` when:
 11. diagrams are synchronized;
 12. repository-specific mechanisms remain exact-ref fenced;
 13. primary review, Maintainer adjudication and any required post-adjudication
-    verification are complete.
+    verification are complete;
+14. final pre-import architecture closeout, controlled import planning,
+    applicable Probe evidence, implementation evidence and Maintainer
+    adjudication are exact-ref recorded in the Stable Promotion record.
 
-DPA-900 MUST NOT become `stable` before final pre-import architecture closeout,
-controlled import planning, applicable Probe evidence, implementation evidence
-and Maintainer adjudication exist at exact refs.
+Future review-economics or external target expansion requires fresh exact-ref
+evidence before it can inherit this stable scope.

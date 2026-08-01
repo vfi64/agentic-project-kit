@@ -28,7 +28,43 @@ from agentic_project_kit.dpa_final_closeout import (
 from agentic_project_kit.dpa_post_dp2_scope_assessment import (
     evaluate_post_dp2_scope_assessment,
 )
+from agentic_project_kit.dpa_probe_002_readiness import (
+    PROBE_002_SOURCE_PATHS,
+    PROBE_002_TEST_GLOBS,
+    PROBE_EXECUTION_PACKAGE_PATH,
+    PROBE_MANUAL_PATH,
+    SELECTED_WRITER_PLAN_PATH,
+)
+from agentic_project_kit.dpa_probe_003_readiness import (
+    PROBE_003_CONTROL_SURFACES,
+    PROBE_003_SOURCE_PATHS,
+    PROBE_003_TEST_GLOBS,
+)
+from agentic_project_kit.dpa_probe_004_readiness import (
+    PROBE_004_CONTROL_SURFACES,
+    PROBE_004_SOURCE_PATHS,
+    PROBE_004_TEST_GLOBS,
+)
 from agentic_project_kit.dpa_readiness import DEFAULT_READINESS_PATH
+from agentic_project_kit.dpa_renderer_readiness import (
+    RENDERER_CONTROL_SURFACES,
+    RENDERER_SOURCE_PATHS,
+    RENDERER_TEST_GLOBS,
+)
+from agentic_project_kit.dpa_stable_readiness import (
+    BASELINE_STABLE_SPEC_IDS,
+    DEFAULT_DPA_STABLE_PROMOTION_RECORD_PATH,
+    EXTERNAL_REPO_STATUS,
+    PROMOTED_SPEC_IDS,
+    PROMOTION_DECISION_TOKEN,
+    PROMOTION_RECORD_STATUS,
+    READY_FOR_STABLE_PROMOTION_STATUS,
+    SPEC_FILES,
+    STABLE_CLAIM_SCOPE,
+    STABLE_SCOPE_ID,
+    VALID_STABLE_PROMOTION_STATUS,
+    evaluate_dpa_stable_readiness,
+)
 from agentic_project_kit.dpa_successor_projection import DPA_SUCCESSOR_PROJECTION_SOURCE_PATHS
 from agentic_project_kit.dpa_workspace_init_projection import DPA_WORKSPACE_INIT_SOURCE_PATHS
 
@@ -56,11 +92,28 @@ def _touch(root: Path, path: str) -> None:
 
 
 def _fixture_root(root: Path) -> None:
-    for path in (*DPA_WORKSPACE_INIT_SOURCE_PATHS, *DPA_SUCCESSOR_PROJECTION_SOURCE_PATHS):
+    for path in (
+        *DPA_WORKSPACE_INIT_SOURCE_PATHS,
+        *DPA_SUCCESSOR_PROJECTION_SOURCE_PATHS,
+        *PROBE_002_SOURCE_PATHS,
+        *PROBE_002_TEST_GLOBS,
+        SELECTED_WRITER_PLAN_PATH,
+        PROBE_MANUAL_PATH,
+        PROBE_EXECUTION_PACKAGE_PATH,
+        *PROBE_003_SOURCE_PATHS,
+        *PROBE_003_TEST_GLOBS,
+        *PROBE_003_CONTROL_SURFACES,
+        *PROBE_004_SOURCE_PATHS,
+        *PROBE_004_TEST_GLOBS,
+        *PROBE_004_CONTROL_SURFACES,
+        *RENDERER_SOURCE_PATHS,
+        *RENDERER_TEST_GLOBS,
+        *RENDERER_CONTROL_SURFACES,
+    ):
         _touch(root, path)
     _touch(root, "docs/handoff/CURRENT_HANDOFF.md")
     _touch(root, "docs/STATUS.md")
-    (root / "docs/reports/handoff-packages/latest").mkdir(parents=True)
+    (root / "docs/reports/handoff-packages/latest").mkdir(parents=True, exist_ok=True)
     command_reference = root / "docs/reference/agentic-kit-commands.json"
     command_reference.parent.mkdir(parents=True)
     command_reference.write_text(
@@ -411,6 +464,94 @@ def _write_valid_final_closeout_record(root: Path) -> Path:
         },
     )
     return DEFAULT_DPA_FINAL_CLOSEOUT_RECORD_PATH
+
+
+def _write_dpa_spec_statuses(root: Path, *, promote_to_stable: bool = False) -> None:
+    for spec_id, spec_path in SPEC_FILES:
+        status = "stable" if promote_to_stable or spec_id in BASELINE_STABLE_SPEC_IDS else "review-ready"
+        path = root / spec_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(f"# {spec_id}\n\nStatus: {status}\n", encoding="utf-8")
+
+
+def _write_stable_promotion_record(
+    root: Path,
+    *,
+    stable_evidence: Path,
+    external_repo_overclaim: bool = False,
+) -> Path:
+    final_closeout = DEFAULT_DPA_FINAL_CLOSEOUT_RECORD_PATH.as_posix()
+    promoted_specs = [
+        {
+            "id": spec_id,
+            "path": spec_path,
+            "from_status": "stable" if spec_id in BASELINE_STABLE_SPEC_IDS else "review-ready",
+            "to_status": "stable",
+            "evidence": [stable_evidence.as_posix(), final_closeout],
+        }
+        for spec_id, spec_path in SPEC_FILES
+    ]
+    _write(
+        root / DEFAULT_DPA_STABLE_PROMOTION_RECORD_PATH,
+        {
+            "schema_version": 1,
+            "kind": "dpa_stable_promotion_record",
+            "status": PROMOTION_RECORD_STATUS,
+            "status_date": "2026-08-01",
+            "validation_ref": "test-ref",
+            "maintainer": "test stable promotion authorization",
+            "decision_token": PROMOTION_DECISION_TOKEN,
+            "stable_scope": {
+                "id": STABLE_SCOPE_ID,
+                "final_closeout_record": final_closeout,
+                "stable_readiness_evidence": stable_evidence.as_posix(),
+                "promoted_specs": promoted_specs,
+                "evidence": [
+                    final_closeout,
+                    stable_evidence.as_posix(),
+                    DEFAULT_DP3_DP4_ADJUDICATION_RECORD_PATH.as_posix(),
+                    DEFAULT_DP5_STAGE_RECORD_PATH.as_posix(),
+                ],
+                "limitations": [
+                    "Stable is bounded to the accepted Kit-side DP1-DP5 implementation scope.",
+                    "Foreign repositories require fresh per-repo inventory, evidence and authorization.",
+                ],
+            },
+            "criteria": {
+                "dpa_000_to_dpa_900_stable": True,
+                "dp2_selected_scope_implementation_percent": 100,
+                "final_closeout_result_status": "VALID_DPA_FINAL_CLOSEOUT_RECORD",
+                "post_dp2_kit_wide_dpa_status": "READY_FOR_FINAL_CLOSEOUT_RECORD",
+                "strict_gate_result_status": "PASS",
+                "stable_readiness_result_status": READY_FOR_STABLE_PROMOTION_STATUS,
+                "blocker_count": 0,
+                "warning_count": 0,
+            },
+            "rollback": {
+                "tested_or_adjudicated": True,
+                "production_mutation_required": False,
+                "evidence": [DEFAULT_DP5_STAGE_RECORD_PATH.as_posix(), final_closeout],
+                "path": "Revert the Stable Promotion record/spec-status PR and rerun stable-readiness-check.",
+            },
+            "external_repo_management": {
+                "status": EXTERNAL_REPO_STATUS,
+                "automatic_external_repo_conformance_claimed": external_repo_overclaim,
+                "requires_fresh_per_repo_inventory": True,
+                "requires_fresh_per_repo_dpa_600_700_evidence": True,
+                "requires_maintainer_authorized_scope": True,
+            },
+            "claims": {
+                "kit_wide_dpa_conformance_claimed": True,
+                "stable_dpa_claimed": True,
+                "production_mutation_performed": False,
+                "generated_outputs_manually_patched": False,
+                "external_repo_conformance_claimed": external_repo_overclaim,
+                "claim_scope": STABLE_CLAIM_SCOPE,
+            },
+        },
+    )
+    assert set(PROMOTED_SPEC_IDS) == {item["id"] for item in promoted_specs}
+    return DEFAULT_DPA_STABLE_PROMOTION_RECORD_PATH
 
 
 def _dp3_target(
@@ -1070,6 +1211,92 @@ def test_dpa_final_closeout_cli_reports_valid(tmp_path: Path) -> None:
     assert "STATUS=VALID_DPA_FINAL_CLOSEOUT_RECORD" in result.stdout
     assert "KIT_WIDE_DPA_CONFORMANCE_CLAIMED=true" in result.stdout
     assert "STABLE_DPA_CLAIMED=false" in result.stdout
+
+
+def test_dpa_stable_readiness_reports_ready_without_promotion_record(tmp_path: Path) -> None:
+    _fixture_root(tmp_path)
+    _write_valid_final_closeout_record(tmp_path)
+    _write_dpa_spec_statuses(tmp_path)
+
+    result = evaluate_dpa_stable_readiness(tmp_path, validation_ref="test-ref")
+    payload = result.as_dict()
+
+    assert payload["result_status"] == READY_FOR_STABLE_PROMOTION_STATUS
+    assert payload["promotion_record_present"] is False
+    assert payload["dp2_implementation_percent"] == 100
+    assert payload["claims"]["kit_wide_dpa_conformance_claimed"] is False
+    assert payload["claims"]["stable_dpa_claimed"] is False
+    assert payload["foreign_repo_management"]["automatic_external_repo_conformance_claimed"] is False
+
+
+def test_dpa_stable_readiness_validates_promotion_record(tmp_path: Path) -> None:
+    _fixture_root(tmp_path)
+    _write_valid_final_closeout_record(tmp_path)
+    _write_dpa_spec_statuses(tmp_path)
+    ready = evaluate_dpa_stable_readiness(tmp_path, validation_ref="test-ref")
+    stable_evidence = Path("docs/architecture/evidence/dpa/assessment/stable-ready/results.json")
+    _write(tmp_path / stable_evidence, ready.as_dict())
+    _write_dpa_spec_statuses(tmp_path, promote_to_stable=True)
+    _write_stable_promotion_record(tmp_path, stable_evidence=stable_evidence)
+
+    result = evaluate_dpa_stable_readiness(tmp_path, validation_ref="test-ref")
+    payload = result.as_dict()
+
+    assert payload["result_status"] == VALID_STABLE_PROMOTION_STATUS
+    assert payload["promotion_record_present"] is True
+    assert payload["claims"]["kit_wide_dpa_conformance_claimed"] is True
+    assert payload["claims"]["stable_dpa_claimed"] is True
+    assert all(spec["stable"] for spec in payload["spec_statuses"])
+
+
+def test_dpa_stable_readiness_blocks_external_repo_overclaim(tmp_path: Path) -> None:
+    _fixture_root(tmp_path)
+    _write_valid_final_closeout_record(tmp_path)
+    _write_dpa_spec_statuses(tmp_path)
+    ready = evaluate_dpa_stable_readiness(tmp_path, validation_ref="test-ref")
+    stable_evidence = Path("docs/architecture/evidence/dpa/assessment/stable-ready/results.json")
+    _write(tmp_path / stable_evidence, ready.as_dict())
+    _write_dpa_spec_statuses(tmp_path, promote_to_stable=True)
+    _write_stable_promotion_record(
+        tmp_path,
+        stable_evidence=stable_evidence,
+        external_repo_overclaim=True,
+    )
+
+    result = evaluate_dpa_stable_readiness(tmp_path, validation_ref="test-ref")
+
+    assert result.result_status == "INVALID_DPA_STABLE_PROMOTION_RECORD"
+    assert any(finding.code == "external-repo-overclaim" for finding in result.findings)
+
+
+def test_dpa_stable_readiness_cli_reports_stable(tmp_path: Path) -> None:
+    _fixture_root(tmp_path)
+    _write_valid_final_closeout_record(tmp_path)
+    _write_dpa_spec_statuses(tmp_path)
+    ready = evaluate_dpa_stable_readiness(tmp_path, validation_ref="test-ref")
+    stable_evidence = Path("docs/architecture/evidence/dpa/assessment/stable-ready/results.json")
+    _write(tmp_path / stable_evidence, ready.as_dict())
+    _write_dpa_spec_statuses(tmp_path, promote_to_stable=True)
+    _write_stable_promotion_record(tmp_path, stable_evidence=stable_evidence)
+
+    result = runner.invoke(
+        app,
+        [
+            "dpa",
+            "stable-readiness-check",
+            "--root",
+            str(tmp_path),
+            "--validation-ref",
+            "test-ref",
+            "--require-stable",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert "DPA_STABLE_READINESS_CHECK" in result.stdout
+    assert "STATUS=VALID_DPA_STABLE_PROMOTION_RECORD" in result.stdout
+    assert "STABLE_DPA_CLAIMED=true" in result.stdout
+    assert "EXTERNAL_REPO_CONFORMANCE_CLAIMED=false" in result.stdout
 
 
 def _git_commit_all(root: Path, subject: str) -> str:
