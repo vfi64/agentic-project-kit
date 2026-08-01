@@ -107,6 +107,14 @@ keeps generated package/prompt files source-command owned and keeps manual
 durable target-byte patching, production mutation and Kit conformance claims
 closed.
 
+The current post-DP2 scope assessment records validation ref
+`6a59bf4393672837862f1760f4ad644d4dd6dcb6`. It inventories DP3 rollout
+candidates, DP4 status-authority candidates and DP5 strict lifecycle-gate stage
+blockers after the selected DP2 self-hosting scope reached 100%. It records
+`DP3_DP5_NOT_COMPLETE`, keeps `kit_wide_dpa_conformance_claimed` false and does
+not execute migration, strict enforcement, production mutation or generated
+output manual patching.
+
 ## Imported Probe Evidence
 
 - `probes/dp1-readonly-c788a8c5-20260727/` records read-only baseline evidence
@@ -193,6 +201,9 @@ closed.
 - `assessment/maintainer-record-check-be37f052-wrt-ch004-20260729/` records
   validation of the WRT-CH-004 scope-extension Maintainer Assessment record with
   result `VALID_AUTHORIZATION_RECORD`.
+- `assessment/post-dp2-scope-6a59bf43-20260801/` records the post-DP2 DP3-DP5
+  scope assessment with result `POST_DP2_SCOPE_ASSESSMENT_RECORDED` and
+  `DP3_DP5_NOT_COMPLETE`.
 
 These packages preserve their limitation language. Future execution must freeze
 current refs, record command manifest currency, retain cleanup evidence and

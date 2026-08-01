@@ -218,13 +218,22 @@ Non-DPA workspaces retain the prior DOI metadata write behavior. This records
 WRT-CH-003 as the acceptance-state writer for that target mutation; it does not
 publish a release, create DOI records or claim Kit-wide DPA conformance.
 
-The read-only wrapper `agentic-kit dpa readiness` now reports DPA
+The read-only wrapper `agentic-kit dpa readiness` now reports DP2 selected self-hosting target-scope
 implementation readiness at 100% for the current authorization record: all DP2
 entry evidence fields are satisfied for the current Kit ref and no DP2 entry
-blockers remain. The current selected self-hosting writer scope is
+blockers remain. This percentage is not a Kit-wide DPA conformance or DP3-DP5
+completion percentage. The current selected self-hosting writer scope is
 `WRT-CH-001` plus `WRT-CH-002` plus `WRT-CH-003` plus `WRT-CH-004`; no current
 self-hosting `CURRENT_HANDOFF.md` writer remains deferred. `WRT-CH-005` and
 `WRT-CH-006` remain outside that selected target scope.
+
+The read-only wrapper `agentic-kit dpa post-dp2-scope-assessment` inventories
+post-DP2 DP3 rollout candidates, DP4 status-authority candidates and DP5 strict
+lifecycle-gate stage blockers. It records `DP3_DP5_NOT_COMPLETE`, keeps
+`kit_wide_dpa_conformance_claimed` false and may write bounded assessment
+evidence under `docs/architecture/evidence/dpa/assessment/`. The wrapper is a
+scope and readiness assessment only: it does not execute migrations, activate
+strict gates, patch generated outputs manually or close final DPA conformance.
 
 The current WRT-CH-001 observation package under
 `../evidence/dpa/probes/wrt-ch001-admin-refresh-observation-57a892e4-20260729/`

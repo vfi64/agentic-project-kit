@@ -987,6 +987,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable WRT-CH-004 DP2 Maintainer Assessment record check; VALID_AUTHORIZATION_RECORD.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-6a59bf43-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Post-DP2 DP3-DP5 scope assessment summary; records DP3_DP5_NOT_COMPLETE and no Kit-wide conformance claim.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-6a59bf43-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable post-DP2 DP3-DP5 scope assessment; records rollout, migration and strict-gate blockers.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

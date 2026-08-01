@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 56f24aba6681
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: f6031c749e80
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `237`
+- Command count: `238`
 
 ## Commands
 
@@ -783,6 +783,24 @@ Validate a DP2 Maintainer Assessment record without authorizing DP2.
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
 | `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 | `require_authorization` | `TyperOption` | --require-authorization | `False` | `False` | Fail unless the record is a valid DP2 authorization record. |
+
+### `agentic-kit dpa post-dp2-scope-assessment`
+
+- Safety: `BOUNDED`
+- When to use: Assess post-DP2 DP3-DP5 rollout, migration and strict-gate scope.
+- Dry-run available: `True`
+
+Assess post-DP2 DP3-DP5 rollout, migration and strict-gate scope.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')` | DPA Assessment readiness JSON record to inspect. |
+| `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact target ref to record instead of the current repository HEAD. |
+| `output` | `TyperOption` | --output | `False` |  | Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `require_closeout_ready` | `TyperOption` | --require-closeout-ready | `False` | `False` | Fail unless DP3, DP4, DP5 and final closeout are structurally ready. |
 
 ### `agentic-kit dpa probe-002-readiness`
 

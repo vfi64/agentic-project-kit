@@ -3480,6 +3480,124 @@
     {
       "dry_run_available": true,
       "group": "dpa",
+      "help": "Assess post-DP2 DP3-DP5 rollout, migration and strict-gate scope.",
+      "name": "post-dp2-scope-assessment",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')",
+          "help": "DPA Assessment readiness JSON record to inspect.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "record",
+          "opts": [
+            "--record"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional exact target ref to record instead of the current repository HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "validation_ref",
+          "opts": [
+            "--validation-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write --output when supplied.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_json",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail unless DP3, DP4, DP5 and final closeout are structurally ready.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_closeout_ready",
+          "opts": [
+            "--require-closeout-ready"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "dpa",
+        "post-dp2-scope-assessment"
+      ],
+      "qualified_name": "agentic-kit dpa post-dp2-scope-assessment",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "dpa"
+      ],
+      "when_to_use": "Assess post-DP2 DP3-DP5 rollout, migration and strict-gate scope."
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
       "help": "Inspect PROBE-002 lifecycle and selected-writer readiness without production mutation.",
       "name": "probe-002-readiness",
       "params": [
@@ -15737,7 +15855,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "56f24aba6681",
+    "manifest_sha": "f6031c749e80",
     "schema_version": 1
   },
   "schema_version": 2,
