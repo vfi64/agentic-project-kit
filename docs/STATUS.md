@@ -9,10 +9,11 @@ Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
 Current verified main: `2331c848` (`Add DPA repo adoption assessment (#1979)`).
 Latest substantive work: PR #1979 (`Add DPA repo adoption assessment (#1979)`).
-Current governed slice: `codex/dpa-repo-adoption-assessment` adds deterministic
-DPA repository adoption assessment for foreign or newly initialized repositories.
-Post-merge handoff status: PASS/NOOP after PR #1979 administrative refresh.
-Next safe step: continue from fresh main with the next planned governed slice.
+Current governed slice: `codex/dpa-workspace-intake-orchestrator` automates the
+deterministic workspace-level DPA intake sequence for foreign or newly initialized
+repositories.
+Post-merge handoff status: PASS/NOOP after PR #1979 administrative refresh (#1980).
+Next safe step: complete the workspace DPA intake orchestration slice, then run
 post-merge closeout and a generated handoff refresh if required.
 
 ## Historical State Snapshots

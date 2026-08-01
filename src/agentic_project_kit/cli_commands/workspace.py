@@ -24,6 +24,10 @@ from agentic_project_kit.workspace_adopt import (
     analyze_workspace_adoption,
     render_workspace_adopt_report,
 )
+from agentic_project_kit.workspace_dpa_intake import (
+    build_workspace_dpa_intake_report,
+    render_workspace_dpa_intake_report,
+)
 
 workspace_app = typer.Typer(help="Inspect and manage operating-layer workspaces.")
 
@@ -40,6 +44,62 @@ def workspace_adopt_command(
         typer.echo(json.dumps(report.as_json_data(), indent=2, sort_keys=True))
     else:
         typer.echo(render_workspace_adopt_report(report), nl=False)
+
+
+@workspace_app.command("dpa-intake")
+def workspace_dpa_intake_command(
+    root: Annotated[Path, typer.Option("--root", help="Target repository root.")] = Path("."),
+    validation_ref: Annotated[
+        str | None,
+        typer.Option(
+            "--validation-ref",
+            help="Optional exact current ref to record instead of repository HEAD.",
+        ),
+    ] = None,
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output",
+            help="Optional DPA intake evidence JSON path under docs/architecture/evidence/dpa/assessment/.",
+        ),
+    ] = None,
+    write_evidence: Annotated[
+        bool,
+        typer.Option(
+            "--write-evidence",
+            help="Use the default bounded DPA intake evidence JSON path.",
+        ),
+    ] = False,
+    execute: Annotated[
+        bool,
+        typer.Option("--execute", help="Write requested evidence output."),
+    ] = False,
+    require_ready: Annotated[
+        bool,
+        typer.Option(
+            "--require-ready",
+            help="Fail unless the target repo is ready for DPA intake adjudication.",
+        ),
+    ] = False,
+    json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
+) -> None:
+    """Run the deterministic DPA repository-intake orchestration."""
+
+    report = build_workspace_dpa_intake_report(
+        root.resolve(),
+        validation_ref=validation_ref,
+        output=output,
+        write_evidence=write_evidence,
+        execute=execute,
+    )
+    if json_output:
+        typer.echo(json.dumps(report.as_json_data(), indent=2, sort_keys=True))
+    else:
+        typer.echo(render_workspace_dpa_intake_report(report), nl=False)
+    if report.evidence_write is not None and report.evidence_write["result_status"] == "BLOCK":
+        raise typer.Exit(2)
+    if require_ready and not report.ok:
+        raise typer.Exit(1)
 
 
 @workspace_app.command("init")

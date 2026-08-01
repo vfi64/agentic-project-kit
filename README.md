@@ -201,11 +201,22 @@ For an existing Git repo, add `.agentic/` governance; use `agentic-kit init` onl
 
 ```bash
 pip install agentic-project-kit
+agentic-kit workspace dpa-intake --root PATH
 agentic-kit workspace adopt --root PATH
 agentic-kit dpa repo-adoption-assessment --root PATH
 agentic-kit workspace init --root PATH --execute [--inject-ci|--inject-pre-commit]
 agentic-kit-gui --root PATH
 ```
+
+`workspace dpa-intake` is the one-shot DPA intake orchestrator for takeover or
+new-workspace planning. It resolves the target repo exact Git ref when possible,
+runs `workspace adopt`, runs the DPA repo-adoption assessment, groups surfaces
+into an `adjudication_plan`, and can write bounded intake evidence with
+`--write-evidence --execute`. It remains read-only by default and keeps
+`external_repo_conformance_claimed=false`,
+`automatic_migration_performed=false`, and `production_mutation_performed=false`;
+`READY_FOR_DPA_INTAKE_ADJUDICATION` means the repo is ready for Maintainer
+adjudication, not automatically conformant.
 
 `workspace adopt` is read-only: it proposes `.agentic/config.yaml`, reports the private/public boundary, a documentation age baseline, a DPA repo-adoption assessment, and foreign `.agentic/` directory. `agentic-kit dpa repo-adoption-assessment --root PATH` is the same DPA intake gate as a standalone command: it inventories candidate surfaces, records source authority and target identity, classifies generated or command-updated outputs, records DPA-600/DPA-700 evidence requirements, requires exact-ref evidence before adoption readiness, and keeps `external_repo_conformance_claimed=false`. `workspace init` is dry-run by default; `--execute` creates `.agentic/state/status.md`, `.agentic/state/handoff/`, `.agentic/DOC_LIFECYCLE.md`, `docs/archive/README.md`, transfer/CI/prompt files, and a `hygiene` manifest block with warn-mode doc lifecycle defaults. It appends `.agentic/tmp/`; versioned `.agentic/` must not hold secrets, chat fragments, or logs.
 
@@ -358,6 +369,7 @@ Quick command guide:
 - `agentic-kit chat refresher --mode copy-paste`: print the six-line command-manifest refresher for chat replies that may include commands.
 - `agentic-kit chat session-start --mode copy-paste`: print the refresher plus the full inline command manifest for a new session.
 - `agentic-kit commands sync-entrypoints --execute`: synchronize command reference files and command-manifest entrypoint headers.
+- `agentic-kit workspace dpa-intake`: run the deterministic one-shot DPA intake for a target repository by resolving exact-ref evidence, running workspace adoption analysis and DPA repo-adoption assessment, generating an adjudication plan, and optionally writing bounded intake evidence without migration or external-repo conformance claims.
 - `agentic-kit dpa readiness`: validate the staged DPA DP1 Assessment readiness record, report the deterministic DP2 selected self-hosting target-scope implementation percentage, and keep that separate from Kit-wide DPA conformance.
 - `agentic-kit dpa repo-adoption-assessment`: assess a foreign or new repository for DPA-governed adoption without mutation; it records fresh per-repo inventory, source authority, target identity, DPA-600/DPA-700 evidence requirements, exact-ref readiness and no external-repo conformance claim.
 - `agentic-kit dpa post-dp2-scope-assessment`: inventory post-DP2 DP3 rollout candidates, DP4 status-authority candidates and DP5 strict lifecycle-gate stage blockers without claiming Kit-wide DPA completion.
