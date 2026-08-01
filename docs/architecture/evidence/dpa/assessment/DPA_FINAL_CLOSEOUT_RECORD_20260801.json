@@ -3,43 +3,68 @@
   "kind": "dpa_final_closeout_record",
   "status": "DPA_DP3_DP5_FINAL_CLOSEOUT_RECORDED",
   "status_date": "2026-08-01",
-  "validation_ref": "dde89bf09ac8359b28ac045b5d091b5f6324a98d",
+  "validation_ref": "6b061c65c1db5945f1a0b3c28163a57de68e6c4b",
   "maintainer": "Maintainer instruction recorded in Codex chat, 2026-08-01: continue DPA implementation autonomously through bounded DP3-DP5 slices, including branch, PR, CI, merge and post-merge closeout authority; produce a final conformance/closeout record only when DP3-DP5 criteria are truly satisfied by exact-ref evidence.",
   "decision_token": "DPA_DP3_DP5_FINAL_CLOSEOUT_AUTHORIZED",
   "closeout_scope": {
     "id": "DPA_KIT_WIDE_DPA_DP1_DP5_ACCEPTED_SCOPE",
-    "current_validation_ref": "dde89bf09ac8359b28ac045b5d091b5f6324a98d",
+    "current_validation_ref": "6b061c65c1db5945f1a0b3c28163a57de68e6c4b",
     "dp1_readiness_record": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
     "dp2_maintainer_record": "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
     "dp3_dp4_adjudication_record": "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
     "dp5_strict_stage_record": "docs/architecture/evidence/dpa/assessment/DP5_STRICT_STAGE_RECORD_20260801.json",
-    "post_dp2_scope_assessment": "docs/architecture/evidence/dpa/assessment/post-dp2-scope-dde89bf0-final-closeout-20260801/results.json",
-    "dp5_strict_gate": "docs/architecture/evidence/dpa/assessment/dp5-strict-gate-dde89bf0-final-closeout-20260801/results.json",
+    "post_dp2_scope_assessment": "docs/architecture/evidence/dpa/assessment/post-dp2-scope-6b061c65-final-ref-audit-20260801/results.json",
+    "dp5_strict_gate": "docs/architecture/evidence/dpa/assessment/dp5-strict-gate-6b061c65-final-ref-audit-20260801/results.json",
     "accepted_prs": [
       {
         "pr": 1961,
         "scope": "post-DP2 DP3-DP5 readiness/scope assessment wrapper",
-        "merge_commit": "19831e0e862e4da5e61ca1311dea0796250c15d9"
+        "merge_commit": "0fdc3415ca3eea96265d15f91254bf104c1bfe6c"
+      },
+      {
+        "pr": 1962,
+        "scope": "generated handoff refresh after post-DP2 scope assessment",
+        "merge_commit": "3fd8bcc8dfe89965b98a783954f36609836bd094"
       },
       {
         "pr": 1963,
         "scope": "bounded DP3/DP4 adjudication record and check",
-        "merge_commit": "3fd8bcc8dfe89965b98a783954f36609836bd094"
+        "merge_commit": "67b93589045441044420191c081a25392e6c7077"
+      },
+      {
+        "pr": 1964,
+        "scope": "generated handoff refresh after DP3/DP4 adjudication",
+        "merge_commit": "19831e0e862e4da5e61ca1311dea0796250c15d9"
       },
       {
         "pr": 1965,
         "scope": "DP5 observe stage",
-        "merge_commit": "d06eb275"
+        "merge_commit": "d06eb27545b3c613094e23e46c7d58d2cd076b97"
+      },
+      {
+        "pr": 1966,
+        "scope": "generated handoff refresh after DP5 observe stage",
+        "merge_commit": "4305dceec10a9681331e522d70fb31275612ed69"
       },
       {
         "pr": 1967,
         "scope": "DP5 warn stage",
-        "merge_commit": "c71faa63"
+        "merge_commit": "c71faa63fec7f769967e5edd5734db46124e39c9"
+      },
+      {
+        "pr": 1968,
+        "scope": "generated handoff refresh after DP5 warn stage",
+        "merge_commit": "511788214c97291bd8ba04d07f46b79aa8cc6549"
       },
       {
         "pr": 1969,
         "scope": "DP5 block-new stage",
-        "merge_commit": "82635e17"
+        "merge_commit": "82635e179d500e86f928452068a9d5273bd06a2e"
+      },
+      {
+        "pr": 1970,
+        "scope": "generated handoff refresh after DP5 block-new stage",
+        "merge_commit": "1ba85b723b9a838121e781ad9ecbc8bcd5beaad1"
       },
       {
         "pr": 1971,
@@ -50,6 +75,16 @@
         "pr": 1972,
         "scope": "generated handoff refresh after DP5 strict stage",
         "merge_commit": "dde89bf09ac8359b28ac045b5d091b5f6324a98d"
+      },
+      {
+        "pr": 1973,
+        "scope": "final DPA DP3-DP5 closeout record",
+        "merge_commit": "b27ce0ae14ced5267d9153a04c65752677bef2b8"
+      },
+      {
+        "pr": 1974,
+        "scope": "generated handoff refresh after final closeout record",
+        "merge_commit": "6b061c65c1db5945f1a0b3c28163a57de68e6c4b"
       }
     ],
     "evidence": [
@@ -57,10 +92,10 @@
       "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
       "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
       "docs/architecture/evidence/dpa/assessment/DP5_STRICT_STAGE_RECORD_20260801.json",
-      "docs/architecture/evidence/dpa/assessment/post-dp2-scope-dde89bf0-final-closeout-20260801/results.json",
-      "docs/architecture/evidence/dpa/assessment/dp5-strict-gate-dde89bf0-final-closeout-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/post-dp2-scope-6b061c65-final-ref-audit-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/dp5-strict-gate-6b061c65-final-ref-audit-20260801/results.json",
       "docs/reports/handoff-packages/latest/validation_report.json",
-      "docs/reports/terminal/post-pr1971-successor-chat-handoff.md"
+      "docs/reports/terminal/post-pr1973-successor-chat-handoff.md"
     ],
     "limitations": [
       "The conformance claim is bounded to the accepted Kit-side DP1-DP5 implementation and evidence scope.",

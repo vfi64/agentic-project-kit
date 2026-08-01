@@ -260,9 +260,11 @@ warning count is 0 and `final_closeout_ready` is true. The wrapper
 `agentic-kit dpa final-closeout-check` validates the final closeout record
 `DPA_DP3_DP5_FINAL_CLOSEOUT_RECORDED`; a passing check reports
 `VALID_DPA_FINAL_CLOSEOUT_RECORD`. That record owns the bounded Kit-wide DPA
-conformance claim for the accepted DP1-DP5 implementation scope. Stable DPA,
-production mutation and generated-output manual patching remain unclaimed. The
-prior observe-stage assessment
+conformance claim for the accepted DP1-DP5 implementation scope. The check also
+validates accepted PR exact refs when local Git history is available: each
+recorded PR merge commit must resolve, remain an ancestor of `HEAD` and carry
+the matching `(#PR)` merge subject. Stable DPA, production mutation and
+generated-output manual patching remain unclaimed. The prior observe-stage assessment
 status remains `DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE`, the prior warn-stage
 assessment status remains `DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE`, and the prior
 block-new-stage assessment status remains
