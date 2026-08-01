@@ -1043,6 +1043,42 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable post-observe post-DP2 assessment; records DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE.
+  - path: docs/architecture/evidence/dpa/assessment/DP5_WARN_STAGE_RECORD_20260801.json
+    class: evidence/log
+    owner: maintainers
+    notes: Bounded DP5 warn-stage adoption record; block-new, strict and Kit-wide conformance claims remain false.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-observe-stage-check-4305dcee-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: DP5 observe-stage validation package summary at the pre-warn ref.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-observe-stage-check-4305dcee-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable observe-stage validation result used as warn rollback evidence.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-4305dcee-pre-dp5-warn-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Pre-warn post-DP2 scope assessment summary with observe adopted and warn blocked.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-4305dcee-pre-dp5-warn-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable pre-warn post-DP2 scope assessment used as rollback evidence.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-warn-stage-check-4305dcee-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: DP5 warn-stage validation package summary; VALID_DP5_STAGE_RECORD.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-warn-stage-check-4305dcee-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable DP5 warn-stage validation result; block-new and strict remain blocked.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-4305dcee-post-dp5-warn-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Post-warn post-DP2 scope assessment summary; warn active and stricter stages blocked.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-4305dcee-post-dp5-warn-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable post-warn assessment; records DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE warnings.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

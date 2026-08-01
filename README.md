@@ -360,7 +360,7 @@ Quick command guide:
 - `agentic-kit dpa readiness`: validate the staged DPA DP1 Assessment readiness record, report the deterministic DP2 selected self-hosting target-scope implementation percentage, and keep that separate from Kit-wide DPA conformance.
 - `agentic-kit dpa post-dp2-scope-assessment`: inventory post-DP2 DP3 rollout candidates, DP4 status-authority candidates and DP5 strict lifecycle-gate stage blockers without claiming Kit-wide DPA completion.
 - `agentic-kit dpa dp3-dp4-adjudication-check`: validate the bounded DP3/DP4 adjudication record without authorizing DP5 strict lifecycle gates.
-- `agentic-kit dpa dp5-stage-check`: validate the bounded DP5 observe-stage record without enabling warn, block-new or strict enforcement.
+- `agentic-kit dpa dp5-stage-check`: validate the bounded DP5 stage record; the current default is warn, while block-new and strict remain disabled.
 - `agentic-kit dpa dp2-decision-readiness`: prepare the DP2 decision package without recording Maintainer Assessment or authorization.
 - `agentic-kit dpa maintainer-record-check`: validate a DP2 Maintainer Assessment record or blocked template without authorizing DP2.
 - `agentic-kit dpa probe-002-readiness`: inspect PROBE-002 lifecycle and selected-writer readiness, optionally writing bounded DPA probe evidence under `docs/architecture/evidence/dpa/probes/`.

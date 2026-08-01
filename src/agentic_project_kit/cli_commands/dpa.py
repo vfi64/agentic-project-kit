@@ -276,10 +276,10 @@ def dpa_dp5_stage_check_command(
     require_valid: bool = typer.Option(
         False,
         "--require-valid",
-        help="Fail unless the DP5 observe-stage record is structurally valid.",
+        help="Fail unless the DP5 stage record is structurally valid.",
     ),
 ) -> None:
-    """Validate a bounded DP5 observe-stage record without enabling stricter stages."""
+    """Validate a bounded DP5 stage record without enabling block-new or strict."""
     resolved_root = root.resolve()
     result = evaluate_dp5_stage_record(
         resolved_root,

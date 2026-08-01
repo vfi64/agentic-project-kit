@@ -3306,7 +3306,7 @@
     {
       "dry_run_available": true,
       "group": "dpa",
-      "help": "Validate a bounded DP5 observe-stage record without enabling stricter stages.",
+      "help": "Validate a bounded DP5 stage record without enabling block-new or strict.",
       "name": "dp5-stage-check",
       "params": [
         {
@@ -3324,7 +3324,7 @@
           "secondary_opts": []
         },
         {
-          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP5_OBSERVE_STAGE_RECORD_20260801.json')",
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP5_WARN_STAGE_RECORD_20260801.json')",
           "help": "DPA DP5 stage-adoption record to inspect.",
           "is_flag": false,
           "metavar": null,
@@ -3395,7 +3395,7 @@
         },
         {
           "default": false,
-          "help": "Fail unless the DP5 observe-stage record is structurally valid.",
+          "help": "Fail unless the DP5 stage record is structurally valid.",
           "is_flag": true,
           "metavar": null,
           "multiple": false,
@@ -3419,7 +3419,7 @@
         "bounded",
         "dpa"
       ],
-      "when_to_use": "Validate a bounded DP5 observe-stage record without enabling stricter stages."
+      "when_to_use": "Validate a bounded DP5 stage record without enabling block-new or strict."
     },
     {
       "dry_run_available": true,
@@ -3762,7 +3762,7 @@
           "secondary_opts": []
         },
         {
-          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP5_OBSERVE_STAGE_RECORD_20260801.json')",
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP5_WARN_STAGE_RECORD_20260801.json')",
           "help": "Optional DP5 stage-adoption record to inspect when clearing stage blockers.",
           "is_flag": false,
           "metavar": null,
@@ -16119,7 +16119,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "15e460e88f45",
+    "manifest_sha": "17720e1a6386",
     "schema_version": 1
   },
   "schema_version": 2,

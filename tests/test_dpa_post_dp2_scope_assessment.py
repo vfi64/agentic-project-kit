@@ -22,6 +22,9 @@ from agentic_project_kit.dpa_successor_projection import DPA_SUCCESSOR_PROJECTIO
 from agentic_project_kit.dpa_workspace_init_projection import DPA_WORKSPACE_INIT_SOURCE_PATHS
 
 runner = CliRunner()
+OBSERVE_DP5_STAGE_RECORD_PATH = Path(
+    "docs/architecture/evidence/dpa/assessment/DP5_OBSERVE_STAGE_RECORD_20260801.json"
+)
 
 
 def _write(path: Path, payload: dict[str, object]) -> None:
@@ -166,63 +169,87 @@ def _write_valid_dp3_dp4_adjudication_record(root: Path) -> None:
     )
 
 
-def _write_valid_dp5_stage_record(root: Path) -> None:
+def _write_valid_dp5_stage_record(root: Path, *, stage: str = "observe") -> Path:
     post_dp2 = "docs/architecture/evidence/dpa/assessment/post-dp2-scope-6a59bf43-20260801/results.json"
     dp3_dp4 = DEFAULT_DP3_DP4_ADJUDICATION_RECORD_PATH.as_posix()
+    observe_path = OBSERVE_DP5_STAGE_RECORD_PATH if stage == "observe" else DEFAULT_DP5_STAGE_RECORD_PATH
+    status = "DP5_OBSERVE_STAGE_ADOPTED" if stage == "observe" else "DP5_WARN_STAGE_ADOPTED"
+    token = "DPA_DP5_OBSERVE_STAGE_AUTHORIZED" if stage == "observe" else "DPA_DP5_WARN_STAGE_AUTHORIZED"
+    gate_id = "DPA_DP5_OBSERVE_GATE_SET_V1" if stage == "observe" else "DPA_DP5_WARN_GATE_SET_V1"
+    behavior = "observe-only" if stage == "observe" else "warn-only"
+    stage_decision = "record_only_no_new_blocking" if stage == "observe" else "warn_without_blocking_compatibility"
+    rollback_stage = "pre-dp5" if stage == "observe" else "observe"
+    claims = {
+        "observe_stage_active": True,
+        "warn_stage_active": stage == "warn",
+        "block_new_stage_active": False,
+        "strict_stage_active": False,
+        "kit_wide_dpa_conformance_claimed": False,
+        "production_mutation_performed": False,
+        "generated_outputs_manually_patched": False,
+        "stable_dpa_claimed": False,
+    }
+    target_scope = {
+        "id": "DPA_POST_DP2_DP3_DP4_ACCEPTED_SCOPE",
+        "enforcement_stage": stage,
+        "evidence": [post_dp2, dp3_dp4],
+    }
+    if stage == "warn":
+        _write_valid_dp5_stage_record(root, stage="observe")
+        target_scope["previous_stage_record"] = OBSERVE_DP5_STAGE_RECORD_PATH.as_posix()
+    gate_set: dict[str, object] = {
+        "id": gate_id,
+        "stage_behavior": behavior,
+        "blocks_unrelated_work": False,
+        "commands": [
+            {
+                "command": "agentic-kit dpa dp3-dp4-adjudication-check --require-valid",
+                "evidence": [dp3_dp4],
+            },
+            {
+                "command": "agentic-kit dpa post-dp2-scope-assessment",
+                "evidence": [post_dp2],
+            },
+        ],
+    }
+    if stage == "warn":
+        gate_set["warns_on_noncompliance"] = True
+        gate_set["warning_surfaces"] = ["agentic-kit dpa post-dp2-scope-assessment"]
     _write(
-        root / DEFAULT_DP5_STAGE_RECORD_PATH,
+        root / observe_path,
         {
             "schema_version": 1,
             "kind": "dpa_dp5_stage_record",
-            "status": "DP5_OBSERVE_STAGE_ADOPTED",
-            "stage": "observe",
+            "status": status,
+            "stage": stage,
             "status_date": "2026-08-01",
             "validation_ref": "test-ref",
             "maintainer": "Maintainer instruction recorded in Codex chat, 2026-08-01: continue bounded DP5 work.",
-            "decision_token": "DPA_DP5_OBSERVE_STAGE_AUTHORIZED",
-            "target_scope": {
-                "id": "DPA_POST_DP2_DP3_DP4_ACCEPTED_SCOPE",
-                "enforcement_stage": "observe",
-                "evidence": [post_dp2, dp3_dp4],
-            },
-            "gate_set": {
-                "id": "DPA_DP5_OBSERVE_GATE_SET_V1",
-                "stage_behavior": "observe-only",
-                "blocks_unrelated_work": False,
-                "commands": [
-                    {
-                        "command": "agentic-kit dpa dp3-dp4-adjudication-check --require-valid",
-                        "evidence": [dp3_dp4],
-                    },
-                    {
-                        "command": "agentic-kit dpa post-dp2-scope-assessment",
-                        "evidence": [post_dp2],
-                    },
-                ],
-            },
+            "decision_token": token,
+            "target_scope": target_scope,
+            "gate_set": gate_set,
             "findings_mapping": {
                 "unknown_mutation_safety_finding": {
                     "disposition": "fail_closed_for_mutation_safety",
                 },
-                "stage_decision": "record_only_no_new_blocking",
+                "stage_decision": stage_decision,
+                "observed_noncompliance": {
+                    "disposition": (
+                        "record_finding_without_blocking_unrelated_work"
+                        if stage == "observe"
+                        else "emit_warning_without_blocking_unrelated_work"
+                    ),
+                },
             },
             "rollback": {
-                "less_strict_stage": "pre-dp5",
+                "less_strict_stage": rollback_stage,
                 "tested_or_adjudicated": True,
                 "evidence": [post_dp2],
             },
-            "claims": {
-                "observe_stage_active": True,
-                "warn_stage_active": False,
-                "block_new_stage_active": False,
-                "strict_stage_active": False,
-                "kit_wide_dpa_conformance_claimed": False,
-                "production_mutation_performed": False,
-                "generated_outputs_manually_patched": False,
-                "stable_dpa_claimed": False,
-            },
+            "claims": claims,
         },
     )
+    return observe_path
 
 
 def _dp3_target(
@@ -457,10 +484,14 @@ def test_dp3_dp4_adjudication_check_cli_reports_valid_record(tmp_path: Path) -> 
 def test_dp5_observe_record_clears_only_observe_stage_blockers(tmp_path: Path) -> None:
     _fixture_root(tmp_path)
     _write_valid_dp3_dp4_adjudication_record(tmp_path)
-    _write_valid_dp5_stage_record(tmp_path)
+    record_path = _write_valid_dp5_stage_record(tmp_path, stage="observe")
 
-    stage = evaluate_dp5_stage_record(tmp_path, validation_ref="test-ref")
-    result = evaluate_post_dp2_scope_assessment(tmp_path, validation_ref="test-ref")
+    stage = evaluate_dp5_stage_record(tmp_path, record_path=record_path, validation_ref="test-ref")
+    result = evaluate_post_dp2_scope_assessment(
+        tmp_path,
+        dp5_stage_record_path=record_path,
+        validation_ref="test-ref",
+    )
     payload = result.as_dict()
 
     assert stage.result_status == "VALID_DP5_STAGE_RECORD"
@@ -473,10 +504,34 @@ def test_dp5_observe_record_clears_only_observe_stage_blockers(tmp_path: Path) -
     assert payload["blocker_count"] == 6
 
 
+def test_dp5_warn_record_warns_without_block_new_or_strict(tmp_path: Path) -> None:
+    _fixture_root(tmp_path)
+    _write_valid_dp3_dp4_adjudication_record(tmp_path)
+    _write_valid_dp5_stage_record(tmp_path, stage="warn")
+
+    stage = evaluate_dp5_stage_record(tmp_path, validation_ref="test-ref")
+    result = evaluate_post_dp2_scope_assessment(tmp_path, validation_ref="test-ref")
+    payload = result.as_dict()
+
+    assert stage.result_status == "VALID_DP5_STAGE_RECORD"
+    assert stage.stage_accepted("observe")
+    assert stage.stage_accepted("warn")
+    assert not stage.stage_accepted("block-new")
+    assert payload["kit_wide_dpa_status"] == "DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE"
+    assert payload["dp5"]["status"] == "WARN_ACTIVE_STRICT_LIFECYCLE_NOT_COMPLETE"
+    assert payload["dp5"]["strict_lifecycle_stages"][0]["status"] == "ADOPTED_OBSERVE"
+    assert payload["dp5"]["strict_lifecycle_stages"][1]["status"] == "ADOPTED_WARN"
+    assert payload["dp5"]["strict_lifecycle_stages"][2]["status"] == "BLOCKED_BEFORE_STAGE_TRANSITION"
+    assert payload["blocker_count"] == 4
+    assert payload["dp5"]["warning_count"] == 4
+    assert "DP5_WARN:block-new:exact-stage-authorization-record-missing" in payload["dp5"]["warnings"]
+    assert "strict:exact-stage-authorization-record-missing" in payload["dp5"]["blockers"]
+
+
 def test_dp5_stage_check_cli_reports_observe_only(tmp_path: Path) -> None:
     _fixture_root(tmp_path)
     _write_valid_dp3_dp4_adjudication_record(tmp_path)
-    _write_valid_dp5_stage_record(tmp_path)
+    record_path = _write_valid_dp5_stage_record(tmp_path, stage="observe")
 
     result = runner.invoke(
         app,
@@ -485,6 +540,8 @@ def test_dp5_stage_check_cli_reports_observe_only(tmp_path: Path) -> None:
             "dp5-stage-check",
             "--root",
             str(tmp_path),
+            "--record",
+            record_path.as_posix(),
             "--validation-ref",
             "test-ref",
             "--require-valid",
@@ -496,6 +553,30 @@ def test_dp5_stage_check_cli_reports_observe_only(tmp_path: Path) -> None:
     assert "STATUS=VALID_DP5_STAGE_RECORD" in result.stdout
     assert "DP5_STAGE=observe|status=ADOPTED" in result.stdout
     assert "DP5_STAGE=strict|status=BLOCKED" in result.stdout
+
+
+def test_dp5_stage_check_cli_reports_warn_stage(tmp_path: Path) -> None:
+    _fixture_root(tmp_path)
+    _write_valid_dp3_dp4_adjudication_record(tmp_path)
+    _write_valid_dp5_stage_record(tmp_path, stage="warn")
+
+    result = runner.invoke(
+        app,
+        [
+            "dpa",
+            "post-dp2-scope-assessment",
+            "--root",
+            str(tmp_path),
+            "--validation-ref",
+            "test-ref",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert "KIT_WIDE_DPA_STATUS=DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE" in result.stdout
+    assert "DP5_STAGE=warn|status=ADOPTED_WARN" in result.stdout
+    assert "WARNINGS=4" in result.stdout
+    assert "WARNING=DP5_WARN:block-new:exact-stage-authorization-record-missing" in result.stdout
 
 
 def test_post_dp2_scope_assessment_blocks_missing_candidate_evidence(tmp_path: Path) -> None:

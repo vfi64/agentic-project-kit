@@ -422,6 +422,7 @@ rules:
     - DP5_NOT_COMPLETE
     - DP3_DP4_BOUNDED_ADJUDICATION_ACCEPTED
     - DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE
+    - DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE
     - kit_wide_dpa_conformance_claimed
     - DP1 read-only baseline refresh
     - 46deae72c2d37ae18331203bc3a6be19c9a67f64

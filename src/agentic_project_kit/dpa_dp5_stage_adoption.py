@@ -9,20 +9,37 @@ from typing import Any
 from agentic_project_kit.workspace import load_workspace
 
 DEFAULT_DP5_STAGE_RECORD_PATH = Path(
-    "docs/architecture/evidence/dpa/assessment/DP5_OBSERVE_STAGE_RECORD_20260801.json"
+    "docs/architecture/evidence/dpa/assessment/DP5_WARN_STAGE_RECORD_20260801.json"
 )
 DP5_STAGE_MODEL = "dpa-dp5-stage-adoption-v1"
 VALID_STATUS = "VALID_DP5_STAGE_RECORD"
 ACCEPTED_OBSERVE_STATUS = "DP5_OBSERVE_STAGE_ADOPTED"
 ACCEPTED_OBSERVE_TOKEN = "DPA_DP5_OBSERVE_STAGE_AUTHORIZED"
+ACCEPTED_WARN_STATUS = "DP5_WARN_STAGE_ADOPTED"
+ACCEPTED_WARN_TOKEN = "DPA_DP5_WARN_STAGE_AUTHORIZED"
 EVIDENCE_OUTPUT_ROOT_PARTS = ("evidence", "dpa", "assessment")
-SUPPORTED_STAGE = "observe"
-STRICTER_STAGES = ("warn", "block-new", "strict")
+STAGE_SEQUENCE = ("observe", "warn", "block-new", "strict")
+SUPPORTED_STAGES = ("observe", "warn")
+STAGE_CONTRACTS = {
+    "observe": {
+        "status": ACCEPTED_OBSERVE_STATUS,
+        "decision_token": ACCEPTED_OBSERVE_TOKEN,
+        "gate_set_id": "DPA_DP5_OBSERVE_GATE_SET_V1",
+        "stage_behavior": "observe-only",
+        "stage_decision": "record_only_no_new_blocking",
+        "rollback_stage": "pre-dp5",
+    },
+    "warn": {
+        "status": ACCEPTED_WARN_STATUS,
+        "decision_token": ACCEPTED_WARN_TOKEN,
+        "gate_set_id": "DPA_DP5_WARN_GATE_SET_V1",
+        "stage_behavior": "warn-only",
+        "stage_decision": "warn_without_blocking_compatibility",
+        "rollback_stage": "observe",
+    },
+}
 
-FALSE_CLAIM_FIELDS = (
-    "warn_stage_active",
-    "block_new_stage_active",
-    "strict_stage_active",
+NON_STAGE_FALSE_CLAIM_FIELDS = (
     "kit_wide_dpa_conformance_claimed",
     "production_mutation_performed",
     "generated_outputs_manually_patched",
@@ -65,11 +82,12 @@ class Dp5StageAdoptionResult:
         return VALID_STATUS
 
     def stage_accepted(self, stage: str) -> bool:
-        return self.ok and self.active_stage == stage
+        return self.ok and _stage_is_active_or_past(self.active_stage, stage)
 
     def as_dict(self) -> dict[str, Any]:
         claims = _false_claims()
-        claims["observe_stage_active"] = self.stage_accepted("observe")
+        for stage in STAGE_SEQUENCE:
+            claims[_stage_claim_field(stage)] = self.stage_accepted(stage)
         return {
             "schema_version": 1,
             "kind": "dpa_dp5_stage_check",
@@ -83,10 +101,8 @@ class Dp5StageAdoptionResult:
             "decision_token": self.decision_token,
             "active_stage": self.active_stage,
             "stage_status": {
-                "observe": "ADOPTED" if self.stage_accepted("observe") else "BLOCKED",
-                "warn": "BLOCKED",
-                "block-new": "BLOCKED",
-                "strict": "BLOCKED",
+                stage: "ADOPTED" if self.stage_accepted(stage) else "BLOCKED"
+                for stage in STAGE_SEQUENCE
             },
             "finding_count": len(self.findings),
             "findings": [finding.as_dict() for finding in self.findings],
@@ -241,12 +257,25 @@ def _validate_header(
         _finding(findings, "schema-version-invalid", "schema_version must be 1", path)
     if data.get("kind") != "dpa_dp5_stage_record":
         _finding(findings, "kind-invalid", "kind must be dpa_dp5_stage_record", path)
-    if data.get("stage") != SUPPORTED_STAGE:
-        _finding(findings, "unsupported-stage", "this bounded slice only supports DP5 observe", path)
-    if data.get("status") != ACCEPTED_OBSERVE_STATUS:
-        _finding(findings, "status-not-adopted", f"status must be {ACCEPTED_OBSERVE_STATUS}", path)
-    if data.get("decision_token") != ACCEPTED_OBSERVE_TOKEN:
-        _finding(findings, "decision-token-invalid", f"decision_token must be {ACCEPTED_OBSERVE_TOKEN}", path)
+    stage = str(data.get("stage", ""))
+    contract = STAGE_CONTRACTS.get(stage)
+    if contract is None:
+        _finding(
+            findings,
+            "unsupported-stage",
+            f"this bounded slice only supports DP5 stages: {', '.join(SUPPORTED_STAGES)}",
+            path,
+        )
+    else:
+        if data.get("status") != contract["status"]:
+            _finding(findings, "status-not-adopted", f"status must be {contract['status']}", path)
+        if data.get("decision_token") != contract["decision_token"]:
+            _finding(
+                findings,
+                "decision-token-invalid",
+                f"decision_token must be {contract['decision_token']}",
+                path,
+            )
     validation_ref = str(data.get("validation_ref", ""))
     if not validation_ref:
         _finding(findings, "validation-ref-missing", "validation_ref must record an exact ref", path)
@@ -263,11 +292,23 @@ def _validate_stage_scope(
     *,
     root: Path,
 ) -> None:
+    stage = str(data.get("stage", ""))
     scope = _mapping(data.get("target_scope"))
     if scope.get("id") != "DPA_POST_DP2_DP3_DP4_ACCEPTED_SCOPE":
         _finding(findings, "target-scope-id-invalid", "target_scope.id must name the accepted DP3/DP4 scope", path)
-    if scope.get("enforcement_stage") != "observe":
-        _finding(findings, "target-scope-stage-invalid", "target_scope.enforcement_stage must be observe", path)
+    if scope.get("enforcement_stage") != stage:
+        _finding(
+            findings,
+            "target-scope-stage-invalid",
+            f"target_scope.enforcement_stage must be {stage}",
+            path,
+        )
+    if stage == "warn":
+        previous = str(scope.get("previous_stage_record", "")).strip()
+        if not previous:
+            _finding(findings, "previous-stage-record-missing", "warn scope must name previous_stage_record", path)
+        elif not (root / previous).exists():
+            _finding(findings, "previous-stage-record-missing", f"missing previous stage record: {previous}", path)
     _require_existing_paths(scope.get("evidence"), root, findings, path, "target-scope-evidence-missing")
 
 
@@ -278,13 +319,25 @@ def _validate_gate_set(
     *,
     root: Path,
 ) -> None:
+    stage = str(data.get("stage", ""))
+    contract = STAGE_CONTRACTS.get(stage)
     gate_set = _mapping(data.get("gate_set"))
-    if gate_set.get("id") != "DPA_DP5_OBSERVE_GATE_SET_V1":
-        _finding(findings, "gate-set-id-invalid", "gate_set.id must be DPA_DP5_OBSERVE_GATE_SET_V1", path)
-    if gate_set.get("stage_behavior") != "observe-only":
-        _finding(findings, "gate-set-stage-behavior-invalid", "gate_set.stage_behavior must be observe-only", path)
+    if contract is not None and gate_set.get("id") != contract["gate_set_id"]:
+        _finding(findings, "gate-set-id-invalid", f"gate_set.id must be {contract['gate_set_id']}", path)
+    if contract is not None and gate_set.get("stage_behavior") != contract["stage_behavior"]:
+        _finding(
+            findings,
+            "gate-set-stage-behavior-invalid",
+            f"gate_set.stage_behavior must be {contract['stage_behavior']}",
+            path,
+        )
     if gate_set.get("blocks_unrelated_work") is not False:
-        _finding(findings, "gate-set-overblocks", "observe gate set must not block unrelated work", path)
+        _finding(findings, "gate-set-overblocks", "DP5 observe/warn gate set must not block unrelated work", path)
+    if stage == "warn":
+        if gate_set.get("warns_on_noncompliance") is not True:
+            _finding(findings, "gate-set-warning-disabled", "warn gate set must enable noncompliance warnings", path)
+        if not _string_list(gate_set.get("warning_surfaces")):
+            _finding(findings, "gate-set-warning-surfaces-missing", "warn gate set must list warning_surfaces", path)
     commands = _list_of_mappings(gate_set.get("commands"))
     if not commands:
         _finding(findings, "gate-set-commands-missing", "gate_set.commands must not be empty", path)
@@ -299,6 +352,8 @@ def _validate_findings_mapping(
     findings: list[Dp5StageFinding],
     path: str,
 ) -> None:
+    stage = str(data.get("stage", ""))
+    contract = STAGE_CONTRACTS.get(stage)
     mapping = _mapping(data.get("findings_mapping"))
     required = _mapping(mapping.get("unknown_mutation_safety_finding"))
     if required.get("disposition") != "fail_closed_for_mutation_safety":
@@ -308,8 +363,22 @@ def _validate_findings_mapping(
             "unknown mutation-safety findings must fail closed",
             path,
         )
-    if mapping.get("stage_decision") != "record_only_no_new_blocking":
-        _finding(findings, "stage-decision-invalid", "observe mapping must record only and add no new blocking", path)
+    if contract is not None and mapping.get("stage_decision") != contract["stage_decision"]:
+        _finding(
+            findings,
+            "stage-decision-invalid",
+            f"{stage} mapping must use {contract['stage_decision']}",
+            path,
+        )
+    if stage == "warn":
+        observed = _mapping(mapping.get("observed_noncompliance"))
+        if observed.get("disposition") != "emit_warning_without_blocking_unrelated_work":
+            _finding(
+                findings,
+                "observed-noncompliance-disposition-invalid",
+                "warn mapping must emit warnings without blocking unrelated work",
+                path,
+            )
 
 
 def _validate_rollback(
@@ -319,9 +388,16 @@ def _validate_rollback(
     *,
     root: Path,
 ) -> None:
+    stage = str(data.get("stage", ""))
+    contract = STAGE_CONTRACTS.get(stage)
     rollback = _mapping(data.get("rollback"))
-    if rollback.get("less_strict_stage") != "pre-dp5":
-        _finding(findings, "rollback-stage-invalid", "rollback.less_strict_stage must be pre-dp5", path)
+    if contract is not None and rollback.get("less_strict_stage") != contract["rollback_stage"]:
+        _finding(
+            findings,
+            "rollback-stage-invalid",
+            f"rollback.less_strict_stage must be {contract['rollback_stage']}",
+            path,
+        )
     if rollback.get("tested_or_adjudicated") is not True:
         _finding(findings, "rollback-not-proven", "rollback must be tested or explicitly adjudicated", path)
     _require_existing_paths(rollback.get("evidence"), root, findings, path, "rollback-evidence-missing")
@@ -332,10 +408,14 @@ def _validate_claims(
     findings: list[Dp5StageFinding],
     path: str,
 ) -> None:
+    active_stage = str(data.get("stage", ""))
     claims = _mapping(data.get("claims"))
-    if claims.get("observe_stage_active") is not True:
-        _finding(findings, "observe-claim-missing", "claims.observe_stage_active must be true", path)
-    for field in FALSE_CLAIM_FIELDS:
+    for stage in STAGE_SEQUENCE:
+        field = _stage_claim_field(stage)
+        expected = _stage_is_active_or_past(active_stage, stage)
+        if claims.get(field) is not expected:
+            _finding(findings, "stage-claim-invalid", f"claims.{field} must be {str(expected).lower()}", path)
+    for field in NON_STAGE_FALSE_CLAIM_FIELDS:
         if claims.get(field) is not False:
             _finding(findings, "false-claim-invalid", f"claims.{field} must be false", path)
 
@@ -387,6 +467,19 @@ def _false_claims() -> dict[str, bool]:
         "generated_outputs_manually_patched": False,
         "stable_dpa_claimed": False,
     }
+
+
+def _stage_claim_field(stage: str) -> str:
+    if stage == "block-new":
+        return "block_new_stage_active"
+    return f"{stage}_stage_active"
+
+
+def _stage_is_active_or_past(active_stage: str, stage: str) -> bool:
+    try:
+        return STAGE_SEQUENCE.index(stage) <= STAGE_SEQUENCE.index(active_stage)
+    except ValueError:
+        return False
 
 
 def _resolve_under_root(root: Path, path: Path | str) -> Path:

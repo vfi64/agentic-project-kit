@@ -124,12 +124,20 @@ no-migration/manual-preservation or command-contract-boundary decisions for
 The paired post-DP2 scope assessment keeps DP5 blocked before any observe, warn,
 block-new or strict stage transition and records `DP5_NOT_COMPLETE`.
 
-The current DP5 observe-stage record records validation ref
+The DP5 observe-stage record records validation ref
 `19831e0e862e4da5e61ca1311dea0796250c15d9` and status
 `DP5_OBSERVE_STAGE_ADOPTED`. It selects observe-only behavior for the bounded
 post-DP2, DP3/DP4-adjudicated scope. The paired post-DP2 scope assessment
 records `DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE`: observe is adopted, while
 warn, block-new and strict remain blocked.
+
+The current DP5 warn-stage record records validation ref
+`4305dceec10a9681331e522d70fb31275612ed69` and status
+`DP5_WARN_STAGE_ADOPTED`. It selects warn-only behavior for the same bounded
+scope. The paired post-DP2 scope assessment records
+`DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE`: observe and warn are adopted, block-new
+and strict remain blocked, and the remaining DP5 blockers are surfaced as
+warnings without claiming Kit-wide conformance or strict enforcement.
 
 ## Imported Probe Evidence
 
@@ -233,6 +241,16 @@ warn, block-new and strict remain blocked.
   observe-stage record with result `VALID_DP5_STAGE_RECORD`.
 - `assessment/post-dp2-scope-19831e0e-post-dp5-observe-20260801/` records the
   post-observe assessment with `DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE`.
+- `assessment/dp5-observe-stage-check-4305dcee-20260801/` validates the
+  observe-stage record at the pre-warn ref with result
+  `VALID_DP5_STAGE_RECORD`.
+- `assessment/post-dp2-scope-4305dcee-pre-dp5-warn-20260801/` records the
+  pre-warn rollback baseline with observe adopted and warn blocked.
+- `assessment/dp5-warn-stage-check-4305dcee-20260801/` validates the DP5
+  warn-stage record with result `VALID_DP5_STAGE_RECORD`.
+- `assessment/post-dp2-scope-4305dcee-post-dp5-warn-20260801/` records the
+  post-warn assessment with `DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE` and four DP5
+  warning entries for block-new/strict stage blockers.
 
 These packages preserve their limitation language. Future execution must freeze
 current refs, record command manifest currency, retain cleanup evidence and
