@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9cfb13fb4bffc32010549a18599027c44c9147bf
-  short: 9cfb13fb
-  subject: Promote DPA stable readiness (#1977)
+  full: 2331c848a80457292dcec7d0b500f9b42d0e6f47
+  short: 2331c848
+  subject: Add DPA repo adoption assessment (#1979)
 last_substantive_work_state:
-  full: 9cfb13fb4bffc32010549a18599027c44c9147bf
-  short: 9cfb13fb
-  subject: Promote DPA stable readiness (#1977)
+  full: 2331c848a80457292dcec7d0b500f9b42d0e6f47
+  short: 2331c848
+  subject: Add DPA repo adoption assessment (#1979)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
