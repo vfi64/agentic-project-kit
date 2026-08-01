@@ -191,6 +191,7 @@ rules:
     - agentic-kit chat refresher
     - agentic-kit chat session-start
     - agentic-kit commands sync-entrypoints
+    - agentic-kit workspace dpa-intake
     - agentic-kit dpa readiness
     - agentic-kit dpa repo-adoption-assessment
     - agentic-kit dpa post-dp2-scope-assessment
@@ -473,9 +474,14 @@ rules:
   - path: README.md
     terms:
     - Govern an existing repository (operating layer)
+    - agentic-kit workspace dpa-intake --root PATH
     - agentic-kit workspace adopt --root PATH
     - agentic-kit dpa repo-adoption-assessment --root PATH
     - '`workspace adopt` is read-only'
+    - one-shot DPA intake orchestrator
+    - READY_FOR_DPA_INTAKE_ADJUDICATION
+    - adjudication_plan
+    - --write-evidence --execute
     - .agentic/config.yaml
     - DPA repo-adoption assessment
     - documentation age baseline
@@ -503,6 +509,36 @@ rules:
     - warn-mode doc lifecycle defaults
     - --inject-ci
     - --inject-pre-commit
+- id: workspace-dpa-intake-coverage
+  description: Workspace-level DPA intake orchestration must remain visible without allowing automatic external-repo conformance claims.
+  documents:
+  - path: README.md
+    terms:
+    - agentic-kit workspace dpa-intake
+    - one-shot DPA intake orchestrator
+    - exact Git ref
+    - adjudication_plan
+    - --write-evidence --execute
+    - external_repo_conformance_claimed=false
+    - automatic_migration_performed=false
+    - production_mutation_performed=false
+    - READY_FOR_DPA_INTAKE_ADJUDICATION
+  - path: docs/TEST_GATES.md
+    terms:
+    - Workspace DPA intake orchestration change
+    - agentic-kit workspace dpa-intake
+    - read-only by default
+    - DPA assessment evidence root
+    - does not claim external-repo conformance
+  - path: docs/architecture/dpa/README.md
+    terms:
+    - agentic-kit workspace dpa-intake
+    - sensible deterministic intake sequence
+    - exact ref
+    - adjudication_plan
+    - DPA assessment evidence root
+    - READY_FOR_DPA_INTAKE_ADJUDICATION
+    - external-repository conformance/stable claims
 - id: workspace-upgrade-readme-coverage
   description: Bounded workspace upgrade behavior must remain visible with dry-run, stepwise migration, backup, and schema-boundary messages.
   documents:

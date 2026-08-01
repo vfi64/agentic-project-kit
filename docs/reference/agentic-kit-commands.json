@@ -16527,6 +16527,124 @@
     {
       "dry_run_available": true,
       "group": "workspace",
+      "help": "Run the deterministic DPA repository-intake orchestration.",
+      "name": "dpa-intake",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Target repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional exact current ref to record instead of repository HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "validation_ref",
+          "opts": [
+            "--validation-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional DPA intake evidence JSON path under docs/architecture/evidence/dpa/assessment/.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Use the default bounded DPA intake evidence JSON path.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "write_evidence",
+          "opts": [
+            "--write-evidence"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write requested evidence output.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail unless the target repo is ready for DPA intake adjudication.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_ready",
+          "opts": [
+            "--require-ready"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workspace",
+        "dpa-intake"
+      ],
+      "qualified_name": "agentic-kit workspace dpa-intake",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "workspace"
+      ],
+      "when_to_use": "Run the deterministic DPA repository-intake orchestration."
+    },
+    {
+      "dry_run_available": true,
+      "group": "workspace",
       "help": "Plan or create a bounded operating-layer workspace.",
       "name": "init",
       "params": [
@@ -16723,7 +16841,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "c1487bde81c7",
+    "manifest_sha": "e5396ccb3d3a",
     "schema_version": 1
   },
   "schema_version": 2,

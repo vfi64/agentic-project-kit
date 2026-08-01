@@ -179,6 +179,15 @@ and `automatic_migration_performed=false`. A PASS status means
 Maintainer-authorized bounded scope is still required before migration,
 strict-gate adoption or external-repo conformance claims.
 
+The workspace-level orchestrator `agentic-kit workspace dpa-intake` automates the
+sensible deterministic intake sequence: resolve the target repository exact ref,
+run workspace adoption analysis, run the DPA repo-adoption assessment, group
+surfaces into an `adjudication_plan`, and optionally write bounded intake
+evidence under the DPA assessment evidence root. It remains read-only by default
+and reports `READY_FOR_DPA_INTAKE_ADJUDICATION` only when the target is ready for
+Maintainer adjudication. It must not perform migration, production mutation or
+external-repository conformance/stable claims.
+
 The read-only wrapper `agentic-kit dpa readonly-probe-execution` executes only
 DP1 Probe fixture-manifest cases whose mutation scope is `READ_ONLY` and whose
 authorization is `NOT_REQUIRED`. It records mutable or context-dependent cases

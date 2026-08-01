@@ -303,6 +303,10 @@ def write_dpa_repo_adoption_assessment_json(
     }
 
 
+def dpa_repo_adoption_evidence_output_root(root: Path | str) -> Path:
+    return _evidence_output_root(Path(root).resolve())
+
+
 def _candidate_paths(root: Path) -> tuple[Path, ...]:
     candidates: set[Path] = set()
     for relative in TOP_LEVEL_CANDIDATES:

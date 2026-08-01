@@ -318,6 +318,33 @@ roadmap:
   source_files:
   - docs/architecture/dpa/README.md
   - docs/planning/PROJECT_DIRECTION.yaml
+- id: workspace-dpa-intake-orchestrator
+  phase: unphased
+  status: done
+  title: Automate deterministic workspace DPA intake
+  completed_by_pr: pending-pr-workspace-dpa-intake-orchestrator
+  depends_on:
+  - dpa-repo-adoption-assessment
+  acceptance:
+  - agentic-kit workspace dpa-intake resolves exact-ref evidence when the target
+    repository is a Git checkout.
+  - The orchestrator runs workspace adoption analysis and DPA repo-adoption
+    assessment in one read-only default command.
+  - The output includes an adjudication_plan that groups candidate surfaces by
+    classification and records default Maintainer decision categories.
+  - Bounded intake evidence can be written only with explicit execute semantics
+    under the DPA assessment evidence root.
+  - external-repo conformance, automatic migration and production mutation claims
+    remain false.
+  evidence:
+  - tests/test_workspace_dpa_intake.py
+  - tests/test_dpa_repo_adoption_assessment.py
+  - README.md
+  - docs/TEST_GATES.md
+  source_files:
+  - src/agentic_project_kit/workspace_dpa_intake.py
+  - src/agentic_project_kit/cli_commands/workspace.py
+  - docs/architecture/dpa/README.md
 - id: v2-0-legacy-profile-removal
   phase: unphased
   status: planned

@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: c1487bde81c7
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: e5396ccb3d3a
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `245`
+- Command count: `246`
 
 ## Commands
 
@@ -3326,6 +3326,24 @@ Analyze an existing repository without writing workspace files.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Target repository root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+
+### `agentic-kit workspace dpa-intake`
+
+- Safety: `BOUNDED`
+- When to use: Run the deterministic DPA repository-intake orchestration.
+- Dry-run available: `True`
+
+Run the deterministic DPA repository-intake orchestration.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Target repository root. |
+| `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact current ref to record instead of repository HEAD. |
+| `output` | `TyperOption` | --output | `False` |  | Optional DPA intake evidence JSON path under docs/architecture/evidence/dpa/assessment/. |
+| `write_evidence` | `TyperOption` | --write-evidence | `False` | `False` | Use the default bounded DPA intake evidence JSON path. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write requested evidence output. |
+| `require_ready` | `TyperOption` | --require-ready | `False` | `False` | Fail unless the target repo is ready for DPA intake adjudication. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit workspace init`
