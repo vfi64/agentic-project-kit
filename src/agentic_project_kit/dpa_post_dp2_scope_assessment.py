@@ -6,6 +6,11 @@ from pathlib import Path
 import subprocess
 from typing import Any
 
+from agentic_project_kit.dpa_dp3_dp4_adjudication import (
+    DEFAULT_DP3_DP4_ADJUDICATION_RECORD_PATH,
+    Dp3Dp4AdjudicationResult,
+    evaluate_dp3_dp4_adjudication_record,
+)
 from agentic_project_kit.dpa_readiness import (
     DEFAULT_READINESS_PATH,
     evaluate_dpa_readiness,
@@ -28,6 +33,7 @@ from agentic_project_kit.workspace import load_workspace
 ASSESSMENT_MODEL = "dpa-post-dp2-scope-assessment-v1"
 RESULT_STATUS = "POST_DP2_SCOPE_ASSESSMENT_RECORDED"
 KIT_WIDE_DPA_STATUS = "DP3_DP5_NOT_COMPLETE"
+KIT_WIDE_DPA_STATUS_DP5_ONLY = "DP5_NOT_COMPLETE"
 EVIDENCE_OUTPUT_ROOT_PARTS = ("evidence", "dpa", "assessment")
 
 
@@ -55,6 +61,8 @@ class RolloutCandidate:
     dpa_600_evidence: dict[str, Any]
     dpa_700_evidence: dict[str, Any]
     rollback: str
+    adjudication_record: str
+    adjudication_status: str
     entry_blockers: tuple[str, ...]
     completion_blockers: tuple[str, ...]
 
@@ -66,6 +74,8 @@ class RolloutCandidate:
     def status(self) -> str:
         if self.entry_blockers:
             return "BLOCKED_FOR_DP3_ENTRY"
+        if not self.completion_blockers:
+            return "ADJUDICATED_FOR_BOUNDED_DP3_ROLLOUT"
         return "READY_FOR_BOUNDED_DP3_ADJUDICATION"
 
     def as_dict(self) -> dict[str, Any]:
@@ -82,6 +92,8 @@ class RolloutCandidate:
             "dpa_600_evidence": self.dpa_600_evidence,
             "dpa_700_evidence": self.dpa_700_evidence,
             "rollback": self.rollback,
+            "adjudication_record": self.adjudication_record,
+            "adjudication_status": self.adjudication_status,
             "status": self.status,
             "entry_ready": self.entry_ready,
             "entry_blockers": list(self.entry_blockers),
@@ -99,6 +111,8 @@ class StatusAuthorityCandidate:
     target_identity: str
     generated_or_command_updated: bool
     decision: str
+    adjudication_record: str
+    adjudication_status: str
     blockers: tuple[str, ...]
     evidence: tuple[str, ...]
 
@@ -106,7 +120,7 @@ class StatusAuthorityCandidate:
     def status(self) -> str:
         if self.blockers:
             return "BLOCKED_FOR_DP4_EXIT"
-        return "READY_FOR_DP4_ADJUDICATION"
+        return "ADJUDICATED_FOR_BOUNDED_DP4_EXIT"
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -117,6 +131,8 @@ class StatusAuthorityCandidate:
             "target_identity": self.target_identity,
             "generated_or_command_updated": self.generated_or_command_updated,
             "decision": self.decision,
+            "adjudication_record": self.adjudication_record,
+            "adjudication_status": self.adjudication_status,
             "status": self.status,
             "blockers": list(self.blockers),
             "evidence": list(self.evidence),
@@ -141,6 +157,7 @@ class PostDp2ScopeAssessmentResult:
     dp2_status: str
     dp2_implementation_percent: int
     dp2_scope: str
+    adjudication_record: Dp3Dp4AdjudicationResult
     rollout_candidates: tuple[RolloutCandidate, ...]
     status_authority_candidates: tuple[StatusAuthorityCandidate, ...]
     strict_lifecycle_stages: tuple[StrictLifecycleStage, ...]
@@ -181,6 +198,14 @@ class PostDp2ScopeAssessmentResult:
         return self.structural_ok and self.blocker_count == 0
 
     @property
+    def kit_wide_dpa_status(self) -> str:
+        if self.final_closeout_ready:
+            return "READY_FOR_FINAL_CLOSEOUT_RECORD"
+        if not self.dp3_blockers and not self.dp4_blockers and self.dp5_blockers:
+            return KIT_WIDE_DPA_STATUS_DP5_ONLY
+        return KIT_WIDE_DPA_STATUS
+
+    @property
     def result_status(self) -> str:
         if not self.structural_ok:
             return "STRUCTURAL_BLOCK"
@@ -189,6 +214,8 @@ class PostDp2ScopeAssessmentResult:
         return RESULT_STATUS
 
     def as_dict(self) -> dict[str, Any]:
+        dp3_bounded_slice_adjudicated = not self.dp3_blockers
+        dp4_bounded_slice_adjudicated = not self.dp4_blockers
         return {
             "schema_version": 1,
             "kind": "dpa_post_dp2_scope_assessment",
@@ -199,19 +226,30 @@ class PostDp2ScopeAssessmentResult:
             "dp2_status": self.dp2_status,
             "dp2_implementation_percent": self.dp2_implementation_percent,
             "dp2_scope": self.dp2_scope,
-            "kit_wide_dpa_status": KIT_WIDE_DPA_STATUS,
+            "kit_wide_dpa_status": self.kit_wide_dpa_status,
             "kit_wide_dpa_conformance_claimed": False,
             "final_closeout_ready": self.final_closeout_ready,
+            "dp3_dp4_adjudication": self.adjudication_record.as_dict(),
             "finding_count": len(self.findings),
             "blocker_count": self.blocker_count,
             "findings": [finding.as_dict() for finding in self.findings],
             "dp3": {
-                "status": "NOT_COMPLETE",
+                "status": (
+                    "ADJUDICATED_FOR_BOUNDED_SLICE"
+                    if dp3_bounded_slice_adjudicated
+                    else "NOT_COMPLETE"
+                ),
+                "bounded_slice_adjudicated": dp3_bounded_slice_adjudicated,
                 "blockers": list(self.dp3_blockers),
                 "rollout_candidates": [candidate.as_dict() for candidate in self.rollout_candidates],
             },
             "dp4": {
-                "status": "NOT_COMPLETE",
+                "status": (
+                    "ADJUDICATED_FOR_BOUNDED_STATUS_AUTHORITY_SLICE"
+                    if dp4_bounded_slice_adjudicated
+                    else "NOT_COMPLETE"
+                ),
+                "bounded_slice_adjudicated": dp4_bounded_slice_adjudicated,
                 "blockers": list(self.dp4_blockers),
                 "status_authority_candidates": [
                     candidate.as_dict() for candidate in self.status_authority_candidates
@@ -230,6 +268,7 @@ def evaluate_post_dp2_scope_assessment(
     root: Path | str = ".",
     *,
     readiness_path: Path | str = DEFAULT_READINESS_PATH,
+    adjudication_record_path: Path | str = DEFAULT_DP3_DP4_ADJUDICATION_RECORD_PATH,
     validation_ref: str | None = None,
 ) -> PostDp2ScopeAssessmentResult:
     base = Path(root).resolve()
@@ -245,10 +284,15 @@ def evaluate_post_dp2_scope_assessment(
     ]
     selected_writer_status = _mapping(readiness.data.get("selected_writer_status"))
     resolved_validation_ref = validation_ref or _git_head(base)
+    adjudication = evaluate_dp3_dp4_adjudication_record(
+        base,
+        record_path=adjudication_record_path,
+        validation_ref=resolved_validation_ref,
+    )
 
-    rollout_candidates = _rollout_candidates(base, selected_writer_status)
-    status_authority_candidates = _status_authority_candidates(base)
-    strict_lifecycle_stages = _strict_lifecycle_stages()
+    rollout_candidates = _rollout_candidates(base, selected_writer_status, adjudication)
+    status_authority_candidates = _status_authority_candidates(base, adjudication)
+    strict_lifecycle_stages = _strict_lifecycle_stages(adjudication)
     dp2_scope = str(
         _mapping(readiness.data.get("dp2_entry_status")).get(
             "first_dp2_target_scope",
@@ -262,6 +306,7 @@ def evaluate_post_dp2_scope_assessment(
         dp2_status=readiness.status,
         dp2_implementation_percent=readiness.implementation_percent,
         dp2_scope=dp2_scope,
+        adjudication_record=adjudication,
         rollout_candidates=rollout_candidates,
         status_authority_candidates=status_authority_candidates,
         strict_lifecycle_stages=strict_lifecycle_stages,
@@ -339,6 +384,7 @@ def write_post_dp2_scope_assessment_json(
 def _rollout_candidates(
     root: Path,
     selected_writer_status: dict[str, Any],
+    adjudication: Dp3Dp4AdjudicationResult,
 ) -> tuple[RolloutCandidate, ...]:
     return (
         _candidate(
@@ -354,6 +400,7 @@ def _rollout_candidates(
             implementation_result_ref="f653bbbb",
             evidence_path="docs/architecture/evidence/dpa/probes/fixture-evidence-0b985a22-wrt-ch005-20260729/results.json",
             rollback="no production migration; fixture cleanup covers disposable generated target roots",
+            adjudication=adjudication,
             completion_blocker="dp3-adjudicated-rollout-result-missing",
         ),
         _candidate(
@@ -369,6 +416,7 @@ def _rollout_candidates(
             implementation_result_ref="644f470a",
             evidence_path="docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json",
             rollback="source command contract and exact-byte rollback classification; no durable manual patches",
+            adjudication=adjudication,
             completion_blocker="dp3-or-dp4-generated-output-adjudication-record-missing",
         ),
     )
@@ -388,6 +436,7 @@ def _candidate(
     implementation_result_ref: str,
     evidence_path: str,
     rollback: str,
+    adjudication: Dp3Dp4AdjudicationResult,
     completion_blocker: str,
 ) -> RolloutCandidate:
     entry_blockers: list[str] = []
@@ -409,6 +458,11 @@ def _candidate(
         entry_blockers.append("dpa-700-probe-004-evidence-missing")
     if evidence.get("rollback_cleanup_proven") is not True:
         entry_blockers.append("rollback-cleanup-not-proven")
+    completion_blockers: tuple[str, ...]
+    if adjudication.dp3_target_accepted(writer_id):
+        completion_blockers = ()
+    else:
+        completion_blockers = (completion_blocker,)
     return RolloutCandidate(
         writer_id=writer_id,
         target_identity=target_identity,
@@ -431,12 +485,17 @@ def _candidate(
             "rollback_cleanup_proven": evidence.get("rollback_cleanup_proven") is True,
         },
         rollback=rollback,
+        adjudication_record=adjudication.record_path,
+        adjudication_status=adjudication.dp3_target_status.get(writer_id, adjudication.result_status),
         entry_blockers=tuple(entry_blockers),
-        completion_blockers=(completion_blocker,),
+        completion_blockers=completion_blockers,
     )
 
 
-def _status_authority_candidates(root: Path) -> tuple[StatusAuthorityCandidate, ...]:
+def _status_authority_candidates(
+    root: Path,
+    adjudication: Dp3Dp4AdjudicationResult,
+) -> tuple[StatusAuthorityCandidate, ...]:
     successor_evidence = "docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json"
     candidates = [
         StatusAuthorityCandidate(
@@ -447,7 +506,9 @@ def _status_authority_candidates(root: Path) -> tuple[StatusAuthorityCandidate, 
             target_identity="CURRENT_HANDOFF_SELF_HOSTING_TARGET",
             generated_or_command_updated=True,
             decision="manual-preservation-required-for-non-lifecycle-owned-bytes",
-            blockers=("dp4-adjudication-record-missing",),
+            adjudication_record=adjudication.record_path,
+            adjudication_status=adjudication.dp4_candidate_status.get("DP4-CURRENT-HANDOFF", adjudication.result_status),
+            blockers=_dp4_blockers(adjudication, "DP4-CURRENT-HANDOFF", "dp4-adjudication-record-missing"),
             evidence=("docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",),
         ),
         StatusAuthorityCandidate(
@@ -458,7 +519,9 @@ def _status_authority_candidates(root: Path) -> tuple[StatusAuthorityCandidate, 
             target_identity="PROJECT_STATUS_CURRENT_STATE",
             generated_or_command_updated=False,
             decision="no-migration-until-reader-writer-inventory-is-recorded",
-            blockers=("reader-writer-generator-command-update-inventory-missing",),
+            adjudication_record=adjudication.record_path,
+            adjudication_status=adjudication.dp4_candidate_status.get("DP4-STATUS", adjudication.result_status),
+            blockers=_dp4_blockers(adjudication, "DP4-STATUS", "reader-writer-generator-command-update-inventory-missing"),
             evidence=(),
         ),
         StatusAuthorityCandidate(
@@ -469,7 +532,12 @@ def _status_authority_candidates(root: Path) -> tuple[StatusAuthorityCandidate, 
             target_identity=DPA_SUCCESSOR_PROJECTION_TARGET_SCOPE,
             generated_or_command_updated=True,
             decision="no-migration-generated-output-command-contract-boundary",
-            blockers=("dp4-no-migration-adjudication-record-missing",),
+            adjudication_record=adjudication.record_path,
+            adjudication_status=adjudication.dp4_candidate_status.get(
+                "DP4-SUCCESSOR-PROJECTIONS",
+                adjudication.result_status,
+            ),
+            blockers=_dp4_blockers(adjudication, "DP4-SUCCESSOR-PROJECTIONS", "dp4-no-migration-adjudication-record-missing"),
             evidence=(successor_evidence,),
         ),
     ]
@@ -494,22 +562,35 @@ def _with_missing_path_blockers(root: Path, candidate: StatusAuthorityCandidate)
         target_identity=candidate.target_identity,
         generated_or_command_updated=candidate.generated_or_command_updated,
         decision=candidate.decision,
+        adjudication_record=candidate.adjudication_record,
+        adjudication_status=candidate.adjudication_status,
         blockers=tuple(blockers),
         evidence=candidate.evidence,
     )
 
 
-def _strict_lifecycle_stages() -> tuple[StrictLifecycleStage, ...]:
-    blockers = (
-        "accepted-dp3-and-dp4-results-missing",
-        "exact-stage-authorization-record-missing",
-        "rollback-to-less-strict-stage-evidence-missing",
+def _dp4_blockers(adjudication: Dp3Dp4AdjudicationResult, candidate_id: str, fallback: str) -> tuple[str, ...]:
+    if adjudication.dp4_candidate_accepted(candidate_id):
+        return ()
+    return (fallback,)
+
+
+def _strict_lifecycle_stages(adjudication: Dp3Dp4AdjudicationResult) -> tuple[StrictLifecycleStage, ...]:
+    blockers = []
+    if not adjudication.ok:
+        blockers.append("accepted-dp3-and-dp4-results-missing")
+    blockers.extend(
+        (
+            "exact-stage-authorization-record-missing",
+            "rollback-to-less-strict-stage-evidence-missing",
+        )
     )
+    blocker_tuple = tuple(blockers)
     return (
-        StrictLifecycleStage("observe", "BLOCKED_BEFORE_STAGE_TRANSITION", blockers),
-        StrictLifecycleStage("warn", "BLOCKED_BEFORE_STAGE_TRANSITION", blockers),
-        StrictLifecycleStage("block-new", "BLOCKED_BEFORE_STAGE_TRANSITION", blockers),
-        StrictLifecycleStage("strict", "BLOCKED_BEFORE_STAGE_TRANSITION", blockers),
+        StrictLifecycleStage("observe", "BLOCKED_BEFORE_STAGE_TRANSITION", blocker_tuple),
+        StrictLifecycleStage("warn", "BLOCKED_BEFORE_STAGE_TRANSITION", blocker_tuple),
+        StrictLifecycleStage("block-new", "BLOCKED_BEFORE_STAGE_TRANSITION", blocker_tuple),
+        StrictLifecycleStage("strict", "BLOCKED_BEFORE_STAGE_TRANSITION", blocker_tuple),
     )
 
 

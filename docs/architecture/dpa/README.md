@@ -229,11 +229,22 @@ self-hosting `CURRENT_HANDOFF.md` writer remains deferred. `WRT-CH-005` and
 
 The read-only wrapper `agentic-kit dpa post-dp2-scope-assessment` inventories
 post-DP2 DP3 rollout candidates, DP4 status-authority candidates and DP5 strict
-lifecycle-gate stage blockers. It records `DP3_DP5_NOT_COMPLETE`, keeps
-`kit_wide_dpa_conformance_claimed` false and may write bounded assessment
-evidence under `docs/architecture/evidence/dpa/assessment/`. The wrapper is a
-scope and readiness assessment only: it does not execute migrations, activate
-strict gates, patch generated outputs manually or close final DPA conformance.
+lifecycle-gate stage blockers. It records `DP3_DP5_NOT_COMPLETE` before bounded
+DP3/DP4 adjudication and `DP5_NOT_COMPLETE` once only DP5 stage blockers
+remain. It keeps `kit_wide_dpa_conformance_claimed` false and may write bounded
+assessment evidence under `docs/architecture/evidence/dpa/assessment/`. The
+wrapper is a scope and readiness assessment only: it does not execute
+migrations, activate strict gates, patch generated outputs manually or close
+final DPA conformance.
+
+The read-only wrapper `agentic-kit dpa dp3-dp4-adjudication-check` validates
+the bounded DP3/DP4 adjudication record. The current record status is
+`DP3_DP4_BOUNDED_ADJUDICATION_ACCEPTED`: `WRT-CH-005` and `WRT-CH-006` are
+accepted for the bounded DP3 rollout slice, and the selected DP4
+status-authority candidates are accepted as no-migration/manual-preservation or
+command-contract-boundary outcomes. This does not authorize DP5 observe, warn,
+block-new or strict stage transitions and does not claim Kit-wide DPA
+conformance.
 
 The current WRT-CH-001 observation package under
 `../evidence/dpa/probes/wrt-ch001-admin-refresh-observation-57a892e4-20260729/`
@@ -316,7 +327,8 @@ no-production-mutation and no-full-Probe-claim boundaries.
 After this index, registry staging, Assessment-readiness, the lifecycle wrapper
 slice, WRT-CH-002 release-preparation routing, WRT-CH-003 post-release DOI
 closeout routing, WRT-CH-004 action-surface routing, WRT-CH-005 workspace-init
-classification and WRT-CH-006 generated-successor projection classification,
+classification, WRT-CH-006 generated-successor projection classification and
+the bounded DP3/DP4 adjudication record,
 the next DPA work remains governed by the closeout restrictions:
 
 1. Preserve the DPA Lab source ref and Kit import baseline in every import slice.
@@ -325,9 +337,9 @@ the next DPA work remains governed by the closeout restrictions:
    authority on the lifecycle-owned `CURRENT_HANDOFF.md` acceptance-state path.
 3. Keep the full WRT-CH-001 administrative refresh PR-flow evidence boundary
    separate until that observation is explicitly closed.
-4. Keep DP2 implementation within the authorized
-   WRT-CH-001/WRT-CH-002/WRT-CH-003/WRT-CH-004 target scope unless a later
-   Maintainer Assessment selects or authorizes another target.
+4. Keep DP5 stage transitions blocked unless exact stage scope, gate evidence,
+   rollback-to-less-strict-stage evidence and Maintainer authorization are
+   recorded for that stage.
 5. Re-run the fixture evidence package before any production runtime mutation if
    Probe manuals, fixture manifest, selected target, command manifest or DPA
    implementation code changes.

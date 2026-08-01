@@ -1,0 +1,468 @@
+{
+  "schema_version": 1,
+  "kind": "dpa_dp3_dp4_adjudication_record",
+  "status": "DP3_DP4_BOUNDED_ADJUDICATION_ACCEPTED",
+  "status_date": "2026-08-01",
+  "validation_ref": "3fd8bcc8dfe89965b98a783954f36609836bd094",
+  "post_dp2_scope_assessment": "docs/architecture/evidence/dpa/assessment/post-dp2-scope-6a59bf43-20260801/results.json",
+  "maintainer": "Maintainer instruction recorded in Codex chat, 2026-08-01: continue DPA implementation autonomously through bounded DP3-DP5 slices, including branch, PR, CI, merge and post-merge closeout authority; do not claim global Kit DPA conformance before DP3-DP5 and closeout evidence exist.",
+  "decision_token": "DPA_DP3_DP4_BOUNDED_ADJUDICATION_ACCEPTED",
+  "dp3_scope": {
+    "status": "ACCEPTED_FOR_BOUNDED_SLICE",
+    "rollout_targets": [
+      {
+        "writer_id": "WRT-CH-005",
+        "target_identity": "EXTERNAL_WORKSPACE_INITIALIZATION_TEMPLATE",
+        "target_path": ".agentic/dpa/workspace_init_projection.json",
+        "source_authority": "DPA-WORKSPACE-INIT-HANDOFF-TEMPLATE-v1",
+        "source_paths": [
+          "src/agentic_project_kit/templates.py",
+          "src/agentic_project_kit/workspace_init.py"
+        ],
+        "document_form": "external-generated-initialization-manifest",
+        "implementation_result_ref": "f653bbbb",
+        "reader_inventory": [
+          {
+            "id": "workspace-init-projection-manifest-validator",
+            "path": "src/agentic_project_kit/dpa_workspace_init_projection.py",
+            "role": "validates generated external workspace initialization manifest shape"
+          },
+          {
+            "id": "workspace-init-tests",
+            "path": "tests/test_dpa_workspace_init_projection.py",
+            "role": "asserts generated workspace-init DPA boundary semantics"
+          }
+        ],
+        "writer_inventory": [
+          {
+            "id": "agentic-kit-init-template-writer",
+            "path": "src/agentic_project_kit/templates.py",
+            "role": "emits generated project handoff template bytes inside target workspaces"
+          },
+          {
+            "id": "agentic-kit-workspace-init-manifest-writer",
+            "path": "src/agentic_project_kit/workspace_init.py",
+            "role": "writes workspace handoff state and workspace-init DPA projection manifest"
+          }
+        ],
+        "dpa_600": {
+          "status": "SATISFIED_FOR_CURRENT_KIT_REF",
+          "evidence": [
+            "docs/architecture/evidence/dpa/probes/fixture-evidence-0b985a22-wrt-ch005-20260729/results.json"
+          ],
+          "rationale": "The target is generated into external target roots or workspace-init state, not the live Kit self-hosting CURRENT_HANDOFF.md acceptance path; fixture evidence records branch/PR/integration coverage and rollback cleanup."
+        },
+        "dpa_700": {
+          "status": "SATISFIED_FOR_CURRENT_KIT_REF",
+          "evidence": [
+            "docs/architecture/evidence/dpa/probes/fixture-evidence-0b985a22-wrt-ch005-20260729/results.json"
+          ],
+          "rationale": "No production migration is selected. Generated target-root bytes are disposable or independently recreated from template sources, and fixture cleanup proves rollback for temporary target roots."
+        },
+        "tests": {
+          "positive": [
+            "tests/test_dpa_workspace_init_projection.py"
+          ],
+          "negative": [
+            "tests/test_dpa_workspace_init_projection.py"
+          ]
+        },
+        "rollout_evidence": [
+          "docs/architecture/evidence/dpa/probes/fixture-evidence-0b985a22-wrt-ch005-20260729/results.json"
+        ],
+        "rollback": {
+          "status": "NO_PRODUCTION_MIGRATION",
+          "independently_revertible": true,
+          "cleanup_proven": true,
+          "rationale": "Rollback is deletion or regeneration of generated target-root state; no live Kit production target bytes or acceptance state are migrated."
+        },
+        "adjudication": {
+          "status": "ACCEPTED_FOR_BOUNDED_DP3_ROLLOUT",
+          "maintainer_accepted": true,
+          "next_stage_authorized": "DP4_STATUS_AUTHORITY_EVALUATION_ONLY",
+          "limitations": [
+            "This accepts only the external workspace-initialization boundary classification for WRT-CH-005.",
+            "It does not make generated target workspaces Kit-wide DPA conformant."
+          ]
+        },
+        "claims": {
+          "kit_wide_dpa_conformance_claimed": false,
+          "dp5_strict_enforced": false,
+          "production_mutation_performed": false,
+          "generated_outputs_manually_patched": false,
+          "stable_dpa_claimed": false
+        }
+      },
+      {
+        "writer_id": "WRT-CH-006",
+        "target_identity": "GENERATED_SUCCESSOR_HANDOFF_PACKAGE_AND_PROMPT_PROJECTIONS",
+        "target_path": "docs/reports/handoff-packages/latest/",
+        "source_authority": "DPA-GENERATED-SUCCESSOR-HANDOFF-PROJECTION-v1",
+        "source_paths": [
+          "src/agentic_project_kit/successor_handoff_package.py",
+          "src/agentic_project_kit/cli_commands/transfer_handoff_flow.py"
+        ],
+        "document_form": "command-generated-successor-handoff-projection",
+        "implementation_result_ref": "644f470a",
+        "reader_inventory": [
+          {
+            "id": "agent-instruction-package-reader",
+            "path": "AGENTS.md",
+            "role": "points agents to the canonical generated successor handoff package"
+          },
+          {
+            "id": "successor-package-tests",
+            "path": "tests/test_successor_handoff_package.py",
+            "role": "asserts generated package contract fields and projection paths"
+          }
+        ],
+        "writer_inventory": [
+          {
+            "id": "successor-handoff-package-renderer",
+            "path": "src/agentic_project_kit/successor_handoff_package.py",
+            "role": "renders machine-readable successor package files and prompt projection"
+          },
+          {
+            "id": "transfer-chat-switch-complete-command",
+            "path": "src/agentic_project_kit/cli_commands/transfer_handoff_flow.py",
+            "role": "command entrypoint that writes the generated successor package"
+          }
+        ],
+        "dpa_600": {
+          "status": "SATISFIED_FOR_CURRENT_KIT_REF",
+          "evidence": [
+            "docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json",
+            "docs/reports/terminal/transfer_handoff_reports/20260801T140555Z-a8d48509-post-merge-complete-after-pr1962.json"
+          ],
+          "rationale": "The generated package is updated through transfer commands and post-merge refresh lifecycle evidence; manual durable target-byte patches remain disallowed."
+        },
+        "dpa_700": {
+          "status": "SATISFIED_FOR_CURRENT_KIT_REF",
+          "evidence": [
+            "docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json",
+            "docs/reports/terminal/transfer_handoff_reports/20260801T140555Z-a8d48509-post-merge-complete-after-pr1962.json"
+          ],
+          "rationale": "No migration of generated outputs is selected. Rollback is source-command contract preservation plus regeneration from canonical source/state after post-merge refresh."
+        },
+        "tests": {
+          "positive": [
+            "tests/test_successor_handoff_package.py",
+            "tests/test_dpa_successor_projection.py"
+          ],
+          "negative": [
+            "tests/test_successor_handoff_package.py",
+            "tests/test_dpa_successor_projection.py"
+          ]
+        },
+        "rollout_evidence": [
+          "docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json",
+          "docs/reports/terminal/post-pr1961-successor-chat-handoff.md"
+        ],
+        "rollback": {
+          "status": "NO_DURABLE_MANUAL_TARGET_PATCHING",
+          "independently_revertible": true,
+          "cleanup_proven": true,
+          "rationale": "Generated successor package outputs are regenerated from source command contracts; output bytes are not treated as durable manual migration sources."
+        },
+        "adjudication": {
+          "status": "ACCEPTED_FOR_BOUNDED_DP3_ROLLOUT",
+          "maintainer_accepted": true,
+          "next_stage_authorized": "DP4_GENERATED_OUTPUT_BOUNDARY_EVALUATION_ONLY",
+          "limitations": [
+            "This accepts only the generated-output command-contract boundary for WRT-CH-006.",
+            "It does not authorize manual durable edits to generated package or prompt outputs."
+          ]
+        },
+        "claims": {
+          "kit_wide_dpa_conformance_claimed": false,
+          "dp5_strict_enforced": false,
+          "production_mutation_performed": false,
+          "generated_outputs_manually_patched": false,
+          "stable_dpa_claimed": false
+        }
+      }
+    ]
+  },
+  "dp4_scope": {
+    "status": "ACCEPTED_FOR_BOUNDED_STATUS_AUTHORITY_SLICE",
+    "status_authority_candidates": [
+      {
+        "id": "DP4-CURRENT-HANDOFF",
+        "path": "docs/handoff/CURRENT_HANDOFF.md",
+        "decision": "MANUAL_PRESERVATION_WITH_LIFECYCLE_OWNED_GENERATED_BLOCK",
+        "document_form": "hybrid-current-state-document",
+        "target_identity": "CURRENT_HANDOFF_SELF_HOSTING_TARGET",
+        "source_authority": ".agentic/operational_handoff_state.yaml plus curated manual regions",
+        "reader_inventory": [
+          {
+            "id": "agent-required-read",
+            "path": "AGENTS.md",
+            "role": "requires CURRENT_HANDOFF.md before non-trivial changes"
+          },
+          {
+            "id": "current-state-tests",
+            "path": "tests/test_current_state_doc_currency.py",
+            "role": "checks current handoff and successor package currency"
+          }
+        ],
+        "writer_inventory": [
+          {
+            "id": "WRT-CH-001-admin-refresh",
+            "path": "src/agentic_project_kit/transfer_repo_actions.py",
+            "role": "updates generated operational handoff block through admin-refresh-pr"
+          },
+          {
+            "id": "WRT-CH-002-release-prepare",
+            "path": "src/agentic_project_kit/release_prepare.py",
+            "role": "routes release metadata handoff updates through selected DPA target path"
+          },
+          {
+            "id": "WRT-CH-003-post-release-closeout",
+            "path": "src/agentic_project_kit/post_release_closeout.py",
+            "role": "routes post-release DOI handoff updates through selected DPA target path"
+          },
+          {
+            "id": "WRT-CH-004-action-spec-surface",
+            "path": "src/agentic_project_kit/action_specs.py",
+            "role": "declares action-surfaced handoff mutation authority"
+          }
+        ],
+        "generator_inventory": [
+          {
+            "id": "operational-handoff-state-renderer",
+            "path": "src/agentic_project_kit/transfer_repo_actions.py",
+            "source": ".agentic/operational_handoff_state.yaml"
+          }
+        ],
+        "command_update_inventory": [
+          {
+            "command": "agentic-kit transfer admin-refresh-pr --after-pr",
+            "role": "command-updates generated operational handoff block"
+          },
+          {
+            "command": "agentic-kit transfer post-merge-complete --after-pr",
+            "role": "drives required administrative handoff refresh after merges"
+          },
+          {
+            "command": "agentic-kit transfer post-merge-settle --after-pr",
+            "role": "settles generated/admin refresh loops after PR merges"
+          }
+        ],
+        "dpa_600": {
+          "status": "SATISFIED_FOR_CURRENT_KIT_REF",
+          "evidence": [
+            "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+            "docs/reports/terminal/transfer_handoff_reports/20260801T140555Z-a8d48509-post-merge-complete-after-pr1962.json"
+          ],
+          "rationale": "Existing transfer wrappers serialize branch, PR, merge and post-merge handoff refresh state for the bounded CURRENT_HANDOFF target scope."
+        },
+        "dpa_700": {
+          "status": "NO_MIGRATION_OR_MANUAL_PRESERVATION",
+          "evidence": [
+            "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+            "docs/architecture/evidence/dpa/assessment/post-dp2-scope-6a59bf43-20260801/results.json"
+          ],
+          "rationale": "DP4 selects manual preservation for non-lifecycle-owned bytes and retains lifecycle-owned generated-region replacement through existing command contracts."
+        },
+        "rollback_or_preservation": {
+          "status": "MANUAL_PRESERVATION_RECORDED",
+          "evidence": [
+            "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+            "docs/architecture/evidence/dpa/assessment/post-dp2-scope-6a59bf43-20260801/results.json"
+          ],
+          "rationale": "No full-document migration is selected; manual prose remains manually preserved and generated operational block refresh remains command-owned."
+        },
+        "status_authority_consequences": "CURRENT_HANDOFF.md remains a hybrid current-state document: command-owned generated operational state is updated through transfer wrappers, while non-lifecycle-owned prose remains manual and must not be overwritten by DPA projection machinery.",
+        "adjudication": {
+          "status": "ACCEPTED_FOR_BOUNDED_DP4_NO_MIGRATION_OR_MANUAL_PRESERVATION",
+          "maintainer_accepted": true,
+          "next_stage_authorized": "DP5_PREPARATION_ONLY"
+        },
+        "claims": {
+          "kit_wide_dpa_conformance_claimed": false,
+          "dp5_strict_enforced": false,
+          "production_mutation_performed": false,
+          "generated_outputs_manually_patched": false,
+          "stable_dpa_claimed": false
+        }
+      },
+      {
+        "id": "DP4-STATUS",
+        "path": "docs/STATUS.md",
+        "decision": "NO_MIGRATION_MANUAL_STATUS_DASHBOARD",
+        "document_form": "manual-current-state-dashboard",
+        "target_identity": "PROJECT_STATUS_CURRENT_STATE",
+        "source_authority": "manual-maintainer-current-state-update",
+        "reader_inventory": [
+          {
+            "id": "agent-required-read",
+            "path": "AGENTS.md",
+            "role": "requires STATUS.md before non-trivial changes"
+          },
+          {
+            "id": "doctor-current-state-check",
+            "path": "src/agentic_project_kit/doctor.py",
+            "role": "checks current-state visibility in STATUS.md"
+          }
+        ],
+        "writer_inventory": [
+          {
+            "id": "manual-status-maintainer-update",
+            "path": "docs/STATUS.md",
+            "role": "manual current-state dashboard update"
+          },
+          {
+            "id": "admin-refresh-status-update",
+            "path": "src/agentic_project_kit/transfer_repo_actions.py",
+            "role": "updates bounded post-merge status lines during administrative refresh"
+          }
+        ],
+        "generator_inventory": [
+          {
+            "id": "none-selected-for-full-status-projection",
+            "path": "docs/STATUS.md",
+            "role": "no full-document generator selected in this DP4 slice"
+          }
+        ],
+        "command_update_inventory": [
+          {
+            "command": "agentic-kit transfer admin-refresh-pr --after-pr",
+            "role": "updates bounded operational documentation refresh lines"
+          }
+        ],
+        "dpa_600": {
+          "status": "SATISFIED_FOR_CURRENT_KIT_REF",
+          "evidence": [
+            "docs/reports/terminal/transfer_handoff_reports/20260801T140555Z-a8d48509-post-merge-complete-after-pr1962.json"
+          ],
+          "rationale": "The only command-updated STATUS.md path in this slice is administrative refresh status, guarded by transfer branch/PR/merge wrappers."
+        },
+        "dpa_700": {
+          "status": "NO_MIGRATION_OR_MANUAL_PRESERVATION",
+          "evidence": [
+            "docs/architecture/evidence/dpa/assessment/post-dp2-scope-6a59bf43-20260801/results.json"
+          ],
+          "rationale": "Reader/writer inventory does not justify selecting a generated STATUS.md projection; the safe DP4 result is no migration."
+        },
+        "rollback_or_preservation": {
+          "status": "NO_MIGRATION_RECORDED",
+          "evidence": [
+            "docs/architecture/evidence/dpa/assessment/post-dp2-scope-6a59bf43-20260801/results.json"
+          ],
+          "rationale": "STATUS.md remains a concise manual dashboard. Rollback for this slice is retaining current manual behavior."
+        },
+        "status_authority_consequences": "STATUS.md remains the manual current-state dashboard. DPA does not become a new full-document source authority for STATUS.md in this bounded slice.",
+        "adjudication": {
+          "status": "ACCEPTED_FOR_BOUNDED_DP4_NO_MIGRATION_OR_MANUAL_PRESERVATION",
+          "maintainer_accepted": true,
+          "next_stage_authorized": "DP5_PREPARATION_ONLY"
+        },
+        "claims": {
+          "kit_wide_dpa_conformance_claimed": false,
+          "dp5_strict_enforced": false,
+          "production_mutation_performed": false,
+          "generated_outputs_manually_patched": false,
+          "stable_dpa_claimed": false
+        }
+      },
+      {
+        "id": "DP4-SUCCESSOR-PROJECTIONS",
+        "path": "docs/reports/handoff-packages/latest/ and docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "decision": "NO_MIGRATION_COMMAND_GENERATED_OUTPUT_BOUNDARY",
+        "document_form": "command-generated-successor-handoff-projection-family",
+        "target_identity": "GENERATED_SUCCESSOR_HANDOFF_PACKAGE_AND_PROMPT_PROJECTIONS",
+        "source_authority": "DPA-GENERATED-SUCCESSOR-HANDOFF-PROJECTION-v1",
+        "reader_inventory": [
+          {
+            "id": "agent-successor-contract-reader",
+            "path": "AGENTS.md",
+            "role": "points agents to the generated successor package as canonical handoff projection"
+          },
+          {
+            "id": "bootstrap-prompt-reader",
+            "path": "docs/handoff/START_NEW_CHAT_PROMPT.md",
+            "role": "points successor chats to generated successor_prompt.md"
+          }
+        ],
+        "writer_inventory": [
+          {
+            "id": "successor-handoff-package-renderer",
+            "path": "src/agentic_project_kit/successor_handoff_package.py",
+            "role": "renders successor package files and prompt projection"
+          },
+          {
+            "id": "transfer-chat-switch-complete-command",
+            "path": "src/agentic_project_kit/cli_commands/transfer_handoff_flow.py",
+            "role": "current command contract for generated successor package writes"
+          }
+        ],
+        "generator_inventory": [
+          {
+            "id": "successor-package-generator",
+            "path": "src/agentic_project_kit/successor_handoff_package.py",
+            "source": ".agentic/handoff_state.yaml, .agentic/operational_handoff_state.yaml and governed repo state"
+          }
+        ],
+        "command_update_inventory": [
+          {
+            "command": "agentic-kit transfer chat-switch-complete --render-prompt",
+            "role": "current generated successor package command"
+          },
+          {
+            "command": "agentic-kit transfer prepare-successor-handoff --render-prompt",
+            "role": "deprecated compatibility alias covered by the same source-command contract"
+          }
+        ],
+        "dpa_600": {
+          "status": "SATISFIED_FOR_CURRENT_KIT_REF",
+          "evidence": [
+            "docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json",
+            "docs/reports/terminal/transfer_handoff_reports/20260801T140555Z-a8d48509-post-merge-complete-after-pr1962.json"
+          ],
+          "rationale": "Successor projections are written through transfer command contracts and post-merge closeout wrappers."
+        },
+        "dpa_700": {
+          "status": "NO_MIGRATION_OR_MANUAL_PRESERVATION",
+          "evidence": [
+            "docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json"
+          ],
+          "rationale": "Generated package outputs are not migrated by manual target-byte edits. The selected result is preserving generator/source-command authority."
+        },
+        "rollback_or_preservation": {
+          "status": "COMMAND_CONTRACT_BOUNDARY_RECORDED",
+          "evidence": [
+            "docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json"
+          ],
+          "rationale": "Rollback is regeneration from the command-owned source contract or reverting the source command change, not hand-editing generated output bytes."
+        },
+        "status_authority_consequences": "Generated successor package and prompt projections remain command-owned outputs. The canonical authority is the source command contract plus state inputs, not durable target bytes.",
+        "adjudication": {
+          "status": "ACCEPTED_FOR_BOUNDED_DP4_NO_MIGRATION_OR_MANUAL_PRESERVATION",
+          "maintainer_accepted": true,
+          "next_stage_authorized": "DP5_PREPARATION_ONLY"
+        },
+        "claims": {
+          "kit_wide_dpa_conformance_claimed": false,
+          "dp5_strict_enforced": false,
+          "production_mutation_performed": false,
+          "generated_outputs_manually_patched": false,
+          "stable_dpa_claimed": false
+        }
+      }
+    ]
+  },
+  "dp5": {
+    "next_stage_authorized": false,
+    "stage_transition": "NOT_AUTHORIZED_IN_THIS_RECORD",
+    "rationale": "This record accepts the bounded DP3/DP4 classification and no-migration/manual-preservation outcomes only. DP5 observe, warn, block-new or strict transitions still require exact stage scope, gate evidence, rollback-stage evidence and a separate stage authorization record."
+  },
+  "claims": {
+    "dp3_complete_for_bounded_slice": true,
+    "dp4_complete_for_bounded_slice": true,
+    "kit_wide_dpa_conformance_claimed": false,
+    "dp5_strict_enforced": false,
+    "production_mutation_performed": false,
+    "generated_outputs_manually_patched": false,
+    "stable_dpa_claimed": false
+  }
+}

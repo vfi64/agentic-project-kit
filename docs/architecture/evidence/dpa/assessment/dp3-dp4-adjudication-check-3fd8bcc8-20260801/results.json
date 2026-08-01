@@ -1,0 +1,33 @@
+{
+  "adjudication_model": "dpa-dp3-dp4-adjudication-record-v1",
+  "claims": {
+    "dp3_complete": false,
+    "dp4_complete": false,
+    "dp5_strict_enforced": false,
+    "generated_outputs_manually_patched": false,
+    "kit_wide_dpa_conformance_claimed": false,
+    "production_mutation_performed": false,
+    "stable_dpa_claimed": false
+  },
+  "current_validation_ref": "3fd8bcc8dfe89965b98a783954f36609836bd094",
+  "decision_token": "DPA_DP3_DP4_BOUNDED_ADJUDICATION_ACCEPTED",
+  "dp3_target_status": {
+    "WRT-CH-005": "ACCEPTED_FOR_BOUNDED_DP3_ROLLOUT",
+    "WRT-CH-006": "ACCEPTED_FOR_BOUNDED_DP3_ROLLOUT"
+  },
+  "dp4_candidate_status": {
+    "DP4-CURRENT-HANDOFF": "ACCEPTED_FOR_BOUNDED_DP4_NO_MIGRATION_OR_MANUAL_PRESERVATION",
+    "DP4-STATUS": "ACCEPTED_FOR_BOUNDED_DP4_NO_MIGRATION_OR_MANUAL_PRESERVATION",
+    "DP4-SUCCESSOR-PROJECTIONS": "ACCEPTED_FOR_BOUNDED_DP4_NO_MIGRATION_OR_MANUAL_PRESERVATION"
+  },
+  "dp5_next_stage_authorized": false,
+  "finding_count": 0,
+  "findings": [],
+  "kind": "dpa_dp3_dp4_adjudication_check",
+  "record_path": "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
+  "record_present": true,
+  "record_status": "DP3_DP4_BOUNDED_ADJUDICATION_ACCEPTED",
+  "record_validation_ref": "3fd8bcc8dfe89965b98a783954f36609836bd094",
+  "result_status": "VALID_DP3_DP4_ADJUDICATION_RECORD",
+  "schema_version": 1
+}
