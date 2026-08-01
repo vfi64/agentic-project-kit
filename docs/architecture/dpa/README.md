@@ -246,6 +246,14 @@ command-contract-boundary outcomes. This does not authorize DP5 observe, warn,
 block-new or strict stage transitions and does not claim Kit-wide DPA
 conformance.
 
+The read-only wrapper `agentic-kit dpa dp5-stage-check` validates the bounded
+DP5 stage-adoption record. The current stage status is
+`DP5_OBSERVE_STAGE_ADOPTED`: observe records projection findings without
+blocking unrelated work. Warn, block-new and strict remain blocked pending
+separate exact stage records, rollback-to-less-strict-stage evidence and
+Maintainer authorization. The paired post-DP2 scope assessment records
+`DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE`.
+
 The current WRT-CH-001 observation package under
 `../evidence/dpa/probes/wrt-ch001-admin-refresh-observation-57a892e4-20260729/`
 records the merged post-PR1932 handoff refresh PR #1933 after the
@@ -327,8 +335,8 @@ no-production-mutation and no-full-Probe-claim boundaries.
 After this index, registry staging, Assessment-readiness, the lifecycle wrapper
 slice, WRT-CH-002 release-preparation routing, WRT-CH-003 post-release DOI
 closeout routing, WRT-CH-004 action-surface routing, WRT-CH-005 workspace-init
-classification, WRT-CH-006 generated-successor projection classification and
-the bounded DP3/DP4 adjudication record,
+classification, WRT-CH-006 generated-successor projection classification,
+the bounded DP3/DP4 adjudication record and DP5 observe-stage adoption,
 the next DPA work remains governed by the closeout restrictions:
 
 1. Preserve the DPA Lab source ref and Kit import baseline in every import slice.
@@ -337,9 +345,9 @@ the next DPA work remains governed by the closeout restrictions:
    authority on the lifecycle-owned `CURRENT_HANDOFF.md` acceptance-state path.
 3. Keep the full WRT-CH-001 administrative refresh PR-flow evidence boundary
    separate until that observation is explicitly closed.
-4. Keep DP5 stage transitions blocked unless exact stage scope, gate evidence,
-   rollback-to-less-strict-stage evidence and Maintainer authorization are
-   recorded for that stage.
+4. Keep DP5 warn, block-new and strict transitions blocked unless exact stage
+   scope, gate evidence, rollback-to-less-strict-stage evidence and Maintainer
+   authorization are recorded for that stage.
 5. Re-run the fixture evidence package before any production runtime mutation if
    Probe manuals, fixture manifest, selected target, command manifest or DPA
    implementation code changes.

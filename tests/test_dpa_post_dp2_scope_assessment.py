@@ -10,6 +10,10 @@ from agentic_project_kit.dpa_dp3_dp4_adjudication import (
     DEFAULT_DP3_DP4_ADJUDICATION_RECORD_PATH,
     evaluate_dp3_dp4_adjudication_record,
 )
+from agentic_project_kit.dpa_dp5_stage_adoption import (
+    DEFAULT_DP5_STAGE_RECORD_PATH,
+    evaluate_dp5_stage_record,
+)
 from agentic_project_kit.dpa_post_dp2_scope_assessment import (
     evaluate_post_dp2_scope_assessment,
 )
@@ -157,6 +161,65 @@ def _write_valid_dp3_dp4_adjudication_record(root: Path) -> None:
                 "dp3_complete_for_bounded_slice": True,
                 "dp4_complete_for_bounded_slice": True,
                 **claims,
+            },
+        },
+    )
+
+
+def _write_valid_dp5_stage_record(root: Path) -> None:
+    post_dp2 = "docs/architecture/evidence/dpa/assessment/post-dp2-scope-6a59bf43-20260801/results.json"
+    dp3_dp4 = DEFAULT_DP3_DP4_ADJUDICATION_RECORD_PATH.as_posix()
+    _write(
+        root / DEFAULT_DP5_STAGE_RECORD_PATH,
+        {
+            "schema_version": 1,
+            "kind": "dpa_dp5_stage_record",
+            "status": "DP5_OBSERVE_STAGE_ADOPTED",
+            "stage": "observe",
+            "status_date": "2026-08-01",
+            "validation_ref": "test-ref",
+            "maintainer": "Maintainer instruction recorded in Codex chat, 2026-08-01: continue bounded DP5 work.",
+            "decision_token": "DPA_DP5_OBSERVE_STAGE_AUTHORIZED",
+            "target_scope": {
+                "id": "DPA_POST_DP2_DP3_DP4_ACCEPTED_SCOPE",
+                "enforcement_stage": "observe",
+                "evidence": [post_dp2, dp3_dp4],
+            },
+            "gate_set": {
+                "id": "DPA_DP5_OBSERVE_GATE_SET_V1",
+                "stage_behavior": "observe-only",
+                "blocks_unrelated_work": False,
+                "commands": [
+                    {
+                        "command": "agentic-kit dpa dp3-dp4-adjudication-check --require-valid",
+                        "evidence": [dp3_dp4],
+                    },
+                    {
+                        "command": "agentic-kit dpa post-dp2-scope-assessment",
+                        "evidence": [post_dp2],
+                    },
+                ],
+            },
+            "findings_mapping": {
+                "unknown_mutation_safety_finding": {
+                    "disposition": "fail_closed_for_mutation_safety",
+                },
+                "stage_decision": "record_only_no_new_blocking",
+            },
+            "rollback": {
+                "less_strict_stage": "pre-dp5",
+                "tested_or_adjudicated": True,
+                "evidence": [post_dp2],
+            },
+            "claims": {
+                "observe_stage_active": True,
+                "warn_stage_active": False,
+                "block_new_stage_active": False,
+                "strict_stage_active": False,
+                "kit_wide_dpa_conformance_claimed": False,
+                "production_mutation_performed": False,
+                "generated_outputs_manually_patched": False,
+                "stable_dpa_claimed": False,
             },
         },
     )
@@ -389,6 +452,50 @@ def test_dp3_dp4_adjudication_check_cli_reports_valid_record(tmp_path: Path) -> 
     assert "DPA_DP3_DP4_ADJUDICATION_CHECK" in result.stdout
     assert "STATUS=VALID_DP3_DP4_ADJUDICATION_RECORD" in result.stdout
     assert "DP5_NEXT_STAGE_AUTHORIZED=false" in result.stdout
+
+
+def test_dp5_observe_record_clears_only_observe_stage_blockers(tmp_path: Path) -> None:
+    _fixture_root(tmp_path)
+    _write_valid_dp3_dp4_adjudication_record(tmp_path)
+    _write_valid_dp5_stage_record(tmp_path)
+
+    stage = evaluate_dp5_stage_record(tmp_path, validation_ref="test-ref")
+    result = evaluate_post_dp2_scope_assessment(tmp_path, validation_ref="test-ref")
+    payload = result.as_dict()
+
+    assert stage.result_status == "VALID_DP5_STAGE_RECORD"
+    assert payload["kit_wide_dpa_status"] == "DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE"
+    assert payload["dp5"]["status"] == "OBSERVE_ADOPTED_STRICT_LIFECYCLE_NOT_COMPLETE"
+    assert payload["dp5"]["strict_lifecycle_stages"][0]["stage"] == "observe"
+    assert payload["dp5"]["strict_lifecycle_stages"][0]["status"] == "ADOPTED_OBSERVE"
+    assert not any(blocker.startswith("observe:") for blocker in payload["dp5"]["blockers"])
+    assert "strict:exact-stage-authorization-record-missing" in payload["dp5"]["blockers"]
+    assert payload["blocker_count"] == 6
+
+
+def test_dp5_stage_check_cli_reports_observe_only(tmp_path: Path) -> None:
+    _fixture_root(tmp_path)
+    _write_valid_dp3_dp4_adjudication_record(tmp_path)
+    _write_valid_dp5_stage_record(tmp_path)
+
+    result = runner.invoke(
+        app,
+        [
+            "dpa",
+            "dp5-stage-check",
+            "--root",
+            str(tmp_path),
+            "--validation-ref",
+            "test-ref",
+            "--require-valid",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert "DPA_DP5_STAGE_CHECK" in result.stdout
+    assert "STATUS=VALID_DP5_STAGE_RECORD" in result.stdout
+    assert "DP5_STAGE=observe|status=ADOPTED" in result.stdout
+    assert "DP5_STAGE=strict|status=BLOCKED" in result.stdout
 
 
 def test_post_dp2_scope_assessment_blocks_missing_candidate_evidence(tmp_path: Path) -> None:
