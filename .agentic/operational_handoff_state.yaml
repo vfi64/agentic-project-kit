@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 644f470a42e9c1970f3ace966abf13dd5210d90f
-  short: 644f470a
-  subject: Classify successor handoff projections for DPA (#1959)
+  full: 0fdc3415ca3eea96265d15f91254bf104c1bfe6c
+  short: 0fdc3415
+  subject: Add DPA post-DP2 scope assessment (#1961)
 last_substantive_work_state:
-  full: 644f470a42e9c1970f3ace966abf13dd5210d90f
-  short: 644f470a
-  subject: Classify successor handoff projections for DPA (#1959)
+  full: 0fdc3415ca3eea96265d15f91254bf104c1bfe6c
+  short: 0fdc3415
+  subject: Add DPA post-DP2 scope assessment (#1961)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

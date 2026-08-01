@@ -7,9 +7,9 @@ Current verified release: 0.4.13.
 Current release tag: v0.4.13.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
-Current verified main: `644f470a` (`Classify successor handoff projections for DPA (#1959)`).
-Latest substantive work: PR #1959 (`Classify successor handoff projections for DPA (#1959)`).
-Post-merge handoff status: PASS/NOOP after PR #1959 administrative refresh.
+Current verified main: `0fdc3415` (`Add DPA post-DP2 scope assessment (#1961)`).
+Latest substantive work: PR #1961 (`Add DPA post-DP2 scope assessment (#1961)`).
+Post-merge handoff status: PASS/NOOP after PR #1961 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1959
+## Operational documentation refresh state after PR #1961
 
-Current administrative handoff refresh state is `644f470a` (`Classify successor handoff projections for DPA (#1959)`). Continue next only after this post-PR1959 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `0fdc3415` (`Add DPA post-DP2 scope assessment (#1961)`). Continue next only after this post-PR1961 refresh is committed and merged; the next substantive slice must be created from fresh main.
