@@ -7,9 +7,9 @@ Current verified release: 0.4.13.
 Current release tag: v0.4.13.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
-Current verified main: `c71faa63` (`Adopt DPA DP5 warn stage (#1967)`).
-Latest substantive work: PR #1967 (`Adopt DPA DP5 warn stage (#1967)`).
-Post-merge handoff status: PASS/NOOP after PR #1967 administrative refresh.
+Current verified main: `82635e17` (`Adopt DPA DP5 block-new stage (#1969)`).
+Latest substantive work: PR #1969 (`Adopt DPA DP5 block-new stage (#1969)`).
+Post-merge handoff status: PASS/NOOP after PR #1969 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -400,6 +400,6 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 ## Operational documentation refresh state after PR #1730
 
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #1967
+## Operational documentation refresh state after PR #1969
 
-Current administrative handoff refresh state is `c71faa63` (`Adopt DPA DP5 warn stage (#1967)`). Continue next only after this post-PR1967 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `82635e17` (`Adopt DPA DP5 block-new stage (#1969)`). Continue next only after this post-PR1969 refresh is committed and merged; the next substantive slice must be created from fresh main.
