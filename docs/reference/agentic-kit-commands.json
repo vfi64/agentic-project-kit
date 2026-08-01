@@ -3306,6 +3306,124 @@
     {
       "dry_run_available": true,
       "group": "dpa",
+      "help": "Validate a bounded DP5 observe-stage record without enabling stricter stages.",
+      "name": "dp5-stage-check",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP5_OBSERVE_STAGE_RECORD_20260801.json')",
+          "help": "DPA DP5 stage-adoption record to inspect.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "record",
+          "opts": [
+            "--record"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional exact current ref to record instead of repository HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "validation_ref",
+          "opts": [
+            "--validation-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write --output when supplied.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_json",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail unless the DP5 observe-stage record is structurally valid.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_valid",
+          "opts": [
+            "--require-valid"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "dpa",
+        "dp5-stage-check"
+      ],
+      "qualified_name": "agentic-kit dpa dp5-stage-check",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "dpa"
+      ],
+      "when_to_use": "Validate a bounded DP5 observe-stage record without enabling stricter stages."
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
       "help": "Execute authorized non-production DPA fixture evidence cases.",
       "name": "fixture-evidence",
       "params": [
@@ -3638,6 +3756,20 @@
           "name": "adjudication_record",
           "opts": [
             "--adjudication-record"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DP5_OBSERVE_STAGE_RECORD_20260801.json')",
+          "help": "Optional DP5 stage-adoption record to inspect when clearing stage blockers.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "dp5_stage_record",
+          "opts": [
+            "--dp5-stage-record"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -15987,7 +16119,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "9336aa528d00",
+    "manifest_sha": "15e460e88f45",
     "schema_version": 1
   },
   "schema_version": 2,

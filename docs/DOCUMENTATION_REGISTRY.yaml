@@ -1015,6 +1015,34 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable post-DP2 scope assessment after DP3/DP4 adjudication; records remaining DP5 stage-transition blockers.
+  - path: docs/architecture/evidence/dpa/assessment/DP5_OBSERVE_STAGE_RECORD_20260801.json
+    class: evidence/log
+    owner: maintainers
+    notes: Bounded DP5 observe-stage adoption record; warn, block-new, strict and Kit-wide conformance claims remain false.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-19831e0e-pre-dp5-observe-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Pre-observe post-DP2 assessment summary and rollback evidence for the DP5 observe stage.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-19831e0e-pre-dp5-observe-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable pre-observe post-DP2 assessment; records DP5_NOT_COMPLETE before observe adoption.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-observe-stage-check-19831e0e-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: DP5 observe-stage validation package summary; VALID_DP5_STAGE_RECORD.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-observe-stage-check-19831e0e-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable DP5 observe-stage validation result; stricter stages remain blocked.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-19831e0e-post-dp5-observe-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Post-observe post-DP2 assessment summary; observe adopted and stricter stages blocked.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-19831e0e-post-dp5-observe-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable post-observe post-DP2 assessment; records DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

@@ -11,6 +11,12 @@ from agentic_project_kit.dpa_dp3_dp4_adjudication import (
     render_dp3_dp4_adjudication_check,
     write_dp3_dp4_adjudication_check_json,
 )
+from agentic_project_kit.dpa_dp5_stage_adoption import (
+    DEFAULT_DP5_STAGE_RECORD_PATH,
+    evaluate_dp5_stage_record,
+    render_dp5_stage_check,
+    write_dp5_stage_check_json,
+)
 from agentic_project_kit.dpa_dp2_decision_readiness import (
     evaluate_dp2_decision_readiness,
     render_dp2_decision_readiness,
@@ -118,6 +124,11 @@ def dpa_post_dp2_scope_assessment_command(
         "--adjudication-record",
         help="Optional DP3/DP4 adjudication record to inspect when clearing post-DP2 blockers.",
     ),
+    dp5_stage_record: Path = typer.Option(
+        DEFAULT_DP5_STAGE_RECORD_PATH,
+        "--dp5-stage-record",
+        help="Optional DP5 stage-adoption record to inspect when clearing stage blockers.",
+    ),
     validation_ref: str | None = typer.Option(
         None,
         "--validation-ref",
@@ -142,6 +153,7 @@ def dpa_post_dp2_scope_assessment_command(
         resolved_root,
         readiness_path=record,
         adjudication_record_path=adjudication_record,
+        dp5_stage_record_path=dp5_stage_record,
         validation_ref=validation_ref,
     )
     write_result = None
@@ -224,6 +236,71 @@ def dpa_dp3_dp4_adjudication_check_command(
         typer.echo(json.dumps(payload, indent=2, sort_keys=True))
     else:
         typer.echo(render_dp3_dp4_adjudication_check(result), nl=False)
+        if write_result is not None:
+            reason = f"|reason={write_result['reason']}" if "reason" in write_result else ""
+            typer.echo(
+                "EVIDENCE_WRITE="
+                f"{write_result['result_status']}|"
+                f"path={write_result['output_path']}|"
+                f"written={str(write_result.get('written', False)).lower()}"
+                f"{reason}"
+            )
+    if write_result is not None and write_result["result_status"] == "BLOCK":
+        raise typer.Exit(2)
+    if result.findings:
+        raise typer.Exit(2)
+    if require_valid and not result.ok:
+        raise typer.Exit(1)
+
+
+@dpa_app.command("dp5-stage-check")
+def dpa_dp5_stage_check_command(
+    root: Path = typer.Option(Path("."), "--root", help="Repository root."),
+    record: Path = typer.Option(
+        DEFAULT_DP5_STAGE_RECORD_PATH,
+        "--record",
+        help="DPA DP5 stage-adoption record to inspect.",
+    ),
+    validation_ref: str | None = typer.Option(
+        None,
+        "--validation-ref",
+        help="Optional exact current ref to record instead of repository HEAD.",
+    ),
+    output: Path | None = typer.Option(
+        None,
+        "--output",
+        help="Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/.",
+    ),
+    execute: bool = typer.Option(False, "--execute", help="Write --output when supplied."),
+    output_json: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+    require_valid: bool = typer.Option(
+        False,
+        "--require-valid",
+        help="Fail unless the DP5 observe-stage record is structurally valid.",
+    ),
+) -> None:
+    """Validate a bounded DP5 observe-stage record without enabling stricter stages."""
+    resolved_root = root.resolve()
+    result = evaluate_dp5_stage_record(
+        resolved_root,
+        record_path=record,
+        validation_ref=validation_ref,
+    )
+    write_result = None
+    if output is not None:
+        write_result = write_dp5_stage_check_json(
+            result,
+            resolved_root,
+            output,
+            execute=execute,
+        )
+    payload = result.as_dict()
+    if write_result is not None:
+        payload["evidence_write"] = write_result
+    if output_json:
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+    else:
+        typer.echo(render_dp5_stage_check(result), nl=False)
         if write_result is not None:
             reason = f"|reason={write_result['reason']}" if "reason" in write_result else ""
             typer.echo(

@@ -124,6 +124,13 @@ no-migration/manual-preservation or command-contract-boundary decisions for
 The paired post-DP2 scope assessment keeps DP5 blocked before any observe, warn,
 block-new or strict stage transition and records `DP5_NOT_COMPLETE`.
 
+The current DP5 observe-stage record records validation ref
+`19831e0e862e4da5e61ca1311dea0796250c15d9` and status
+`DP5_OBSERVE_STAGE_ADOPTED`. It selects observe-only behavior for the bounded
+post-DP2, DP3/DP4-adjudicated scope. The paired post-DP2 scope assessment
+records `DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE`: observe is adopted, while
+warn, block-new and strict remain blocked.
+
 ## Imported Probe Evidence
 
 - `probes/dp1-readonly-c788a8c5-20260727/` records read-only baseline evidence
@@ -220,6 +227,12 @@ block-new or strict stage transition and records `DP5_NOT_COMPLETE`.
   assessment after DP3/DP4 adjudication: DP3 and DP4 are bounded-slice
   adjudicated, while DP5 remains blocked before stage transition with
   `DP5_NOT_COMPLETE`.
+- `assessment/post-dp2-scope-19831e0e-pre-dp5-observe-20260801/` records the
+  pre-observe post-DP2 assessment and rollback evidence for the observe stage.
+- `assessment/dp5-observe-stage-check-19831e0e-20260801/` validates the DP5
+  observe-stage record with result `VALID_DP5_STAGE_RECORD`.
+- `assessment/post-dp2-scope-19831e0e-post-dp5-observe-20260801/` records the
+  post-observe assessment with `DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE`.
 
 These packages preserve their limitation language. Future execution must freeze
 current refs, record command manifest currency, retain cleanup evidence and

@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 9336aa528d00
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 15e460e88f45
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `239`
+- Command count: `240`
 
 ## Commands
 
@@ -762,6 +762,24 @@ Validate a bounded DP3/DP4 adjudication record without authorizing DP5.
 | `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 | `require_valid` | `TyperOption` | --require-valid | `False` | `False` | Fail unless the record structurally accepts the bounded DP3/DP4 slice. |
 
+### `agentic-kit dpa dp5-stage-check`
+
+- Safety: `BOUNDED`
+- When to use: Validate a bounded DP5 observe-stage record without enabling stricter stages.
+- Dry-run available: `True`
+
+Validate a bounded DP5 observe-stage record without enabling stricter stages.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/DP5_OBSERVE_STAGE_RECORD_20260801.json')` | DPA DP5 stage-adoption record to inspect. |
+| `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact current ref to record instead of repository HEAD. |
+| `output` | `TyperOption` | --output | `False` |  | Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `require_valid` | `TyperOption` | --require-valid | `False` | `False` | Fail unless the DP5 observe-stage record is structurally valid. |
+
 ### `agentic-kit dpa fixture-evidence`
 
 - Safety: `BOUNDED`
@@ -815,6 +833,7 @@ Assess post-DP2 DP3-DP5 rollout, migration and strict-gate scope.
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
 | `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json')` | DPA Assessment readiness JSON record to inspect. |
 | `adjudication_record` | `TyperOption` | --adjudication-record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json')` | Optional DP3/DP4 adjudication record to inspect when clearing post-DP2 blockers. |
+| `dp5_stage_record` | `TyperOption` | --dp5-stage-record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/DP5_OBSERVE_STAGE_RECORD_20260801.json')` | Optional DP5 stage-adoption record to inspect when clearing stage blockers. |
 | `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact target ref to record instead of the current repository HEAD. |
 | `output` | `TyperOption` | --output | `False` |  | Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/. |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |

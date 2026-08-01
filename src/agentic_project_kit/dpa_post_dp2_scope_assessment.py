@@ -11,6 +11,11 @@ from agentic_project_kit.dpa_dp3_dp4_adjudication import (
     Dp3Dp4AdjudicationResult,
     evaluate_dp3_dp4_adjudication_record,
 )
+from agentic_project_kit.dpa_dp5_stage_adoption import (
+    DEFAULT_DP5_STAGE_RECORD_PATH,
+    Dp5StageAdoptionResult,
+    evaluate_dp5_stage_record,
+)
 from agentic_project_kit.dpa_readiness import (
     DEFAULT_READINESS_PATH,
     evaluate_dpa_readiness,
@@ -34,6 +39,7 @@ ASSESSMENT_MODEL = "dpa-post-dp2-scope-assessment-v1"
 RESULT_STATUS = "POST_DP2_SCOPE_ASSESSMENT_RECORDED"
 KIT_WIDE_DPA_STATUS = "DP3_DP5_NOT_COMPLETE"
 KIT_WIDE_DPA_STATUS_DP5_ONLY = "DP5_NOT_COMPLETE"
+KIT_WIDE_DPA_STATUS_DP5_OBSERVE = "DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE"
 EVIDENCE_OUTPUT_ROOT_PARTS = ("evidence", "dpa", "assessment")
 
 
@@ -158,6 +164,7 @@ class PostDp2ScopeAssessmentResult:
     dp2_implementation_percent: int
     dp2_scope: str
     adjudication_record: Dp3Dp4AdjudicationResult
+    dp5_stage_record: Dp5StageAdoptionResult
     rollout_candidates: tuple[RolloutCandidate, ...]
     status_authority_candidates: tuple[StatusAuthorityCandidate, ...]
     strict_lifecycle_stages: tuple[StrictLifecycleStage, ...]
@@ -201,6 +208,8 @@ class PostDp2ScopeAssessmentResult:
     def kit_wide_dpa_status(self) -> str:
         if self.final_closeout_ready:
             return "READY_FOR_FINAL_CLOSEOUT_RECORD"
+        if self.dp5_stage_record.stage_accepted("observe") and self.dp5_blockers:
+            return KIT_WIDE_DPA_STATUS_DP5_OBSERVE
         if not self.dp3_blockers and not self.dp4_blockers and self.dp5_blockers:
             return KIT_WIDE_DPA_STATUS_DP5_ONLY
         return KIT_WIDE_DPA_STATUS
@@ -230,6 +239,7 @@ class PostDp2ScopeAssessmentResult:
             "kit_wide_dpa_conformance_claimed": False,
             "final_closeout_ready": self.final_closeout_ready,
             "dp3_dp4_adjudication": self.adjudication_record.as_dict(),
+            "dp5_stage_adoption": self.dp5_stage_record.as_dict(),
             "finding_count": len(self.findings),
             "blocker_count": self.blocker_count,
             "findings": [finding.as_dict() for finding in self.findings],
@@ -256,7 +266,11 @@ class PostDp2ScopeAssessmentResult:
                 ],
             },
             "dp5": {
-                "status": "BLOCKED_BEFORE_STAGE_TRANSITION",
+                "status": (
+                    "OBSERVE_ADOPTED_STRICT_LIFECYCLE_NOT_COMPLETE"
+                    if self.dp5_stage_record.stage_accepted("observe")
+                    else "BLOCKED_BEFORE_STAGE_TRANSITION"
+                ),
                 "blockers": list(self.dp5_blockers),
                 "strict_lifecycle_stages": [stage.as_dict() for stage in self.strict_lifecycle_stages],
             },
@@ -269,6 +283,7 @@ def evaluate_post_dp2_scope_assessment(
     *,
     readiness_path: Path | str = DEFAULT_READINESS_PATH,
     adjudication_record_path: Path | str = DEFAULT_DP3_DP4_ADJUDICATION_RECORD_PATH,
+    dp5_stage_record_path: Path | str = DEFAULT_DP5_STAGE_RECORD_PATH,
     validation_ref: str | None = None,
 ) -> PostDp2ScopeAssessmentResult:
     base = Path(root).resolve()
@@ -289,10 +304,15 @@ def evaluate_post_dp2_scope_assessment(
         record_path=adjudication_record_path,
         validation_ref=resolved_validation_ref,
     )
+    dp5_stage_record = evaluate_dp5_stage_record(
+        base,
+        record_path=dp5_stage_record_path,
+        validation_ref=resolved_validation_ref,
+    )
 
     rollout_candidates = _rollout_candidates(base, selected_writer_status, adjudication)
     status_authority_candidates = _status_authority_candidates(base, adjudication)
-    strict_lifecycle_stages = _strict_lifecycle_stages(adjudication)
+    strict_lifecycle_stages = _strict_lifecycle_stages(adjudication, dp5_stage_record)
     dp2_scope = str(
         _mapping(readiness.data.get("dp2_entry_status")).get(
             "first_dp2_target_scope",
@@ -307,6 +327,7 @@ def evaluate_post_dp2_scope_assessment(
         dp2_implementation_percent=readiness.implementation_percent,
         dp2_scope=dp2_scope,
         adjudication_record=adjudication,
+        dp5_stage_record=dp5_stage_record,
         rollout_candidates=rollout_candidates,
         status_authority_candidates=status_authority_candidates,
         strict_lifecycle_stages=strict_lifecycle_stages,
@@ -575,7 +596,10 @@ def _dp4_blockers(adjudication: Dp3Dp4AdjudicationResult, candidate_id: str, fal
     return (fallback,)
 
 
-def _strict_lifecycle_stages(adjudication: Dp3Dp4AdjudicationResult) -> tuple[StrictLifecycleStage, ...]:
+def _strict_lifecycle_stages(
+    adjudication: Dp3Dp4AdjudicationResult,
+    dp5_stage: Dp5StageAdoptionResult,
+) -> tuple[StrictLifecycleStage, ...]:
     blockers = []
     if not adjudication.ok:
         blockers.append("accepted-dp3-and-dp4-results-missing")
@@ -586,8 +610,13 @@ def _strict_lifecycle_stages(adjudication: Dp3Dp4AdjudicationResult) -> tuple[St
         )
     )
     blocker_tuple = tuple(blockers)
+    observe = (
+        StrictLifecycleStage("observe", "ADOPTED_OBSERVE", ())
+        if dp5_stage.stage_accepted("observe")
+        else StrictLifecycleStage("observe", "BLOCKED_BEFORE_STAGE_TRANSITION", blocker_tuple)
+    )
     return (
-        StrictLifecycleStage("observe", "BLOCKED_BEFORE_STAGE_TRANSITION", blocker_tuple),
+        observe,
         StrictLifecycleStage("warn", "BLOCKED_BEFORE_STAGE_TRANSITION", blocker_tuple),
         StrictLifecycleStage("block-new", "BLOCKED_BEFORE_STAGE_TRANSITION", blocker_tuple),
         StrictLifecycleStage("strict", "BLOCKED_BEFORE_STAGE_TRANSITION", blocker_tuple),
