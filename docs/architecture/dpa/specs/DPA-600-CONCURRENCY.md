@@ -1,10 +1,10 @@
 # DPA-600 — Concurrency and Workflow Serialization
 
-Status: review-ready
+Status: stable
 
-Status-date: 2026-07-27
+Status-date: 2026-08-01
 
-Authority: normative DPA specification; review-ready after Package A primary review, Maintainer adjudication and secondary technical verification; not stable, not implementation evidence and not a main-repository conformance claim
+Authority: normative DPA specification; stable for the accepted Kit-side DP1-DP5 scope through `docs/architecture/evidence/dpa/assessment/DPA_STABLE_PROMOTION_RECORD_20260801.json`
 
 ## 1. Purpose
 
@@ -535,9 +535,9 @@ The following are invalid:
 24. automatic repair of stale target bytes outside the lifecycle;
 25. DPA Lab validation represented as main-repository runtime conformance.
 
-## 21. Review-ready criteria
+## 21. Stable criteria
 
-DPA-600 may become `review-ready` when:
+DPA-600 is `stable` for the accepted Kit-side DP1-DP5 scope when:
 
 1. local locking and cross-ref serialization boundaries are unambiguous;
 2. concurrency identity requirements are complete and consistent with DPA-300
@@ -557,8 +557,10 @@ DPA-600 may become `review-ready` when:
 11. diagrams are synchronized;
 12. repository-specific mechanisms remain exact-ref fenced;
 13. primary review, Maintainer adjudication and independent post-adjudication
-   verification are complete.
+   verification are complete;
+14. applicable concurrency, stale-plan, branch, pull-request, integration,
+   regeneration and workflow-serialization evidence is exact-ref recorded in
+   the Stable Promotion record.
 
-DPA-600 MUST NOT become `stable` before applicable concurrency, stale-plan,
-branch, pull-request, integration, regeneration and workflow-serialization
-Probes have evidence at an exact main-repository validation ref.
+Future workflow or target expansion requires fresh exact-ref evidence before it
+can inherit this stable scope.

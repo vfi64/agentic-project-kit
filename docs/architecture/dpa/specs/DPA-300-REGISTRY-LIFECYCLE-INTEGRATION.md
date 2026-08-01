@@ -1,10 +1,10 @@
 # DPA-300 — Registry and Lifecycle Integration
 
-Status: review-ready
+Status: stable
 
-Status-date: 2026-07-17
+Status-date: 2026-08-01
 
-Authority: normative DPA specification; review-ready lineage includes independent restructure-equivalence verification and explicit Maintainer ratification
+Authority: normative DPA specification; stable for the accepted Kit-side DP1-DP5 scope through `docs/architecture/evidence/dpa/assessment/DPA_STABLE_PROMOTION_RECORD_20260801.json`
 
 ## 1. Purpose
 
@@ -619,9 +619,9 @@ Detailed requirement, test, Probe, gate, evidence and rollback mappings are in `
 
 Primary decisions include DPA-ADR-001 through DPA-ADR-021.
 
-## 24. Review-ready exit criteria
+## 24. Stable exit criteria
 
-DPA-300 is `review-ready` when:
+DPA-300 is `stable` for the accepted Kit-side DP1-DP5 scope when:
 
 1. this contract, DPA-100 and DPA-200 are internally consistent;
 2. registry, partition, lifecycle, acceptance-state and recovery contracts are complete;
@@ -629,6 +629,11 @@ DPA-300 is `review-ready` when:
 4. diagrams match the contract;
 5. repository-specific claims remain exact-ref bounded;
 6. primary review, secondary verification, maintainer adjudication and independent post-adjudication verification are complete;
-7. no production form or implementation success is claimed.
+7. no production form or implementation success is claimed;
+8. applicable Probe and implementation evidence are exact-ref recorded in the
+   Stable Promotion record.
 
-The review-ready criteria are satisfied only together with the accepted restructure-equivalence verification and Maintainer ratification record. The ADR-021 bounded amendment requires DPA-500 post-adjudication verification to confirm synchronized meaning. Stability remains blocked on applicable DP1 Probe evidence and subsequent governed revalidation.
+The stable criteria are satisfied only together with the accepted
+restructure-equivalence verification, Maintainer ratification record, DPA-500
+post-adjudication verification and exact-ref Stable Promotion evidence. Future
+target expansion requires fresh governed revalidation.

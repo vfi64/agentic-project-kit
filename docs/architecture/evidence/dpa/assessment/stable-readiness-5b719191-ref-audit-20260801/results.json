@@ -1,0 +1,129 @@
+{
+  "claims": {
+    "external_repo_conformance_claimed": false,
+    "generated_outputs_manually_patched": false,
+    "kit_wide_dpa_conformance_claimed": true,
+    "production_mutation_performed": false,
+    "stable_dpa_claimed": true
+  },
+  "current_validation_ref": "5b7191919f935ea8f6ff8564fce5de01f56f08e6",
+  "decision_token": "DPA_STABLE_PROMOTION_AUTHORIZED",
+  "dp2_implementation_percent": 100,
+  "dp2_status": "DP2_AUTHORIZED",
+  "final_closeout_status": "VALID_DPA_FINAL_CLOSEOUT_RECORD",
+  "finding_count": 0,
+  "findings": [],
+  "foreign_repo_management": {
+    "automatic_external_repo_conformance_claimed": false,
+    "requires_fresh_per_repo_dpa_600_700_evidence": true,
+    "requires_fresh_per_repo_inventory": true,
+    "requires_maintainer_authorized_scope": true,
+    "status": "DPA_CAPABLE_WITH_FRESH_PER_REPO_ASSESSMENT"
+  },
+  "kind": "dpa_stable_readiness_check",
+  "post_dp2_status": "READY_FOR_FINAL_CLOSEOUT_RECORD",
+  "probe_statuses": {
+    "PROBE-002": "SATISFIED_FOR_CURRENT_KIT_REF",
+    "PROBE-003": "SATISFIED_FOR_CURRENT_KIT_REF",
+    "PROBE-004": "SATISFIED_FOR_CURRENT_KIT_REF",
+    "RENDERER": "SATISFIED_FOR_CURRENT_KIT_REF"
+  },
+  "promotion_model": "dpa-stable-promotion-v1",
+  "promotion_record_path": "docs/architecture/evidence/dpa/assessment/DPA_STABLE_PROMOTION_RECORD_20260801.json",
+  "promotion_record_present": true,
+  "record_status": "DPA_STABLE_PROMOTION_RECORDED",
+  "record_validation_ref": "7b6ea807491d63de408e22d8555b18f66a18f571",
+  "result_status": "VALID_DPA_STABLE_PROMOTION_RECORD",
+  "schema_version": 1,
+  "spec_statuses": [
+    {
+      "id": "DPA-000",
+      "path": "docs/architecture/dpa/specs/DPA-000-VISION.md",
+      "present": true,
+      "promotable": true,
+      "stable": true,
+      "status": "stable"
+    },
+    {
+      "id": "DPA-100",
+      "path": "docs/architecture/dpa/specs/DPA-100-FOUNDATIONS.md",
+      "present": true,
+      "promotable": true,
+      "stable": true,
+      "status": "stable"
+    },
+    {
+      "id": "DPA-200",
+      "path": "docs/architecture/dpa/specs/DPA-200-DOCUMENT-MODEL.md",
+      "present": true,
+      "promotable": true,
+      "stable": true,
+      "status": "stable"
+    },
+    {
+      "id": "DPA-200-FORM-MATRIX",
+      "path": "docs/architecture/dpa/specs/DPA-200-DOCUMENT-FORM-MATRIX.md",
+      "present": true,
+      "promotable": true,
+      "stable": true,
+      "status": "stable"
+    },
+    {
+      "id": "DPA-300",
+      "path": "docs/architecture/dpa/specs/DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md",
+      "present": true,
+      "promotable": true,
+      "stable": true,
+      "status": "stable"
+    },
+    {
+      "id": "DPA-400",
+      "path": "docs/architecture/dpa/specs/DPA-400-RENDERER-CONTRACT.md",
+      "present": true,
+      "promotable": true,
+      "stable": true,
+      "status": "stable"
+    },
+    {
+      "id": "DPA-500",
+      "path": "docs/architecture/dpa/specs/DPA-500-FRESHNESS-AND-GATES.md",
+      "present": true,
+      "promotable": true,
+      "stable": true,
+      "status": "stable"
+    },
+    {
+      "id": "DPA-600",
+      "path": "docs/architecture/dpa/specs/DPA-600-CONCURRENCY.md",
+      "present": true,
+      "promotable": true,
+      "stable": true,
+      "status": "stable"
+    },
+    {
+      "id": "DPA-700",
+      "path": "docs/architecture/dpa/specs/DPA-700-MIGRATION.md",
+      "present": true,
+      "promotable": true,
+      "stable": true,
+      "status": "stable"
+    },
+    {
+      "id": "DPA-800",
+      "path": "docs/architecture/dpa/specs/DPA-800-DP1-DP5.md",
+      "present": true,
+      "promotable": true,
+      "stable": true,
+      "status": "stable"
+    },
+    {
+      "id": "DPA-900",
+      "path": "docs/architecture/dpa/specs/DPA-900-FUTURE.md",
+      "present": true,
+      "promotable": true,
+      "stable": true,
+      "status": "stable"
+    }
+  ],
+  "strict_gate_status": "PASS"
+}

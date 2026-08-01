@@ -164,6 +164,16 @@ refresh PR were merged. The closeout record owns the bounded Kit-wide DPA
 conformance claim, while `stable_dpa_claimed`, `production_mutation_performed`
 and `generated_outputs_manually_patched` remain false.
 
+The current Stable Promotion record records validation ref
+`7b6ea807491d63de408e22d8555b18f66a18f571` and status
+`DPA_STABLE_PROMOTION_RECORDED`. It promotes DPA-000 through DPA-900 to stable
+for the accepted Kit-side DP1-DP5 implementation and evidence scope, validates
+with `agentic-kit dpa stable-readiness-check`, and keeps foreign-repository
+conformance unclaimed. Managing a foreign repository as an operating system
+requires fresh per-repository inventory, source-authority mapping, DPA-600
+evidence, DPA-700 evidence, exact refs and Maintainer-authorized scope before
+any conformance claim.
+
 ## Imported Probe Evidence
 
 - `probes/dp1-readonly-c788a8c5-20260727/` records read-only baseline evidence
@@ -305,6 +315,15 @@ and `generated_outputs_manually_patched` remain false.
   post-refresh strict gate with result `PASS`.
 - `assessment/dpa-final-closeout-check-dde89bf0-20260801/` records the final
   closeout check with result `VALID_DPA_FINAL_CLOSEOUT_RECORD`.
+- `assessment/stable-readiness-7b6ea807-pre-promotion-20260801/` records
+  readiness for Stable Promotion with zero findings before changing the DPA-200
+  through DPA-900 headers.
+- `assessment/stable-readiness-7b6ea807-post-promotion-20260801/` records the
+  bounded Stable Promotion check with result
+  `VALID_DPA_STABLE_PROMOTION_RECORD`.
+- `assessment/stable-readiness-5b719191-ref-audit-20260801/` records the
+  post-commit Stable Promotion ref audit with result
+  `VALID_DPA_STABLE_PROMOTION_RECORD`.
 
 These packages preserve their limitation language. Future execution must freeze
 current refs, record command manifest currency, retain cleanup evidence and

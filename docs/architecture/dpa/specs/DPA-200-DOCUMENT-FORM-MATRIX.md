@@ -1,7 +1,7 @@
 # DPA-200 — Document-Form Decision Matrix
 
-Status: review-ready
-Status-date: 2026-07-15
+Status: stable
+Status-date: 2026-08-01
 Owner: `specs/dpa/DPA-200-DOCUMENT-MODEL.md`
 Superseded-by: n/a
 

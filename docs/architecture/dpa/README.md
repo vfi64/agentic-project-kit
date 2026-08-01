@@ -1,8 +1,8 @@
 # Document Projection Architecture
 
-Status: probe-package-staged
+Status: stable-dpa-promoted
 
-Status-date: 2026-07-29
+Status-date: 2026-08-01
 
 Document class: architecture
 
@@ -17,9 +17,15 @@ selected detailed architecture package: specifications, accepted and deferred
 DPA decisions, traceability matrices and diagrams. DPA-IMPORT-3 imports Probe
 package staging material and selected DP1 evidence snapshots.
 
-This subtree introduces no runtime behavior change, no DP2 implementation, no
-full Probe PASS claim, no DPA stable claim and no main-repository conformance
-claim. The full Probe PASS claim boundary remains closed.
+This subtree now records bounded Kit-side DPA stable promotion for the accepted
+DP1-DP5 implementation scope. It does not perform production mutation, does not
+manually patch generated or command-updated outputs, does not claim full Probe
+PASS beyond the accepted current-Kit evidence families and does not claim
+automatic conformance for foreign repositories.
+
+The original Lab import boundary remains recorded as `no runtime behavior change`;
+Stable Promotion adds governed validation and status evidence, not a new
+production target mutation.
 
 ## Source and closeout evidence
 
@@ -37,8 +43,13 @@ The current source package is the DPA Lab PR carrying final pre-import closeout:
 - closeout token: `DPA_PRE_IMPORT_CLOSEOUT_COMPLETE`.
 
 The Lab records DPA-000 and DPA-100 as `stable`, and DPA-200 through DPA-900 as
-`review-ready`. Those statuses are Lab architecture statuses only; they do not
-make this Kit checkout DPA-conformant.
+`review-ready`. The current Kit branch separately promotes DPA-200 through
+DPA-900 to `stable` only for the accepted Kit-side DP1-DP5 scope, with exact-ref
+evidence in
+`docs/architecture/evidence/dpa/assessment/DPA_STABLE_PROMOTION_RECORD_20260801.json`.
+Foreign repository management requires fresh per-repository inventory, DPA-600
+and DPA-700 evidence, exact refs and Maintainer-authorized scope before
+conformance can be claimed.
 
 ## Current import boundary
 
@@ -66,15 +77,15 @@ slices.
 - `specs/README.md` — DPA specification file map.
 - `specs/DPA-000-VISION.md` — stable vision and invariants.
 - `specs/DPA-100-FOUNDATIONS.md` — stable terminology and authority model.
-- `specs/DPA-200-DOCUMENT-MODEL.md` — review-ready document model.
-- `specs/DPA-200-DOCUMENT-FORM-MATRIX.md` — review-ready document-form matrix.
-- `specs/DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md` — review-ready registry and lifecycle contract.
-- `specs/DPA-400-RENDERER-CONTRACT.md` — review-ready renderer contract.
-- `specs/DPA-500-FRESHNESS-AND-GATES.md` — review-ready freshness and gates contract.
-- `specs/DPA-600-CONCURRENCY.md` — review-ready concurrency and workflow serialization contract.
-- `specs/DPA-700-MIGRATION.md` — review-ready migration and rollback contract.
-- `specs/DPA-800-DP1-DP5.md` — review-ready DP1 through DP5 implementation-sequence contract.
-- `specs/DPA-900-FUTURE.md` — review-ready future evolution and review-economics contract.
+- `specs/DPA-200-DOCUMENT-MODEL.md` — stable document model.
+- `specs/DPA-200-DOCUMENT-FORM-MATRIX.md` — stable document-form matrix.
+- `specs/DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md` — stable registry and lifecycle contract.
+- `specs/DPA-400-RENDERER-CONTRACT.md` — stable renderer contract.
+- `specs/DPA-500-FRESHNESS-AND-GATES.md` — stable freshness and gates contract.
+- `specs/DPA-600-CONCURRENCY.md` — stable concurrency and workflow serialization contract.
+- `specs/DPA-700-MIGRATION.md` — stable migration and rollback contract.
+- `specs/DPA-800-DP1-DP5.md` — stable DP1 through DP5 implementation-sequence contract.
+- `specs/DPA-900-FUTURE.md` — stable future evolution and review-economics contract.
 
 ### Decisions
 
@@ -145,6 +156,18 @@ The read-only wrapper `agentic-kit dpa readiness` validates that staged
 Assessment readiness record, reports the deterministic implementation
 percentage and shows the current DP2 authorization state without mutating
 repository files.
+
+The read-only wrapper `agentic-kit dpa stable-readiness-check` validates Stable
+DPA readiness and the bounded Stable Promotion record. Without a promotion
+record it reports readiness for stable promotion; with the record present it
+requires stable DPA-000 through DPA-900 headers, valid DP1-DP5 closeout,
+DP2 implementation percent `100`, satisfied Probe families, DP5 strict PASS and
+foreign-repository overclaim guards.
+
+The Stable Promotion record status is `DPA_STABLE_PROMOTION_RECORDED`; the
+validator reports `VALID_DPA_STABLE_PROMOTION_RECORD` when the bounded stable
+claim is structurally valid. Foreign-repository management remains
+`DPA_CAPABLE_WITH_FRESH_PER_REPO_ASSESSMENT`, not automatically conformant.
 
 The read-only wrapper `agentic-kit dpa readonly-probe-execution` executes only
 DP1 Probe fixture-manifest cases whose mutation scope is `READ_ONLY` and whose

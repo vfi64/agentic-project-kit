@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "kind": "dpa_stable_promotion_record",
+  "status": "DPA_STABLE_PROMOTION_RECORDED",
+  "status_date": "2026-08-01",
+  "validation_ref": "7b6ea807491d63de408e22d8555b18f66a18f571",
+  "maintainer": "Maintainer instruction recorded in Codex chat, 2026-08-01: make a plan for full DPA implementation and execute it autonomously; prior DPA work authority includes branches, PRs, CI, merge and post-merge closeout. Stable promotion is bounded to exact evidence and must not claim automatic foreign-repository conformance.",
+  "decision_token": "DPA_STABLE_PROMOTION_AUTHORIZED",
+  "stable_scope": {
+    "id": "DPA_STABLE_ACCEPTED_KIT_SCOPE",
+    "final_closeout_record": "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json",
+    "stable_readiness_evidence": "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+    "promoted_specs": [
+      {
+        "id": "DPA-000",
+        "path": "docs/architecture/dpa/specs/DPA-000-VISION.md",
+        "from_status": "stable",
+        "to_status": "stable",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+          "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json"
+        ]
+      },
+      {
+        "id": "DPA-100",
+        "path": "docs/architecture/dpa/specs/DPA-100-FOUNDATIONS.md",
+        "from_status": "stable",
+        "to_status": "stable",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+          "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json"
+        ]
+      },
+      {
+        "id": "DPA-200",
+        "path": "docs/architecture/dpa/specs/DPA-200-DOCUMENT-MODEL.md",
+        "from_status": "review-ready",
+        "to_status": "stable",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+          "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json"
+        ]
+      },
+      {
+        "id": "DPA-200-FORM-MATRIX",
+        "path": "docs/architecture/dpa/specs/DPA-200-DOCUMENT-FORM-MATRIX.md",
+        "from_status": "review-ready",
+        "to_status": "stable",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+          "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json"
+        ]
+      },
+      {
+        "id": "DPA-300",
+        "path": "docs/architecture/dpa/specs/DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md",
+        "from_status": "review-ready",
+        "to_status": "stable",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+          "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json"
+        ]
+      },
+      {
+        "id": "DPA-400",
+        "path": "docs/architecture/dpa/specs/DPA-400-RENDERER-CONTRACT.md",
+        "from_status": "review-ready",
+        "to_status": "stable",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+          "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json"
+        ]
+      },
+      {
+        "id": "DPA-500",
+        "path": "docs/architecture/dpa/specs/DPA-500-FRESHNESS-AND-GATES.md",
+        "from_status": "review-ready",
+        "to_status": "stable",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+          "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json"
+        ]
+      },
+      {
+        "id": "DPA-600",
+        "path": "docs/architecture/dpa/specs/DPA-600-CONCURRENCY.md",
+        "from_status": "review-ready",
+        "to_status": "stable",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+          "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json"
+        ]
+      },
+      {
+        "id": "DPA-700",
+        "path": "docs/architecture/dpa/specs/DPA-700-MIGRATION.md",
+        "from_status": "review-ready",
+        "to_status": "stable",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+          "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json"
+        ]
+      },
+      {
+        "id": "DPA-800",
+        "path": "docs/architecture/dpa/specs/DPA-800-DP1-DP5.md",
+        "from_status": "review-ready",
+        "to_status": "stable",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+          "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json"
+        ]
+      },
+      {
+        "id": "DPA-900",
+        "path": "docs/architecture/dpa/specs/DPA-900-FUTURE.md",
+        "from_status": "review-ready",
+        "to_status": "stable",
+        "evidence": [
+          "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+          "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json"
+        ]
+      }
+    ],
+    "evidence": [
+      "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+      "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+      "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
+      "docs/architecture/evidence/dpa/assessment/DP5_STRICT_STAGE_RECORD_20260801.json",
+      "docs/architecture/evidence/dpa/assessment/post-dp2-scope-6b061c65-final-ref-audit-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/dp5-strict-gate-6b061c65-final-ref-audit-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/dpa-final-closeout-check-6b061c65-ref-audit-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json",
+      "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/stable-readiness-5b719191-ref-audit-20260801/results.json"
+    ],
+    "limitations": [
+      "Stable DPA is bounded to the accepted Kit-side DP1-DP5 implementation and specification scope.",
+      "Stable DPA does not perform production mutation and does not manually patch generated or command-updated outputs.",
+      "Foreign repository management requires fresh per-repository inventory, source-authority mapping, DPA-600 evidence, DPA-700 evidence, exact refs and Maintainer-authorized scope before conformance can be claimed.",
+      "Future target expansion, migration, release or broader strict enforcement requires fresh exact-ref evidence."
+    ]
+  },
+  "criteria": {
+    "dpa_000_to_dpa_900_stable": true,
+    "dp2_selected_scope_implementation_percent": 100,
+    "final_closeout_result_status": "VALID_DPA_FINAL_CLOSEOUT_RECORD",
+    "post_dp2_kit_wide_dpa_status": "READY_FOR_FINAL_CLOSEOUT_RECORD",
+    "strict_gate_result_status": "PASS",
+    "stable_readiness_result_status": "READY_FOR_STABLE_DPA_PROMOTION",
+    "blocker_count": 0,
+    "warning_count": 0
+  },
+  "rollback": {
+    "tested_or_adjudicated": true,
+    "production_mutation_required": false,
+    "evidence": [
+      "docs/architecture/evidence/dpa/assessment/DP5_BLOCK_NEW_STAGE_RECORD_20260801.json",
+      "docs/architecture/evidence/dpa/assessment/DP5_STRICT_STAGE_RECORD_20260801.json",
+      "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json",
+      "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/stable-readiness-5b719191-ref-audit-20260801/results.json"
+    ],
+    "path": "Revert the Stable Promotion record and spec-status PR, restore DPA-200 through DPA-900 to review-ready if needed, then rerun agentic-kit dpa stable-readiness-check."
+  },
+  "external_repo_management": {
+    "status": "DPA_CAPABLE_WITH_FRESH_PER_REPO_ASSESSMENT",
+    "automatic_external_repo_conformance_claimed": false,
+    "requires_fresh_per_repo_inventory": true,
+    "requires_fresh_per_repo_dpa_600_700_evidence": true,
+    "requires_maintainer_authorized_scope": true
+  },
+  "documentation_sync": {
+    "required": true,
+    "surfaces": [
+      "README.md",
+      "docs/DOCUMENTATION_COVERAGE.yaml",
+      "docs/architecture/dpa/README.md",
+      "docs/architecture/dpa/specs/README.md",
+      "docs/architecture/evidence/dpa/README.md",
+      "docs/STATUS.md",
+      "docs/reference/agentic-kit-commands.json",
+      "docs/reference/AGENTIC_KIT_COMMANDS.md",
+      "AGENTS.md"
+    ]
+  },
+  "claims": {
+    "kit_wide_dpa_conformance_claimed": true,
+    "stable_dpa_claimed": true,
+    "production_mutation_performed": false,
+    "generated_outputs_manually_patched": false,
+    "external_repo_conformance_claimed": false,
+    "claim_scope": "accepted-kit-dpa-dp1-dp5-stable-implementation-scope"
+  }
+}

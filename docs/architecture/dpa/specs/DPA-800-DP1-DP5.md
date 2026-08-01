@@ -1,10 +1,10 @@
 # DPA-800 — DP1–DP5 Implementation Specification
 
-Status: review-ready
+Status: stable
 
-Status-date: 2026-07-27
+Status-date: 2026-08-01
 
-Authority: normative DPA specification; review-ready after Package B primary review, Maintainer adjudication and independent post-adjudication verification; not stable, not implementation evidence and not a main-repository conformance claim
+Authority: normative DPA specification; stable for the accepted Kit-side DP1-DP5 scope through `docs/architecture/evidence/dpa/assessment/DPA_STABLE_PROMOTION_RECORD_20260801.json`
 
 ## 1. Purpose
 
@@ -757,9 +757,9 @@ The following are invalid:
 26. command-generated or command-updated Kit output durably patched by hand
     instead of changing its source authority, generator or command contract.
 
-## 29. Review-ready criteria
+## 29. Stable criteria
 
-DPA-800 may become `review-ready` when:
+DPA-800 is `stable` for the accepted Kit-side DP1-DP5 scope when:
 
 1. DP1 through DP5 stage boundaries are complete;
 2. exact-ref identity classes are unambiguous;
@@ -776,8 +776,9 @@ DPA-800 may become `review-ready` when:
 11. diagrams are synchronized;
 12. repository-specific mechanisms remain exact-ref fenced;
 13. primary review, Maintainer adjudication and independent post-adjudication
-    verification are complete.
+    verification are complete;
+14. applicable DP1 through DP5 evidence, implementation and rollout records are
+    exact-ref recorded and adjudicated in the Stable Promotion record.
 
-DPA-800 MUST NOT become `stable` before applicable DP1 through DP5 evidence,
-implementation and rollout records exist at exact main-repository refs and have
-been adjudicated.
+Future rollout or target expansion requires fresh exact-ref evidence before it
+can inherit this stable scope.

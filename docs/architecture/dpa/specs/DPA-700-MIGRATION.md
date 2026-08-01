@@ -1,10 +1,10 @@
 # DPA-700 — Migration and Rollback
 
-Status: review-ready
+Status: stable
 
-Status-date: 2026-07-27
+Status-date: 2026-08-01
 
-Authority: normative DPA specification; review-ready after Package A primary review, Maintainer adjudication and secondary technical verification; not stable, not implementation evidence and not a main-repository conformance claim
+Authority: normative DPA specification; stable for the accepted Kit-side DP1-DP5 scope through `docs/architecture/evidence/dpa/assessment/DPA_STABLE_PROMOTION_RECORD_20260801.json`
 
 ## 1. Purpose
 
@@ -599,9 +599,9 @@ The following are invalid:
 26. `accepted` acceptance state retained over bytes restored without renderer
     reproducibility.
 
-## 26. Review-ready criteria
+## 26. Stable criteria
 
-DPA-700 may become `review-ready` when:
+DPA-700 is `stable` for the accepted Kit-side DP1-DP5 scope when:
 
 1. migration outcome hierarchy is complete and consistent with DPA-000 through
    DPA-600;
@@ -620,8 +620,10 @@ DPA-700 may become `review-ready` when:
    gates, evidence and rollback;
 13. diagrams are synchronized;
 14. primary review, Maintainer adjudication and independent post-adjudication
-   verification are complete.
+    verification are complete;
+15. applicable migration, rollback, writer, reader, renderer-version,
+    acceptance-state and interrupted-migration evidence is exact-ref recorded in
+    the Stable Promotion record.
 
-DPA-700 MUST NOT become `stable` before applicable migration, rollback, writer,
-reader, renderer-version, acceptance-state and interrupted-migration Probes have
-evidence at an exact main-repository validation ref.
+Future migration or target expansion requires fresh exact-ref evidence before it
+can inherit this stable scope.

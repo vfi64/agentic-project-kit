@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: f035eece4a3c
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 48a94c612311
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `243`
+- Command count: `244`
 
 ## Commands
 
@@ -1000,6 +1000,25 @@ Inspect Renderer Probe readiness without renderer conformance claims.
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
 | `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 | `require_full_evidence` | `TyperOption` | --require-full-evidence | `False` | `False` | Fail unless Renderer Probe full evidence is structurally satisfied. |
+
+### `agentic-kit dpa stable-readiness-check`
+
+- Safety: `BOUNDED`
+- When to use: Validate Stable-DPA readiness and the bounded Stable Promotion record.
+- Dry-run available: `True`
+
+Validate Stable-DPA readiness and the bounded Stable Promotion record.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/DPA_STABLE_PROMOTION_RECORD_20260801.json')` | DPA Stable Promotion record to inspect. |
+| `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact current ref to record instead of repository HEAD. |
+| `output` | `TyperOption` | --output | `False` |  | Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `require_ready` | `TyperOption` | --require-ready | `False` | `False` | Fail unless the current DPA state is ready for Stable Promotion or already stable. |
+| `require_stable` | `TyperOption` | --require-stable | `False` | `False` | Fail unless the Stable Promotion record is valid and DPA specs are stable. |
 
 ### `agentic-kit dpa wrt-ch001-evidence`
 

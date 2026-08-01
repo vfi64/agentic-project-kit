@@ -4910,6 +4910,138 @@
     {
       "dry_run_available": true,
       "group": "dpa",
+      "help": "Validate Stable-DPA readiness and the bounded Stable Promotion record.",
+      "name": "stable-readiness-check",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('docs/architecture/evidence/dpa/assessment/DPA_STABLE_PROMOTION_RECORD_20260801.json')",
+          "help": "DPA Stable Promotion record to inspect.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "record",
+          "opts": [
+            "--record"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional exact current ref to record instead of repository HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "validation_ref",
+          "opts": [
+            "--validation-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "output",
+          "opts": [
+            "--output"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write --output when supplied.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "output_json",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail unless the current DPA state is ready for Stable Promotion or already stable.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_ready",
+          "opts": [
+            "--require-ready"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Fail unless the Stable Promotion record is valid and DPA specs are stable.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "require_stable",
+          "opts": [
+            "--require-stable"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "dpa",
+        "stable-readiness-check"
+      ],
+      "qualified_name": "agentic-kit dpa stable-readiness-check",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "dpa"
+      ],
+      "when_to_use": "Validate Stable-DPA readiness and the bounded Stable Promotion record."
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
       "help": "Observe a WRT-CH-001 admin refresh PR without claiming disposable fixture PASS.",
       "name": "wrt-ch001-evidence",
       "params": [
@@ -16487,7 +16619,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "f035eece4a3c",
+    "manifest_sha": "48a94c612311",
     "schema_version": 1
   },
   "schema_version": 2,

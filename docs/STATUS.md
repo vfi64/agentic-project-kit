@@ -9,8 +9,11 @@ Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
 Current verified main: `61f96822` (`Harden DPA final closeout refs (#1975)`).
 Latest substantive work: PR #1975 (`Harden DPA final closeout refs (#1975)`).
+Current governed slice: `codex/dpa-stable-readiness` records bounded Stable-DPA
+promotion readiness and promotion evidence; not merged yet.
 Post-merge handoff status: PASS/NOOP after PR #1975 administrative refresh.
-Next safe step: continue from fresh main with the next planned governed slice.
+Next safe step: complete Stable-DPA PR validation, merge, then run transfer
+post-merge closeout and a generated handoff refresh if required.
 
 ## Historical State Snapshots
 
@@ -402,4 +405,13 @@ Current administrative handoff refresh state is `979825da` (`Remove ns dev go up
 Current administrative handoff refresh state is `ae066495` (`Refresh handoff state after PR1730 (#1731)`). The next substantive slice must be created from fresh main.
 ## Operational documentation refresh state after PR #1975
 
-Current administrative handoff refresh state is `61f96822` (`Harden DPA final closeout refs (#1975)`). Continue next only after this post-PR1975 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `7b6ea807` (`Refresh handoff state after PR1975 (#1976)`). The Stable-DPA promotion slice was created from fresh main after this refresh.
+
+## Stable-DPA promotion slice
+
+Current work branch `codex/dpa-stable-readiness` adds
+`agentic-kit dpa stable-readiness-check`, records Stable Promotion evidence and
+promotes DPA-000 through DPA-900 to stable for the accepted Kit-side DP1-DP5
+scope. It does not claim automatic foreign-repository conformance; each managed
+foreign repository still requires fresh per-repo inventory, DPA-600 evidence,
+DPA-700 evidence, exact refs and Maintainer-authorized scope.

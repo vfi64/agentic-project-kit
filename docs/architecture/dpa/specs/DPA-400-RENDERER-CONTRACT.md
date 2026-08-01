@@ -1,8 +1,8 @@
 # DPA-400 — Renderer Contract
 
-Status: review-ready
-Status-date: 2026-07-17
-Authority: normative DPA specification; review-ready after independent post-adjudication verification at `6050d0664d9c1ac8bd1a2eb9d6409593046ede9c`
+Status: stable
+Status-date: 2026-08-01
+Authority: normative DPA specification; stable for the accepted Kit-side DP1-DP5 scope through `docs/architecture/evidence/dpa/assessment/DPA_STABLE_PROMOTION_RECORD_20260801.json`
 
 ## 1. Purpose
 
@@ -522,15 +522,18 @@ The following are invalid:
 24. template or formatting input enabling code execution, import, traversal or shell expansion;
 25. capability conformance claimed without the mandatory invocation boundary and negative-test evidence.
 
-## 22. Review-ready criteria
+## 22. Stable criteria
 
-DPA-400 may become `review-ready` when:
+DPA-400 is `stable` for the accepted Kit-side DP1-DP5 scope when:
 
 1. its authority boundary is consistent with DPA-000 through DPA-300;
 2. identity, input, output, purity, determinism and failure contracts are complete;
 3. every requirement is traceable to invariants, decisions, tests, later gates, evidence and rollback;
 4. diagrams are synchronized with the normative text;
 5. repository-specific implementation statements remain exact-ref fenced;
-6. primary review, secondary verification, maintainer adjudication and required post-adjudication verification are complete.
+6. primary review, secondary verification, maintainer adjudication and required post-adjudication verification are complete;
+7. relevant renderer compatibility and purity evidence is exact-ref recorded in
+   the Stable Promotion record.
 
-DPA-400 MUST NOT become `stable` before relevant renderer compatibility and purity Probes have evidence at an exact main-repository validation ref.
+Future renderer or target expansion requires fresh exact-ref evidence before it
+can inherit this stable scope.

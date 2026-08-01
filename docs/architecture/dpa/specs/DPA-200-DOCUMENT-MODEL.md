@@ -1,7 +1,7 @@
 # DPA-200 — Document Model
 
-Status: review-ready
-Status-date: 2026-07-15
+Status: stable
+Status-date: 2026-08-01
 Superseded-by: n/a
 
 ## 1. Purpose
@@ -302,9 +302,9 @@ The following remain `NEEDS_MAIN_REPO_VALIDATION`:
 
 Early DP1 Discovery may inventory these facts but may not decide sufficiency or conformance.
 
-## 16. Review-ready assessment
+## 16. Stable assessment
 
-DPA-200 is `review-ready` because:
+DPA-200 is `stable` for the accepted Kit-side DP1-DP5 scope because:
 
 - every primary form has a unique classifier;
 - authority and ownership include partition bytes;
@@ -313,6 +313,10 @@ DPA-200 is `review-ready` because:
 - one normative invalid-state catalog exists;
 - tests, gates, evidence and rollback are traceable;
 - no production form is preselected;
-- primary review, secondary verification and maintainer adjudication are complete.
+- primary review, secondary verification and maintainer adjudication are complete;
+- bounded post-adjudication verification is recorded in the Stable Promotion
+  record at
+  `docs/architecture/evidence/dpa/assessment/DPA_STABLE_PROMOTION_RECORD_20260801.json`.
 
-A bounded post-adjudication verification is still required before `stable`.
+Future target expansion still requires fresh exact-ref evidence before it can
+inherit this stable scope.
