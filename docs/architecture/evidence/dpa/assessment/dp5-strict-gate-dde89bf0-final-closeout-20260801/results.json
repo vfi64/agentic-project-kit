@@ -1,0 +1,20 @@
+{
+  "active_stage": "strict",
+  "blocker_count": 0,
+  "claims": {
+    "generated_outputs_manually_patched": false,
+    "kit_wide_dpa_conformance_claimed": false,
+    "production_mutation_performed": false,
+    "stable_dpa_claimed": false,
+    "strict_stage_active": true
+  },
+  "current_kit_wide_status": "READY_FOR_FINAL_CLOSEOUT_RECORD",
+  "current_validation_ref": "dde89bf09ac8359b28ac045b5d091b5f6324a98d",
+  "final_closeout_ready": true,
+  "finding_count": 0,
+  "findings": [],
+  "kind": "dpa_dp5_strict_gate",
+  "result_status": "PASS",
+  "schema_version": 1,
+  "warning_count": 0
+}

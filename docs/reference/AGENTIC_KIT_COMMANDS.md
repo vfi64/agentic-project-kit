@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: c66426f3ddf0
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: f035eece4a3c
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `242`
+- Command count: `243`
 
 ## Commands
 
@@ -816,6 +816,24 @@ Block all configured DP5 noncompliance in the accepted DPA scope.
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
 | `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 | `require_pass` | `TyperOption` | --require-pass | `False` | `False` | Fail unless strict has zero configured noncompliance in the accepted DPA scope. |
+
+### `agentic-kit dpa final-closeout-check`
+
+- Safety: `BOUNDED`
+- When to use: Validate the bounded DP1-DP5 final closeout record.
+- Dry-run available: `True`
+
+Validate the bounded DP1-DP5 final closeout record.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `record` | `TyperOption` | --record | `False` | `PosixPath('docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json')` | DPA final closeout record to inspect. |
+| `validation_ref` | `TyperOption` | --validation-ref | `False` |  | Optional exact current ref to record instead of repository HEAD. |
+| `output` | `TyperOption` | --output | `False` |  | Optional DPA Assessment evidence JSON path under docs/architecture/evidence/dpa/assessment/. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write --output when supplied. |
+| `output_json` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `require_valid` | `TyperOption` | --require-valid | `False` | `False` | Fail unless the final closeout record is structurally valid. |
 
 ### `agentic-kit dpa fixture-evidence`
 

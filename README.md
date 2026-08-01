@@ -363,6 +363,7 @@ Quick command guide:
 - `agentic-kit dpa dp5-stage-check`: validate the bounded DP5 stage record; the current default is strict for the accepted post-DP2 DP3/DP4 scope.
 - `agentic-kit dpa dp5-block-new-gate`: fail when current DPA scope nonconformance introduces items outside the accepted warn-stage baseline.
 - `agentic-kit dpa dp5-strict-gate`: fail when any configured noncompliance remains in the accepted DPA scope before final closeout.
+- `agentic-kit dpa final-closeout-check`: validate the final DP1-DP5 closeout record that owns the bounded Kit-wide DPA conformance claim while leaving stable DPA unclaimed.
 - `agentic-kit dpa dp2-decision-readiness`: prepare the DP2 decision package without recording Maintainer Assessment or authorization.
 - `agentic-kit dpa maintainer-record-check`: validate a DP2 Maintainer Assessment record or blocked template without authorizing DP2.
 - `agentic-kit dpa probe-002-readiness`: inspect PROBE-002 lifecycle and selected-writer readiness, optionally writing bounded DPA probe evidence under `docs/architecture/evidence/dpa/probes/`.
