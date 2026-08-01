@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `b27ce0ae14ced5267d9153a04c65752677bef2b8` (`b27ce0ae`), after `Record DPA final closeout (#1973)`.
-Last substantive work state is `b27ce0ae14ced5267d9153a04c65752677bef2b8` (`b27ce0ae`), after `Record DPA final closeout (#1973)`.
+Current verified main/admin HEAD is `61f968228e51296c15e05cb66e1e0b4bbe7d7b78` (`61f96822`), after `Harden DPA final closeout refs (#1975)`.
+Last substantive work state is `61f968228e51296c15e05cb66e1e0b4bbe7d7b78` (`61f96822`), after `Harden DPA final closeout refs (#1975)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b27ce0ae14ced5267d9153a04c65752677bef2b8
-  short: b27ce0ae
-  subject: Record DPA final closeout (#1973)
+  full: 61f968228e51296c15e05cb66e1e0b4bbe7d7b78
+  short: 61f96822
+  subject: Harden DPA final closeout refs (#1975)
 last_substantive_work_state:
-  full: b27ce0ae14ced5267d9153a04c65752677bef2b8
-  short: b27ce0ae
-  subject: Record DPA final closeout (#1973)
+  full: 61f968228e51296c15e05cb66e1e0b4bbe7d7b78
+  short: 61f96822
+  subject: Harden DPA final closeout refs (#1975)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
