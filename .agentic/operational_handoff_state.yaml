@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 2331c848a80457292dcec7d0b500f9b42d0e6f47
-  short: 2331c848
-  subject: Add DPA repo adoption assessment (#1979)
+  full: 6803984fcaf3ea93f81fabbad724a54c0208e761
+  short: 6803984f
+  subject: Add workspace DPA intake orchestrator (#1981)
 last_substantive_work_state:
-  full: 2331c848a80457292dcec7d0b500f9b42d0e6f47
-  short: 2331c848
-  subject: Add DPA repo adoption assessment (#1979)
+  full: 6803984fcaf3ea93f81fabbad724a54c0208e761
+  short: 6803984f
+  subject: Add workspace DPA intake orchestrator (#1981)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

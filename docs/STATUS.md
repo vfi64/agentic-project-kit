@@ -7,13 +7,13 @@ Current verified release: 0.4.13.
 Current release tag: v0.4.13.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
-Current verified main: `2331c848` (`Add DPA repo adoption assessment (#1979)`).
-Latest substantive work: PR #1979 (`Add DPA repo adoption assessment (#1979)`).
+Current verified main: `6803984f` (`Add workspace DPA intake orchestrator (#1981)`).
+Latest substantive work: PR #1981 (`Add workspace DPA intake orchestrator (#1981)`).
 Current governed slice: `codex/dpa-workspace-intake-orchestrator` automates the
 deterministic workspace-level DPA intake sequence for foreign or newly initialized
 repositories.
-Post-merge handoff status: PASS/NOOP after PR #1979 administrative refresh (#1980).
-Next safe step: complete the workspace DPA intake orchestration slice, then run
+Post-merge handoff status: PASS/NOOP after PR #1981 administrative refresh.
+Next safe step: continue from fresh main with the next planned governed slice.
 post-merge closeout and a generated handoff refresh if required.
 
 ## Historical State Snapshots
@@ -416,6 +416,6 @@ promotes DPA-000 through DPA-900 to stable for the accepted Kit-side DP1-DP5
 scope. It does not claim automatic foreign-repository conformance; each managed
 foreign repository still requires fresh per-repo inventory, DPA-600 evidence,
 DPA-700 evidence, exact refs and Maintainer-authorized scope.
-## Operational documentation refresh state after PR #1979
+## Operational documentation refresh state after PR #1981
 
-Current administrative handoff refresh state is `2331c848` (`Add DPA repo adoption assessment (#1979)`). Continue next only after this post-PR1979 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `6803984f` (`Add workspace DPA intake orchestrator (#1981)`). Continue next only after this post-PR1981 refresh is committed and merged; the next substantive slice must be created from fresh main.
