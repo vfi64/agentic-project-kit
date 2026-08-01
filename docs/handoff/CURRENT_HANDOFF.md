@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `644f470a42e9c1970f3ace966abf13dd5210d90f` (`644f470a`), after `Classify successor handoff projections for DPA (#1959)`.
-Last substantive work state is `644f470a42e9c1970f3ace966abf13dd5210d90f` (`644f470a`), after `Classify successor handoff projections for DPA (#1959)`.
+Current verified main/admin HEAD is `0fdc3415ca3eea96265d15f91254bf104c1bfe6c` (`0fdc3415`), after `Add DPA post-DP2 scope assessment (#1961)`.
+Last substantive work state is `0fdc3415ca3eea96265d15f91254bf104c1bfe6c` (`0fdc3415`), after `Add DPA post-DP2 scope assessment (#1961)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
