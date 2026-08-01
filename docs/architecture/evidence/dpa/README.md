@@ -321,6 +321,9 @@ any conformance claim.
 - `assessment/stable-readiness-7b6ea807-post-promotion-20260801/` records the
   bounded Stable Promotion check with result
   `VALID_DPA_STABLE_PROMOTION_RECORD`.
+- `assessment/stable-readiness-5b719191-ref-audit-20260801/` records the
+  post-commit Stable Promotion ref audit with result
+  `VALID_DPA_STABLE_PROMOTION_RECORD`.
 
 These packages preserve their limitation language. Future execution must freeze
 current refs, record command manifest currency, retain cleanup evidence and

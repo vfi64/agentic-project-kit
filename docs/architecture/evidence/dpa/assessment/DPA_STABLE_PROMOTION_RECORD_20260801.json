@@ -131,7 +131,8 @@
       "docs/architecture/evidence/dpa/assessment/dp5-strict-gate-6b061c65-final-ref-audit-20260801/results.json",
       "docs/architecture/evidence/dpa/assessment/dpa-final-closeout-check-6b061c65-ref-audit-20260801/results.json",
       "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json",
-      "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json"
+      "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/stable-readiness-5b719191-ref-audit-20260801/results.json"
     ],
     "limitations": [
       "Stable DPA is bounded to the accepted Kit-side DP1-DP5 implementation and specification scope.",
@@ -157,7 +158,8 @@
       "docs/architecture/evidence/dpa/assessment/DP5_BLOCK_NEW_STAGE_RECORD_20260801.json",
       "docs/architecture/evidence/dpa/assessment/DP5_STRICT_STAGE_RECORD_20260801.json",
       "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json",
-      "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json"
+      "docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-pre-promotion-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/stable-readiness-5b719191-ref-audit-20260801/results.json"
     ],
     "path": "Revert the Stable Promotion record and spec-status PR, restore DPA-200 through DPA-900 to review-ready if needed, then rerun agentic-kit dpa stable-readiness-check."
   },
