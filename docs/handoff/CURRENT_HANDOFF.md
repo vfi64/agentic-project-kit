@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `82635e179d500e86f928452068a9d5273bd06a2e` (`82635e17`), after `Adopt DPA DP5 block-new stage (#1969)`.
-Last substantive work state is `82635e179d500e86f928452068a9d5273bd06a2e` (`82635e17`), after `Adopt DPA DP5 block-new stage (#1969)`.
+Current verified main/admin HEAD is `39e5a5341bf9b24c0860db18bb1ba6bf43e6d9e1` (`39e5a534`), after `Adopt DPA DP5 strict stage (#1971)`.
+Last substantive work state is `39e5a5341bf9b24c0860db18bb1ba6bf43e6d9e1` (`39e5a534`), after `Adopt DPA DP5 strict stage (#1971)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
