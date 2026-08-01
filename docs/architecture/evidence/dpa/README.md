@@ -156,6 +156,14 @@ adopted, blocker count is 0, warning count is 0 and the strict gate records
 `PASS`. This is readiness for a separate final closeout record only; it does not
 claim Kit-wide DPA conformance or stable DPA.
 
+The current DPA final closeout record records validation ref
+`dde89bf09ac8359b28ac045b5d091b5f6324a98d` and status
+`DPA_DP3_DP5_FINAL_CLOSEOUT_RECORDED`. It validates the accepted DP1-DP5
+implementation scope after the DP5 strict-stage PR and generated handoff
+refresh PR were merged. The closeout record owns the bounded Kit-wide DPA
+conformance claim, while `stable_dpa_claimed`, `production_mutation_performed`
+and `generated_outputs_manually_patched` remain false.
+
 ## Imported Probe Evidence
 
 - `probes/dp1-readonly-c788a8c5-20260727/` records read-only baseline evidence
@@ -291,6 +299,12 @@ claim Kit-wide DPA conformance or stable DPA.
   post-strict assessment with `READY_FOR_FINAL_CLOSEOUT_RECORD`.
 - `assessment/dp5-strict-gate-1ba85b72-20260801/` records the bounded strict
   gate with result `PASS`, zero blockers and final-closeout readiness.
+- `assessment/post-dp2-scope-dde89bf0-final-closeout-20260801/` records the
+  post-refresh final-closeout input assessment with `READY_FOR_FINAL_CLOSEOUT_RECORD`.
+- `assessment/dp5-strict-gate-dde89bf0-final-closeout-20260801/` records the
+  post-refresh strict gate with result `PASS`.
+- `assessment/dpa-final-closeout-check-dde89bf0-20260801/` records the final
+  closeout check with result `VALID_DPA_FINAL_CLOSEOUT_RECORD`.
 
 These packages preserve their limitation language. Future execution must freeze
 current refs, record command manifest currency, retain cleanup evidence and

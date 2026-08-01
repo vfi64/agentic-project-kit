@@ -1175,6 +1175,34 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable DP5 strict gate result; final_closeout_ready true without conformance claim.
+  - path: docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json
+    class: evidence/log
+    owner: maintainers
+    notes: Final DP1-DP5 closeout record; bounded Kit-wide DPA conformance claimed and stable DPA unclaimed.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-dde89bf0-final-closeout-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Final-closeout post-DP2 assessment package summary.
+  - path: docs/architecture/evidence/dpa/assessment/post-dp2-scope-dde89bf0-final-closeout-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable final-closeout post-DP2 assessment; READY_FOR_FINAL_CLOSEOUT_RECORD.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-strict-gate-dde89bf0-final-closeout-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Final-closeout DP5 strict gate package summary.
+  - path: docs/architecture/evidence/dpa/assessment/dp5-strict-gate-dde89bf0-final-closeout-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable final-closeout DP5 strict gate result; PASS with zero blockers.
+  - path: docs/architecture/evidence/dpa/assessment/dpa-final-closeout-check-dde89bf0-20260801/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: DPA final closeout check package summary.
+  - path: docs/architecture/evidence/dpa/assessment/dpa-final-closeout-check-dde89bf0-20260801/results.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable final closeout validation result; VALID_DPA_FINAL_CLOSEOUT_RECORD.
   - path: docs/architecture/evidence/dpa/probes/dp1-readonly-c788a8c5-20260727/README.md
     class: evidence/log
     owner: maintainers

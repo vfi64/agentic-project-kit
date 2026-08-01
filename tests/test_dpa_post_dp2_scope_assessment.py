@@ -20,6 +20,10 @@ from agentic_project_kit.dpa_dp5_stage_adoption import (
     DEFAULT_DP5_STAGE_RECORD_PATH,
     evaluate_dp5_stage_record,
 )
+from agentic_project_kit.dpa_final_closeout import (
+    DEFAULT_DPA_FINAL_CLOSEOUT_RECORD_PATH,
+    evaluate_dpa_final_closeout_record,
+)
 from agentic_project_kit.dpa_post_dp2_scope_assessment import (
     evaluate_post_dp2_scope_assessment,
 )
@@ -318,6 +322,87 @@ def _write_valid_dp5_stage_record(root: Path, *, stage: str = "observe") -> Path
         },
     )
     return stage_path
+
+
+def _write_valid_final_closeout_record(root: Path) -> Path:
+    _write_valid_dp3_dp4_adjudication_record(root)
+    warn_record = _write_valid_dp5_stage_record(root, stage="warn")
+    warn = evaluate_post_dp2_scope_assessment(
+        root,
+        dp5_stage_record_path=warn_record,
+        validation_ref="test-ref",
+    )
+    _write(root / DEFAULT_DP5_BLOCK_NEW_BASELINE_PATH, warn.as_dict())
+    _write_valid_dp5_stage_record(root, stage="strict")
+    post_path = Path("docs/architecture/evidence/dpa/assessment/post-dp2-final/results.json")
+    strict_gate_path = Path("docs/architecture/evidence/dpa/assessment/strict-gate-final/results.json")
+    post = evaluate_post_dp2_scope_assessment(root, validation_ref="test-ref")
+    strict = evaluate_dp5_strict_gate(root, validation_ref="test-ref")
+    _write(root / post_path, post.as_dict())
+    _write(root / strict_gate_path, strict.as_dict())
+    _write(
+        root / DEFAULT_DPA_FINAL_CLOSEOUT_RECORD_PATH,
+        {
+            "schema_version": 1,
+            "kind": "dpa_final_closeout_record",
+            "status": "DPA_DP3_DP5_FINAL_CLOSEOUT_RECORDED",
+            "status_date": "2026-08-01",
+            "validation_ref": "test-ref",
+            "maintainer": "test maintainer authorization",
+            "decision_token": "DPA_DP3_DP5_FINAL_CLOSEOUT_AUTHORIZED",
+            "closeout_scope": {
+                "id": "DPA_KIT_WIDE_DPA_DP1_DP5_ACCEPTED_SCOPE",
+                "current_validation_ref": "test-ref",
+                "dp1_readiness_record": DEFAULT_READINESS_PATH.as_posix(),
+                "dp2_maintainer_record": "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+                "dp3_dp4_adjudication_record": DEFAULT_DP3_DP4_ADJUDICATION_RECORD_PATH.as_posix(),
+                "dp5_strict_stage_record": DEFAULT_DP5_STAGE_RECORD_PATH.as_posix(),
+                "post_dp2_scope_assessment": post_path.as_posix(),
+                "dp5_strict_gate": strict_gate_path.as_posix(),
+                "evidence": [
+                    DEFAULT_READINESS_PATH.as_posix(),
+                    "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+                    DEFAULT_DP3_DP4_ADJUDICATION_RECORD_PATH.as_posix(),
+                    DEFAULT_DP5_STAGE_RECORD_PATH.as_posix(),
+                    post_path.as_posix(),
+                    strict_gate_path.as_posix(),
+                ],
+            },
+            "criteria": {
+                "dp2_selected_scope_implementation_percent": 100,
+                "post_dp2_kit_wide_dpa_status": "READY_FOR_FINAL_CLOSEOUT_RECORD",
+                "post_dp2_final_closeout_ready": True,
+                "blocker_count": 0,
+                "warning_count": 0,
+                "dp3_bounded_rollout_adjudicated": True,
+                "dp4_status_authority_adjudicated": True,
+                "dp5_strict_lifecycle_adopted": True,
+                "strict_gate_result_status": "PASS",
+                "strict_gate_active_stage": "strict",
+                "strict_gate_blocker_count": 0,
+            },
+            "rollback": {
+                "tested_or_adjudicated": True,
+                "evidence": [
+                    BLOCK_NEW_DP5_STAGE_RECORD_PATH.as_posix(),
+                    DEFAULT_DP5_STAGE_RECORD_PATH.as_posix(),
+                    strict_gate_path.as_posix(),
+                ],
+            },
+            "claims": {
+                "dp3_bounded_rollout_complete": True,
+                "dp4_status_authority_discovery_complete": True,
+                "dp5_strict_lifecycle_complete": True,
+                "strict_enforcement_claimed": True,
+                "kit_wide_dpa_conformance_claimed": True,
+                "stable_dpa_claimed": False,
+                "production_mutation_performed": False,
+                "generated_outputs_manually_patched": False,
+                "claim_scope": "accepted-kit-dpa-dp1-dp5-implementation-scope",
+            },
+        },
+    )
+    return DEFAULT_DPA_FINAL_CLOSEOUT_RECORD_PATH
 
 
 def _dp3_target(
@@ -893,6 +978,64 @@ def test_dp5_strict_gate_cli_reports_pass(tmp_path: Path) -> None:
     assert "DPA_DP5_STRICT_GATE" in result.stdout
     assert "STATUS=PASS" in result.stdout
     assert "FINAL_CLOSEOUT_READY=true" in result.stdout
+
+
+def test_dpa_final_closeout_record_reports_conformance_claim(tmp_path: Path) -> None:
+    _fixture_root(tmp_path)
+    _write_valid_final_closeout_record(tmp_path)
+
+    result = evaluate_dpa_final_closeout_record(tmp_path, validation_ref="test-ref")
+    payload = result.as_dict()
+
+    assert payload["result_status"] == "VALID_DPA_FINAL_CLOSEOUT_RECORD"
+    assert payload["post_dp2_status"] == "READY_FOR_FINAL_CLOSEOUT_RECORD"
+    assert payload["strict_gate_status"] == "PASS"
+    assert payload["dp2_implementation_percent"] == 100
+    assert payload["claims"]["kit_wide_dpa_conformance_claimed"] is True
+    assert payload["claims"]["stable_dpa_claimed"] is False
+
+
+def test_dpa_final_closeout_record_blocks_when_post_dp2_not_ready(tmp_path: Path) -> None:
+    _fixture_root(tmp_path)
+    record_path = _write_valid_final_closeout_record(tmp_path)
+    post_path = tmp_path / "docs/architecture/evidence/dpa/assessment/post-dp2-final/results.json"
+    post_payload = json.loads(post_path.read_text(encoding="utf-8"))
+    post_payload["blocker_count"] = 1
+    post_payload["final_closeout_ready"] = False
+    _write(post_path, post_payload)
+
+    result = evaluate_dpa_final_closeout_record(
+        tmp_path,
+        record_path=record_path,
+        validation_ref="test-ref",
+    )
+
+    assert result.result_status == "INVALID_DPA_FINAL_CLOSEOUT_RECORD"
+    assert any(finding.code == "post-dp2-not-closeout-ready" for finding in result.findings)
+
+
+def test_dpa_final_closeout_cli_reports_valid(tmp_path: Path) -> None:
+    _fixture_root(tmp_path)
+    _write_valid_final_closeout_record(tmp_path)
+
+    result = runner.invoke(
+        app,
+        [
+            "dpa",
+            "final-closeout-check",
+            "--root",
+            str(tmp_path),
+            "--validation-ref",
+            "test-ref",
+            "--require-valid",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert "DPA_FINAL_CLOSEOUT_CHECK" in result.stdout
+    assert "STATUS=VALID_DPA_FINAL_CLOSEOUT_RECORD" in result.stdout
+    assert "KIT_WIDE_DPA_CONFORMANCE_CLAIMED=true" in result.stdout
+    assert "STABLE_DPA_CLAIMED=false" in result.stdout
 
 
 def test_post_dp2_scope_assessment_blocks_missing_candidate_evidence(tmp_path: Path) -> None:

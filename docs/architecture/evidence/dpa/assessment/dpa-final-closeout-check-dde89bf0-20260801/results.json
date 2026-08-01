@@ -1,0 +1,23 @@
+{
+  "claims": {
+    "generated_outputs_manually_patched": false,
+    "kit_wide_dpa_conformance_claimed": true,
+    "production_mutation_performed": false,
+    "stable_dpa_claimed": false
+  },
+  "closeout_model": "dpa-final-closeout-v1",
+  "current_validation_ref": "dde89bf09ac8359b28ac045b5d091b5f6324a98d",
+  "decision_token": "DPA_DP3_DP5_FINAL_CLOSEOUT_AUTHORIZED",
+  "dp2_implementation_percent": 100,
+  "finding_count": 0,
+  "findings": [],
+  "kind": "dpa_final_closeout_check",
+  "post_dp2_status": "READY_FOR_FINAL_CLOSEOUT_RECORD",
+  "record_path": "docs/architecture/evidence/dpa/assessment/DPA_FINAL_CLOSEOUT_RECORD_20260801.json",
+  "record_present": true,
+  "record_status": "DPA_DP3_DP5_FINAL_CLOSEOUT_RECORDED",
+  "record_validation_ref": "dde89bf09ac8359b28ac045b5d091b5f6324a98d",
+  "result_status": "VALID_DPA_FINAL_CLOSEOUT_RECORD",
+  "schema_version": 1,
+  "strict_gate_status": "PASS"
+}

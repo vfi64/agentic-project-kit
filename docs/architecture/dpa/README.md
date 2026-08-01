@@ -255,10 +255,14 @@ preserved as rollback/baseline evidence. The read-only wrapper
 accepted warn-stage baseline and fails when new nonconformance appears. The
 read-only wrapper `agentic-kit dpa dp5-strict-gate` fails when any configured
 noncompliance remains in the accepted scope. The paired post-DP2 scope
-assessment now records `READY_FOR_FINAL_CLOSEOUT_RECORD`: blocker count is 0,
-warning count is 0 and `final_closeout_ready` is true. This is readiness for a
-separate final closeout record only; it is not a Kit-wide DPA conformance,
-stable DPA or production-mutation claim. The prior observe-stage assessment
+assessment records `READY_FOR_FINAL_CLOSEOUT_RECORD`: blocker count is 0,
+warning count is 0 and `final_closeout_ready` is true. The wrapper
+`agentic-kit dpa final-closeout-check` validates the final closeout record
+`DPA_DP3_DP5_FINAL_CLOSEOUT_RECORDED`; a passing check reports
+`VALID_DPA_FINAL_CLOSEOUT_RECORD`. That record owns the bounded Kit-wide DPA
+conformance claim for the accepted DP1-DP5 implementation scope. Stable DPA,
+production mutation and generated-output manual patching remain unclaimed. The
+prior observe-stage assessment
 status remains `DP5_OBSERVE_ADOPTED_STRICT_NOT_COMPLETE`, the prior warn-stage
 assessment status remains `DP5_WARN_ACTIVE_STRICT_NOT_COMPLETE`, and the prior
 block-new-stage assessment status remains
@@ -346,8 +350,9 @@ After this index, registry staging, Assessment-readiness, the lifecycle wrapper
 slice, WRT-CH-002 release-preparation routing, WRT-CH-003 post-release DOI
 closeout routing, WRT-CH-004 action-surface routing, WRT-CH-005 workspace-init
 classification, WRT-CH-006 generated-successor projection classification,
-the bounded DP3/DP4 adjudication record and DP5 observe/warn/block-new/strict-stage adoption,
-the next DPA work remains governed by the final-closeout restrictions:
+the bounded DP3/DP4 adjudication record, DP5 observe/warn/block-new/strict-stage adoption
+and the final closeout record, future DPA work remains governed by these
+restrictions:
 
 1. Preserve the DPA Lab source ref and Kit import baseline in every import slice.
 2. Keep WRT-CH-001 administrative refresh, WRT-CH-002 release preparation,
@@ -355,8 +360,9 @@ the next DPA work remains governed by the final-closeout restrictions:
    authority on the lifecycle-owned `CURRENT_HANDOFF.md` acceptance-state path.
 3. Keep the full WRT-CH-001 administrative refresh PR-flow evidence boundary
    separate until that observation is explicitly closed.
-4. Keep Kit-wide DPA conformance and stable-DPA claims closed unless a final
-   closeout record is explicitly produced from exact strict-stage evidence.
+4. Keep stable-DPA, target-expansion, production-mutation, release and future
+   migration claims closed unless fresh exact-ref evidence and Maintainer
+   authorization are recorded for that new scope.
 5. Re-run the fixture evidence package before any production runtime mutation if
    Probe manuals, fixture manifest, selected target, command manifest or DPA
    implementation code changes.

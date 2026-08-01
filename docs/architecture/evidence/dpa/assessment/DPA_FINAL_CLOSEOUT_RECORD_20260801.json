@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "kind": "dpa_final_closeout_record",
+  "status": "DPA_DP3_DP5_FINAL_CLOSEOUT_RECORDED",
+  "status_date": "2026-08-01",
+  "validation_ref": "dde89bf09ac8359b28ac045b5d091b5f6324a98d",
+  "maintainer": "Maintainer instruction recorded in Codex chat, 2026-08-01: continue DPA implementation autonomously through bounded DP3-DP5 slices, including branch, PR, CI, merge and post-merge closeout authority; produce a final conformance/closeout record only when DP3-DP5 criteria are truly satisfied by exact-ref evidence.",
+  "decision_token": "DPA_DP3_DP5_FINAL_CLOSEOUT_AUTHORIZED",
+  "closeout_scope": {
+    "id": "DPA_KIT_WIDE_DPA_DP1_DP5_ACCEPTED_SCOPE",
+    "current_validation_ref": "dde89bf09ac8359b28ac045b5d091b5f6324a98d",
+    "dp1_readiness_record": "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+    "dp2_maintainer_record": "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+    "dp3_dp4_adjudication_record": "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
+    "dp5_strict_stage_record": "docs/architecture/evidence/dpa/assessment/DP5_STRICT_STAGE_RECORD_20260801.json",
+    "post_dp2_scope_assessment": "docs/architecture/evidence/dpa/assessment/post-dp2-scope-dde89bf0-final-closeout-20260801/results.json",
+    "dp5_strict_gate": "docs/architecture/evidence/dpa/assessment/dp5-strict-gate-dde89bf0-final-closeout-20260801/results.json",
+    "accepted_prs": [
+      {
+        "pr": 1961,
+        "scope": "post-DP2 DP3-DP5 readiness/scope assessment wrapper",
+        "merge_commit": "19831e0e862e4da5e61ca1311dea0796250c15d9"
+      },
+      {
+        "pr": 1963,
+        "scope": "bounded DP3/DP4 adjudication record and check",
+        "merge_commit": "3fd8bcc8dfe89965b98a783954f36609836bd094"
+      },
+      {
+        "pr": 1965,
+        "scope": "DP5 observe stage",
+        "merge_commit": "d06eb275"
+      },
+      {
+        "pr": 1967,
+        "scope": "DP5 warn stage",
+        "merge_commit": "c71faa63"
+      },
+      {
+        "pr": 1969,
+        "scope": "DP5 block-new stage",
+        "merge_commit": "82635e17"
+      },
+      {
+        "pr": 1971,
+        "scope": "DP5 strict stage",
+        "merge_commit": "39e5a5341bf9b24c0860db18bb1ba6bf43e6d9e1"
+      },
+      {
+        "pr": 1972,
+        "scope": "generated handoff refresh after DP5 strict stage",
+        "merge_commit": "dde89bf09ac8359b28ac045b5d091b5f6324a98d"
+      }
+    ],
+    "evidence": [
+      "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+      "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
+      "docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json",
+      "docs/architecture/evidence/dpa/assessment/DP5_STRICT_STAGE_RECORD_20260801.json",
+      "docs/architecture/evidence/dpa/assessment/post-dp2-scope-dde89bf0-final-closeout-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/dp5-strict-gate-dde89bf0-final-closeout-20260801/results.json",
+      "docs/reports/handoff-packages/latest/validation_report.json",
+      "docs/reports/terminal/post-pr1971-successor-chat-handoff.md"
+    ],
+    "limitations": [
+      "The conformance claim is bounded to the accepted Kit-side DP1-DP5 implementation and evidence scope.",
+      "Stable DPA remains unclaimed because the imported DPA specifications retain their review-ready status.",
+      "The record does not perform production mutation and does not manually patch generated or command-updated outputs.",
+      "Future target expansion, migration, release or stable-promotion work requires fresh exact-ref evidence."
+    ]
+  },
+  "criteria": {
+    "dp2_selected_scope_implementation_percent": 100,
+    "post_dp2_kit_wide_dpa_status": "READY_FOR_FINAL_CLOSEOUT_RECORD",
+    "post_dp2_final_closeout_ready": true,
+    "blocker_count": 0,
+    "warning_count": 0,
+    "dp3_bounded_rollout_adjudicated": true,
+    "dp4_status_authority_adjudicated": true,
+    "dp5_strict_lifecycle_adopted": true,
+    "strict_gate_result_status": "PASS",
+    "strict_gate_active_stage": "strict",
+    "strict_gate_blocker_count": 0
+  },
+  "rollback": {
+    "tested_or_adjudicated": true,
+    "evidence": [
+      "docs/architecture/evidence/dpa/assessment/DP5_BLOCK_NEW_STAGE_RECORD_20260801.json",
+      "docs/architecture/evidence/dpa/assessment/DP5_STRICT_STAGE_RECORD_20260801.json",
+      "docs/architecture/evidence/dpa/assessment/dp5-block-new-gate-1ba85b72-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/post-dp2-scope-1ba85b72-pre-dp5-strict-20260801/results.json",
+      "docs/architecture/evidence/dpa/assessment/dp5-strict-gate-dde89bf0-final-closeout-20260801/results.json"
+    ],
+    "rationale": "Strict-stage rollback is record-selection back to block-new plus normal PR revert for the final closeout record. No production target mutation, release artifact, stable-promotion state or generated-output manual patch is introduced by this closeout."
+  },
+  "documentation_sync": {
+    "required": true,
+    "surfaces": [
+      "README.md",
+      "docs/architecture/dpa/README.md",
+      "docs/architecture/evidence/dpa/README.md",
+      "docs/DOCUMENTATION_COVERAGE.yaml",
+      "docs/DOCUMENTATION_REGISTRY.yaml",
+      "docs/handoff/CURRENT_HANDOFF.md",
+      "docs/STATUS.md"
+    ]
+  },
+  "claims": {
+    "dp3_bounded_rollout_complete": true,
+    "dp4_status_authority_discovery_complete": true,
+    "dp5_strict_lifecycle_complete": true,
+    "strict_enforcement_claimed": true,
+    "kit_wide_dpa_conformance_claimed": true,
+    "stable_dpa_claimed": false,
+    "production_mutation_performed": false,
+    "generated_outputs_manually_patched": false,
+    "claim_scope": "accepted-kit-dpa-dp1-dp5-implementation-scope"
+  }
+}
