@@ -192,6 +192,7 @@ rules:
     - agentic-kit chat session-start
     - agentic-kit commands sync-entrypoints
     - agentic-kit dpa readiness
+    - agentic-kit dpa post-dp2-scope-assessment
     - agentic-kit dpa dp2-decision-readiness
     - agentic-kit dpa maintainer-record-check
     - agentic-kit dpa probe-002-readiness
@@ -413,6 +414,10 @@ rules:
     - Probe package staging
     - DP1 Assessment readiness record
     - DP2_BLOCKED
+    - agentic-kit dpa post-dp2-scope-assessment
+    - DP2 selected self-hosting target-scope
+    - DP3_DP5_NOT_COMPLETE
+    - kit_wide_dpa_conformance_claimed
     - DP1 read-only baseline refresh
     - 46deae72c2d37ae18331203bc3a6be19c9a67f64
     - PASS_WITH_LIMITATIONS

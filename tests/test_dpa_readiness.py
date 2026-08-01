@@ -213,7 +213,9 @@ def test_dpa_readiness_cli_reports_authorized_without_failure() -> None:
 
     assert result.exit_code == 0
     assert "DPA readiness: DP2_AUTHORIZED" in result.stdout
-    assert "implementation: 100%" in result.stdout
+    assert "implementation scope: DP2_SELECTED_SELF_HOSTING_CURRENT_HANDOFF_SCOPE" in result.stdout
+    assert "DP2 implementation: 100%" in result.stdout
+    assert "kit-wide DPA: NOT_ASSESSED_BY_DP2_READINESS" in result.stdout
     assert "DP2 authorization evidence is structurally complete." in result.stdout
 
 

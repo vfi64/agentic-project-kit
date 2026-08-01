@@ -28,6 +28,8 @@ REQUIRED_FALSE_CLAIMS = (
     "generated_outputs_manually_patched",
 )
 PROGRESS_MODEL = "dpa-readiness-v1"
+IMPLEMENTATION_SCOPE = "DP2_SELECTED_SELF_HOSTING_CURRENT_HANDOFF_SCOPE"
+KIT_WIDE_DPA_STATUS = "NOT_ASSESSED_BY_DP2_READINESS"
 PROGRESS_WEIGHTS = (
     ("architecture_staging", "Architecture package staged in Kit", 25),
     ("dp1_evidence_staged", "DP1 evidence inputs staged", 10),
@@ -111,6 +113,10 @@ class DpaReadinessResult:
             "kind": "dpa_readiness_check",
             "status": self.status,
             "implementation_percent": self.implementation_percent,
+            "implementation_scope": IMPLEMENTATION_SCOPE,
+            "dp2_implementation_percent": self.implementation_percent,
+            "kit_wide_dpa_status": KIT_WIDE_DPA_STATUS,
+            "kit_wide_dpa_conformance_claimed": False,
             "progress_model": PROGRESS_MODEL,
             "path": self.path,
             "finding_count": len(self.findings),
@@ -192,7 +198,9 @@ def evaluate_dpa_readiness(
 def render_dpa_readiness_result(result: DpaReadinessResult) -> str:
     lines = [
         f"DPA readiness: {result.status}",
-        f"implementation: {result.implementation_percent}%",
+        f"implementation scope: {IMPLEMENTATION_SCOPE}",
+        f"DP2 implementation: {result.implementation_percent}%",
+        f"kit-wide DPA: {KIT_WIDE_DPA_STATUS}",
         f"record: {result.path}",
         f"findings: {len(result.findings)}",
         f"blockers: {len(result.blockers)}",
