@@ -5,6 +5,7 @@ branch: transfer/compare-local-remote-main-20260802
 safety: Read-only repository-state inspection through existing agentic-kit transfer status wrappers.
 label: compare-local-remote-main
 allow_blocked_start: true
+report_path: docs/reports/transfer_runs/compare-local-remote-main.json
 actions:
   - command:
       - ./.venv/bin/python
