@@ -1,5 +1,35 @@
-TRANSFER_REFRESH_LLM_CONTEXT_CARRIERS
-STATE=PASS
-OUTBOX=.agentic/transfer/outbox/last_result.txt
-LATEST=docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
-CHAT_REPLY=d | NEXT=LLM context carriers refreshed.
+TRANSFER_UPLINK_RUN=20260801T180046Z-f4e02fe1
+LABEL=post-merge-complete-after-pr1976
+COMMAND=agentic-kit transfer post-merge-complete --after-pr 1976
+RETURNCODE=0
+### STDOUT ###
+********************************** START SUMMARY ***********************************
+TRANSFER_POST_MERGE_COMPLETE
+
+STATE:                 PASS
+RETURNCODE:            0
+
+LIFECYCLE
+- AFTER_PR:            1976
+- STATE:               NOOP
+- REFRESH_PR:          
+- REFRESH_LOOP:        false
+
+REMOTE_REPORT
+- UPLOADED:            pending
+- REPORT_PATH:         
+
+LOCAL
+- REPORT_PATH:         
+
+NEXT:                  Post-merge lifecycle is complete; continue with the next planned slice.
+CHAT_REPLY:            d | NEXT=Post-merge lifecycle is complete; continue with the next planned slice.
+*********************************** END SUMMARY ************************************
+### STDERR ###
+
+### SUMMARY ###
+TRANSFER_REPORT_WRITTEN=done
+LOCAL_REPORT=docs/reports/transfer_runs/20260801T180046Z-f4e02fe1-post-merge-complete-after-pr1976.json
+FINAL_SIGNAL=d
+FINAL_NEXT=Post-merge lifecycle is complete; continue with the next planned slice.
+CHAT_REPLY=d | NEXT=Post-merge lifecycle is complete; continue with the next planned slice.
