@@ -62,8 +62,79 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
     "next_action": "Inspect the published remote-next diagnostic report before retrying.",
     "post_report_actions": {
       "attempted": true,
+      "branch": "transfer/compare-local-remote-main-20260802",
+      "commit_head": "dbb8ed1a",
+      "committed": true,
+      "final_head": "dbb8ed1a",
+      "final_status_short": "",
+      "paths": [
+        "docs/reports/transfer_runs/latest-remote-next-report.json",
+        "docs/reports/transfer_runs/latest-remote-next-report.log",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+      ],
+      "pushed": true,
+      "rule_ack_after_report_commit": {
+        "blocking_reasons": [],
+        "confirmed": true,
+        "head": "dbb8ed1a",
+        "path": ".agentic/rule_ack/current.json",
+        "present": true
+      },
+      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "status": "pending_until_report_files_are_written"
+      "steps": [
+        {
+          "argv": [
+            "git",
+            "add",
+            "-f",
+            "docs/reports/transfer_runs/latest-remote-next-report.json",
+            "docs/reports/transfer_runs/latest-remote-next-report.log",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+          ],
+          "name": "git_add_force_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        },
+        {
+          "argv": [
+            "git",
+            "commit",
+            "-m",
+            "Publish remote-next transfer report"
+          ],
+          "name": "git_commit_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "[transfer/compare-local-remote-main-20260802 dbb8ed1a] Publish remote-next transfer report\n 4 files changed, 82 insertions(+), 650 deletions(-)"
+        },
+        {
+          "argv": [
+            "./.venv/bin/agentic-kit",
+            "rules",
+            "acknowledge"
+          ],
+          "name": "rules_acknowledge_after_report_commit",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=68b25c2bcc9f9faeedbca6b3c86ef80d6d25c98461e3f8238494f692c98a6446\nrepo_head=dbb8ed1a\ndeclared_next_allowed_action=run_next_command"
+        },
+        {
+          "argv": [
+            "git",
+            "push",
+            "origin",
+            "transfer/compare-local-remote-main-20260802"
+          ],
+          "name": "git_push_report_commit",
+          "returncode": 0,
+          "stderr": "To https://github.com/vfi64/agentic-project-kit.git\n   160c6dbf..dbb8ed1a  transfer/compare-local-remote-main-20260802 -> transfer/compare-local-remote-main-20260802",
+          "stdout": ""
+        }
+      ]
     },
     "preflight": {
       "current_branch": "transfer/compare-local-remote-main-20260802",
@@ -391,11 +462,11 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-08-02T12:08:27.404546+00:00",
+    "generated_at_utc": "2026-08-02T12:08:29.674125+00:00",
     "generated_from_current_repo": true,
     "git_state": {
       "branch": "transfer/compare-local-remote-main-20260802",
-      "head": "160c6dbf7368e452a1980c4963b7b6cb8514ff79",
+      "head": "dbb8ed1a0e429f48dcc48c82ca474812275c329c",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -1003,10 +1074,10 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
     "repo_state": {
       "branch": "transfer/compare-local-remote-main-20260802",
       "dirty_status": "",
-      "head": "160c6dbf7368e452a1980c4963b7b6cb8514ff79",
+      "head": "dbb8ed1a0e429f48dcc48c82ca474812275c329c",
       "head_matches_upstream": true,
       "upstream": "origin/transfer/compare-local-remote-main-20260802",
-      "upstream_head": "160c6dbf7368e452a1980c4963b7b6cb8514ff79"
+      "upstream_head": "dbb8ed1a0e429f48dcc48c82ca474812275c329c"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -1097,8 +1168,79 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
     "next_action": "Inspect the published remote-next diagnostic report before retrying.",
     "post_report_actions": {
       "attempted": true,
+      "branch": "transfer/compare-local-remote-main-20260802",
+      "commit_head": "dbb8ed1a",
+      "committed": true,
+      "final_head": "dbb8ed1a",
+      "final_status_short": "",
+      "paths": [
+        "docs/reports/transfer_runs/latest-remote-next-report.json",
+        "docs/reports/transfer_runs/latest-remote-next-report.log",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+      ],
+      "pushed": true,
+      "rule_ack_after_report_commit": {
+        "blocking_reasons": [],
+        "confirmed": true,
+        "head": "dbb8ed1a",
+        "path": ".agentic/rule_ack/current.json",
+        "present": true
+      },
+      "rule_ack_refreshed_after_commit": true,
       "schema_version": 1,
-      "status": "pending_until_report_files_are_written"
+      "steps": [
+        {
+          "argv": [
+            "git",
+            "add",
+            "-f",
+            "docs/reports/transfer_runs/latest-remote-next-report.json",
+            "docs/reports/transfer_runs/latest-remote-next-report.log",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+          ],
+          "name": "git_add_force_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": ""
+        },
+        {
+          "argv": [
+            "git",
+            "commit",
+            "-m",
+            "Publish remote-next transfer report"
+          ],
+          "name": "git_commit_report_paths",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "[transfer/compare-local-remote-main-20260802 dbb8ed1a] Publish remote-next transfer report\n 4 files changed, 82 insertions(+), 650 deletions(-)"
+        },
+        {
+          "argv": [
+            "./.venv/bin/agentic-kit",
+            "rules",
+            "acknowledge"
+          ],
+          "name": "rules_acknowledge_after_report_commit",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "RULE_ACKNOWLEDGEMENT\npath=.agentic/rule_ack/current.json\nwritten=True\nschema_version=1\nsnapshot_id=68b25c2bcc9f9faeedbca6b3c86ef80d6d25c98461e3f8238494f692c98a6446\nrepo_head=dbb8ed1a\ndeclared_next_allowed_action=run_next_command"
+        },
+        {
+          "argv": [
+            "git",
+            "push",
+            "origin",
+            "transfer/compare-local-remote-main-20260802"
+          ],
+          "name": "git_push_report_commit",
+          "returncode": 0,
+          "stderr": "To https://github.com/vfi64/agentic-project-kit.git\n   160c6dbf..dbb8ed1a  transfer/compare-local-remote-main-20260802 -> transfer/compare-local-remote-main-20260802",
+          "stdout": ""
+        }
+      ]
     },
     "preflight": {
       "current_branch": "transfer/compare-local-remote-main-20260802",
@@ -1658,10 +1800,10 @@ NEXT=Inspect the published remote-next diagnostic report before retrying.
     "repo_state": {
       "branch": "transfer/compare-local-remote-main-20260802",
       "dirty_status": "",
-      "head": "160c6dbf7368e452a1980c4963b7b6cb8514ff79",
+      "head": "dbb8ed1a0e429f48dcc48c82ca474812275c329c",
       "head_matches_upstream": true,
       "upstream": "origin/transfer/compare-local-remote-main-20260802",
-      "upstream_head": "160c6dbf7368e452a1980c4963b7b6cb8514ff79"
+      "upstream_head": "dbb8ed1a0e429f48dcc48c82ca474812275c329c"
     },
     "schema_version": 1,
     "terminal_block_rules": {
