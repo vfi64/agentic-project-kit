@@ -1,0 +1,47 @@
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[3]
+
+
+def run_command(*args: str) -> dict[str, object]:
+    result = subprocess.run(
+        list(args),
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    return {
+        "argv": list(args),
+        "returncode": result.returncode,
+        "stdout": result.stdout,
+        "stderr": result.stderr,
+    }
+
+
+def main() -> int:
+    commands = [
+        run_command("./.venv/bin/agentic-kit", "transfer", "repo-status", "--json"),
+        run_command("./.venv/bin/agentic-kit", "transfer", "divergence-status", "--json"),
+        run_command("./.venv/bin/agentic-kit", "transfer", "repo-log", "--json"),
+    ]
+    returncode = 0 if all(item["returncode"] == 0 for item in commands) else 1
+    report = {
+        "kind": "local_remote_main_comparison",
+        "result_status": "PASS" if returncode == 0 else "FAIL",
+        "commands": commands,
+        "interpretation_required": True,
+    }
+    stream = sys.stdout if returncode == 0 else sys.stderr
+    print(json.dumps(report, indent=2, ensure_ascii=False), file=stream)
+    return returncode
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
