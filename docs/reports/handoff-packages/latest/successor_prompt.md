@@ -40,7 +40,7 @@ Critical rule IDs:
 
 - branch: `fix/revert-erroneous-transfer-reports`
 - head_matches_origin_main: `False`
-- worktree_clean: `True`
+- worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -404,13 +404,13 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "fix/revert-erroneous-transfer-reports",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f2384dc1a24d2edb8052128517e16c65562314b1",
+    "head": "a9620de794b9ea21bb4c54d29842d93d75f38a60",
     "head_matches_origin_main": false,
-    "head_short": "f2384dc1",
+    "head_short": "a9620de7",
     "local_path": "cd /path/to/",
     "origin_main": "19e7d40e990f7c597f51f62637c1505496e39734",
     "origin_main_short": "19e7d40e",
-    "worktree_clean": true
+    "worktree_clean": false
   }
 }
 ```
