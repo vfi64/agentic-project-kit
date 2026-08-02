@@ -1,0 +1,20 @@
+schema_version: 1
+id: compare-local-remote-main-20260802
+title: Compare local checkout with origin/main
+branch: transfer/compare-local-remote-main-20260802
+safety: Read-only repository-state inspection through existing agentic-kit transfer status wrappers.
+label: compare-local-remote-main
+allow_blocked_start: true
+steps:
+  - command:
+      - ./.venv/bin/python
+      - .agentic/transfer/inbox/next_command.py.txt
+publish_last_report: true
+commit:
+  message: Publish compare-local-remote-main transfer report
+  paths:
+    - docs/reports/transfer_runs
+    - docs/reports/terminal/transfer_handoff_reports
+push:
+  branch: transfer/compare-local-remote-main-20260802
+expected_chat_reply: g
