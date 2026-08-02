@@ -1,88 +1,15 @@
 {
   "derived_projection": true,
-  "kind": "local_to_llm_remote_next_report",
+  "kind": "local_to_llm_last_result",
   "last_result": {
-    "artifact_type": "transfer_remote_next_execution_report",
-    "blocked_message": "[Errno 2] No such file or directory: '.agentic/transfer/inbox/current.yaml'",
-    "branch": "main",
-    "chat_reply": "g",
-    "command_id": "remote-next-blocked",
-    "head": "475e4b0e",
-    "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
-    "local_run": {
-      "apply": null,
-      "command_id": "remote-next-blocked",
-      "inspect": {
-        "message": "[Errno 2] No such file or directory: '.agentic/transfer/inbox/current.yaml'",
-        "reasons": [
-          "missing_transfer_order"
-        ],
-        "result_status": "BLOCKED",
-        "returncode": 2,
-        "schema_version": 1
-      },
-      "next": "Inspect the published remote-next diagnostic report before retrying.",
-      "next_action": "Inspect the published remote-next diagnostic report before retrying.",
-      "result_status": "BLOCKED",
-      "returncode": 2,
-      "schema_version": 1,
-      "state": {
-        "branch": "main",
-        "dirty_state": {
-          "clean": true,
-          "staged_changes": [],
-          "status_short": "",
-          "unstaged_changes": [],
-          "untracked_files": []
-        },
-        "head": "475e4b0e",
-        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
-        "primary_state": "BLOCKED",
-        "reasons": [
-          "missing_transfer_order"
-        ],
-        "schema_version": 1
-      },
-      "transfer_id": "remote-next-blocked"
-    },
-    "next": "Inspect the published remote-next diagnostic report before retrying.",
-    "next_action": "Inspect the published remote-next diagnostic report before retrying.",
-    "post_report_actions": {
-      "attempted": true,
-      "schema_version": 1,
-      "status": "pending_until_report_files_are_written"
-    },
-    "preflight": {
-      "current_branch": "main",
-      "dirty_state": {
-        "clean": true,
-        "staged_changes": [],
-        "status_short": "",
-        "unstaged_changes": [],
-        "untracked_files": []
-      },
-      "head": "475e4b0e",
-      "remote_tracking": "origin/main"
-    },
-    "primary_state": "BLOCKED",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "reasons": [
-      "missing_transfer_order"
-    ],
-    "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
-    "result_status": "BLOCKED",
-    "returncode": 2,
-    "rule_ack": {
-      "blocking_reasons": [],
-      "confirmed": true,
-      "head": "475e4b0e",
-      "path": ".agentic/rule_ack/current.json",
-      "present": true
-    },
-    "schema_version": 1,
-    "state": "BLOCKED",
-    "transfer_id": "remote-next-blocked"
+    "action": "refresh-llm-context-carriers",
+    "created_at_utc": "2026-07-29T05:11:07.742183+00:00",
+    "final_signal": "d",
+    "kind": "llm_context_carriers_refresh",
+    "label": "llm-context-carriers-refresh",
+    "next_action": "LLM context carriers refreshed.",
+    "result_status": "PASS",
+    "schema_version": 1
   },
   "llm_execution_context": {
     "canonical_lifecycle": {
@@ -166,7 +93,7 @@
       "status": "active"
     },
     "command_reference": {
-      "command_count": 246,
+      "command_count": 236,
       "generated_by": "scripts/generate_agentic_kit_command_reference.py",
       "important_wrappers": [
         {
@@ -379,11 +306,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-08-02T11:51:17.154277+00:00",
+    "generated_at_utc": "2026-07-29T05:11:07.974457+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "main",
-      "head": "475e4b0e292004bad9966104930bea2c1dac624f",
+      "branch": "codex/dpa-wrt-ch001-generated-block",
+      "head": "438b03e07817b894f7875e36f77d3dd997ddc1e8",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -443,8 +370,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "44d6cbcff3b727dea59ae5cfeaa491fce8851e9025949cf44d6e9ddebf60c8f7",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "72ec83b01e441d883ba97ac6e369df1ae57786c7187fe0a83be913301abfe0d6",
-      "docs/reference/agentic-kit-commands.json": "7d982e39b6207b6dfb8a8fa60d09f35f25397c38664311cfdd532b2b28470c14"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "9df576f9326d83245477ced49958e9a2bf22b5f560be83fc892b2e3639db4136",
+      "docs/reference/agentic-kit-commands.json": "3334fe9948d608596fb4b5799985c3c68141029162c182a03c8a9461fa11c316"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -484,11 +411,11 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "adc0c9792173eeadc07d01c5895080c5c2f03352296840062d472c8fe226dfa3"
+        "sha256": "24b07998733f2a03d85448b91f68cd5ec49178b3ac4f57317c7ab21cdfc4483f"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "3ca61c8f44fd33d577cc5090bf8e280448fa5343e56a9430c4e58ff85030c536"
+        "sha256": "178178a60fbaa16917099ca32ae5d01f3064406e18e95a9a284d1c087d34c76f"
       }
     ],
     "canonical_cli_usage": {
@@ -989,12 +916,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "main",
+      "branch": "codex/dpa-wrt-ch001-generated-block",
       "dirty_status": "",
-      "head": "475e4b0e292004bad9966104930bea2c1dac624f",
+      "head": "438b03e07817b894f7875e36f77d3dd997ddc1e8",
       "head_matches_upstream": true,
-      "upstream": "origin/main",
-      "upstream_head": "475e4b0e292004bad9966104930bea2c1dac624f"
+      "upstream": "origin/codex/dpa-wrt-ch001-generated-block",
+      "upstream_head": "438b03e07817b894f7875e36f77d3dd997ddc1e8"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -1036,89 +963,6 @@
       "copy_paste_only_fallback"
     ]
   },
-  "remote_next_report": {
-    "artifact_type": "transfer_remote_next_execution_report",
-    "blocked_message": "[Errno 2] No such file or directory: '.agentic/transfer/inbox/current.yaml'",
-    "branch": "main",
-    "chat_reply": "g",
-    "command_id": "remote-next-blocked",
-    "head": "475e4b0e",
-    "latest_published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "latest_report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
-    "local_run": {
-      "apply": null,
-      "command_id": "remote-next-blocked",
-      "inspect": {
-        "message": "[Errno 2] No such file or directory: '.agentic/transfer/inbox/current.yaml'",
-        "reasons": [
-          "missing_transfer_order"
-        ],
-        "result_status": "BLOCKED",
-        "returncode": 2,
-        "schema_version": 1
-      },
-      "next": "Inspect the published remote-next diagnostic report before retrying.",
-      "next_action": "Inspect the published remote-next diagnostic report before retrying.",
-      "result_status": "BLOCKED",
-      "returncode": 2,
-      "schema_version": 1,
-      "state": {
-        "branch": "main",
-        "dirty_state": {
-          "clean": true,
-          "staged_changes": [],
-          "status_short": "",
-          "unstaged_changes": [],
-          "untracked_files": []
-        },
-        "head": "475e4b0e",
-        "next_action": "Inspect the published remote-next diagnostic report before retrying.",
-        "primary_state": "BLOCKED",
-        "reasons": [
-          "missing_transfer_order"
-        ],
-        "schema_version": 1
-      },
-      "transfer_id": "remote-next-blocked"
-    },
-    "next": "Inspect the published remote-next diagnostic report before retrying.",
-    "next_action": "Inspect the published remote-next diagnostic report before retrying.",
-    "post_report_actions": {
-      "attempted": true,
-      "schema_version": 1,
-      "status": "pending_until_report_files_are_written"
-    },
-    "preflight": {
-      "current_branch": "main",
-      "dirty_state": {
-        "clean": true,
-        "staged_changes": [],
-        "status_short": "",
-        "unstaged_changes": [],
-        "untracked_files": []
-      },
-      "head": "475e4b0e",
-      "remote_tracking": "origin/main"
-    },
-    "primary_state": "BLOCKED",
-    "published_report_path": "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "reasons": [
-      "missing_transfer_order"
-    ],
-    "report_path": "docs/reports/transfer_runs/latest-remote-next-report.json",
-    "result_status": "BLOCKED",
-    "returncode": 2,
-    "rule_ack": {
-      "blocking_reasons": [],
-      "confirmed": true,
-      "head": "475e4b0e",
-      "path": ".agentic/rule_ack/current.json",
-      "present": true
-    },
-    "schema_version": 1,
-    "state": "BLOCKED",
-    "transfer_id": "remote-next-blocked"
-  },
   "safety_header": {
     "authoritative_sources": [
       {
@@ -1139,11 +983,11 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "adc0c9792173eeadc07d01c5895080c5c2f03352296840062d472c8fe226dfa3"
+        "sha256": "24b07998733f2a03d85448b91f68cd5ec49178b3ac4f57317c7ab21cdfc4483f"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "3ca61c8f44fd33d577cc5090bf8e280448fa5343e56a9430c4e58ff85030c536"
+        "sha256": "178178a60fbaa16917099ca32ae5d01f3064406e18e95a9a284d1c087d34c76f"
       }
     ],
     "canonical_cli_usage": {
@@ -1644,12 +1488,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "main",
+      "branch": "codex/dpa-wrt-ch001-generated-block",
       "dirty_status": "",
-      "head": "475e4b0e292004bad9966104930bea2c1dac624f",
+      "head": "438b03e07817b894f7875e36f77d3dd997ddc1e8",
       "head_matches_upstream": true,
-      "upstream": "origin/main",
-      "upstream_head": "475e4b0e292004bad9966104930bea2c1dac624f"
+      "upstream": "origin/codex/dpa-wrt-ch001-generated-block",
+      "upstream_head": "438b03e07817b894f7875e36f77d3dd997ddc1e8"
     },
     "schema_version": 1,
     "terminal_block_rules": {
