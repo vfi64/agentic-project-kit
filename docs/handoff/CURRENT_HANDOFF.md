@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `e59d9c2af2732b670b4af01bdf8e01885bfaa2f5` (`e59d9c2a`), after `Gate command authority surfaces (#1988)`.
-Last substantive work state is `e59d9c2af2732b670b4af01bdf8e01885bfaa2f5` (`e59d9c2a`), after `Gate command authority surfaces (#1988)`.
+Current verified main/admin HEAD is `1009bea202e6d85f76a517f95ff44d31a51ac936` (`1009bea2`), after `Add remote-next order contract commands (#1990)`.
+Last substantive work state is `1009bea202e6d85f76a517f95ff44d31a51ac936` (`1009bea2`), after `Add remote-next order contract commands (#1990)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
