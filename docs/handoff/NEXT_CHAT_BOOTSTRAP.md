@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `e59d9c2af2732b670b4af01bdf8e01885bfaa2f5` (`e59d9c2a`)
-- Handoff freshness marker: `e59d9c2a`
-- Branch at generation: `docs/post-pr1988-handoff-refresh`
+- HEAD: `3fbba7bf275abf6667ac82c7731776e4f155bbed` (`3fbba7bf`)
+- Handoff freshness marker: `3fbba7bf`
+- Branch at generation: `codex/remote-next-order-contract`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -102,7 +102,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 ### RESULT: PASS ###
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 2c59db31ba6a). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 2c59db31ba6a. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 3a372b60455a). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 3a372b60455a. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -112,5 +112,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: ba4278440e16c99dea17359c940545445e209ac01bbd396d8ad88358d520b3e3
-- docs/reference/agentic-kit-commands.json: 858d821b07ec8cc87df3edbd9f971c91208f8d064ab7a75a3b1e056e7cf5b3f4
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 128dc8fa5aabdd6c45afde15034a93b2ae7a9e7f0835784919b42abcf8d65db6
+- docs/reference/agentic-kit-commands.json: a37293bc4812ba09ed5bd411ff378d2963512607309c94f6d9b0e599f960f7c9
