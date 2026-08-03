@@ -8,6 +8,9 @@ from typing import Any
 
 import yaml
 
+from agentic_project_kit.safe_push import SafePushResult
+from agentic_project_kit.safe_push import safe_push
+from agentic_project_kit.safe_push import validate_branch_name
 from agentic_project_kit.transfer_local_runner import TransferLocalRun, run_local_transfer
 from agentic_project_kit.transfer_runner import DEFAULT_INBOX
 from agentic_project_kit.transfer_safety_context import build_local_to_llm_payload
@@ -26,6 +29,7 @@ PUBLISHED_LATEST_JSON = PUBLISHED_REPORT_DIR / "latest-transfer-handoff-report.j
 PUBLISHED_LATEST_LOG = PUBLISHED_REPORT_DIR / "latest-transfer-handoff-report.log"
 COMMAND_RUN_LATEST = Path(LEGACY_DEFAULTS.command_runs_root) / "LATEST_COMMAND_RUN.txt"
 RULE_ACK_PATH = Path(".agentic/rule_ack/current.json")
+EXECUTABLE_TRANSFER_ORDER_KIND = "llm_to_local_transfer_order"
 
 
 @dataclass(frozen=True)
@@ -397,15 +401,48 @@ def _ensure_clean(project_root: Path, *, branch: str | None) -> None:
 
 
 def _validate_branch_name(branch: str) -> str:
-    value = branch.strip()
-    if not value:
-        raise ValueError("branch must not be empty")
-    if value.startswith("-") or ".." in value or value.endswith(".lock"):
-        raise ValueError(f"unsafe branch name: {branch}")
-    allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._/-")
-    if any(char not in allowed for char in value):
-        raise ValueError(f"unsafe branch name: {branch}")
-    return value
+    return validate_branch_name(branch)
+
+
+def _safe_push_runner(argv: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
+    result = _command(argv, cwd)
+    return subprocess.CompletedProcess(list(result.argv), result.returncode, result.stdout, result.stderr)
+
+
+def _safe_push(
+    root: Path,
+    *,
+    branch: str | None,
+    purpose: str,
+    expected_current_branch: str | None = None,
+    dry_run: bool = False,
+) -> SafePushResult:
+    return safe_push(
+        root,
+        target_branch=branch,
+        purpose=purpose,
+        expected_current_branch=expected_current_branch,
+        dry_run=dry_run,
+        run=_safe_push_runner,
+    )
+
+
+def _ensure_safe_publish_target(root: Path, *, branch: str) -> dict[str, object]:
+    result = _safe_push(
+        root,
+        branch=branch,
+        purpose="transfer remote-next publish target validation",
+        expected_current_branch="",
+        dry_run=True,
+    )
+    if not result.ok:
+        raise RemoteNextBlocked(
+            "remote-next transfer publish target is not safe: " + "; ".join(result.reasons),
+            reasons=("unsafe_remote_next_publish_branch", *result.reasons),
+            branch=branch,
+            preflight={"safe_push_target": result.as_json_data()},
+        )
+    return result.as_json_data()
 
 
 def _read_transfer_order_data(path: Path) -> dict[str, Any]:
@@ -421,6 +458,7 @@ def _read_transfer_order_data(path: Path) -> dict[str, Any]:
 def _order_identity(data: dict[str, Any]) -> dict[str, object]:
     return {
         "schema_version": 1,
+        "kind": data.get("kind", ""),
         "id": data.get("id", ""),
         "status": data.get("status", ""),
         "branch": data.get("branch", ""),
@@ -486,6 +524,14 @@ def _ensure_transfer_order_is_fresh(root: Path, *, branch: str | None = None) ->
         raise RemoteNextBlocked(
             f"remote-next transfer order has unsupported status: {status}",
             reasons=("invalid_transfer_order_status",),
+            branch=branch,
+            preflight=preflight,
+        )
+    kind = str(data.get("kind") or "").strip()
+    if kind != EXECUTABLE_TRANSFER_ORDER_KIND:
+        raise RemoteNextBlocked(
+            "remote-next transfer order kind is not executable",
+            reasons=("invalid_transfer_order_kind",),
             branch=branch,
             preflight=preflight,
         )
@@ -652,6 +698,19 @@ def _attempt_report_commit_ack_push(root: Path, *, branch: str | None, paths: tu
         "rule_ack_refreshed_after_commit": False,
         "pushed": False,
     }
+    preflight = _safe_push(
+        root,
+        branch=branch,
+        purpose="publish remote-next transfer report",
+        dry_run=True,
+    )
+    steps.append({"name": "safe_push_preflight_report_commit", **preflight.as_json_data()})
+    if not preflight.ok:
+        actions["blocked_reason"] = "safe_push_preflight_failed"
+        actions["safe_push_reasons"] = list(preflight.reasons)
+        actions["final_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
+        actions["final_status_short"] = _command(["git", "status", "--porcelain=v1"], root).stdout
+        return actions
     add = _command(["git", "add", "-f", *paths], root)
     steps.append({"name": "git_add_force_report_paths", **add.as_json_data()})
     if add.returncode != 0:
@@ -673,10 +732,10 @@ def _attempt_report_commit_ack_push(root: Path, *, branch: str | None, paths: tu
         actions["rule_ack_refreshed_after_commit"] = ack.returncode == 0
         post_ack_head = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
         actions["rule_ack_after_report_commit"] = _rule_ack_snapshot(root, repo_head=post_ack_head).as_json_data()
-    push = _command(["git", "push", "origin", branch], root) if branch else _command(["git", "push"], root)
-    steps.append({"name": "git_push_report_commit", **push.as_json_data()})
-    actions["pushed"] = push.returncode == 0
-    if push.returncode != 0:
+    push = _safe_push(root, branch=branch, purpose="publish remote-next transfer report")
+    steps.append({"name": "safe_push_report_commit", **push.as_json_data()})
+    actions["pushed"] = push.pushed
+    if not push.ok:
         actions["blocked_reason"] = "git_push_failed"
     actions["final_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
     actions["final_status_short"] = _command(["git", "status", "--porcelain=v1"], root).stdout
@@ -699,6 +758,19 @@ def _attempt_final_report_projection_commit_push(
         "committed": False,
         "pushed": False,
     }
+    preflight = _safe_push(
+        root,
+        branch=branch,
+        purpose="publish final remote-next report projection",
+        dry_run=True,
+    )
+    steps.append({"name": "safe_push_preflight_final_report_projection", **preflight.as_json_data()})
+    if not preflight.ok:
+        actions["blocked_reason"] = "safe_push_preflight_failed"
+        actions["safe_push_reasons"] = list(preflight.reasons)
+        actions["final_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
+        actions["final_status_short"] = _command(["git", "status", "--porcelain=v1"], root).stdout
+        return actions
     add = _command(["git", "add", "-f", *paths], root)
     steps.append({"name": "git_add_force_final_report_projection", **add.as_json_data()})
     if add.returncode != 0:
@@ -717,10 +789,10 @@ def _attempt_final_report_projection_commit_push(
         actions["committed"] = True
         actions["commit_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
 
-    push = _command(["git", "push", "origin", branch], root) if branch else _command(["git", "push"], root)
-    steps.append({"name": "git_push_final_report_projection", **push.as_json_data()})
-    actions["pushed"] = push.returncode == 0
-    if push.returncode != 0:
+    push = _safe_push(root, branch=branch, purpose="publish final remote-next report projection")
+    steps.append({"name": "safe_push_final_report_projection", **push.as_json_data()})
+    actions["pushed"] = push.pushed
+    if not push.ok:
         actions["blocked_reason"] = "git_push_failed"
     actions["final_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
     actions["final_status_short"] = _command(["git", "status", "--porcelain=v1"], root).stdout
@@ -851,6 +923,7 @@ def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> T
                 "branch": safe_branch,
             }
         _ensure_clean(root, branch=safe_branch)
+        publish_target_guard = _ensure_safe_publish_target(root, branch=safe_branch)
         _run(["git", "fetch", "origin", safe_branch], root)
         _run(["git", "switch", safe_branch], root)
         _run(["git", "pull", "--ff-only", "origin", safe_branch], root)
@@ -864,6 +937,7 @@ def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> T
         preflight["owned_report_artifact_recovery"] = cleanup
         preflight["order_sync"] = order_sync
         preflight["transfer_order_guard"] = order_guard
+        preflight["safe_push_target"] = publish_target_guard
         if ack_refresh is not None:
             preflight["rule_ack_refresh_before_transfer"] = ack_refresh
         local_run = run_local_transfer(root)

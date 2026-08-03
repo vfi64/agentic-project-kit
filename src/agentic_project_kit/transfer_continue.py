@@ -7,6 +7,7 @@ from typing import Any
 import yaml
 
 from agentic_project_kit.transfer_runner import DEFAULT_INBOX
+from agentic_project_kit.transfer_remote_next import EXECUTABLE_TRANSFER_ORDER_KIND
 from agentic_project_kit.transfer_remote_next import run_remote_next_transfer
 
 
@@ -27,7 +28,10 @@ def _read_order_from_ref(root: Path, ref: str) -> dict[str, Any] | None:
 def _is_active_order(data: dict[str, Any] | None) -> bool:
     if not isinstance(data, dict):
         return False
-    return str(data.get("status") or "active").strip().lower() == "active"
+    return (
+        str(data.get("status") or "active").strip().lower() == "active"
+        and str(data.get("kind") or "").strip() == EXECUTABLE_TRANSFER_ORDER_KIND
+    )
 
 
 def _branch_from_order(data: dict[str, Any] | None, fallback: str) -> str:

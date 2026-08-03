@@ -55,3 +55,13 @@ def test_transfer_continue_blocks_when_fetch_fails_before_branch_inference(monke
     assert result["returncode"] == 2
     assert result["reasons"] == ["remote_ref_fetch_failed"]
     assert result["steps"][1]["stderr"] == "network unavailable"
+
+
+def test_transfer_continue_active_order_detection_requires_executable_kind() -> None:
+    assert transfer_continue._is_active_order(  # noqa: SLF001
+        {"kind": "llm_to_local_transfer_order", "status": "active"}
+    )
+    assert not transfer_continue._is_active_order(  # noqa: SLF001
+        {"kind": "gui_user_task_transfer_order", "status": "active"}
+    )
+    assert not transfer_continue._is_active_order({"status": "active"})  # noqa: SLF001

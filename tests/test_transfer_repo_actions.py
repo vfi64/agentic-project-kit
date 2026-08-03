@@ -1262,8 +1262,12 @@ def test_push_current_refuses_branch_drift_after_push(monkeypatch):
     def fake_run(command, cwd=None):
         if command == ["git", "branch", "--show-current"]:
             calls["branch"] += 1
-            branch = "feature/demo" if calls["branch"] == 1 else "main"
+            branch = "feature/demo" if calls["branch"] <= 2 else "main"
             return subprocess.CompletedProcess(command, 0, branch + "\n", "")
+        if command == ["git", "remote", "get-url", "origin"]:
+            return subprocess.CompletedProcess(command, 0, "https://example.invalid/repo.git\n", "")
+        if command == ["git", "symbolic-ref", "--quiet", "--short", "refs/remotes/origin/HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "origin/main\n", "")
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "push", "-u", "origin", "feature/demo"]:
@@ -1334,6 +1338,10 @@ def test_push_current_with_required_branch_switches_before_push(monkeypatch):
         calls.append(command)
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if command == ["git", "remote", "get-url", "origin"]:
+            return subprocess.CompletedProcess(command, 0, "https://example.invalid/repo.git\n", "")
+        if command == ["git", "symbolic-ref", "--quiet", "--short", "refs/remotes/origin/HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "origin/main\n", "")
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
         if command == ["git", "push", "-u", "origin", "feature/demo"]:
@@ -1367,6 +1375,10 @@ def test_push_current_refuses_remote_mismatch_after_push(monkeypatch):
         calls.append(command)
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "remote", "get-url", "origin"]:
+            return subprocess.CompletedProcess(command, 0, "https://example.invalid/repo.git\n", "")
+        if command == ["git", "symbolic-ref", "--quiet", "--short", "refs/remotes/origin/HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "origin/main\n", "")
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command == ["git", "push", "-u", "origin", "feature/demo"]:

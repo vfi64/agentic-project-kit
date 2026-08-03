@@ -376,6 +376,32 @@ rules:
     - 'Status: PASS'
     - 'Blocking findings: 0'
     - LC2 same-PID reentrancy decision
+- id: safe-push-gatekeeper-coverage
+  description: Branch publication must remain centrally guarded against branchless
+    pushes and protected/default branch targets.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms:
+    - Safe Push Gatekeeper
+    - agentic_project_kit.safe_push.safe_push
+    - explicit target branch
+    - actual default branch
+    - tests/test_safe_push.py
+    - tests/test_safe_push_audit.py
+    - direct branch-push vectors
+    - protected-branch override
+- id: executable-remote-next-transfer-order-coverage
+  description: Remote-next execution must distinguish executable transfer orders
+    from GUI/user-task carriers that share the transfer inbox path.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms:
+    - Executable Remote-Next Transfer Orders
+    - "kind: llm_to_local_transfer_order"
+    - "kind: gui_user_task_transfer_order"
+    - transfer continue
+    - tests/test_transfer_remote_next_stale_order_guard.py
+    - tests/test_transfer_continue.py
 - id: command-manifest-entrypoint-coverage
   description: Command manifest entrypoints must keep ACK headers, chat refreshers,
     and initial prompt sources synchronized with the generated command manifest.

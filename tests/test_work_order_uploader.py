@@ -15,9 +15,18 @@ def _init_repo(path: Path) -> None:
     _git(["init"], path)
     _git(["config", "user.email", "test@example.invalid"], path)
     _git(["config", "user.name", "Test User"], path)
+    _git(["branch", "-M", "master"], path)
     (path / "README.md").write_text("repo\n", encoding="utf-8")
     _git(["add", "README.md"], path)
     _git(["commit", "-m", "Initial commit"], path)
+
+
+def _add_bare_origin(repo: Path, remote: Path, *, default_branch: str = "master") -> None:
+    _git(["init", "--bare", str(remote)], remote.parent)
+    _git(["symbolic-ref", "HEAD", f"refs/heads/{default_branch}"], remote)
+    assert _git(["remote", "add", "origin", str(remote)], repo).returncode == 0
+    assert _git(["push", "-u", "origin", default_branch], repo).returncode == 0
+    assert _git(["remote", "set-head", "origin", "-a"], repo).returncode == 0
 
 
 def test_upload_next_turn_result_log_blocks_missing_file(tmp_path, monkeypatch):
@@ -59,9 +68,7 @@ def test_upload_next_turn_result_log_commits_only_result_log(tmp_path, monkeypat
     repo.mkdir()
     _init_repo(repo)
     remote = tmp_path / "remote.git"
-    _git(["init", "--bare", str(remote)], tmp_path)
-    _git(["remote", "add", "origin", str(remote)], repo)
-    _git(["push", "-u", "origin", "HEAD"], repo)
+    _add_bare_origin(repo, remote, default_branch="master")
     _git(["switch", "-c", "feature/upload-result-log"], repo)
     _git(["push", "-u", "origin", "HEAD"], repo)
     monkeypatch.chdir(repo)
@@ -86,9 +93,7 @@ def test_upload_next_turn_result_log_promotes_local_log_before_commit(tmp_path, 
     repo.mkdir()
     _init_repo(repo)
     remote = tmp_path / "remote.git"
-    _git(["init", "--bare", str(remote)], tmp_path)
-    _git(["remote", "add", "origin", str(remote)], repo)
-    _git(["push", "-u", "origin", "HEAD"], repo)
+    _add_bare_origin(repo, remote, default_branch="master")
     _git(["switch", "-c", "feature/promote-result-log"], repo)
     _git(["push", "-u", "origin", "HEAD"], repo)
     monkeypatch.chdir(repo)
@@ -148,6 +153,27 @@ def test_upload_next_turn_result_log_refuses_main_branch(tmp_path, monkeypatch):
 
     assert result.ok is False
     assert "refuses to commit on main" in result.message
+
+
+def test_upload_next_turn_result_log_refuses_actual_default_branch_before_commit(tmp_path, monkeypatch):
+    repo = tmp_path / "repo"
+    remote = tmp_path / "remote.git"
+    repo.mkdir()
+    _init_repo(repo)
+    _add_bare_origin(repo, remote, default_branch="master")
+    monkeypatch.chdir(repo)
+    log = repo / "docs/reports/terminal/next-turn-latest.log"
+    log.parent.mkdir(parents=True)
+    log.write_text("### RESULT: PASS ###\n", encoding="utf-8")
+    head_before = _git(["rev-parse", "HEAD"], repo).stdout.strip()
+
+    result = upload_next_turn_result_log(log_path=Path("docs/reports/terminal/next-turn-latest.log"))
+
+    assert result.ok is False
+    assert result.committed is False
+    assert "push preflight blocked upload" in result.message
+    assert "protected_branch_refused:master" in result.message
+    assert _git(["rev-parse", "HEAD"], repo).stdout.strip() == head_before
 
 
 def test_upload_next_turn_result_log_refuses_branch_mismatch(tmp_path, monkeypatch):

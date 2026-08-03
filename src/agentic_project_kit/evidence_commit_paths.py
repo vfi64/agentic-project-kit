@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from pathlib import Path
 import subprocess
 
+from agentic_project_kit.safe_push import safe_push
+
 
 @dataclass(frozen=True)
 class EvidenceCommitPathsResult:
@@ -76,6 +78,24 @@ def commit_paths(
     head_before = _git_stdout(root_path, ["rev-parse", "HEAD"]) or "UNKNOWN"
     status_before = _status_lines(root_path)
 
+    if push:
+        push_preflight = safe_push(
+            root_path,
+            target_branch=branch,
+            purpose="evidence commit-paths publish branch",
+            dry_run=True,
+        )
+        if not push_preflight.ok:
+            return EvidenceCommitPathsResult(
+                False,
+                branch,
+                head_before,
+                "",
+                normalized_paths,
+                log_path,
+                tuple(["push preflight blocked evidence commit", *push_preflight.reasons]),
+            )
+
     unexpected = [
         line for line in status_before
         if not any(_path_is_dirty(line, rel) for rel in normalized_paths)
@@ -145,8 +165,12 @@ def commit_paths(
 
     commit_sha = _git_stdout(root_path, ["rev-parse", "HEAD"]) or "UNKNOWN"
     if push:
-        push_result = _run_git(root_path, ["push", "origin", branch])
-        if push_result.returncode != 0:
+        push_result = safe_push(
+            root_path,
+            target_branch=branch,
+            purpose="evidence commit-paths publish branch",
+        )
+        if not push_result.ok:
             return EvidenceCommitPathsResult(
                 False,
                 branch,

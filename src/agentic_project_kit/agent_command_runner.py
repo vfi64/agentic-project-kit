@@ -23,6 +23,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from agentic_project_kit.safe_push import safe_push
+
 from agentic_project_kit import terminal_logging
 from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
@@ -302,11 +304,30 @@ def stage_commit_push(paths: list[Path], message: str, *, required_branch: str =
     if branch in {"", "unknown"}:
         print("FAIL_NO_CURRENT_BRANCH")
         return 1
+    push_preflight = safe_push(
+        Path("."),
+        target_branch=branch,
+        purpose="agent command runner stage commit push",
+        set_upstream=True,
+        dry_run=True,
+    )
+    if not push_preflight.ok:
+        print("FAIL_PUSH_PREFLIGHT_BLOCKED")
+        for reason in push_preflight.reasons:
+            print(reason)
+        return push_preflight.returncode
     add_paths = [path for path in paths if path.exists() or _git_path_is_tracked(path)]
     if add_paths:
         subprocess.run(["git", "add", *[path.as_posix() for path in add_paths]], check=True)
     subprocess.run(["git", "commit", "-m", message], check=True)
-    push = subprocess.run(["git", "push", "-u", "origin", branch], check=False)
+    push = safe_push(
+        Path("."),
+        target_branch=branch,
+        purpose="agent command runner stage commit push",
+        set_upstream=True,
+    )
+    if not push.ok:
+        print(push.stderr or push.stdout or "FAIL_PUSH_FAILED")
     return push.returncode
 
 def logged_script_has_fail_result_marker(log_path: Path | None) -> bool:
