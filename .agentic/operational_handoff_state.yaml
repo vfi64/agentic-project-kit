@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 58e2eb2c1c2f287b4c6e20bf44a953f4e2e70a30
-  short: 58e2eb2c
-  subject: Allow DPA state in admin refresh (#1986)
+  full: e59d9c2af2732b670b4af01bdf8e01885bfaa2f5
+  short: e59d9c2a
+  subject: Gate command authority surfaces (#1988)
 last_substantive_work_state:
-  full: 58e2eb2c1c2f287b4c6e20bf44a953f4e2e70a30
-  short: 58e2eb2c
-  subject: Allow DPA state in admin refresh (#1986)
+  full: e59d9c2af2732b670b4af01bdf8e01885bfaa2f5
+  short: e59d9c2a
+  subject: Gate command authority surfaces (#1988)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

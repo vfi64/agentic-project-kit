@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `58e2eb2c1c2f287b4c6e20bf44a953f4e2e70a30` (`58e2eb2c`), after `Allow DPA state in admin refresh (#1986)`.
-Last substantive work state is `58e2eb2c1c2f287b4c6e20bf44a953f4e2e70a30` (`58e2eb2c`), after `Allow DPA state in admin refresh (#1986)`.
+Current verified main/admin HEAD is `e59d9c2af2732b670b4af01bdf8e01885bfaa2f5` (`e59d9c2a`), after `Gate command authority surfaces (#1988)`.
+Last substantive work state is `e59d9c2af2732b670b4af01bdf8e01885bfaa2f5` (`e59d9c2a`), after `Gate command authority surfaces (#1988)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
