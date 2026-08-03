@@ -524,9 +524,19 @@ executable transfer order. GUI/user-task carriers such as
 inbox path, but they must not be inferred or executed as remote-next transfer
 orders. Active orders without the executable kind are blocked before apply.
 
+`agentic-kit transfer order-create` generates a head-anchored executable
+remote-next transfer order from explicit safe branch and write-action inputs.
+It defaults to preview-only and writes `.agentic/transfer/inbox/current.yaml`
+only with `--execute`. `agentic-kit transfer order-validate` is read-only: it
+checks the current command-manifest ACK, executable kind, active status,
+safe non-protected branch, current branch/head anchors, bounded `report_path`,
+action schema, and payload hashes before `transfer remote-next` can be trusted
+as the next command.
+
 Tests:
 
     python -m pytest -q tests/test_transfer_remote_next_stale_order_guard.py tests/test_transfer_continue.py
+    python -m pytest -q tests/test_remote_next_order_contract.py
 
 ## State freshness guard
 

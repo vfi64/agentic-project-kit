@@ -12354,6 +12354,228 @@
       "when_to_use": "Normalize and summarize the local transfer session state."
     },
     {
+      "dry_run_available": true,
+      "group": "transfer",
+      "help": "Generate a head-anchored executable remote-next transfer order.",
+      "name": "order-create",
+      "params": [
+        {
+          "default": null,
+          "help": "Safe remote-next transfer branch.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "--branch"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": [],
+          "help": "Write action in target_path=payload_path form. Repeatable.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "write_actions",
+          "opts": [
+            "--write-action"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.agentic/transfer/inbox/current.yaml')",
+          "help": "Transfer order path.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Transfer order id. Defaults to branch and HEAD.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "order_id",
+          "opts": [
+            "--id"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Transfer order title.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "title",
+          "opts": [
+            "--title"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Transfer order safety label.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "safety",
+          "opts": [
+            "--safety"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Bounded command-run report path.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "report_path",
+          "opts": [
+            "--report-path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "active",
+          "help": "Remote-next order status.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "status",
+          "opts": [
+            "--status"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write the transfer order file.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Allow replacing an existing transfer order file.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_overwrite",
+          "opts": [
+            "--allow-overwrite"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "order-create"
+      ],
+      "qualified_name": "agentic-kit transfer order-create",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Generate a head-anchored executable remote-next transfer order."
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "help": "Validate a remote-next transfer order without mutating the repository.",
+      "name": "order-validate",
+      "params": [
+        {
+          "default": "PosixPath('.agentic/transfer/inbox/current.yaml')",
+          "help": "Transfer order path.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "path",
+          "opts": [
+            "--path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "order-validate"
+      ],
+      "qualified_name": "agentic-kit transfer order-validate",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Validate a remote-next transfer order without mutating the repository."
+    },
+    {
       "dry_run_available": false,
       "group": "transfer",
       "help": "Render the current four-slice patch/handoff workflow state.",
@@ -16887,7 +17109,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "2c59db31ba6a",
+    "manifest_sha": "3a372b60455a",
     "schema_version": 1
   },
   "schema_version": 2,

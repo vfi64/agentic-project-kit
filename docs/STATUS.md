@@ -7,7 +7,7 @@ Current verified release: 0.4.13.
 Current release tag: v0.4.13.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
-Current verified main: `e59d9c2a` (`Gate command authority surfaces (#1988)`).
+Current verified main: `3fbba7bf` (`Refresh handoff state after PR1988 (#1989)`).
 Latest substantive work: PR #1988 (`Gate command authority surfaces (#1988)`).
 Current governed slice: `codex/dpa-workspace-intake-orchestrator` automates the
 deterministic workspace-level DPA intake sequence for foreign or newly initialized

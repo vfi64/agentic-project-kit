@@ -53,6 +53,8 @@ EXPECTED_TRANSFER_COMMANDS = (
     "inspect",
     "apply",
     "publish-last-report",
+    "order-create",
+    "order-validate",
     "require-fresh-llm-context",
     "verify-llm-context-refresh",
     "refresh-llm-context-carriers",
@@ -129,7 +131,7 @@ def test_transfer_app_command_inventory_stable() -> None:
     command_names = tuple(_fresh_transfer_module_probe()["command_names"])
 
     assert command_names == EXPECTED_TRANSFER_COMMANDS
-    assert len(command_names) == 65
+    assert len(command_names) == 67
 
 
 def test_transfer_module_importable_without_side_effects() -> None:

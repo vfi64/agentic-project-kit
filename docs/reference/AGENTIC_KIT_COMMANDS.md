@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 2c59db31ba6a
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 3a372b60455a
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `247`
+- Command count: `249`
 
 ## Commands
 
@@ -2446,6 +2446,41 @@ canonical transfer outbox file.
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 | `repair_known_volatile` | `TyperOption` | --repair-known-volatile | `False` | `False` | Restore known volatile transfer output files before checking the session. |
 | `write_outbox` | `TyperOption` | --write-outbox, --no-write-outbox | `False` | `False` | Write the normalized session result to the canonical transfer outbox. |
+
+### `agentic-kit transfer order-create`
+
+- Safety: `BOUNDED`
+- When to use: Generate a head-anchored executable remote-next transfer order.
+- Dry-run available: `True`
+
+Generate a head-anchored executable remote-next transfer order.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `branch` | `TyperOption` | --branch | `True` |  | Safe remote-next transfer branch. |
+| `write_actions` | `TyperOption` | --write-action | `False` | `[]` | Write action in target_path=payload_path form. Repeatable. |
+| `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/current.yaml')` | Transfer order path. |
+| `order_id` | `TyperOption` | --id | `False` | `` | Transfer order id. Defaults to branch and HEAD. |
+| `title` | `TyperOption` | --title | `False` | `` | Transfer order title. |
+| `safety` | `TyperOption` | --safety | `False` | `` | Transfer order safety label. |
+| `report_path` | `TyperOption` | --report-path | `False` | `` | Bounded command-run report path. |
+| `status` | `TyperOption` | --status | `False` | `active` | Remote-next order status. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write the transfer order file. |
+| `allow_overwrite` | `TyperOption` | --allow-overwrite | `False` | `False` | Allow replacing an existing transfer order file. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit transfer order-validate`
+
+- Safety: `BOUNDED`
+- When to use: Validate a remote-next transfer order without mutating the repository.
+- Dry-run available: `False`
+
+Validate a remote-next transfer order without mutating the repository.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/current.yaml')` | Transfer order path. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit transfer patch-cycle-status`
 
