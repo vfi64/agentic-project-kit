@@ -7,12 +7,12 @@ Current verified release: 0.4.13.
 Current release tag: v0.4.13.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
-Current verified main: `6803984f` (`Add workspace DPA intake orchestrator (#1981)`).
-Latest substantive work: PR #1981 (`Add workspace DPA intake orchestrator (#1981)`).
+Current verified main: `1715ccd1` (`Merge pull request #1983 from vfi64/fix/revert-erroneous-transfer-reports`).
+Latest substantive work: PR #1983 (`Merge pull request #1983 from vfi64/fix/revert-erroneous-transfer-reports`).
 Current governed slice: `codex/dpa-workspace-intake-orchestrator` automates the
 deterministic workspace-level DPA intake sequence for foreign or newly initialized
 repositories.
-Post-merge handoff status: PASS/NOOP after PR #1981 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #1983 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 post-merge closeout and a generated handoff refresh if required.
 
@@ -416,6 +416,6 @@ promotes DPA-000 through DPA-900 to stable for the accepted Kit-side DP1-DP5
 scope. It does not claim automatic foreign-repository conformance; each managed
 foreign repository still requires fresh per-repo inventory, DPA-600 evidence,
 DPA-700 evidence, exact refs and Maintainer-authorized scope.
-## Operational documentation refresh state after PR #1981
+## Operational documentation refresh state after PR #1983
 
-Current administrative handoff refresh state is `6803984f` (`Add workspace DPA intake orchestrator (#1981)`). Continue next only after this post-PR1981 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `1715ccd1` (`Merge pull request #1983 from vfi64/fix/revert-erroneous-transfer-reports`). Continue next only after this post-PR1983 refresh is committed and merged; the next substantive slice must be created from fresh main.
