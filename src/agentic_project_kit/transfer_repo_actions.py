@@ -14,6 +14,8 @@ from agentic_project_kit.dpa_current_handoff_lifecycle import (
     evaluate_current_handoff_lifecycle,
     render_current_handoff_lifecycle_result,
 )
+from agentic_project_kit.safe_push import SafePushResult
+from agentic_project_kit.safe_push import safe_push
 from agentic_project_kit.transfer_operation_monitor import MonitorDecision
 from agentic_project_kit.transfer_operation_monitor import guard_branch
 from agentic_project_kit.transfer_operation_monitor import guard_pr_create
@@ -85,6 +87,25 @@ def _agentic_kit_command() -> str:
     if candidate.exists():
         return str(candidate)
     return "agentic-kit"
+
+
+def _safe_push_runner(command: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
+    return _run(command, cwd=cwd)
+
+
+def _safe_push_current_branch(
+    *,
+    branch: str,
+    purpose: str,
+    set_upstream: bool = True,
+) -> SafePushResult:
+    return safe_push(
+        Path("."),
+        target_branch=branch,
+        purpose=purpose,
+        set_upstream=set_upstream,
+        run=_safe_push_runner,
+    )
 
 
 
@@ -699,10 +720,18 @@ def branch_create(branch: str, *, start_point: str = "main", push: bool = False)
             )
             if preflight is not None:
                 return preflight
-            push_command = ["git", "push", "-u", "origin", branch]
-            pushed = _run(push_command)
-            if pushed.returncode != 0:
-                return _result("branch-create", push_command, pushed, "Inspect branch push failure before continuing.")
+            pushed = _safe_push_current_branch(
+                branch=branch,
+                purpose="transfer branch-create publish new branch",
+            )
+            push_command = list(pushed.command)
+            if not pushed.ok:
+                return _result(
+                    "branch-create",
+                    push_command,
+                    pushed.as_completed_process(),
+                    "Inspect safe push block or branch push failure before continuing.",
+                )
             drift = _verify_current_branch("branch-create", branch, command=push_command)
             if drift is not None:
                 return drift
@@ -912,8 +941,9 @@ def _push_current_unlocked(*, required_branch: str = "") -> RepoActionResult:
         return _result("push-current", ["git", "branch", "--show-current"], branch_completed, "Inspect repository state.")
     branch = branch_completed.stdout.strip()
     if not branch:
-        completed = subprocess.CompletedProcess(["git", "push"], 2, "", "No current branch detected.\n")
-        return _result("push-current", ["git", "push"], completed, "Switch to a named branch first.")
+        command = ["safe-push", "push-current", "--branch", "UNKNOWN"]
+        completed = subprocess.CompletedProcess(command, 2, "", "No current branch detected.\n")
+        return _result("push-current", command, completed, "Switch to a named branch first.")
 
     if branch == "main":
         completed = subprocess.CompletedProcess(
@@ -956,10 +986,18 @@ def _push_current_unlocked(*, required_branch: str = "") -> RepoActionResult:
     if preflight is not None:
         return preflight
 
-    command = ["git", "push", "-u", "origin", branch]
-    completed = _run(command)
-    if completed.returncode != 0:
-        return _result("push-current", command, completed, "Inspect push failure before continuing.")
+    pushed = _safe_push_current_branch(
+        branch=branch,
+        purpose="transfer push-current publish branch",
+    )
+    command = list(pushed.command)
+    if not pushed.ok:
+        return _result(
+            "push-current",
+            command,
+            pushed.as_completed_process(),
+            "Inspect safe push block or push failure before continuing.",
+        )
 
     drift = _verify_current_branch("push-current", branch, command=command)
     if drift is not None:
@@ -974,7 +1012,7 @@ def _push_current_unlocked(*, required_branch: str = "") -> RepoActionResult:
     if remote_drift is not None:
         return remote_drift
 
-    return _result("push-current", command, completed, "Create or inspect pull request.")
+    return _result("push-current", command, pushed.as_completed_process(), "Create or inspect pull request.")
 
 
 def _remote_head_sha(head: str) -> tuple[str, subprocess.CompletedProcess[str]]:

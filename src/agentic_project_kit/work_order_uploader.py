@@ -4,6 +4,7 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
+from agentic_project_kit.safe_push import safe_push
 from agentic_project_kit.work_order_validator import default_local_result_log_path, default_result_log_path
 
 
@@ -133,6 +134,22 @@ def upload_next_turn_result_log(
             message="work-order uploader refuses to commit without a current branch",
         )
 
+    push_preflight = safe_push(
+        Path.cwd(),
+        target_branch=branch,
+        purpose="upload next-turn result log",
+        dry_run=True,
+    )
+    if not push_preflight.ok:
+        return WorkOrderUploadResult(
+            ok=False,
+            committed=False,
+            pushed=False,
+            returncode=push_preflight.returncode,
+            log_path=log_path,
+            message="push preflight blocked upload: " + "; ".join(push_preflight.reasons),
+        )
+
     if local_log_ready:
         log_path.parent.mkdir(parents=True, exist_ok=True)
         log_path.write_text(local_log_path.read_text(encoding="utf-8"), encoding="utf-8")
@@ -160,15 +177,19 @@ def upload_next_turn_result_log(
         return WorkOrderUploadResult(False, False, False, commit.returncode, log_path, commit.stderr.strip() or commit.stdout.strip())
 
     commit_sha = _git_stdout(["rev-parse", "HEAD"])
-    push = _run_git(["push"])
-    if push.returncode != 0:
+    push = safe_push(
+        Path.cwd(),
+        target_branch=branch,
+        purpose="upload next-turn result log",
+    )
+    if not push.ok:
         return WorkOrderUploadResult(
             ok=False,
             committed=True,
             pushed=False,
             returncode=push.returncode,
             log_path=log_path,
-            message=push.stderr.strip() or push.stdout.strip(),
+            message=push.stderr.strip() or push.stdout.strip() or "git push failed",
             commit_sha=commit_sha,
         )
 

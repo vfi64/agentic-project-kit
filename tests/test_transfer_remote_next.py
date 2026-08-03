@@ -21,6 +21,20 @@ def _init_repo(root: Path) -> None:
     subprocess.run(["git", "commit", "--allow-empty", "-m", "init"], cwd=root, check=True, stdout=subprocess.PIPE)
 
 
+def _git(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(["git", *args], cwd=root, text=True, capture_output=True, check=False)
+
+
+def _add_bare_origin(repo: Path, remote: Path, *, default_branch: str = "main") -> None:
+    initialized = _git(remote.parent, "init", "--bare", str(remote))
+    assert initialized.returncode == 0, initialized.stderr
+    assert _git(remote, "symbolic-ref", "HEAD", f"refs/heads/{default_branch}").returncode == 0
+    assert _git(repo, "remote", "add", "origin", str(remote)).returncode == 0
+    pushed = _git(repo, "push", "-u", "origin", default_branch)
+    assert pushed.returncode == 0, pushed.stderr
+    assert _git(repo, "remote", "set-head", "origin", "-a").returncode == 0
+
+
 def test_validate_branch_name_accepts_transfer_branch():
     assert _validate_branch_name("transfer/example-1") == "transfer/example-1"
 
@@ -113,6 +127,53 @@ def test_remote_next_without_branch_requires_order_branch(tmp_path, monkeypatch)
     assert "must define a non-empty branch" in result.blocked_message
     assert result.published_report_path
     assert (tmp_path / result.published_report_path).exists()
+
+
+def test_remote_next_missing_order_on_main_writes_local_report_without_commit_or_push(tmp_path, monkeypatch):
+    repo = tmp_path / "repo"
+    remote = tmp_path / "remote.git"
+    repo.mkdir()
+    _init_repo(repo)
+    assert _git(repo, "branch", "-M", "main").returncode == 0
+    _add_bare_origin(repo, remote, default_branch="main")
+    origin_main_before = _git(repo, "rev-parse", "origin/main").stdout.strip()
+    local_head_before = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    monkeypatch.chdir(repo)
+
+    result = run_remote_next_transfer(repo)
+
+    assert result.returncode == 2
+    assert result.result_status == "BLOCKED"
+    assert "missing_transfer_order" in result.reasons
+    assert result.published_report_path
+    assert (repo / result.published_report_path).exists()
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == local_head_before
+    assert _git(repo, "rev-parse", "origin/main").stdout.strip() == origin_main_before
+    assert result.post_report_actions["committed"] is False
+    assert result.post_report_actions["pushed"] is False
+    assert result.post_report_actions["blocked_reason"] == "safe_push_preflight_failed"
+    assert "missing_explicit_target_branch" in result.post_report_actions["safe_push_reasons"]
+
+
+def test_remote_next_refuses_explicit_default_branch_before_commit(tmp_path, monkeypatch):
+    repo = tmp_path / "repo"
+    remote = tmp_path / "remote.git"
+    repo.mkdir()
+    _init_repo(repo)
+    assert _git(repo, "branch", "-M", "main").returncode == 0
+    _add_bare_origin(repo, remote, default_branch="main")
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    monkeypatch.chdir(repo)
+
+    result = run_remote_next_transfer(repo, "main")
+
+    assert result.returncode == 2
+    assert result.result_status == "BLOCKED"
+    assert "unsafe_remote_next_publish_branch" in result.reasons
+    assert "protected_branch_refused:main" in result.reasons
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == head
+    assert result.post_report_actions["committed"] is False
+    assert result.post_report_actions["pushed"] is False
 
 
 def test_transfer_help_lists_remote_next():

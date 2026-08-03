@@ -1,3 +1,4 @@
+import subprocess
 from pathlib import Path
 
 from agentic_project_kit import terminal_logging as tl
@@ -15,6 +16,28 @@ def _write_manifest(root: Path) -> None:
         "profile: generic\n",
         encoding="utf-8",
     )
+
+
+def _git(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(["git", *args], cwd=root, text=True, capture_output=True, check=False)
+
+
+def _init_repo(root: Path, *, branch: str = "master") -> None:
+    assert _git(root, "init").returncode == 0
+    assert _git(root, "config", "user.email", "test@example.invalid").returncode == 0
+    assert _git(root, "config", "user.name", "Test User").returncode == 0
+    assert _git(root, "branch", "-M", branch).returncode == 0
+    (root / "README.md").write_text("repo\n", encoding="utf-8")
+    assert _git(root, "add", "README.md").returncode == 0
+    assert _git(root, "commit", "-m", "Initial commit").returncode == 0
+
+
+def _add_bare_origin(repo: Path, remote: Path, *, default_branch: str = "master") -> None:
+    assert _git(remote.parent, "init", "--bare", str(remote)).returncode == 0
+    assert _git(remote, "symbolic-ref", "HEAD", f"refs/heads/{default_branch}").returncode == 0
+    assert _git(repo, "remote", "add", "origin", str(remote)).returncode == 0
+    assert _git(repo, "push", "-u", "origin", default_branch).returncode == 0
+    assert _git(repo, "remote", "set-head", "origin", "-a").returncode == 0
 
 
 def test_safe_name_and_log_path_are_deterministic():
@@ -140,3 +163,30 @@ def test_terminal_upload_accepts_required_feature_branch_without_ready_log(monke
     monkeypatch.setattr(tl, "_current_branch", lambda: "feature/demo")
     monkeypatch.setattr(tl, "terminal_status", lambda: ("FAIL_INVALID_POINTER", "missing"))
     assert tl.upload_terminal_output(required_branch="feature/demo") == 1
+
+
+def test_terminal_upload_refuses_actual_default_branch_before_commit(tmp_path, monkeypatch, capsys):
+    repo = tmp_path / "repo"
+    remote = tmp_path / "remote.git"
+    repo.mkdir()
+    _init_repo(repo, branch="master")
+    _add_bare_origin(repo, remote, default_branch="master")
+    monkeypatch.chdir(repo)
+    log = Path("docs/reports/terminal/default.log")
+    log.parent.mkdir(parents=True)
+    log.write_text("terminal\n### RESULT: PASS ###\n", encoding="utf-8")
+    tl.write_latest_pointer(log)
+    monkeypatch.setattr(
+        tl,
+        "git_dirty_paths",
+        lambda: ["docs/reports/terminal/default.log", "docs/reports/terminal/LATEST_TERMINAL_LOG.txt"],
+    )
+    head_before = _git(repo, "rev-parse", "HEAD").stdout.strip()
+
+    result = tl.upload_terminal_output()
+
+    output = capsys.readouterr().out
+    assert result == 2
+    assert "FAIL_PUSH_PREFLIGHT_BLOCKED" in output
+    assert "protected_branch_refused:master" in output
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == head_before

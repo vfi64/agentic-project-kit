@@ -484,6 +484,36 @@ Whenever the current branch, version, release state, test status, architecture c
 
 Before terminal workflows perform remote mutations or merge/sync verification, the working tree must be fully clean. Terminal-log dirtiness is not allowed for this preflight because it can block branch switching, fast-forward pulls, PR merges, and verification. Use `removed legacy-wrapper route terminal-remote-preflight` before `gh pr merge`, release publication, tag creation, or any merge-verification block.
 
+## Safe Push Gatekeeper
+
+Branch publication must go through `agentic_project_kit.safe_push.safe_push`.
+The Safe Push Gatekeeper requires an explicit target branch, validates branch
+syntax, resolves `origin` default branch, blocks `main`, `master`, and the
+actual default branch by default, rejects current-branch mismatches, records the
+push purpose, and fails closed before commit when the target is unsafe.
+
+Tests:
+
+    python -m pytest -q tests/test_safe_push.py tests/test_safe_push_audit.py tests/test_transfer_remote_next.py
+
+`tests/test_safe_push_audit.py` blocks new direct branch-push vectors outside
+the gatekeeper. It also rejects normal callers that enable the
+protected-branch override. Explicit release tag pushes and remote branch deletion remain
+separate, narrow exceptions for their own lifecycle controls.
+
+## Executable Remote-Next Transfer Orders
+
+`transfer remote-next` and `transfer continue` treat only
+`kind: llm_to_local_transfer_order` plus an active/pending/ready status as an
+executable transfer order. GUI/user-task carriers such as
+`kind: gui_user_task_transfer_order` may live in the same canonical transfer
+inbox path, but they must not be inferred or executed as remote-next transfer
+orders. Active orders without the executable kind are blocked before apply.
+
+Tests:
+
+    python -m pytest -q tests/test_transfer_remote_next_stale_order_guard.py tests/test_transfer_continue.py
+
 ## State freshness guard
 
 `removed legacy-wrapper route state-freshness-check` detects known stale current-state fragments in `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md`. It is intentionally narrow and deterministic: it catches recurring obsolete state fragments such as old released-version claims, old status dates, and stale slice descriptions without trying to prove full semantic freshness.

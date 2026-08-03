@@ -15,6 +15,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+from agentic_project_kit.safe_push import safe_push
 from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
 TERMINAL_DIR = Path(LEGACY_DEFAULTS.terminal_reports_root)
@@ -195,6 +196,17 @@ def upload_terminal_output(required_branch: str = "", allow_main: bool = False) 
         for item in forbidden:
             print(item)
         return 1
+    push_preflight = safe_push(
+        Path("."),
+        target_branch=branch_message,
+        purpose="upload terminal output log",
+        dry_run=True,
+    )
+    if not push_preflight.ok:
+        print("FAIL_PUSH_PREFLIGHT_BLOCKED")
+        for reason in push_preflight.reasons:
+            print(reason)
+        return push_preflight.returncode
     latest = read_latest_pointer()
     assert latest is not None
     subprocess.run(["git", "add", latest.as_posix(), _latest_pointer().as_posix()], check=True)
@@ -203,8 +215,12 @@ def upload_terminal_output(required_branch: str = "", allow_main: bool = False) 
         print("PASS_ALREADY_UPLOADED")
         return 0
     subprocess.run(["git", "commit", "-m", "Upload terminal output log"], check=True)
-    pushed = subprocess.run(["git", "push"], check=False)
-    if pushed.returncode != 0:
+    pushed = safe_push(
+        Path("."),
+        target_branch=branch_message,
+        purpose="upload terminal output log",
+    )
+    if not pushed.ok:
         print("FAIL_PUSH_FAILED")
         return pushed.returncode
     print("PASS_UPLOADED")

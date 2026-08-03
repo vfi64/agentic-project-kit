@@ -86,6 +86,7 @@ def test_remote_next_blocks_order_missing_freshness_anchor_before_apply(tmp_path
         tmp_path,
         {
             "schema_version": 1,
+            "kind": "llm_to_local_transfer_order",
             "id": "old-order-without-anchor",
             "status": "active",
             "branch": "main",
@@ -107,6 +108,7 @@ def test_remote_next_blocks_head_mismatch_before_apply(tmp_path, monkeypatch):
         tmp_path,
         {
             "schema_version": 1,
+            "kind": "llm_to_local_transfer_order",
             "id": "stale-order",
             "status": "active",
             "branch": "main",
@@ -165,3 +167,25 @@ def test_remote_next_reports_stale_order_status_state(tmp_path, monkeypatch):
     assert result.next_action == "Supersede the stale remote-next transfer order with a fresh head-anchored order."
     assert result.local_run.apply is None
 
+
+def test_remote_next_blocks_active_order_with_non_executable_kind(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    _write_order(
+        tmp_path,
+        {
+            "schema_version": 1,
+            "kind": "gui_user_task_transfer_order",
+            "id": "submitted-gui-task",
+            "status": "active",
+            "branch": "main",
+            "expected_current_head": _head(tmp_path),
+        },
+    )
+
+    result = run_remote_next_transfer(tmp_path)
+
+    assert result.returncode == 2
+    assert result.result_status == "BLOCKED"
+    assert "invalid_transfer_order_kind" in result.reasons
+    assert result.local_run.apply is None

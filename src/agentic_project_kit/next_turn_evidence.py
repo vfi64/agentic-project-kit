@@ -5,6 +5,8 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
+from agentic_project_kit.safe_push import safe_push
+
 from agentic_project_kit.next_turn_result import publish_local_evidence, render_summary
 
 
@@ -133,6 +135,15 @@ def commit_and_push_evidence(
         raise RuntimeError("next-turn evidence refuses to commit on main without allow_main=True")
     if not branch:
         raise RuntimeError("next-turn evidence refuses to commit without a current branch")
+    if push:
+        push_preflight = safe_push(
+            root_path,
+            target_branch=plan.branch,
+            purpose="next-turn evidence publish branch",
+            dry_run=True,
+        )
+        if not push_preflight.ok:
+            raise RuntimeError("push preflight blocked next-turn evidence: " + "; ".join(push_preflight.reasons))
 
     commit = _run_git(["commit", "-m", plan.commit_message], root=root_path, check=False)
     if commit.returncode != 0:
@@ -152,8 +163,13 @@ def commit_and_push_evidence(
 
     pushed = False
     if push:
-        push_result = _run_git(["push", "-u", "origin", plan.branch], root=root_path, check=False)
-        if push_result.returncode != 0:
+        push_result = safe_push(
+            root_path,
+            target_branch=plan.branch,
+            purpose="next-turn evidence publish branch",
+            set_upstream=True,
+        )
+        if not push_result.ok:
             raise RuntimeError((push_result.stderr + push_result.stdout).strip())
         pushed = True
 

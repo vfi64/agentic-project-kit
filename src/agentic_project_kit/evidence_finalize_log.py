@@ -11,6 +11,7 @@ from agentic_project_kit.evidence_inspector import inspect_evidence
 from agentic_project_kit.evidence_inspector import render_log_classification
 from agentic_project_kit.run_summary_renderer import SummaryPayload
 from agentic_project_kit.run_summary_renderer import render_summary
+from agentic_project_kit.safe_push import safe_push
 
 
 @dataclass(frozen=True)
@@ -81,6 +82,15 @@ def finalize_log(
     if branch == "main" and not allow_main:
         raise ValueError("evidence finalize-log refuses to commit on main without --allow-main")
     head_sha = _git_stdout(["rev-parse", "HEAD"], root=root_path) or "UNKNOWN"
+    if push:
+        push_preflight = safe_push(
+            root_path,
+            target_branch=branch,
+            purpose="evidence finalize-log publish branch",
+            dry_run=True,
+        )
+        if not push_preflight.ok:
+            raise ValueError("push preflight blocked finalize-log: " + "; ".join(push_preflight.reasons))
     payload = SummaryPayload(
         comm_id=comm_id,
         slice=slice_name,
@@ -150,8 +160,12 @@ def finalize_log(
             return FinalizeLogResult(False, run_log_path, remote_log_path, False, "", summary_inspection, summary, tuple(findings))
         commit_sha = _git_stdout(["rev-parse", "HEAD"], root=root_path) or "UNKNOWN"
         if push:
-            push_result = _run_git(["push", "origin", branch], root=root_path)
-            if push_result.returncode != 0:
+            push_result = safe_push(
+                root_path,
+                target_branch=branch,
+                purpose="evidence finalize-log publish branch",
+            )
+            if not push_result.ok:
                 findings.append(push_result.stderr.strip() or "git push failed")
                 return FinalizeLogResult(False, run_log_path, remote_log_path, True, commit_sha, summary_inspection, summary, tuple(findings))
     return FinalizeLogResult(True, run_log_path, remote_log_path, commit_created, commit_sha, summary_inspection, summary, tuple(findings))
