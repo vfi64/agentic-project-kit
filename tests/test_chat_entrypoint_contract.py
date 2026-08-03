@@ -8,8 +8,10 @@ from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
 from agentic_project_kit.command_manifest import JSON_PATH, MD_PATH, evaluate_command_manifest, load_manifest
+from agentic_project_kit.command_authority_audit import evaluate_command_authority
 from agentic_project_kit.chat_entrypoint_contract import (
     command_manifest_ack_line,
+    command_reference_prompt_block,
     mandatory_entrypoint_block,
 )
 
@@ -124,6 +126,55 @@ def test_agents_entrypoint_block_matches_manifest_sha() -> None:
     text = Path("AGENTS.md").read_text(encoding="utf-8")
 
     assert mandatory_entrypoint_block(manifest) in text
+
+
+def test_command_authority_audit_passes_for_current_chat_surfaces() -> None:
+    audit = evaluate_command_authority(Path(".").resolve())
+
+    assert audit.ok, audit.as_dict()
+
+
+def test_command_authority_audit_blocks_missing_start_surface_terms(tmp_path: Path) -> None:
+    manifest = load_manifest(Path(".").resolve())
+    for source in (JSON_PATH, MD_PATH):
+        target = tmp_path / source
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, target)
+    (tmp_path / "AGENTS.md").write_text(mandatory_entrypoint_block(manifest) + "\n", encoding="utf-8")
+    for rel in (
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+        "docs/reports/handoff-packages/latest/successor_prompt.md",
+    ):
+        path = tmp_path / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(command_reference_prompt_block(tmp_path), encoding="utf-8")
+    (tmp_path / "docs/handoff/START_NEW_CHAT_PROMPT.md").write_text("stale prompt\n", encoding="utf-8")
+    contract = {
+        "command_reference": {
+            "ack": command_manifest_ack_line(manifest),
+            "json": "docs/reference/agentic-kit-commands.json",
+            "manifest_sha": manifest["meta"]["manifest_sha"],
+            "markdown": "docs/reference/AGENTIC_KIT_COMMANDS.md",
+            "must_not_reconstruct_commands_from_memory": True,
+            "source_hashes": {
+                "docs/reference/agentic-kit-commands.json": "sha",
+                "docs/reference/AGENTIC_KIT_COMMANDS.md": "sha",
+            },
+        }
+    }
+    contract_path = tmp_path / "docs/reports/handoff-packages/latest/execution_contract.json"
+    contract_path.write_text(json.dumps(contract), encoding="utf-8")
+
+    audit = evaluate_command_authority(tmp_path)
+
+    assert not audit.ok
+    assert any(
+        finding.code == "COMMAND_AUTHORITY_TERM_MISSING"
+        and finding.path == "docs/handoff/START_NEW_CHAT_PROMPT.md"
+        for finding in audit.findings
+    )
 
 
 def test_workspace_initial_prompt_contains_command_manifest_header(tmp_path: Path) -> None:

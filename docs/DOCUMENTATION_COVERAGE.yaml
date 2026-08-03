@@ -187,6 +187,7 @@ rules:
     - agentic-kit workflow go
     - agentic-kit workflow upload-output
     - agentic-kit workflow state
+    - agentic-kit audit-command-authority
     - agentic-kit instruction lint
     - agentic-kit chat refresher
     - agentic-kit chat session-start
@@ -408,10 +409,22 @@ rules:
   documents:
   - path: README.md
     terms:
+    - agentic-kit audit-command-authority
     - agentic-kit chat refresher
     - agentic-kit chat session-start
     - agentic-kit commands sync-entrypoints
     - command manifest
+    - most specific available Kit workflow command
+  - path: docs/TEST_GATES.md
+    terms:
+    - Command Authority Gate
+    - agentic-kit audit-command-authority
+    - COMMAND_MANIFEST_ACK
+    - agentic-kit command-for
+    - most specific available Kit workflow command
+    - must_not_reconstruct_commands_from_memory
+    - raw `git`/`gh` commands
+    - agentic-kit standard-gates-audit-suite
   - path: docs/architecture/evidence/command-manifest-audit-2026-07-11-cm4.md
     terms:
     - Command Manifest Audit Evidence

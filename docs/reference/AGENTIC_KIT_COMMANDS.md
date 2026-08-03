@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: e5396ccb3d3a
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 2c59db31ba6a
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `246`
+- Command count: `247`
 
 ## Commands
 
@@ -60,6 +60,19 @@ Audit absolute local paths that may break portability.
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
+### `agentic-kit audit-command-authority`
+
+- Safety: `READ_ONLY`
+- When to use: Audit agent-facing command authority surfaces for current command-for guidance.
+- Dry-run available: `False`
+
+Audit agent-facing command authority surfaces for current command-for guidance.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit audit-command-manifest`
 

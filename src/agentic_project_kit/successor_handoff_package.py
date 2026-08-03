@@ -1240,7 +1240,7 @@ def render_next_chat_bootstrap_from_context(context: dict[str, Any], ws: Workspa
     successor_prompt_path = _workspace_path_text(ws, ws.package_file("successor_prompt.md"))
     start_prompt_path = _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md"))
     closeout_prompt_path = _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"))
-    return "\n".join(
+    text = "\n".join(
         [
             "# NEXT CHAT BOOTSTRAP",
             "",
@@ -1288,6 +1288,7 @@ def render_next_chat_bootstrap_from_context(context: dict[str, Any], ws: Workspa
             "",
         ]
     )
+    return ensure_command_reference_in_prompt(text, ws.root)
 
 
 
@@ -1338,7 +1339,7 @@ def render_start_prompt_from_context(context: dict[str, Any], ws: Workspace | No
     start_prompt_path = _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md"))
     closeout_prompt_path = _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"))
     successor_prompt_path = _workspace_path_text(ws, ws.package_file("successor_prompt.md"))
-    return "\n".join(
+    text = "\n".join(
         [
             "---",
             "schema_version: 2",
@@ -1385,6 +1386,7 @@ def render_start_prompt_from_context(context: dict[str, Any], ws: Workspace | No
             "",
         ]
     )
+    return ensure_command_reference_in_prompt(text, ws.root)
 
 
 def render_closeout_prompt_from_context(context: dict[str, Any], ws: Workspace | None = None) -> str:
@@ -1395,7 +1397,7 @@ def render_closeout_prompt_from_context(context: dict[str, Any], ws: Workspace |
     successor_context_path = _workspace_path_text(ws, ws.package_file("successor_context.yaml"))
     start_prompt_path = _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md"))
     closeout_prompt_path = _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"))
-    return "\n".join(
+    text = "\n".join(
         [
             "---",
             "schema_version: 2",
@@ -1439,6 +1441,7 @@ def render_closeout_prompt_from_context(context: dict[str, Any], ws: Workspace |
             "",
         ]
     )
+    return ensure_command_reference_in_prompt(text, ws.root)
 
 
 

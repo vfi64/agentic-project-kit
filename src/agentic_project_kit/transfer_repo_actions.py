@@ -9,6 +9,7 @@ from pathlib import Path
 
 import yaml
 
+from agentic_project_kit.chat_entrypoint_contract import ensure_command_reference_in_prompt
 from agentic_project_kit.dpa_current_handoff_lifecycle import (
     DEFAULT_READINESS_PATH,
     evaluate_current_handoff_lifecycle,
@@ -1688,6 +1689,8 @@ def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = N
                 current = refreshed
             else:
                 refreshed = operational_refresh_marker_pattern.sub("", current).rstrip() + marker
+                if file_path == workspace.handoff_file("START_NEW_CHAT_PROMPT.md"):
+                    refreshed = ensure_command_reference_in_prompt(refreshed, workspace.root)
             if refreshed != current:
                 file_path.write_text(refreshed, encoding="utf-8")
                 touched.append(file_name)

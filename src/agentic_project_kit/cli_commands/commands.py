@@ -18,6 +18,10 @@ from agentic_project_kit.command_manifest import (
     render_command_manifest_audit,
     render_markdown,
 )
+from agentic_project_kit.command_authority_audit import (
+    evaluate_command_authority,
+    render_command_authority_audit,
+)
 from agentic_project_kit.chat_entrypoint_contract import sync_entrypoint_files
 
 
@@ -89,6 +93,20 @@ def audit_command_manifest_command(
         typer.echo(json.dumps(audit.as_dict(), indent=2, sort_keys=True))
     else:
         typer.echo(render_command_manifest_audit(audit), nl=False)
+    if not audit.ok:
+        raise typer.Exit(code=audit.returncode)
+
+
+def audit_command_authority_command(
+    root: Path = typer.Option(Path("."), "--root", help="Repository root."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    """Audit agent-facing command authority surfaces for current command-for guidance."""
+    audit = evaluate_command_authority(root.resolve())
+    if json_output:
+        typer.echo(json.dumps(audit.as_dict(), indent=2, sort_keys=True))
+    else:
+        typer.echo(render_command_authority_audit(audit), nl=False)
     if not audit.ok:
         raise typer.Exit(code=audit.returncode)
 

@@ -53,7 +53,8 @@ def mandatory_entrypoint_line(manifest: dict[str, Any]) -> str:
     return (
         f"MANDATORY FIRST READ: {COMMAND_REFERENCE_JSON} (manifest_sha: {sha}). "
         "Every reply containing commands MUST start with: "
-        f"COMMAND_MANIFEST_ACK {sha}. Consult `agentic-kit command-for` before proposing commands."
+        f"COMMAND_MANIFEST_ACK {sha}. Consult `agentic-kit command-for` before proposing commands "
+        "and choose the most specific available Kit workflow command."
     )
 
 
@@ -72,7 +73,7 @@ def chat_refresher_lines(mode: str, manifest: dict[str, Any]) -> tuple[str, ...]
     return (
         command_manifest_ack_line(manifest),
         f"Manifest: {COMMAND_REFERENCE_JSON} (manifest_sha: {sha}).",
-        "Before proposing ANY command run/consult `agentic-kit command-for`.",
+        "Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.",
         "raw git/gh commands with a mapped wrapper are rejected by instruction lint.",
         mode_lines[normalized_mode],
         f"Readable reference: {COMMAND_REFERENCE_MARKDOWN}.",

@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `58e2eb2c1c2f287b4c6e20bf44a953f4e2e70a30` (`58e2eb2c`)
-- Handoff freshness marker: `58e2eb2c`
-- Branch at generation: `docs/post-pr1986-handoff-refresh`
+- HEAD: `9d2416cb838edcab80497b005f03455ca1847482` (`9d2416cb`)
+- Handoff freshness marker: `9d2416cb`
+- Branch at generation: `codex/command-authority-gate`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -100,3 +100,17 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 - `agf-dpa-adoption-tracker` (blocked): Track AGF/DPA Package-G adoption evaluation without implementation claims
 
 ### RESULT: PASS ###
+
+Command manifest entrypoint:
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 2c59db31ba6a). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 2c59db31ba6a. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
+- raw git/gh commands with a mapped wrapper are rejected by instruction lint.
+
+Command reference contract:
+- Read `docs/reference/agentic-kit-commands.json` before composing agentic-kit commands.
+- Read `docs/reference/AGENTIC_KIT_COMMANDS.md` before composing agentic-kit commands.
+- `must_not_reconstruct_commands_from_memory: true`.
+- Treat `source_hashes` as freshness evidence.
+source_hashes:
+- docs/reference/AGENTIC_KIT_COMMANDS.md: ba4278440e16c99dea17359c940545445e209ac01bbd396d8ad88358d520b3e3
+- docs/reference/agentic-kit-commands.json: 858d821b07ec8cc87df3edbd9f971c91208f8d064ab7a75a3b1e056e7cf5b3f4
