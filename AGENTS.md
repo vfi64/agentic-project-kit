@@ -12,7 +12,7 @@ rule_source_boundary: pointer_not_duplicate_rule_book
 # Agent Instructions
 
 <!-- command-manifest-entrypoint:start -->
-MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: e5396ccb3d3a). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK e5396ccb3d3a. Consult `agentic-kit command-for` before proposing commands.
+MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 2c59db31ba6a). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 2c59db31ba6a. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 <!-- command-manifest-entrypoint:end -->
 
 > Outer-doc currency note: Operational chat handoff now uses the deterministic Successor Handoff Package. Treat `docs/reports/handoff-packages/latest/successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` as the canonical generated handoff package. The markdown prompts are projections, not independent sources of truth.
@@ -169,7 +169,7 @@ Not allowed without explicit maintainer approval:
 - make irreversible history changes;
 - change architecture direction when multiple plausible options exist.
 
-Remote branch commits are allowed under this rule, but publication, release, and merge decisions remain maintainer-owned.
+Remote branch commits are allowed; publication, release, and merge decisions remain maintainer-owned.
 
 
 ## Clean Handoff Command
@@ -201,7 +201,7 @@ do not weaken tests, documentation gates, architecture checks, release checks, o
 
 ## Responsibility Split
 
-Use this responsibility model from the architecture contract:
+Use the architecture contract responsibility model:
 
 ```text
 LLM / coding agent      -> propose, explain, draft, inspect, and prepare changes
@@ -389,5 +389,5 @@ When the marker is `PASS`, the human can reply with a short acknowledgement such
 
 Terminal blocks must avoid heredocs and risky multi-line `python -c` strings. Prefer small script files under `tmp/`, explicit virtualenv paths such as `.venv/bin/python`, and quote-safe one-line shell operations.
 
-Detailed portability and shell-removal rules live in `docs/governance/PORTABILITY_AND_OPERATIONAL_RULES.md`.
-Remote inspection evidence rules live in `docs/governance/REMOTE_INSPECTION_EVIDENCE_RULES.md`.
+Portability and shell-removal rules: `docs/governance/PORTABILITY_AND_OPERATIONAL_RULES.md`.
+Remote inspection evidence rules: `docs/governance/REMOTE_INSPECTION_EVIDENCE_RULES.md`.

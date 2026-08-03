@@ -114,6 +114,8 @@ def test_next_chat_bootstrap_contains_standard_prompt_and_next_work(tmp_path: Pa
     assert "Successor Handoff Package" in text
     assert "successor_context.yaml" in text
     assert "validation_report.json" in text
+    assert "agentic-kit command-for" in text
+    assert "most specific available Kit workflow command" in text
     assert "chat-switch-complete" not in text or "stale" not in text
     assert "PROJECT_DIRECTION.yaml" in text
     assert "docs-reconciliation" in text
@@ -153,6 +155,10 @@ def test_canonical_chat_switch_prompts_cross_reference() -> None:
     for term in REQUIRED_TERMS:
         assert term in start
         assert term in closeout
+    for text in (start, closeout, bootstrap):
+        assert "COMMAND_MANIFEST_ACK" in text
+        assert "agentic-kit command-for" in text
+        assert "must_not_reconstruct_commands_from_memory" in text
 
 
 def test_successor_handoff_package_writes_deterministic_outputs(tmp_path: Path) -> None:
@@ -177,6 +183,8 @@ def test_successor_handoff_package_writes_deterministic_outputs(tmp_path: Path) 
     for rel in (BOOTSTRAP, CLOSEOUT_PROMPT):
         text = (tmp_path / rel).read_text(encoding="utf-8")
         assert "successor_context.yaml" in text
+        assert "agentic-kit command-for" in text
+        assert "must_not_reconstruct_commands_from_memory" in text
         assert "Post-PR1245" not in text
         assert "PR #880" not in text
         assert "\\\\n" not in text

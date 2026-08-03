@@ -37,3 +37,17 @@ cd /path/to/
 The command must generate the package files, update the three canonical chat-switch prompt files, validate that no stale or accumulative markers remain, and print the copy/paste successor prompt.
 
 Do not start product work in this closeout. If validation fails, repair the handoff projection first.
+
+Command manifest entrypoint:
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 2c59db31ba6a). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 2c59db31ba6a. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
+- raw git/gh commands with a mapped wrapper are rejected by instruction lint.
+
+Command reference contract:
+- Read `docs/reference/agentic-kit-commands.json` before composing agentic-kit commands.
+- Read `docs/reference/AGENTIC_KIT_COMMANDS.md` before composing agentic-kit commands.
+- `must_not_reconstruct_commands_from_memory: true`.
+- Treat `source_hashes` as freshness evidence.
+source_hashes:
+- docs/reference/AGENTIC_KIT_COMMANDS.md: ba4278440e16c99dea17359c940545445e209ac01bbd396d8ad88358d520b3e3
+- docs/reference/agentic-kit-commands.json: 858d821b07ec8cc87df3edbd9f971c91208f8d064ab7a75a3b1e056e7cf5b3f4

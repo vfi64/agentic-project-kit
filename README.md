@@ -365,6 +365,7 @@ Use `workflow status --explain` when you are unsure what to do next. It is read-
 
 Quick command guide:
 
+- `agentic-kit audit-command-authority`: verify that agent-facing chat/handoff entrypoints carry the current command manifest ACK, `command-for` guidance to choose the most specific available Kit workflow command, and the no-memory-reconstruction contract.
 - `agentic-kit instruction lint --file PATH` or `--stdin`: lint LLM instruction text against the current command manifest before applying transfer orders.
 - `agentic-kit chat refresher --mode copy-paste`: print the six-line command-manifest refresher for chat replies that may include commands.
 - `agentic-kit chat session-start --mode copy-paste`: print the refresher plus the full inline command manifest for a new session.

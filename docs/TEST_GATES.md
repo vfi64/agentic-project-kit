@@ -380,6 +380,20 @@ Run `agentic-kit direction validate` when changing `docs/planning/PROJECT_DIRECT
 
 `agentic-kit release ready` must include a documentation lifecycle release review step that blocks `REVIEW_DUE_RELEASE` findings for the requested version and directs maintainers to `agentic-kit docs lifecycle sweep` before release readiness.
 
+## Command Authority Gate
+
+`agentic-kit audit-command-authority` verifies that persistent agent-facing start and handoff surfaces carry the current `COMMAND_MANIFEST_ACK`, point to `docs/reference/agentic-kit-commands.json` and `docs/reference/AGENTIC_KIT_COMMANDS.md`, require `agentic-kit command-for`, require the most specific available Kit workflow command, reject mapped raw `git`/`gh` commands through instruction lint, and preserve `must_not_reconstruct_commands_from_memory`.
+
+`agentic-kit standard-gates-audit-suite` runs this audit, so `agentic-kit doctor` and release readiness inherit the check through the standard suite. This gate cannot prove what an external LLM will do, but it blocks stale or weak repository entrypoints before they can be used as authoritative startup material.
+
+Required evidence when changing command selection, command references, chat bootstrap prompts, successor handoff package rendering, transfer-order execution, PR lifecycle, or release orchestration:
+
+    python -m pytest -q tests/test_chat_entrypoint_contract.py tests/test_instruction_lint_gate.py tests/test_command_manifest.py
+    agentic-kit audit-command-authority
+    agentic-kit audit-command-manifest
+    agentic-kit standard-gates-audit-suite
+    agentic-kit check-docs
+
 ## Doctor Gate
 
 Run this command when changing project health diagnostics:

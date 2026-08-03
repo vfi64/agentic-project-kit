@@ -7,12 +7,12 @@ Current verified release: 0.4.13.
 Current release tag: v0.4.13.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
-Current verified main: `58e2eb2c` (`Allow DPA state in admin refresh (#1986)`).
+Current verified main: `9d2416cb` (`Refresh handoff state after PR1986 (#1987)`).
 Latest substantive work: PR #1986 (`Allow DPA state in admin refresh (#1986)`).
 Current governed slice: `codex/dpa-workspace-intake-orchestrator` automates the
 deterministic workspace-level DPA intake sequence for foreign or newly initialized
 repositories.
-Post-merge handoff status: PASS/NOOP after PR #1986 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #1986 administrative refresh PR #1987.
 Next safe step: continue from fresh main with the next planned governed slice.
 post-merge closeout and a generated handoff refresh if required.
 
