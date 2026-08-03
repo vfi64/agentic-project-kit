@@ -593,6 +593,7 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
             return subprocess.CompletedProcess(
                 command,
                 0,
+                " M .agentic/dpa/acceptance/current_handoff_operational_state.json\n"
                 " M .agentic/handoff_state.yaml\n"
                 " M .agentic/operational_handoff_state.yaml\n"
                 " M docs/STATUS.md\n"
