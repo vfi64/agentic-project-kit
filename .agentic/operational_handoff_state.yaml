@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6803984fcaf3ea93f81fabbad724a54c0208e761
-  short: 6803984f
-  subject: Add workspace DPA intake orchestrator (#1981)
+  full: 1715ccd173502275a0f627d2b48cd50ebf578156
+  short: 1715ccd1
+  subject: 'Merge pull request #1983 from vfi64/fix/revert-erroneous-transfer-reports'
 last_substantive_work_state:
-  full: 6803984fcaf3ea93f81fabbad724a54c0208e761
-  short: 6803984f
-  subject: Add workspace DPA intake orchestrator (#1981)
+  full: 1715ccd173502275a0f627d2b48cd50ebf578156
+  short: 1715ccd1
+  subject: 'Merge pull request #1983 from vfi64/fix/revert-erroneous-transfer-reports'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
