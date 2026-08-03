@@ -55,6 +55,7 @@ def _workspace_path_text(ws: Workspace, path: Path) -> str:
 
 def _admin_refresh_paths(ws: Workspace) -> tuple[str, ...]:
     return (
+        _workspace_path_text(ws, ws.dpa_current_handoff_acceptance_state_path()),
         _workspace_path_text(ws, ws.handoff_state_path()),
         _workspace_path_text(ws, ws.operational_handoff_state_path()),
         _workspace_path_text(ws, ws.status_path()),
