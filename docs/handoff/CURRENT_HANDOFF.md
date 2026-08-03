@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `1715ccd173502275a0f627d2b48cd50ebf578156` (`1715ccd1`), after `Merge pull request #1983 from vfi64/fix/revert-erroneous-transfer-reports`.
-Last substantive work state is `1715ccd173502275a0f627d2b48cd50ebf578156` (`1715ccd1`), after `Merge pull request #1983 from vfi64/fix/revert-erroneous-transfer-reports`.
+Current verified main/admin HEAD is `58e2eb2c1c2f287b4c6e20bf44a953f4e2e70a30` (`58e2eb2c`), after `Allow DPA state in admin refresh (#1986)`.
+Last substantive work state is `58e2eb2c1c2f287b4c6e20bf44a953f4e2e70a30` (`58e2eb2c`), after `Allow DPA state in admin refresh (#1986)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

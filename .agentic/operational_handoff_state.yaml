@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 1715ccd173502275a0f627d2b48cd50ebf578156
-  short: 1715ccd1
-  subject: 'Merge pull request #1983 from vfi64/fix/revert-erroneous-transfer-reports'
+  full: 58e2eb2c1c2f287b4c6e20bf44a953f4e2e70a30
+  short: 58e2eb2c
+  subject: Allow DPA state in admin refresh (#1986)
 last_substantive_work_state:
-  full: 1715ccd173502275a0f627d2b48cd50ebf578156
-  short: 1715ccd1
-  subject: 'Merge pull request #1983 from vfi64/fix/revert-erroneous-transfer-reports'
+  full: 58e2eb2c1c2f287b4c6e20bf44a953f4e2e70a30
+  short: 58e2eb2c
+  subject: Allow DPA state in admin refresh (#1986)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
