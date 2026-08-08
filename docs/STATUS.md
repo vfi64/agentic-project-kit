@@ -7,12 +7,12 @@ Current verified release: 0.5.0.
 Current release tag: v0.5.0.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21850952`.
-Current verified main: `fa1f8ccc` (`Close out release 0.5.0 DOI metadata (#2000)`).
-Latest substantive work: PR #2000 (`Close out release 0.5.0 DOI metadata (#2000)`).
+Current verified main: `70fa831b` (`Analyze status direction drift after 0.5.0 (#2002)`).
+Latest substantive work: PR #2002 (`Analyze status direction drift after 0.5.0 (#2002)`).
 Current governed slice: `codex/claude-followup-hardening` closes the remaining
 small Claude follow-ups before release 0.5.0: bounded workspace removal,
 age-only fresh-context warnings, and automatic pytest marker routing.
-Post-merge handoff status: PASS/NOOP after PR #2000 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2002 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 handoff closeout, then regenerate and publish release 0.5.0 from fresh main.
 
@@ -416,6 +416,6 @@ promotes DPA-000 through DPA-900 to stable for the accepted Kit-side DP1-DP5
 scope. It does not claim automatic foreign-repository conformance; each managed
 foreign repository still requires fresh per-repo inventory, DPA-600 evidence,
 DPA-700 evidence, exact refs and Maintainer-authorized scope.
-## Operational documentation refresh state after PR #2000
+## Operational documentation refresh state after PR #2002
 
-Current administrative handoff refresh state is `fa1f8ccc` (`Close out release 0.5.0 DOI metadata (#2000)`). Continue next only after this post-PR2000 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `70fa831b` (`Analyze status direction drift after 0.5.0 (#2002)`). Continue next only after this post-PR2002 refresh is committed and merged; the next substantive slice must be created from fresh main.

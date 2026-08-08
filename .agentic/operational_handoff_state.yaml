@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: fa1f8cccd83a1904ad2f6be32445326f3db5308c
-  short: fa1f8ccc
-  subject: Close out release 0.5.0 DOI metadata (#2000)
+  full: 70fa831b9e8e19db6073ea292845e43c6a1de2fa
+  short: 70fa831b
+  subject: Analyze status direction drift after 0.5.0 (#2002)
 last_substantive_work_state:
-  full: fa1f8cccd83a1904ad2f6be32445326f3db5308c
-  short: fa1f8ccc
-  subject: Close out release 0.5.0 DOI metadata (#2000)
+  full: 70fa831b9e8e19db6073ea292845e43c6a1de2fa
+  short: 70fa831b
+  subject: Analyze status direction drift after 0.5.0 (#2002)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
