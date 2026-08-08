@@ -66,7 +66,8 @@ Typical use:
 
     agentic-kit release prepare --version <version> --from-tag <from-tag> --date <date> --dry-run --json
 
-Use --write only when readiness checks are clean.
+Use --write only when readiness checks are clean. A successful write also refreshes command entrypoints and writes
+`docs/reports/release/release-prepare-<version>.json` as release-metadata authority evidence for PR and CI gates.
 
 ## Preference and fallback rule
 

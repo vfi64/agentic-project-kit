@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date as date_cls
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -8,6 +9,7 @@ import subprocess
 import typer
 
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_release_blockers
+from agentic_project_kit.release_metadata_authority_gate import release_anchor_changes
 from agentic_project_kit.work_discard_changes import discard_all_changes
 from agentic_project_kit.workspace import load_workspace
 
@@ -88,6 +90,88 @@ def _path_args(paths: list[Path]) -> list[str]:
     for path in paths:
         args.extend(["--path", str(path)])
     return args
+
+
+def _changed_paths_against(base_ref: str) -> list[str]:
+    completed = subprocess.run(
+        ["git", "diff", "--name-only", base_ref],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    if completed.returncode != 0:
+        raise RuntimeError(completed.stdout.strip() or f"git diff failed for {base_ref}")
+    return [line.strip() for line in completed.stdout.splitlines() if line.strip()]
+
+
+def _compact_step_for_report(step: dict[str, object]) -> dict[str, object]:
+    stdout = str(step.get("stdout") or "")
+    stderr = str(step.get("stderr") or "")
+    stdout_lines = [line for line in stdout.splitlines() if line.strip()]
+    stderr_lines = [line for line in stderr.splitlines() if line.strip()]
+    return {
+        "name": step.get("name"),
+        "argv": step.get("argv"),
+        "returncode": step.get("returncode"),
+        "ok": step.get("ok"),
+        "allowed_returncodes": step.get("allowed_returncodes"),
+        "stdout_length": len(stdout),
+        "stdout_sha256": hashlib.sha256(stdout.encode("utf-8")).hexdigest(),
+        "stdout_last_line": stdout_lines[-1][:500] if stdout_lines else "",
+        "stderr_length": len(stderr),
+        "stderr_sha256": hashlib.sha256(stderr.encode("utf-8")).hexdigest(),
+        "stderr_last_line": stderr_lines[-1][:500] if stderr_lines else "",
+    }
+
+
+def _write_release_prepare_report_step(
+    *,
+    version: str,
+    release_date: str,
+    from_tag: str,
+    to_ref: str,
+    summary_lines_path: Path,
+    prior_steps: list[dict[str, object]],
+    base_ref: str = "origin/main",
+) -> dict[str, object]:
+    report_path = Path("docs") / "reports" / "release" / f"release-prepare-{version}.json"
+    try:
+        changed_paths = _changed_paths_against(base_ref)
+        payload = {
+            "schema_version": 1,
+            "kind": "release_prepare_evidence",
+            "version": version,
+            "date": release_date,
+            "from_tag": from_tag,
+            "to_ref": to_ref,
+            "base_ref": base_ref,
+            "summary_lines_path": str(summary_lines_path),
+            "authorized_route": "agentic-kit release-prep",
+            "changed_paths_against_base": changed_paths,
+            "release_metadata_anchor_paths": release_anchor_changes(changed_paths),
+            "steps": [_compact_step_for_report(step) for step in prior_steps],
+        }
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    except (OSError, RuntimeError) as exc:
+        return {
+            "name": "release-prepare-report",
+            "argv": ["agentic-kit", "release", "prepare", "--write", "--json"],
+            "returncode": 2,
+            "ok": False,
+            "allowed_returncodes": [0],
+            "stdout": "",
+            "stderr": str(exc),
+        }
+    return {
+        "name": "release-prepare-report",
+        "argv": ["agentic-kit", "release", "prepare", "--write", "--json"],
+        "returncode": 0,
+        "ok": True,
+        "allowed_returncodes": [0],
+        "stdout": report_path.as_posix() + "\n",
+        "stderr": "",
+    }
 
 
 def _doc_lifecycle_release_review_step(version: str) -> dict[str, object]:
@@ -294,10 +378,52 @@ def release_prepare_command(
     steps = [
         _run_step("release-notes-generate", _agentic("release-notes-generate", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--include-github-metadata", "--summary-lines-json", str(summary_lines_path), "--json"))
     ]
-    release_prep_argv = _agentic("release-prep", "--version", version, "--date", release_date, "--summary-lines-from", str(summary_lines_path), "--json")
-    if dry_run:
-        release_prep_argv.insert(-1, "--dry-run")
-    steps.append(_run_step("release-prep", release_prep_argv))
-    payload = _payload("release-prepare", steps, dry_run=dry_run, extra={"version": version, "from_tag": effective_from_tag, "to_ref": to_ref, "date": release_date, "summary_lines_path": str(summary_lines_path)})
+    if all(step["ok"] for step in steps):
+        release_prep_argv = _agentic(
+            "release-prep",
+            "--version",
+            version,
+            "--date",
+            release_date,
+            "--summary-lines-from",
+            str(summary_lines_path),
+            "--json",
+        )
+        if dry_run:
+            release_prep_argv.insert(-1, "--dry-run")
+        steps.append(_run_step("release-prep", release_prep_argv))
+    if not dry_run and all(step["ok"] for step in steps):
+        steps.append(
+            _run_step(
+                "commands-sync-entrypoints",
+                _agentic("commands", "sync-entrypoints", "--execute", "--json"),
+            )
+        )
+    evidence_path = ""
+    if not dry_run and all(step["ok"] for step in steps):
+        report_step = _write_release_prepare_report_step(
+            version=version,
+            release_date=release_date,
+            from_tag=effective_from_tag,
+            to_ref=to_ref,
+            summary_lines_path=summary_lines_path,
+            prior_steps=list(steps),
+        )
+        if report_step["ok"]:
+            evidence_path = str(report_step["stdout"]).strip()
+        steps.append(report_step)
+    payload = _payload(
+        "release-prepare",
+        steps,
+        dry_run=dry_run,
+        extra={
+            "version": version,
+            "from_tag": effective_from_tag,
+            "to_ref": to_ref,
+            "date": release_date,
+            "summary_lines_path": str(summary_lines_path),
+            "evidence_path": evidence_path,
+        },
+    )
     _emit(payload, json_output=json_output)
     _exit_if_blocked(payload)

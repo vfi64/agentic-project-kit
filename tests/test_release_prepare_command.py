@@ -11,6 +11,7 @@ from agentic_project_kit.dpa_current_handoff_lifecycle import (
     DEFAULT_ACCEPTANCE_STATE_PATH,
     evaluate_current_handoff_text_lifecycle,
 )
+from agentic_project_kit.dpa_readiness import DEFAULT_READINESS_PATH
 from agentic_project_kit.release import CommandResult, build_release_state_report
 from agentic_project_kit.release_prepare import prepare_release_state
 from agentic_project_kit import release_metadata_prep
@@ -192,6 +193,28 @@ def test_prepare_release_state_is_idempotent(tmp_path: Path) -> None:
 
     first = prepare_release_state(project, version=TARGET_VERSION, date=TARGET_DATE, summary_lines=SUMMARY_LINES)
     second = prepare_release_state(project, version=TARGET_VERSION, date=TARGET_DATE, summary_lines=SUMMARY_LINES)
+
+    assert first.changed_paths
+    assert second.changed_paths == []
+
+
+def test_prepare_release_state_noop_does_not_require_dpa_write_authority(tmp_path: Path) -> None:
+    project = _copy_release_state_files(tmp_path)
+
+    first = prepare_release_state(project, version=TARGET_VERSION, date=TARGET_DATE, summary_lines=SUMMARY_LINES)
+    readiness_path = project / DEFAULT_READINESS_PATH
+    readiness_path.parent.mkdir(parents=True, exist_ok=True)
+    readiness_path.write_text(
+        json.dumps({"status": "DP2_AUTHORIZED", "command_manifest_ack": "COMMAND_MANIFEST_ACK stale"}),
+        encoding="utf-8",
+    )
+    second = prepare_release_state(
+        project,
+        version=TARGET_VERSION,
+        date=TARGET_DATE,
+        summary_lines=SUMMARY_LINES,
+        dry_run=True,
+    )
 
     assert first.changed_paths
     assert second.changed_paths == []

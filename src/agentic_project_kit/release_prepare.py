@@ -341,14 +341,15 @@ def prepare_release_state(
         ),
     }
 
-    _require_dpa_current_handoff_preflight(
-        root,
-        target_path=handoff_path,
-        projected_text=updates[handoff_path],
-        version=version,
-        date=date,
-        summary_lines=normalized_summary_lines,
-    )
+    if _read(handoff_path) != updates[handoff_path]:
+        _require_dpa_current_handoff_preflight(
+            root,
+            target_path=handoff_path,
+            projected_text=updates[handoff_path],
+            version=version,
+            date=date,
+            summary_lines=normalized_summary_lines,
+        )
 
     _write_current_handoff_if_changed(
         handoff_path,
