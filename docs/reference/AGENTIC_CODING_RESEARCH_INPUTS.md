@@ -1,5 +1,5 @@
 Status: active
-Status-date: 2026-07-09
+Status-date: 2026-07-19
 Superseded-by: n/a
 
 # Agentic Coding Research Inputs
@@ -235,3 +235,85 @@ Agentic coding needs less unconstrained autonomy and more explicit context, dete
 ```
 
 That matches the planned direction of `agentic-project-kit`. The project should therefore become a governance layer for human-AI development, not merely a scaffold generator and not a vibe-coding accelerator.
+
+## 7. Repository OS and review-economy research note
+
+**Status:** descriptive / non-normative / candidate  
+**Authority:** none  
+**Not:** a specification, roadmap commitment, ROS classification, or permission to alter the active DPA or kit master plans
+
+### 7.1 Purpose and immediate value
+
+This section preserves the converged conclusions of a design discussion about a possible future Repository Operating System (ROS), repository impact modelling, and adaptive review depth. It is an idea store and later comparison point. It creates no new workstream.
+
+The immediate value is narrower than an ROS program:
+
+- treat commands as governed operation surfaces rather than as the kernel itself;
+- make authority, mutation, lifecycle, evidence, and handoff relationships explicit;
+- use completeness checks before trusting any impact catalogue;
+- measure governance cost without treating assurance work as waste;
+- keep later automation fail-closed when impact knowledge is incomplete.
+
+### 7.2 Converged principles
+
+1. **No separate ROS programme yet.** Do not create an ROS architecture laboratory, ROS specification series, or independent governance stack before the DPA probes and their adjudication have produced repository-backed evidence.
+2. **Controlled extraction beats copying or greenfield replacement.** If a later ROS programme is justified, the current kit remains the reference implementation and first migration target; extraction follows a strangler pattern.
+3. **Missing catalogue data never proves missing impact.** Absence of an entry must resolve to unknown impact, and unknown impact must fall back to the complete review path.
+4. **Fast paths require proven catalogue completeness.** A catalogue is trustworthy only when CI proves that every real command maps to exactly one current entry, aliases resolve, removed commands leave no orphans, mutation types are complete, and the completeness gate itself is part of the mandatory CI path.
+5. **Safety is an admissibility condition, not an optimization target.** Critical misses are threshold failures. They are never weighted, averaged, or offset against cost, yield, or selectivity.
+6. **Adaptive review is not free model discretion.** Any later reduction in review depth must follow typed impact evidence, predefined rules, and fail-closed fallback behavior.
+7. **A safety claim needs a ground-truth channel.** During any fast-path pilot, a preregistered sample of fast-path-classified changes must still receive a blind parallel full review. Additional findings form the false-negative signal.
+8. **Small pilots provide promising evidence, not proof of safety.** Result labels must preserve the same epistemic discipline used elsewhere in the project.
+
+### 7.3 Measurement frame
+
+A later governance experiment must keep four dimensions separate:
+
+- **Cost:** passes, synchronization surface, correction work, and other declared effort proxies;
+- **Yield:** relevant defects found, with severity labels used only for efficiency analysis;
+- **Safety:** critical misses as a separate threshold test;
+- **Selectivity:** correctly avoided full reviews and unnecessary conservative fallbacks.
+
+No blended overall score may allow efficiency gains to compensate for a safety failure. Optimization metrics may be compared only after the admissibility gate passes.
+
+A governance baseline must be reconstructed from repository evidence. A deterministic script can reproduce calculations, but it does not make manually remembered inputs authoritative. Any later baseline package therefore needs source refs, review and adjudication anchors, an explicit counting convention, stable episode/pass definitions, and independent verification.
+
+### 7.4 Candidate future sequence
+
+The following sequence is a non-authoritative research candidate, not an active plan:
+
+1. reconstruct a repository-backed Governance Cost and Assurance Yield baseline;
+2. complete current-main revalidation, PROBE-001, PROBE-002, and adjudication under the existing DPA master plan;
+3. classify a minimal ROS-0 vocabulary from probe evidence, not from prior assumptions;
+4. build a completeness-proven command and operation catalogue;
+5. derive a bounded Repository Impact Projection rather than a new authority source;
+6. pilot adaptive review with preregistered thresholds and a blind full-review control sample;
+7. compare Cost, Yield, Safety, and Selectivity against the baseline;
+8. decide only then whether a broader ROS programme is justified.
+
+### 7.5 Candidate concepts, not decisions
+
+- repository kernel vocabulary for authority, state, lifecycle, registry, evidence, locks, workspace, operation, and capability;
+- a derived Repository Impact Projection for dependency and review-scope reasoning;
+- typed command metadata linking operation type, affected authorities, mutation class, risk domains, tests, and gates;
+- controlled Keep / Extract / Rewrite / Retire classification after probe evidence exists;
+- adaptive review compression that remains subordinate to catalogue completeness and safety gates.
+
+### 7.6 Explicit non-decisions
+
+This research note does not authorize:
+
+- a new ROS repository or architecture lab;
+- ROS-000 through ROS-900 specifications or ROS ADRs;
+- pre-probe Keep / Extract / Rewrite / Retire classification;
+- a new normative DPA invariant without the normal DPA change and adjudication path;
+- use of an unverified amplification figure as decision-grade evidence;
+- fast-path automation or an AI-selected review depth;
+- treating an impact graph as repository authority;
+- reordering the active DPA or kit master plans.
+
+### 7.7 Decision boundary
+
+The ROS line remains dormant until PROBE-001 and PROBE-002 are completed and adjudicated. Later work may promote individual conclusions only when repository-backed evidence supports them and the normal documentation, planning, review, and gate contracts are satisfied.
+
+The intended near-term effect of this section is therefore simple: preserve the ideas well enough that the current DPA and kit work can continue without reopening the architecture discussion from chat memory.
