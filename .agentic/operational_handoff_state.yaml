@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 1009bea202e6d85f76a517f95ff44d31a51ac936
-  short: 1009bea2
-  subject: Add remote-next order contract commands (#1990)
+  full: 01eb0163ffde4462344a30a95e077ee7541468e0
+  short: 01eb0163
+  subject: Classify DPA release-note titles (#1992)
 last_substantive_work_state:
-  full: 1009bea202e6d85f76a517f95ff44d31a51ac936
-  short: 1009bea2
-  subject: Add remote-next order contract commands (#1990)
+  full: 01eb0163ffde4462344a30a95e077ee7541468e0
+  short: 01eb0163
+  subject: Classify DPA release-note titles (#1992)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

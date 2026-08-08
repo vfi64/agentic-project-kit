@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `1009bea202e6d85f76a517f95ff44d31a51ac936` (`1009bea2`), after `Add remote-next order contract commands (#1990)`.
-Last substantive work state is `1009bea202e6d85f76a517f95ff44d31a51ac936` (`1009bea2`), after `Add remote-next order contract commands (#1990)`.
+Current verified main/admin HEAD is `01eb0163ffde4462344a30a95e077ee7541468e0` (`01eb0163`), after `Classify DPA release-note titles (#1992)`.
+Last substantive work state is `01eb0163ffde4462344a30a95e077ee7541468e0` (`01eb0163`), after `Classify DPA release-note titles (#1992)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

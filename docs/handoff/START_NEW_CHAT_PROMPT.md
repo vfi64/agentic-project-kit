@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: ba4278440e16c99dea17359c940545445e209ac01bbd396d8ad88358d520b3e3
 - docs/reference/agentic-kit-commands.json: 858d821b07ec8cc87df3edbd9f971c91208f8d064ab7a75a3b1e056e7cf5b3f4
-## Operational documentation refresh state after PR #1990
+## Operational documentation refresh state after PR #1992
 
-Current administrative handoff refresh state is `1009bea2` (`Add remote-next order contract commands (#1990)`). Continue next only after this post-PR1990 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `01eb0163` (`Classify DPA release-note titles (#1992)`). Continue next only after this post-PR1992 refresh is committed and merged; the next substantive slice must be created from fresh main.
