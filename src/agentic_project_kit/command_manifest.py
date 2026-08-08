@@ -147,6 +147,12 @@ def infer_safety(command: dict[str, Any]) -> str:
     group = str(command.get("group") or "")
     leaf = _leaf(command)
 
+    exact_read_only_commands = {
+        "agentic-kit workspace adopt",
+    }
+    if qualified in exact_read_only_commands:
+        return "READ_ONLY"
+
     destructive_terms = (
         "delete",
         "merge",

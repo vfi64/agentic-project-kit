@@ -1354,6 +1354,9 @@ plans:
   - Rule source validation remains read-only and fail-closed.
   - Active rules have stable identity, status, category, priority, scope, enforcement
     references, projection targets, dependencies, conflicts, and migration metadata.
+  - Active rules and command/governance mechanisms define `retirement_trigger`
+    metadata when newly added or materially touched; legacy coverage may be ratcheted
+    in by adjudicated follow-up slices.
   - Status files, handoff files, compiled agent context, and successor prompts are
     generated or validated projections, not independent rule stores.
   - Rule ids are stable and never recycled; obsolete or migrated rules keep explicit

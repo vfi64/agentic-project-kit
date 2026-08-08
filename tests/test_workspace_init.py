@@ -186,7 +186,7 @@ def test_init_ci_template_yaml_matches_cli_inventory(tmp_path: Path) -> None:
                 "runs-on": "ubuntu-latest",
                 "steps": [
                     {"uses": "actions/checkout@v4"},
-                    {"uses": "actions/setup-python@v5", "with": {"python-version": "3.12"}},
+                    {"uses": "actions/setup-python@v5", "with": {"python-version": "3.12", "cache": "pip"}},
                     {"run": "python -m pip install --upgrade pip"},
                     {"run": "python -m pip install agentic-project-kit"},
                     {"run": gate_command},

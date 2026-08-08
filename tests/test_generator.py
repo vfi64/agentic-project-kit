@@ -102,6 +102,7 @@ def test_generated_ci_uses_pypi_kit_source_by_default(tmp_path):
     )
 
     ci = (target / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    assert 'cache: "pip"' in ci
     assert "pip install agentic-project-kit" in ci
     assert "test.pypi.org" not in ci
 

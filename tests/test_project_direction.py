@@ -127,6 +127,18 @@ def test_direction_validate_cli_passes_current_project_direction() -> None:
     assert '"status": "PASS"' in result.output
 
 
+def test_rule_registry_hardening_acceptance_mentions_retirement_trigger() -> None:
+    direction = load_project_direction(Path("."))
+    items = [
+        entry
+        for section in ("strategy", "roadmap", "plans", "ideas")
+        for entry in direction.data[section]
+    ]
+    item = next(entry for entry in items if entry["id"] == "rule-registry-hardening")
+
+    assert any("retirement_trigger" in line for line in item["acceptance"])
+
+
 def test_direction_validate_rejects_duplicate_ids(tmp_path: Path) -> None:
     direction = _minimal_direction()
     direction["ideas"] = [

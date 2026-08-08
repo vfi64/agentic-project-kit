@@ -104,13 +104,19 @@ def _normalize_chat_mode(mode: str) -> str:
     return normalized
 
 
-def command_reference_contract(root: Path | str = ".") -> dict[str, Any]:
+def command_reference_contract(
+    root: Path | str = ".",
+    *,
+    manifest: dict[str, Any] | None = None,
+    source_texts: dict[str, str] | None = None,
+) -> dict[str, Any]:
     repo_root = Path(root)
-    manifest = load_command_manifest(repo_root)
+    manifest = manifest or load_command_manifest(repo_root)
     source_hashes: dict[str, str] = {}
     for rel in (COMMAND_REFERENCE_JSON, COMMAND_REFERENCE_MARKDOWN):
-        path = repo_root / rel
-        if path.exists():
+        if source_texts is not None and rel in source_texts:
+            source_hashes[rel] = hashlib.sha256(source_texts[rel].encode("utf-8")).hexdigest()
+        elif (path := repo_root / rel).exists():
             source_hashes[rel] = hashlib.sha256(path.read_bytes()).hexdigest()
 
     return {
@@ -123,9 +129,14 @@ def command_reference_contract(root: Path | str = ".") -> dict[str, Any]:
     }
 
 
-def command_reference_prompt_block(root: Path | str = ".") -> str:
-    contract = command_reference_contract(root)
-    manifest = load_command_manifest(root)
+def command_reference_prompt_block(
+    root: Path | str = ".",
+    *,
+    manifest: dict[str, Any] | None = None,
+    source_texts: dict[str, str] | None = None,
+) -> str:
+    contract = command_reference_contract(root, manifest=manifest, source_texts=source_texts)
+    manifest = manifest or load_command_manifest(root)
     hashes = contract["source_hashes"]
     hash_lines = "\n".join(f"- {path}: {digest}" for path, digest in sorted(hashes.items()))
     if not hash_lines:
@@ -146,15 +157,50 @@ def command_reference_prompt_block(root: Path | str = ".") -> str:
     )
 
 
-def ensure_command_reference_in_prompt(prompt_text: str, root: Path | str = ".") -> str:
-    manifest = load_command_manifest(root)
+def ensure_command_reference_in_prompt(
+    prompt_text: str,
+    root: Path | str = ".",
+    *,
+    manifest: dict[str, Any] | None = None,
+    source_texts: dict[str, str] | None = None,
+) -> str:
+    manifest = manifest or load_command_manifest(root)
     if (
         COMMAND_REFERENCE_JSON in prompt_text
         and command_manifest_ack_line(manifest) in prompt_text
         and "must_not_reconstruct_commands_from_memory" in prompt_text
     ):
         return prompt_text
-    return prompt_text.rstrip() + "\n\n" + command_reference_prompt_block(root) + "\n"
+    return (
+        prompt_text.rstrip()
+        + "\n\n"
+        + command_reference_prompt_block(root, manifest=manifest, source_texts=source_texts)
+        + "\n"
+    )
+
+
+_COMMAND_REFERENCE_PROMPT_BLOCK_RE = re.compile(
+    r"(?:\n\n)?Command manifest entrypoint:\n"
+    r".*?"
+    r"source_hashes:\n"
+    r"(?:- [^\n]+\n?)+",
+    re.DOTALL,
+)
+
+
+def upsert_command_reference_prompt_block(
+    prompt_text: str,
+    root: Path | str = ".",
+    *,
+    manifest: dict[str, Any] | None = None,
+    source_texts: dict[str, str] | None = None,
+) -> str:
+    block = command_reference_prompt_block(root, manifest=manifest, source_texts=source_texts)
+    if "Command manifest entrypoint:" in prompt_text and "Command reference contract:" in prompt_text:
+        updated = _COMMAND_REFERENCE_PROMPT_BLOCK_RE.sub("\n\n" + block + "\n", prompt_text, count=1)
+        if updated != prompt_text:
+            return updated.lstrip("\n")
+    return ensure_command_reference_in_prompt(prompt_text, root, manifest=manifest, source_texts=source_texts)
 
 
 def upsert_mandatory_entrypoint_block(text: str, manifest: dict[str, Any]) -> str:
@@ -179,15 +225,24 @@ def sync_entrypoint_files(
     execute: bool = False,
 ) -> dict[str, Any]:
     repo_root = Path(root)
-    targets: dict[str, str] = {
+    reference_targets: dict[str, str] = {
         COMMAND_REFERENCE_JSON: json.dumps(manifest, indent=2, sort_keys=True) + "\n",
         COMMAND_REFERENCE_MARKDOWN: markdown,
     }
+    targets: dict[str, str] = dict(reference_targets)
     agents_path = repo_root / "AGENTS.md"
     if agents_path.exists():
         targets["AGENTS.md"] = upsert_mandatory_entrypoint_block(
             agents_path.read_text(encoding="utf-8"),
             manifest,
+        )
+    start_prompt_path = repo_root / "docs/handoff/START_NEW_CHAT_PROMPT.md"
+    if start_prompt_path.exists():
+        targets["docs/handoff/START_NEW_CHAT_PROMPT.md"] = upsert_command_reference_prompt_block(
+            start_prompt_path.read_text(encoding="utf-8"),
+            repo_root,
+            manifest=manifest,
+            source_texts=reference_targets,
         )
 
     changed_paths: list[str] = []

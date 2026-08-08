@@ -16785,9 +16785,9 @@
       ],
       "qualified_name": "agentic-kit workspace adopt",
       "replaces_raw": [],
-      "safety": "BOUNDED",
+      "safety": "READ_ONLY",
       "task_tags": [
-        "bounded",
+        "read-only",
         "workspace"
       ],
       "when_to_use": "Analyze an existing repository without writing workspace files."
@@ -17109,7 +17109,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "3a372b60455a",
+    "manifest_sha": "ea6fde72b7b0",
     "schema_version": 1
   },
   "schema_version": 2,

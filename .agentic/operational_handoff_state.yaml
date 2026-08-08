@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 01eb0163ffde4462344a30a95e077ee7541468e0
-  short: 01eb0163
-  subject: Classify DPA release-note titles (#1992)
+  full: 375542e430453fffdbfb20e9fc8a19fd2fbb6862
+  short: 375542e4
+  subject: Refresh handoff state after PR1992 (#1993)
 last_substantive_work_state:
-  full: 01eb0163ffde4462344a30a95e077ee7541468e0
-  short: 01eb0163
-  subject: Classify DPA release-note titles (#1992)
+  full: 375542e430453fffdbfb20e9fc8a19fd2fbb6862
+  short: 375542e4
+  subject: Refresh handoff state after PR1992 (#1993)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

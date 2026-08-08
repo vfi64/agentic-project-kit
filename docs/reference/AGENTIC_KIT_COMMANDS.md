@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 3a372b60455a
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: ea6fde72b7b0
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -3365,7 +3365,7 @@ Alias for upload-output.
 
 ### `agentic-kit workspace adopt`
 
-- Safety: `BOUNDED`
+- Safety: `READ_ONLY`
 - When to use: Analyze an existing repository without writing workspace files.
 - Dry-run available: `False`
 

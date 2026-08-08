@@ -6,6 +6,8 @@ import subprocess
 import sys
 import types
 
+import pytest
+
 from agentic_project_kit.cockpit import BOUNDED, READ_ONLY, CockpitAction, CockpitActionResult
 from agentic_project_kit.gui_activity_log import normalize_activity_status
 from agentic_project_kit.gui_cockpit import (
@@ -50,6 +52,8 @@ GUI_VISIBILITY_GROUPS = (
     "copy_paste_tools",
     "output",
 )
+
+pytestmark = pytest.mark.gui
 
 
 class _FakeStringVar:
