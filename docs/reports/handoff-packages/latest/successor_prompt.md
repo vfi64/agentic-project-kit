@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `codex/s2b-command-surface-classification`
+- branch: `docs/post-pr2009-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -402,14 +402,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "codex/s2b-command-surface-classification",
+    "branch": "docs/post-pr2009-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "22c33481c095fc4e4a58f8af626a825ea1636a1d",
+    "head": "41dd0028b57a08b147804d7683c9f31e0baa60b4",
     "head_matches_origin_main": true,
-    "head_short": "22c33481",
+    "head_short": "41dd0028",
     "local_path": "cd /path/to/",
-    "origin_main": "22c33481c095fc4e4a58f8af626a825ea1636a1d",
-    "origin_main_short": "22c33481",
+    "origin_main": "41dd0028b57a08b147804d7683c9f31e0baa60b4",
+    "origin_main_short": "41dd0028",
     "worktree_clean": false
   }
 }

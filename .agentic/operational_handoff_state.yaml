@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a83468b862f671ccb2ac644a446e766d104b386c
-  short: a83468b8
-  subject: Refresh successor package after PR2006 (#2007)
+  full: 41dd0028b57a08b147804d7683c9f31e0baa60b4
+  short: 41dd0028
+  subject: Classify command manifest surfaces (#2009)
 last_substantive_work_state:
-  full: a83468b862f671ccb2ac644a446e766d104b386c
-  short: a83468b8
-  subject: Refresh successor package after PR2006 (#2007)
+  full: 41dd0028b57a08b147804d7683c9f31e0baa60b4
+  short: 41dd0028
+  subject: Classify command manifest surfaces (#2009)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
