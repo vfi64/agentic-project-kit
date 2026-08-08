@@ -4,7 +4,7 @@ Status: decided
 Decision status: decided 2026-07-08
 Review policy: required
 Document class: governance/system
-Status-date: 2026-07-29
+Status-date: 2026-08-09
 Moved-from: docs/planning/DOC_REGISTRY_SCOPE_DECISION.md
 Decision source: docs/DOC_REGISTRY_SCOPE.yaml
 
@@ -23,7 +23,7 @@ Decision outcome: active registry scope is declared in `docs/DOC_REGISTRY_SCOPE.
 | docs/planning/ | 2 | 2 | 0 |  |
 | docs/reference/ | 7 | 7 | 0 |  |
 | docs/releases/ | 1 | 1 | 0 |  |
-| docs/reports/ | 65 | 0 | 65 |  |
+| docs/reports/ | 66 | 0 | 66 |  |
 | docs/workflow/ | 11 | 11 | 0 |  |
 
 Notes:
