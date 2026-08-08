@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 70fa831b9e8e19db6073ea292845e43c6a1de2fa
-  short: 70fa831b
-  subject: Analyze status direction drift after 0.5.0 (#2002)
+  full: a18e831dd27c2662c43da843d7e51f5a03411042
+  short: a18e831d
+  subject: Fix post release status next step drift (#2004)
 last_substantive_work_state:
-  full: 70fa831b9e8e19db6073ea292845e43c6a1de2fa
-  short: 70fa831b
-  subject: Analyze status direction drift after 0.5.0 (#2002)
+  full: a18e831dd27c2662c43da843d7e51f5a03411042
+  short: a18e831d
+  subject: Fix post release status next step drift (#2004)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
