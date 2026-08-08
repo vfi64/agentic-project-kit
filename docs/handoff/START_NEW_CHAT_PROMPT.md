@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 2a4f50cd0b4784a35c865383feeaa050ce94676f47c90928fc8e68d8747590f5
 - docs/reference/agentic-kit-commands.json: cf0e11f7b0a065825e2e4ccfa600821d1293af6bfe505f9d9c23d00ca6603348
-## Operational documentation refresh state after PR #1993
+## Operational documentation refresh state after PR #1994
 
-Current administrative handoff refresh state is `375542e4` (`Refresh handoff state after PR1992 (#1993)`). Continue next only after this post-PR1993 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `665cbc76` (`Apply Claude release-prep hardening (#1994)`). Continue next only after this post-PR1994 refresh is committed and merged; the next substantive slice must be created from fresh main.
