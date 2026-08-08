@@ -1539,6 +1539,40 @@ def _admin_refresh_successor_prompt_path(after_pr: int, *, ws: Workspace | None 
     return _workspace_path_text(workspace, workspace.post_pr_successor_chat_handoff_path(after_pr))
 
 
+_CURRENT_GOVERNED_SLICE_REFRESH_TEXT = (
+    "Current governed slice: continue from fresh main with the next planned "
+    "governed slice after post-merge handoff checks pass; do not repeat already "
+    "verified release publication steps."
+)
+
+_NEXT_SAFE_STEP_REFRESH_TEXT = (
+    "Next safe step: continue from fresh main with the next planned governed slice."
+)
+
+
+def _refresh_current_state_multiline_field(
+    block: str,
+    *,
+    label: str,
+    replacement: str,
+    following_labels: tuple[str, ...] = (),
+) -> str:
+    label_pattern = re.escape(label)
+    stop_labels = "|".join(re.escape(item) for item in following_labels)
+    stop_pattern = r"\Z"
+    if stop_labels:
+        stop_pattern = rf"\n(?:{stop_labels}):|\Z"
+    pattern = rf"(?ms)^{label_pattern}:.*?(?={stop_pattern})"
+    match = re.search(pattern, block)
+    if not match:
+        return block
+    suffix = ""
+    if not following_labels:
+        suffix_match = re.search(r"(\n*)\Z", match.group(0))
+        suffix = suffix_match.group(1) if suffix_match else ""
+    return block[: match.start()] + replacement + suffix + block[match.end() :]
+
+
 def _refresh_status_current_state_block(text: str, *, after_pr: int, short: str, subject: str) -> str:
     match = re.search(r"(?ms)^## Current State\s*(.*?)(?=^## |\Z)", text)
     if not match:
@@ -1558,13 +1592,20 @@ def _refresh_status_current_state_block(text: str, *, after_pr: int, short: str,
             r"^Post-merge handoff status:.*$",
             f"Post-merge handoff status: PASS/NOOP after PR #{after_pr} administrative refresh.",
         ),
-        (
-            r"^Next safe step:.*$",
-            "Next safe step: continue from fresh main with the next planned governed slice.",
-        ),
     )
     for pattern, replacement in replacements:
         block = re.sub(pattern, replacement, block, count=1, flags=re.MULTILINE)
+    block = _refresh_current_state_multiline_field(
+        block,
+        label="Current governed slice",
+        replacement=_CURRENT_GOVERNED_SLICE_REFRESH_TEXT,
+        following_labels=("Post-merge handoff status", "Next safe step"),
+    )
+    block = _refresh_current_state_multiline_field(
+        block,
+        label="Next safe step",
+        replacement=_NEXT_SAFE_STEP_REFRESH_TEXT,
+    )
     return text[: match.start()] + block + text[match.end() :]
 
 

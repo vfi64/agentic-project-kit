@@ -9,12 +9,12 @@ Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21850952`.
 Current verified main: `70fa831b` (`Analyze status direction drift after 0.5.0 (#2002)`).
 Latest substantive work: PR #2002 (`Analyze status direction drift after 0.5.0 (#2002)`).
-Current governed slice: `codex/claude-followup-hardening` closes the remaining
-small Claude follow-ups before release 0.5.0: bounded workspace removal,
-age-only fresh-context warnings, and automatic pytest marker routing.
+Current governed slice: post-0.5.0 consolidation follows the S1
+status/direction drift analysis before Block-B website work. The next bounded
+slices are S1-fix, S2 command-surface evidence/hardening, and S3 GUI projection.
 Post-merge handoff status: PASS/NOOP after PR #2002 administrative refresh.
-Next safe step: continue from fresh main with the next planned governed slice.
-handoff closeout, then regenerate and publish release 0.5.0 from fresh main.
+Next safe step: continue from fresh main with the next authorized post-0.5.0
+governed slice; release 0.5.0 is already published and DOI-verified.
 
 ## Historical State Snapshots
 
