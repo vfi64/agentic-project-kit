@@ -1,0 +1,22 @@
+{
+  "schema_version": "agf.capture-profile.v1",
+  "status": "proposed-adoption",
+  "status_date": "2026-07-20",
+  "repository": "vfi64/agentic-project-kit",
+  "framework_repository": "vfi64/agentic-governance-framework",
+  "framework_ref": "1b642470b1af82685a18b1459f9e131ff62f4510",
+  "event_schema_path": "schemas/capture-event.schema.json",
+  "local_event_stream": ".agentic/governance/capture-events.jsonl",
+  "authority": {
+    "framework": "Defines the reusable capture format and method only.",
+    "kit": "Owns all Kit capture content, triage, promotion, implementation and runtime decisions."
+  },
+  "queue_policy": {
+    "priority_order": ["critical", "high", "normal", "low"],
+    "within_priority": "oldest-unresolved-first",
+    "tie_breaker": "capture_id-lexical"
+  },
+  "required_capture_boundary": "Before handoff or context loss, persist material unpromoted Kit governance ideas, rule candidates, risks, questions and important project facts.",
+  "normative_effect": "none-until-promoted-through-kit-governance",
+  "projection_policy": "Human-readable capture views are derived and non-authoritative."
+}
