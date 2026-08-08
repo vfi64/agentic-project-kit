@@ -134,7 +134,8 @@ def _write_release_prepare_report_step(
     prior_steps: list[dict[str, object]],
     base_ref: str = "origin/main",
 ) -> dict[str, object]:
-    report_path = Path("docs") / "reports" / "release" / f"release-prepare-{version}.json"
+    workspace = load_workspace(Path("."), suppress_legacy_profile_warning=True)
+    report_path = workspace.reports_dir() / "release" / f"release-prepare-{version}.json"
     try:
         changed_paths = _changed_paths_against(base_ref)
         payload = {
@@ -169,7 +170,7 @@ def _write_release_prepare_report_step(
         "returncode": 0,
         "ok": True,
         "allowed_returncodes": [0],
-        "stdout": report_path.as_posix() + "\n",
+            "stdout": workspace.path_text(report_path) + "\n",
         "stderr": "",
     }
 
