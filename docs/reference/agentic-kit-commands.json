@@ -13,6 +13,7 @@
       "qualified_name": "agentic-kit actions list",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "actions",
         "read-only"
@@ -47,6 +48,7 @@
       "qualified_name": "agentic-kit actions show",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "actions",
         "read-only"
@@ -192,6 +194,7 @@
       "qualified_name": "agentic-kit artifact-gc",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -238,6 +241,7 @@
       "qualified_name": "agentic-kit audit-absolute-path-portability",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -284,6 +288,7 @@
       "qualified_name": "agentic-kit audit-command-authority",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -330,6 +335,7 @@
       "qualified_name": "agentic-kit audit-command-manifest",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -376,6 +382,7 @@
       "qualified_name": "agentic-kit audit-doc-currency",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -436,6 +443,7 @@
       "qualified_name": "agentic-kit audit-doc-orphans",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -468,6 +476,7 @@
       "qualified_name": "agentic-kit audit-mutation-lock-coverage",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -514,6 +523,7 @@
       "qualified_name": "agentic-kit audit-ns-legacy-references",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -574,6 +584,7 @@
       "qualified_name": "agentic-kit audit-patch-failure-discipline",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -634,6 +645,7 @@
       "qualified_name": "agentic-kit audit-path-literals",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -680,6 +692,7 @@
       "qualified_name": "agentic-kit audit-planning-docs-consolidation",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -726,6 +739,7 @@
       "qualified_name": "agentic-kit audit-program-redundancy",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -786,6 +800,7 @@
       "qualified_name": "agentic-kit audit-status-current-state",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -819,6 +834,7 @@
       "qualified_name": "agentic-kit boot check",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "boot",
         "read-only"
@@ -853,6 +869,7 @@
       "qualified_name": "agentic-kit boot closeout",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "boot",
         "bounded"
@@ -887,6 +904,7 @@
       "qualified_name": "agentic-kit boot prompt",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "boot",
         "bounded"
@@ -935,6 +953,7 @@
       "qualified_name": "agentic-kit boot report",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "boot",
         "read-only"
@@ -999,6 +1018,7 @@
       "qualified_name": "agentic-kit boot write",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "boot",
         "bounded"
@@ -1033,6 +1053,7 @@
       "qualified_name": "agentic-kit chat refresher",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "chat",
         "read-only"
@@ -1067,6 +1088,7 @@
       "qualified_name": "agentic-kit chat session-start",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "chat",
         "read-only"
@@ -1100,6 +1122,7 @@
       "qualified_name": "agentic-kit check",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -1132,6 +1155,7 @@
       "qualified_name": "agentic-kit check-docs",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -1164,6 +1188,7 @@
       "qualified_name": "agentic-kit check-todo",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -1197,6 +1222,7 @@
       "qualified_name": "agentic-kit cockpit actions",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "cockpit",
         "read-only"
@@ -1245,6 +1271,7 @@
       "qualified_name": "agentic-kit cockpit gatekeeper-status",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "cockpit",
         "read-only"
@@ -1321,6 +1348,7 @@
       "qualified_name": "agentic-kit cockpit run",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "cockpit"
@@ -1340,6 +1368,7 @@
       "qualified_name": "agentic-kit cockpit select",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "cockpit"
@@ -1374,6 +1403,7 @@
       "qualified_name": "agentic-kit cockpit status",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "cockpit",
         "read-only"
@@ -1449,6 +1479,7 @@
       "qualified_name": "agentic-kit command-for",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -1495,6 +1526,7 @@
       "qualified_name": "agentic-kit command-taxonomy-check",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -1556,6 +1588,7 @@
       "qualified_name": "agentic-kit commands render-md",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "commands",
         "read-only"
@@ -1618,6 +1651,7 @@
       "qualified_name": "agentic-kit commands sync-entrypoints",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "commands"
@@ -1652,6 +1686,7 @@
       "qualified_name": "agentic-kit dev local-feature-gate",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "dev"
@@ -1700,6 +1735,7 @@
       "qualified_name": "agentic-kit direction audit-drift",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "direction",
         "read-only"
@@ -1776,6 +1812,7 @@
       "qualified_name": "agentic-kit direction render",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "direction"
@@ -1838,6 +1875,7 @@
       "qualified_name": "agentic-kit direction validate",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "direction",
         "read-only"
@@ -1941,6 +1979,7 @@
       "qualified_name": "agentic-kit doc-lifecycle-audit",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -2001,6 +2040,7 @@
       "qualified_name": "agentic-kit doc-mesh-audit",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -2047,6 +2087,7 @@
       "qualified_name": "agentic-kit doc-mesh-repair",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -2108,6 +2149,7 @@
       "qualified_name": "agentic-kit doc-registry check-unregistered",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "doc-registry"
@@ -2170,6 +2212,7 @@
       "qualified_name": "agentic-kit doc-registry reconcile",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "doc-registry"
@@ -2260,6 +2303,7 @@
       "qualified_name": "agentic-kit doc-registry register",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "doc-registry"
@@ -2351,6 +2395,7 @@
       "qualified_name": "agentic-kit docs lifecycle apply",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "docs-lifecycle"
@@ -2416,6 +2461,7 @@
       "qualified_name": "agentic-kit docs lifecycle bootstrap",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "docs-lifecycle"
@@ -2479,6 +2525,7 @@
       "qualified_name": "agentic-kit docs lifecycle plan",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "docs-lifecycle",
         "read-only"
@@ -2528,6 +2575,7 @@
       "qualified_name": "agentic-kit docs lifecycle propose-delete",
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
+      "surface": "primitive",
       "task_tags": [
         "destructive",
         "docs-lifecycle"
@@ -2619,6 +2667,7 @@
       "qualified_name": "agentic-kit docs lifecycle report",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "docs-lifecycle",
         "read-only"
@@ -2726,6 +2775,7 @@
       "qualified_name": "agentic-kit docs lifecycle sweep",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "docs-lifecycle"
@@ -2775,6 +2825,7 @@
       "qualified_name": "agentic-kit docs lifecycle triage",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "docs-lifecycle",
         "read-only"
@@ -2851,6 +2902,7 @@
       "qualified_name": "agentic-kit docs removed-source-audit",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "docs",
         "read-only"
@@ -2898,6 +2950,7 @@
       "qualified_name": "agentic-kit docs-audit",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -2944,6 +2997,7 @@
       "qualified_name": "agentic-kit docs-registry",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -2976,6 +3030,7 @@
       "qualified_name": "agentic-kit doctor",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -3107,6 +3162,7 @@
       "qualified_name": "agentic-kit dpa current-handoff-refresh",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "dpa"
@@ -3225,6 +3281,7 @@
       "qualified_name": "agentic-kit dpa dp2-decision-readiness",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "dpa"
@@ -3343,6 +3400,7 @@
       "qualified_name": "agentic-kit dpa dp3-dp4-adjudication-check",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "dpa"
@@ -3475,6 +3533,7 @@
       "qualified_name": "agentic-kit dpa dp5-block-new-gate",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "dpa"
@@ -3593,6 +3652,7 @@
       "qualified_name": "agentic-kit dpa dp5-stage-check",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "dpa"
@@ -3711,6 +3771,7 @@
       "qualified_name": "agentic-kit dpa dp5-strict-gate",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "dpa"
@@ -3829,6 +3890,7 @@
       "qualified_name": "agentic-kit dpa final-closeout-check",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "dpa"
@@ -3989,6 +4051,7 @@
       "qualified_name": "agentic-kit dpa fixture-evidence",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "dpa"
@@ -4121,6 +4184,7 @@
       "qualified_name": "agentic-kit dpa maintainer-record-check",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "dpa"
@@ -4267,6 +4331,7 @@
       "qualified_name": "agentic-kit dpa post-dp2-scope-assessment",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "dpa"
@@ -4371,6 +4436,7 @@
       "qualified_name": "agentic-kit dpa probe-002-readiness",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "dpa"
@@ -4489,6 +4555,7 @@
       "qualified_name": "agentic-kit dpa probe-003-readiness",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "dpa"
@@ -4607,6 +4674,7 @@
       "qualified_name": "agentic-kit dpa probe-004-readiness",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "dpa"
@@ -4683,6 +4751,7 @@
       "qualified_name": "agentic-kit dpa readiness",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "dpa"
@@ -4829,6 +4898,7 @@
       "qualified_name": "agentic-kit dpa readonly-probe-execution",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "dpa"
@@ -4947,6 +5017,7 @@
       "qualified_name": "agentic-kit dpa renderer-readiness",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "dpa"
@@ -5051,6 +5122,7 @@
       "qualified_name": "agentic-kit dpa repo-adoption-assessment",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "dpa"
@@ -5183,6 +5255,7 @@
       "qualified_name": "agentic-kit dpa stable-readiness-check",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "dpa"
@@ -5315,6 +5388,7 @@
       "qualified_name": "agentic-kit dpa wrt-ch001-evidence",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "dpa"
@@ -5391,6 +5465,7 @@
       "qualified_name": "agentic-kit evidence classify-log",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "evidence"
@@ -5425,6 +5500,7 @@
       "qualified_name": "agentic-kit evidence clean",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "evidence"
@@ -5473,6 +5549,7 @@
       "qualified_name": "agentic-kit evidence clean-check",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "evidence"
@@ -5591,6 +5668,7 @@
       "qualified_name": "agentic-kit evidence commit-paths",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "evidence"
@@ -5947,6 +6025,7 @@
       "qualified_name": "agentic-kit evidence finalize-log",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "evidence"
@@ -5981,6 +6060,7 @@
       "qualified_name": "agentic-kit evidence guard",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "evidence"
@@ -6043,6 +6123,7 @@
       "qualified_name": "agentic-kit evidence inspect",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "evidence",
         "read-only"
@@ -6091,6 +6172,7 @@
       "qualified_name": "agentic-kit evidence scope-check",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "evidence"
@@ -6152,6 +6234,7 @@
       "qualified_name": "agentic-kit github-create",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded"
       ],
@@ -6170,6 +6253,7 @@
       "qualified_name": "agentic-kit governance check",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "governance",
         "read-only"
@@ -6218,6 +6302,7 @@
       "qualified_name": "agentic-kit gui initial-llm-prompt",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "gui"
@@ -6279,6 +6364,7 @@
       "qualified_name": "agentic-kit gui-readiness-gate",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded"
       ],
@@ -6312,6 +6398,7 @@
       "qualified_name": "agentic-kit handoff check",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "handoff",
         "read-only"
@@ -6331,6 +6418,7 @@
       "qualified_name": "agentic-kit handoff post-merge-refresh-status",
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
+      "surface": "diagnostic",
       "task_tags": [
         "destructive",
         "handoff"
@@ -6379,6 +6467,7 @@
       "qualified_name": "agentic-kit handoff prompt",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "handoff"
@@ -6427,6 +6516,7 @@
       "qualified_name": "agentic-kit handoff refresh",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "handoff"
@@ -6461,6 +6551,7 @@
       "qualified_name": "agentic-kit handoff show",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "handoff",
         "read-only"
@@ -6686,6 +6777,7 @@
       "qualified_name": "agentic-kit init",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded"
       ],
@@ -6791,6 +6883,7 @@
       "qualified_name": "agentic-kit instruction lint",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "instruction",
         "read-only"
@@ -6881,6 +6974,7 @@
       "qualified_name": "agentic-kit pass-already-done classify",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "pass-already-done"
@@ -6971,6 +7065,7 @@
       "qualified_name": "agentic-kit pass-already-done report",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "pass-already-done",
         "read-only"
@@ -7018,6 +7113,7 @@
       "qualified_name": "agentic-kit patch-preflight",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -7134,6 +7230,7 @@
       "qualified_name": "agentic-kit patch-scope-preflight",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -7152,6 +7249,7 @@
       "qualified_name": "agentic-kit patterns list",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "patterns",
         "read-only"
@@ -7186,6 +7284,7 @@
       "qualified_name": "agentic-kit patterns show",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "patterns",
         "read-only"
@@ -7233,6 +7332,7 @@
       "qualified_name": "agentic-kit post-release-check",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded"
       ],
@@ -7307,6 +7407,7 @@
       "qualified_name": "agentic-kit post-release-doi-closeout",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded"
       ],
@@ -7340,6 +7441,7 @@
       "qualified_name": "agentic-kit pr closeout-check",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "pr"
@@ -7530,6 +7632,7 @@
       "qualified_name": "agentic-kit pr merge-if-green",
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
+      "surface": "primitive",
       "task_tags": [
         "destructive",
         "pr"
@@ -7606,6 +7709,7 @@
       "qualified_name": "agentic-kit pr status",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "pr",
         "read-only"
@@ -7696,6 +7800,7 @@
       "qualified_name": "agentic-kit pr wait-ci",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "pr"
@@ -7729,6 +7834,7 @@
       "qualified_name": "agentic-kit pr-closeout",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -7775,6 +7881,7 @@
       "qualified_name": "agentic-kit pr-hygiene",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -7792,6 +7899,7 @@
       "qualified_name": "agentic-kit profile-explain",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -7852,6 +7960,7 @@
       "qualified_name": "agentic-kit project-direction",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -7957,6 +8066,7 @@
       "qualified_name": "agentic-kit release prepare",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "release"
@@ -8050,6 +8160,7 @@
         "gh release create"
       ],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "release"
@@ -8097,6 +8208,7 @@
       "qualified_name": "agentic-kit release-check",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded"
       ],
@@ -8185,6 +8297,7 @@
       "qualified_name": "agentic-kit release-metadata-authority-gate",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -8357,6 +8470,7 @@
       "qualified_name": "agentic-kit release-notes-generate",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -8403,6 +8517,7 @@
       "qualified_name": "agentic-kit release-plan",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded"
       ],
@@ -8435,6 +8550,7 @@
       "qualified_name": "agentic-kit release-preflight",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -8551,6 +8667,7 @@
       "qualified_name": "agentic-kit release-prep",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded"
       ],
@@ -8655,6 +8772,7 @@
       "qualified_name": "agentic-kit release-publish",
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
+      "surface": "orchestrator",
       "task_tags": [
         "destructive"
       ],
@@ -8729,6 +8847,7 @@
       "qualified_name": "agentic-kit release-status",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded"
       ],
@@ -8775,6 +8894,7 @@
       "qualified_name": "agentic-kit remote-branch-hygiene",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -8849,6 +8969,7 @@
       "qualified_name": "agentic-kit remote-branch-hygiene-apply",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -8923,6 +9044,7 @@
       "qualified_name": "agentic-kit remote-branch-hygiene-report",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded"
       ],
@@ -8969,6 +9091,7 @@
       "qualified_name": "agentic-kit remote-next",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -9015,6 +9138,7 @@
       "qualified_name": "agentic-kit rn",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -9061,6 +9185,7 @@
       "qualified_name": "agentic-kit rnc",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded"
       ],
@@ -9079,6 +9204,7 @@
       "qualified_name": "agentic-kit rule-registry check",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "rule-registry"
@@ -9309,6 +9435,7 @@
       "qualified_name": "agentic-kit rule-registry register",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "rule-registry"
@@ -9357,6 +9484,7 @@
       "qualified_name": "agentic-kit rule-registry report",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "rule-registry"
@@ -9433,6 +9561,7 @@
       "qualified_name": "agentic-kit rules acknowledge",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "rules"
@@ -9495,6 +9624,7 @@
       "qualified_name": "agentic-kit rules acknowledge-communication-refresh",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "rules"
@@ -9557,6 +9687,7 @@
       "qualified_name": "agentic-kit rules communication-refresh",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "rules"
@@ -9605,6 +9736,7 @@
       "qualified_name": "agentic-kit rules handoff-refresh",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "rules"
@@ -9653,6 +9785,7 @@
       "qualified_name": "agentic-kit rules require-current-communication-context",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "rules"
@@ -9701,6 +9834,7 @@
       "qualified_name": "agentic-kit rules snapshot",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "rules"
@@ -9749,6 +9883,7 @@
       "qualified_name": "agentic-kit rules validate-sources",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "rules"
@@ -9881,6 +10016,7 @@
       "qualified_name": "agentic-kit scaffold planning-doc",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "scaffold"
@@ -9929,6 +10065,7 @@
       "qualified_name": "agentic-kit slice gate",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "slice"
@@ -9990,6 +10127,7 @@
       "qualified_name": "agentic-kit standard-gates-audit-suite",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -10008,6 +10146,7 @@
       "qualified_name": "agentic-kit state freshness-check",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "state"
@@ -10070,6 +10209,7 @@
       "qualified_name": "agentic-kit state mode-check",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "state"
@@ -10146,6 +10286,7 @@
       "qualified_name": "agentic-kit state mode-write",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "state"
@@ -10210,6 +10351,7 @@
       "qualified_name": "agentic-kit todo complete",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "todo"
@@ -10244,6 +10386,7 @@
       "qualified_name": "agentic-kit todo list",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "todo"
@@ -10263,6 +10406,7 @@
       "qualified_name": "agentic-kit todo render",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "todo"
@@ -10325,6 +10469,7 @@
       "qualified_name": "agentic-kit transfer admin-refresh-pr",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "transfer"
@@ -10373,6 +10518,7 @@
       "qualified_name": "agentic-kit transfer apply",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -10452,6 +10598,7 @@
         "git checkout -b"
       ],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -10528,6 +10675,7 @@
       "qualified_name": "agentic-kit transfer branch-delete",
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
+      "surface": "primitive",
       "task_tags": [
         "destructive",
         "transfer"
@@ -10590,6 +10738,7 @@
       "qualified_name": "agentic-kit transfer branch-switch",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -10668,6 +10817,7 @@
       "qualified_name": "agentic-kit transfer chat-switch-complete",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "transfer"
@@ -10718,6 +10868,7 @@
       "qualified_name": "agentic-kit transfer closeout",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -10808,6 +10959,7 @@
       "qualified_name": "agentic-kit transfer command-composition-check",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "transfer"
@@ -10842,6 +10994,7 @@
       "qualified_name": "agentic-kit transfer command-reference-check",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "transfer"
@@ -10876,6 +11029,7 @@
       "qualified_name": "agentic-kit transfer command-reference-refresh",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -10912,6 +11066,7 @@
       "qualified_name": "agentic-kit transfer command-stack-begin",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -10948,6 +11103,7 @@
       "qualified_name": "agentic-kit transfer command-stack-end",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -11041,6 +11197,7 @@
         "git commit"
       ],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -11117,6 +11274,7 @@
       "qualified_name": "agentic-kit transfer conflict-resolve-file",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -11151,6 +11309,7 @@
       "qualified_name": "agentic-kit transfer conflict-status",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "transfer"
@@ -11215,6 +11374,7 @@
       "qualified_name": "agentic-kit transfer continue",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -11312,6 +11472,7 @@
         "git branch -D"
       ],
       "safety": "DESTRUCTIVE",
+      "surface": "primitive",
       "task_tags": [
         "destructive",
         "transfer"
@@ -11402,6 +11563,7 @@
       "qualified_name": "agentic-kit transfer diagnose-removed-ns-commands",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "transfer"
@@ -11436,6 +11598,7 @@
       "qualified_name": "agentic-kit transfer divergence-status",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "transfer"
@@ -11652,6 +11815,7 @@
       "qualified_name": "agentic-kit transfer evidence-finalize-current-transfer",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -11686,6 +11850,7 @@
       "qualified_name": "agentic-kit transfer evidence-inspect-latest",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "transfer"
@@ -11973,6 +12138,7 @@
       "qualified_name": "agentic-kit transfer evidence-pr-complete",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "transfer"
@@ -12021,6 +12187,7 @@
       "qualified_name": "agentic-kit transfer fetch-origin",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -12069,6 +12236,7 @@
       "qualified_name": "agentic-kit transfer head-sha",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "transfer"
@@ -12117,6 +12285,7 @@
       "qualified_name": "agentic-kit transfer inspect",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "transfer"
@@ -12151,6 +12320,7 @@
       "qualified_name": "agentic-kit transfer list-refs",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "transfer"
@@ -12185,6 +12355,7 @@
       "qualified_name": "agentic-kit transfer log-header",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -12233,6 +12404,7 @@
       "qualified_name": "agentic-kit transfer log-upload-hint",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -12283,6 +12455,7 @@
       "qualified_name": "agentic-kit transfer normalize-files",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -12347,6 +12520,7 @@
       "qualified_name": "agentic-kit transfer normalize-session",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -12521,6 +12695,7 @@
       "qualified_name": "agentic-kit transfer order-create",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -12569,6 +12744,7 @@
       "qualified_name": "agentic-kit transfer order-validate",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "transfer"
@@ -12645,6 +12821,7 @@
       "qualified_name": "agentic-kit transfer patch-cycle-status",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "transfer"
@@ -12693,6 +12870,7 @@
       "qualified_name": "agentic-kit transfer post-merge-check",
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
+      "surface": "diagnostic",
       "task_tags": [
         "destructive",
         "transfer"
@@ -12839,6 +13017,7 @@
       "qualified_name": "agentic-kit transfer post-merge-complete",
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
+      "surface": "orchestrator",
       "task_tags": [
         "destructive",
         "transfer"
@@ -12985,6 +13164,7 @@
       "qualified_name": "agentic-kit transfer post-merge-settle",
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
+      "surface": "orchestrator",
       "task_tags": [
         "destructive",
         "transfer"
@@ -13117,6 +13297,7 @@
       "qualified_name": "agentic-kit transfer pr-closeout-complete",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "transfer"
@@ -13264,6 +13445,7 @@
       "qualified_name": "agentic-kit transfer pr-complete",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "transfer"
@@ -13368,6 +13550,7 @@
       "qualified_name": "agentic-kit transfer pr-create",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -13531,6 +13714,7 @@
         "gh pr create"
       ],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "transfer"
@@ -13607,6 +13791,7 @@
       "qualified_name": "agentic-kit transfer pr-existing-for-branch",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -13755,6 +13940,7 @@
         "gh pr merge"
       ],
       "safety": "DESTRUCTIVE",
+      "surface": "primitive",
       "task_tags": [
         "destructive",
         "transfer"
@@ -13845,6 +14031,7 @@
       "qualified_name": "agentic-kit transfer pr-status",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "transfer"
@@ -13950,6 +14137,7 @@
       "qualified_name": "agentic-kit transfer pr-wait-ci",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -14028,6 +14216,7 @@
       "qualified_name": "agentic-kit transfer prepare-successor-handoff",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -14090,6 +14279,7 @@
       "qualified_name": "agentic-kit transfer protected-diff-plan",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "transfer"
@@ -14138,6 +14328,7 @@
       "qualified_name": "agentic-kit transfer publish-last-report",
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
+      "surface": "diagnostic",
       "task_tags": [
         "destructive",
         "transfer"
@@ -14172,6 +14363,7 @@
       "qualified_name": "agentic-kit transfer pull-current",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -14222,6 +14414,7 @@
         "git push"
       ],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -14256,6 +14449,7 @@
       "qualified_name": "agentic-kit transfer read-user-task",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -14318,6 +14512,7 @@
       "qualified_name": "agentic-kit transfer rebase-on-upstream",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -14352,6 +14547,7 @@
       "qualified_name": "agentic-kit transfer refresh-llm-context-carriers",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -14402,6 +14598,7 @@
       "qualified_name": "agentic-kit transfer remote-next",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "transfer"
@@ -14464,6 +14661,7 @@
       "qualified_name": "agentic-kit transfer remote-work-start",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "transfer"
@@ -14526,6 +14724,7 @@
       "qualified_name": "agentic-kit transfer repo-diff",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "transfer"
@@ -14575,6 +14774,7 @@
       "qualified_name": "agentic-kit transfer repo-log",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "transfer"
@@ -14625,6 +14825,7 @@
       "qualified_name": "agentic-kit transfer repo-status",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "transfer"
@@ -14687,6 +14888,7 @@
       "qualified_name": "agentic-kit transfer require-fresh-llm-context",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "transfer"
@@ -14721,6 +14923,7 @@
       "qualified_name": "agentic-kit transfer restore-known-volatile",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -14769,6 +14972,7 @@
       "qualified_name": "agentic-kit transfer run-and-log",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -14819,6 +15023,7 @@
       "qualified_name": "agentic-kit transfer run-local",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -14881,6 +15086,7 @@
       "qualified_name": "agentic-kit transfer run-sequence-and-log",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -14915,6 +15121,7 @@
       "qualified_name": "agentic-kit transfer show-last-report",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "transfer"
@@ -15033,6 +15240,7 @@
       "qualified_name": "agentic-kit transfer standard-error-scan",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -15069,6 +15277,7 @@
       "qualified_name": "agentic-kit transfer state",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "transfer"
@@ -15117,6 +15326,7 @@
       "qualified_name": "agentic-kit transfer status",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "transfer"
@@ -15207,6 +15417,7 @@
       "qualified_name": "agentic-kit transfer submit-user-task",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -15255,6 +15466,7 @@
       "qualified_name": "agentic-kit transfer sync-main",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "transfer"
@@ -15289,6 +15501,7 @@
       "qualified_name": "agentic-kit transfer verify-llm-context-refresh",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "transfer"
@@ -15351,6 +15564,7 @@
       "qualified_name": "agentic-kit transfer work-order-patch",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -15387,6 +15601,7 @@
       "qualified_name": "agentic-kit transfer workflow-next",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "transfer"
@@ -15420,6 +15635,7 @@
       "qualified_name": "agentic-kit validate-contract",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -15523,6 +15739,7 @@
       "qualified_name": "agentic-kit validate-output-contract",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -15570,6 +15787,7 @@
       "qualified_name": "agentic-kit validate-sections",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only"
       ],
@@ -15617,6 +15835,7 @@
       "qualified_name": "agentic-kit work check",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "work"
@@ -15679,6 +15898,7 @@
       "qualified_name": "agentic-kit work discard-changes",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "work"
@@ -15799,6 +16019,7 @@
       "qualified_name": "agentic-kit work finish",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "work"
@@ -15833,6 +16054,7 @@
       "qualified_name": "agentic-kit work recover",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "work"
@@ -15909,6 +16131,7 @@
       "qualified_name": "agentic-kit work start",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "work"
@@ -15928,6 +16151,7 @@
       "qualified_name": "agentic-kit work-order check",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "work-order"
@@ -15947,6 +16171,7 @@
       "qualified_name": "agentic-kit work-order list",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "work-order"
@@ -16009,6 +16234,7 @@
       "qualified_name": "agentic-kit work-order prepare",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "work-order"
@@ -16057,6 +16283,7 @@
       "qualified_name": "agentic-kit work-order run",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "work-order"
@@ -16091,6 +16318,7 @@
       "qualified_name": "agentic-kit work-order show",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "work-order"
@@ -16110,6 +16338,7 @@
       "qualified_name": "agentic-kit work-order templates",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "work-order"
@@ -16144,6 +16373,7 @@
       "qualified_name": "agentic-kit work-order typed-next",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "work-order"
@@ -16192,6 +16422,7 @@
       "qualified_name": "agentic-kit work-order typed-queue-status",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "work-order"
@@ -16254,6 +16485,7 @@
       "qualified_name": "agentic-kit work-order typed-run",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "work-order"
@@ -16288,6 +16520,7 @@
       "qualified_name": "agentic-kit workflow cleanup",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "workflow"
@@ -16322,6 +16555,7 @@
       "qualified_name": "agentic-kit workflow fail-report",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "workflow"
@@ -16356,6 +16590,7 @@
       "qualified_name": "agentic-kit workflow go",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "workflow"
@@ -16390,6 +16625,7 @@
       "qualified_name": "agentic-kit workflow list",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "workflow"
@@ -16424,6 +16660,7 @@
       "qualified_name": "agentic-kit workflow request",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "workflow"
@@ -16472,6 +16709,7 @@
       "qualified_name": "agentic-kit workflow run",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "workflow"
@@ -16520,6 +16758,7 @@
       "qualified_name": "agentic-kit workflow show",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "workflow"
@@ -16554,6 +16793,7 @@
       "qualified_name": "agentic-kit workflow state",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "workflow"
@@ -16602,6 +16842,7 @@
       "qualified_name": "agentic-kit workflow status",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "workflow"
@@ -16636,6 +16877,7 @@
       "qualified_name": "agentic-kit workflow upload",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "workflow"
@@ -16670,6 +16912,7 @@
       "qualified_name": "agentic-kit workflow upload-output",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "workflow"
@@ -16704,6 +16947,7 @@
       "qualified_name": "agentic-kit workflow-guard check",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "diagnostic",
       "task_tags": [
         "read-only",
         "workflow-guard"
@@ -16738,6 +16982,7 @@
       "qualified_name": "agentic-kit workflow-guard diagnose",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "diagnostic",
       "task_tags": [
         "bounded",
         "workflow-guard"
@@ -16786,6 +17031,7 @@
       "qualified_name": "agentic-kit workspace adopt",
       "replaces_raw": [],
       "safety": "READ_ONLY",
+      "surface": "orchestrator",
       "task_tags": [
         "read-only",
         "workspace"
@@ -16904,6 +17150,7 @@
       "qualified_name": "agentic-kit workspace dpa-intake",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "workspace"
@@ -17036,6 +17283,7 @@
       "qualified_name": "agentic-kit workspace init",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "workspace"
@@ -17098,6 +17346,7 @@
       "qualified_name": "agentic-kit workspace remove",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "workspace"
@@ -17160,6 +17409,7 @@
       "qualified_name": "agentic-kit workspace upgrade",
       "replaces_raw": [],
       "safety": "BOUNDED",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "workspace"
@@ -17171,7 +17421,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "b5c5204979a2",
+    "manifest_sha": "dbd04733157b",
     "schema_version": 1
   },
   "schema_version": 2,

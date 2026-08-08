@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `a83468b862f671ccb2ac644a446e766d104b386c` (`a83468b8`)
-- Handoff freshness marker: `a83468b8`
-- Branch at generation: `docs/post-pr2007-handoff-refresh`
+- HEAD: `22c33481c095fc4e4a58f8af626a825ea1636a1d` (`22c33481`)
+- Handoff freshness marker: `22c33481`
+- Branch at generation: `codex/s2b-command-surface-classification`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -102,7 +102,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml`.
 ### RESULT: PASS ###
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: b5c5204979a2). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK b5c5204979a2. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: dbd04733157b). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK dbd04733157b. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -112,5 +112,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: b85eb76973d5f062a1616b5670ba5fe363b3ed297c927a38d68db53e4dab10bf
-- docs/reference/agentic-kit-commands.json: c66b59973ba641d6a240985cbeeff3e0c7d9d850d41d10e3e5ac8f7f5702dca8
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 5e4520a86d640aa195fe3c9b7165dc8f04c877ec3c4b05b464df5eebab38e77a
+- docs/reference/agentic-kit-commands.json: cb1eeba681045365650e5c8bb9393815feb2556688fec5bfa05575fc8a6dbc82

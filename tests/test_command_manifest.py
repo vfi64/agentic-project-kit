@@ -9,6 +9,7 @@ from typer import Typer
 from agentic_project_kit.command_manifest import (
     JSON_PATH,
     MD_PATH,
+    SURFACE_VALUES,
     build_reference_from_app,
     evaluate_command_manifest,
     manifest_sha,
@@ -59,6 +60,7 @@ def test_fixture_reference_contains_required_manifest_fields() -> None:
 
     assert data["meta"]["manifest_sha"] == manifest_sha(data["commands"])
     assert command["safety"] in {"READ_ONLY", "BOUNDED", "DESTRUCTIVE"}
+    assert command["surface"] in SURFACE_VALUES
     assert command["task_tags"]
     assert command["when_to_use"] == "Say hello."
     assert command["replaces_raw"] == []
@@ -92,6 +94,23 @@ def test_workspace_remove_is_bounded_dry_run_available_in_current_reference() ->
 
     assert by_name["agentic-kit workspace remove"]["safety"] == "BOUNDED"
     assert by_name["agentic-kit workspace remove"]["dry_run_available"] is True
+    assert by_name["agentic-kit workspace remove"]["surface"] == "orchestrator"
+
+
+def test_current_reference_classifies_every_command_surface() -> None:
+    from agentic_project_kit.command_manifest import build_current_reference
+
+    data = build_current_reference()
+    surfaces = {
+        command["qualified_name"]: command.get("surface")
+        for command in data["commands"]
+    }
+
+    assert surfaces
+    assert all(surface in SURFACE_VALUES for surface in surfaces.values())
+    assert surfaces["agentic-kit transfer pr-create-complete"] == "orchestrator"
+    assert surfaces["agentic-kit audit-command-manifest"] == "diagnostic"
+    assert surfaces["agentic-kit transfer commit"] == "primitive"
 
 
 def test_audit_detects_missing_safety(tmp_path: Path, monkeypatch) -> None:
@@ -105,6 +124,32 @@ def test_audit_detects_missing_safety(tmp_path: Path, monkeypatch) -> None:
 
     assert not audit.ok
     assert any(finding.code == "SAFETY_INVALID" for finding in audit.findings)
+
+
+def test_audit_detects_missing_surface(tmp_path: Path, monkeypatch) -> None:
+    data = build_reference_from_app(_fixture_app())
+    data["commands"][0].pop("surface")
+    data["meta"]["manifest_sha"] = manifest_sha(data["commands"])
+    _write_manifest(tmp_path, data)
+    monkeypatch.chdir(tmp_path)
+
+    audit = evaluate_command_manifest(tmp_path)
+
+    assert not audit.ok
+    assert any(finding.code == "SURFACE_INVALID" for finding in audit.findings)
+
+
+def test_audit_detects_invalid_surface(tmp_path: Path, monkeypatch) -> None:
+    data = build_reference_from_app(_fixture_app())
+    data["commands"][0]["surface"] = "internal"
+    data["meta"]["manifest_sha"] = manifest_sha(data["commands"])
+    _write_manifest(tmp_path, data)
+    monkeypatch.chdir(tmp_path)
+
+    audit = evaluate_command_manifest(tmp_path)
+
+    assert not audit.ok
+    assert any(finding.code == "SURFACE_INVALID" for finding in audit.findings)
 
 
 def test_audit_detects_manifest_sha_mismatch(tmp_path: Path, monkeypatch) -> None:

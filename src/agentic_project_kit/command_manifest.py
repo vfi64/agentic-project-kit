@@ -13,6 +13,7 @@ from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 JSON_PATH = Path(LEGACY_DEFAULTS.reference_root) / "agentic-kit-commands.json"
 MD_PATH = Path(LEGACY_DEFAULTS.reference_root) / "AGENTIC_KIT_COMMANDS.md"
 SAFETY_VALUES = {"READ_ONLY", "BOUNDED", "DESTRUCTIVE"}
+SURFACE_VALUES = {"orchestrator", "diagnostic", "primitive"}
 
 RAW_REPLACEMENTS: dict[str, tuple[str, ...]] = {
     "agentic-kit transfer push-current": ("git push",),
@@ -215,6 +216,80 @@ def infer_safety(command: dict[str, Any]) -> str:
     return "BOUNDED"
 
 
+def infer_surface(command: dict[str, Any]) -> str:
+    qualified = str(command.get("qualified_name") or "")
+    path = command.get("path")
+    path_parts = [str(part) for part in path] if isinstance(path, list) else []
+    group = str(command.get("group") or (path_parts[0] if path_parts else "root"))
+    leaf = _leaf(command)
+
+    orchestrator_commands = {
+        "agentic-kit dpa final-closeout-check",
+        "agentic-kit evidence commit-paths",
+        "agentic-kit evidence finalize-log",
+        "agentic-kit github-create",
+        "agentic-kit init",
+        "agentic-kit post-release-doi-closeout",
+        "agentic-kit release prepare",
+        "agentic-kit release ready",
+        "agentic-kit release-prep",
+        "agentic-kit release-publish",
+        "agentic-kit transfer admin-refresh-pr",
+        "agentic-kit transfer chat-switch-complete",
+        "agentic-kit transfer evidence-pr-complete",
+        "agentic-kit transfer post-merge-complete",
+        "agentic-kit transfer post-merge-settle",
+        "agentic-kit transfer pr-closeout-complete",
+        "agentic-kit transfer pr-complete",
+        "agentic-kit transfer pr-create-complete",
+        "agentic-kit transfer remote-next",
+        "agentic-kit transfer remote-work-start",
+        "agentic-kit transfer sync-main",
+        "agentic-kit workflow go",
+        "agentic-kit workspace adopt",
+        "agentic-kit workspace dpa-intake",
+        "agentic-kit workspace init",
+        "agentic-kit workspace remove",
+        "agentic-kit workspace upgrade",
+    }
+    if qualified in orchestrator_commands:
+        return "orchestrator"
+
+    diagnostic_leaf_terms = (
+        "audit",
+        "check",
+        "status",
+        "inspect",
+        "list",
+        "show",
+        "validate",
+        "readiness",
+        "doctor",
+        "render",
+        "report",
+        "summary",
+        "diff",
+        "plan",
+        "diagnose",
+        "classify",
+    )
+    diagnostic_exact = {
+        "agentic-kit check",
+        "agentic-kit check-docs",
+        "agentic-kit check-todo",
+        "agentic-kit command-for",
+    }
+    if qualified in diagnostic_exact:
+        return "diagnostic"
+    if any(term in leaf for term in diagnostic_leaf_terms):
+        return "diagnostic"
+    if group == "dpa" and any(term in qualified for term in ("assessment", "closeout", "stage", "gate")):
+        return "diagnostic"
+    if infer_safety(command) == "READ_ONLY" and group not in {"workspace"}:
+        return "diagnostic"
+    return "primitive"
+
+
 def _task_tags(command: dict[str, Any]) -> list[str]:
     tags = []
     group = str(command.get("group") or "")
@@ -240,6 +315,7 @@ def _dry_run_available(command: dict[str, Any]) -> bool:
 def _with_manifest_fields(command: dict[str, Any]) -> dict[str, Any]:
     enriched = dict(command)
     enriched["safety"] = str(enriched.get("safety") or infer_safety(enriched))
+    enriched["surface"] = str(enriched.get("surface") or infer_surface(enriched))
     enriched["task_tags"] = list(enriched.get("task_tags") or _task_tags(enriched))
     enriched["when_to_use"] = str(enriched.get("when_to_use") or _when_to_use(enriched))
     enriched["replaces_raw"] = list(
@@ -326,6 +402,7 @@ def render_markdown(data: dict[str, Any]) -> str:
         lines.append(f"### `{command['qualified_name']}`")
         lines.append("")
         lines.append(f"- Safety: `{command.get('safety', '')}`")
+        lines.append(f"- Surface: `{command.get('surface', '')}`")
         lines.append(f"- When to use: {command.get('when_to_use', '')}")
         lines.append(f"- Dry-run available: `{bool(command.get('dry_run_available'))}`")
         replaces = command.get("replaces_raw") or []
@@ -407,6 +484,11 @@ def evaluate_command_manifest(root: Path = Path(".")) -> CommandManifestAudit:
         if safety not in SAFETY_VALUES:
             findings.append(
                 CommandManifestFinding("BLOCK", "SAFETY_INVALID", f"{qualified}: {safety!r}")
+            )
+        surface = command.get("surface")
+        if surface not in SURFACE_VALUES:
+            findings.append(
+                CommandManifestFinding("BLOCK", "SURFACE_INVALID", f"{qualified}: {surface!r}")
             )
         replaces_raw = command.get("replaces_raw", [])
         if replaces_raw is None:
