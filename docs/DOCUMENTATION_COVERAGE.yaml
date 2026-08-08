@@ -193,6 +193,7 @@ rules:
     - agentic-kit chat session-start
     - agentic-kit commands sync-entrypoints
     - agentic-kit workspace dpa-intake
+    - agentic-kit workspace remove
     - agentic-kit dpa readiness
     - agentic-kit dpa repo-adoption-assessment
     - agentic-kit dpa post-dp2-scope-assessment
@@ -542,6 +543,7 @@ rules:
   - path: README.md
     terms:
     - agentic-kit workspace init --root PATH
+    - agentic-kit workspace remove --root PATH
     - dry-run by default
     - --execute
     - .agentic/tmp/
@@ -554,6 +556,26 @@ rules:
     - warn-mode doc lifecycle defaults
     - --inject-ci
     - --inject-pre-commit
+- id: workspace-remove-readme-coverage
+  description: Bounded workspace removal must remain visible as the safe rollback path for exact Kit-generated operating-layer files.
+  documents:
+  - path: README.md
+    terms:
+    - agentic-kit workspace remove --root PATH
+    - bounded rollback path
+    - dry-run by default
+    - --execute
+    - exact Kit-generated `.agentic/` workspace files
+    - managed injected
+    - unknown or modified `.agentic/` paths block execution
+    - project docs/source files are preserved
+  - path: docs/TEST_GATES.md
+    terms:
+    - Workspace remove lifecycle change
+    - agentic-kit workspace remove
+    - exact Kit-generated workspace files
+    - unknown or modified `.agentic/` paths block execution
+    - project docs/source files are preserved
 - id: workspace-dpa-intake-coverage
   description: Workspace-level DPA intake orchestration must remain visible without allowing automatic external-repo conformance claims.
   documents:

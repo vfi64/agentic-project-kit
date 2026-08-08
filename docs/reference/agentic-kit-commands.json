@@ -17045,6 +17045,68 @@
     {
       "dry_run_available": true,
       "group": "workspace",
+      "help": "Plan or remove exact Kit-generated operating-layer workspace files.",
+      "name": "remove",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Target repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Remove exact Kit-generated workspace files.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workspace",
+        "remove"
+      ],
+      "qualified_name": "agentic-kit workspace remove",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "task_tags": [
+        "bounded",
+        "workspace"
+      ],
+      "when_to_use": "Plan or remove exact Kit-generated operating-layer workspace files."
+    },
+    {
+      "dry_run_available": true,
+      "group": "workspace",
       "help": "Plan or run deterministic workspace manifest schema upgrades.",
       "name": "upgrade",
       "params": [
@@ -17109,7 +17171,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "ea6fde72b7b0",
+    "manifest_sha": "403dd923c256",
     "schema_version": 1
   },
   "schema_version": 2,

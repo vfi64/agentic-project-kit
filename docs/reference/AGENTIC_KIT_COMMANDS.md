@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: ea6fde72b7b0
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 403dd923c256
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `249`
+- Command count: `250`
 
 ## Commands
 
@@ -3411,6 +3411,20 @@ Plan or create a bounded operating-layer workspace.
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write the planned workspace files. |
 | `inject_ci` | `TyperOption` | --inject-ci | `False` | `False` | Opt in to GitHub Actions workflow injection. |
 | `inject_pre_commit` | `TyperOption` | --inject-pre-commit | `False` | `False` | Opt in to pre-commit snippet injection. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+
+### `agentic-kit workspace remove`
+
+- Safety: `BOUNDED`
+- When to use: Plan or remove exact Kit-generated operating-layer workspace files.
+- Dry-run available: `True`
+
+Plan or remove exact Kit-generated operating-layer workspace files.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Target repository root. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Remove exact Kit-generated workspace files. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit workspace upgrade`

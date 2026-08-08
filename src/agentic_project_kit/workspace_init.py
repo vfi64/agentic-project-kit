@@ -183,6 +183,18 @@ def execute_workspace_init(plan: WorkspaceInitPlan) -> None:
         load_workspace(plan.root)
 
 
+def workspace_init_manifest_yaml(project: ProjectSuggestion) -> str:
+    return yaml.safe_dump(_manifest_for(project), sort_keys=False)
+
+
+def workspace_init_generated_files(
+    root: Path,
+    project: ProjectSuggestion,
+    manifest_yaml: str,
+) -> dict[str, str]:
+    return _planned_files(root, project, manifest_yaml)
+
+
 def render_workspace_init_plan(plan: WorkspaceInitPlan, *, written: bool = False) -> str:
     lines = [
         "WORKSPACE_INIT",
