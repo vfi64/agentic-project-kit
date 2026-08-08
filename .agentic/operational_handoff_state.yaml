@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a18e831dd27c2662c43da843d7e51f5a03411042
-  short: a18e831d
-  subject: Fix post release status next step drift (#2004)
+  full: a83468b862f671ccb2ac644a446e766d104b386c
+  short: a83468b8
+  subject: Refresh successor package after PR2006 (#2007)
 last_substantive_work_state:
-  full: a18e831dd27c2662c43da843d7e51f5a03411042
-  short: a18e831d
-  subject: Fix post release status next step drift (#2004)
+  full: a83468b862f671ccb2ac644a446e766d104b386c
+  short: a83468b8
+  subject: Refresh successor package after PR2006 (#2007)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
