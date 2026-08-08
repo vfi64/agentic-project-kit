@@ -37,6 +37,8 @@ RELEASE_METADATA_LINE_PATTERNS: tuple[re.Pattern[str], ...] = (
 )
 
 AUTHORIZED_ROUTE = "agentic-kit release-prep"
+AUTHORIZED_DOI_CLOSEOUT_ROUTE = "agentic-kit post-release-doi-closeout --write"
+DOI_CLOSEOUT_EVIDENCE_KIND = "post_release_doi_closeout_authority"
 
 
 @dataclass(frozen=True)
@@ -141,13 +143,22 @@ def release_metadata_anchor_changes_from_git(
     return release_metadata_anchor_changes_from_diff(completed.stdout, changed_anchor_paths)
 
 
-def _evidence_text_mentions_authorized_route(text: str) -> bool:
+def _release_prep_text_mentions_authorized_route(text: str) -> bool:
     lowered = text.lower()
     return "release-prep" in lowered and (
         AUTHORIZED_ROUTE in lowered
         or '"release-prep"' in lowered
         or "'release-prep'" in lowered
         or "release metadata" in lowered
+    )
+
+
+def _doi_closeout_text_mentions_authorized_route(text: str) -> bool:
+    lowered = text.lower()
+    return DOI_CLOSEOUT_EVIDENCE_KIND in lowered and (
+        AUTHORIZED_DOI_CLOSEOUT_ROUTE in lowered
+        or "post-release-doi-closeout --version" in lowered
+        or "post-release-doi-closeout" in lowered and "--write" in lowered
     )
 
 
@@ -166,6 +177,17 @@ def _json_evidence_mentions_changed_paths(data: object, changed_anchor_paths: Se
     return all(path in text for path in changed_anchor_paths)
 
 
+def _json_evidence_mentions_authorized_route(data: object) -> bool:
+    if not isinstance(data, dict):
+        return False
+    text = json.dumps(data, sort_keys=True)
+    if _release_prep_text_mentions_authorized_route(text):
+        return True
+    if data.get("evidence_kind") != DOI_CLOSEOUT_EVIDENCE_KIND:
+        return False
+    return _doi_closeout_text_mentions_authorized_route(text)
+
+
 def _text_evidence_mentions_changed_paths(text: str, changed_anchor_paths: Sequence[str]) -> bool:
     return all(path in text for path in changed_anchor_paths)
 
@@ -179,15 +201,17 @@ def evidence_is_authoritative(
     if not evidence_path.exists() or not evidence_path.is_file():
         return False
     text = evidence_path.read_text(encoding="utf-8", errors="replace")
-    if not _evidence_text_mentions_authorized_route(text):
-        return False
     if not _evidence_text_mentions_version(text, version):
         return False
 
     try:
         data = json.loads(text)
     except json.JSONDecodeError:
+        if not _release_prep_text_mentions_authorized_route(text):
+            return False
         return _text_evidence_mentions_changed_paths(text, changed_anchor_paths)
+    if not _json_evidence_mentions_authorized_route(data):
+        return False
     return _json_evidence_mentions_changed_paths(data, changed_anchor_paths)
 
 
@@ -255,7 +279,10 @@ def evaluate_release_metadata_authority_gate(
             base_ref=base_ref,
             changed_release_anchor_paths=changed_anchor_paths,
             evidence_paths=[path.as_posix() for path in authoritative],
-            message="Release metadata anchor changes are backed by authoritative release-prep evidence.",
+            message=(
+                "Release metadata anchor changes are backed by authoritative "
+                "release-prep or post-release DOI closeout evidence."
+            ),
         )
 
     return ReleaseMetadataAuthorityGateResult(
@@ -266,8 +293,9 @@ def evaluate_release_metadata_authority_gate(
         changed_release_anchor_paths=changed_anchor_paths,
         evidence_paths=[path.as_posix() for path in candidates],
         message=(
-            "Release metadata files changed without authoritative release-prepare evidence. "
-            "Use `agentic-kit release-prep --version <version> --summary-line <line> --json` evidence instead of "
+            "Release metadata files changed without authoritative release-prepare or post-release DOI closeout "
+            "evidence. Use `agentic-kit release-prep --version <version> --summary-line <line> --json` or "
+            "`agentic-kit post-release-doi-closeout --version <version> --write --json` evidence instead of "
             "manual regex/file patching."
         ),
     )

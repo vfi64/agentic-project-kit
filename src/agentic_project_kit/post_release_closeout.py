@@ -27,6 +27,10 @@ EXPECTED_DOI_CLOSEOUT_PATHS: tuple[str, ...] = (
 )
 
 _ALLOWED_WRITE_PATHS = frozenset(EXPECTED_DOI_CLOSEOUT_PATHS)
+DOI_CLOSEOUT_AUTHORIZED_ROUTE = "agentic-kit post-release-doi-closeout --write"
+DOI_CLOSEOUT_EVIDENCE_KIND = "post_release_doi_closeout_authority"
+DOI_CLOSEOUT_EVIDENCE_SCHEMA_VERSION = 1
+DOI_CLOSEOUT_EVIDENCE_DIR = "docs/reports/release"
 CURRENT_HANDOFF_RELATIVE_PATH = "docs/handoff/CURRENT_HANDOFF.md"
 DPA_DOI_CLOSEOUT_CONTRACT_ID = "DPA-CURRENT-HANDOFF-POST-RELEASE-DOI-CLOSEOUT-v1"
 DPA_DOI_CLOSEOUT_TARGET_SCOPE = "CURRENT_HANDOFF_POST_RELEASE_DOI_METADATA"
@@ -47,6 +51,7 @@ class PostReleaseDoiCloseoutResult:
     expected_paths: tuple[str, ...]
     version_doi: str
     concept_doi: str
+    evidence_path: str | None
     next_action: str
 
     @property
@@ -64,6 +69,7 @@ class PostReleaseDoiCloseoutResult:
             "expected_paths": list(self.expected_paths),
             "version_doi": self.version_doi,
             "concept_doi": self.concept_doi,
+            "evidence_path": self.evidence_path,
             "next_action": self.next_action,
             "ok": self.ok,
         }
@@ -106,6 +112,7 @@ def post_release_doi_closeout(
             EXPECTED_DOI_CLOSEOUT_PATHS,
             version_doi,
             concept_doi,
+            None,
             "Wait for post-release-check PASS before writing DOI metadata.",
         )
 
@@ -168,9 +175,11 @@ def post_release_doi_closeout(
             EXPECTED_DOI_CLOSEOUT_PATHS,
             version_doi,
             concept_doi,
+            None,
             next_action,
         )
 
+    evidence_path: str | None = None
     if write:
         handoff_text = changed_texts.get(CURRENT_HANDOFF_RELATIVE_PATH)
         if handoff_text is not None:
@@ -192,12 +201,21 @@ def post_release_doi_closeout(
                     EXPECTED_DOI_CLOSEOUT_PATHS,
                     version_doi,
                     concept_doi,
+                    None,
                     "Resolve DPA CURRENT_HANDOFF lifecycle blockers before DOI closeout can write.",
                 )
         for relative_path, text in changed_texts.items():
             if relative_path == CURRENT_HANDOFF_RELATIVE_PATH:
                 continue
             (project_root / relative_path).write_text(text, encoding="utf-8")
+        evidence_path = _write_doi_closeout_evidence(
+            project_root,
+            version=version,
+            version_doi=version_doi,
+            concept_doi=concept_doi,
+            changed_paths=tuple(changed_paths),
+            expected_paths=EXPECTED_DOI_CLOSEOUT_PATHS,
+        )
 
     next_action = (
         "Post-release DOI metadata closeout is complete."
@@ -214,6 +232,7 @@ def post_release_doi_closeout(
         EXPECTED_DOI_CLOSEOUT_PATHS,
         version_doi,
         concept_doi,
+        evidence_path,
         next_action,
     )
 
@@ -233,6 +252,8 @@ def render_post_release_doi_closeout_result(result: PostReleaseDoiCloseoutResult
     missing_changed = sorted(set(result.expected_paths) - set(result.changed_paths))
     if not result.changed_paths:
         lines.append("CHANGED_PATH=<none>")
+    if result.evidence_path is not None:
+        lines.append(f"EVIDENCE_PATH={result.evidence_path}")
     lines.extend(f"UNCHANGED_EXPECTED_PATH={path}" for path in missing_changed)
     lines.extend(f"BLOCKER={blocker}" for blocker in result.blockers)
     lines.append(f"NEXT={result.next_action}")
@@ -250,6 +271,55 @@ def _check_detail(report, name: str) -> tuple[str, str]:
 def _extract_zenodo_doi(text: str) -> str:
     match = re.search(r"10\.5281/zenodo\.\d+", text)
     return match.group(0) if match else ""
+
+
+def doi_closeout_evidence_relative_path(version: str) -> str:
+    plain_version = version.removeprefix("v")
+    safe_version = re.sub(r"[^A-Za-z0-9_.-]", "-", plain_version)
+    return f"{DOI_CLOSEOUT_EVIDENCE_DIR}/post-release-doi-closeout-{safe_version}.json"
+
+
+def _write_doi_closeout_evidence(
+    root: Path,
+    *,
+    version: str,
+    version_doi: str,
+    concept_doi: str,
+    changed_paths: tuple[str, ...],
+    expected_paths: tuple[str, ...],
+) -> str:
+    relative_path = doi_closeout_evidence_relative_path(version)
+    evidence = {
+        "schema_version": DOI_CLOSEOUT_EVIDENCE_SCHEMA_VERSION,
+        "evidence_kind": DOI_CLOSEOUT_EVIDENCE_KIND,
+        "authorized_route": DOI_CLOSEOUT_AUTHORIZED_ROUTE,
+        "command": f"agentic-kit post-release-doi-closeout --version {version.removeprefix('v')} --write --json",
+        "version": version.removeprefix("v"),
+        "tag": f"v{version.removeprefix('v')}",
+        "result_status": "PASS",
+        "write": True,
+        "version_doi": version_doi,
+        "concept_doi": concept_doi,
+        "changed_paths_at_closeout": list(changed_paths),
+        "expected_paths": list(expected_paths),
+        "authorized_release_anchor_paths": list(expected_paths),
+        "source_authority": {
+            "post_release_check": "PASS",
+            "github_release": "verified",
+            "zenodo_concept_doi": concept_doi,
+            "zenodo_version_doi": version_doi,
+        },
+        "dpa_current_handoff": {
+            "contract_id": DPA_DOI_CLOSEOUT_CONTRACT_ID,
+            "target_scope": DPA_DOI_CLOSEOUT_TARGET_SCOPE,
+            "writer_id": DPA_DOI_CLOSEOUT_WRITER_ID,
+            "renderer_id": DPA_DOI_CLOSEOUT_RENDERER_ID,
+        },
+    }
+    path = root / relative_path
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return relative_path
 
 
 def _dpa_current_handoff_lifecycle_enabled(root: Path) -> bool:
