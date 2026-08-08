@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 665cbc76a3b361d2fa43f0a453cc359a9add6590
-  short: 665cbc76
-  subject: Apply Claude release-prep hardening (#1994)
+  full: b54718c837c4408271d8775066984132482dacb3
+  short: b54718c8
+  subject: Complete Claude follow-up hardening (#1996)
 last_substantive_work_state:
-  full: 665cbc76a3b361d2fa43f0a453cc359a9add6590
-  short: 665cbc76
-  subject: Apply Claude release-prep hardening (#1994)
+  full: b54718c837c4408271d8775066984132482dacb3
+  short: b54718c8
+  subject: Complete Claude follow-up hardening (#1996)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-08T11:41:07.875924+00:00",
+  "generated_at_utc": "2026-08-08T12:05:29.580828+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,14 +57,14 @@
     "package_version": "0.4.13"
   },
   "repo": {
-    "branch": "codex/claude-followup-hardening",
+    "branch": "docs/post-pr1996-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "cc833944211b99d11e007ed7891a73bf2f33f4f2",
+    "head": "b54718c837c4408271d8775066984132482dacb3",
     "head_matches_origin_main": true,
-    "head_short": "cc833944",
+    "head_short": "b54718c8",
     "local_path": "cd /path/to/",
-    "origin_main": "cc833944211b99d11e007ed7891a73bf2f33f4f2",
-    "origin_main_short": "cc833944",
+    "origin_main": "b54718c837c4408271d8775066984132482dacb3",
+    "origin_main_short": "b54718c8",
     "worktree_clean": false
   },
   "schema_version": 1,
