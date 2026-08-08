@@ -44,7 +44,7 @@
       "path": "AGENTS.md"
     },
     {
-      "bytes": 36505,
+      "bytes": 36501,
       "exists": true,
       "path": "README.md"
     },
@@ -67,7 +67,7 @@
       "yaml_valid": true
     },
     {
-      "bytes": 32720,
+      "bytes": 32719,
       "exists": true,
       "path": "docs/STATUS.md"
     },
@@ -77,12 +77,12 @@
       "path": "docs/TEST_GATES.md"
     },
     {
-      "bytes": 31727,
+      "bytes": 31726,
       "exists": true,
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
     {
-      "bytes": 6922,
+      "bytes": 6918,
       "exists": true,
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
@@ -123,12 +123,12 @@
       "yaml_valid": true
     },
     {
-      "bytes": 163664,
+      "bytes": 163661,
       "exists": true,
       "path": "docs/reference/AGENTIC_KIT_COMMANDS.md"
     },
     {
-      "bytes": 460982,
+      "bytes": 460979,
       "exists": true,
       "path": "docs/reference/agentic-kit-commands.json"
     }
