@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-08-08T11:50:52.749209+00:00",
+    "created_at_utc": "2026-08-08T11:57:27.703762+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -306,11 +306,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-08-08T11:50:52.988551+00:00",
+    "generated_at_utc": "2026-08-08T11:57:28.011577+00:00",
     "generated_from_current_repo": true,
     "git_state": {
       "branch": "codex/claude-followup-hardening",
-      "head": "f7a9ee6ce87df4d284448e0e592352c6c857043f",
+      "head": "b3a4cd090537128fc4ccbfdd1b1e4fc12bf86ce9",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -918,10 +918,10 @@
     "repo_state": {
       "branch": "codex/claude-followup-hardening",
       "dirty_status": "",
-      "head": "f7a9ee6ce87df4d284448e0e592352c6c857043f",
+      "head": "b3a4cd090537128fc4ccbfdd1b1e4fc12bf86ce9",
       "head_matches_upstream": true,
       "upstream": "origin/codex/claude-followup-hardening",
-      "upstream_head": "f7a9ee6ce87df4d284448e0e592352c6c857043f"
+      "upstream_head": "b3a4cd090537128fc4ccbfdd1b1e4fc12bf86ce9"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -1490,10 +1490,10 @@
     "repo_state": {
       "branch": "codex/claude-followup-hardening",
       "dirty_status": "",
-      "head": "f7a9ee6ce87df4d284448e0e592352c6c857043f",
+      "head": "b3a4cd090537128fc4ccbfdd1b1e4fc12bf86ce9",
       "head_matches_upstream": true,
       "upstream": "origin/codex/claude-followup-hardening",
-      "upstream_head": "f7a9ee6ce87df4d284448e0e592352c6c857043f"
+      "upstream_head": "b3a4cd090537128fc4ccbfdd1b1e4fc12bf86ce9"
     },
     "schema_version": 1,
     "terminal_block_rules": {
