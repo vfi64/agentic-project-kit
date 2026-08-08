@@ -617,12 +617,13 @@ def _classify_subject(subject: str) -> str:
             "path literal",
             "repository identity",
             "mutation lock",
+            "dpa",
         )
     ):
         return "Governance"
     if any(token in lowered for token in ("test", "gate", "audit", "ruff", "pytest", "preflight", "check", "coverage", "hygiene")):
         return "Tests / Gates"
-    if any(token in lowered for token in ("doc", "documentation", "planning", "concept", "analysis", "plan ", "roadmap")):
+    if any(token in lowered for token in ("doc", "documentation", "planning", "concept", "analysis", "plan ", "roadmap", "readme")):
         return "Docs"
     if lowered.startswith(("fix ", "repair ", "harden ", "resolve ", "recheck ", "detect ", "keep ", "block ", "remediate ")):
         return "Fixed"

@@ -260,6 +260,37 @@ def test_release_notes_generator_uses_merge_pr_coverage_for_branch_commits(tmp_p
     assert report.administrative_items[0].commit_sha == merge_sha
 
 
+def test_release_notes_generator_classifies_current_readme_and_dpa_titles(tmp_path: Path) -> None:
+    report = build_release_notes_report(
+        tmp_path,
+        version="0.5.0",
+        from_tag="v0.4.13",
+        command_runner=FakeRunner(
+            subjects=[
+                "Extend README word limit (#1885)",
+                "Import DPA probe package (#1889)",
+                "Refresh DPA readiness evidence for current main (#1916)",
+                "Sanitize DPA fixture evidence paths (#1926)",
+                "Authorize DPA DP2 entry (#1928)",
+                "Authorize DPA WRT-CH-002 scope (#1939)",
+                "Authorize DPA WRT-CH-003 scope (#1941)",
+                "Authorize DPA WRT-CH-004 scope (#1943)",
+                "Adopt DPA DP5 observe stage (#1965)",
+                "Adopt DPA DP5 warn stage (#1967)",
+                "Adopt DPA DP5 block-new stage (#1969)",
+                "Adopt DPA DP5 strict stage (#1971)",
+                "Promote DPA stable readiness (#1977)",
+                "Allow DPA state in admin refresh (#1986)",
+            ]
+        ),
+    )
+
+    assert report.validation.status == "PASS"
+    assert report.unclassified_items == ()
+    assert report.items[0].category == "Docs"
+    assert {item.category for item in report.items[1:]} == {"Governance"}
+
+
 def test_release_notes_generator_treats_report_projection_commits_as_administrative(
     tmp_path: Path,
 ) -> None:
