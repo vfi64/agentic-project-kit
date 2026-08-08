@@ -42,6 +42,7 @@ def _evaluate_llm_context_freshness(
     forbidden_fragments = ["<PR_NUMMER>", "<PR_NUMBER>"]
     now = datetime.now(timezone.utc)
     blockers: list[str] = []
+    warnings: list[str] = []
     checked: dict[str, dict[str, object]] = {}
     valid_contexts: list[str] = []
 
@@ -97,12 +98,14 @@ def _evaluate_llm_context_freshness(
         status["source_hashes_match_current_repo"] = bool(source_hashes) and source_hashes == current_source_hashes
         generated_at = ctx.get("generated_at_utc")
         status["generated_at_utc"] = generated_at
+        age_only_stale = False
         if isinstance(generated_at, str) and generated_at:
             try:
                 generated_time = datetime.fromisoformat(generated_at.replace("Z", "+00:00"))
                 age_seconds = (now - generated_time).total_seconds()
                 status["age_seconds"] = age_seconds
                 status["fresh"] = age_seconds <= max_age_minutes * 60
+                age_only_stale = not status["fresh"]
             except ValueError:
                 status["fresh"] = False
                 local_blockers.append("generated_at_invalid")
@@ -121,7 +124,17 @@ def _evaluate_llm_context_freshness(
             local_blockers.append("source_hashes_mismatch")
         if not status["refresh_required_for_running_chats"]:
             local_blockers.append("running_chat_refresh_contract_missing")
-        if not status["fresh"]:
+        age_warning_only = (
+            age_only_stale
+            and status["source_hashes_complete"]
+            and status["source_hashes_match_current_repo"]
+        )
+        status["age_warning_only"] = age_warning_only
+        if age_warning_only:
+            warning = name + "_age_exceeds_max_but_source_hashes_match"
+            status.setdefault("warnings", []).append("age_exceeds_max_but_source_hashes_match")
+            warnings.append(warning)
+        elif not status["fresh"]:
             local_blockers.append("stale_or_not_fresh")
         status["blockers"] = local_blockers
         if local_blockers:
@@ -168,6 +181,7 @@ def _evaluate_llm_context_freshness(
         "max_age_minutes": max_age_minutes,
         "valid_contexts": valid_contexts,
         "blockers": blockers,
+        "warnings": list(dict.fromkeys(warnings)),
         "checked": checked,
         "allow_clean_post_merge_carrier_staleness": allow_clean_post_merge_carrier_staleness,
         "clean_post_merge_carrier_staleness_allowed": clean_post_merge_carrier_staleness_allowed,

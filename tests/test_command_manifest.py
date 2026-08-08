@@ -84,6 +84,16 @@ def test_workspace_adopt_is_read_only_in_current_reference() -> None:
     assert by_name["agentic-kit workspace adopt"]["safety"] == "READ_ONLY"
 
 
+def test_workspace_remove_is_bounded_dry_run_available_in_current_reference() -> None:
+    from agentic_project_kit.command_manifest import build_current_reference
+
+    data = build_current_reference()
+    by_name = {command["qualified_name"]: command for command in data["commands"]}
+
+    assert by_name["agentic-kit workspace remove"]["safety"] == "BOUNDED"
+    assert by_name["agentic-kit workspace remove"]["dry_run_available"] is True
+
+
 def test_audit_detects_missing_safety(tmp_path: Path, monkeypatch) -> None:
     data = build_reference_from_app(_fixture_app())
     data["commands"][0].pop("safety")

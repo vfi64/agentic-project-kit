@@ -7,14 +7,14 @@ Current verified release: 0.4.13.
 Current release tag: v0.4.13.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
-Current verified main: `665cbc76` (`Apply Claude release-prep hardening (#1994)`).
+Current verified main: `cc833944` (`Refresh handoff state after PR1994 (#1995)`).
 Latest substantive work: PR #1994 (`Apply Claude release-prep hardening (#1994)`).
-Current governed slice: `codex/dpa-workspace-intake-orchestrator` automates the
-deterministic workspace-level DPA intake sequence for foreign or newly initialized
-repositories.
-Post-merge handoff status: PASS/NOOP after PR #1994 administrative refresh.
-Next safe step: continue from fresh main with the next planned governed slice.
-post-merge closeout and a generated handoff refresh if required.
+Current governed slice: `codex/claude-followup-hardening` closes the remaining
+small Claude follow-ups before release 0.5.0: bounded workspace removal,
+age-only fresh-context warnings, and automatic pytest marker routing.
+Post-merge handoff status: PASS/NOOP after PR #1995 administrative refresh.
+Next safe step: finish this Claude follow-up slice, merge it with generated
+handoff closeout, then regenerate and publish release 0.5.0 from fresh main.
 
 ## Historical State Snapshots
 

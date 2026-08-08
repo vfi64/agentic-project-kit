@@ -37,6 +37,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Project health check change | Unit tests plus agentic-kit doctor CLI smoke command |
 | DPA repository adoption gate change | Unit tests plus CLI smoke command for `agentic-kit dpa repo-adoption-assessment`; confirm it remains read-only and does not claim external-repo conformance |
 | Workspace DPA intake orchestration change | Unit tests plus CLI smoke command for `agentic-kit workspace dpa-intake`; confirm it remains read-only by default, writes evidence only under the DPA assessment evidence root when explicitly executed, and does not claim external-repo conformance |
+| Workspace remove lifecycle change | Unit tests plus CLI smoke command for `agentic-kit workspace remove`; confirm it is dry-run by default, removes only exact Kit-generated workspace files, unknown or modified `.agentic/` paths block execution, and project docs/source files are preserved |
 | Planning-documentation slice gate | Unit tests plus CLI smoke command for `agentic-kit slice gate --kind planning-doc`; output must distinguish helper-local PASS from slice PASS |
 | TestPyPI validation | TestPyPI upload, fresh venv install, CLI smoke command |
 | Handoff/state change | Update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md |
@@ -59,6 +60,10 @@ The checked-in pytest marker contract is intentionally small:
 Markers enable selective local and CI routing without deleting or combining
 contract tests. The standard release gate still runs the full suite unless a
 more specific gate explicitly documents a narrower evidence scope.
+`tests/conftest.py` applies the `repo_state` marker during collection from
+deterministic source patterns for tests that inspect checked-in governance files
+or repository state, avoiding broad one-off edits across hundreds of contract
+tests.
 
 ## Architecture Contract Gate
 

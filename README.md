@@ -205,6 +205,7 @@ agentic-kit workspace dpa-intake --root PATH
 agentic-kit workspace adopt --root PATH
 agentic-kit dpa repo-adoption-assessment --root PATH
 agentic-kit workspace init --root PATH --execute [--inject-ci|--inject-pre-commit]
+agentic-kit workspace remove --root PATH
 agentic-kit-gui --root PATH
 ```
 
@@ -226,6 +227,12 @@ manifest diff, reports when a workspace is already at schema v1, and with
 `--execute` writes `.agentic/config.yaml.bak.v<N>` before each migration step.
 It tells manifest-less repositories to run `workspace init` and tells
 newer-schema repositories to upgrade the kit instead of guessing.
+
+`agentic-kit workspace remove --root PATH` is the bounded rollback path for an
+unmodified Kit operating layer. It is dry-run by default. With `--execute` it
+removes only exact Kit-generated `.agentic/` workspace files and managed injected
+CI/pre-commit files; unknown or modified `.agentic/` paths block execution, and
+project docs/source files are preserved.
 
 Manifest-less repositories still use the implicit legacy profile for the 1.x
 line, but that fallback is deprecated. The resolver emits a suppressible
@@ -371,6 +378,7 @@ Quick command guide:
 - `agentic-kit chat session-start --mode copy-paste`: print the refresher plus the full inline command manifest for a new session.
 - `agentic-kit commands sync-entrypoints --execute`: synchronize command reference files and command-manifest entrypoint headers.
 - `agentic-kit workspace dpa-intake`: run the deterministic one-shot DPA intake for a target repository by resolving exact-ref evidence, running workspace adoption analysis and DPA repo-adoption assessment, generating an adjudication plan, and optionally writing bounded intake evidence without migration or external-repo conformance claims.
+- `agentic-kit workspace remove`: plan or execute bounded removal of exact Kit-generated workspace files while preserving modified, unknown, source, and project-documentation paths.
 - `agentic-kit dpa readiness`: validate the staged DPA DP1 Assessment readiness record, report the deterministic DP2 selected self-hosting target-scope implementation percentage, and keep that separate from Kit-wide DPA conformance.
 - `agentic-kit dpa repo-adoption-assessment`: assess a foreign or new repository for DPA-governed adoption without mutation; it records fresh per-repo inventory, source authority, target identity, DPA-600/DPA-700 evidence requirements, exact-ref readiness and no external-repo conformance claim.
 - `agentic-kit dpa post-dp2-scope-assessment`: inventory post-DP2 DP3 rollout candidates, DP4 status-authority candidates and DP5 strict lifecycle-gate stage blockers without claiming Kit-wide DPA completion.

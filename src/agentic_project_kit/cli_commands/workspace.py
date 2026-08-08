@@ -13,6 +13,13 @@ from agentic_project_kit.workspace_init import (
     render_workspace_init_error,
     render_workspace_init_plan,
 )
+from agentic_project_kit.workspace_remove import (
+    WorkspaceRemoveError,
+    build_workspace_remove_plan,
+    execute_workspace_remove,
+    render_workspace_remove_error,
+    render_workspace_remove_plan,
+)
 from agentic_project_kit.workspace_upgrade import (
     WorkspaceUpgradeError,
     build_workspace_upgrade_plan,
@@ -148,6 +155,48 @@ def workspace_init_command(
             )
         else:
             typer.echo(render_workspace_init_error(exc), nl=False)
+        raise typer.Exit(code=1) from exc
+
+
+@workspace_app.command("remove")
+def workspace_remove_command(
+    root: Annotated[Path, typer.Option("--root", help="Target repository root.")] = Path("."),
+    execute: Annotated[
+        bool,
+        typer.Option("--execute", help="Remove exact Kit-generated workspace files."),
+    ] = False,
+    json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
+) -> None:
+    """Plan or remove exact Kit-generated operating-layer workspace files."""
+
+    try:
+        plan = build_workspace_remove_plan(root.resolve(), execute=execute)
+        if execute and plan.result_status == "PASS":
+            execute_workspace_remove(plan)
+        written = execute and plan.result_status == "PASS"
+        if json_output:
+            typer.echo(json.dumps(plan.as_json_data(written=written), indent=2, sort_keys=True))
+        else:
+            typer.echo(render_workspace_remove_plan(plan, written=written), nl=False)
+        if plan.result_status == "BLOCKED":
+            raise typer.Exit(2)
+    except WorkspaceRemoveError as exc:
+        if json_output:
+            typer.echo(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "kind": "workspace_remove_result",
+                        "result_status": "FAIL",
+                        "code": exc.code,
+                        "error": str(exc),
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+        else:
+            typer.echo(render_workspace_remove_error(exc), nl=False)
         raise typer.Exit(code=1) from exc
 
 
