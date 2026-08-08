@@ -7,10 +7,10 @@ Current verified release: 0.5.0.
 Current release tag: v0.5.0.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21850952`.
-Current verified main: `a18e831d` (`Fix post release status next step drift (#2004)`).
-Latest substantive work: PR #2004 (`Fix post release status next step drift (#2004)`).
+Current verified main: `a83468b8` (`Refresh successor package after PR2006 (#2007)`).
+Latest substantive work: PR #2007 (`Refresh successor package after PR2006 (#2007)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2004 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2007 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -413,6 +413,6 @@ promotes DPA-000 through DPA-900 to stable for the accepted Kit-side DP1-DP5
 scope. It does not claim automatic foreign-repository conformance; each managed
 foreign repository still requires fresh per-repo inventory, DPA-600 evidence,
 DPA-700 evidence, exact refs and Maintainer-authorized scope.
-## Operational documentation refresh state after PR #2004
+## Operational documentation refresh state after PR #2007
 
-Current administrative handoff refresh state is `a18e831d` (`Fix post release status next step drift (#2004)`). Continue next only after this post-PR2004 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `a83468b8` (`Refresh successor package after PR2006 (#2007)`). Continue next only after this post-PR2007 refresh is committed and merged; the next substantive slice must be created from fresh main.
