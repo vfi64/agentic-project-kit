@@ -6,7 +6,7 @@
 Current version: 0.4.13
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/zenodo.20101359)
 
-`agentic-project-kit` is a local Python package for generating GitHub-ready project skeletons for human-AI software development workflows.
+`agentic-project-kit` is a local Python package and CLI for governing AI-assisted repository work with explicit contracts, gates, evidence, and handoffs.
 
 It creates a reusable development process: onboarding, project contracts, policy selection, status discipline, test gates, task tracking, bounded logs, GitHub automation, workflow evidence, and release validation.
 

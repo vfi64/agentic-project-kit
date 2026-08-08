@@ -39,7 +39,7 @@ The command must generate the package files, update the three canonical chat-swi
 Do not start product work in this closeout. If validation fails, repair the handoff projection first.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 3a372b60455a). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 3a372b60455a. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: ea6fde72b7b0). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK ea6fde72b7b0. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -49,5 +49,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 128dc8fa5aabdd6c45afde15034a93b2ae7a9e7f0835784919b42abcf8d65db6
-- docs/reference/agentic-kit-commands.json: a37293bc4812ba09ed5bd411ff378d2963512607309c94f6d9b0e599f960f7c9
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 2a4f50cd0b4784a35c865383feeaa050ce94676f47c90928fc8e68d8747590f5
+- docs/reference/agentic-kit-commands.json: cf0e11f7b0a065825e2e4ccfa600821d1293af6bfe505f9d9c23d00ca6603348

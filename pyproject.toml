@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "agentic-project-kit"
 version = "0.4.13"
-description = "Generate GitHub-ready project templates for human-AI software development workflows."
+description = "Govern AI-assisted repository work with explicit contracts, gates, evidence, and handoffs."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -45,6 +45,11 @@ agentic-kit-gui = "agentic_project_kit.gui_cockpit:main"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+markers = [
+  "gui: GUI and Tkinter cockpit tests.",
+  "repo_state: tests that inspect live repository state or checked-in governance files.",
+  "slow: slower integration or lifecycle tests.",
+]
 
 [tool.ruff]
 line-length = 100

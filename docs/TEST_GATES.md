@@ -48,6 +48,18 @@ That scope intentionally preserves the historical default rule families E4, E7, 
 Do not rely on Ruff's upstream defaults for CI behavior, because new Ruff releases may expand
 their defaults and turn unrelated repository-wide style findings into gate failures.
 
+## Pytest Marker Routing
+
+The checked-in pytest marker contract is intentionally small:
+
+- `gui` marks GUI and Tkinter cockpit tests.
+- `repo_state` marks tests that inspect live repository state or checked-in governance files.
+- `slow` marks slower integration or lifecycle tests.
+
+Markers enable selective local and CI routing without deleting or combining
+contract tests. The standard release gate still runs the full suite unless a
+more specific gate explicitly documents a narrower evidence scope.
+
 ## Architecture Contract Gate
 
 `docs/architecture/ARCHITECTURE_CONTRACT.md` is a required project gate document.

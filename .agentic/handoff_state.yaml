@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 01eb0163
-  commit_subject: Classify DPA release-note titles (#1992)
+  commit: 375542e4
+  commit_subject: Refresh handoff state after PR1992 (#1993)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -87,14 +87,14 @@ safe_state:
   - 897
   - 968
 release:
-  current_version: 0.4.6
-  previous_version: 0.4.4
-  tag: v0.4.6
+  current_version: 0.4.13
+  previous_version: 0.4.12
+  tag: v0.4.13
   github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
-  zenodo_version_doi: 10.5281/zenodo.20467371
+  zenodo_version_doi: 10.5281/zenodo.21631484
   post_release_check: PASS
-  post_release_evidence: docs/reports/terminal/v045-doi-metadata-update.log
+  post_release_evidence: CHANGELOG.md#v0413
 open_items:
   prs: []
   next_expected_chat_action: Continue after PR892 with post-merge gate visibility
@@ -433,7 +433,7 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr1992-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1993-successor-chat-handoff.md
   first_instruction: 'Review PR #1436 and the refreshed successor handoff package
     for the release command authority planning slice. After merge, start from fresh
     main and use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice
@@ -444,6 +444,6 @@ next_step:
     main and use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice
     before DOI, legacy-doc, absolute-path, or GUI work.'
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr1992-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr1993-successor-chat-handoff.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers

@@ -75,7 +75,7 @@ Wenn der Bootstrap grün ist:
 - Neue Produktarbeit nur aus frischem, sauberem `main` beginnen.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 3a372b60455a). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 3a372b60455a. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: ea6fde72b7b0). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK ea6fde72b7b0. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -85,8 +85,8 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: ba4278440e16c99dea17359c940545445e209ac01bbd396d8ad88358d520b3e3
-- docs/reference/agentic-kit-commands.json: 858d821b07ec8cc87df3edbd9f971c91208f8d064ab7a75a3b1e056e7cf5b3f4
-## Operational documentation refresh state after PR #1992
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 2a4f50cd0b4784a35c865383feeaa050ce94676f47c90928fc8e68d8747590f5
+- docs/reference/agentic-kit-commands.json: cf0e11f7b0a065825e2e4ccfa600821d1293af6bfe505f9d9c23d00ca6603348
+## Operational documentation refresh state after PR #1993
 
-Current administrative handoff refresh state is `01eb0163` (`Classify DPA release-note titles (#1992)`). Continue next only after this post-PR1992 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `375542e4` (`Refresh handoff state after PR1992 (#1993)`). Continue next only after this post-PR1993 refresh is committed and merged; the next substantive slice must be created from fresh main.

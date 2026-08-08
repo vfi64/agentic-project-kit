@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `01eb0163ffde4462344a30a95e077ee7541468e0` (`01eb0163`), after `Classify DPA release-note titles (#1992)`.
-Last substantive work state is `01eb0163ffde4462344a30a95e077ee7541468e0` (`01eb0163`), after `Classify DPA release-note titles (#1992)`.
+Current verified main/admin HEAD is `375542e430453fffdbfb20e9fc8a19fd2fbb6862` (`375542e4`), after `Refresh handoff state after PR1992 (#1993)`.
+Last substantive work state is `375542e430453fffdbfb20e9fc8a19fd2fbb6862` (`375542e4`), after `Refresh handoff state after PR1992 (#1993)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

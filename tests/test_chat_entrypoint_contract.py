@@ -200,6 +200,27 @@ def test_sync_entrypoints_repairs_stale_manifest_sha_and_agents_block(tmp_path: 
         "<!-- command-manifest-entrypoint:end -->\n",
         encoding="utf-8",
     )
+    start_prompt = tmp_path / "docs/handoff/START_NEW_CHAT_PROMPT.md"
+    start_prompt.parent.mkdir(parents=True)
+    start_prompt.write_text(
+        "# Start New Chat Prompt\n\n"
+        "Command manifest entrypoint:\n"
+        "- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json "
+        "(manifest_sha: stale). Every reply containing commands MUST start with: "
+        "COMMAND_MANIFEST_ACK stale. Consult `agentic-kit command-for` before proposing commands.\n"
+        "- Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.\n"
+        "- raw git/gh commands with a mapped wrapper are rejected by instruction lint.\n\n"
+        "Command reference contract:\n"
+        "- Read `docs/reference/agentic-kit-commands.json` before composing agentic-kit commands.\n"
+        "- Read `docs/reference/AGENTIC_KIT_COMMANDS.md` before composing agentic-kit commands.\n"
+        "- `must_not_reconstruct_commands_from_memory: true`.\n"
+        "- Treat `source_hashes` as freshness evidence.\n"
+        "source_hashes:\n"
+        "- docs/reference/AGENTIC_KIT_COMMANDS.md: stalehash\n"
+        "- docs/reference/agentic-kit-commands.json: stalehash\n\n"
+        "## Tail\nkeep this paragraph\n",
+        encoding="utf-8",
+    )
     data = json.loads((tmp_path / JSON_PATH).read_text(encoding="utf-8"))
     data["meta"]["manifest_sha"] = "stale"
     (tmp_path / JSON_PATH).write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -221,6 +242,11 @@ def test_sync_entrypoints_repairs_stale_manifest_sha_and_agents_block(tmp_path: 
     assert payload["result_status"] == "PASS"
     assert payload["changed"] is True
     assert evaluate_command_manifest(tmp_path).ok
+    prompt_text = start_prompt.read_text(encoding="utf-8")
+    assert command_manifest_ack_line(load_manifest(tmp_path)) in prompt_text
+    assert "COMMAND_MANIFEST_ACK stale" not in prompt_text
+    assert prompt_text.count("Command manifest entrypoint:") == 1
+    assert "## Tail\nkeep this paragraph" in prompt_text
 
     idempotent = CliRunner().invoke(
         app,

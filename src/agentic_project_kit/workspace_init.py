@@ -388,6 +388,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
       - run: python -m pip install --upgrade pip
       - run: python -m pip install agentic-project-kit
       - run: agentic-kit standard-gates-audit-suite
