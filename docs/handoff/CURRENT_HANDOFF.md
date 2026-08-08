@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `375542e430453fffdbfb20e9fc8a19fd2fbb6862` (`375542e4`), after `Refresh handoff state after PR1992 (#1993)`.
-Last substantive work state is `375542e430453fffdbfb20e9fc8a19fd2fbb6862` (`375542e4`), after `Refresh handoff state after PR1992 (#1993)`.
+Current verified main/admin HEAD is `665cbc76a3b361d2fa43f0a453cc359a9add6590` (`665cbc76`), after `Apply Claude release-prep hardening (#1994)`.
+Last substantive work state is `665cbc76a3b361d2fa43f0a453cc359a9add6590` (`665cbc76`), after `Apply Claude release-prep hardening (#1994)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

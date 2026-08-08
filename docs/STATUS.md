@@ -7,12 +7,12 @@ Current verified release: 0.4.13.
 Current release tag: v0.4.13.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
-Current verified main: `375542e4` (`Refresh handoff state after PR1992 (#1993)`).
-Latest substantive work: PR #1993 (`Refresh handoff state after PR1992 (#1993)`).
+Current verified main: `665cbc76` (`Apply Claude release-prep hardening (#1994)`).
+Latest substantive work: PR #1994 (`Apply Claude release-prep hardening (#1994)`).
 Current governed slice: `codex/dpa-workspace-intake-orchestrator` automates the
 deterministic workspace-level DPA intake sequence for foreign or newly initialized
 repositories.
-Post-merge handoff status: PASS/NOOP after PR #1993 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #1994 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 post-merge closeout and a generated handoff refresh if required.
 
@@ -416,6 +416,6 @@ promotes DPA-000 through DPA-900 to stable for the accepted Kit-side DP1-DP5
 scope. It does not claim automatic foreign-repository conformance; each managed
 foreign repository still requires fresh per-repo inventory, DPA-600 evidence,
 DPA-700 evidence, exact refs and Maintainer-authorized scope.
-## Operational documentation refresh state after PR #1993
+## Operational documentation refresh state after PR #1994
 
-Current administrative handoff refresh state is `375542e4` (`Refresh handoff state after PR1992 (#1993)`). Continue next only after this post-PR1993 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `665cbc76` (`Apply Claude release-prep hardening (#1994)`). Continue next only after this post-PR1994 refresh is committed and merged; the next substantive slice must be created from fresh main.
