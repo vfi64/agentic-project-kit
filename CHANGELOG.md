@@ -1,6 +1,5 @@
 ## v0.5.0 - 2026-08-08
 
-- Zenodo DOI verification pending for v0.5.0.
 - Close out v0.4.13 DOI metadata
 - Stage DPA architecture import index
 - Add deterministic post-merge settle wrapper
@@ -61,6 +60,9 @@
 - Complete Claude follow-up hardening
 - Harden release prepare workflow evidence
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v0.5.0 DOI `10.5281/zenodo.21850952`.
+
+Zenodo v0.5.0 DOI: 10.5281/zenodo.21850952
 ## v0.4.13 - 2026-07-27
 
 - Close out v0.4.12 DOI metadata

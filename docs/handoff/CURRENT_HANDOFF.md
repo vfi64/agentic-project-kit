@@ -227,10 +227,10 @@ This file is the concise, curated current handoff pointer. Long-term history bel
 - This refresh records the AGF/DPA Package-G adoption-evaluation tracker only. It
   does not claim DPA import, AGF adoption or production runtime mutation.
 
-- Current verified release: 0.4.13.
-- Current release tag: v0.4.13.
+- Current verified release: 0.5.0.
+- Current release tag: v0.5.0.
 - Zenodo concept DOI: `10.5281/zenodo.20101359`.
-- Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
+- Verified Zenodo version DOI: `10.5281/zenodo.21850952`.
 - Main contains PR #1387 at `e07ccd4`.
 - PR #1387 refreshed handoff state after the v0.4.8 release PR #1386.
 - Generated handoff safe-state now anchors to PR #1387 via `docs/reports/terminal/post-pr1386-successor-chat-handoff.md`.

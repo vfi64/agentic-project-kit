@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -9,6 +10,8 @@ import typer
 from agentic_project_kit.cli_commands import release as release_cli
 import agentic_project_kit.post_release_closeout as closeout
 from agentic_project_kit.post_release_closeout import (
+    DOI_CLOSEOUT_AUTHORIZED_ROUTE,
+    DOI_CLOSEOUT_EVIDENCE_KIND,
     EXPECTED_DOI_CLOSEOUT_PATHS,
     post_release_doi_closeout,
     render_post_release_doi_closeout_result,
@@ -85,6 +88,7 @@ def test_doi_closeout_reports_expected_paths_even_when_dry_run(monkeypatch, tmp_
     assert result.ok is True
     assert result.expected_paths == EXPECTED_DOI_CLOSEOUT_PATHS
     assert set(result.changed_paths) == set(EXPECTED_DOI_CLOSEOUT_PATHS)
+    assert result.evidence_path is None
 
     rendered = render_post_release_doi_closeout_result(result)
     for path in EXPECTED_DOI_CLOSEOUT_PATHS:
@@ -101,6 +105,7 @@ def test_doi_closeout_write_updates_verified_releases_atomically(monkeypatch, tm
     assert result.ok is True
     assert result.expected_paths == EXPECTED_DOI_CLOSEOUT_PATHS
     assert set(result.changed_paths) == set(EXPECTED_DOI_CLOSEOUT_PATHS)
+    assert result.evidence_path == "docs/reports/release/post-release-doi-closeout-0.4.9.json"
 
     for path in EXPECTED_DOI_CLOSEOUT_PATHS:
         text = (tmp_path / path).read_text(encoding="utf-8")
@@ -112,6 +117,12 @@ def test_doi_closeout_write_updates_verified_releases_atomically(monkeypatch, tm
     assert "`v0.4.9` / `0.4.9`" in verified
     assert "10.5281/zenodo.20738074" in verified
     assert "10.5281/zenodo.20101359" in verified
+
+    evidence = json.loads((tmp_path / result.evidence_path).read_text(encoding="utf-8"))
+    assert evidence["evidence_kind"] == DOI_CLOSEOUT_EVIDENCE_KIND
+    assert evidence["authorized_route"] == DOI_CLOSEOUT_AUTHORIZED_ROUTE
+    assert evidence["version"] == "0.4.9"
+    assert set(evidence["authorized_release_anchor_paths"]) == set(EXPECTED_DOI_CLOSEOUT_PATHS)
 
 
 def test_doi_closeout_blocks_missing_verified_releases_file(monkeypatch, tmp_path: Path) -> None:

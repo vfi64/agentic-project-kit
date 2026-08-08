@@ -45,7 +45,7 @@ def test_gate_blocks_release_anchor_changes_without_evidence(tmp_path: Path) -> 
     assert result.ok is False
     assert result.status == "BLOCK"
     assert result.changed_release_anchor_paths == ["README.md", "pyproject.toml"]
-    assert "without authoritative release-prepare evidence" in result.message
+    assert "without authoritative release-prepare or post-release DOI closeout evidence" in result.message
 
 
 def test_release_metadata_diff_filter_ignores_non_release_readme_hunks() -> None:
@@ -100,6 +100,73 @@ def test_gate_accepts_authoritative_json_evidence(tmp_path: Path) -> None:
     assert result.ok is True
     assert result.status == "PASS"
     assert result.evidence_paths == [evidence.as_posix()]
+
+
+def test_gate_accepts_authoritative_post_release_doi_closeout_json_evidence(tmp_path: Path) -> None:
+    evidence = tmp_path / "docs/reports/release/post-release-doi-closeout-0.4.9.json"
+    evidence.parent.mkdir(parents=True)
+    evidence.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "evidence_kind": "post_release_doi_closeout_authority",
+                "authorized_route": "agentic-kit post-release-doi-closeout --write",
+                "command": "agentic-kit post-release-doi-closeout --version 0.4.9 --write --json",
+                "version": "0.4.9",
+                "version_doi": "10.5281/zenodo.20738074",
+                "concept_doi": "10.5281/zenodo.20101359",
+                "authorized_release_anchor_paths": [
+                    "README.md",
+                    "CITATION.cff",
+                    "docs/STATUS.md",
+                    "docs/handoff/CURRENT_HANDOFF.md",
+                    "docs/releases/VERIFIED_RELEASES.md",
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = evaluate_release_metadata_authority_gate(
+        tmp_path,
+        version="0.4.9",
+        evidence_paths=[evidence],
+        changed_paths=[
+            "README.md",
+            "CITATION.cff",
+            "docs/STATUS.md",
+            "docs/handoff/CURRENT_HANDOFF.md",
+            "docs/releases/VERIFIED_RELEASES.md",
+        ],
+    )
+
+    assert result.ok is True
+    assert result.status == "PASS"
+    assert result.evidence_paths == [evidence.as_posix()]
+
+
+def test_gate_rejects_post_release_doi_closeout_json_without_authorized_kind(tmp_path: Path) -> None:
+    evidence = tmp_path / "post-release-doi-closeout.json"
+    evidence.write_text(
+        json.dumps(
+            {
+                "command": "agentic-kit post-release-doi-closeout --version 0.4.9 --write --json",
+                "version": "0.4.9",
+                "authorized_release_anchor_paths": ["README.md"],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = evaluate_release_metadata_authority_gate(
+        tmp_path,
+        version="0.4.9",
+        evidence_paths=[evidence],
+        changed_paths=["README.md"],
+    )
+
+    assert result.ok is False
+    assert result.status == "BLOCK"
 
 
 def test_gate_rejects_evidence_for_wrong_version(tmp_path: Path) -> None:
