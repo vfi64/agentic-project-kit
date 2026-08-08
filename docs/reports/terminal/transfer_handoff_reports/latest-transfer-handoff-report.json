@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-08-08T11:57:27.703762+00:00",
+    "created_at_utc": "2026-08-08T12:36:15.627607+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -306,11 +306,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-08-08T11:57:28.011577+00:00",
+    "generated_at_utc": "2026-08-08T12:36:15.865708+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/claude-followup-hardening",
-      "head": "b3a4cd090537128fc4ccbfdd1b1e4fc12bf86ce9",
+      "branch": "codex/release-0.5.0-refresh",
+      "head": "9c4a0aa15f50458cadcad1e3706d8d1f14cb0b5e",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -370,8 +370,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "44d6cbcff3b727dea59ae5cfeaa491fce8851e9025949cf44d6e9ddebf60c8f7",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "5df008f0963553c7f798b0cd2a0a5d9df7d6490a649085e101e4605bd00b3fa9",
-      "docs/reference/agentic-kit-commands.json": "ecd49fd3bfb1a007358b1dc4b9505fc9a508ebb30a2460fef8427588684a346e"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "b85eb76973d5f062a1616b5670ba5fe363b3ed297c927a38d68db53e4dab10bf",
+      "docs/reference/agentic-kit-commands.json": "c66b59973ba641d6a240985cbeeff3e0c7d9d850d41d10e3e5ac8f7f5702dca8"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -916,12 +916,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/claude-followup-hardening",
+      "branch": "codex/release-0.5.0-refresh",
       "dirty_status": "",
-      "head": "b3a4cd090537128fc4ccbfdd1b1e4fc12bf86ce9",
+      "head": "9c4a0aa15f50458cadcad1e3706d8d1f14cb0b5e",
       "head_matches_upstream": true,
-      "upstream": "origin/codex/claude-followup-hardening",
-      "upstream_head": "b3a4cd090537128fc4ccbfdd1b1e4fc12bf86ce9"
+      "upstream": "origin/codex/release-0.5.0-refresh",
+      "upstream_head": "9c4a0aa15f50458cadcad1e3706d8d1f14cb0b5e"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -1488,12 +1488,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/claude-followup-hardening",
+      "branch": "codex/release-0.5.0-refresh",
       "dirty_status": "",
-      "head": "b3a4cd090537128fc4ccbfdd1b1e4fc12bf86ce9",
+      "head": "9c4a0aa15f50458cadcad1e3706d8d1f14cb0b5e",
       "head_matches_upstream": true,
-      "upstream": "origin/codex/claude-followup-hardening",
-      "upstream_head": "b3a4cd090537128fc4ccbfdd1b1e4fc12bf86ce9"
+      "upstream": "origin/codex/release-0.5.0-refresh",
+      "upstream_head": "9c4a0aa15f50458cadcad1e3706d8d1f14cb0b5e"
     },
     "schema_version": 1,
     "terminal_block_rules": {
