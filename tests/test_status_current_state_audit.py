@@ -203,6 +203,52 @@ def test_audit_status_current_state_allows_prepared_release_validation_descendan
     )
 
 
+def test_audit_status_current_state_allows_prepared_release_branch_ahead_of_origin(tmp_path: Path) -> None:
+    origin_main = "aaa1111222233334444555566667777888899990"
+    validation_head = "bbb1111222233334444555566667777888899990"
+    _write_project(tmp_path, status_main=origin_main[:8], validation_head=validation_head)
+    (tmp_path / "pyproject.toml").write_text('[project]\nname = "demo"\nversion = "1.2.4"\n', encoding="utf-8")
+    (tmp_path / "src" / "agentic_project_kit" / "__init__.py").write_text(
+        '__version__ = "1.2.4"\n', encoding="utf-8"
+    )
+    status = tmp_path / "docs" / "STATUS.md"
+    status.write_text(
+        status.read_text(encoding="utf-8").replace("Current version: 1.2.3", "Current version: 1.2.4"),
+        encoding="utf-8",
+    )
+
+    def git_runner(_root: Path, args: tuple[str, ...] | list[str]) -> GitResult:
+        command = tuple(args)
+        if command == ("rev-parse", "--verify", "origin/main"):
+            return GitResult(0, origin_main + "\n")
+        if command == ("merge-base", "--is-ancestor", validation_head, origin_main):
+            return GitResult(1, "")
+        if command == ("merge-base", "--is-ancestor", origin_main, validation_head):
+            return GitResult(0, "")
+        if command == ("merge-base", "--is-ancestor", origin_main[:8], validation_head):
+            return GitResult(0, "")
+        if command[:2] == ("rev-list", "--count"):
+            return GitResult(0, "0\n")
+        return GitResult(1, "", "unexpected command")
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=git_runner,
+        release_status_builder=lambda _root: _release_status(
+            "1.2.4",
+            current_state="prepared",
+            current_verified_version="1.2.3",
+        ),
+    )
+
+    assert result.ok is True
+    assert any(
+        finding.check == "handoff_validation_head_reachable_from_origin_main"
+        and "validation_head_descends_from_origin_main=True" in finding.detail
+        for finding in result.findings
+    )
+
+
 def test_audit_status_current_state_blocks_stale_status_main(tmp_path: Path) -> None:
     _write_project(tmp_path, status_main="0000000")
 

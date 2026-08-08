@@ -183,6 +183,7 @@ def audit_status_current_state(
         warnings=warnings,
         validation_head=validation_head,
         origin_main=origin_main,
+        release_current_state=release_current_state,
         max_origin_lag=max_origin_lag,
     )
     _audit_release_status(
@@ -540,6 +541,7 @@ def _audit_origin_main(
     warnings: list[StatusCurrentStateFinding],
     validation_head: str | None,
     origin_main: str | None,
+    release_current_state: str | None,
     max_origin_lag: int,
 ) -> None:
     _finding(
@@ -553,6 +555,21 @@ def _audit_origin_main(
     if not validation_head or not origin_main:
         return
     ancestor = run_git(root, ("merge-base", "--is-ancestor", validation_head, origin_main))
+    if ancestor.returncode != 0 and release_current_state == "prepared":
+        descendant = run_git(root, ("merge-base", "--is-ancestor", origin_main, validation_head))
+        if descendant.returncode == 0:
+            _finding(
+                findings,
+                blockers,
+                "origin/main",
+                "handoff_validation_head_reachable_from_origin_main",
+                True,
+                (
+                    f"validation_head={validation_head}, origin_main={origin_main}, "
+                    "release_state=prepared, validation_head_descends_from_origin_main=True"
+                ),
+            )
+            return
     _finding(
         findings,
         blockers,
