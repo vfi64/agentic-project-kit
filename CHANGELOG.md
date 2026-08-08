@@ -1,3 +1,66 @@
+## v0.5.0 - 2026-08-08
+
+- Zenodo DOI verification pending for v0.5.0.
+- Close out v0.4.13 DOI metadata
+- Stage DPA architecture import index
+- Add deterministic post-merge settle wrapper
+- Handle legacy post-merge refresh state
+- Extend README word limit
+- Import DPA architecture package
+- Import DPA probe package
+- Record DPA read-only probe refresh
+- Add DPA readiness check
+- Add DPA registry contract validation
+- Record DPA PROBE-001 readiness evidence
+- Add DPA PROBE-002 lifecycle readiness preflight
+- Record DPA WRT-CH-001 handoff refresh observation
+- Add DPA PROBE-003 workflow readiness preflight
+- Add DPA Renderer Probe readiness preflight
+- Add DPA PROBE-004 migration readiness preflight
+- Add DPA DP2 decision readiness preflight
+- Add DPA DP2 maintainer record check
+- Refresh DPA readiness evidence for current main
+- Add DPA read-only probe execution wrapper
+- Record DPA DP2 blocked maintainer assessment
+- Record DPA fixture evidence readiness
+- Sanitize DPA fixture evidence paths
+- Authorize DPA DP2 entry
+- Route WRT-CH001 through generated handoff block
+- Avoid self-stale post-PR handoff prompts
+- Record current WRT-CH001 refresh evidence
+- Avoid extra handoff prompt trailing newline
+- Authorize DPA WRT-CH-002 scope
+- Authorize DPA WRT-CH-003 scope
+- Authorize DPA WRT-CH-004 scope
+- Route current handoff refresh through DPA lifecycle
+- Allow DPA acceptance state in refresh-only checks
+- Route release-prep handoff writes through DPA
+- Route DOI closeout handoff writes through DPA
+- Guard DPA action-surface handoff routing
+- Classify workspace init handoff templates for DPA
+- Classify successor handoff projections for DPA
+- Add DPA post-DP2 scope assessment
+- Record DPA DP3 DP4 adjudication
+- Adopt DPA DP5 observe stage
+- Adopt DPA DP5 warn stage
+- Adopt DPA DP5 block-new stage
+- Adopt DPA DP5 strict stage
+- Record DPA final closeout
+- Harden DPA final closeout refs
+- Promote DPA stable readiness
+- Add DPA repo adoption assessment
+- Add workspace DPA intake orchestrator
+- Refresh handoff before PR 1983 closeout
+- Refresh final handoff before PR 1983 closeout
+- Harden transfer push safety
+- Allow DPA state in admin refresh
+- Gate command authority surfaces
+- Add remote-next order contract commands
+- Classify DPA release-note titles
+- Apply Claude release-prep hardening
+- Complete Claude follow-up hardening
+- Harden release prepare workflow evidence
+
 ## v0.4.13 - 2026-07-27
 
 - Close out v0.4.12 DOI metadata

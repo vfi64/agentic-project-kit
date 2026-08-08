@@ -297,3 +297,67 @@ def test_release_prepare_is_dry_run_by_default_and_derives_tag(monkeypatch):
     release_prep_call = next(call for call in calls if call[:2] == ["./.venv/bin/agentic-kit", "release-prep"])
     assert "--dry-run" in release_prep_call
     assert "--summary-lines-from" in release_prep_call
+
+
+def test_release_prepare_write_syncs_command_entrypoints(monkeypatch, tmp_path):
+    calls: list[list[str]] = []
+    monkeypatch.chdir(tmp_path)
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "tag", "--sort=-creatordate"]:
+            return _completed(command, stdout="v1.2.2\n")
+        if command == ["git", "diff", "--name-only", "origin/main"]:
+            return _completed(command, stdout="pyproject.toml\nREADME.md\nsrc/example.py\n")
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(app, ["release", "prepare", "--version", "1.2.3", "--write", "--json"])
+
+    assert result.exit_code == 0, result.output
+    release_prep_index = next(
+        index for index, call in enumerate(calls) if call[:2] == ["./.venv/bin/agentic-kit", "release-prep"]
+    )
+    sync_index = next(
+        index
+        for index, call in enumerate(calls)
+        if call[:3] == ["./.venv/bin/agentic-kit", "commands", "sync-entrypoints"]
+    )
+    release_prep_call = calls[release_prep_index]
+    sync_call = calls[sync_index]
+    assert "--dry-run" not in release_prep_call
+    assert "--execute" in sync_call
+    assert sync_index > release_prep_index
+    report = tmp_path / "docs" / "reports" / "release" / "release-prepare-1.2.3.json"
+    assert report.exists()
+    try:
+        payload = json.loads(report.read_text(encoding="utf-8"))
+        assert payload["authorized_route"] == "agentic-kit release-prep"
+        assert payload["release_metadata_anchor_paths"] == ["README.md", "pyproject.toml"]
+        assert any(step["name"] == "release-prep" for step in payload["steps"])
+    finally:
+        report.unlink(missing_ok=True)
+
+
+def test_release_prepare_stops_before_release_prep_when_notes_block(monkeypatch, tmp_path):
+    calls: list[list[str]] = []
+    monkeypatch.chdir(tmp_path)
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "tag", "--sort=-creatordate"]:
+            return _completed(command, stdout="v1.2.2\n")
+        if command[:2] == ["./.venv/bin/agentic-kit", "release-notes-generate"]:
+            return _completed(command, stdout='{"validation": {"status": "BLOCK"}}\n', returncode=2)
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(app, ["release", "prepare", "--version", "1.2.3", "--write", "--json"])
+
+    assert result.exit_code == 2, result.output
+    assert not any(call[:2] == ["./.venv/bin/agentic-kit", "release-prep"] for call in calls)
+    assert not (tmp_path / "docs" / "reports" / "release" / "release-prepare-1.2.3.json").exists()

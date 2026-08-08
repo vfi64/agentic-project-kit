@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agentic-project-kit"
-version = "0.4.13"
+version = "0.5.0"
 description = "Govern AI-assisted repository work with explicit contracts, gates, evidence, and handoffs."
 readme = "README.md"
 requires-python = ">=3.10"
