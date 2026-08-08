@@ -3,10 +3,10 @@
 ## Current State
 
 Current version: 0.5.0
-Current verified release: 0.4.13.
-Current release tag: v0.4.13.
+Current verified release: 0.5.0.
+Current release tag: v0.5.0.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.21631484`.
+Verified Zenodo version DOI: `10.5281/zenodo.21850952`.
 Current verified main: `8a1e0f95` (`Prepare release 0.5.0 (#1998)`).
 Latest substantive work: PR #1998 (`Prepare release 0.5.0 (#1998)`).
 Current governed slice: `codex/claude-followup-hardening` closes the remaining
