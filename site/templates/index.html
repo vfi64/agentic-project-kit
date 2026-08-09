@@ -8,10 +8,28 @@
   </head>
   <body>
     <main class="page">
+      <nav class="topnav" aria-label="Site">
+        <a href="index.html">Overview</a>
+        <a href="commands/guided.html">Guided</a>
+        <a href="commands/diagnostics.html">Diagnostics</a>
+        <a href="commands/index.html">Complete</a>
+        <a href="claims/index.html">Claims</a>
+      </nav>
+
       <section class="overview" aria-labelledby="site-title">
-        <p class="eyebrow">Generated repository projection</p>
-        <h1 id="site-title">${product_name}</h1>
-        <p class="lede">Formerly ${former_product_name}. This foundation page is generated from the current repository state, not copied by hand.</p>
+        <div>
+          <p class="eyebrow">Generated repository projection</p>
+          <h1 id="site-title">${product_name}</h1>
+          <p class="lede">Formerly ${former_product_name}. A local runtime for keeping long AI-assisted repository work grounded in contracts, gates, evidence and handoffs.</p>
+          <div class="hero-actions" aria-label="Primary generated views">
+            <a href="commands/guided.html">Guided commands</a>
+            <a href="claims/index.html">Claim evidence</a>
+          </div>
+        </div>
+        <figure class="system-map">
+          <img src="static/runtime-map.svg" alt="Repository sources flow into the deterministic site generator and then into public projections.">
+          <figcaption>Generated from repository state at build time.</figcaption>
+        </figure>
       </section>
 
       <section class="metrics" aria-label="Repository facts">
@@ -36,10 +54,6 @@
           <strong>${release_tag}</strong>
         </article>
         <article>
-          <span>Concept DOI</span>
-          <strong>${concept_doi}</strong>
-        </article>
-        <article>
           <span>Version DOI</span>
           <strong>${version_doi}</strong>
         </article>
@@ -47,6 +61,50 @@
           <span>Verified main</span>
           <strong>${current_verified_main}</strong>
         </article>
+        <article>
+          <span>Manifest</span>
+          <strong>${manifest_sha}</strong>
+        </article>
+      </section>
+
+      <section class="section-grid" aria-label="Project orientation">
+        <article class="panel">
+          <p class="eyebrow">Why</p>
+          <h2>Repository Memory</h2>
+          <p>Long LLM projects lose time when context lives in chat history. The Kit makes the repository the durable project memory: current state, handoff packages, command manifests, gates, reports and release evidence are inspectable before new work starts.</p>
+        </article>
+        <article class="panel">
+          <p class="eyebrow">Current State</p>
+          <h2>Generated Status</h2>
+          <p>Latest substantive work: ${latest_substantive_work}</p>
+          <p>Next safe step: ${next_safe_step}</p>
+        </article>
+      </section>
+
+      <section class="band" aria-labelledby="architecture-title">
+        <div>
+          <p class="eyebrow">Architecture</p>
+          <h2 id="architecture-title">Runtime Structure</h2>
+          <p>The public site is a projection, not a new authority. Package metadata, release state, command surfaces, safety metadata and claim status are derived from repository sources during the build.</p>
+        </div>
+        <dl class="compact-details">
+          <div>
+            <dt>Manifest identity</dt>
+            <dd><code>${manifest_sha}</code></dd>
+          </div>
+          <div>
+            <dt>Reproduced manifest</dt>
+            <dd><code>${reproduced_manifest_sha}</code></dd>
+          </div>
+          <div>
+            <dt>Identity verified</dt>
+            <dd><code>${manifest_identity_verified}</code></dd>
+          </div>
+          <div>
+            <dt>Build commit</dt>
+            <dd><code>${build_commit}</code></dd>
+          </div>
+        </dl>
       </section>
 
       <section class="command-links" aria-label="Command views">
@@ -58,23 +116,74 @@
         <a href="claims/index.html">Planned claims <strong>${claim_planned_count}</strong></a>
       </section>
 
-      <section class="details" aria-label="Build metadata">
+      <section class="section-grid" aria-label="Command surface">
+        <article class="panel">
+          <p class="eyebrow">CLI</p>
+          <h2>Normal Lifecycle</h2>
+          <ul class="summary-list">
+${guided_command_items}
+          </ul>
+        </article>
+        <article class="panel">
+          <p class="eyebrow">Diagnostics</p>
+          <h2>Common Blockers</h2>
+          <ul class="summary-list">
+${common_diagnostic_items}
+          </ul>
+        </article>
+      </section>
+
+      <section class="section-grid" aria-label="Interface and communication">
+        <article class="panel">
+          <p class="eyebrow">GUI</p>
+          <h2>Manifest Driven</h2>
+          <p>The GUI entry point is shown only through claim evidence, and command grouping follows the manifest surface projection instead of a separate hand-maintained command list.</p>
+        </article>
+        <article class="panel">
+          <p class="eyebrow">Communication</p>
+          <h2>Handoff First</h2>
+          <p>Successor handoff packages, transfer closeout, remote work evidence and copy-and-paste bridges are part of the governed workflow. The current package is regenerated by Kit commands after merges.</p>
+        </article>
+      </section>
+
+      <section class="status-board" aria-labelledby="status-title">
+        <div class="status-board-head">
+          <p class="eyebrow">Evidence Status</p>
+          <h2 id="status-title">Claims</h2>
+        </div>
+        <article>
+          <h3>Verified now</h3>
+          <ul class="summary-list">
+${verified_now_items}
+          </ul>
+        </article>
+        <article>
+          <h3>Available but evolving</h3>
+          <ul class="summary-list">
+${available_evolving_items}
+          </ul>
+        </article>
+        <article>
+          <h3>Planned</h3>
+          <ul class="summary-list">
+${planned_items}
+          </ul>
+        </article>
+        <article>
+          <h3>Not claimed</h3>
+          <ul class="summary-list">
+            <li><span>Global DPA conformance for arbitrary foreign repositories is not claimed.</span></li>
+            <li><span>Full GUI parity with every CLI command is not claimed.</span></li>
+            <li><span>Live GitHub Pages publication is not claimed until repository Pages source is configured for GitHub Actions.</span></li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="details" aria-label="Additional metadata">
         <dl>
           <div>
-            <dt>Command manifest</dt>
-            <dd><code>${manifest_sha}</code></dd>
-          </div>
-          <div>
-            <dt>Reproduced manifest</dt>
-            <dd><code>${reproduced_manifest_sha}</code></dd>
-          </div>
-          <div>
-            <dt>Manifest identity verified</dt>
-            <dd><code>${manifest_identity_verified}</code></dd>
-          </div>
-          <div>
-            <dt>Build commit</dt>
-            <dd><code>${build_commit}</code></dd>
+            <dt>Concept DOI</dt>
+            <dd><code>${concept_doi}</code></dd>
           </div>
           <div>
             <dt>Primitives</dt>

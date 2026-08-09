@@ -156,6 +156,7 @@ claims:
                 surface="diagnostic",
                 safety="READ_ONLY",
                 dry_run_available=False,
+                diagnostic_priority="common_blocker",
                 when_to_use="Run agentic-kit check-docs.",
                 help="",
                 params=(),

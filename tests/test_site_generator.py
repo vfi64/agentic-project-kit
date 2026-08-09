@@ -41,6 +41,7 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
         "commands/index.html",
         "index.html",
         "site.json",
+        "static/runtime-map.svg",
         "static/site.css",
     )
     html = (output / "index.html").read_text(encoding="utf-8")
@@ -48,6 +49,8 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     commands = json.loads((output / "commands" / "commands.json").read_text(encoding="utf-8"))
     claims = json.loads((output / "claims" / "claims.json").read_text(encoding="utf-8"))
     assert "Agentic Execution Runtime" in html
+    assert "Repository Memory" in html
+    assert "Verified now" in html
     assert "1.2.3" in html
     assert "abc123" in html
     assert "v1.2.3" in html
@@ -63,6 +66,7 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     assert data["roadmap_projection"]["status"] == "active"
     assert commands["guided_count"] == 1
     assert commands["diagnostic_count"] == 1
+    assert commands["entries"][0]["diagnostic_priority"] == "common_blocker"
     assert claims["claim_count"] == 0
     assert "agentic-kit workspace init" in (
         output / "commands" / "guided.html"
@@ -162,7 +166,11 @@ def _write_site_fixture(
         encoding="utf-8",
     )
     (root / "site" / "templates" / "index.html").write_text(
-        "<html>${product_name} ${package_version} ${build_commit} ${orchestrator_count} ${release_tag}</html>\n",
+        (
+            "<html>${product_name} ${package_version} ${build_commit} "
+            "${orchestrator_count} ${release_tag} Repository Memory Verified now "
+            "${guided_command_items} ${common_diagnostic_items}</html>\n"
+        ),
         encoding="utf-8",
     )
     (root / "site" / "templates" / "commands.html").write_text(
@@ -174,6 +182,10 @@ def _write_site_fixture(
         encoding="utf-8",
     )
     (root / "site" / "static" / "site.css").write_text("body { color: black; }\n", encoding="utf-8")
+    (root / "site" / "static" / "runtime-map.svg").write_text(
+        "<svg xmlns=\"http://www.w3.org/2000/svg\"></svg>\n",
+        encoding="utf-8",
+    )
     (root / "docs" / "STATUS.md").write_text(
         "\n".join(
             [

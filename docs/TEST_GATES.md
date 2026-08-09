@@ -285,6 +285,15 @@ deploy with `actions/deploy-pages` only when the repository Pages API reports
 If GitHub Pages is not enabled yet, deployment is skipped after a
 successful build; the repository setting remains a documented maintainer action.
 
+Presentation Layer website changes must keep technical facts generated rather
+than copied into prose. Homepage content may explain Repository Memory, Runtime Structure,
+CLI, GUI, Communication, and Claims, but command examples must come
+from `surface: orchestrator` or common blocker diagnostics projected from the
+existing GUI command projection. Claim sections must render computed statuses:
+verified now, available but evolving, planned, and not claimed. Static visuals
+such as `static/runtime-map.svg` must be copied by the site build and covered by
+site tests.
+
 ## Path Literal Active-Class Gate
 
 `agentic-kit audit-path-literals` remains report-only by default so reference and
