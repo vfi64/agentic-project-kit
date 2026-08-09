@@ -572,6 +572,12 @@ rules:
     - pytest-node
     - command-probe
     - generated-artifact
+    - .github/workflows/pages.yml
+    - GitHub Pages workflow
+    - actions/upload-pages-artifact
+    - actions/deploy-pages
+    - 'build_type: workflow'
+    - GitHub Actions deployment
   - path: docs/TEST_GATES.md
     terms:
     - Claim-evidence rendering
@@ -588,6 +594,14 @@ rules:
     - optional claims render as unverified
     - execute the named test node
     - manifest-command coverage rather than file existence
+    - GitHub Pages workflow changes
+    - .github/workflows/pages.yml
+    - python site/scripts/build.py --output site/dist --json
+    - python -m pytest tests/test_site_generator.py tests/test_site_claims.py -q
+    - actions/upload-pages-artifact
+    - actions/deploy-pages
+    - 'build_type: workflow'
+    - repository setting remains a documented maintainer action
 - id: kit-os-architecture-coverage
   description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, legacy-profile deprecation, P5c physical migration planning, and evidence policy.
   documents:
