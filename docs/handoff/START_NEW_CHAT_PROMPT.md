@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 5e4520a86d640aa195fe3c9b7165dc8f04c877ec3c4b05b464df5eebab38e77a
 - docs/reference/agentic-kit-commands.json: cb1eeba681045365650e5c8bb9393815feb2556688fec5bfa05575fc8a6dbc82
-## Operational documentation refresh state after PR #2009
+## Operational documentation refresh state after PR #2011
 
-Current administrative handoff refresh state is `41dd0028` (`Classify command manifest surfaces (#2009)`). Continue next only after this post-PR2009 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `9cefd514` (`Document command surface compatibility contract (#2011)`). Continue next only after this post-PR2011 refresh is committed and merged; the next substantive slice must be created from fresh main.
