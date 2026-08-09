@@ -402,6 +402,7 @@ Run `agentic-kit direction validate` when changing `docs/planning/PROJECT_DIRECT
 `agentic-kit audit-command-authority` verifies that persistent agent-facing start and handoff surfaces carry the current `COMMAND_MANIFEST_ACK`, point to `docs/reference/agentic-kit-commands.json` and `docs/reference/AGENTIC_KIT_COMMANDS.md`, require `agentic-kit command-for`, require the most specific available Kit workflow command, reject mapped raw `git`/`gh` commands through instruction lint, and preserve `must_not_reconstruct_commands_from_memory`.
 
 Command manifest surface classes must remain a role/disclosure contract, not a compatibility or deprecation contract. Valid values are `orchestrator`, `diagnostic`, and `primitive`; every command must have exactly one valid value. Surface classification does not change command safety, compatibility, or deprecation status, and primitive does not mean unstable.
+`agentic-kit command-for` may use surface only as a tie-breaker after semantic task matching and safety checks. Equally suitable task matches prefer orchestrator, diagnostic task tags may prefer diagnostic, and exact primitive matches must not be displaced by broader orchestrators.
 
 `agentic-kit standard-gates-audit-suite` runs this audit, so `agentic-kit doctor` and release readiness inherit the check through the standard suite. This gate cannot prove what an external LLM will do, but it blocks stale or weak repository entrypoints before they can be used as authoritative startup material.
 

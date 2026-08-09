@@ -3,8 +3,26 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from agentic_project_kit.command_manifest import SURFACE_VALUES
+
 
 SAFETY_SORT_ORDER = {"READ_ONLY": 0, "BOUNDED": 1, "DESTRUCTIVE": 2}
+SURFACE_SORT_ORDER = {"orchestrator": 0, "diagnostic": 1, "primitive": 2}
+DIAGNOSTIC_SURFACE_SORT_ORDER = {"diagnostic": 0, "orchestrator": 1, "primitive": 2}
+DIAGNOSTIC_TASK_TERMS = (
+    "audit",
+    "check",
+    "diagnose",
+    "diagnostic",
+    "doctor",
+    "inspect",
+    "list",
+    "readiness",
+    "report",
+    "show",
+    "status",
+    "validate",
+)
 
 
 @dataclass(frozen=True)
@@ -29,9 +47,31 @@ def _command_summary(command: dict[str, Any]) -> dict[str, Any]:
     return {
         "qualified_name": str(command.get("qualified_name") or ""),
         "safety": str(command.get("safety") or ""),
+        "surface": str(command.get("surface") or ""),
         "when_to_use": str(command.get("when_to_use") or ""),
         "dry_run_available": bool(command.get("dry_run_available")),
     }
+
+
+def _invalid_surface_summaries(commands: list[dict[str, Any]]) -> list[dict[str, str]]:
+    invalid = []
+    for command in commands:
+        surface = str(command.get("surface") or "")
+        if surface not in SURFACE_VALUES:
+            invalid.append(
+                {
+                    "qualified_name": str(command.get("qualified_name") or ""),
+                    "surface": surface,
+                }
+            )
+    return invalid
+
+
+def _surface_sort_order(task_tag: str) -> dict[str, int]:
+    normalized = task_tag.casefold()
+    if any(term in normalized for term in DIAGNOSTIC_TASK_TERMS):
+        return DIAGNOSTIC_SURFACE_SORT_ORDER
+    return SURFACE_SORT_ORDER
 
 
 def select_for_raw(manifest: dict[str, Any], command_line: str) -> CommandSelection:
@@ -61,7 +101,25 @@ def select_for_raw(manifest: dict[str, Any], command_line: str) -> CommandSelect
     selected = [
         command for prefix, command in matches if len(prefix) == longest
     ]
-    selected.sort(key=lambda command: str(command.get("qualified_name") or ""))
+    invalid = _invalid_surface_summaries(selected)
+    if invalid:
+        return CommandSelection(
+            status="invalid_manifest",
+            payload={
+                "mode": "raw",
+                "status": "invalid_manifest",
+                "raw": command_line,
+                "normalized_raw": normalized,
+                "invalid_surfaces": invalid,
+            },
+        )
+    selected.sort(
+        key=lambda command: (
+            SAFETY_SORT_ORDER.get(str(command.get("safety") or ""), 99),
+            SURFACE_SORT_ORDER.get(str(command.get("surface") or ""), 99),
+            str(command.get("qualified_name") or ""),
+        )
+    )
     matched_prefix = sorted({prefix for prefix, _command in matches if len(prefix) == longest})[0]
     return CommandSelection(
         status="match",
@@ -102,9 +160,23 @@ def select_for_task(manifest: dict[str, Any], task_tag: str) -> CommandSelection
             },
         )
 
+    invalid = _invalid_surface_summaries(commands)
+    if invalid:
+        return CommandSelection(
+            status="invalid_manifest",
+            payload={
+                "mode": "task",
+                "status": "invalid_manifest",
+                "task_tag": task_tag,
+                "invalid_surfaces": invalid,
+            },
+        )
+
+    surface_order = _surface_sort_order(task_tag)
     commands.sort(
         key=lambda command: (
             SAFETY_SORT_ORDER.get(str(command.get("safety") or ""), 99),
+            surface_order.get(str(command.get("surface") or ""), 99),
             str(command.get("qualified_name") or ""),
         )
     )
@@ -131,12 +203,20 @@ def render_command_selection(selection: CommandSelection) -> str:
         if payload["status"] == "no_match":
             lines.append(str(payload["message"]))
             return "\n".join(lines) + "\n"
+        if payload["status"] == "invalid_manifest":
+            for invalid in payload["invalid_surfaces"]:
+                lines.append(
+                    "INVALID_SURFACE="
+                    f"{invalid['qualified_name']} | surface={invalid['surface']}"
+                )
+            return "\n".join(lines) + "\n"
         lines.append(f"MATCHED_PREFIX={payload['matched_prefix']}")
         for command in payload["commands"]:
             dry_run = "yes" if command["dry_run_available"] else "no"
             lines.append(
                 "WRAPPER="
                 f"{command['qualified_name']} | safety={command['safety']} | "
+                f"surface={command['surface']} | "
                 f"dry_run_available={dry_run} | when_to_use={command['when_to_use']}"
             )
         return "\n".join(lines) + "\n"
@@ -149,9 +229,17 @@ def render_command_selection(selection: CommandSelection) -> str:
     if payload["status"] == "unknown_tag":
         lines.append("AVAILABLE_TAGS=" + ", ".join(payload["available_tags"]))
         return "\n".join(lines) + "\n"
+    if payload["status"] == "invalid_manifest":
+        for invalid in payload["invalid_surfaces"]:
+            lines.append(
+                "INVALID_SURFACE="
+                f"{invalid['qualified_name']} | surface={invalid['surface']}"
+            )
+        return "\n".join(lines) + "\n"
     for command in payload["commands"]:
         lines.append(
             f"COMMAND={command['qualified_name']} | safety={command['safety']} | "
+            f"surface={command['surface']} | "
             f"when_to_use={command['when_to_use']}"
         )
     return "\n".join(lines) + "\n"
