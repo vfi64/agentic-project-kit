@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 7972d0417433a3c7d738d359f516cdb2a2bfd54ecaa4bd618239f4041efff799
 - docs/reference/agentic-kit-commands.json: caa0813618a01b4151f3c24da5a826ed145833b3e8257a07f5ecebea93ae4c5a
-## Operational documentation refresh state after PR #2020
+## Operational documentation refresh state after PR #2022
 
-Current administrative handoff refresh state is `17b393c7` (`Refresh successor package after PR2019 (#2020)`). Continue next only after this post-PR2020 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `71e072a9` (`Refine intent-oriented command surfaces (#2022)`). Continue next only after this post-PR2022 refresh is committed and merged; the next substantive slice must be created from fresh main.
