@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 24338be4f6edd556779ef01fcb8b37e84642e4dc
-  short: 24338be4
-  subject: Record post-0.5 generated site closeout (#2039)
+  full: 226ad96b15378d494590de072c963b095e442fe3
+  short: 226ad96b
+  subject: Clarify DPA stable closeout boundary (#2041)
 last_substantive_work_state:
-  full: 24338be4f6edd556779ef01fcb8b37e84642e4dc
-  short: 24338be4
-  subject: Record post-0.5 generated site closeout (#2039)
+  full: 226ad96b15378d494590de072c963b095e442fe3
+  short: 226ad96b
+  subject: Clarify DPA stable closeout boundary (#2041)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
