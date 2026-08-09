@@ -9,6 +9,8 @@ import sys
 from typing import Callable
 
 from agentic_project_kit.access_levels import ACCESS_LEVEL_ORDER, DEFAULT_ACCESS_LEVEL, AccessLevel
+from agentic_project_kit.command_manifest import SURFACE_VALUES, load_manifest
+from agentic_project_kit.gui_command_projection import GUI_SURFACE_LAYERS, resolve_manifest_command
 
 
 @dataclass(frozen=True)
@@ -364,8 +366,13 @@ def render_cockpit_status(status: CockpitStatus) -> str:
     return "\n".join(lines)
 
 
-def action_inventory_as_json_data(actions: list[CockpitAction] | None = None) -> dict[str, object]:
+def action_inventory_as_json_data(
+    actions: list[CockpitAction] | None = None,
+    *,
+    manifest: dict[str, object] | None = None,
+) -> dict[str, object]:
     selected = actions if actions is not None else cockpit_actions()
+    reference = manifest if manifest is not None else _load_manifest_or_empty(Path("."))
     return {
         "schema_version": 1,
         "actions": [
@@ -378,6 +385,8 @@ def action_inventory_as_json_data(actions: list[CockpitAction] | None = None) ->
                 "description": action.description,
                 "short_description": action.short_description,
                 "min_access_level": action.min_access_level,
+                "manifest_surface": _manifest_surface_for_action(action, reference),
+                "gui_layer": _gui_layer_for_action(action, reference),
             }
             for action in selected
         ],
@@ -405,12 +414,19 @@ def action_result_as_json_data(result: CockpitActionResult) -> dict[str, object]
         "stderr": result.stderr,
     }
 
-def render_action_inventory(actions: list[CockpitAction] | None = None) -> str:
+def render_action_inventory(
+    actions: list[CockpitAction] | None = None,
+    *,
+    manifest: dict[str, object] | None = None,
+) -> str:
     selected = actions if actions is not None else cockpit_actions()
+    reference = manifest if manifest is not None else _load_manifest_or_empty(Path("."))
     lines = ["Local cockpit actions"]
     for action in selected:
         command = " ".join(action.command)
-        lines.append(f"- {action.action_id} [{action.category}/{action.safety}] {command}")
+        surface = _manifest_surface_for_action(action, reference)
+        layer = _gui_layer_for_action(action, reference)
+        lines.append(f"- {action.action_id} [{action.category}/{action.safety}/{surface}/{layer}] {command}")
         lines.append(f"  {action.description}")
     return "\n".join(lines)
 
@@ -519,3 +535,29 @@ def _run_command(command: tuple[str, ...], root: Path) -> subprocess.CompletedPr
 
 def _present(value: bool) -> str:
     return "present" if value else "missing"
+
+
+def _load_manifest_or_empty(root: Path) -> dict[str, object]:
+    try:
+        return load_manifest(root)
+    except Exception:
+        return {"commands": []}
+
+
+def _manifest_surface_for_action(action: CockpitAction, manifest: dict[str, object]) -> str:
+    if not action.command or action.command[0] != "agentic-kit":
+        return "external"
+    command = resolve_manifest_command(action.command, manifest)
+    if command is None:
+        return "unregistered"
+    surface = str(command.get("surface") or "")
+    if surface not in SURFACE_VALUES:
+        return "invalid"
+    return surface
+
+
+def _gui_layer_for_action(action: CockpitAction, manifest: dict[str, object]) -> str:
+    surface = _manifest_surface_for_action(action, manifest)
+    if surface in GUI_SURFACE_LAYERS:
+        return GUI_SURFACE_LAYERS[surface]
+    return surface

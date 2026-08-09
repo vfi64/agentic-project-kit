@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: dbd04733157b
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 2eea21bea1cd
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `250`
+- Command count: `251`
 
 ## Commands
 
@@ -3438,6 +3438,22 @@ _No parameters._
 |---|---:|---|---:|---|---|
 | `work_order_path` | `TyperArgument` | work_order_path | `True` |  |  |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Actually run the typed work order. Omit for dry-run. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON result. |
+
+### `agentic-kit work-order upload`
+
+- Safety: `BOUNDED`
+- Surface: `primitive`
+- When to use: Run agentic-kit work-order upload.
+- Dry-run available: `False`
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `log_path` | `TyperOption` | --log-path | `False` |  | Repository evidence log path to commit; defaults to the next-turn result log. |
+| `local_log_path` | `TyperOption` | --local-log-path | `False` |  | Local result log to promote before committing. |
+| `commit_message` | `TyperOption` | --commit-message | `False` | `Upload next-turn result log` | Commit message for the bounded result-log upload. |
+| `required_branch` | `TyperOption` | --required-branch | `False` | `` | Require the current branch to match this value before committing. |
+| `allow_main` | `TyperOption` | --allow-main | `False` | `False` | Allow committing on main; reserved for explicit maintainer-controlled recovery. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON result. |
 
 ### `agentic-kit workflow cleanup`

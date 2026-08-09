@@ -1,6 +1,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+from agentic_project_kit.gui_command_projection import (
+    build_gui_command_projection,
+    gui_command_bindings,
+    validate_gui_command_bindings,
+)
 
 
 @dataclass(frozen=True)
@@ -571,3 +579,27 @@ def enabled_gui_button_ids() -> tuple[str, ...]:
 
 def disabled_gui_button_ids() -> tuple[str, ...]:
     return tuple(button.command_id for button in GUI_BUTTON_CATALOG if not button.enabled)
+
+
+def gui_button_manifest_bindings(
+    root: Path = Path("."),
+    *,
+    manifest: dict[str, Any] | None = None,
+):
+    return gui_command_bindings(GUI_BUTTON_CATALOG, root=root, manifest=manifest)
+
+
+def validate_gui_button_manifest_bindings(
+    root: Path = Path("."),
+    *,
+    manifest: dict[str, Any] | None = None,
+) -> tuple[str, ...]:
+    return validate_gui_command_bindings(GUI_BUTTON_CATALOG, root=root, manifest=manifest)
+
+
+def gui_button_command_projection(
+    root: Path = Path("."),
+    *,
+    manifest: dict[str, Any] | None = None,
+):
+    return build_gui_command_projection(root=root, manifest=manifest)

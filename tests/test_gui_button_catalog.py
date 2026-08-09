@@ -195,6 +195,7 @@ def test_gui_button_catalog_enabled_bounded_mutations_are_explicit_safe_wrappers
     upload = enabled_mutations[1]
     assert upload.safety_class == "bounded-mutation"
     assert upload.gui_gate == "fixed_path_upload_gate"
+    assert upload.wrapper_command == ("agentic-kit", "work-order", "upload")
     assert upload.requires_parameters is False
 
 

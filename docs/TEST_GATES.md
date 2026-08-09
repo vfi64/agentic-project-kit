@@ -341,7 +341,7 @@ When changing the experimental Tkinter GUI cockpit, also verify that the selecte
 
 Required evidence:
 
-    python -m pytest -q tests/test_cockpit.py tests/test_repo_ns_entrypoint.py
+    python -m pytest -q tests/test_cockpit.py tests/test_gui_command_projection.py tests/test_gui_button_catalog.py tests/test_repo_ns_entrypoint.py
     ruff check .
     agentic-kit cockpit status
     agentic-kit cockpit actions
@@ -351,7 +351,7 @@ Required evidence:
     agentic-kit cockpit
     agentic-kit actions
 
-The action registry must preserve explicit safety classification and `min_access_level` visibility metadata. Machine-readable inventory output must remain parseable JSON and must not execute actions. Read-only cockpit commands must not execute destructive Git, release publication, tag, merge, cleanup, or remote operations. `cockpit run` may execute registered `read_only` actions through argument-vector execution. Bounded actions may be listed as action metadata, but they must be blocked unless an explicit bounded-action allow path is used. General destructive actions must remain blocked. The only allowed GUI destructive exception is `agentic-kit work discard-changes`, and only as feature-branch dry-run first plus a separate confirm action with signature matching. The Tkinter cockpit may guide `agentic-kit release ready` before a separate confirmed `agentic-kit release prepare` for release metadata preparation only; it must not publish releases or push tags. Access level is a visibility convenience for the Tkinter cockpit and must not grant permission or override safety classification.
+The action registry must preserve explicit safety classification and `min_access_level` visibility metadata. Machine-readable inventory output must remain parseable JSON and must not execute actions. Agentic-kit cockpit actions must project `manifest_surface` and `gui_layer` from the generated command manifest. The GUI command projection defaults to Primary/orchestrator commands, keeps Diagnostics/diagnostic commands separate, and keeps Expert / Low-level primitive commands reachable without treating primitive as unstable. GUI buttons with `agentic-kit` wrappers must resolve to registered command-reference entries; stale wrapper commands are gate failures. Read-only cockpit commands must not execute destructive Git, release publication, tag, merge, cleanup, or remote operations. `cockpit run` may execute registered `read_only` actions through argument-vector execution. Bounded actions may be listed as action metadata, but they must be blocked unless an explicit bounded-action allow path is used. General destructive actions must remain blocked. The only allowed GUI destructive exception is `agentic-kit work discard-changes`, and only as feature-branch dry-run first plus a separate confirm action with signature matching. The Tkinter cockpit may guide `agentic-kit release ready` before a separate confirmed `agentic-kit release prepare` for release metadata preparation only; it must not publish releases or push tags. Access level is a visibility convenience for the Tkinter cockpit and must not grant permission or override safety classification.
 
 ## Post-Merge Handoff Refresh Status Gate
 
