@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 2f321aa1588672a81465a991b47fc5667884f92d
-  short: 2f321aa1
-  subject: Refresh Block A consolidation report (#2026)
+  full: e2f78bafc5979db748bfb7b540048c22f7ca73c3
+  short: e2f78baf
+  subject: Add generated site foundation (#2028)
 last_substantive_work_state:
-  full: 2f321aa1588672a81465a991b47fc5667884f92d
-  short: 2f321aa1
-  subject: Refresh Block A consolidation report (#2026)
+  full: e2f78bafc5979db748bfb7b540048c22f7ca73c3
+  short: e2f78baf
+  subject: Add generated site foundation (#2028)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
