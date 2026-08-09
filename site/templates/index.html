@@ -53,6 +53,9 @@
         <a href="commands/guided.html">Guided commands <strong>${orchestrator_count}</strong></a>
         <a href="commands/diagnostics.html">Diagnostics <strong>${diagnostic_count}</strong></a>
         <a href="commands/index.html">Complete reference <strong>${command_count}</strong></a>
+        <a href="claims/index.html">Verified claims <strong>${claim_verified_count}</strong></a>
+        <a href="claims/index.html">Unverified claims <strong>${claim_unverified_count}</strong></a>
+        <a href="claims/index.html">Planned claims <strong>${claim_planned_count}</strong></a>
       </section>
 
       <section class="details" aria-label="Build metadata">
@@ -84,6 +87,10 @@
           <div>
             <dt>Project direction</dt>
             <dd><code>${project_direction_status}</code></dd>
+          </div>
+          <div>
+            <dt>Required claims</dt>
+            <dd><code>${required_claim_count}</code></dd>
           </div>
         </dl>
       </section>

@@ -33,6 +33,8 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
 
     assert result.ok
     assert result.files == (
+        "claims/claims.json",
+        "claims/index.html",
         "commands/commands.json",
         "commands/diagnostics.html",
         "commands/guided.html",
@@ -44,6 +46,7 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     html = (output / "index.html").read_text(encoding="utf-8")
     data = json.loads((output / "site.json").read_text(encoding="utf-8"))
     commands = json.loads((output / "commands" / "commands.json").read_text(encoding="utf-8"))
+    claims = json.loads((output / "claims" / "claims.json").read_text(encoding="utf-8"))
     assert "Agentic Execution Runtime" in html
     assert "1.2.3" in html
     assert "abc123" in html
@@ -60,6 +63,7 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     assert data["roadmap_projection"]["status"] == "active"
     assert commands["guided_count"] == 1
     assert commands["diagnostic_count"] == 1
+    assert claims["claim_count"] == 0
     assert "agentic-kit workspace init" in (
         output / "commands" / "guided.html"
     ).read_text(encoding="utf-8")
@@ -163,6 +167,10 @@ def _write_site_fixture(
     )
     (root / "site" / "templates" / "commands.html").write_text(
         "<html>${title} ${rows}</html>\n",
+        encoding="utf-8",
+    )
+    (root / "site" / "templates" / "claims.html").write_text(
+        "<html>${claim_count} ${rows}</html>\n",
         encoding="utf-8",
     )
     (root / "site" / "static" / "site.css").write_text("body { color: black; }\n", encoding="utf-8")

@@ -33,3 +33,19 @@ S4b generated content adds the command catalog projections:
   diagnostic views would be empty.
 - Release, status and roadmap summaries are derived from `docs/STATUS.md`,
   `CITATION.cff` and `docs/planning/PROJECT_DIRECTION.yaml`.
+
+S4b.2 claim evidence adds `site/content/claims.yaml`. Claim content stores
+`id`, `text`, `required`, optional `planned`, and evidence bindings only. It
+must not store derived `status` or `verified` fields. The build computes
+`verified`, `unverified`, or `planned` in `claims/claims.json` and
+`claims/index.html`. Required claims block the build when they are not verified;
+optional claims degrade visibly to unverified.
+
+Supported evidence types:
+
+- `pyproject-entrypoint`
+- `pyproject-value`
+- `command-manifest`
+- `pytest-node`
+- `command-probe`
+- `generated-artifact`

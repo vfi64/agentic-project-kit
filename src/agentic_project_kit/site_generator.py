@@ -14,6 +14,7 @@ from typing import Any
 import yaml
 
 from agentic_project_kit.command_manifest import SAFETY_VALUES, SURFACE_VALUES, load_manifest, manifest_sha
+from agentic_project_kit.site_claims import ClaimEvaluationReport, evaluate_site_claims
 
 
 PRODUCT_NAME = "Agentic Execution Runtime"
@@ -144,6 +145,7 @@ class SiteFoundationReport:
     command_catalog: SiteCommandCatalog | None
     status_projection: SiteStatusProjection
     roadmap_projection: SiteRoadmapProjection
+    claim_report: ClaimEvaluationReport
     blockers: tuple[str, ...]
 
     @property
@@ -170,6 +172,7 @@ class SiteFoundationReport:
             ),
             "status_projection": self.status_projection.as_dict(),
             "roadmap_projection": self.roadmap_projection.as_dict(),
+            "claim_report": self.claim_report.as_dict(),
             "blockers": list(self.blockers),
             "blocker_count": len(self.blockers),
         }
@@ -250,6 +253,8 @@ def collect_site_foundation_metadata(
     command_catalog = _build_command_catalog(commands, blockers)
     status_projection = _read_status_projection(root)
     roadmap_projection = _read_roadmap_projection(root)
+    claim_report = evaluate_site_claims(root, command_catalog=command_catalog)
+    blockers.extend(claim_report.blockers)
     concept_doi = status_projection.concept_doi or _citation_value(root, "doi")
     version_doi = status_projection.version_doi
     release_tag = status_projection.current_release_tag
@@ -282,6 +287,7 @@ def collect_site_foundation_metadata(
         command_catalog=command_catalog,
         status_projection=status_projection,
         roadmap_projection=roadmap_projection,
+        claim_report=claim_report,
         blockers=tuple(blockers),
     )
 
@@ -317,6 +323,7 @@ def build_site(
     output.mkdir(parents=True, exist_ok=True)
     (output / "static").mkdir(parents=True, exist_ok=True)
     (output / "commands").mkdir(parents=True, exist_ok=True)
+    (output / "claims").mkdir(parents=True, exist_ok=True)
 
     index_html = render_index_html(root, report)
     site_json = json.dumps(
@@ -327,6 +334,7 @@ def build_site(
             "command_catalog": command_catalog.as_dict(),
             "status_projection": report.status_projection.as_dict(),
             "roadmap_projection": report.roadmap_projection.as_dict(),
+            "claim_report": report.claim_report.as_dict(),
         },
         indent=2,
         sort_keys=True,
@@ -335,6 +343,14 @@ def build_site(
     (output / "site.json").write_text(site_json + "\n", encoding="utf-8")
     (output / "commands" / "commands.json").write_text(
         json.dumps(command_catalog.as_dict(), indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    (output / "claims" / "claims.json").write_text(
+        json.dumps(report.claim_report.as_dict(), indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    (output / "claims" / "index.html").write_text(
+        render_claims_html(root, metadata, report.claim_report),
         encoding="utf-8",
     )
     (output / "commands" / "guided.html").write_text(
@@ -405,8 +421,53 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
         "primitive_count": str(metadata.surface_counts.get("primitive", 0)),
         "command_group_count": str(metadata.command_group_count),
         "project_direction_status": escape(report.roadmap_projection.status or "not recorded"),
+        "claim_verified_count": str(report.claim_report.status_counts().get("verified", 0)),
+        "claim_unverified_count": str(report.claim_report.status_counts().get("unverified", 0)),
+        "claim_planned_count": str(report.claim_report.status_counts().get("planned", 0)),
+        "required_claim_count": str(report.claim_report.required_counts().get("required", 0)),
     }
     return template.safe_substitute(values).rstrip() + "\n"
+
+
+def render_claims_html(
+    root: Path,
+    metadata: SiteFoundationMetadata,
+    claim_report: ClaimEvaluationReport,
+) -> str:
+    template_path = root / "site" / "templates" / "claims.html"
+    template = Template(template_path.read_text(encoding="utf-8"))
+    rows = "\n".join(_claim_table_row(claim) for claim in claim_report.claims)
+    values = {
+        "product_name": escape(metadata.product_name),
+        "manifest_sha": escape(metadata.manifest_sha),
+        "package_version": escape(metadata.package_version),
+        "claim_count": str(len(claim_report.claims)),
+        "verified_count": str(claim_report.status_counts().get("verified", 0)),
+        "unverified_count": str(claim_report.status_counts().get("unverified", 0)),
+        "planned_count": str(claim_report.status_counts().get("planned", 0)),
+        "required_count": str(claim_report.required_counts().get("required", 0)),
+        "optional_count": str(claim_report.required_counts().get("optional", 0)),
+        "rows": rows,
+    }
+    return template.safe_substitute(values).rstrip() + "\n"
+
+
+def _claim_table_row(claim: object) -> str:
+    claim_id = escape(str(getattr(claim, "id", "")))
+    text = escape(str(getattr(claim, "text", "")))
+    status = escape(str(getattr(claim, "status", "")))
+    required = "yes" if bool(getattr(claim, "required", False)) else "no"
+    evidence = getattr(claim, "evidence", ())
+    evidence_text = ", ".join(str(getattr(item, "evidence_type", "")) for item in evidence) or "none"
+    return (
+        "          <tr>"
+        f"<td><code>{claim_id}</code></td>"
+        f"<td>{text}</td>"
+        f"<td>{status}</td>"
+        f"<td>{required}</td>"
+        f"<td>{escape(evidence_text)}</td>"
+        "</tr>"
+    )
 
 
 def render_command_view_html(

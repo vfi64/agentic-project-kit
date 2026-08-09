@@ -1,0 +1,93 @@
+schema_version: 1
+claims:
+  - id: cli-entry-point
+    text: The package provides the agentic-kit command-line interface.
+    required: true
+    evidence:
+      type: pyproject-entrypoint
+      script: agentic-kit
+      target: agentic_project_kit.cli:app
+
+  - id: gui-entry-point
+    text: The package provides the agentic-kit-gui graphical entry point.
+    required: false
+    evidence:
+      type: pyproject-entrypoint
+      script: agentic-kit-gui
+      target: agentic_project_kit.gui_cockpit:main
+
+  - id: python-requirement
+    text: The website Python requirement is projected from pyproject.toml.
+    required: true
+    evidence:
+      type: pyproject-value
+      key: project.requires-python
+
+  - id: package-version
+    text: The website package version is projected from pyproject.toml.
+    required: true
+    evidence:
+      type: pyproject-value
+      key: project.version
+
+  - id: command-manifest-synchronization
+    text: The public command catalog is generated from the current command manifest and checked for synchronization.
+    required: true
+    evidence:
+      type: command-probe
+      command:
+        - agentic-kit
+        - audit-command-manifest
+        - --json
+      assertion:
+        json_path: $.status
+        equals: PASS
+
+  - id: artifact-gc-dry-run
+    text: agentic-kit artifact-gc supports dry-run behavior.
+    required: false
+    evidence:
+      type: command-manifest
+      qualified_name: agentic-kit artifact-gc
+      dry_run_available: true
+
+  - id: workspace-adopt-read-only
+    text: agentic-kit workspace adopt inspects without writing.
+    required: false
+    evidence:
+      - type: command-manifest
+        qualified_name: agentic-kit workspace adopt
+        safety: READ_ONLY
+      - type: pytest-node
+        node_id: tests/test_workspace_adopt.py::test_adopt_makes_no_writes
+
+  - id: workspace-init-preview-execute
+    text: agentic-kit workspace init previews changes before explicit execution.
+    required: false
+    evidence:
+      - type: command-manifest
+        qualified_name: agentic-kit workspace init
+        dry_run_available: true
+      - type: pytest-node
+        node_id: tests/test_workspace_init.py::test_init_dry_run_writes_nothing_and_prints_tree
+      - type: pytest-node
+        node_id: tests/test_workspace_init.py::test_init_execute_creates_exact_tree_and_valid_manifest
+
+  - id: successor-handoff-package
+    text: The Kit can produce a structured successor handoff package for continuing work in another session or model.
+    required: false
+    evidence:
+      type: pytest-node
+      node_id: tests/test_successor_handoff_package.py::test_successor_handoff_artifacts_snapshot
+
+  - id: generated-command-catalog
+    text: The website command catalog is generated from the Kit's current command manifest.
+    required: true
+    evidence:
+      type: generated-artifact
+      producer:
+        - python
+        - site/scripts/build.py
+      source: docs/reference/agentic-kit-commands.json
+      output: commands/commands.json
+      assertion: manifest-command-coverage

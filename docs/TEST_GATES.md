@@ -267,6 +267,14 @@ and `commands/commands.json` plus `commands/index.html` from the complete
 manifest. The build must fail on missing or invalid command `surface`, `safety`,
 `dry_run_available`, `when_to_use` or `params` metadata.
 
+Claim-evidence rendering must compute status during the build. `site/content/claims.yaml`
+must not store derived `status` or `verified` fields. Supported evidence types
+are `pyproject-entrypoint`, `pyproject-value`, `command-manifest`,
+`pytest-node`, `command-probe`, and `generated-artifact`. Required claims block
+the build when unverified; optional claims render as unverified without blocking
+unrelated website publication. `pytest-node` evidence must execute the named test node.
+`generated-artifact` evidence must validate manifest-command coverage rather than file existence.
+
 ## Path Literal Active-Class Gate
 
 `agentic-kit audit-path-literals` remains report-only by default so reference and
