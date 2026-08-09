@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 71e072a960b1cac94a777bac9979b00f849a2f40
-  short: 71e072a9
-  subject: Refine intent-oriented command surfaces (#2022)
+  full: 539fc9699a256754d76aa63522ed53b1810c3d63
+  short: 539fc969
+  subject: Harden freshness and guided diagnostics (#2024)
 last_substantive_work_state:
-  full: 71e072a960b1cac94a777bac9979b00f849a2f40
-  short: 71e072a9
-  subject: Refine intent-oriented command surfaces (#2022)
+  full: 539fc9699a256754d76aa63522ed53b1810c3d63
+  short: 539fc969
+  subject: Harden freshness and guided diagnostics (#2024)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
