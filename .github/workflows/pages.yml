@@ -1,0 +1,91 @@
+name: Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  pages-state:
+    runs-on: ubuntu-latest
+    outputs:
+      deploy-ready: ${{ steps.pages.outputs.deploy-ready }}
+
+    steps:
+      - id: pages
+        uses: actions/github-script@v8
+        with:
+          script: |
+            try {
+              const response = await github.request(
+                "GET /repos/{owner}/{repo}/pages",
+                context.repo
+              );
+              const buildType = response.data.build_type || "";
+              const deployReady = buildType === "workflow";
+              if (!deployReady) {
+                core.notice("GitHub Pages exists but is not configured for GitHub Actions deployment.");
+              }
+              core.setOutput("deploy-ready", String(deployReady));
+            } catch (error) {
+              if (error.status === 404) {
+                core.notice("GitHub Pages is not enabled yet; skipping deployment after a successful build.");
+                core.setOutput("deploy-ready", "false");
+                return;
+              }
+              throw error;
+            }
+
+  build:
+    runs-on: ubuntu-latest
+    needs: pages-state
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Build generated site
+        run: python site/scripts/build.py --output site/dist --json
+
+      - name: Site tests
+        run: python -m pytest tests/test_site_generator.py tests/test_site_claims.py -q
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - pages-state
+      - build
+    if: needs.pages-state.outputs.deploy-ready == 'true'
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

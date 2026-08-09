@@ -275,6 +275,15 @@ the build when unverified; optional claims render as unverified without blocking
 unrelated website publication. `pytest-node` evidence must execute the named test node.
 `generated-artifact` evidence must validate manifest-command coverage rather than file existence.
 
+GitHub Pages workflow changes must parse as YAML and keep `.github/workflows/pages.yml`
+build-gated by the generated site build and site tests. The workflow must run
+`python site/scripts/build.py --output site/dist --json`, run
+`python -m pytest tests/test_site_generator.py tests/test_site_claims.py -q`,
+upload `site/dist` with `actions/upload-pages-artifact`, and deploy with
+`actions/deploy-pages` only when the repository Pages API reports `build_type: workflow`.
+If GitHub Pages is not enabled yet, deployment is skipped after a
+successful build; the repository setting remains a documented maintainer action.
+
 ## Path Literal Active-Class Gate
 
 `agentic-kit audit-path-literals` remains report-only by default so reference and
