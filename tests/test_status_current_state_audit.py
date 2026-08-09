@@ -265,6 +265,74 @@ def test_audit_status_current_state_blocks_stale_status_main(tmp_path: Path) -> 
     )
 
 
+def test_audit_status_current_state_allows_direct_admin_refresh_merge_head(tmp_path: Path) -> None:
+    status_main = "abc1234"
+    validation_head = "def5678"
+    _write_project(tmp_path, status_main=status_main, validation_head=validation_head)
+
+    def git_runner(_root: Path, args: tuple[str, ...] | list[str]) -> GitResult:
+        command = tuple(args)
+        if command == ("rev-parse", "--verify", "origin/main"):
+            return GitResult(0, validation_head + "\n")
+        if command == ("log", "-1", "--pretty=%s", validation_head):
+            return GitResult(0, "Refresh handoff state after PR2020 (#2021)\n")
+        if command == ("merge-base", "--is-ancestor", status_main, validation_head):
+            return GitResult(0, "")
+        if command == ("merge-base", "--is-ancestor", validation_head, validation_head):
+            return GitResult(0, "")
+        if command == ("rev-list", "--count", "--first-parent", f"{status_main}..{validation_head}"):
+            return GitResult(0, "1\n")
+        if command == ("rev-list", "--count", f"{validation_head}..{validation_head}"):
+            return GitResult(0, "0\n")
+        return GitResult(1, "", f"unexpected command: {command}")
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=git_runner,
+        release_status_builder=lambda _root: _release_status(),
+    )
+
+    assert result.ok is True
+    assert not any(
+        finding.check == "status_current_verified_main_matches_handoff_validation_head"
+        for finding in result.blockers
+    )
+
+
+def test_audit_status_current_state_blocks_unbounded_admin_refresh_gap(tmp_path: Path) -> None:
+    status_main = "abc1234"
+    validation_head = "def5678"
+    _write_project(tmp_path, status_main=status_main, validation_head=validation_head)
+
+    def git_runner(_root: Path, args: tuple[str, ...] | list[str]) -> GitResult:
+        command = tuple(args)
+        if command == ("rev-parse", "--verify", "origin/main"):
+            return GitResult(0, validation_head + "\n")
+        if command == ("log", "-1", "--pretty=%s", validation_head):
+            return GitResult(0, "Refresh handoff state after PR2020 (#2021)\n")
+        if command == ("merge-base", "--is-ancestor", status_main, validation_head):
+            return GitResult(0, "")
+        if command == ("merge-base", "--is-ancestor", validation_head, validation_head):
+            return GitResult(0, "")
+        if command == ("rev-list", "--count", "--first-parent", f"{status_main}..{validation_head}"):
+            return GitResult(0, "2\n")
+        if command == ("rev-list", "--count", f"{validation_head}..{validation_head}"):
+            return GitResult(0, "0\n")
+        return GitResult(1, "", f"unexpected command: {command}")
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=git_runner,
+        release_status_builder=lambda _root: _release_status(),
+    )
+
+    assert result.ok is False
+    assert any(
+        finding.check == "status_current_verified_main_matches_handoff_validation_head"
+        for finding in result.blockers
+    )
+
+
 def test_audit_status_current_state_blocks_duplicate_live_current_verified_main(tmp_path: Path) -> None:
     _write_project(tmp_path)
     status = tmp_path / "docs" / "STATUS.md"

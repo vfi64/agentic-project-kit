@@ -149,6 +149,8 @@ def infer_safety(command: dict[str, Any]) -> str:
     leaf = _leaf(command)
 
     exact_read_only_commands = {
+        "agentic-kit handoff post-merge-refresh-status",
+        "agentic-kit transfer post-merge-check",
         "agentic-kit workspace adopt",
     }
     if qualified in exact_read_only_commands:
@@ -224,9 +226,10 @@ def infer_surface(command: dict[str, Any]) -> str:
     leaf = _leaf(command)
 
     orchestrator_commands = {
+        "agentic-kit artifact-gc",
+        "agentic-kit chat session-start",
+        "agentic-kit docs lifecycle sweep",
         "agentic-kit dpa final-closeout-check",
-        "agentic-kit evidence commit-paths",
-        "agentic-kit evidence finalize-log",
         "agentic-kit github-create",
         "agentic-kit init",
         "agentic-kit post-release-doi-closeout",
@@ -245,6 +248,9 @@ def infer_surface(command: dict[str, Any]) -> str:
         "agentic-kit transfer remote-next",
         "agentic-kit transfer remote-work-start",
         "agentic-kit transfer sync-main",
+        "agentic-kit work finish",
+        "agentic-kit work recover",
+        "agentic-kit work start",
         "agentic-kit workflow go",
         "agentic-kit workspace adopt",
         "agentic-kit workspace dpa-intake",
@@ -255,6 +261,9 @@ def infer_surface(command: dict[str, Any]) -> str:
     if qualified in orchestrator_commands:
         return "orchestrator"
 
+    primitive_exact = {
+        "agentic-kit transfer publish-last-report",
+    }
     diagnostic_leaf_terms = (
         "audit",
         "check",
@@ -279,6 +288,8 @@ def infer_surface(command: dict[str, Any]) -> str:
         "agentic-kit check-todo",
         "agentic-kit command-for",
     }
+    if qualified in primitive_exact:
+        return "primitive"
     if qualified in diagnostic_exact:
         return "diagnostic"
     if any(term in leaf for term in diagnostic_leaf_terms):

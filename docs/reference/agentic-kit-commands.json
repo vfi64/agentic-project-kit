@@ -194,7 +194,7 @@
       "qualified_name": "agentic-kit artifact-gc",
       "replaces_raw": [],
       "safety": "BOUNDED",
-      "surface": "primitive",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded"
       ],
@@ -1088,7 +1088,7 @@
       "qualified_name": "agentic-kit chat session-start",
       "replaces_raw": [],
       "safety": "READ_ONLY",
-      "surface": "diagnostic",
+      "surface": "orchestrator",
       "task_tags": [
         "chat",
         "read-only"
@@ -2775,7 +2775,7 @@
       "qualified_name": "agentic-kit docs lifecycle sweep",
       "replaces_raw": [],
       "safety": "BOUNDED",
-      "surface": "primitive",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "docs-lifecycle"
@@ -5668,7 +5668,7 @@
       "qualified_name": "agentic-kit evidence commit-paths",
       "replaces_raw": [],
       "safety": "BOUNDED",
-      "surface": "orchestrator",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "evidence"
@@ -6025,7 +6025,7 @@
       "qualified_name": "agentic-kit evidence finalize-log",
       "replaces_raw": [],
       "safety": "BOUNDED",
-      "surface": "orchestrator",
+      "surface": "primitive",
       "task_tags": [
         "bounded",
         "evidence"
@@ -6417,11 +6417,11 @@
       ],
       "qualified_name": "agentic-kit handoff post-merge-refresh-status",
       "replaces_raw": [],
-      "safety": "DESTRUCTIVE",
+      "safety": "READ_ONLY",
       "surface": "diagnostic",
       "task_tags": [
-        "destructive",
-        "handoff"
+        "handoff",
+        "read-only"
       ],
       "when_to_use": "Run agentic-kit handoff post-merge-refresh-status."
     },
@@ -12869,10 +12869,10 @@
       ],
       "qualified_name": "agentic-kit transfer post-merge-check",
       "replaces_raw": [],
-      "safety": "DESTRUCTIVE",
+      "safety": "READ_ONLY",
       "surface": "diagnostic",
       "task_tags": [
-        "destructive",
+        "read-only",
         "transfer"
       ],
       "when_to_use": "Run agentic-kit transfer post-merge-check."
@@ -14328,7 +14328,7 @@
       "qualified_name": "agentic-kit transfer publish-last-report",
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
-      "surface": "diagnostic",
+      "surface": "primitive",
       "task_tags": [
         "destructive",
         "transfer"
@@ -16019,7 +16019,7 @@
       "qualified_name": "agentic-kit work finish",
       "replaces_raw": [],
       "safety": "BOUNDED",
-      "surface": "primitive",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "work"
@@ -16054,7 +16054,7 @@
       "qualified_name": "agentic-kit work recover",
       "replaces_raw": [],
       "safety": "BOUNDED",
-      "surface": "primitive",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "work"
@@ -16131,7 +16131,7 @@
       "qualified_name": "agentic-kit work start",
       "replaces_raw": [],
       "safety": "BOUNDED",
-      "surface": "primitive",
+      "surface": "orchestrator",
       "task_tags": [
         "bounded",
         "work"
@@ -17526,7 +17526,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "2eea21bea1cd",
+    "manifest_sha": "3d20e7338c12",
     "schema_version": 1
   },
   "schema_version": 2,

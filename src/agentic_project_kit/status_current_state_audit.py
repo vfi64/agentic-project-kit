@@ -479,6 +479,13 @@ def _audit_status_main_marker(
     if not matches_validation and release_current_state == "prepared" and status_main and validation_head:
         ancestor = run_git(root, ("merge-base", "--is-ancestor", status_main, validation_head))
         matches_validation = ancestor.returncode == 0
+    if not matches_validation and _is_bounded_admin_refresh_validation_head(
+        root,
+        run_git,
+        status_main=status_main,
+        validation_head=validation_head,
+    ):
+        matches_validation = True
     _finding(
         findings,
         blockers,
@@ -523,6 +530,40 @@ def _audit_status_release_marker(
 
 def _unique_values(values: Sequence[str]) -> list[str]:
     return sorted(set(values))
+
+
+def _is_bounded_admin_refresh_validation_head(
+    root: Path,
+    run_git: GitRunner,
+    *,
+    status_main: str | None,
+    validation_head: str | None,
+) -> bool:
+    if not status_main or not validation_head:
+        return False
+    subject = run_git(root, ("log", "-1", "--pretty=%s", validation_head))
+    if subject.returncode != 0 or not _is_admin_refresh_merge_subject(subject.stdout.strip()):
+        return False
+    ancestor = run_git(root, ("merge-base", "--is-ancestor", status_main, validation_head))
+    if ancestor.returncode != 0:
+        return False
+    first_parent_count = run_git(
+        root,
+        ("rev-list", "--count", "--first-parent", f"{status_main}..{validation_head}"),
+    )
+    if first_parent_count.returncode != 0:
+        return False
+    try:
+        return int(first_parent_count.stdout.strip()) == 1
+    except ValueError:
+        return False
+
+
+def _is_admin_refresh_merge_subject(subject: str) -> bool:
+    return (
+        subject.startswith("Refresh handoff state after PR")
+        or subject.startswith("Refresh successor handoff after PR")
+    ) and "(#" in subject
 
 
 def _origin_main(root: Path, run_git: GitRunner) -> str | None:

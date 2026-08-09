@@ -451,6 +451,7 @@ rules:
     - orchestrator
     - diagnostic
     - primitive
+    - Surface classification is intent-oriented
     - Surface classification does not by itself change command safety, compatibility, or deprecation status
     - primitive does not mean unstable
     - agentic-kit command-for
@@ -465,6 +466,8 @@ rules:
     - role/disclosure contract
     - Valid values are `orchestrator`, `diagnostic`, and `primitive`
     - every command must have exactly one valid value
+    - Surface classification is intent-oriented
+    - "`diagnostic` must not be inferred from `READ_ONLY`"
     - Surface classification does not change command safety, compatibility, or deprecation status
     - primitive does not mean unstable
     - agentic-kit command-for
@@ -478,6 +481,8 @@ rules:
     - diagnostic
     - primitive
     - Surface classification is separate from command safety
+    - Surface classification is intent-oriented
+    - "`diagnostic` must not be inferred from `READ_ONLY`"
     - Surface classification does not by itself change the compatibility or deprecation contract
     - primitive does not mean unstable
     - agentic-kit command-for

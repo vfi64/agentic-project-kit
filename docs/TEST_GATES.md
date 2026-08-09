@@ -239,7 +239,7 @@ The hard audit checks only machine-checkable drift classes, including version mi
 
 Use `agentic-kit audit-status-current-state` when changing `docs/STATUS.md`, current-state handoff projections, release-state reporting, or post-merge status-refresh behavior.
 
-The gate compares `docs/STATUS.md`, `CHANGELOG.md`, `docs/reports/handoff-packages/latest/validation_report.json`, `release-status`, and `origin/main`. It must allow a bounded administrative refresh commit after the validated substantive safe-state, but block stale Current verified main claims, duplicate live current-state markers, release-version drift, stale pending DOI lines in the current CHANGELOG block after STATUS records a verified Zenodo version DOI, and validation reports that are no longer reachable from `origin/main`.
+The gate compares `docs/STATUS.md`, `CHANGELOG.md`, `docs/reports/handoff-packages/latest/validation_report.json`, `release-status`, and `origin/main`. It must allow only a direct first-parent administrative refresh commit after the validated substantive safe-state, but block stale Current verified main claims, duplicate live current-state markers, release-version drift, stale pending DOI lines in the current CHANGELOG block after STATUS records a verified Zenodo version DOI, and validation reports that are no longer reachable from `origin/main`.
 
 ## Path Literal Active-Class Gate
 
@@ -401,7 +401,7 @@ Run `agentic-kit direction validate` when changing `docs/planning/PROJECT_DIRECT
 
 `agentic-kit audit-command-authority` verifies that persistent agent-facing start and handoff surfaces carry the current `COMMAND_MANIFEST_ACK`, point to `docs/reference/agentic-kit-commands.json` and `docs/reference/AGENTIC_KIT_COMMANDS.md`, require `agentic-kit command-for`, require the most specific available Kit workflow command, reject mapped raw `git`/`gh` commands through instruction lint, and preserve `must_not_reconstruct_commands_from_memory`.
 
-Command manifest surface classes must remain a role/disclosure contract, not a compatibility or deprecation contract. Valid values are `orchestrator`, `diagnostic`, and `primitive`; every command must have exactly one valid value. Surface classification does not change command safety, compatibility, or deprecation status, and primitive does not mean unstable.
+Command manifest surface classes must remain a role/disclosure contract, not a compatibility or deprecation contract. Valid values are `orchestrator`, `diagnostic`, and `primitive`; every command must have exactly one valid value. Surface classification is intent-oriented, not derived from command safety or implementation shape. Surface classification does not change command safety, compatibility, or deprecation status, `diagnostic` must not be inferred from `READ_ONLY`, and primitive does not mean unstable.
 `agentic-kit command-for` may use surface only as a tie-breaker after semantic task matching and safety checks. Equally suitable task matches prefer orchestrator, diagnostic task tags may prefer diagnostic, and exact primitive matches must not be displaced by broader orchestrators.
 
 `agentic-kit standard-gates-audit-suite` runs this audit, so `agentic-kit doctor` and release readiness inherit the check through the standard suite. This gate cannot prove what an external LLM will do, but it blocks stale or weak repository entrypoints before they can be used as authoritative startup material.
