@@ -379,6 +379,7 @@ Quick command guide:
 - `agentic-kit commands sync-entrypoints --execute`: synchronize command reference files and command-manifest entrypoint headers.
 
 Command manifest surface classes are role metadata, not stability metadata. `orchestrator` marks primary task/lifecycle operations, `diagnostic` marks inspection and readiness operations, and `primitive` marks public low-level command building blocks. Surface classification does not by itself change command safety, compatibility, or deprecation status; primitive does not mean unstable.
+`agentic-kit command-for` uses the same surface classes as a tie-breaker after semantic task matching and safety checks: equally suitable task matches prefer orchestrator, diagnostic task tags may prefer diagnostic, and exact primitive matches are not displaced by broader orchestrators.
 
 - `agentic-kit workspace dpa-intake`: run the deterministic one-shot DPA intake for a target repository by resolving exact-ref evidence, running workspace adoption analysis and DPA repo-adoption assessment, generating an adjudication plan, and optionally writing bounded intake evidence without migration or external-repo conformance claims.
 - `agentic-kit workspace remove`: plan or execute bounded removal of exact Kit-generated workspace files while preserving modified, unknown, source, and project-documentation paths.

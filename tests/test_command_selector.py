@@ -7,6 +7,7 @@ from typer.testing import CliRunner
 from agentic_project_kit.cli import app
 from agentic_project_kit.command_selector import (
     normalize_raw_command,
+    render_command_selection,
     select_for_raw,
     select_for_task,
 )
@@ -18,6 +19,7 @@ def _manifest() -> dict[str, object]:
             {
                 "qualified_name": "agentic-kit transfer push-current",
                 "safety": "BOUNDED",
+                "surface": "orchestrator",
                 "when_to_use": "Push the current branch.",
                 "dry_run_available": True,
                 "replaces_raw": ["git push"],
@@ -26,6 +28,7 @@ def _manifest() -> dict[str, object]:
             {
                 "qualified_name": "agentic-kit transfer push-force-safe",
                 "safety": "DESTRUCTIVE",
+                "surface": "primitive",
                 "when_to_use": "Force-push with checks.",
                 "dry_run_available": True,
                 "replaces_raw": ["git push --force-with-lease"],
@@ -34,6 +37,7 @@ def _manifest() -> dict[str, object]:
             {
                 "qualified_name": "agentic-kit audit-command-manifest",
                 "safety": "READ_ONLY",
+                "surface": "diagnostic",
                 "when_to_use": "Audit command metadata.",
                 "dry_run_available": False,
                 "replaces_raw": [],
@@ -75,6 +79,143 @@ def test_select_for_task_sorts_by_safety_then_name() -> None:
     ]
 
 
+def test_select_for_task_prefers_orchestrator_for_equivalent_candidates() -> None:
+    manifest = {
+        "commands": [
+            {
+                "qualified_name": "agentic-kit transfer commit",
+                "safety": "BOUNDED",
+                "surface": "primitive",
+                "when_to_use": "Commit selected paths.",
+                "task_tags": ["work"],
+            },
+            {
+                "qualified_name": "agentic-kit workflow go",
+                "safety": "BOUNDED",
+                "surface": "orchestrator",
+                "when_to_use": "Run the next governed workflow step.",
+                "task_tags": ["work"],
+            },
+        ]
+    }
+
+    selection = select_for_task(manifest, "work")
+
+    assert selection.status == "match"
+    assert selection.payload["commands"][0]["qualified_name"] == "agentic-kit workflow go"
+
+
+def test_select_for_task_keeps_more_specific_primitive_match() -> None:
+    manifest = {
+        "commands": [
+            {
+                "qualified_name": "agentic-kit workflow go",
+                "safety": "BOUNDED",
+                "surface": "orchestrator",
+                "when_to_use": "Run the next governed workflow step.",
+                "task_tags": ["work"],
+            },
+            {
+                "qualified_name": "agentic-kit transfer commit",
+                "safety": "BOUNDED",
+                "surface": "primitive",
+                "when_to_use": "Commit selected paths.",
+                "task_tags": ["work-commit"],
+            },
+        ]
+    }
+
+    selection = select_for_task(manifest, "work-commit")
+
+    assert selection.status == "match"
+    assert [command["qualified_name"] for command in selection.payload["commands"]] == [
+        "agentic-kit transfer commit"
+    ]
+
+
+def test_select_for_task_diagnostic_intent_prefers_diagnostic() -> None:
+    manifest = {
+        "commands": [
+            {
+                "qualified_name": "agentic-kit workflow go",
+                "safety": "READ_ONLY",
+                "surface": "orchestrator",
+                "when_to_use": "Explain and run the next governed workflow step.",
+                "task_tags": ["diagnose"],
+            },
+            {
+                "qualified_name": "agentic-kit doctor",
+                "safety": "READ_ONLY",
+                "surface": "diagnostic",
+                "when_to_use": "Run project health diagnostics.",
+                "task_tags": ["diagnose"],
+            },
+        ]
+    }
+
+    selection = select_for_task(manifest, "diagnose")
+
+    assert selection.status == "match"
+    assert selection.payload["commands"][0]["qualified_name"] == "agentic-kit doctor"
+
+
+def test_select_for_task_safety_still_wins_before_surface() -> None:
+    manifest = {
+        "commands": [
+            {
+                "qualified_name": "agentic-kit workflow go",
+                "safety": "BOUNDED",
+                "surface": "orchestrator",
+                "when_to_use": "Run the next governed workflow step.",
+                "task_tags": ["operate"],
+            },
+            {
+                "qualified_name": "agentic-kit transfer repo-status",
+                "safety": "READ_ONLY",
+                "surface": "primitive",
+                "when_to_use": "Inspect repository status.",
+                "task_tags": ["operate"],
+            },
+        ]
+    }
+
+    selection = select_for_task(manifest, "operate")
+
+    assert selection.status == "match"
+    assert selection.payload["commands"][0]["qualified_name"] == "agentic-kit transfer repo-status"
+
+
+def test_select_for_task_reports_invalid_surface() -> None:
+    selection = select_for_task(
+        {
+            "commands": [
+                {
+                    "qualified_name": "agentic-kit mystery",
+                    "safety": "READ_ONLY",
+                    "surface": "internal",
+                    "when_to_use": "Mystery command.",
+                    "task_tags": ["mystery"],
+                }
+            ]
+        },
+        "mystery",
+    )
+
+    assert selection.status == "invalid_manifest"
+    assert selection.payload["invalid_surfaces"] == [
+        {"qualified_name": "agentic-kit mystery", "surface": "internal"}
+    ]
+
+
+def test_render_command_selection_includes_surface_deterministically() -> None:
+    selection = select_for_task(_manifest(), "audit")
+
+    rendered = render_command_selection(selection)
+
+    assert rendered == render_command_selection(selection)
+    assert "surface=diagnostic" in rendered
+
+
 def test_select_for_task_unknown_tag_lists_available_tags() -> None:
     selection = select_for_task(_manifest(), "missing")
 
@@ -97,3 +238,4 @@ def test_command_for_cli_json_shape() -> None:
     assert payload["status"] == "match"
     assert payload["matched_prefix"] == "git push"
     assert payload["commands"][0]["qualified_name"] == "agentic-kit transfer push-current"
+    assert payload["commands"][0]["surface"] == "primitive"

@@ -18,6 +18,8 @@ Surface classification is separate from command safety. It describes user-facing
 
 Surface classification does not by itself change the compatibility or deprecation contract of an existing public command. In particular, primitive does not mean unstable, deprecated, private, or unsupported. Any future stability or deprecation model must be introduced as its own explicit contract and gate, not inferred from `surface`.
 
+`agentic-kit command-for` may use `surface` only after semantic task matching and safety or prerequisite checks. For equally suitable task matches it should prefer `orchestrator`, then `diagnostic`, then `primitive`; diagnostic task tags may prefer `diagnostic` first. Surface must not override a more exact task match, so an exact primitive match is not displaced by a broader orchestrator.
+
 Required maintenance path:
 
 1. Change the CLI command implementation.
