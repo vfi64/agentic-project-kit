@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6b074259c0e6f8357f802ad983c530875e9b30f7
-  short: 6b074259
-  subject: Prefer command surfaces in command-for (#2013)
+  full: 9eb75b5826029c564b6a0aded033497cacd46849
+  short: 9eb75b58
+  subject: Project GUI commands from manifest surfaces (#2015)
 last_substantive_work_state:
-  full: 6b074259c0e6f8357f802ad983c530875e9b30f7
-  short: 6b074259
-  subject: Prefer command surfaces in command-for (#2013)
+  full: 9eb75b5826029c564b6a0aded033497cacd46849
+  short: 9eb75b58
+  subject: Project GUI commands from manifest surfaces (#2015)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
