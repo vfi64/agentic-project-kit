@@ -101,16 +101,29 @@ def test_current_reference_classifies_every_command_surface() -> None:
     from agentic_project_kit.command_manifest import build_current_reference
 
     data = build_current_reference()
-    surfaces = {
-        command["qualified_name"]: command.get("surface")
-        for command in data["commands"]
-    }
+    by_name = {command["qualified_name"]: command for command in data["commands"]}
+    surfaces = {name: command.get("surface") for name, command in by_name.items()}
 
     assert surfaces
     assert all(surface in SURFACE_VALUES for surface in surfaces.values())
     assert surfaces["agentic-kit transfer pr-create-complete"] == "orchestrator"
     assert surfaces["agentic-kit audit-command-manifest"] == "diagnostic"
     assert surfaces["agentic-kit transfer commit"] == "primitive"
+    assert surfaces["agentic-kit work start"] == "orchestrator"
+    assert surfaces["agentic-kit work finish"] == "orchestrator"
+    assert surfaces["agentic-kit docs lifecycle sweep"] == "orchestrator"
+    assert surfaces["agentic-kit artifact-gc"] == "orchestrator"
+    assert surfaces["agentic-kit chat session-start"] == "orchestrator"
+    assert surfaces["agentic-kit evidence commit-paths"] == "primitive"
+    assert surfaces["agentic-kit evidence finalize-log"] == "primitive"
+    assert surfaces["agentic-kit transfer publish-last-report"] == "primitive"
+    assert by_name["agentic-kit handoff post-merge-refresh-status"]["safety"] == "READ_ONLY"
+    assert by_name["agentic-kit transfer post-merge-check"]["safety"] == "READ_ONLY"
+    assert [
+        command["qualified_name"]
+        for command in data["commands"]
+        if command["safety"] == "DESTRUCTIVE" and command["surface"] == "diagnostic"
+    ] == []
 
 
 def test_surface_contract_documents_compatibility_boundary() -> None:
@@ -121,6 +134,8 @@ def test_surface_contract_documents_compatibility_boundary() -> None:
     assert SURFACE_VALUES == {"orchestrator", "diagnostic", "primitive"}
     assert "Command surface contract" in contract
     assert "Surface classification is separate from command safety" in contract
+    assert "Surface classification is intent-oriented" in contract
+    assert "`diagnostic` must not be inferred from `READ_ONLY`" in contract
     assert "does not by itself change the compatibility or deprecation contract" in contract
     assert "primitive does not mean unstable" in contract
 

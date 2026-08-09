@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 2eea21bea1cd
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 3d20e7338c12
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -33,7 +33,7 @@ _No parameters._
 ### `agentic-kit artifact-gc`
 
 - Safety: `BOUNDED`
-- Surface: `primitive`
+- Surface: `orchestrator`
 - When to use: Dry-run by default garbage collector for transient communication artifacts.
 - Dry-run available: `True`
 
@@ -296,7 +296,7 @@ Render the compact six-line command manifest refresher.
 ### `agentic-kit chat session-start`
 
 - Safety: `READ_ONLY`
-- Surface: `diagnostic`
+- Surface: `orchestrator`
 - When to use: Render the session-start refresher and full inline command list.
 - Dry-run available: `False`
 
@@ -689,7 +689,7 @@ Build or write one documentation lifecycle evidence report.
 ### `agentic-kit docs lifecycle sweep`
 
 - Safety: `BOUNDED`
-- Surface: `primitive`
+- Surface: `orchestrator`
 - When to use: Build or apply a bounded documentation lifecycle sweep plan.
 - Dry-run available: `True`
 
@@ -1189,7 +1189,7 @@ Pass when git status is clean except one expected in-progress log.
 ### `agentic-kit evidence commit-paths`
 
 - Safety: `BOUNDED`
-- Surface: `orchestrator`
+- Surface: `primitive`
 - When to use: Commit an explicit evidence path set and verify the worktree is clean afterwards.
 - Dry-run available: `False`
 
@@ -1208,7 +1208,7 @@ Commit an explicit evidence path set and verify the worktree is clean afterwards
 ### `agentic-kit evidence finalize-log`
 
 - Safety: `BOUNDED`
-- Surface: `orchestrator`
+- Surface: `primitive`
 - When to use: Append a canonical summary, require strict inspection, then upload the evidence log.
 - Dry-run available: `False`
 
@@ -1345,7 +1345,7 @@ Run the pre-GUI readiness gate.
 
 ### `agentic-kit handoff post-merge-refresh-status`
 
-- Safety: `DESTRUCTIVE`
+- Safety: `READ_ONLY`
 - Surface: `diagnostic`
 - When to use: Run agentic-kit handoff post-merge-refresh-status.
 - Dry-run available: `False`
@@ -2676,7 +2676,7 @@ Render the current four-slice patch/handoff workflow state.
 
 ### `agentic-kit transfer post-merge-check`
 
-- Safety: `DESTRUCTIVE`
+- Safety: `READ_ONLY`
 - Surface: `diagnostic`
 - When to use: Run agentic-kit transfer post-merge-check.
 - Dry-run available: `False`
@@ -2899,7 +2899,7 @@ Write the current diff to /tmp and run the Python protected change planner on it
 ### `agentic-kit transfer publish-last-report`
 
 - Safety: `DESTRUCTIVE`
-- Surface: `diagnostic`
+- Surface: `primitive`
 - When to use: Run agentic-kit transfer publish-last-report.
 - Dry-run available: `False`
 
@@ -3296,7 +3296,7 @@ Preview or execute the explicit destructive discard-all workflow.
 ### `agentic-kit work finish`
 
 - Safety: `BOUNDED`
-- Surface: `primitive`
+- Surface: `orchestrator`
 - When to use: Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks.
 - Dry-run available: `True`
 
@@ -3315,7 +3315,7 @@ Finish a human work slice by planning or executing commit, push, PR, merge, and 
 ### `agentic-kit work recover`
 
 - Safety: `BOUNDED`
-- Surface: `primitive`
+- Surface: `orchestrator`
 - When to use: Run safe recovery/status commands after interrupted work.
 - Dry-run available: `False`
 
@@ -3328,7 +3328,7 @@ Run safe recovery/status commands after interrupted work.
 ### `agentic-kit work start`
 
 - Safety: `BOUNDED`
-- Surface: `primitive`
+- Surface: `orchestrator`
 - When to use: Start a human patch/slice workflow with the safe standard startup sequence.
 - Dry-run available: `False`
 
