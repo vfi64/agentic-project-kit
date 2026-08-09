@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9eb75b5826029c564b6a0aded033497cacd46849
-  short: 9eb75b58
-  subject: Project GUI commands from manifest surfaces (#2015)
+  full: f559f1ebdbeec3cb2cc6c42c63aa153ceb3962dc
+  short: f559f1eb
+  subject: Accept handoff state refresh merge subjects (#2017)
 last_substantive_work_state:
-  full: 9eb75b5826029c564b6a0aded033497cacd46849
-  short: 9eb75b58
-  subject: Project GUI commands from manifest surfaces (#2015)
+  full: f559f1ebdbeec3cb2cc6c42c63aa153ceb3962dc
+  short: f559f1eb
+  subject: Accept handoff state refresh merge subjects (#2017)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

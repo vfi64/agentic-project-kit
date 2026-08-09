@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `6b074259c0e6f8357f802ad983c530875e9b30f7` (`6b074259`), after `Prefer command surfaces in command-for (#2013)`.
-Last substantive work state is `6b074259c0e6f8357f802ad983c530875e9b30f7` (`6b074259`), after `Prefer command surfaces in command-for (#2013)`.
+Current verified main/admin HEAD is `f559f1ebdbeec3cb2cc6c42c63aa153ceb3962dc` (`f559f1eb`), after `Accept handoff state refresh merge subjects (#2017)`.
+Last substantive work state is `f559f1ebdbeec3cb2cc6c42c63aa153ceb3962dc` (`f559f1eb`), after `Accept handoff state refresh merge subjects (#2017)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

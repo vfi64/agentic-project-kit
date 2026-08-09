@@ -77,17 +77,17 @@
       "path": "docs/TEST_GATES.md"
     },
     {
-      "bytes": 31730,
+      "bytes": 31740,
       "exists": true,
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
     {
-      "bytes": 6919,
+      "bytes": 6923,
       "exists": true,
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
     {
-      "bytes": 3927,
+      "bytes": 3932,
       "exists": true,
       "path": "docs/handoff/START_NEW_CHAT_PROMPT.md"
     },
