@@ -560,6 +560,34 @@ rules:
     - docs/STATUS.md
     - CITATION.cff
     - docs/planning/PROJECT_DIRECTION.yaml
+    - claims.yaml
+    - derived `status`
+    - '`verified` fields'
+    - claims/claims.json
+    - claims/index.html
+    - optional claims degrade visibly to unverified
+    - pyproject-entrypoint
+    - pyproject-value
+    - command-manifest
+    - pytest-node
+    - command-probe
+    - generated-artifact
+  - path: docs/TEST_GATES.md
+    terms:
+    - Claim-evidence rendering
+    - site/content/claims.yaml
+    - derived `status`
+    - '`verified` fields'
+    - pyproject-entrypoint
+    - pyproject-value
+    - command-manifest
+    - pytest-node
+    - command-probe
+    - generated-artifact
+    - Required claims block
+    - optional claims render as unverified
+    - execute the named test node
+    - manifest-command coverage rather than file existence
 - id: kit-os-architecture-coverage
   description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, legacy-profile deprecation, P5c physical migration planning, and evidence policy.
   documents:

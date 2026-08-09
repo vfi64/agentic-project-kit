@@ -43,8 +43,11 @@ def main() -> int:
 def _summary(data: dict[str, object]) -> dict[str, object]:
     report = data.get("report") if isinstance(data.get("report"), dict) else {}
     catalog = report.get("command_catalog") if isinstance(report.get("command_catalog"), dict) else None
+    claims = report.get("claim_report") if isinstance(report.get("claim_report"), dict) else None
     if catalog is not None:
         catalog = {key: value for key, value in catalog.items() if key != "entries"}
+    if claims is not None:
+        claims = {key: value for key, value in claims.items() if key != "claims"}
     return {
         "schema_version": data.get("schema_version"),
         "kind": data.get("kind"),
@@ -54,6 +57,7 @@ def _summary(data: dict[str, object]) -> dict[str, object]:
         "files": data.get("files"),
         "metadata": report.get("metadata"),
         "command_catalog": catalog,
+        "claim_report": claims,
         "blocker_count": report.get("blocker_count"),
         "blockers": report.get("blockers"),
     }

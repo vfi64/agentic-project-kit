@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Claim Evidence - ${product_name}</title>
+    <link rel="stylesheet" href="../static/site.css">
+  </head>
+  <body>
+    <main class="page">
+      <nav class="topnav" aria-label="Site">
+        <a href="../index.html">Overview</a>
+        <a href="../commands/guided.html">Guided</a>
+        <a href="../commands/diagnostics.html">Diagnostics</a>
+        <a href="../commands/index.html">Complete</a>
+      </nav>
+
+      <section class="overview" aria-labelledby="claims-title">
+        <p class="eyebrow">Computed claim evidence</p>
+        <h1 id="claims-title">Claim Evidence</h1>
+        <p class="lede">Claim status is evaluated during the build from evidence bindings. Curated claim content does not store derived verified state.</p>
+        <p class="catalog-meta">Version <code>${package_version}</code> · Manifest <code>${manifest_sha}</code> · Claims <code>${claim_count}</code></p>
+      </section>
+
+      <section class="metrics" aria-label="Claim status counts">
+        <article>
+          <span>Verified</span>
+          <strong>${verified_count}</strong>
+        </article>
+        <article>
+          <span>Unverified</span>
+          <strong>${unverified_count}</strong>
+        </article>
+        <article>
+          <span>Planned</span>
+          <strong>${planned_count}</strong>
+        </article>
+        <article>
+          <span>Required</span>
+          <strong>${required_count}</strong>
+        </article>
+      </section>
+
+      <section class="table-wrap" aria-label="Claims">
+        <table>
+          <thead>
+            <tr>
+              <th>Claim</th>
+              <th>Text</th>
+              <th>Status</th>
+              <th>Required</th>
+              <th>Evidence</th>
+            </tr>
+          </thead>
+          <tbody>
+${rows}
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </body>
+</html>
