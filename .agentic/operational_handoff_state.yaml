@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e2f78bafc5979db748bfb7b540048c22f7ca73c3
-  short: e2f78baf
-  subject: Add generated site foundation (#2028)
+  full: 8cb5d04e0c31e41ac935f66846561ac1c2406a18
+  short: 8cb5d04e
+  subject: Generate site repository content (#2030)
 last_substantive_work_state:
-  full: e2f78bafc5979db748bfb7b540048c22f7ca73c3
-  short: e2f78baf
-  subject: Add generated site foundation (#2028)
+  full: 8cb5d04e0c31e41ac935f66846561ac1c2406a18
+  short: 8cb5d04e
+  subject: Generate site repository content (#2030)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
