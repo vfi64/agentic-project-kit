@@ -7,6 +7,8 @@ meta:
   owner: maintainers
   status: active
   updated_after_pr: 1860
+  updated_after_pr_semantics: strategic_direction_refresh
+  updated_after_pr_current_main_claimed: false
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated

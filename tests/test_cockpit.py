@@ -90,6 +90,9 @@ def test_cockpit_actions_command_lists_structured_actions() -> None:
     assert "workflow.go [workflow/bounded/orchestrator/primary]" in result.output
     assert "release.plan [release/read_only/diagnostic/diagnostics]" in result.output
     assert "audit.pr-hygiene [audit/read_only/primitive/expert]" in result.output
+    assert "diagnostic_priority=" in result.output
+    assert "claim_evidence=" in result.output
+    assert "safety_review=" in result.output
 
 
 def test_cockpit_select_renderer_lists_numbered_actions_without_execution_contract() -> None:
@@ -268,6 +271,9 @@ def test_cockpit_action_inventory_json_data_has_stable_schema() -> None:
                 "min_access_level": "basic",
                 "manifest_surface": "external",
                 "gui_layer": "external",
+                "gui_diagnostic_priority": "external",
+                "claim_evidence": "none",
+                "safety_review": READ_ONLY,
             }
         ],
     }
@@ -292,6 +298,9 @@ def test_cockpit_actions_json_cli_outputs_machine_readable_inventory() -> None:
     assert workflow_go["safety"] == BOUNDED
     assert workflow_go["manifest_surface"] == "orchestrator"
     assert workflow_go["gui_layer"] == "primary"
+    assert workflow_go["gui_diagnostic_priority"] == "not_diagnostic"
+    assert workflow_go["claim_evidence"] == "none"
+    assert workflow_go["safety_review"] in {"dry_run_available", "manual_safety_review"}
     restore = next(action for action in data["actions"] if action["action_id"] == "transfer.restore-known-volatile")
     assert restore["min_access_level"] == "basic"
 
@@ -305,6 +314,9 @@ def test_agentic_cockpit_actions_resolve_to_manifest_surface() -> None:
     assert agentic_actions
     assert all(action["manifest_surface"] not in {"unregistered", "invalid"} for action in agentic_actions)
     assert all(action["gui_layer"] in {"primary", "diagnostics", "expert"} for action in agentic_actions)
+    assert all("gui_diagnostic_priority" in action for action in agentic_actions)
+    assert all("claim_evidence" in action for action in agentic_actions)
+    assert all("safety_review" in action for action in agentic_actions)
 
 
 def test_every_cockpit_action_has_short_description() -> None:

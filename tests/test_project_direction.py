@@ -27,6 +27,7 @@ def test_project_direction_text_output_contains_sections() -> None:
     rendered = render_project_direction(direction, section="all", output_format="text")
 
     assert "PROJECT DIRECTION" in rendered
+    assert "Strategic direction updated after PR" in rendered
     assert "Strategy" in rendered
     assert "Roadmap" in rendered
     assert "Plans" in rendered
@@ -189,6 +190,34 @@ def test_direction_validate_rejects_unknown_dependency(tmp_path: Path) -> None:
     result = validate_project_direction_data(direction, root=tmp_path)
 
     assert any(finding.code == "unknown-dependency" for finding in result.findings)
+
+
+def test_direction_validate_requires_updated_after_pr_semantics_when_set(tmp_path: Path) -> None:
+    direction = _minimal_direction()
+    meta = direction["meta"]
+    assert isinstance(meta, dict)
+    meta["updated_after_pr"] = 1860
+
+    result = validate_project_direction_data(direction, root=tmp_path)
+
+    assert any(finding.code == "invalid-updated-after-pr-semantics" for finding in result.findings)
+    assert any(
+        finding.code == "invalid-updated-after-pr-current-main-claim"
+        for finding in result.findings
+    )
+
+
+def test_direction_validate_accepts_updated_after_pr_as_strategic_marker(tmp_path: Path) -> None:
+    direction = _minimal_direction()
+    meta = direction["meta"]
+    assert isinstance(meta, dict)
+    meta["updated_after_pr"] = 1860
+    meta["updated_after_pr_semantics"] = "strategic_direction_refresh"
+    meta["updated_after_pr_current_main_claimed"] = False
+
+    result = validate_project_direction_data(direction, root=tmp_path)
+
+    assert not any(finding.code.startswith("invalid-updated-after-pr") for finding in result.findings)
 
 
 def test_direction_validate_allows_deleted_source_mapping(tmp_path: Path) -> None:

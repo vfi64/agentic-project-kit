@@ -148,6 +148,15 @@ def audit_status_current_state(
         status_verified_version_doi=status_verified_version_doi,
         release_current_state=release_current_state,
     )
+    _audit_status_current_state_instruction_freshness(
+        findings=findings,
+        blockers=blockers,
+        current_block=current_block,
+        pyproject_version=pyproject_version,
+        status_release=status_release,
+        status_verified_version_doi=status_verified_version_doi,
+        release_current_state=release_current_state,
+    )
     _audit_status_main_marker(
         root=root,
         run_git=run_git,
@@ -371,6 +380,69 @@ def _audit_changelog_current_pending_doi(
         not stale_pending,
         detail,
     )
+
+
+def _audit_status_current_state_instruction_freshness(
+    *,
+    findings: list[StatusCurrentStateFinding],
+    blockers: list[StatusCurrentStateFinding],
+    current_block: str,
+    pyproject_version: str | None,
+    status_release: str | None,
+    status_verified_version_doi: tuple[str, int] | None,
+    release_current_state: str | None,
+) -> None:
+    instruction_lines = _current_state_instruction_lines(current_block)
+    stale_lines: list[tuple[int, str]] = []
+    if (
+        release_current_state == "current_verified"
+        and pyproject_version
+        and status_release == pyproject_version
+        and status_verified_version_doi is not None
+    ):
+        stale_lines = [
+            (line_no, line)
+            for line_no, line in instruction_lines
+            if _is_stale_current_release_instruction(line, pyproject_version)
+        ]
+    detail = (
+        "stale_lines="
+        + repr([f"docs/STATUS.md current block line {line_no}: {line}" for line_no, line in stale_lines])
+        + f"; release_state={release_current_state}; status_release={status_release}; "
+        f"pyproject={pyproject_version}; verified_doi={status_verified_version_doi[0] if status_verified_version_doi else None}"
+    )
+    _finding(
+        findings,
+        blockers,
+        "docs/STATUS.md",
+        "status_current_state_stale_release_instruction",
+        not stale_lines,
+        detail,
+    )
+
+
+def _current_state_instruction_lines(current_block: str) -> list[tuple[int, str]]:
+    lines: list[tuple[int, str]] = []
+    for index, line in enumerate(current_block.splitlines(), start=1):
+        stripped = line.strip()
+        if stripped.startswith(("Current governed slice:", "Next safe step:")):
+            lines.append((index, stripped))
+    return lines
+
+
+def _is_stale_current_release_instruction(line: str, version: str) -> bool:
+    normalized = line.lower()
+    if any(
+        marker in normalized
+        for marker in ("do not ", "must not ", "avoid ", "not repeat", "no need to ")
+    ):
+        return False
+    version_refs = {version.lower(), f"v{version}".lower()}
+    release_ref = "release" in normalized or any(ref in normalized for ref in version_refs)
+    stale_verb = re.search(r"\b(publish|prepare|verify|regenerate|upload|create|cut)\b", normalized)
+    if release_ref and stale_verb:
+        return True
+    return "pre-release" in normalized
 
 
 _CURRENT_VERIFIED_MAIN_PATTERN = r"^Current verified main:\s*`?([0-9a-f]{7,40})`?"
