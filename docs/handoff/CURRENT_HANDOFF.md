@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `9cefd51401108fcc79d76052e81333a0e4ac74a7` (`9cefd514`), after `Document command surface compatibility contract (#2011)`.
-Last substantive work state is `9cefd51401108fcc79d76052e81333a0e4ac74a7` (`9cefd514`), after `Document command surface compatibility contract (#2011)`.
+Current verified main/admin HEAD is `6b074259c0e6f8357f802ad983c530875e9b30f7` (`6b074259`), after `Prefer command surfaces in command-for (#2013)`.
+Last substantive work state is `6b074259c0e6f8357f802ad983c530875e9b30f7` (`6b074259`), after `Prefer command surfaces in command-for (#2013)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
