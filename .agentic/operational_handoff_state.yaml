@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 539fc9699a256754d76aa63522ed53b1810c3d63
-  short: 539fc969
-  subject: Harden freshness and guided diagnostics (#2024)
+  full: 2f321aa1588672a81465a991b47fc5667884f92d
+  short: 2f321aa1
+  subject: Refresh Block A consolidation report (#2026)
 last_substantive_work_state:
-  full: 539fc9699a256754d76aa63522ed53b1810c3d63
-  short: 539fc969
-  subject: Harden freshness and guided diagnostics (#2024)
+  full: 2f321aa1588672a81465a991b47fc5667884f92d
+  short: 2f321aa1
+  subject: Refresh Block A consolidation report (#2026)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
