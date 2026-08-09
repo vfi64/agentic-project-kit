@@ -20,6 +20,8 @@ Surface classification does not by itself change the compatibility or deprecatio
 
 `agentic-kit command-for` may use `surface` only after semantic task matching and safety or prerequisite checks. For equally suitable task matches it should prefer `orchestrator`, then `diagnostic`, then `primitive`; diagnostic task tags may prefer `diagnostic` first. Surface must not override a more exact task match, so an exact primitive match is not displaced by a broader orchestrator.
 
+GUI and website projections must consume this same generated `surface` field. They may group commands as Primary (`orchestrator`), Diagnostics (`diagnostic`), and Expert / Low-level (`primitive`), but they must not maintain an independent list such as `ORCHESTRATORS = [...]` or infer stability from the GUI layer. GUI action registries may remain Bedienprojektionen with their own labels, access levels, and safety gates, but any `agentic-kit` wrapper they expose must resolve to a generated command-reference entry with a valid `surface`.
+
 Required maintenance path:
 
 1. Change the CLI command implementation.

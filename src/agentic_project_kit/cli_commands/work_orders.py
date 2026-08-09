@@ -26,6 +26,10 @@ from agentic_project_kit.work_orders import (
     render_work_order,
     run_work_order,
 )
+from agentic_project_kit.work_order_uploader import (
+    render_work_order_upload_result,
+    upload_next_turn_result_log,
+)
 
 work_orders_app = typer.Typer(help="Inspect and run repo-backed work orders.")
 
@@ -135,6 +139,66 @@ def typed_run_command(
     else:
         typer.echo(f"Typed work order result: {result.result_status}")
         typer.echo(f"Typed work order log written: {result.terminal_log}")
+    if result.returncode != 0:
+        raise typer.Exit(code=result.returncode)
+
+
+@work_orders_app.command("upload")
+def upload_command(
+    log_path: Path | None = typer.Option(
+        None,
+        "--log-path",
+        help="Repository evidence log path to commit; defaults to the next-turn result log.",
+    ),
+    local_log_path: Path | None = typer.Option(
+        None,
+        "--local-log-path",
+        help="Local result log to promote before committing.",
+    ),
+    commit_message: str = typer.Option(
+        "Upload next-turn result log",
+        "--commit-message",
+        help="Commit message for the bounded result-log upload.",
+    ),
+    required_branch: str = typer.Option(
+        "",
+        "--required-branch",
+        help="Require the current branch to match this value before committing.",
+    ),
+    allow_main: bool = typer.Option(
+        False,
+        "--allow-main",
+        help="Allow committing on main; reserved for explicit maintainer-controlled recovery.",
+    ),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON result."),
+) -> None:
+    result = upload_next_turn_result_log(
+        log_path=log_path,
+        local_log_path=local_log_path,
+        commit_message=commit_message,
+        required_branch=required_branch,
+        allow_main=allow_main,
+    )
+    if json_output:
+        typer.echo(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "kind": "work_order_upload_result",
+                    "ok": result.ok,
+                    "committed": result.committed,
+                    "pushed": result.pushed,
+                    "returncode": result.returncode,
+                    "log_path": str(result.log_path),
+                    "message": result.message,
+                    "commit_sha": result.commit_sha,
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+    else:
+        typer.echo(render_work_order_upload_result(result))
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 

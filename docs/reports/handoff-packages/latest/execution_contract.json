@@ -1,13 +1,13 @@
 {
   "command_reference": {
-    "ack": "COMMAND_MANIFEST_ACK dbd04733157b",
+    "ack": "COMMAND_MANIFEST_ACK 2eea21bea1cd",
     "json": "docs/reference/agentic-kit-commands.json",
-    "manifest_sha": "dbd04733157b",
+    "manifest_sha": "2eea21bea1cd",
     "markdown": "docs/reference/AGENTIC_KIT_COMMANDS.md",
     "must_not_reconstruct_commands_from_memory": true,
     "source_hashes": {
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "5e4520a86d640aa195fe3c9b7165dc8f04c877ec3c4b05b464df5eebab38e77a",
-      "docs/reference/agentic-kit-commands.json": "cb1eeba681045365650e5c8bb9393815feb2556688fec5bfa05575fc8a6dbc82"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "321dce86332a104fa20087ca7e6962f0780946eeb484bd53992971db66b0fb70",
+      "docs/reference/agentic-kit-commands.json": "33bd4433ec386d717a12689815242806d25913c1166c7a9d0b9cd043b8b46b34"
     }
   },
   "current_state_contract": {
@@ -269,13 +269,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2013-handoff-refresh",
+      "branch": "codex/s3-gui-command-surface",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "6b074259c0e6f8357f802ad983c530875e9b30f7",
+      "head": "e3509718ba9e0e8a8ba6876a99fa23a781e0e207",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "6b074259c0e6f8357f802ad983c530875e9b30f7",
+      "origin_main": "e3509718ba9e0e8a8ba6876a99fa23a781e0e207",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -415,13 +415,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2013-handoff-refresh",
+    "branch": "codex/s3-gui-command-surface",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "6b074259c0e6f8357f802ad983c530875e9b30f7",
+    "head": "e3509718ba9e0e8a8ba6876a99fa23a781e0e207",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "6b074259c0e6f8357f802ad983c530875e9b30f7",
+    "origin_main": "e3509718ba9e0e8a8ba6876a99fa23a781e0e207",
     "worktree_clean": false
   },
   "rules": [
@@ -644,8 +644,8 @@
   ],
   "schema_version": 1,
   "source_hashes": {
-    "docs/reference/AGENTIC_KIT_COMMANDS.md": "5e4520a86d640aa195fe3c9b7165dc8f04c877ec3c4b05b464df5eebab38e77a",
-    "docs/reference/agentic-kit-commands.json": "cb1eeba681045365650e5c8bb9393815feb2556688fec5bfa05575fc8a6dbc82"
+    "docs/reference/AGENTIC_KIT_COMMANDS.md": "321dce86332a104fa20087ca7e6962f0780946eeb484bd53992971db66b0fb70",
+    "docs/reference/agentic-kit-commands.json": "33bd4433ec386d717a12689815242806d25913c1166c7a9d0b9cd043b8b46b34"
   },
   "validation": {
     "path": ".agentic/successor_handoff_package/validation_report.json",

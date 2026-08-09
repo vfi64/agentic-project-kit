@@ -1,6 +1,9 @@
 import subprocess
 from pathlib import Path
 
+from typer.testing import CliRunner
+
+from agentic_project_kit.cli import app
 from agentic_project_kit.work_order_uploader import (
     render_work_order_upload_result,
     upload_next_turn_result_log,
@@ -193,3 +196,17 @@ def test_upload_next_turn_result_log_refuses_branch_mismatch(tmp_path, monkeypat
 
     assert result.ok is False
     assert "does not match required branch" in result.message
+
+
+def test_work_order_upload_cli_exposes_bounded_result_log_uploader(tmp_path, monkeypatch):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_repo(repo)
+    monkeypatch.chdir(repo)
+
+    result = CliRunner().invoke(app, ["work-order", "upload", "--json"])
+
+    assert result.exit_code == 1
+    assert '"kind": "work_order_upload_result"' in result.output
+    assert '"ok": false' in result.output
+    assert "missing result log" in result.output

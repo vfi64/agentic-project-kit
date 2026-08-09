@@ -16494,6 +16494,111 @@
     },
     {
       "dry_run_available": false,
+      "group": "work-order",
+      "help": "",
+      "name": "upload",
+      "params": [
+        {
+          "default": null,
+          "help": "Repository evidence log path to commit; defaults to the next-turn result log.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "log_path",
+          "opts": [
+            "--log-path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Local result log to promote before committing.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "local_log_path",
+          "opts": [
+            "--local-log-path"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "Upload next-turn result log",
+          "help": "Commit message for the bounded result-log upload.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "commit_message",
+          "opts": [
+            "--commit-message"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Require the current branch to match this value before committing.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "required_branch",
+          "opts": [
+            "--required-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Allow committing on main; reserved for explicit maintainer-controlled recovery.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_main",
+          "opts": [
+            "--allow-main"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON result.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "work-order",
+        "upload"
+      ],
+      "qualified_name": "agentic-kit work-order upload",
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "surface": "primitive",
+      "task_tags": [
+        "bounded",
+        "work-order"
+      ],
+      "when_to_use": "Run agentic-kit work-order upload."
+    },
+    {
+      "dry_run_available": false,
       "group": "workflow",
       "help": "Cleanup completed or stale temporary workflow evidence branches.",
       "name": "cleanup",
@@ -17421,7 +17526,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "dbd04733157b",
+    "manifest_sha": "2eea21bea1cd",
     "schema_version": 1
   },
   "schema_version": 2,

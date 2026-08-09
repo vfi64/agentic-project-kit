@@ -192,6 +192,7 @@ rules:
     - agentic-kit chat refresher
     - agentic-kit chat session-start
     - agentic-kit commands sync-entrypoints
+    - agentic-kit work-order upload
     - agentic-kit workspace dpa-intake
     - agentic-kit workspace remove
     - agentic-kit dpa readiness
@@ -455,6 +456,9 @@ rules:
     - agentic-kit command-for
     - tie-breaker after semantic task matching and safety checks
     - exact primitive matches are not displaced by broader orchestrators
+    - GUI and website projections must consume this same generated `surface` field
+    - Primary (`orchestrator`)
+    - Expert / Low-level (`primitive`)
   - path: docs/TEST_GATES.md
     terms:
     - Command manifest surface classes
@@ -1114,6 +1118,12 @@ rules:
     - agentic-kit cockpit actions
     - agentic-kit cockpit run
     - structured action inventory
+    - manifest_surface
+    - gui_layer
+    - Primary layer
+    - Diagnostics layer
+    - Expert / Low-level layer
+    - agentic-kit work-order upload
     - read_only
     - bounded
     - destructive
@@ -1143,6 +1153,10 @@ rules:
     - agentic-kit cockpit run
     - action registry
     - safety classification
+    - manifest_surface
+    - gui_layer
+    - GUI command projection defaults to Primary/orchestrator commands
+    - stale wrapper commands are gate failures
 - id: planning-state-freshness-coverage
   description: Planning state documents must remain current, mutually consistent,
     and guarded against stale historical fragments.

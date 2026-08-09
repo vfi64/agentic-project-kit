@@ -86,10 +86,10 @@ def test_cockpit_actions_command_lists_structured_actions() -> None:
 
     assert result.exit_code == 0, result.output
     assert "Local cockpit actions" in result.output
-    assert "workflow.state [workflow/read_only]" in result.output
-    assert "workflow.go [workflow/bounded]" in result.output
-    assert "release.plan [release/read_only]" in result.output
-    assert "audit.pr-hygiene [audit/read_only]" in result.output
+    assert "workflow.state [workflow/read_only/diagnostic/diagnostics]" in result.output
+    assert "workflow.go [workflow/bounded/orchestrator/primary]" in result.output
+    assert "release.plan [release/read_only/diagnostic/diagnostics]" in result.output
+    assert "audit.pr-hygiene [audit/read_only/primitive/expert]" in result.output
 
 
 def test_cockpit_select_renderer_lists_numbered_actions_without_execution_contract() -> None:
@@ -266,6 +266,8 @@ def test_cockpit_action_inventory_json_data_has_stable_schema() -> None:
                 "description": "Demo action.",
                 "short_description": "Inspect demo state",
                 "min_access_level": "basic",
+                "manifest_surface": "external",
+                "gui_layer": "external",
             }
         ],
     }
@@ -284,10 +286,25 @@ def test_cockpit_actions_json_cli_outputs_machine_readable_inventory() -> None:
     assert git_status["command"] == ["git", "status", "--short"]
     assert git_status["short_description"] == "Show local uncommitted changes"
     assert git_status["min_access_level"] == "basic"
+    assert git_status["manifest_surface"] == "external"
+    assert git_status["gui_layer"] == "external"
     workflow_go = next(action for action in data["actions"] if action["action_id"] == "workflow.go")
     assert workflow_go["safety"] == BOUNDED
+    assert workflow_go["manifest_surface"] == "orchestrator"
+    assert workflow_go["gui_layer"] == "primary"
     restore = next(action for action in data["actions"] if action["action_id"] == "transfer.restore-known-volatile")
     assert restore["min_access_level"] == "basic"
+
+
+def test_agentic_cockpit_actions_resolve_to_manifest_surface() -> None:
+    data = action_inventory_as_json_data()
+    agentic_actions = [
+        action for action in data["actions"] if action["command"] and action["command"][0] == "agentic-kit"
+    ]
+
+    assert agentic_actions
+    assert all(action["manifest_surface"] not in {"unregistered", "invalid"} for action in agentic_actions)
+    assert all(action["gui_layer"] in {"primary", "diagnostics", "expert"} for action in agentic_actions)
 
 
 def test_every_cockpit_action_has_short_description() -> None:
