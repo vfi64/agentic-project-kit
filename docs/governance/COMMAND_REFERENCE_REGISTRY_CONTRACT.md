@@ -6,6 +6,18 @@
 
 The registry must be generated from the real Typer/Click CLI registration state, not from a manual seed. The required source marker is `generated_from_typer_click_registry`.
 
+## Command surface contract
+
+Every generated command-reference entry must carry exactly one `surface` value:
+
+- `orchestrator`: primary user-facing operation for a complete governed task or lifecycle step.
+- `diagnostic`: primary diagnosis, inspection, status, readiness, audit, or evidence-reporting operation.
+- `primitive`: public low-level command building block that may be used directly by expert users, CI, wrappers, or orchestration code.
+
+Surface classification is separate from command safety. It describes user-facing role and disclosure level; it does not grant mutation permission and it does not change the `READ_ONLY`, `BOUNDED`, or `DESTRUCTIVE` safety contract.
+
+Surface classification does not by itself change the compatibility or deprecation contract of an existing public command. In particular, primitive does not mean unstable, deprecated, private, or unsupported. Any future stability or deprecation model must be introduced as its own explicit contract and gate, not inferred from `surface`.
+
 Required maintenance path:
 
 1. Change the CLI command implementation.

@@ -113,6 +113,18 @@ def test_current_reference_classifies_every_command_surface() -> None:
     assert surfaces["agentic-kit transfer commit"] == "primitive"
 
 
+def test_surface_contract_documents_compatibility_boundary() -> None:
+    contract = Path("docs/governance/COMMAND_REFERENCE_REGISTRY_CONTRACT.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert SURFACE_VALUES == {"orchestrator", "diagnostic", "primitive"}
+    assert "Command surface contract" in contract
+    assert "Surface classification is separate from command safety" in contract
+    assert "does not by itself change the compatibility or deprecation contract" in contract
+    assert "primitive does not mean unstable" in contract
+
+
 def test_audit_detects_missing_safety(tmp_path: Path, monkeypatch) -> None:
     data = build_reference_from_app(_fixture_app())
     data["commands"][0].pop("safety")
