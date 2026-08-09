@@ -44,7 +44,13 @@ def test_pages_workflow_builds_site_and_deploys_actions_artifact() -> None:
     assert "python -m pytest tests/test_site_generator.py tests/test_site_claims.py -q" in build_runs
     assert "actions/configure-pages@v5" in build_uses
     assert any(
+        step.get("uses") == "actions/configure-pages@v5"
+        and step.get("if") == "needs.pages-state.outputs.deploy-ready == 'true'"
+        for step in build_steps
+    )
+    assert any(
         step.get("uses") == "actions/upload-pages-artifact@v3"
+        and step.get("if") == "needs.pages-state.outputs.deploy-ready == 'true'"
         and step.get("with", {}).get("path") == "site/dist"
         for step in build_steps
     )

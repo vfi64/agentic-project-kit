@@ -25,14 +25,15 @@ available API view.
 - installs the package with development dependencies;
 - runs `python site/scripts/build.py --output site/dist --json`;
 - runs `python -m pytest tests/test_site_generator.py tests/test_site_claims.py -q`;
-- uploads `site/dist` with `actions/upload-pages-artifact`;
+- uploads `site/dist` with `actions/upload-pages-artifact` only when Pages is
+  already configured for GitHub Actions deployment;
 - deploys with `actions/deploy-pages` only when the repository Pages API reports
   `build_type: workflow`.
 
 If Pages is not enabled or is not configured for GitHub Actions deployment, the
-workflow skips deployment after a successful build. This keeps `main` from
-turning red because of a missing repository setting while still making the
-deployment path ready.
+workflow skips the Pages configure/upload/deploy steps after a successful build.
+This keeps `main` from turning red because of a missing repository setting while
+still making the deployment path ready.
 
 ## Required Maintainer Action
 
