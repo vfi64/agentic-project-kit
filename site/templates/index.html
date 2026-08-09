@@ -31,6 +31,28 @@
           <span>Commands</span>
           <strong>${command_count}</strong>
         </article>
+        <article>
+          <span>Release tag</span>
+          <strong>${release_tag}</strong>
+        </article>
+        <article>
+          <span>Concept DOI</span>
+          <strong>${concept_doi}</strong>
+        </article>
+        <article>
+          <span>Version DOI</span>
+          <strong>${version_doi}</strong>
+        </article>
+        <article>
+          <span>Verified main</span>
+          <strong>${current_verified_main}</strong>
+        </article>
+      </section>
+
+      <section class="command-links" aria-label="Command views">
+        <a href="commands/guided.html">Guided commands <strong>${orchestrator_count}</strong></a>
+        <a href="commands/diagnostics.html">Diagnostics <strong>${diagnostic_count}</strong></a>
+        <a href="commands/index.html">Complete reference <strong>${command_count}</strong></a>
       </section>
 
       <section class="details" aria-label="Build metadata">
@@ -50,6 +72,18 @@
           <div>
             <dt>Build commit</dt>
             <dd><code>${build_commit}</code></dd>
+          </div>
+          <div>
+            <dt>Primitives</dt>
+            <dd><code>${primitive_count}</code></dd>
+          </div>
+          <div>
+            <dt>Command groups</dt>
+            <dd><code>${command_group_count}</code></dd>
+          </div>
+          <div>
+            <dt>Project direction</dt>
+            <dd><code>${project_direction_status}</code></dd>
           </div>
         </dl>
       </section>

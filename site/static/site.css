@@ -85,6 +85,39 @@ dt {
   font-size: 1.35rem;
 }
 
+.command-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 28px;
+}
+
+.command-links a,
+.topnav a {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.command-links strong {
+  float: right;
+  color: var(--accent);
+}
+
+.topnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.catalog-meta {
+  color: var(--muted);
+}
+
 .details {
   border-top: 1px solid var(--line);
   padding-top: 24px;
@@ -110,6 +143,33 @@ code {
   font: 0.95em ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 }
 
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 1120px;
+  border-collapse: collapse;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--line);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
 @media (max-width: 760px) {
   .page {
     width: min(100% - 24px, 1120px);
@@ -117,6 +177,7 @@ code {
   }
 
   .metrics,
+  .command-links,
   dl {
     grid-template-columns: 1fr;
   }
