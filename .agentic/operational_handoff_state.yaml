@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 926a3b905a52f397a76f3cc2fc52847fd8bb3e1e
-  short: 926a3b90
-  subject: Guard Pages deploy until Actions source is enabled (#2035)
+  full: 19d1fc32ba85ef7d86764cc336bdb16476d13473
+  short: 19d1fc32
+  subject: Build generated site presentation layer (#2037)
 last_substantive_work_state:
-  full: 926a3b905a52f397a76f3cc2fc52847fd8bb3e1e
-  short: 926a3b90
-  subject: Guard Pages deploy until Actions source is enabled (#2035)
+  full: 19d1fc32ba85ef7d86764cc336bdb16476d13473
+  short: 19d1fc32
+  subject: Build generated site presentation layer (#2037)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
