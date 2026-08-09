@@ -3,8 +3,9 @@
 Date: 2026-08-09
 
 Status: Block A and Block B are complete for the post-0.5.0 consolidation and
-generated website scope. This is not a global DPA-stable or arbitrary
-external-repository conformance claim.
+generated website scope. This report is not the source authority for DPA stable
+promotion; it records the generated-site closeout and points to the current DPA
+readiness commands for DPA status.
 
 Post-S4d main ref before this reporting slice:
 `8227f304bbc5cf5dc3aa5c0cbb5db838c992007f`
@@ -23,8 +24,9 @@ This closeout covers:
 
 It does not claim:
 
-- kit-wide DPA strict enforcement for every possible future scope;
-- DPA conformance for arbitrary foreign repositories without fresh scope
+- a new DPA stable authority beyond the existing DPA final closeout and stable
+  promotion records;
+- automatic DPA conformance for arbitrary foreign repositories without fresh scope
   evidence;
 - full GUI parity with every CLI command;
 - live public GitHub Pages publication before the repository Pages source is set
@@ -32,7 +34,9 @@ It does not claim:
 
 DP2 implementation remains `100%` only for the
 `DP2_SELECTED_SELF_HOSTING_CURRENT_HANDOFF_SCOPE`. That percentage must not be
-read as whole-kit DPA completion.
+read as whole-kit DPA completion. Current DPA stable status is instead governed
+by `agentic-kit dpa final-closeout-check` and
+`agentic-kit dpa stable-readiness-check`.
 
 ## Main Refs
 
@@ -43,6 +47,8 @@ read as whole-kit DPA completion.
 - S4c start: `b145064a`.
 - S4d start: `30de3c23`.
 - Post-S4d admin main before this closeout report: `8227f304`.
+- Closeout report merge: `24338be4`.
+- Post-closeout admin refresh: `e19293bc`.
 
 ## PRs
 
@@ -78,6 +84,8 @@ Block B PRs:
 - #2036 `30de3c23` Refresh handoff state after PR2035.
 - #2037 `19d1fc32` Build generated site presentation layer.
 - #2038 `8227f304` Refresh handoff state after PR2037.
+- #2039 `24338be4` Record post-0.5 generated site closeout.
+- #2040 `e19293bc` Refresh handoff state after PR2039.
 
 ## Gate Evidence
 
@@ -100,6 +108,42 @@ Latest post-merge evidence after #2038:
 - S4d PR #2037 CI run `31308450612`: success.
 - S4d PR #2037 Pages run `31308450606`: success.
 - `agentic-kit transfer pr-closeout-complete --after-pr 2037`: PASS.
+
+Latest post-closeout evidence after #2040:
+
+- `agentic-kit transfer post-merge-check --json`: PASS / NOOP at `e19293bc`.
+- GitHub CI run `31309784674`: success.
+- GitHub Pages run `31309784691`: success.
+- `agentic-kit transfer pr-closeout-complete --after-pr 2039`: PASS.
+- final local `.venv/bin/python -m pytest -q`: 2785 passed.
+- final local `.venv/bin/ruff check .`: PASS.
+- final local `.venv/bin/agentic-kit check-docs`: PASS.
+- final local `.venv/bin/agentic-kit doctor`: PASS.
+- final local site build: PASS, 10/10 claims verified.
+
+## DPA Status Evidence
+
+Current DPA command evidence at `e19293bc`:
+
+- `agentic-kit dpa readiness --json`: `DP2_AUTHORIZED`, DP2 selected scope
+  100%, `kit_wide_dpa_conformance_claimed: false` for the DP2 readiness
+  command.
+- `agentic-kit dpa post-dp2-scope-assessment --json`:
+  `READY_FOR_FINAL_CLOSEOUT_RECORD`, final closeout ready, DP5 strict active
+  for the accepted scope.
+- `agentic-kit dpa final-closeout-check --json`:
+  `VALID_DPA_FINAL_CLOSEOUT_RECORD`, strict gate PASS.
+- `agentic-kit dpa stable-readiness-check --json`:
+  `VALID_DPA_STABLE_PROMOTION_RECORD`, strict gate PASS,
+  `stable_dpa_claimed: true` for the recorded promotion scope.
+- Probe readiness for PROBE-002, PROBE-003, PROBE-004 and renderer:
+  `SATISFIED_FOR_CURRENT_KIT_REF`.
+
+Foreign repository management remains bounded:
+
+- automatic external repo conformance is not claimed;
+- each foreign or newly adopted repo still needs fresh inventory, DPA-600/
+  DPA-700 evidence, exact refs and maintainer-authorized scope.
 
 ## Drift Result
 
@@ -370,9 +414,9 @@ Required manual or external action before public deployment:
     `docs/reference/agentic-kit-commands.json` `meta.manifest_sha` and is
     reproduced from the command list as `3d20e7338c12`.
 12. Useful pre-0.6.0 work is: enable and verify live GitHub Pages, continue
-    safety review for bounded commands where autonomy matters, broaden external
-    repository adoption/DPA evidence, and avoid turning DP2 scope completion
-    into a global DPA-conformance claim.
+    safety review for bounded commands where autonomy matters, and broaden
+    external repository adoption/DPA automation while preserving the per-repo
+    evidence boundary.
 
 ## Closeout Judgment
 
