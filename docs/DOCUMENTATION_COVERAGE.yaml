@@ -532,6 +532,12 @@ rules:
     - meta.manifest_sha
     - manifest_sha(commands)
     - top-level `manifest_hash`
+    - commands/guided.html
+    - commands/diagnostics.html
+    - commands/commands.json
+    - 'surface: orchestrator'
+    - 'surface: diagnostic'
+    - invalid command `surface`
   - path: site/README.md
     terms:
     - Generated Website
@@ -544,6 +550,16 @@ rules:
     - manifest_sha(commands)
     - git rev-parse HEAD
     - computed from evidence bindings
+    - commands/guided.html
+    - commands/diagnostics.html
+    - commands/index.html
+    - commands/commands.json
+    - 'surface: orchestrator'
+    - 'surface: diagnostic'
+    - valid `surface`
+    - docs/STATUS.md
+    - CITATION.cff
+    - docs/planning/PROJECT_DIRECTION.yaml
 - id: kit-os-architecture-coverage
   description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, legacy-profile deprecation, P5c physical migration planning, and evidence policy.
   documents:

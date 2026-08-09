@@ -21,3 +21,15 @@ Later website slices add generated command views, claim-evidence evaluation, the
 GitHub Pages workflow and the presentation layer. Technical claim status must be
 computed from evidence bindings; curated content must not store a derived
 `verified` value.
+
+S4b generated content adds the command catalog projections:
+
+- `commands/guided.html` contains only `surface: orchestrator` entries.
+- `commands/diagnostics.html` contains only `surface: diagnostic` entries.
+- `commands/index.html` and `commands/commands.json` contain the complete
+  reference.
+- The build fails when command entries lack valid `surface`, `safety`,
+  `dry_run_available`, `when_to_use` or `params` metadata, or when guided and
+  diagnostic views would be empty.
+- Release, status and roadmap summaries are derived from `docs/STATUS.md`,
+  `CITATION.cff` and `docs/planning/PROJECT_DIRECTION.yaml`.

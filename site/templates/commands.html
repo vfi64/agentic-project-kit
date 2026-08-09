@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${title} - ${product_name}</title>
+    <link rel="stylesheet" href="../static/site.css">
+  </head>
+  <body>
+    <main class="page">
+      <nav class="topnav" aria-label="Site">
+        <a href="../index.html">Overview</a>
+        <a href="guided.html">Guided</a>
+        <a href="diagnostics.html">Diagnostics</a>
+        <a href="index.html">Complete</a>
+      </nav>
+
+      <section class="overview" aria-labelledby="command-title">
+        <p class="eyebrow">Generated command catalog</p>
+        <h1 id="command-title">${title}</h1>
+        <p class="lede">${description}</p>
+        <p class="catalog-meta">Version <code>${package_version}</code> · Manifest <code>${manifest_sha}</code> · Commands <code>${command_count}</code></p>
+      </section>
+
+      <section class="table-wrap" aria-label="${title}">
+        <table>
+          <thead>
+            <tr>
+              <th>Command</th>
+              <th>Group</th>
+              <th>Surface</th>
+              <th>Safety</th>
+              <th>Dry-run</th>
+              <th>When to use</th>
+              <th>Parameters</th>
+              <th>Kit version</th>
+              <th>Manifest</th>
+            </tr>
+          </thead>
+          <tbody>
+${rows}
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </body>
+</html>

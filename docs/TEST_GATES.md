@@ -260,6 +260,13 @@ reproduced from the committed `commands` list with
 `agentic_project_kit.command_manifest.manifest_sha(commands)`. A website build
 must not depend on a top-level `manifest_hash` field.
 
+Generated command catalog views must come from the same manifest, not hand-coded
+HTML command lists. `commands/guided.html` is generated from
+`surface: orchestrator`, `commands/diagnostics.html` from `surface: diagnostic`,
+and `commands/commands.json` plus `commands/index.html` from the complete
+manifest. The build must fail on missing or invalid command `surface`, `safety`,
+`dry_run_available`, `when_to_use` or `params` metadata.
+
 ## Path Literal Active-Class Gate
 
 `agentic-kit audit-path-literals` remains report-only by default so reference and
