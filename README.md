@@ -383,6 +383,15 @@ Command manifest surface classes are role metadata, not stability metadata. `orc
 `agentic-kit command-for` uses the same surface classes as a tie-breaker after semantic task matching and safety checks: equally suitable task matches prefer orchestrator, diagnostic task tags may prefer diagnostic, and exact primitive matches are not displaced by broader orchestrators. GUI and website projections must consume this same generated `surface` field: Primary (`orchestrator`), Diagnostics (`diagnostic`), and Expert / Low-level (`primitive`).
 GUI and website projections may add presentation-only guidance over that surface: `diagnostic_priority` separates Guided Diagnostics common blockers from specialized audits, `safety_review` highlights bounded commands without dry-run as manual-review items, and `claim_evidence` marks commands whose readiness, release, PR, or DPA claims require gate output, exact refs, or remote/release evidence.
 
+## Generated website foundation
+
+`site/scripts/build.py` uses `agentic_project_kit.site_generator` to write the
+ignored `site/dist/` artifact from repository sources. It derives package
+version, Python requirement, command count, `meta.manifest_sha`,
+`manifest_sha(commands)`, and build commit from current repo state. The site is
+not a second hand-maintained technical truth surface; future technical claim
+status must be computed from evidence bindings.
+
 - `agentic-kit workspace dpa-intake`: run the deterministic one-shot DPA intake for a target repository by resolving exact-ref evidence, running workspace adoption analysis and DPA repo-adoption assessment, generating an adjudication plan, and optionally writing bounded intake evidence without migration or external-repo conformance claims.
 - `agentic-kit workspace remove`: plan or execute bounded removal of exact Kit-generated workspace files while preserving modified, unknown, source, and project-documentation paths.
 - `agentic-kit dpa readiness`: validate the staged DPA DP1 Assessment readiness record, report the deterministic DP2 selected self-hosting target-scope implementation percentage, and keep that separate from Kit-wide DPA conformance.
