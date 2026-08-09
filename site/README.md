@@ -51,9 +51,9 @@ Supported evidence types:
 - `generated-artifact`
 
 S4c Pages deployment adds `.github/workflows/pages.yml`. The GitHub Pages
-workflow builds a fresh `site/dist/` artifact, runs the site tests, uploads it
-with `actions/upload-pages-artifact`, and deploys with `actions/deploy-pages`
-only after the repository Pages API reports `build_type: workflow`. When Pages
-is not enabled or not set to GitHub Actions deployment, the workflow records
-that state and skips deployment after a successful build rather than turning
-`main` red for a missing repository setting.
+workflow builds a fresh `site/dist/` artifact and runs the site tests on `main`.
+It configures Pages, uploads with `actions/upload-pages-artifact`, and deploys
+with `actions/deploy-pages` only after the repository Pages API reports
+`build_type: workflow`. When Pages is not enabled or not set to GitHub Actions deployment,
+the workflow records that state and skips the Pages-specific steps after a
+successful build rather than turning `main` red for a missing repository setting.
