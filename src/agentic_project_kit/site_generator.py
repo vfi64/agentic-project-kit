@@ -14,6 +14,7 @@ from typing import Any
 import yaml
 
 from agentic_project_kit.command_manifest import SAFETY_VALUES, SURFACE_VALUES, load_manifest, manifest_sha
+from agentic_project_kit.gui_command_projection import diagnostic_priority_for_command
 from agentic_project_kit.site_claims import ClaimEvaluationReport, evaluate_site_claims
 
 
@@ -58,6 +59,7 @@ class SiteCommandEntry:
     surface: str
     safety: str
     dry_run_available: bool
+    diagnostic_priority: str
     when_to_use: str
     help: str
     params: tuple[dict[str, object], ...]
@@ -79,6 +81,12 @@ class SiteCommandCatalog:
     @property
     def diagnostic_entries(self) -> tuple[SiteCommandEntry, ...]:
         return tuple(entry for entry in self.entries if entry.surface == "diagnostic")
+
+    @property
+    def common_blocker_entries(self) -> tuple[SiteCommandEntry, ...]:
+        return tuple(
+            entry for entry in self.diagnostic_entries if entry.diagnostic_priority == "common_blocker"
+        )
 
     def surface_counts(self) -> dict[str, int]:
         return {
@@ -383,7 +391,9 @@ def build_site(
         ),
         encoding="utf-8",
     )
-    shutil.copy2(root / "site" / "static" / "site.css", output / "static" / "site.css")
+    for source in sorted((root / "site" / "static").iterdir()):
+        if source.is_file():
+            shutil.copy2(source, output / "static" / source.name)
 
     files = tuple(
         sorted(path.relative_to(output).as_posix() for path in output.rglob("*") if path.is_file())
@@ -398,7 +408,9 @@ def build_site(
 
 def render_index_html(root: Path, report: SiteFoundationReport) -> str:
     metadata = report.metadata
+    command_catalog = report.command_catalog
     assert metadata is not None
+    assert command_catalog is not None
     template_path = root / "site" / "templates" / "index.html"
     template = Template(template_path.read_text(encoding="utf-8"))
     values = {
@@ -425,8 +437,71 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
         "claim_unverified_count": str(report.claim_report.status_counts().get("unverified", 0)),
         "claim_planned_count": str(report.claim_report.status_counts().get("planned", 0)),
         "required_claim_count": str(report.claim_report.required_counts().get("required", 0)),
+        "latest_substantive_work": escape(
+            report.status_projection.latest_substantive_work or "not recorded"
+        ),
+        "next_safe_step": escape(report.status_projection.next_safe_step or "not recorded"),
+        "guided_command_items": _command_summary_items(command_catalog.guided_entries, limit=8),
+        "common_diagnostic_items": _command_summary_items(
+            command_catalog.common_blocker_entries,
+            limit=6,
+            empty="No common blocker diagnostics are currently projected.",
+        ),
+        "verified_now_items": _claim_summary_items(
+            [
+                claim
+                for claim in report.claim_report.claims
+                if claim.required and claim.status == "verified"
+            ],
+            empty="No required claims are currently verified.",
+        ),
+        "available_evolving_items": _claim_summary_items(
+            [
+                claim
+                for claim in report.claim_report.claims
+                if not claim.required and claim.status == "verified"
+            ],
+            empty="No optional claims are currently verified.",
+        ),
+        "planned_items": _claim_summary_items(
+            [claim for claim in report.claim_report.claims if claim.status == "planned"],
+            empty="No planned public claims are currently declared.",
+        ),
     }
     return template.safe_substitute(values).rstrip() + "\n"
+
+
+def _command_summary_items(
+    entries: tuple[SiteCommandEntry, ...],
+    *,
+    limit: int,
+    empty: str = "No commands are currently projected.",
+) -> str:
+    if not entries:
+        return f"          <li>{escape(empty)}</li>"
+    rows = []
+    for entry in entries[:limit]:
+        rows.append(
+            "          <li>"
+            f"<code>{escape(entry.qualified_name)}</code>"
+            f"<span>{escape(entry.when_to_use)}</span>"
+            "</li>"
+        )
+    return "\n".join(rows)
+
+
+def _claim_summary_items(claims: list[object], *, empty: str) -> str:
+    if not claims:
+        return f"          <li>{escape(empty)}</li>"
+    rows = []
+    for claim in sorted(claims, key=lambda item: str(getattr(item, "id", ""))):
+        rows.append(
+            "          <li>"
+            f"<code>{escape(str(getattr(claim, 'id', '')))}</code>"
+            f"<span>{escape(str(getattr(claim, 'text', '')))}</span>"
+            "</li>"
+        )
+    return "\n".join(rows)
 
 
 def render_claims_html(
@@ -579,6 +654,7 @@ def _build_command_catalog(
                 surface=surface,
                 safety=safety,
                 dry_run_available=bool(command.get("dry_run_available")),
+                diagnostic_priority=diagnostic_priority_for_command(command),
                 when_to_use=when_to_use,
                 help=_string(command.get("help")),
                 params=tuple(_param_summary(param) for param in params if isinstance(param, dict)),

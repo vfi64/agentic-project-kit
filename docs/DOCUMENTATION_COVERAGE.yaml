@@ -578,6 +578,13 @@ rules:
     - actions/deploy-pages
     - 'build_type: workflow'
     - GitHub Actions deployment
+    - static/runtime-map.svg
+    - Repository Memory
+    - Runtime Structure
+    - common blocker diagnostics
+    - verified now
+    - available but evolving
+    - not claimed
   - path: docs/TEST_GATES.md
     terms:
     - Claim-evidence rendering
@@ -602,6 +609,14 @@ rules:
     - actions/deploy-pages
     - 'build_type: workflow'
     - repository setting remains a documented maintainer action
+    - Presentation Layer website changes
+    - Repository Memory
+    - Runtime Structure
+    - common blocker diagnostics
+    - verified now
+    - available but evolving
+    - not claimed
+    - static/runtime-map.svg
 - id: kit-os-architecture-coverage
   description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, legacy-profile deprecation, P5c physical migration planning, and evidence policy.
   documents:

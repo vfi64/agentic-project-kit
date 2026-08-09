@@ -57,3 +57,16 @@ with `actions/deploy-pages` only after the repository Pages API reports
 `build_type: workflow`. When Pages is not enabled or not set to GitHub Actions deployment,
 the workflow records that state and skips the Pages-specific steps after a
 successful build rather than turning `main` red for a missing repository setting.
+
+S4d presentation keeps the public homepage generated from the same sources while
+adding clearer explanatory sections:
+
+- `static/runtime-map.svg` visualizes repository truth flowing into the
+  deterministic site builder.
+- Repository Memory, Runtime Structure, CLI, GUI, Communication, and Claims
+  sections are rendered from templates plus generated metadata.
+- Guided lifecycle examples come from `surface: orchestrator`.
+- common blocker diagnostics come from the existing GUI command projection, not
+  a separate website taxonomy.
+- Status categories use computed claim status: verified now, available but evolving,
+  planned, and not claimed.
