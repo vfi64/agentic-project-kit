@@ -1,8 +1,16 @@
 from __future__ import annotations
 
+import pytest
 
 
-def test_post_merge_refresh_status_treats_refresh_only_head_as_fresh(monkeypatch):
+@pytest.mark.parametrize(
+    "subject",
+    [
+        "Refresh successor handoff after PR1281 (#1282)\n",
+        "Refresh handoff state after PR2015 (#2016)\n",
+    ],
+)
+def test_post_merge_refresh_status_treats_refresh_only_head_as_fresh(monkeypatch, subject):
     import subprocess
     from typer.testing import CliRunner
 
@@ -26,7 +34,7 @@ def test_post_merge_refresh_status_treats_refresh_only_head_as_fresh(monkeypatch
         return subprocess.CompletedProcess(
             argv,
             0,
-            "Refresh successor handoff after PR1281 (#1282)\n",
+            subject,
             "",
         )
 
