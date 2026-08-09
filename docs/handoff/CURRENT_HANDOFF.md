@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `926a3b905a52f397a76f3cc2fc52847fd8bb3e1e` (`926a3b90`), after `Guard Pages deploy until Actions source is enabled (#2035)`.
-Last substantive work state is `926a3b905a52f397a76f3cc2fc52847fd8bb3e1e` (`926a3b90`), after `Guard Pages deploy until Actions source is enabled (#2035)`.
+Current verified main/admin HEAD is `19d1fc32ba85ef7d86764cc336bdb16476d13473` (`19d1fc32`), after `Build generated site presentation layer (#2037)`.
+Last substantive work state is `19d1fc32ba85ef7d86764cc336bdb16476d13473` (`19d1fc32`), after `Build generated site presentation layer (#2037)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
