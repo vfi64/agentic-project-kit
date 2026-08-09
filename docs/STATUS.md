@@ -7,10 +7,10 @@ Current verified release: 0.5.0.
 Current release tag: v0.5.0.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21850952`.
-Current verified main: `41dd0028` (`Classify command manifest surfaces (#2009)`).
-Latest substantive work: PR #2009 (`Classify command manifest surfaces (#2009)`).
+Current verified main: `9cefd514` (`Document command surface compatibility contract (#2011)`).
+Latest substantive work: PR #2011 (`Document command surface compatibility contract (#2011)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2009 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2011 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -413,6 +413,6 @@ promotes DPA-000 through DPA-900 to stable for the accepted Kit-side DP1-DP5
 scope. It does not claim automatic foreign-repository conformance; each managed
 foreign repository still requires fresh per-repo inventory, DPA-600 evidence,
 DPA-700 evidence, exact refs and Maintainer-authorized scope.
-## Operational documentation refresh state after PR #2009
+## Operational documentation refresh state after PR #2011
 
-Current administrative handoff refresh state is `41dd0028` (`Classify command manifest surfaces (#2009)`). Continue next only after this post-PR2009 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `9cefd514` (`Document command surface compatibility contract (#2011)`). Continue next only after this post-PR2011 refresh is committed and merged; the next substantive slice must be created from fresh main.
