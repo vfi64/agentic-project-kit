@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `8cb5d04e0c31e41ac935f66846561ac1c2406a18` (`8cb5d04e`), after `Generate site repository content (#2030)`.
-Last substantive work state is `8cb5d04e0c31e41ac935f66846561ac1c2406a18` (`8cb5d04e`), after `Generate site repository content (#2030)`.
+Current verified main/admin HEAD is `e9fcfa092861a6d1ee30af2a7806545392ffd2cf` (`e9fcfa09`), after `Bind site claims to executable evidence (#2032)`.
+Last substantive work state is `e9fcfa092861a6d1ee30af2a7806545392ffd2cf` (`e9fcfa09`), after `Bind site claims to executable evidence (#2032)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
