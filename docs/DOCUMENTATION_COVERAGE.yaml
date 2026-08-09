@@ -439,6 +439,37 @@ rules:
     - 'Manifest sha: `9a377188be24`'
     - 'Status: PASS'
     - 'Blocker count: 0'
+- id: command-surface-contract-coverage
+  description: Command manifest surface classes must remain visible as role/disclosure
+    metadata and must not be treated as safety, compatibility, deprecation, or
+    stability metadata.
+  documents:
+  - path: README.md
+    terms:
+    - Command manifest surface classes
+    - orchestrator
+    - diagnostic
+    - primitive
+    - Surface classification does not by itself change command safety, compatibility, or deprecation status
+    - primitive does not mean unstable
+  - path: docs/TEST_GATES.md
+    terms:
+    - Command manifest surface classes
+    - role/disclosure contract
+    - Valid values are `orchestrator`, `diagnostic`, and `primitive`
+    - every command must have exactly one valid value
+    - Surface classification does not change command safety, compatibility, or deprecation status
+    - primitive does not mean unstable
+  - path: docs/governance/COMMAND_REFERENCE_REGISTRY_CONTRACT.md
+    terms:
+    - Command surface contract
+    - Every generated command-reference entry must carry exactly one `surface` value
+    - orchestrator
+    - diagnostic
+    - primitive
+    - Surface classification is separate from command safety
+    - Surface classification does not by itself change the compatibility or deprecation contract
+    - primitive does not mean unstable
 - id: kit-os-architecture-coverage
   description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, legacy-profile deprecation, P5c physical migration planning, and evidence policy.
   documents:

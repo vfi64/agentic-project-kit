@@ -377,6 +377,9 @@ Quick command guide:
 - `agentic-kit chat refresher --mode copy-paste`: print the six-line command-manifest refresher for chat replies that may include commands.
 - `agentic-kit chat session-start --mode copy-paste`: print the refresher plus the full inline command manifest for a new session.
 - `agentic-kit commands sync-entrypoints --execute`: synchronize command reference files and command-manifest entrypoint headers.
+
+Command manifest surface classes are role metadata, not stability metadata. `orchestrator` marks primary task/lifecycle operations, `diagnostic` marks inspection and readiness operations, and `primitive` marks public low-level command building blocks. Surface classification does not by itself change command safety, compatibility, or deprecation status; primitive does not mean unstable.
+
 - `agentic-kit workspace dpa-intake`: run the deterministic one-shot DPA intake for a target repository by resolving exact-ref evidence, running workspace adoption analysis and DPA repo-adoption assessment, generating an adjudication plan, and optionally writing bounded intake evidence without migration or external-repo conformance claims.
 - `agentic-kit workspace remove`: plan or execute bounded removal of exact Kit-generated workspace files while preserving modified, unknown, source, and project-documentation paths.
 - `agentic-kit dpa readiness`: validate the staged DPA DP1 Assessment readiness record, report the deterministic DP2 selected self-hosting target-scope implementation percentage, and keep that separate from Kit-wide DPA conformance.
