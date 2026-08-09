@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f559f1ebdbeec3cb2cc6c42c63aa153ceb3962dc
-  short: f559f1eb
-  subject: Accept handoff state refresh merge subjects (#2017)
+  full: 17b393c7fd82747b620919b93b8288059730e631
+  short: 17b393c7
+  subject: Refresh successor package after PR2019 (#2020)
 last_substantive_work_state:
-  full: f559f1ebdbeec3cb2cc6c42c63aa153ceb3962dc
-  short: f559f1eb
-  subject: Accept handoff state refresh merge subjects (#2017)
+  full: 17b393c7fd82747b620919b93b8288059730e631
+  short: 17b393c7
+  subject: Refresh successor package after PR2019 (#2020)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
