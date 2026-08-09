@@ -153,7 +153,10 @@ def _current_head_is_refresh_only_merge_commit() -> bool:
         return False
     subject = completed.stdout.strip()
     return (
-        subject.startswith("Refresh successor handoff after PR")
+        (
+            subject.startswith("Refresh successor handoff after PR")
+            or subject.startswith("Refresh handoff state after PR")
+        )
         and "(#" in subject
         and subject.endswith(")")
     )
