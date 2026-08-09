@@ -1,0 +1,23 @@
+# Generated Website
+
+This directory contains the repository-native public website generator.
+
+The generated output is a projection of current repository sources, not a manual
+technical truth surface. `site/scripts/build.py` calls
+`agentic_project_kit.site_generator` and writes the static artifact to
+`site/dist/` by default. The generated `site/dist/` tree is ignored; GitHub
+Pages deployment must build a fresh artifact from the checked-in sources.
+
+S4a foundation sources:
+
+- `pyproject.toml` supplies package name, version and Python requirement.
+- `docs/reference/agentic-kit-commands.json` supplies command count and
+  `meta.manifest_sha`.
+- `agentic_project_kit.command_manifest.manifest_sha(commands)` reproduces the
+  manifest identity from the committed command list.
+- `git rev-parse HEAD` supplies the build commit.
+
+Later website slices add generated command views, claim-evidence evaluation, the
+GitHub Pages workflow and the presentation layer. Technical claim status must be
+computed from evidence bindings; curated content must not store a derived
+`verified` value.

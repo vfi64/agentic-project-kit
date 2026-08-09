@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${product_name}</title>
+    <link rel="stylesheet" href="static/site.css">
+  </head>
+  <body>
+    <main class="page">
+      <section class="overview" aria-labelledby="site-title">
+        <p class="eyebrow">Generated repository projection</p>
+        <h1 id="site-title">${product_name}</h1>
+        <p class="lede">Formerly ${former_product_name}. This foundation page is generated from the current repository state, not copied by hand.</p>
+      </section>
+
+      <section class="metrics" aria-label="Repository facts">
+        <article>
+          <span>Package</span>
+          <strong>${package_name}</strong>
+        </article>
+        <article>
+          <span>Version</span>
+          <strong>${package_version}</strong>
+        </article>
+        <article>
+          <span>Python</span>
+          <strong>${requires_python}</strong>
+        </article>
+        <article>
+          <span>Commands</span>
+          <strong>${command_count}</strong>
+        </article>
+      </section>
+
+      <section class="details" aria-label="Build metadata">
+        <dl>
+          <div>
+            <dt>Command manifest</dt>
+            <dd><code>${manifest_sha}</code></dd>
+          </div>
+          <div>
+            <dt>Reproduced manifest</dt>
+            <dd><code>${reproduced_manifest_sha}</code></dd>
+          </div>
+          <div>
+            <dt>Manifest identity verified</dt>
+            <dd><code>${manifest_identity_verified}</code></dd>
+          </div>
+          <div>
+            <dt>Build commit</dt>
+            <dd><code>${build_commit}</code></dd>
+          </div>
+        </dl>
+      </section>
+    </main>
+  </body>
+</html>

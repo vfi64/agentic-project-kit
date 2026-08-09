@@ -28,6 +28,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Python code | python -m pytest -q and ruff check . |
 | CLI behavior | Unit tests plus CLI smoke command; update docs/DOCUMENTATION_COVERAGE.yaml when public command visibility changes |
 | Generator behavior | Generator test plus generated-project file inspection |
+| Website generation | Website Generation Gate: unit tests for `agentic_project_kit.site_generator`, local `site/scripts/build.py --json` smoke build, and generated-output inspection; `site/dist/` must stay ignored |
 | GitHub workflow change | Local workflow review plus GitHub Actions run |
 | Packaging/release change | python -m build, twine check dist/*, release workflow result |
 | Release planning change | Unit tests plus agentic-kit release-plan CLI smoke command |
@@ -240,6 +241,24 @@ The hard audit checks only machine-checkable drift classes, including version mi
 Use `agentic-kit audit-status-current-state` when changing `docs/STATUS.md`, current-state handoff projections, release-state reporting, or post-merge status-refresh behavior.
 
 The gate compares `docs/STATUS.md`, `CHANGELOG.md`, `docs/reports/handoff-packages/latest/validation_report.json`, `release-status`, and `origin/main`. It must allow only a direct first-parent administrative refresh commit after the validated substantive safe-state, but block stale Current verified main claims, duplicate live current-state markers, release-version drift, stale pending DOI lines in the current CHANGELOG block after STATUS records a verified Zenodo version DOI, active Current governed slice / Next safe step instructions that tell maintainers to publish, prepare, or verify an already verified current release, and validation reports that are no longer reachable from `origin/main`.
+
+## Website Generation Gate
+
+The repository website is a generated projection, not a second hand-maintained
+technical truth surface. Changes to `site/`, `agentic_project_kit.site_generator`
+or future claim-evidence rendering must run:
+
+    python -m pytest -q tests/test_site_generator.py
+    python site/scripts/build.py --output tmp/site-build --json
+    agentic-kit check-docs
+
+The generated `site/dist/` tree must remain ignored. The foundation generator
+must derive package version, Python requirement, command count, build commit and
+the command manifest identity from repository sources. The command manifest
+identity is `docs/reference/agentic-kit-commands.json` `meta.manifest_sha`,
+reproduced from the committed `commands` list with
+`agentic_project_kit.command_manifest.manifest_sha(commands)`. A website build
+must not depend on a top-level `manifest_hash` field.
 
 ## Path Literal Active-Class Gate
 
