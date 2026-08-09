@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e9fcfa092861a6d1ee30af2a7806545392ffd2cf
-  short: e9fcfa09
-  subject: Bind site claims to executable evidence (#2032)
+  full: 926a3b905a52f397a76f3cc2fc52847fd8bb3e1e
+  short: 926a3b90
+  subject: Guard Pages deploy until Actions source is enabled (#2035)
 last_substantive_work_state:
-  full: e9fcfa092861a6d1ee30af2a7806545392ffd2cf
-  short: e9fcfa09
-  subject: Bind site claims to executable evidence (#2032)
+  full: 926a3b905a52f397a76f3cc2fc52847fd8bb3e1e
+  short: 926a3b90
+  subject: Guard Pages deploy until Actions source is enabled (#2035)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
