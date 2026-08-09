@@ -194,6 +194,7 @@ After a PR merge, run `agentic-kit transfer post-merge-settle --after-pr PR_NUMB
 ## Project direction
 
 `agentic-kit direction validate`, `agentic-kit direction render`, and `agentic-kit direction audit-drift` guard `docs/planning/PROJECT_DIRECTION.yaml`.
+`meta.updated_after_pr` is a strategic direction refresh marker, not a current-main freshness claim; validation requires `updated_after_pr_semantics` and keeps `updated_after_pr_current_main_claimed=false` when the marker is set.
 
 ## Govern an existing repository (operating layer)
 
@@ -380,6 +381,7 @@ Quick command guide:
 
 Command manifest surface classes are role metadata, not stability metadata. `orchestrator` marks primary task/lifecycle operations, `diagnostic` marks inspection and readiness operations, and `primitive` marks public low-level command building blocks. Surface classification is intent-oriented: read-only session start or dry-run maintenance workflows may be primary, while highly parameterized evidence/log/file helpers may remain low-level even when implemented as mini-workflows. Surface classification does not by itself change command safety, compatibility, or deprecation status; primitive does not mean unstable.
 `agentic-kit command-for` uses the same surface classes as a tie-breaker after semantic task matching and safety checks: equally suitable task matches prefer orchestrator, diagnostic task tags may prefer diagnostic, and exact primitive matches are not displaced by broader orchestrators. GUI and website projections must consume this same generated `surface` field: Primary (`orchestrator`), Diagnostics (`diagnostic`), and Expert / Low-level (`primitive`).
+GUI and website projections may add presentation-only guidance over that surface: `diagnostic_priority` separates Guided Diagnostics common blockers from specialized audits, `safety_review` highlights bounded commands without dry-run as manual-review items, and `claim_evidence` marks commands whose readiness, release, PR, or DPA claims require gate output, exact refs, or remote/release evidence.
 
 - `agentic-kit workspace dpa-intake`: run the deterministic one-shot DPA intake for a target repository by resolving exact-ref evidence, running workspace adoption analysis and DPA repo-adoption assessment, generating an adjudication plan, and optionally writing bounded intake evidence without migration or external-repo conformance claims.
 - `agentic-kit workspace remove`: plan or execute bounded removal of exact Kit-generated workspace files while preserving modified, unknown, source, and project-documentation paths.
@@ -439,7 +441,7 @@ agentic-kit patterns show bounded-workflow-evidence
 
 ## Local Cockpit Foundation
 
-The local cockpit foundation exposes a conservative control surface for local project operation. Use `agentic-kit cockpit`, `agentic-kit actions`, `agentic-kit cockpit status`, `agentic-kit cockpit actions`, and `agentic-kit cockpit run <action-id>` to inspect state, read the structured action inventory, and execute registered read-only actions. For `agentic-kit` actions, inventory output includes `manifest_surface` and `gui_layer` from the command manifest: Primary layer, Diagnostics layer, and Expert / Low-level layer.
+The local cockpit foundation exposes a conservative control surface for local project operation. Use `agentic-kit cockpit`, `agentic-kit actions`, `agentic-kit cockpit status`, `agentic-kit cockpit actions`, and `agentic-kit cockpit run <action-id>` to inspect state, read the structured action inventory, and execute registered read-only actions. For `agentic-kit` actions, inventory output includes `manifest_surface` and `gui_layer` from the command manifest: Primary layer, Diagnostics layer, and Expert / Low-level layer. It also includes `gui_diagnostic_priority`, `claim_evidence`, and `safety_review` so GUI and website views can show Guided Diagnostics common blockers before specialized audits and avoid prose-only readiness or release claims.
 
 The action inventory classifies by category, safety, and Access level. Access level is a Tkinter cockpit visibility convenience, not permission. Execution allows `read_only` by default, blocks `bounded` without an allow path, and blocks general `destructive` actions. The experimental `agentic-kit-gui` entry point starts a local Tkinter cockpit skeleton and may guide `agentic-kit release ready` before confirmed `agentic-kit release prepare`; it must not publish releases, push tags, merge PRs, or run remote cleanup. The GUI button catalog is a Bedienprojektion, not a second taxonomy: `agentic-kit` wrappers must resolve to generated command-reference entries with valid `surface`, and stale wrappers fail tests. The bounded Upload Result Log button uses `agentic-kit work-order upload`.
 
@@ -522,7 +524,7 @@ Future repair tools should stay bounded to mechanical edits and must not rewrite
 
 ## Status current-state audit
 
-`agentic-kit audit-status-current-state` checks that `docs/STATUS.md` Current verified main, the handoff validation report, `release-status`, `origin/main`, and the current `CHANGELOG.md` release block agree. It allows bounded admin-refresh lag, but blocks stale current-state claims, including a pending DOI line after STATUS records a verified Zenodo version DOI for the same current version.
+`agentic-kit audit-status-current-state` checks that `docs/STATUS.md` Current verified main, the handoff validation report, `release-status`, `origin/main`, and the current `CHANGELOG.md` release block agree. It allows bounded admin-refresh lag, but blocks stale current-state claims, including a pending DOI line after STATUS records a verified Zenodo version DOI for the same current version and active Current governed slice / Next safe step instructions that still tell maintainers to publish, prepare, or verify an already verified current release.
 
 ## Path literal audit
 

@@ -83,6 +83,9 @@ rules:
     - agentic-kit direction validate
     - agentic-kit direction render
     - agentic-kit direction audit-drift
+    - meta.updated_after_pr
+    - strategic direction refresh marker
+    - updated_after_pr_current_main_claimed=false
   - path: docs/TEST_GATES.md
     terms:
     - Project Direction Gate
@@ -90,6 +93,9 @@ rules:
     - agentic-kit direction validate
     - agentic-kit direction render
     - agentic-kit direction audit-drift
+    - stale `updated_after_pr` current-main overclaims
+    - updated_after_pr_semantics
+    - updated_after_pr_current_main_claimed=false
   - path: docs/planning/PROJECT_DIRECTION.md
     terms:
     - docs/planning/PROJECT_DIRECTION.yaml
@@ -283,6 +289,8 @@ rules:
     - Current verified main
     - CHANGELOG.md
     - pending DOI line
+    - Current governed slice / Next safe step instructions
+    - already verified current release
     - handoff validation report
     - origin/main
   - path: docs/TEST_GATES.md
@@ -292,6 +300,8 @@ rules:
     - docs/STATUS.md
     - CHANGELOG.md
     - pending DOI lines
+    - Current governed slice / Next safe step instructions
+    - already verified current release
     - validation_report.json
     - release-status
     - origin/main
@@ -458,6 +468,10 @@ rules:
     - tie-breaker after semantic task matching and safety checks
     - exact primitive matches are not displaced by broader orchestrators
     - GUI and website projections must consume this same generated `surface` field
+    - diagnostic_priority
+    - safety_review
+    - claim_evidence
+    - Guided Diagnostics common blockers
     - Primary (`orchestrator`)
     - Expert / Low-level (`primitive`)
   - path: docs/TEST_GATES.md
@@ -473,6 +487,10 @@ rules:
     - agentic-kit command-for
     - tie-breaker after semantic task matching and safety checks
     - exact primitive matches must not be displaced by broader orchestrators
+    - diagnostic_priority
+    - claim_evidence
+    - safety_review
+    - must not rewrite manifest `surface`
   - path: docs/governance/COMMAND_REFERENCE_REGISTRY_CONTRACT.md
     terms:
     - Command surface contract
@@ -1125,6 +1143,10 @@ rules:
     - structured action inventory
     - manifest_surface
     - gui_layer
+    - gui_diagnostic_priority
+    - claim_evidence
+    - safety_review
+    - Guided Diagnostics common blockers
     - Primary layer
     - Diagnostics layer
     - Expert / Low-level layer
@@ -1160,6 +1182,9 @@ rules:
     - safety classification
     - manifest_surface
     - gui_layer
+    - diagnostic_priority
+    - claim_evidence
+    - safety_review
     - GUI command projection defaults to Primary/orchestrator commands
     - stale wrapper commands are gate failures
 - id: planning-state-freshness-coverage

@@ -10,7 +10,13 @@ from typing import Callable
 
 from agentic_project_kit.access_levels import ACCESS_LEVEL_ORDER, DEFAULT_ACCESS_LEVEL, AccessLevel
 from agentic_project_kit.command_manifest import SURFACE_VALUES, load_manifest
-from agentic_project_kit.gui_command_projection import GUI_SURFACE_LAYERS, resolve_manifest_command
+from agentic_project_kit.gui_command_projection import (
+    GUI_SURFACE_LAYERS,
+    claim_evidence_for_command,
+    diagnostic_priority_for_command,
+    resolve_manifest_command,
+    safety_review_for_command,
+)
 
 
 @dataclass(frozen=True)
@@ -387,6 +393,9 @@ def action_inventory_as_json_data(
                 "min_access_level": action.min_access_level,
                 "manifest_surface": _manifest_surface_for_action(action, reference),
                 "gui_layer": _gui_layer_for_action(action, reference),
+                "gui_diagnostic_priority": _gui_diagnostic_priority_for_action(action, reference),
+                "claim_evidence": _claim_evidence_for_action(action, reference),
+                "safety_review": _safety_review_for_action(action, reference),
             }
             for action in selected
         ],
@@ -426,7 +435,16 @@ def render_action_inventory(
         command = " ".join(action.command)
         surface = _manifest_surface_for_action(action, reference)
         layer = _gui_layer_for_action(action, reference)
+        diagnostic_priority = _gui_diagnostic_priority_for_action(action, reference)
+        claim_evidence = _claim_evidence_for_action(action, reference)
+        safety_review = _safety_review_for_action(action, reference)
         lines.append(f"- {action.action_id} [{action.category}/{action.safety}/{surface}/{layer}] {command}")
+        lines.append(
+            "  metadata: "
+            f"diagnostic_priority={diagnostic_priority}; "
+            f"claim_evidence={claim_evidence}; "
+            f"safety_review={safety_review}"
+        )
         lines.append(f"  {action.description}")
     return "\n".join(lines)
 
@@ -561,3 +579,30 @@ def _gui_layer_for_action(action: CockpitAction, manifest: dict[str, object]) ->
     if surface in GUI_SURFACE_LAYERS:
         return GUI_SURFACE_LAYERS[surface]
     return surface
+
+
+def _manifest_command_for_action(action: CockpitAction, manifest: dict[str, object]) -> dict[str, object] | None:
+    if not action.command or action.command[0] != "agentic-kit":
+        return None
+    return resolve_manifest_command(action.command, manifest)
+
+
+def _gui_diagnostic_priority_for_action(action: CockpitAction, manifest: dict[str, object]) -> str:
+    command = _manifest_command_for_action(action, manifest)
+    if command is None:
+        return "external"
+    return diagnostic_priority_for_command(command)
+
+
+def _claim_evidence_for_action(action: CockpitAction, manifest: dict[str, object]) -> str:
+    command = _manifest_command_for_action(action, manifest)
+    if command is None:
+        return "none"
+    return claim_evidence_for_command(command)
+
+
+def _safety_review_for_action(action: CockpitAction, manifest: dict[str, object]) -> str:
+    command = _manifest_command_for_action(action, manifest)
+    if command is None:
+        return action.safety
+    return safety_review_for_command(command)

@@ -23,6 +23,7 @@ SECTION_STATUS_VALUES = {
     "ideas": frozenset({"candidate", "accepted", "rejected", "superseded"}),
 }
 ACTIVE_STATUSES = frozenset({"active", "next", "planned", "blocked", "candidate", "accepted"})
+UPDATED_AFTER_PR_SEMANTICS = frozenset({"strategic_direction_refresh"})
 PLANNING_SCAN_ROOTS = (
     Path(_DEFAULT_CONFIG.docs_root) / "strategy",
     Path(_DEFAULT_CONFIG.planning_root),
@@ -202,6 +203,24 @@ def validate_project_direction_data(
             findings.append(
                 DirectionFinding("invalid-authority", f"meta.authority must be {authority_path}")
             )
+        if meta.get("updated_after_pr") is not None:
+            semantics = meta.get("updated_after_pr_semantics")
+            if semantics not in UPDATED_AFTER_PR_SEMANTICS:
+                findings.append(
+                    DirectionFinding(
+                        "invalid-updated-after-pr-semantics",
+                        "meta.updated_after_pr_semantics must be strategic_direction_refresh "
+                        "when meta.updated_after_pr is set",
+                    )
+                )
+            if meta.get("updated_after_pr_current_main_claimed") is not False:
+                findings.append(
+                    DirectionFinding(
+                        "invalid-updated-after-pr-current-main-claim",
+                        "meta.updated_after_pr_current_main_claimed must be false; "
+                        "PROJECT_DIRECTION updated_after_pr is not a current-main freshness claim",
+                    )
+                )
 
     ids_by_section: dict[str, str] = {}
     dependency_checks: list[tuple[str, str]] = []
@@ -386,7 +405,7 @@ def _render_text(data: dict[str, Any], section: str) -> str:
     lines: list[str] = [
         "PROJECT DIRECTION",
         f"Status: {meta.get('status')}",
-        f"Updated after PR: {meta.get('updated_after_pr')}",
+        f"{_updated_after_pr_render_label(meta)}: {meta.get('updated_after_pr')}",
         f"Authority: {meta.get('authority')}",
         "",
     ]
@@ -411,7 +430,7 @@ def _render_markdown(data: dict[str, Any], section: str) -> str:
         "# Project Direction",
         "",
         f"- Status: `{meta.get('status')}`",
-        f"- Updated after PR: `{meta.get('updated_after_pr')}`",
+        f"- {_updated_after_pr_render_label(meta)}: `{meta.get('updated_after_pr')}`",
         f"- Authority: `{meta.get('authority')}`",
         "",
     ]
@@ -428,6 +447,12 @@ def _render_markdown(data: dict[str, Any], section: str) -> str:
     if section in {"all", "discarded"}:
         _append_items_markdown(lines, "Discarded", data["discarded"])
     return "\n".join(lines).rstrip() + "\n"
+
+
+def _updated_after_pr_render_label(meta: dict[str, Any]) -> str:
+    if meta.get("updated_after_pr_semantics") == "strategic_direction_refresh":
+        return "Strategic direction updated after PR"
+    return "Updated after PR"
 
 
 def _append_strategy_text(lines: list[str], strategy: list[dict[str, Any]]) -> None:

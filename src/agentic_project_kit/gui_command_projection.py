@@ -11,6 +11,36 @@ GUI_SURFACE_LAYERS: dict[str, str] = {
     "diagnostic": "diagnostics",
     "primitive": "expert",
 }
+GUI_DIAGNOSTIC_PRIORITY_VALUES = {
+    "not_diagnostic",
+    "common_blocker",
+    "claim_evidence",
+    "specialized_audit",
+    "reference_lookup",
+    "advanced_diagnostic",
+}
+GUI_CLAIM_EVIDENCE_VALUES = {
+    "none",
+    "gate_output_required",
+    "exact_ref_required",
+    "release_evidence_required",
+    "pr_or_remote_evidence_required",
+}
+GUI_SAFETY_REVIEW_VALUES = {
+    "read_only",
+    "dry_run_available",
+    "manual_safety_review",
+    "destructive_gate_required",
+}
+
+COMMON_BLOCKER_DIAGNOSTICS = {
+    "agentic-kit audit-status-current-state",
+    "agentic-kit check-docs",
+    "agentic-kit docs-audit",
+    "agentic-kit doctor",
+    "agentic-kit workflow status",
+    "agentic-kit workflow-guard check",
+}
 
 
 @dataclass(frozen=True)
@@ -21,6 +51,9 @@ class GuiCommandProjectionEntry:
     layer: str
     safety: str
     dry_run_available: bool
+    diagnostic_priority: str
+    claim_evidence: str
+    safety_review: str
     when_to_use: str
 
     def as_dict(self) -> dict[str, object]:
@@ -35,6 +68,9 @@ class GuiCommandBinding:
     surface: str
     layer: str
     safety: str
+    diagnostic_priority: str
+    claim_evidence: str
+    safety_review: str
 
     def as_dict(self) -> dict[str, object]:
         data = asdict(self)
@@ -76,6 +112,17 @@ class GuiCommandProjection:
             for layer in ("primary", "diagnostics", "expert")
         }
 
+    def diagnostic_priority_counts(self) -> dict[str, int]:
+        return {
+            priority: len([entry for entry in self.entries if entry.diagnostic_priority == priority])
+            for priority in sorted(GUI_DIAGNOSTIC_PRIORITY_VALUES)
+        }
+
+    def guided_diagnostic_entries(self) -> tuple[GuiCommandProjectionEntry, ...]:
+        return tuple(
+            entry for entry in self.entries if entry.diagnostic_priority == "common_blocker"
+        )
+
     def as_dict(self) -> dict[str, object]:
         return {
             "schema_version": 1,
@@ -86,6 +133,8 @@ class GuiCommandProjection:
             "command_count": self.command_count,
             "surface_counts": self.surface_counts(),
             "layer_counts": self.layer_counts(),
+            "diagnostic_priority_counts": self.diagnostic_priority_counts(),
+            "guided_diagnostic_count": len(self.guided_diagnostic_entries()),
             "findings": list(self.findings),
             "entries": [entry.as_dict() for entry in self.entries],
         }
@@ -116,6 +165,9 @@ def build_gui_command_projection(
                 layer=layer,
                 safety=str(command.get("safety") or ""),
                 dry_run_available=bool(command.get("dry_run_available")),
+                diagnostic_priority=diagnostic_priority_for_command(command),
+                claim_evidence=claim_evidence_for_command(command),
+                safety_review=safety_review_for_command(command),
                 when_to_use=str(command.get("when_to_use") or ""),
             )
         )
@@ -160,9 +212,75 @@ def gui_command_bindings(
                 surface=surface,
                 layer=GUI_SURFACE_LAYERS[surface],
                 safety=str(command.get("safety") or ""),
+                diagnostic_priority=diagnostic_priority_for_command(command),
+                claim_evidence=claim_evidence_for_command(command),
+                safety_review=safety_review_for_command(command),
             )
         )
     return tuple(bindings)
+
+
+def diagnostic_priority_for_command(command: dict[str, Any]) -> str:
+    qualified = str(command.get("qualified_name") or "")
+    surface = str(command.get("surface") or "")
+    group = str(command.get("group") or "")
+    leaf = qualified.split()[-1] if qualified else ""
+    if surface != "diagnostic":
+        return "not_diagnostic"
+    if qualified in COMMON_BLOCKER_DIAGNOSTICS:
+        return "common_blocker"
+    claim_evidence = claim_evidence_for_command(command)
+    if claim_evidence in {
+        "exact_ref_required",
+        "release_evidence_required",
+        "pr_or_remote_evidence_required",
+    }:
+        return "claim_evidence"
+    if group in {"audit", "dpa"} or leaf.startswith("audit-") or leaf.endswith("-audit"):
+        return "specialized_audit"
+    if group in {"commands", "command", "reference"} or leaf in {"list", "show", "render-md"}:
+        return "reference_lookup"
+    return "advanced_diagnostic"
+
+
+def claim_evidence_for_command(command: dict[str, Any]) -> str:
+    qualified = str(command.get("qualified_name") or "")
+    group = str(command.get("group") or "")
+    words = set(qualified.split())
+    if "dpa" in words and any(
+        marker in qualified
+        for marker in (
+            "adoption-assessment",
+            "closeout",
+            "probe",
+            "readiness",
+            "stable",
+            "strict",
+        )
+    ):
+        return "exact_ref_required"
+    if group == "release" or "release" in words or "post-release" in qualified:
+        return "release_evidence_required"
+    if group == "transfer" and any(
+        marker in qualified
+        for marker in (" pr-", " post-merge", " push-", " publish-", " merge")
+    ):
+        return "pr_or_remote_evidence_required"
+    if qualified in COMMON_BLOCKER_DIAGNOSTICS or qualified.startswith("agentic-kit audit-"):
+        return "gate_output_required"
+    return "none"
+
+
+def safety_review_for_command(command: dict[str, Any]) -> str:
+    safety = str(command.get("safety") or "")
+    dry_run_available = bool(command.get("dry_run_available"))
+    if safety == "READ_ONLY":
+        return "read_only"
+    if safety == "DESTRUCTIVE":
+        return "destructive_gate_required"
+    if dry_run_available:
+        return "dry_run_available"
+    return "manual_safety_review"
 
 
 def validate_gui_command_bindings(
