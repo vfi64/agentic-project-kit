@@ -295,6 +295,11 @@ roadmap:
   - Too-old and too-new kit_schema_version failure paths are tested.
   - A tested workspace upgrade transformation exists before or with the first schema
     bump.
+  evidence:
+  - docs/reports/POST_0_5_0_BROWNFIELD_COMM_SCI_READONLY_20260811.md
+  - docs/reports/POST_0_5_0_BROWNFIELD_COMM_SCI_ADOPTION_B1_5_20260811.md
+  - docs/reports/POST_0_5_0_GREENFIELD_B2_20260811.md
+  - docs/reports/POST_0_5_0_B3_V1_ADJUDICATION_20260811.md
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: dpa-repo-adoption-assessment
@@ -1939,6 +1944,8 @@ plans:
     - generated handoff package validation remains part of lifecycle truth
     - release closeout remains separate from ordinary post-merge completion
     - docs and direction gates remain part of K2 closeout before PR
+  evidence:
+  - docs/reports/POST_0_5_0_C1_REFRESH_FRICTION_20260811.md
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
 - id: obsolete-pr660-handoff-overlay
@@ -2159,6 +2166,11 @@ plans:
     first real external adoption evidence remain separate work.
   - Ensure future docs do not claim operating-layer maturity before implemented and
     tested phases.
+  evidence:
+  - docs/reports/POST_0_5_0_BROWNFIELD_COMM_SCI_READONLY_20260811.md
+  - docs/reports/POST_0_5_0_BROWNFIELD_COMM_SCI_ADOPTION_B1_5_20260811.md
+  - docs/reports/POST_0_5_0_GREENFIELD_B2_20260811.md
+  - docs/reports/POST_0_5_0_SITE_GOVERNANCE_PACKAGING_20260811.md
   non_goals:
   - Do not implement during K2b.
   - Do not replace the accepted architecture.
@@ -2611,6 +2623,11 @@ ideas:
   rationale: The 1.0 milestone requires workspace adopt/init stability on at least
     one real external project; Comm-SCI-Control-private is named in the architecture
     document as the candidate for that evidence.
+  current_result: Bounded local adoption is PASS_WITH_LIMITATIONS; full remote
+    adoption and successor continuation are not yet claimed.
+  evidence:
+  - docs/reports/POST_0_5_0_BROWNFIELD_COMM_SCI_READONLY_20260811.md
+  - docs/reports/POST_0_5_0_BROWNFIELD_COMM_SCI_ADOPTION_B1_5_20260811.md
   decision_needed: true
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
