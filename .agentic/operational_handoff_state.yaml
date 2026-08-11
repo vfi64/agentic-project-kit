@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 021da11e7821997a26ebe8bf3244fb77a3e81741
-  short: 021da11e
-  subject: Consolidate post-0.5.0 planning surface (#2043)
+  full: 4c0603275e6aaa955f2b99a0df228d89a687dd65
+  short: 4c060327
+  subject: Refresh successor package after PR2055 (#2056)
 last_substantive_work_state:
-  full: 021da11e7821997a26ebe8bf3244fb77a3e81741
-  short: 021da11e
-  subject: Consolidate post-0.5.0 planning surface (#2043)
+  full: 4c0603275e6aaa955f2b99a0df228d89a687dd65
+  short: 4c060327
+  subject: Refresh successor package after PR2055 (#2056)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
