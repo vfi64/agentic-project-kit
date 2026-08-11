@@ -10263,11 +10263,11 @@
   },
   "kind": "agentic_project_kit_generated_site",
   "metadata": {
-    "build_commit": "700c68670f3fc1e46b0405abdff541a4f65b5473",
+    "build_commit": "docs-pages-fallback",
     "command_count": 251,
     "command_group_count": 33,
     "concept_doi": "10.5281/zenodo.20101359",
-    "current_verified_main": "226ad96b",
+    "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
     "manifest_sha": "3d20e7338c12",
@@ -10308,11 +10308,11 @@
   "status_projection": {
     "concept_doi": "10.5281/zenodo.20101359",
     "current_release_tag": "v0.5.0",
-    "current_verified_main": "226ad96b",
+    "current_verified_main": "See docs/STATUS.md",
     "current_verified_release": "0.5.0",
     "current_version": "0.5.0",
-    "latest_substantive_work": "PR #2041 (`Clarify DPA stable closeout boundary (#2041)`).",
-    "next_safe_step": "continue from fresh main with the next planned governed slice.",
+    "latest_substantive_work": "See docs/STATUS.md for current repository state.",
+    "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
     "version_doi": "10.5281/zenodo.21850952"
   }
 }

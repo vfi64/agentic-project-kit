@@ -547,6 +547,8 @@ rules:
     - docs/.nojekyll
     - docs/site/
     - legacy GitHub Pages source `main` `/docs`
+    - idempotent across post-merge handoff/status refreshes
+    - volatile current-state details
   - path: site/README.md
     terms:
     - Generated Website
@@ -599,6 +601,8 @@ rules:
     - docs/.nojekyll
     - docs/site/
     - Legacy GitHub Pages source `/docs`
+    - idempotent across post-merge handoff/status refreshes
+    - volatile current-state details
   - path: docs/TEST_GATES.md
     terms:
     - Claim-evidence rendering
@@ -636,6 +640,8 @@ rules:
     - docs/.nojekyll
     - docs/site/
     - generated publication projection
+    - idempotent across post-merge handoff/status refreshes
+    - volatile current-state details
 - id: kit-os-architecture-coverage
   description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, legacy-profile deprecation, P5c physical migration planning, and evidence policy.
   documents:
