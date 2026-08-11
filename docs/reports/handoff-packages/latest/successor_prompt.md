@@ -39,8 +39,8 @@ Critical rule IDs:
 ## Current continuation state
 
 - branch: `docs/post-pr2043-handoff-refresh`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -404,13 +404,13 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "docs/post-pr2043-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "021da11e7821997a26ebe8bf3244fb77a3e81741",
-    "head_matches_origin_main": true,
-    "head_short": "021da11e",
+    "head": "87bd227a59b3c0a33b8867216c15d2a82cf1e7c6",
+    "head_matches_origin_main": false,
+    "head_short": "87bd227a",
     "local_path": "cd /path/to/",
     "origin_main": "021da11e7821997a26ebe8bf3244fb77a3e81741",
     "origin_main_short": "021da11e",
-    "worktree_clean": false
+    "worktree_clean": true
   }
 }
 ```
