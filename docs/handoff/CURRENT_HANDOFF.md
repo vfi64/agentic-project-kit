@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `ea4fa8884109be12caf624a3c7e22cb001c56aec` (`ea4fa888`), after `Record Brownfield DPA read-only probe (#2044)`.
-Last substantive work state is `ea4fa8884109be12caf624a3c7e22cb001c56aec` (`ea4fa888`), after `Record Brownfield DPA read-only probe (#2044)`.
+Current verified main/admin HEAD is `4945ee8919f2f5210896c5a58bcc23052826540b` (`4945ee89`), after `Refresh successor package after PR2050 (#2051)`.
+Last substantive work state is `4945ee8919f2f5210896c5a58bcc23052826540b` (`4945ee89`), after `Refresh successor package after PR2050 (#2051)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
