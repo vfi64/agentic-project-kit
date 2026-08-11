@@ -519,6 +519,10 @@ rules:
     - meta.manifest_sha
     - manifest_sha(commands)
     - not a second hand-maintained technical truth surface
+    - --docs-pages-fallback
+    - docs/index.html
+    - docs/site/
+    - legacy `main` `/docs`
   - path: docs/TEST_GATES.md
     terms:
     - Website Generation Gate
@@ -538,6 +542,13 @@ rules:
     - 'surface: orchestrator'
     - 'surface: diagnostic'
     - invalid command `surface`
+    - --docs-pages-fallback
+    - docs/index.html
+    - docs/.nojekyll
+    - docs/site/
+    - legacy GitHub Pages source `main` `/docs`
+    - idempotent across post-merge handoff/status refreshes
+    - volatile current-state details
   - path: site/README.md
     terms:
     - Generated Website
@@ -585,6 +596,13 @@ rules:
     - verified now
     - available but evolving
     - not claimed
+    - --docs-pages-fallback
+    - docs/index.html
+    - docs/.nojekyll
+    - docs/site/
+    - Legacy GitHub Pages source `/docs`
+    - idempotent across post-merge handoff/status refreshes
+    - volatile current-state details
   - path: docs/TEST_GATES.md
     terms:
     - Claim-evidence rendering
@@ -617,6 +635,13 @@ rules:
     - available but evolving
     - not claimed
     - static/runtime-map.svg
+    - --docs-pages-fallback
+    - docs/index.html
+    - docs/.nojekyll
+    - docs/site/
+    - generated publication projection
+    - idempotent across post-merge handoff/status refreshes
+    - volatile current-state details
 - id: kit-os-architecture-coverage
   description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, legacy-profile deprecation, P5c physical migration planning, and evidence policy.
   documents:
@@ -710,6 +735,8 @@ rules:
     - DPA repo-adoption assessment
     - documentation age baseline
     - exact-ref evidence
+    - common specification directories
+    - specification_authority
     - private/public boundary
     - foreign `.agentic/` directory
     - implicit legacy profile

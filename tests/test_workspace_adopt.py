@@ -151,6 +151,35 @@ def test_adopt_json_shape(tmp_path: Path) -> None:
     assert payload["privacy_boundary"] == PRIVATE_PUBLIC_BOUNDARY
 
 
+def test_adopt_dpa_inventory_includes_top_level_and_json_spec_authorities(
+    tmp_path: Path,
+) -> None:
+    _write(
+        tmp_path / "AGENTS.md",
+        "The active canonical JSON ruleset is the primary source of truth.\n",
+    )
+    _write(tmp_path / "ARCHITECTURE.md", "# Architecture\n")
+    _write(tmp_path / "MODULARIZATION.md", "# Modularization\n")
+    _write(tmp_path / "Format-Memory.md", "# Format Memory\n")
+    _write(tmp_path / "README.de.md", "# Deutsch\n")
+    _write(tmp_path / "JSON" / "ACTIVE_RULESET.json", '{"active": "Rules.json"}\n')
+    _write(tmp_path / "JSON" / "Rules.json", "{}\n")
+
+    report = analyze_workspace_adoption(tmp_path)
+    surfaces = {
+        surface.path: surface
+        for surface in report.dpa_repo_adoption.surfaces
+    }
+
+    assert surfaces["ARCHITECTURE.md"].classification == "architecture_authority"
+    assert surfaces["MODULARIZATION.md"].classification == "architecture_authority"
+    assert surfaces["Format-Memory.md"].classification == "specification_authority"
+    assert surfaces["README.de.md"].classification == "onboarding_document"
+    assert surfaces["JSON/ACTIVE_RULESET.json"].classification == "specification_authority"
+    assert surfaces["JSON/ACTIVE_RULESET.json"].document_form == "structured_specification"
+    assert surfaces["JSON/Rules.json"].classification == "specification_authority"
+
+
 def test_adopt_documentation_age_baseline_empty_docs(tmp_path: Path) -> None:
     result = CliRunner().invoke(app, ["workspace", "adopt", "--root", str(tmp_path)])
 

@@ -5,7 +5,9 @@ from pathlib import Path
 
 from agentic_project_kit.command_manifest import manifest_sha
 from agentic_project_kit.site_generator import (
+    DOCS_PAGES_FALLBACK_KIND,
     SITE_KIND,
+    build_docs_pages_fallback,
     build_site,
     collect_site_foundation_metadata,
 )
@@ -74,6 +76,58 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     assert "agentic-kit check-docs" in (
         output / "commands" / "diagnostics.html"
     ).read_text(encoding="utf-8")
+
+
+def test_docs_pages_fallback_writes_redirect_and_generated_site(tmp_path: Path) -> None:
+    root = _write_site_fixture(tmp_path)
+
+    result = build_docs_pages_fallback(root)
+
+    assert result.ok
+    assert result.as_dict()["kind"] == DOCS_PAGES_FALLBACK_KIND
+    assert result.files == (
+        ".nojekyll",
+        "index.html",
+        "site/claims/claims.json",
+        "site/claims/index.html",
+        "site/commands/commands.json",
+        "site/commands/diagnostics.html",
+        "site/commands/guided.html",
+        "site/commands/index.html",
+        "site/index.html",
+        "site/site.json",
+        "site/static/runtime-map.svg",
+        "site/static/site.css",
+    )
+    redirect = (root / "docs" / "index.html").read_text(encoding="utf-8")
+    generated_site = (root / "docs" / "site" / "site.json").read_text(encoding="utf-8")
+    assert 'url=site/index.html' in redirect
+    assert 'href="site/index.html"' in redirect
+    assert "docs-pages-fallback" in generated_site
+    assert "See docs/STATUS.md" in generated_site
+    assert (root / "docs" / ".nojekyll").read_text(encoding="utf-8")
+    assert (root / "docs" / "site" / "index.html").exists()
+    assert (root / "docs" / "STATUS.md").read_text(encoding="utf-8").startswith(
+        "## Current State"
+    )
+
+
+def test_docs_pages_fallback_ignores_volatile_status_refresh(tmp_path: Path) -> None:
+    root = _write_site_fixture(tmp_path)
+
+    build_docs_pages_fallback(root)
+    first_site_json = (root / "docs" / "site" / "site.json").read_text(encoding="utf-8")
+    status_path = root / "docs" / "STATUS.md"
+    status_path.write_text(
+        status_path.read_text(encoding="utf-8")
+        .replace("Current verified main: `abc123`.", "Current verified main: `def456`.")
+        .replace("Latest substantive work: PR #1.", "Latest substantive work: PR #2."),
+        encoding="utf-8",
+    )
+
+    build_docs_pages_fallback(root)
+
+    assert (root / "docs" / "site" / "site.json").read_text(encoding="utf-8") == first_site_json
 
 
 def test_site_foundation_blocks_manifest_identity_mismatch(tmp_path: Path) -> None:

@@ -26,6 +26,7 @@ HIGH_AUTHORITY_CLASSIFICATIONS = frozenset(
         "handoff_authority",
         "planning_authority",
         "release_state",
+        "specification_authority",
         "status_authority",
         "workspace_manifest",
     }
@@ -45,13 +46,23 @@ SCAN_SUFFIXES = frozenset(
 TOP_LEVEL_CANDIDATES = frozenset(
     {
         "AGENTS.md",
+        "ARCHITECTURE.md",
         "CHANGELOG.md",
         "CITATION.cff",
+        "Format-Memory.md",
+        "MODULARIZATION.md",
         "README.md",
         "codemeta.json",
         "package.json",
         "pyproject.toml",
     }
+)
+
+SPECIFICATION_DIRS = (
+    "JSON",
+    "json",
+    "spec",
+    "specs",
 )
 
 EXCLUDED_DIRS = frozenset(
@@ -313,7 +324,10 @@ def _candidate_paths(root: Path) -> tuple[Path, ...]:
         path = root / relative
         if path.is_file() and not path.is_symlink():
             candidates.add(path)
-    for directory in ("docs", ".agentic", ".github/workflows"):
+    for path in root.iterdir():
+        if path.is_file() and not path.is_symlink() and _is_candidate_file(path):
+            candidates.add(path)
+    for directory in ("docs", ".agentic", ".github/workflows", *SPECIFICATION_DIRS):
         base = root / directory
         if not base.exists():
             continue
@@ -387,13 +401,21 @@ def _classification(relative: str) -> str:
         return "agent_instruction"
     if relative in {"CHANGELOG.md", "CITATION.cff", "codemeta.json"}:
         return "release_state"
+    if relative in {"Format-Memory.md"} or relative.startswith(
+        tuple(f"{directory}/" for directory in SPECIFICATION_DIRS)
+    ):
+        return "specification_authority"
+    if relative in {"ARCHITECTURE.md", "MODULARIZATION.md"}:
+        return "architecture_authority"
     if relative.startswith("docs/architecture/dpa/"):
         return "dpa_authority"
     if relative.startswith("docs/architecture/"):
         return "architecture_authority"
     if relative.startswith("docs/planning/"):
         return "planning_authority"
-    if relative == "README.md":
+    if relative == "README.md" or (
+        relative.startswith("README.") and relative.endswith(".md")
+    ):
         return "onboarding_document"
     if relative in {"pyproject.toml", "package.json"}:
         return "project_config"
@@ -415,6 +437,8 @@ def _document_form(classification: str, path: Path) -> str:
         return "structured_workflow"
     if classification in {"workspace_manifest", "project_config", "release_state"}:
         return "structured_config" if path.suffix.lower() != ".md" else "manual_document"
+    if classification == "specification_authority":
+        return "authority_document" if path.suffix.lower() == ".md" else "structured_specification"
     if classification.endswith("_authority") or classification == "agent_instruction":
         return "authority_document"
     if path.suffix.lower() == ".md":

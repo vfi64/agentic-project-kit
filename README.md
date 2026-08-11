@@ -1,6 +1,6 @@
 # Agentic Project Kit
 
-> Current handoff architecture: the project now uses a deterministic Successor Handoff Package. The package writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/`. New chat starts should verify the package and then follow the machine-readable execution contract instead of relying on chat memory.
+> Current handoff architecture: the project uses a deterministic Successor Handoff Package. It writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/`. New chat starts should verify the package and follow the machine-readable execution contract instead of relying on chat memory.
 
 
 Current version: 0.5.0
@@ -9,8 +9,6 @@ Current version: 0.5.0
 `agentic-project-kit` is a local Python package and CLI for governing AI-assisted repository work with explicit contracts, gates, evidence, and handoffs.
 
 It creates a reusable development process: onboarding, project contracts, policy selection, status discipline, test gates, task tracking, bounded logs, GitHub automation, workflow evidence, and release validation.
-
-In one sentence: `agentic-project-kit` makes AI-assisted repository work more reproducible through explicit contracts, gates, workflow evidence, and bounded auditability.
 
 ## Why this exists
 
@@ -220,7 +218,7 @@ into an `adjudication_plan`, and can write bounded intake evidence with
 `READY_FOR_DPA_INTAKE_ADJUDICATION` means the repo is ready for Maintainer
 adjudication, not automatically conformant.
 
-`workspace adopt` is read-only: it proposes `.agentic/config.yaml`, reports the private/public boundary, a documentation age baseline, a DPA repo-adoption assessment, and foreign `.agentic/` directory. `agentic-kit dpa repo-adoption-assessment --root PATH` is the same DPA intake gate as a standalone command: it inventories candidate surfaces, records source authority and target identity, classifies generated or command-updated outputs, records DPA-600/DPA-700 evidence requirements, requires exact-ref evidence before adoption readiness, and keeps `external_repo_conformance_claimed=false`. `workspace init` is dry-run by default; `--execute` creates `.agentic/state/status.md`, `.agentic/state/handoff/`, `.agentic/DOC_LIFECYCLE.md`, `docs/archive/README.md`, transfer/CI/prompt files, and a `hygiene` manifest block with warn-mode doc lifecycle defaults. It appends `.agentic/tmp/`; versioned `.agentic/` must not hold secrets, chat fragments, or logs.
+`workspace adopt` is read-only: it proposes `.agentic/config.yaml`, reports the private/public boundary, a documentation age baseline, a DPA repo-adoption assessment, and foreign `.agentic/` directory. `agentic-kit dpa repo-adoption-assessment --root PATH` is the same DPA intake gate as a standalone command: it inventories candidate surfaces, including top-level architecture/specification files and common specification directories such as `JSON/`, records source authority and target identity, classifies `specification_authority`, generated, or command-updated outputs, records DPA-600/DPA-700 evidence requirements, requires exact-ref evidence before adoption readiness, and keeps `external_repo_conformance_claimed=false`. `workspace init` is dry-run by default; `--execute` creates `.agentic/state/status.md`, `.agentic/state/handoff/`, `.agentic/DOC_LIFECYCLE.md`, `docs/archive/README.md`, transfer/CI/prompt files, and a `hygiene` manifest block with warn-mode doc lifecycle defaults. It appends `.agentic/tmp/`; versioned `.agentic/` must not hold secrets, chat fragments, or logs.
 
 `agentic-kit workspace upgrade --root PATH` is also a dry-run by default. It
 plans deterministic manifest schema migrations step by step, prints the
@@ -391,6 +389,11 @@ version, Python requirement, command count, `meta.manifest_sha`,
 `manifest_sha(commands)`, and build commit from current repo state. The site is
 not a second hand-maintained technical truth surface; future technical claim
 status must be computed from evidence bindings.
+
+For legacy `main` `/docs` GitHub Pages,
+`python site/scripts/build.py --docs-pages-fallback --json` writes
+`docs/index.html`, `docs/.nojekyll`, and `docs/site/`; `site/dist/` stays
+ignored.
 
 - `agentic-kit workspace dpa-intake`: run the deterministic one-shot DPA intake for a target repository by resolving exact-ref evidence, running workspace adoption analysis and DPA repo-adoption assessment, generating an adjudication plan, and optionally writing bounded intake evidence without migration or external-repo conformance claims.
 - `agentic-kit workspace remove`: plan or execute bounded removal of exact Kit-generated workspace files while preserving modified, unknown, source, and project-documentation paths.

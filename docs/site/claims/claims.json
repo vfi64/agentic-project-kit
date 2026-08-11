@@ -1,0 +1,184 @@
+{
+  "blockers": [],
+  "claim_count": 10,
+  "claims": [
+    {
+      "blockers": [],
+      "evidence": [
+        {
+          "detail": "agentic-kit=agentic_project_kit.cli:app",
+          "evidence_type": "pyproject-entrypoint",
+          "status": "verified"
+        }
+      ],
+      "id": "cli-entry-point",
+      "planned": false,
+      "required": true,
+      "status": "verified",
+      "text": "The package provides the agentic-kit command-line interface."
+    },
+    {
+      "blockers": [],
+      "evidence": [
+        {
+          "detail": "agentic-kit-gui=agentic_project_kit.gui_cockpit:main",
+          "evidence_type": "pyproject-entrypoint",
+          "status": "verified"
+        }
+      ],
+      "id": "gui-entry-point",
+      "planned": false,
+      "required": false,
+      "status": "verified",
+      "text": "The package provides the agentic-kit-gui graphical entry point."
+    },
+    {
+      "blockers": [],
+      "evidence": [
+        {
+          "detail": "project.requires-python=>=3.10",
+          "evidence_type": "pyproject-value",
+          "status": "verified"
+        }
+      ],
+      "id": "python-requirement",
+      "planned": false,
+      "required": true,
+      "status": "verified",
+      "text": "The website Python requirement is projected from pyproject.toml."
+    },
+    {
+      "blockers": [],
+      "evidence": [
+        {
+          "detail": "project.version=0.5.0",
+          "evidence_type": "pyproject-value",
+          "status": "verified"
+        }
+      ],
+      "id": "package-version",
+      "planned": false,
+      "required": true,
+      "status": "verified",
+      "text": "The website package version is projected from pyproject.toml."
+    },
+    {
+      "blockers": [],
+      "evidence": [
+        {
+          "detail": "agentic-kit audit-command-manifest --json",
+          "evidence_type": "command-probe",
+          "status": "verified"
+        }
+      ],
+      "id": "command-manifest-synchronization",
+      "planned": false,
+      "required": true,
+      "status": "verified",
+      "text": "The public command catalog is generated from the current command manifest and checked for synchronization."
+    },
+    {
+      "blockers": [],
+      "evidence": [
+        {
+          "detail": "agentic-kit artifact-gc",
+          "evidence_type": "command-manifest",
+          "status": "verified"
+        }
+      ],
+      "id": "artifact-gc-dry-run",
+      "planned": false,
+      "required": false,
+      "status": "verified",
+      "text": "agentic-kit artifact-gc supports dry-run behavior."
+    },
+    {
+      "blockers": [],
+      "evidence": [
+        {
+          "detail": "agentic-kit workspace adopt",
+          "evidence_type": "command-manifest",
+          "status": "verified"
+        },
+        {
+          "detail": "tests/test_workspace_adopt.py::test_adopt_makes_no_writes",
+          "evidence_type": "pytest-node",
+          "status": "verified"
+        }
+      ],
+      "id": "workspace-adopt-read-only",
+      "planned": false,
+      "required": false,
+      "status": "verified",
+      "text": "agentic-kit workspace adopt inspects without writing."
+    },
+    {
+      "blockers": [],
+      "evidence": [
+        {
+          "detail": "agentic-kit workspace init",
+          "evidence_type": "command-manifest",
+          "status": "verified"
+        },
+        {
+          "detail": "tests/test_workspace_init.py::test_init_dry_run_writes_nothing_and_prints_tree",
+          "evidence_type": "pytest-node",
+          "status": "verified"
+        },
+        {
+          "detail": "tests/test_workspace_init.py::test_init_execute_creates_exact_tree_and_valid_manifest",
+          "evidence_type": "pytest-node",
+          "status": "verified"
+        }
+      ],
+      "id": "workspace-init-preview-execute",
+      "planned": false,
+      "required": false,
+      "status": "verified",
+      "text": "agentic-kit workspace init previews changes before explicit execution."
+    },
+    {
+      "blockers": [],
+      "evidence": [
+        {
+          "detail": "tests/test_successor_handoff_package.py::test_successor_handoff_artifacts_snapshot",
+          "evidence_type": "pytest-node",
+          "status": "verified"
+        }
+      ],
+      "id": "successor-handoff-package",
+      "planned": false,
+      "required": false,
+      "status": "verified",
+      "text": "The Kit can produce a structured successor handoff package for continuing work in another session or model."
+    },
+    {
+      "blockers": [],
+      "evidence": [
+        {
+          "detail": "commands=251",
+          "evidence_type": "generated-artifact",
+          "status": "verified"
+        }
+      ],
+      "id": "generated-command-catalog",
+      "planned": false,
+      "required": true,
+      "status": "verified",
+      "text": "The website command catalog is generated from the Kit's current command manifest."
+    }
+  ],
+  "kind": "site_claim_evaluation_report",
+  "required_counts": {
+    "optional": 5,
+    "required": 5
+  },
+  "schema_blockers": [],
+  "schema_version": 1,
+  "status": "PASS",
+  "status_counts": {
+    "planned": 0,
+    "unverified": 0,
+    "verified": 10
+  }
+}
