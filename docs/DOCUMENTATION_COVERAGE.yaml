@@ -86,6 +86,7 @@ rules:
     - meta.updated_after_pr
     - strategic direction refresh marker
     - updated_after_pr_current_main_claimed=false
+    - passed the current package version
   - path: docs/TEST_GATES.md
     terms:
     - Project Direction Gate
@@ -94,6 +95,7 @@ rules:
     - agentic-kit direction render
     - agentic-kit direction audit-drift
     - stale `updated_after_pr` current-main overclaims
+    - open items with passed `target_release` values
     - updated_after_pr_semantics
     - updated_after_pr_current_main_claimed=false
   - path: docs/planning/PROJECT_DIRECTION.md
@@ -174,6 +176,7 @@ rules:
     - agentic-kit check-docs
     - agentic-kit check-todo
     - agentic-kit doctor
+    - agentic-kit --version
     - agentic-kit doc-mesh-audit
     - agentic-kit doc-mesh-repair
     - agentic-kit doc-lifecycle-audit --json

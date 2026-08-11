@@ -3,7 +3,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 import json
 from pathlib import Path
+import re
 from typing import Any, Literal
+
+try:
+    import tomllib
+except ModuleNotFoundError:  # pragma: no cover - Python 3.10 fallback
+    tomllib = None  # type: ignore[assignment]
 
 import yaml
 
@@ -226,6 +232,7 @@ def validate_project_direction_data(
     dependency_checks: list[tuple[str, str]] = []
     source_files = _collect_source_file_entries(data)
     _validate_no_private_absolute_paths(data, findings)
+    current_release = _read_project_version(root)
 
     for section in ("strategy", "roadmap", "plans", "ideas", "done", "discarded"):
         raw_items = data.get(section)
@@ -261,6 +268,13 @@ def validate_project_direction_data(
                     )
                 if status in ACTIVE_STATUSES and not str(item.get("title") or "").strip():
                     findings.append(DirectionFinding("empty-active-title", f"{path}.title must not be empty"))
+                _validate_target_release_currency(
+                    item,
+                    path,
+                    status=status,
+                    current_release=current_release,
+                    findings=findings,
+                )
             if section in {"roadmap", "plans"}:
                 for dependency in _string_list(item.get("depends_on"), f"{path}.depends_on", findings):
                     dependency_checks.append((path, dependency))
@@ -652,6 +666,66 @@ def _validate_item_evidence(
             continue
         if _looks_like_repo_file(entry) and not (root / entry).exists():
             findings.append(DirectionFinding("missing-evidence-file", f"{path}.evidence[{index}] missing: {entry}"))
+
+
+def _validate_target_release_currency(
+    item: dict[str, Any],
+    path: str,
+    *,
+    status: str,
+    current_release: str | None,
+    findings: list[DirectionFinding],
+) -> None:
+    if status not in ACTIVE_STATUSES or not current_release:
+        return
+    target_release = item.get("target_release")
+    if not isinstance(target_release, str) or not target_release.strip():
+        return
+    current_tuple = _release_tuple(current_release)
+    target_tuple = _release_tuple(target_release)
+    if current_tuple is None or target_tuple is None:
+        return
+    if target_tuple < current_tuple:
+        findings.append(
+            DirectionFinding(
+                "stale-target-release",
+                f"{path}.target_release {target_release!r} has passed current release "
+                f"{current_release!r}; revalidate the item or remove the stale target",
+            )
+        )
+
+
+def _read_project_version(root: Path) -> str | None:
+    pyproject = root / "pyproject.toml"
+    if not pyproject.exists():
+        return None
+    text = pyproject.read_text(encoding="utf-8")
+    if tomllib is not None:
+        try:
+            project = tomllib.loads(text).get("project")
+        except tomllib.TOMLDecodeError:
+            return None
+        if isinstance(project, dict):
+            version = project.get("version")
+            if isinstance(version, str) and version.strip():
+                return version
+        return None
+    match = re.search(r'^version\s*=\s*"([^"]+)"', text, re.MULTILINE)
+    return match.group(1) if match else None
+
+
+def _release_tuple(value: str) -> tuple[int, int, int] | None:
+    match = re.match(r"^v?(\d+)\.(\d+)(?:\.(\d+|x))?$", value.strip())
+    if not match:
+        return None
+    major, minor, patch = match.groups()
+    if patch is None:
+        patch_value = 0
+    elif patch == "x":
+        patch_value = 9999
+    else:
+        patch_value = int(patch)
+    return int(major), int(minor), patch_value
 
 
 def _validate_no_private_absolute_paths(data: object, findings: list[DirectionFinding]) -> None:

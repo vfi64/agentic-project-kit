@@ -364,7 +364,6 @@ roadmap:
   status: next
   title: Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI
     expansion
-  target_release: v0.4.12
   depends_on:
   - p1-planning-consolidation
   acceptance:
@@ -1293,7 +1292,6 @@ plans:
 - id: pre-gui-hardening-plan
   status: active
   title: Execute the pre-GUI hardening backlog in small wrapper-first slices
-  target_release: v0.4.12
   depends_on:
   - p1-planning-consolidation
   acceptance:
@@ -1324,7 +1322,6 @@ plans:
   status: active
   title: Move recurring next-step execution from chat discipline into a deterministic
     local workflow kernel
-  target_release: v0.4.12
   depends_on:
   - pre-gui-hardening-plan
   acceptance:
@@ -1340,7 +1337,6 @@ plans:
   status: active
   title: Keep release preparation, publishing, and DOI closeout under explicit command
     authority
-  target_release: v0.4.12
   depends_on:
   - pre-gui-hardening-plan
   acceptance:
@@ -1433,7 +1429,6 @@ plans:
   status: planned
   title: Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit
     commands
-  target_release: v0.4.12
   depends_on:
   - next-turn-workflow-kernel
   acceptance:
@@ -1618,7 +1613,6 @@ plans:
 - id: gui-workbench-plan
   status: planned
   title: Implement the GUI gatekeeper/workbench as a view over governed action specs
-  target_release: v0.4.x
   depends_on:
   - gui-gatekeeper-workbench
   acceptance:

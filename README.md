@@ -55,13 +55,14 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-Run the local gate:
+Run gates:
 
 ```bash
 pytest -q
 ruff check .
 agentic-kit check-docs
 agentic-kit doctor
+agentic-kit --version
 agentic-kit --help
 ```
 
@@ -195,6 +196,7 @@ After a PR merge, run `agentic-kit transfer post-merge-settle --after-pr PR_NUMB
 
 `agentic-kit direction validate`, `agentic-kit direction render`, and `agentic-kit direction audit-drift` guard `docs/planning/PROJECT_DIRECTION.yaml`.
 `meta.updated_after_pr` is a strategic direction refresh marker, not a current-main freshness claim; validation requires `updated_after_pr_semantics` and keeps `updated_after_pr_current_main_claimed=false` when the marker is set.
+Open Direction items whose `target_release` has passed the current package version must be revalidated or lose that stale target.
 
 ## Govern an existing repository (operating layer)
 

@@ -47,6 +47,7 @@ from agentic_project_kit.cli_commands.transfer_pr_closeout_complete import (
     register_transfer_pr_closeout_complete_command,
 )
 from agentic_project_kit.cli_commands.validation import register_validation_commands
+from agentic_project_kit.cli_commands.version import register_version_callback
 from agentic_project_kit.cli_commands.work_orders import work_orders_app
 from agentic_project_kit.cli_commands.workspace import workspace_app
 from agentic_project_kit.cli_commands.workflow import workflow_app
@@ -73,6 +74,7 @@ from agentic_project_kit.cli_commands.mutation_lock_audit import register_mutati
 from agentic_project_kit.patch_artifact_preflight import register_patch_preflight_command
 
 app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
+register_version_callback(app)
 app.command("project-direction")(project_direction_command)
 app.command("artifact-gc")(artifact_gc_command)
 app.command("patch-scope-preflight")(patch_preflight_command)
@@ -139,9 +141,6 @@ app.add_typer(slice_app, name="slice")
 app.add_typer(state_app, name="state")
 app.add_typer(todo_app, name="todo")
 app.add_typer(transfer_app, name="transfer")
-
-
-
 
 
 if __name__ == "__main__":
