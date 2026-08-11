@@ -7,10 +7,10 @@ Current verified release: 0.5.0.
 Current release tag: v0.5.0.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21850952`.
-Current verified main: `5ca924d6` (`Refresh successor package after PR2045 (#2053)`).
-Latest substantive work: PR #2053 (`Refresh successor package after PR2045 (#2053)`).
+Current verified main: `021da11e` (`Consolidate post-0.5.0 planning surface (#2043)`).
+Latest substantive work: PR #2043 (`Consolidate post-0.5.0 planning surface (#2043)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2053 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2043 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -416,6 +416,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2053
+## Operational documentation refresh state after PR #2043
 
-Current administrative handoff refresh state is `5ca924d6` (`Refresh successor package after PR2045 (#2053)`). Continue next only after this post-PR2053 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `021da11e` (`Consolidate post-0.5.0 planning surface (#2043)`). Continue next only after this post-PR2043 refresh is committed and merged; the next substantive slice must be created from fresh main.
