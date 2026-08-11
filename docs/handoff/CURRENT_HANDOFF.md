@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `75ad692645e5abf60422e5cd240ed4e84f349148` (`75ad6926`), after `Add docs-source Pages fallback for generated site (#2046)`.
-Last substantive work state is `75ad692645e5abf60422e5cd240ed4e84f349148` (`75ad6926`), after `Add docs-source Pages fallback for generated site (#2046)`.
+Current verified main/admin HEAD is `730afb8d7a816d3bbdf0e458733e4f4b9115d7ad` (`730afb8d`), after `Stabilize docs-source Pages fallback projection (#2048)`.
+Last substantive work state is `730afb8d7a816d3bbdf0e458733e4f4b9115d7ad` (`730afb8d`), after `Stabilize docs-source Pages fallback projection (#2048)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

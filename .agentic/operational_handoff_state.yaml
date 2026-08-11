@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 75ad692645e5abf60422e5cd240ed4e84f349148
-  short: 75ad6926
-  subject: Add docs-source Pages fallback for generated site (#2046)
+  full: 730afb8d7a816d3bbdf0e458733e4f4b9115d7ad
+  short: 730afb8d
+  subject: Stabilize docs-source Pages fallback projection (#2048)
 last_substantive_work_state:
-  full: 75ad692645e5abf60422e5cd240ed4e84f349148
-  short: 75ad6926
-  subject: Add docs-source Pages fallback for generated site (#2046)
+  full: 730afb8d7a816d3bbdf0e458733e4f4b9115d7ad
+  short: 730afb8d
+  subject: Stabilize docs-source Pages fallback projection (#2048)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
