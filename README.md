@@ -1,6 +1,6 @@
 # Agentic Project Kit
 
-> Current handoff architecture: the project now uses a deterministic Successor Handoff Package. The package writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/`. New chat starts should verify the package and then follow the machine-readable execution contract instead of relying on chat memory.
+> Current handoff architecture: the project uses a deterministic Successor Handoff Package. It writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/`. New chat starts should verify the package and follow the machine-readable execution contract instead of relying on chat memory.
 
 
 Current version: 0.5.0
@@ -9,8 +9,6 @@ Current version: 0.5.0
 `agentic-project-kit` is a local Python package and CLI for governing AI-assisted repository work with explicit contracts, gates, evidence, and handoffs.
 
 It creates a reusable development process: onboarding, project contracts, policy selection, status discipline, test gates, task tracking, bounded logs, GitHub automation, workflow evidence, and release validation.
-
-In one sentence: `agentic-project-kit` makes AI-assisted repository work more reproducible through explicit contracts, gates, workflow evidence, and bounded auditability.
 
 ## Why this exists
 
