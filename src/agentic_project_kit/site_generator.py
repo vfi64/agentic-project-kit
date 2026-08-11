@@ -22,6 +22,7 @@ PRODUCT_NAME = "Agentic Execution Runtime"
 FORMER_PRODUCT_NAME = "Agentic Project Kit"
 SITE_KIND = "agentic_project_kit_generated_site"
 DOCS_PAGES_FALLBACK_KIND = "agentic_project_kit_docs_pages_fallback"
+DOCS_PAGES_FALLBACK_BUILD_COMMIT = "docs-pages-fallback"
 
 
 @dataclass(frozen=True)
@@ -261,6 +262,7 @@ def collect_site_foundation_metadata(
     *,
     build_commit: str | None = None,
     manifest: dict[str, Any] | None = None,
+    status_projection: SiteStatusProjection | None = None,
 ) -> SiteFoundationReport:
     root = root.resolve()
     blockers: list[str] = []
@@ -297,7 +299,7 @@ def collect_site_foundation_metadata(
         blockers.append("build commit is not available")
 
     command_catalog = _build_command_catalog(commands, blockers)
-    status_projection = _read_status_projection(root)
+    status_projection = status_projection or _read_status_projection(root)
     roadmap_projection = _read_roadmap_projection(root)
     claim_report = evaluate_site_claims(root, command_catalog=command_catalog)
     blockers.extend(claim_report.blockers)
@@ -344,6 +346,7 @@ def build_site(
     output_dir: Path | None = None,
     build_commit: str | None = None,
     manifest: dict[str, Any] | None = None,
+    status_projection: SiteStatusProjection | None = None,
 ) -> SiteBuildResult:
     root = root.resolve()
     output = (output_dir or root / "site" / "dist").resolve()
@@ -351,6 +354,7 @@ def build_site(
         root,
         build_commit=build_commit,
         manifest=manifest,
+        status_projection=status_projection,
     )
     if not report.ok:
         return SiteBuildResult(
@@ -461,8 +465,9 @@ def build_docs_pages_fallback(
         site_build = build_site(
             root,
             output_dir=docs_root / site_subdir,
-            build_commit=build_commit,
+            build_commit=build_commit or DOCS_PAGES_FALLBACK_BUILD_COMMIT,
             manifest=manifest,
+            status_projection=_docs_pages_fallback_status_projection(root),
         )
         if site_build.ok:
             (docs_root / "index.html").write_text(
@@ -517,6 +522,20 @@ def _render_docs_pages_index(site_subdir: str) -> str:
   </body>
 </html>
 """
+
+
+def _docs_pages_fallback_status_projection(root: Path) -> SiteStatusProjection:
+    current = _read_status_projection(root)
+    return SiteStatusProjection(
+        current_version=current.current_version,
+        current_verified_release=current.current_verified_release,
+        current_release_tag=current.current_release_tag,
+        concept_doi=current.concept_doi,
+        version_doi=current.version_doi,
+        current_verified_main="See docs/STATUS.md",
+        latest_substantive_work="See docs/STATUS.md for current repository state.",
+        next_safe_step="See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
+    )
 
 
 def render_index_html(root: Path, report: SiteFoundationReport) -> str:
