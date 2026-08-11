@@ -1,6 +1,6 @@
 # Agentic Project Kit
 
-> Current handoff architecture: the project uses a deterministic Successor Handoff Package. It writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/`. New chat starts should verify the package and follow the machine-readable execution contract instead of relying on chat memory.
+> Handoff architecture: the deterministic Successor Handoff Package writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/`. New chat starts verify the package and follow the machine-readable execution contract instead of relying on chat memory.
 
 
 Current version: 0.5.0
@@ -8,7 +8,7 @@ Current version: 0.5.0
 
 `agentic-project-kit` is a local Python package and CLI for governing AI-assisted repository work with explicit contracts, gates, evidence, and handoffs.
 
-It creates a reusable development process: onboarding, project contracts, policy selection, status discipline, test gates, task tracking, bounded logs, GitHub automation, workflow evidence, and release validation.
+It provides reusable onboarding, project contracts, policy selection, status discipline, gates, task tracking, bounded logs, GitHub automation, workflow evidence, and release validation.
 
 ## Why this exists
 
@@ -16,7 +16,7 @@ AI-assisted development works best when project context is explicit, current, an
 
 This kit turns those lessons into a reusable starter system for new repositories.
 
-The goal is not to make an LLM write code better by itself. The goal is to make repository state, handoffs, documentation coverage, task state, release state, and policy expectations visible enough that humans and coding agents can work with less context drift.
+The goal is not making an LLM write code better by itself; it is making repository state, handoffs, documentation coverage, task state, release state, and policy expectations visible enough that humans and coding agents can work with less context drift.
 
 ## Why not just Cookiecutter?
 
@@ -194,7 +194,7 @@ After a PR merge, run `agentic-kit transfer post-merge-settle --after-pr PR_NUMB
 
 `agentic-kit direction validate`, `agentic-kit direction render`, and `agentic-kit direction audit-drift` guard `docs/planning/PROJECT_DIRECTION.yaml`.
 `meta.updated_after_pr` is a strategic direction refresh marker, not a current-main freshness claim; validation requires `updated_after_pr_semantics` and keeps `updated_after_pr_current_main_claimed=false` when the marker is set.
-Open Direction items whose `target_release` has passed the current package version must be revalidated or lose that stale target.
+Open Direction items whose `target_release` passed the current package version require revalidation.
 
 ## Govern an existing repository (operating layer)
 
