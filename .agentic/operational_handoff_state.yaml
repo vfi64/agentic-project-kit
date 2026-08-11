@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 226ad96b15378d494590de072c963b095e442fe3
-  short: 226ad96b
-  subject: Clarify DPA stable closeout boundary (#2041)
+  full: 5ca924d603ccb900b3e037ec4ee736176d5eb90f
+  short: 5ca924d6
+  subject: Refresh successor package after PR2045 (#2053)
 last_substantive_work_state:
-  full: 226ad96b15378d494590de072c963b095e442fe3
-  short: 226ad96b
-  subject: Clarify DPA stable closeout boundary (#2041)
+  full: 5ca924d603ccb900b3e037ec4ee736176d5eb90f
+  short: 5ca924d6
+  subject: Refresh successor package after PR2045 (#2053)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

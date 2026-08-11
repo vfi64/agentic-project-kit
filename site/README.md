@@ -60,6 +60,16 @@ with `actions/deploy-pages` only after the repository Pages API reports
 the workflow records that state and skips the Pages-specific steps after a
 successful build rather than turning `main` red for a missing repository setting.
 
+Legacy GitHub Pages source `/docs` is supported as a generated fallback, not as a
+new manual website source. `python site/scripts/build.py --docs-pages-fallback --json`
+writes `docs/index.html`, `docs/.nojekyll`, and `docs/site/` from the same
+generator. This lets `https://vfi64.github.io/agentic-project-kit/` open the
+generated website while preserving `site/` as the canonical source and
+`site/dist/` as ignored fresh-build output.
+The fallback intentionally renders volatile current-state details as pointers to
+`docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md`; this keeps the committed
+Pages projection idempotent across post-merge handoff/status refreshes.
+
 S4d presentation keeps the public homepage generated from the same sources while
 adding clearer explanatory sections:
 

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>${product_name}</title>
+    <title>Agentic Execution Runtime</title>
     <link rel="stylesheet" href="static/site.css">
   </head>
   <body>
@@ -19,8 +19,8 @@
       <section class="overview" aria-labelledby="site-title">
         <div>
           <p class="eyebrow">Generated repository projection</p>
-          <h1 id="site-title">${product_name}</h1>
-          <p class="lede">Formerly ${former_product_name}. A local runtime for keeping long AI-assisted repository work grounded in contracts, gates, evidence and handoffs.</p>
+          <h1 id="site-title">Agentic Execution Runtime</h1>
+          <p class="lede">Formerly Agentic Project Kit. A local runtime for keeping long AI-assisted repository work grounded in contracts, gates, evidence and handoffs.</p>
           <div class="hero-actions" aria-label="Primary generated views">
             <a href="commands/guided.html">Guided commands</a>
             <a href="claims/index.html">Claim evidence</a>
@@ -35,35 +35,35 @@
       <section class="metrics" aria-label="Repository facts">
         <article>
           <span>Package</span>
-          <strong>${package_name}</strong>
+          <strong>agentic-project-kit</strong>
         </article>
         <article>
           <span>Version</span>
-          <strong>${package_version}</strong>
+          <strong>0.5.0</strong>
         </article>
         <article>
           <span>Python</span>
-          <strong>${requires_python}</strong>
+          <strong>&gt;=3.10</strong>
         </article>
         <article>
           <span>Commands</span>
-          <strong>${command_count}</strong>
+          <strong>251</strong>
         </article>
         <article>
           <span>Release tag</span>
-          <strong>${release_tag}</strong>
+          <strong>v0.5.0</strong>
         </article>
         <article>
           <span>Version DOI</span>
-          <strong>${version_doi}</strong>
+          <strong>10.5281/zenodo.21850952</strong>
         </article>
         <article>
           <span>Verified main</span>
-          <strong>${current_verified_main}</strong>
+          <strong>See docs/STATUS.md</strong>
         </article>
         <article>
           <span>Manifest</span>
-          <strong>${manifest_sha}</strong>
+          <strong>3d20e7338c12</strong>
         </article>
       </section>
 
@@ -76,8 +76,8 @@
         <article class="panel">
           <p class="eyebrow">Current State</p>
           <h2>Generated Status</h2>
-          <p>Latest substantive work: ${latest_substantive_work}</p>
-          <p>Next safe step: ${next_safe_step}</p>
+          <p>Latest substantive work: See docs/STATUS.md for current repository state.</p>
+          <p>Next safe step: See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.</p>
         </article>
       </section>
 
@@ -90,30 +90,30 @@
         <dl class="compact-details">
           <div>
             <dt>Manifest identity</dt>
-            <dd><code>${manifest_sha}</code></dd>
+            <dd><code>3d20e7338c12</code></dd>
           </div>
           <div>
             <dt>Reproduced manifest</dt>
-            <dd><code>${reproduced_manifest_sha}</code></dd>
+            <dd><code>3d20e7338c12</code></dd>
           </div>
           <div>
             <dt>Identity verified</dt>
-            <dd><code>${manifest_identity_verified}</code></dd>
+            <dd><code>true</code></dd>
           </div>
           <div>
             <dt>Build commit</dt>
-            <dd><code>${build_commit}</code></dd>
+            <dd><code>docs-pages-fallback</code></dd>
           </div>
         </dl>
       </section>
 
       <section class="command-links" aria-label="Command views">
-        <a href="commands/guided.html">Guided commands <strong>${orchestrator_count}</strong></a>
-        <a href="commands/diagnostics.html">Diagnostics <strong>${diagnostic_count}</strong></a>
-        <a href="commands/index.html">Complete reference <strong>${command_count}</strong></a>
-        <a href="claims/index.html">Verified claims <strong>${claim_verified_count}</strong></a>
-        <a href="claims/index.html">Unverified claims <strong>${claim_unverified_count}</strong></a>
-        <a href="claims/index.html">Planned claims <strong>${claim_planned_count}</strong></a>
+        <a href="commands/guided.html">Guided commands <strong>31</strong></a>
+        <a href="commands/diagnostics.html">Diagnostics <strong>119</strong></a>
+        <a href="commands/index.html">Complete reference <strong>251</strong></a>
+        <a href="claims/index.html">Verified claims <strong>10</strong></a>
+        <a href="claims/index.html">Unverified claims <strong>0</strong></a>
+        <a href="claims/index.html">Planned claims <strong>0</strong></a>
       </section>
 
       <section class="section-grid" aria-label="Command surface">
@@ -121,14 +121,26 @@
           <p class="eyebrow">CLI</p>
           <h2>Normal Lifecycle</h2>
           <ul class="summary-list">
-${guided_command_items}
+          <li><code>agentic-kit artifact-gc</code><span>Dry-run by default garbage collector for transient communication artifacts.</span></li>
+          <li><code>agentic-kit chat session-start</code><span>Render the session-start refresher and full inline command list.</span></li>
+          <li><code>agentic-kit docs lifecycle sweep</code><span>Build or apply a bounded documentation lifecycle sweep plan.</span></li>
+          <li><code>agentic-kit dpa final-closeout-check</code><span>Validate the bounded DP1-DP5 final closeout record.</span></li>
+          <li><code>agentic-kit github-create</code><span>Run agentic-kit github-create.</span></li>
+          <li><code>agentic-kit init</code><span>Run agentic-kit init.</span></li>
+          <li><code>agentic-kit post-release-doi-closeout</code><span>Run agentic-kit post-release-doi-closeout.</span></li>
+          <li><code>agentic-kit release prepare</code><span>Generate release summary evidence and run release-prep safely.</span></li>
           </ul>
         </article>
         <article class="panel">
           <p class="eyebrow">Diagnostics</p>
           <h2>Common Blockers</h2>
           <ul class="summary-list">
-${common_diagnostic_items}
+          <li><code>agentic-kit audit-status-current-state</code><span>Audit STATUS.md current-state claims against handoff, release, and origin/main state.</span></li>
+          <li><code>agentic-kit check-docs</code><span>Run agentic-kit check-docs.</span></li>
+          <li><code>agentic-kit docs-audit</code><span>Run the umbrella documentation-system audit.</span></li>
+          <li><code>agentic-kit doctor</code><span>Run a compact project health check.</span></li>
+          <li><code>agentic-kit workflow status</code><span>Print the current workflow state and bounded evidence pointers.</span></li>
+          <li><code>agentic-kit workflow-guard check</code><span>Run agentic-kit workflow-guard check.</span></li>
           </ul>
         </article>
       </section>
@@ -154,19 +166,27 @@ ${common_diagnostic_items}
         <article>
           <h3>Verified now</h3>
           <ul class="summary-list">
-${verified_now_items}
+          <li><code>cli-entry-point</code><span>The package provides the agentic-kit command-line interface.</span></li>
+          <li><code>command-manifest-synchronization</code><span>The public command catalog is generated from the current command manifest and checked for synchronization.</span></li>
+          <li><code>generated-command-catalog</code><span>The website command catalog is generated from the Kit&#x27;s current command manifest.</span></li>
+          <li><code>package-version</code><span>The website package version is projected from pyproject.toml.</span></li>
+          <li><code>python-requirement</code><span>The website Python requirement is projected from pyproject.toml.</span></li>
           </ul>
         </article>
         <article>
           <h3>Available but evolving</h3>
           <ul class="summary-list">
-${available_evolving_items}
+          <li><code>artifact-gc-dry-run</code><span>agentic-kit artifact-gc supports dry-run behavior.</span></li>
+          <li><code>gui-entry-point</code><span>The package provides the agentic-kit-gui graphical entry point.</span></li>
+          <li><code>successor-handoff-package</code><span>The Kit can produce a structured successor handoff package for continuing work in another session or model.</span></li>
+          <li><code>workspace-adopt-read-only</code><span>agentic-kit workspace adopt inspects without writing.</span></li>
+          <li><code>workspace-init-preview-execute</code><span>agentic-kit workspace init previews changes before explicit execution.</span></li>
           </ul>
         </article>
         <article>
           <h3>Planned</h3>
           <ul class="summary-list">
-${planned_items}
+          <li>No planned public claims are currently declared.</li>
           </ul>
         </article>
         <article>
@@ -183,23 +203,23 @@ ${planned_items}
         <dl>
           <div>
             <dt>Concept DOI</dt>
-            <dd><code>${concept_doi}</code></dd>
+            <dd><code>10.5281/zenodo.20101359</code></dd>
           </div>
           <div>
             <dt>Primitives</dt>
-            <dd><code>${primitive_count}</code></dd>
+            <dd><code>101</code></dd>
           </div>
           <div>
             <dt>Command groups</dt>
-            <dd><code>${command_group_count}</code></dd>
+            <dd><code>33</code></dd>
           </div>
           <div>
             <dt>Project direction</dt>
-            <dd><code>${project_direction_status}</code></dd>
+            <dd><code>active</code></dd>
           </div>
           <div>
             <dt>Required claims</dt>
-            <dd><code>${required_claim_count}</code></dd>
+            <dd><code>5</code></dd>
           </div>
         </dl>
       </section>

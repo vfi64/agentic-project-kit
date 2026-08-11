@@ -21,6 +21,8 @@ from agentic_project_kit.site_claims import ClaimEvaluationReport, evaluate_site
 PRODUCT_NAME = "Agentic Execution Runtime"
 FORMER_PRODUCT_NAME = "Agentic Project Kit"
 SITE_KIND = "agentic_project_kit_generated_site"
+DOCS_PAGES_FALLBACK_KIND = "agentic_project_kit_docs_pages_fallback"
+DOCS_PAGES_FALLBACK_BUILD_COMMIT = "docs-pages-fallback"
 
 
 @dataclass(frozen=True)
@@ -218,11 +220,49 @@ class SiteBuildResult:
         }
 
 
+@dataclass(frozen=True)
+class DocsPagesFallbackResult:
+    root: str
+    docs_root: str
+    site_subdir: str
+    site_build: SiteBuildResult | None
+    files: tuple[str, ...]
+    blockers: tuple[str, ...]
+
+    @property
+    def ok(self) -> bool:
+        return not self.blockers and self.site_build is not None and self.site_build.ok
+
+    @property
+    def status(self) -> str:
+        return "PASS" if self.ok else "BLOCK"
+
+    @property
+    def returncode(self) -> int:
+        return 0 if self.ok else 2
+
+    def as_dict(self) -> dict[str, object]:
+        return {
+            "schema_version": 1,
+            "kind": DOCS_PAGES_FALLBACK_KIND,
+            "root": self.root,
+            "docs_root": self.docs_root,
+            "site_subdir": self.site_subdir,
+            "status": self.status,
+            "files": list(self.files),
+            "file_count": len(self.files),
+            "blockers": list(self.blockers),
+            "blocker_count": len(self.blockers),
+            "site_build": self.site_build.as_dict() if self.site_build is not None else None,
+        }
+
+
 def collect_site_foundation_metadata(
     root: Path = Path("."),
     *,
     build_commit: str | None = None,
     manifest: dict[str, Any] | None = None,
+    status_projection: SiteStatusProjection | None = None,
 ) -> SiteFoundationReport:
     root = root.resolve()
     blockers: list[str] = []
@@ -259,7 +299,7 @@ def collect_site_foundation_metadata(
         blockers.append("build commit is not available")
 
     command_catalog = _build_command_catalog(commands, blockers)
-    status_projection = _read_status_projection(root)
+    status_projection = status_projection or _read_status_projection(root)
     roadmap_projection = _read_roadmap_projection(root)
     claim_report = evaluate_site_claims(root, command_catalog=command_catalog)
     blockers.extend(claim_report.blockers)
@@ -306,6 +346,7 @@ def build_site(
     output_dir: Path | None = None,
     build_commit: str | None = None,
     manifest: dict[str, Any] | None = None,
+    status_projection: SiteStatusProjection | None = None,
 ) -> SiteBuildResult:
     root = root.resolve()
     output = (output_dir or root / "site" / "dist").resolve()
@@ -313,6 +354,7 @@ def build_site(
         root,
         build_commit=build_commit,
         manifest=manifest,
+        status_projection=status_projection,
     )
     if not report.ok:
         return SiteBuildResult(
@@ -403,6 +445,96 @@ def build_site(
         output_dir=output.as_posix(),
         report=report,
         files=files,
+    )
+
+
+def build_docs_pages_fallback(
+    root: Path = Path("."),
+    *,
+    site_subdir: str = "site",
+    build_commit: str | None = None,
+    manifest: dict[str, Any] | None = None,
+) -> DocsPagesFallbackResult:
+    root = root.resolve()
+    docs_root = root / "docs"
+    blockers = _docs_pages_fallback_blockers(site_subdir)
+    site_build: SiteBuildResult | None = None
+    files: tuple[str, ...] = ()
+    if not blockers:
+        docs_root.mkdir(parents=True, exist_ok=True)
+        site_build = build_site(
+            root,
+            output_dir=docs_root / site_subdir,
+            build_commit=build_commit or DOCS_PAGES_FALLBACK_BUILD_COMMIT,
+            manifest=manifest,
+            status_projection=_docs_pages_fallback_status_projection(root),
+        )
+        if site_build.ok:
+            (docs_root / "index.html").write_text(
+                _render_docs_pages_index(site_subdir),
+                encoding="utf-8",
+            )
+            (docs_root / ".nojekyll").write_text(
+                "Generated marker: serve docs/ as static GitHub Pages content.\n",
+                encoding="utf-8",
+            )
+            files = tuple(
+                sorted((".nojekyll", "index.html", *(f"{site_subdir}/{path}" for path in site_build.files)))
+            )
+        else:
+            blockers.extend(site_build.report.blockers)
+
+    return DocsPagesFallbackResult(
+        root=root.as_posix(),
+        docs_root=docs_root.as_posix(),
+        site_subdir=site_subdir,
+        site_build=site_build,
+        files=files,
+        blockers=tuple(blockers),
+    )
+
+
+def _docs_pages_fallback_blockers(site_subdir: str) -> list[str]:
+    if not site_subdir or site_subdir in {".", ".."}:
+        return ["docs Pages site subdir must be a named child directory"]
+    if "/" in site_subdir or "\\" in site_subdir:
+        return ["docs Pages site subdir must not contain path separators"]
+    if not re.fullmatch(r"[A-Za-z0-9._-]+", site_subdir):
+        return ["docs Pages site subdir contains unsupported characters"]
+    return []
+
+
+def _render_docs_pages_index(site_subdir: str) -> str:
+    target = f"{site_subdir}/index.html"
+    return f"""<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="refresh" content="0; url={target}">
+    <link rel="canonical" href="{target}">
+    <title>{PRODUCT_NAME}</title>
+  </head>
+  <body>
+    <main>
+      <p><a href="{target}">Open the generated website</a>.</p>
+    </main>
+  </body>
+</html>
+"""
+
+
+def _docs_pages_fallback_status_projection(root: Path) -> SiteStatusProjection:
+    current = _read_status_projection(root)
+    return SiteStatusProjection(
+        current_version=current.current_version,
+        current_verified_release=current.current_verified_release,
+        current_release_tag=current.current_release_tag,
+        concept_doi=current.concept_doi,
+        version_doi=current.version_doi,
+        current_verified_main="See docs/STATUS.md",
+        latest_substantive_work="See docs/STATUS.md for current repository state.",
+        next_safe_step="See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
     )
 
 
