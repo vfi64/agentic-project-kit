@@ -104,7 +104,7 @@ See `docs/examples/minimal-python-cli.md` for a small end-to-end example showing
 
 ## Project contract, profiles, and policy packs
 
-Generated projects contain `.agentic/project.yaml` as a machine-readable project contract. It records the project name, description, project type, selected profiles, selected policy packs, and basic governance expectations.
+Generated projects contain `.agentic/project.yaml` as a machine-readable project contract and a standard `.gitignore` for local Python/tooling byproducts. The contract records the project name, description, project type, selected profiles, selected policy packs, and basic governance expectations.
 
 Profiles describe what kind of repository the project is, for example `generic-git-repo`, `markdown-docs`, `python-cli`, `python-lib`, `git-github`, or `release-managed`.
 
