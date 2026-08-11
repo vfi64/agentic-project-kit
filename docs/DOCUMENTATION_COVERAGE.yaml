@@ -1052,6 +1052,7 @@ rules:
   - path: README.md
     terms:
     - .agentic/project.yaml
+    - .gitignore
     - project contract
     - project profiles
     - policy packs

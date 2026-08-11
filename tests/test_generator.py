@@ -33,6 +33,8 @@ def test_create_project_generates_core_files(tmp_path: Path):
     assert (target / DPA_WORKSPACE_INIT_HANDOFF_TEMPLATE_PATH).exists()
     assert (target / DPA_WORKSPACE_INIT_MANIFEST_PATH).exists()
     assert (target / ".agentic/todo.yaml").exists()
+    assert (target / ".gitignore").exists()
+    assert "__pycache__/" in (target / ".gitignore").read_text(encoding="utf-8")
     assert (target / ".github/workflows/ci.yml").exists()
 
 
