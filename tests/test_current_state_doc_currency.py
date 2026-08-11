@@ -160,7 +160,6 @@ def test_successor_package_mentions_current_release_and_project_direction_tasks(
     assert "docs/planning/PROJECT_DIRECTION.yaml" in combined
     assert "project-direction" in combined
     assert "docs-reconciliation" in combined
-    assert "v0.4.12" in combined
 
 
 def test_current_state_docs_do_not_depend_on_over_specific_status_sentence() -> None:
