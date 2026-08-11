@@ -7,6 +7,8 @@ technical truth surface. `site/scripts/build.py` calls
 `agentic_project_kit.site_generator` and writes the static artifact to
 `site/dist/` by default. The generated `site/dist/` tree is ignored; GitHub
 Pages deployment must build a fresh artifact from the checked-in sources.
+`site/` is excluded from Python sdist and wheel artifacts because it is a
+repository-native projection surface, not package runtime data.
 
 S4a foundation sources:
 

@@ -4,6 +4,7 @@ import subprocess
 from typer.testing import CliRunner
 import yaml
 
+from agentic_project_kit import __version__
 from agentic_project_kit.cli import app
 
 
@@ -119,6 +120,15 @@ def test_profile_explain_lists_profiles_and_policy_packs():
     assert "starter" in result.output
     assert "agentic-development" in result.output
     assert "output-contracts" in result.output
+
+
+def test_cli_version_prints_package_version() -> None:
+    runner = CliRunner()
+
+    result = runner.invoke(app, ["--version"])
+
+    assert result.exit_code == 0
+    assert result.output == f"agentic-kit {__version__}\n"
 
 
 def test_workflow_status_reports_idle(tmp_path):

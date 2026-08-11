@@ -220,6 +220,41 @@ def test_direction_validate_accepts_updated_after_pr_as_strategic_marker(tmp_pat
     assert not any(finding.code.startswith("invalid-updated-after-pr") for finding in result.findings)
 
 
+def test_direction_validate_rejects_open_item_with_passed_target_release(tmp_path: Path) -> None:
+    direction = _minimal_direction()
+    (tmp_path / "docs/planning").mkdir(parents=True)
+    (tmp_path / "docs/planning/PROJECT_DIRECTION.yaml").write_text("x\n", encoding="utf-8")
+    (tmp_path / "pyproject.toml").write_text(
+        '[project]\nname = "fixture"\nversion = "0.5.0"\n',
+        encoding="utf-8",
+    )
+    roadmap = direction["roadmap"]
+    assert isinstance(roadmap, list)
+    roadmap[0]["target_release"] = "v0.4.12"
+
+    result = validate_project_direction_data(direction, root=tmp_path)
+
+    assert any(finding.code == "stale-target-release" for finding in result.findings)
+
+
+def test_direction_validate_allows_done_item_with_historical_target_release(tmp_path: Path) -> None:
+    direction = _minimal_direction()
+    (tmp_path / "docs/planning").mkdir(parents=True)
+    (tmp_path / "docs/planning/PROJECT_DIRECTION.yaml").write_text("x\n", encoding="utf-8")
+    (tmp_path / "pyproject.toml").write_text(
+        '[project]\nname = "fixture"\nversion = "0.5.0"\n',
+        encoding="utf-8",
+    )
+    roadmap = direction["roadmap"]
+    assert isinstance(roadmap, list)
+    roadmap[0]["status"] = "done"
+    roadmap[0]["target_release"] = "v0.4.12"
+
+    result = validate_project_direction_data(direction, root=tmp_path)
+
+    assert not any(finding.code == "stale-target-release" for finding in result.findings)
+
+
 def test_direction_validate_allows_deleted_source_mapping(tmp_path: Path) -> None:
     direction = _minimal_direction()
     direction["strategy"][0]["source_files"] = [  # type: ignore[index]
