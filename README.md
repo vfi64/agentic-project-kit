@@ -392,6 +392,11 @@ version, Python requirement, command count, `meta.manifest_sha`,
 not a second hand-maintained technical truth surface; future technical claim
 status must be computed from evidence bindings.
 
+For legacy `main` `/docs` GitHub Pages,
+`python site/scripts/build.py --docs-pages-fallback --json` writes
+`docs/index.html`, `docs/.nojekyll`, and `docs/site/`; `site/dist/` stays
+ignored.
+
 - `agentic-kit workspace dpa-intake`: run the deterministic one-shot DPA intake for a target repository by resolving exact-ref evidence, running workspace adoption analysis and DPA repo-adoption assessment, generating an adjudication plan, and optionally writing bounded intake evidence without migration or external-repo conformance claims.
 - `agentic-kit workspace remove`: plan or execute bounded removal of exact Kit-generated workspace files while preserving modified, unknown, source, and project-documentation paths.
 - `agentic-kit dpa readiness`: validate the staged DPA DP1 Assessment readiness record, report the deterministic DP2 selected self-hosting target-scope implementation percentage, and keep that separate from Kit-wide DPA conformance.

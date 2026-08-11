@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Claim Evidence - Agentic Execution Runtime</title>
+    <link rel="stylesheet" href="../static/site.css">
+  </head>
+  <body>
+    <main class="page">
+      <nav class="topnav" aria-label="Site">
+        <a href="../index.html">Overview</a>
+        <a href="../commands/guided.html">Guided</a>
+        <a href="../commands/diagnostics.html">Diagnostics</a>
+        <a href="../commands/index.html">Complete</a>
+      </nav>
+
+      <section class="overview" aria-labelledby="claims-title">
+        <p class="eyebrow">Computed claim evidence</p>
+        <h1 id="claims-title">Claim Evidence</h1>
+        <p class="lede">Claim status is evaluated during the build from evidence bindings. Curated claim content does not store derived verified state.</p>
+        <p class="catalog-meta">Version <code>0.5.0</code> · Manifest <code>3d20e7338c12</code> · Claims <code>10</code></p>
+      </section>
+
+      <section class="metrics" aria-label="Claim status counts">
+        <article>
+          <span>Verified</span>
+          <strong>10</strong>
+        </article>
+        <article>
+          <span>Unverified</span>
+          <strong>0</strong>
+        </article>
+        <article>
+          <span>Planned</span>
+          <strong>0</strong>
+        </article>
+        <article>
+          <span>Required</span>
+          <strong>5</strong>
+        </article>
+      </section>
+
+      <section class="table-wrap" aria-label="Claims">
+        <table>
+          <thead>
+            <tr>
+              <th>Claim</th>
+              <th>Text</th>
+              <th>Status</th>
+              <th>Required</th>
+              <th>Evidence</th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr><td><code>cli-entry-point</code></td><td>The package provides the agentic-kit command-line interface.</td><td>verified</td><td>yes</td><td>pyproject-entrypoint</td></tr>
+          <tr><td><code>gui-entry-point</code></td><td>The package provides the agentic-kit-gui graphical entry point.</td><td>verified</td><td>no</td><td>pyproject-entrypoint</td></tr>
+          <tr><td><code>python-requirement</code></td><td>The website Python requirement is projected from pyproject.toml.</td><td>verified</td><td>yes</td><td>pyproject-value</td></tr>
+          <tr><td><code>package-version</code></td><td>The website package version is projected from pyproject.toml.</td><td>verified</td><td>yes</td><td>pyproject-value</td></tr>
+          <tr><td><code>command-manifest-synchronization</code></td><td>The public command catalog is generated from the current command manifest and checked for synchronization.</td><td>verified</td><td>yes</td><td>command-probe</td></tr>
+          <tr><td><code>artifact-gc-dry-run</code></td><td>agentic-kit artifact-gc supports dry-run behavior.</td><td>verified</td><td>no</td><td>command-manifest</td></tr>
+          <tr><td><code>workspace-adopt-read-only</code></td><td>agentic-kit workspace adopt inspects without writing.</td><td>verified</td><td>no</td><td>command-manifest, pytest-node</td></tr>
+          <tr><td><code>workspace-init-preview-execute</code></td><td>agentic-kit workspace init previews changes before explicit execution.</td><td>verified</td><td>no</td><td>command-manifest, pytest-node, pytest-node</td></tr>
+          <tr><td><code>successor-handoff-package</code></td><td>The Kit can produce a structured successor handoff package for continuing work in another session or model.</td><td>verified</td><td>no</td><td>pytest-node</td></tr>
+          <tr><td><code>generated-command-catalog</code></td><td>The website command catalog is generated from the Kit&#x27;s current command manifest.</td><td>verified</td><td>yes</td><td>generated-artifact</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </body>
+</html>
