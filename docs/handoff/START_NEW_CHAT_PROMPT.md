@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 7972d0417433a3c7d738d359f516cdb2a2bfd54ecaa4bd618239f4041efff799
 - docs/reference/agentic-kit-commands.json: caa0813618a01b4151f3c24da5a826ed145833b3e8257a07f5ecebea93ae4c5a
-## Operational documentation refresh state after PR #2041
+## Operational documentation refresh state after PR #2046
 
-Current administrative handoff refresh state is `226ad96b` (`Clarify DPA stable closeout boundary (#2041)`). Continue next only after this post-PR2041 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `75ad6926` (`Add docs-source Pages fallback for generated site (#2046)`). Continue next only after this post-PR2046 refresh is committed and merged; the next substantive slice must be created from fresh main.
