@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 7972d0417433a3c7d738d359f516cdb2a2bfd54ecaa4bd618239f4041efff799
 - docs/reference/agentic-kit-commands.json: caa0813618a01b4151f3c24da5a826ed145833b3e8257a07f5ecebea93ae4c5a
-## Operational documentation refresh state after PR #2053
+## Operational documentation refresh state after PR #2043
 
-Current administrative handoff refresh state is `5ca924d6` (`Refresh successor package after PR2045 (#2053)`). Continue next only after this post-PR2053 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `021da11e` (`Consolidate post-0.5.0 planning surface (#2043)`). Continue next only after this post-PR2043 refresh is committed and merged; the next substantive slice must be created from fresh main.

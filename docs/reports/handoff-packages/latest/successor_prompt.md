@@ -38,9 +38,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2053-handoff-refresh`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- branch: `docs/post-pr2043-handoff-refresh`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -182,7 +182,7 @@ Wenn der Bootstrap grün ist:
       ],
       "id": "pre-gui-hardening-line",
       "status": "next",
-      "summary": "Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for v0.4.12"
+      "summary": "Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for pre-GUI"
     },
     {
       "files": [
@@ -263,7 +263,7 @@ Wenn der Bootstrap grün ist:
       ],
       "id": "pre-gui-hardening-plan",
       "status": "active",
-      "summary": "Execute the pre-GUI hardening backlog in small wrapper-first slices for v0.4.12"
+      "summary": "Execute the pre-GUI hardening backlog in small wrapper-first slices"
     },
     {
       "files": [
@@ -272,7 +272,7 @@ Wenn der Bootstrap grün ist:
       ],
       "id": "next-turn-workflow-kernel",
       "status": "active",
-      "summary": "Move recurring next-step execution from chat discipline into a deterministic local workflow kernel for v0.4.12"
+      "summary": "Move recurring next-step execution from chat discipline into a deterministic local workflow kernel"
     },
     {
       "files": [
@@ -281,7 +281,7 @@ Wenn der Bootstrap grün ist:
       ],
       "id": "release-command-authority",
       "status": "active",
-      "summary": "Keep release preparation, publishing, and DOI closeout under explicit command authority for v0.4.12"
+      "summary": "Keep release preparation, publishing, and DOI closeout under explicit command authority"
     },
     {
       "files": [
@@ -299,7 +299,7 @@ Wenn der Bootstrap grün ist:
       ],
       "id": "portability-and-ns-closeout",
       "status": "planned",
-      "summary": "Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands for v0.4.12"
+      "summary": "Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands"
     },
     {
       "files": [
@@ -308,7 +308,7 @@ Wenn der Bootstrap grün ist:
       ],
       "id": "gui-workbench-plan",
       "status": "planned",
-      "summary": "Implement the GUI gatekeeper/workbench as a view over governed action specs for v0.4.x"
+      "summary": "Implement the GUI gatekeeper/workbench as a view over governed action specs"
     },
     {
       "files": [
@@ -402,15 +402,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2053-handoff-refresh",
+    "branch": "docs/post-pr2043-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "5ca924d603ccb900b3e037ec4ee736176d5eb90f",
-    "head_matches_origin_main": true,
-    "head_short": "5ca924d6",
+    "head": "87bd227a59b3c0a33b8867216c15d2a82cf1e7c6",
+    "head_matches_origin_main": false,
+    "head_short": "87bd227a",
     "local_path": "cd /path/to/",
-    "origin_main": "5ca924d603ccb900b3e037ec4ee736176d5eb90f",
-    "origin_main_short": "5ca924d6",
-    "worktree_clean": false
+    "origin_main": "021da11e7821997a26ebe8bf3244fb77a3e81741",
+    "origin_main_short": "021da11e",
+    "worktree_clean": true
   }
 }
 ```

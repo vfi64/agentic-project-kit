@@ -48,7 +48,7 @@
         ],
         "id": "pre-gui-hardening-line",
         "status": "next",
-        "summary": "Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for v0.4.12"
+        "summary": "Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for pre-GUI"
       },
       {
         "files": [
@@ -129,7 +129,7 @@
         ],
         "id": "pre-gui-hardening-plan",
         "status": "active",
-        "summary": "Execute the pre-GUI hardening backlog in small wrapper-first slices for v0.4.12"
+        "summary": "Execute the pre-GUI hardening backlog in small wrapper-first slices"
       },
       {
         "files": [
@@ -138,7 +138,7 @@
         ],
         "id": "next-turn-workflow-kernel",
         "status": "active",
-        "summary": "Move recurring next-step execution from chat discipline into a deterministic local workflow kernel for v0.4.12"
+        "summary": "Move recurring next-step execution from chat discipline into a deterministic local workflow kernel"
       },
       {
         "files": [
@@ -147,7 +147,7 @@
         ],
         "id": "release-command-authority",
         "status": "active",
-        "summary": "Keep release preparation, publishing, and DOI closeout under explicit command authority for v0.4.12"
+        "summary": "Keep release preparation, publishing, and DOI closeout under explicit command authority"
       },
       {
         "files": [
@@ -165,7 +165,7 @@
         ],
         "id": "portability-and-ns-closeout",
         "status": "planned",
-        "summary": "Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands for v0.4.12"
+        "summary": "Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands"
       },
       {
         "files": [
@@ -174,7 +174,7 @@
         ],
         "id": "gui-workbench-plan",
         "status": "planned",
-        "summary": "Implement the GUI gatekeeper/workbench as a view over governed action specs for v0.4.x"
+        "summary": "Implement the GUI gatekeeper/workbench as a view over governed action specs"
       },
       {
         "files": [
@@ -269,14 +269,14 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2053-handoff-refresh",
+      "branch": "docs/post-pr2043-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "5ca924d603ccb900b3e037ec4ee736176d5eb90f",
-      "head_matches_origin_main": true,
+      "head": "87bd227a59b3c0a33b8867216c15d2a82cf1e7c6",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
-      "origin_main": "5ca924d603ccb900b3e037ec4ee736176d5eb90f",
-      "worktree_clean": false
+      "origin_main": "021da11e7821997a26ebe8bf3244fb77a3e81741",
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -415,14 +415,14 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2053-handoff-refresh",
+    "branch": "docs/post-pr2043-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "5ca924d603ccb900b3e037ec4ee736176d5eb90f",
-    "head_matches_origin_main": true,
+    "head": "87bd227a59b3c0a33b8867216c15d2a82cf1e7c6",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
-    "origin_main": "5ca924d603ccb900b3e037ec4ee736176d5eb90f",
-    "worktree_clean": false
+    "origin_main": "021da11e7821997a26ebe8bf3244fb77a3e81741",
+    "worktree_clean": true
   },
   "rules": [
     {
