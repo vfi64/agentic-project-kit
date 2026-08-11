@@ -70,6 +70,24 @@ def test_workspace_remove_execute_removes_exact_generated_workspace(tmp_path: Pa
     assert ".agentic/tmp/" in (tmp_path / ".gitignore").read_text(encoding="utf-8")
 
 
+def test_workspace_remove_prunes_lock_created_tmp_directory(tmp_path: Path) -> None:
+    init = runner.invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
+    assert init.exit_code == 0, init.output
+
+    (tmp_path / ".agentic/tmp").rmdir()
+
+    result = runner.invoke(
+        app,
+        ["workspace", "remove", "--root", str(tmp_path), "--execute", "--json"],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["result_status"] == "PASS"
+    assert payload["written"] is True
+    assert not (tmp_path / ".agentic").exists()
+
+
 def test_workspace_remove_blocks_modified_generated_file_without_writing(tmp_path: Path) -> None:
     init = runner.invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
     _write(tmp_path / ".agentic/state/status.md", "# customized\n")

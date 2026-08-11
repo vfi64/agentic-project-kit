@@ -244,7 +244,8 @@ def execute_workspace_remove(plan: WorkspaceRemovePlan) -> None:
                 path.unlink()
             except FileNotFoundError:
                 continue
-    for relative_path in plan.directories_to_prune:
+        directories_to_prune = current.directories_to_prune
+    for relative_path in directories_to_prune:
         path = plan.root / relative_path
         try:
             path.rmdir()
