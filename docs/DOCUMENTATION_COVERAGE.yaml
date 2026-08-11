@@ -735,6 +735,8 @@ rules:
     - DPA repo-adoption assessment
     - documentation age baseline
     - exact-ref evidence
+    - common specification directories
+    - specification_authority
     - private/public boundary
     - foreign `.agentic/` directory
     - implicit legacy profile
