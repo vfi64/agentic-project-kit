@@ -2,7 +2,7 @@
 
 ## Current State
 
-Current version: 0.5.0
+Current version: 1.0.0
 Current verified release: 0.5.0.
 Current release tag: v0.5.0.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.

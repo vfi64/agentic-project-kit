@@ -1,3 +1,47 @@
+## v1.0.0 - 2026-08-13
+
+- Zenodo DOI verification pending for v1.0.0.
+- Close out release 0.5.0 DOI metadata
+- Analyze status direction drift after 0.5.0
+- Fix post release status next step drift
+- Record command surface evidence
+- Classify command manifest surfaces
+- Document command surface compatibility contract
+- Prefer command surfaces in command-for
+- Project GUI commands from manifest surfaces
+- Accept handoff state refresh merge subjects
+- Record Block A consolidation report
+- Refine intent-oriented command surfaces
+- Harden freshness and guided diagnostics
+- Refresh Block A consolidation report
+- Add generated site foundation
+- Generate site repository content
+- Bind site claims to executable evidence
+- Add generated site Pages workflow
+- Guard Pages deploy until Actions source is enabled
+- Build generated site presentation layer
+- Record post-0.5 generated site closeout
+- Clarify DPA stable closeout boundary
+- Add docs-source Pages fallback for generated site
+- Stabilize docs-source Pages fallback projection
+- Record Brownfield DPA read-only probe
+- Record Greenfield B2 probe
+- Consolidate post-0.5.0 planning surface
+- Record external adoption and friction evidence
+- Enable external workspace health checks
+- Enable external successor handoff packages
+- Relax external workspace version drift doctor check
+- Recover PR merge wrappers after remote merge
+- Verify Comm-SCI external workspace mode
+- Document C4 refresh chain decision
+- Improve generated site onboarding entry
+- Exclude generated Pages fallback from packages
+- Document post-0.5.0 phase closeout
+- Close v1 schema readiness
+- Record v1 schema readiness PR
+- Update project direction meta after PR2082
+- Classify release 1.0 notes
+
 ## v0.5.0 - 2026-08-08
 
 - Close out v0.4.13 DOI metadata
