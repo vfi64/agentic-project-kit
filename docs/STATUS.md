@@ -7,10 +7,10 @@ Current verified release: 0.5.0.
 Current release tag: v0.5.0.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21850952`.
-Current verified main: `36f87bae` (`Exclude generated Pages fallback from packages (#2075)`).
-Latest substantive work: PR #2075 (`Exclude generated Pages fallback from packages (#2075)`).
+Current verified main: `4cd8595d` (`Document post-0.5.0 phase closeout (#2077)`).
+Latest substantive work: PR #2077 (`Document post-0.5.0 phase closeout (#2077)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2075 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2077 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -416,6 +416,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2075
+## Operational documentation refresh state after PR #2077
 
-Current administrative handoff refresh state is `36f87bae` (`Exclude generated Pages fallback from packages (#2075)`). Continue next only after this post-PR2075 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `4cd8595d` (`Document post-0.5.0 phase closeout (#2077)`). Continue next only after this post-PR2077 refresh is committed and merged; the next substantive slice must be created from fresh main.
