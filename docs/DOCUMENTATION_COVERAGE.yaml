@@ -526,6 +526,7 @@ rules:
     - docs/index.html
     - docs/site/
     - legacy `main` `/docs`
+    - excluded from Python sdist and wheel artifacts
   - path: docs/TEST_GATES.md
     terms:
     - Website Generation Gate
@@ -552,6 +553,7 @@ rules:
     - legacy GitHub Pages source `main` `/docs`
     - idempotent across post-merge handoff/status refreshes
     - volatile current-state details
+    - excluded from Python sdist and wheel artifacts
   - path: site/README.md
     terms:
     - Generated Website
@@ -606,6 +608,7 @@ rules:
     - Legacy GitHub Pages source `/docs`
     - idempotent across post-merge handoff/status refreshes
     - volatile current-state details
+    - excluded from Python sdist and wheel artifacts
   - path: docs/TEST_GATES.md
     terms:
     - Claim-evidence rendering
@@ -645,6 +648,7 @@ rules:
     - generated publication projection
     - idempotent across post-merge handoff/status refreshes
     - volatile current-state details
+    - excluded from Python sdist and wheel artifacts
 - id: kit-os-architecture-coverage
   description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, legacy-profile deprecation, P5c physical migration planning, and evidence policy.
   documents:

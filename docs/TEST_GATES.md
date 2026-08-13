@@ -297,6 +297,9 @@ The fallback must be idempotent across post-merge handoff/status refreshes:
 volatile current-state details must render as pointers to `docs/STATUS.md` and
 `docs/handoff/CURRENT_HANDOFF.md`, not copied SHA or PR lines that would dirty
 the committed Pages projection after every administrative refresh.
+The generated publication projection files `docs/index.html`, `docs/.nojekyll`
+and `docs/site/` must remain excluded from Python sdist and wheel artifacts
+together with the canonical `site/` generator tree.
 
 Presentation Layer website changes must keep technical facts generated rather
 than copied into prose. Homepage content may explain Repository Memory, Runtime Structure,
