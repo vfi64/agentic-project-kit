@@ -13,6 +13,7 @@ from agentic_project_kit.workspace import (
     KitConfig,
     SUPPORTED_MANIFEST_SCHEMA_VERSION,
     WORKSPACE_MANIFEST_FIX_HINT,
+    default_hygiene_manifest,
     load_workspace,
 )
 from agentic_project_kit.workspace_lock import acquire_workspace_lock
@@ -113,8 +114,7 @@ def build_workspace_upgrade_plan(
             f"manifest schema v{current_version} is newer than this kit; upgrade the kit",
             code="NEWER_SCHEMA",
         )
-    if current_version == SUPPORTED_MANIFEST_SCHEMA_VERSION:
-        _validate_current_manifest(root_path)
+    _validate_current_manifest(root_path)
     steps, final_manifest = _build_step_previews(
         manifest,
         current_version=current_version,
@@ -252,6 +252,24 @@ def _build_step_previews(
     return tuple(steps), working
 
 
+def _upgrade_v1_to_v2(manifest: Manifest) -> Manifest:
+    migrated = copy.deepcopy(manifest)
+    migrated["kit_schema_version"] = 2
+    default_hygiene = default_hygiene_manifest()
+    hygiene = migrated.get("hygiene")
+    if hygiene is None:
+        migrated["hygiene"] = default_hygiene
+    elif isinstance(hygiene, dict):
+        merged_hygiene = copy.deepcopy(hygiene)
+        merged_hygiene.setdefault("doc_lifecycle", default_hygiene["doc_lifecycle"])
+        merged_hygiene.setdefault("review_budgets", default_hygiene["review_budgets"])
+        migrated["hygiene"] = merged_hygiene
+    return migrated
+
+
+WORKSPACE_UPGRADE_STEPS = {1: _upgrade_v1_to_v2}
+
+
 def _read_manifest_text(manifest_path: Path) -> str:
     try:
         return manifest_path.read_text(encoding="utf-8")
@@ -287,7 +305,7 @@ def _load_manifest_yaml(text: str) -> Manifest:
 
 def _manifest_schema_version(manifest: Manifest) -> int:
     version = manifest.get("kit_schema_version")
-    if type(version) is not int or version < 0:
+    if type(version) is not int or version < 1:
         raise WorkspaceUpgradeError(
             f"invalid kit_schema_version; {WORKSPACE_MANIFEST_FIX_HINT}",
             code="INVALID_SCHEMA",

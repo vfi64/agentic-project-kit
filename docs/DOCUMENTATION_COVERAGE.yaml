@@ -778,6 +778,7 @@ rules:
     - dry-run by default
     - --execute
     - exact Kit-generated `.agentic/` workspace files
+    - generated successor handoff package files
     - managed injected
     - unknown or modified `.agentic/` paths block execution
     - project docs/source files are preserved
@@ -827,10 +828,37 @@ rules:
     - dry-run by default
     - deterministic manifest schema migrations step by step
     - manifest diff
-    - already at schema v1
+    - already at schema v2
+    - v1 manifests to v2
+    - hygiene
     - .agentic/config.yaml.bak.v<N>
     - workspace init
     - upgrade the kit
+- id: brownfield-external-repo-guide-coverage
+  description: External brownfield onboarding must remain visible as a short user-facing path with clear SKIP, venv, rollback, and conformance limits.
+  documents:
+  - path: README.md
+    terms:
+    - docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md
+  - path: docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md
+    terms:
+    - Govern an Existing Repository in 15 Minutes
+    - agentic-kit workspace dpa-intake --root PATH
+    - agentic-kit workspace adopt --root PATH
+    - agentic-kit workspace init --root PATH --execute
+    - agentic-kit check-docs --root PATH
+    - agentic-kit check --root PATH
+    - agentic-kit doctor --root PATH
+    - PASS
+    - FAIL
+    - WARN
+    - SKIP
+    - target project's own tests
+    - agentic-kit transfer chat-switch-complete --render-prompt
+    - agentic-kit workspace remove --root PATH --execute
+    - Generated successor handoff package files
+    - agentic-kit workspace upgrade --root PATH
+    - external_repo_conformance_claimed=false
 - id: pattern-advisor-readme-coverage
   description: Read-only Pattern Advisor MVP commands and boundaries must remain visible.
   documents:

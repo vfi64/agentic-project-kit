@@ -63,6 +63,7 @@ def test_kit_repo_manifest_yields_legacy_paths() -> None:
     assert ws.project_name == "agentic-project-kit"
     assert ws.project_type == "python"
     assert ws.profile == "python-default"
+    assert ws.manifest_schema_version == 1
     assert ws.hygiene_doc_lifecycle == "warn"
     assert dict(ws.hygiene_review_budgets) == dict(DEFAULT_REVIEW_BUDGETS)
     assert _rel(ws.status_path().relative_to(ROOT)) == "docs/STATUS.md"
@@ -164,6 +165,7 @@ def test_manifest_workspace_does_not_emit_legacy_profile_deprecation_warning(
         ws = load_workspace(tmp_path)
 
     assert ws.profile == "generic"
+    assert ws.manifest_schema_version == 1
     assert not [
         warning
         for warning in caught
@@ -237,6 +239,7 @@ def test_manifest_defaults_resolve_into_namespace(tmp_path: Path) -> None:
 
     ws = load_workspace(tmp_path)
 
+    assert ws.manifest_schema_version == 1
     assert ws.hygiene_doc_lifecycle == "warn"
     assert dict(ws.hygiene_review_budgets) == dict(DEFAULT_REVIEW_BUDGETS)
     assert _rel(ws.docs_root().relative_to(tmp_path)) == "docs"
@@ -301,6 +304,45 @@ def test_manifest_defaults_resolve_into_namespace(tmp_path: Path) -> None:
         _rel(ws.package_file("validation_report.json").relative_to(tmp_path))
         == ".agentic/state/handoff/packages/latest/validation_report.json"
     )
+
+
+def test_schema_v2_manifest_requires_explicit_hygiene(tmp_path: Path) -> None:
+    _write_manifest(tmp_path, "kit_schema_version: 2\nprofile: generic\n")
+
+    with pytest.raises(
+        RuntimeError,
+        match=re.escape(
+            ".agentic/config.yaml:hygiene: required for kit_schema_version >= 2; "
+            "run `agentic-kit workspace upgrade`, or fix the manifest"
+        ),
+    ):
+        load_workspace(tmp_path)
+
+
+def test_schema_v2_manifest_accepts_explicit_hygiene(tmp_path: Path) -> None:
+    _write_manifest(
+        tmp_path,
+        """
+kit_schema_version: 2
+profile: generic
+hygiene:
+  doc_lifecycle: warn
+  review_budgets:
+    governance: 180
+    reference: 365
+    workflow: 270
+""",
+    )
+
+    ws = load_workspace(tmp_path)
+
+    assert ws.manifest_schema_version == 2
+    assert ws.hygiene_doc_lifecycle == "warn"
+    assert dict(ws.hygiene_review_budgets) == {
+        "governance": 180,
+        "reference": 365,
+        "workflow": 270,
+    }
 
 
 def test_explicit_override_beats_namespace_default(tmp_path: Path) -> None:
@@ -444,11 +486,11 @@ def test_manifest_missing_schema_version_fails_naming_upgrade(tmp_path: Path) ->
 
 
 def test_manifest_newer_schema_fails_naming_kit_upgrade(tmp_path: Path) -> None:
-    _write_manifest(tmp_path, "kit_schema_version: 2\n")
+    _write_manifest(tmp_path, "kit_schema_version: 3\n")
 
     with pytest.raises(
         RuntimeError,
-        match=re.escape(".agentic/config.yaml:kit_schema_version: manifest schema v2 is newer than this kit; upgrade the kit"),
+        match=re.escape(".agentic/config.yaml:kit_schema_version: manifest schema v3 is newer than this kit; upgrade the kit"),
     ):
         load_workspace(tmp_path)
 

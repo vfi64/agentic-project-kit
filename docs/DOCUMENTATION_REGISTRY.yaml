@@ -567,6 +567,10 @@ documents:
     class: user-facing description
     owner: maintainers
     notes: Public entry point and command visibility anchor.
+  - path: docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md
+    class: user-facing description
+    owner: maintainers
+    notes: Short brownfield onboarding path for adopting existing external repositories.
   - path: CHANGELOG.md
     class: release
     owner: maintainers
