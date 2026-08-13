@@ -144,7 +144,7 @@ def _resolve_pr_head_sha(pr_number: int, *, action: str) -> tuple[str, RepoActio
 
 
 def _pr_state_lookup(pr_number: int, *, action: str) -> tuple[dict, RepoActionResult | None]:
-    command = ["gh", "pr", "view", str(pr_number), "--json", "number,state,merged,headRefOid,url,title"]
+    command = ["gh", "pr", "view", str(pr_number), "--json", "number,state,mergedAt,mergeCommit,headRefOid,url,title"]
     completed = _run(command)
     if completed.returncode != 0:
         return {}, _result(action, command, completed, "STATE=BLOCKED; NEXT=diagnose_pr_state_lookup")
@@ -168,12 +168,13 @@ def _already_merged_pr_result(pr_number: int, *, action: str, command: list[str]
     data, failure = _pr_state_lookup(pr_number, action=action)
     if failure is not None:
         return None
-    if data.get("merged") is True or str(data.get("state") or "").upper() == "MERGED":
+    if data.get("mergedAt") or str(data.get("state") or "").upper() == "MERGED":
         out = (
             "IDEMPOTENT_PR_RECOVERY\n"
             f"STATE=ALREADY_MERGED\n"
             f"PR={pr_number}\n"
             f"URL={data.get('url', '')}\n"
+            f"MERGED_AT={data.get('mergedAt', '')}\n"
             "RESULT=PASS\n"
         )
         completed = subprocess.CompletedProcess(command, 0, out, "")
@@ -1465,6 +1466,10 @@ def _pr_merge_safe_unlocked(
     if no_verify_main:
         command.append("--no-verify-main")
     completed = _run(command)
+    if completed.returncode != 0:
+        already_merged = _already_merged_pr_result(pr_number, action="pr-merge-safe", command=command)
+        if already_merged is not None:
+            return already_merged
     return _result("pr-merge-safe", command, completed, "Sync main and run post-merge handoff refresh status.")
 
 
