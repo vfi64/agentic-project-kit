@@ -6,14 +6,14 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 1860
+  updated_after_pr: 2078
   updated_after_pr_semantics: strategic_direction_refresh
   updated_after_pr_current_main_claimed: false
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1860
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/2078
 strategy:
 - id: governed-operating-model
   status: active
@@ -285,10 +285,11 @@ roadmap:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: v1-0-milestone
   phase: unphased
-  status: planned
+  status: next
   title: Reach the 1.0 operating-layer stability milestone
   depends_on:
   - p6-gui-project-selection-and-ci-recipe
+  - v1-0-schema-readiness
   acceptance:
   - The self-hosting litmus has passed.
   - workspace adopt/init is stable on at least one real external project.
@@ -302,8 +303,78 @@ roadmap:
   - docs/reports/POST_0_5_0_B3_V1_ADJUDICATION_20260811.md
   - External workspace health mode implementation slices for check, check-docs,
     doctor, and successor handoff package generation.
+  - docs/reports/POST_0_5_0_V1_SCHEMA_AND_NEUTRAL_EXTERNAL_VALIDATION_20260813.md
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+- id: post-0-5-0-phases-a-b-c
+  phase: unphased
+  status: done
+  title: Close post-0.5.0 phases A, B, and C with external validation evidence
+  completed_by_pr: 2078
+  merge_commit: 3539e52c
+  depends_on:
+  - p6-gui-project-selection-and-ci-recipe
+  acceptance:
+  - Phase A planning, version, quickstart, site, and packaging consolidation is
+    closed without claiming 1.0.
+  - Phase B greenfield and bounded brownfield adoption evidence is recorded.
+  - Phase C verifies Comm-SCI as a real external manifest workspace through adopt,
+    init, health checks, successor handoff, remove, and re-init.
+  - The final administrative handoff refresh after PR 2077 settles to NOOP on
+    main 3539e52c.
+  evidence:
+  - docs/reports/POST_0_5_0_PHASES_A_B_C_CLOSEOUT_20260813.md
+  - docs/reports/POST_0_5_0_C3V_COMM_SCI_EXTERNAL_VERIFICATION_20260813.md
+  - docs/reports/terminal/post-pr2077-successor-chat-handoff.md
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+- id: v1-0-schema-readiness
+  phase: unphased
+  status: done
+  title: Close schema-version 1.0 acceptance criteria
+  completed_by_pr: pending-pr-v1-schema-readiness
+  depends_on:
+  - post-0-5-0-phases-a-b-c
+  acceptance:
+  - Workspace loader tests cover too-old and too-new kit_schema_version failure
+    paths.
+  - Schema v2 has a real manifest change, not only a version-number bump.
+  - workspace upgrade dry-run and execute paths migrate v1 manifests to v2 with a
+    backup and validated final manifest.
+  - User-facing docs describe the v1 to v2 hygiene-materialization migration.
+  evidence:
+  - tests/test_workspace_foundation.py
+  - tests/test_workspace_upgrade.py
+  - docs/reports/POST_0_5_0_V1_SCHEMA_AND_NEUTRAL_EXTERNAL_VALIDATION_20260813.md
+  - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  - README.md
+  source_files:
+  - src/agentic_project_kit/workspace.py
+  - src/agentic_project_kit/workspace_upgrade.py
+  - docs/planning/PROJECT_DIRECTION.yaml
+- id: neutral-external-repo-evidence
+  phase: unphased
+  status: done
+  title: Broaden external repository evidence beyond Comm-SCI
+  completed_by_pr: pending-pr-v1-schema-readiness
+  depends_on:
+  - v1-0-schema-readiness
+  acceptance:
+  - A neutral public or controlled repository with no Comm-SCI lineage is adopted
+    locally without source mutation.
+  - The target runs workspace init, check-docs, check, doctor, successor handoff,
+    workspace remove, and re-init with bounded evidence.
+  - Any target-owned test failures remain classified as project-owned rather than
+    Kit conformance failures.
+  - Remote adoption PR is completed in a controlled fork; target CI absence is
+    recorded without claiming CI validation.
+  evidence:
+  - docs/reports/POST_0_5_0_V1_SCHEMA_AND_NEUTRAL_EXTERNAL_VALIDATION_20260813.md
+  - https://github.com/vfi64/sampleproject/pull/1
+  source_files:
+  - docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md
+  - docs/planning/PROJECT_DIRECTION.yaml
 - id: dpa-repo-adoption-assessment
   phase: unphased
   status: done

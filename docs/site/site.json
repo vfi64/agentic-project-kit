@@ -10544,15 +10544,15 @@
   "roadmap_projection": {
     "roadmap_counts": {
       "blocked": 1,
-      "done": 10,
-      "next": 1,
-      "planned": 6
+      "done": 13,
+      "next": 2,
+      "planned": 5
     },
     "status": "active",
     "strategy_counts": {
       "active": 5
     },
-    "updated_after_pr": "1860",
+    "updated_after_pr": "2078",
     "updated_after_pr_current_main_claimed": false,
     "updated_after_pr_semantics": "strategic_direction_refresh"
   },

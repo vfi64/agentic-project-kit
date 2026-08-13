@@ -11,7 +11,7 @@ import warnings
 import yaml
 
 
-SUPPORTED_MANIFEST_SCHEMA_VERSION = 1
+SUPPORTED_MANIFEST_SCHEMA_VERSION = 2
 WORKSPACE_MANIFEST_FIX_HINT = "run `agentic-kit workspace upgrade`, or fix the manifest"
 LEGACY_PROFILE_WARNING_ENV = "AGENTIC_KIT_SUPPRESS_LEGACY_PROFILE_WARNING"
 LEGACY_PROFILE_DEPRECATION_MESSAGE = (
@@ -179,6 +179,7 @@ class Workspace:
     hygiene_review_budgets: Mapping[str, int] = field(default_factory=default_review_budgets)
     gates_extra: tuple[str, ...] = ()
     gates_skip: tuple[str, ...] = ()
+    manifest_schema_version: int = 0
 
     def _path(self, relative: str | Path) -> Path:
         return self.root / Path(relative)
@@ -392,7 +393,7 @@ def load_workspace(
     *,
     suppress_legacy_profile_warning: bool | None = None,
 ) -> Workspace:
-    """Load the workspace using the implicit legacy profile or a schema-v1 manifest."""
+    """Load the workspace using the implicit legacy profile or a supported manifest."""
 
     config = LEGACY_DEFAULTS
     root = Path(root)
@@ -423,12 +424,16 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
     location = _manifest_location(config.workspace_manifest_file)
     manifest = _read_manifest(manifest_path, location)
     _validate_top_level(manifest, location)
-    _validate_schema_version(manifest, location)
+    schema_version = _validate_schema_version(manifest, location)
     project_name, project_type = _parse_project(manifest.get("project"), location)
     profile = _parse_profile(manifest.get("profile", "python-default"), location)
     modules = _parse_modules(manifest.get("modules"), location)
     transfer_visibility = _parse_transfer_visibility(manifest.get("transfer"), location)
-    hygiene_doc_lifecycle, hygiene_review_budgets = _parse_hygiene(manifest.get("hygiene"), location)
+    hygiene_doc_lifecycle, hygiene_review_budgets = _parse_hygiene(
+        manifest.get("hygiene"),
+        location,
+        schema_version=schema_version,
+    )
     config = _apply_path_overrides(config, manifest.get("paths"), location)
     gates_extra, gates_skip = _parse_gates(manifest.get("gates"), location)
     return Workspace(
@@ -443,6 +448,7 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
         hygiene_review_budgets=hygiene_review_budgets,
         gates_extra=gates_extra,
         gates_skip=gates_skip,
+        manifest_schema_version=schema_version,
     )
 
 
@@ -466,7 +472,7 @@ def _validate_top_level(manifest: dict[str, Any], location: str) -> None:
             )
 
 
-def _validate_schema_version(manifest: dict[str, Any], location: str) -> None:
+def _validate_schema_version(manifest: dict[str, Any], location: str) -> int:
     version = manifest.get("kit_schema_version")
     if type(version) is not int or version < 1:
         raise RuntimeError(
@@ -478,6 +484,7 @@ def _validate_schema_version(manifest: dict[str, Any], location: str) -> None:
             f"{location}:kit_schema_version: manifest schema v{version} "
             "is newer than this kit; upgrade the kit"
         )
+    return version
 
 
 def _parse_project(project: object, location: str) -> tuple[str, str]:
@@ -551,8 +558,20 @@ def _parse_transfer_visibility(transfer: object, location: str) -> str:
     return visibility
 
 
-def _parse_hygiene(hygiene: object, location: str) -> tuple[str, Mapping[str, int]]:
+def _parse_hygiene(
+    hygiene: object,
+    location: str,
+    *,
+    schema_version: int,
+) -> tuple[str, Mapping[str, int]]:
     if hygiene is None:
+        if schema_version >= 2:
+            raise RuntimeError(
+                _manifest_error(
+                    f"{location}:hygiene",
+                    f"required for kit_schema_version >= 2; {WORKSPACE_MANIFEST_FIX_HINT}",
+                )
+            )
         return DEFAULT_DOC_LIFECYCLE_MODE, default_review_budgets()
     if not isinstance(hygiene, dict):
         raise RuntimeError(_manifest_error(f"{location}:hygiene", "expected mapping"))

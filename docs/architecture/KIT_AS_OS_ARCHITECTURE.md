@@ -335,10 +335,12 @@ while manifest-bearing repositories remain quiet.
 ## 9. Versioning
 
 0.5.x introduces resolver, manifest, `workspace adopt/init` — all
-backward-compatible via the implicit legacy profile. **1.0.0 criteria:**
-(a) self-hosting litmus passed, (b) `workspace adopt/init` stable on at least
-one real external project (candidate: Comm-SCI-Control-private), (c) tested
-too-old/too-new `kit_schema_version` failure paths, (d) a tested
+backward-compatible via the implicit legacy profile. Schema v2 materializes the
+manifest `hygiene` block that v1 treated as an implicit default, and
+`workspace upgrade` provides the tested v1 to v2 transformation. **1.0.0
+criteria:** (a) self-hosting litmus passed, (b) `workspace adopt/init` stable on
+at least one real external project (candidate: Comm-SCI-Control-private), (c)
+tested too-old/too-new `kit_schema_version` failure paths, (d) a tested
 `workspace upgrade` transformation exists before (or with) the first schema
 bump. **2.0.0:** implicit legacy profile removed; manifest required.
 
@@ -355,8 +357,9 @@ and lock acquisition covered by tests (busy path, stale takeover).
 message names `workspace upgrade`, profiles `python-default` and `generic`.
 
 **P3 — `workspace adopt`, `workspace init`, `workspace upgrade` skeleton.**
-Read-only analysis first, creation second, upgrade mechanism designed (first
-real transformation ships with the first schema bump). CI templates under
+Read-only analysis first, creation second, upgrade mechanism designed. The
+first real transformation is the schema v1 to v2 hygiene-materialization bump.
+CI templates under
 `.agentic/ci/`; `--inject-ci` as the documented opt-in exception.
 
 **P4 — Namespace completion for manifest-bearing projects.** Registries,

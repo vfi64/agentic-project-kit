@@ -228,6 +228,7 @@ def test_init_workspace_roundtrip_with_namespace_resolvers(tmp_path: Path) -> No
 
     assert result.exit_code == 0, result.output
     workspace = load_workspace(tmp_path)
+    assert workspace.manifest_schema_version == 2
     existing_paths = (
         workspace.tmp(),
         workspace.agentic_tmp(),

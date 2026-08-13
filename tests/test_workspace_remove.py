@@ -70,6 +70,59 @@ def test_workspace_remove_execute_removes_exact_generated_workspace(tmp_path: Pa
     assert ".agentic/tmp/" in (tmp_path / ".gitignore").read_text(encoding="utf-8")
 
 
+def test_workspace_remove_removes_generated_successor_handoff_files(tmp_path: Path) -> None:
+    init = runner.invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
+    assert init.exit_code == 0, init.output
+    _write(
+        tmp_path / ".agentic" / "INITIAL_LLM_PROMPT.md",
+        "# Initial LLM Prompt\n\nCommand manifest entrypoint:\n- refreshed\n",
+    )
+    _write(
+        tmp_path / ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md",
+        "---\nartifact_type: chat_switch_prompt\nrole: start_new_chat\n---\n",
+    )
+    _write(
+        tmp_path / ".agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+        "---\nartifact_type: chat_switch_prompt\nrole: closeout_before_chat_switch\n---\n",
+    )
+    _write(
+        tmp_path / ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "# NEXT CHAT BOOTSTRAP\n\nsuccessor_context.yaml\n",
+    )
+    package_root = tmp_path / ".agentic/state/handoff/packages/latest"
+    _write(
+        package_root / "successor_context.yaml",
+        '{"kind": "successor_chat_context", "generated_by": "agentic-kit"}\n',
+    )
+    _write(
+        package_root / "source_manifest.json",
+        '{"kind": "successor_source_manifest", "sources": []}\n',
+    )
+    _write(
+        package_root / "validation_report.json",
+        '{"kind": "successor_handoff_validation_report", "status": "PASS"}\n',
+    )
+    _write(
+        package_root / "execution_contract.json",
+        '{"command_reference": {}, "bootstrap_acceptance_gate": {}}\n',
+    )
+    _write(
+        package_root / "successor_prompt.md",
+        "## Machine-readable execution contract\n\n# Successor Chat Prompt\n",
+    )
+
+    result = runner.invoke(
+        app,
+        ["workspace", "remove", "--root", str(tmp_path), "--execute", "--json"],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["result_status"] == "PASS"
+    assert payload["written"] is True
+    assert not (tmp_path / ".agentic").exists()
+
+
 def test_workspace_remove_prunes_lock_created_tmp_directory(tmp_path: Path) -> None:
     init = runner.invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
     assert init.exit_code == 0, init.output

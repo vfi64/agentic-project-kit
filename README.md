@@ -118,7 +118,7 @@ agentic-kit init my-docs-project \
 
 `agentic-kit doctor` validates the project contract when `.agentic/project.yaml` is present and reports selected profiles and policy packs.
 
-After `agentic-kit workspace init --root PATH --execute`, repositories with `.agentic/config.yaml` use external workspace health mode: `agentic-kit check-docs`, `agentic-kit check`, and `agentic-kit doctor` validate `.agentic/state/` and `.agentic/registries/` without the self-hosting Kit documentation set. `doctor` reports not-applicable Kit checks as `SKIP`, including Kit-specific version drift as project-owned release governance rather than failure over `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, or `CHANGELOG.md`.
+After `agentic-kit workspace init --root PATH --execute`, `.agentic/config.yaml` enables external workspace health mode without the self-hosting Kit documentation set. `check`/`check-docs` inspect `.agentic/state/` and `.agentic/registries/`; only `doctor` renders statuses and marks not-applicable Kit checks as `SKIP`. Kit-specific version drift is project-owned release governance.
 
 ## Policy-pack doctor checks
 
@@ -209,16 +209,19 @@ adjudication, not automatically conformant.
 
 `agentic-kit workspace upgrade --root PATH` is also a dry-run by default. It
 plans deterministic manifest schema migrations step by step, prints the
-manifest diff, reports when a workspace is already at schema v1, and with
+manifest diff, reports when a workspace is already at schema v2, and with
 `--execute` writes `.agentic/config.yaml.bak.v<N>` before each migration step.
-It tells manifest-less repositories to run `workspace init` and tells
-newer-schema repositories to upgrade the kit instead of guessing.
+The first real schema migration upgrades v1 manifests to v2 by materializing
+`hygiene`. Manifest-less repositories should run `workspace init`;
+newer-schema repositories should upgrade the kit.
+
+Brownfield path: `docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md`.
 
 `agentic-kit workspace remove --root PATH` is the bounded rollback path for an
 unmodified Kit operating layer. It is dry-run by default. With `--execute` it
 removes only exact Kit-generated `.agentic/` workspace files and managed injected
-CI/pre-commit files; unknown or modified `.agentic/` paths block execution, and
-project docs/source files are preserved.
+CI/pre-commit files; generated successor handoff package files are recognized.
+Rule: unknown or modified `.agentic/` paths block execution; project docs/source files are preserved.
 
 Manifest-less repositories still use the implicit legacy profile for the 1.x
 line, but that fallback is deprecated. The resolver emits a suppressible

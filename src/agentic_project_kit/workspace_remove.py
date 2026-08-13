@@ -22,6 +22,9 @@ from agentic_project_kit.workspace_lock import acquire_workspace_lock
 WorkspaceRemoveStatus = Literal["PASS", "BLOCKED", "NOOP"]
 
 VOLATILE_RUNTIME_FILES = frozenset({".agentic/tmp/workspace.lock"})
+GENERATED_RUNTIME_FILE_MARKERS = {
+    ".agentic/INITIAL_LLM_PROMPT.md": ("# Initial LLM Prompt", "Command manifest entrypoint:"),
+}
 
 
 @dataclass(frozen=True)
@@ -142,13 +145,14 @@ def build_workspace_remove_plan(
         for path, content in expected_files.items()
         if path.startswith(".agentic/")
     }
-    known_files = set(expected_files) | set(VOLATILE_RUNTIME_FILES)
+    generated_runtime_files = _generated_runtime_file_markers(workspace)
+    known_files = set(expected_files) | set(VOLATILE_RUNTIME_FILES) | set(generated_runtime_files)
     known_directories = {
         path.rstrip("/")
         for path in WORKSPACE_INIT_TREE
         if path.rstrip("/").startswith(".agentic") and path.endswith("/")
     }
-    for relative_path in expected_files:
+    for relative_path in set(expected_files) | set(generated_runtime_files):
         for parent in Path(relative_path).parents:
             parent_text = parent.as_posix()
             if parent_text == ".":
@@ -173,6 +177,12 @@ def build_workspace_remove_plan(
             blockers.append(WorkspaceRemoveFinding(relative_path, f"read_failed: {exc}"))
             continue
         if current_text == expected_text:
+            files_to_remove.append(relative_path)
+        elif _matches_generated_runtime_markers(
+            relative_path,
+            current_text,
+            generated_runtime_files,
+        ):
             files_to_remove.append(relative_path)
         else:
             blockers.append(WorkspaceRemoveFinding(relative_path, "modified_generated_file"))
@@ -199,7 +209,21 @@ def build_workspace_remove_plan(
     if agentic_path.exists():
         for path in sorted(agentic_path.rglob("*")):
             relative_path = path.relative_to(root_path).as_posix()
-            if path.is_file() and relative_path not in known_files:
+            if path.is_file() and relative_path in generated_runtime_files:
+                try:
+                    current_text = path.read_text(encoding="utf-8")
+                except OSError as exc:
+                    blockers.append(WorkspaceRemoveFinding(relative_path, f"read_failed: {exc}"))
+                    continue
+                if _matches_generated_runtime_markers(
+                    relative_path,
+                    current_text,
+                    generated_runtime_files,
+                ):
+                    files_to_remove.append(relative_path)
+                elif relative_path not in expected_files:
+                    blockers.append(WorkspaceRemoveFinding(relative_path, "invalid_generated_runtime_file"))
+            elif path.is_file() and relative_path not in known_files:
                 blockers.append(WorkspaceRemoveFinding(relative_path, "unknown_agentic_file"))
             elif path.is_dir() and relative_path not in known_directories:
                 blockers.append(WorkspaceRemoveFinding(relative_path, "unknown_agentic_directory"))
@@ -302,3 +326,56 @@ def _managed_injection_targets(expected_files: dict[str, str]) -> dict[str, str]
             MANAGED_PRE_COMMIT_HEADER + "\n" + expected_files[PRE_COMMIT_TEMPLATE_PATH]
         ),
     }
+
+
+def _generated_runtime_file_markers(workspace) -> dict[str, tuple[str, ...]]:
+    def path_text(path: Path) -> str:
+        return workspace.path_text(path)
+
+    markers = dict(GENERATED_RUNTIME_FILE_MARKERS)
+    markers.update(
+        {
+            path_text(workspace.handoff_file("START_NEW_CHAT_PROMPT.md")): (
+                "artifact_type: chat_switch_prompt",
+                "role: start_new_chat",
+            ),
+            path_text(workspace.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")): (
+                "artifact_type: chat_switch_prompt",
+                "role: closeout_before_chat_switch",
+            ),
+            path_text(workspace.handoff_file("NEXT_CHAT_BOOTSTRAP.md")): (
+                "# NEXT CHAT BOOTSTRAP",
+                "successor_context.yaml",
+            ),
+            path_text(workspace.package_file("successor_context.yaml")): (
+                "successor_chat_context",
+                "generated_by",
+            ),
+            path_text(workspace.package_file("source_manifest.json")): (
+                "successor_source_manifest",
+                '"sources"',
+            ),
+            path_text(workspace.package_file("validation_report.json")): (
+                "successor_handoff_validation_report",
+                '"status"',
+            ),
+            path_text(workspace.package_file("execution_contract.json")): (
+                '"command_reference"',
+                '"bootstrap_acceptance_gate"',
+            ),
+            path_text(workspace.package_file("successor_prompt.md")): (
+                "Machine-readable execution contract",
+                "# Successor Chat Prompt",
+            ),
+        }
+    )
+    return markers
+
+
+def _matches_generated_runtime_markers(
+    relative_path: str,
+    text: str,
+    generated_runtime_files: dict[str, tuple[str, ...]],
+) -> bool:
+    markers = generated_runtime_files.get(relative_path)
+    return bool(markers) and all(marker in text for marker in markers)
