@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-08-11T16:25:34.834008+00:00",
+    "created_at_utc": "2026-08-13T18:44:50.305270+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -106,7 +106,7 @@
           "qualified_name": "agentic-kit transfer continue"
         },
         {
-          "help": "",
+          "help": "Run the next repo-backed transfer order for local or remote work handoff.",
           "options": [
             "--json"
           ],
@@ -150,7 +150,7 @@
           "qualified_name": "agentic-kit transfer sync-main"
         },
         {
-          "help": "",
+          "help": "Prepare a remote work branch with freshness, status, and transfer safety checks.",
           "options": [
             "--json",
             "--main-branch"
@@ -169,7 +169,7 @@
           "qualified_name": "agentic-kit transfer protected-diff-plan"
         },
         {
-          "help": "",
+          "help": "Create, validate, merge, and optionally close out a PR without manual PR/SHA copying.",
           "options": [
             "--base",
             "--body",
@@ -193,7 +193,7 @@
           "qualified_name": "agentic-kit transfer pr-create-complete --post-merge-complete"
         },
         {
-          "help": "",
+          "help": "Wait for CI, safely merge an existing PR, and synchronize main.",
           "options": [
             "--expected-head-sha",
             "--interval-seconds",
@@ -225,7 +225,7 @@
           "qualified_name": "agentic-kit transfer post-merge-settle"
         },
         {
-          "help": "",
+          "help": "Run the post-merge handoff refresh lifecycle after a merged PR.",
           "options": [
             "--after-pr",
             "--ci-poll-seconds",
@@ -306,11 +306,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-08-11T16:25:35.153202+00:00",
+    "generated_at_utc": "2026-08-13T18:44:50.614341+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "docs/post-pr2043-handoff-refresh",
-      "head": "765a47d0b7170fcc4a13b4fd476162ac65ab704a",
+      "branch": "codex/v1-schema-readiness",
+      "head": "f7effe713110e6a17d8da4bfdfa2d25ca6e44826",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -370,8 +370,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "44d6cbcff3b727dea59ae5cfeaa491fce8851e9025949cf44d6e9ddebf60c8f7",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "7972d0417433a3c7d738d359f516cdb2a2bfd54ecaa4bd618239f4041efff799",
-      "docs/reference/agentic-kit-commands.json": "caa0813618a01b4151f3c24da5a826ed145833b3e8257a07f5ecebea93ae4c5a"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "0200ba8c7dc99792004a14dd522129f50eba4abcac4f411b38ad856db905a23c",
+      "docs/reference/agentic-kit-commands.json": "f1af5c2d038a7bf6ad6c55ede61bec1b7a8347173ffa46f3f599ac96127aada7"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -411,11 +411,11 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "adc0c9792173eeadc07d01c5895080c5c2f03352296840062d472c8fe226dfa3"
+        "sha256": "df9f65aa806d3d2dc34416563e24b782a22bafeb4108ac1706170c3948efceda"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "14f0fa7315352c3c4fcfd0fa44ebc1ed2887c9096fa454b9bb06156395c51c19"
+        "sha256": "7fb6867ddc2260274ffd01febcdd087a12bc1588b32f110b389ea97592051bcf"
       }
     ],
     "canonical_cli_usage": {
@@ -916,12 +916,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "docs/post-pr2043-handoff-refresh",
+      "branch": "codex/v1-schema-readiness",
       "dirty_status": "",
-      "head": "765a47d0b7170fcc4a13b4fd476162ac65ab704a",
+      "head": "f7effe713110e6a17d8da4bfdfa2d25ca6e44826",
       "head_matches_upstream": true,
-      "upstream": "origin/docs/post-pr2043-handoff-refresh",
-      "upstream_head": "765a47d0b7170fcc4a13b4fd476162ac65ab704a"
+      "upstream": "origin/codex/v1-schema-readiness",
+      "upstream_head": "f7effe713110e6a17d8da4bfdfa2d25ca6e44826"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -983,11 +983,11 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "adc0c9792173eeadc07d01c5895080c5c2f03352296840062d472c8fe226dfa3"
+        "sha256": "df9f65aa806d3d2dc34416563e24b782a22bafeb4108ac1706170c3948efceda"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "14f0fa7315352c3c4fcfd0fa44ebc1ed2887c9096fa454b9bb06156395c51c19"
+        "sha256": "7fb6867ddc2260274ffd01febcdd087a12bc1588b32f110b389ea97592051bcf"
       }
     ],
     "canonical_cli_usage": {
@@ -1488,12 +1488,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "docs/post-pr2043-handoff-refresh",
+      "branch": "codex/v1-schema-readiness",
       "dirty_status": "",
-      "head": "765a47d0b7170fcc4a13b4fd476162ac65ab704a",
+      "head": "f7effe713110e6a17d8da4bfdfa2d25ca6e44826",
       "head_matches_upstream": true,
-      "upstream": "origin/docs/post-pr2043-handoff-refresh",
-      "upstream_head": "765a47d0b7170fcc4a13b4fd476162ac65ab704a"
+      "upstream": "origin/codex/v1-schema-readiness",
+      "upstream_head": "f7effe713110e6a17d8da4bfdfa2d25ca6e44826"
     },
     "schema_version": 1,
     "terminal_block_rules": {
