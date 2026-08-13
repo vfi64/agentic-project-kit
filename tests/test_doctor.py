@@ -40,6 +40,31 @@ def _write_state_docs(root: Path, version: str = "1.2.3") -> None:
     )
 
 
+def _write_manifest_workspace(root: Path) -> None:
+    (root / ".agentic/state/handoff").mkdir(parents=True, exist_ok=True)
+    (root / ".agentic/registries").mkdir(parents=True, exist_ok=True)
+    (root / ".agentic/config.yaml").write_text(
+        """
+kit_schema_version: 1
+project:
+  name: external-demo
+  type: python
+profile: python-default
+""",
+        encoding="utf-8",
+    )
+    (root / ".agentic/state/status.md").write_text(
+        "# Workspace Status\n\nProject: external-demo\nCurrent state: initialized workspace.\n",
+        encoding="utf-8",
+    )
+    (root / ".agentic/state/handoff/README.md").write_text(
+        "# Workspace Handoff\n\nValidated handoff packages belong here.\n",
+        encoding="utf-8",
+    )
+    (root / ".agentic/registries/documentation.yaml").write_text("version: 1\n", encoding="utf-8")
+    (root / ".agentic/registries/rules.yaml").write_text("version: 1\n", encoding="utf-8")
+
+
 def _valid_changelog(version: str) -> str:
     return (
         "# Changelog\n\n"
@@ -123,6 +148,7 @@ def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
         DoctorStatus.WARN,
         DoctorStatus.WARN,
         DoctorStatus.WARN,
+        DoctorStatus.WARN,
         DoctorStatus.PASS,
         DoctorStatus.PASS,
         DoctorStatus.WARN,
@@ -130,6 +156,46 @@ def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
         DoctorStatus.WARN,
     ]
     assert "Overall: PASS" in render_doctor_report(report)
+
+
+def test_doctor_report_passes_for_manifest_operating_layer_workspace(tmp_path: Path):
+    _write_readme(tmp_path)
+    _write_manifest_workspace(tmp_path)
+
+    report = build_doctor_report(tmp_path)
+
+    assert report.ok
+    check_by_name = {check.name: check for check in report.checks}
+    assert check_by_name["workspace manifest"].status == DoctorStatus.PASS
+    assert "external-demo" in check_by_name["workspace manifest"].detail
+    assert check_by_name["documentation gates"].status == DoctorStatus.PASS
+    assert check_by_name["todo gates"].status == DoctorStatus.WARN
+    assert "workspace manifest" in check_by_name["todo gates"].detail
+
+
+def test_doctor_report_accepts_manifest_workspace_without_root_readme(tmp_path: Path):
+    _write_manifest_workspace(tmp_path)
+
+    report = build_doctor_report(tmp_path)
+
+    assert report.ok
+    readme_check = _check_by_name(report, "README.md")
+    assert readme_check.status == DoctorStatus.WARN
+    assert readme_check.detail == "missing optional project file"
+
+
+def test_doctor_report_keeps_root_readme_required_for_selfhosting_checkout(tmp_path: Path):
+    _write_manifest_workspace(tmp_path)
+    (tmp_path / "src/agentic_project_kit").mkdir(parents=True)
+    (tmp_path / "docs/reference").mkdir(parents=True)
+    (tmp_path / "docs/reference/agentic-kit-commands.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "pyproject.toml").write_text("[project]\nversion = '1.2.3'\n", encoding="utf-8")
+
+    report = build_doctor_report(tmp_path)
+
+    readme_check = _check_by_name(report, "README.md")
+    assert readme_check.status == DoctorStatus.FAIL
+    assert readme_check.detail == "missing"
 
 
 def test_doctor_report_fails_without_required_readme(tmp_path: Path):
@@ -150,7 +216,7 @@ def test_doctor_report_reports_valid_project_contract(tmp_path: Path):
 
     report = build_doctor_report(tmp_path)
 
-    contract_check = report.checks[4]
+    contract_check = _check_by_name(report, "project contract")
     assert contract_check.name == "project contract"
     assert contract_check.status == DoctorStatus.PASS
     assert "profiles: generic-git-repo, python-cli" in contract_check.detail
@@ -169,7 +235,7 @@ def test_doctor_policy_pack_checks_pass_when_required_files_exist(tmp_path: Path
 
     report = build_doctor_report(tmp_path)
 
-    policy_check = report.checks[5]
+    policy_check = _check_by_name(report, "policy pack checks")
     assert policy_check.name == "policy pack checks"
     assert policy_check.status == DoctorStatus.PASS
     assert "solo-maintainer" in policy_check.detail
@@ -184,7 +250,7 @@ def test_doctor_policy_pack_checks_fail_when_required_files_are_missing(tmp_path
     report = build_doctor_report(tmp_path)
 
     assert not report.ok
-    policy_check = report.checks[5]
+    policy_check = _check_by_name(report, "policy pack checks")
     assert policy_check.name == "policy pack checks"
     assert policy_check.status == DoctorStatus.FAIL
     assert "solo-maintainer: missing sentinel.yaml" in policy_check.detail
@@ -204,7 +270,7 @@ def test_doctor_report_fails_on_invalid_project_contract(tmp_path: Path):
     report = build_doctor_report(tmp_path)
 
     assert not report.ok
-    contract_check = report.checks[4]
+    contract_check = _check_by_name(report, "project contract")
     assert contract_check.name == "project contract"
     assert contract_check.status == DoctorStatus.FAIL
     assert "project.name is required" in contract_check.detail
@@ -288,3 +354,7 @@ def test_doctor_report_warns_on_report_only_document_lifecycle_findings(tmp_path
     lifecycle_check = next(check for check in report.checks if check.name == "document lifecycle audit")
     assert lifecycle_check.status == DoctorStatus.WARN
     assert "report-only" in lifecycle_check.detail
+
+
+def _check_by_name(report, name: str):
+    return next(check for check in report.checks if check.name == name)

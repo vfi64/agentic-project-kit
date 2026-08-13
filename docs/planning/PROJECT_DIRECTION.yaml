@@ -300,6 +300,8 @@ roadmap:
   - docs/reports/POST_0_5_0_BROWNFIELD_COMM_SCI_ADOPTION_B1_5_20260811.md
   - docs/reports/POST_0_5_0_GREENFIELD_B2_20260811.md
   - docs/reports/POST_0_5_0_B3_V1_ADJUDICATION_20260811.md
+  - External workspace health mode implementation slice for check, check-docs,
+    and doctor.
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: dpa-repo-adoption-assessment
@@ -2624,7 +2626,9 @@ ideas:
     one real external project; Comm-SCI-Control-private is named in the architecture
     document as the candidate for that evidence.
   current_result: Bounded local adoption is PASS_WITH_LIMITATIONS; full remote
-    adoption and successor continuation are not yet claimed.
+    adoption and successor continuation are not yet claimed. Manifest-based
+    external workspace health checks are implemented for check, check-docs, and
+    doctor.
   evidence:
   - docs/reports/POST_0_5_0_BROWNFIELD_COMM_SCI_READONLY_20260811.md
   - docs/reports/POST_0_5_0_BROWNFIELD_COMM_SCI_ADOPTION_B1_5_20260811.md

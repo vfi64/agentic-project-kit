@@ -16,6 +16,7 @@ from agentic_project_kit.contract import (
     load_project_contract,
     validate_project_contract,
 )
+from agentic_project_kit.workspace import Workspace, load_workspace
 
 
 class DoctorStatus(str, Enum):
@@ -45,16 +46,22 @@ def build_doctor_report(project_root: Path) -> DoctorReport:
     """Build a compact health report for an agentic project checkout."""
     root = project_root.resolve()
     contract_data = _load_contract_for_doctor(root)
+    workspace = _load_manifest_workspace_for_doctor(root)
+    external_manifest_workspace = (
+        isinstance(workspace, Workspace)
+        and not _is_agentic_project_kit_development_checkout(root)
+    )
     checks = [
         _path_check(root, "pyproject.toml", required=False),
-        _path_check(root, "README.md", required=True),
+        _path_check(root, "README.md", required=not external_manifest_workspace),
         _path_check(root, "sentinel.yaml", required=False),
         _path_check(root, ".github/workflows/ci.yml", required=False),
+        _workspace_manifest_check(workspace),
         _project_contract_check(root, contract_data),
         _policy_pack_check(root, contract_data),
         _docs_check(root),
         _doc_lifecycle_check(root),
-        _todo_check(root),
+        _todo_check(root, workspace),
         _standard_gates_audit_suite_check(root),
         _version_drift_check(root),
     ]
@@ -83,6 +90,27 @@ def _load_contract_for_doctor(project_root: Path) -> dict[str, Any] | None | Val
         return load_project_contract(project_root)
     except ValueError as exc:
         return exc
+
+
+def _load_manifest_workspace_for_doctor(project_root: Path) -> Workspace | None | ValueError:
+    if not (project_root / ".agentic/config.yaml").exists():
+        return None
+    try:
+        return load_workspace(project_root, suppress_legacy_profile_warning=True)
+    except RuntimeError as exc:
+        return ValueError(str(exc))
+
+
+def _workspace_manifest_check(data: Workspace | None | ValueError) -> DoctorCheck:
+    if isinstance(data, ValueError):
+        return DoctorCheck("workspace manifest", DoctorStatus.FAIL, str(data))
+    if data is None:
+        return DoctorCheck("workspace manifest", DoctorStatus.WARN, ".agentic/config.yaml absent")
+    detail = (
+        f"{data.project_name or 'unnamed'}; type: {data.project_type}; "
+        f"profile: {data.profile}; transfer: {data.transfer_visibility}"
+    )
+    return DoctorCheck("workspace manifest", DoctorStatus.PASS, detail)
 
 
 def _project_contract_check(project_root: Path, data: dict[str, Any] | None | ValueError) -> DoctorCheck:
@@ -172,9 +200,15 @@ def _doc_lifecycle_check(project_root: Path) -> DoctorCheck:
     return DoctorCheck("document lifecycle audit", DoctorStatus.PASS, "passed")
 
 
-def _todo_check(project_root: Path) -> DoctorCheck:
+def _todo_check(project_root: Path, workspace: Workspace | None | ValueError = None) -> DoctorCheck:
     sentinel_path = project_root / "sentinel.yaml"
     if not sentinel_path.exists():
+        if isinstance(workspace, Workspace):
+            return DoctorCheck(
+                "todo gates",
+                DoctorStatus.WARN,
+                "workspace manifest present; sentinel.yaml absent; skipped TODO validation",
+            )
         return DoctorCheck("todo gates", DoctorStatus.WARN, "sentinel.yaml absent; skipped TODO validation")
     errors = check_todo(project_root)
     if errors:

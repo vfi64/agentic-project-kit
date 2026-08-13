@@ -1085,6 +1085,20 @@ rules:
     terms:
     - policy-pack checks
     - policy packs
+- id: external-workspace-health-mode-coverage
+  description: Manifest-based external workspaces must remain visible as a distinct health-check mode.
+  documents:
+  - path: README.md
+    terms:
+    - external workspace health mode
+    - .agentic/config.yaml
+    - .agentic/state/
+    - .agentic/registries/
+    - self-hosting Kit documentation set
+    - agentic-kit workspace init --root PATH --execute
+    - agentic-kit check-docs
+    - agentic-kit check
+    - agentic-kit doctor
 - id: semantic-quality-boundary-coverage
   description: Semantic quality limits must remain explicit so deterministic checks
     are not oversold.
