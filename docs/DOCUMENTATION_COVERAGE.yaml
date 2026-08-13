@@ -1099,6 +1099,11 @@ rules:
     - agentic-kit check-docs
     - agentic-kit check
     - agentic-kit doctor
+    - Kit-specific version drift
+    - project-owned release governance
+    - docs/STATUS.md
+    - docs/handoff/CURRENT_HANDOFF.md
+    - CHANGELOG.md
     - .agentic/state/handoff/packages/latest/
     - successor_prompt.md
     - validation_report.json

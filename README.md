@@ -120,7 +120,7 @@ agentic-kit init my-docs-project \
 
 `agentic-kit doctor` validates the project contract when `.agentic/project.yaml` is present and reports selected profiles and policy packs.
 
-After `agentic-kit workspace init --root PATH --execute`, non-Kit repositories with `.agentic/config.yaml` use external workspace health mode: `agentic-kit check-docs`, `agentic-kit check`, and `agentic-kit doctor` validate `.agentic/state/` and `.agentic/registries/` without requiring the self-hosting Kit documentation set.
+After `agentic-kit workspace init --root PATH --execute`, repositories with `.agentic/config.yaml` use external workspace health mode: `agentic-kit check-docs`, `agentic-kit check`, and `agentic-kit doctor` validate `.agentic/state/` and `.agentic/registries/` without the self-hosting Kit documentation set. Here, `doctor` reports Kit-specific version drift as project-owned release governance, not failure over `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, `CHANGELOG.md`.
 
 ## Policy-pack doctor checks
 

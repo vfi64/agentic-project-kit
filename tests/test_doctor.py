@@ -184,6 +184,24 @@ def test_doctor_report_accepts_manifest_workspace_without_root_readme(tmp_path: 
     assert readme_check.detail == "missing optional project file"
 
 
+def test_doctor_report_skips_version_drift_for_external_manifest_workspace(tmp_path: Path):
+    _write_readme(tmp_path)
+    _write_manifest_workspace(tmp_path)
+    (tmp_path / "pyproject.toml").write_text(
+        "[project]\nname = 'external-demo'\nversion = '9.8.7'\n",
+        encoding="utf-8",
+    )
+
+    report = build_doctor_report(tmp_path)
+
+    assert report.ok
+    version_check = _check_by_name(report, "version drift")
+    assert version_check.status == DoctorStatus.WARN
+    assert version_check.detail == (
+        "skipped for external manifest workspace; version governance remains project-owned"
+    )
+
+
 def test_doctor_report_keeps_root_readme_required_for_selfhosting_checkout(tmp_path: Path):
     _write_manifest_workspace(tmp_path)
     (tmp_path / "src/agentic_project_kit").mkdir(parents=True)
