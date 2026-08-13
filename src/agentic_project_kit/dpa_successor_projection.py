@@ -21,6 +21,7 @@ def render_successor_projection_dpa_contract(
     generated_projection_paths: tuple[str, ...] | list[str],
     default_direct_write_paths: tuple[str, ...] | list[str],
     dedicated_update_only_paths: tuple[str, ...] | list[str],
+    initial_create_if_missing_paths: tuple[str, ...] | list[str] = (),
     source_paths: tuple[str, ...] = DPA_SUCCESSOR_PROJECTION_SOURCE_PATHS,
 ) -> dict[str, Any]:
     return {
@@ -36,6 +37,7 @@ def render_successor_projection_dpa_contract(
         "generated_projection_paths": list(generated_projection_paths),
         "default_direct_write_paths": list(default_direct_write_paths),
         "dedicated_update_only_paths": list(dedicated_update_only_paths),
+        "initial_create_if_missing_paths": list(initial_create_if_missing_paths),
         "source_command_contract_required": True,
         "manual_durable_target_patches_allowed": False,
         "current_handoff_target_byte_writer": False,
@@ -91,6 +93,7 @@ def validate_successor_projection_dpa_contract(data: Any) -> list[str]:
     generated_paths = _string_list(data.get("generated_projection_paths"))
     direct_paths = _string_list(data.get("default_direct_write_paths"))
     dedicated_paths = _string_list(data.get("dedicated_update_only_paths"))
+    initial_create_paths = _string_list(data.get("initial_create_if_missing_paths"))
     source_paths = _string_list(data.get("source_paths"))
     if generated_paths is None:
         errors.append("generated_projection_paths must be a string list")
@@ -101,6 +104,9 @@ def validate_successor_projection_dpa_contract(data: Any) -> list[str]:
     if dedicated_paths is None:
         errors.append("dedicated_update_only_paths must be a string list")
         dedicated_paths = []
+    if initial_create_paths is None:
+        errors.append("initial_create_if_missing_paths must be a string list")
+        initial_create_paths = []
     if source_paths is None:
         errors.append("source_paths must be a string list")
         source_paths = []
@@ -113,6 +119,7 @@ def validate_successor_projection_dpa_contract(data: Any) -> list[str]:
         ("generated_projection_paths", generated_paths),
         ("default_direct_write_paths", direct_paths),
         ("dedicated_update_only_paths", dedicated_paths),
+        ("initial_create_if_missing_paths", initial_create_paths),
         ("source_paths", source_paths),
     ):
         for path in paths:
@@ -122,6 +129,7 @@ def validate_successor_projection_dpa_contract(data: Any) -> list[str]:
     generated_set = set(generated_paths)
     direct_outside_generated = sorted(set(direct_paths) - generated_set)
     dedicated_outside_generated = sorted(set(dedicated_paths) - generated_set)
+    initial_create_outside_generated = sorted(set(initial_create_paths) - generated_set)
     if direct_outside_generated:
         errors.append(
             "default_direct_write_paths must be generated paths: "
@@ -131,6 +139,11 @@ def validate_successor_projection_dpa_contract(data: Any) -> list[str]:
         errors.append(
             "dedicated_update_only_paths must be generated paths: "
             + ", ".join(dedicated_outside_generated)
+        )
+    if initial_create_outside_generated:
+        errors.append(
+            "initial_create_if_missing_paths must be generated paths: "
+            + ", ".join(initial_create_outside_generated)
         )
     if "src/agentic_project_kit/successor_handoff_package.py" not in source_paths:
         errors.append("source_paths must include successor_handoff_package.py")

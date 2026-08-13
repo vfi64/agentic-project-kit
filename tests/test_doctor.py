@@ -152,7 +152,7 @@ def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
         DoctorStatus.PASS,
         DoctorStatus.PASS,
         DoctorStatus.WARN,
-        DoctorStatus.WARN,
+        DoctorStatus.SKIP,
         DoctorStatus.WARN,
     ]
     assert "Overall: PASS" in render_doctor_report(report)
@@ -169,8 +169,11 @@ def test_doctor_report_passes_for_manifest_operating_layer_workspace(tmp_path: P
     assert check_by_name["workspace manifest"].status == DoctorStatus.PASS
     assert "external-demo" in check_by_name["workspace manifest"].detail
     assert check_by_name["documentation gates"].status == DoctorStatus.PASS
-    assert check_by_name["todo gates"].status == DoctorStatus.WARN
+    assert check_by_name["project contract"].status == DoctorStatus.SKIP
+    assert check_by_name["policy pack checks"].status == DoctorStatus.SKIP
+    assert check_by_name["todo gates"].status == DoctorStatus.SKIP
     assert "workspace manifest" in check_by_name["todo gates"].detail
+    assert "[SKIP] todo gates" in render_doctor_report(report)
 
 
 def test_doctor_report_accepts_manifest_workspace_without_root_readme(tmp_path: Path):
@@ -196,7 +199,7 @@ def test_doctor_report_skips_version_drift_for_external_manifest_workspace(tmp_p
 
     assert report.ok
     version_check = _check_by_name(report, "version drift")
-    assert version_check.status == DoctorStatus.WARN
+    assert version_check.status == DoctorStatus.SKIP
     assert version_check.detail == (
         "skipped for external manifest workspace; version governance remains project-owned"
     )

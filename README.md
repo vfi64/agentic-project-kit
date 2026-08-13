@@ -6,23 +6,21 @@
 Current version: 0.5.0
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/zenodo.20101359)
 
-`agentic-project-kit` is a local Python package and CLI for governing AI-assisted repository work with explicit contracts, gates, evidence, and handoffs.
-
-It provides reusable onboarding, project contracts, policy selection, status discipline, gates, task tracking, bounded logs, GitHub automation, workflow evidence, and release validation.
+`agentic-project-kit` is a local Python package and CLI for governing AI-assisted repository work with explicit contracts, gates, evidence, handoffs, policy selection, task tracking, GitHub automation, and release validation.
 
 ## Why this exists
 
-AI-assisted development works best when project context is explicit, current, and machine-checkable. Without that, agents tend to rely on stale handoffs, copied project history, unclear branch rules, missing test evidence, and unstructured logs.
+AI-assisted development works best when project context is explicit, current, and machine-checkable. Otherwise, agents drift into stale handoffs, unclear branch rules, missing test evidence, and unstructured logs.
 
 This kit turns those lessons into a reusable starter system for new repositories.
 
-The goal is not making an LLM write code better by itself; it is making repository state, handoffs, documentation coverage, task state, release state, and policy expectations visible enough that humans and coding agents can work with less context drift.
+The goal is not making an LLM write code better by itself; it is making repository state, handoffs, documentation coverage, tasks, release state, and policy expectations visible enough to reduce context drift.
 
 ## Why not just Cookiecutter?
 
-Cookiecutter-style generators are useful for creating initial files. `agentic-project-kit` is aimed at a narrower problem: keeping AI-assisted repository work reviewable after the first commit.
+Cookiecutter-style generators create initial files. `agentic-project-kit` targets the narrower problem of keeping AI-assisted repository work reviewable after the first commit.
 
-A generated project therefore includes machine-readable state, current handoff files, documentation coverage expectations, task gates, local health checks, release-state validation, policy-pack fixtures, and evidence conventions. These are governance aids, not a claim that the repository is semantically complete or production-ready.
+A generated project includes machine-readable state, current handoff files, documentation coverage expectations, task gates, local health checks, release-state validation, policy-pack fixtures, and evidence conventions. These are governance aids, not semantic-completeness or production-readiness claims.
 
 ## What it generates
 
@@ -120,7 +118,7 @@ agentic-kit init my-docs-project \
 
 `agentic-kit doctor` validates the project contract when `.agentic/project.yaml` is present and reports selected profiles and policy packs.
 
-After `agentic-kit workspace init --root PATH --execute`, repositories with `.agentic/config.yaml` use external workspace health mode: `agentic-kit check-docs`, `agentic-kit check`, and `agentic-kit doctor` validate `.agentic/state/` and `.agentic/registries/` without the self-hosting Kit documentation set. Here, `doctor` reports Kit-specific version drift as project-owned release governance, not failure over `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, `CHANGELOG.md`.
+After `agentic-kit workspace init --root PATH --execute`, repositories with `.agentic/config.yaml` use external workspace health mode: `agentic-kit check-docs`, `agentic-kit check`, and `agentic-kit doctor` validate `.agentic/state/` and `.agentic/registries/` without the self-hosting Kit documentation set. `doctor` reports not-applicable Kit checks as `SKIP`, including Kit-specific version drift as project-owned release governance rather than failure over `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, or `CHANGELOG.md`.
 
 ## Policy-pack doctor checks
 
@@ -145,8 +143,9 @@ agentic-kit doctor
 ```
 
 It reports project files, workspace manifest status, project contract status,
-policy-pack checks, documentation gates, task validation, and version drift. The
-command exits non-zero only when required checks fail.
+policy-pack checks, documentation gates, task validation, and version drift.
+`SKIP` means not applicable; `WARN` means advisory. The command exits non-zero
+only when required checks fail.
 
 ## Clean handoff / chat switch
 
@@ -168,7 +167,7 @@ The command writes a machine-readable successor context, source manifest, valida
 docs/reports/handoff-packages/latest/
 ```
 
-In external workspace mode the default package path is `.agentic/state/handoff/packages/latest/`. It also updates canonical chat-switch projections in the workspace handoff directory. A successor chat should use `successor_prompt.md` from that package and must stop if `validation_report.json` is not `PASS`.
+In external workspace mode the default package path is `.agentic/state/handoff/packages/latest/`. It updates canonical chat-switch projections, including the initial `START_NEW_CHAT_PROMPT.md` when missing. A successor chat uses `successor_prompt.md`, runs `agentic-kit transfer repo-status`, `agentic-kit check --root .`, and `agentic-kit doctor --root .`, and stops unless `validation_report.json` is `PASS`.
 
 After a PR merge, run `agentic-kit transfer post-merge-settle --after-pr PR_NUMBER`; it stops at READY/NOOP and blocks repeated generated/admin refresh loops.
 
