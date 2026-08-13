@@ -1,6 +1,5 @@
 ## v1.0.0 - 2026-08-13
 
-- Zenodo DOI verification pending for v1.0.0.
 - Close out release 0.5.0 DOI metadata
 - Analyze status direction drift after 0.5.0
 - Fix post release status next step drift
@@ -42,6 +41,9 @@
 - Update project direction meta after PR2082
 - Classify release 1.0 notes
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.0 DOI `10.5281/zenodo.21925421`.
+
+Zenodo v1.0.0 DOI: 10.5281/zenodo.21925421
 ## v0.5.0 - 2026-08-08
 
 - Close out v0.4.13 DOI metadata
