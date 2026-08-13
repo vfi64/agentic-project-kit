@@ -1099,13 +1099,19 @@ rules:
     - agentic-kit check-docs
     - agentic-kit check
     - agentic-kit doctor
+    - SKIP
+    - not-applicable Kit checks
     - Kit-specific version drift
     - project-owned release governance
     - docs/STATUS.md
     - docs/handoff/CURRENT_HANDOFF.md
     - CHANGELOG.md
     - .agentic/state/handoff/packages/latest/
+    - START_NEW_CHAT_PROMPT.md
     - successor_prompt.md
+    - agentic-kit transfer repo-status
+    - agentic-kit check --root .
+    - agentic-kit doctor --root .
     - validation_report.json
 - id: semantic-quality-boundary-coverage
   description: Semantic quality limits must remain explicit so deterministic checks

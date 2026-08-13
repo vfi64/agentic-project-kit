@@ -127,15 +127,12 @@ def _startup_command_tail(ws: Workspace) -> tuple[str, ...]:
         return STARTUP_COMMAND_TAIL
     command = _agentic_kit_command(ws)
     return (
-        f"{command} transfer normalize-session --repair-known-volatile",
-        f"{command} rules acknowledge",
-        f"{command} transfer normalize-session --repair-known-volatile",
         "git branch --show-current",
         "git status -sb",
         "git status --short",
-        f"{command} transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output",
-        f"{command} transfer post-merge-check",
         f"{command} transfer repo-status",
+        f"{command} check --root .",
+        f"{command} doctor --root .",
     )
 
 RECENT_LESSONS: tuple[str, ...] = (
@@ -226,6 +223,10 @@ def _dedicated_successor_projection_update_paths(ws: Workspace) -> tuple[str, ..
         _workspace_path_text(ws, ws.transfer_handoff_report_file("latest-transfer-handoff-report.json")),
         _workspace_path_text(ws, ws.transfer_handoff_report_file("latest-transfer-handoff-report.log")),
     )
+
+
+def _initial_create_if_missing_projection_paths(ws: Workspace) -> tuple[str, ...]:
+    return (_workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md")),)
 
 
 def _general_source_authorities(ws: Workspace) -> tuple[str, ...]:
@@ -503,6 +504,125 @@ def _source_manifest(root: Path, ws: Workspace) -> dict[str, Any]:
         "kind": "successor_source_manifest",
         "workspace_mode": "external" if _is_external_workspace(ws) else "self-hosting",
         "sources": [_file_info(root, rel) for rel in _long_term_sources(ws)],
+    }
+
+
+def _bootstrap_acceptance_gate_rule(ws: Workspace) -> dict[str, object]:
+    if _is_external_workspace(ws):
+        return {
+            "rule_id": BOOTSTRAP_ACCEPTANCE_GATE_RULE_ID,
+            "priority": "critical",
+            "scope": "successor-chat-bootstrap",
+            "must": [
+                "After running the bootstrap block, evaluate the log before starting any new work.",
+                "Confirm validation_report.json PASS and execution_contract.json was read.",
+                "Confirm worktree clean or only explicitly named WIP files.",
+                "Confirm repo-status PASS, agentic-kit check --root . PASS, and agentic-kit doctor --root . Overall PASS.",
+                "Classify every WARN as a risk, optional foreign-repo component, or explained skip.",
+                "Emit exactly one status decision: Übergabe akzeptiert, keine Admin-Arbeit nötig. or BLOCK with the concrete log-backed reason.",
+            ],
+            "not_required_for_external_workspace": [
+                "rules acknowledge",
+                "transfer post-merge-check on a non-main feature branch",
+                "self-hosting docs-audit",
+                "main == origin/main while continuing a feature branch",
+            ],
+        }
+    return {
+        "rule_id": BOOTSTRAP_ACCEPTANCE_GATE_RULE_ID,
+        "priority": "critical",
+        "scope": "successor-chat-bootstrap",
+        "must": [
+            "After running the bootstrap block, evaluate the log before starting any new work.",
+            "Confirm RC=0 and RESULT=NEW_CHAT_BOOTSTRAP_DONE.",
+            "Confirm main == origin/main and worktree clean.",
+            "Confirm post-merge-check PASS with refresh_required=False, result=NOOP, next_safe_action=none.",
+            "Confirm repo-status PASS and docs-audit PASS.",
+            "Confirm validation_report.json PASS and execution_contract.json was read.",
+            "Emit exactly one status decision: Übergabe akzeptiert, keine Admin-Arbeit nötig. or BLOCK with the concrete log-backed reason.",
+        ],
+        "forbidden_when_bootstrap_is_green": [
+            "revalidating already-merged handoff PRs",
+            "regenerating handoff files",
+            "running prepare-successor-handoff --render-prompt",
+            "starting administrative refresh work",
+        ],
+    }
+
+
+def _wrapper_first_complete_development_cycle_rule(ws: Workspace) -> dict[str, object]:
+    if _is_external_workspace(ws):
+        return {
+            "rule_id": "wrapper-first-complete-development-cycle",
+            "priority": "critical",
+            "scope": "external-workspace-development-handoff",
+            "must": [
+                "Use the target repository's native tests and documented quality gates as the product authority.",
+                "Use agentic-kit check, doctor, repo-status, and successor handoff package as the operating-layer health checks.",
+                "Inspect actual diffs before committing generated operating-layer files.",
+                "Regenerate the successor handoff package before a chat switch or after completing a local work slice.",
+                "Use Kit PR/post-merge wrappers only when their preconditions fit the target repository and branch state.",
+            ],
+            "forbidden": [
+                "treating Kit self-hosting post-merge or rule-snapshot gates as mandatory external feature-branch startup gates",
+                "claiming target-repository product tests are green when only Kit overlay gates ran",
+                "planning from stale chat memory or stale copied prompt text",
+            ],
+        }
+    return {
+        "rule_id": "wrapper-first-complete-development-cycle",
+        "priority": "critical",
+        "scope": "feature-development-pr-handoff",
+        "must": [
+            "Use agentic-kit wrappers as the authoritative control plane.",
+            "Prefer complex transfer wrappers over hand-built Git/GitHub/handoff/release/GC shell logic.",
+            "Run focused tests, full tests/audits as needed, inspect actual diff, and run transfer protected-diff-plan before commit.",
+            "Commit through transfer commit, then run rules acknowledge.",
+            "Before PR completion, regenerate and publish fresh successor/LLM handoff context.",
+            "Use transfer pr-create-complete with --post-merge-complete for the normal PR lifecycle.",
+            "After merge, sync main, restore known volatile files, run post-merge-settle on main, repo-status, audits, standard gates, and final successor handoff.",
+        ],
+        "forbidden": [
+            "manual PR creation/merge when the wrapper can perform the lifecycle",
+            "running post-merge-check as a feature-branch pre-PR gate",
+            "planning from stale chat memory or stale copied prompt text",
+        ],
+    }
+
+
+def _documentation_authority_rule(ws: Workspace) -> dict[str, object]:
+    if _is_external_workspace(ws):
+        return {
+            "rule_id": "documentation-authority-model",
+            "priority": "critical",
+            "scope": "external-workspace-documentation-authority",
+            "must": [
+                "Use .agentic/state/status.md and .agentic/state/handoff/README.md as external workspace continuation state.",
+                "Use .agentic/registries/documentation.yaml for operating-layer document classification.",
+                "Treat target-repository README, architecture, changelog, and native docs as project-owned authority.",
+                "Do not require docs/planning/PROJECT_DIRECTION.yaml unless the external workspace explicitly adopts it.",
+            ],
+            "forbidden": [
+                "treating missing self-hosting Kit governance documents as external product failures",
+                "adding durable target-repository rules only to generated handoff projections",
+                "deleting semantic documentation through report-retention GC",
+            ],
+        }
+    return {
+        "rule_id": "documentation-authority-model",
+        "priority": "critical",
+        "scope": "documentation-reconciliation",
+        "must": [
+            "Use docs/planning/PROJECT_DIRECTION.yaml for active roadmap, strategy, and current tasks.",
+            "Use docs/DOCUMENTATION_REGISTRY.yaml for document classification and authority mapping.",
+            "Classify obsolete documents before archive/delete decisions.",
+            "Retarget active references away from obsolete/superseded documents before archival.",
+        ],
+        "forbidden": [
+            "adding new operational rules to historical, archived, superseded, or migration-report documents",
+            "treating old roadmap or planning markdown files as active authority",
+            "deleting semantic documentation through report-retention GC",
+        ],
     }
 
 
@@ -875,6 +995,7 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
         "generated_projection_paths": list(_generated_handoff_projection_paths(ws)),
         "default_direct_write_paths": list(_default_successor_projection_direct_write_paths(ws)),
         "dedicated_update_only_paths": list(_dedicated_successor_projection_update_paths(ws)),
+        "initial_create_if_missing_paths": list(_initial_create_if_missing_projection_paths(ws)),
         "source_of_truth": "generator_and_machine_readable_successor_package",
         "allowed_update_path": [
             "Change successor_handoff_package.py, execution contract inputs, or repo-backed rule sources.",
@@ -902,6 +1023,7 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
             generated_projection_paths=_generated_handoff_projection_paths(ws),
             default_direct_write_paths=_default_successor_projection_direct_write_paths(ws),
             dedicated_update_only_paths=_dedicated_successor_projection_update_paths(ws),
+            initial_create_if_missing_paths=_initial_create_if_missing_projection_paths(ws),
         )
     )
 
@@ -962,45 +1084,8 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
                     "start_product_slice_only_from_clean_main",
                 ],
             },
-            {
-                "rule_id": BOOTSTRAP_ACCEPTANCE_GATE_RULE_ID,
-                "priority": "critical",
-                "scope": "successor-chat-bootstrap",
-                "must": [
-                    "After running the bootstrap block, evaluate the log before starting any new work.",
-                    "Confirm RC=0 and RESULT=NEW_CHAT_BOOTSTRAP_DONE.",
-                    "Confirm main == origin/main and worktree clean.",
-                    "Confirm post-merge-check PASS with refresh_required=False, result=NOOP, next_safe_action=none.",
-                    "Confirm repo-status PASS and docs-audit PASS.",
-                    "Confirm validation_report.json PASS and execution_contract.json was read.",
-                    "Emit exactly one status decision: Übergabe akzeptiert, keine Admin-Arbeit nötig. or BLOCK with the concrete log-backed reason.",
-                ],
-                "forbidden_when_bootstrap_is_green": [
-                    "revalidating already-merged handoff PRs",
-                    "regenerating handoff files",
-                    "running prepare-successor-handoff --render-prompt",
-                    "starting administrative refresh work",
-                ],
-            },
-            {
-                "rule_id": "wrapper-first-complete-development-cycle",
-                "priority": "critical",
-                "scope": "feature-development-pr-handoff",
-                "must": [
-                    "Use agentic-kit wrappers as the authoritative control plane.",
-                    "Prefer complex transfer wrappers over hand-built Git/GitHub/handoff/release/GC shell logic.",
-                    "Run focused tests, full tests/audits as needed, inspect actual diff, and run transfer protected-diff-plan before commit.",
-                    "Commit through transfer commit, then run rules acknowledge.",
-                    "Before PR completion, regenerate and publish fresh successor/LLM handoff context.",
-                    "Use transfer pr-create-complete with --post-merge-complete for the normal PR lifecycle.",
-                    "After merge, sync main, restore known volatile files, run post-merge-settle on main, repo-status, audits, standard gates, and final successor handoff.",
-                ],
-                "forbidden": [
-                    "manual PR creation/merge when the wrapper can perform the lifecycle",
-                    "running post-merge-check as a feature-branch pre-PR gate",
-                    "planning from stale chat memory or stale copied prompt text",
-                ],
-            },
+            _bootstrap_acceptance_gate_rule(ws),
+            _wrapper_first_complete_development_cycle_rule(ws),
             {
                 "rule_id": "successor-package-not-prompt-only",
                 "priority": "critical",
@@ -1015,22 +1100,7 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
                     "starting product work before validation_report.json and execution_contract.json were inspected",
                 ],
             },
-            {
-                "rule_id": "documentation-authority-model",
-                "priority": "critical",
-                "scope": "documentation-reconciliation",
-                "must": [
-                    "Use docs/planning/PROJECT_DIRECTION.yaml for active roadmap, strategy, and current tasks.",
-                    "Use docs/DOCUMENTATION_REGISTRY.yaml for document classification and authority mapping.",
-                    "Classify obsolete documents before archive/delete decisions.",
-                    "Retarget active references away from obsolete/superseded documents before archival.",
-                ],
-                "forbidden": [
-                    "adding new operational rules to historical, archived, superseded, or migration-report documents",
-                    "treating old roadmap or planning markdown files as active authority",
-                    "deleting semantic documentation through report-retention GC",
-                ],
-            },
+            _documentation_authority_rule(ws),
             {
                 "rule_id": "repo-backed-rules-and-gates",
                 "priority": "critical",
@@ -1145,6 +1215,37 @@ def render_execution_contract_projection(contract: dict[str, object]) -> str:
     general_contract = contract.get("general_contract", {})
     current_state_contract = contract.get("current_state_contract", {})
     projection_contract = contract.get("handoff_projection_contract", {})
+    source_authorities = general_contract.get("source_authorities", [])
+    external_contract = (
+        isinstance(source_authorities, list)
+        and ".agentic/config.yaml" in source_authorities
+        and ".agentic/compiled_agent_context.yaml" not in source_authorities
+    )
+
+    if external_contract:
+        operating_model_lines = [
+            "- agentic-kit provides the operating-layer control plane for this external workspace.",
+            "- Use the workspace manifest, external status/handoff files, registries, check/doctor, repo-status, and successor handoff package as active Kit subsystems.",
+            "- Target-repository product behavior remains project-owned; native tests and docs stay authoritative for product correctness.",
+            "- GC is technical retention, not semantic documentation migration.",
+        ]
+        lifecycle_lines = [
+            "External workspace lifecycle: read target-repo authority files -> use a feature branch or local smoke branch -> run native tests plus `agentic-kit check --root .`, `agentic-kit doctor --root .`, and `transfer repo-status` -> inspect diffs -> refresh successor handoff package for chat switches.",
+            "",
+            "`transfer post-merge-check` and `rules acknowledge` are self-hosting/post-merge gates unless the external repository has explicitly adopted their required sources and branch preconditions.",
+        ]
+    else:
+        operating_model_lines = [
+            "- agentic-kit wrappers are the authoritative control plane.",
+            "- Use the rule system, command reference, documentation registry, project direction authority, the `agentic-kit project-direction` command, the `agentic-kit docs-reconciliation` command, gates, evidence logs, report-retention GC, and successor handoff package as active subsystems.",
+            "- GC is technical retention, not semantic documentation migration.",
+            "- Historical `ns` migration documents are not active rule locations.",
+        ]
+        lifecycle_lines = [
+            "Normal feature lifecycle: feature branch -> tests/audits -> `transfer protected-diff-plan` -> `transfer commit` -> `rules acknowledge` -> fresh successor/LLM context -> `transfer pr-create-complete ... --post-merge-complete` -> sync main -> `transfer post-merge-settle` on main -> `transfer repo-status` -> docs/program/standard gates -> final successor handoff package.",
+            "",
+            "`transfer post-merge-check` is a main/post-merge lifecycle check, not a feature-branch pre-PR gate. Use `transfer repo-status` for feature-branch cleanliness.",
+        ]
 
     lines = [
         "## Machine-readable execution contract",
@@ -1156,10 +1257,7 @@ def render_execution_contract_projection(contract: dict[str, object]) -> str:
         "## Durable agentic-kit operating model",
         "",
         f"- scope: `{general_contract.get('scope', 'UNKNOWN')}`",
-        "- agentic-kit wrappers are the authoritative control plane.",
-        "- Use the rule system, command reference, documentation registry, project direction authority, the `agentic-kit project-direction` command, the `agentic-kit docs-reconciliation` command, gates, evidence logs, report-retention GC, and successor handoff package as active subsystems.",
-        "- GC is technical retention, not semantic documentation migration.",
-        "- Historical `ns` migration documents are not active rule locations.",
+        *operating_model_lines,
         "",
         "Source authorities:",
     ]
@@ -1189,9 +1287,7 @@ def render_execution_contract_projection(contract: dict[str, object]) -> str:
             "",
             "## Wrapper-first complete development cycle",
             "",
-            "Normal feature lifecycle: feature branch -> tests/audits -> `transfer protected-diff-plan` -> `transfer commit` -> `rules acknowledge` -> fresh successor/LLM context -> `transfer pr-create-complete ... --post-merge-complete` -> sync main -> `transfer post-merge-settle` on main -> `transfer repo-status` -> docs/program/standard gates -> final successor handoff package.",
-            "",
-            "`transfer post-merge-check` is a main/post-merge lifecycle check, not a feature-branch pre-PR gate. Use `transfer repo-status` for feature-branch cleanliness.",
+            *lifecycle_lines,
             "",
             "## Handoff package precedence",
             "",
@@ -1277,7 +1373,7 @@ def render_successor_prompt(context: dict[str, Any], ws: Workspace | None = None
             "",
             "## Bootstrap-Akzeptanzbremse",
             "",
-            BOOTSTRAP_ACCEPTANCE_GATE_PROMPT.rstrip(),
+            _bootstrap_acceptance_gate_prompt(ws).rstrip(),
             "",
             "## Aktueller Paketstand",
             "",
@@ -1370,7 +1466,7 @@ def render_next_chat_bootstrap_from_context(context: dict[str, Any], ws: Workspa
             "",
             "## Bootstrap-Akzeptanzbremse",
             "",
-            BOOTSTRAP_ACCEPTANCE_GATE_PROMPT.rstrip(),
+            _bootstrap_acceptance_gate_prompt(ws).rstrip(),
             "",
             "## Required first action in a successor chat",
             "",
@@ -1432,6 +1528,41 @@ Wenn der Bootstrap grün ist:
 - Neue Produktarbeit nur aus frischem, sauberem `main` beginnen.
 """
 
+
+EXTERNAL_BOOTSTRAP_ACCEPTANCE_GATE_PROMPT = """\
+Zusätzliche Startbremse nach dem Bootstrap:
+
+Nach Ausführung des Bootstrap-Blocks darfst du nicht sofort mit neuer Arbeit beginnen. Werte zuerst ausschließlich das Bootstrap-Log aus.
+
+Prüfe:
+- `validation_report.json PASS`
+- `execution_contract.json` wurde gelesen
+- Worktree clean oder nur ausdrücklich benannte WIP-Dateien
+- `repo-status PASS`
+- `agentic-kit check --root .` PASS
+- `agentic-kit doctor --root .` Overall PASS
+- Jeder `WARN` ist als Risiko, optionaler Fremdrepo-Bestandteil oder erklärter Skip eingeordnet
+
+Gib danach genau eine kurze Statusentscheidung aus:
+
+- `Übergabe akzeptiert, keine Admin-Arbeit nötig.`
+
+oder:
+
+- `BLOCK: ...` mit konkretem Grund aus dem Log.
+
+Beginne erst nach dieser Statusentscheidung mit neuer Arbeit.
+
+In einem externen Workspace sind Kit-interne Rule-Snapshot- und Post-Merge-Main-Gates keine Pflichtstart-Gates. Nutze `transfer post-merge-check` erst nach einem tatsächlichen PR-Merge auf `main`.
+"""
+
+
+def _bootstrap_acceptance_gate_prompt(ws: Workspace) -> str:
+    if _is_external_workspace(ws):
+        return EXTERNAL_BOOTSTRAP_ACCEPTANCE_GATE_PROMPT
+    return BOOTSTRAP_ACCEPTANCE_GATE_PROMPT
+
+
 def render_start_prompt_from_context(context: dict[str, Any], ws: Workspace | None = None) -> str:
     ws = ws or _LEGACY_WORKSPACE
     repo = context["repo"]
@@ -1483,7 +1614,7 @@ def render_start_prompt_from_context(context: dict[str, Any], ws: Workspace | No
             "",
             "If the package validation is not PASS, or if HEAD/local status differs from the package without explanation, stop and repair handoff drift first.",
             "",
-            BOOTSTRAP_ACCEPTANCE_GATE_PROMPT.rstrip(),
+            _bootstrap_acceptance_gate_prompt(ws).rstrip(),
             "",
         ]
     )
@@ -1614,15 +1745,18 @@ def write_successor_handoff_package(
     (out / "validation_report.json").write_text(_json_block(result.validation_report) + "\n", encoding="utf-8")
     (out / "execution_contract.json").write_text(_json_block(result.execution_contract) + "\n", encoding="utf-8")
     (out / "successor_prompt.md").write_text(result.successor_prompt, encoding="utf-8")
-    # START_NEW_CHAT_PROMPT is protected against broad generator replacement. The
-    # successor package refresh updates NEXT_CHAT_BOOTSTRAP, the closeout prompt,
-    # and package files; START_NEW_CHAT_PROMPT must be changed only by a dedicated
-    # minimal handoff-refresh/admin slice.
     if update_canonical_prompts:
-        for rel, text in (
+        start_prompt_path = root_path / ws.handoff_file("START_NEW_CHAT_PROMPT.md")
+        canonical_prompts: list[tuple[Path, str]] = [
             (ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md"), result.next_chat_bootstrap),
             (ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"), result.closeout_prompt),
-        ):
+        ]
+        # START_NEW_CHAT_PROMPT is protected against broad generator replacement.
+        # A fresh external workspace still needs its initial paired prompt, but
+        # existing start prompts remain dedicated-update-only.
+        if not start_prompt_path.exists():
+            canonical_prompts.append((ws.handoff_file("START_NEW_CHAT_PROMPT.md"), result.start_new_chat_prompt))
+        for rel, text in canonical_prompts:
             path = root_path / rel
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(text, encoding="utf-8")

@@ -23,6 +23,7 @@ class DoctorStatus(str, Enum):
     PASS = "PASS"
     FAIL = "FAIL"
     WARN = "WARN"
+    SKIP = "SKIP"
 
 
 @dataclass(frozen=True)
@@ -57,8 +58,8 @@ def build_doctor_report(project_root: Path) -> DoctorReport:
         _path_check(root, "sentinel.yaml", required=False),
         _path_check(root, ".github/workflows/ci.yml", required=False),
         _workspace_manifest_check(workspace),
-        _project_contract_check(root, contract_data),
-        _policy_pack_check(root, contract_data),
+        _project_contract_check(root, contract_data, external_manifest_workspace=external_manifest_workspace),
+        _policy_pack_check(root, contract_data, external_manifest_workspace=external_manifest_workspace),
         _docs_check(root),
         _doc_lifecycle_check(root),
         _todo_check(root, workspace),
@@ -113,10 +114,21 @@ def _workspace_manifest_check(data: Workspace | None | ValueError) -> DoctorChec
     return DoctorCheck("workspace manifest", DoctorStatus.PASS, detail)
 
 
-def _project_contract_check(project_root: Path, data: dict[str, Any] | None | ValueError) -> DoctorCheck:
+def _project_contract_check(
+    project_root: Path,
+    data: dict[str, Any] | None | ValueError,
+    *,
+    external_manifest_workspace: bool = False,
+) -> DoctorCheck:
     if isinstance(data, ValueError):
         return DoctorCheck("project contract", DoctorStatus.FAIL, str(data))
     if data is None:
+        if external_manifest_workspace:
+            return DoctorCheck(
+                "project contract",
+                DoctorStatus.SKIP,
+                f"{CONTRACT_PATH} absent; external workspace uses .agentic/config.yaml",
+            )
         return DoctorCheck("project contract", DoctorStatus.WARN, f"{CONTRACT_PATH} absent")
     errors = validate_project_contract(data)
     if errors:
@@ -124,10 +136,21 @@ def _project_contract_check(project_root: Path, data: dict[str, Any] | None | Va
     return DoctorCheck("project contract", DoctorStatus.PASS, contract_summary(data))
 
 
-def _policy_pack_check(project_root: Path, data: dict[str, Any] | None | ValueError) -> DoctorCheck:
+def _policy_pack_check(
+    project_root: Path,
+    data: dict[str, Any] | None | ValueError,
+    *,
+    external_manifest_workspace: bool = False,
+) -> DoctorCheck:
     if isinstance(data, ValueError):
         return DoctorCheck("policy pack checks", DoctorStatus.WARN, "skipped because project contract is invalid")
     if data is None:
+        if external_manifest_workspace:
+            return DoctorCheck(
+                "policy pack checks",
+                DoctorStatus.SKIP,
+                f"skipped because {CONTRACT_PATH} is absent in external workspace",
+            )
         return DoctorCheck("policy pack checks", DoctorStatus.WARN, f"skipped because {CONTRACT_PATH} is absent")
 
     contract_errors = validate_project_contract(data)
@@ -206,7 +229,7 @@ def _todo_check(project_root: Path, workspace: Workspace | None | ValueError = N
         if isinstance(workspace, Workspace):
             return DoctorCheck(
                 "todo gates",
-                DoctorStatus.WARN,
+                DoctorStatus.SKIP,
                 "workspace manifest present; sentinel.yaml absent; skipped TODO validation",
             )
         return DoctorCheck("todo gates", DoctorStatus.WARN, "sentinel.yaml absent; skipped TODO validation")
@@ -220,7 +243,7 @@ def _version_drift_check(project_root: Path, *, external_manifest_workspace: boo
     if external_manifest_workspace:
         return DoctorCheck(
             "version drift",
-            DoctorStatus.WARN,
+            DoctorStatus.SKIP,
             "skipped for external manifest workspace; version governance remains project-owned",
         )
 
@@ -258,7 +281,7 @@ def _standard_gates_audit_suite_check(project_root: Path) -> DoctorCheck:
     if not _is_agentic_project_kit_development_checkout(project_root):
         return DoctorCheck(
             "standard audit suite",
-            DoctorStatus.WARN,
+            DoctorStatus.SKIP,
             "skipped outside the agentic-project-kit development checkout",
         )
     try:

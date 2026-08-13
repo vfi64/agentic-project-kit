@@ -88,7 +88,7 @@ def test_doctor_skips_standard_audit_suite_outside_toolkit_checkout(tmp_path: Pa
     assert called is False
     assert any(
         check.name == "standard audit suite"
-        and check.status is doctor_module.DoctorStatus.WARN
+        and check.status is doctor_module.DoctorStatus.SKIP
         and "outside the agentic-project-kit development checkout" in check.detail
         for check in report.checks
     )
@@ -120,4 +120,3 @@ def test_doctor_runs_standard_audit_suite_inside_toolkit_checkout(tmp_path: Path
         and check.status is doctor_module.DoctorStatus.PASS
         for check in report.checks
     )
-

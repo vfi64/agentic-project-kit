@@ -222,6 +222,7 @@ def test_successor_handoff_artifacts_snapshot(tmp_path):
     assert generated_paths == [
         "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
         "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
         "docs/reports/handoff-packages/latest/execution_contract.json",
         "docs/reports/handoff-packages/latest/source_manifest.json",
         "docs/reports/handoff-packages/latest/successor_context.yaml",
@@ -236,6 +237,7 @@ def test_successor_handoff_artifacts_snapshot(tmp_path):
     execution_contract = json.loads((package_dir / "execution_contract.json").read_text(encoding="utf-8"))
     successor_prompt = (package_dir / "successor_prompt.md").read_text(encoding="utf-8")
     next_bootstrap = (tmp_path / "docs" / "handoff" / "NEXT_CHAT_BOOTSTRAP.md").read_text(encoding="utf-8")
+    start_prompt = (tmp_path / "docs" / "handoff" / "START_NEW_CHAT_PROMPT.md").read_text(encoding="utf-8")
     closeout_prompt = (
         tmp_path / "docs" / "handoff" / "CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
     ).read_text(encoding="utf-8")
@@ -257,6 +259,7 @@ def test_successor_handoff_artifacts_snapshot(tmp_path):
     assert "# NEXT CHAT BOOTSTRAP" in next_bootstrap
     assert "Successor handoff package" in next_bootstrap
     assert "### RESULT: PASS ###" in next_bootstrap
+    assert "# Start New Chat Prompt" in start_prompt
     assert "# Closeout Before Chat Switch Prompt" in closeout_prompt
     assert "agentic-kit transfer chat-switch-complete --render-prompt" in closeout_prompt
 
@@ -289,6 +292,8 @@ def test_external_workspace_successor_handoff_package_uses_operating_layer_paths
     context = json.loads((package_dir / "successor_context.yaml").read_text(encoding="utf-8"))
     contract = json.loads((package_dir / "execution_contract.json").read_text(encoding="utf-8"))
     successor_prompt = (package_dir / "successor_prompt.md").read_text(encoding="utf-8")
+    next_bootstrap = (tmp_path / ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md").read_text(encoding="utf-8")
+    start_prompt = (tmp_path / ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md").read_text(encoding="utf-8")
 
     assert source_manifest["workspace_mode"] == "external"
     assert {source["path"] for source in source_manifest["sources"]} == {
@@ -312,7 +317,17 @@ def test_external_workspace_successor_handoff_package_uses_operating_layer_paths
     assert "agentic-kit transfer chat-switch-complete --render-prompt" in result.closeout_prompt
     assert "./.venv/bin/agentic-kit" not in result.closeout_prompt
     assert "docs/reference/agentic-kit-commands.json" not in successor_prompt
+    assert "agentic-kit check --root ." in successor_prompt
+    assert "agentic-kit doctor --root ." in successor_prompt
+    assert "agentic-kit transfer repo-status" in successor_prompt
+    assert "agentic-kit rules acknowledge" not in successor_prompt
+    assert "agentic-kit transfer post-merge-check" not in successor_prompt
+    assert "main == origin/main" not in successor_prompt
+    assert "PR #1304" not in successor_prompt
+    assert "agentic-kit check --root ." in next_bootstrap
+    assert "agentic-kit doctor --root ." in start_prompt
     assert (tmp_path / ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md").exists()
+    assert (tmp_path / ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md").exists()
     assert (tmp_path / ".agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md").exists()
 
 
@@ -715,6 +730,7 @@ def test_handoff_projection_contract_names_generated_paths_and_update_policy() -
     assert "docs/reports/handoff-packages/latest/execution_contract.json" in projection["generated_projection_paths"]
     assert "docs/handoff/NEXT_CHAT_BOOTSTRAP.md" in projection["default_direct_write_paths"]
     assert "docs/handoff/START_NEW_CHAT_PROMPT.md" in projection["dedicated_update_only_paths"]
+    assert projection["initial_create_if_missing_paths"] == ["docs/handoff/START_NEW_CHAT_PROMPT.md"]
     assert projection["source_of_truth"] == "generator_and_machine_readable_successor_package"
     assert projection["generator_command"] == "agentic-kit transfer prepare-successor-handoff --render-prompt"
     assert "manual direct edits to generated handoff projections" in projection["forbidden_update_path"]
@@ -724,6 +740,7 @@ def test_handoff_projection_contract_names_generated_paths_and_update_policy() -
     assert dpa_contract["current_handoff_target_byte_writer"] is False
     assert dpa_contract["default_direct_write_paths"] == projection["default_direct_write_paths"]
     assert dpa_contract["dedicated_update_only_paths"] == projection["dedicated_update_only_paths"]
+    assert dpa_contract["initial_create_if_missing_paths"] == projection["initial_create_if_missing_paths"]
     assert {
         "generated-handoff-projection-update-policy",
         "patch-cycle-diagnostic-gate",
