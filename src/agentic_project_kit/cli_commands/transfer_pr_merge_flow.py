@@ -130,6 +130,7 @@ def pr_complete_command(
         ),
     ),
 ) -> None:
+    """Wait for CI, safely merge an existing PR, and synchronize main."""
     mutation_lock_contract = "workspace_mutation_lock"
     _ = mutation_lock_contract
     if post_merge_complete:

@@ -296,7 +296,10 @@ def prepare_successor_handoff(
         update_canonical_prompts=True,
     )
 
-@transfer_app.command("remote-work-start")
+@transfer_app.command(
+    "remote-work-start",
+    help="Prepare a remote work branch with freshness, status, and transfer safety checks.",
+)
 def remote_work_start(
     branch: str = typer.Argument(..., help="Feature branch to prepare, for example feature/name."),
     main_branch: str = typer.Option("main", "--main-branch", help="Base branch for new work branches."),

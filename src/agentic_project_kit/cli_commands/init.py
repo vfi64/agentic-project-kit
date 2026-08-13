@@ -22,7 +22,10 @@ console = Console()
 
 
 def register_init_command(app: typer.Typer) -> None:
-    app.command("init")(init_command)
+    app.command(
+        "init",
+        help="Create a governed project skeleton with selected profiles and policy packs.",
+    )(init_command)
 
 
 def init_command(

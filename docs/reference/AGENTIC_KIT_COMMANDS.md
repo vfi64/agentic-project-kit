@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: a6030c3e51e0
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 4a6368de864c
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -1287,8 +1287,10 @@ Fail if expected target paths are missing from a change set.
 
 - Safety: `BOUNDED`
 - Surface: `orchestrator`
-- When to use: Run agentic-kit github-create.
+- When to use: Create and push a GitHub repository for an initialized project.
 - Dry-run available: `False`
+
+Create and push a GitHub repository for an initialized project.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1391,8 +1393,10 @@ _No parameters._
 
 - Safety: `BOUNDED`
 - Surface: `orchestrator`
-- When to use: Run agentic-kit init.
+- When to use: Create a governed project skeleton with selected profiles and policy packs.
 - Dry-run available: `False`
+
+Create a governed project skeleton with selected profiles and policy packs.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1532,8 +1536,10 @@ Validate post-release GitHub and Zenodo state without guessing DOI metadata.
 
 - Safety: `BOUNDED`
 - Surface: `orchestrator`
-- When to use: Run agentic-kit post-release-doi-closeout.
+- When to use: Record verified DOI metadata after GitHub release and Zenodo publication.
 - Dry-run available: `False`
+
+Record verified DOI metadata after GitHub release and Zenodo publication.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2174,8 +2180,10 @@ _No parameters._
 
 - Safety: `BOUNDED`
 - Surface: `orchestrator`
-- When to use: Run agentic-kit transfer admin-refresh-pr.
+- When to use: Create or recover the administrative handoff refresh PR after a merged PR.
 - Dry-run available: `False`
+
+Create or recover the administrative handoff refresh PR after a merged PR.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2690,8 +2698,10 @@ Render the current four-slice patch/handoff workflow state.
 
 - Safety: `DESTRUCTIVE`
 - Surface: `orchestrator`
-- When to use: Run agentic-kit transfer post-merge-complete.
+- When to use: Run the post-merge handoff refresh lifecycle after a merged PR.
 - Dry-run available: `False`
+
+Run the post-merge handoff refresh lifecycle after a merged PR.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2730,8 +2740,10 @@ Deterministically settle post-merge generated-output refresh state.
 
 - Safety: `BOUNDED`
 - Surface: `orchestrator`
-- When to use: Run agentic-kit transfer pr-closeout-complete.
+- When to use: Merge a substantive PR if needed, then finish post-merge handoff closeout.
 - Dry-run available: `False`
+
+Merge a substantive PR if needed, then finish post-merge handoff closeout.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2748,8 +2760,10 @@ Deterministically settle post-merge generated-output refresh state.
 
 - Safety: `BOUNDED`
 - Surface: `orchestrator`
-- When to use: Run agentic-kit transfer pr-complete.
+- When to use: Wait for CI, safely merge an existing PR, and synchronize main.
 - Dry-run available: `False`
+
+Wait for CI, safely merge an existing PR, and synchronize main.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2783,9 +2797,11 @@ Deterministically settle post-merge generated-output refresh state.
 
 - Safety: `BOUNDED`
 - Surface: `orchestrator`
-- When to use: Run agentic-kit transfer pr-create-complete.
+- When to use: Create, validate, merge, and optionally close out a PR without manual PR/SHA copying.
 - Dry-run available: `False`
 - Replaces raw: `gh pr create`
+
+Create, validate, merge, and optionally close out a PR without manual PR/SHA copying.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2975,8 +2991,10 @@ Refresh outbox and latest handoff report with fresh generated LLM context.
 
 - Safety: `BOUNDED`
 - Surface: `orchestrator`
-- When to use: Run agentic-kit transfer remote-next.
+- When to use: Run the next repo-backed transfer order for local or remote work handoff.
 - Dry-run available: `False`
+
+Run the next repo-backed transfer order for local or remote work handoff.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2987,8 +3005,10 @@ Refresh outbox and latest handoff report with fresh generated LLM context.
 
 - Safety: `BOUNDED`
 - Surface: `orchestrator`
-- When to use: Run agentic-kit transfer remote-work-start.
+- When to use: Prepare a remote work branch with freshness, status, and transfer safety checks.
 - Dry-run available: `False`
+
+Prepare a remote work branch with freshness, status, and transfer safety checks.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|

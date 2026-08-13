@@ -59,6 +59,7 @@
       "dry_run_available": true,
       "group": "root",
       "help": "Dry-run by default garbage collector for transient communication artifacts.",
+      "lifecycle_rank": 100,
       "name": "artifact-gc",
       "params": [
         {
@@ -2678,6 +2679,7 @@
       "dry_run_available": true,
       "group": "docs lifecycle",
       "help": "Build or apply a bounded documentation lifecycle sweep plan.",
+      "lifecycle_rank": 80,
       "name": "sweep",
       "params": [
         {
@@ -3782,6 +3784,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Validate the bounded DP1-DP5 final closeout record.",
+      "lifecycle_rank": 90,
       "name": "final-closeout-check",
       "params": [
         {
@@ -6182,7 +6185,8 @@
     {
       "dry_run_available": false,
       "group": "root",
-      "help": "",
+      "help": "Create and push a GitHub repository for an initialized project.",
+      "lifecycle_rank": 110,
       "name": "github-create",
       "params": [
         {
@@ -6238,7 +6242,7 @@
       "task_tags": [
         "bounded"
       ],
-      "when_to_use": "Run agentic-kit github-create."
+      "when_to_use": "Create and push a GitHub repository for an initialized project."
     },
     {
       "dry_run_available": false,
@@ -6561,7 +6565,8 @@
     {
       "dry_run_available": false,
       "group": "root",
-      "help": "",
+      "help": "Create a governed project skeleton with selected profiles and policy packs.",
+      "lifecycle_rank": 0,
       "name": "init",
       "params": [
         {
@@ -6781,7 +6786,7 @@
       "task_tags": [
         "bounded"
       ],
-      "when_to_use": "Run agentic-kit init."
+      "when_to_use": "Create a governed project skeleton with selected profiles and policy packs."
     },
     {
       "dry_run_available": false,
@@ -7341,7 +7346,8 @@
     {
       "dry_run_available": false,
       "group": "root",
-      "help": "",
+      "help": "Record verified DOI metadata after GitHub release and Zenodo publication.",
+      "lifecycle_rank": 74,
       "name": "post-release-doi-closeout",
       "params": [
         {
@@ -7411,7 +7417,7 @@
       "task_tags": [
         "bounded"
       ],
-      "when_to_use": "Run agentic-kit post-release-doi-closeout."
+      "when_to_use": "Record verified DOI metadata after GitHub release and Zenodo publication."
     },
     {
       "dry_run_available": false,
@@ -7970,6 +7976,7 @@
       "dry_run_available": true,
       "group": "release",
       "help": "Generate release summary evidence and run release-prep safely.",
+      "lifecycle_rank": 71,
       "name": "prepare",
       "params": [
         {
@@ -8077,6 +8084,7 @@
       "dry_run_available": false,
       "group": "release",
       "help": "Run release readiness through the standard-error scan wrapper.",
+      "lifecycle_rank": 70,
       "name": "ready",
       "params": [
         {
@@ -8560,6 +8568,7 @@
       "dry_run_available": true,
       "group": "root",
       "help": "Prepare release metadata through the supported agentic-kit route.\n\nThis edits only local release metadata files. It does not tag, publish,\npush, create GitHub releases, or write Zenodo DOI metadata.",
+      "lifecycle_rank": 72,
       "name": "release-prep",
       "params": [
         {
@@ -8677,6 +8686,7 @@
       "dry_run_available": true,
       "group": "root",
       "help": "Plan release publishing without live tag/release side effects.",
+      "lifecycle_rank": 73,
       "name": "release-publish",
       "params": [
         {
@@ -10416,7 +10426,8 @@
     {
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Create or recover the administrative handoff refresh PR after a merged PR.",
+      "lifecycle_rank": 63,
       "name": "admin-refresh-pr",
       "params": [
         {
@@ -10474,7 +10485,7 @@
         "bounded",
         "transfer"
       ],
-      "when_to_use": "Run agentic-kit transfer admin-refresh-pr."
+      "when_to_use": "Create or recover the administrative handoff refresh PR after a merged PR."
     },
     {
       "dry_run_available": false,
@@ -10749,6 +10760,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Create a deterministic successor handoff package and prompt projections.",
+      "lifecycle_rank": 62,
       "name": "chat-switch-complete",
       "params": [
         {
@@ -12880,7 +12892,8 @@
     {
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Run the post-merge handoff refresh lifecycle after a merged PR.",
+      "lifecycle_rank": 61,
       "name": "post-merge-complete",
       "params": [
         {
@@ -13022,12 +13035,13 @@
         "destructive",
         "transfer"
       ],
-      "when_to_use": "Run agentic-kit transfer post-merge-complete."
+      "when_to_use": "Run the post-merge handoff refresh lifecycle after a merged PR."
     },
     {
       "dry_run_available": false,
       "group": "transfer",
       "help": "Deterministically settle post-merge generated-output refresh state.",
+      "lifecycle_rank": 60,
       "name": "post-merge-settle",
       "params": [
         {
@@ -13174,7 +13188,8 @@
     {
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Merge a substantive PR if needed, then finish post-merge handoff closeout.",
+      "lifecycle_rank": 57,
       "name": "pr-closeout-complete",
       "params": [
         {
@@ -13302,12 +13317,13 @@
         "bounded",
         "transfer"
       ],
-      "when_to_use": "Run agentic-kit transfer pr-closeout-complete."
+      "when_to_use": "Merge a substantive PR if needed, then finish post-merge handoff closeout."
     },
     {
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Wait for CI, safely merge an existing PR, and synchronize main.",
+      "lifecycle_rank": 56,
       "name": "pr-complete",
       "params": [
         {
@@ -13450,7 +13466,7 @@
         "bounded",
         "transfer"
       ],
-      "when_to_use": "Run agentic-kit transfer pr-complete."
+      "when_to_use": "Wait for CI, safely merge an existing PR, and synchronize main."
     },
     {
       "dry_run_available": false,
@@ -13560,7 +13576,8 @@
     {
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Create, validate, merge, and optionally close out a PR without manual PR/SHA copying.",
+      "lifecycle_rank": 55,
       "name": "pr-create-complete",
       "params": [
         {
@@ -13719,7 +13736,7 @@
         "bounded",
         "transfer"
       ],
-      "when_to_use": "Run agentic-kit transfer pr-create-complete."
+      "when_to_use": "Create, validate, merge, and optionally close out a PR without manual PR/SHA copying."
     },
     {
       "dry_run_available": false,
@@ -14557,7 +14574,8 @@
     {
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Run the next repo-backed transfer order for local or remote work handoff.",
+      "lifecycle_rank": 46,
       "name": "remote-next",
       "params": [
         {
@@ -14603,12 +14621,13 @@
         "bounded",
         "transfer"
       ],
-      "when_to_use": "Run agentic-kit transfer remote-next."
+      "when_to_use": "Run the next repo-backed transfer order for local or remote work handoff."
     },
     {
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Prepare a remote work branch with freshness, status, and transfer safety checks.",
+      "lifecycle_rank": 45,
       "name": "remote-work-start",
       "params": [
         {
@@ -14666,7 +14685,7 @@
         "bounded",
         "transfer"
       ],
-      "when_to_use": "Run agentic-kit transfer remote-work-start."
+      "when_to_use": "Prepare a remote work branch with freshness, status, and transfer safety checks."
     },
     {
       "dry_run_available": false,
@@ -15909,6 +15928,7 @@
       "dry_run_available": true,
       "group": "work",
       "help": "Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks.",
+      "lifecycle_rank": 50,
       "name": "finish",
       "params": [
         {
@@ -16030,6 +16050,7 @@
       "dry_run_available": false,
       "group": "work",
       "help": "Run safe recovery/status commands after interrupted work.",
+      "lifecycle_rank": 35,
       "name": "recover",
       "params": [
         {
@@ -16065,6 +16086,7 @@
       "dry_run_available": false,
       "group": "work",
       "help": "Start a human patch/slice workflow with the safe standard startup sequence.",
+      "lifecycle_rank": 30,
       "name": "start",
       "params": [
         {
@@ -16671,6 +16693,7 @@
       "dry_run_available": false,
       "group": "workflow",
       "help": "Request the configured workflow and run one bounded step.",
+      "lifecycle_rank": 40,
       "name": "go",
       "params": [
         {
@@ -17098,6 +17121,7 @@
       "dry_run_available": false,
       "group": "workspace",
       "help": "Analyze an existing repository without writing workspace files.",
+      "lifecycle_rank": 10,
       "name": "adopt",
       "params": [
         {
@@ -17147,6 +17171,7 @@
       "dry_run_available": true,
       "group": "workspace",
       "help": "Run the deterministic DPA repository-intake orchestration.",
+      "lifecycle_rank": 21,
       "name": "dpa-intake",
       "params": [
         {
@@ -17266,6 +17291,7 @@
       "dry_run_available": true,
       "group": "workspace",
       "help": "Plan or create a bounded operating-layer workspace.",
+      "lifecycle_rank": 20,
       "name": "init",
       "params": [
         {
@@ -17399,6 +17425,7 @@
       "dry_run_available": true,
       "group": "workspace",
       "help": "Plan or remove exact Kit-generated operating-layer workspace files.",
+      "lifecycle_rank": 95,
       "name": "remove",
       "params": [
         {
@@ -17462,6 +17489,7 @@
       "dry_run_available": true,
       "group": "workspace",
       "help": "Plan or run deterministic workspace manifest schema upgrades.",
+      "lifecycle_rank": 25,
       "name": "upgrade",
       "params": [
         {
@@ -17526,7 +17554,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "a6030c3e51e0",
+    "manifest_sha": "4a6368de864c",
     "schema_version": 1
   },
   "schema_version": 2,

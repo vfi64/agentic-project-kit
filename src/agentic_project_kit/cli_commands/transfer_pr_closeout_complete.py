@@ -59,7 +59,10 @@ def render_pr_closeout_complete_result(result: PrCloseoutCompleteResult) -> str:
 
 
 def register_transfer_pr_closeout_complete_command(transfer_app: typer.Typer) -> None:
-    @transfer_app.command("pr-closeout-complete")
+    @transfer_app.command(
+        "pr-closeout-complete",
+        help="Merge a substantive PR if needed, then finish post-merge handoff closeout.",
+    )
     def pr_closeout_complete_command(
         after_pr: int = typer.Option(
             ...,

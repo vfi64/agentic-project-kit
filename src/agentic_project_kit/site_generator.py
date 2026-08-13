@@ -40,6 +40,7 @@ class SiteFoundationMetadata:
     concept_doi: str
     version_doi: str
     current_verified_main: str
+    repository_url: str
     surface_counts: dict[str, int]
     safety_counts: dict[str, int]
     command_group_count: int
@@ -65,6 +66,7 @@ class SiteCommandEntry:
     when_to_use: str
     help: str
     params: tuple[dict[str, object], ...]
+    lifecycle_rank: int | None = None
 
     def as_dict(self) -> dict[str, object]:
         data = asdict(self)
@@ -78,7 +80,9 @@ class SiteCommandCatalog:
 
     @property
     def guided_entries(self) -> tuple[SiteCommandEntry, ...]:
-        return tuple(entry for entry in self.entries if entry.surface == "orchestrator")
+        return _guided_lifecycle_entries(
+            tuple(entry for entry in self.entries if entry.surface == "orchestrator")
+        )
 
     @property
     def diagnostic_entries(self) -> tuple[SiteCommandEntry, ...]:
@@ -324,6 +328,7 @@ def collect_site_foundation_metadata(
             concept_doi=concept_doi,
             version_doi=version_doi,
             current_verified_main=current_verified_main,
+            repository_url=_project_repository_url(project),
             surface_counts=command_catalog.surface_counts(),
             safety_counts=command_catalog.safety_counts(),
             command_group_count=len(command_catalog.group_counts()),
@@ -560,6 +565,7 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
         "concept_doi": escape(metadata.concept_doi or "not recorded"),
         "version_doi": escape(metadata.version_doi or "not recorded"),
         "current_verified_main": escape(metadata.current_verified_main or "not recorded"),
+        "repository_url": escape(metadata.repository_url or "#"),
         "orchestrator_count": str(metadata.surface_counts.get("orchestrator", 0)),
         "diagnostic_count": str(metadata.surface_counts.get("diagnostic", 0)),
         "primitive_count": str(metadata.surface_counts.get("primitive", 0)),
@@ -573,7 +579,10 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
             report.status_projection.latest_substantive_work or "not recorded"
         ),
         "next_safe_step": escape(report.status_projection.next_safe_step or "not recorded"),
-        "guided_command_items": _command_summary_items(command_catalog.guided_entries, limit=8),
+        "guided_command_items": _command_summary_items(
+            _guided_lifecycle_entries(command_catalog.guided_entries),
+            limit=8,
+        ),
         "common_diagnostic_items": _command_summary_items(
             command_catalog.common_blocker_entries,
             limit=6,
@@ -601,6 +610,58 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
         ),
     }
     return template.safe_substitute(values).rstrip() + "\n"
+
+
+def _guided_lifecycle_entries(
+    entries: tuple[SiteCommandEntry, ...],
+) -> tuple[SiteCommandEntry, ...]:
+    return tuple(sorted(entries, key=_guided_lifecycle_sort_key))
+
+
+def _guided_lifecycle_sort_key(entry: SiteCommandEntry) -> tuple[int, int, str]:
+    if entry.lifecycle_rank is not None:
+        return (entry.lifecycle_rank, 0, entry.qualified_name)
+    qualified = entry.qualified_name
+    path = qualified.removeprefix("agentic-kit ").split()
+    group = path[0] if path else ""
+    leaf = path[-1] if path else ""
+    group_rank = {
+        "workspace": 100,
+        "work": 200,
+        "workflow": 300,
+        "transfer": 400,
+        "release": 500,
+        "docs": 600,
+        "dpa": 700,
+    }.get(group, 800)
+    leaf_rank = {
+        "adopt": 0,
+        "init": 1,
+        "upgrade": 2,
+        "dpa-intake": 3,
+        "remove": 90,
+        "start": 0,
+        "finish": 1,
+        "recover": 2,
+        "remote-work-start": 0,
+        "remote-next": 1,
+        "pr-create-complete": 2,
+        "pr-complete": 3,
+        "pr-closeout-complete": 4,
+        "post-merge-settle": 5,
+        "post-merge-complete": 6,
+        "chat-switch-complete": 7,
+        "admin-refresh-pr": 8,
+        "prepare": 0,
+        "ready": 1,
+        "release-prep": 2,
+        "release-publish": 3,
+        "post-release-doi-closeout": 4,
+        "sweep": 0,
+        "final-closeout-check": 0,
+        "artifact-gc": 0,
+    }.get(leaf, 50)
+    return (group_rank, leaf_rank, qualified)
 
 
 def _command_summary_items(
@@ -789,6 +850,11 @@ def _build_command_catalog(
                 diagnostic_priority=diagnostic_priority_for_command(command),
                 when_to_use=when_to_use,
                 help=_string(command.get("help")),
+                lifecycle_rank=(
+                    command.get("lifecycle_rank")
+                    if isinstance(command.get("lifecycle_rank"), int)
+                    else None
+                ),
                 params=tuple(_param_summary(param) for param in params if isinstance(param, dict)),
             )
         )
@@ -867,6 +933,17 @@ def _citation_value(root: Path, key: str) -> str:
     if not path.exists():
         return ""
     return _match_line(path.read_text(encoding="utf-8"), rf"^{key}:\s*\"?([^\"\n]+)\"?")
+
+
+def _project_repository_url(project: dict[str, Any]) -> str:
+    urls = project.get("urls")
+    if not isinstance(urls, dict):
+        return ""
+    for key in ("Repository", "Source", "Source Code", "Homepage"):
+        value = urls.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    return ""
 
 
 def _section_block(text: str, heading: str) -> str:

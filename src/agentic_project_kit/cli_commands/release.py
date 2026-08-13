@@ -49,7 +49,10 @@ def register_release_commands(app: typer.Typer) -> None:
     app.command("release-metadata-authority-gate")(release_metadata_authority_gate_command)
     app.command("release-check")(release_check_command)
     app.command("post-release-check")(post_release_check_command)
-    app.command("post-release-doi-closeout")(post_release_doi_closeout_command)
+    app.command(
+        "post-release-doi-closeout",
+        help="Record verified DOI metadata after GitHub release and Zenodo publication.",
+    )(post_release_doi_closeout_command)
 
 
 def release_plan_command(

@@ -7,6 +7,7 @@
       "dry_run_available": false,
       "group": "actions",
       "help": "",
+      "lifecycle_rank": null,
       "params": [],
       "qualified_name": "agentic-kit actions list",
       "safety": "READ_ONLY",
@@ -18,6 +19,7 @@
       "dry_run_available": false,
       "group": "actions",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -38,6 +40,7 @@
       "dry_run_available": true,
       "group": "root",
       "help": "Dry-run by default garbage collector for transient communication artifacts.",
+      "lifecycle_rank": 100,
       "params": [
         {
           "help": "Collect expired local tmp logs.",
@@ -122,6 +125,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Audit absolute local paths that may break portability.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -150,6 +154,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Audit agent-facing command authority surfaces for current command-for guidance.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -178,6 +183,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Audit command manifest hash, CLI coverage, safety metadata, and MD sync.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -206,6 +212,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Audit current release/documentation currency across handoff and release docs.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -234,6 +241,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Report registered documents without incoming repository references.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -270,6 +278,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Audit mutating entrypoints for workspace mutation-lock coverage.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Emit JSON output.",
@@ -290,6 +299,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Audit remaining legacy ./ns/ns-menu/ns_release references.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -318,6 +328,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Audit whether repeated patch failures were followed by diagnosis evidence.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -354,6 +365,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Report hardcoded docs/tmp path literals in source modules.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Project root.",
@@ -390,6 +402,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Audit planning and handoff docs for consolidation candidates.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -418,6 +431,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Audit source for risky bug/redundancy patterns.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -446,6 +460,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Audit STATUS.md current-state claims against handoff, release, and origin/main state.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -482,6 +497,7 @@
       "dry_run_available": false,
       "group": "boot",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -502,6 +518,7 @@
       "dry_run_available": false,
       "group": "boot",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -522,6 +539,7 @@
       "dry_run_available": false,
       "group": "boot",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -542,6 +560,7 @@
       "dry_run_available": false,
       "group": "boot",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -570,6 +589,7 @@
       "dry_run_available": false,
       "group": "boot",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -606,6 +626,7 @@
       "dry_run_available": false,
       "group": "chat",
       "help": "Render the compact six-line command manifest refresher.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "copy-paste, remote, or file-transfer.",
@@ -626,6 +647,7 @@
       "dry_run_available": false,
       "group": "chat",
       "help": "Render the session-start refresher and full inline command list.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "copy-paste, remote, or file-transfer.",
@@ -646,6 +668,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -666,6 +689,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -686,6 +710,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -706,6 +731,7 @@
       "dry_run_available": false,
       "group": "cockpit",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON action inventory.",
@@ -726,6 +752,7 @@
       "dry_run_available": false,
       "group": "cockpit",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -754,6 +781,7 @@
       "dry_run_available": false,
       "group": "cockpit",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -798,6 +826,7 @@
       "dry_run_available": false,
       "group": "cockpit",
       "help": "",
+      "lifecycle_rank": null,
       "params": [],
       "qualified_name": "agentic-kit cockpit select",
       "safety": "BOUNDED",
@@ -809,6 +838,7 @@
       "dry_run_available": false,
       "group": "cockpit",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -829,6 +859,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Select the deterministic wrapper command for a raw command or task tag.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Raw command line to map to a wrapper.",
@@ -873,6 +904,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Check that public commands have stable GUI-usable taxonomy.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -901,6 +933,7 @@
       "dry_run_available": true,
       "group": "commands",
       "help": "Render docs/reference/AGENTIC_KIT_COMMANDS.md from the JSON manifest.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -937,6 +970,7 @@
       "dry_run_available": true,
       "group": "commands",
       "help": "Synchronize command reference files and command-manifest entrypoint headers.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -973,6 +1007,7 @@
       "dry_run_available": false,
       "group": "dev",
       "help": "Run the local feature gate through the supported agentic-kit CLI.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Also run PR hygiene after the local feature gate.",
@@ -993,6 +1028,7 @@
       "dry_run_available": false,
       "group": "direction",
       "help": "Report planning files that are not yet represented in project direction.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -1021,6 +1057,7 @@
       "dry_run_available": false,
       "group": "direction",
       "help": "Render project direction without overwriting committed projections.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -1065,6 +1102,7 @@
       "dry_run_available": false,
       "group": "direction",
       "help": "Validate docs/planning/PROJECT_DIRECTION.yaml.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -1101,6 +1139,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Audit lifecycle status headers for planning, roadmap, strategy, and idea documents.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -1161,6 +1200,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Audit cross-document state, governance, architecture, and historical-plan drift.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -1197,6 +1237,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Apply safe automatic documentation mesh repairs.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -1225,6 +1266,7 @@
       "dry_run_available": false,
       "group": "doc-registry",
       "help": "List unregistered docs candidates with optional strict declared-scope failure.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Project root.",
@@ -1261,6 +1303,7 @@
       "dry_run_available": true,
       "group": "doc-registry",
       "help": "Reconcile documentation registry, declared scope, and decision projection.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Project root.",
@@ -1297,6 +1340,7 @@
       "dry_run_available": false,
       "group": "doc-registry",
       "help": "Add one reviewed document entry to the documentation registry.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository-relative document path.",
@@ -1349,6 +1393,7 @@
       "dry_run_available": true,
       "group": "docs lifecycle",
       "help": "Apply one safe documentation lifecycle plan step.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -1401,6 +1446,7 @@
       "dry_run_available": true,
       "group": "docs lifecycle",
       "help": "Stamp missing lifecycle headers without claiming semantic currency.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -1437,6 +1483,7 @@
       "dry_run_available": false,
       "group": "docs lifecycle",
       "help": "Build a dry-run lifecycle plan for one documentation scope.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -1473,6 +1520,7 @@
       "dry_run_available": false,
       "group": "docs lifecycle",
       "help": "List archive documents that may be old enough for manual deletion review.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -1501,6 +1549,7 @@
       "dry_run_available": true,
       "group": "docs lifecycle",
       "help": "Build or write one documentation lifecycle evidence report.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -1553,6 +1602,7 @@
       "dry_run_available": true,
       "group": "docs lifecycle",
       "help": "Build or apply a bounded documentation lifecycle sweep plan.",
+      "lifecycle_rank": 80,
       "params": [
         {
           "help": "Repository root.",
@@ -1613,6 +1663,7 @@
       "dry_run_available": false,
       "group": "docs lifecycle",
       "help": "Propose safe documentation lifecycle actions without applying changes.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -1641,6 +1692,7 @@
       "dry_run_available": false,
       "group": "docs",
       "help": "Fail if removed documentation sources still have live refs or registry refs.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -1685,6 +1737,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Run the umbrella documentation-system audit.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -1713,6 +1766,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Show a read-only summary of the documentation registry.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -1741,6 +1795,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Run a compact project health check.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -1761,6 +1816,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Refresh CURRENT_HANDOFF through DPA freshness, locking and acceptance-state gates.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -1837,6 +1893,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Prepare DP2 decision readiness without recording Maintainer authorization.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -1905,6 +1962,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Validate a bounded DP3/DP4 adjudication record without authorizing DP5.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -1973,6 +2031,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Block new DP5 noncompliance against the accepted warn-stage baseline.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -2049,6 +2108,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Validate a bounded DP5 lifecycle stage record.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -2117,6 +2177,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Block all configured DP5 noncompliance in the accepted DPA scope.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -2185,6 +2246,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Validate the bounded DP1-DP5 final closeout record.",
+      "lifecycle_rank": 90,
       "params": [
         {
           "help": "Repository root.",
@@ -2253,6 +2315,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Execute authorized non-production DPA fixture evidence cases.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -2345,6 +2408,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Validate a DP2 Maintainer Assessment record without authorizing DP2.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -2421,6 +2485,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Assess post-DP2 DP3-DP5 rollout, migration and strict-gate scope.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -2505,6 +2570,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Inspect PROBE-002 lifecycle and selected-writer readiness without production mutation.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -2565,6 +2631,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Inspect PROBE-003 workflow serialization readiness without workflow mutation.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -2633,6 +2700,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Inspect PROBE-004 migration and rollback readiness without migration.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -2701,6 +2769,7 @@
       "dry_run_available": false,
       "group": "dpa",
       "help": "Validate the DPA DP1 Assessment readiness record without mutating files.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -2745,6 +2814,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Execute only non-mutating DP1 Probe fixture cases.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -2829,6 +2899,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Inspect Renderer Probe readiness without renderer conformance claims.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -2897,6 +2968,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Assess a foreign or new repo for DPA-governed adoption without mutation.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Target repository root.",
@@ -2957,6 +3029,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Validate Stable-DPA readiness and the bounded Stable Promotion record.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -3033,6 +3106,7 @@
       "dry_run_available": true,
       "group": "dpa",
       "help": "Observe a WRT-CH-001 admin refresh PR without claiming disposable fixture PASS.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Substantive PR that triggered the admin refresh.",
@@ -3109,6 +3183,7 @@
       "dry_run_available": false,
       "group": "evidence",
       "help": "Classify a terminal/evidence log for deterministic gatekeeper decisions.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -3153,6 +3228,7 @@
       "dry_run_available": false,
       "group": "evidence",
       "help": "Clean local evidence according to repo policy.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -3173,6 +3249,7 @@
       "dry_run_available": false,
       "group": "evidence",
       "help": "Pass when git status is clean except one expected in-progress log.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -3201,6 +3278,7 @@
       "dry_run_available": false,
       "group": "evidence",
       "help": "Commit an explicit evidence path set and verify the worktree is clean afterwards.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository-relative path to commit. Repeat for multiple paths.",
@@ -3269,6 +3347,7 @@
       "dry_run_available": false,
       "group": "evidence",
       "help": "Append a canonical summary, require strict inspection, then upload the evidence log.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -3473,6 +3552,7 @@
       "dry_run_available": false,
       "group": "evidence",
       "help": "Fail if a terminal evidence log has contradictory final state.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -3493,6 +3573,7 @@
       "dry_run_available": false,
       "group": "evidence",
       "help": "Inspect explicit or latest terminal evidence before continuing after chat control signals.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -3529,6 +3610,7 @@
       "dry_run_available": false,
       "group": "evidence",
       "help": "Fail if expected target paths are missing from a change set.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Changed repository path. Repeat for multiple paths.",
@@ -3556,7 +3638,8 @@
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "root",
-      "help": "",
+      "help": "Create and push a GitHub repository for an initialized project.",
+      "lifecycle_rank": 110,
       "params": [
         {
           "help": "",
@@ -3586,13 +3669,14 @@
       "qualified_name": "agentic-kit github-create",
       "safety": "BOUNDED",
       "surface": "orchestrator",
-      "when_to_use": "Run agentic-kit github-create."
+      "when_to_use": "Create and push a GitHub repository for an initialized project."
     },
     {
       "diagnostic_priority": "advanced_diagnostic",
       "dry_run_available": false,
       "group": "governance",
       "help": "",
+      "lifecycle_rank": null,
       "params": [],
       "qualified_name": "agentic-kit governance check",
       "safety": "READ_ONLY",
@@ -3604,6 +3688,7 @@
       "dry_run_available": false,
       "group": "gui",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Project root whose GUI prompt should be rendered.",
@@ -3632,6 +3717,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Run the pre-GUI readiness gate.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -3668,6 +3754,7 @@
       "dry_run_available": false,
       "group": "handoff",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -3688,6 +3775,7 @@
       "dry_run_available": false,
       "group": "handoff",
       "help": "",
+      "lifecycle_rank": null,
       "params": [],
       "qualified_name": "agentic-kit handoff post-merge-refresh-status",
       "safety": "READ_ONLY",
@@ -3699,6 +3787,7 @@
       "dry_run_available": false,
       "group": "handoff",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -3727,6 +3816,7 @@
       "dry_run_available": false,
       "group": "handoff",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -3755,6 +3845,7 @@
       "dry_run_available": false,
       "group": "handoff",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -3774,7 +3865,8 @@
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "root",
-      "help": "",
+      "help": "Create a governed project skeleton with selected profiles and policy packs.",
+      "lifecycle_rank": 0,
       "params": [
         {
           "help": "Project directory/name.",
@@ -3892,13 +3984,14 @@
       "qualified_name": "agentic-kit init",
       "safety": "BOUNDED",
       "surface": "orchestrator",
-      "when_to_use": "Run agentic-kit init."
+      "when_to_use": "Create a governed project skeleton with selected profiles and policy packs."
     },
     {
       "diagnostic_priority": "advanced_diagnostic",
       "dry_run_available": false,
       "group": "instruction",
       "help": "Lint instruction text against the current command manifest.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Instruction text file to lint.",
@@ -3959,6 +4052,7 @@
       "dry_run_available": false,
       "group": "pass-already-done",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -4011,6 +4105,7 @@
       "dry_run_available": false,
       "group": "pass-already-done",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -4063,6 +4158,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -4091,6 +4187,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Diagnose patch size, protected paths, and diff-risk before closeout.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -4159,6 +4256,7 @@
       "dry_run_available": false,
       "group": "patterns",
       "help": "List known local patterns and anti-patterns.",
+      "lifecycle_rank": null,
       "params": [],
       "qualified_name": "agentic-kit patterns list",
       "safety": "READ_ONLY",
@@ -4170,6 +4268,7 @@
       "dry_run_available": false,
       "group": "patterns",
       "help": "Show one local pattern catalog entry by stable ID.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -4190,6 +4289,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Validate post-release GitHub and Zenodo state without guessing DOI metadata.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -4217,7 +4317,8 @@
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "root",
-      "help": "",
+      "help": "Record verified DOI metadata after GitHub release and Zenodo publication.",
+      "lifecycle_rank": 74,
       "params": [
         {
           "help": "",
@@ -4255,13 +4356,14 @@
       "qualified_name": "agentic-kit post-release-doi-closeout",
       "safety": "BOUNDED",
       "surface": "orchestrator",
-      "when_to_use": "Run agentic-kit post-release-doi-closeout."
+      "when_to_use": "Record verified DOI metadata after GitHub release and Zenodo publication."
     },
     {
       "diagnostic_priority": "advanced_diagnostic",
       "dry_run_available": false,
       "group": "pr",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -4282,6 +4384,7 @@
       "dry_run_available": true,
       "group": "pr",
       "help": "Merge only when PR checks are green, refs match, and merge state is clean.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Pull request number to merge only after green checks.",
@@ -4390,6 +4493,7 @@
       "dry_run_available": false,
       "group": "pr",
       "help": "Print deterministic PR/CI status and fetch failed logs for red CI.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Pull request number to inspect.",
@@ -4434,6 +4538,7 @@
       "dry_run_available": false,
       "group": "pr",
       "help": "Wait for pull-request CI; guard merge preparation with --expected-head-sha.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Pull request number to inspect.",
@@ -4486,6 +4591,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -4506,6 +4612,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -4534,6 +4641,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "List available project profiles and policy packs.",
+      "lifecycle_rank": null,
       "params": [],
       "qualified_name": "agentic-kit profile-explain",
       "safety": "BOUNDED",
@@ -4545,6 +4653,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Render project direction sections from the YAML source.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository root.",
@@ -4581,6 +4690,7 @@
       "dry_run_available": true,
       "group": "release",
       "help": "Generate release summary evidence and run release-prep safely.",
+      "lifecycle_rank": 71,
       "params": [
         {
           "help": "Target release version.",
@@ -4641,6 +4751,7 @@
       "dry_run_available": false,
       "group": "release",
       "help": "Run release readiness through the standard-error scan wrapper.",
+      "lifecycle_rank": 70,
       "params": [
         {
           "help": "Target release version.",
@@ -4693,6 +4804,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Validate release state for a target version.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -4721,6 +4833,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Block manual release metadata anchor edits without release-prep evidence.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -4773,6 +4886,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Generate deterministic evidence-backed release notes from a local git tag diff.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -4873,6 +4987,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Print a release preparation checklist for the current project.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -4901,6 +5016,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Validate before-metadata release readiness for a target version.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Target release version without leading v.",
@@ -4921,6 +5037,7 @@
       "dry_run_available": true,
       "group": "root",
       "help": "Prepare release metadata through the supported agentic-kit route.\n\nThis edits only local release metadata files. It does not tag, publish,\npush, create GitHub releases, or write Zenodo DOI metadata.",
+      "lifecycle_rank": 72,
       "params": [
         {
           "help": "",
@@ -4989,6 +5106,7 @@
       "dry_run_available": true,
       "group": "root",
       "help": "Plan release publishing without live tag/release side effects.",
+      "lifecycle_rank": 73,
       "params": [
         {
           "help": "",
@@ -5049,6 +5167,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Render the local release lifecycle state without mutating release files.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5093,6 +5212,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Dry-run remote branch hygiene classification for K3.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5121,6 +5241,7 @@
       "dry_run_available": true,
       "group": "root",
       "help": "Safely apply exactly one remote branch deletion candidate.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5165,6 +5286,7 @@
       "dry_run_available": true,
       "group": "root",
       "help": "Write a K3 remote branch hygiene evidence report only with --execute.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5209,6 +5331,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5237,6 +5360,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5265,6 +5389,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5293,6 +5418,7 @@
       "dry_run_available": false,
       "group": "rule-registry",
       "help": "",
+      "lifecycle_rank": null,
       "params": [],
       "qualified_name": "agentic-kit rule-registry check",
       "safety": "READ_ONLY",
@@ -5304,6 +5430,7 @@
       "dry_run_available": false,
       "group": "rule-registry",
       "help": "Add one reviewed rule mechanism with direct evidence coverage.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Unique rule mechanism id.",
@@ -5436,6 +5563,7 @@
       "dry_run_available": false,
       "group": "rule-registry",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Emit machine-readable JSON.",
@@ -5464,6 +5592,7 @@
       "dry_run_available": false,
       "group": "rules",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5508,6 +5637,7 @@
       "dry_run_available": false,
       "group": "rules",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Path to RULE_REFRESH_ACK JSON/text.",
@@ -5544,6 +5674,7 @@
       "dry_run_available": false,
       "group": "rules",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5580,6 +5711,7 @@
       "dry_run_available": false,
       "group": "rules",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5608,6 +5740,7 @@
       "dry_run_available": false,
       "group": "rules",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5636,6 +5769,7 @@
       "dry_run_available": false,
       "group": "rules",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5664,6 +5798,7 @@
       "dry_run_available": false,
       "group": "rules",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5692,6 +5827,7 @@
       "dry_run_available": false,
       "group": "scaffold",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Planning document title",
@@ -5768,6 +5904,7 @@
       "dry_run_available": false,
       "group": "slice",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Slice gate kind to run.",
@@ -5796,6 +5933,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Run the audit suite required by standard project gates.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5832,6 +5970,7 @@
       "dry_run_available": false,
       "group": "state",
       "help": "",
+      "lifecycle_rank": null,
       "params": [],
       "qualified_name": "agentic-kit state freshness-check",
       "safety": "BOUNDED",
@@ -5843,6 +5982,7 @@
       "dry_run_available": false,
       "group": "state",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Execution target: local or remote.",
@@ -5879,6 +6019,7 @@
       "dry_run_available": false,
       "group": "state",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Execution target: local or remote.",
@@ -5923,6 +6064,7 @@
       "dry_run_available": false,
       "group": "todo",
       "help": "Mark a TODO item as done and store evidence.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -5959,6 +6101,7 @@
       "dry_run_available": false,
       "group": "todo",
       "help": "List project TODO items from .agentic/todo.yaml.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Show completed items too.",
@@ -5979,6 +6122,7 @@
       "dry_run_available": false,
       "group": "todo",
       "help": "Regenerate docs/TODO.md from .agentic/todo.yaml.",
+      "lifecycle_rank": null,
       "params": [],
       "qualified_name": "agentic-kit todo render",
       "safety": "BOUNDED",
@@ -5989,7 +6133,8 @@
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Create or recover the administrative handoff refresh PR after a merged PR.",
+      "lifecycle_rank": 63,
       "params": [
         {
           "help": "Merged PR number that requires the administrative handoff refresh.",
@@ -6019,13 +6164,14 @@
       "qualified_name": "agentic-kit transfer admin-refresh-pr",
       "safety": "BOUNDED",
       "surface": "orchestrator",
-      "when_to_use": "Run agentic-kit transfer admin-refresh-pr."
+      "when_to_use": "Create or recover the administrative handoff refresh PR after a merged PR."
     },
     {
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Transfer order path.",
@@ -6054,6 +6200,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Branch name to create.",
@@ -6098,6 +6245,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Branch name to delete.",
@@ -6142,6 +6290,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Branch name to switch to.",
@@ -6178,6 +6327,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Create a deterministic successor handoff package and prompt projections.",
+      "lifecycle_rank": 62,
       "params": [
         {
           "help": "Print machine-readable JSON only.",
@@ -6196,7 +6346,7 @@
           "required": false
         },
         {
-          "help": "Directory for the generated successor handoff package.",
+          "help": "Directory for the generated successor handoff package. Defaults to the workspace handoff package path.",
           "name": "output_dir",
           "opts": [
             "--output-dir"
@@ -6222,6 +6372,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Do not remove .agentic/transfer during closeout.",
@@ -6250,6 +6401,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Block common copied-command mistakes before running patch, transfer, or release gates.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository-relative test path that must exist before composing a pytest command. Repeatable.",
@@ -6302,6 +6454,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Check whether the committed agentic-kit command reference is current.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON only.",
@@ -6322,6 +6475,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Regenerate the agentic-kit command reference without committing changes.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON only.",
@@ -6342,6 +6496,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Begin a repo-local command-stack state for deterministic local preflight cleanup.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON.",
@@ -6362,6 +6517,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "End the repo-local command-stack state after a local command stack completed.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON.",
@@ -6382,6 +6538,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Commit message.",
@@ -6435,6 +6592,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Resolve one conflicted file by replacing it from an explicit source and staging it.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository-relative conflicted file to resolve.",
@@ -6479,6 +6637,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Report merge/rebase conflict state without resolving anything.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON only.",
@@ -6499,6 +6658,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Continue chat/local transfer communication through the safest available wrapper path.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Optional target branch. If omitted, infer a single active transfer order.",
@@ -6535,6 +6695,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Delete a merged non-main work branch after PR merge-state verification.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Merged feature/docs/fix/chore/evidence branch to delete.",
@@ -6587,6 +6748,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Diagnose ns command definitions/usages removed or reduced between release refs.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Old release tag/ref.",
@@ -6639,6 +6801,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Report local/upstream divergence without mutating repository state.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON only.",
@@ -6659,6 +6822,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Finalize the current transfer evidence log through the stricter evidence CLI.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Evidence slice label.",
@@ -6783,6 +6947,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Inspect the latest evidence log with the required-summary contract.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON only.",
@@ -6803,6 +6968,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Finalize transfer evidence on an evidence branch and complete it through a PR.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Evidence slice label.",
@@ -6968,6 +7134,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Remote branch to fetch from origin.",
@@ -6996,6 +7163,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print the full HEAD SHA instead of the short SHA.",
@@ -7024,6 +7192,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Transfer order path.",
@@ -7052,6 +7221,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "List local release tags and branches for safe work-start selection.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print JSON instead of text.",
@@ -7072,6 +7242,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Render the dynamic local-to-LLM copy/paste log header from rule files.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Optional log path to include in the dynamic local-to-LLM header.",
@@ -7092,6 +7263,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Render the terminal hint for copy/paste communication with the LLM.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Log file path to mention in the terminal upload hint.",
@@ -7120,6 +7292,7 @@
       "dry_run_available": true,
       "group": "transfer",
       "help": "Normalize active transfer files by adding missing command IDs and archiving stale active files.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Report transfer file lifecycle repairs without applying them.",
@@ -7148,6 +7321,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Normalize and summarize the local transfer session state.\n\nThe MVP is diagnostic and evidence-producing only. It does not switch branches,\npull, delete files, commit, push, or mutate the worktree except for writing the\ncanonical transfer outbox file.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON only.",
@@ -7184,6 +7358,7 @@
       "dry_run_available": true,
       "group": "transfer",
       "help": "Generate a head-anchored executable remote-next transfer order.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Safe remote-next transfer branch.",
@@ -7284,6 +7459,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Validate a remote-next transfer order without mutating the repository.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Transfer order path.",
@@ -7312,6 +7488,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Render the current four-slice patch/handoff workflow state.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Optional pull request number to include in the patch-cycle state.",
@@ -7356,6 +7533,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Expected current branch after merge.",
@@ -7383,7 +7561,8 @@
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Run the post-merge handoff refresh lifecycle after a merged PR.",
+      "lifecycle_rank": 61,
       "params": [
         {
           "help": "Merged PR number to complete.",
@@ -7461,13 +7640,14 @@
       "qualified_name": "agentic-kit transfer post-merge-complete",
       "safety": "DESTRUCTIVE",
       "surface": "orchestrator",
-      "when_to_use": "Run agentic-kit transfer post-merge-complete."
+      "when_to_use": "Run the post-merge handoff refresh lifecycle after a merged PR."
     },
     {
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "transfer",
       "help": "Deterministically settle post-merge generated-output refresh state.",
+      "lifecycle_rank": 60,
       "params": [
         {
           "help": "Merged PR number whose post-merge generated-output state should settle.",
@@ -7551,7 +7731,8 @@
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Merge a substantive PR if needed, then finish post-merge handoff closeout.",
+      "lifecycle_rank": 57,
       "params": [
         {
           "help": "Substantive PR number to merge if needed and close out with post-merge handoff refresh.",
@@ -7621,13 +7802,14 @@
       "qualified_name": "agentic-kit transfer pr-closeout-complete",
       "safety": "BOUNDED",
       "surface": "orchestrator",
-      "when_to_use": "Run agentic-kit transfer pr-closeout-complete."
+      "when_to_use": "Merge a substantive PR if needed, then finish post-merge handoff closeout."
     },
     {
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Wait for CI, safely merge an existing PR, and synchronize main.",
+      "lifecycle_rank": 56,
       "params": [
         {
           "help": "Pull request number to complete.",
@@ -7706,13 +7888,14 @@
       "qualified_name": "agentic-kit transfer pr-complete",
       "safety": "BOUNDED",
       "surface": "orchestrator",
-      "when_to_use": "Run agentic-kit transfer pr-complete."
+      "when_to_use": "Wait for CI, safely merge an existing PR, and synchronize main."
     },
     {
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Base branch.",
@@ -7772,7 +7955,8 @@
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Create, validate, merge, and optionally close out a PR without manual PR/SHA copying.",
+      "lifecycle_rank": 55,
       "params": [
         {
           "help": "Pull request title.",
@@ -7859,13 +8043,14 @@
       "qualified_name": "agentic-kit transfer pr-create-complete",
       "safety": "BOUNDED",
       "surface": "orchestrator",
-      "when_to_use": "Run agentic-kit transfer pr-create-complete."
+      "when_to_use": "Create, validate, merge, and optionally close out a PR without manual PR/SHA copying."
     },
     {
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Head branch to look up. Use current to resolve git branch --show-current.",
@@ -7910,6 +8095,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Pull request number to merge safely.",
@@ -7994,6 +8180,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Pull request number to inspect through the transfer wrapper.",
@@ -8046,6 +8233,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Pull request number to wait for.",
@@ -8107,6 +8295,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Deprecated compatibility alias for transfer chat-switch-complete.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON only.",
@@ -8151,6 +8340,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Write the current diff to /tmp and run the Python protected change planner on it.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Stable label for the temporary diff file.",
@@ -8187,6 +8377,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Label for the published tracked handoff report.",
@@ -8215,6 +8406,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print JSON instead of text.",
@@ -8235,6 +8427,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Expected branch to push. If set, the transfer monitor switches to it or blocks safely.",
@@ -8263,6 +8456,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON.",
@@ -8283,6 +8477,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Rebase the current branch on its upstream with bounded conflict reporting.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Upstream ref. Defaults to origin/<current-branch>.",
@@ -8319,6 +8514,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Refresh outbox and latest handoff report with fresh generated LLM context.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print JSON instead of text.",
@@ -8338,7 +8534,8 @@
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Run the next repo-backed transfer order for local or remote work handoff.",
+      "lifecycle_rank": 46,
       "params": [
         {
           "help": "Optional remote transfer branch. If omitted, read branch from the transfer order.",
@@ -8360,13 +8557,14 @@
       "qualified_name": "agentic-kit transfer remote-next",
       "safety": "BOUNDED",
       "surface": "orchestrator",
-      "when_to_use": "Run agentic-kit transfer remote-next."
+      "when_to_use": "Run the next repo-backed transfer order for local or remote work handoff."
     },
     {
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Prepare a remote work branch with freshness, status, and transfer safety checks.",
+      "lifecycle_rank": 45,
       "params": [
         {
           "help": "Feature branch to prepare, for example feature/name.",
@@ -8396,13 +8594,14 @@
       "qualified_name": "agentic-kit transfer remote-work-start",
       "safety": "BOUNDED",
       "surface": "orchestrator",
-      "when_to_use": "Run agentic-kit transfer remote-work-start."
+      "when_to_use": "Prepare a remote work branch with freshness, status, and transfer safety checks."
     },
     {
       "diagnostic_priority": "advanced_diagnostic",
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Show staged diff.",
@@ -8439,6 +8638,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Number of commits to show.",
@@ -8468,6 +8668,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Use short git status by default.",
@@ -8496,6 +8697,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Require fresh generated LLM context before transfer planning.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Maximum acceptable age of generated LLM context.",
@@ -8532,6 +8734,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Restore the canonical known volatile transfer files.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON only.",
@@ -8552,6 +8755,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Label for the transfer uplink report.",
@@ -8580,6 +8784,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Transfer order path.",
@@ -8608,6 +8813,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "One command step; quote it as one shell argument.",
@@ -8644,6 +8850,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print the full latest transfer report JSON.",
@@ -8664,6 +8871,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Run a bounded scan for known workflow standard errors before patch/transfer/release work.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Run the release-oriented standard-error scan bundle.",
@@ -8732,6 +8940,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON.",
@@ -8752,6 +8961,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Transfer order path.",
@@ -8780,6 +8990,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Task title.",
@@ -8832,6 +9043,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Synchronize main, acknowledge rules, and normalize the session.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Main branch to synchronize.",
@@ -8860,6 +9072,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print JSON instead of text.",
@@ -8880,6 +9093,7 @@
       "dry_run_available": true,
       "group": "transfer",
       "help": "Apply a guarded JSON/YAML text-replacement patch work order.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "JSON/YAML patch work-order path.",
@@ -8916,6 +9130,7 @@
       "dry_run_available": false,
       "group": "transfer",
       "help": "Read repo and transfer state and print the next safe wrapper command without mutating state.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON.",
@@ -8936,6 +9151,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Validate the machine-readable project contract.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Project root containing .agentic/project.yaml.",
@@ -8956,6 +9172,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Validate an output file against a machine-readable output contract.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Output text file to validate.",
@@ -9017,6 +9234,7 @@
       "dry_run_available": false,
       "group": "root",
       "help": "Validate that a text file contains required literal section markers.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Text file to validate.",
@@ -9046,6 +9264,7 @@
       "dry_run_available": false,
       "group": "work",
       "help": "Run common human workflow gates without committing or pushing.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Check profile: minimal, code, docs, or release.",
@@ -9074,6 +9293,7 @@
       "dry_run_available": true,
       "group": "work",
       "help": "Preview or execute the explicit destructive discard-all workflow.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Discard all feature-branch changes. Dry-run is the default.",
@@ -9110,6 +9330,7 @@
       "dry_run_available": true,
       "group": "work",
       "help": "Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks.",
+      "lifecycle_rank": 50,
       "params": [
         {
           "help": "Feature branch to finish.",
@@ -9178,6 +9399,7 @@
       "dry_run_available": false,
       "group": "work",
       "help": "Run safe recovery/status commands after interrupted work.",
+      "lifecycle_rank": 35,
       "params": [
         {
           "help": "Print machine-readable JSON.",
@@ -9198,6 +9420,7 @@
       "dry_run_available": false,
       "group": "work",
       "help": "Start a human patch/slice workflow with the safe standard startup sequence.",
+      "lifecycle_rank": 30,
       "params": [
         {
           "help": "Feature branch to create or switch to.",
@@ -9242,6 +9465,7 @@
       "dry_run_available": false,
       "group": "work-order",
       "help": "",
+      "lifecycle_rank": null,
       "params": [],
       "qualified_name": "agentic-kit work-order check",
       "safety": "READ_ONLY",
@@ -9253,6 +9477,7 @@
       "dry_run_available": false,
       "group": "work-order",
       "help": "",
+      "lifecycle_rank": null,
       "params": [],
       "qualified_name": "agentic-kit work-order list",
       "safety": "READ_ONLY",
@@ -9264,6 +9489,7 @@
       "dry_run_available": false,
       "group": "work-order",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -9300,6 +9526,7 @@
       "dry_run_available": true,
       "group": "work-order",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -9328,6 +9555,7 @@
       "dry_run_available": false,
       "group": "work-order",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -9348,6 +9576,7 @@
       "dry_run_available": false,
       "group": "work-order",
       "help": "",
+      "lifecycle_rank": null,
       "params": [],
       "qualified_name": "agentic-kit work-order templates",
       "safety": "BOUNDED",
@@ -9359,6 +9588,7 @@
       "dry_run_available": false,
       "group": "work-order",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Print machine-readable JSON result.",
@@ -9379,6 +9609,7 @@
       "dry_run_available": false,
       "group": "work-order",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Typed work order inbox directory.",
@@ -9407,6 +9638,7 @@
       "dry_run_available": true,
       "group": "work-order",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -9443,6 +9675,7 @@
       "dry_run_available": false,
       "group": "work-order",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Repository evidence log path to commit; defaults to the next-turn result log.",
@@ -9503,6 +9736,7 @@
       "dry_run_available": false,
       "group": "workflow",
       "help": "Cleanup completed or stale temporary workflow evidence branches.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Project root containing tools/next-step.py.",
@@ -9523,6 +9757,7 @@
       "dry_run_available": false,
       "group": "workflow",
       "help": "Upload preserved FAILED workflow evidence without cleanup or retry.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Project root containing tools/next-step.py.",
@@ -9543,6 +9778,7 @@
       "dry_run_available": false,
       "group": "workflow",
       "help": "Request the configured workflow and run one bounded step.",
+      "lifecycle_rank": 40,
       "params": [
         {
           "help": "Project root containing .agentic/current_work.yaml and tools/next-step.py.",
@@ -9563,6 +9799,7 @@
       "dry_run_available": false,
       "group": "workflow",
       "help": "List stored local workflow items.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Project root containing .agentic/work_items.",
@@ -9583,6 +9820,7 @@
       "dry_run_available": false,
       "group": "workflow",
       "help": "Request the configured declarative workflow without running it.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Project root containing .agentic/current_work.yaml.",
@@ -9603,6 +9841,7 @@
       "dry_run_available": false,
       "group": "workflow",
       "help": "Run the current workflow, or set a stored workflow item and run it.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Optional stored workflow item name to set before running.",
@@ -9631,6 +9870,7 @@
       "dry_run_available": false,
       "group": "workflow",
       "help": "Show the current workflow request or one stored workflow item.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Optional stored workflow item name.",
@@ -9659,6 +9899,7 @@
       "dry_run_available": false,
       "group": "workflow",
       "help": "Show guided workflow state; shortcut for workflow status --explain.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Project root containing .agentic/workflow_state.",
@@ -9679,6 +9920,7 @@
       "dry_run_available": false,
       "group": "workflow",
       "help": "Print the current workflow state and bounded evidence pointers.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Project root containing .agentic/workflow_state.",
@@ -9707,6 +9949,7 @@
       "dry_run_available": false,
       "group": "workflow",
       "help": "Alias for upload-output.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Project root containing tools/next-step.py.",
@@ -9727,6 +9970,7 @@
       "dry_run_available": false,
       "group": "workflow",
       "help": "Alias for upload-output.",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "Project root containing tools/next-step.py.",
@@ -9747,6 +9991,7 @@
       "dry_run_available": false,
       "group": "workflow-guard",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -9767,6 +10012,7 @@
       "dry_run_available": false,
       "group": "workflow-guard",
       "help": "",
+      "lifecycle_rank": null,
       "params": [
         {
           "help": "",
@@ -9787,6 +10033,7 @@
       "dry_run_available": false,
       "group": "workspace",
       "help": "Analyze an existing repository without writing workspace files.",
+      "lifecycle_rank": 10,
       "params": [
         {
           "help": "Target repository root.",
@@ -9815,6 +10062,7 @@
       "dry_run_available": true,
       "group": "workspace",
       "help": "Run the deterministic DPA repository-intake orchestration.",
+      "lifecycle_rank": 21,
       "params": [
         {
           "help": "Target repository root.",
@@ -9883,6 +10131,7 @@
       "dry_run_available": true,
       "group": "workspace",
       "help": "Plan or create a bounded operating-layer workspace.",
+      "lifecycle_rank": 20,
       "params": [
         {
           "help": "Target repository root.",
@@ -9959,6 +10208,7 @@
       "dry_run_available": true,
       "group": "workspace",
       "help": "Plan or remove exact Kit-generated operating-layer workspace files.",
+      "lifecycle_rank": 95,
       "params": [
         {
           "help": "Target repository root.",
@@ -9995,6 +10245,7 @@
       "dry_run_available": true,
       "group": "workspace",
       "help": "Plan or run deterministic workspace manifest schema upgrades.",
+      "lifecycle_rank": 25,
       "params": [
         {
           "help": "Target repository root.",

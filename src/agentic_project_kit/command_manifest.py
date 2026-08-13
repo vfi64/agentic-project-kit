@@ -25,6 +25,37 @@ RAW_REPLACEMENTS: dict[str, tuple[str, ...]] = {
     "agentic-kit release ready": ("git tag", "gh release create"),
 }
 
+LIFECYCLE_RANKS: dict[str, int] = {
+    "agentic-kit init": 0,
+    "agentic-kit workspace adopt": 10,
+    "agentic-kit workspace init": 20,
+    "agentic-kit workspace dpa-intake": 21,
+    "agentic-kit workspace upgrade": 25,
+    "agentic-kit work start": 30,
+    "agentic-kit work recover": 35,
+    "agentic-kit workflow go": 40,
+    "agentic-kit transfer remote-work-start": 45,
+    "agentic-kit transfer remote-next": 46,
+    "agentic-kit work finish": 50,
+    "agentic-kit transfer pr-create-complete": 55,
+    "agentic-kit transfer pr-complete": 56,
+    "agentic-kit transfer pr-closeout-complete": 57,
+    "agentic-kit transfer post-merge-settle": 60,
+    "agentic-kit transfer post-merge-complete": 61,
+    "agentic-kit transfer chat-switch-complete": 62,
+    "agentic-kit transfer admin-refresh-pr": 63,
+    "agentic-kit release ready": 70,
+    "agentic-kit release prepare": 71,
+    "agentic-kit release-prep": 72,
+    "agentic-kit release-publish": 73,
+    "agentic-kit post-release-doi-closeout": 74,
+    "agentic-kit docs lifecycle sweep": 80,
+    "agentic-kit dpa final-closeout-check": 90,
+    "agentic-kit workspace remove": 95,
+    "agentic-kit artifact-gc": 100,
+    "agentic-kit github-create": 110,
+}
+
 
 @dataclass(frozen=True)
 class CommandManifestFinding:
@@ -325,13 +356,15 @@ def _dry_run_available(command: dict[str, Any]) -> bool:
 
 def _with_manifest_fields(command: dict[str, Any]) -> dict[str, Any]:
     enriched = dict(command)
+    qualified_name = str(enriched.get("qualified_name") or "")
     enriched["safety"] = str(enriched.get("safety") or infer_safety(enriched))
     enriched["surface"] = str(enriched.get("surface") or infer_surface(enriched))
     enriched["task_tags"] = list(enriched.get("task_tags") or _task_tags(enriched))
     enriched["when_to_use"] = str(enriched.get("when_to_use") or _when_to_use(enriched))
+    if qualified_name in LIFECYCLE_RANKS:
+        enriched["lifecycle_rank"] = LIFECYCLE_RANKS[qualified_name]
     enriched["replaces_raw"] = list(
-        enriched.get("replaces_raw")
-        or RAW_REPLACEMENTS.get(str(enriched.get("qualified_name") or ""), ())
+        enriched.get("replaces_raw") or RAW_REPLACEMENTS.get(qualified_name, ())
     )
     enriched["dry_run_available"] = bool(
         enriched.get("dry_run_available")

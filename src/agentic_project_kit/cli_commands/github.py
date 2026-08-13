@@ -12,7 +12,10 @@ console = Console()
 
 
 def register_github_commands(app: typer.Typer) -> None:
-    app.command("github-create")(github_create_command)
+    app.command(
+        "github-create",
+        help="Create and push a GitHub repository for an initialized project.",
+    )(github_create_command)
 
 
 def github_create_command(

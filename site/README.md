@@ -77,7 +77,9 @@ adding clearer explanatory sections:
   deterministic site builder.
 - Repository Memory, Runtime Structure, CLI, GUI, Communication, and Claims
   sections are rendered from templates plus generated metadata.
-- Guided lifecycle examples come from `surface: orchestrator`.
+- Guided lifecycle examples come from `surface: orchestrator` and are ordered
+  by `lifecycle_rank` metadata in the generated command manifest, with
+  deterministic grouping as fallback.
 - common blocker diagnostics come from the existing GUI command projection, not
   a separate website taxonomy.
 - Status categories use computed claim status: verified now, available but evolving,

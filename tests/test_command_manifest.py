@@ -126,6 +126,32 @@ def test_current_reference_classifies_every_command_surface() -> None:
     ] == []
 
 
+def test_orchestrator_lifecycle_rank_projects_normal_flow() -> None:
+    from agentic_project_kit.command_manifest import build_current_reference
+
+    data = build_current_reference()
+    by_name = {command["qualified_name"]: command for command in data["commands"]}
+    expected_order = [
+        "agentic-kit init",
+        "agentic-kit workspace adopt",
+        "agentic-kit workspace init",
+        "agentic-kit work start",
+        "agentic-kit workflow go",
+        "agentic-kit work finish",
+        "agentic-kit transfer pr-create-complete",
+        "agentic-kit transfer pr-complete",
+        "agentic-kit transfer pr-closeout-complete",
+        "agentic-kit transfer post-merge-complete",
+        "agentic-kit release prepare",
+        "agentic-kit workspace remove",
+    ]
+
+    ranks = [by_name[name]["lifecycle_rank"] for name in expected_order]
+
+    assert ranks == sorted(ranks)
+    assert all(isinstance(rank, int) for rank in ranks)
+
+
 def test_surface_contract_documents_compatibility_boundary() -> None:
     contract = Path("docs/governance/COMMAND_REFERENCE_REGISTRY_CONTRACT.md").read_text(
         encoding="utf-8"
@@ -138,6 +164,7 @@ def test_surface_contract_documents_compatibility_boundary() -> None:
     assert "`diagnostic` must not be inferred from `READ_ONLY`" in contract
     assert "does not by itself change the compatibility or deprecation contract" in contract
     assert "primitive does not mean unstable" in contract
+    assert "`lifecycle_rank` is generated presentation metadata" in contract
 
 
 def test_audit_detects_missing_safety(tmp_path: Path, monkeypatch) -> None:

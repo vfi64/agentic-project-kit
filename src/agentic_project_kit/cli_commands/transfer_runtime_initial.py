@@ -89,7 +89,10 @@ def continue_transfer_command(
     if int(result.get("returncode", 2)) != 0:
         raise typer.Exit(code=int(result.get("returncode", 2)))
 
-@transfer_app.command("remote-next")
+@transfer_app.command(
+    "remote-next",
+    help="Run the next repo-backed transfer order for local or remote work handoff.",
+)
 def remote_next(
     branch: str | None = typer.Argument(
         None,
