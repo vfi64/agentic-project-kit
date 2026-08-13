@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `36f87bae5e6c6f6368a36a69242695d061a1729d` (`36f87bae`), after `Exclude generated Pages fallback from packages (#2075)`.
-Last substantive work state is `36f87bae5e6c6f6368a36a69242695d061a1729d` (`36f87bae`), after `Exclude generated Pages fallback from packages (#2075)`.
+Current verified main/admin HEAD is `4cd8595d65ecc641defde571b80fefe3468f2e44` (`4cd8595d`), after `Document post-0.5.0 phase closeout (#2077)`.
+Last substantive work state is `4cd8595d65ecc641defde571b80fefe3468f2e44` (`4cd8595d`), after `Document post-0.5.0 phase closeout (#2077)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
