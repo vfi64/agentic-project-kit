@@ -22,6 +22,8 @@
           <h1 id="site-title">Agentic Execution Runtime</h1>
           <p class="lede">Formerly Agentic Project Kit. A local runtime for keeping long AI-assisted repository work grounded in contracts, gates, evidence and handoffs.</p>
           <div class="hero-actions" aria-label="Primary generated views">
+            <a href="#install">Install</a>
+            <a href="https://github.com/vfi64/agentic-project-kit">Repository</a>
             <a href="commands/guided.html">Guided commands</a>
             <a href="claims/index.html">Claim evidence</a>
           </div>
@@ -63,7 +65,7 @@
         </article>
         <article>
           <span>Manifest</span>
-          <strong>3d20e7338c12</strong>
+          <strong>4a6368de864c</strong>
         </article>
       </section>
 
@@ -72,6 +74,12 @@
           <p class="eyebrow">Why</p>
           <h2>Repository Memory</h2>
           <p>Long LLM projects lose time when context lives in chat history. The Kit makes the repository the durable project memory: current state, handoff packages, command manifests, gates, reports and release evidence are inspectable before new work starts.</p>
+        </article>
+        <article class="panel" id="install">
+          <p class="eyebrow">Install</p>
+          <h2>Start Locally</h2>
+          <p><code>pip install agentic-project-kit</code></p>
+          <p>After installation, run <code>agentic-kit --version</code>, then choose <code>agentic-kit init</code> for a new governed repository or <code>agentic-kit workspace adopt</code> for an existing one.</p>
         </article>
         <article class="panel">
           <p class="eyebrow">Current State</p>
@@ -90,11 +98,11 @@
         <dl class="compact-details">
           <div>
             <dt>Manifest identity</dt>
-            <dd><code>3d20e7338c12</code></dd>
+            <dd><code>4a6368de864c</code></dd>
           </div>
           <div>
             <dt>Reproduced manifest</dt>
-            <dd><code>3d20e7338c12</code></dd>
+            <dd><code>4a6368de864c</code></dd>
           </div>
           <div>
             <dt>Identity verified</dt>
@@ -121,14 +129,14 @@
           <p class="eyebrow">CLI</p>
           <h2>Normal Lifecycle</h2>
           <ul class="summary-list">
-          <li><code>agentic-kit artifact-gc</code><span>Dry-run by default garbage collector for transient communication artifacts.</span></li>
-          <li><code>agentic-kit chat session-start</code><span>Render the session-start refresher and full inline command list.</span></li>
-          <li><code>agentic-kit docs lifecycle sweep</code><span>Build or apply a bounded documentation lifecycle sweep plan.</span></li>
-          <li><code>agentic-kit dpa final-closeout-check</code><span>Validate the bounded DP1-DP5 final closeout record.</span></li>
-          <li><code>agentic-kit github-create</code><span>Run agentic-kit github-create.</span></li>
-          <li><code>agentic-kit init</code><span>Run agentic-kit init.</span></li>
-          <li><code>agentic-kit post-release-doi-closeout</code><span>Run agentic-kit post-release-doi-closeout.</span></li>
-          <li><code>agentic-kit release prepare</code><span>Generate release summary evidence and run release-prep safely.</span></li>
+          <li><code>agentic-kit init</code><span>Create a governed project skeleton with selected profiles and policy packs.</span></li>
+          <li><code>agentic-kit workspace adopt</code><span>Analyze an existing repository without writing workspace files.</span></li>
+          <li><code>agentic-kit workspace init</code><span>Plan or create a bounded operating-layer workspace.</span></li>
+          <li><code>agentic-kit workspace dpa-intake</code><span>Run the deterministic DPA repository-intake orchestration.</span></li>
+          <li><code>agentic-kit workspace upgrade</code><span>Plan or run deterministic workspace manifest schema upgrades.</span></li>
+          <li><code>agentic-kit work start</code><span>Start a human patch/slice workflow with the safe standard startup sequence.</span></li>
+          <li><code>agentic-kit work recover</code><span>Run safe recovery/status commands after interrupted work.</span></li>
+          <li><code>agentic-kit workflow go</code><span>Request the configured workflow and run one bounded step.</span></li>
           </ul>
         </article>
         <article class="panel">

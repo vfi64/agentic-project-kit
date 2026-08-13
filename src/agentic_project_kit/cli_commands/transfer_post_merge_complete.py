@@ -322,7 +322,10 @@ def _run_or_preflight_block(after_pr: int):
 
 
 def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> None:
-    @transfer_app.command("post-merge-complete")
+    @transfer_app.command(
+        "post-merge-complete",
+        help="Run the post-merge handoff refresh lifecycle after a merged PR.",
+    )
     def post_merge_complete_command(
         after_pr: int = typer.Option(
             ...,

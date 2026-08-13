@@ -22,6 +22,8 @@
           <h1 id="site-title">${product_name}</h1>
           <p class="lede">Formerly ${former_product_name}. A local runtime for keeping long AI-assisted repository work grounded in contracts, gates, evidence and handoffs.</p>
           <div class="hero-actions" aria-label="Primary generated views">
+            <a href="#install">Install</a>
+            <a href="${repository_url}">Repository</a>
             <a href="commands/guided.html">Guided commands</a>
             <a href="claims/index.html">Claim evidence</a>
           </div>
@@ -72,6 +74,12 @@
           <p class="eyebrow">Why</p>
           <h2>Repository Memory</h2>
           <p>Long LLM projects lose time when context lives in chat history. The Kit makes the repository the durable project memory: current state, handoff packages, command manifests, gates, reports and release evidence are inspectable before new work starts.</p>
+        </article>
+        <article class="panel" id="install">
+          <p class="eyebrow">Install</p>
+          <h2>Start Locally</h2>
+          <p><code>pip install ${package_name}</code></p>
+          <p>After installation, run <code>agentic-kit --version</code>, then choose <code>agentic-kit init</code> for a new governed repository or <code>agentic-kit workspace adopt</code> for an existing one.</p>
         </article>
         <article class="panel">
           <p class="eyebrow">Current State</p>

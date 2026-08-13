@@ -7,9 +7,11 @@ from agentic_project_kit.command_manifest import manifest_sha
 from agentic_project_kit.site_generator import (
     DOCS_PAGES_FALLBACK_KIND,
     SITE_KIND,
+    SiteCommandEntry,
     build_docs_pages_fallback,
     build_site,
     collect_site_foundation_metadata,
+    _guided_lifecycle_entries,
 )
 
 
@@ -22,6 +24,7 @@ def test_site_foundation_metadata_uses_meta_manifest_sha(tmp_path: Path) -> None
     assert report.metadata is not None
     assert report.metadata.package_version == "1.2.3"
     assert report.metadata.requires_python == ">=3.11"
+    assert report.metadata.repository_url == "https://example.invalid/repo"
     assert report.metadata.command_count == 3
     assert report.metadata.manifest_sha == report.metadata.reproduced_manifest_sha
     assert report.metadata.manifest_identity_verified is True
@@ -56,8 +59,11 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     assert "1.2.3" in html
     assert "abc123" in html
     assert "v1.2.3" in html
+    assert "pip install agentic-project-kit" in html
+    assert "https://example.invalid/repo" in html
     assert data["kind"] == SITE_KIND
     assert data["metadata"]["package_version"] == "1.2.3"
+    assert data["metadata"]["repository_url"] == "https://example.invalid/repo"
     assert data["metadata"]["manifest_identity_verified"] is True
     assert data["metadata"]["surface_counts"] == {
         "diagnostic": 1,
@@ -130,6 +136,22 @@ def test_docs_pages_fallback_ignores_volatile_status_refresh(tmp_path: Path) -> 
     assert (root / "docs" / "site" / "site.json").read_text(encoding="utf-8") == first_site_json
 
 
+def test_guided_lifecycle_entries_use_manifest_rank_before_alphabetical_order() -> None:
+    entries = (
+        _entry("agentic-kit artifact-gc", rank=100),
+        _entry("agentic-kit workspace init", rank=20),
+        _entry("agentic-kit init", rank=0),
+        _entry("agentic-kit work start", rank=30),
+    )
+
+    assert [entry.qualified_name for entry in _guided_lifecycle_entries(entries)] == [
+        "agentic-kit init",
+        "agentic-kit workspace init",
+        "agentic-kit work start",
+        "agentic-kit artifact-gc",
+    ]
+
+
 def test_site_foundation_blocks_manifest_identity_mismatch(tmp_path: Path) -> None:
     root = _write_site_fixture(tmp_path, manifest_identity="not-current")
 
@@ -178,6 +200,9 @@ def _write_site_fixture(
                 'version = "1.2.3"',
                 'requires-python = ">=3.11"',
                 "",
+                "[project.urls]",
+                'Repository = "https://example.invalid/repo"',
+                "",
             ]
         ),
         encoding="utf-8",
@@ -223,6 +248,7 @@ def _write_site_fixture(
         (
             "<html>${product_name} ${package_version} ${build_commit} "
             "${orchestrator_count} ${release_tag} Repository Memory Verified now "
+            "pip install ${package_name} ${repository_url} "
             "${guided_command_items} ${common_diagnostic_items}</html>\n"
         ),
         encoding="utf-8",
@@ -279,3 +305,18 @@ def _write_site_fixture(
         encoding="utf-8",
     )
     return root
+
+
+def _entry(qualified_name: str, *, rank: int | None) -> SiteCommandEntry:
+    return SiteCommandEntry(
+        qualified_name=qualified_name,
+        group=qualified_name.removeprefix("agentic-kit ").split()[0],
+        surface="orchestrator",
+        safety="BOUNDED",
+        dry_run_available=False,
+        diagnostic_priority="normal",
+        when_to_use=f"Use {qualified_name}.",
+        help=f"Use {qualified_name}.",
+        lifecycle_rank=rank,
+        params=(),
+    )

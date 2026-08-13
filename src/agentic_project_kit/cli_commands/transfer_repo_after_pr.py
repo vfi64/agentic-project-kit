@@ -17,7 +17,10 @@ def post_merge_check_command(
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)
 
-@transfer_app.command("admin-refresh-pr")
+@transfer_app.command(
+    "admin-refresh-pr",
+    help="Create or recover the administrative handoff refresh PR after a merged PR.",
+)
 def admin_refresh_pr_command(
     after_pr: int = typer.Option(
         ..., "--after-pr", help="Merged PR number that requires the administrative handoff refresh."

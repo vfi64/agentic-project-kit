@@ -305,7 +305,10 @@ def pr_existing_for_branch_command(
     if returncode != 0:
         raise typer.Exit(code=returncode)
 
-@transfer_app.command("pr-create-complete")
+@transfer_app.command(
+    "pr-create-complete",
+    help="Create, validate, merge, and optionally close out a PR without manual PR/SHA copying.",
+)
 def pr_create_complete_command(
     title: str = typer.Option(..., "--title", help="Pull request title."),
     body: str = typer.Option("", "--body", help="Pull request body."),

@@ -25,6 +25,9 @@ dev = [
   "ruff>=0.6"
 ]
 
+[project.urls]
+Repository = "https://github.com/vfi64/agentic-project-kit"
+
 
 [tool.hatch.build]
 exclude = [
