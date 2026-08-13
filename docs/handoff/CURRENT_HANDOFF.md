@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `34465873632a04e9617d96173c189dd2b48aeaa5` (`34465873`), after `Document C4 refresh chain decision (#2071)`.
-Last substantive work state is `34465873632a04e9617d96173c189dd2b48aeaa5` (`34465873`), after `Document C4 refresh chain decision (#2071)`.
+Current verified main/admin HEAD is `2c0bfec695c44a6d545007c124002255004248ee` (`2c0bfec6`), after `Improve generated site onboarding entry (#2073)`.
+Last substantive work state is `2c0bfec695c44a6d545007c124002255004248ee` (`2c0bfec6`), after `Improve generated site onboarding entry (#2073)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

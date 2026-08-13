@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 34465873632a04e9617d96173c189dd2b48aeaa5
-  short: 34465873
-  subject: Document C4 refresh chain decision (#2071)
+  full: 2c0bfec695c44a6d545007c124002255004248ee
+  short: 2c0bfec6
+  subject: Improve generated site onboarding entry (#2073)
 last_substantive_work_state:
-  full: 34465873632a04e9617d96173c189dd2b48aeaa5
-  short: 34465873
-  subject: Document C4 refresh chain decision (#2071)
+  full: 2c0bfec695c44a6d545007c124002255004248ee
+  short: 2c0bfec6
+  subject: Improve generated site onboarding entry (#2073)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
