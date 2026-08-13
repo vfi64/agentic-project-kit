@@ -9,4 +9,8 @@ def test_site_is_excluded_from_python_build_artifacts() -> None:
     match = re.search(r"(?ms)^\[tool\.hatch\.build\]\s*^exclude = \[(.*?)^\]", text)
 
     assert match is not None
-    assert '"/site"' in match.group(1)
+    exclude_block = match.group(1)
+    assert '"/site"' in exclude_block
+    assert '"/docs/.nojekyll"' in exclude_block
+    assert '"/docs/index.html"' in exclude_block
+    assert '"/docs/site"' in exclude_block

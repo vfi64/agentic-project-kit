@@ -381,6 +381,7 @@ For legacy `main` `/docs` GitHub Pages,
 `python site/scripts/build.py --docs-pages-fallback --json` writes
 `docs/index.html`, `docs/.nojekyll`, and `docs/site/`; `site/dist/` stays
 ignored.
+`site/` and `/docs` Pages fallback files are excluded from Python sdist and wheel artifacts.
 
 - `agentic-kit workspace dpa-intake`: run the deterministic one-shot DPA intake for a target repository by resolving exact-ref evidence, running workspace adoption analysis and DPA repo-adoption assessment, generating an adjudication plan, and optionally writing bounded intake evidence without migration or external-repo conformance claims.
 - `agentic-kit workspace remove`: plan or execute bounded removal of exact Kit-generated workspace files while preserving modified, unknown, source, and project-documentation paths.
