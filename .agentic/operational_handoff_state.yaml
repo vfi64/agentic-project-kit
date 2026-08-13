@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c4d84cd8e8b0f3d676a04d85001be9b0c6983c71
-  short: c4d84cd8
-  subject: Enable external workspace health checks (#2061)
+  full: 6ee3758da13ff66f95a5487f84ee85a7b3191240
+  short: 6ee3758d
+  subject: Enable external successor handoff packages (#2063)
 last_substantive_work_state:
-  full: c4d84cd8e8b0f3d676a04d85001be9b0c6983c71
-  short: c4d84cd8
-  subject: Enable external workspace health checks (#2061)
+  full: 6ee3758da13ff66f95a5487f84ee85a7b3191240
+  short: 6ee3758d
+  subject: Enable external successor handoff packages (#2063)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
