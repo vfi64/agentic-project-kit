@@ -291,6 +291,41 @@ def test_release_notes_generator_classifies_current_readme_and_dpa_titles(tmp_pa
     assert {item.category for item in report.items[1:]} == {"Governance"}
 
 
+def test_release_notes_generator_classifies_post_050_closing_titles(tmp_path: Path) -> None:
+    report = build_release_notes_report(
+        tmp_path,
+        version="1.0.0",
+        from_tag="v0.5.0",
+        command_runner=FakeRunner(
+            subjects=[
+                "Prefer command surfaces in command-for (#2013)",
+                "Refresh Block A consolidation report (#2026)",
+                "Generate site repository content (#2030)",
+                "Bind site claims to executable evidence (#2032)",
+                "Guard Pages deploy until Actions source is enabled (#2035)",
+                "Recover PR merge wrappers after remote merge (#2067)",
+                "Verify Comm-SCI external workspace mode (#2069)",
+                "Improve generated site onboarding entry (#2073)",
+                "Exclude generated Pages fallback from packages (#2075)",
+            ]
+        ),
+    )
+
+    assert report.validation.status == "PASS"
+    assert report.unclassified_items == ()
+    assert [item.category for item in report.items] == [
+        "Governance",
+        "Docs",
+        "Docs",
+        "Docs",
+        "Tests / Gates",
+        "Transfer / Handoff",
+        "Tests / Gates",
+        "Docs",
+        "Docs",
+    ]
+
+
 def test_release_notes_generator_treats_report_projection_commits_as_administrative(
     tmp_path: Path,
 ) -> None:
