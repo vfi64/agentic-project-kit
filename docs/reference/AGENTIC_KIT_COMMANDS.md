@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 3d20e7338c12
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: a6030c3e51e0
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -2250,7 +2250,7 @@ Create a deterministic successor handoff package and prompt projections.
 |---|---:|---|---:|---|---|
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 | `render_prompt` | `TyperOption` | --render-prompt | `False` | `False` | Print the generated copy-and-paste successor chat prompt. |
-| `output_dir` | `TyperOption` | --output-dir | `False` | `docs/reports/handoff-packages/latest` | Directory for the generated successor handoff package. |
+| `output_dir` | `TyperOption` | --output-dir | `False` |  | Directory for the generated successor handoff package. Defaults to the workspace handoff package path. |
 | `update_canonical_prompts` | `TyperOption` | --update-canonical-prompts, --no-update-canonical-prompts | `False` | `True` | Update NEXT_CHAT_BOOTSTRAP, START_NEW_CHAT_PROMPT, and CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT. |
 
 ### `agentic-kit transfer closeout`

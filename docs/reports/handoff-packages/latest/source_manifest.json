@@ -44,7 +44,7 @@
       "path": "AGENTS.md"
     },
     {
-      "bytes": 37525,
+      "bytes": 37619,
       "exists": true,
       "path": "README.md"
     },
@@ -54,7 +54,7 @@
       "path": "SECURITY.md"
     },
     {
-      "bytes": 48593,
+      "bytes": 48694,
       "exists": true,
       "path": "docs/DOCUMENTATION_COVERAGE.yaml",
       "yaml_valid": true
@@ -117,20 +117,21 @@
       "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md"
     },
     {
-      "bytes": 141637,
+      "bytes": 141713,
       "exists": true,
       "path": "docs/planning/PROJECT_DIRECTION.yaml",
       "yaml_valid": true
     },
     {
-      "bytes": 170664,
+      "bytes": 170674,
       "exists": true,
       "path": "docs/reference/AGENTIC_KIT_COMMANDS.md"
     },
     {
-      "bytes": 471620,
+      "bytes": 471634,
       "exists": true,
       "path": "docs/reference/agentic-kit-commands.json"
     }
-  ]
+  ],
+  "workspace_mode": "self-hosting"
 }

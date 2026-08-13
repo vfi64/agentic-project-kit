@@ -204,22 +204,23 @@ def _emit_successor_package(
     *,
     json_output: bool,
     render_prompt: bool,
-    output_dir: str,
+    output_dir: str | None,
     update_canonical_prompts: bool,
 ) -> None:
     result = write_successor_handoff_package(
         Path("."),
-        Path(output_dir),
+        Path(output_dir) if output_dir is not None else None,
         update_canonical_prompts=update_canonical_prompts,
     )
+    package_dir = result.output_dir
     payload = {
         "schema_version": 1,
         "kind": "transfer_chat_switch_complete_result",
         "result_status": result.validation_report["status"],
-        "context_path": str(Path(output_dir) / "successor_context.yaml"),
-        "source_manifest_path": str(Path(output_dir) / "source_manifest.json"),
-        "validation_report_path": str(Path(output_dir) / "validation_report.json"),
-        "successor_prompt_path": str(Path(output_dir) / "successor_prompt.md"),
+        "context_path": str(package_dir / "successor_context.yaml"),
+        "source_manifest_path": str(package_dir / "source_manifest.json"),
+        "validation_report_path": str(package_dir / "validation_report.json"),
+        "successor_prompt_path": str(package_dir / "successor_prompt.md"),
         "updated_canonical_prompts": update_canonical_prompts,
         "generated_head": result.context["repo"]["head"],
         "generated_head_short": result.context["repo"]["head_short"],
@@ -244,10 +245,10 @@ def chat_switch_complete(
         "--render-prompt",
         help="Print the generated copy-and-paste successor chat prompt.",
     ),
-    output_dir: str = typer.Option(
-        "docs/reports/handoff-packages/latest",
+    output_dir: str | None = typer.Option(
+        None,
         "--output-dir",
-        help="Directory for the generated successor handoff package.",
+        help="Directory for the generated successor handoff package. Defaults to the workspace handoff package path.",
     ),
     update_canonical_prompts: bool = typer.Option(
         True,
