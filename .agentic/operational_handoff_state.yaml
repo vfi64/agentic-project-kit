@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: dc5c66759e3a40087495eb7a30e2387a341e6886
-  short: dc5c6675
-  subject: Relax external workspace version drift doctor check (#2065)
+  full: a8b70bbef9af0be872d2b32dce578616c1e1a3fe
+  short: a8b70bbe
+  subject: Recover PR merge wrappers after remote merge (#2067)
 last_substantive_work_state:
-  full: dc5c66759e3a40087495eb7a30e2387a341e6886
-  short: dc5c6675
-  subject: Relax external workspace version drift doctor check (#2065)
+  full: a8b70bbef9af0be872d2b32dce578616c1e1a3fe
+  short: a8b70bbe
+  subject: Recover PR merge wrappers after remote merge (#2067)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
