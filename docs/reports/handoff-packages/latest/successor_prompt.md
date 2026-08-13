@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2077-handoff-refresh`
+- branch: `docs/post-pr2080-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -163,7 +163,7 @@ Wenn der Bootstrap grün ist:
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
       "id": "v1-0-milestone",
-      "status": "planned",
+      "status": "next",
       "summary": "Reach the 1.0 operating-layer stability milestone for unphased"
     },
     {
@@ -402,14 +402,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2077-handoff-refresh",
+    "branch": "docs/post-pr2080-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "4cd8595d65ecc641defde571b80fefe3468f2e44",
+    "head": "cd50a6f63577ea96d2c6e8e4bbc5588eef738dcf",
     "head_matches_origin_main": true,
-    "head_short": "4cd8595d",
+    "head_short": "cd50a6f6",
     "local_path": "cd /path/to/",
-    "origin_main": "4cd8595d65ecc641defde571b80fefe3468f2e44",
-    "origin_main_short": "4cd8595d",
+    "origin_main": "cd50a6f63577ea96d2c6e8e4bbc5588eef738dcf",
+    "origin_main_short": "cd50a6f6",
     "worktree_clean": false
   }
 }
