@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-08-13T18:44:50.305270+00:00",
+    "created_at_utc": "2026-08-13T21:20:26.833294+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -306,11 +306,11 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-08-13T18:44:50.614341+00:00",
+    "generated_at_utc": "2026-08-13T21:20:27.088391+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/v1-schema-readiness",
-      "head": "f7effe713110e6a17d8da4bfdfa2d25ca6e44826",
+      "branch": "codex/release-100-prepare",
+      "head": "91109e0569d051fd871b4cc133a0badcf918a161",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -370,8 +370,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "44d6cbcff3b727dea59ae5cfeaa491fce8851e9025949cf44d6e9ddebf60c8f7",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "0200ba8c7dc99792004a14dd522129f50eba4abcac4f411b38ad856db905a23c",
-      "docs/reference/agentic-kit-commands.json": "f1af5c2d038a7bf6ad6c55ede61bec1b7a8347173ffa46f3f599ac96127aada7"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "12e8f10d247c2e9f4aa12cce1dbdad07f0f33500505543ae097f331379cce2d9",
+      "docs/reference/agentic-kit-commands.json": "4c5ed6ebdda00568e92d3012df461fefd7384ad23453366b66107e2900d3e9d0"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -415,7 +415,7 @@
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "7fb6867ddc2260274ffd01febcdd087a12bc1588b32f110b389ea97592051bcf"
+        "sha256": "a70caf51dbf909ecf92be3ce3295092725e35984b2f78136401ec63d957179b0"
       }
     ],
     "canonical_cli_usage": {
@@ -916,12 +916,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/v1-schema-readiness",
+      "branch": "codex/release-100-prepare",
       "dirty_status": "",
-      "head": "f7effe713110e6a17d8da4bfdfa2d25ca6e44826",
-      "head_matches_upstream": true,
-      "upstream": "origin/codex/v1-schema-readiness",
-      "upstream_head": "f7effe713110e6a17d8da4bfdfa2d25ca6e44826"
+      "head": "91109e0569d051fd871b4cc133a0badcf918a161",
+      "head_matches_upstream": false,
+      "upstream": "",
+      "upstream_head": ""
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -987,7 +987,7 @@
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "7fb6867ddc2260274ffd01febcdd087a12bc1588b32f110b389ea97592051bcf"
+        "sha256": "a70caf51dbf909ecf92be3ce3295092725e35984b2f78136401ec63d957179b0"
       }
     ],
     "canonical_cli_usage": {
@@ -1488,12 +1488,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/v1-schema-readiness",
+      "branch": "codex/release-100-prepare",
       "dirty_status": "",
-      "head": "f7effe713110e6a17d8da4bfdfa2d25ca6e44826",
-      "head_matches_upstream": true,
-      "upstream": "origin/codex/v1-schema-readiness",
-      "upstream_head": "f7effe713110e6a17d8da4bfdfa2d25ca6e44826"
+      "head": "91109e0569d051fd871b4cc133a0badcf918a161",
+      "head_matches_upstream": false,
+      "upstream": "",
+      "upstream_head": ""
     },
     "schema_version": 1,
     "terminal_block_rules": {
