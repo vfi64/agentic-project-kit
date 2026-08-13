@@ -333,7 +333,8 @@ roadmap:
   phase: unphased
   status: done
   title: Close schema-version 1.0 acceptance criteria
-  completed_by_pr: pending-pr-v1-schema-readiness
+  completed_by_pr: 2080
+  merge_commit: cd50a6f6
   depends_on:
   - post-0-5-0-phases-a-b-c
   acceptance:
@@ -357,7 +358,8 @@ roadmap:
   phase: unphased
   status: done
   title: Broaden external repository evidence beyond Comm-SCI
-  completed_by_pr: pending-pr-v1-schema-readiness
+  completed_by_pr: 2080
+  merge_commit: cd50a6f6
   depends_on:
   - v1-0-schema-readiness
   acceptance:
