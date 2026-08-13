@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4cd8595d65ecc641defde571b80fefe3468f2e44
-  short: 4cd8595d
-  subject: Document post-0.5.0 phase closeout (#2077)
+  full: cd50a6f63577ea96d2c6e8e4bbc5588eef738dcf
+  short: cd50a6f6
+  subject: Close v1 schema readiness (#2080)
 last_substantive_work_state:
-  full: 4cd8595d65ecc641defde571b80fefe3468f2e44
-  short: 4cd8595d
-  subject: Document post-0.5.0 phase closeout (#2077)
+  full: cd50a6f63577ea96d2c6e8e4bbc5588eef738dcf
+  short: cd50a6f6
+  subject: Close v1 schema readiness (#2080)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
