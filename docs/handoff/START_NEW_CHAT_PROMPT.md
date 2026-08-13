@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 0200ba8c7dc99792004a14dd522129f50eba4abcac4f411b38ad856db905a23c
 - docs/reference/agentic-kit-commands.json: f1af5c2d038a7bf6ad6c55ede61bec1b7a8347173ffa46f3f599ac96127aada7
-## Operational documentation refresh state after PR #2082
+## Operational documentation refresh state after PR #2084
 
-Current administrative handoff refresh state is `0535cbb5` (`Record v1 schema readiness PR (#2082)`). Continue next only after this post-PR2082 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `4f065ecd` (`Update project direction meta after PR2082 (#2084)`). Continue next only after this post-PR2084 refresh is committed and merged; the next substantive slice must be created from fresh main.
