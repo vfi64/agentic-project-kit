@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `fff8777525eed8e862e3276b1cced120bc07ded1` (`fff87775`), after `Verify Comm-SCI external workspace mode (#2069)`.
-Last substantive work state is `fff8777525eed8e862e3276b1cced120bc07ded1` (`fff87775`), after `Verify Comm-SCI external workspace mode (#2069)`.
+Current verified main/admin HEAD is `34465873632a04e9617d96173c189dd2b48aeaa5` (`34465873`), after `Document C4 refresh chain decision (#2071)`.
+Last substantive work state is `34465873632a04e9617d96173c189dd2b48aeaa5` (`34465873`), after `Document C4 refresh chain decision (#2071)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
