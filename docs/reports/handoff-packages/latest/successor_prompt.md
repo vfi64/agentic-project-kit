@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2061-handoff-refresh`
+- branch: `codex/external-successor-handoff-mode`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -402,14 +402,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2061-handoff-refresh",
+    "branch": "codex/external-successor-handoff-mode",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "c4d84cd8e8b0f3d676a04d85001be9b0c6983c71",
+    "head": "08aa1a6e594e152817c835f5298c2e5b6cc560e2",
     "head_matches_origin_main": true,
-    "head_short": "c4d84cd8",
+    "head_short": "08aa1a6e",
     "local_path": "cd /path/to/",
-    "origin_main": "c4d84cd8e8b0f3d676a04d85001be9b0c6983c71",
-    "origin_main_short": "c4d84cd8",
+    "origin_main": "08aa1a6e594e152817c835f5298c2e5b6cc560e2",
+    "origin_main_short": "08aa1a6e",
     "worktree_clean": false
   }
 }
@@ -422,7 +422,7 @@ Wenn der Bootstrap grün ist:
 - Große Ausgaben nach `~/Downloads/*.log` umleiten und nur `LOG=...` posten.
 - Vor Commit: tatsächlichen Diff inspizieren, Tests laufen lassen, protected-diff-plan ausführen.
 - Bei `BLOCK` oder `FAIL`: sofort stoppen, Diagnose statt Weiterarbeiten.
-- Aktive Aufgaben stammen aus `docs/planning/PROJECT_DIRECTION.yaml`; alte Planungsdokumente sind keine Startautorität.
+- Aktive Aufgaben stammen aus `docs/planning/PROJECT_DIRECTION.yaml`; wenn diese Datei in einem externen Workspace fehlt, gelten Status- und Handoff-State als Fortsetzungsquelle.
 - Allgemeingültige Regeln stehen in `execution_contract.json.general_contract`; aktueller Fortsetzungspunkt steht in `execution_contract.json.current_state_contract` und `successor_context.yaml`.
 - `successor_prompt.md` ist nur Projektion. Maschinenlesbare Dateien haben Vorrang.
 - Komplexe `agentic-kit`-Wrapper haben Vorrang vor selbstgebauten Git-/GitHub-/Handoff-/GC-/Release-Blöcken.
@@ -432,10 +432,10 @@ Wenn der Bootstrap grün ist:
 
 1. Wenn `validation_report.json` nicht PASS ist: Handoff-Projektion reparieren.
 2. Wenn der Arbeitsbaum dirty ist: nur explizite WIP-Dateien prüfen und abschließen oder sauber dokumentieren.
-3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` bearbeiten.
+3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` oder dem externen Workspace-State bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 3d20e7338c12). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 3d20e7338c12. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: a6030c3e51e0). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK a6030c3e51e0. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -445,5 +445,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 7972d0417433a3c7d738d359f516cdb2a2bfd54ecaa4bd618239f4041efff799
-- docs/reference/agentic-kit-commands.json: caa0813618a01b4151f3c24da5a826ed145833b3e8257a07f5ecebea93ae4c5a
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 11fcb9f3d896fa0b8344fde9366745d89d057b21209b081fef92870bfbca88c4
+- docs/reference/agentic-kit-commands.json: 2814f80c9ba8da5d513a42127c505a8a9137715d7424f96ef6f97995c7836ebd

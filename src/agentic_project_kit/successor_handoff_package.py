@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import subprocess
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -37,6 +37,21 @@ def _workspace_path_text(ws: Workspace, path: Path) -> str:
         return path.as_posix()
 
 
+def _is_agentic_project_kit_development_checkout(root: Path) -> bool:
+    return (
+        (root / "src" / "agentic_project_kit").is_dir()
+        and (root / "docs" / "reference" / "agentic-kit-commands.json").exists()
+        and (root / "pyproject.toml").exists()
+    )
+
+
+def _is_external_workspace(ws: Workspace) -> bool:
+    return (
+        (ws.root / ".agentic/config.yaml").exists()
+        and not _is_agentic_project_kit_development_checkout(ws.root)
+    )
+
+
 NEXT_CHAT_BOOTSTRAP = _LEGACY_WORKSPACE.handoff_file("NEXT_CHAT_BOOTSTRAP.md")
 START_NEW_CHAT_PROMPT = _LEGACY_WORKSPACE.handoff_file("START_NEW_CHAT_PROMPT.md")
 CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT = _LEGACY_WORKSPACE.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")
@@ -44,7 +59,22 @@ CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT = _LEGACY_WORKSPACE.handoff_file("CLOSEOUT_BE
 DEFAULT_PACKAGE_DIR = _LEGACY_WORKSPACE.handoff_packages_latest()
 
 
+def _external_long_term_sources(ws: Workspace) -> tuple[str, ...]:
+    return (
+        ".agentic/config.yaml",
+        ".agentic/INITIAL_LLM_PROMPT.md",
+        ".agentic/DOC_LIFECYCLE.md",
+        _workspace_path_text(ws, ws.status_path()),
+        _workspace_path_text(ws, ws.handoff_file("README.md")),
+        _workspace_path_text(ws, ws.doc_registry_path()),
+        _workspace_path_text(ws, ws.rule_registry_path()),
+        ".agentic/rules/README.md",
+    )
+
+
 def _long_term_sources(ws: Workspace) -> tuple[str, ...]:
+    if _is_external_workspace(ws):
+        return _external_long_term_sources(ws)
     return (
         ".agentic/compiled_agent_context.yaml",
         ".agentic/handoff_state.yaml",
@@ -86,6 +116,27 @@ STARTUP_COMMAND_TAIL: tuple[str, ...] = (
     "./.venv/bin/agentic-kit transfer post-merge-check",
     "./.venv/bin/agentic-kit transfer repo-status",
 )
+
+
+def _agentic_kit_command(ws: Workspace) -> str:
+    return "agentic-kit" if _is_external_workspace(ws) else "./.venv/bin/agentic-kit"
+
+
+def _startup_command_tail(ws: Workspace) -> tuple[str, ...]:
+    if not _is_external_workspace(ws):
+        return STARTUP_COMMAND_TAIL
+    command = _agentic_kit_command(ws)
+    return (
+        f"{command} transfer normalize-session --repair-known-volatile",
+        f"{command} rules acknowledge",
+        f"{command} transfer normalize-session --repair-known-volatile",
+        "git branch --show-current",
+        "git status -sb",
+        "git status --short",
+        f"{command} transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output",
+        f"{command} transfer post-merge-check",
+        f"{command} transfer repo-status",
+    )
 
 RECENT_LESSONS: tuple[str, ...] = (
     "The old prepare-successor-handoff mechanism is not sufficient as a standalone chat-switch source.",
@@ -178,6 +229,14 @@ def _dedicated_successor_projection_update_paths(ws: Workspace) -> tuple[str, ..
 
 
 def _general_source_authorities(ws: Workspace) -> tuple[str, ...]:
+    if _is_external_workspace(ws):
+        return (
+            ".agentic/config.yaml",
+            _workspace_path_text(ws, ws.status_path()),
+            _workspace_path_text(ws, ws.handoff_file("README.md")),
+            _workspace_path_text(ws, ws.doc_registry_path()),
+            _workspace_path_text(ws, ws.rule_registry_path()),
+        )
     return (
         ".agentic/compiled_agent_context.yaml",
         ".agentic/transfer_safety_rules.yaml",
@@ -224,6 +283,12 @@ def _forbidden_local_command_recommendations(text: str) -> list[str]:
             findings.append("{ ... } > \"$OUT\" 2>&1")
 
     return findings
+
+
+def _ensure_command_reference_for_workspace(text: str, ws: Workspace) -> str:
+    if _is_external_workspace(ws):
+        return text
+    return ensure_command_reference_in_prompt(text, ws.root)
 
 
 @dataclass(frozen=True)
@@ -281,8 +346,9 @@ def _head_short(head: str) -> str:
     return head[:8] if head and head != "UNKNOWN" else "UNKNOWN"
 
 
-def _startup_commands(local_path_hint: str) -> tuple[str, ...]:
-    return (local_path_hint, *STARTUP_COMMAND_TAIL)
+def _startup_commands(local_path_hint: str, ws: Workspace | None = None) -> tuple[str, ...]:
+    ws = ws or _LEGACY_WORKSPACE
+    return (local_path_hint, *_startup_command_tail(ws))
 
 
 def _build_repo_state(root: Path) -> dict[str, Any]:
@@ -310,6 +376,22 @@ def _open_tasks_from_project_direction(root: Path, ws: Workspace) -> list[dict[s
         direction = load_project_direction(root)
         findings = direction.validate()
     except (OSError, ValueError) as exc:
+        if _is_external_workspace(ws):
+            return [
+                {
+                    "id": "external-workspace-no-project-direction",
+                    "status": "review",
+                    "summary": (
+                        "No Kit project-direction file is required for this external workspace; "
+                        f"continue from {_workspace_path_text(ws, ws.status_path())} and "
+                        f"{_workspace_path_text(ws, ws.handoff_file('README.md'))}."
+                    ),
+                    "files": [
+                        _workspace_path_text(ws, ws.status_path()),
+                        _workspace_path_text(ws, ws.handoff_file("README.md")),
+                    ],
+                }
+            ]
         return [
             {
                 "id": "project-direction-unavailable",
@@ -372,7 +454,7 @@ def _open_tasks_from_project_direction(root: Path, ws: Workspace) -> list[dict[s
 
 def _build_context(root: Path, ws: Workspace) -> dict[str, Any]:
     repo_state = _build_repo_state(root)
-    startup_commands = _startup_commands(repo_state["local_path"])
+    startup_commands = _startup_commands(repo_state["local_path"], ws)
     successor_context_path = _workspace_path_text(ws, ws.package_file("successor_context.yaml"))
     successor_prompt_path = _workspace_path_text(ws, ws.package_file("successor_prompt.md"))
     next_chat_bootstrap_path = _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md"))
@@ -419,6 +501,7 @@ def _source_manifest(root: Path, ws: Workspace) -> dict[str, Any]:
     return {
         "schema_version": 1,
         "kind": "successor_source_manifest",
+        "workspace_mode": "external" if _is_external_workspace(ws) else "self-hosting",
         "sources": [_file_info(root, rel) for rel in _long_term_sources(ws)],
     }
 
@@ -715,7 +798,10 @@ def _source_manifest_validation_findings(
                     "message": f"Invalid YAML in mandatory handoff source {path}: {source.get('yaml_error')}",
                 }
             )
-        if path.endswith("DOCUMENTATION_REGISTRY.yaml") and source.get("registry_document_count") == 0:
+        if (
+            path.endswith(("DOCUMENTATION_REGISTRY.yaml", ".agentic/registries/documentation.yaml"))
+            and source.get("registry_document_count") == 0
+        ):
             findings.append(
                 {
                     "severity": "error",
@@ -1143,7 +1229,7 @@ def render_successor_prompt(context: dict[str, Any], ws: Workspace | None = None
     startup_commands = context.get("long_term_memory", {}).get("required_startup_commands")
     if not isinstance(startup_commands, list) or not all(isinstance(command, str) for command in startup_commands):
         startup_commands = list(
-            _startup_commands(str(repo.get("local_path", default_local_path_hint(ws.root))))
+            _startup_commands(str(repo.get("local_path", default_local_path_hint(ws.root))), ws)
         )
     package_files = [
         ws.package_file("successor_context.yaml"),
@@ -1155,6 +1241,21 @@ def render_successor_prompt(context: dict[str, Any], ws: Workspace | None = None
         ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"),
         ws.reference_file("AGENTIC_KIT_COMMANDS.md"),
         ws.reference_file("agentic-kit-commands.json"),
+    ]
+    readable_package_files = [
+        path
+        for path in package_files
+        if path.exists()
+        or path in {
+            ws.package_file("successor_context.yaml"),
+            ws.package_file("source_manifest.json"),
+            ws.package_file("validation_report.json"),
+            ws.package_file("execution_contract.json"),
+            ws.package_file("successor_prompt.md"),
+            ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md"),
+            ws.handoff_file("START_NEW_CHAT_PROMPT.md"),
+            ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"),
+        }
     ]
     return contract_projection + "\n" + "\n".join(
         [
@@ -1172,7 +1273,7 @@ def render_successor_prompt(context: dict[str, Any], ws: Workspace | None = None
             "",
             "## Zuerst lesen",
             "",
-            *(f"- `{_workspace_path_text(ws, path)}`" for path in package_files),
+            *(f"- `{_workspace_path_text(ws, path)}`" for path in readable_package_files),
             "",
             "## Bootstrap-Akzeptanzbremse",
             "",
@@ -1197,7 +1298,7 @@ def render_successor_prompt(context: dict[str, Any], ws: Workspace | None = None
             "- Große Ausgaben nach `~/Downloads/*.log` umleiten und nur `LOG=...` posten.",
             "- Vor Commit: tatsächlichen Diff inspizieren, Tests laufen lassen, protected-diff-plan ausführen.",
             "- Bei `BLOCK` oder `FAIL`: sofort stoppen, Diagnose statt Weiterarbeiten.",
-            "- Aktive Aufgaben stammen aus `docs/planning/PROJECT_DIRECTION.yaml`; alte Planungsdokumente sind keine Startautorität.",
+            f"- Aktive Aufgaben stammen aus `{_workspace_path_text(ws, ws.project_direction_path())}`; wenn diese Datei in einem externen Workspace fehlt, gelten Status- und Handoff-State als Fortsetzungsquelle.",
             "- Allgemeingültige Regeln stehen in `execution_contract.json.general_contract`; aktueller Fortsetzungspunkt steht in `execution_contract.json.current_state_contract` und `successor_context.yaml`.",
             "- `successor_prompt.md` ist nur Projektion. Maschinenlesbare Dateien haben Vorrang.",
             "- Komplexe `agentic-kit`-Wrapper haben Vorrang vor selbstgebauten Git-/GitHub-/Handoff-/GC-/Release-Blöcken.",
@@ -1207,7 +1308,7 @@ def render_successor_prompt(context: dict[str, Any], ws: Workspace | None = None
             "",
             "1. Wenn `validation_report.json` nicht PASS ist: Handoff-Projektion reparieren.",
             "2. Wenn der Arbeitsbaum dirty ist: nur explizite WIP-Dateien prüfen und abschließen oder sauber dokumentieren.",
-            "3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` bearbeiten.",
+            f"3. Danach die nächste aktive Aufgabe aus `{_workspace_path_text(ws, ws.project_direction_path())}` oder dem externen Workspace-State bearbeiten.",
             "",
         ]
     )
@@ -1244,7 +1345,7 @@ def render_next_chat_bootstrap_from_context(context: dict[str, Any], ws: Workspa
         [
             "# NEXT CHAT BOOTSTRAP",
             "",
-            "This file is a deterministic projection of `docs/reports/handoff-packages/latest/successor_context.yaml`.",
+            f"This file is a deterministic projection of `{successor_context_path}`.",
             "Do not start from chat memory. Read the Successor Handoff Package first.",
             "",
             "## Current verified repository state",
@@ -1280,7 +1381,7 @@ def render_next_chat_bootstrap_from_context(context: dict[str, Any], ws: Workspa
             "",
             "## Open high-priority work",
             "",
-            "Source: `docs/planning/PROJECT_DIRECTION.yaml`.",
+            f"Source: `{_workspace_path_text(ws, ws.project_direction_path())}` or external workspace state.",
             "",
             *_format_open_tasks_for_bootstrap(context),
             "",
@@ -1288,7 +1389,7 @@ def render_next_chat_bootstrap_from_context(context: dict[str, Any], ws: Workspa
             "",
         ]
     )
-    return ensure_command_reference_in_prompt(text, ws.root)
+    return _ensure_command_reference_for_workspace(text, ws)
 
 
 
@@ -1386,7 +1487,7 @@ def render_start_prompt_from_context(context: dict[str, Any], ws: Workspace | No
             "",
         ]
     )
-    return ensure_command_reference_in_prompt(text, ws.root)
+    return _ensure_command_reference_for_workspace(text, ws)
 
 
 def render_closeout_prompt_from_context(context: dict[str, Any], ws: Workspace | None = None) -> str:
@@ -1397,6 +1498,7 @@ def render_closeout_prompt_from_context(context: dict[str, Any], ws: Workspace |
     successor_context_path = _workspace_path_text(ws, ws.package_file("successor_context.yaml"))
     start_prompt_path = _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md"))
     closeout_prompt_path = _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"))
+    command = _agentic_kit_command(ws)
     text = "\n".join(
         [
             "---",
@@ -1432,7 +1534,7 @@ def render_closeout_prompt_from_context(context: dict[str, Any], ws: Workspace |
             "",
             "```bash",
             local_path,
-            "./.venv/bin/agentic-kit transfer chat-switch-complete --render-prompt",
+            f"{command} transfer chat-switch-complete --render-prompt",
             "```",
             "",
             "The command must generate the package files, update the three canonical chat-switch prompt files, validate that no stale or accumulative markers remain, and print the copy/paste successor prompt.",
@@ -1441,7 +1543,7 @@ def render_closeout_prompt_from_context(context: dict[str, Any], ws: Workspace |
             "",
         ]
     )
-    return ensure_command_reference_in_prompt(text, ws.root)
+    return _ensure_command_reference_for_workspace(text, ws)
 
 
 
@@ -1455,7 +1557,7 @@ def _build_successor_handoff_package(root_path: Path, ws: Workspace) -> Successo
     context = _build_context(root_path, ws)
     source_manifest = _source_manifest(root_path, ws)
     successor_prompt = render_successor_prompt(context, ws)
-    successor_prompt = ensure_command_reference_in_prompt(successor_prompt, ws.root)
+    successor_prompt = _ensure_command_reference_for_workspace(successor_prompt, ws)
     next_chat_bootstrap = render_next_chat_bootstrap_from_context(context, ws)
     start_prompt = render_start_prompt_from_context(context, ws)
     closeout_prompt = render_closeout_prompt_from_context(context, ws)
@@ -1495,14 +1597,17 @@ def build_successor_handoff_package(root: Path | str = ".") -> SuccessorPackageR
 
 def write_successor_handoff_package(
     root: Path | str = ".",
-    output_dir: Path | str = DEFAULT_PACKAGE_DIR,
+    output_dir: Path | str | None = None,
     *,
     update_canonical_prompts: bool = True,
 ) -> SuccessorPackageResult:
     root_path = Path(root)
     ws = load_workspace(root_path)
+    resolved_output_dir = Path(output_dir) if output_dir is not None else ws.handoff_packages_latest()
+    relative_output_dir = Path(_workspace_path_text(ws, resolved_output_dir))
     result = _build_successor_handoff_package(root_path, ws)
-    out = root_path / output_dir
+    result = replace(result, output_dir=relative_output_dir)
+    out = root_path / relative_output_dir
     out.mkdir(parents=True, exist_ok=True)
     (out / "successor_context.yaml").write_text(_json_block(result.context) + "\n", encoding="utf-8")
     (out / "source_manifest.json").write_text(_json_block(result.source_manifest) + "\n", encoding="utf-8")

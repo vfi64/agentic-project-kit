@@ -36,6 +36,29 @@ def _init_git_repo(path, origin_url: str | None = None) -> None:
         )
 
 
+def _write_external_workspace(root: Path) -> None:
+    (root / ".agentic/state/handoff/packages/latest").mkdir(parents=True, exist_ok=True)
+    (root / ".agentic/registries").mkdir(parents=True, exist_ok=True)
+    (root / ".agentic/rules").mkdir(parents=True, exist_ok=True)
+    (root / ".agentic/config.yaml").write_text(
+        """
+kit_schema_version: 1
+project:
+  name: external-demo
+  type: generic
+profile: generic
+""",
+        encoding="utf-8",
+    )
+    (root / ".agentic/INITIAL_LLM_PROMPT.md").write_text("# Initial LLM Prompt\n", encoding="utf-8")
+    (root / ".agentic/DOC_LIFECYCLE.md").write_text("# Doc Lifecycle\n", encoding="utf-8")
+    (root / ".agentic/state/status.md").write_text("# Workspace Status\n", encoding="utf-8")
+    (root / ".agentic/state/handoff/README.md").write_text("# Workspace Handoff\n", encoding="utf-8")
+    (root / ".agentic/registries/documentation.yaml").write_text("version: 1\n", encoding="utf-8")
+    (root / ".agentic/registries/rules.yaml").write_text("version: 1\n", encoding="utf-8")
+    (root / ".agentic/rules/README.md").write_text("# Rules\n", encoding="utf-8")
+
+
 def test_repo_identity_parses_https_url(tmp_path):
     from agentic_project_kit.repo_identity import detect_repo_full_name
 
@@ -236,6 +259,96 @@ def test_successor_handoff_artifacts_snapshot(tmp_path):
     assert "### RESULT: PASS ###" in next_bootstrap
     assert "# Closeout Before Chat Switch Prompt" in closeout_prompt
     assert "agentic-kit transfer chat-switch-complete --render-prompt" in closeout_prompt
+
+
+def test_external_workspace_successor_handoff_package_uses_operating_layer_paths(tmp_path, monkeypatch):
+    import json
+
+    from agentic_project_kit import successor_handoff_package as package
+
+    def fake_run_git(_root, args):
+        if args == ["rev-parse", "HEAD"]:
+            return "external123456"
+        if args == ["rev-parse", "origin/main"]:
+            return "external123456"
+        if args == ["status", "--short"]:
+            return ""
+        if args == ["branch", "--show-current"]:
+            return "main"
+        return "UNKNOWN"
+
+    monkeypatch.setattr(package, "_run_git", fake_run_git)
+    _write_external_workspace(tmp_path)
+
+    result = package.write_successor_handoff_package(tmp_path, update_canonical_prompts=True)
+
+    assert result.validation_report["status"] == "PASS"
+    assert result.output_dir.as_posix() == ".agentic/state/handoff/packages/latest"
+    package_dir = tmp_path / ".agentic/state/handoff/packages/latest"
+    source_manifest = json.loads((package_dir / "source_manifest.json").read_text(encoding="utf-8"))
+    context = json.loads((package_dir / "successor_context.yaml").read_text(encoding="utf-8"))
+    contract = json.loads((package_dir / "execution_contract.json").read_text(encoding="utf-8"))
+    successor_prompt = (package_dir / "successor_prompt.md").read_text(encoding="utf-8")
+
+    assert source_manifest["workspace_mode"] == "external"
+    assert {source["path"] for source in source_manifest["sources"]} == {
+        ".agentic/config.yaml",
+        ".agentic/INITIAL_LLM_PROMPT.md",
+        ".agentic/DOC_LIFECYCLE.md",
+        ".agentic/state/status.md",
+        ".agentic/state/handoff/README.md",
+        ".agentic/registries/documentation.yaml",
+        ".agentic/registries/rules.yaml",
+        ".agentic/rules/README.md",
+    }
+    assert context["short_term_memory"]["open_tasks"][0]["id"] == "external-workspace-no-project-direction"
+    assert contract["general_contract"]["source_authorities"] == [
+        ".agentic/config.yaml",
+        ".agentic/state/status.md",
+        ".agentic/state/handoff/README.md",
+        ".agentic/registries/documentation.yaml",
+        ".agentic/registries/rules.yaml",
+    ]
+    assert "agentic-kit transfer chat-switch-complete --render-prompt" in result.closeout_prompt
+    assert "./.venv/bin/agentic-kit" not in result.closeout_prompt
+    assert "docs/reference/agentic-kit-commands.json" not in successor_prompt
+    assert (tmp_path / ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md").exists()
+    assert (tmp_path / ".agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md").exists()
+
+
+def test_external_workspace_chat_switch_cli_defaults_to_workspace_package_path(tmp_path, monkeypatch):
+    import json
+
+    from typer.testing import CliRunner
+
+    from agentic_project_kit import successor_handoff_package as package
+    from agentic_project_kit.cli import app
+
+    def fake_run_git(_root, args):
+        if args == ["rev-parse", "HEAD"]:
+            return "external123456"
+        if args == ["rev-parse", "origin/main"]:
+            return "external123456"
+        if args == ["status", "--short"]:
+            return ""
+        if args == ["branch", "--show-current"]:
+            return "main"
+        return "UNKNOWN"
+
+    monkeypatch.setattr(package, "_run_git", fake_run_git)
+    _write_external_workspace(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "chat-switch-complete", "--json", "--no-update-canonical-prompts"],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["result_status"] == "PASS"
+    assert payload["context_path"] == ".agentic/state/handoff/packages/latest/successor_context.yaml"
+    assert (tmp_path / payload["context_path"]).exists()
 
 
 

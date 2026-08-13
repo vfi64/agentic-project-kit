@@ -1,6 +1,6 @@
 # Agentic Project Kit
 
-> Handoff architecture: the deterministic Successor Handoff Package writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/`. New chat starts verify the package and follow the machine-readable execution contract instead of relying on chat memory.
+> Handoff architecture: the deterministic Successor Handoff Package writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/` for this repo or `.agentic/state/handoff/packages/latest/` in external workspace mode. New chats verify the package and execution contract, not chat memory.
 
 
 Current version: 0.5.0
@@ -168,7 +168,7 @@ The command writes a machine-readable successor context, source manifest, valida
 docs/reports/handoff-packages/latest/
 ```
 
-It also updates the canonical chat-switch prompt projections in `docs/handoff/`. A successor chat should use `docs/reports/handoff-packages/latest/successor_prompt.md` as the copy/paste prompt and must stop if `validation_report.json` is not `PASS`.
+In external workspace mode the default package path is `.agentic/state/handoff/packages/latest/`. It also updates canonical chat-switch projections in the workspace handoff directory. A successor chat should use `successor_prompt.md` from that package and must stop if `validation_report.json` is not `PASS`.
 
 After a PR merge, run `agentic-kit transfer post-merge-settle --after-pr PR_NUMBER`; it stops at READY/NOOP and blocks repeated generated/admin refresh loops.
 

@@ -10780,8 +10780,8 @@
           "secondary_opts": []
         },
         {
-          "default": "docs/reports/handoff-packages/latest",
-          "help": "Directory for the generated successor handoff package.",
+          "default": null,
+          "help": "Directory for the generated successor handoff package. Defaults to the workspace handoff package path.",
           "is_flag": false,
           "metavar": null,
           "multiple": false,
@@ -17526,7 +17526,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "3d20e7338c12",
+    "manifest_sha": "a6030c3e51e0",
     "schema_version": 1
   },
   "schema_version": 2,

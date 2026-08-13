@@ -1099,6 +1099,9 @@ rules:
     - agentic-kit check-docs
     - agentic-kit check
     - agentic-kit doctor
+    - .agentic/state/handoff/packages/latest/
+    - successor_prompt.md
+    - validation_report.json
 - id: semantic-quality-boundary-coverage
   description: Semantic quality limits must remain explicit so deterministic checks
     are not oversold.
