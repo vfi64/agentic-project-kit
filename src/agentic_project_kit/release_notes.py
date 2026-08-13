@@ -601,6 +601,9 @@ def _classify_subject(subject: str) -> str:
             "outbox",
             "communication",
             "remote-next",
+            "merge wrapper",
+            "pr merge",
+            "wrapper",
         )
     ):
         return "Transfer / Handoff"
@@ -618,14 +621,48 @@ def _classify_subject(subject: str) -> str:
             "repository identity",
             "mutation lock",
             "dpa",
+            "command-for",
+            "command surface",
         )
     ):
         return "Governance"
-    if any(token in lowered for token in ("test", "gate", "audit", "ruff", "pytest", "preflight", "check", "coverage", "hygiene")):
+    if any(
+        token in lowered
+        for token in (
+            "test",
+            "gate",
+            "audit",
+            "ruff",
+            "pytest",
+            "preflight",
+            "check",
+            "coverage",
+            "hygiene",
+            "pages deploy",
+        )
+    ) or lowered.startswith(("verify ", "guard ")):
         return "Tests / Gates"
-    if any(token in lowered for token in ("doc", "documentation", "planning", "concept", "analysis", "plan ", "roadmap", "readme")):
+    if any(
+        token in lowered
+        for token in (
+            "doc",
+            "documentation",
+            "planning",
+            "concept",
+            "analysis",
+            "plan ",
+            "roadmap",
+            "readme",
+            "report",
+            "site",
+            "pages",
+            "onboarding",
+        )
+    ):
         return "Docs"
-    if lowered.startswith(("fix ", "repair ", "harden ", "resolve ", "recheck ", "detect ", "keep ", "block ", "remediate ")):
+    if lowered.startswith(
+        ("fix ", "repair ", "harden ", "resolve ", "recheck ", "detect ", "keep ", "block ", "remediate ", "recover ")
+    ):
         return "Fixed"
     if lowered.startswith(("add ", "build ")):
         return "Added"
@@ -654,6 +691,12 @@ def _classify_subject(subject: str) -> str:
             "deprecate ",
             "track ",
             "stabilize ",
+            "prefer ",
+            "improve ",
+            "exclude ",
+            "generate ",
+            "bind ",
+            "refresh ",
         )
     ):
         return "Changed"
