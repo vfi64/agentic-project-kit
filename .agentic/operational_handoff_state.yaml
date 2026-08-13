@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a8b70bbef9af0be872d2b32dce578616c1e1a3fe
-  short: a8b70bbe
-  subject: Recover PR merge wrappers after remote merge (#2067)
+  full: fff8777525eed8e862e3276b1cced120bc07ded1
+  short: fff87775
+  subject: Verify Comm-SCI external workspace mode (#2069)
 last_substantive_work_state:
-  full: a8b70bbef9af0be872d2b32dce578616c1e1a3fe
-  short: a8b70bbe
-  subject: Recover PR merge wrappers after remote merge (#2067)
+  full: fff8777525eed8e862e3276b1cced120bc07ded1
+  short: fff87775
+  subject: Verify Comm-SCI external workspace mode (#2069)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

@@ -269,13 +269,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2067-handoff-refresh",
+      "branch": "docs/post-pr2069-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "a8b70bbef9af0be872d2b32dce578616c1e1a3fe",
+      "head": "fff8777525eed8e862e3276b1cced120bc07ded1",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "a8b70bbef9af0be872d2b32dce578616c1e1a3fe",
+      "origin_main": "fff8777525eed8e862e3276b1cced120bc07ded1",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -370,6 +370,9 @@
         "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
       ],
       "generator_command": "agentic-kit transfer prepare-successor-handoff --render-prompt",
+      "initial_create_if_missing_paths": [
+        "docs/handoff/START_NEW_CHAT_PROMPT.md"
+      ],
       "kind": "dpa_generated_successor_handoff_projection_contract",
       "kit_conformance_claimed": false,
       "manual_durable_target_patches_allowed": false,
@@ -401,6 +404,9 @@
       "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
     ],
     "generator_command": "agentic-kit transfer prepare-successor-handoff --render-prompt",
+    "initial_create_if_missing_paths": [
+      "docs/handoff/START_NEW_CHAT_PROMPT.md"
+    ],
     "machine_readable_files_take_precedence": true,
     "must_read_files": [
       "docs/reports/handoff-packages/latest/execution_contract.json",
@@ -415,13 +421,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2067-handoff-refresh",
+    "branch": "docs/post-pr2069-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "a8b70bbef9af0be872d2b32dce578616c1e1a3fe",
+    "head": "fff8777525eed8e862e3276b1cced120bc07ded1",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "a8b70bbef9af0be872d2b32dce578616c1e1a3fe",
+    "origin_main": "fff8777525eed8e862e3276b1cced120bc07ded1",
     "worktree_clean": false
   },
   "rules": [

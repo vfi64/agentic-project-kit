@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `a8b70bbef9af0be872d2b32dce578616c1e1a3fe` (`a8b70bbe`), after `Recover PR merge wrappers after remote merge (#2067)`.
-Last substantive work state is `a8b70bbef9af0be872d2b32dce578616c1e1a3fe` (`a8b70bbe`), after `Recover PR merge wrappers after remote merge (#2067)`.
+Current verified main/admin HEAD is `fff8777525eed8e862e3276b1cced120bc07ded1` (`fff87775`), after `Verify Comm-SCI external workspace mode (#2069)`.
+Last substantive work state is `fff8777525eed8e862e3276b1cced120bc07ded1` (`fff87775`), after `Verify Comm-SCI external workspace mode (#2069)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
