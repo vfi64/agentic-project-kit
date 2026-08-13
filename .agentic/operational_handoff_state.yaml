@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 173d89e6e810852a4eb83288bbb24acdbd39d02e
-  short: 173d89e6
-  subject: Classify release 1.0 notes (#2086)
+  full: 958c07d9afddeae3a83690eeed26db87261872f5
+  short: 958c07d9
+  subject: Prepare release 1.0.0 metadata (#2088)
 last_substantive_work_state:
-  full: 173d89e6e810852a4eb83288bbb24acdbd39d02e
-  short: 173d89e6
-  subject: Classify release 1.0 notes (#2086)
+  full: 958c07d9afddeae3a83690eeed26db87261872f5
+  short: 958c07d9
+  subject: Prepare release 1.0.0 metadata (#2088)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
