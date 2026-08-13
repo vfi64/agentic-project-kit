@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 0200ba8c7dc99792004a14dd522129f50eba4abcac4f411b38ad856db905a23c
 - docs/reference/agentic-kit-commands.json: f1af5c2d038a7bf6ad6c55ede61bec1b7a8347173ffa46f3f599ac96127aada7
-## Operational documentation refresh state after PR #2073
+## Operational documentation refresh state after PR #2075
 
-Current administrative handoff refresh state is `2c0bfec6` (`Improve generated site onboarding entry (#2073)`). Continue next only after this post-PR2073 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `36f87bae` (`Exclude generated Pages fallback from packages (#2075)`). Continue next only after this post-PR2075 refresh is committed and merged; the next substantive slice must be created from fresh main.
