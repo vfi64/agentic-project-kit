@@ -4,6 +4,7 @@ import re
 import yaml
 
 from agentic_project_kit.documentation_registry import check_documentation_registry
+from agentic_project_kit.workspace import Workspace, load_workspace
 
 
 STATE_GATE_DOCUMENTS = (
@@ -25,6 +26,18 @@ STATE_GATE_SECTIONS = {
         "## 7. Architectural Contract",
         "## 17. Acceptance Criteria for Future Work",
     ),
+}
+
+WORKSPACE_STATE_GATE_DOCUMENTS = (
+    ".agentic/state/status.md",
+    ".agentic/state/handoff/README.md",
+    ".agentic/registries/documentation.yaml",
+    ".agentic/registries/rules.yaml",
+)
+
+WORKSPACE_STATE_GATE_SECTIONS = {
+    ".agentic/state/status.md": ("# Workspace Status",),
+    ".agentic/state/handoff/README.md": ("# Workspace Handoff",),
 }
 
 STALE_HANDOFF_MARKERS = (
@@ -171,11 +184,36 @@ def check_docs(project_root: Path) -> list[str]:
         if bool(doc.get("quality_checks", True)):
             errors.extend(check_document_quality(doc["path"], content))
 
-    errors.extend(check_state_gate_docs(project_root))
-    errors.extend(check_documentation_coverage(project_root))
-    errors.extend(check_documentation_registry(project_root))
+    workspace = _load_manifest_workspace_for_checks(project_root)
+    if isinstance(workspace, ValueError):
+        errors.append(f"Invalid workspace manifest: {workspace}")
+    elif workspace is not None:
+        errors.extend(check_workspace_state_gate_docs(project_root))
+    else:
+        errors.extend(check_state_gate_docs(project_root))
+        errors.extend(check_documentation_coverage(project_root))
+        errors.extend(check_documentation_registry(project_root))
     errors.extend(check_changelog_quality(project_root))
     return errors
+
+
+def _load_manifest_workspace_for_checks(project_root: Path) -> Workspace | None | ValueError:
+    if _is_agentic_project_kit_development_checkout(project_root):
+        return None
+    if not (project_root / ".agentic/config.yaml").exists():
+        return None
+    try:
+        return load_workspace(project_root, suppress_legacy_profile_warning=True)
+    except RuntimeError as exc:
+        return ValueError(str(exc))
+
+
+def _is_agentic_project_kit_development_checkout(project_root: Path) -> bool:
+    return (
+        (project_root / "src" / "agentic_project_kit").is_dir()
+        and (project_root / "docs" / "reference" / "agentic-kit-commands.json").exists()
+        and (project_root / "pyproject.toml").exists()
+    )
 
 
 def check_document_quality(relative_path: str, content: str) -> list[str]:
@@ -291,6 +329,23 @@ def check_state_gate_docs(project_root: Path) -> list[str]:
     return errors
 
 
+def check_workspace_state_gate_docs(project_root: Path) -> list[str]:
+    errors: list[str] = []
+
+    for relative_path in WORKSPACE_STATE_GATE_DOCUMENTS:
+        path = project_root / relative_path
+        if not path.exists():
+            errors.append(f"Missing workspace state document: {relative_path}")
+            continue
+
+        content = path.read_text(encoding="utf-8")
+        for section in WORKSPACE_STATE_GATE_SECTIONS.get(relative_path, ()):
+            if section not in content:
+                errors.append(f"{relative_path}: missing workspace state section {section!r}")
+
+    return errors
+
+
 def check_documentation_coverage(project_root: Path) -> list[str]:
     matrix_path = project_root / "docs/DOCUMENTATION_COVERAGE.yaml"
     if not matrix_path.exists():
@@ -344,6 +399,11 @@ def check_documentation_coverage(project_root: Path) -> list[str]:
 
 
 def check_todo(project_root: Path) -> list[str]:
+    workspace = _load_manifest_workspace_for_checks(project_root)
+    if isinstance(workspace, ValueError) and not (project_root / "sentinel.yaml").exists():
+        return [f"Invalid workspace manifest: {workspace}"]
+    if workspace is not None and not (project_root / "sentinel.yaml").exists():
+        return []
     config = load_yaml(project_root / "sentinel.yaml")
     todo_path = project_root / config.get("todo", {}).get("path", ".agentic/todo.yaml")
     data = load_yaml(todo_path)

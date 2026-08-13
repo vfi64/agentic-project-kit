@@ -2,6 +2,7 @@ from pathlib import Path
 
 from agentic_project_kit.checks import (
     check_changelog_quality,
+    check_all,
     check_docs,
     check_document_quality,
     check_documentation_coverage,
@@ -34,6 +35,47 @@ def test_check_docs_accepts_state_gate_docs_without_sentinel(tmp_path: Path):
     _write_valid_state_gate_docs(tmp_path)
 
     assert check_docs(tmp_path) == []
+
+
+def test_check_docs_accepts_manifest_workspace_state_without_selfhosting_docs(tmp_path: Path):
+    _write_manifest_workspace(tmp_path)
+    (tmp_path / "README.md").write_text("# Demo\nrequired-term\n", encoding="utf-8")
+
+    assert check_docs(tmp_path) == []
+
+
+def test_check_docs_keeps_selfhosting_gate_when_manifest_is_present(tmp_path: Path):
+    _write_manifest_workspace(
+        tmp_path,
+        path_overrides={"documentation_registry_file": "docs/DOCUMENTATION_REGISTRY.yaml"},
+    )
+    _write_valid_state_gate_docs(tmp_path)
+    _write_documentation_registry(tmp_path)
+    (tmp_path / "src/agentic_project_kit").mkdir(parents=True)
+    (tmp_path / "docs/reference").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "docs/reference/agentic-kit-commands.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "pyproject.toml").write_text("[project]\nname = 'agentic-project-kit'\n", encoding="utf-8")
+    (tmp_path / "README.md").write_text("# Demo\nrequired-term\n", encoding="utf-8")
+
+    assert check_docs(tmp_path) == []
+
+
+def test_check_all_accepts_manifest_workspace_without_sentinel_todo(tmp_path: Path):
+    _write_manifest_workspace(tmp_path)
+    (tmp_path / "README.md").write_text("# Demo\nrequired-term\n", encoding="utf-8")
+
+    assert check_all(tmp_path) == []
+
+
+def test_manifest_workspace_invalid_config_reports_check_errors(tmp_path: Path):
+    (tmp_path / ".agentic").mkdir()
+    (tmp_path / ".agentic/config.yaml").write_text("kit_schema_version: [unterminated\n", encoding="utf-8")
+
+    doc_errors = check_docs(tmp_path)
+    all_errors = check_all(tmp_path)
+
+    assert any(error.startswith("Invalid workspace manifest: .agentic/config.yaml: invalid YAML") for error in doc_errors)
+    assert any(error.startswith("Invalid workspace manifest: .agentic/config.yaml: invalid YAML") for error in all_errors)
 
 
 def test_check_docs_reports_unresolved_placeholder_markers(tmp_path: Path):
@@ -296,3 +338,62 @@ rules:
 ''',
         encoding="utf-8",
     )
+
+
+def _write_manifest_workspace(project_root: Path, *, path_overrides: dict[str, str] | None = None) -> None:
+    (project_root / ".agentic/state/handoff").mkdir(parents=True, exist_ok=True)
+    (project_root / ".agentic/registries").mkdir(parents=True, exist_ok=True)
+    manifest = """
+kit_schema_version: 1
+project:
+  name: external-demo
+  type: python
+profile: python-default
+"""
+    if path_overrides:
+        manifest += "paths:\n"
+        for key, value in path_overrides.items():
+            manifest += f"  {key}: {value}\n"
+    (project_root / ".agentic/config.yaml").write_text(
+        manifest,
+        encoding="utf-8",
+    )
+    (project_root / ".agentic/state/status.md").write_text(
+        "# Workspace Status\n\nProject: external-demo\nCurrent state: initialized workspace.\n",
+        encoding="utf-8",
+    )
+    (project_root / ".agentic/state/handoff/README.md").write_text(
+        "# Workspace Handoff\n\nValidated handoff packages belong here.\n",
+        encoding="utf-8",
+    )
+    (project_root / ".agentic/registries/documentation.yaml").write_text("version: 1\n", encoding="utf-8")
+    (project_root / ".agentic/registries/rules.yaml").write_text("version: 1\n", encoding="utf-8")
+
+
+def _write_documentation_registry(project_root: Path) -> None:
+    import yaml
+
+    from agentic_project_kit.documentation_registry import DOCUMENT_CLASSES, REQUIRED_CLASS_RULE_FIELDS
+
+    registry = {
+        "version": 1,
+        "class_rules": {
+            class_name: {field: f"{class_name} {field}" for field in REQUIRED_CLASS_RULE_FIELDS}
+            for class_name in DOCUMENT_CLASSES
+        },
+        "documents": [
+            {
+                "path": "README.md",
+                "class": "user-facing description",
+                "owner": "maintainers",
+            },
+            {
+                "path": "docs/DOCUMENTATION_REGISTRY.yaml",
+                "class": "governance/system",
+                "owner": "maintainers",
+            },
+        ],
+    }
+    path = project_root / "docs/DOCUMENTATION_REGISTRY.yaml"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(yaml.safe_dump(registry, sort_keys=False), encoding="utf-8")

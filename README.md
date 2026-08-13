@@ -120,6 +120,8 @@ agentic-kit init my-docs-project \
 
 `agentic-kit doctor` validates the project contract when `.agentic/project.yaml` is present and reports selected profiles and policy packs.
 
+After `agentic-kit workspace init --root PATH --execute`, non-Kit repositories with `.agentic/config.yaml` use external workspace health mode: `agentic-kit check-docs`, `agentic-kit check`, and `agentic-kit doctor` validate `.agentic/state/` and `.agentic/registries/` without requiring the self-hosting Kit documentation set.
+
 ## Policy-pack doctor checks
 
 `agentic-kit doctor` also activates lightweight policy-pack checks from `.agentic/project.yaml`.
@@ -142,25 +144,9 @@ Use `agentic-kit doctor` as the compact repository health check:
 agentic-kit doctor
 ```
 
-It reports required project files, project contract status, policy-pack checks, documentation gates, task validation when configured, and version-drift checks. The command exits non-zero only when required checks fail.
-
-Example output shape:
-
-```text
-Agentic project doctor report for /path/to/project
-
-[PASS] pyproject.toml: present
-[PASS] README.md: present
-[PASS] sentinel.yaml: present
-[PASS] project contract: my-project; profiles: generic-git-repo, python-cli; policy packs: starter, solo-maintainer
-[PASS] policy pack checks: active: starter, solo-maintainer
-[PASS] documentation gates: passed
-[PASS] todo gates: passed
-[PASS] version drift: project state matches version 0.3.4
-
-Overall: PASS
-```
-
+It reports project files, workspace manifest status, project contract status,
+policy-pack checks, documentation gates, task validation, and version drift. The
+command exits non-zero only when required checks fail.
 
 ## Clean handoff / chat switch
 
