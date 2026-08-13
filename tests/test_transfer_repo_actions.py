@@ -3342,7 +3342,7 @@ def test_already_merged_pr_result_returns_idempotent_pass(monkeypatch):
             return subprocess.CompletedProcess(
                 command,
                 0,
-                '{"number": 42, "state": "MERGED", "merged": true, "headRefOid": "%s", "url": "https://example.invalid/pr/42", "title": "Merged"}\n' % ("a" * 40),
+                '{"number": 42, "state": "MERGED", "mergedAt": "2026-08-13T08:31:46Z", "mergeCommit": {"oid": "%s"}, "headRefOid": "%s", "url": "https://example.invalid/pr/42", "title": "Merged"}\n' % ("b" * 40, "a" * 40),
                 "",
             )
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
@@ -3361,8 +3361,60 @@ def test_already_merged_pr_result_returns_idempotent_pass(monkeypatch):
     assert result.returncode == 0
     assert result.command == command
     assert "STATE=ALREADY_MERGED" in result.stdout
+    assert "MERGED_AT=2026-08-13T08:31:46Z" in result.stdout
     assert "STATE=ALREADY_MERGED" in result.next_action
-    assert calls == [["gh", "pr", "view", "42", "--json", "number,state,merged,headRefOid,url,title"]]
+    assert calls == [["gh", "pr", "view", "42", "--json", "number,state,mergedAt,mergeCommit,headRefOid,url,title"]]
+
+
+def test_pr_merge_safe_recovers_when_inner_merge_left_pr_merged(monkeypatch):
+    calls = []
+
+    class PassingMonitor:
+        decision = transfer_repo_actions.MonitorDecision.CONTINUE
+        actual_branch = "main"
+        required_branch = "main"
+        reason = "test_monitor_pass"
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if len(command) >= 3 and command[0].endswith("agentic-kit") and command[1:3] == ["pr", "merge-if-green"]:
+            return subprocess.CompletedProcess(command, 1, "", "main verification timed out\n")
+        if command == ["gh", "pr", "view", "42", "--json", "number,state,mergedAt,mergeCommit,headRefOid,url,title"]:
+            lookup_count = sum(1 for call in calls if call == command)
+            if lookup_count == 1:
+                return subprocess.CompletedProcess(
+                    command,
+                    0,
+                    '{"number": 42, "state": "OPEN", "mergedAt": null, "mergeCommit": null, "headRefOid": "%s", "url": "https://example.invalid/pr/42", "title": "Open"}\n' % ("d" * 40),
+                    "",
+                )
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                '{"number": 42, "state": "MERGED", "mergedAt": "2026-08-13T08:31:46Z", "mergeCommit": {"oid": "%s"}, "headRefOid": "%s", "url": "https://example.invalid/pr/42", "title": "Merged"}\n' % ("c" * 40, "d" * 40),
+                "",
+            )
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", lambda **_kwargs: PassingMonitor())
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.pr_merge_safe(
+        42,
+        expected_head_sha="d" * 40,
+        main_branch="main",
+    )
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert "STATE=ALREADY_MERGED" in result.stdout
+    assert "MERGED_AT=2026-08-13T08:31:46Z" in result.stdout
+    assert any(
+        len(command) >= 3 and command[0].endswith("agentic-kit") and command[1:3] == ["pr", "merge-if-green"]
+        for command in calls
+    )
 
 
 def test_pr_complete_auto_runs_admin_refresh_when_successor_package_is_stale():
