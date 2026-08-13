@@ -6,14 +6,14 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 2082
+  updated_after_pr: 2091
   updated_after_pr_semantics: strategic_direction_refresh
   updated_after_pr_current_main_claimed: false
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/2082
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/2091
 strategy:
 - id: governed-operating-model
   status: active
@@ -285,11 +285,20 @@ roadmap:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 - id: v1-0-milestone
   phase: unphased
-  status: next
+  status: done
   title: Reach the 1.0 operating-layer stability milestone
+  completed_by_pr: 2090
+  merge_commit: 52a72628
   depends_on:
-  - p6-gui-project-selection-and-ci-recipe
+  - post-0-5-0-phases-a-b-c
   - v1-0-schema-readiness
+  related_prior_work:
+  - p6-gui-project-selection-and-ci-recipe
+  non_1_0_prerequisite_notes:
+  - GUI project selection and CI recipe work was completed before 1.0, but GUI
+    workbench capability is not a 1.0 release prerequisite. The 1.0 acceptance
+    basis is deterministic CLI operating-layer evidence, schema migration
+    evidence, external repository evidence, release publication, and DOI closeout.
   acceptance:
   - The self-hosting litmus has passed.
   - workspace adopt/init is stable on at least one real external project.
@@ -304,8 +313,15 @@ roadmap:
   - External workspace health mode implementation slices for check, check-docs,
     doctor, and successor handoff package generation.
   - docs/reports/POST_0_5_0_V1_SCHEMA_AND_NEUTRAL_EXTERNAL_VALIDATION_20260813.md
+  - https://github.com/vfi64/agentic-project-kit/releases/tag/v1.0.0
+  - docs/reports/release/post-release-doi-closeout-1.0.0.json
+  - https://doi.org/10.5281/zenodo.21925421
+  - docs/reports/terminal/post-pr2090-successor-chat-handoff.md
+  - docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md
+  - docs/reports/V1_0_PLANNING_SITE_ONBOARDING_CLOSEOUT_20260814.md
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
+  - docs/planning/PROJECT_DIRECTION.yaml
 - id: post-0-5-0-phases-a-b-c
   phase: unphased
   status: done

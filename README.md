@@ -8,6 +8,8 @@ Current version: 1.0.0
 
 `agentic-project-kit` is a local Python package and CLI for governing AI-assisted repository work with explicit contracts, gates, evidence, handoffs, policy selection, task tracking, GitHub automation, and release validation.
 
+Generated website: <https://vfi64.github.io/agentic-project-kit/>. It serves the current public projection with install, new-repo, existing-repo, command, and claim-evidence views.
+
 ## Why this exists
 
 AI-assisted development works best when project context is explicit, current, and machine-checkable. Otherwise, agents drift into stale handoffs, unclear branch rules, missing test evidence, and unstructured logs.
@@ -63,6 +65,8 @@ agentic-kit --help
 ```
 
 ## Quick start
+
+For the generated install and usage walkthrough, including local pip usage, a Docker-based Python container path, new repositories, and existing repositories, see <https://vfi64.github.io/agentic-project-kit/site/quickstart/>.
 
 Create a new project interactively:
 
@@ -379,6 +383,10 @@ version, Python requirement, command count, `meta.manifest_sha`,
 `manifest_sha(commands)`, and build commit from current repo state. The site is
 not a second hand-maintained technical truth surface; future technical claim
 status must be computed from evidence bindings.
+
+Published Pages entry point: <https://vfi64.github.io/agentic-project-kit/>.
+The generated quickstart is at
+<https://vfi64.github.io/agentic-project-kit/site/quickstart/>.
 
 For legacy `main` `/docs` GitHub Pages,
 `python site/scripts/build.py --docs-pages-fallback --json` writes

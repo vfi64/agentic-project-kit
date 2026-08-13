@@ -52,7 +52,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "project.version=0.5.0",
+            "detail": "project.version=1.0.0",
             "evidence_type": "pyproject-value",
             "status": "verified"
           }
@@ -10521,13 +10521,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "4a6368de864c",
+    "manifest_sha": "2bb560ebe587",
     "package_name": "agentic-project-kit",
-    "package_version": "0.5.0",
+    "package_version": "1.0.0",
     "product_name": "Agentic Execution Runtime",
-    "release_tag": "v0.5.0",
+    "release_tag": "v1.0.0",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "4a6368de864c",
+    "reproduced_manifest_sha": "2bb560ebe587",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 165,
@@ -10539,32 +10539,32 @@
       "orchestrator": 31,
       "primitive": 101
     },
-    "version_doi": "10.5281/zenodo.21850952"
+    "version_doi": "10.5281/zenodo.21925421"
   },
   "roadmap_projection": {
     "roadmap_counts": {
       "blocked": 1,
-      "done": 13,
-      "next": 2,
+      "done": 14,
+      "next": 1,
       "planned": 5
     },
     "status": "active",
     "strategy_counts": {
       "active": 5
     },
-    "updated_after_pr": "2078",
+    "updated_after_pr": "2091",
     "updated_after_pr_current_main_claimed": false,
     "updated_after_pr_semantics": "strategic_direction_refresh"
   },
   "schema_version": 1,
   "status_projection": {
     "concept_doi": "10.5281/zenodo.20101359",
-    "current_release_tag": "v0.5.0",
+    "current_release_tag": "v1.0.0",
     "current_verified_main": "See docs/STATUS.md",
-    "current_verified_release": "0.5.0",
-    "current_version": "0.5.0",
+    "current_verified_release": "1.0.0",
+    "current_version": "1.0.0",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
-    "version_doi": "10.5281/zenodo.21850952"
+    "version_doi": "10.5281/zenodo.21925421"
   }
 }

@@ -1,0 +1,126 @@
+{
+  "docs": [
+    {
+      "label": "Brownfield external repository guide",
+      "path": "docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md"
+    },
+    {
+      "label": "Command reference",
+      "path": "docs/reference/AGENTIC_KIT_COMMANDS.md"
+    },
+    {
+      "label": "Test gates",
+      "path": "docs/TEST_GATES.md"
+    }
+  ],
+  "flows": [
+    {
+      "commands": [
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit init",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Create a governed project skeleton with selected profiles and policy packs."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit check",
+          "safety": "READ_ONLY",
+          "surface": "diagnostic",
+          "when_to_use": "Run agentic-kit check."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit doctor",
+          "safety": "READ_ONLY",
+          "surface": "diagnostic",
+          "when_to_use": "Run a compact project health check."
+        }
+      ],
+      "id": "new-repository",
+      "title": "New repository"
+    },
+    {
+      "commands": [
+        {
+          "dry_run_available": true,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit workspace dpa-intake",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Run the deterministic DPA repository-intake orchestration."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit workspace adopt",
+          "safety": "READ_ONLY",
+          "surface": "orchestrator",
+          "when_to_use": "Analyze an existing repository without writing workspace files."
+        },
+        {
+          "dry_run_available": true,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit workspace init",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Plan or create a bounded operating-layer workspace."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit check-docs",
+          "safety": "READ_ONLY",
+          "surface": "diagnostic",
+          "when_to_use": "Run agentic-kit check-docs."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit check",
+          "safety": "READ_ONLY",
+          "surface": "diagnostic",
+          "when_to_use": "Run agentic-kit check."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit doctor",
+          "safety": "READ_ONLY",
+          "surface": "diagnostic",
+          "when_to_use": "Run a compact project health check."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer chat-switch-complete",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Create a deterministic successor handoff package and prompt projections."
+        },
+        {
+          "dry_run_available": true,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit workspace remove",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Plan or remove exact Kit-generated operating-layer workspace files."
+        }
+      ],
+      "id": "existing-repository",
+      "title": "Existing repository"
+    }
+  ],
+  "kind": "site_quickstart_projection",
+  "package": {
+    "name": "agentic-project-kit",
+    "repository_url": "https://github.com/vfi64/agentic-project-kit",
+    "requires_python": ">=3.10",
+    "version": "1.0.0"
+  },
+  "schema_version": 1
+}

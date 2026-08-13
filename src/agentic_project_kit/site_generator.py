@@ -379,8 +379,10 @@ def build_site(
     (output / "static").mkdir(parents=True, exist_ok=True)
     (output / "commands").mkdir(parents=True, exist_ok=True)
     (output / "claims").mkdir(parents=True, exist_ok=True)
+    (output / "quickstart").mkdir(parents=True, exist_ok=True)
 
     index_html = render_index_html(root, report)
+    quickstart_projection = _build_quickstart_projection(metadata, command_catalog)
     site_json = json.dumps(
         {
             "schema_version": 1,
@@ -398,6 +400,14 @@ def build_site(
     (output / "site.json").write_text(site_json + "\n", encoding="utf-8")
     (output / "commands" / "commands.json").write_text(
         json.dumps(command_catalog.as_dict(), indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    (output / "quickstart" / "quickstart.json").write_text(
+        json.dumps(quickstart_projection, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    (output / "quickstart" / "index.html").write_text(
+        render_quickstart_html(root, metadata, quickstart_projection),
         encoding="utf-8",
     )
     (output / "claims" / "claims.json").write_text(
@@ -695,6 +705,158 @@ def _claim_summary_items(claims: list[object], *, empty: str) -> str:
             "</li>"
         )
     return "\n".join(rows)
+
+
+def _build_quickstart_projection(
+    metadata: SiteFoundationMetadata,
+    command_catalog: SiteCommandCatalog,
+) -> dict[str, object]:
+    return {
+        "schema_version": 1,
+        "kind": "site_quickstart_projection",
+        "package": {
+            "name": metadata.package_name,
+            "version": metadata.package_version,
+            "requires_python": metadata.requires_python,
+            "repository_url": metadata.repository_url,
+        },
+        "docs": [
+            {
+                "label": "Brownfield external repository guide",
+                "path": "docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md",
+            },
+            {
+                "label": "Command reference",
+                "path": "docs/reference/AGENTIC_KIT_COMMANDS.md",
+            },
+            {
+                "label": "Test gates",
+                "path": "docs/TEST_GATES.md",
+            },
+        ],
+        "flows": [
+            {
+                "id": "new-repository",
+                "title": "New repository",
+                "commands": _quickstart_commands(
+                    command_catalog,
+                    ("agentic-kit init", "agentic-kit check", "agentic-kit doctor"),
+                ),
+            },
+            {
+                "id": "existing-repository",
+                "title": "Existing repository",
+                "commands": _quickstart_commands(
+                    command_catalog,
+                    (
+                        "agentic-kit workspace dpa-intake",
+                        "agentic-kit workspace adopt",
+                        "agentic-kit workspace init",
+                        "agentic-kit check-docs",
+                        "agentic-kit check",
+                        "agentic-kit doctor",
+                        "agentic-kit transfer chat-switch-complete",
+                        "agentic-kit workspace remove",
+                    ),
+                ),
+            },
+        ],
+    }
+
+
+def _quickstart_commands(
+    command_catalog: SiteCommandCatalog,
+    names: tuple[str, ...],
+) -> list[dict[str, object]]:
+    entries = {entry.qualified_name: entry for entry in command_catalog.entries}
+    rows: list[dict[str, object]] = []
+    for name in names:
+        entry = entries.get(name)
+        rows.append(
+            {
+                "qualified_name": name,
+                "manifest_present": entry is not None,
+                "surface": entry.surface if entry is not None else "",
+                "safety": entry.safety if entry is not None else "",
+                "dry_run_available": entry.dry_run_available if entry is not None else False,
+                "when_to_use": entry.when_to_use if entry is not None else "",
+            }
+        )
+    return rows
+
+
+def render_quickstart_html(
+    root: Path,
+    metadata: SiteFoundationMetadata,
+    projection: dict[str, object],
+) -> str:
+    template_path = root / "site" / "templates" / "quickstart.html"
+    template = Template(template_path.read_text(encoding="utf-8"))
+    values = {
+        "product_name": escape(metadata.product_name),
+        "package_name": escape(metadata.package_name),
+        "package_version": escape(metadata.package_version),
+        "requires_python": escape(metadata.requires_python),
+        "repository_url": escape(metadata.repository_url or "#"),
+        "new_repo_command_items": _quickstart_flow_command_items(projection, "new-repository"),
+        "existing_repo_command_items": _quickstart_flow_command_items(projection, "existing-repository"),
+        "docs_link_items": _quickstart_docs_link_items(metadata, projection),
+    }
+    return template.safe_substitute(values).rstrip() + "\n"
+
+
+def _quickstart_flow_command_items(projection: dict[str, object], flow_id: str) -> str:
+    flows = projection.get("flows")
+    if not isinstance(flows, list):
+        return "          <li>No command flow is currently projected.</li>"
+    flow = next((item for item in flows if isinstance(item, dict) and item.get("id") == flow_id), None)
+    if not isinstance(flow, dict):
+        return "          <li>No command flow is currently projected.</li>"
+    commands = flow.get("commands")
+    if not isinstance(commands, list) or not commands:
+        return "          <li>No commands are currently projected.</li>"
+    rows = []
+    for command in commands:
+        if not isinstance(command, dict):
+            continue
+        name = _string(command.get("qualified_name"))
+        when_to_use = _string(command.get("when_to_use")) or "Command metadata is not projected."
+        metadata = " · ".join(
+            part
+            for part in (
+                _string(command.get("surface")),
+                _string(command.get("safety")),
+                "dry-run" if command.get("dry_run_available") is True else "",
+            )
+            if part
+        )
+        rows.append(
+            "          <li>"
+            f"<code>{escape(name)}</code>"
+            f"<span>{escape(when_to_use)}</span>"
+            f"<small>{escape(metadata or 'manifest metadata unavailable')}</small>"
+            "</li>"
+        )
+    return "\n".join(rows) if rows else "          <li>No commands are currently projected.</li>"
+
+
+def _quickstart_docs_link_items(
+    metadata: SiteFoundationMetadata,
+    projection: dict[str, object],
+) -> str:
+    docs = projection.get("docs")
+    if not isinstance(docs, list):
+        return "          <li>No documentation links are currently projected.</li>"
+    rows = []
+    repository = metadata.repository_url.rstrip("/")
+    for item in docs:
+        if not isinstance(item, dict):
+            continue
+        label = _string(item.get("label"))
+        path = _string(item.get("path"))
+        href = f"{repository}/blob/main/{path}" if repository and path else "#"
+        rows.append(f'          <li><a href="{escape(href)}">{escape(label or path)}</a></li>')
+    return "\n".join(rows) if rows else "          <li>No documentation links are currently projected.</li>"
 
 
 def render_claims_html(

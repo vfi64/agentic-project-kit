@@ -84,3 +84,13 @@ adding clearer explanatory sections:
   a separate website taxonomy.
 - Status categories use computed claim status: verified now, available but evolving,
   planned, and not claimed.
+
+S4e quickstart projection adds `quickstart/index.html` and
+`quickstart/quickstart.json`:
+
+- install paths cover local pip, local Kit checkout development, and a
+  Docker-based Python container path without claiming an official Kit image.
+- new-repository and existing-repository flows are rendered beside command
+  metadata projected from `docs/reference/agentic-kit-commands.json`.
+- documentation links point back to canonical repository docs, including the
+  Brownfield external repository guide and generated command reference.

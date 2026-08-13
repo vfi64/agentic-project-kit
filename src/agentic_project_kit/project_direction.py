@@ -372,6 +372,7 @@ def audit_project_direction_drift(root: Path | str = ".") -> DirectionDriftAudit
             )
         )
     records.extend(_closed_item_active_source_records(direction.data, root_path, reference_counts))
+    records.extend(_open_release_planning_drift_records(direction.data, root_path, direction.authority_path))
     return DirectionDriftAuditResult(
         root=root_path.resolve().as_posix(),
         records=tuple(sorted(records, key=lambda record: record.path)),
@@ -594,6 +595,65 @@ def _closed_item_active_source_records(
                     )
                 )
     return records
+
+
+def _open_release_planning_drift_records(
+    data: dict[str, Any],
+    root: Path,
+    authority_path: str,
+) -> list[DirectionDriftRecord]:
+    current_release = _read_project_version(root)
+    if not current_release:
+        return []
+    current_tuple = _release_tuple(current_release)
+    records: list[DirectionDriftRecord] = []
+    for section in ("roadmap", "plans"):
+        items = data.get(section)
+        if not isinstance(items, list):
+            continue
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            item_id = item.get("id")
+            status = _direction_item_status(section, item)
+            if not isinstance(item_id, str) or not item_id or status not in ACTIVE_STATUSES:
+                continue
+            release_evidence_count = _current_release_evidence_count(item, current_release)
+            if release_evidence_count:
+                records.append(
+                    DirectionDriftRecord(
+                        path=authority_path,
+                        classification="OPEN_ITEM_REFERENCES_CURRENT_RELEASE",
+                        recommendation="close_item_or_explain_why_current_release_evidence_is_not_acceptance",
+                        in_source_files=True,
+                        reference_count=release_evidence_count,
+                        item_id=item_id,
+                        item_status=status,
+                    )
+                )
+            target_release = item.get("target_release")
+            target_tuple = _release_tuple(target_release) if isinstance(target_release, str) else None
+            if current_tuple is not None and target_tuple is not None and target_tuple < current_tuple:
+                records.append(
+                    DirectionDriftRecord(
+                        path=authority_path,
+                        classification="OPEN_ITEM_TARGET_RELEASE_PASSED",
+                        recommendation="revalidate_target_release_or_close_item",
+                        in_source_files=True,
+                        reference_count=0,
+                        item_id=item_id,
+                        item_status=status,
+                    )
+                )
+    return records
+
+
+def _current_release_evidence_count(item: dict[str, Any], current_release: str) -> int:
+    evidence = item.get("evidence")
+    if not isinstance(evidence, list):
+        return 0
+    release_pattern = re.compile(rf"(?<![0-9A-Za-z_.-])v?{re.escape(current_release)}(?![0-9A-Za-z_.-])")
+    return sum(1 for entry in evidence if isinstance(entry, str) and release_pattern.search(entry))
 
 
 def _direction_item_status(section: str, item: dict[str, Any]) -> str:
