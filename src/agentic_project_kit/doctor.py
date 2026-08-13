@@ -63,7 +63,7 @@ def build_doctor_report(project_root: Path) -> DoctorReport:
         _doc_lifecycle_check(root),
         _todo_check(root, workspace),
         _standard_gates_audit_suite_check(root),
-        _version_drift_check(root),
+        _version_drift_check(root, external_manifest_workspace=external_manifest_workspace),
     ]
     return DoctorReport(project_root=root, checks=checks)
 
@@ -216,7 +216,14 @@ def _todo_check(project_root: Path, workspace: Workspace | None | ValueError = N
     return DoctorCheck("todo gates", DoctorStatus.PASS, "passed")
 
 
-def _version_drift_check(project_root: Path) -> DoctorCheck:
+def _version_drift_check(project_root: Path, *, external_manifest_workspace: bool = False) -> DoctorCheck:
+    if external_manifest_workspace:
+        return DoctorCheck(
+            "version drift",
+            DoctorStatus.WARN,
+            "skipped for external manifest workspace; version governance remains project-owned",
+        )
+
     version = _read_pyproject_version(project_root / "pyproject.toml")
     if version is None:
         return DoctorCheck("version drift", DoctorStatus.WARN, "pyproject.toml absent or version unavailable")
