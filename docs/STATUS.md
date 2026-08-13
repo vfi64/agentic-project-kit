@@ -7,10 +7,10 @@ Current verified release: 0.5.0.
 Current release tag: v0.5.0.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21850952`.
-Current verified main: `c4d84cd8` (`Enable external workspace health checks (#2061)`).
-Latest substantive work: PR #2061 (`Enable external workspace health checks (#2061)`).
+Current verified main: `6ee3758d` (`Enable external successor handoff packages (#2063)`).
+Latest substantive work: PR #2063 (`Enable external successor handoff packages (#2063)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2061 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2063 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -416,6 +416,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2061
+## Operational documentation refresh state after PR #2063
 
-Current administrative handoff refresh state is `c4d84cd8` (`Enable external workspace health checks (#2061)`). Continue next only after this post-PR2061 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `6ee3758d` (`Enable external successor handoff packages (#2063)`). Continue next only after this post-PR2063 refresh is committed and merged; the next substantive slice must be created from fresh main.

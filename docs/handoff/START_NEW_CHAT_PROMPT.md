@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 11fcb9f3d896fa0b8344fde9366745d89d057b21209b081fef92870bfbca88c4
 - docs/reference/agentic-kit-commands.json: 2814f80c9ba8da5d513a42127c505a8a9137715d7424f96ef6f97995c7836ebd
-## Operational documentation refresh state after PR #2061
+## Operational documentation refresh state after PR #2063
 
-Current administrative handoff refresh state is `c4d84cd8` (`Enable external workspace health checks (#2061)`). Continue next only after this post-PR2061 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `6ee3758d` (`Enable external successor handoff packages (#2063)`). Continue next only after this post-PR2063 refresh is committed and merged; the next substantive slice must be created from fresh main.

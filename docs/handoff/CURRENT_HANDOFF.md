@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `c4d84cd8e8b0f3d676a04d85001be9b0c6983c71` (`c4d84cd8`), after `Enable external workspace health checks (#2061)`.
-Last substantive work state is `c4d84cd8e8b0f3d676a04d85001be9b0c6983c71` (`c4d84cd8`), after `Enable external workspace health checks (#2061)`.
+Current verified main/admin HEAD is `6ee3758da13ff66f95a5487f84ee85a7b3191240` (`6ee3758d`), after `Enable external successor handoff packages (#2063)`.
+Last substantive work state is `6ee3758da13ff66f95a5487f84ee85a7b3191240` (`6ee3758d`), after `Enable external successor handoff packages (#2063)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
