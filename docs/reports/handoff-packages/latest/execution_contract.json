@@ -28,15 +28,6 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "v1-0-milestone",
-        "status": "next",
-        "summary": "Reach the 1.0 operating-layer stability milestone for unphased"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
         "id": "v2-0-legacy-profile-removal",
         "status": "planned",
         "summary": "Remove the implicit legacy profile in 2.0.0 for unphased"
@@ -269,13 +260,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2090-handoff-refresh",
+      "branch": "docs/post-pr2092-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "52a72628547b2feba719b4d23a056aa764cee3ec",
+      "head": "e07dc4b54b97436fbc309b5097aed75cf0eefdce",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "52a72628547b2feba719b4d23a056aa764cee3ec",
+      "origin_main": "e07dc4b54b97436fbc309b5097aed75cf0eefdce",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -421,13 +412,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2090-handoff-refresh",
+    "branch": "docs/post-pr2092-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "52a72628547b2feba719b4d23a056aa764cee3ec",
+    "head": "e07dc4b54b97436fbc309b5097aed75cf0eefdce",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "52a72628547b2feba719b4d23a056aa764cee3ec",
+    "origin_main": "e07dc4b54b97436fbc309b5097aed75cf0eefdce",
     "worktree_clean": false
   },
   "rules": [
