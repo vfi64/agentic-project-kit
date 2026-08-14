@@ -677,6 +677,22 @@
             "--root"
           ],
           "required": false
+        },
+        {
+          "help": "Emit machine-readable check result with execution context.",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        },
+        {
+          "help": "Print check execution context before the text result.",
+          "name": "show_context",
+          "opts": [
+            "--context"
+          ],
+          "required": false
         }
       ],
       "qualified_name": "agentic-kit check",
@@ -696,6 +712,22 @@
           "name": "project_root",
           "opts": [
             "--root"
+          ],
+          "required": false
+        },
+        {
+          "help": "Emit machine-readable check result with execution context.",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        },
+        {
+          "help": "Print check execution context before the text result.",
+          "name": "show_context",
+          "opts": [
+            "--context"
           ],
           "required": false
         }

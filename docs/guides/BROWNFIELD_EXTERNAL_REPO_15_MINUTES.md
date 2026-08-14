@@ -64,6 +64,10 @@ agentic-kit doctor --root PATH
 
 `check` and `check-docs` are error-list gates with zero/non-zero exits. `doctor`
 renders a health report with `PASS`, `FAIL`, `WARN`, and `SKIP`.
+For audit evidence, run `agentic-kit check --root PATH --context` or
+`agentic-kit check-docs --root PATH --json` to show whether those gates are using
+the external workspace-state document set. These commands do not render
+per-check statuses; `doctor` is the status renderer.
 
 In an external manifest workspace, `SKIP` means the check is not applicable to
 the target repository. For example, Kit-specific version drift remains

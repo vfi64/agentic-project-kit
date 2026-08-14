@@ -190,6 +190,13 @@ def test_site_foundation_blocks_invalid_command_surface(tmp_path: Path) -> None:
     assert "agentic-kit workspace init: invalid surface 'unknown'" in report.blockers
 
 
+def test_public_site_templates_name_remote_target_ci_limitation() -> None:
+    limitation = "Remote target-CI validation is not claimed"
+
+    assert limitation in Path("site/templates/index.html").read_text(encoding="utf-8")
+    assert limitation in Path("site/templates/claims.html").read_text(encoding="utf-8")
+
+
 def _write_site_fixture(
     root: Path,
     *,

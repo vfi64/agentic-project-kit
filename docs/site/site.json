@@ -862,6 +862,22 @@
               "--root"
             ],
             "required": false
+          },
+          {
+            "help": "Emit machine-readable check result with execution context.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          },
+          {
+            "help": "Print check execution context before the text result.",
+            "name": "show_context",
+            "opts": [
+              "--context"
+            ],
+            "required": false
           }
         ],
         "qualified_name": "agentic-kit check",
@@ -881,6 +897,22 @@
             "name": "project_root",
             "opts": [
               "--root"
+            ],
+            "required": false
+          },
+          {
+            "help": "Emit machine-readable check result with execution context.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          },
+          {
+            "help": "Print check execution context before the text result.",
+            "name": "show_context",
+            "opts": [
+              "--context"
             ],
             "required": false
           }
@@ -10521,13 +10553,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "2bb560ebe587",
+    "manifest_sha": "28656f2fd53e",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.0",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.0",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "2bb560ebe587",
+    "reproduced_manifest_sha": "28656f2fd53e",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 165,

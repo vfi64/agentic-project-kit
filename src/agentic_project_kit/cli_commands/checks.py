@@ -7,7 +7,13 @@ from typing import Annotated
 import typer
 from rich.console import Console
 
-from agentic_project_kit.checks import check_all, check_docs, check_todo
+from agentic_project_kit.checks import (
+    CheckContext,
+    build_check_context,
+    check_all,
+    check_docs,
+    check_todo,
+)
 from agentic_project_kit.doc_mesh import (
     apply_doc_mesh_repair_plan,
     build_doc_mesh_repair_plan,
@@ -62,14 +68,48 @@ def register_check_commands(app: typer.Typer) -> None:
     app.command("doctor")(doctor_command)
 
 
-def check_command(project_root: Path = typer.Option(Path("."), "--root")) -> None:
-    errors = check_all(project_root.resolve())
-    _print_result(errors)
+def check_command(
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    json_output: Annotated[
+        bool,
+        typer.Option("--json", help="Emit machine-readable check result with execution context."),
+    ] = False,
+    show_context: Annotated[
+        bool,
+        typer.Option("--context", help="Print check execution context before the text result."),
+    ] = False,
+) -> None:
+    root = project_root.resolve()
+    errors = check_all(root)
+    _print_result(
+        errors,
+        command="check",
+        project_root=root,
+        json_output=json_output,
+        show_context=show_context,
+    )
 
 
-def check_docs_command(project_root: Path = typer.Option(Path("."), "--root")) -> None:
-    errors = check_docs(project_root.resolve())
-    _print_result(errors)
+def check_docs_command(
+    project_root: Annotated[Path, typer.Option("--root")] = Path("."),
+    json_output: Annotated[
+        bool,
+        typer.Option("--json", help="Emit machine-readable check result with execution context."),
+    ] = False,
+    show_context: Annotated[
+        bool,
+        typer.Option("--context", help="Print check execution context before the text result."),
+    ] = False,
+) -> None:
+    root = project_root.resolve()
+    errors = check_docs(root)
+    _print_result(
+        errors,
+        command="check-docs",
+        project_root=root,
+        json_output=json_output,
+        show_context=show_context,
+    )
 
 
 def check_todo_command(project_root: Path = typer.Option(Path("."), "--root")) -> None:
@@ -211,10 +251,55 @@ def doctor_command(project_root: Path = typer.Option(Path("."), "--root")) -> No
         raise typer.Exit(code=1)
 
 
-def _print_result(errors: list[str]) -> None:
+def _print_result(
+    errors: list[str],
+    *,
+    command: str | None = None,
+    project_root: Path | None = None,
+    json_output: bool = False,
+    show_context: bool = False,
+) -> None:
+    if json_output:
+        if command is None or project_root is None:
+            raise RuntimeError("JSON check output requires command and project root context")
+        payload = _check_result_payload(command, project_root, errors)
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+        if errors:
+            raise typer.Exit(code=1)
+        return
+    if show_context and project_root is not None:
+        _print_check_context(build_check_context(project_root))
     if errors:
         console.print("[bold red]Agentic project check failed[/bold red]")
         for error in errors:
             console.print(f"[red]- {error}[/red]")
         raise typer.Exit(code=1)
     console.print("[bold green]Agentic project check passed[/bold green]")
+
+
+def _check_result_payload(command: str, project_root: Path, errors: list[str]) -> dict[str, object]:
+    return {
+        "schema_version": 1,
+        "kind": "agentic_project_check_result",
+        "command": command,
+        "status": "PASS" if not errors else "FAIL",
+        "error_count": len(errors),
+        "errors": errors,
+        "context": build_check_context(project_root).as_dict(),
+    }
+
+
+def _print_check_context(context: CheckContext) -> None:
+    console.print("CHECK_CONTEXT", markup=False)
+    console.print(f"MODE={context.mode}", markup=False)
+    console.print(
+        f"EXTERNAL_MANIFEST_WORKSPACE={str(context.external_manifest_workspace).lower()}",
+        markup=False,
+    )
+    console.print(f"GATE_FAMILY={context.gate_family}", markup=False)
+    console.print(f"CHECK_RENDERS_STATUSES={str(context.check_renders_statuses).lower()}", markup=False)
+    console.print(f"SKIP_STATUS_RENDERER={context.skip_status_renderer}", markup=False)
+    if context.gate_documents:
+        console.print(f"GATE_DOCUMENTS={','.join(context.gate_documents)}", markup=False)
+    if context.invalid_manifest_error:
+        console.print(f"INVALID_MANIFEST_ERROR={context.invalid_manifest_error}", markup=False)

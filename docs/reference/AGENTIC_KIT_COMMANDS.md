@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 2bb560ebe587
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 28656f2fd53e
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -316,6 +316,8 @@ Render the session-start refresher and full inline command list.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable check result with execution context. |
+| `show_context` | `TyperOption` | --context | `False` | `False` | Print check execution context before the text result. |
 
 ### `agentic-kit check-docs`
 
@@ -327,6 +329,8 @@ Render the session-start refresher and full inline command list.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable check result with execution context. |
+| `show_context` | `TyperOption` | --context | `False` | `False` | Print check execution context before the text result. |
 
 ### `agentic-kit check-todo`
 
