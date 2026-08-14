@@ -1,0 +1,11 @@
+.git
+.venv*
+.pytest_cache
+.ruff_cache
+.mypy_cache
+build
+dist
+tmp
+site/dist
+docs/site
+docs/.nojekyll

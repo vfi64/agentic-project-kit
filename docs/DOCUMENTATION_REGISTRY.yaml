@@ -600,7 +600,7 @@ documents:
   - path: .agentic/config.yaml
     class: governance/system
     owner: maintainers
-    notes: Self-hosting workspace manifest that keeps physical legacy paths stable during P5a.
+    notes: Self-hosting workspace manifest at schema v2; keeps physical legacy paths stable while materializing hygiene defaults.
   - path: docs/reports/terminal/LATEST_TERMINAL_LOG.txt
     class: generated artifact
     owner: automation
@@ -613,6 +613,10 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Handoff refresh evidence before registry work.
+  - path: docs/reports/PUBLIC_INSTALLATION_UPDATE_DOCKER_READINESS_20260814.md
+    class: evidence/log
+    owner: maintainers
+    notes: Post-1.0 public installation, PyPI publish-readiness, update path, Docker, and self-hosting schema-upgrade evidence.
   - path: docs/architecture/evidence/path-literal-audit-2026-07-04.md
     class: evidence/log
     owner: maintainers

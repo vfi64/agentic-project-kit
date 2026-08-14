@@ -21,13 +21,13 @@
         <p class="eyebrow">Computed claim evidence</p>
         <h1 id="claims-title">Claim Evidence</h1>
         <p class="lede">Claim status is evaluated during the build from evidence bindings. Curated claim content does not store derived verified state.</p>
-        <p class="catalog-meta">Version <code>1.0.0</code> · Manifest <code>28656f2fd53e</code> · Claims <code>10</code></p>
+        <p class="catalog-meta">Version <code>1.0.0</code> · Manifest <code>28656f2fd53e</code> · Claims <code>13</code></p>
       </section>
 
       <section class="metrics" aria-label="Claim status counts">
         <article>
           <span>Verified</span>
-          <strong>10</strong>
+          <strong>12</strong>
         </article>
         <article>
           <span>Unverified</span>
@@ -35,11 +35,11 @@
         </article>
         <article>
           <span>Planned</span>
-          <strong>0</strong>
+          <strong>1</strong>
         </article>
         <article>
           <span>Required</span>
-          <strong>5</strong>
+          <strong>6</strong>
         </article>
       </section>
 
@@ -59,6 +59,9 @@
           <tr><td><code>gui-entry-point</code></td><td>The package provides the agentic-kit-gui graphical entry point.</td><td>verified</td><td>no</td><td>pyproject-entrypoint</td></tr>
           <tr><td><code>python-requirement</code></td><td>The website Python requirement is projected from pyproject.toml.</td><td>verified</td><td>yes</td><td>pyproject-value</td></tr>
           <tr><td><code>package-version</code></td><td>The website package version is projected from pyproject.toml.</td><td>verified</td><td>yes</td><td>pyproject-value</td></tr>
+          <tr><td><code>public-source-install-documented</code></td><td>The public install path currently points to the GitHub source projection instead of claiming an unpublished PyPI package.</td><td>verified</td><td>yes</td><td>file-contains, file-contains</td></tr>
+          <tr><td><code>pypi-trusted-publishing-ready</code></td><td>PyPI/TestPyPI publication is prepared through gated Trusted Publishing automation, but direct PyPI installation remains unclaimed until publication evidence exists.</td><td>verified</td><td>no</td><td>file-contains, file-contains</td></tr>
+          <tr><td><code>pypi-package-installable</code></td><td>Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users.</td><td>planned</td><td>no</td><td>file-contains</td></tr>
           <tr><td><code>command-manifest-synchronization</code></td><td>The public command catalog is generated from the current command manifest and checked for synchronization.</td><td>verified</td><td>yes</td><td>command-probe</td></tr>
           <tr><td><code>artifact-gc-dry-run</code></td><td>agentic-kit artifact-gc supports dry-run behavior.</td><td>verified</td><td>no</td><td>command-manifest</td></tr>
           <tr><td><code>workspace-adopt-read-only</code></td><td>agentic-kit workspace adopt inspects without writing.</td><td>verified</td><td>no</td><td>command-manifest, pytest-node</td></tr>
@@ -78,6 +81,7 @@
           <h3>Not claimed</h3>
           <ul class="summary-list">
             <li><span>Remote target-CI validation is not claimed when the target repository reports no checks; remote adoption PR mechanics are separate from target-owned CI evidence.</span></li>
+            <li><span>Direct PyPI installation is not claimed until PyPI package availability evidence is verified.</span></li>
             <li><span>Global DPA conformance for arbitrary foreign repositories is not claimed.</span></li>
             <li><span>Full GUI parity with every CLI command is not claimed.</span></li>
           </ul>

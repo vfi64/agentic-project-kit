@@ -149,6 +149,7 @@ def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):
         DoctorStatus.WARN,
         DoctorStatus.WARN,
         DoctorStatus.WARN,
+        DoctorStatus.WARN,
         DoctorStatus.PASS,
         DoctorStatus.PASS,
         DoctorStatus.WARN,
@@ -168,12 +169,36 @@ def test_doctor_report_passes_for_manifest_operating_layer_workspace(tmp_path: P
     check_by_name = {check.name: check for check in report.checks}
     assert check_by_name["workspace manifest"].status == DoctorStatus.PASS
     assert "external-demo" in check_by_name["workspace manifest"].detail
+    assert check_by_name["workspace schema"].status == DoctorStatus.WARN
+    assert "workspace upgrade" in check_by_name["workspace schema"].detail
     assert check_by_name["documentation gates"].status == DoctorStatus.PASS
     assert check_by_name["project contract"].status == DoctorStatus.SKIP
     assert check_by_name["policy pack checks"].status == DoctorStatus.SKIP
     assert check_by_name["todo gates"].status == DoctorStatus.SKIP
     assert "workspace manifest" in check_by_name["todo gates"].detail
     assert "[SKIP] todo gates" in render_doctor_report(report)
+
+
+def test_doctor_report_passes_current_manifest_schema(tmp_path: Path):
+    _write_readme(tmp_path)
+    _write_manifest_workspace(tmp_path)
+    config_path = tmp_path / ".agentic/config.yaml"
+    config_path.write_text(
+        config_path.read_text(encoding="utf-8").replace("kit_schema_version: 1", "kit_schema_version: 2")
+        + "hygiene:\n"
+        + "  doc_lifecycle: warn\n"
+        + "  review_budgets:\n"
+        + "    governance: 180\n"
+        + "    reference: 365\n"
+        + "    workflow: 270\n",
+        encoding="utf-8",
+    )
+
+    report = build_doctor_report(tmp_path)
+
+    schema_check = _check_by_name(report, "workspace schema")
+    assert schema_check.status == DoctorStatus.PASS
+    assert schema_check.detail == "manifest schema v2 is current"
 
 
 def test_doctor_report_accepts_manifest_workspace_without_root_readme(tmp_path: Path):

@@ -32,12 +32,22 @@
 
       <section class="quickstart-grid" aria-label="Installation paths">
         <article class="panel code-panel" id="install">
-          <p class="eyebrow">Local pip</p>
+          <p class="eyebrow">Current public source</p>
           <h2>Install in a Virtual Environment</h2>
+          <pre><code>python -m venv .venv
+source .venv/bin/activate
+python -m pip install "${package_name} @ git+${repository_url}.git@main"
+agentic-kit --version</code></pre>
+          <p>This path matches the generated documentation on <code>main</code>. Direct PyPI installation is planned, not claimed yet.</p>
+        </article>
+        <article class="panel code-panel">
+          <p class="eyebrow">Planned PyPI</p>
+          <h2>Use After Publication</h2>
           <pre><code>python -m venv .venv
 source .venv/bin/activate
 python -m pip install ${package_name}
 agentic-kit --version</code></pre>
+          <p>Use this only after the PyPI claim is verified on the claim-evidence page.</p>
         </article>
         <article class="panel code-panel">
           <p class="eyebrow">Kit checkout</p>
@@ -50,11 +60,30 @@ agentic-kit --version</code></pre>
         </article>
         <article class="panel code-panel">
           <p class="eyebrow">Docker</p>
-          <h2>Run Pip Inside Python</h2>
-          <pre><code>docker run --rm -it -v "$PWD:/work" -w /work python:3.12-slim sh
-python -m pip install ${package_name}
-agentic-kit --version</code></pre>
-          <p>No official Docker image is claimed by this generated site.</p>
+          <h2>Use the Local Image</h2>
+          <pre><code>git clone ${repository_url}.git
+cd agentic-project-kit
+docker build -t agentic-project-kit:local .
+docker run --rm -v "/path/to/repo:/work" agentic-project-kit:local doctor --root /work</code></pre>
+          <p>No official registry image is claimed by this generated site. GitHub operations inside Docker require mounted credentials for <code>gh</code> and SSH.</p>
+        </article>
+      </section>
+
+      <section class="band" aria-labelledby="update-title">
+        <div>
+          <p class="eyebrow">Updates</p>
+          <h2 id="update-title">Update a Managed Repository</h2>
+          <p>After updating the Kit package, inspect the target workspace before applying schema migrations. <code>workspace upgrade</code> is dry-run by default.</p>
+          <pre><code>python -m pip install --upgrade "${package_name} @ git+${repository_url}.git@main"
+agentic-kit doctor --root PATH
+agentic-kit workspace upgrade --root PATH
+agentic-kit workspace upgrade --root PATH --execute
+agentic-kit check --root PATH
+agentic-kit doctor --root PATH</code></pre>
+        </div>
+        <article class="panel">
+          <p class="eyebrow">Safety rule</p>
+          <p>Review the manifest diff before using <code>--execute</code>. If the manifest schema is older than this Kit supports, <code>doctor</code> reports the upgrade command explicitly.</p>
         </article>
       </section>
 

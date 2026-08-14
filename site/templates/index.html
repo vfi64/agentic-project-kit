@@ -79,8 +79,8 @@
         <article class="panel" id="install">
           <p class="eyebrow">Install</p>
           <h2>Start Locally</h2>
-          <p><code>pip install ${package_name}</code></p>
-          <p>After installation, run <code>agentic-kit --version</code>, then choose <code>agentic-kit init</code> for a new governed repository or <code>agentic-kit workspace adopt</code> for an existing one.</p>
+          <p><code>python -m pip install "${package_name} @ git+${repository_url}.git@main"</code></p>
+          <p>The direct PyPI command is not claimed until package publication evidence is verified. After installation, run <code>agentic-kit --version</code>, then choose <code>agentic-kit init</code> for a new governed repository or <code>agentic-kit workspace adopt</code> for an existing one.</p>
           <p><a href="quickstart/index.html">Generated quickstart</a> · <a href="${repository_url}/blob/main/docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md">Brownfield guide</a></p>
         </article>
         <article class="panel">
@@ -184,6 +184,7 @@ ${planned_items}
           <ul class="summary-list">
             <li><span>Global DPA conformance for arbitrary foreign repositories is not claimed.</span></li>
             <li><span>Remote target-CI validation is not claimed when the target repository reports no checks; remote adoption PR mechanics are separate from target-owned CI evidence.</span></li>
+            <li><span>Direct PyPI installation is not claimed until PyPI package availability evidence is verified.</span></li>
             <li><span>Full GUI parity with every CLI command is not claimed.</span></li>
             <li><span>Live GitHub Pages publication depends on either GitHub Actions Pages deployment or the generated docs-source fallback being current.</span></li>
           </ul>

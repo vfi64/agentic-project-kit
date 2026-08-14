@@ -47,10 +47,22 @@ A generated project includes:
 
 ## Installation for local development
 
+The public PyPI package is not published yet. Until the PyPI claim is verified,
+install the current public source projection from GitHub:
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -e ".[dev]"
+python -m pip install "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"
+agentic-kit --version
+```
+
+For Kit development from a local checkout:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[dev]"
 ```
 
 Run gates:
@@ -66,7 +78,22 @@ agentic-kit --help
 
 ## Quick start
 
-For the generated install and usage walkthrough, including local pip usage, a Docker-based Python container path, new repositories, and existing repositories, see <https://vfi64.github.io/agentic-project-kit/site/quickstart/>.
+For the generated install and usage walkthrough, including the current GitHub
+source install path, planned PyPI usage, a Docker-based Python container path,
+new repositories, and existing repositories, see
+<https://vfi64.github.io/agentic-project-kit/site/quickstart/>.
+
+Docker without an official registry image uses the local source image:
+
+```bash
+git clone https://github.com/vfi64/agentic-project-kit.git
+cd agentic-project-kit
+docker build -t agentic-project-kit:local .
+docker run --rm -v "/path/to/repo:/work" agentic-project-kit:local doctor --root /work
+```
+
+GitHub operations inside Docker require explicit `gh` and SSH credentials; no
+secret should be baked into the image.
 
 Create a new project interactively:
 
@@ -190,7 +217,7 @@ Open Direction items whose `target_release` passed the current package version r
 For an existing Git repo, add `.agentic/` governance; use `agentic-kit init` only for new scaffolds.
 
 ```bash
-pip install agentic-project-kit
+python -m pip install "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"
 agentic-kit workspace dpa-intake --root PATH
 agentic-kit workspace adopt --root PATH
 agentic-kit dpa repo-adoption-assessment --root PATH
@@ -218,6 +245,21 @@ manifest diff, reports when a workspace is already at schema v2, and with
 The first real schema migration upgrades v1 manifests to v2 by materializing
 `hygiene`. Manifest-less repositories should run `workspace init`;
 newer-schema repositories should upgrade the kit.
+
+After updating the Kit package in an already managed repository, run the bounded
+upgrade path from inside or against the target repository:
+
+```bash
+python -m pip install --upgrade "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"
+agentic-kit doctor --root PATH
+agentic-kit workspace upgrade --root PATH
+agentic-kit workspace upgrade --root PATH --execute
+agentic-kit check --root PATH
+agentic-kit doctor --root PATH
+```
+
+`doctor` reports an actionable warning when the workspace manifest schema is
+older than the schema supported by the installed Kit.
 
 Brownfield path: `docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md`.
 

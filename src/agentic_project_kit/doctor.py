@@ -16,7 +16,11 @@ from agentic_project_kit.contract import (
     load_project_contract,
     validate_project_contract,
 )
-from agentic_project_kit.workspace import Workspace, load_workspace
+from agentic_project_kit.workspace import (
+    SUPPORTED_MANIFEST_SCHEMA_VERSION,
+    Workspace,
+    load_workspace,
+)
 
 
 class DoctorStatus(str, Enum):
@@ -58,6 +62,7 @@ def build_doctor_report(project_root: Path) -> DoctorReport:
         _path_check(root, "sentinel.yaml", required=False),
         _path_check(root, ".github/workflows/ci.yml", required=False),
         _workspace_manifest_check(workspace),
+        _workspace_schema_currency_check(workspace),
         _project_contract_check(root, contract_data, external_manifest_workspace=external_manifest_workspace),
         _policy_pack_check(root, contract_data, external_manifest_workspace=external_manifest_workspace),
         _docs_check(root),
@@ -112,6 +117,32 @@ def _workspace_manifest_check(data: Workspace | None | ValueError) -> DoctorChec
         f"profile: {data.profile}; transfer: {data.transfer_visibility}"
     )
     return DoctorCheck("workspace manifest", DoctorStatus.PASS, detail)
+
+
+def _workspace_schema_currency_check(data: Workspace | None | ValueError) -> DoctorCheck:
+    if isinstance(data, ValueError):
+        return DoctorCheck(
+            "workspace schema",
+            DoctorStatus.WARN,
+            "skipped because workspace manifest is invalid",
+        )
+    if data is None:
+        return DoctorCheck("workspace schema", DoctorStatus.WARN, ".agentic/config.yaml absent")
+    if data.manifest_schema_version < SUPPORTED_MANIFEST_SCHEMA_VERSION:
+        return DoctorCheck(
+            "workspace schema",
+            DoctorStatus.WARN,
+            (
+                f"manifest schema v{data.manifest_schema_version} is older than "
+                f"supported v{SUPPORTED_MANIFEST_SCHEMA_VERSION}; run "
+                "`agentic-kit workspace upgrade --root PATH`"
+            ),
+        )
+    return DoctorCheck(
+        "workspace schema",
+        DoctorStatus.PASS,
+        f"manifest schema v{data.manifest_schema_version} is current",
+    )
 
 
 def _project_contract_check(

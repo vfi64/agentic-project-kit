@@ -30,6 +30,37 @@ claims:
       type: pyproject-value
       key: project.version
 
+  - id: public-source-install-documented
+    text: The public install path currently points to the GitHub source projection instead of claiming an unpublished PyPI package.
+    required: true
+    evidence:
+      - type: file-contains
+        path: README.md
+        contains: "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"
+      - type: file-contains
+        path: site/templates/quickstart.html
+        contains: '${package_name} @ git+${repository_url}.git@main'
+
+  - id: pypi-trusted-publishing-ready
+    text: PyPI/TestPyPI publication is prepared through gated Trusted Publishing automation, but direct PyPI installation remains unclaimed until publication evidence exists.
+    required: false
+    evidence:
+      - type: file-contains
+        path: .github/workflows/release.yml
+        contains: "pypa/gh-action-pypi-publish@release/v1"
+      - type: file-contains
+        path: site/templates/claims.html
+        contains: "Direct PyPI installation is not claimed until PyPI package availability evidence is verified."
+
+  - id: pypi-package-installable
+    text: Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users.
+    required: false
+    planned: true
+    evidence:
+      type: file-contains
+      path: site/templates/quickstart.html
+      contains: "Use this only after the PyPI claim is verified"
+
   - id: command-manifest-synchronization
     text: The public command catalog is generated from the current command manifest and checked for synchronization.
     required: true
