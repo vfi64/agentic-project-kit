@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6ab737bd74569c14e6bafeb1f3741c1ac4616069
-  short: 6ab737bd
-  subject: Clarify external check context and public limits (#2094)
+  full: e5824bc224e3e20b68472955a72cf172dd693278
+  short: e5824bc2
+  subject: Close public installation readiness gaps (#2096)
 last_substantive_work_state:
-  full: 6ab737bd74569c14e6bafeb1f3741c1ac4616069
-  short: 6ab737bd
-  subject: Clarify external check context and public limits (#2094)
+  full: e5824bc224e3e20b68472955a72cf172dd693278
+  short: e5824bc2
+  subject: Close public installation readiness gaps (#2096)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
