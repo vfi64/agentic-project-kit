@@ -4,11 +4,14 @@ from pathlib import Path
 from collections.abc import Sequence
 
 from agentic_project_kit import __version__ as PACKAGE_VERSION
+import agentic_project_kit.cli_executable as cli_executable
 from agentic_project_kit.standard_gates_audit_suite import (
     REQUIRED_STANDARD_GATE_COMMANDS,
+    _default_agentic_kit,
     evaluate_standard_gates_audit_suite,
     render_standard_gates_audit_suite,
 )
+from agentic_project_kit.cli_executable import default_python
 
 
 REQUIRED_NAMES = {
@@ -118,6 +121,32 @@ def test_standard_gates_audit_suite_fails_when_required_gate_fails(tmp_path: Pat
 
     assert result.ok is False
     assert any(check.name == "audit-doc-currency" for check in result.blockers)
+
+
+def test_default_agentic_kit_falls_back_when_local_venv_shebang_is_not_runnable(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    local = tmp_path / ".venv" / "bin" / "agentic-kit"
+    local.parent.mkdir(parents=True)
+    local.write_text("#!/missing/container/python\n", encoding="utf-8")
+
+    monkeypatch.setattr(cli_executable.shutil, "which", lambda name: "/usr/local/bin/agentic-kit")
+
+    assert _default_agentic_kit(tmp_path) == "/usr/local/bin/agentic-kit"
+
+
+def test_default_python_falls_back_when_local_venv_shebang_is_not_runnable(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    local = tmp_path / ".venv" / "bin" / "python"
+    local.parent.mkdir(parents=True)
+    local.write_text("#!/missing/container/python\n", encoding="utf-8")
+
+    monkeypatch.setattr(cli_executable.sys, "executable", "/usr/local/bin/python")
+
+    assert default_python(tmp_path) == "/usr/local/bin/python"
 
 
 def test_standard_gates_audit_suite_blocks_invalid_project_direction(tmp_path: Path) -> None:

@@ -10630,10 +10630,9 @@
   },
   "roadmap_projection": {
     "roadmap_counts": {
-      "active": 1,
       "blocked": 1,
       "done": 14,
-      "next": 1,
+      "next": 2,
       "planned": 5
     },
     "status": "active",

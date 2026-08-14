@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from agentic_project_kit.cli_commands.transfer_shared import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import *
+from agentic_project_kit.cli_executable import default_python
 from agentic_project_kit.workspace import load_workspace
 
 
@@ -316,8 +317,9 @@ def command_reference_refresh(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
 ) -> None:
     """Regenerate the agentic-kit command reference without committing changes."""
+    python = default_python(Path("."))
     script_result = _run_transfer_subprocess(
-        ["./.venv/bin/python", "scripts/generate_agentic_kit_command_reference.py"]
+        [python, "scripts/generate_agentic_kit_command_reference.py"]
     )
     status_result = _run_transfer_subprocess(["git", "status", "--short"])
     diff_result = _run_transfer_subprocess(
@@ -365,9 +367,10 @@ def command_reference_check(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
 ) -> None:
     """Check whether the committed agentic-kit command reference is current."""
+    python = default_python(Path("."))
     check_result = _run_transfer_subprocess(
         [
-            "./.venv/bin/python",
+            python,
             "-m",
             "pytest",
             "-q",

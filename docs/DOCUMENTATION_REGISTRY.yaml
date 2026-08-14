@@ -621,6 +621,10 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: v1.0.1 release-publication preparation evidence separating TestPyPI, PyPI, source-install, Docker, and post-publication claim closeout boundaries.
+  - path: docs/reports/DOCKER_LOCAL_SMOKE_20260814.md
+    class: evidence/log
+    owner: maintainers
+    notes: Local Docker build and runtime smoke evidence after Docker became available on the maintainer Mac, including Git identity and host-venv container findings.
   - path: docs/architecture/evidence/path-literal-audit-2026-07-04.md
     class: evidence/log
     owner: maintainers

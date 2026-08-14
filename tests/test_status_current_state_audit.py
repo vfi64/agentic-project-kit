@@ -174,6 +174,41 @@ def test_audit_status_current_state_allows_prepared_release_with_previous_verifi
     assert not any(finding.check == "changelog_stale_pending_doi" for finding in result.blockers)
 
 
+def test_audit_status_current_state_allows_published_release_pending_doi_with_previous_verified_status(
+    tmp_path: Path,
+) -> None:
+    _write_project(tmp_path)
+    (tmp_path / "pyproject.toml").write_text('[project]\nname = "demo"\nversion = "1.2.4"\n', encoding="utf-8")
+    (tmp_path / "src" / "agentic_project_kit" / "__init__.py").write_text(
+        '__version__ = "1.2.4"\n',
+        encoding="utf-8",
+    )
+    (tmp_path / "CHANGELOG.md").write_text(
+        "## v1.2.4 - 2026-06-29\n\n- Zenodo DOI verification pending for v1.2.4.\n\n## v1.2.3 - 2026-06-28\n\n- Done.\n",
+        encoding="utf-8",
+    )
+    status = tmp_path / "docs" / "STATUS.md"
+    status.write_text(
+        status.read_text(encoding="utf-8").replace("Current version: 1.2.3", "Current version: 1.2.4"),
+        encoding="utf-8",
+    )
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=_git_runner(),
+        release_status_builder=lambda _root: _release_status(
+            "1.2.4",
+            current_state="published",
+            current_verified_version="1.2.3",
+        ),
+    )
+
+    assert result.ok is True
+    assert result.status_current_verified_release == "1.2.3"
+    assert result.release_current_state == "published"
+    assert not any(finding.check == "changelog_stale_pending_doi" for finding in result.blockers)
+
+
 def test_audit_status_current_state_allows_prepared_release_validation_descendant(tmp_path: Path) -> None:
     _write_project(tmp_path, status_main="abc1234", validation_head="def5678")
     (tmp_path / "pyproject.toml").write_text('[project]\nname = "demo"\nversion = "1.2.4"\n', encoding="utf-8")

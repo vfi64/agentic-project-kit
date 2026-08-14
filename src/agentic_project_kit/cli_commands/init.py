@@ -102,8 +102,7 @@ def init_command(
     console.print("Recommended profiles: " + ", ".join(selected_profiles))
     console.print("Recommended policy packs: " + ", ".join(selected_policy_packs))
 
-    subprocess.run(["git", "add", "."], cwd=target, check=False)
-    subprocess.run(["git", "commit", "-m", "Initialize agentic project"], cwd=target, check=False)
+    _create_initial_git_commit(target)
 
     if github:
         if visibility == "public":
@@ -130,3 +129,43 @@ def _parse_csv(value: str | None) -> tuple[str, ...]:
     if value is None:
         return ()
     return tuple(item.strip() for item in value.split(",") if item.strip())
+
+
+def _create_initial_git_commit(target: Path) -> None:
+    add = _run_git(target, "add", ".")
+    if add.returncode != 0:
+        _warn_initial_commit_not_created("git add failed", add.stdout)
+        return
+
+    commit = _run_git(target, "commit", "-m", "Initialize agentic project")
+    if commit.returncode != 0:
+        _warn_initial_commit_not_created("git commit failed", commit.stdout)
+
+
+def _run_git(target: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", *args],
+        cwd=target,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+
+
+def _warn_initial_commit_not_created(reason: str, output: str) -> None:
+    detail = _first_diagnostic_line(output)
+    console.print(
+        "[yellow]Initial Git commit was not created[/yellow] "
+        f"({reason}: {detail}). Configure Git identity and run "
+        "`git add . && git commit -m \"Initialize agentic project\"` if you want "
+        "the generated skeleton committed immediately."
+    )
+
+
+def _first_diagnostic_line(output: str) -> str:
+    for line in output.splitlines():
+        stripped = line.strip()
+        if stripped:
+            return stripped[:240]
+    return "no diagnostic output"
