@@ -181,6 +181,48 @@ def test_direction_audit_drift_reports_active_source_of_closed_item(tmp_path: Pa
     assert record.item_status == "done"
 
 
+def test_direction_audit_drift_reports_open_item_with_current_release_evidence(tmp_path: Path) -> None:
+    direction = _minimal_direction()
+    roadmap = direction["roadmap"]
+    assert isinstance(roadmap, list)
+    roadmap[0]["evidence"] = ["GitHub release https://github.example/releases/tag/v1.2.3"]
+    _write_project_direction_fixture(tmp_path, direction)
+    (tmp_path / "pyproject.toml").write_text(
+        '[project]\nname = "fixture"\nversion = "1.2.3"\n',
+        encoding="utf-8",
+    )
+
+    result = audit_project_direction_drift(tmp_path)
+
+    record = next(
+        item for item in result.records if item.classification == "OPEN_ITEM_REFERENCES_CURRENT_RELEASE"
+    )
+    assert record.path == "docs/planning/PROJECT_DIRECTION.yaml"
+    assert record.item_id == "roadmap-a"
+    assert record.item_status == "next"
+    assert record.reference_count == 1
+
+
+def test_direction_audit_drift_reports_open_item_with_passed_target_release(tmp_path: Path) -> None:
+    direction = _minimal_direction()
+    roadmap = direction["roadmap"]
+    assert isinstance(roadmap, list)
+    roadmap[0]["target_release"] = "v1.1.0"
+    _write_project_direction_fixture(tmp_path, direction)
+    (tmp_path / "pyproject.toml").write_text(
+        '[project]\nname = "fixture"\nversion = "1.2.3"\n',
+        encoding="utf-8",
+    )
+
+    result = audit_project_direction_drift(tmp_path)
+
+    record = next(
+        item for item in result.records if item.classification == "OPEN_ITEM_TARGET_RELEASE_PASSED"
+    )
+    assert record.item_id == "roadmap-a"
+    assert record.item_status == "next"
+
+
 def test_direction_validate_rejects_unknown_dependency(tmp_path: Path) -> None:
     direction = _minimal_direction()
     direction["roadmap"][0]["depends_on"] = ["missing-id"]  # type: ignore[index]

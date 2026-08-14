@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quickstart - Agentic Execution Runtime</title>
+    <link rel="stylesheet" href="../static/site.css">
+  </head>
+  <body>
+    <main class="page">
+      <nav class="topnav" aria-label="Site">
+        <a href="../index.html">Overview</a>
+        <a href="index.html">Quickstart</a>
+        <a href="../commands/guided.html">Guided</a>
+        <a href="../commands/diagnostics.html">Diagnostics</a>
+        <a href="../commands/index.html">Complete</a>
+        <a href="../claims/index.html">Claims</a>
+      </nav>
+
+      <section class="overview" aria-labelledby="quickstart-title">
+        <div>
+          <p class="eyebrow">Generated onboarding</p>
+          <h1 id="quickstart-title">Quickstart</h1>
+          <p class="lede">Install the Kit, start a new governed repository, or add the operating layer to an existing repository without moving project-owned source or release authority into the Kit.</p>
+          <p class="catalog-meta">Version <code>1.0.0</code> · Python <code>&gt;=3.10</code> · Package <code>agentic-project-kit</code></p>
+        </div>
+        <figure class="system-map">
+          <img src="../static/runtime-map.svg" alt="Repository sources flow into generated public onboarding and command projections.">
+          <figcaption>Commands and links are projected from the current manifest and repository docs.</figcaption>
+        </figure>
+      </section>
+
+      <section class="quickstart-grid" aria-label="Installation paths">
+        <article class="panel code-panel" id="install">
+          <p class="eyebrow">Local pip</p>
+          <h2>Install in a Virtual Environment</h2>
+          <pre><code>python -m venv .venv
+source .venv/bin/activate
+python -m pip install agentic-project-kit
+agentic-kit --version</code></pre>
+        </article>
+        <article class="panel code-panel">
+          <p class="eyebrow">Kit checkout</p>
+          <h2>Develop the Kit Locally</h2>
+          <pre><code>python -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[dev]"
+pytest -q
+agentic-kit --version</code></pre>
+        </article>
+        <article class="panel code-panel">
+          <p class="eyebrow">Docker</p>
+          <h2>Run Pip Inside Python</h2>
+          <pre><code>docker run --rm -it -v "$PWD:/work" -w /work python:3.12-slim sh
+python -m pip install agentic-project-kit
+agentic-kit --version</code></pre>
+          <p>No official Docker image is claimed by this generated site.</p>
+        </article>
+      </section>
+
+      <section class="band" aria-labelledby="new-repo-title">
+        <div>
+          <p class="eyebrow">New repository</p>
+          <h2 id="new-repo-title">Create a Governed Project</h2>
+          <p>Use the scaffold path when the Kit should create the repository skeleton, project contract, docs, task gate files, CI template, and local quality gates.</p>
+          <pre><code>agentic-kit init my-new-project \
+  --type python-cli \
+  --description "My new project" \
+  --license MIT \
+  --github-actions \
+  --agent-docs
+cd my-new-project
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[dev]"
+pytest -q
+agentic-kit check
+agentic-kit doctor</code></pre>
+        </div>
+        <article class="panel">
+          <p class="eyebrow">Projected commands</p>
+          <ul class="summary-list command-flow">
+          <li><code>agentic-kit init</code><span>Create a governed project skeleton with selected profiles and policy packs.</span><small>orchestrator · BOUNDED</small></li>
+          <li><code>agentic-kit check</code><span>Run agentic-kit check.</span><small>diagnostic · READ_ONLY</small></li>
+          <li><code>agentic-kit doctor</code><span>Run a compact project health check.</span><small>diagnostic · READ_ONLY</small></li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="band" aria-labelledby="existing-repo-title">
+        <div>
+          <p class="eyebrow">Existing repository</p>
+          <h2 id="existing-repo-title">Adopt Before Initializing</h2>
+          <p>Use the brownfield path when project-owned files already exist. The first commands inspect and assess; the bounded write step is explicit.</p>
+          <pre><code>agentic-kit workspace dpa-intake --root PATH
+agentic-kit workspace adopt --root PATH
+agentic-kit workspace init --root PATH
+agentic-kit workspace init --root PATH --execute
+agentic-kit check-docs --root PATH
+agentic-kit check --root PATH
+agentic-kit doctor --root PATH
+cd PATH
+agentic-kit transfer chat-switch-complete --render-prompt</code></pre>
+          <p>Rollback remains dry-run first: <code>agentic-kit workspace remove --root PATH</code>, then <code>agentic-kit workspace remove --root PATH --execute</code> after review.</p>
+        </div>
+        <article class="panel">
+          <p class="eyebrow">Projected commands</p>
+          <ul class="summary-list command-flow">
+          <li><code>agentic-kit workspace dpa-intake</code><span>Run the deterministic DPA repository-intake orchestration.</span><small>orchestrator · BOUNDED · dry-run</small></li>
+          <li><code>agentic-kit workspace adopt</code><span>Analyze an existing repository without writing workspace files.</span><small>orchestrator · READ_ONLY</small></li>
+          <li><code>agentic-kit workspace init</code><span>Plan or create a bounded operating-layer workspace.</span><small>orchestrator · BOUNDED · dry-run</small></li>
+          <li><code>agentic-kit check-docs</code><span>Run agentic-kit check-docs.</span><small>diagnostic · READ_ONLY</small></li>
+          <li><code>agentic-kit check</code><span>Run agentic-kit check.</span><small>diagnostic · READ_ONLY</small></li>
+          <li><code>agentic-kit doctor</code><span>Run a compact project health check.</span><small>diagnostic · READ_ONLY</small></li>
+          <li><code>agentic-kit transfer chat-switch-complete</code><span>Create a deterministic successor handoff package and prompt projections.</span><small>orchestrator · BOUNDED</small></li>
+          <li><code>agentic-kit workspace remove</code><span>Plan or remove exact Kit-generated operating-layer workspace files.</span><small>orchestrator · BOUNDED · dry-run</small></li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="section-grid" aria-label="Reference links">
+        <article class="panel">
+          <p class="eyebrow">Docs</p>
+          <h2>Read Next</h2>
+          <ul class="link-list">
+          <li><a href="https://github.com/vfi64/agentic-project-kit/blob/main/docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md">Brownfield external repository guide</a></li>
+          <li><a href="https://github.com/vfi64/agentic-project-kit/blob/main/docs/reference/AGENTIC_KIT_COMMANDS.md">Command reference</a></li>
+          <li><a href="https://github.com/vfi64/agentic-project-kit/blob/main/docs/TEST_GATES.md">Test gates</a></li>
+          </ul>
+        </article>
+        <article class="panel">
+          <p class="eyebrow">Evidence</p>
+          <h2>Public Projections</h2>
+          <ul class="link-list">
+            <li><a href="../commands/guided.html">Guided command projection</a></li>
+            <li><a href="../commands/index.html">Complete command reference</a></li>
+            <li><a href="../claims/index.html">Claim evidence</a></li>
+            <li><a href="https://github.com/vfi64/agentic-project-kit">Repository source</a></li>
+          </ul>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

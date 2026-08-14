@@ -172,6 +172,13 @@ dt {
   margin: 28px 0;
 }
 
+.quickstart-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 28px 0;
+}
+
 .band {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
@@ -227,6 +234,28 @@ dd {
   color: var(--muted);
 }
 
+.summary-list small {
+  color: var(--accent-2);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.command-flow li {
+  border-left-color: var(--accent-2);
+}
+
+.link-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.link-list a {
+  color: var(--accent-2);
+}
+
 .status-board {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -249,6 +278,24 @@ code {
   background: var(--soft);
   padding: 0.1rem 0.28rem;
   font: 0.95em ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+pre {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #111827;
+  color: #f8fafc;
+  padding: 14px;
+  white-space: pre;
+}
+
+pre code {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: 0.88rem;
 }
 
 .table-wrap {
@@ -287,6 +334,7 @@ th {
   .overview,
   .band,
   .section-grid,
+  .quickstart-grid,
   .metrics,
   .command-links,
   .status-board,

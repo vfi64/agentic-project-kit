@@ -45,6 +45,8 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
         "commands/guided.html",
         "commands/index.html",
         "index.html",
+        "quickstart/index.html",
+        "quickstart/quickstart.json",
         "site.json",
         "static/runtime-map.svg",
         "static/site.css",
@@ -53,6 +55,7 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     data = json.loads((output / "site.json").read_text(encoding="utf-8"))
     commands = json.loads((output / "commands" / "commands.json").read_text(encoding="utf-8"))
     claims = json.loads((output / "claims" / "claims.json").read_text(encoding="utf-8"))
+    quickstart = json.loads((output / "quickstart" / "quickstart.json").read_text(encoding="utf-8"))
     assert "Agentic Execution Runtime" in html
     assert "Repository Memory" in html
     assert "Verified now" in html
@@ -76,6 +79,9 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     assert commands["diagnostic_count"] == 1
     assert commands["entries"][0]["diagnostic_priority"] == "common_blocker"
     assert claims["claim_count"] == 0
+    assert quickstart["kind"] == "site_quickstart_projection"
+    assert quickstart["flows"][0]["commands"][0]["qualified_name"] == "agentic-kit init"
+    assert "Docker" in (output / "quickstart" / "index.html").read_text(encoding="utf-8")
     assert "agentic-kit workspace init" in (
         output / "commands" / "guided.html"
     ).read_text(encoding="utf-8")
@@ -101,6 +107,8 @@ def test_docs_pages_fallback_writes_redirect_and_generated_site(tmp_path: Path) 
         "site/commands/guided.html",
         "site/commands/index.html",
         "site/index.html",
+        "site/quickstart/index.html",
+        "site/quickstart/quickstart.json",
         "site/site.json",
         "site/static/runtime-map.svg",
         "site/static/site.css",
@@ -255,6 +263,10 @@ def _write_site_fixture(
     )
     (root / "site" / "templates" / "commands.html").write_text(
         "<html>${title} ${rows}</html>\n",
+        encoding="utf-8",
+    )
+    (root / "site" / "templates" / "quickstart.html").write_text(
+        "<html>${product_name} ${package_name} Docker ${new_repo_command_items} ${existing_repo_command_items} ${docs_link_items}</html>\n",
         encoding="utf-8",
     )
     (root / "site" / "templates" / "claims.html").write_text(
