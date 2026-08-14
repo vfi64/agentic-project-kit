@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6bac7be43d610edd94a29f6cc0e58e790a4f5a33
-  short: 6bac7be4
-  subject: Prepare release v1.0.1 (#2098)
+  full: 7ee1df29f8d1aadd7eadeafcdf8463cd1c1cbb77
+  short: 7ee1df29
+  subject: Harden local Docker usage (#2100)
 last_substantive_work_state:
-  full: 6bac7be43d610edd94a29f6cc0e58e790a4f5a33
-  short: 6bac7be4
-  subject: Prepare release v1.0.1 (#2098)
+  full: 7ee1df29f8d1aadd7eadeafcdf8463cd1c1cbb77
+  short: 7ee1df29
+  subject: Harden local Docker usage (#2100)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
