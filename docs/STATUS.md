@@ -7,11 +7,11 @@ Current verified release: 1.0.0.
 Current release tag: v1.0.0.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21925421`.
-Current verified main: `6630f1f0` (`Refresh handoff state after PR2096 (#2097)`).
-Latest substantive work: PR #2096 (`Close public installation readiness gaps (#2096)`).
-Current governed slice: prepare v1.0.1 for tag publication, TestPyPI smoke validation, and the first real PyPI publication attempt through Trusted Publishing.
-Post-merge handoff status: PASS/NOOP after PR #2096 administrative refresh.
-Next safe step: complete v1.0.1 release-prep gates, merge the prep PR, push tag v1.0.1, run TestPyPI first, then run the reviewed pypi environment publication path.
+Current verified main: `6bac7be4` (`Prepare release v1.0.1 (#2098)`).
+Latest substantive work: PR #2098 (`Prepare release v1.0.1 (#2098)`).
+Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
+Post-merge handoff status: PASS/NOOP after PR #2098 administrative refresh.
+Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
 
@@ -416,6 +416,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2096
+## Operational documentation refresh state after PR #2098
 
-Current administrative handoff refresh state is `e5824bc2` (`Close public installation readiness gaps (#2096)`). Continue next only after this post-PR2096 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `6bac7be4` (`Prepare release v1.0.1 (#2098)`). Continue next only after this post-PR2098 refresh is committed and merged; the next substantive slice must be created from fresh main.
