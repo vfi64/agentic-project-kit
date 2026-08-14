@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 6429fd5b0622da3c6e6956207df7b6ef65c5e739ed0a846247c6519eadc860d3
 - docs/reference/agentic-kit-commands.json: 6fef0c0b1a261c154af8800d63d3a5dee5e4413d21f8496b20ce92d4f8b83a77
-## Operational documentation refresh state after PR #2096
+## Operational documentation refresh state after PR #2098
 
-Current administrative handoff refresh state is `e5824bc2` (`Close public installation readiness gaps (#2096)`). Continue next only after this post-PR2096 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `6bac7be4` (`Prepare release v1.0.1 (#2098)`). Continue next only after this post-PR2098 refresh is committed and merged; the next substantive slice must be created from fresh main.

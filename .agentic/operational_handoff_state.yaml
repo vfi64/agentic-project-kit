@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e5824bc224e3e20b68472955a72cf172dd693278
-  short: e5824bc2
-  subject: Close public installation readiness gaps (#2096)
+  full: 6bac7be43d610edd94a29f6cc0e58e790a4f5a33
+  short: 6bac7be4
+  subject: Prepare release v1.0.1 (#2098)
 last_substantive_work_state:
-  full: e5824bc224e3e20b68472955a72cf172dd693278
-  short: e5824bc2
-  subject: Close public installation readiness gaps (#2096)
+  full: 6bac7be43d610edd94a29f6cc0e58e790a4f5a33
+  short: 6bac7be4
+  subject: Prepare release v1.0.1 (#2098)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
