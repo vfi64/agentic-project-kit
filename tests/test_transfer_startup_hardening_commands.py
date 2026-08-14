@@ -201,6 +201,11 @@ def test_sync_main_orchestrates_safe_startup_sequence(monkeypatch):
 
 
 def test_command_reference_refresh_runs_generator_and_reports_changed_files(monkeypatch):
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer_context_flow.default_python",
+        lambda root: "./.venv/bin/python",
+    )
+
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
         if command == ["./.venv/bin/python", "scripts/generate_agentic_kit_command_reference.py"]:
@@ -236,6 +241,10 @@ def test_command_reference_refresh_runs_generator_and_reports_changed_files(monk
 
 def test_command_reference_check_runs_drift_test(monkeypatch):
     calls: list[list[str]] = []
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer_context_flow.default_python",
+        lambda root: "./.venv/bin/python",
+    )
 
     def fake_run(argv, *args, **kwargs):
         calls.append(list(argv))
