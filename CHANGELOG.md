@@ -1,3 +1,10 @@
+## v1.0.1 - 2026-08-14
+
+- Zenodo DOI verification pending for v1.0.1.
+- Record v1.0.1 after public installation, Trusted Publishing, update-path, and local Docker readiness work.
+- Harden direct PyPI public docs so TestPyPI smoke evidence cannot satisfy pypi.org install claims.
+- Preserve the Docker path as a local source image only; no official registry image is claimed.
+
 ## v1.0.0 - 2026-08-13
 
 - Close out release 0.5.0 DOI metadata

@@ -31,7 +31,9 @@ def test_public_installation_docs_do_not_claim_current_pypi_install() -> None:
     assert templated_source_install in index
     assert "The public PyPI package is not published yet" in readme
     assert "Direct PyPI installation is planned, not claimed yet" in quickstart
-    assert "Direct PyPI installation is not claimed until PyPI package availability evidence is verified." in claims
+    assert "TestPyPI and PyPI are separate publication targets" in readme
+    assert "TestPyPI smoke evidence is separate and does not prove pypi.org availability" in quickstart
+    assert "Direct PyPI installation is not claimed until pypi.org package availability evidence is verified" in claims
 
 
 def test_site_claims_track_source_install_and_planned_pypi_publication() -> None:
