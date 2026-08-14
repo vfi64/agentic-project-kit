@@ -4,6 +4,18 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      publish_target:
+        description: "Optional package index publication target."
+        required: true
+        default: "none"
+        type: choice
+        options:
+          - "none"
+          - "testpypi"
+          - "pypi"
+          - "both"
 
 permissions:
   contents: write
@@ -14,6 +26,8 @@ env:
 jobs:
   build-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v6
@@ -26,10 +40,13 @@ jobs:
       - name: Install build tooling
         run: |
           python -m pip install --upgrade pip
-          python -m pip install build
+          python -m pip install build twine
 
       - name: Build package
         run: python -m build
+
+      - name: Check package metadata
+        run: twine check dist/*
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v7
@@ -38,7 +55,61 @@ jobs:
           path: dist/*
 
       - name: Create GitHub release
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v3
         with:
           files: dist/*
           generate_release_notes: true
+
+  publish-testpypi:
+    needs: build-release
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      (inputs.publish_target == 'testpypi' || inputs.publish_target == 'both')
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/agentic-project-kit
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: python-dist
+          path: dist/
+
+      - name: Publish package distributions to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true
+
+  publish-pypi:
+    needs: build-release
+    runs-on: ubuntu-latest
+    if: >-
+      (github.event_name == 'workflow_dispatch' &&
+      (inputs.publish_target == 'pypi' || inputs.publish_target == 'both')) ||
+      (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') &&
+      vars.PYPI_TRUSTED_PUBLISHING_ENABLED == 'true')
+    environment:
+      name: pypi
+      url: https://pypi.org/p/agentic-project-kit
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: python-dist
+          path: dist/
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

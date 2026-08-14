@@ -1,4 +1,4 @@
-kit_schema_version: 2
+kit_schema_version: 1
 project:
   name: agentic-project-kit
   type: python
@@ -18,9 +18,3 @@ paths:
   terminal_post_pr_successor_chat_handoff_prefix: docs/reports/terminal/post-pr
   handoff_root: docs/handoff
   handoff_packages_latest_root: docs/reports/handoff-packages/latest
-hygiene:
-  doc_lifecycle: warn
-  review_budgets:
-    governance: 180
-    reference: 365
-    workflow: 270

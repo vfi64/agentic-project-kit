@@ -202,6 +202,53 @@ claims:
     assert report.claims[0].status == "verified"
 
 
+def test_file_contains_evidence_checks_repository_text(tmp_path: Path) -> None:
+    root = _write_site_fixture(tmp_path)
+    (root / "README.md").write_text("Install from source: git+https://example.invalid/repo.git@main\n", encoding="utf-8")
+    _write_claims(
+        root,
+        """
+schema_version: 1
+claims:
+  - id: source-install
+    text: Source install path is documented.
+    required: true
+    evidence:
+      type: file-contains
+      path: README.md
+      contains: git+https://example.invalid/repo.git@main
+""",
+    )
+
+    report = evaluate_site_claims(root)
+
+    assert report.ok
+    assert report.claims[0].status == "verified"
+
+
+def test_file_contains_evidence_rejects_root_escape(tmp_path: Path) -> None:
+    root = _write_site_fixture(tmp_path)
+    _write_claims(
+        root,
+        """
+schema_version: 1
+claims:
+  - id: escape
+    text: Root escape is invalid.
+    required: false
+    evidence:
+      type: file-contains
+      path: ../outside.md
+      contains: nope
+""",
+    )
+
+    report = evaluate_site_claims(root)
+
+    assert report.claims[0].status == "unverified"
+    assert "path escapes root" in report.claims[0].blockers[0]
+
+
 def _write_claims(root: Path, text: str) -> None:
     (root / "site" / "content").mkdir(parents=True, exist_ok=True)
     (root / "site" / "content" / "claims.yaml").write_text(text.strip() + "\n", encoding="utf-8")

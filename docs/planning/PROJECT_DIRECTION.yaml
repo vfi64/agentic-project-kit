@@ -6,14 +6,14 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 2091
+  updated_after_pr: 2095
   updated_after_pr_semantics: strategic_direction_refresh
   updated_after_pr_current_main_claimed: false
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/2091
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/2095
 strategy:
 - id: governed-operating-model
   status: active
@@ -395,6 +395,47 @@ roadmap:
   source_files:
   - docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md
   - docs/planning/PROJECT_DIRECTION.yaml
+- id: public-installation-and-update-readiness
+  phase: post-1.0
+  status: next
+  title: Close public installation, PyPI publication, update, and Docker readiness gaps
+  target_release: v1.0.1
+  depends_on:
+  - v1-0-milestone
+  acceptance:
+  - Public README and generated site instructions do not claim direct PyPI installation
+    until PyPI package availability evidence exists.
+  - Release automation contains a gated Trusted Publishing path for TestPyPI and
+    PyPI without long-lived package tokens in repository secrets.
+  - Claim evidence distinguishes the currently supported source-install path from
+    the planned direct PyPI installation path.
+  - Existing managed repositories have a documented Kit-update path that runs
+    doctor, workspace upgrade, and health gates after the package update.
+  - Doctor reports an actionable warning when a manifest workspace schema is older
+    than the current Kit-supported schema.
+  - The self-hosting workspace manifest is upgraded through the same tested
+    workspace-upgrade path and retains a v1 backup artifact.
+  - Docker usage has a local source-build path now and keeps official registry image
+    publication explicitly unclaimed until a published image exists.
+  evidence:
+  - docs/reports/PUBLIC_INSTALLATION_UPDATE_DOCKER_READINESS_20260814.md
+  - README.md
+  - site/templates/quickstart.html
+  - site/templates/index.html
+  - site/content/claims.yaml
+  - .github/workflows/release.yml
+  - Dockerfile
+  - .agentic/config.yaml
+  - .agentic/config.yaml.bak.v1
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - README.md
+  - site/templates/quickstart.html
+  - site/templates/index.html
+  - site/content/claims.yaml
+  - .github/workflows/release.yml
+  - Dockerfile
+  - .agentic/config.yaml
 - id: dpa-repo-adoption-assessment
   phase: unphased
   status: done

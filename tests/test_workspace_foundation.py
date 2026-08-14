@@ -39,10 +39,13 @@ def _write_manifest(root: Path, text: str) -> None:
 def test_kit_repo_manifest_yields_legacy_paths() -> None:
     manifest_path = ROOT / ".agentic" / "config.yaml"
     manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
-    assert manifest["kit_schema_version"] == 1
+    assert manifest["kit_schema_version"] == 2
     assert manifest["project"] == {"name": "agentic-project-kit", "type": "python"}
     assert manifest["profile"] == "python-default"
-    assert "hygiene" not in manifest
+    assert manifest["hygiene"] == {
+        "doc_lifecycle": "warn",
+        "review_budgets": dict(DEFAULT_REVIEW_BUDGETS),
+    }
 
     expected_overrides = {
         field.name: getattr(LEGACY_DEFAULTS, field.name)
@@ -63,7 +66,7 @@ def test_kit_repo_manifest_yields_legacy_paths() -> None:
     assert ws.project_name == "agentic-project-kit"
     assert ws.project_type == "python"
     assert ws.profile == "python-default"
-    assert ws.manifest_schema_version == 1
+    assert ws.manifest_schema_version == 2
     assert ws.hygiene_doc_lifecycle == "warn"
     assert dict(ws.hygiene_review_budgets) == dict(DEFAULT_REVIEW_BUDGETS)
     assert _rel(ws.status_path().relative_to(ROOT)) == "docs/STATUS.md"

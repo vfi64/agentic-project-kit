@@ -208,6 +208,8 @@ def _evaluate_evidence(
         return _evaluate_pytest_node(root, evidence, command_runner)
     if evidence_type == "command-probe":
         return _evaluate_command_probe(root, evidence, command_runner)
+    if evidence_type == "file-contains":
+        return _evaluate_file_contains(root, evidence)
     if evidence_type == "generated-artifact":
         return _evaluate_generated_artifact(evidence, manifest, command_catalog)
     return EvidenceEvaluation(evidence_type or "<missing>", "unverified", "unsupported evidence type")
@@ -309,6 +311,34 @@ def _evaluate_command_probe(
                 f"assertion mismatch: expected {expected!r}, found {actual!r}",
             )
     return EvidenceEvaluation("command-probe", "verified", " ".join(command))
+
+
+def _evaluate_file_contains(root: Path, evidence: dict[str, Any]) -> EvidenceEvaluation:
+    relative_path = _string(evidence.get("path"))
+    needle = _string(evidence.get("contains"))
+    if not relative_path:
+        return EvidenceEvaluation("file-contains", "unverified", "path is missing")
+    if not needle:
+        return EvidenceEvaluation("file-contains", "unverified", "contains is missing")
+    target = (root / relative_path).resolve()
+    try:
+        target.relative_to(root)
+    except ValueError:
+        return EvidenceEvaluation(
+            "file-contains",
+            "unverified",
+            f"path escapes root: {relative_path}",
+        )
+    if not target.exists():
+        return EvidenceEvaluation("file-contains", "unverified", f"file missing: {relative_path}")
+    text = target.read_text(encoding="utf-8")
+    if needle not in text:
+        return EvidenceEvaluation(
+            "file-contains",
+            "unverified",
+            f"file {relative_path} does not contain required text",
+        )
+    return EvidenceEvaluation("file-contains", "verified", f"{relative_path} contains required text")
 
 
 def _evaluate_generated_artifact(
