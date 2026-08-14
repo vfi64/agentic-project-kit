@@ -145,6 +145,7 @@ def audit_status_current_state(
         root=root,
         pyproject_version=pyproject_version,
         status_version=status_version,
+        status_release=status_release,
         status_verified_version_doi=status_verified_version_doi,
         release_current_state=release_current_state,
     )
@@ -330,6 +331,7 @@ def _audit_changelog_current_pending_doi(
     root: Path,
     pyproject_version: str | None,
     status_version: str | None,
+    status_release: str | None,
     status_verified_version_doi: tuple[str, int] | None,
     release_current_state: str | None,
 ) -> None:
@@ -353,6 +355,7 @@ def _audit_changelog_current_pending_doi(
     stale_pending = bool(
         pending_lines
         and status_version == pyproject_version
+        and status_release == pyproject_version
         and status_verified_version_doi is not None
         and release_current_state != "prepared"
     )
@@ -369,6 +372,7 @@ def _audit_changelog_current_pending_doi(
         detail = (
             f"version={pyproject_version}; pending_lines={len(pending_lines)}; "
             f"status_version={status_version}; "
+            f"status_release={status_release}; "
             f"status_verified_doi={status_verified_version_doi[0] if status_verified_version_doi else None}; "
             f"release_state={release_current_state}"
         )
@@ -741,7 +745,7 @@ def _audit_release_status(
         blockers,
         "release-status",
         "release_status_current_or_prepared",
-        release_status.current_state in {"current_verified", "prepared"} and not release_status.blockers,
+        release_status.current_state in {"current_verified", "prepared", "published"} and not release_status.blockers,
         f"current_state={release_status.current_state}, blockers={list(release_status.blockers)}",
     )
     _finding(

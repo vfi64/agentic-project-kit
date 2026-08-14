@@ -4,10 +4,10 @@ from collections.abc import Callable, Sequence
 from dataclasses import asdict, dataclass
 import json
 from pathlib import Path
-import shutil
 import subprocess
 
 from agentic_project_kit import __version__ as PACKAGE_VERSION
+from agentic_project_kit.cli_executable import default_agentic_kit
 
 
 Runner = Callable[[Sequence[str], Path], tuple[int, str]]
@@ -81,11 +81,7 @@ class StandardGatesAuditSuiteResult:
 
 
 def _default_agentic_kit(root: Path) -> str:
-    local = root / ".venv" / "bin" / "agentic-kit"
-    if local.exists():
-        return local.as_posix()
-    found = shutil.which("agentic-kit")
-    return found or "agentic-kit"
+    return default_agentic_kit(root)
 
 
 def _default_runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:

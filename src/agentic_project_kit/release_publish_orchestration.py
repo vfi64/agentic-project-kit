@@ -5,10 +5,10 @@ from dataclasses import asdict, dataclass
 import json
 from pathlib import Path
 import re
-import shutil
 import subprocess
 
 from agentic_project_kit import __version__ as PACKAGE_VERSION
+from agentic_project_kit.cli_executable import default_agentic_kit
 from agentic_project_kit.release import CommandResult
 from agentic_project_kit.release_state import build_release_lifecycle_status
 
@@ -74,11 +74,7 @@ class ReleasePublishPlan:
 
 
 def _default_agentic_kit(root: Path) -> str:
-    local = root / ".venv" / "bin" / "agentic-kit"
-    if local.exists():
-        return local.as_posix()
-    found = shutil.which("agentic-kit")
-    return found or "agentic-kit"
+    return default_agentic_kit(root)
 
 
 def _default_runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:

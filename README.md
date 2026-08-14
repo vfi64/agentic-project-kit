@@ -97,8 +97,23 @@ docker build -t agentic-project-kit:local .
 docker run --rm -v "/path/to/repo:/work" agentic-project-kit:local doctor --root /work
 ```
 
-GitHub operations inside Docker require explicit `gh` and SSH credentials; no
-secret should be baked into the image.
+Creating a new repository inside Docker also needs a Git identity for the
+initial convenience commit:
+
+```bash
+docker run --rm \
+  -e GIT_AUTHOR_NAME="Your Name" \
+  -e GIT_AUTHOR_EMAIL="you@example.com" \
+  -e GIT_COMMITTER_NAME="Your Name" \
+  -e GIT_COMMITTER_EMAIL="you@example.com" \
+  -v "$PWD:/work" \
+  agentic-project-kit:local init my-new-project --type generic --kit-source none
+```
+
+Without that identity the project files are still created, but the initial Git
+commit is skipped with an explicit warning. GitHub operations inside Docker
+require explicit `gh` and SSH credentials; no secret should be baked into the
+image.
 
 Create a new project interactively:
 

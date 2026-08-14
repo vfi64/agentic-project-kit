@@ -418,10 +418,12 @@ roadmap:
   - The self-hosting workspace manifest is upgraded through the same tested
     workspace-upgrade path and retains a v1 backup artifact.
   - Docker usage has a local source-build path now and keeps official registry image
-    publication explicitly unclaimed until a published image exists.
+    publication explicitly unclaimed until a published image exists; local Docker
+    build and runtime smoke evidence exists after Docker became available.
   evidence:
   - docs/reports/PUBLIC_INSTALLATION_UPDATE_DOCKER_READINESS_20260814.md
   - docs/reports/V1_0_1_RELEASE_PUBLICATION_PREP_20260814.md
+  - docs/reports/DOCKER_LOCAL_SMOKE_20260814.md
   - README.md
   - site/templates/quickstart.html
   - site/templates/index.html

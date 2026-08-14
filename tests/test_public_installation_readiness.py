@@ -34,6 +34,8 @@ def test_public_installation_docs_do_not_claim_current_pypi_install() -> None:
     assert "TestPyPI and PyPI are separate publication targets" in readme
     assert "TestPyPI smoke evidence is separate and does not prove pypi.org availability" in quickstart
     assert "Direct PyPI installation is not claimed until pypi.org package availability evidence is verified" in claims
+    assert "GIT_AUTHOR_NAME" in readme
+    assert "Creating the initial convenience commit inside Docker requires a Git identity" in quickstart
 
 
 def test_site_claims_track_source_install_and_planned_pypi_publication() -> None:
@@ -52,7 +54,7 @@ def test_dockerfile_supports_local_source_image_contract() -> None:
     assert "git" in dockerfile
     assert "gh" in dockerfile
     assert "openssh-client" in dockerfile
-    assert "python -m pip install ." in dockerfile
+    assert 'python -m pip install ".[dev]"' in dockerfile
     assert 'ENTRYPOINT ["agentic-kit"]' in dockerfile
     assert "USER kit" in dockerfile
 
