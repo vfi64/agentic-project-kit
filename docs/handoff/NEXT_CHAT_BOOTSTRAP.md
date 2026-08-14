@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `6ab737bd74569c14e6bafeb1f3741c1ac4616069` (`6ab737bd`)
-- Handoff freshness marker: `6ab737bd`
-- Branch at generation: `docs/post-pr2094-handoff-refresh`
+- HEAD: `e5824bc224e3e20b68472955a72cf172dd693278` (`e5824bc2`)
+- Handoff freshness marker: `e5824bc2`
+- Branch at generation: `docs/post-pr2096-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -72,6 +72,7 @@ Wenn der Bootstrap grün ist:
 Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 
 - `p5c-physical-migration` (blocked): Plan physical migration after legacy profile deprecation for P5
+- `public-installation-and-update-readiness` (next): Close public installation, PyPI publication, update, and Docker readiness gaps for v1.0.1
 - `v2-0-legacy-profile-removal` (planned): Remove the implicit legacy profile in 2.0.0 for unphased
 - `pre-gui-hardening-line` (next): Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for pre-GUI
 - `workflow-kernel-and-transfer-hardening` (planned): Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI

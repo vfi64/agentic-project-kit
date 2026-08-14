@@ -28,6 +28,15 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
+        "id": "public-installation-and-update-readiness",
+        "status": "next",
+        "summary": "Close public installation, PyPI publication, update, and Docker readiness gaps for v1.0.1"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
         "id": "v2-0-legacy-profile-removal",
         "status": "planned",
         "summary": "Remove the implicit legacy profile in 2.0.0 for unphased"
@@ -260,13 +269,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2094-handoff-refresh",
+      "branch": "docs/post-pr2096-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "6ab737bd74569c14e6bafeb1f3741c1ac4616069",
+      "head": "e5824bc224e3e20b68472955a72cf172dd693278",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "6ab737bd74569c14e6bafeb1f3741c1ac4616069",
+      "origin_main": "e5824bc224e3e20b68472955a72cf172dd693278",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -412,13 +421,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2094-handoff-refresh",
+    "branch": "docs/post-pr2096-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "6ab737bd74569c14e6bafeb1f3741c1ac4616069",
+    "head": "e5824bc224e3e20b68472955a72cf172dd693278",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "6ab737bd74569c14e6bafeb1f3741c1ac4616069",
+    "origin_main": "e5824bc224e3e20b68472955a72cf172dd693278",
     "worktree_clean": false
   },
   "rules": [

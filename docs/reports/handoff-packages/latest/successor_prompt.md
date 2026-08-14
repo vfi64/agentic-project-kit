@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2094-handoff-refresh`
+- branch: `docs/post-pr2096-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -156,6 +156,15 @@ Wenn der Bootstrap grün ist:
       "id": "p5c-physical-migration",
       "status": "blocked",
       "summary": "Plan physical migration after legacy profile deprecation for P5"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "public-installation-and-update-readiness",
+      "status": "next",
+      "summary": "Close public installation, PyPI publication, update, and Docker readiness gaps for v1.0.1"
     },
     {
       "files": [
@@ -393,14 +402,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2094-handoff-refresh",
+    "branch": "docs/post-pr2096-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "6ab737bd74569c14e6bafeb1f3741c1ac4616069",
+    "head": "e5824bc224e3e20b68472955a72cf172dd693278",
     "head_matches_origin_main": true,
-    "head_short": "6ab737bd",
+    "head_short": "e5824bc2",
     "local_path": "cd /path/to/",
-    "origin_main": "6ab737bd74569c14e6bafeb1f3741c1ac4616069",
-    "origin_main_short": "6ab737bd",
+    "origin_main": "e5824bc224e3e20b68472955a72cf172dd693278",
+    "origin_main_short": "e5824bc2",
     "worktree_clean": false
   }
 }
