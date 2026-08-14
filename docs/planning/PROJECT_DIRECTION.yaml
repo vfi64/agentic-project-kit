@@ -6,14 +6,14 @@ meta:
   planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
   owner: maintainers
   status: active
-  updated_after_pr: 2095
+  updated_after_pr: 2097
   updated_after_pr_semantics: strategic_direction_refresh
   updated_after_pr_current_main_claimed: false
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/2095
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/2097
 strategy:
 - id: governed-operating-model
   status: active
@@ -407,6 +407,8 @@ roadmap:
     until PyPI package availability evidence exists.
   - Release automation contains a gated Trusted Publishing path for TestPyPI and
     PyPI without long-lived package tokens in repository secrets.
+  - TestPyPI and PyPI publication evidence remains separated; TestPyPI success
+    must not be treated as pypi.org package availability.
   - Claim evidence distinguishes the currently supported source-install path from
     the planned direct PyPI installation path.
   - Existing managed repositories have a documented Kit-update path that runs
@@ -419,6 +421,7 @@ roadmap:
     publication explicitly unclaimed until a published image exists.
   evidence:
   - docs/reports/PUBLIC_INSTALLATION_UPDATE_DOCKER_READINESS_20260814.md
+  - docs/reports/V1_0_1_RELEASE_PUBLICATION_PREP_20260814.md
   - README.md
   - site/templates/quickstart.html
   - site/templates/index.html

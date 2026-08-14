@@ -42,7 +42,7 @@ claims:
         contains: '${package_name} @ git+${repository_url}.git@main'
 
   - id: pypi-trusted-publishing-ready
-    text: PyPI/TestPyPI publication is prepared through gated Trusted Publishing automation, but direct PyPI installation remains unclaimed until publication evidence exists.
+    text: PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths, but direct PyPI installation remains unclaimed until pypi.org publication evidence exists.
     required: false
     evidence:
       - type: file-contains
@@ -50,7 +50,7 @@ claims:
         contains: "pypa/gh-action-pypi-publish@release/v1"
       - type: file-contains
         path: site/templates/claims.html
-        contains: "Direct PyPI installation is not claimed until PyPI package availability evidence is verified."
+        contains: "Direct PyPI installation is not claimed until pypi.org package availability evidence is verified"
 
   - id: pypi-package-installable
     text: Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users.
@@ -59,7 +59,7 @@ claims:
     evidence:
       type: file-contains
       path: site/templates/quickstart.html
-      contains: "Use this only after the PyPI claim is verified"
+      contains: "TestPyPI smoke evidence is separate and does not prove pypi.org availability"
 
   - id: command-manifest-synchronization
     text: The public command catalog is generated from the current command manifest and checked for synchronization.

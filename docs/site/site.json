@@ -52,7 +52,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "project.version=1.0.0",
+            "detail": "project.version=1.0.1",
             "evidence_type": "pyproject-value",
             "status": "verified"
           }
@@ -101,7 +101,7 @@
         "planned": false,
         "required": false,
         "status": "verified",
-        "text": "PyPI/TestPyPI publication is prepared through gated Trusted Publishing automation, but direct PyPI installation remains unclaimed until publication evidence exists."
+        "text": "PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths, but direct PyPI installation remains unclaimed until pypi.org publication evidence exists."
       },
       {
         "blockers": [],
@@ -10608,13 +10608,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "28656f2fd53e",
+    "manifest_sha": "699a4acf0634",
     "package_name": "agentic-project-kit",
-    "package_version": "1.0.0",
+    "package_version": "1.0.1",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.0",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "28656f2fd53e",
+    "reproduced_manifest_sha": "699a4acf0634",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 165,
@@ -10630,16 +10630,17 @@
   },
   "roadmap_projection": {
     "roadmap_counts": {
+      "active": 1,
       "blocked": 1,
       "done": 14,
-      "next": 2,
+      "next": 1,
       "planned": 5
     },
     "status": "active",
     "strategy_counts": {
       "active": 5
     },
-    "updated_after_pr": "2095",
+    "updated_after_pr": "2097",
     "updated_after_pr_current_main_claimed": false,
     "updated_after_pr_semantics": "strategic_direction_refresh"
   },
@@ -10649,7 +10650,7 @@
     "current_release_tag": "v1.0.0",
     "current_verified_main": "See docs/STATUS.md",
     "current_verified_release": "1.0.0",
-    "current_version": "1.0.0",
+    "current_version": "1.0.1",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
     "version_doi": "10.5281/zenodo.21925421"

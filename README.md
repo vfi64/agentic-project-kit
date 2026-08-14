@@ -3,7 +3,7 @@
 > Handoff architecture: the deterministic Successor Handoff Package writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/` for this repo or `.agentic/state/handoff/packages/latest/` in external workspace mode. New chats verify the package and execution contract, not chat memory.
 
 
-Current version: 1.0.0
+Current version: 1.0.1
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/zenodo.20101359)
 
 `agentic-project-kit` is a local Python package and CLI for governing AI-assisted repository work with explicit contracts, gates, evidence, handoffs, policy selection, task tracking, GitHub automation, and release validation.
@@ -56,6 +56,11 @@ source .venv/bin/activate
 python -m pip install "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"
 agentic-kit --version
 ```
+
+TestPyPI and PyPI are separate publication targets. A successful TestPyPI smoke
+test does not prove that `python -m pip install agentic-project-kit` works from
+`pypi.org`; use the direct PyPI command only after the claim-evidence page shows
+PyPI availability as verified.
 
 For Kit development from a local checkout:
 
@@ -676,8 +681,8 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Prepared release: `v1.0.0`; GitHub Release, tag publication, and Zenodo version DOI verification are complete.
-Version `1.0.0` is the current release line prepared as a safety baseline after the pre-GUI transfer-wrapper, output-discipline, GUI wrapper-gating, PR diagnostics, and release-plan guard hardening work.
+Prepared release: `v1.0.1`; GitHub Release, tag publication, and Zenodo version DOI verification are pending.
+Version `1.0.1` is the current release line prepared as a safety baseline after the pre-GUI transfer-wrapper, output-discipline, GUI wrapper-gating, PR diagnostics, and release-plan guard hardening work.
 Current verified release: `v1.0.0` with Zenodo version DOI `10.5281/zenodo.21925421`.
 Earlier verified version-specific DOI notes are maintained in `docs/releases/VERIFIED_RELEASES.md`; historical release records remain in this section and the verified release archive.
 
