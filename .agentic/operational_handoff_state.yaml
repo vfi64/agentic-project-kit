@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e07dc4b54b97436fbc309b5097aed75cf0eefdce
-  short: e07dc4b5
-  subject: Close v1 planning and site onboarding drift (#2092)
+  full: 6ab737bd74569c14e6bafeb1f3741c1ac4616069
+  short: 6ab737bd
+  subject: Clarify external check context and public limits (#2094)
 last_substantive_work_state:
-  full: e07dc4b54b97436fbc309b5097aed75cf0eefdce
-  short: e07dc4b5
-  subject: Close v1 planning and site onboarding drift (#2092)
+  full: 6ab737bd74569c14e6bafeb1f3741c1ac4616069
+  short: 6ab737bd
+  subject: Clarify external check context and public limits (#2094)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
