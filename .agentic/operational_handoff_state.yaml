@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 52a72628547b2feba719b4d23a056aa764cee3ec
-  short: 52a72628
-  subject: Close out release 1.0 DOI metadata (#2090)
+  full: e07dc4b54b97436fbc309b5097aed75cf0eefdce
+  short: e07dc4b5
+  subject: Close v1 planning and site onboarding drift (#2092)
 last_substantive_work_state:
-  full: 52a72628547b2feba719b4d23a056aa764cee3ec
-  short: 52a72628
-  subject: Close out release 1.0 DOI metadata (#2090)
+  full: e07dc4b54b97436fbc309b5097aed75cf0eefdce
+  short: e07dc4b5
+  subject: Close v1 planning and site onboarding drift (#2092)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

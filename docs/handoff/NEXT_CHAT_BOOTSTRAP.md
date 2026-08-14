@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `52a72628547b2feba719b4d23a056aa764cee3ec` (`52a72628`)
-- Handoff freshness marker: `52a72628`
-- Branch at generation: `docs/post-pr2090-handoff-refresh`
+- HEAD: `e07dc4b54b97436fbc309b5097aed75cf0eefdce` (`e07dc4b5`)
+- Handoff freshness marker: `e07dc4b5`
+- Branch at generation: `docs/post-pr2092-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -72,7 +72,6 @@ Wenn der Bootstrap grün ist:
 Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 
 - `p5c-physical-migration` (blocked): Plan physical migration after legacy profile deprecation for P5
-- `v1-0-milestone` (next): Reach the 1.0 operating-layer stability milestone for unphased
 - `v2-0-legacy-profile-removal` (planned): Remove the implicit legacy profile in 2.0.0 for unphased
 - `pre-gui-hardening-line` (next): Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for pre-GUI
 - `workflow-kernel-and-transfer-hardening` (planned): Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI
