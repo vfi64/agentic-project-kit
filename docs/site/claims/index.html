@@ -21,7 +21,7 @@
         <p class="eyebrow">Computed claim evidence</p>
         <h1 id="claims-title">Claim Evidence</h1>
         <p class="lede">Claim status is evaluated during the build from evidence bindings. Curated claim content does not store derived verified state.</p>
-        <p class="catalog-meta">Version <code>1.0.0</code> · Manifest <code>2bb560ebe587</code> · Claims <code>10</code></p>
+        <p class="catalog-meta">Version <code>1.0.0</code> · Manifest <code>28656f2fd53e</code> · Claims <code>10</code></p>
       </section>
 
       <section class="metrics" aria-label="Claim status counts">
@@ -67,6 +67,21 @@
           <tr><td><code>generated-command-catalog</code></td><td>The website command catalog is generated from the Kit&#x27;s current command manifest.</td><td>verified</td><td>yes</td><td>generated-artifact</td></tr>
           </tbody>
         </table>
+      </section>
+
+      <section class="status-board" aria-labelledby="claim-limits-title">
+        <div class="status-board-head">
+          <p class="eyebrow">Evidence Boundary</p>
+          <h2 id="claim-limits-title">Public Limits</h2>
+        </div>
+        <article>
+          <h3>Not claimed</h3>
+          <ul class="summary-list">
+            <li><span>Remote target-CI validation is not claimed when the target repository reports no checks; remote adoption PR mechanics are separate from target-owned CI evidence.</span></li>
+            <li><span>Global DPA conformance for arbitrary foreign repositories is not claimed.</span></li>
+            <li><span>Full GUI parity with every CLI command is not claimed.</span></li>
+          </ul>
+        </article>
       </section>
     </main>
   </body>

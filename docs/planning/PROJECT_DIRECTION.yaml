@@ -319,6 +319,7 @@ roadmap:
   - docs/reports/terminal/post-pr2090-successor-chat-handoff.md
   - docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md
   - docs/reports/V1_0_PLANNING_SITE_ONBOARDING_CLOSEOUT_20260814.md
+  - docs/reports/V1_0_EXTERNAL_MODE_CONTEXT_AND_PUBLIC_LIMITS_20260814.md
   source_files:
   - docs/architecture/KIT_AS_OS_ARCHITECTURE.md
   - docs/planning/PROJECT_DIRECTION.yaml
@@ -390,6 +391,7 @@ roadmap:
   evidence:
   - docs/reports/POST_0_5_0_V1_SCHEMA_AND_NEUTRAL_EXTERNAL_VALIDATION_20260813.md
   - https://github.com/vfi64/sampleproject/pull/1
+  - docs/reports/V1_0_EXTERNAL_MODE_CONTEXT_AND_PUBLIC_LIMITS_20260814.md
   source_files:
   - docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md
   - docs/planning/PROJECT_DIRECTION.yaml

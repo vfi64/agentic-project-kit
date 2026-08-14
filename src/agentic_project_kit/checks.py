@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 import re
@@ -135,6 +136,30 @@ SEMANTIC_QUALITY_BOUNDARY = (
 )
 
 
+@dataclass(frozen=True)
+class CheckContext:
+    root: str
+    mode: str
+    external_manifest_workspace: bool
+    gate_family: str
+    gate_documents: tuple[str, ...]
+    check_renders_statuses: bool
+    skip_status_renderer: str
+    invalid_manifest_error: str = ""
+
+    def as_dict(self) -> dict[str, object]:
+        return {
+            "root": self.root,
+            "mode": self.mode,
+            "external_manifest_workspace": self.external_manifest_workspace,
+            "gate_family": self.gate_family,
+            "gate_documents": list(self.gate_documents),
+            "check_renders_statuses": self.check_renders_statuses,
+            "skip_status_renderer": self.skip_status_renderer,
+            "invalid_manifest_error": self.invalid_manifest_error,
+        }
+
+
 def load_yaml(path: Path) -> dict[str, Any]:
     if not path.exists():
         raise FileNotFoundError(f"Missing config file: {path}")
@@ -184,10 +209,10 @@ def check_docs(project_root: Path) -> list[str]:
         if bool(doc.get("quality_checks", True)):
             errors.extend(check_document_quality(doc["path"], content))
 
-    workspace = _load_manifest_workspace_for_checks(project_root)
-    if isinstance(workspace, ValueError):
-        errors.append(f"Invalid workspace manifest: {workspace}")
-    elif workspace is not None:
+    context = build_check_context(project_root)
+    if context.invalid_manifest_error:
+        errors.append(f"Invalid workspace manifest: {context.invalid_manifest_error}")
+    elif context.external_manifest_workspace:
         errors.extend(check_workspace_state_gate_docs(project_root))
     else:
         errors.extend(check_state_gate_docs(project_root))
@@ -206,6 +231,46 @@ def _load_manifest_workspace_for_checks(project_root: Path) -> Workspace | None 
         return load_workspace(project_root, suppress_legacy_profile_warning=True)
     except RuntimeError as exc:
         return ValueError(str(exc))
+
+
+def build_check_context(project_root: Path) -> CheckContext:
+    project_root = project_root.resolve()
+    workspace = _load_manifest_workspace_for_checks(project_root)
+    if isinstance(workspace, ValueError):
+        return CheckContext(
+            root=project_root.as_posix(),
+            mode="invalid_manifest",
+            external_manifest_workspace=False,
+            gate_family="invalid_manifest",
+            gate_documents=(),
+            check_renders_statuses=False,
+            skip_status_renderer="agentic-kit doctor",
+            invalid_manifest_error=str(workspace),
+        )
+    if workspace is not None:
+        return CheckContext(
+            root=project_root.as_posix(),
+            mode="external_manifest_workspace",
+            external_manifest_workspace=True,
+            gate_family="workspace_state",
+            gate_documents=WORKSPACE_STATE_GATE_DOCUMENTS,
+            check_renders_statuses=False,
+            skip_status_renderer="agentic-kit doctor",
+        )
+    mode = (
+        "selfhosting_checkout"
+        if _is_agentic_project_kit_development_checkout(project_root)
+        else "repository_state"
+    )
+    return CheckContext(
+        root=project_root.as_posix(),
+        mode=mode,
+        external_manifest_workspace=False,
+        gate_family="repository_state",
+        gate_documents=STATE_GATE_DOCUMENTS,
+        check_renders_statuses=False,
+        skip_status_renderer="agentic-kit doctor",
+    )
 
 
 def _is_agentic_project_kit_development_checkout(project_root: Path) -> bool:

@@ -1115,6 +1115,34 @@
           "param_type": "TyperOption",
           "required": false,
           "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable check result with execution context.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print check execution context before the text result.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "show_context",
+          "opts": [
+            "--context"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -1144,6 +1172,34 @@
           "name": "project_root",
           "opts": [
             "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable check result with execution context.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print check execution context before the text result.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "show_context",
+          "opts": [
+            "--context"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -17554,7 +17610,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "2bb560ebe587",
+    "manifest_sha": "28656f2fd53e",
     "schema_version": 1
   },
   "schema_version": 2,

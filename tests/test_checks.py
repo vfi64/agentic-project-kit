@@ -1,6 +1,11 @@
+import json
 from pathlib import Path
 
+from typer.testing import CliRunner
+
+from agentic_project_kit.cli import app
 from agentic_project_kit.checks import (
+    build_check_context,
     check_changelog_quality,
     check_all,
     check_docs,
@@ -42,6 +47,49 @@ def test_check_docs_accepts_manifest_workspace_state_without_selfhosting_docs(tm
     (tmp_path / "README.md").write_text("# Demo\nrequired-term\n", encoding="utf-8")
 
     assert check_docs(tmp_path) == []
+
+
+def test_check_context_reports_manifest_workspace_gate_semantics(tmp_path: Path):
+    _write_manifest_workspace(tmp_path)
+
+    context = build_check_context(tmp_path)
+
+    assert context.mode == "external_manifest_workspace"
+    assert context.external_manifest_workspace is True
+    assert context.gate_family == "workspace_state"
+    assert context.check_renders_statuses is False
+    assert context.skip_status_renderer == "agentic-kit doctor"
+    assert ".agentic/state/status.md" in context.gate_documents
+
+
+def test_check_docs_json_reports_manifest_workspace_gate_semantics(tmp_path: Path):
+    _write_manifest_workspace(tmp_path)
+
+    result = CliRunner().invoke(app, ["check-docs", "--root", str(tmp_path), "--json"])
+
+    assert result.exit_code == 0
+    payload = json.loads(result.output)
+    assert payload["kind"] == "agentic_project_check_result"
+    assert payload["command"] == "check-docs"
+    assert payload["status"] == "PASS"
+    assert payload["context"]["mode"] == "external_manifest_workspace"
+    assert payload["context"]["external_manifest_workspace"] is True
+    assert payload["context"]["check_renders_statuses"] is False
+    assert payload["context"]["skip_status_renderer"] == "agentic-kit doctor"
+
+
+def test_check_context_option_reports_manifest_workspace_gate_semantics(tmp_path: Path):
+    _write_manifest_workspace(tmp_path)
+
+    result = CliRunner().invoke(app, ["check", "--root", str(tmp_path), "--context"])
+
+    assert result.exit_code == 0
+    assert "CHECK_CONTEXT" in result.output
+    assert "MODE=external_manifest_workspace" in result.output
+    assert "EXTERNAL_MANIFEST_WORKSPACE=true" in result.output
+    assert "CHECK_RENDERS_STATUSES=false" in result.output
+    assert "SKIP_STATUS_RENDERER=agentic-kit doctor" in result.output
+    assert "Agentic project check passed" in result.output
 
 
 def test_check_docs_keeps_selfhosting_gate_when_manifest_is_present(tmp_path: Path):
