@@ -73,6 +73,27 @@ rules:
     - slice_result=PASS|BLOCKED
     - helper-local PASS from slice PASS
     - agentic-kit docs-audit
+- id: open-pr-closeout-gate-coverage
+  description: Open review PR closeout must distinguish CI-green PR readiness from
+    post-merge handoff refresh and must keep the pending handoff marker visible.
+  documents:
+  - path: README.md
+    terms:
+    - agentic-kit work finish --execute --no-merge
+    - Open PR Closeout / Handoff
+    - 'Post-merge handoff: pending until this PR is merged.'
+  - path: docs/TEST_GATES.md
+    terms:
+    - Open PR Closeout Gate
+    - agentic-kit work finish --execute --no-merge
+    - Open PR Closeout / Handoff
+    - 'Post-merge handoff: pending until this PR is merged.'
+    - must not update `docs/STATUS.md`
+  - path: .agentic/compiled_agent_context.yaml
+    terms:
+    - open-pr-closeout-pending-handoff
+    - agentic-kit work finish --execute --no-merge
+    - Open PR Closeout / Handoff
 - id: project-direction-command-coverage
   description: Canonical project direction commands must remain discoverable and documented.
   documents:

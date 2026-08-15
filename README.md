@@ -475,6 +475,7 @@ ignored.
 - `agentic-kit dpa probe-004-readiness`: inspect PROBE-004 migration and rollback readiness, optionally writing bounded DPA probe evidence without migration or rollback execution.
 - `agentic-kit dpa wrt-ch001-evidence`: observe a WRT-CH-001 administrative handoff refresh PR without claiming disposable fixture PASS.
 - `agentic-kit work start --from-ref REF`: create a fresh work branch based on a selected release tag or branch.
+- `agentic-kit work finish --execute --no-merge`: publish an open review PR, wait for final-head CI, and verify the `Open PR Closeout / Handoff` PR-body section. This keeps `Post-merge handoff: pending until this PR is merged.` explicit without updating current `STATUS` or `CURRENT_HANDOFF` before merge.
 - `agentic-kit work discard-changes`: preview the explicitly destructive feature-branch discard flow; `--execute` requires a deliberate confirmation path.
 - `agentic-kit transfer list-refs --json`: list local release tags and branches for the guided work-start picker.
 - `workflow status --explain`: inspect the current state and next safe step.

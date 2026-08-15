@@ -118,6 +118,18 @@ def test_allows_generated_bootstrap_change_with_generator_source() -> None:
     assert not any(f.code == "generated-artifact-direct-edit" for f in analyze_diff(diff))
 
 
+def test_allows_generated_bootstrap_command_authority_sync_source() -> None:
+    diff = "\n".join(
+        [
+            "diff --git a/src/agentic_project_kit/chat_entrypoint_contract.py b/src/agentic_project_kit/chat_entrypoint_contract.py",
+            "+COMMAND_AUTHORITY_PROMPT_TARGETS = ()",
+            "diff --git a/docs/handoff/NEXT_CHAT_BOOTSTRAP.md b/docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+            "+Command manifest entrypoint:",
+        ]
+    )
+    assert not any(f.code == "generated-artifact-direct-edit" for f in analyze_diff(diff))
+
+
 def test_allows_generated_bootstrap_change_with_successor_handoff_projection_bundle() -> None:
     diff = "\n".join(
         [

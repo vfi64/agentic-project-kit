@@ -15,6 +15,13 @@ ENTRYPOINT_SOURCE_PATHS = (
     "src/agentic_project_kit/workspace_init.py",
     "src/agentic_project_kit/gui_task_editor.py",
 )
+COMMAND_AUTHORITY_PROMPT_TARGETS = (
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+)
+COMMAND_AUTHORITY_EXECUTION_CONTRACT = "docs/reports/handoff-packages/latest/execution_contract.json"
 CHAT_MODES = ("copy-paste", "remote", "file-transfer")
 _SHA_REFERENCE_RE = re.compile(
     r"(?:manifest_sha:\s*|COMMAND_MANIFEST_ACK\s+)(?P<sha>[0-9a-f]{12}|stale|UNKNOWN)"
@@ -217,6 +224,29 @@ def upsert_mandatory_entrypoint_block(text: str, manifest: dict[str, Any]) -> st
     return block + "\n\n" + text
 
 
+def _sync_execution_contract_command_reference(
+    text: str,
+    root: Path,
+    *,
+    manifest: dict[str, Any],
+    source_texts: dict[str, str],
+) -> str:
+    try:
+        payload = json.loads(text or "{}")
+    except json.JSONDecodeError:
+        return text
+    if not isinstance(payload, dict):
+        return text
+    contract = command_reference_contract(root, manifest=manifest, source_texts=source_texts)
+    context = payload.get("llm_execution_context") if isinstance(payload.get("llm_execution_context"), dict) else payload
+    if not isinstance(context, dict):
+        return text
+    context["command_reference"] = contract
+    if "source_hashes" in context:
+        context["source_hashes"] = contract["source_hashes"]
+    return json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+
+
 def sync_entrypoint_files(
     root: Path | str,
     *,
@@ -236,10 +266,19 @@ def sync_entrypoint_files(
             agents_path.read_text(encoding="utf-8"),
             manifest,
         )
-    start_prompt_path = repo_root / "docs/handoff/START_NEW_CHAT_PROMPT.md"
-    if start_prompt_path.exists():
-        targets["docs/handoff/START_NEW_CHAT_PROMPT.md"] = upsert_command_reference_prompt_block(
-            start_prompt_path.read_text(encoding="utf-8"),
+    for relative in COMMAND_AUTHORITY_PROMPT_TARGETS:
+        prompt_path = repo_root / relative
+        if prompt_path.exists():
+            targets[relative] = upsert_command_reference_prompt_block(
+                prompt_path.read_text(encoding="utf-8"),
+                repo_root,
+                manifest=manifest,
+                source_texts=reference_targets,
+            )
+    execution_contract_path = repo_root / COMMAND_AUTHORITY_EXECUTION_CONTRACT
+    if execution_contract_path.exists():
+        targets[COMMAND_AUTHORITY_EXECUTION_CONTRACT] = _sync_execution_contract_command_reference(
+            execution_contract_path.read_text(encoding="utf-8"),
             repo_root,
             manifest=manifest,
             source_texts=reference_targets,

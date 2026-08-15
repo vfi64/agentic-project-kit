@@ -19,6 +19,7 @@ RAW_REPLACEMENTS: dict[str, tuple[str, ...]] = {
     "agentic-kit transfer push-current": ("git push",),
     "agentic-kit transfer commit": ("git commit",),
     "agentic-kit transfer branch-create": ("git switch -c", "git checkout -b"),
+    "agentic-kit work finish": ("gh pr create --draft",),
     "agentic-kit transfer pr-create-complete": ("gh pr create",),
     "agentic-kit transfer pr-merge-safe": ("gh pr merge",),
     "agentic-kit transfer delete-merged-work-branch": ("git push --delete", "git branch -D"),

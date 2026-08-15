@@ -65,6 +65,8 @@ hard_rules:
   rule: Successor chats must read mandatory sources first, detect drift, warn, and avoid mutation except for drift fixes.
 - id: successor-handoff-freshness-guard
   rule: Before presenting a successor handoff prompt as authoritative, run the freshness guard against STATUS, handoff_state, CURRENT_HANDOFF, and the latest successor prompt.
+- id: open-pr-closeout-pending-handoff
+  rule: Open review PR closeout must use agentic-kit work finish --execute --no-merge or an equivalent gate that verifies final-head CI and an Open PR Closeout / Handoff marker; STATUS, CURRENT_HANDOFF, and canonical successor handoff projections stay unchanged until merge.
 - id: documentation-registry-first-slice
   summary: Classify documentation and artifacts through an additive, reversible registry before broad migration.
   rule: Documentation registry changes must keep the first slice structural, test-backed, and non-destructive; broad migration, deletion, or taxonomy-driven rewrites require later explicit slices.

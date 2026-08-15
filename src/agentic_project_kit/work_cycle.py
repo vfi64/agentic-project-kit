@@ -102,8 +102,14 @@ BLOCKER_EXPLANATIONS: dict[str, str] = {
     "reset-hard": "Tracked changes could not be discarded.",
     "clean-untracked": "Untracked files could not be removed.",
     "commit": "The selected files could not be saved.",
+    "resolve-head-sha": "The final commit head could not be verified.",
     "rules-acknowledge": "The project rules acknowledgement step needs attention.",
     "push-current": "The change could not be published to the server.",
+    "pr-create": "The open review PR could not be created.",
+    "pr-number": "The created PR number could not be determined.",
+    "pr-wait-ci": "The open PR did not reach a green final-head CI state.",
+    "pr-status": "The final open PR status is not green for the expected head.",
+    "open-pr-closeout": "The open PR closeout or pending-handoff marker is missing or stale.",
     "pr-create-complete": "The publish-and-review workflow did not complete.",
     "sync-main": "The local main branch could not be synchronized.",
     "post-merge-check": "The post-merge repository check needs attention.",
@@ -298,6 +304,7 @@ def build_work_finish_args(
     message: str,
     paths: tuple[ChangedPath, ...],
     execute: bool = False,
+    merge: bool = True,
 ) -> tuple[str, ...]:
     args: list[str] = [
         "work",
@@ -312,6 +319,8 @@ def build_work_finish_args(
     for changed_path in paths:
         if changed_path.selected:
             args.extend(["--path", changed_path.path])
+    if not merge:
+        args.append("--no-merge")
     args.append("--execute" if execute else "--dry-run")
     args.append("--json")
     return tuple(args)

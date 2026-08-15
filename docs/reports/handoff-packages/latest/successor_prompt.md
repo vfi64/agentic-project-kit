@@ -435,7 +435,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` oder dem externen Workspace-State bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 699a4acf0634). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 699a4acf0634. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 051f27717581). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 051f27717581. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -445,5 +445,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 6429fd5b0622da3c6e6956207df7b6ef65c5e739ed0a846247c6519eadc860d3
-- docs/reference/agentic-kit-commands.json: 6fef0c0b1a261c154af8800d63d3a5dee5e4413d21f8496b20ce92d4f8b83a77
+- docs/reference/AGENTIC_KIT_COMMANDS.md: e5aa98c71011723aba828cf882250313a81d0b9003b0d505ca3199987749f846
+- docs/reference/agentic-kit-commands.json: f08fae06dd3dcf7713d9cd31a952e94600985b45528b8314fc69c77f6aab6e44

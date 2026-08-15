@@ -1,13 +1,13 @@
 {
   "command_reference": {
-    "ack": "COMMAND_MANIFEST_ACK 699a4acf0634",
+    "ack": "COMMAND_MANIFEST_ACK 051f27717581",
     "json": "docs/reference/agentic-kit-commands.json",
-    "manifest_sha": "699a4acf0634",
+    "manifest_sha": "051f27717581",
     "markdown": "docs/reference/AGENTIC_KIT_COMMANDS.md",
     "must_not_reconstruct_commands_from_memory": true,
     "source_hashes": {
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "6429fd5b0622da3c6e6956207df7b6ef65c5e739ed0a846247c6519eadc860d3",
-      "docs/reference/agentic-kit-commands.json": "6fef0c0b1a261c154af8800d63d3a5dee5e4413d21f8496b20ce92d4f8b83a77"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "e5aa98c71011723aba828cf882250313a81d0b9003b0d505ca3199987749f846",
+      "docs/reference/agentic-kit-commands.json": "f08fae06dd3dcf7713d9cd31a952e94600985b45528b8314fc69c77f6aab6e44"
     }
   },
   "current_state_contract": {
@@ -650,8 +650,8 @@
   ],
   "schema_version": 1,
   "source_hashes": {
-    "docs/reference/AGENTIC_KIT_COMMANDS.md": "6429fd5b0622da3c6e6956207df7b6ef65c5e739ed0a846247c6519eadc860d3",
-    "docs/reference/agentic-kit-commands.json": "6fef0c0b1a261c154af8800d63d3a5dee5e4413d21f8496b20ce92d4f8b83a77"
+    "docs/reference/AGENTIC_KIT_COMMANDS.md": "e5aa98c71011723aba828cf882250313a81d0b9003b0d505ca3199987749f846",
+    "docs/reference/agentic-kit-commands.json": "f08fae06dd3dcf7713d9cd31a952e94600985b45528b8314fc69c77f6aab6e44"
   },
   "validation": {
     "path": ".agentic/successor_handoff_package/validation_report.json",

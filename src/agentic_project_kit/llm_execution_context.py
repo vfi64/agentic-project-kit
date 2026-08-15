@@ -38,6 +38,7 @@ IMPORTANT_WRAPPERS = (
     "agentic-kit transfer sync-main",
     "agentic-kit transfer remote-work-start",
     "agentic-kit transfer protected-diff-plan",
+    "agentic-kit work finish",
     "agentic-kit transfer pr-create-complete",
     "agentic-kit transfer pr-create-complete --post-merge-complete",
     "agentic-kit transfer pr-complete",
@@ -96,6 +97,7 @@ def build_llm_execution_context(root: str | Path = ".") -> dict[str, Any]:
         "shell_placeholder_policy": transfer_rules.get("shell_placeholder_policy", {}),
         "canonical_lifecycle": {
             "new_pr_single_command_text": "agentic-kit transfer pr-create-complete --post-merge-complete",
+            "open_review_pr_single_command_text": "agentic-kit work finish --execute --no-merge",
             "verify_context_refresh_command": "agentic-kit transfer verify-llm-context-refresh",
             "feature_branch_pre_pr_gate": "agentic-kit transfer repo-status",
             "forbidden_feature_branch_pre_pr_gate": "agentic-kit transfer post-merge-check",
@@ -106,7 +108,17 @@ def build_llm_execution_context(root: str | Path = ".") -> dict[str, Any]:
             ],
             "post_merge_checks_belong_to_main": True,
             "post_merge_check_after_merge_only": True,
+            "open_review_pr_requires_pending_handoff_marker": True,
+            "open_review_pr_must_not_update_current_handoff": True,
             "do_not_use_stale_prompt_text_as_handoff_source": True,
+            "open_review_pr_single_command": [
+                "./.venv/bin/agentic-kit",
+                "work",
+                "finish",
+                "--execute",
+                "--no-merge",
+                "--json",
+            ],
             "new_pr_single_command": [
                 "./.venv/bin/agentic-kit",
                 "transfer",
@@ -247,7 +259,7 @@ def _option_names(command: dict[str, Any]) -> list[str]:
     for param in command.get("params", []) or command.get("parameters", []) or []:
         if not isinstance(param, dict):
             continue
-        for field in ("opts", "option_strings", "names"):
+        for field in ("opts", "secondary_opts", "option_strings", "names"):
             raw = param.get(field)
             if isinstance(raw, list):
                 options.extend(str(item) for item in raw if str(item).startswith("-"))

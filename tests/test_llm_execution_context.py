@@ -23,6 +23,7 @@ def test_llm_execution_context_is_generated_from_current_repo_sources() -> None:
         for item in context["command_reference"]["important_wrappers"]
     }
     for name in (
+        "agentic-kit work finish",
         "agentic-kit transfer pr-create-complete",
         "agentic-kit transfer pr-complete",
         "agentic-kit transfer post-merge-settle",
@@ -30,6 +31,7 @@ def test_llm_execution_context_is_generated_from_current_repo_sources() -> None:
         "agentic-kit transfer command-reference-refresh",
     ):
         assert wrappers[name]["present"] is True
+    assert "--no-merge" in wrappers["agentic-kit work finish"]["options"]
 
     assert context["execution_policy"]["wrapper_first"] is True
     assert context["execution_policy"]["post_merge_settle_required_after_merge"] is True
@@ -41,6 +43,7 @@ def test_llm_execution_context_records_placeholder_and_terminal_resilience_polic
     assert "agentic-kit transfer pr-create-complete --post-merge-complete" in {
         item["qualified_name"] for item in context["command_reference"]["important_wrappers"]
     }
+    assert context["canonical_lifecycle"]["open_review_pr_single_command_text"] == "agentic-kit work finish --execute --no-merge"
 
     lifecycle = context["canonical_lifecycle"]
     assert lifecycle["shell_placeholder_policy"]["no_angle_bracket_placeholders_in_executable_blocks"] is True
@@ -99,6 +102,8 @@ def test_llm_execution_context_encodes_pr_handoff_lifecycle_order(tmp_path: Path
     assert lifecycle["forbidden_feature_branch_pre_pr_gate"] == "agentic-kit transfer post-merge-check"
     assert lifecycle["post_merge_checks_belong_to_main"] is True
     assert lifecycle["post_merge_check_after_merge_only"] is True
+    assert lifecycle["open_review_pr_requires_pending_handoff_marker"] is True
+    assert lifecycle["open_review_pr_must_not_update_current_handoff"] is True
     assert lifecycle["do_not_use_stale_prompt_text_as_handoff_source"] is True
     assert any("post-merge-settle --after-pr" in item for item in lifecycle["post_merge_requires_concrete_number"])
     assert lifecycle["fresh_llm_context_before_pr"] == [

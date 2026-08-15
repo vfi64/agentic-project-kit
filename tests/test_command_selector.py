@@ -43,6 +43,24 @@ def _manifest() -> dict[str, object]:
                 "replaces_raw": [],
                 "task_tags": ["audit", "read-only"],
             },
+            {
+                "qualified_name": "agentic-kit work finish",
+                "safety": "BOUNDED",
+                "surface": "orchestrator",
+                "when_to_use": "Finish a human work slice.",
+                "dry_run_available": True,
+                "replaces_raw": ["gh pr create --draft"],
+                "task_tags": ["work", "bounded"],
+            },
+            {
+                "qualified_name": "agentic-kit transfer pr-create-complete",
+                "safety": "BOUNDED",
+                "surface": "orchestrator",
+                "when_to_use": "Create and complete a PR.",
+                "dry_run_available": False,
+                "replaces_raw": ["gh pr create"],
+                "task_tags": ["transfer", "bounded"],
+            },
         ]
     }
 
@@ -60,6 +78,14 @@ def test_select_for_raw_uses_longest_replaces_raw_prefix() -> None:
     assert selection.payload["commands"][0]["qualified_name"] == "agentic-kit transfer push-force-safe"
 
 
+def test_select_for_raw_prefers_open_pr_work_finish_for_draft_pr_create() -> None:
+    selection = select_for_raw(_manifest(), "gh pr create --draft --title Demo")
+
+    assert selection.status == "match"
+    assert selection.payload["matched_prefix"] == "gh pr create --draft"
+    assert selection.payload["commands"][0]["qualified_name"] == "agentic-kit work finish"
+
+
 def test_select_for_raw_reports_no_mapping_with_exit_zero_payload() -> None:
     selection = select_for_raw(_manifest(), "git status")
 
@@ -75,7 +101,13 @@ def test_select_for_task_sorts_by_safety_then_name() -> None:
     assert selection.status == "match"
     assert [command["safety"] for command in selection.payload["commands"]] == [
         "BOUNDED",
+        "BOUNDED",
         "DESTRUCTIVE",
+    ]
+    assert [command["qualified_name"] for command in selection.payload["commands"]] == [
+        "agentic-kit transfer pr-create-complete",
+        "agentic-kit transfer push-current",
+        "agentic-kit transfer push-force-safe",
     ]
 
 
@@ -226,6 +258,7 @@ def test_select_for_task_unknown_tag_lists_available_tags() -> None:
         "destructive",
         "read-only",
         "transfer",
+        "work",
     ]
 
 

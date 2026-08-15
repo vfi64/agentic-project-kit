@@ -11,6 +11,7 @@ from agentic_project_kit.command_manifest import JSON_PATH, MD_PATH, evaluate_co
 from agentic_project_kit.command_authority_audit import evaluate_command_authority
 from agentic_project_kit.chat_entrypoint_contract import (
     command_manifest_ack_line,
+    command_reference_contract,
     command_reference_prompt_block,
     mandatory_entrypoint_block,
 )
@@ -202,7 +203,7 @@ def test_sync_entrypoints_repairs_stale_manifest_sha_and_agents_block(tmp_path: 
     )
     start_prompt = tmp_path / "docs/handoff/START_NEW_CHAT_PROMPT.md"
     start_prompt.parent.mkdir(parents=True)
-    start_prompt.write_text(
+    stale_prompt = (
         "# Start New Chat Prompt\n\n"
         "Command manifest entrypoint:\n"
         "- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json "
@@ -218,7 +219,36 @@ def test_sync_entrypoints_repairs_stale_manifest_sha_and_agents_block(tmp_path: 
         "source_hashes:\n"
         "- docs/reference/AGENTIC_KIT_COMMANDS.md: stalehash\n"
         "- docs/reference/agentic-kit-commands.json: stalehash\n\n"
-        "## Tail\nkeep this paragraph\n",
+        "## Tail\nkeep this paragraph\n"
+    )
+    start_prompt.write_text(
+        stale_prompt,
+        encoding="utf-8",
+    )
+    next_bootstrap = tmp_path / "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
+    closeout_prompt = tmp_path / "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
+    successor_prompt = tmp_path / "docs/reports/handoff-packages/latest/successor_prompt.md"
+    successor_prompt.parent.mkdir(parents=True)
+    for prompt_path in (next_bootstrap, closeout_prompt, successor_prompt):
+        prompt_path.write_text(stale_prompt.replace("# Start New Chat Prompt", "# Prompt"), encoding="utf-8")
+    execution_contract_path = tmp_path / "docs/reports/handoff-packages/latest/execution_contract.json"
+    execution_contract_path.write_text(
+        json.dumps(
+            {
+                "kind": "successor_execution_contract",
+                "command_reference": {
+                    "ack": "COMMAND_MANIFEST_ACK stale",
+                    "json": "docs/reference/agentic-kit-commands.json",
+                    "markdown": "docs/reference/AGENTIC_KIT_COMMANDS.md",
+                    "manifest_sha": "stale",
+                    "must_not_reconstruct_commands_from_memory": True,
+                    "source_hashes": {},
+                },
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
         encoding="utf-8",
     )
     data = json.loads((tmp_path / JSON_PATH).read_text(encoding="utf-8"))
@@ -247,6 +277,13 @@ def test_sync_entrypoints_repairs_stale_manifest_sha_and_agents_block(tmp_path: 
     assert "COMMAND_MANIFEST_ACK stale" not in prompt_text
     assert prompt_text.count("Command manifest entrypoint:") == 1
     assert "## Tail\nkeep this paragraph" in prompt_text
+    for prompt_path in (next_bootstrap, closeout_prompt, successor_prompt):
+        text = prompt_path.read_text(encoding="utf-8")
+        assert command_manifest_ack_line(load_manifest(tmp_path)) in text
+        assert "COMMAND_MANIFEST_ACK stale" not in text
+        assert text.count("Command manifest entrypoint:") == 1
+    execution_contract = json.loads(execution_contract_path.read_text(encoding="utf-8"))
+    assert execution_contract["command_reference"] == command_reference_contract(tmp_path)
 
     idempotent = CliRunner().invoke(
         app,

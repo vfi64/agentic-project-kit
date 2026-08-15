@@ -21,6 +21,7 @@ LARGE_PROTECTED_REMOVAL_THRESHOLD = 20
 
 GENERATED_ARTIFACTS = {
     "docs/handoff/NEXT_CHAT_BOOTSTRAP.md": (
+        "src/agentic_project_kit/chat_entrypoint_contract.py",
         "src/agentic_project_kit/successor_handoff_package.py",
         "src/agentic_project_kit/chat_bootloader.py",
         "src/agentic_project_kit/operational_handoff_projection.py",

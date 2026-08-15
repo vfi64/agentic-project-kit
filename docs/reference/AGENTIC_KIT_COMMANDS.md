@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 699a4acf0634
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 051f27717581
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -3321,10 +3321,11 @@ Preview or execute the explicit destructive discard-all workflow.
 
 - Safety: `BOUNDED`
 - Surface: `orchestrator`
-- When to use: Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks.
+- When to use: Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.
 - Dry-run available: `True`
+- Replaces raw: `gh pr create --draft`
 
-Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks.
+Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3333,7 +3334,8 @@ Finish a human work slice by planning or executing commit, push, PR, merge, and 
 | `message` | `TyperOption` | --message | `True` |  | Commit message. |
 | `paths` | `TyperOption` | --path | `False` |  | Path to include in the commit. Repeatable. |
 | `merge_method` | `TyperOption` | --merge-method | `False` | `squash` | PR merge method. |
-| `dry_run` | `TyperOption` | --dry-run, --execute | `False` | `True` | Plan by default. Use --execute to commit, push, and merge. |
+| `merge` | `TyperOption` | --merge, --no-merge | `False` | `True` | Merge and run post-merge closeout by default. Use --no-merge to leave a review PR open with explicit pending-handoff closeout markers. |
+| `dry_run` | `TyperOption` | --dry-run, --execute | `False` | `True` | Plan by default. Use --execute to commit, push, and publish. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit work recover`
