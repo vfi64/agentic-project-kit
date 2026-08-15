@@ -400,7 +400,7 @@ roadmap:
   status: done
   title: Close public installation, PyPI publication, update, and Docker readiness gaps
   target_release: v1.0.1
-  completed_by_pr: pending-pr-pypi-docs-install-closeout
+  completed_by_pr: 2105
   merge_commit: pending
   depends_on:
   - v1-0-milestone
