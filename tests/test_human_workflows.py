@@ -143,7 +143,14 @@ def test_work_finish_execute_uses_existing_pr_lifecycle_wrapper(monkeypatch):
     assert result.exit_code == 0, result.output
     rules_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
     commit_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"])
+    push_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "push-current"])
+    post_commit_rules_index = next(
+        index
+        for index, call in enumerate(calls)
+        if call[:3] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"] and index > commit_index
+    )
     assert rules_index < commit_index
+    assert commit_index < post_commit_rules_index < push_index
     assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"] for call in calls)
 
 
@@ -259,7 +266,14 @@ def test_work_finish_no_merge_creates_open_pr_and_requires_pending_handoff_marke
     assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] for call in calls)
     rules_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
     commit_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"])
+    push_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "push-current"])
+    post_commit_rules_index = next(
+        index
+        for index, call in enumerate(calls)
+        if call[:3] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"] and index > commit_index
+    )
     assert rules_index < commit_index
+    assert commit_index < post_commit_rules_index < push_index
     pr_create_call = next(call for call in calls if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create"])
     body = pr_create_call[pr_create_call.index("--body") + 1]
     assert "## Open PR Closeout / Handoff" in body

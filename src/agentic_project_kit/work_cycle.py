@@ -104,6 +104,7 @@ BLOCKER_EXPLANATIONS: dict[str, str] = {
     "commit": "The selected files could not be saved.",
     "resolve-head-sha": "The final commit head could not be verified.",
     "rules-acknowledge": "The project rules acknowledgement step needs attention.",
+    "rules-acknowledge-post-commit": "The project rules acknowledgement must be refreshed for the newly created commit.",
     "push-current": "The change could not be published to the server.",
     "pr-create": "The open review PR could not be created.",
     "pr-number": "The created PR number could not be determined.",

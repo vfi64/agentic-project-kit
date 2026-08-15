@@ -411,6 +411,8 @@ def work_finish_command(
             expected_head_sha = str(head_sha_step["stdout"]).strip()
             steps.append(head_sha_step)
         if all(step["ok"] for step in steps):
+            steps.append(_run_step("rules-acknowledge-post-commit", _agentic("rules", "acknowledge")))
+        if all(step["ok"] for step in steps):
             steps.append(_run_step("push-current", _agentic("transfer", "push-current", "--branch", branch)))
         if all(step["ok"] for step in steps):
             if merge:
