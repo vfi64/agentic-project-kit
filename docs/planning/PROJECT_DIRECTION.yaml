@@ -1477,9 +1477,40 @@ plans:
     coverage, and an explicit deprecation or internalization path exist.
   - Transfer, DPA, release, documentation-governance, GUI, and legacy-ns cleanup
     tracks are split into separately reviewable slices.
+  - Audit classifications remain an orthogonal planning dimension to manifest
+    surface; they must not become a second public command taxonomy.
+  - The first implementation slice should prefer the DPA stable API facade unless
+    newer evidence shows transfer-lifecycle consolidation is no longer competing
+    with active next-turn workflow work.
   preserved_information:
     audit_report: docs/reports/DECOMPLEXIFICATION_AUDIT_20260815.md
     machine_readable_appendix: docs/reports/DECOMPLEXIFICATION_AUDIT_20260815.json
+    surface_relationship:
+      decision: orthogonal
+      manifest_surface_values:
+        diagnostic: 119
+        orchestrator: 31
+        primitive: 101
+      note: Manifest surface remains the authoritative usage/presentation layer;
+        audit categories describe decomplexification role and lifecycle risk.
+    first_implementation_recommendation:
+      target: dpa-stable-api
+      rationale: DPA has a smaller public command cluster, no identified active
+        competing Direction item, and mostly HISTORICAL/MIGRATION public names;
+        transfer has higher payoff but overlaps next-turn-workflow-kernel.
+    coordination_constraints:
+    - pre-gui-hardening-plan remains a dependency because GUI and website projections
+      consume command-manifest surface.
+    - transfer-lifecycle-consolidation must be sequenced after or explicitly aligned
+      with next-turn-workflow-kernel to avoid parallel changes to the same transfer/workflow
+      surface.
+    success_metrics:
+    - Preferred facade commands become the documented default path while historical
+      and redundant spellings move to alias, advanced, or internal-candidate status.
+    - The count of HISTORICAL and REDUNDANT commands presented as preferred spellings
+      decreases after facade slices; total command count is not the primary metric.
+    - CI, doctor, audit, docs, release, and handoff gates remain at least as strict
+      as before each facade slice.
     classification_categories:
     - CORE
     - ORCHESTRATOR

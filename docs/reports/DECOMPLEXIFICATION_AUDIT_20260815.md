@@ -11,6 +11,8 @@ This is an audit and planning slice only. It does not remove, rename, or depreca
 
 Architecture contract reviewed: no update is needed for this slice because no product boundary, command behavior, generated structure, or governance rule changes are introduced. DCO was considered; a simple Markdown report plus typed JSON appendix is sufficient because there is no repairable multi-cell generation workflow in this slice.
 
+Branch closeout note: this branch briefly generated successor handoff projections in commit `e22959d8`, then reverted them in `e8adb527`. That was intentional. A pure analysis slice should not carry feature-branch successor projections because the current-state contract still anchors to `docs/STATUS.md` and the validated main state; retaining the generated projection commit would have created validation-head drift.
+
 ## Evidence Inputs
 
 - `docs/reference/agentic-kit-commands.json`: 251 public commands.
@@ -33,6 +35,24 @@ Architecture contract reviewed: no update is needed for this slice because no pr
 | COMPATIBILITY | 3 | Deprecated aliases or legacy-specific compatibility tools. |
 | REDUNDANT | 6 | Public surfaces with overlapping intent that need a preferred spelling and deprecation path. |
 | GUI_DEFERRED | 7 | GUI/cockpit commands that should be split from core after action contracts stabilize. |
+
+### Relationship To Manifest `surface`
+
+The audit categories are orthogonal to the command manifest `surface` field. `surface` remains the authoritative usage/presentation layer consumed by the GUI, website, and `command-for` (`orchestrator`, `diagnostic`, `primitive`). The audit classification is a planning dimension: it describes lifecycle role, deprecation risk, and reduction strategy. These audit categories must not be copied into the command manifest as a second public taxonomy.
+
+The cross-table below is evidence for the orthogonal relationship: most planning categories intentionally span multiple surfaces.
+
+| Audit classification | orchestrator | diagnostic | primitive | Total |
+|---|---:|---:|---:|---:|
+| COMPATIBILITY | 0 | 2 | 1 | 3 |
+| CORE | 9 | 28 | 29 | 66 |
+| GUI_DEFERRED | 0 | 4 | 3 | 7 |
+| HISTORICAL | 0 | 9 | 3 | 12 |
+| INTERNAL_INVARIANT | 0 | 44 | 41 | 85 |
+| MIGRATION | 1 | 5 | 1 | 7 |
+| ORCHESTRATOR | 20 | 22 | 23 | 65 |
+| REDUNDANT | 1 | 5 | 0 | 6 |
+| Surface total | 31 | 119 | 101 | 251 |
 
 ## Largest Clusters
 
@@ -75,9 +95,22 @@ Architecture contract reviewed: no update is needed for this slice because no pr
 
 ## Next Safe Slice
 
-Define the first concrete reduction implementation as a compatibility-preserving facade, not removal. The best first target is either:
+Define the first concrete reduction implementation as a compatibility-preserving facade, not removal. The recommended first implementation target is DPA stable API, not transfer lifecycle.
 
-- `transfer lifecycle`: name the five lifecycle states and choose preferred public commands; or
-- `dpa stable API`: add the stable command facade and map existing stage commands behind it.
+| Criterion | Transfer lifecycle | DPA stable API |
+|---|---:|---:|
+| Public commands in cluster | 71 | 19 |
+| Approx LOC in source cluster | 12642 | 12099 |
+| Dominant audit role | ORCHESTRATOR / INTERNAL_INVARIANT mix | HISTORICAL / MIGRATION |
+| Active competing direction item | `next-turn-workflow-kernel` touches the same transfer/workflow surface | none identified |
 
-Both should include tests, README/coverage updates, and explicit deprecation metadata before any command is removed.
+DPA is the lower-risk first facade because its public names are mostly historical DP/probe/stage spellings, its command count is smaller, and no active Direction item appears to be changing the same surface. Transfer has larger payoff, but should wait until the `next-turn-workflow-kernel` dependency is resolved or explicitly declared to be its predecessor. Parallel transfer-lifecycle consolidation would collide with that active work unless scoped as a follow-on.
+
+`pre-gui-hardening-plan` remains a dependency for both candidates because GUI and website projections consume the existing command manifest surface. The first facade must keep `surface` stable and treat GUI updates as projections over the manifest, not as a second command system.
+
+Success criteria for later implementation slices:
+
+- The guided/default command set for a new user gets smaller without deleting commands: preferred facade commands are documented, and HISTORICAL/REDUNDANT commands are marked as aliases, advanced, or internal candidates with tests and documentation coverage.
+- The number of HISTORICAL and REDUNDANT commands presented as preferred spellings moves downward after each facade slice; CI/doctor/audit/docs/release/handoff gates remain at least as strict as before.
+
+Both DPA and transfer follow-up slices should include tests, README/coverage updates, and explicit deprecation metadata before any command is removed.

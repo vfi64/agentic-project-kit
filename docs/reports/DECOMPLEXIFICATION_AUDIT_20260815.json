@@ -5417,6 +5417,17 @@
       "target_model": "GUI as optional package/view over action specs"
     }
   ],
+  "branch_closeout_note": {
+    "reverted_commit": "e22959d8",
+    "revert_commit": "e8adb527",
+    "reason": "The generated successor handoff projections were intentionally reverted because this audit is an analysis-only feature branch; keeping feature-branch successor projections would create validation-head drift against the current-state contract anchored in docs/STATUS.md."
+  },
+  "implementation_ordering": {
+    "active_dependency": "next-turn-workflow-kernel",
+    "precondition": "pre-gui-hardening-plan",
+    "recommended_first_target": "dpa-stable-api",
+    "reason": "DPA has a smaller public command cluster, no identified active competing direction item, and mostly HISTORICAL/MIGRATION public names. Transfer lifecycle has higher payoff but overlaps the active next-turn-workflow-kernel surface."
+  },
   "schema_version": 1,
   "summary": {
     "classification_counts": {
@@ -5475,6 +5486,71 @@
       "diagnostic": 119,
       "orchestrator": 31,
       "primitive": 101
+    },
+    "surface_relationship": {
+      "decision": "orthogonal",
+      "note": "Manifest surface is the authoritative usage/presentation layer. Audit classifications are planning roles and must not be copied into the manifest as a second public taxonomy.",
+      "cross_table": {
+        "COMPATIBILITY": {
+          "diagnostic": 2,
+          "orchestrator": 0,
+          "primitive": 1,
+          "total": 3
+        },
+        "CORE": {
+          "diagnostic": 28,
+          "orchestrator": 9,
+          "primitive": 29,
+          "total": 66
+        },
+        "GUI_DEFERRED": {
+          "diagnostic": 4,
+          "orchestrator": 0,
+          "primitive": 3,
+          "total": 7
+        },
+        "HISTORICAL": {
+          "diagnostic": 9,
+          "orchestrator": 0,
+          "primitive": 3,
+          "total": 12
+        },
+        "INTERNAL_INVARIANT": {
+          "diagnostic": 44,
+          "orchestrator": 0,
+          "primitive": 41,
+          "total": 85
+        },
+        "MIGRATION": {
+          "diagnostic": 5,
+          "orchestrator": 1,
+          "primitive": 1,
+          "total": 7
+        },
+        "ORCHESTRATOR": {
+          "diagnostic": 22,
+          "orchestrator": 20,
+          "primitive": 23,
+          "total": 65
+        },
+        "REDUNDANT": {
+          "diagnostic": 5,
+          "orchestrator": 1,
+          "primitive": 0,
+          "total": 6
+        },
+        "surface_total": {
+          "diagnostic": 119,
+          "orchestrator": 31,
+          "primitive": 101,
+          "total": 251
+        }
+      }
+    },
+    "success_criteria": {
+      "default_surface": "Preferred facade commands become the documented default path while historical and redundant spellings move to alias, advanced, or internal-candidate status.",
+      "gate_integrity": "CI, doctor, audit, docs, release, and handoff gates remain at least as strict as before each facade slice.",
+      "preferred_historical_redundant_spellings": "The count of HISTORICAL and REDUNDANT commands presented as preferred spellings should decrease after each facade slice; total command count is not the primary metric."
     }
   },
   "worktree_clean_at_generation": true
