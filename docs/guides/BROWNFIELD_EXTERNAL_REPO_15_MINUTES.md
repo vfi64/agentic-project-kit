@@ -1,7 +1,7 @@
 # Govern an Existing Repository in 15 Minutes
 
 Status: active
-Status-date: 2026-08-14
+Status-date: 2026-08-15
 Audience: maintainers adopting an existing Git repository
 
 This guide is the shortest supported brownfield path for using
@@ -12,12 +12,12 @@ or documentation standards.
 ## 1. Install the Kit
 
 ```bash
-python -m pip install "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"
+python -m pip install agentic-project-kit
 agentic-kit --version
 ```
 
-Direct PyPI installation is planned but not claimed until the PyPI package
-availability claim is verified on the generated claim-evidence page.
+The public PyPI package is the supported user install path. TestPyPI remains a
+separate validation target and does not replace `pypi.org` availability evidence.
 
 For local development of the Kit itself, use the repository virtual environment
 instead of a global install.
@@ -118,7 +118,7 @@ After updating the Kit package, inspect the target repository before applying
 manifest changes:
 
 ```bash
-python -m pip install --upgrade "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"
+python -m pip install --upgrade agentic-project-kit
 agentic-kit doctor --root PATH
 ```
 

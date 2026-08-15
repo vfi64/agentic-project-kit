@@ -27,7 +27,7 @@
       <section class="metrics" aria-label="Claim status counts">
         <article>
           <span>Verified</span>
-          <strong>12</strong>
+          <strong>13</strong>
         </article>
         <article>
           <span>Unverified</span>
@@ -35,11 +35,11 @@
         </article>
         <article>
           <span>Planned</span>
-          <strong>1</strong>
+          <strong>0</strong>
         </article>
         <article>
           <span>Required</span>
-          <strong>6</strong>
+          <strong>8</strong>
         </article>
       </section>
 
@@ -59,9 +59,9 @@
           <tr><td><code>gui-entry-point</code></td><td>The package provides the agentic-kit-gui graphical entry point.</td><td>verified</td><td>no</td><td>pyproject-entrypoint</td></tr>
           <tr><td><code>python-requirement</code></td><td>The website Python requirement is projected from pyproject.toml.</td><td>verified</td><td>yes</td><td>pyproject-value</td></tr>
           <tr><td><code>package-version</code></td><td>The website package version is projected from pyproject.toml.</td><td>verified</td><td>yes</td><td>pyproject-value</td></tr>
-          <tr><td><code>public-source-install-documented</code></td><td>The public install path currently points to the GitHub source projection instead of claiming an unpublished PyPI package.</td><td>verified</td><td>yes</td><td>file-contains, file-contains</td></tr>
-          <tr><td><code>pypi-trusted-publishing-ready</code></td><td>PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths, but direct PyPI installation remains unclaimed until pypi.org publication evidence exists.</td><td>verified</td><td>no</td><td>file-contains, file-contains</td></tr>
-          <tr><td><code>pypi-package-installable</code></td><td>Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users.</td><td>planned</td><td>no</td><td>file-contains</td></tr>
+          <tr><td><code>public-pypi-install-documented</code></td><td>The public install path uses the published PyPI package.</td><td>verified</td><td>yes</td><td>file-contains, file-contains</td></tr>
+          <tr><td><code>pypi-trusted-publishing-verified</code></td><td>PyPI and TestPyPI publication use separate gated Trusted Publishing automation paths, and PyPI publication for version 1.0.1 is verified.</td><td>verified</td><td>yes</td><td>file-contains, file-contains</td></tr>
+          <tr><td><code>pypi-package-installable</code></td><td>Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users.</td><td>verified</td><td>yes</td><td>file-contains, file-contains</td></tr>
           <tr><td><code>command-manifest-synchronization</code></td><td>The public command catalog is generated from the current command manifest and checked for synchronization.</td><td>verified</td><td>yes</td><td>command-probe</td></tr>
           <tr><td><code>artifact-gc-dry-run</code></td><td>agentic-kit artifact-gc supports dry-run behavior.</td><td>verified</td><td>no</td><td>command-manifest</td></tr>
           <tr><td><code>workspace-adopt-read-only</code></td><td>agentic-kit workspace adopt inspects without writing.</td><td>verified</td><td>no</td><td>command-manifest, pytest-node</td></tr>
@@ -81,7 +81,7 @@
           <h3>Not claimed</h3>
           <ul class="summary-list">
             <li><span>Remote target-CI validation is not claimed when the target repository reports no checks; remote adoption PR mechanics are separate from target-owned CI evidence.</span></li>
-            <li><span>Direct PyPI installation is not claimed until pypi.org package availability evidence is verified; TestPyPI evidence is tracked separately.</span></li>
+            <li><span>An official Docker registry image is not claimed; Docker usage currently uses local source-built images.</span></li>
             <li><span>Global DPA conformance for arbitrary foreign repositories is not claimed.</span></li>
             <li><span>Full GUI parity with every CLI command is not claimed.</span></li>
           </ul>

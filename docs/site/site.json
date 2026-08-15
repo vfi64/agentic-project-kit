@@ -77,11 +77,11 @@
             "status": "verified"
           }
         ],
-        "id": "public-source-install-documented",
+        "id": "public-pypi-install-documented",
         "planned": false,
         "required": true,
         "status": "verified",
-        "text": "The public install path currently points to the GitHub source projection instead of claiming an unpublished PyPI package."
+        "text": "The public install path uses the published PyPI package."
       },
       {
         "blockers": [],
@@ -92,30 +92,35 @@
             "status": "verified"
           },
           {
-            "detail": "site/templates/claims.html contains required text",
+            "detail": "docs/reports/PYPI_PUBLICATION_AND_DOCKER_PIP_CLOSEOUT_20260815.md contains required text",
             "evidence_type": "file-contains",
             "status": "verified"
           }
         ],
-        "id": "pypi-trusted-publishing-ready",
+        "id": "pypi-trusted-publishing-verified",
         "planned": false,
-        "required": false,
+        "required": true,
         "status": "verified",
-        "text": "PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths, but direct PyPI installation remains unclaimed until pypi.org publication evidence exists."
+        "text": "PyPI and TestPyPI publication use separate gated Trusted Publishing automation paths, and PyPI publication for version 1.0.1 is verified."
       },
       {
         "blockers": [],
         "evidence": [
           {
-            "detail": "site/templates/quickstart.html contains required text",
+            "detail": "docs/reports/PYPI_PUBLICATION_AND_DOCKER_PIP_CLOSEOUT_20260815.md contains required text",
+            "evidence_type": "file-contains",
+            "status": "verified"
+          },
+          {
+            "detail": "docs/reports/PYPI_PUBLICATION_AND_DOCKER_PIP_CLOSEOUT_20260815.md contains required text",
             "evidence_type": "file-contains",
             "status": "verified"
           }
         ],
         "id": "pypi-package-installable",
-        "planned": true,
-        "required": false,
-        "status": "planned",
+        "planned": false,
+        "required": true,
+        "status": "verified",
         "text": "Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users."
       },
       {
@@ -226,16 +231,16 @@
     ],
     "kind": "site_claim_evaluation_report",
     "required_counts": {
-      "optional": 7,
-      "required": 6
+      "optional": 5,
+      "required": 8
     },
     "schema_blockers": [],
     "schema_version": 1,
     "status": "PASS",
     "status_counts": {
-      "planned": 1,
+      "planned": 0,
       "unverified": 0,
-      "verified": 12
+      "verified": 13
     }
   },
   "command_catalog": {
@@ -10631,8 +10636,8 @@
   "roadmap_projection": {
     "roadmap_counts": {
       "blocked": 1,
-      "done": 14,
-      "next": 2,
+      "done": 15,
+      "next": 1,
       "planned": 5
     },
     "status": "active",

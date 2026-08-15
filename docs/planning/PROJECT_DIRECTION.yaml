@@ -397,20 +397,22 @@ roadmap:
   - docs/planning/PROJECT_DIRECTION.yaml
 - id: public-installation-and-update-readiness
   phase: post-1.0
-  status: next
+  status: done
   title: Close public installation, PyPI publication, update, and Docker readiness gaps
   target_release: v1.0.1
+  completed_by_pr: pending-pr-pypi-docs-install-closeout
+  merge_commit: pending
   depends_on:
   - v1-0-milestone
   acceptance:
-  - Public README and generated site instructions do not claim direct PyPI installation
-    until PyPI package availability evidence exists.
-  - Release automation contains a gated Trusted Publishing path for TestPyPI and
+  - Public README and generated site instructions use direct PyPI installation
+    after pypi.org package availability evidence exists.
+  - Release automation contains gated Trusted Publishing paths for TestPyPI and
     PyPI without long-lived package tokens in repository secrets.
   - TestPyPI and PyPI publication evidence remains separated; TestPyPI success
     must not be treated as pypi.org package availability.
-  - Claim evidence distinguishes the currently supported source-install path from
-    the planned direct PyPI installation path.
+  - Claim evidence verifies the currently supported PyPI install path and keeps
+    GitHub source installation as an intentional source-projection fallback.
   - Existing managed repositories have a documented Kit-update path that runs
     doctor, workspace upgrade, and health gates after the package update.
   - Doctor reports an actionable warning when a manifest workspace schema is older
@@ -419,11 +421,13 @@ roadmap:
     workspace-upgrade path and retains a v1 backup artifact.
   - Docker usage has a local source-build path now and keeps official registry image
     publication explicitly unclaimed until a published image exists; local Docker
-    build and runtime smoke evidence exists after Docker became available.
+    build and runtime smoke evidence exists, and a Docker pip-install smoke verifies
+    the public PyPI package from a standard Python base image.
   evidence:
   - docs/reports/PUBLIC_INSTALLATION_UPDATE_DOCKER_READINESS_20260814.md
   - docs/reports/V1_0_1_RELEASE_PUBLICATION_PREP_20260814.md
   - docs/reports/DOCKER_LOCAL_SMOKE_20260814.md
+  - docs/reports/PYPI_PUBLICATION_AND_DOCKER_PIP_CLOSEOUT_20260815.md
   - README.md
   - site/templates/quickstart.html
   - site/templates/index.html

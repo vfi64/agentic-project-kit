@@ -5,13 +5,20 @@
 Current version: 1.0.1
 Current verified release: 1.0.0.
 Current release tag: v1.0.0.
+Current published package tag: v1.0.1.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.21925421`.
 Current verified main: `7ee1df29` (`Harden local Docker usage (#2100)`).
-Latest substantive work: PR #2100 (`Harden local Docker usage (#2100)`).
-Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
+Current local main/admin refresh: `02cdf27b` (`Refresh handoff state after PR2100 (#2101)`).
+Latest substantive work: PR #2100 (`Harden local Docker usage (#2100)`) plus
+the `v1.0.1` TestPyPI/PyPI Trusted Publishing closeout.
+Public PyPI package: `agentic-project-kit==1.0.1` verified installable from
+`pypi.org`.
+Current governed slice: public installation documentation and site claim
+promotion after PyPI publication.
 Post-merge handoff status: PASS/NOOP after PR #2100 administrative refresh.
-Next safe step: continue from fresh main with the next planned governed slice.
+Next safe step: close the public installation documentation slice, then run the
+post-release DOI check/closeout path for `1.0.1`.
 
 ## Historical State Snapshots
 

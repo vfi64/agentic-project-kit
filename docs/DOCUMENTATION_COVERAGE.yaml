@@ -881,7 +881,7 @@ rules:
   documents:
   - path: README.md
     terms:
-    - Installation for local development
+    - Installation
     - Quick start
     - Project contract, profiles, and policy packs
     - Policy-pack doctor checks

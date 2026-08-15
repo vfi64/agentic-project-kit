@@ -625,6 +625,10 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Local Docker build and runtime smoke evidence after Docker became available on the maintainer Mac, including Git identity and host-venv container findings.
+  - path: docs/reports/PYPI_PUBLICATION_AND_DOCKER_PIP_CLOSEOUT_20260815.md
+    class: evidence/log
+    owner: maintainers
+    notes: Closeout evidence for TestPyPI/PyPI trusted publication, public PyPI install, and Docker pip-install smoke for agentic-project-kit 1.0.1.
   - path: docs/architecture/evidence/path-literal-audit-2026-07-04.md
     class: evidence/log
     owner: maintainers

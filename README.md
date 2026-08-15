@@ -45,22 +45,20 @@ A generated project includes:
 - `sentinel.yaml` for document and task checks
 - minimal package/test skeleton for Python projects
 
-## Installation for local development
+## Installation
 
-The public PyPI package is not published yet. Until the PyPI claim is verified,
-install the current public source projection from GitHub:
+Install the current public release from PyPI in a virtual environment:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-python -m pip install "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"
+python -m pip install agentic-project-kit
 agentic-kit --version
 ```
 
-TestPyPI and PyPI are separate publication targets. A successful TestPyPI smoke
-test does not prove that `python -m pip install agentic-project-kit` works from
-`pypi.org`; use the direct PyPI command only after the claim-evidence page shows
-PyPI availability as verified.
+The PyPI package `agentic-project-kit` is published on `pypi.org`.
+TestPyPI and PyPI are separate publication targets. TestPyPI remains a
+validation target and must not be used as evidence for public PyPI availability.
 
 For Kit development from a local checkout:
 
@@ -83,9 +81,9 @@ agentic-kit --help
 
 ## Quick start
 
-For the generated install and usage walkthrough, including the current GitHub
-source install path, planned PyPI usage, a Docker-based Python container path,
-new repositories, and existing repositories, see
+For the generated install and usage walkthrough, including direct PyPI install,
+the local checkout development path, a Docker-based Python container path, new
+repositories, and existing repositories, see
 <https://vfi64.github.io/agentic-project-kit/site/quickstart/>.
 
 Docker without an official registry image uses the local source image:
@@ -237,7 +235,7 @@ Open Direction items whose `target_release` passed the current package version r
 For an existing Git repo, add `.agentic/` governance; use `agentic-kit init` only for new scaffolds.
 
 ```bash
-python -m pip install "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"
+python -m pip install agentic-project-kit
 agentic-kit workspace dpa-intake --root PATH
 agentic-kit workspace adopt --root PATH
 agentic-kit dpa repo-adoption-assessment --root PATH
@@ -270,7 +268,7 @@ After updating the Kit package in an already managed repository, run the bounded
 upgrade path from inside or against the target repository:
 
 ```bash
-python -m pip install --upgrade "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"
+python -m pip install --upgrade agentic-project-kit
 agentic-kit doctor --root PATH
 agentic-kit workspace upgrade --root PATH
 agentic-kit workspace upgrade --root PATH --execute

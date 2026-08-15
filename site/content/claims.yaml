@@ -30,36 +30,38 @@ claims:
       type: pyproject-value
       key: project.version
 
-  - id: public-source-install-documented
-    text: The public install path currently points to the GitHub source projection instead of claiming an unpublished PyPI package.
+  - id: public-pypi-install-documented
+    text: The public install path uses the published PyPI package.
     required: true
     evidence:
       - type: file-contains
         path: README.md
-        contains: "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"
+        contains: "python -m pip install agentic-project-kit"
       - type: file-contains
         path: site/templates/quickstart.html
-        contains: '${package_name} @ git+${repository_url}.git@main'
+        contains: 'python -m pip install ${package_name}'
 
-  - id: pypi-trusted-publishing-ready
-    text: PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths, but direct PyPI installation remains unclaimed until pypi.org publication evidence exists.
-    required: false
+  - id: pypi-trusted-publishing-verified
+    text: PyPI and TestPyPI publication use separate gated Trusted Publishing automation paths, and PyPI publication for version 1.0.1 is verified.
+    required: true
     evidence:
       - type: file-contains
         path: .github/workflows/release.yml
         contains: "pypa/gh-action-pypi-publish@release/v1"
       - type: file-contains
-        path: site/templates/claims.html
-        contains: "Direct PyPI installation is not claimed until pypi.org package availability evidence is verified"
+        path: docs/reports/PYPI_PUBLICATION_AND_DOCKER_PIP_CLOSEOUT_20260815.md
+        contains: "PyPI publish run: PASS"
 
   - id: pypi-package-installable
     text: Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users.
-    required: false
-    planned: true
+    required: true
     evidence:
-      type: file-contains
-      path: site/templates/quickstart.html
-      contains: "TestPyPI smoke evidence is separate and does not prove pypi.org availability"
+      - type: file-contains
+        path: docs/reports/PYPI_PUBLICATION_AND_DOCKER_PIP_CLOSEOUT_20260815.md
+        contains: "Fresh PyPI venv install: PASS"
+      - type: file-contains
+        path: docs/reports/PYPI_PUBLICATION_AND_DOCKER_PIP_CLOSEOUT_20260815.md
+        contains: "Docker PyPI install smoke: PASS"
 
   - id: command-manifest-synchronization
     text: The public command catalog is generated from the current command manifest and checked for synchronization.
