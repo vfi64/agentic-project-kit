@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 575a3dab73cda5e457e607007d2efb94d74dd2edc4ce0250444ed5a737b672de
 - docs/reference/agentic-kit-commands.json: 1255d53cf0194c9a83ea722d447a4642fec04a437c9bf4e3713cb617b2d22cb2
-## Operational documentation refresh state after PR #2109
+## Operational documentation refresh state after PR #2108
 
-Current administrative handoff refresh state is `2f65e872` (`Harden first-contact validation and PR closeout (#2109)`). Continue next only after this post-PR2109 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `166a24a5` (`Harden workspace remove and site fallback checks (#2108)`). Continue next only after this post-PR2108 refresh is committed and merged; the next substantive slice must be created from fresh main.
