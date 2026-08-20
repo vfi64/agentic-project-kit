@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7ee1df29f8d1aadd7eadeafcdf8463cd1c1cbb77
-  short: 7ee1df29
-  subject: Harden local Docker usage (#2100)
+  full: 2f65e872783cddf243183d98abf49c1af66da3cb
+  short: 2f65e872
+  subject: Harden first-contact validation and PR closeout (#2109)
 last_substantive_work_state:
-  full: 7ee1df29f8d1aadd7eadeafcdf8463cd1c1cbb77
-  short: 7ee1df29
-  subject: Harden local Docker usage (#2100)
+  full: 2f65e872783cddf243183d98abf49c1af66da3cb
+  short: 2f65e872
+  subject: Harden first-contact validation and PR closeout (#2109)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
