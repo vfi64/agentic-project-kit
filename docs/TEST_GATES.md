@@ -297,6 +297,15 @@ The fallback must be idempotent across post-merge handoff/status refreshes:
 volatile current-state details must render as pointers to `docs/STATUS.md` and
 `docs/handoff/CURRENT_HANDOFF.md`, not copied SHA or PR lines that would dirty
 the committed Pages projection after every administrative refresh.
+CI must run the docs Pages fallback pytest staleness check for pull requests.
+`tests/test_site_fallback_staleness.py` builds the fallback-equivalent `docs/site/`
+projection into a temporary directory and performs a byte-for-byte comparison
+against `docs/index.html`, `docs/.nojekyll`, and the committed `docs/site/`
+tree. A mismatch means the committed generated publication projection is stale;
+the repair is to run the fallback build locally and commit the updated docs
+output. No timestamp, current-commit, or post-merge-status fields are currently
+excluded from the comparison because the fallback uses the stable `docs-pages-fallback` build commit
+and pointer text for volatile repository state.
 The generated publication projection files `docs/index.html`, `docs/.nojekyll`
 and `docs/site/` must remain excluded from Python sdist and wheel artifacts
 together with the canonical `site/` generator tree.

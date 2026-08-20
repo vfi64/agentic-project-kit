@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from typer.testing import CliRunner
+import yaml
 
 from agentic_project_kit.cli import app
 from agentic_project_kit.workspace_remove import build_workspace_remove_plan
@@ -176,6 +177,57 @@ def test_workspace_remove_blocks_unknown_agentic_file(tmp_path: Path) -> None:
     )
 
 
+def test_workspace_remove_blocks_manifest_path_override_under_git(tmp_path: Path) -> None:
+    init = runner.invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
+    assert init.exit_code == 0, init.output
+    _set_workspace_path_override(tmp_path, "handoff_root", ".git/handoff")
+
+    plan = build_workspace_remove_plan(tmp_path)
+
+    assert plan.result_status == "BLOCKED"
+    assert not plan.files_to_remove
+    assert any(
+        item.path == ".git/handoff/START_NEW_CHAT_PROMPT.md"
+        and item.reason == "protected_git_path"
+        for item in plan.blockers
+    )
+
+
+def test_workspace_remove_blocks_manifest_path_override_with_parent_reference(tmp_path: Path) -> None:
+    init = runner.invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
+    assert init.exit_code == 0, init.output
+    _set_workspace_path_override(tmp_path, "handoff_root", "../outside/handoff")
+
+    plan = build_workspace_remove_plan(tmp_path)
+
+    assert plan.result_status == "BLOCKED"
+    assert not plan.files_to_remove
+    assert any(
+        item.path == "../outside/handoff/START_NEW_CHAT_PROMPT.md"
+        and item.reason == "parent_relative_remove_path"
+        for item in plan.blockers
+    )
+
+
+def test_workspace_remove_blocks_manifest_path_override_with_absolute_path(
+    tmp_path: Path,
+) -> None:
+    init = runner.invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
+    assert init.exit_code == 0, init.output
+    absolute_handoff = tmp_path.parent / "outside" / "handoff"
+    _set_workspace_path_override(tmp_path, "handoff_root", absolute_handoff.as_posix())
+
+    plan = build_workspace_remove_plan(tmp_path)
+
+    assert plan.result_status == "BLOCKED"
+    assert not plan.files_to_remove
+    assert any(
+        item.path == f"{absolute_handoff.as_posix()}/START_NEW_CHAT_PROMPT.md"
+        and item.reason == "absolute_remove_path"
+        for item in plan.blockers
+    )
+
+
 def test_workspace_remove_noops_without_workspace(tmp_path: Path) -> None:
     result = runner.invoke(
         app,
@@ -186,3 +238,10 @@ def test_workspace_remove_noops_without_workspace(tmp_path: Path) -> None:
     payload = json.loads(result.output)
     assert payload["result_status"] == "NOOP"
     assert payload["written"] is False
+
+
+def _set_workspace_path_override(root: Path, key: str, value: str) -> None:
+    manifest_path = root / ".agentic" / "config.yaml"
+    manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
+    manifest.setdefault("paths", {})[key] = value
+    manifest_path.write_text(yaml.safe_dump(manifest, sort_keys=False), encoding="utf-8")

@@ -553,6 +553,10 @@ rules:
     - legacy GitHub Pages source `main` `/docs`
     - idempotent across post-merge handoff/status refreshes
     - volatile current-state details
+    - docs Pages fallback pytest staleness check
+    - tests/test_site_fallback_staleness.py
+    - byte-for-byte comparison
+    - stable `docs-pages-fallback` build commit
     - excluded from Python sdist and wheel artifacts
   - path: site/README.md
     terms:
@@ -608,6 +612,10 @@ rules:
     - Legacy GitHub Pages source `/docs`
     - idempotent across post-merge handoff/status refreshes
     - volatile current-state details
+    - docs Pages fallback pytest staleness check
+    - tests/test_site_fallback_staleness.py
+    - byte-for-byte comparison
+    - stable `docs-pages-fallback` build commit
     - excluded from Python sdist and wheel artifacts
   - path: docs/TEST_GATES.md
     terms:

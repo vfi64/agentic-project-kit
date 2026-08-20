@@ -69,6 +69,14 @@ generated website while preserving `site/` as the canonical source and
 The fallback intentionally renders volatile current-state details as pointers to
 `docs/STATUS.md` and `docs/handoff/CURRENT_HANDOFF.md`; this keeps the committed
 Pages projection idempotent across post-merge handoff/status refreshes.
+CI enforces the docs Pages fallback pytest staleness check through
+`tests/test_site_fallback_staleness.py`. The test builds the fallback-equivalent
+`docs/site/` projection into a temporary directory and performs a byte-for-byte comparison
+against `docs/index.html`, `docs/.nojekyll`, and committed
+`docs/site/` files. No comparison exceptions are currently needed: the fallback
+uses the stable `docs-pages-fallback` build commit and pointer text for volatile
+repository state, so a mismatch means the generated docs output needs to be
+rebuilt and committed.
 
 S4d presentation keeps the public homepage generated from the same sources while
 adding clearer explanatory sections:

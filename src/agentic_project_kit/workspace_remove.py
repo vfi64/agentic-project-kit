@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Literal
 
 from agentic_project_kit.workspace import load_workspace
@@ -25,6 +25,8 @@ VOLATILE_RUNTIME_FILES = frozenset({".agentic/tmp/workspace.lock"})
 GENERATED_RUNTIME_FILE_MARKERS = {
     ".agentic/INITIAL_LLM_PROMPT.md": ("# Initial LLM Prompt", "Command manifest entrypoint:"),
 }
+ALLOWED_MANAGED_REPOSITORY_FILES = frozenset({".github/workflows/agentic-gate.yaml"})
+ALLOWED_MANAGED_ROOT_FILES = frozenset({PRE_COMMIT_INJECTION_TARGET})
 
 
 @dataclass(frozen=True)
@@ -67,6 +69,8 @@ class WorkspaceRemovePlan:
             "safety": {
                 "dry_run_default": True,
                 "removes_only_exact_kit_generated_files": True,
+                "validated_relative_remove_paths": True,
+                "protected_repository_paths_blocked": True,
                 "unknown_or_modified_paths_block_execute": True,
                 "does_not_remove_project_docs_or_source": True,
             },
@@ -159,6 +163,23 @@ def build_workspace_remove_plan(
                 break
             if parent_text.startswith(".agentic"):
                 known_directories.add(parent_text)
+
+    unsafe_plan_paths = _remove_plan_path_blockers(
+        file_paths=known_files,
+        directory_paths=known_directories,
+        managed_injection_paths=_managed_injection_targets(expected_files),
+    )
+    if unsafe_plan_paths:
+        return WorkspaceRemovePlan(
+            root=root_path,
+            execute=execute,
+            result_status="BLOCKED",
+            files_to_remove=(),
+            directories_to_prune=(),
+            blockers=unsafe_plan_paths,
+            ignored_paths=(),
+            message="workspace remove blocked by unsafe remove plan paths",
+        )
 
     files_to_remove: list[str] = []
     blockers: list[WorkspaceRemoveFinding] = []
@@ -308,6 +329,8 @@ def render_workspace_remove_plan(plan: WorkspaceRemovePlan, *, written: bool = F
             "Safety:",
             "- dry-run by default",
             "- removes only exact Kit-generated workspace files",
+            "- validates remove paths as relative workspace paths",
+            "- blocks repository control paths except exact managed injection targets",
             "- modified or unknown .agentic paths block execution",
             "- project docs and source files are preserved",
         ]
@@ -326,6 +349,55 @@ def _managed_injection_targets(expected_files: dict[str, str]) -> dict[str, str]
             MANAGED_PRE_COMMIT_HEADER + "\n" + expected_files[PRE_COMMIT_TEMPLATE_PATH]
         ),
     }
+
+
+def _remove_plan_path_blockers(
+    *,
+    file_paths: set[str],
+    directory_paths: set[str],
+    managed_injection_paths: dict[str, str],
+) -> tuple[WorkspaceRemoveFinding, ...]:
+    findings: list[WorkspaceRemoveFinding] = []
+    for path in sorted(file_paths):
+        blocker = _remove_plan_path_blocker(path, allow_managed_injection=False)
+        if blocker is not None:
+            findings.append(blocker)
+    for path in sorted(directory_paths):
+        blocker = _remove_plan_path_blocker(path, allow_managed_injection=False)
+        if blocker is not None:
+            findings.append(blocker)
+    for path in sorted(managed_injection_paths):
+        blocker = _remove_plan_path_blocker(path, allow_managed_injection=True)
+        if blocker is not None:
+            findings.append(blocker)
+    return tuple(findings)
+
+
+def _remove_plan_path_blocker(
+    path: str,
+    *,
+    allow_managed_injection: bool,
+) -> WorkspaceRemoveFinding | None:
+    candidate = PurePosixPath(path)
+    if not path or path == ".":
+        return WorkspaceRemoveFinding(path, "invalid_empty_remove_path")
+    if "\\" in path:
+        return WorkspaceRemoveFinding(path, "non_posix_remove_path")
+    if candidate.is_absolute():
+        return WorkspaceRemoveFinding(path, "absolute_remove_path")
+    if ".." in candidate.parts:
+        return WorkspaceRemoveFinding(path, "parent_relative_remove_path")
+    if candidate.parts[0] == ".git":
+        return WorkspaceRemoveFinding(path, "protected_git_path")
+    if candidate.parts[0] == ".github":
+        if allow_managed_injection and path in ALLOWED_MANAGED_REPOSITORY_FILES:
+            return None
+        return WorkspaceRemoveFinding(path, "protected_github_path")
+    if path in ALLOWED_MANAGED_ROOT_FILES:
+        return None
+    if path == ".agentic" or path.startswith(".agentic/"):
+        return None
+    return WorkspaceRemoveFinding(path, "unexpected_remove_path")
 
 
 def _generated_runtime_file_markers(workspace) -> dict[str, tuple[str, ...]]:
