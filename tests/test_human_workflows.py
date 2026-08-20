@@ -112,7 +112,7 @@ def test_work_finish_dry_run_requires_paths(monkeypatch):
     assert "path-selection" in payload["blockers"]
 
 
-def test_work_finish_execute_merge_uses_existing_pr_lifecycle_wrapper(monkeypatch):
+def test_work_finish_default_uses_existing_pr_lifecycle_wrapper(monkeypatch):
     calls: list[list[str]] = []
 
     def fake_run(argv, *args, **kwargs):
@@ -135,13 +135,15 @@ def test_work_finish_execute_merge_uses_existing_pr_lifecycle_wrapper(monkeypatc
             "Demo",
             "--path",
             "src/demo.py",
-            "--merge",
             "--execute",
             "--json",
         ],
     )
 
     assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["completion_mode"] == "merge_and_post_merge"
+    assert payload["post_merge_handoff"] == "handled_by_post_merge_complete"
     rules_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
     commit_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"])
     push_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "push-current"])
@@ -242,7 +244,7 @@ def test_work_finish_execute_blocks_before_commit_when_remote_preflight_fails(mo
     assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"] for call in calls)
 
 
-def test_work_finish_default_creates_open_pr_and_requires_pending_handoff_marker(monkeypatch):
+def test_work_finish_no_merge_creates_open_pr_and_requires_pending_handoff_marker(monkeypatch):
     calls: list[list[str]] = []
     expected_sha = "0123456789abcdef0123456789abcdef01234567"
 
@@ -300,6 +302,7 @@ def test_work_finish_default_creates_open_pr_and_requires_pending_handoff_marker
             "Demo",
             "--path",
             "src/demo.py",
+            "--no-merge",
             "--execute",
             "--json",
         ],

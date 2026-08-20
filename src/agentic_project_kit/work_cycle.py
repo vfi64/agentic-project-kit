@@ -65,7 +65,7 @@ _PHASE_DEFINITIONS: tuple[tuple[WorkPhase, str, str, str], ...] = (
         "finish",
         "Finish & publish",
         "agentic-kit work finish --dry-run/--execute --json",
-        "Preview, then publish the work commit, generated handoff, PR, and CI-guarded closeout markers.",
+        "Preview, then publish the work commit, generated handoff, PR, merge, and post-merge handoff closeout.",
     ),
     (
         "recover",
@@ -307,7 +307,7 @@ def build_work_finish_args(
     message: str,
     paths: tuple[ChangedPath, ...],
     execute: bool = False,
-    merge: bool = False,
+    merge: bool = True,
 ) -> tuple[str, ...]:
     args: list[str] = [
         "work",
@@ -322,8 +322,7 @@ def build_work_finish_args(
     for changed_path in paths:
         if changed_path.selected:
             args.extend(["--path", changed_path.path])
-    if merge:
-        args.append("--merge")
+    args.append("--merge" if merge else "--no-merge")
     args.append("--execute" if execute else "--dry-run")
     args.append("--json")
     return tuple(args)

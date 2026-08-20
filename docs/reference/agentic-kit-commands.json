@@ -16058,8 +16058,8 @@
           "secondary_opts": []
         },
         {
-          "default": false,
-          "help": "Open a review PR with explicit pending-handoff closeout markers by default. Use --merge only for an explicitly authorized merge and post-merge closeout.",
+          "default": true,
+          "help": "Run the full PR, merge, and post-merge handoff closeout by default. Use --no-merge only for an explicitly review-only PR.",
           "is_flag": true,
           "metavar": null,
           "multiple": false,
@@ -17626,7 +17626,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "afee1e1f7794",
+    "manifest_sha": "4a04dd52e8be",
     "schema_version": 1
   },
   "schema_version": 2,

@@ -420,11 +420,11 @@ def work_finish_command(
     paths: list[Path] | None = typer.Option(None, "--path", help="Path to include in the commit. Repeatable."),
     merge_method: str = typer.Option("squash", "--merge-method", help="PR merge method."),
     merge: bool = typer.Option(
-        False,
+        True,
         "--merge/--no-merge",
         help=(
-            "Open a review PR with explicit pending-handoff closeout markers by default. "
-            "Use --merge only for an explicitly authorized merge and post-merge closeout."
+            "Run the full PR, merge, and post-merge handoff closeout by default. "
+            "Use --no-merge only for an explicitly review-only PR."
         ),
     ),
     dry_run: bool = typer.Option(True, "--dry-run/--execute", help="Plan by default. Use --execute to commit, push, and publish."),
