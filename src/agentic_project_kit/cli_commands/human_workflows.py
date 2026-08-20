@@ -94,6 +94,8 @@ def _path_args(paths: list[Path]) -> list[str]:
 
 
 HANDOFF_CLOSEOUT_PATHS = [
+    Path("docs/handoff/START_NEW_CHAT_PROMPT.md"),
+    Path("docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"),
     Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md"),
     Path("docs/reports/handoff-packages/latest/execution_contract.json"),
     Path("docs/reports/handoff-packages/latest/source_manifest.json"),

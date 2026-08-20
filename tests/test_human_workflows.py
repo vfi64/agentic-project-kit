@@ -158,6 +158,9 @@ def test_work_finish_execute_merge_uses_existing_pr_lifecycle_wrapper(monkeypatc
         call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"]
         and "--message" in call
         and call[call.index("--message") + 1] == "Refresh handoff for Demo"
+        and "--path" in call
+        and "docs/handoff/START_NEW_CHAT_PROMPT.md" in call
+        and "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md" in call
         for call in calls
     )
 
@@ -326,6 +329,9 @@ def test_work_finish_default_creates_open_pr_and_requires_pending_handoff_marker
         call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"]
         and "--message" in call
         and call[call.index("--message") + 1] == "Refresh handoff for Demo"
+        and "--path" in call
+        and "docs/handoff/START_NEW_CHAT_PROMPT.md" in call
+        and "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md" in call
         for call in calls
     )
     pr_create_call = next(call for call in calls if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create"])
