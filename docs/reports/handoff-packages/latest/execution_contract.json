@@ -1,13 +1,13 @@
 {
   "command_reference": {
-    "ack": "COMMAND_MANIFEST_ACK 109e6c65b4a3",
+    "ack": "COMMAND_MANIFEST_ACK afee1e1f7794",
     "json": "docs/reference/agentic-kit-commands.json",
-    "manifest_sha": "109e6c65b4a3",
+    "manifest_sha": "afee1e1f7794",
     "markdown": "docs/reference/AGENTIC_KIT_COMMANDS.md",
     "must_not_reconstruct_commands_from_memory": true,
     "source_hashes": {
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "a917d30d609bd55344339c052a43cd51e8429ae5c93716f37c1706bed1179f3a",
-      "docs/reference/agentic-kit-commands.json": "0ea9ae27676abf359c1810c09a3c7c7190eb8656474e5e42b103a32a255ed763"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "ead90c21b778a2c31a1de72e137b4d94bc480be9f2baac2a57acd529b7575dfb",
+      "docs/reference/agentic-kit-commands.json": "965923f3292b2711e6245ebc5bb56fd01bb0692a2b2e3e0a8769c4f9caf64681"
     }
   },
   "current_state_contract": {
@@ -272,7 +272,7 @@
       "branch": "codex/first-contact-closeout-validation",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "abd2ce76365653082b11536c662c210ff2243921",
+      "head": "c1ed4e1fbb4474a9a0ccb2afbe473d25401dccb3",
       "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "02cdf27b749f7aa4f8b784f53c49f8b9441e6e15",
@@ -424,7 +424,7 @@
     "branch": "codex/first-contact-closeout-validation",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "abd2ce76365653082b11536c662c210ff2243921",
+    "head": "c1ed4e1fbb4474a9a0ccb2afbe473d25401dccb3",
     "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "02cdf27b749f7aa4f8b784f53c49f8b9441e6e15",
@@ -650,8 +650,8 @@
   ],
   "schema_version": 1,
   "source_hashes": {
-    "docs/reference/AGENTIC_KIT_COMMANDS.md": "a917d30d609bd55344339c052a43cd51e8429ae5c93716f37c1706bed1179f3a",
-    "docs/reference/agentic-kit-commands.json": "0ea9ae27676abf359c1810c09a3c7c7190eb8656474e5e42b103a32a255ed763"
+    "docs/reference/AGENTIC_KIT_COMMANDS.md": "ead90c21b778a2c31a1de72e137b4d94bc480be9f2baac2a57acd529b7575dfb",
+    "docs/reference/agentic-kit-commands.json": "965923f3292b2711e6245ebc5bb56fd01bb0692a2b2e3e0a8769c4f9caf64681"
   },
   "validation": {
     "path": ".agentic/successor_handoff_package/validation_report.json",
