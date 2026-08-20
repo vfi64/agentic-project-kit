@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f301012121bd5dda75ca7a434bf309ca5f54e2e9
-  short: f3010121
-  subject: Add decomplexification audit roadmap (#2106)
+  full: 8cd7a5cfee2d7176797fd6335492d0c890de9999
+  short: 8cd7a5cf
+  subject: Prepare v1.0.2 safety release (#2113)
 last_substantive_work_state:
-  full: f301012121bd5dda75ca7a434bf309ca5f54e2e9
-  short: f3010121
-  subject: Add decomplexification audit roadmap (#2106)
+  full: 8cd7a5cfee2d7176797fd6335492d0c890de9999
+  short: 8cd7a5cf
+  subject: Prepare v1.0.2 safety release (#2113)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
