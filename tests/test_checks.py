@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import warnings
 
 from typer.testing import CliRunner
 
@@ -14,6 +15,45 @@ from agentic_project_kit.checks import (
     check_state_gate_docs,
     check_todo,
 )
+
+
+def test_check_commands_share_controlled_non_workspace_semantics(tmp_path: Path):
+    doc_errors = check_docs(tmp_path)
+    todo_errors = check_todo(tmp_path)
+    all_errors = check_all(tmp_path)
+
+    assert doc_errors == todo_errors == all_errors
+    assert len(all_errors) == 1
+    assert "not an Agentic Project Kit workspace" in all_errors[0]
+    assert "agentic-kit init NAME" in all_errors[0]
+    assert "sentinel.yaml" not in all_errors[0]
+
+
+def test_check_cli_reports_non_workspace_without_traceback(tmp_path: Path):
+    result = CliRunner().invoke(app, ["check", "--root", str(tmp_path), "--json"])
+
+    assert result.exit_code == 1
+    payload = json.loads(result.output)
+    assert payload["status"] == "FAIL"
+    assert payload["context"]["mode"] == "non_workspace"
+    assert payload["context"]["gate_family"] == "none"
+    assert payload["errors"] == check_all(tmp_path)
+    assert "FileNotFoundError" not in result.output
+
+
+def test_check_all_generated_project_contract_does_not_emit_legacy_warning(tmp_path: Path):
+    _write_generated_project_contract(tmp_path)
+    _write_valid_state_gate_docs(tmp_path)
+    (tmp_path / "README.md").write_text("# Demo\nrequired-term\n", encoding="utf-8")
+    (tmp_path / "sentinel.yaml").write_text("todo:\n  path: .agentic/todo.yaml\n", encoding="utf-8")
+    (tmp_path / ".agentic/todo.yaml").write_text("items: []\n", encoding="utf-8")
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        errors = check_all(tmp_path)
+
+    assert errors == []
+    assert not any("implicit legacy profile" in str(item.message) for item in caught)
 
 
 def test_check_docs_reports_missing_section(tmp_path: Path):
@@ -416,6 +456,27 @@ profile: python-default
     )
     (project_root / ".agentic/registries/documentation.yaml").write_text("version: 1\n", encoding="utf-8")
     (project_root / ".agentic/registries/rules.yaml").write_text("version: 1\n", encoding="utf-8")
+
+
+def _write_generated_project_contract(project_root: Path) -> None:
+    (project_root / ".agentic").mkdir(parents=True, exist_ok=True)
+    (project_root / ".agentic/project.yaml").write_text(
+        """
+version: 1
+project:
+  name: generated-demo
+  description: Generated demo
+  type: python-cli
+profiles:
+  - generic-git-repo
+  - python-cli
+policy_packs:
+  - starter
+governance:
+  created_by: agentic-project-kit
+""",
+        encoding="utf-8",
+    )
 
 
 def _write_documentation_registry(project_root: Path) -> None:

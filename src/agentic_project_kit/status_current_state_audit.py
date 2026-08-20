@@ -103,6 +103,7 @@ def audit_status_current_state(
     pyproject_version = _project_version(root)
     status_text = _read_text(root / "docs" / "STATUS.md")
     validation = _read_json(root / "docs" / "reports" / "handoff-packages" / "latest" / "validation_report.json")
+    successor_context = _read_json(root / "docs" / "reports" / "handoff-packages" / "latest" / "successor_context.yaml")
     current_block = _current_state_block(status_text)
     status_version = _match(r"^Current version:\s*([^\s.]+(?:\.[^\s.]+){2})\.?$", current_block)
     status_release = _match(r"^Current verified release:\s*v?([0-9]+\.[0-9]+\.[0-9]+)\.?", current_block)
@@ -167,6 +168,8 @@ def audit_status_current_state(
         current_block=current_block,
         status_main=status_main,
         validation_head=validation_head,
+        successor_context=successor_context,
+        origin_main=origin_main,
         release_current_state=release_current_state,
     )
     _finding(
@@ -192,6 +195,7 @@ def audit_status_current_state(
         blockers=blockers,
         warnings=warnings,
         validation_head=validation_head,
+        successor_context=successor_context,
         origin_main=origin_main,
         release_current_state=release_current_state,
         max_origin_lag=max_origin_lag,
@@ -502,6 +506,8 @@ def _audit_status_main_marker(
     current_block: str,
     status_main: str | None,
     validation_head: str | None,
+    successor_context: dict[str, Any],
+    origin_main: str | None,
     release_current_state: str | None,
 ) -> None:
     live_text = status_text.split("## Historical State Snapshots", 1)[0]
@@ -560,6 +566,15 @@ def _audit_status_main_marker(
         run_git,
         status_main=status_main,
         validation_head=validation_head,
+    ):
+        matches_validation = True
+    if not matches_validation and _is_feature_branch_handoff_validation_head(
+        root,
+        run_git,
+        successor_context=successor_context,
+        status_main=status_main,
+        validation_head=validation_head,
+        origin_main=origin_main,
     ):
         matches_validation = True
     _finding(
@@ -635,6 +650,72 @@ def _is_bounded_admin_refresh_validation_head(
         return False
 
 
+def _is_feature_branch_handoff_validation_head(
+    root: Path,
+    run_git: GitRunner,
+    *,
+    successor_context: dict[str, Any],
+    status_main: str | None,
+    validation_head: str | None,
+    origin_main: str | None,
+) -> bool:
+    if not status_main or not validation_head or not origin_main:
+        return False
+    if not _successor_context_declares_feature_branch(
+        successor_context,
+        validation_head=validation_head,
+        origin_main=origin_main,
+    ):
+        return False
+    if not _status_main_matches_origin_or_bounded_admin_refresh(
+        root,
+        run_git,
+        status_main=status_main,
+        origin_main=origin_main,
+    ):
+        return False
+    descendant = run_git(root, ("merge-base", "--is-ancestor", origin_main, validation_head))
+    return descendant.returncode == 0
+
+
+def _successor_context_declares_feature_branch(
+    successor_context: dict[str, Any],
+    *,
+    validation_head: str,
+    origin_main: str,
+) -> bool:
+    repo = successor_context.get("repo")
+    if not isinstance(repo, dict):
+        return False
+    branch = _string_or_none(repo.get("branch"))
+    context_head = _string_or_none(repo.get("head"))
+    context_origin_main = _string_or_none(repo.get("origin_main"))
+    if not branch or branch in {"main", "master"}:
+        return False
+    if context_head != validation_head:
+        return False
+    if context_origin_main != origin_main:
+        return False
+    return repo.get("head_matches_origin_main") is False
+
+
+def _status_main_matches_origin_or_bounded_admin_refresh(
+    root: Path,
+    run_git: GitRunner,
+    *,
+    status_main: str,
+    origin_main: str,
+) -> bool:
+    if origin_main.startswith(status_main):
+        return True
+    return _is_bounded_admin_refresh_validation_head(
+        root,
+        run_git,
+        status_main=status_main,
+        validation_head=origin_main,
+    )
+
+
 def _is_admin_refresh_merge_subject(subject: str) -> bool:
     return (
         subject.startswith("Refresh handoff state after PR")
@@ -657,6 +738,7 @@ def _audit_origin_main(
     blockers: list[StatusCurrentStateFinding],
     warnings: list[StatusCurrentStateFinding],
     validation_head: str | None,
+    successor_context: dict[str, Any],
     origin_main: str | None,
     release_current_state: str | None,
     max_origin_lag: int,
@@ -672,7 +754,12 @@ def _audit_origin_main(
     if not validation_head or not origin_main:
         return
     ancestor = run_git(root, ("merge-base", "--is-ancestor", validation_head, origin_main))
-    if ancestor.returncode != 0 and release_current_state == "prepared":
+    feature_branch_handoff = _successor_context_declares_feature_branch(
+        successor_context,
+        validation_head=validation_head,
+        origin_main=origin_main,
+    )
+    if ancestor.returncode != 0 and (release_current_state == "prepared" or feature_branch_handoff):
         descendant = run_git(root, ("merge-base", "--is-ancestor", origin_main, validation_head))
         if descendant.returncode == 0:
             _finding(
@@ -683,7 +770,9 @@ def _audit_origin_main(
                 True,
                 (
                     f"validation_head={validation_head}, origin_main={origin_main}, "
-                    "release_state=prepared, validation_head_descends_from_origin_main=True"
+                    f"release_state={release_current_state}, "
+                    f"feature_branch_handoff={feature_branch_handoff}, "
+                    "validation_head_descends_from_origin_main=True"
                 ),
             )
             return

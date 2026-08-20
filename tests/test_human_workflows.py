@@ -112,7 +112,7 @@ def test_work_finish_dry_run_requires_paths(monkeypatch):
     assert "path-selection" in payload["blockers"]
 
 
-def test_work_finish_execute_uses_existing_pr_lifecycle_wrapper(monkeypatch):
+def test_work_finish_default_uses_existing_pr_lifecycle_wrapper(monkeypatch):
     calls: list[list[str]] = []
 
     def fake_run(argv, *args, **kwargs):
@@ -141,7 +141,316 @@ def test_work_finish_execute_uses_existing_pr_lifecycle_wrapper(monkeypatch):
     )
 
     assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["completion_mode"] == "merge_and_post_merge"
+    assert payload["post_merge_handoff"] == "handled_by_post_merge_complete"
+    rules_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
+    commit_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"])
+    push_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "push-current"])
+    post_commit_rules_index = next(
+        index
+        for index, call in enumerate(calls)
+        if call[:3] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"] and index > commit_index
+    )
+    assert rules_index < commit_index
+    assert commit_index < post_commit_rules_index < push_index
     assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"] for call in calls)
+    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "chat-switch-complete"] for call in calls)
+    assert any(
+        call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"]
+        and "--message" in call
+        and call[call.index("--message") + 1] == "Refresh handoff for Demo"
+        and "--path" in call
+        and "docs/handoff/START_NEW_CHAT_PROMPT.md" in call
+        and "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md" in call
+        for call in calls
+    )
+
+
+def test_work_finish_blocks_before_commit_when_rules_acknowledge_fails(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:3] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"]:
+            return _completed(command, stdout='{"result_status": "BLOCKED"}\n', returncode=2)
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "work",
+            "finish",
+            "--branch",
+            "codex/demo",
+            "--title",
+            "Demo",
+            "--message",
+            "Demo",
+            "--path",
+            "src/demo.py",
+            "--execute",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "BLOCKED"
+    assert "rules-acknowledge" in payload["blockers"]
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"] for call in calls)
+
+
+def test_work_finish_execute_blocks_before_commit_when_remote_preflight_fails(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return _completed(command, stderr="Could not resolve host: github.com\n", returncode=128)
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "work",
+            "finish",
+            "--branch",
+            "codex/demo",
+            "--title",
+            "Demo",
+            "--message",
+            "Demo",
+            "--path",
+            "src/demo.py",
+            "--execute",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "BLOCKED"
+    assert "remote-preflight" in payload["blockers"]
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"] for call in calls)
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"] for call in calls)
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "push-current"] for call in calls)
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"] for call in calls)
+
+
+def test_work_finish_no_merge_creates_open_pr_and_requires_pending_handoff_marker(monkeypatch):
+    calls: list[list[str]] = []
+    expected_sha = "0123456789abcdef0123456789abcdef01234567"
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "rev-parse", "HEAD"]:
+            return _completed(command, stdout=f"{expected_sha}\n")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create"]:
+            return _completed(
+                command,
+                stdout=json.dumps(
+                    {
+                        "result_status": "PASS",
+                        "stdout": "https://github.com/vfi64/agentic-project-kit/pull/2140\n",
+                    }
+                )
+                + "\n",
+            )
+        if command[:3] == ["gh", "pr", "view"]:
+            return _completed(
+                command,
+                stdout=json.dumps(
+                    {
+                        "number": 2140,
+                        "state": "OPEN",
+                        "isDraft": True,
+                        "headRefOid": expected_sha,
+                        "body": (
+                            "## Open PR Closeout / Handoff\n\n"
+                            "- Open PR closeout: final-head CI must be green before review or merge.\n"
+                            "- Post-merge handoff: pending until this PR is merged.\n"
+                            "- After merge: run `agentic-kit transfer post-merge-complete --after-pr` "
+                            "with the concrete PR number.\n"
+                        ),
+                        "url": "https://github.com/vfi64/agentic-project-kit/pull/2140",
+                    }
+                )
+                + "\n",
+            )
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "work",
+            "finish",
+            "--branch",
+            "codex/demo",
+            "--title",
+            "Demo",
+            "--message",
+            "Demo",
+            "--path",
+            "src/demo.py",
+            "--no-merge",
+            "--execute",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["completion_mode"] == "open_pr_pending_handoff"
+    assert payload["post_merge_handoff"] == "pending_until_merge"
+    assert payload["pr_number"] == 2140
+    assert payload["expected_head_sha"] == expected_sha
+    assert "post-merge handoff remains pending until merge" in payload["next_action"]
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"] for call in calls)
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] for call in calls)
+    rules_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
+    commit_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"])
+    push_index = next(index for index, call in enumerate(calls) if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "push-current"])
+    post_commit_rules_index = next(
+        index
+        for index, call in enumerate(calls)
+        if call[:3] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"] and index > commit_index
+    )
+    assert rules_index < commit_index
+    assert commit_index < post_commit_rules_index < push_index
+    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "chat-switch-complete"] for call in calls)
+    assert any(
+        call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"]
+        and "--message" in call
+        and call[call.index("--message") + 1] == "Refresh handoff for Demo"
+        and "--path" in call
+        and "docs/handoff/START_NEW_CHAT_PROMPT.md" in call
+        and "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md" in call
+        for call in calls
+    )
+    pr_create_call = next(call for call in calls if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create"])
+    body = pr_create_call[pr_create_call.index("--body") + 1]
+    assert "## Open PR Closeout / Handoff" in body
+    assert "Post-merge handoff: pending until this PR is merged." in body
+    assert "post-merge-complete --after-pr <PR_NUMBER>" in body
+    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"] for call in calls)
+    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-status"] for call in calls)
+    assert any(call[:3] == ["gh", "pr", "view"] for call in calls)
+
+
+def test_work_finish_no_merge_blocks_when_open_pr_closeout_marker_is_missing(monkeypatch):
+    expected_sha = "0123456789abcdef0123456789abcdef01234567"
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "rev-parse", "HEAD"]:
+            return _completed(command, stdout=f"{expected_sha}\n")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create"]:
+            return _completed(
+                command,
+                stdout=json.dumps(
+                    {
+                        "result_status": "PASS",
+                        "stdout": "https://github.com/vfi64/agentic-project-kit/pull/2140\n",
+                    }
+                )
+                + "\n",
+            )
+        if command[:3] == ["gh", "pr", "view"]:
+            return _completed(
+                command,
+                stdout=json.dumps(
+                    {
+                        "number": 2140,
+                        "state": "OPEN",
+                        "isDraft": True,
+                        "headRefOid": expected_sha,
+                        "body": "No closeout marker here.",
+                    }
+                )
+                + "\n",
+            )
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "work",
+            "finish",
+            "--branch",
+            "codex/demo",
+            "--title",
+            "Demo",
+            "--message",
+            "Demo",
+            "--path",
+            "src/demo.py",
+            "--no-merge",
+            "--execute",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "BLOCKED"
+    assert "open-pr-closeout" in payload["blockers"]
+    marker_step = next(step for step in payload["steps"] if step["name"] == "open-pr-closeout")
+    assert "missing_body_term:## Open PR Closeout / Handoff" in marker_step["stdout"]
+
+
+def test_work_finish_no_merge_does_not_wait_for_ci_after_pr_create_failure(monkeypatch):
+    calls: list[list[str]] = []
+    expected_sha = "0123456789abcdef0123456789abcdef01234567"
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "rev-parse", "HEAD"]:
+            return _completed(command, stdout=f"{expected_sha}\n")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create"]:
+            return _completed(command, stdout="https://github.com/vfi64/agentic-project-kit/pull/2140\n", returncode=1)
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "work",
+            "finish",
+            "--branch",
+            "codex/demo",
+            "--title",
+            "Demo",
+            "--message",
+            "Demo",
+            "--path",
+            "src/demo.py",
+            "--no-merge",
+            "--execute",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "BLOCKED"
+    assert "pr-create" in payload["blockers"]
+    assert payload["pr_number"] is None
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"] for call in calls)
+    assert not any(call[:3] == ["gh", "pr", "view"] for call in calls)
 
 
 def test_work_recover_runs_recovery_wrappers(monkeypatch):

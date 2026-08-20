@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import shutil
 import subprocess
 
 import typer
@@ -19,6 +20,12 @@ from agentic_project_kit.models import ProjectOptions
 from agentic_project_kit.templates import create_project
 
 console = Console()
+
+GIT_REQUIRED_MESSAGE = (
+    "Git is required for `agentic-kit init` because generated projects are initialized "
+    "as Git repositories. Install Git and retry; pip cannot install this system "
+    "prerequisite portably."
+)
 
 
 def register_init_command(app: typer.Typer) -> None:
@@ -66,6 +73,7 @@ def init_command(
         raise typer.BadParameter("visibility must be private or public")
     if kit_source not in {"pypi", "testpypi", "none"}:
         raise typer.BadParameter("kit source must be pypi, testpypi, or none")
+    _require_git_available()
 
     selected_profiles = _parse_csv(profiles) or default_profiles(
         project_type,
@@ -131,6 +139,13 @@ def _parse_csv(value: str | None) -> tuple[str, ...]:
     return tuple(item.strip() for item in value.split(",") if item.strip())
 
 
+def _require_git_available() -> None:
+    if shutil.which("git") is not None:
+        return
+    console.print(f"[bold red]{GIT_REQUIRED_MESSAGE}[/bold red]")
+    raise typer.Exit(code=2)
+
+
 def _create_initial_git_commit(target: Path) -> None:
     add = _run_git(target, "add", ".")
     if add.returncode != 0:
@@ -143,14 +158,21 @@ def _create_initial_git_commit(target: Path) -> None:
 
 
 def _run_git(target: Path, *args: str) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
-        ["git", *args],
-        cwd=target,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        check=False,
-    )
+    try:
+        return subprocess.run(
+            ["git", *args],
+            cwd=target,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=False,
+        )
+    except FileNotFoundError:
+        return subprocess.CompletedProcess(
+            ["git", *args],
+            127,
+            GIT_REQUIRED_MESSAGE,
+        )
 
 
 def _warn_initial_commit_not_created(reason: str, output: str) -> None:

@@ -4,6 +4,8 @@ These commands provide a small human-facing layer over the lower-level agentic-k
 
 The meta commands are intentionally conservative:
 - work finish is dry-run by default.
+- work finish executes the full four-part slice closeout by default after `--execute`: work commit, handoff commit, PR/CI/merge, and post-merge handoff refresh PR.
+- review-only PR publishing is an explicit opt-out with `--no-merge`.
 - release prepare is dry-run by default.
 - release version values are supplied by the caller.
 - previous release tags are derived from the latest local v* git tag unless explicitly supplied.
@@ -32,13 +34,18 @@ Typical use:
 
 ## agentic-kit work finish
 
-Finish a slice. It plans by default.
+Finish a slice. It plans by default. On execution it commits selected work,
+refreshes and commits the generated successor handoff package, pushes the
+branch, opens the PR, waits for CI, merges, and runs the post-merge handoff
+refresh closeout.
 
 Typical use:
 
     agentic-kit work finish --branch codex/my-slice --title "My slice" --message "My slice" --path src/file.py --dry-run --json
 
 Use --execute only after reviewing the plan and selected paths.
+Use --no-merge only when the intended result is an open review PR with pending
+post-merge handoff markers.
 
 ## agentic-kit work recover
 

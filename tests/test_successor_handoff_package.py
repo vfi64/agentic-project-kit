@@ -612,6 +612,46 @@ def test_successor_package_refresh_does_not_rewrite_start_new_chat_prompt(tmp_pa
     assert (tmp_path / package.DEFAULT_PACKAGE_DIR / "execution_contract.json").exists()
 
 
+def test_successor_package_refresh_updates_start_prompt_command_reference_block(tmp_path, monkeypatch) -> None:
+    from agentic_project_kit import successor_handoff_package as package
+
+    def fake_git(_root, args):
+        if args == ["rev-parse", "HEAD"]:
+            return "abc123"
+        if args == ["rev-parse", "origin/main"]:
+            return "abc123"
+        if args == ["status", "--short"]:
+            return ""
+        if args == ["branch", "--show-current"]:
+            return "main"
+        return "UNKNOWN"
+
+    monkeypatch.setattr(package, "_run_git", fake_git)
+    _seed_successor_long_term_sources(tmp_path)
+
+    start_prompt = tmp_path / "docs" / "handoff" / "START_NEW_CHAT_PROMPT.md"
+    start_prompt.parent.mkdir(parents=True, exist_ok=True)
+    start_prompt.write_text(
+        "KEEP EXISTING START PROMPT\n\n"
+        "Command manifest entrypoint:\n"
+        "- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: stale). "
+        "Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK stale.\n\n"
+        "## Preserved Section\n\n"
+        "Keep this local start prompt tail.\n",
+        encoding="utf-8",
+    )
+
+    result = package.write_successor_handoff_package(tmp_path, update_canonical_prompts=True)
+    text = start_prompt.read_text(encoding="utf-8")
+
+    assert result.validation_report["status"] == "PASS"
+    assert text.startswith("KEEP EXISTING START PROMPT\n\n")
+    assert "COMMAND_MANIFEST_ACK stale" not in text
+    assert "COMMAND_MANIFEST_ACK" in text
+    assert "Command reference contract:" in text
+    assert "## Preserved Section\n\nKeep this local start prompt tail.\n" in text
+
+
 def test_bootstrap_acceptance_gate_is_projected_into_package_files() -> None:
     from agentic_project_kit.successor_handoff_package import build_successor_handoff_package
 

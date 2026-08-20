@@ -66,7 +66,7 @@
         </article>
         <article>
           <span>Manifest</span>
-          <strong>699a4acf0634</strong>
+          <strong>4a04dd52e8be</strong>
         </article>
       </section>
 
@@ -79,8 +79,8 @@
         <article class="panel" id="install">
           <p class="eyebrow">Install</p>
           <h2>Start Locally</h2>
-          <p><code>python -m pip install "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"</code></p>
-          <p>The direct PyPI command is not claimed until package publication evidence is verified. After installation, run <code>agentic-kit --version</code>, then choose <code>agentic-kit init</code> for a new governed repository or <code>agentic-kit workspace adopt</code> for an existing one.</p>
+          <p><code>python -m pip install agentic-project-kit</code></p>
+          <p>The public PyPI package is available. Git is still a system prerequisite for <code>agentic-kit init</code> and Git-backed workflows; <code>pip</code> cannot install Git portably. After installation, run <code>agentic-kit --version</code>, then choose <code>agentic-kit init</code> for a new governed repository or <code>agentic-kit workspace adopt</code> for an existing one.</p>
           <p><a href="quickstart/index.html">Generated quickstart</a> · <a href="https://github.com/vfi64/agentic-project-kit/blob/main/docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md">Brownfield guide</a></p>
         </article>
         <article class="panel">
@@ -100,11 +100,11 @@
         <dl class="compact-details">
           <div>
             <dt>Manifest identity</dt>
-            <dd><code>699a4acf0634</code></dd>
+            <dd><code>4a04dd52e8be</code></dd>
           </div>
           <div>
             <dt>Reproduced manifest</dt>
-            <dd><code>699a4acf0634</code></dd>
+            <dd><code>4a04dd52e8be</code></dd>
           </div>
           <div>
             <dt>Identity verified</dt>
@@ -121,9 +121,9 @@
         <a href="commands/guided.html">Guided commands <strong>31</strong></a>
         <a href="commands/diagnostics.html">Diagnostics <strong>119</strong></a>
         <a href="commands/index.html">Complete reference <strong>251</strong></a>
-        <a href="claims/index.html">Verified claims <strong>12</strong></a>
+        <a href="claims/index.html">Verified claims <strong>13</strong></a>
         <a href="claims/index.html">Unverified claims <strong>0</strong></a>
-        <a href="claims/index.html">Planned claims <strong>1</strong></a>
+        <a href="claims/index.html">Planned claims <strong>0</strong></a>
       </section>
 
       <section class="section-grid" aria-label="Command surface">
@@ -180,7 +180,8 @@
           <li><code>command-manifest-synchronization</code><span>The public command catalog is generated from the current command manifest and checked for synchronization.</span></li>
           <li><code>generated-command-catalog</code><span>The website command catalog is generated from the Kit&#x27;s current command manifest.</span></li>
           <li><code>package-version</code><span>The website package version is projected from pyproject.toml.</span></li>
-          <li><code>public-source-install-documented</code><span>The public install path currently points to the GitHub source projection instead of claiming an unpublished PyPI package.</span></li>
+          <li><code>public-source-install-documented</code><span>The GitHub source projection remains documented for unreleased fixes and Kit development.</span></li>
+          <li><code>pypi-package-installable</code><span>Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users.</span></li>
           <li><code>python-requirement</code><span>The website Python requirement is projected from pyproject.toml.</span></li>
           </ul>
         </article>
@@ -189,7 +190,7 @@
           <ul class="summary-list">
           <li><code>artifact-gc-dry-run</code><span>agentic-kit artifact-gc supports dry-run behavior.</span></li>
           <li><code>gui-entry-point</code><span>The package provides the agentic-kit-gui graphical entry point.</span></li>
-          <li><code>pypi-trusted-publishing-ready</code><span>PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths, but direct PyPI installation remains unclaimed until pypi.org publication evidence exists.</span></li>
+          <li><code>pypi-trusted-publishing-ready</code><span>PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths.</span></li>
           <li><code>successor-handoff-package</code><span>The Kit can produce a structured successor handoff package for continuing work in another session or model.</span></li>
           <li><code>workspace-adopt-read-only</code><span>agentic-kit workspace adopt inspects without writing.</span></li>
           <li><code>workspace-init-preview-execute</code><span>agentic-kit workspace init previews changes before explicit execution.</span></li>
@@ -198,7 +199,7 @@
         <article>
           <h3>Planned</h3>
           <ul class="summary-list">
-          <li><code>pypi-package-installable</code><span>Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users.</span></li>
+          <li>No planned public claims are currently declared.</li>
           </ul>
         </article>
         <article>
@@ -206,7 +207,7 @@
           <ul class="summary-list">
             <li><span>Global DPA conformance for arbitrary foreign repositories is not claimed.</span></li>
             <li><span>Remote target-CI validation is not claimed when the target repository reports no checks; remote adoption PR mechanics are separate from target-owned CI evidence.</span></li>
-            <li><span>Direct PyPI installation is not claimed until PyPI package availability evidence is verified.</span></li>
+            <li><span>Post-fix PyPI validation is not claimed until a later package is published and installed again from PyPI.</span></li>
             <li><span>Full GUI parity with every CLI command is not claimed.</span></li>
             <li><span>Live GitHub Pages publication depends on either GitHub Actions Pages deployment or the generated docs-source fallback being current.</span></li>
           </ul>
@@ -233,7 +234,7 @@
           </div>
           <div>
             <dt>Required claims</dt>
-            <dd><code>6</code></dd>
+            <dd><code>7</code></dd>
           </div>
         </dl>
       </section>

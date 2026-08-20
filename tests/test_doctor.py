@@ -1,4 +1,5 @@
 from pathlib import Path
+import warnings
 
 import yaml
 
@@ -131,6 +132,37 @@ def _write_documentation_registry(root: Path, documents: list[dict[str, str]]) -
     path = root / REGISTRY_PATH
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(yaml.safe_dump(registry, sort_keys=False), encoding="utf-8")
+
+
+def test_doctor_report_identifies_empty_directory_as_non_workspace(tmp_path: Path):
+    report = build_doctor_report(tmp_path)
+
+    assert not report.ok
+    assert len(report.checks) == 1
+    assert report.checks[0].name == "workspace"
+    assert report.checks[0].status == DoctorStatus.FAIL
+    assert "not an Agentic Project Kit workspace" in report.checks[0].detail
+    assert "agentic-kit init NAME" in report.checks[0].detail
+    rendered = render_doctor_report(report)
+    assert "[FAIL] workspace" in rendered
+    assert "Overall: FAIL" in rendered
+
+
+def test_doctor_report_skips_operating_layer_manifest_for_generated_project(tmp_path: Path):
+    _write_readme(tmp_path)
+    _write_agent_docs(tmp_path)
+    _write_state_docs(tmp_path)
+    _write_project_contract(tmp_path, policy_packs=("starter",))
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        report = build_doctor_report(tmp_path)
+
+    assert report.ok
+    assert _check_by_name(report, "workspace manifest").status == DoctorStatus.SKIP
+    assert _check_by_name(report, "workspace schema").status == DoctorStatus.SKIP
+    assert ".agentic/project.yaml" in _check_by_name(report, "workspace manifest").detail
+    assert not any("implicit legacy profile" in str(item.message) for item in caught)
 
 
 def test_doctor_report_passes_with_minimal_state_docs(tmp_path: Path):

@@ -1684,6 +1684,24 @@ def load_successor_context(path: Path | str) -> dict[str, Any]:
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
+def _refresh_existing_start_prompt_reference_block(existing: str, generated: str) -> str:
+    marker = "Command manifest entrypoint:\n"
+    if marker not in existing or marker not in generated:
+        return existing
+    existing_start = existing.index(marker)
+    generated_start = generated.index(marker)
+    existing_end = _next_markdown_section_index(existing, existing_start + len(marker))
+    generated_end = _next_markdown_section_index(generated, generated_start + len(marker))
+    return existing[:existing_start] + generated[generated_start:generated_end] + existing[existing_end:]
+
+
+def _next_markdown_section_index(text: str, start: int) -> int:
+    next_section = text.find("\n## ", start)
+    if next_section == -1:
+        return len(text)
+    return next_section + 1
+
+
 def _build_successor_handoff_package(root_path: Path, ws: Workspace) -> SuccessorPackageResult:
     context = _build_context(root_path, ws)
     source_manifest = _source_manifest(root_path, ws)
@@ -1753,8 +1771,14 @@ def write_successor_handoff_package(
         ]
         # START_NEW_CHAT_PROMPT is protected against broad generator replacement.
         # A fresh external workspace still needs its initial paired prompt, but
-        # existing start prompts remain dedicated-update-only.
-        if not start_prompt_path.exists():
+        # existing start prompts receive only the command-reference block refresh
+        # that prevents stale command manifest ACK drift.
+        if start_prompt_path.exists():
+            existing = start_prompt_path.read_text(encoding="utf-8")
+            refreshed = _refresh_existing_start_prompt_reference_block(existing, result.start_new_chat_prompt)
+            if refreshed != existing:
+                canonical_prompts.append((ws.handoff_file("START_NEW_CHAT_PROMPT.md"), refreshed))
+        else:
             canonical_prompts.append((ws.handoff_file("START_NEW_CHAT_PROMPT.md"), result.start_new_chat_prompt))
         for rel, text in canonical_prompts:
             path = root_path / rel

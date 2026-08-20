@@ -200,6 +200,7 @@ def test_build_work_finish_args_uses_dry_run_until_explicit_execute() -> None:
         "Example",
         "--path",
         "src/example.py",
+        "--merge",
         "--dry-run",
         "--json",
     )
@@ -217,3 +218,26 @@ def test_build_work_finish_args_execute_is_explicit() -> None:
 
     assert "--execute" in args
     assert "--dry-run" not in args
+
+
+def test_build_work_finish_args_merge_is_explicit_default() -> None:
+    default_args = build_work_finish_args(
+        branch="codex/example",
+        title="Example",
+        message="Example",
+        paths=(ChangedPath("src/example.py"),),
+        execute=True,
+    )
+    review_only_args = build_work_finish_args(
+        branch="codex/example",
+        title="Example",
+        message="Example",
+        paths=(ChangedPath("src/example.py"),),
+        execute=True,
+        merge=False,
+    )
+
+    assert "--merge" in default_args
+    assert "--no-merge" not in default_args
+    assert "--merge" not in review_only_args
+    assert "--no-merge" in review_only_args

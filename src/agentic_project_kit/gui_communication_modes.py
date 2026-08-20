@@ -60,7 +60,7 @@ COMMUNICATION_MODE_DEFINITIONS: tuple[CommunicationModeDefinition, ...] = (
             "Start new work.",
             "Make your changes.",
             "Check.",
-            "Finish & publish opens a pull request; CI verifies before merge.",
+            "Finish & publish opens, verifies, merges, and closes out the pull request.",
         ),
         default_expanded_groups=(),
     ),

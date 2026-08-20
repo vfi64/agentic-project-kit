@@ -15983,7 +15983,7 @@
     {
       "dry_run_available": true,
       "group": "work",
-      "help": "Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks.",
+      "help": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.",
       "lifecycle_rank": 50,
       "name": "finish",
       "params": [
@@ -16059,7 +16059,23 @@
         },
         {
           "default": true,
-          "help": "Plan by default. Use --execute to commit, push, and merge.",
+          "help": "Run the full PR, merge, and post-merge handoff closeout by default. Use --no-merge only for an explicitly review-only PR.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "merge",
+          "opts": [
+            "--merge"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": [
+            "--no-merge"
+          ]
+        },
+        {
+          "default": true,
+          "help": "Plan by default. Use --execute to commit, push, and publish.",
           "is_flag": true,
           "metavar": null,
           "multiple": false,
@@ -16100,7 +16116,7 @@
         "bounded",
         "work"
       ],
-      "when_to_use": "Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks."
+      "when_to_use": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks."
     },
     {
       "dry_run_available": false,
@@ -17610,7 +17626,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "699a4acf0634",
+    "manifest_sha": "4a04dd52e8be",
     "schema_version": 1
   },
   "schema_version": 2,

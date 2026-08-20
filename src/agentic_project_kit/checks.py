@@ -6,6 +6,10 @@ import yaml
 
 from agentic_project_kit.documentation_registry import check_documentation_registry
 from agentic_project_kit.workspace import Workspace, load_workspace
+from agentic_project_kit.workspace_detection import (
+    non_workspace_message,
+    is_non_workspace_root,
+)
 
 
 STATE_GATE_DOCUMENTS = (
@@ -180,6 +184,9 @@ def count_words(text: str) -> int:
 
 
 def check_docs(project_root: Path) -> list[str]:
+    if is_non_workspace_root(project_root):
+        return [non_workspace_message(project_root)]
+
     config = load_optional_yaml(project_root / "sentinel.yaml")
     errors: list[str] = []
 
@@ -235,6 +242,16 @@ def _load_manifest_workspace_for_checks(project_root: Path) -> Workspace | None 
 
 def build_check_context(project_root: Path) -> CheckContext:
     project_root = project_root.resolve()
+    if is_non_workspace_root(project_root):
+        return CheckContext(
+            root=project_root.as_posix(),
+            mode="non_workspace",
+            external_manifest_workspace=False,
+            gate_family="none",
+            gate_documents=(),
+            check_renders_statuses=False,
+            skip_status_renderer="agentic-kit init NAME",
+        )
     workspace = _load_manifest_workspace_for_checks(project_root)
     if isinstance(workspace, ValueError):
         return CheckContext(
@@ -464,6 +481,8 @@ def check_documentation_coverage(project_root: Path) -> list[str]:
 
 
 def check_todo(project_root: Path) -> list[str]:
+    if is_non_workspace_root(project_root):
+        return [non_workspace_message(project_root)]
     workspace = _load_manifest_workspace_for_checks(project_root)
     if isinstance(workspace, ValueError) and not (project_root / "sentinel.yaml").exists():
         return [f"Invalid workspace manifest: {workspace}"]
@@ -505,6 +524,8 @@ def check_todo(project_root: Path) -> list[str]:
 
 
 def check_all(project_root: Path) -> list[str]:
+    if is_non_workspace_root(project_root):
+        return [non_workspace_message(project_root)]
     errors: list[str] = []
     errors.extend(check_docs(project_root))
     errors.extend(check_todo(project_root))

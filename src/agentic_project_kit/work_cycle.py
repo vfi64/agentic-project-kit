@@ -65,7 +65,7 @@ _PHASE_DEFINITIONS: tuple[tuple[WorkPhase, str, str, str], ...] = (
         "finish",
         "Finish & publish",
         "agentic-kit work finish --dry-run/--execute --json",
-        "Preview, then explicitly confirm saving, publishing, and closing the work slice.",
+        "Preview, then publish the work commit, generated handoff, PR, merge, and post-merge handoff closeout.",
     ),
     (
         "recover",
@@ -103,7 +103,16 @@ BLOCKER_EXPLANATIONS: dict[str, str] = {
     "clean-untracked": "Untracked files could not be removed.",
     "commit": "The selected files could not be saved.",
     "rules-acknowledge": "The project rules acknowledgement step needs attention.",
+    "rules-acknowledge-post-work-commit": "The project rules acknowledgement step needs attention after saving the work commit.",
+    "handoff-refresh": "The successor handoff package could not be refreshed.",
+    "handoff-projection-status": "The generated handoff projection status could not be inspected.",
+    "handoff-commit": "The generated handoff projection commit could not be saved.",
+    "rules-acknowledge-post-closeout": "The project rules acknowledgement step needs attention after handoff closeout.",
     "push-current": "The change could not be published to the server.",
+    "pr-create": "The pull request could not be created.",
+    "pr-wait-ci": "Pull request CI did not reach a successful terminal state.",
+    "pr-status": "The final pull request status could not be verified.",
+    "open-pr-closeout": "The open pull request is missing required handoff closeout markers.",
     "pr-create-complete": "The publish-and-review workflow did not complete.",
     "sync-main": "The local main branch could not be synchronized.",
     "post-merge-check": "The post-merge repository check needs attention.",
@@ -298,6 +307,7 @@ def build_work_finish_args(
     message: str,
     paths: tuple[ChangedPath, ...],
     execute: bool = False,
+    merge: bool = True,
 ) -> tuple[str, ...]:
     args: list[str] = [
         "work",
@@ -312,6 +322,7 @@ def build_work_finish_args(
     for changed_path in paths:
         if changed_path.selected:
             args.extend(["--path", changed_path.path])
+    args.append("--merge" if merge else "--no-merge")
     args.append("--execute" if execute else "--dry-run")
     args.append("--json")
     return tuple(args)

@@ -31,7 +31,7 @@ claims:
       key: project.version
 
   - id: public-source-install-documented
-    text: The public install path currently points to the GitHub source projection instead of claiming an unpublished PyPI package.
+    text: The GitHub source projection remains documented for unreleased fixes and Kit development.
     required: true
     evidence:
       - type: file-contains
@@ -42,7 +42,7 @@ claims:
         contains: '${package_name} @ git+${repository_url}.git@main'
 
   - id: pypi-trusted-publishing-ready
-    text: PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths, but direct PyPI installation remains unclaimed until pypi.org publication evidence exists.
+    text: PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths.
     required: false
     evidence:
       - type: file-contains
@@ -50,16 +50,21 @@ claims:
         contains: "pypa/gh-action-pypi-publish@release/v1"
       - type: file-contains
         path: site/templates/claims.html
-        contains: "Direct PyPI installation is not claimed until pypi.org package availability evidence is verified"
+        contains: "Post-fix PyPI validation is not claimed until a later package is published"
 
   - id: pypi-package-installable
     text: Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users.
-    required: false
-    planned: true
+    required: true
     evidence:
-      type: file-contains
-      path: site/templates/quickstart.html
-      contains: "TestPyPI smoke evidence is separate and does not prove pypi.org availability"
+      - type: file-contains
+        path: README.md
+        contains: "python -m pip install agentic-project-kit"
+      - type: file-contains
+        path: site/templates/quickstart.html
+        contains: "python -m pip install ${package_name}"
+      - type: file-contains
+        path: docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md
+        contains: "Successfully installed agentic-project-kit-1.0.1"
 
   - id: command-manifest-synchronization
     text: The public command catalog is generated from the current command manifest and checked for synchronization.

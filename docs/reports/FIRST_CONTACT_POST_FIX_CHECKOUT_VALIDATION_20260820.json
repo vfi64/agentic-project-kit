@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "kind": "first_contact_post_fix_checkout_validation",
+  "date": "2026-08-20",
+  "status": "PASS_WITH_DOCKER_ENGINE_UNAVAILABLE",
+  "evidence_type": "Post-fix Build/Checkout Validation",
+  "package_version": "1.0.1",
+  "fix_status": {
+    "F1": "fixed",
+    "non_workspace_doctor": "fixed",
+    "F2": "fixed",
+    "F3": "retained_as_explicit_warning",
+    "F4": "fixed"
+  },
+  "gates": {
+    "pytest": "2840 passed, 446 warnings",
+    "ruff": "PASS",
+    "check_docs": "PASS",
+    "direction_validate": "PASS",
+    "doctor": "PASS",
+    "audit_command_manifest": "PASS",
+    "site_docs_pages_fallback": "PASS"
+  },
+  "smokes": {
+    "empty_check": {
+      "status": "controlled_fail",
+      "exit_code": 1,
+      "mode": "non_workspace"
+    },
+    "empty_doctor": {
+      "status": "controlled_fail",
+      "exit_code": 1
+    },
+    "missing_git_init": {
+      "status": "controlled_fail_before_mutation",
+      "exit_code": 2,
+      "target_absent": true
+    },
+    "generated_project_check_doctor": {
+      "status": "PASS"
+    },
+    "missing_git_identity": {
+      "status": "explicit_warning_exit_zero"
+    }
+  },
+  "docker": {
+    "cli_version": "29.7.2",
+    "engine_available": false,
+    "validation_executed": false,
+    "reason": "docker API socket unavailable; Docker Desktop application not found"
+  },
+  "not_claimed": [
+    "Docker PASS for the post-fix source state",
+    "PyPI PASS for any fixed behavior after 1.0.1"
+  ]
+}

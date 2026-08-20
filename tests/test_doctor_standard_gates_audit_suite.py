@@ -74,6 +74,8 @@ def test_doctor_warns_when_standard_audit_suite_executable_is_unavailable(tmp_pa
     )
 
 def test_doctor_skips_standard_audit_suite_outside_toolkit_checkout(tmp_path: Path, monkeypatch) -> None:
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "docs" / "STATUS.md").write_text("# Project Status\n", encoding="utf-8")
     called = False
 
     def fake(project_root: Path) -> StandardGatesAuditSuiteResult:
