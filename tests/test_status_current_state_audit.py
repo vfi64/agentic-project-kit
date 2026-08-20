@@ -14,7 +14,13 @@ from agentic_project_kit.status_current_state_audit import (
 )
 
 
-def _write_project(root: Path, *, status_main: str = "abc1234", validation_head: str = "abc123456789") -> None:
+def _write_project(
+    root: Path,
+    *,
+    status_main: str = "abc1234",
+    validation_head: str = "abc123456789",
+    successor_context: dict[str, object] | None = None,
+) -> None:
     (root / "src" / "agentic_project_kit").mkdir(parents=True)
     (root / "pyproject.toml").write_text('[project]\nname = "demo"\nversion = "1.2.3"\n', encoding="utf-8")
     (root / "src" / "agentic_project_kit" / "__init__.py").write_text('__version__ = "1.2.3"\n', encoding="utf-8")
@@ -70,6 +76,11 @@ def _write_project(root: Path, *, status_main: str = "abc1234", validation_head:
         ),
         encoding="utf-8",
     )
+    if successor_context is not None:
+        (latest / "successor_context.yaml").write_text(
+            json.dumps(successor_context, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
 
 
 def _git_runner(*, origin: str = "def5678", lag: int = 1, ancestor_ok: bool = True):
@@ -290,6 +301,100 @@ def test_audit_status_current_state_blocks_stale_status_main(tmp_path: Path) -> 
     result = audit_status_current_state(
         tmp_path,
         git_runner=_git_runner(),
+        release_status_builder=lambda _root: _release_status(),
+    )
+
+    assert result.ok is False
+    assert any(
+        finding.check == "status_current_verified_main_matches_handoff_validation_head"
+        for finding in result.blockers
+    )
+
+
+def test_audit_status_current_state_allows_feature_branch_handoff_head(tmp_path: Path) -> None:
+    status_main = "abc1234"
+    origin_main = "def5678900000000000000000000000000000000"
+    validation_head = "fedcba9800000000000000000000000000000000"
+    _write_project(
+        tmp_path,
+        status_main=status_main,
+        validation_head=validation_head,
+        successor_context={
+            "repo": {
+                "branch": "codex/demo",
+                "head": validation_head,
+                "head_matches_origin_main": False,
+                "origin_main": origin_main,
+            }
+        },
+    )
+
+    def git_runner(_root: Path, args: tuple[str, ...] | list[str]) -> GitResult:
+        command = tuple(args)
+        if command == ("rev-parse", "--verify", "origin/main"):
+            return GitResult(0, origin_main + "\n")
+        if command == ("log", "-1", "--pretty=%s", origin_main):
+            return GitResult(0, "Refresh handoff state after PR2100 (#2101)\n")
+        if command == ("merge-base", "--is-ancestor", status_main, origin_main):
+            return GitResult(0, "")
+        if command == ("merge-base", "--is-ancestor", origin_main, validation_head):
+            return GitResult(0, "")
+        if command == ("merge-base", "--is-ancestor", validation_head, origin_main):
+            return GitResult(1, "")
+        if command == ("rev-list", "--count", "--first-parent", f"{status_main}..{origin_main}"):
+            return GitResult(0, "1\n")
+        return GitResult(1, "", f"unexpected command: {command}")
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=git_runner,
+        release_status_builder=lambda _root: _release_status(),
+    )
+
+    assert result.ok is True
+    assert not any(
+        finding.check == "status_current_verified_main_matches_handoff_validation_head"
+        for finding in result.blockers
+    )
+    assert any(
+        finding.check == "handoff_validation_head_reachable_from_origin_main"
+        and "feature_branch_handoff=True" in finding.detail
+        for finding in result.findings
+    )
+
+
+def test_audit_status_current_state_blocks_feature_branch_handoff_not_descendant(tmp_path: Path) -> None:
+    origin_main = "def5678900000000000000000000000000000000"
+    validation_head = "fedcba9800000000000000000000000000000000"
+    _write_project(
+        tmp_path,
+        status_main=origin_main[:7],
+        validation_head=validation_head,
+        successor_context={
+            "repo": {
+                "branch": "codex/demo",
+                "head": validation_head,
+                "head_matches_origin_main": False,
+                "origin_main": origin_main,
+            }
+        },
+    )
+
+    def git_runner(_root: Path, args: tuple[str, ...] | list[str]) -> GitResult:
+        command = tuple(args)
+        if command == ("rev-parse", "--verify", "origin/main"):
+            return GitResult(0, origin_main + "\n")
+        if command == ("merge-base", "--is-ancestor", validation_head, origin_main):
+            return GitResult(1, "")
+        if command == ("merge-base", "--is-ancestor", origin_main, validation_head):
+            return GitResult(1, "")
+        if command[:2] == ("rev-list", "--count"):
+            return GitResult(0, "0\n")
+        return GitResult(1, "", f"unexpected command: {command}")
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=git_runner,
         release_status_builder=lambda _root: _release_status(),
     )
 
