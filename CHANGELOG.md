@@ -1,3 +1,11 @@
+## v1.0.2 - 2026-08-20
+
+- Zenodo DOI verification pending for v1.0.2.
+- Harden local Docker usage with bounded container smoke evidence and explicit scope boundaries.
+- Harden first-contact validation and PR closeout with regression coverage for clean installs, Git prerequisites, and the four-step handoff lifecycle.
+- Harden workspace remove and site fallback checks with guarded mutation planning and deterministic projection drift tests.
+- Add decomplexification audit roadmap while preserving governance gates and compatibility-safe facade planning.
+
 ## v1.0.1 - 2026-08-14
 
 - Zenodo DOI verification pending for v1.0.1.

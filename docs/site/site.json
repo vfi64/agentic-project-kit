@@ -52,7 +52,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "project.version=1.0.1",
+            "detail": "project.version=1.0.2",
             "evidence_type": "pyproject-value",
             "status": "verified"
           }
@@ -10626,13 +10626,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "4a04dd52e8be",
+    "manifest_sha": "072c9526b5cd",
     "package_name": "agentic-project-kit",
-    "package_version": "1.0.1",
+    "package_version": "1.0.2",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.0",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "4a04dd52e8be",
+    "reproduced_manifest_sha": "072c9526b5cd",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 165,
@@ -10667,7 +10667,7 @@
     "current_release_tag": "v1.0.0",
     "current_verified_main": "See docs/STATUS.md",
     "current_verified_release": "1.0.0",
-    "current_version": "1.0.1",
+    "current_version": "1.0.2",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
     "version_doi": "10.5281/zenodo.21925421"

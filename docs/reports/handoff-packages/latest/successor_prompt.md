@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2106-handoff-refresh`
+- branch: `codex/release-v1.0.2-safety`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -164,7 +164,7 @@ Wenn der Bootstrap grün ist:
       ],
       "id": "public-installation-and-update-readiness",
       "status": "next",
-      "summary": "Close public installation, PyPI publication, update, and Docker readiness gaps for v1.0.1"
+      "summary": "Close public installation, PyPI publication, update, and Docker readiness gaps for v1.0.2"
     },
     {
       "files": [
@@ -411,14 +411,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2106-handoff-refresh",
+    "branch": "codex/release-v1.0.2-safety",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f301012121bd5dda75ca7a434bf309ca5f54e2e9",
+    "head": "5bc487c3b8e9c5617a7bfc83f4d1b4a3e5b95f85",
     "head_matches_origin_main": true,
-    "head_short": "f3010121",
+    "head_short": "5bc487c3",
     "local_path": "cd /path/to/",
-    "origin_main": "f301012121bd5dda75ca7a434bf309ca5f54e2e9",
-    "origin_main_short": "f3010121",
+    "origin_main": "5bc487c3b8e9c5617a7bfc83f4d1b4a3e5b95f85",
+    "origin_main_short": "5bc487c3",
     "worktree_clean": false
   }
 }
@@ -444,7 +444,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` oder dem externen Workspace-State bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 4a04dd52e8be). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 4a04dd52e8be. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 072c9526b5cd). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 072c9526b5cd. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -454,5 +454,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 575a3dab73cda5e457e607007d2efb94d74dd2edc4ce0250444ed5a737b672de
-- docs/reference/agentic-kit-commands.json: 1255d53cf0194c9a83ea722d447a4642fec04a437c9bf4e3713cb617b2d22cb2
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 8d62c0cade803e7ded40d71beeb85d83b0a1d7d3a360baec4cf6580454b7ae18
+- docs/reference/agentic-kit-commands.json: 22064c2979254ad22231ed7f0a58f3069ec80ddb675a99e42643203b1feb3015
