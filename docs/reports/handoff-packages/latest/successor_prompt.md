@@ -38,7 +38,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2108-handoff-refresh`
+- branch: `docs/post-pr2106-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -270,6 +270,15 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
+      "id": "decomplexification-audit-roadmap",
+      "status": "planned",
+      "summary": "Reduce command-surface complexity through compatibility-preserving facades"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
       "id": "next-turn-workflow-kernel",
       "status": "active",
       "summary": "Move recurring next-step execution from chat discipline into a deterministic local workflow kernel"
@@ -402,14 +411,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2108-handoff-refresh",
+    "branch": "docs/post-pr2106-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "166a24a5b40021bf158444278d1722ecac3cdb95",
+    "head": "f301012121bd5dda75ca7a434bf309ca5f54e2e9",
     "head_matches_origin_main": true,
-    "head_short": "166a24a5",
+    "head_short": "f3010121",
     "local_path": "cd /path/to/",
-    "origin_main": "166a24a5b40021bf158444278d1722ecac3cdb95",
-    "origin_main_short": "166a24a5",
+    "origin_main": "f301012121bd5dda75ca7a434bf309ca5f54e2e9",
+    "origin_main_short": "f3010121",
     "worktree_clean": false
   }
 }

@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 166a24a5b40021bf158444278d1722ecac3cdb95
-  short: 166a24a5
-  subject: Harden workspace remove and site fallback checks (#2108)
+  full: f301012121bd5dda75ca7a434bf309ca5f54e2e9
+  short: f3010121
+  subject: Add decomplexification audit roadmap (#2106)
 last_substantive_work_state:
-  full: 166a24a5b40021bf158444278d1722ecac3cdb95
-  short: 166a24a5
-  subject: Harden workspace remove and site fallback checks (#2108)
+  full: f301012121bd5dda75ca7a434bf309ca5f54e2e9
+  short: f3010121
+  subject: Add decomplexification audit roadmap (#2106)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
