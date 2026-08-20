@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `7ee1df29f8d1aadd7eadeafcdf8463cd1c1cbb77` (`7ee1df29`), after `Harden local Docker usage (#2100)`.
-Last substantive work state is `7ee1df29f8d1aadd7eadeafcdf8463cd1c1cbb77` (`7ee1df29`), after `Harden local Docker usage (#2100)`.
+Current verified main/admin HEAD is `2f65e872783cddf243183d98abf49c1af66da3cb` (`2f65e872`), after `Harden first-contact validation and PR closeout (#2109)`.
+Last substantive work state is `2f65e872783cddf243183d98abf49c1af66da3cb` (`2f65e872`), after `Harden first-contact validation and PR closeout (#2109)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
