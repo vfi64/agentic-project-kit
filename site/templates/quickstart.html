@@ -32,22 +32,22 @@
 
       <section class="quickstart-grid" aria-label="Installation paths">
         <article class="panel code-panel" id="install">
-          <p class="eyebrow">Current public source</p>
+          <p class="eyebrow">PyPI</p>
           <h2>Install in a Virtual Environment</h2>
-          <pre><code>python -m venv .venv
-source .venv/bin/activate
-python -m pip install "${package_name} @ git+${repository_url}.git@main"
-agentic-kit --version</code></pre>
-          <p>This path matches the generated documentation on <code>main</code>. Direct PyPI installation is planned, not claimed yet.</p>
-        </article>
-        <article class="panel code-panel">
-          <p class="eyebrow">Planned PyPI</p>
-          <h2>Use After Publication</h2>
           <pre><code>python -m venv .venv
 source .venv/bin/activate
 python -m pip install ${package_name}
 agentic-kit --version</code></pre>
-          <p>Use this only after the PyPI claim is verified on the claim-evidence page. TestPyPI smoke evidence is separate and does not prove pypi.org availability.</p>
+          <p>The public <code>1.0.1</code> package was verified from PyPI in an isolated Docker container. Git remains a system prerequisite for <code>agentic-kit init</code> and Git-backed workflows; <code>pip</code> cannot install Git portably.</p>
+        </article>
+        <article class="panel code-panel">
+          <p class="eyebrow">Public source</p>
+          <h2>Install from GitHub</h2>
+          <pre><code>python -m venv .venv
+source .venv/bin/activate
+python -m pip install "${package_name} @ git+${repository_url}.git@main"
+agentic-kit --version</code></pre>
+          <p>Use the source projection when testing unreleased fixes. A source or local-wheel validation is not a PyPI validation until a new package is published on <code>pypi.org</code>.</p>
         </article>
         <article class="panel code-panel">
           <p class="eyebrow">Kit checkout</p>
@@ -73,6 +73,42 @@ docker run --rm -v "/path/to/repo:/work" agentic-project-kit:local doctor --root
   -v "$PWD:/work" \
   agentic-project-kit:local init my-new-project --type generic --kit-source none</code></pre>
           <p>No official registry image is claimed by this generated site. Creating the initial convenience commit inside Docker requires a Git identity; otherwise the files are created and the commit is skipped with an explicit warning. GitHub operations inside Docker require mounted credentials for <code>gh</code> and SSH.</p>
+        </article>
+      </section>
+
+      <section class="band" aria-labelledby="docker-pypi-title">
+        <div>
+          <p class="eyebrow">Safe package test</p>
+          <h2 id="docker-pypi-title">Test the PyPI Package Safely with Docker</h2>
+          <p>Docker lets you test the public package without changing host Python, a local virtual environment, or the development checkout. The command below starts a disposable container with <code>--rm</code>, no repository mount, and no GitHub remote access.</p>
+          <pre><code>user@mac$ docker --version
+user@mac$ docker info
+user@mac$ docker run --rm hello-world
+user@mac$ docker run --rm -it python:3.13-slim bash</code></pre>
+          <pre><code>root@&lt;container-id&gt;:/# python --version
+root@&lt;container-id&gt;:/# python -m pip list
+root@&lt;container-id&gt;:/# which agentic-kit || true
+root@&lt;container-id&gt;:/# apt-get update
+root@&lt;container-id&gt;:/# apt-get install -y git
+root@&lt;container-id&gt;:/# git --version
+root@&lt;container-id&gt;:/# git config --global user.name "Test User"
+root@&lt;container-id&gt;:/# git config --global user.email "test@example.invalid"
+root@&lt;container-id&gt;:/# python -m pip install ${package_name}
+root@&lt;container-id&gt;:/# agentic-kit --version
+root@&lt;container-id&gt;:/# python -m pip show ${package_name}
+root@&lt;container-id&gt;:/# mkdir /path/to/project
+root@&lt;container-id&gt;:/# cd /path/to/project
+root@&lt;container-id&gt;:/path/to/project# agentic-kit --help
+root@&lt;container-id&gt;:/path/to/project# agentic-kit init demo-project --type generic --description "Docker package smoke"
+root@&lt;container-id&gt;:/path/to/project# cd demo-project
+root@&lt;container-id&gt;:/path/to/project/demo-project# agentic-kit check
+root@&lt;container-id&gt;:/path/to/project/demo-project# agentic-kit doctor
+root@&lt;container-id&gt;:/path/to/project/demo-project# exit</code></pre>
+          <p>The container filesystem is removed when <code>exit</code> ends a <code>docker run --rm</code> session. Docker images may remain in Docker Desktop until you remove them with Docker's image cleanup tools.</p>
+        </div>
+        <article class="panel">
+          <p class="eyebrow">Evidence boundary</p>
+          <p>Use this path to validate a package already published on PyPI. Use a separate local wheel or checkout test for unreleased fixes, and label that result Post-fix Build/Checkout Validation.</p>
         </article>
       </section>
 

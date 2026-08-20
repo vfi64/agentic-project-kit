@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "kind": "docker_pypi_first_contact_validation",
+  "date_recorded": "2026-08-20",
+  "tested_package": "agentic-project-kit",
+  "tested_version": "1.0.1",
+  "evidence_type": "Historical PyPI Validation",
+  "isolation": {
+    "docker_run_rm": true,
+    "local_repo_mounted": false,
+    "local_venv_used": false,
+    "github_repo_cloned": false,
+    "github_remote_mutated": false
+  },
+  "baseline": {
+    "docker_version": "29.7.2",
+    "base_image": "python:3.13-slim",
+    "python_version": "3.13.15",
+    "pip_version": "26.2.1"
+  },
+  "results": [
+    {
+      "id": "docker-engine",
+      "status": "PASS"
+    },
+    {
+      "id": "pypi-install-1.0.1",
+      "status": "PASS"
+    },
+    {
+      "id": "cli-help-empty-directory",
+      "status": "PASS"
+    },
+    {
+      "id": "F1-empty-directory-check",
+      "status": "FAIL",
+      "observed": "LegacyProfileDeprecationWarning followed by FileNotFoundError for /test/sentinel.yaml"
+    },
+    {
+      "id": "F2-init-without-git",
+      "status": "FAIL",
+      "observed": "FileNotFoundError for missing git executable"
+    },
+    {
+      "id": "F3-init-without-git-identity",
+      "status": "PARTIAL",
+      "observed": "Project files created, git commit reported fatal identity error, command exited 0"
+    },
+    {
+      "id": "F4-generated-project-legacy-warning",
+      "status": "PASS_WITH_WARNING",
+      "observed": "check and doctor passed but emitted LegacyProfileDeprecationWarning; doctor warned about missing .agentic/config.yaml"
+    }
+  ],
+  "current_main_classification_before_slice": {
+    "F1": "confirmed",
+    "F2": "confirmed",
+    "F3": "partially_already_improved",
+    "F4": "confirmed"
+  },
+  "related_reports": [
+    "docs/reports/DOCKER_LOCAL_SMOKE_20260814.md",
+    "docs/reports/POST_0_5_0_GREENFIELD_B2_20260811.md",
+    "docs/reports/V1_0_1_RELEASE_PUBLICATION_PREP_20260814.md"
+  ],
+  "evidence_boundary": {
+    "type_a": "Historical PyPI Validation",
+    "type_b": "Post-fix Build/Checkout Validation",
+    "type_c": "Post-release PyPI Validation"
+  }
+}

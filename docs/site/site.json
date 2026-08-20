@@ -81,7 +81,7 @@
         "planned": false,
         "required": true,
         "status": "verified",
-        "text": "The public install path currently points to the GitHub source projection instead of claiming an unpublished PyPI package."
+        "text": "The GitHub source projection remains documented for unreleased fixes and Kit development."
       },
       {
         "blockers": [],
@@ -101,21 +101,31 @@
         "planned": false,
         "required": false,
         "status": "verified",
-        "text": "PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths, but direct PyPI installation remains unclaimed until pypi.org publication evidence exists."
+        "text": "PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths."
       },
       {
         "blockers": [],
         "evidence": [
           {
+            "detail": "README.md contains required text",
+            "evidence_type": "file-contains",
+            "status": "verified"
+          },
+          {
             "detail": "site/templates/quickstart.html contains required text",
+            "evidence_type": "file-contains",
+            "status": "verified"
+          },
+          {
+            "detail": "docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md contains required text",
             "evidence_type": "file-contains",
             "status": "verified"
           }
         ],
         "id": "pypi-package-installable",
-        "planned": true,
-        "required": false,
-        "status": "planned",
+        "planned": false,
+        "required": true,
+        "status": "verified",
         "text": "Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users."
       },
       {
@@ -226,16 +236,16 @@
     ],
     "kind": "site_claim_evaluation_report",
     "required_counts": {
-      "optional": 7,
-      "required": 6
+      "optional": 6,
+      "required": 7
     },
     "schema_blockers": [],
     "schema_version": 1,
     "status": "PASS",
     "status_counts": {
-      "planned": 1,
+      "planned": 0,
       "unverified": 0,
-      "verified": 12
+      "verified": 13
     }
   },
   "command_catalog": {
@@ -9601,7 +9611,7 @@
         "diagnostic_priority": "not_diagnostic",
         "dry_run_available": true,
         "group": "work",
-        "help": "Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks.",
+        "help": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.",
         "lifecycle_rank": 50,
         "params": [
           {
@@ -9645,7 +9655,15 @@
             "required": false
           },
           {
-            "help": "Plan by default. Use --execute to commit, push, and merge.",
+            "help": "Merge and run post-merge closeout by default. Use --no-merge to leave a review PR open with explicit pending-handoff closeout markers.",
+            "name": "merge",
+            "opts": [
+              "--merge"
+            ],
+            "required": false
+          },
+          {
+            "help": "Plan by default. Use --execute to commit, push, and publish.",
             "name": "dry_run",
             "opts": [
               "--dry-run"
@@ -9664,7 +9682,7 @@
         "qualified_name": "agentic-kit work finish",
         "safety": "BOUNDED",
         "surface": "orchestrator",
-        "when_to_use": "Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks."
+        "when_to_use": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks."
       },
       {
         "diagnostic_priority": "not_diagnostic",
@@ -10608,13 +10626,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "699a4acf0634",
+    "manifest_sha": "109e6c65b4a3",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.1",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.0",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "699a4acf0634",
+    "reproduced_manifest_sha": "109e6c65b4a3",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 165,

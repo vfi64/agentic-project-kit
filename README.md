@@ -45,10 +45,27 @@ A generated project includes:
 - `sentinel.yaml` for document and task checks
 - minimal package/test skeleton for Python projects
 
-## Installation for local development
+## Installation
 
-The public PyPI package is not published yet. Until the PyPI claim is verified,
-install the current public source projection from GitHub:
+Install the public package from PyPI in a virtual environment:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install agentic-project-kit
+agentic-kit --version
+```
+
+The first public PyPI validation confirmed that the published package installs
+in an isolated Docker container. Its historical first-contact findings are
+recorded in `docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md`.
+
+Git is a system prerequisite for `agentic-kit init` and Git-backed workflows.
+`pip install agentic-project-kit` cannot install Git portably across macOS,
+Linux, and Windows. Install Git with your operating-system package manager or
+installer before creating a new governed repository.
+
+For Kit development from the public source projection:
 
 ```bash
 python -m venv .venv
@@ -56,11 +73,6 @@ source .venv/bin/activate
 python -m pip install "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"
 agentic-kit --version
 ```
-
-TestPyPI and PyPI are separate publication targets. A successful TestPyPI smoke
-test does not prove that `python -m pip install agentic-project-kit` works from
-`pypi.org`; use the direct PyPI command only after the claim-evidence page shows
-PyPI availability as verified.
 
 For Kit development from a local checkout:
 
@@ -83,10 +95,19 @@ agentic-kit --help
 
 ## Quick start
 
-For the generated install and usage walkthrough, including the current GitHub
-source install path, planned PyPI usage, a Docker-based Python container path,
-new repositories, and existing repositories, see
+For the generated install and usage walkthrough, including the PyPI install
+path, the source install path, a Docker-based safe package test, new
+repositories, and existing repositories, see
 <https://vfi64.github.io/agentic-project-kit/site/quickstart/>.
+
+Evidence labels stay separate:
+
+- Historical PyPI Validation: a published package was installed from
+  `pypi.org`.
+- Post-fix Build/Checkout Validation: a local checkout or local wheel was tested
+  before publication.
+- Post-release PyPI Validation: a later published package was installed from
+  `pypi.org` after release.
 
 Docker without an official registry image uses the local source image:
 
@@ -198,6 +219,13 @@ policy-pack checks, documentation gates, task validation, and version drift.
 `SKIP` means not applicable; `WARN` means advisory. The command exits non-zero
 only when required checks fail.
 
+`agentic-kit check` and `agentic-kit doctor` treat a directory with no Kit
+markers as `not an Agentic Project Kit workspace` and exit non-zero with the
+next safe setup command instead of an internal traceback. A freshly generated
+project uses `.agentic/project.yaml`; `doctor` reports the operating-layer
+`.agentic/config.yaml` checks as `SKIP` there instead of warning that the new
+project is implicitly legacy.
+
 ## Clean handoff / chat switch
 
 Use the deterministic successor handoff package before switching chats or continuing in another LLM:
@@ -291,8 +319,10 @@ Rule: unknown or modified `.agentic/` paths block execution; project docs/source
 
 Manifest-less repositories still use the implicit legacy profile for the 1.x
 line, but that fallback is deprecated. The resolver emits a suppressible
-legacy profile deprecation warning only when `.agentic/config.yaml` is absent;
-set `AGENTIC_KIT_SUPPRESS_LEGACY_PROFILE_WARNING=1` for temporary quiet
+legacy profile deprecation warning for compatibility repositories that have Kit
+governance markers but no `.agentic/config.yaml`; empty non-workspaces and
+fresh generator-mode projects have explicit public CLI states instead. Set
+`AGENTIC_KIT_SUPPRESS_LEGACY_PROFILE_WARNING=1` for temporary quiet
 compatibility while planning `workspace init`.
 
 ## Documentation registry

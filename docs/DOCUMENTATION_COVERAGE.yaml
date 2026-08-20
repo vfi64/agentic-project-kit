@@ -649,6 +649,64 @@ rules:
     - idempotent across post-merge handoff/status refreshes
     - volatile current-state details
     - excluded from Python sdist and wheel artifacts
+- id: pypi-docker-first-contact-coverage
+  description: Public PyPI installation and safe Docker first-contact validation must keep Git prerequisites and evidence boundaries visible.
+  documents:
+  - path: README.md
+    terms:
+    - python -m pip install agentic-project-kit
+    - Git is a system prerequisite
+    - pip install agentic-project-kit
+    - cannot install Git portably
+    - Historical PyPI Validation
+    - Post-fix Build/Checkout Validation
+    - Post-release PyPI Validation
+    - V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md
+  - path: site/templates/quickstart.html
+    terms:
+    - Test the PyPI Package Safely with Docker
+    - docker --version
+    - docker info
+    - docker run --rm hello-world
+    - docker run --rm -it python:3.13-slim bash
+    - python -m pip install ${package_name}
+    - apt-get install -y git
+    - git config --global user.name
+    - agentic-kit init demo-project
+    - agentic-kit check
+    - agentic-kit doctor
+    - Post-fix Build/Checkout Validation
+  - path: site/content/claims.yaml
+    terms:
+    - pypi-package-installable
+    - python -m pip install agentic-project-kit
+    - V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md
+    - Successfully installed agentic-project-kit-1.0.1
+  - path: docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md
+    terms:
+    - Historical PyPI Validation
+    - Empty-directory check crash
+    - Missing Git init crash
+    - Git identity failure masked by success exit
+    - Fresh generated project triggers legacy warning
+    - Post-fix Build/Checkout Validation
+    - Post-release PyPI Validation
+- id: first-contact-non-workspace-cli-coverage
+  description: First-contact CLI behavior must distinguish empty non-workspaces, generator-mode projects, and operating-layer workspaces.
+  documents:
+  - path: README.md
+    terms:
+    - not an Agentic Project Kit workspace
+    - empty non-workspaces
+    - fresh generator-mode projects
+    - .agentic/project.yaml
+    - .agentic/config.yaml
+    - SKIP
+  - path: docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md
+    terms:
+    - F1 still existed before this slice
+    - F4 still existed before this slice
+    - generator-vs-operating-layer boundary
 - id: kit-os-architecture-coverage
   description: Kit-as-OS architecture authority must remain visible as the governing source for the workspace resolver, implicit legacy profile, lock, legacy-profile deprecation, P5c physical migration planning, and evidence policy.
   documents:
@@ -881,7 +939,7 @@ rules:
   documents:
   - path: README.md
     terms:
-    - Installation for local development
+    - Installation
     - Quick start
     - Project contract, profiles, and policy packs
     - Policy-pack doctor checks

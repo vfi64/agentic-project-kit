@@ -21,6 +21,11 @@ from agentic_project_kit.workspace import (
     Workspace,
     load_workspace,
 )
+from agentic_project_kit.workspace_detection import (
+    has_generated_project_contract,
+    is_non_workspace_root,
+    non_workspace_message,
+)
 
 
 class DoctorStatus(str, Enum):
@@ -50,19 +55,31 @@ class DoctorReport:
 def build_doctor_report(project_root: Path) -> DoctorReport:
     """Build a compact health report for an agentic project checkout."""
     root = project_root.resolve()
+    if is_non_workspace_root(root):
+        return DoctorReport(
+            project_root=root,
+            checks=[
+                DoctorCheck(
+                    "workspace",
+                    DoctorStatus.FAIL,
+                    non_workspace_message(root),
+                )
+            ],
+        )
     contract_data = _load_contract_for_doctor(root)
     workspace = _load_manifest_workspace_for_doctor(root)
     external_manifest_workspace = (
         isinstance(workspace, Workspace)
         and not _is_agentic_project_kit_development_checkout(root)
     )
+    generated_project_contract = has_generated_project_contract(root)
     checks = [
         _path_check(root, "pyproject.toml", required=False),
         _path_check(root, "README.md", required=not external_manifest_workspace),
         _path_check(root, "sentinel.yaml", required=False),
         _path_check(root, ".github/workflows/ci.yml", required=False),
-        _workspace_manifest_check(workspace),
-        _workspace_schema_currency_check(workspace),
+        _workspace_manifest_check(workspace, generated_project_contract=generated_project_contract),
+        _workspace_schema_currency_check(workspace, generated_project_contract=generated_project_contract),
         _project_contract_check(root, contract_data, external_manifest_workspace=external_manifest_workspace),
         _policy_pack_check(root, contract_data, external_manifest_workspace=external_manifest_workspace),
         _docs_check(root),
@@ -107,10 +124,20 @@ def _load_manifest_workspace_for_doctor(project_root: Path) -> Workspace | None 
         return ValueError(str(exc))
 
 
-def _workspace_manifest_check(data: Workspace | None | ValueError) -> DoctorCheck:
+def _workspace_manifest_check(
+    data: Workspace | None | ValueError,
+    *,
+    generated_project_contract: bool = False,
+) -> DoctorCheck:
     if isinstance(data, ValueError):
         return DoctorCheck("workspace manifest", DoctorStatus.FAIL, str(data))
     if data is None:
+        if generated_project_contract:
+            return DoctorCheck(
+                "workspace manifest",
+                DoctorStatus.SKIP,
+                ".agentic/config.yaml absent; generated project contract uses .agentic/project.yaml",
+            )
         return DoctorCheck("workspace manifest", DoctorStatus.WARN, ".agentic/config.yaml absent")
     detail = (
         f"{data.project_name or 'unnamed'}; type: {data.project_type}; "
@@ -119,7 +146,11 @@ def _workspace_manifest_check(data: Workspace | None | ValueError) -> DoctorChec
     return DoctorCheck("workspace manifest", DoctorStatus.PASS, detail)
 
 
-def _workspace_schema_currency_check(data: Workspace | None | ValueError) -> DoctorCheck:
+def _workspace_schema_currency_check(
+    data: Workspace | None | ValueError,
+    *,
+    generated_project_contract: bool = False,
+) -> DoctorCheck:
     if isinstance(data, ValueError):
         return DoctorCheck(
             "workspace schema",
@@ -127,6 +158,12 @@ def _workspace_schema_currency_check(data: Workspace | None | ValueError) -> Doc
             "skipped because workspace manifest is invalid",
         )
     if data is None:
+        if generated_project_contract:
+            return DoctorCheck(
+                "workspace schema",
+                DoctorStatus.SKIP,
+                ".agentic/config.yaml absent; generated project contract uses .agentic/project.yaml",
+            )
         return DoctorCheck("workspace schema", DoctorStatus.WARN, ".agentic/config.yaml absent")
     if data.manifest_schema_version < SUPPORTED_MANIFEST_SCHEMA_VERSION:
         return DoctorCheck(

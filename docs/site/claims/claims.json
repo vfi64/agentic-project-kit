@@ -80,7 +80,7 @@
       "planned": false,
       "required": true,
       "status": "verified",
-      "text": "The public install path currently points to the GitHub source projection instead of claiming an unpublished PyPI package."
+      "text": "The GitHub source projection remains documented for unreleased fixes and Kit development."
     },
     {
       "blockers": [],
@@ -100,21 +100,31 @@
       "planned": false,
       "required": false,
       "status": "verified",
-      "text": "PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths, but direct PyPI installation remains unclaimed until pypi.org publication evidence exists."
+      "text": "PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths."
     },
     {
       "blockers": [],
       "evidence": [
         {
+          "detail": "README.md contains required text",
+          "evidence_type": "file-contains",
+          "status": "verified"
+        },
+        {
           "detail": "site/templates/quickstart.html contains required text",
+          "evidence_type": "file-contains",
+          "status": "verified"
+        },
+        {
+          "detail": "docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md contains required text",
           "evidence_type": "file-contains",
           "status": "verified"
         }
       ],
       "id": "pypi-package-installable",
-      "planned": true,
-      "required": false,
-      "status": "planned",
+      "planned": false,
+      "required": true,
+      "status": "verified",
       "text": "Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users."
     },
     {
@@ -225,15 +235,15 @@
   ],
   "kind": "site_claim_evaluation_report",
   "required_counts": {
-    "optional": 7,
-    "required": 6
+    "optional": 6,
+    "required": 7
   },
   "schema_blockers": [],
   "schema_version": 1,
   "status": "PASS",
   "status_counts": {
-    "planned": 1,
+    "planned": 0,
     "unverified": 0,
-    "verified": 12
+    "verified": 13
   }
 }

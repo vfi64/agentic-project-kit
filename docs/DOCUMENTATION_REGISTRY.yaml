@@ -625,6 +625,22 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Local Docker build and runtime smoke evidence after Docker became available on the maintainer Mac, including Git identity and host-venv container findings.
+  - path: docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md
+    class: evidence/log
+    owner: maintainers
+    notes: Historical first-contact Docker/PyPI validation evidence for the published 1.0.1 package, including F1-F4 findings and evidence-type boundaries.
+  - path: docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable appendix for the historical 1.0.1 Docker/PyPI first-contact validation report.
+  - path: docs/reports/FIRST_CONTACT_POST_FIX_CHECKOUT_VALIDATION_20260820.md
+    class: evidence/log
+    owner: maintainers
+    notes: Post-fix checkout validation evidence for F1-F4, local gates, CLI smokes, and the unavailable Docker-engine boundary.
+  - path: docs/reports/FIRST_CONTACT_POST_FIX_CHECKOUT_VALIDATION_20260820.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable appendix for the post-fix first-contact checkout validation report.
   - path: docs/architecture/evidence/path-literal-audit-2026-07-04.md
     class: evidence/log
     owner: maintainers

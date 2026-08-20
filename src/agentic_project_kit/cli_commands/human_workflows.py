@@ -4,6 +4,7 @@ from datetime import date as date_cls
 import hashlib
 import json
 from pathlib import Path
+import re
 import subprocess
 
 import typer
@@ -90,6 +91,123 @@ def _path_args(paths: list[Path]) -> list[str]:
     for path in paths:
         args.extend(["--path", str(path)])
     return args
+
+
+def _extract_pr_number(text: str) -> int | None:
+    try:
+        payload = json.loads(text or "{}")
+    except json.JSONDecodeError:
+        payload = {}
+    candidates = [text]
+    if isinstance(payload, dict):
+        for key in ("stdout", "url"):
+            value = payload.get(key)
+            if isinstance(value, str):
+                candidates.append(value)
+    for candidate in candidates:
+        match = re.search(r"/pull/(\d+)\b", candidate)
+        if match:
+            return int(match.group(1))
+        match = re.search(r"(?m)^PR=(\d+)\s*$", candidate)
+        if match:
+            return int(match.group(1))
+    return None
+
+
+def _current_head_sha_step() -> dict[str, object]:
+    return _run_step("resolve-head-sha", ["git", "rev-parse", "HEAD"])
+
+
+def _remote_preflight_step() -> dict[str, object]:
+    return _run_step("remote-preflight", ["git", "ls-remote", "--exit-code", "origin", "HEAD"])
+
+
+def _open_pr_closeout_body(title: str) -> str:
+    return (
+        f"Human workflow finish: {title}\n\n"
+        "## Open PR Closeout / Handoff\n\n"
+        "- Open PR closeout: final-head CI must be green before review or merge.\n"
+        "- Post-merge handoff: pending until this PR is merged.\n"
+        "- After merge: run `agentic-kit transfer post-merge-complete --after-pr` "
+        "with the concrete PR number, or use `agentic-kit transfer pr-closeout-complete --after-pr`.\n"
+    )
+
+
+def _failed_local_step(name: str, message: str) -> dict[str, object]:
+    return {
+        "name": name,
+        "argv": [],
+        "returncode": 2,
+        "ok": False,
+        "allowed_returncodes": [0],
+        "stdout": "",
+        "stderr": message,
+    }
+
+
+def _open_pr_closeout_marker_step(
+    *,
+    pr_number: int,
+    expected_head_sha: str,
+) -> dict[str, object]:
+    command = [
+        "gh",
+        "pr",
+        "view",
+        str(pr_number),
+        "--json",
+        "number,state,isDraft,headRefOid,body,url",
+    ]
+    completed = subprocess.run(command, text=True, capture_output=True)
+    ok = completed.returncode == 0
+    findings: list[str] = []
+    if ok:
+        try:
+            payload = json.loads(completed.stdout or "{}")
+        except json.JSONDecodeError as exc:
+            payload = {}
+            findings.append(f"body_lookup_json_invalid:{exc}")
+        body = str(payload.get("body") or "")
+        state = str(payload.get("state") or "").upper()
+        head_ref_oid = str(payload.get("headRefOid") or "")
+        required_terms = (
+            "## Open PR Closeout / Handoff",
+            "Open PR closeout: final-head CI must be green",
+            "Post-merge handoff: pending until this PR is merged.",
+            "agentic-kit transfer post-merge-complete --after-pr",
+        )
+        if state != "OPEN":
+            findings.append(f"pr_state_not_open:{state or 'missing'}")
+        if expected_head_sha and head_ref_oid != expected_head_sha:
+            findings.append("head_sha_mismatch")
+        for term in required_terms:
+            if term not in body:
+                findings.append(f"missing_body_term:{term}")
+        ok = not findings
+        stdout = "\n".join(
+            (
+                "OPEN_PR_CLOSEOUT_CHECK",
+                f"pr={pr_number}",
+                f"state={state or 'missing'}",
+                f"head_ref_oid={head_ref_oid or 'missing'}",
+                f"expected_head_sha={expected_head_sha or 'missing'}",
+                f"body_terms_present={str(not findings).lower()}",
+                f"finding_count={len(findings)}",
+                *(f"finding={finding}" for finding in findings),
+            )
+        ) + "\n"
+    else:
+        stdout = completed.stdout
+
+    return {
+        "name": "open-pr-closeout",
+        "argv": command,
+        "returncode": 0 if ok else completed.returncode or 2,
+        "ok": ok,
+        "allowed_returncodes": [0],
+        "stdout": stdout,
+        "stderr": completed.stderr,
+    }
 
 
 def _changed_paths_against(base_ref: str) -> list[str]:
@@ -267,11 +385,21 @@ def work_finish_command(
     message: str = typer.Option(..., "--message", help="Commit message."),
     paths: list[Path] | None = typer.Option(None, "--path", help="Path to include in the commit. Repeatable."),
     merge_method: str = typer.Option("squash", "--merge-method", help="PR merge method."),
-    dry_run: bool = typer.Option(True, "--dry-run/--execute", help="Plan by default. Use --execute to commit, push, and merge."),
+    merge: bool = typer.Option(
+        True,
+        "--merge/--no-merge",
+        help=(
+            "Merge and run post-merge closeout by default. Use --no-merge to "
+            "leave a review PR open with explicit pending-handoff closeout markers."
+        ),
+    ),
+    dry_run: bool = typer.Option(True, "--dry-run/--execute", help="Plan by default. Use --execute to commit, push, and publish."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
-    """Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks."""
+    """Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks."""
     selected_paths = paths or []
+    pr_number: int | None = None
+    expected_head_sha = ""
     steps: list[dict[str, object]] = [
         _run_step("repo-status", _agentic("transfer", "repo-status")),
         _run_step("protected-diff-plan", _agentic("transfer", "protected-diff-plan", "--label", branch.replace("/", "-"))),
@@ -279,18 +407,110 @@ def work_finish_command(
     if not selected_paths:
         steps.append({"name": "path-selection", "argv": [], "returncode": 2, "ok": False, "allowed_returncodes": [0], "stdout": "", "stderr": "At least one --path is required for work finish."})
     if not dry_run and all(step["ok"] for step in steps):
-        steps.extend(
-            [
-                _run_step("commit", _agentic("transfer", "commit", "--branch", branch, "--message", message, *_path_args(selected_paths))),
-                _run_step("rules-acknowledge", _agentic("rules", "acknowledge")),
-                _run_step("push-current", _agentic("transfer", "push-current", "--branch", branch)),
-                _run_step("pr-create-complete", _agentic("transfer", "pr-create-complete", "--title", title, "--body", f"Human workflow finish: {title}", "--base", "main", "--head", branch, "--merge-method", merge_method, "--post-merge-complete", "--skip-llm-context-gate", "--timeout-seconds", "300", "--interval-seconds", "10", "--json")),
-                _run_step("sync-main", _agentic("transfer", "sync-main")),
-                _run_step("post-merge-check", _agentic("transfer", "post-merge-check")),
-                _run_step("repo-status", _agentic("transfer", "repo-status")),
-            ]
-        )
-    payload = _payload("work-finish", steps, dry_run=dry_run, extra={"branch": branch, "paths": [str(path) for path in selected_paths], "title": title})
+        steps.append(_remote_preflight_step())
+        if all(step["ok"] for step in steps):
+            steps.append(_run_step("rules-acknowledge", _agentic("rules", "acknowledge")))
+        if all(step["ok"] for step in steps):
+            steps.append(_run_step("commit", _agentic("transfer", "commit", "--branch", branch, "--message", message, *_path_args(selected_paths))))
+        if all(step["ok"] for step in steps):
+            head_sha_step = _current_head_sha_step()
+            expected_head_sha = str(head_sha_step["stdout"]).strip()
+            steps.append(head_sha_step)
+        if all(step["ok"] for step in steps):
+            steps.append(_run_step("rules-acknowledge-post-commit", _agentic("rules", "acknowledge")))
+        if all(step["ok"] for step in steps):
+            steps.append(_run_step("push-current", _agentic("transfer", "push-current", "--branch", branch)))
+        if all(step["ok"] for step in steps):
+            if merge:
+                steps.extend(
+                    [
+                        _run_step("pr-create-complete", _agentic("transfer", "pr-create-complete", "--title", title, "--body", f"Human workflow finish: {title}", "--base", "main", "--head", branch, "--merge-method", merge_method, "--post-merge-complete", "--skip-llm-context-gate", "--timeout-seconds", "300", "--interval-seconds", "10", "--json")),
+                        _run_step("sync-main", _agentic("transfer", "sync-main")),
+                        _run_step("post-merge-check", _agentic("transfer", "post-merge-check")),
+                        _run_step("repo-status", _agentic("transfer", "repo-status")),
+                    ]
+                )
+            else:
+                pr_create_step = _run_step(
+                    "pr-create",
+                    _agentic(
+                        "transfer",
+                        "pr-create",
+                        "--title",
+                        title,
+                        "--body",
+                        _open_pr_closeout_body(title),
+                        "--base",
+                        "main",
+                        "--head",
+                        branch,
+                        "--skip-llm-context-gate",
+                        "--json",
+                    ),
+                )
+                steps.append(pr_create_step)
+                if pr_create_step["ok"]:
+                    pr_number = _extract_pr_number(str(pr_create_step.get("stdout") or ""))
+                    if pr_number is None:
+                        steps.append(_failed_local_step("pr-number", "Could not determine PR number from transfer pr-create output."))
+                    else:
+                        steps.append(
+                            _run_step(
+                                "pr-wait-ci",
+                                _agentic(
+                                    "transfer",
+                                    "pr-wait-ci",
+                                    str(pr_number),
+                                    "--expected-head-sha",
+                                    expected_head_sha,
+                                    "--timeout-seconds",
+                                    "300",
+                                    "--interval-seconds",
+                                    "10",
+                                    "--json",
+                                ),
+                            )
+                        )
+                        if all(step["ok"] for step in steps):
+                            steps.append(
+                                _run_step(
+                                    "pr-status",
+                                    _agentic(
+                                        "transfer",
+                                        "pr-status",
+                                        str(pr_number),
+                                        "--expected-head-sha",
+                                        expected_head_sha,
+                                        "--no-failed-log-fetch",
+                                        "--json",
+                                    ),
+                                )
+                            )
+                        if all(step["ok"] for step in steps):
+                            steps.append(_open_pr_closeout_marker_step(pr_number=pr_number, expected_head_sha=expected_head_sha))
+    completion_mode = "merge_and_post_merge" if merge else "open_pr_pending_handoff"
+    next_action = (
+        "Open PR is published and CI-green; post-merge handoff remains pending until merge."
+        if not merge
+        else None
+    )
+    payload = _payload(
+        "work-finish",
+        steps,
+        dry_run=dry_run,
+        extra={
+            "branch": branch,
+            "paths": [str(path) for path in selected_paths],
+            "title": title,
+            "completion_mode": completion_mode,
+            "merge": merge,
+            "pr_number": pr_number,
+            "expected_head_sha": expected_head_sha,
+            "post_merge_handoff": "pending_until_merge" if not merge else "handled_by_post_merge_complete",
+        },
+    )
+    if next_action and payload["result_status"] == "PASS":
+        payload["next_action"] = next_action
     _emit(payload, json_output=json_output)
     _exit_if_blocked(payload)
 

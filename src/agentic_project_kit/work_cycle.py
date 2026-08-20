@@ -298,6 +298,7 @@ def build_work_finish_args(
     message: str,
     paths: tuple[ChangedPath, ...],
     execute: bool = False,
+    merge: bool = True,
 ) -> tuple[str, ...]:
     args: list[str] = [
         "work",
@@ -312,6 +313,8 @@ def build_work_finish_args(
     for changed_path in paths:
         if changed_path.selected:
             args.extend(["--path", changed_path.path])
+    if not merge:
+        args.append("--no-merge")
     args.append("--execute" if execute else "--dry-run")
     args.append("--json")
     return tuple(args)

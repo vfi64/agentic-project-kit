@@ -44,7 +44,7 @@
       "path": "AGENTS.md"
     },
     {
-      "bytes": 40814,
+      "bytes": 42014,
       "exists": true,
       "path": "README.md"
     },
@@ -54,16 +54,16 @@
       "path": "SECURITY.md"
     },
     {
-      "bytes": 50349,
+      "bytes": 52518,
       "exists": true,
       "path": "docs/DOCUMENTATION_COVERAGE.yaml",
       "yaml_valid": true
     },
     {
-      "bytes": 87785,
+      "bytes": 88757,
       "exists": true,
       "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-      "registry_document_count": 299,
+      "registry_document_count": 303,
       "yaml_valid": true
     },
     {
@@ -123,12 +123,12 @@
       "yaml_valid": true
     },
     {
-      "bytes": 172247,
+      "bytes": 172451,
       "exists": true,
       "path": "docs/reference/AGENTIC_KIT_COMMANDS.md"
     },
     {
-      "bytes": 475068,
+      "bytes": 475570,
       "exists": true,
       "path": "docs/reference/agentic-kit-commands.json"
     }

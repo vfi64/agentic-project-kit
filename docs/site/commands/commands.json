@@ -9361,7 +9361,7 @@
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": true,
       "group": "work",
-      "help": "Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks.",
+      "help": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.",
       "lifecycle_rank": 50,
       "params": [
         {
@@ -9405,7 +9405,15 @@
           "required": false
         },
         {
-          "help": "Plan by default. Use --execute to commit, push, and merge.",
+          "help": "Merge and run post-merge closeout by default. Use --no-merge to leave a review PR open with explicit pending-handoff closeout markers.",
+          "name": "merge",
+          "opts": [
+            "--merge"
+          ],
+          "required": false
+        },
+        {
+          "help": "Plan by default. Use --execute to commit, push, and publish.",
           "name": "dry_run",
           "opts": [
             "--dry-run"
@@ -9424,7 +9432,7 @@
       "qualified_name": "agentic-kit work finish",
       "safety": "BOUNDED",
       "surface": "orchestrator",
-      "when_to_use": "Finish a human work slice by planning or executing commit, push, PR, merge, and post-merge checks."
+      "when_to_use": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks."
     },
     {
       "diagnostic_priority": "not_diagnostic",

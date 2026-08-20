@@ -85,8 +85,12 @@ class DocumentationRegistryScope:
     errors: tuple[str, ...] = ()
 
 
+def _load_registry_workspace(project_root: Path):
+    return load_workspace(project_root, suppress_legacy_profile_warning=True)
+
+
 def load_documentation_registry(project_root: Path) -> dict[str, Any]:
-    workspace = load_workspace(project_root)
+    workspace = _load_registry_workspace(project_root)
     path = workspace.doc_registry_path()
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
@@ -95,7 +99,7 @@ def load_documentation_registry(project_root: Path) -> dict[str, Any]:
 
 
 def load_documentation_registry_scope(project_root: Path) -> DocumentationRegistryScope:
-    workspace = load_workspace(project_root)
+    workspace = _load_registry_workspace(project_root)
     path = workspace.docs_file("DOC_REGISTRY_SCOPE.yaml")
     if not path.exists():
         return DocumentationRegistryScope(
@@ -213,7 +217,7 @@ def build_documentation_registry_summary(project_root: Path) -> dict[str, Any]:
     migration or changing any document lifecycle policy.
     """
     registry = load_documentation_registry(project_root)
-    workspace = load_workspace(project_root)
+    workspace = _load_registry_workspace(project_root)
     documents = registry.get("documents", [])
     if not isinstance(documents, list):
         documents = []
@@ -453,7 +457,7 @@ def build_doc_registry_reconcile_report(project_root: Path) -> dict[str, Any]:
     The report deliberately performs no writes. It centralizes diagnostics that
     were previously assembled manually during documentation taxonomy cleanup.
     """
-    workspace = load_workspace(project_root)
+    workspace = _load_registry_workspace(project_root)
     registry = load_documentation_registry(project_root)
     scope = load_documentation_registry_scope(project_root)
     registered_paths = _registered_document_paths_from_registry(registry)
@@ -599,7 +603,7 @@ def documentation_registry_findings_for_data(
 
 
 def check_documentation_registry(project_root: Path) -> list[str]:
-    workspace = load_workspace(project_root)
+    workspace = load_workspace(project_root, suppress_legacy_profile_warning=True)
     registry_file = workspace.doc_registry_path()
     if not registry_file.exists():
         if _registry_required(project_root):
@@ -626,7 +630,7 @@ def register_documentation_registry_entry(
     normalized_path = document_path.strip().lstrip("./")
     normalized_class = document_class.strip()
     normalized_owner = owner.strip() or "maintainers"
-    workspace = load_workspace(project_root)
+    workspace = _load_registry_workspace(project_root)
     registry_path = workspace.doc_registry_path()
     base_payload: dict[str, Any] = {
         "schema_version": 1,
@@ -725,7 +729,7 @@ def build_unregistered_document_candidates_report(
     strict_scope: bool = False,
 ) -> dict[str, Any]:
     scope = load_documentation_registry_scope(project_root)
-    workspace = load_workspace(project_root)
+    workspace = _load_registry_workspace(project_root)
     candidates = find_unregistered_document_candidates(project_root)
     candidates, exempted_count = _filter_exempt_candidates(candidates, scope)
     scope_violations = _find_scope_violations(project_root, scope)
@@ -1004,7 +1008,8 @@ def _matches_scope_pattern(path: str, pattern: str) -> bool:
 
 
 def _registry_required(project_root: Path) -> bool:
-    if load_workspace(project_root).governance_file("DOCUMENTATION_REGISTRY_CONTRACT.md").exists():
+    workspace = load_workspace(project_root, suppress_legacy_profile_warning=True)
+    if workspace.governance_file("DOCUMENTATION_REGISTRY_CONTRACT.md").exists():
         return True
     compiled_context = project_root / COMPILED_CONTEXT_PATH
     if not compiled_context.exists():

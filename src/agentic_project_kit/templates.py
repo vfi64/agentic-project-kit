@@ -289,4 +289,9 @@ def create_project(options: ProjectOptions, overwrite: bool = False) -> None:
         content = render_template_string(template, context)
         write_file(target / rel_path, content, overwrite=overwrite)
 
-    subprocess.run(["git", "init"], cwd=target, check=False)
+    try:
+        subprocess.run(["git", "init"], cwd=target, check=False)
+    except FileNotFoundError as exc:
+        raise RuntimeError(
+            "git executable not found; install Git before creating an agentic project"
+        ) from exc
