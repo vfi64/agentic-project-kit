@@ -635,7 +635,9 @@ def test_successor_package_refresh_updates_start_prompt_command_reference_block(
         "KEEP EXISTING START PROMPT\n\n"
         "Command manifest entrypoint:\n"
         "- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: stale). "
-        "Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK stale.\n",
+        "Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK stale.\n\n"
+        "## Preserved Section\n\n"
+        "Keep this local start prompt tail.\n",
         encoding="utf-8",
     )
 
@@ -647,6 +649,7 @@ def test_successor_package_refresh_updates_start_prompt_command_reference_block(
     assert "COMMAND_MANIFEST_ACK stale" not in text
     assert "COMMAND_MANIFEST_ACK" in text
     assert "Command reference contract:" in text
+    assert "## Preserved Section\n\nKeep this local start prompt tail.\n" in text
 
 
 def test_bootstrap_acceptance_gate_is_projected_into_package_files() -> None:

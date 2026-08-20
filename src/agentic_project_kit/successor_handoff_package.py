@@ -1688,7 +1688,18 @@ def _refresh_existing_start_prompt_reference_block(existing: str, generated: str
     marker = "Command manifest entrypoint:\n"
     if marker not in existing or marker not in generated:
         return existing
-    return existing[: existing.index(marker)] + generated[generated.index(marker) :]
+    existing_start = existing.index(marker)
+    generated_start = generated.index(marker)
+    existing_end = _next_markdown_section_index(existing, existing_start + len(marker))
+    generated_end = _next_markdown_section_index(generated, generated_start + len(marker))
+    return existing[:existing_start] + generated[generated_start:generated_end] + existing[existing_end:]
+
+
+def _next_markdown_section_index(text: str, start: int) -> int:
+    next_section = text.find("\n## ", start)
+    if next_section == -1:
+        return len(text)
+    return next_section + 1
 
 
 def _build_successor_handoff_package(root_path: Path, ws: Workspace) -> SuccessorPackageResult:
