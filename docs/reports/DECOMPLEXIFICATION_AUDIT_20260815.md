@@ -11,7 +11,7 @@ This is an audit and planning slice only. It does not remove, rename, or depreca
 
 Architecture contract reviewed: no update is needed for this slice because no product boundary, command behavior, generated structure, or governance rule changes are introduced. DCO was considered; a simple Markdown report plus typed JSON appendix is sufficient because there is no repairable multi-cell generation workflow in this slice.
 
-Branch closeout note: this branch briefly generated successor handoff projections in commit `e22959d8`, then reverted them in `e8adb527`. That was intentional. A pure analysis slice should not carry feature-branch successor projections because the current-state contract still anchors to `docs/STATUS.md` and the validated main state; retaining the generated projection commit would have created validation-head drift.
+Branch closeout note: the original PR history briefly generated successor handoff projections in commit `e22959d8`, then reverted them in `e8adb527`. During the rebase onto current `main`, those canceling handoff-projection commits were intentionally omitted. A pure analysis slice should not carry feature-branch successor projections because the current-state contract still anchors to `docs/STATUS.md` and the validated main state; retaining generated projection commits would create validation-head drift.
 
 ## Evidence Inputs
 

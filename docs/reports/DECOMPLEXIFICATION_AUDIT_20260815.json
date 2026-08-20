@@ -5418,9 +5418,10 @@
     }
   ],
   "branch_closeout_note": {
-    "reverted_commit": "e22959d8",
-    "revert_commit": "e8adb527",
-    "reason": "The generated successor handoff projections were intentionally reverted because this audit is an analysis-only feature branch; keeping feature-branch successor projections would create validation-head drift against the current-state contract anchored in docs/STATUS.md."
+    "original_reverted_commit": "e22959d8",
+    "original_revert_commit": "e8adb527",
+    "rebased_history": "The canceling handoff-projection commits were intentionally omitted during rebase onto current main.",
+    "reason": "The generated successor handoff projections were intentionally excluded because this audit is an analysis-only feature branch; keeping feature-branch successor projections would create validation-head drift against the current-state contract anchored in docs/STATUS.md."
   },
   "implementation_ordering": {
     "active_dependency": "next-turn-workflow-kernel",
