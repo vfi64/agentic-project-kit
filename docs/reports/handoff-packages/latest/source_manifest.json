@@ -123,12 +123,12 @@
       "yaml_valid": true
     },
     {
-      "bytes": 172470,
+      "bytes": 172438,
       "exists": true,
       "path": "docs/reference/AGENTIC_KIT_COMMANDS.md"
     },
     {
-      "bytes": 475589,
+      "bytes": 475557,
       "exists": true,
       "path": "docs/reference/agentic-kit-commands.json"
     }

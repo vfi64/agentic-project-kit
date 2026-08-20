@@ -404,9 +404,9 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/first-contact-closeout-validation",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "4d4b567a37f0b7e2b7f0d64c87f73ca539a6fa99",
+    "head": "0deda3bf66ff6696f265916bb551060cdda66696",
     "head_matches_origin_main": false,
-    "head_short": "4d4b567a",
+    "head_short": "0deda3bf",
     "local_path": "cd /path/to/",
     "origin_main": "02cdf27b749f7aa4f8b784f53c49f8b9441e6e15",
     "origin_main_short": "02cdf27b",
@@ -435,7 +435,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` oder dem externen Workspace-State bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: afee1e1f7794). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK afee1e1f7794. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 4a04dd52e8be). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 4a04dd52e8be. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -445,5 +445,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: ead90c21b778a2c31a1de72e137b4d94bc480be9f2baac2a57acd529b7575dfb
-- docs/reference/agentic-kit-commands.json: 965923f3292b2711e6245ebc5bb56fd01bb0692a2b2e3e0a8769c4f9caf64681
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 575a3dab73cda5e457e607007d2efb94d74dd2edc4ce0250444ed5a737b672de
+- docs/reference/agentic-kit-commands.json: 1255d53cf0194c9a83ea722d447a4642fec04a437c9bf4e3713cb617b2d22cb2
