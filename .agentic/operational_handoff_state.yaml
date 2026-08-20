@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 2f65e872783cddf243183d98abf49c1af66da3cb
-  short: 2f65e872
-  subject: Harden first-contact validation and PR closeout (#2109)
+  full: 166a24a5b40021bf158444278d1722ecac3cdb95
+  short: 166a24a5
+  subject: Harden workspace remove and site fallback checks (#2108)
 last_substantive_work_state:
-  full: 2f65e872783cddf243183d98abf49c1af66da3cb
-  short: 2f65e872
-  subject: Harden first-contact validation and PR closeout (#2109)
+  full: 166a24a5b40021bf158444278d1722ecac3cdb95
+  short: 166a24a5
+  subject: Harden workspace remove and site fallback checks (#2108)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
