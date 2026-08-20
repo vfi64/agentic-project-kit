@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-20T15:59:27.319961+00:00",
+  "generated_at_utc": "2026-08-20T16:49:28.106161+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -54,17 +54,17 @@
     "source": "repository files and command references"
   },
   "release": {
-    "package_version": "1.0.1"
+    "package_version": "1.0.2"
   },
   "repo": {
-    "branch": "docs/post-pr2106-handoff-refresh",
+    "branch": "codex/release-v1.0.2-safety",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f301012121bd5dda75ca7a434bf309ca5f54e2e9",
+    "head": "5bc487c3b8e9c5617a7bfc83f4d1b4a3e5b95f85",
     "head_matches_origin_main": true,
-    "head_short": "f3010121",
+    "head_short": "5bc487c3",
     "local_path": "cd /path/to/",
-    "origin_main": "f301012121bd5dda75ca7a434bf309ca5f54e2e9",
-    "origin_main_short": "f3010121",
+    "origin_main": "5bc487c3b8e9c5617a7bfc83f4d1b4a3e5b95f85",
+    "origin_main_short": "5bc487c3",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -86,7 +86,7 @@
         ],
         "id": "public-installation-and-update-readiness",
         "status": "next",
-        "summary": "Close public installation, PyPI publication, update, and Docker readiness gaps for v1.0.1"
+        "summary": "Close public installation, PyPI publication, update, and Docker readiness gaps for v1.0.2"
       },
       {
         "files": [

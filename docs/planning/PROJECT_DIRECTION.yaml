@@ -399,7 +399,7 @@ roadmap:
   phase: post-1.0
   status: next
   title: Close public installation, PyPI publication, update, and Docker readiness gaps
-  target_release: v1.0.1
+  target_release: v1.0.2
   depends_on:
   - v1-0-milestone
   acceptance:
@@ -424,6 +424,9 @@ roadmap:
   - docs/reports/PUBLIC_INSTALLATION_UPDATE_DOCKER_READINESS_20260814.md
   - docs/reports/V1_0_1_RELEASE_PUBLICATION_PREP_20260814.md
   - docs/reports/DOCKER_LOCAL_SMOKE_20260814.md
+  - docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md
+  - docs/reports/FIRST_CONTACT_POST_FIX_CHECKOUT_VALIDATION_20260820.md
+  - docs/reports/release/release-prepare-1.0.2.json
   - README.md
   - site/templates/quickstart.html
   - site/templates/index.html
