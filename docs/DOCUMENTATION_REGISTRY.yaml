@@ -641,6 +641,14 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable appendix for the post-fix first-contact checkout validation report.
+  - path: docs/reports/DECOMPLEXIFICATION_AUDIT_20260815.md
+    class: evidence/log
+    owner: maintainers
+    notes: Command-surface, source/test/documentation reachability, and module-cluster decomplexification audit for compatibility-preserving reduction planning.
+  - path: docs/reports/DECOMPLEXIFICATION_AUDIT_20260815.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable appendix for the 2026-08-15 Decomplexification Audit, including per-command classifications and reduction tracks.
   - path: docs/architecture/evidence/path-literal-audit-2026-07-04.md
     class: evidence/log
     owner: maintainers

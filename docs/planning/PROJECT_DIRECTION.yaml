@@ -1462,6 +1462,88 @@ plans:
   - docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
   - docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
   - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
+- id: decomplexification-audit-roadmap
+  status: planned
+  title: Reduce command-surface complexity through compatibility-preserving facades
+  depends_on:
+  - pre-gui-hardening-plan
+  acceptance:
+  - The Decomplexification Audit remains the classification baseline before any
+    destructive command-surface cleanup.
+  - 'Follow-up implementation slices preserve the core Kit mechanisms: workspace
+    resolver and manifest, command authority, safe mutation, evidence, rules,
+    documentation lifecycle/projection, handoff state, and adopt/init/upgrade/remove.'
+  - No public CLI command is removed before a preferred facade, tests, documentation
+    coverage, and an explicit deprecation or internalization path exist.
+  - Transfer, DPA, release, documentation-governance, GUI, and legacy-ns cleanup
+    tracks are split into separately reviewable slices.
+  - Audit classifications remain an orthogonal planning dimension to manifest
+    surface; they must not become a second public command taxonomy.
+  - The first implementation slice should prefer the DPA stable API facade unless
+    newer evidence shows transfer-lifecycle consolidation is no longer competing
+    with active next-turn workflow work.
+  preserved_information:
+    audit_report: docs/reports/DECOMPLEXIFICATION_AUDIT_20260815.md
+    machine_readable_appendix: docs/reports/DECOMPLEXIFICATION_AUDIT_20260815.json
+    surface_relationship:
+      decision: orthogonal
+      manifest_surface_values:
+        diagnostic: 119
+        orchestrator: 31
+        primitive: 101
+      note: Manifest surface remains the authoritative usage/presentation layer;
+        audit categories describe decomplexification role and lifecycle risk.
+    first_implementation_recommendation:
+      target: dpa-stable-api
+      rationale: DPA has a smaller public command cluster, no identified active
+        competing Direction item, and mostly HISTORICAL/MIGRATION public names;
+        transfer has higher payoff but overlaps next-turn-workflow-kernel.
+    coordination_constraints:
+    - pre-gui-hardening-plan remains a dependency because GUI and website projections
+      consume command-manifest surface.
+    - transfer-lifecycle-consolidation must be sequenced after or explicitly aligned
+      with next-turn-workflow-kernel to avoid parallel changes to the same transfer/workflow
+      surface.
+    success_metrics:
+    - Preferred facade commands become the documented default path while historical
+      and redundant spellings move to alias, advanced, or internal-candidate status.
+    - The count of HISTORICAL and REDUNDANT commands presented as preferred spellings
+      decreases after facade slices; total command count is not the primary metric.
+    - CI, doctor, audit, docs, release, and handoff gates remain at least as strict
+      as before each facade slice.
+    classification_categories:
+    - CORE
+    - ORCHESTRATOR
+    - INTERNAL_INVARIANT
+    - MIGRATION
+    - HISTORICAL
+    - COMPATIBILITY
+    - REDUNDANT
+    - GUI_DEFERRED
+    reduction_tracks:
+    - id: transfer-lifecycle-consolidation
+      target_model: work -> PR -> merge -> settle -> successor
+      next_step: Define a lifecycle facade and mark low-level transfer primitives
+        advanced/internal before any removal.
+    - id: dpa-stable-api
+      target_model: dpa assess | dpa validate | dpa migrate | dpa explain
+      next_step: Introduce stable facade semantics while keeping historical DP/probe
+        commands as aliases or internal checks for one deprecation window.
+    - id: release-phase-model
+      target_model: release state | prepare | verify | publish | closeout
+      next_step: Map existing release commands to five phases and choose one preferred
+        public spelling per phase.
+    - id: docs-registry-lifecycle-projection
+      target_model: registry -> lifecycle -> projection
+      next_step: Keep registry and lifecycle core while moving migration/debug helpers
+        out of the Golden Path.
+    - id: gui-package-boundary
+      target_model: GUI as optional package/view over governed action specs
+      next_step: Split GUI implementation after action contracts stabilize.
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/reports/DECOMPLEXIFICATION_AUDIT_20260815.md
+  - docs/reports/DECOMPLEXIFICATION_AUDIT_20260815.json
 - id: next-turn-workflow-kernel
   status: active
   title: Move recurring next-step execution from chat discipline into a deterministic

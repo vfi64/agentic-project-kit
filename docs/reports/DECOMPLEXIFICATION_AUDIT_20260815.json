@@ -1,0 +1,5558 @@
+{
+  "branch": "codex/decomplexification-audit",
+  "clusters": [
+    {
+      "classification_counts": {
+        "COMPATIBILITY": 2,
+        "INTERNAL_INVARIANT": 55,
+        "ORCHESTRATOR": 11,
+        "REDUNDANT": 3
+      },
+      "command_count": 71,
+      "id": "transfer_lifecycle",
+      "reference_file_counts": {
+        "doc_files": 646,
+        "other_files": 31,
+        "src_files": 107,
+        "test_files": 68
+      },
+      "representative_commands": [
+        "agentic-kit transfer admin-refresh-pr",
+        "agentic-kit transfer apply",
+        "agentic-kit transfer branch-create",
+        "agentic-kit transfer branch-delete",
+        "agentic-kit transfer branch-switch",
+        "agentic-kit transfer chat-switch-complete",
+        "agentic-kit transfer closeout",
+        "agentic-kit transfer command-composition-check",
+        "agentic-kit transfer command-reference-check",
+        "agentic-kit transfer command-reference-refresh",
+        "agentic-kit transfer command-stack-begin",
+        "agentic-kit transfer command-stack-end"
+      ]
+    },
+    {
+      "classification_counts": {
+        "HISTORICAL": 12,
+        "MIGRATION": 7
+      },
+      "command_count": 19,
+      "id": "dpa",
+      "reference_file_counts": {
+        "doc_files": 192,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 3
+      },
+      "representative_commands": [
+        "agentic-kit dpa current-handoff-refresh",
+        "agentic-kit dpa dp2-decision-readiness",
+        "agentic-kit dpa dp3-dp4-adjudication-check",
+        "agentic-kit dpa dp5-block-new-gate",
+        "agentic-kit dpa dp5-stage-check",
+        "agentic-kit dpa dp5-strict-gate",
+        "agentic-kit dpa final-closeout-check",
+        "agentic-kit dpa fixture-evidence",
+        "agentic-kit dpa maintainer-record-check",
+        "agentic-kit dpa post-dp2-scope-assessment",
+        "agentic-kit dpa probe-002-readiness",
+        "agentic-kit dpa probe-003-readiness"
+      ]
+    },
+    {
+      "classification_counts": {
+        "ORCHESTRATOR": 10,
+        "REDUNDANT": 2
+      },
+      "command_count": 12,
+      "id": "release",
+      "reference_file_counts": {
+        "doc_files": 124,
+        "other_files": 6,
+        "src_files": 37,
+        "test_files": 25
+      },
+      "representative_commands": [
+        "agentic-kit post-release-check",
+        "agentic-kit post-release-doi-closeout",
+        "agentic-kit release prepare",
+        "agentic-kit release ready",
+        "agentic-kit release-check",
+        "agentic-kit release-metadata-authority-gate",
+        "agentic-kit release-notes-generate",
+        "agentic-kit release-plan",
+        "agentic-kit release-preflight",
+        "agentic-kit release-prep",
+        "agentic-kit release-publish",
+        "agentic-kit release-status"
+      ]
+    },
+    {
+      "classification_counts": {
+        "CORE": 15,
+        "INTERNAL_INVARIANT": 5
+      },
+      "command_count": 20,
+      "id": "docs_governance",
+      "reference_file_counts": {
+        "doc_files": 217,
+        "other_files": 1,
+        "src_files": 8,
+        "test_files": 4
+      },
+      "representative_commands": [
+        "agentic-kit direction audit-drift",
+        "agentic-kit direction render",
+        "agentic-kit direction validate",
+        "agentic-kit doc-lifecycle-audit",
+        "agentic-kit doc-mesh-audit",
+        "agentic-kit doc-mesh-repair",
+        "agentic-kit doc-registry check-unregistered",
+        "agentic-kit doc-registry reconcile",
+        "agentic-kit doc-registry register",
+        "agentic-kit docs lifecycle apply",
+        "agentic-kit docs lifecycle bootstrap",
+        "agentic-kit docs lifecycle plan"
+      ]
+    },
+    {
+      "classification_counts": {
+        "COMPATIBILITY": 1,
+        "INTERNAL_INVARIANT": 17
+      },
+      "command_count": 18,
+      "id": "audit_invariants",
+      "reference_file_counts": {
+        "doc_files": 194,
+        "other_files": 0,
+        "src_files": 7,
+        "test_files": 6
+      },
+      "representative_commands": [
+        "agentic-kit audit-absolute-path-portability",
+        "agentic-kit audit-command-authority",
+        "agentic-kit audit-command-manifest",
+        "agentic-kit audit-doc-currency",
+        "agentic-kit audit-doc-orphans",
+        "agentic-kit audit-mutation-lock-coverage",
+        "agentic-kit audit-ns-legacy-references",
+        "agentic-kit audit-patch-failure-discipline",
+        "agentic-kit audit-path-literals",
+        "agentic-kit audit-planning-docs-consolidation",
+        "agentic-kit audit-program-redundancy",
+        "agentic-kit audit-status-current-state"
+      ]
+    },
+    {
+      "classification_counts": {
+        "GUI_DEFERRED": 7
+      },
+      "command_count": 7,
+      "id": "gui_cockpit",
+      "reference_file_counts": {
+        "doc_files": 54,
+        "other_files": 0,
+        "src_files": 4,
+        "test_files": 5
+      },
+      "representative_commands": [
+        "agentic-kit cockpit actions",
+        "agentic-kit cockpit gatekeeper-status",
+        "agentic-kit cockpit run",
+        "agentic-kit cockpit select",
+        "agentic-kit cockpit status",
+        "agentic-kit gui initial-llm-prompt",
+        "agentic-kit gui-readiness-gate"
+      ]
+    },
+    {
+      "classification_counts": {
+        "INTERNAL_INVARIANT": 2,
+        "ORCHESTRATOR": 25,
+        "REDUNDANT": 1
+      },
+      "command_count": 28,
+      "id": "workflow_work_order",
+      "reference_file_counts": {
+        "doc_files": 231,
+        "other_files": 8,
+        "src_files": 25,
+        "test_files": 27
+      },
+      "representative_commands": [
+        "agentic-kit work check",
+        "agentic-kit work discard-changes",
+        "agentic-kit work finish",
+        "agentic-kit work recover",
+        "agentic-kit work start",
+        "agentic-kit work-order check",
+        "agentic-kit work-order list",
+        "agentic-kit work-order prepare",
+        "agentic-kit work-order run",
+        "agentic-kit work-order show",
+        "agentic-kit work-order templates",
+        "agentic-kit work-order typed-next"
+      ]
+    },
+    {
+      "classification_counts": {
+        "CORE": 7
+      },
+      "command_count": 7,
+      "id": "workspace_core",
+      "reference_file_counts": {
+        "doc_files": 128,
+        "other_files": 10,
+        "src_files": 14,
+        "test_files": 11
+      },
+      "representative_commands": [
+        "agentic-kit init",
+        "agentic-kit scaffold planning-doc",
+        "agentic-kit workspace adopt",
+        "agentic-kit workspace dpa-intake",
+        "agentic-kit workspace init",
+        "agentic-kit workspace remove",
+        "agentic-kit workspace upgrade"
+      ]
+    },
+    {
+      "classification_counts": {
+        "CORE": 1,
+        "INTERNAL_INVARIANT": 3
+      },
+      "command_count": 4,
+      "id": "command_authority",
+      "reference_file_counts": {
+        "doc_files": 39,
+        "other_files": 0,
+        "src_files": 3,
+        "test_files": 5
+      },
+      "representative_commands": [
+        "agentic-kit command-for",
+        "agentic-kit command-taxonomy-check",
+        "agentic-kit commands render-md",
+        "agentic-kit commands sync-entrypoints"
+      ]
+    },
+    {
+      "classification_counts": {
+        "CORE": 18,
+        "INTERNAL_INVARIANT": 1
+      },
+      "command_count": 19,
+      "id": "rules_evidence",
+      "reference_file_counts": {
+        "doc_files": 167,
+        "other_files": 6,
+        "src_files": 7,
+        "test_files": 7
+      },
+      "representative_commands": [
+        "agentic-kit evidence classify-log",
+        "agentic-kit evidence clean",
+        "agentic-kit evidence clean-check",
+        "agentic-kit evidence commit-paths",
+        "agentic-kit evidence finalize-log",
+        "agentic-kit evidence guard",
+        "agentic-kit evidence inspect",
+        "agentic-kit evidence scope-check",
+        "agentic-kit instruction lint",
+        "agentic-kit rule-registry check",
+        "agentic-kit rule-registry register",
+        "agentic-kit rule-registry report"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "dry_run_available": false,
+      "group": "actions",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit actions list",
+      "rationale": "Supports command/action metadata rather than a user workflow.",
+      "recommended_action": "keep_as_debug_or_generated_support",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "debug_or_manifest_support"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "actions",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit actions show",
+      "rationale": "Supports command/action metadata rather than a user workflow.",
+      "recommended_action": "keep_as_debug_or_generated_support",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "debug_or_manifest_support"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 14,
+        "other_files": 1,
+        "src_files": 1,
+        "test_files": 3
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit artifact-gc",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit audit-absolute-path-portability",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit audit-command-authority",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 15,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 3
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit audit-command-manifest",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit audit-doc-currency",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit audit-doc-orphans",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 11,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit audit-mutation-lock-coverage",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "COMPATIBILITY",
+      "qualified_name": "agentic-kit audit-ns-legacy-references",
+      "rationale": "Legacy ns reference audit; keep as invariant while ns references are still being cleaned up.",
+      "recommended_action": "retire_after_deprecation_window",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "legacy"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit audit-patch-failure-discipline",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 14,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit audit-path-literals",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit audit-planning-docs-consolidation",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit audit-program-redundancy",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 13,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit audit-status-current-state",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "boot",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit boot check",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "boot",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit boot closeout",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "boot",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 325,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit boot prompt",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "boot",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit boot report",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "boot",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit boot write",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "chat",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 1
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit chat refresher",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "chat",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 11,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 2
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit chat session-start",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 50,
+        "other_files": 2,
+        "src_files": 9,
+        "test_files": 7
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit check",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 43,
+        "other_files": 2,
+        "src_files": 8,
+        "test_files": 6
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit check-docs",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 2,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit check-todo",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "cockpit",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 11,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "GUI_DEFERRED",
+      "qualified_name": "agentic-kit cockpit actions",
+      "rationale": "GUI/cockpit behavior should be a view over governed actions, not a second core command system.",
+      "recommended_action": "split_gui_from_core_package",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "package_boundary_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "cockpit",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "GUI_DEFERRED",
+      "qualified_name": "agentic-kit cockpit gatekeeper-status",
+      "rationale": "GUI/cockpit behavior should be a view over governed actions, not a second core command system.",
+      "recommended_action": "split_gui_from_core_package",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "package_boundary_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "cockpit",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 2
+      },
+      "primary_classification": "GUI_DEFERRED",
+      "qualified_name": "agentic-kit cockpit run",
+      "rationale": "GUI/cockpit behavior should be a view over governed actions, not a second core command system.",
+      "recommended_action": "split_gui_from_core_package",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "package_boundary_candidate"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "cockpit",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 1
+      },
+      "primary_classification": "GUI_DEFERRED",
+      "qualified_name": "agentic-kit cockpit select",
+      "rationale": "GUI/cockpit behavior should be a view over governed actions, not a second core command system.",
+      "recommended_action": "split_gui_from_core_package",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "package_boundary_candidate"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "cockpit",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "GUI_DEFERRED",
+      "qualified_name": "agentic-kit cockpit status",
+      "rationale": "GUI/cockpit behavior should be a view over governed actions, not a second core command system.",
+      "recommended_action": "split_gui_from_core_package",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "package_boundary_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 17,
+        "other_files": 0,
+        "src_files": 3,
+        "test_files": 4
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit command-for",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit command-taxonomy-check",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "commands",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 1
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit commands render-md",
+      "rationale": "Supports command/action metadata rather than a user workflow.",
+      "recommended_action": "keep_as_debug_or_generated_support",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "debug_or_manifest_support"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "commands",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit commands sync-entrypoints",
+      "rationale": "Supports command/action metadata rather than a user workflow.",
+      "recommended_action": "keep_as_debug_or_generated_support",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "debug_or_manifest_support"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "dev",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit dev local-feature-gate",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "direction",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 11,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit direction audit-drift",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "direction",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit direction render",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "direction",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 15,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 1
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit direction validate",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit doc-lifecycle-audit",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit doc-mesh-audit",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit doc-mesh-repair",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "doc-registry",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 16,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit doc-registry check-unregistered",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "doc-registry",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit doc-registry reconcile",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "doc-registry",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 15,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit doc-registry register",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": true,
+      "group": "docs lifecycle",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit docs lifecycle apply",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": true,
+      "group": "docs lifecycle",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit docs lifecycle bootstrap",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "docs lifecycle",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit docs lifecycle plan",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "docs lifecycle",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit docs lifecycle propose-delete",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "DESTRUCTIVE",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": true,
+      "group": "docs lifecycle",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit docs lifecycle report",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "docs lifecycle",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit docs lifecycle sweep",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "docs lifecycle",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit docs lifecycle triage",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "docs",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit docs removed-source-audit",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 27,
+        "other_files": 0,
+        "src_files": 2,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit docs-audit",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 23,
+        "other_files": 1,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit docs-registry",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 52,
+        "other_files": 3,
+        "src_files": 8,
+        "test_files": 6
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit doctor",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "HISTORICAL",
+      "qualified_name": "agentic-kit dpa current-handoff-refresh",
+      "rationale": "Command name encodes a historical DP/probe/stage rather than a stable product abstraction.",
+      "recommended_action": "internalize_behind_stable_dpa_api",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_stage_named",
+        "migration_candidate"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "HISTORICAL",
+      "qualified_name": "agentic-kit dpa dp2-decision-readiness",
+      "rationale": "Command name encodes a historical DP/probe/stage rather than a stable product abstraction.",
+      "recommended_action": "internalize_behind_stable_dpa_api",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_stage_named",
+        "migration_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 12,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 1
+      },
+      "primary_classification": "HISTORICAL",
+      "qualified_name": "agentic-kit dpa dp3-dp4-adjudication-check",
+      "rationale": "Command name encodes a historical DP/probe/stage rather than a stable product abstraction.",
+      "recommended_action": "internalize_behind_stable_dpa_api",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_stage_named",
+        "migration_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 12,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "HISTORICAL",
+      "qualified_name": "agentic-kit dpa dp5-block-new-gate",
+      "rationale": "Command name encodes a historical DP/probe/stage rather than a stable product abstraction.",
+      "recommended_action": "internalize_behind_stable_dpa_api",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_stage_named",
+        "migration_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 16,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "HISTORICAL",
+      "qualified_name": "agentic-kit dpa dp5-stage-check",
+      "rationale": "Command name encodes a historical DP/probe/stage rather than a stable product abstraction.",
+      "recommended_action": "internalize_behind_stable_dpa_api",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_stage_named",
+        "migration_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "HISTORICAL",
+      "qualified_name": "agentic-kit dpa dp5-strict-gate",
+      "rationale": "Command name encodes a historical DP/probe/stage rather than a stable product abstraction.",
+      "recommended_action": "internalize_behind_stable_dpa_api",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_stage_named",
+        "migration_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 12,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "MIGRATION",
+      "qualified_name": "agentic-kit dpa final-closeout-check",
+      "rationale": "DPA command should be kept only through a stable product verb before long-term public support.",
+      "recommended_action": "fold_into_dpa_assess_validate_migrate_explain",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_candidate"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "HISTORICAL",
+      "qualified_name": "agentic-kit dpa fixture-evidence",
+      "rationale": "Command name encodes a historical DP/probe/stage rather than a stable product abstraction.",
+      "recommended_action": "internalize_behind_stable_dpa_api",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_stage_named",
+        "migration_candidate"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "MIGRATION",
+      "qualified_name": "agentic-kit dpa maintainer-record-check",
+      "rationale": "DPA command should be kept only through a stable product verb before long-term public support.",
+      "recommended_action": "fold_into_dpa_assess_validate_migrate_explain",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 14,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 1
+      },
+      "primary_classification": "HISTORICAL",
+      "qualified_name": "agentic-kit dpa post-dp2-scope-assessment",
+      "rationale": "Command name encodes a historical DP/probe/stage rather than a stable product abstraction.",
+      "recommended_action": "internalize_behind_stable_dpa_api",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_stage_named",
+        "migration_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "HISTORICAL",
+      "qualified_name": "agentic-kit dpa probe-002-readiness",
+      "rationale": "Command name encodes a historical DP/probe/stage rather than a stable product abstraction.",
+      "recommended_action": "internalize_behind_stable_dpa_api",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_stage_named",
+        "migration_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "HISTORICAL",
+      "qualified_name": "agentic-kit dpa probe-003-readiness",
+      "rationale": "Command name encodes a historical DP/probe/stage rather than a stable product abstraction.",
+      "recommended_action": "internalize_behind_stable_dpa_api",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_stage_named",
+        "migration_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "HISTORICAL",
+      "qualified_name": "agentic-kit dpa probe-004-readiness",
+      "rationale": "Command name encodes a historical DP/probe/stage rather than a stable product abstraction.",
+      "recommended_action": "internalize_behind_stable_dpa_api",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_stage_named",
+        "migration_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 15,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "MIGRATION",
+      "qualified_name": "agentic-kit dpa readiness",
+      "rationale": "DPA command should be kept only through a stable product verb before long-term public support.",
+      "recommended_action": "fold_into_dpa_assess_validate_migrate_explain",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "MIGRATION",
+      "qualified_name": "agentic-kit dpa readonly-probe-execution",
+      "rationale": "DPA command should be kept only through a stable product verb before long-term public support.",
+      "recommended_action": "fold_into_dpa_assess_validate_migrate_explain",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_candidate"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "MIGRATION",
+      "qualified_name": "agentic-kit dpa renderer-readiness",
+      "rationale": "DPA command should be kept only through a stable product verb before long-term public support.",
+      "recommended_action": "fold_into_dpa_assess_validate_migrate_explain",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 12,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "MIGRATION",
+      "qualified_name": "agentic-kit dpa repo-adoption-assessment",
+      "rationale": "DPA command should be kept only through a stable product verb before long-term public support.",
+      "recommended_action": "fold_into_dpa_assess_validate_migrate_explain",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 13,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 1
+      },
+      "primary_classification": "MIGRATION",
+      "qualified_name": "agentic-kit dpa stable-readiness-check",
+      "rationale": "DPA command should be kept only through a stable product verb before long-term public support.",
+      "recommended_action": "fold_into_dpa_assess_validate_migrate_explain",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "dpa",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "HISTORICAL",
+      "qualified_name": "agentic-kit dpa wrt-ch001-evidence",
+      "rationale": "Command name encodes a historical DP/probe/stage rather than a stable product abstraction.",
+      "recommended_action": "internalize_behind_stable_dpa_api",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "dpa_stage_named",
+        "migration_candidate"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "evidence",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit evidence classify-log",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "evidence",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit evidence clean",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "evidence",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit evidence clean-check",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "evidence",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 1
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit evidence commit-paths",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "evidence",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 15,
+        "other_files": 1,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit evidence finalize-log",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "evidence",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 2
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit evidence guard",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "evidence",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 14,
+        "other_files": 1,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit evidence inspect",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "evidence",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit evidence scope-check",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 11,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit github-create",
+      "rationale": "No strong decomplexification signal found in this slice.",
+      "recommended_action": "review_before_change",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "unclassified_keep_pending_review"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "governance",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit governance check",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "gui",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "GUI_DEFERRED",
+      "qualified_name": "agentic-kit gui initial-llm-prompt",
+      "rationale": "GUI/cockpit behavior should be a view over governed actions, not a second core command system.",
+      "recommended_action": "split_gui_from_core_package",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "package_boundary_candidate"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "GUI_DEFERRED",
+      "qualified_name": "agentic-kit gui-readiness-gate",
+      "rationale": "GUI/cockpit behavior should be a view over governed actions, not a second core command system.",
+      "recommended_action": "split_gui_from_core_package",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "package_boundary_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "handoff",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 15,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit handoff check",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "handoff",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 23,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit handoff post-merge-refresh-status",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "handoff",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 16,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit handoff prompt",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "handoff",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 1,
+        "src_files": 2,
+        "test_files": 2
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit handoff refresh",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "handoff",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit handoff show",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 26,
+        "other_files": 2,
+        "src_files": 2,
+        "test_files": 2
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit init",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "instruction",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 2,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit instruction lint",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "pass-already-done",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit pass-already-done classify",
+      "rationale": "No strong decomplexification signal found in this slice.",
+      "recommended_action": "review_before_change",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "unclassified_keep_pending_review"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "pass-already-done",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit pass-already-done report",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit patch-preflight",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 1
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit patch-scope-preflight",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "patterns",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit patterns list",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "patterns",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit patterns show",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 17,
+        "other_files": 1,
+        "src_files": 1,
+        "test_files": 2
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit post-release-check",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 14,
+        "other_files": 0,
+        "src_files": 5,
+        "test_files": 1
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit post-release-doi-closeout",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "pr",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit pr closeout-check",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "pr",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 1
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit pr merge-if-green",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "DESTRUCTIVE",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "pr",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit pr status",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "pr",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit pr wait-ci",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit pr-closeout",
+      "rationale": "No strong decomplexification signal found in this slice.",
+      "recommended_action": "review_before_change",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "unclassified_keep_pending_review"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit pr-hygiene",
+      "rationale": "No strong decomplexification signal found in this slice.",
+      "recommended_action": "review_before_change",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "unclassified_keep_pending_review"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit profile-explain",
+      "rationale": "No strong decomplexification signal found in this slice.",
+      "recommended_action": "review_before_change",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "unclassified_keep_pending_review"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit project-direction",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": true,
+      "group": "release",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 14,
+        "other_files": 2,
+        "src_files": 7,
+        "test_files": 4
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit release prepare",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "release",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 12,
+        "other_files": 2,
+        "src_files": 4,
+        "test_files": 4
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit release ready",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 1,
+        "src_files": 2,
+        "test_files": 2
+      },
+      "primary_classification": "REDUNDANT",
+      "qualified_name": "agentic-kit release-check",
+      "rationale": "Overlaps release ready/release-status/release-preflight concepts and should be folded into a smaller release phase model.",
+      "recommended_action": "fold_into_preferred_surface",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "consolidation_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit release-metadata-authority-gate",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 2,
+        "test_files": 1
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit release-notes-generate",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 2,
+        "test_files": 3
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit release-plan",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit release-preflight",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": true,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 11,
+        "other_files": 0,
+        "src_files": 9,
+        "test_files": 4
+      },
+      "primary_classification": "REDUNDANT",
+      "qualified_name": "agentic-kit release-prep",
+      "rationale": "Overlaps with the newer human-friendly agentic-kit release prepare flow.",
+      "recommended_action": "fold_into_preferred_surface",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "consolidation_candidate"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": true,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 3,
+        "test_files": 1
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit release-publish",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "DESTRUCTIVE",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 2
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit release-status",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit remote-branch-hygiene",
+      "rationale": "No strong decomplexification signal found in this slice.",
+      "recommended_action": "review_before_change",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "unclassified_keep_pending_review"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": true,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit remote-branch-hygiene-apply",
+      "rationale": "No strong decomplexification signal found in this slice.",
+      "recommended_action": "review_before_change",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "unclassified_keep_pending_review"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": true,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit remote-branch-hygiene-report",
+      "rationale": "No strong decomplexification signal found in this slice.",
+      "recommended_action": "review_before_change",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "unclassified_keep_pending_review"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 1,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit remote-next",
+      "rationale": "No strong decomplexification signal found in this slice.",
+      "recommended_action": "review_before_change",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "unclassified_keep_pending_review"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 1,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit rn",
+      "rationale": "No strong decomplexification signal found in this slice.",
+      "recommended_action": "review_before_change",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "unclassified_keep_pending_review"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 1,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit rnc",
+      "rationale": "No strong decomplexification signal found in this slice.",
+      "recommended_action": "review_before_change",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "unclassified_keep_pending_review"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "rule-registry",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 14,
+        "other_files": 1,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit rule-registry check",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "rule-registry",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit rule-registry register",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "rule-registry",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 14,
+        "other_files": 1,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit rule-registry report",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "rules",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 18,
+        "other_files": 2,
+        "src_files": 2,
+        "test_files": 1
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit rules acknowledge",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "rules",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit rules acknowledge-communication-refresh",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "rules",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit rules communication-refresh",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "rules",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit rules handoff-refresh",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "rules",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit rules require-current-communication-context",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "rules",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit rules snapshot",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "rules",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit rules validate-sources",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "scaffold",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit scaffold planning-doc",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "slice",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit slice gate",
+      "rationale": "No strong decomplexification signal found in this slice.",
+      "recommended_action": "review_before_change",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "unclassified_keep_pending_review"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 16,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit standard-gates-audit-suite",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "state",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit state freshness-check",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "state",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit state mode-check",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "state",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit state mode-write",
+      "rationale": "Handoff/state orchestration should converge with transfer successor lifecycle semantics.",
+      "recommended_action": "merge_with_transfer_successor_lifecycle",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "handoff_state_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "todo",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit todo complete",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "todo",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit todo list",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "todo",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit todo render",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 17,
+        "other_files": 1,
+        "src_files": 2,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit transfer admin-refresh-pr",
+      "rationale": "High-level transfer lifecycle wrapper; preserve behavior but reduce exposed lifecycle vocabulary.",
+      "recommended_action": "fold_into_work_pr_merge_settle_successor_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "lifecycle_candidate"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer apply",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer branch-create",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer branch-delete",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "DESTRUCTIVE",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 1
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer branch-switch",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 24,
+        "other_files": 1,
+        "src_files": 5,
+        "test_files": 2
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit transfer chat-switch-complete",
+      "rationale": "High-level transfer lifecycle wrapper; preserve behavior but reduce exposed lifecycle vocabulary.",
+      "recommended_action": "fold_into_work_pr_merge_settle_successor_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "lifecycle_candidate"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer closeout",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer command-composition-check",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 15,
+        "other_files": 0,
+        "src_files": 2,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer command-reference-check",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 2
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer command-reference-refresh",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer command-stack-begin",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer command-stack-end",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 3,
+        "test_files": 5
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer commit",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer conflict-resolve-file",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer conflict-status",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 2,
+        "src_files": 4,
+        "test_files": 2
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer continue",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer delete-merged-work-branch",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "DESTRUCTIVE",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "COMPATIBILITY",
+      "qualified_name": "agentic-kit transfer diagnose-removed-ns-commands",
+      "rationale": "Exists only to reason about removed legacy ns command paths.",
+      "recommended_action": "retire_after_deprecation_window",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "legacy"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer divergence-status",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer evidence-finalize-current-transfer",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer evidence-inspect-latest",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 1,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit transfer evidence-pr-complete",
+      "rationale": "High-level transfer lifecycle wrapper; preserve behavior but reduce exposed lifecycle vocabulary.",
+      "recommended_action": "fold_into_work_pr_merge_settle_successor_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "lifecycle_candidate"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer fetch-origin",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer head-sha",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer inspect",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer list-refs",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer log-header",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer log-upload-hint",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": true,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer normalize-files",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 11,
+        "other_files": 2,
+        "src_files": 2,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer normalize-session",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": true,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer order-create",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer order-validate",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 4,
+        "test_files": 3
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer patch-cycle-status",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 27,
+        "other_files": 1,
+        "src_files": 6,
+        "test_files": 4
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer post-merge-check",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 23,
+        "other_files": 2,
+        "src_files": 4,
+        "test_files": 3
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit transfer post-merge-complete",
+      "rationale": "High-level transfer lifecycle wrapper; preserve behavior but reduce exposed lifecycle vocabulary.",
+      "recommended_action": "fold_into_work_pr_merge_settle_successor_model",
+      "safety": "DESTRUCTIVE",
+      "secondary_flags": [
+        "lifecycle_candidate"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 14,
+        "other_files": 1,
+        "src_files": 5,
+        "test_files": 3
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit transfer post-merge-settle",
+      "rationale": "High-level transfer lifecycle wrapper; preserve behavior but reduce exposed lifecycle vocabulary.",
+      "recommended_action": "fold_into_work_pr_merge_settle_successor_model",
+      "safety": "DESTRUCTIVE",
+      "secondary_flags": [
+        "lifecycle_candidate"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 2,
+        "src_files": 4,
+        "test_files": 2
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit transfer pr-closeout-complete",
+      "rationale": "High-level transfer lifecycle wrapper; preserve behavior but reduce exposed lifecycle vocabulary.",
+      "recommended_action": "fold_into_work_pr_merge_settle_successor_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "lifecycle_candidate"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 20,
+        "other_files": 0,
+        "src_files": 2,
+        "test_files": 4
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit transfer pr-complete",
+      "rationale": "High-level transfer lifecycle wrapper; preserve behavior but reduce exposed lifecycle vocabulary.",
+      "recommended_action": "fold_into_work_pr_merge_settle_successor_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "lifecycle_candidate"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 21,
+        "other_files": 2,
+        "src_files": 7,
+        "test_files": 6
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer pr-create",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 19,
+        "other_files": 2,
+        "src_files": 7,
+        "test_files": 5
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit transfer pr-create-complete",
+      "rationale": "High-level transfer lifecycle wrapper; preserve behavior but reduce exposed lifecycle vocabulary.",
+      "recommended_action": "fold_into_work_pr_merge_settle_successor_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "lifecycle_candidate"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer pr-existing-for-branch",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 2,
+        "test_files": 1
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer pr-merge-safe",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "DESTRUCTIVE",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 14,
+        "other_files": 0,
+        "src_files": 2,
+        "test_files": 2
+      },
+      "primary_classification": "REDUNDANT",
+      "qualified_name": "agentic-kit transfer pr-status",
+      "rationale": "Duplicates the first-class agentic-kit pr status diagnostic as a transfer-scoped public surface.",
+      "recommended_action": "fold_into_preferred_surface",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "consolidation_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer pr-wait-ci",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 12,
+        "other_files": 0,
+        "src_files": 4,
+        "test_files": 2
+      },
+      "primary_classification": "COMPATIBILITY",
+      "qualified_name": "agentic-kit transfer prepare-successor-handoff",
+      "rationale": "Manifest marks this as a deprecated compatibility alias for transfer chat-switch-complete.",
+      "recommended_action": "retire_after_deprecation_window",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "legacy"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 19,
+        "other_files": 1,
+        "src_files": 3,
+        "test_files": 2
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer protected-diff-plan",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 1,
+        "src_files": 3,
+        "test_files": 2
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer publish-last-report",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "DESTRUCTIVE",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer pull-current",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 3,
+        "test_files": 2
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer push-current",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer read-user-task",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer rebase-on-upstream",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer refresh-llm-context-carriers",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 15,
+        "other_files": 2,
+        "src_files": 3,
+        "test_files": 1
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit transfer remote-next",
+      "rationale": "High-level transfer lifecycle wrapper; preserve behavior but reduce exposed lifecycle vocabulary.",
+      "recommended_action": "fold_into_work_pr_merge_settle_successor_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "lifecycle_candidate"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 12,
+        "other_files": 1,
+        "src_files": 2,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit transfer remote-work-start",
+      "rationale": "High-level transfer lifecycle wrapper; preserve behavior but reduce exposed lifecycle vocabulary.",
+      "recommended_action": "fold_into_work_pr_merge_settle_successor_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "lifecycle_candidate"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer repo-diff",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer repo-log",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 32,
+        "other_files": 2,
+        "src_files": 5,
+        "test_files": 8
+      },
+      "primary_classification": "REDUNDANT",
+      "qualified_name": "agentic-kit transfer repo-status",
+      "rationale": "Useful primitive, but overlaps higher-level work/check and transfer-state status reporting.",
+      "recommended_action": "fold_into_preferred_surface",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "consolidation_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer require-fresh-llm-context",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 1,
+        "src_files": 2,
+        "test_files": 1
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer restore-known-volatile",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 1,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer run-and-log",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 1,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer run-local",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer run-sequence-and-log",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer show-last-report",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer standard-error-scan",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer state",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "REDUNDANT",
+      "qualified_name": "agentic-kit transfer status",
+      "rationale": "Overlaps transfer state/inspect while exposing transfer-carrier internals as public CLI.",
+      "recommended_action": "fold_into_preferred_surface",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "consolidation_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer submit-user-task",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 19,
+        "other_files": 2,
+        "src_files": 4,
+        "test_files": 1
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit transfer sync-main",
+      "rationale": "High-level transfer lifecycle wrapper; preserve behavior but reduce exposed lifecycle vocabulary.",
+      "recommended_action": "fold_into_work_pr_merge_settle_successor_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "lifecycle_candidate"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 1,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer verify-llm-context-refresh",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 1,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer work-order-patch",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "transfer",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit transfer workflow-next",
+      "rationale": "Low-level transfer primitive or diagnostic; should support the lifecycle model instead of expanding public UX.",
+      "recommended_action": "hide_or_internalize_after_orchestrator_covers_it",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "transfer_primitive"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit validate-contract",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit validate-output-contract",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit validate-sections",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "work",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 2,
+        "src_files": 3,
+        "test_files": 3
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work check",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "work",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work discard-changes",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": true,
+      "group": "work",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 2,
+        "src_files": 5,
+        "test_files": 3
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work finish",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "work",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 2,
+        "src_files": 4,
+        "test_files": 2
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work recover",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "work",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 13,
+        "other_files": 2,
+        "src_files": 4,
+        "test_files": 5
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work start",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "work-order",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 7,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work-order check",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "work-order",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work-order list",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "work-order",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work-order prepare",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": true,
+      "group": "work-order",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work-order run",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "work-order",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 6,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work-order show",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "work-order",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work-order templates",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "work-order",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work-order typed-next",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "work-order",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work-order typed-queue-status",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": true,
+      "group": "work-order",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 4,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work-order typed-run",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "work-order",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 1
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit work-order upload",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "workflow",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 11,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 2
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit workflow cleanup",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "workflow",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit workflow fail-report",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "workflow",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 16,
+        "other_files": 0,
+        "src_files": 2,
+        "test_files": 4
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit workflow go",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": false,
+      "group": "workflow",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 9,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit workflow list",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "workflow",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 11,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 2
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit workflow request",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "workflow",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 10,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 2
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit workflow run",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "workflow",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 8,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit workflow show",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "workflow",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 11,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "REDUNDANT",
+      "qualified_name": "agentic-kit workflow state",
+      "rationale": "Overlaps workflow status --explain as a guided state surface.",
+      "recommended_action": "fold_into_preferred_surface",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "consolidation_candidate"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "workflow",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 14,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 1
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit workflow status",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "workflow",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 11,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 1
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit workflow upload",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "workflow",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 11,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "ORCHESTRATOR",
+      "qualified_name": "agentic-kit workflow upload-output",
+      "rationale": "Coordinates a workflow, PR, work-order, or release lifecycle phase.",
+      "recommended_action": "fold_into_smaller_phase_model",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "workflow_or_release_lifecycle"
+      ],
+      "surface": "primitive"
+    },
+    {
+      "dry_run_available": false,
+      "group": "workflow-guard",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 11,
+        "other_files": 0,
+        "src_files": 1,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit workflow-guard check",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "workflow-guard",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 5,
+        "other_files": 0,
+        "src_files": 0,
+        "test_files": 0
+      },
+      "primary_classification": "INTERNAL_INVARIANT",
+      "qualified_name": "agentic-kit workflow-guard diagnose",
+      "rationale": "Focused invariant/audit command; useful as gate logic but too detailed for the default CLI surface.",
+      "recommended_action": "keep_invariant_but_reduce_public_prominence",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "ci_or_maintainer_diagnostic"
+      ],
+      "surface": "diagnostic"
+    },
+    {
+      "dry_run_available": false,
+      "group": "workspace",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 18,
+        "other_files": 3,
+        "src_files": 2,
+        "test_files": 2
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit workspace adopt",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "READ_ONLY",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": true,
+      "group": "workspace",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 19,
+        "other_files": 1,
+        "src_files": 2,
+        "test_files": 0
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit workspace dpa-intake",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": true,
+      "group": "workspace",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 28,
+        "other_files": 2,
+        "src_files": 3,
+        "test_files": 3
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit workspace init",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": true,
+      "group": "workspace",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 15,
+        "other_files": 1,
+        "src_files": 2,
+        "test_files": 2
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit workspace remove",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "orchestrator"
+    },
+    {
+      "dry_run_available": true,
+      "group": "workspace",
+      "literal_references_excluding_command_reference": {
+        "doc_files": 16,
+        "other_files": 1,
+        "src_files": 3,
+        "test_files": 2
+      },
+      "primary_classification": "CORE",
+      "qualified_name": "agentic-kit workspace upgrade",
+      "rationale": "Matches a durable Kit mechanism: workspace, command authority, evidence, rules, docs lifecycle, validation, or project health.",
+      "recommended_action": "keep_stable_contract",
+      "safety": "BOUNDED",
+      "secondary_flags": [
+        "durable_mechanism"
+      ],
+      "surface": "orchestrator"
+    }
+  ],
+  "generated_date": "2026-08-15",
+  "head": "02cdf27b749f7aa4f8b784f53c49f8b9441e6e15",
+  "inputs": {
+    "command_count": 251,
+    "command_manifest": "docs/reference/agentic-kit-commands.json",
+    "command_manifest_gate": "PASS via agentic-kit audit-command-manifest --json",
+    "command_taxonomy_gate": "PASS via agentic-kit command-taxonomy-check --json",
+    "ns_legacy_reference_gate": "PASS via agentic-kit audit-ns-legacy-references --json",
+    "program_redundancy_gate": "PASS with review findings via agentic-kit audit-program-redundancy --json",
+    "project_direction_gate": "PASS via agentic-kit direction validate --root . --json"
+  },
+  "kind": "decomplexification_audit",
+  "module_clusters": [
+    {
+      "file_count": 32,
+      "id": "transfer",
+      "largest_files": [
+        {
+          "loc": 2253,
+          "path": "src/agentic_project_kit/transfer_repo_actions.py"
+        },
+        {
+          "loc": 959,
+          "path": "src/agentic_project_kit/transfer_remote_next.py"
+        },
+        {
+          "loc": 767,
+          "path": "src/agentic_project_kit/cli_commands/transfer_diagnostics.py"
+        },
+        {
+          "loc": 743,
+          "path": "src/agentic_project_kit/cli_commands/transfer_pr_create_flow.py"
+        },
+        {
+          "loc": 664,
+          "path": "src/agentic_project_kit/cli_commands/transfer_repo_pre_pr.py"
+        },
+        {
+          "loc": 594,
+          "path": "src/agentic_project_kit/cli_commands/transfer_handoff_flow.py"
+        },
+        {
+          "loc": 547,
+          "path": "src/agentic_project_kit/cli_commands/transfer_pr_merge_flow.py"
+        },
+        {
+          "loc": 483,
+          "path": "src/agentic_project_kit/transfer_state.py"
+        },
+        {
+          "loc": 471,
+          "path": "src/agentic_project_kit/transfer_uplink.py"
+        },
+        {
+          "loc": 442,
+          "path": "src/agentic_project_kit/cli_commands/transfer_post_merge_complete.py"
+        },
+        {
+          "loc": 401,
+          "path": "src/agentic_project_kit/cli_commands/transfer_context_flow.py"
+        },
+        {
+          "loc": 398,
+          "path": "src/agentic_project_kit/cli_commands/transfer_context_helpers.py"
+        }
+      ],
+      "total_loc": 12642
+    },
+    {
+      "file_count": 24,
+      "id": "dpa",
+      "largest_files": [
+        {
+          "loc": 1338,
+          "path": "src/agentic_project_kit/cli_commands/dpa.py"
+        },
+        {
+          "loc": 743,
+          "path": "src/agentic_project_kit/dpa_stable_readiness.py"
+        },
+        {
+          "loc": 734,
+          "path": "src/agentic_project_kit/dpa_post_dp2_scope_assessment.py"
+        },
+        {
+          "loc": 711,
+          "path": "src/agentic_project_kit/dpa_maintainer_record_check.py"
+        },
+        {
+          "loc": 680,
+          "path": "src/agentic_project_kit/dpa_fixture_evidence.py"
+        },
+        {
+          "loc": 627,
+          "path": "src/agentic_project_kit/dpa_final_closeout.py"
+        },
+        {
+          "loc": 615,
+          "path": "src/agentic_project_kit/dpa_dp5_stage_adoption.py"
+        },
+        {
+          "loc": 604,
+          "path": "src/agentic_project_kit/dpa_dp3_dp4_adjudication.py"
+        },
+        {
+          "loc": 574,
+          "path": "src/agentic_project_kit/dpa_repo_adoption_assessment.py"
+        },
+        {
+          "loc": 549,
+          "path": "src/agentic_project_kit/dpa_current_handoff_lifecycle.py"
+        },
+        {
+          "loc": 509,
+          "path": "src/agentic_project_kit/dpa_probe_002_readiness.py"
+        },
+        {
+          "loc": 505,
+          "path": "src/agentic_project_kit/dpa_readiness.py"
+        }
+      ],
+      "total_loc": 12099
+    },
+    {
+      "file_count": 19,
+      "id": "release",
+      "largest_files": [
+        {
+          "loc": 823,
+          "path": "src/agentic_project_kit/release_notes.py"
+        },
+        {
+          "loc": 616,
+          "path": "src/agentic_project_kit/post_release_closeout.py"
+        },
+        {
+          "loc": 552,
+          "path": "src/agentic_project_kit/release_state.py"
+        },
+        {
+          "loc": 465,
+          "path": "src/agentic_project_kit/release_publish_orchestration.py"
+        },
+        {
+          "loc": 430,
+          "path": "src/agentic_project_kit/cli_commands/human_workflows.py"
+        },
+        {
+          "loc": 401,
+          "path": "src/agentic_project_kit/release.py"
+        },
+        {
+          "loc": 392,
+          "path": "src/agentic_project_kit/cli_commands/release.py"
+        },
+        {
+          "loc": 369,
+          "path": "src/agentic_project_kit/release_prepare.py"
+        },
+        {
+          "loc": 328,
+          "path": "src/agentic_project_kit/release_metadata_authority_gate.py"
+        },
+        {
+          "loc": 252,
+          "path": "src/agentic_project_kit/post_release.py"
+        },
+        {
+          "loc": 247,
+          "path": "src/agentic_project_kit/release_process_guardrails.py"
+        },
+        {
+          "loc": 204,
+          "path": "src/agentic_project_kit/release_prep_core.py"
+        }
+      ],
+      "total_loc": 5704
+    },
+    {
+      "file_count": 13,
+      "id": "docs_governance",
+      "largest_files": [
+        {
+          "loc": 1179,
+          "path": "src/agentic_project_kit/doc_lifecycle.py"
+        },
+        {
+          "loc": 1122,
+          "path": "src/agentic_project_kit/documentation_registry.py"
+        },
+        {
+          "loc": 639,
+          "path": "src/agentic_project_kit/doc_lifecycle_sweep.py"
+        },
+        {
+          "loc": 536,
+          "path": "src/agentic_project_kit/doc_currency_audit.py"
+        },
+        {
+          "loc": 491,
+          "path": "src/agentic_project_kit/doc_mesh.py"
+        },
+        {
+          "loc": 446,
+          "path": "src/agentic_project_kit/doc_lifecycle_signals.py"
+        },
+        {
+          "loc": 379,
+          "path": "src/agentic_project_kit/doctor.py"
+        },
+        {
+          "loc": 313,
+          "path": "src/agentic_project_kit/planning_docs_consolidation_audit.py"
+        },
+        {
+          "loc": 310,
+          "path": "src/agentic_project_kit/documentation_system_audit.py"
+        },
+        {
+          "loc": 223,
+          "path": "src/agentic_project_kit/cli_commands/docs.py"
+        },
+        {
+          "loc": 126,
+          "path": "src/agentic_project_kit/cli_commands/doc_registry.py"
+        },
+        {
+          "loc": 25,
+          "path": "src/agentic_project_kit/cli_commands/doc_currency_audit.py"
+        }
+      ],
+      "total_loc": 5814
+    },
+    {
+      "file_count": 35,
+      "id": "gui",
+      "largest_files": [
+        {
+          "loc": 1176,
+          "path": "src/agentic_project_kit/gui_tkinter_shell.py"
+        },
+        {
+          "loc": 1077,
+          "path": "src/agentic_project_kit/gui_task_editor.py"
+        },
+        {
+          "loc": 748,
+          "path": "src/agentic_project_kit/gui_cockpit_task.py"
+        },
+        {
+          "loc": 698,
+          "path": "src/agentic_project_kit/gui_viewmodel.py"
+        },
+        {
+          "loc": 695,
+          "path": "src/agentic_project_kit/gui_cockpit_actions.py"
+        },
+        {
+          "loc": 608,
+          "path": "src/agentic_project_kit/cockpit.py"
+        },
+        {
+          "loc": 605,
+          "path": "src/agentic_project_kit/gui_button_catalog.py"
+        },
+        {
+          "loc": 501,
+          "path": "src/agentic_project_kit/gui_cockpit_header.py"
+        },
+        {
+          "loc": 387,
+          "path": "src/agentic_project_kit/gui_cockpit_sidebar.py"
+        },
+        {
+          "loc": 365,
+          "path": "src/agentic_project_kit/gui_cockpit.py"
+        },
+        {
+          "loc": 355,
+          "path": "src/agentic_project_kit/gui_command_projection.py"
+        },
+        {
+          "loc": 259,
+          "path": "src/agentic_project_kit/gui_gatekeeper_status.py"
+        }
+      ],
+      "total_loc": 9709
+    },
+    {
+      "file_count": 7,
+      "id": "workflow",
+      "largest_files": [
+        {
+          "loc": 471,
+          "path": "src/agentic_project_kit/cli_commands/workflow.py"
+        },
+        {
+          "loc": 440,
+          "path": "src/agentic_project_kit/patch_cycle_workflow.py"
+        },
+        {
+          "loc": 430,
+          "path": "src/agentic_project_kit/cli_commands/human_workflows.py"
+        },
+        {
+          "loc": 262,
+          "path": "src/agentic_project_kit/workflow_guard.py"
+        },
+        {
+          "loc": 148,
+          "path": "src/agentic_project_kit/transfer_workflow_next.py"
+        },
+        {
+          "loc": 124,
+          "path": "src/agentic_project_kit/workflow_summary_runner.py"
+        },
+        {
+          "loc": 26,
+          "path": "src/agentic_project_kit/cli_commands/workflow_guard.py"
+        }
+      ],
+      "total_loc": 1901
+    }
+  ],
+  "non_overlap_precondition": {
+    "decision": "green",
+    "handling": "Audit branch starts from origin/main and does not stack decomplexification work on PR #2105.",
+    "head_ref_oid": "75018cc3437f0aefd158481cc056f5382aca3330",
+    "open_pr": 2105,
+    "state": "OPEN"
+  },
+  "origin_main": "02cdf27b749f7aa4f8b784f53c49f8b9441e6e15",
+  "reduction_tracks": [
+    {
+      "id": "transfer-lifecycle-consolidation",
+      "priority": "highest",
+      "reason": "71 transfer commands expose both lifecycle orchestration and primitives; this is the largest public surface cluster.",
+      "safe_next_step": "Define a lifecycle facade and mark primitives as advanced/internal before any removal.",
+      "target_model": "work -> PR -> merge -> settle -> successor"
+    },
+    {
+      "id": "dpa-stable-api",
+      "priority": "high",
+      "reason": "Most DPA commands encode DP/probe/stage history rather than product verbs.",
+      "safe_next_step": "Introduce stable facade semantics while keeping historical commands as aliases/internal checks for one deprecation window.",
+      "target_model": "dpa assess | dpa validate | dpa migrate | dpa explain"
+    },
+    {
+      "id": "release-phase-model",
+      "priority": "high",
+      "reason": "Release root commands and release subcommands overlap phase vocabulary.",
+      "safe_next_step": "Map existing commands to five phases and choose one preferred public spelling per phase.",
+      "target_model": "release state | prepare | verify | publish | closeout"
+    },
+    {
+      "id": "docs-registry-lifecycle-projection",
+      "priority": "medium",
+      "reason": "Docs governance has many focused commands that can remain as invariants behind fewer workflows.",
+      "safe_next_step": "Keep registry and lifecycle core but hide migration/debug primitives from the Golden Path.",
+      "target_model": "registry -> lifecycle -> projection"
+    },
+    {
+      "id": "gui-package-boundary",
+      "priority": "medium",
+      "reason": "GUI command count is small, but GUI/cockpit code is a large package-resident module cluster.",
+      "safe_next_step": "Move GUI code behind an optional package boundary after action contracts are stable.",
+      "target_model": "GUI as optional package/view over action specs"
+    }
+  ],
+  "branch_closeout_note": {
+    "original_reverted_commit": "e22959d8",
+    "original_revert_commit": "e8adb527",
+    "rebased_history": "The canceling handoff-projection commits were intentionally omitted during rebase onto current main.",
+    "reason": "The generated successor handoff projections were intentionally excluded because this audit is an analysis-only feature branch; keeping feature-branch successor projections would create validation-head drift against the current-state contract anchored in docs/STATUS.md."
+  },
+  "implementation_ordering": {
+    "active_dependency": "next-turn-workflow-kernel",
+    "precondition": "pre-gui-hardening-plan",
+    "recommended_first_target": "dpa-stable-api",
+    "reason": "DPA has a smaller public command cluster, no identified active competing direction item, and mostly HISTORICAL/MIGRATION public names. Transfer lifecycle has higher payoff but overlaps the active next-turn-workflow-kernel surface."
+  },
+  "schema_version": 1,
+  "summary": {
+    "classification_counts": {
+      "COMPATIBILITY": 3,
+      "CORE": 66,
+      "GUI_DEFERRED": 7,
+      "HISTORICAL": 12,
+      "INTERNAL_INVARIANT": 85,
+      "MIGRATION": 7,
+      "ORCHESTRATOR": 65,
+      "REDUNDANT": 6
+    },
+    "group_counts": {
+      "actions": 2,
+      "boot": 5,
+      "chat": 2,
+      "cockpit": 5,
+      "commands": 2,
+      "dev": 1,
+      "direction": 3,
+      "doc-registry": 3,
+      "docs": 1,
+      "docs lifecycle": 7,
+      "dpa": 19,
+      "evidence": 8,
+      "governance": 1,
+      "gui": 1,
+      "handoff": 5,
+      "instruction": 1,
+      "pass-already-done": 2,
+      "patterns": 2,
+      "pr": 4,
+      "release": 2,
+      "root": 53,
+      "rule-registry": 3,
+      "rules": 7,
+      "scaffold": 1,
+      "slice": 1,
+      "state": 3,
+      "todo": 3,
+      "transfer": 71,
+      "work": 5,
+      "work-order": 10,
+      "workflow": 11,
+      "workflow-guard": 2,
+      "workspace": 5
+    },
+    "missing_public_command_readme_terms": [],
+    "public_command_readme_terms": 72,
+    "safety_counts": {
+      "BOUNDED": 165,
+      "DESTRUCTIVE": 9,
+      "READ_ONLY": 77
+    },
+    "surface_counts": {
+      "diagnostic": 119,
+      "orchestrator": 31,
+      "primitive": 101
+    },
+    "surface_relationship": {
+      "decision": "orthogonal",
+      "note": "Manifest surface is the authoritative usage/presentation layer. Audit classifications are planning roles and must not be copied into the manifest as a second public taxonomy.",
+      "cross_table": {
+        "COMPATIBILITY": {
+          "diagnostic": 2,
+          "orchestrator": 0,
+          "primitive": 1,
+          "total": 3
+        },
+        "CORE": {
+          "diagnostic": 28,
+          "orchestrator": 9,
+          "primitive": 29,
+          "total": 66
+        },
+        "GUI_DEFERRED": {
+          "diagnostic": 4,
+          "orchestrator": 0,
+          "primitive": 3,
+          "total": 7
+        },
+        "HISTORICAL": {
+          "diagnostic": 9,
+          "orchestrator": 0,
+          "primitive": 3,
+          "total": 12
+        },
+        "INTERNAL_INVARIANT": {
+          "diagnostic": 44,
+          "orchestrator": 0,
+          "primitive": 41,
+          "total": 85
+        },
+        "MIGRATION": {
+          "diagnostic": 5,
+          "orchestrator": 1,
+          "primitive": 1,
+          "total": 7
+        },
+        "ORCHESTRATOR": {
+          "diagnostic": 22,
+          "orchestrator": 20,
+          "primitive": 23,
+          "total": 65
+        },
+        "REDUNDANT": {
+          "diagnostic": 5,
+          "orchestrator": 1,
+          "primitive": 0,
+          "total": 6
+        },
+        "surface_total": {
+          "diagnostic": 119,
+          "orchestrator": 31,
+          "primitive": 101,
+          "total": 251
+        }
+      }
+    },
+    "success_criteria": {
+      "default_surface": "Preferred facade commands become the documented default path while historical and redundant spellings move to alias, advanced, or internal-candidate status.",
+      "gate_integrity": "CI, doctor, audit, docs, release, and handoff gates remain at least as strict as before each facade slice.",
+      "preferred_historical_redundant_spellings": "The count of HISTORICAL and REDUNDANT commands presented as preferred spellings should decrease after each facade slice; total command count is not the primary metric."
+    }
+  },
+  "worktree_clean_at_generation": true
+}
