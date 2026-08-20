@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `166a24a5b40021bf158444278d1722ecac3cdb95` (`166a24a5`), after `Harden workspace remove and site fallback checks (#2108)`.
-Last substantive work state is `166a24a5b40021bf158444278d1722ecac3cdb95` (`166a24a5`), after `Harden workspace remove and site fallback checks (#2108)`.
+Current verified main/admin HEAD is `f301012121bd5dda75ca7a434bf309ca5f54e2e9` (`f3010121`), after `Add decomplexification audit roadmap (#2106)`.
+Last substantive work state is `f301012121bd5dda75ca7a434bf309ca5f54e2e9` (`f3010121`), after `Add decomplexification audit roadmap (#2106)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

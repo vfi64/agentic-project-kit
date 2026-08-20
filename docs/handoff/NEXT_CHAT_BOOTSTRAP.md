@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `166a24a5b40021bf158444278d1722ecac3cdb95` (`166a24a5`)
-- Handoff freshness marker: `166a24a5`
-- Branch at generation: `docs/post-pr2108-handoff-refresh`
+- HEAD: `f301012121bd5dda75ca7a434bf309ca5f54e2e9` (`f3010121`)
+- Handoff freshness marker: `f3010121`
+- Branch at generation: `docs/post-pr2106-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -84,6 +84,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 - `governance-doc-backfill` (active): Backfill reviewed governance document registry entries
 - `planning-ideas-residual-cleanup` (planned): Resolve remaining planning and idea residual documents
 - `pre-gui-hardening-plan` (active): Execute the pre-GUI hardening backlog in small wrapper-first slices
+- `decomplexification-audit-roadmap` (planned): Reduce command-surface complexity through compatibility-preserving facades
 - `next-turn-workflow-kernel` (active): Move recurring next-step execution from chat discipline into a deterministic local workflow kernel
 - `release-command-authority` (active): Keep release preparation, publishing, and DOI closeout under explicit command authority
 - `rule-registry-hardening` (active): Preserve active rule identity, source validation, and refresh handshakes

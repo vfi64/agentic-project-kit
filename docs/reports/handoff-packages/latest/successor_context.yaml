@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-20T15:30:56.337286+00:00",
+  "generated_at_utc": "2026-08-20T15:59:27.319961+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,14 +57,14 @@
     "package_version": "1.0.1"
   },
   "repo": {
-    "branch": "docs/post-pr2108-handoff-refresh",
+    "branch": "docs/post-pr2106-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "166a24a5b40021bf158444278d1722ecac3cdb95",
+    "head": "f301012121bd5dda75ca7a434bf309ca5f54e2e9",
     "head_matches_origin_main": true,
-    "head_short": "166a24a5",
+    "head_short": "f3010121",
     "local_path": "cd /path/to/",
-    "origin_main": "166a24a5b40021bf158444278d1722ecac3cdb95",
-    "origin_main_short": "166a24a5",
+    "origin_main": "f301012121bd5dda75ca7a434bf309ca5f54e2e9",
+    "origin_main_short": "f3010121",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -186,6 +186,15 @@
         "id": "pre-gui-hardening-plan",
         "status": "active",
         "summary": "Execute the pre-GUI hardening backlog in small wrapper-first slices"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "decomplexification-audit-roadmap",
+        "status": "planned",
+        "summary": "Reduce command-surface complexity through compatibility-preserving facades"
       },
       {
         "files": [
