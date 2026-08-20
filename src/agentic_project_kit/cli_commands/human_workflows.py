@@ -93,16 +93,18 @@ def _path_args(paths: list[Path]) -> list[str]:
     return args
 
 
-HANDOFF_CLOSEOUT_PATHS = [
-    Path("docs/handoff/START_NEW_CHAT_PROMPT.md"),
-    Path("docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"),
-    Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md"),
-    Path("docs/reports/handoff-packages/latest/execution_contract.json"),
-    Path("docs/reports/handoff-packages/latest/source_manifest.json"),
-    Path("docs/reports/handoff-packages/latest/successor_context.yaml"),
-    Path("docs/reports/handoff-packages/latest/successor_prompt.md"),
-    Path("docs/reports/handoff-packages/latest/validation_report.json"),
-]
+def _handoff_closeout_paths() -> list[Path]:
+    workspace = load_workspace(Path("."), suppress_legacy_profile_warning=True)
+    return [
+        workspace.handoff_file("START_NEW_CHAT_PROMPT.md"),
+        workspace.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"),
+        workspace.handoff_file("NEXT_CHAT_BOOTSTRAP.md"),
+        workspace.package_file("execution_contract.json"),
+        workspace.package_file("source_manifest.json"),
+        workspace.package_file("successor_context.yaml"),
+        workspace.package_file("successor_prompt.md"),
+        workspace.package_file("validation_report.json"),
+    ]
 
 
 def _extract_pr_number(text: str) -> int | None:
@@ -135,9 +137,10 @@ def _remote_preflight_step() -> dict[str, object]:
 
 
 def _handoff_projection_status_step() -> dict[str, object]:
+    paths = _handoff_closeout_paths()
     return _run_step(
         "handoff-projection-status",
-        ["git", "status", "--short", "--", *[str(path) for path in HANDOFF_CLOSEOUT_PATHS]],
+        ["git", "status", "--short", "--", *[str(path) for path in paths]],
     )
 
 
@@ -461,7 +464,7 @@ def work_finish_command(
                             branch,
                             "--message",
                             f"Refresh handoff for {title}",
-                            *_path_args(HANDOFF_CLOSEOUT_PATHS),
+                            *_path_args(_handoff_closeout_paths()),
                         ),
                     )
                 )
