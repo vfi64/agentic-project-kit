@@ -272,11 +272,11 @@
       "branch": "codex/first-contact-closeout-validation",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "02cdf27b749f7aa4f8b784f53c49f8b9441e6e15",
-      "head_matches_origin_main": true,
+      "head": "abd2ce76365653082b11536c662c210ff2243921",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "02cdf27b749f7aa4f8b784f53c49f8b9441e6e15",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -424,11 +424,11 @@
     "branch": "codex/first-contact-closeout-validation",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "02cdf27b749f7aa4f8b784f53c49f8b9441e6e15",
-    "head_matches_origin_main": true,
+    "head": "abd2ce76365653082b11536c662c210ff2243921",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "02cdf27b749f7aa4f8b784f53c49f8b9441e6e15",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {
