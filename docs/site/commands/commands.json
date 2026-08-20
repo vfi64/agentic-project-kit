@@ -9405,7 +9405,7 @@
           "required": false
         },
         {
-          "help": "Merge and run post-merge closeout by default. Use --no-merge to leave a review PR open with explicit pending-handoff closeout markers.",
+          "help": "Open a review PR with explicit pending-handoff closeout markers by default. Use --merge only for an explicitly authorized merge and post-merge closeout.",
           "name": "merge",
           "opts": [
             "--merge"

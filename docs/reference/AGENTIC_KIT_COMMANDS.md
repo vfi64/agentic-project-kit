@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 109e6c65b4a3
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: afee1e1f7794
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -3333,7 +3333,7 @@ Finish a human work slice by planning or executing commit, push, PR, merge, and 
 | `message` | `TyperOption` | --message | `True` |  | Commit message. |
 | `paths` | `TyperOption` | --path | `False` |  | Path to include in the commit. Repeatable. |
 | `merge_method` | `TyperOption` | --merge-method | `False` | `squash` | PR merge method. |
-| `merge` | `TyperOption` | --merge, --no-merge | `False` | `True` | Merge and run post-merge closeout by default. Use --no-merge to leave a review PR open with explicit pending-handoff closeout markers. |
+| `merge` | `TyperOption` | --merge, --no-merge | `False` | `False` | Open a review PR with explicit pending-handoff closeout markers by default. Use --merge only for an explicitly authorized merge and post-merge closeout. |
 | `dry_run` | `TyperOption` | --dry-run, --execute | `False` | `True` | Plan by default. Use --execute to commit, push, and publish. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 

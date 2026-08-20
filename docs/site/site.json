@@ -9655,7 +9655,7 @@
             "required": false
           },
           {
-            "help": "Merge and run post-merge closeout by default. Use --no-merge to leave a review PR open with explicit pending-handoff closeout markers.",
+            "help": "Open a review PR with explicit pending-handoff closeout markers by default. Use --merge only for an explicitly authorized merge and post-merge closeout.",
             "name": "merge",
             "opts": [
               "--merge"
@@ -10626,13 +10626,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "109e6c65b4a3",
+    "manifest_sha": "afee1e1f7794",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.1",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.0",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "109e6c65b4a3",
+    "reproduced_manifest_sha": "afee1e1f7794",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 165,

@@ -145,7 +145,7 @@ class CockpitHeaderMixin:
         )
         attach_tooltip(
             self.work_finish_confirm_button,
-            "Runs agentic-kit work finish --execute only after a successful dry-run preview.",
+            "Runs agentic-kit work finish --execute after a successful dry-run: commit, handoff refresh, PR, and CI check.",
         )
         self.work_finish_confirm_button.pack(side=tk.RIGHT)
         self.open_project_button = ttk.Button(

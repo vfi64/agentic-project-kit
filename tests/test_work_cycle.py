@@ -217,3 +217,25 @@ def test_build_work_finish_args_execute_is_explicit() -> None:
 
     assert "--execute" in args
     assert "--dry-run" not in args
+
+
+def test_build_work_finish_args_merge_is_explicit_opt_in() -> None:
+    default_args = build_work_finish_args(
+        branch="codex/example",
+        title="Example",
+        message="Example",
+        paths=(ChangedPath("src/example.py"),),
+        execute=True,
+    )
+    merge_args = build_work_finish_args(
+        branch="codex/example",
+        title="Example",
+        message="Example",
+        paths=(ChangedPath("src/example.py"),),
+        execute=True,
+        merge=True,
+    )
+
+    assert "--merge" not in default_args
+    assert "--no-merge" not in default_args
+    assert "--merge" in merge_args

@@ -112,7 +112,7 @@ def test_work_finish_dry_run_requires_paths(monkeypatch):
     assert "path-selection" in payload["blockers"]
 
 
-def test_work_finish_execute_uses_existing_pr_lifecycle_wrapper(monkeypatch):
+def test_work_finish_execute_merge_uses_existing_pr_lifecycle_wrapper(monkeypatch):
     calls: list[list[str]] = []
 
     def fake_run(argv, *args, **kwargs):
@@ -135,6 +135,7 @@ def test_work_finish_execute_uses_existing_pr_lifecycle_wrapper(monkeypatch):
             "Demo",
             "--path",
             "src/demo.py",
+            "--merge",
             "--execute",
             "--json",
         ],
@@ -152,6 +153,13 @@ def test_work_finish_execute_uses_existing_pr_lifecycle_wrapper(monkeypatch):
     assert rules_index < commit_index
     assert commit_index < post_commit_rules_index < push_index
     assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"] for call in calls)
+    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "chat-switch-complete"] for call in calls)
+    assert any(
+        call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"]
+        and "--message" in call
+        and call[call.index("--message") + 1] == "Refresh handoff for Demo"
+        for call in calls
+    )
 
 
 def test_work_finish_blocks_before_commit_when_rules_acknowledge_fails(monkeypatch):
@@ -231,7 +239,7 @@ def test_work_finish_execute_blocks_before_commit_when_remote_preflight_fails(mo
     assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"] for call in calls)
 
 
-def test_work_finish_no_merge_creates_open_pr_and_requires_pending_handoff_marker(monkeypatch):
+def test_work_finish_default_creates_open_pr_and_requires_pending_handoff_marker(monkeypatch):
     calls: list[list[str]] = []
     expected_sha = "0123456789abcdef0123456789abcdef01234567"
 
@@ -289,7 +297,6 @@ def test_work_finish_no_merge_creates_open_pr_and_requires_pending_handoff_marke
             "Demo",
             "--path",
             "src/demo.py",
-            "--no-merge",
             "--execute",
             "--json",
         ],
@@ -314,10 +321,18 @@ def test_work_finish_no_merge_creates_open_pr_and_requires_pending_handoff_marke
     )
     assert rules_index < commit_index
     assert commit_index < post_commit_rules_index < push_index
+    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "chat-switch-complete"] for call in calls)
+    assert any(
+        call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"]
+        and "--message" in call
+        and call[call.index("--message") + 1] == "Refresh handoff for Demo"
+        for call in calls
+    )
     pr_create_call = next(call for call in calls if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create"])
     body = pr_create_call[pr_create_call.index("--body") + 1]
     assert "## Open PR Closeout / Handoff" in body
     assert "Post-merge handoff: pending until this PR is merged." in body
+    assert "post-merge-complete --after-pr <PR_NUMBER>" in body
     assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"] for call in calls)
     assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-status"] for call in calls)
     assert any(call[:3] == ["gh", "pr", "view"] for call in calls)

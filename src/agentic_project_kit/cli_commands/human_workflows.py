@@ -93,6 +93,16 @@ def _path_args(paths: list[Path]) -> list[str]:
     return args
 
 
+HANDOFF_CLOSEOUT_PATHS = [
+    Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md"),
+    Path("docs/reports/handoff-packages/latest/execution_contract.json"),
+    Path("docs/reports/handoff-packages/latest/source_manifest.json"),
+    Path("docs/reports/handoff-packages/latest/successor_context.yaml"),
+    Path("docs/reports/handoff-packages/latest/successor_prompt.md"),
+    Path("docs/reports/handoff-packages/latest/validation_report.json"),
+]
+
+
 def _extract_pr_number(text: str) -> int | None:
     try:
         payload = json.loads(text or "{}")
@@ -122,14 +132,33 @@ def _remote_preflight_step() -> dict[str, object]:
     return _run_step("remote-preflight", ["git", "ls-remote", "--exit-code", "origin", "HEAD"])
 
 
+def _handoff_projection_status_step() -> dict[str, object]:
+    return _run_step(
+        "handoff-projection-status",
+        ["git", "status", "--short", "--", *[str(path) for path in HANDOFF_CLOSEOUT_PATHS]],
+    )
+
+
+def _noop_step(name: str, message: str) -> dict[str, object]:
+    return {
+        "name": name,
+        "argv": [],
+        "returncode": 0,
+        "ok": True,
+        "allowed_returncodes": [0],
+        "stdout": message,
+        "stderr": "",
+    }
+
+
 def _open_pr_closeout_body(title: str) -> str:
     return (
         f"Human workflow finish: {title}\n\n"
         "## Open PR Closeout / Handoff\n\n"
         "- Open PR closeout: final-head CI must be green before review or merge.\n"
         "- Post-merge handoff: pending until this PR is merged.\n"
-        "- After merge: run `agentic-kit transfer post-merge-complete --after-pr` "
-        "with the concrete PR number, or use `agentic-kit transfer pr-closeout-complete --after-pr`.\n"
+        "- After merge: run `agentic-kit transfer post-merge-complete --after-pr <PR_NUMBER>` "
+        "with the concrete PR number, or use `agentic-kit transfer pr-closeout-complete --after-pr <PR_NUMBER>`.\n"
     )
 
 
@@ -386,11 +415,11 @@ def work_finish_command(
     paths: list[Path] | None = typer.Option(None, "--path", help="Path to include in the commit. Repeatable."),
     merge_method: str = typer.Option("squash", "--merge-method", help="PR merge method."),
     merge: bool = typer.Option(
-        True,
+        False,
         "--merge/--no-merge",
         help=(
-            "Merge and run post-merge closeout by default. Use --no-merge to "
-            "leave a review PR open with explicit pending-handoff closeout markers."
+            "Open a review PR with explicit pending-handoff closeout markers by default. "
+            "Use --merge only for an explicitly authorized merge and post-merge closeout."
         ),
     ),
     dry_run: bool = typer.Option(True, "--dry-run/--execute", help="Plan by default. Use --execute to commit, push, and publish."),
@@ -413,11 +442,35 @@ def work_finish_command(
         if all(step["ok"] for step in steps):
             steps.append(_run_step("commit", _agentic("transfer", "commit", "--branch", branch, "--message", message, *_path_args(selected_paths))))
         if all(step["ok"] for step in steps):
+            steps.append(_run_step("rules-acknowledge-post-work-commit", _agentic("rules", "acknowledge")))
+        if all(step["ok"] for step in steps):
+            steps.append(_run_step("handoff-refresh", _agentic("transfer", "chat-switch-complete", "--render-prompt")))
+        if all(step["ok"] for step in steps):
+            handoff_status = _handoff_projection_status_step()
+            steps.append(handoff_status)
+            if handoff_status["ok"] and str(handoff_status.get("stdout") or "").strip():
+                steps.append(
+                    _run_step(
+                        "handoff-commit",
+                        _agentic(
+                            "transfer",
+                            "commit",
+                            "--branch",
+                            branch,
+                            "--message",
+                            f"Refresh handoff for {title}",
+                            *_path_args(HANDOFF_CLOSEOUT_PATHS),
+                        ),
+                    )
+                )
+            elif handoff_status["ok"]:
+                steps.append(_noop_step("handoff-commit", "No handoff projection changes to commit.\n"))
+        if all(step["ok"] for step in steps):
             head_sha_step = _current_head_sha_step()
             expected_head_sha = str(head_sha_step["stdout"]).strip()
             steps.append(head_sha_step)
         if all(step["ok"] for step in steps):
-            steps.append(_run_step("rules-acknowledge-post-commit", _agentic("rules", "acknowledge")))
+            steps.append(_run_step("rules-acknowledge-post-closeout", _agentic("rules", "acknowledge")))
         if all(step["ok"] for step in steps):
             steps.append(_run_step("push-current", _agentic("transfer", "push-current", "--branch", branch)))
         if all(step["ok"] for step in steps):
