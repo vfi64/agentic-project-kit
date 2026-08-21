@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 53e70ef48533fd74eadd72bccdbd3644956a236d
-  short: 53e70ef4
-  subject: Close out v1.0.2 DOI metadata (#2115)
+  full: f45160a5c755aaa61fd2c307b38c2fc8efec9f60
+  short: f45160a5
+  subject: Harden PR lifecycle settle cleanup (#2117)
 last_substantive_work_state:
-  full: 53e70ef48533fd74eadd72bccdbd3644956a236d
-  short: 53e70ef4
-  subject: Close out v1.0.2 DOI metadata (#2115)
+  full: f45160a5c755aaa61fd2c307b38c2fc8efec9f60
+  short: f45160a5
+  subject: Harden PR lifecycle settle cleanup (#2117)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
