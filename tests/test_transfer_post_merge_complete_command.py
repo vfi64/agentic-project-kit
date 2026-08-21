@@ -205,7 +205,7 @@ def test_inspect_local_state_classifies_dirty_product_paths(tmp_path):
     assert local_state.product_paths == ("src/example.py",)
 
 
-def test_post_merge_complete_cli_blocks_dirty_worktree_before_lifecycle(tmp_path, monkeypatch):
+def test_post_merge_complete_cli_blocks_dirty_product_worktree_before_lifecycle(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     called = False
 
@@ -220,10 +220,10 @@ def test_post_merge_complete_cli_blocks_dirty_worktree_before_lifecycle(tmp_path
         "inspect_local_state",
         lambda *_args, **_kwargs: LocalState(
             clean=False,
-            dirty_paths=("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",),
-            report_artifact_paths=("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",),
-            product_paths=(),
-            blocked_reason="dirty_report_artifacts_before_post_merge_complete",
+            dirty_paths=("src/example.py",),
+            report_artifact_paths=(),
+            product_paths=("src/example.py",),
+            blocked_reason="dirty_product_paths_before_post_merge_complete",
         ),
     )
 
@@ -232,9 +232,58 @@ def test_post_merge_complete_cli_blocks_dirty_worktree_before_lifecycle(tmp_path
     assert result.exit_code == 2
     assert called is False
     assert "LOCAL_STATE" in result.stdout
-    assert "- BLOCKED_REASON:      dirty_report_artifacts_before_post_merge_complete" in result.stdout
-    assert "- REPORT_DIRTY:        docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log" in result.stdout
+    assert "- BLOCKED_REASON:      dirty_product_paths_before_post_merge_complete" in result.stdout
+    assert "- PRODUCT_DIRTY:       src/example.py" in result.stdout
     assert "CHAT_REPLY:            f | NEXT=Clean or publish local changes before running post-merge-complete." in result.stdout
+
+
+def test_post_merge_complete_cli_restores_report_artifacts_before_lifecycle(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    states = [
+        LocalState(
+            clean=False,
+            dirty_paths=("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",),
+            report_artifact_paths=("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",),
+            product_paths=(),
+            blocked_reason="dirty_report_artifacts_before_post_merge_complete",
+        ),
+        LocalState(clean=True, dirty_paths=(), report_artifact_paths=(), product_paths=()),
+        LocalState(clean=True, dirty_paths=(), report_artifact_paths=(), product_paths=()),
+        LocalState(clean=True, dirty_paths=(), report_artifact_paths=(), product_paths=()),
+    ]
+    restore_calls: list[Path] = []
+    called = False
+
+    def fake_inspect(*_args, **_kwargs):
+        return states.pop(0)
+
+    def fake_restore(root):
+        restore_calls.append(root)
+        return {"ok": True, "tracked_paths": ["docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"]}
+
+    def fake_post_merge_complete(*_args, **_kwargs):
+        nonlocal called
+        called = True
+        return FakePostMergeCompleteResult()
+
+    monkeypatch.setattr(command_module, "inspect_local_state", fake_inspect)
+    monkeypatch.setattr(command_module, "_restore_known_volatile_paths", fake_restore)
+    monkeypatch.setattr(command_module, "post_merge_complete", fake_post_merge_complete)
+    monkeypatch.setattr(
+        command_module,
+        "refresh_llm_context_carriers",
+        lambda root, label: {"result_status": "PASS"},
+    )
+
+    result = CliRunner().invoke(app, ["transfer", "post-merge-complete", "--after-pr", "1094", "--json"])
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert called is True
+    assert payload["known_volatile_preflight_cleanup"]["attempted"] is True
+    assert payload["known_volatile_preflight_cleanup"]["ok"] is True
+    assert payload["result_status"] == "PASS"
+    assert restore_calls == [Path(".")]
 
 
 def test_post_merge_complete_cli_writes_and_publishes_report(tmp_path, monkeypatch):
@@ -263,6 +312,94 @@ def test_post_merge_complete_cli_writes_and_publishes_report(tmp_path, monkeypat
     assert "CHAT_REPLY=g" not in result.stdout
     assert refresh_calls == [(Path("."), "post-merge-complete-after-pr1090")]
     assert (tmp_path / "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json").exists()
+
+
+def test_post_merge_complete_cli_restores_known_volatile_after_success(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    states = [
+        LocalState(clean=True, dirty_paths=(), report_artifact_paths=(), product_paths=()),
+        LocalState(clean=True, dirty_paths=(), report_artifact_paths=(), product_paths=()),
+        LocalState(
+            clean=False,
+            dirty_paths=("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",),
+            report_artifact_paths=("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",),
+            product_paths=(),
+            blocked_reason="dirty_report_artifacts_before_post_merge_complete",
+        ),
+        LocalState(clean=True, dirty_paths=(), report_artifact_paths=(), product_paths=()),
+    ]
+    restore_calls: list[Path] = []
+
+    def fake_inspect(*_args, **_kwargs):
+        return states.pop(0)
+
+    def fake_restore(root):
+        restore_calls.append(root)
+        return {"ok": True, "tracked_paths": ["docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"]}
+
+    monkeypatch.setattr(command_module, "inspect_local_state", fake_inspect)
+    monkeypatch.setattr(command_module, "_restore_known_volatile_paths", fake_restore)
+    monkeypatch.setattr(command_module, "post_merge_complete", lambda *_args, **_kwargs: FakePostMergeCompleteResult())
+    monkeypatch.setattr(
+        command_module,
+        "refresh_llm_context_carriers",
+        lambda root, label: {"result_status": "PASS"},
+    )
+
+    result = CliRunner().invoke(app, ["transfer", "post-merge-complete", "--after-pr", "1090", "--json"])
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["known_volatile_final_cleanup"]["attempted"] is True
+    assert payload["known_volatile_final_cleanup"]["ok"] is True
+    assert payload["chat_reply"] == "d | NEXT=Post-merge lifecycle is complete after admin refresh."
+    assert restore_calls == [Path(".")]
+
+
+def test_post_merge_complete_cli_blocks_when_final_volatile_cleanup_fails(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    states = [
+        LocalState(clean=True, dirty_paths=(), report_artifact_paths=(), product_paths=()),
+        LocalState(clean=True, dirty_paths=(), report_artifact_paths=(), product_paths=()),
+        LocalState(
+            clean=False,
+            dirty_paths=("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",),
+            report_artifact_paths=("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",),
+            product_paths=(),
+            blocked_reason="dirty_report_artifacts_before_post_merge_complete",
+        ),
+        LocalState(
+            clean=False,
+            dirty_paths=("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",),
+            report_artifact_paths=("docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",),
+            product_paths=(),
+            blocked_reason="dirty_report_artifacts_before_post_merge_complete",
+        ),
+    ]
+
+    def fake_inspect(*_args, **_kwargs):
+        return states.pop(0)
+
+    monkeypatch.setattr(command_module, "inspect_local_state", fake_inspect)
+    monkeypatch.setattr(
+        command_module,
+        "_restore_known_volatile_paths",
+        lambda root: {"ok": False, "errors": ["git_restore_failed"]},
+    )
+    monkeypatch.setattr(command_module, "post_merge_complete", lambda *_args, **_kwargs: FakePostMergeCompleteResult())
+    monkeypatch.setattr(
+        command_module,
+        "refresh_llm_context_carriers",
+        lambda root, label: {"result_status": "PASS"},
+    )
+
+    result = CliRunner().invoke(app, ["transfer", "post-merge-complete", "--after-pr", "1090", "--json"])
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert payload["known_volatile_final_cleanup"]["ok"] is False
+    assert payload["chat_reply"] == "f | NEXT=Inspect known volatile transfer cleanup before continuing."
 
 
 def test_post_merge_complete_cli_reports_publish_blocker(tmp_path, monkeypatch):

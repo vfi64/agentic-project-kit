@@ -2353,7 +2353,7 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
 def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_admin_refresh(monkeypatch):
     calls = []
 
-    def fake_run(command, text=True, capture_output=True):
+    def fake_run(command, text=True, capture_output=True, timeout=None):
         calls.append(command)
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
@@ -2445,11 +2445,13 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_ad
     assert payload["result_status"] == "PASS"
     assert payload["post_merge_complete_followup_required"] is True
     assert payload["failed_step"] is None
-    assert "created, completed, and verified" in payload["next_action"]
+    assert payload["remote_settle_recovery_required"] is True
+    assert payload["remote_settle_recovery_failed_step"] == "post-merge-complete"
+    assert "post-merge lifecycle was settled" in payload["next_action"]
 
     step_names = [step["name"] for step in payload["steps"]]
-    assert "sync-main-before-post-merge-check-after-post-merge-complete" in step_names
-    assert "post-merge-check-after-post-merge-complete" in step_names
+    assert "sync-main-before-post-merge-check-after-merged-pr-failure" in step_names
+    assert "post-merge-check-after-merged-pr-failure" in step_names
     assert "admin-refresh-pr-after-successor-refresh-needed" in step_names
     assert "admin-refresh-pr-complete" in step_names
     assert "post-merge-check-after-admin-refresh-complete" in step_names

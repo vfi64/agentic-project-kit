@@ -184,12 +184,9 @@ After a successful merge, the required closeout is:
 
 Before branch switches, PR completion, or merge-safe operations, known volatile transfer outputs must not be allowed to block the lifecycle.
 
-At minimum, clean these local-only volatile paths when they are dirty and not the target of the current slice:
+Canonical wrappers that mutate branch, PR, merge, or post-merge state must restore known volatile transfer paths as a precondition or postcondition when doing so is safe. Use the dedicated wrapper for diagnostics or fallback cleanup:
 
-    git restore -- .agentic/transfer/outbox/last_result.txt
-    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
-    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log
+    ./.venv/bin/agentic-kit transfer restore-known-volatile --json
 
-This cleanup is a workaround for volatile report files. It must not be used to discard substantive source, governance, planning, or handoff changes.
+This cleanup is limited to the known volatile transfer whitelist. It must not be used to discard substantive source, governance, planning, or handoff changes.
 <!-- agentic-kit:command-reference-lifecycle-discipline:end -->
-
