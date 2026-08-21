@@ -94,7 +94,115 @@ def test_transfer_pr_complete_blocks_on_first_failed_step(monkeypatch) -> None:
     assert "BLOCKED" in result.stdout
     assert "FAILED_STEP:" in result.stdout
     assert "pr-merge-safe" in result.stdout
-    assert len(calls) == 2
+    assert [call[:3] for call in calls] == [
+        ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"],
+        ["./.venv/bin/agentic-kit", "transfer", "pr-merge-safe"],
+        ["gh", "pr", "view"],
+    ]
+
+
+def test_transfer_pr_complete_settles_when_merge_step_times_out_after_remote_merge(monkeypatch) -> None:
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-merge-safe"]:
+            raise subprocess.TimeoutExpired(command, kwargs.get("timeout", 1), output="", stderr="hung\n")
+        if command[:3] == ["gh", "pr", "view"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                '{"state":"MERGED","mergedAt":"2026-08-21T12:00:00Z","mergeCommit":{"oid":"abc"}}\n',
+                "",
+            )
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"]:
+            return subprocess.CompletedProcess(command, 0, "result=NOOP\n", "")
+        return subprocess.CompletedProcess(command, 0, "ok\n", "")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "pr-complete",
+            "123",
+            "--expected-head-sha",
+            "0123456789abcdef0123456789abcdef01234567",
+            "--timeout-seconds",
+            "1",
+            "--interval-seconds",
+            "1",
+            "--skip-llm-context-gate",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert payload["remote_settle_recovery_required"] is True
+    assert payload["remote_settle_recovery_failed_step"] == "pr-merge-safe"
+    assert payload["failed_step"] is None
+    assert any(step["name"] == "pr-merge-safe" and step["timed_out"] is True for step in payload["steps"])
+    assert [call[:3] for call in calls] == [
+        ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"],
+        ["./.venv/bin/agentic-kit", "transfer", "pr-merge-safe"],
+        ["gh", "pr", "view"],
+        ["./.venv/bin/agentic-kit", "transfer", "sync-main"],
+        ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"],
+    ]
+
+
+def test_transfer_pr_complete_settles_when_post_merge_complete_times_out_after_remote_merge(monkeypatch) -> None:
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-complete"]:
+            raise subprocess.TimeoutExpired(command, kwargs.get("timeout", 1), output="", stderr="hung\n")
+        if command[:3] == ["gh", "pr", "view"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                '{"state":"MERGED","mergedAt":"2026-08-21T12:00:00Z","mergeCommit":{"oid":"abc"}}\n',
+                "",
+            )
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"]:
+            return subprocess.CompletedProcess(command, 0, "result=NOOP\n", "")
+        return subprocess.CompletedProcess(command, 0, "ok\n", "")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "pr-complete",
+            "123",
+            "--expected-head-sha",
+            "0123456789abcdef0123456789abcdef01234567",
+            "--timeout-seconds",
+            "1",
+            "--interval-seconds",
+            "1",
+            "--skip-llm-context-gate",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert payload["remote_settle_recovery_required"] is True
+    assert payload["remote_settle_recovery_failed_step"] == "post-merge-complete"
+    assert payload["failed_step"] is None
+    assert any(
+        step["name"] == "post-merge-complete" and step["timed_out"] is True
+        for step in payload["steps"]
+    )
 
 
 def test_transfer_pr_create_complete_orchestrates_create_and_complete(monkeypatch) -> None:

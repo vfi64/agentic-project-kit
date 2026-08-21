@@ -9,6 +9,7 @@ from uuid import uuid4
 
 import typer
 
+from agentic_project_kit.cli_commands.transfer_context_helpers import _restore_known_volatile_paths
 from agentic_project_kit.transfer_post_merge_lifecycle import post_merge_complete
 from agentic_project_kit.llm_context_carriers import refresh_llm_context_carriers
 from agentic_project_kit.llm_execution_context import build_llm_execution_context
@@ -151,6 +152,45 @@ def inspect_local_state(cwd: Path | None = None) -> LocalState:
         report_artifact_paths=report_artifact_paths,
         product_paths=product_paths,
         blocked_reason=reason,
+    )
+
+
+def restore_known_volatile_for_post_merge(cwd: Path | None = None) -> dict[str, object]:
+    root = Path(".") if cwd is None else cwd
+    before = inspect_local_state(root)
+    restore_result: dict[str, object] | None = None
+    attempted = False
+
+    if not before.clean and not before.product_paths:
+        attempted = True
+        restore_result = _restore_known_volatile_paths(root)
+
+    after = inspect_local_state(root)
+    return {
+        "attempted": attempted,
+        "ok": (not attempted or bool(restore_result and restore_result.get("ok"))) and after.clean,
+        "before": before.as_json_data(),
+        "restore": restore_result,
+        "after": after.as_json_data(),
+    }
+
+
+def _cleanup_state_from_payload(payload: dict[str, object]) -> LocalState:
+    after = payload.get("after")
+    if not isinstance(after, dict):
+        return LocalState(
+            clean=False,
+            dirty_paths=(),
+            report_artifact_paths=(),
+            product_paths=(),
+            blocked_reason="known_volatile_cleanup_state_unavailable",
+        )
+    return LocalState(
+        clean=bool(after.get("clean")),
+        dirty_paths=tuple(str(path) for path in (after.get("dirty_paths") or ())),
+        report_artifact_paths=tuple(str(path) for path in (after.get("report_artifact_paths") or ())),
+        product_paths=tuple(str(path) for path in (after.get("product_paths") or ())),
+        blocked_reason=str(after.get("blocked_reason") or ""),
     )
 
 
@@ -315,8 +355,9 @@ def render_post_merge_complete_result(
 
 
 def _run_or_preflight_block(after_pr: int):
-    local_state = inspect_local_state(Path("."))
-    if local_state.clean:
+    cleanup = restore_known_volatile_for_post_merge(Path("."))
+    local_state = _cleanup_state_from_payload(cleanup)
+    if bool(cleanup.get("ok")) and local_state.clean:
         return post_merge_complete(after_pr)
     return PreflightBlockedResult(after_pr=after_pr, local_state=local_state)
 
@@ -375,8 +416,9 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
             help="Print JSON instead of text.",
         ),
     ) -> None:
-        local_state = inspect_local_state(Path("."))
-        if local_state.clean:
+        preflight_cleanup = restore_known_volatile_for_post_merge(Path("."))
+        local_state = _cleanup_state_from_payload(preflight_cleanup)
+        if bool(preflight_cleanup.get("ok")) and local_state.clean:
             result = post_merge_complete(
                 after_pr,
                 main_branch=main_branch,
@@ -423,12 +465,23 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
                 "error": str(exc),
             }
 
+        final_cleanup = restore_known_volatile_for_post_merge(Path("."))
+        final_cleanup_ok = bool(final_cleanup.get("ok"))
+        final_chat_signal = _final_signal(result) if final_cleanup_ok else "f"
+        final_next_action = (
+            result.next_action
+            if final_cleanup_ok
+            else "Inspect known volatile transfer cleanup before continuing."
+        )
+
         if json_output:
             payload = result.as_json_data()
             payload["transfer_report"] = local_report
             payload["published_transfer_report"] = published_report
             payload["llm_context_carriers_refresh"] = llm_context_carriers_refresh
-            payload["chat_reply"] = _chat_reply(_final_signal(result), result.next_action)
+            payload["known_volatile_preflight_cleanup"] = preflight_cleanup
+            payload["known_volatile_final_cleanup"] = final_cleanup
+            payload["chat_reply"] = _chat_reply(final_chat_signal, final_next_action)
             typer.echo(json.dumps(payload, indent=2, sort_keys=True))
         else:
             typer.echo(
@@ -438,5 +491,12 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
                     published_report=published_report,
                 )
             )
+            if not final_cleanup_ok:
+                typer.echo("")
+                typer.echo("LOCAL_CLEANUP")
+                typer.echo(_summary_bullet("KNOWN_VOLATILE", "blocked"))
+                typer.echo(_summary_bullet("NEXT", final_next_action))
+        if not final_cleanup_ok:
+            raise typer.Exit(code=2)
         if result.returncode != 0:
             raise typer.Exit(code=result.returncode)

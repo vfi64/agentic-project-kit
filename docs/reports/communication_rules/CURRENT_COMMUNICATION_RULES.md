@@ -1,7 +1,7 @@
 # Current communication rules refresh
 
 Status: generated
-Generated at: 2026-06-26T17:20:19+00:00
+Generated at: 2026-08-21T18:12:55+00:00
 Next reply trigger: `d2`
 
 ## Assistant instruction
@@ -22,6 +22,10 @@ On user reply d2, read this generated file before continuing and refresh the act
 ### `docs/workflow/NO_COPY_TERMINAL_EVIDENCE.md`
 
 ```text
+Status: active
+Status-date: 2026-07-09
+Superseded-by: n/a
+
 # No-Copy Terminal Evidence Policy
 
 Status: active
@@ -279,13 +283,11 @@ After a successful merge, the required closeout is:
 
 Before branch switches, PR completion, or merge-safe operations, known volatile transfer outputs must not be allowed to block the lifecycle.
 
-At minimum, clean these local-only volatile paths when they are dirty and not the target of the current slice:
+Canonical wrappers that mutate branch, PR, merge, or post-merge state must restore known volatile transfer paths as a precondition or postcondition when doing so is safe. Use the dedicated wrapper for diagnostics or fallback cleanup:
 
-    git restore -- .agentic/transfer/outbox/last_result.txt
-    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
-    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log
+    ./.venv/bin/agentic-kit transfer restore-known-volatile --json
 
-This cleanup is a workaround for volatile report files. It must not be used to discard substantive source, governance, planning, or handoff changes.
+This cleanup is limited to the known volatile transfer whitelist. It must not be used to discard substantive source, governance, planning, or handoff changes.
 <!-- agentic-kit:command-reference-lifecycle-discipline:end -->
 ```
 
@@ -434,13 +436,11 @@ After a successful merge, the required closeout is:
 
 Before branch switches, PR completion, or merge-safe operations, known volatile transfer outputs must not be allowed to block the lifecycle.
 
-At minimum, clean these local-only volatile paths when they are dirty and not the target of the current slice:
+Canonical wrappers that mutate branch, PR, merge, or post-merge state must restore known volatile transfer paths as a precondition or postcondition when doing so is safe. Use the dedicated wrapper for diagnostics or fallback cleanup:
 
-    git restore -- .agentic/transfer/outbox/last_result.txt
-    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
-    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log
+    ./.venv/bin/agentic-kit transfer restore-known-volatile --json
 
-This cleanup is a workaround for volatile report files. It must not be used to discard substantive source, governance, planning, or handoff changes.
+This cleanup is limited to the known volatile transfer whitelist. It must not be used to discard substantive source, governance, planning, or handoff changes.
 <!-- agentic-kit:command-reference-lifecycle-discipline:end -->
 ```
 
@@ -633,13 +633,11 @@ After a successful merge, the required closeout is:
 
 Before branch switches, PR completion, or merge-safe operations, known volatile transfer outputs must not be allowed to block the lifecycle.
 
-At minimum, clean these local-only volatile paths when they are dirty and not the target of the current slice:
+Canonical wrappers that mutate branch, PR, merge, or post-merge state must restore known volatile transfer paths as a precondition or postcondition when doing so is safe. Use the dedicated wrapper for diagnostics or fallback cleanup:
 
-    git restore -- .agentic/transfer/outbox/last_result.txt
-    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json
-    git restore -- docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log
+    ./.venv/bin/agentic-kit transfer restore-known-volatile --json
 
-This cleanup is a workaround for volatile report files. It must not be used to discard substantive source, governance, planning, or handoff changes.
+This cleanup is limited to the known volatile transfer whitelist. It must not be used to discard substantive source, governance, planning, or handoff changes.
 <!-- agentic-kit:command-reference-lifecycle-discipline:end -->
 ```
 
@@ -831,8 +829,8 @@ workflow_friction_rules:
 ```text
 schema_version: 1
 updated:
-  date: '2026-06-18'
-  reason: Refresh handoff state after release command authority planning slice
+  date: '2026-08-03'
+  reason: Refresh handoff state to last substantive work commit
   source: agentic-kit handoff refresh
 repo:
   name: agentic-project-kit
@@ -841,8 +839,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 5d68dd9c
-  commit_subject: Resolve cockpit agentic-kit commands from GUI (#1573)
+  commit: 53e70ef4
+  commit_subject: Close out v1.0.2 DOI metadata (#2115)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -918,14 +916,14 @@ safe_state:
   - 897
   - 968
 release:
-  current_version: 0.4.6
-  previous_version: 0.4.4
-  tag: v0.4.6
+  current_version: 0.4.13
+  previous_version: 0.4.12
+  tag: v0.4.13
   github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
-  zenodo_version_doi: 10.5281/zenodo.20467371
+  zenodo_version_doi: 10.5281/zenodo.21631484
   post_release_check: PASS
-  post_release_evidence: docs/reports/terminal/v045-doi-metadata-update.log
+  post_release_evidence: CHANGELOG.md#v0413
 open_items:
   prs: []
   next_expected_chat_action: Continue after PR892 with post-merge gate visibility
@@ -1254,31 +1252,28 @@ blocked_until_closeout:
 - Gatekeeper product work before post-PR888 handoff refresh is merged and verified
 - Treating helper-local PASS as slice PASS without patch-preflight slice-gate evidence
 - GUI implementation before B11 Gatekeeper Core state/action contract is test-backed
-first_instruction: >-
-  Review PR #1436 and the refreshed successor handoff package for the release
-  command authority planning slice. After merge, start from fresh main and
-  implement docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md before DOI,
-  legacy-doc, absolute-path, or GUI work.
+first_instruction: 'Review PR #1436 and the refreshed successor handoff package for
+  the release command authority planning slice. After merge, start from fresh main
+  and use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice
+  before DOI, legacy-doc, absolute-path, or GUI work.'
 handoff_maintenance:
   principle: curated-not-accumulated
   update_required_at_chat_end: true
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr1573-successor-chat-handoff.md
-  first_instruction: >-
-    Review PR #1436 and the refreshed successor handoff package for the release
-    command authority planning slice. After merge, start from fresh main and
-    implement docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md before DOI,
-    legacy-doc, absolute-path, or GUI work.
+  latest_successor_prompt: docs/reports/terminal/post-pr2115-successor-chat-handoff.md
+  first_instruction: 'Review PR #1436 and the refreshed successor handoff package
+    for the release command authority planning slice. After merge, start from fresh
+    main and use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice
+    before DOI, legacy-doc, absolute-path, or GUI work.'
 next_step:
-  first_instruction: >-
-    Review PR #1436 and the refreshed successor handoff package for the release
-    command authority planning slice. After merge, start from fresh main and
-    implement docs/planning/RELEASE_COMMAND_AUTHORITY_SLICE.md before DOI,
-    legacy-doc, absolute-path, or GUI work.
+  first_instruction: 'Review PR #1436 and the refreshed successor handoff package
+    for the release command authority planning slice. After merge, start from fresh
+    main and use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice
+    before DOI, legacy-doc, absolute-path, or GUI work.'
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr1573-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr2115-successor-chat-handoff.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
 ```
