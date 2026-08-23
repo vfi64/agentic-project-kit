@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `80a1987c7fbc0a3f56e022732fbf72de6fafb72d` (`80a1987c`), after `Add measured first-chat onboarding (#2131)`.
-Last substantive work state is `80a1987c7fbc0a3f56e022732fbf72de6fafb72d` (`80a1987c`), after `Add measured first-chat onboarding (#2131)`.
+Current verified main/admin HEAD is `5afde2f0dd4dbc92f1a8f3ff2754ad921d6c87d8` (`5afde2f0`), after `Prepare release v1.0.4 (#2133)`.
+Last substantive work state is `5afde2f0dd4dbc92f1a8f3ff2754ad921d6c87d8` (`5afde2f0`), after `Prepare release v1.0.4 (#2133)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

@@ -7,10 +7,10 @@ Current verified release: 1.0.3.
 Current release tag: v1.0.3.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22071671`.
-Current verified main: `80a1987c` (`Add measured first-chat onboarding (#2131)`).
-Latest substantive work: PR #2131 (`Add measured first-chat onboarding (#2131)`).
+Current verified main: `5afde2f0` (`Prepare release v1.0.4 (#2133)`).
+Latest substantive work: PR #2133 (`Prepare release v1.0.4 (#2133)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2131 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2133 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -416,6 +416,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2131
+## Operational documentation refresh state after PR #2133
 
-Current administrative handoff refresh state is `80a1987c` (`Add measured first-chat onboarding (#2131)`). Continue next only after this post-PR2131 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `5afde2f0` (`Prepare release v1.0.4 (#2133)`). Continue next only after this post-PR2133 refresh is committed and merged; the next substantive slice must be created from fresh main.
