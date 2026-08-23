@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `c9e125ae38fef6756c178ff375fbf6072e935a10` (`c9e125ae`), after `Record Hermes executor H0 inventory (#2123)`.
-Last substantive work state is `c9e125ae38fef6756c178ff375fbf6072e935a10` (`c9e125ae`), after `Record Hermes executor H0 inventory (#2123)`.
+Current verified main/admin HEAD is `41e6e9ae6d3b8b1fdb8b0d7f00bfaf33fb59a1e5` (`41e6e9ae`), after `Record onboarding O0 baseline (#2125)`.
+Last substantive work state is `41e6e9ae6d3b8b1fdb8b0d7f00bfaf33fb59a1e5` (`41e6e9ae`), after `Record onboarding O0 baseline (#2125)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
