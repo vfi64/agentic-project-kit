@@ -657,6 +657,10 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Read-only O0 baseline evidence for measured first-chat onboarding friction and orientation-anchor planning.
+  - path: docs/reports/release/post-release-doi-closeout-1.0.3.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable post-release DOI closeout evidence for verified v1.0.3 publication and Zenodo DOI metadata.
   - path: docs/architecture/evidence/path-literal-audit-2026-07-04.md
     class: evidence/log
     owner: maintainers

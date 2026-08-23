@@ -726,9 +726,9 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Prepared release: `v1.0.3`; GitHub Release, tag publication, and Zenodo version DOI verification are pending.
+Prepared release: `v1.0.3`; GitHub Release, tag publication, and Zenodo version DOI verification are complete.
 Version `1.0.3` is the current release line prepared as a safety baseline after the pre-GUI transfer-wrapper, output-discipline, GUI wrapper-gating, PR diagnostics, and release-plan guard hardening work.
-Current verified release: `v1.0.2` with Zenodo version DOI `10.5281/zenodo.22032882`.
+Current verified release: `v1.0.3` with Zenodo version DOI `10.5281/zenodo.22071671`.
 Earlier verified version-specific DOI notes are maintained in `docs/releases/VERIFIED_RELEASES.md`; historical release records remain in this section and the verified release archive.
 
 Archived GUI/cockpit release notes: v0.3.22 verified DOI `10.5281/zenodo.20256637`; v0.3.19 verified DOI `10.5281/zenodo.20246121`.

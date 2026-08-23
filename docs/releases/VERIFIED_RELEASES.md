@@ -74,6 +74,7 @@ The archived v0.3.18 release has the verified version-specific DOI: `10.5281/zen
 - `v0.3.34` / `0.3.34`: Zenodo version DOI `10.5281/zenodo.20315568`; concept DOI `10.5281/zenodo.20101359`.
 - `v0.3.35` / `0.3.35`: Zenodo version DOI `10.5281/zenodo.20316280`; concept DOI `10.5281/zenodo.20101359`.
 - `v0.4.5` / `0.4.5`: Zenodo version DOI `10.5281/zenodo.20467371`; concept DOI `10.5281/zenodo.20101359`.
+- `v1.0.3` / `1.0.3`: Zenodo version DOI `10.5281/zenodo.22071671`; concept DOI `10.5281/zenodo.20101359`.
 - `v1.0.2` / `1.0.2`: Zenodo version DOI `10.5281/zenodo.22032882`; concept DOI `10.5281/zenodo.20101359`.
 - `v1.0.0` / `1.0.0`: Zenodo version DOI `10.5281/zenodo.21925421`; concept DOI `10.5281/zenodo.20101359`.
 - `v0.5.0` / `0.5.0`: Zenodo version DOI `10.5281/zenodo.21850952`; concept DOI `10.5281/zenodo.20101359`.
