@@ -281,11 +281,11 @@
       "branch": "codex/planner-executor-integration",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "c00c720d90a54b63906c9294f5c85f12a9b6968d",
-      "head_matches_origin_main": true,
+      "head": "c1331d3bb91e1ff4725e42e6ea8807b2197ec0c1",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "c00c720d90a54b63906c9294f5c85f12a9b6968d",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -433,11 +433,11 @@
     "branch": "codex/planner-executor-integration",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "c00c720d90a54b63906c9294f5c85f12a9b6968d",
-    "head_matches_origin_main": true,
+    "head": "c1331d3bb91e1ff4725e42e6ea8807b2197ec0c1",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "c00c720d90a54b63906c9294f5c85f12a9b6968d",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {
