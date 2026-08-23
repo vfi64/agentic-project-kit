@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 0a3db8afbe6641cfaee1a538af090762236c438615964bec5438601c00e883f9
 - docs/reference/agentic-kit-commands.json: 0a6582ccfd04be23fe1beb49bffae18e7b50dacf8aa3e596e5eed2ced14f2943
-## Operational documentation refresh state after PR #2119
+## Operational documentation refresh state after PR #2121
 
-Current administrative handoff refresh state is `18eb6040` (`Prepare v1.0.3 release metadata (#2119)`). Continue next only after this post-PR2119 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `50592bdf` (`Record Hermes executor and onboarding plans (#2121)`). Continue next only after this post-PR2121 refresh is committed and merged; the next substantive slice must be created from fresh main.

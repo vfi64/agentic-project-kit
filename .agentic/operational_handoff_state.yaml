@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 18eb6040930471061345fadc33a686323d9134f2
-  short: 18eb6040
-  subject: Prepare v1.0.3 release metadata (#2119)
+  full: 50592bdf0ec4c8ddd13579d398bfc9da7a545455
+  short: 50592bdf
+  subject: Record Hermes executor and onboarding plans (#2121)
 last_substantive_work_state:
-  full: 18eb6040930471061345fadc33a686323d9134f2
-  short: 18eb6040
-  subject: Prepare v1.0.3 release metadata (#2119)
+  full: 50592bdf0ec4c8ddd13579d398bfc9da7a545455
+  short: 50592bdf
+  subject: Record Hermes executor and onboarding plans (#2121)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
