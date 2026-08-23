@@ -471,6 +471,8 @@ roadmap:
   - id: H0
     goal: Read-only inventory of current Kit command, state, handoff, GUI/action,
       and release authority boundaries relevant to Planner-Kit-Executor integration.
+    evidence:
+    - docs/reports/HERMES_EXECUTOR_H0_INVENTORY_20260823.md
   - id: H1
     goal: Gap analysis and proof-of-concept contract for a Hermes-backed executor
       adapter, with no direct command taxonomy fork.
@@ -483,6 +485,7 @@ roadmap:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/architecture/ARCHITECTURE_CONTRACT.md
   - docs/reference/agentic-kit-commands.json
+  - docs/reports/HERMES_EXECUTOR_H0_INVENTORY_20260823.md
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/architecture/ARCHITECTURE_CONTRACT.md
