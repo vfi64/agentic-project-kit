@@ -141,6 +141,12 @@ documents:
   - path: docs/planning/MASTER_IMPLEMENTATION_Q.md
     class: planning
     owner: maintainers
+  - path: docs/architecture/PLANNER_KIT_EXECUTOR_CONTRACT.md
+    class: architecture
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Active contract for governed Planner-Kit-Executor intents and the Hermes adapter boundary.
   - path: docs/workflow/WORK_ORDER_TEMPLATES.md
     class: operational/automation
     status: active

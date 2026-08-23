@@ -550,6 +550,12 @@ The action inventory classifies by category, safety, and Access level. Access le
 
 Architecture details are documented in `docs/architecture/LOCAL_COCKPIT_FOUNDATION.md`.
 
+## Planner-Kit-Executor Contract
+
+`agentic-kit executor plan INTENT` and `agentic-kit executor run INTENT` expose the governed Planner-Kit-Executor surface. The intent may name `hermes` as the first executor adapter, but every runnable step must still resolve through the generated command manifest or the cockpit/action registry. This keeps Kit authority in one place instead of creating a parallel planner or workflow taxonomy.
+
+`agentic-kit executor run` is dry-run by default. Read-only manifest and cockpit steps may run with `--execute`; bounded cockpit actions also require step-level `allow_bounded: true` and CLI `--allow-bounded`; destructive actions remain blocked. The contract, failure states, and evidence rules are documented in `docs/architecture/PLANNER_KIT_EXECUTOR_CONTRACT.md`.
+
 ## CLI command package structure
 
 The root CLI module is intentionally a thin root command registry. Command implementations live under `src/agentic_project_kit/cli_commands/`.

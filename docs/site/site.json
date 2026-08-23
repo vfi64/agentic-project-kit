@@ -222,7 +222,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "commands=251",
+            "detail": "commands=253",
             "evidence_type": "generated-artifact",
             "status": "verified"
           }
@@ -249,8 +249,8 @@
     }
   },
   "command_catalog": {
-    "command_count": 251,
-    "diagnostic_count": 119,
+    "command_count": 253,
+    "diagnostic_count": 120,
     "entries": [
       {
         "diagnostic_priority": "reference_lookup",
@@ -3915,6 +3915,104 @@
         "safety": "BOUNDED",
         "surface": "diagnostic",
         "when_to_use": "Fail if expected target paths are missing from a change set."
+      },
+      {
+        "diagnostic_priority": "advanced_diagnostic",
+        "dry_run_available": false,
+        "group": "executor",
+        "help": "Resolve a planner intent against Kit-owned command and cockpit authorities.",
+        "lifecycle_rank": null,
+        "params": [
+          {
+            "help": "Planner-executor intent YAML path.",
+            "name": "intent_path",
+            "opts": [
+              "intent_path"
+            ],
+            "required": true
+          },
+          {
+            "help": "Repository root.",
+            "name": "project_root",
+            "opts": [
+              "--root"
+            ],
+            "required": false
+          },
+          {
+            "help": "Print machine-readable JSON.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          }
+        ],
+        "qualified_name": "agentic-kit executor plan",
+        "safety": "READ_ONLY",
+        "surface": "diagnostic",
+        "when_to_use": "Resolve a planner intent against Kit-owned command and cockpit authorities."
+      },
+      {
+        "diagnostic_priority": "not_diagnostic",
+        "dry_run_available": true,
+        "group": "executor",
+        "help": "Run a governed planner intent through Kit-owned execution surfaces.",
+        "lifecycle_rank": null,
+        "params": [
+          {
+            "help": "Planner-executor intent YAML path.",
+            "name": "intent_path",
+            "opts": [
+              "intent_path"
+            ],
+            "required": true
+          },
+          {
+            "help": "Repository root.",
+            "name": "project_root",
+            "opts": [
+              "--root"
+            ],
+            "required": false
+          },
+          {
+            "help": "Execute allowed steps. Default is dry-run.",
+            "name": "execute",
+            "opts": [
+              "--execute"
+            ],
+            "required": false
+          },
+          {
+            "help": "Allow steps that are both bounded and marked allow_bounded in the intent.",
+            "name": "allow_bounded",
+            "opts": [
+              "--allow-bounded"
+            ],
+            "required": false
+          },
+          {
+            "help": "Write bounded JSON result under docs/reports/ or tmp/.",
+            "name": "report",
+            "opts": [
+              "--report"
+            ],
+            "required": false
+          },
+          {
+            "help": "Print machine-readable JSON.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          }
+        ],
+        "qualified_name": "agentic-kit executor run",
+        "safety": "BOUNDED",
+        "surface": "primitive",
+        "when_to_use": "Run a governed planner intent through Kit-owned execution surfaces."
       },
       {
         "diagnostic_priority": "not_diagnostic",
@@ -10581,6 +10679,7 @@
       "docs lifecycle": 7,
       "dpa": 19,
       "evidence": 8,
+      "executor": 2,
       "governance": 1,
       "gui": 1,
       "handoff": 5,
@@ -10606,51 +10705,51 @@
     "guided_count": 31,
     "kind": "site_command_catalog",
     "safety_counts": {
-      "BOUNDED": 165,
+      "BOUNDED": 166,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 77
+      "READ_ONLY": 78
     },
     "schema_version": 1,
     "surface_counts": {
-      "diagnostic": 119,
+      "diagnostic": 120,
       "orchestrator": 31,
-      "primitive": 101
+      "primitive": 102
     }
   },
   "kind": "agentic_project_kit_generated_site",
   "metadata": {
     "build_commit": "docs-pages-fallback",
-    "command_count": 251,
-    "command_group_count": 33,
+    "command_count": 253,
+    "command_group_count": 34,
     "concept_doi": "10.5281/zenodo.20101359",
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "a6c875ef652f",
+    "manifest_sha": "0b7a1d404319",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.3",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.3",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "a6c875ef652f",
+    "reproduced_manifest_sha": "0b7a1d404319",
     "requires_python": ">=3.10",
     "safety_counts": {
-      "BOUNDED": 165,
+      "BOUNDED": 166,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 77
+      "READ_ONLY": 78
     },
     "surface_counts": {
-      "diagnostic": 119,
+      "diagnostic": 120,
       "orchestrator": 31,
-      "primitive": 101
+      "primitive": 102
     },
     "version_doi": "10.5281/zenodo.22071671"
   },
   "roadmap_projection": {
     "roadmap_counts": {
       "blocked": 1,
-      "done": 15,
-      "next": 3,
+      "done": 16,
+      "next": 2,
       "planned": 5
     },
     "status": "active",

@@ -1,13 +1,13 @@
 {
   "command_reference": {
-    "ack": "COMMAND_MANIFEST_ACK a6c875ef652f",
+    "ack": "COMMAND_MANIFEST_ACK 0b7a1d404319",
     "json": "docs/reference/agentic-kit-commands.json",
-    "manifest_sha": "a6c875ef652f",
+    "manifest_sha": "0b7a1d404319",
     "markdown": "docs/reference/AGENTIC_KIT_COMMANDS.md",
     "must_not_reconstruct_commands_from_memory": true,
     "source_hashes": {
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "0a3db8afbe6641cfaee1a538af090762236c438615964bec5438601c00e883f9",
-      "docs/reference/agentic-kit-commands.json": "0a6582ccfd04be23fe1beb49bffae18e7b50dacf8aa3e596e5eed2ced14f2943"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "0ca728c6db8c0189004df72a1275500475d197d3bd491ff858708a0537598bf7",
+      "docs/reference/agentic-kit-commands.json": "2def882e32fccea5e746f13fa8dce86308450d7ecb65b601dea6b1347b921121"
     }
   },
   "current_state_contract": {
@@ -22,15 +22,6 @@
         "id": "p5c-physical-migration",
         "status": "blocked",
         "summary": "Plan physical migration after legacy profile deprecation for P5"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "planner-kit-executor-hermes-integration",
-        "status": "next",
-        "summary": "Add governed Planner-Kit-Executor integration with Hermes as the first executor adapter for post-1.0"
       },
       {
         "files": [
@@ -287,13 +278,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2127-handoff-refresh",
+      "branch": "codex/planner-executor-integration",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "e964dfde0adfda0fdcc4977cd90ddf54122ee58a",
+      "head": "c00c720d90a54b63906c9294f5c85f12a9b6968d",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "e964dfde0adfda0fdcc4977cd90ddf54122ee58a",
+      "origin_main": "c00c720d90a54b63906c9294f5c85f12a9b6968d",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -439,13 +430,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2127-handoff-refresh",
+    "branch": "codex/planner-executor-integration",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "e964dfde0adfda0fdcc4977cd90ddf54122ee58a",
+    "head": "c00c720d90a54b63906c9294f5c85f12a9b6968d",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "e964dfde0adfda0fdcc4977cd90ddf54122ee58a",
+    "origin_main": "c00c720d90a54b63906c9294f5c85f12a9b6968d",
     "worktree_clean": false
   },
   "rules": [
@@ -668,8 +659,8 @@
   ],
   "schema_version": 1,
   "source_hashes": {
-    "docs/reference/AGENTIC_KIT_COMMANDS.md": "0a3db8afbe6641cfaee1a538af090762236c438615964bec5438601c00e883f9",
-    "docs/reference/agentic-kit-commands.json": "0a6582ccfd04be23fe1beb49bffae18e7b50dacf8aa3e596e5eed2ced14f2943"
+    "docs/reference/AGENTIC_KIT_COMMANDS.md": "0ca728c6db8c0189004df72a1275500475d197d3bd491ff858708a0537598bf7",
+    "docs/reference/agentic-kit-commands.json": "2def882e32fccea5e746f13fa8dce86308450d7ecb65b601dea6b1347b921121"
   },
   "validation": {
     "path": ".agentic/successor_handoff_package/validation_report.json",
