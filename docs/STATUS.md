@@ -3,10 +3,10 @@
 ## Current State
 
 Current version: 1.0.3
-Current verified release: 1.0.2.
-Current release tag: v1.0.2.
+Current verified release: 1.0.3.
+Current release tag: v1.0.3.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.22032882`.
+Verified Zenodo version DOI: `10.5281/zenodo.22071671`.
 Current verified main: `41e6e9ae` (`Record onboarding O0 baseline (#2125)`).
 Latest substantive work: PR #2125 (`Record onboarding O0 baseline (#2125)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
