@@ -1,10 +1,12 @@
 ## v1.0.4 - 2026-08-23
 
-- Zenodo DOI verification pending for v1.0.4.
 - Close out v1.0.3 DOI metadata with preserved release evidence.
 - Add governed Planner-Kit-Executor surface with dry-run defaults, bounded action guards, and command-manifest governance.
 - Add measured first-chat onboarding with route-selection documentation, workspace-detection scope anchors, and regression coverage.
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.4 DOI `10.5281/zenodo.22072575`.
+
+Zenodo v1.0.4 DOI: 10.5281/zenodo.22072575
 ## v1.0.3 - 2026-08-23
 
 - Close out v1.0.2 DOI metadata
