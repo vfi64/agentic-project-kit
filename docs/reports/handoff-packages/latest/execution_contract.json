@@ -272,11 +272,11 @@
       "branch": "codex/measured-agent-onboarding",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "17ea3831ff1f8ce0481c16d8089ee315da03b8a8",
-      "head_matches_origin_main": true,
+      "head": "59d76576e61c9a419f110e5ed5db87b262847700",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "17ea3831ff1f8ce0481c16d8089ee315da03b8a8",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -424,11 +424,11 @@
     "branch": "codex/measured-agent-onboarding",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "17ea3831ff1f8ce0481c16d8089ee315da03b8a8",
-    "head_matches_origin_main": true,
+    "head": "59d76576e61c9a419f110e5ed5db87b262847700",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "17ea3831ff1f8ce0481c16d8089ee315da03b8a8",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {
