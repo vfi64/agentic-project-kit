@@ -44,7 +44,7 @@
       "path": "AGENTS.md"
     },
     {
-      "bytes": 42007,
+      "bytes": 42008,
       "exists": true,
       "path": "README.md"
     },
@@ -60,10 +60,10 @@
       "yaml_valid": true
     },
     {
-      "bytes": 89734,
+      "bytes": 89969,
       "exists": true,
       "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-      "registry_document_count": 307,
+      "registry_document_count": 308,
       "yaml_valid": true
     },
     {
@@ -82,7 +82,7 @@
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
     {
-      "bytes": 7190,
+      "bytes": 7195,
       "exists": true,
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
