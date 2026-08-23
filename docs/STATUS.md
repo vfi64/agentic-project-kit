@@ -3,10 +3,10 @@
 ## Current State
 
 Current version: 1.0.4
-Current verified release: 1.0.3.
-Current release tag: v1.0.3.
+Current verified release: 1.0.4.
+Current release tag: v1.0.4.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.22071671`.
+Verified Zenodo version DOI: `10.5281/zenodo.22072575`.
 Current verified main: `5afde2f0` (`Prepare release v1.0.4 (#2133)`).
 Latest substantive work: PR #2133 (`Prepare release v1.0.4 (#2133)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
