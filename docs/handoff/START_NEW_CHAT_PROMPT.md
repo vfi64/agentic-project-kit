@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 0a3db8afbe6641cfaee1a538af090762236c438615964bec5438601c00e883f9
 - docs/reference/agentic-kit-commands.json: 0a6582ccfd04be23fe1beb49bffae18e7b50dacf8aa3e596e5eed2ced14f2943
-## Operational documentation refresh state after PR #2125
+## Operational documentation refresh state after PR #2127
 
-Current administrative handoff refresh state is `41e6e9ae` (`Record onboarding O0 baseline (#2125)`). Continue next only after this post-PR2125 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `e964dfde` (`Close out v1.0.3 DOI metadata (#2127)`). Continue next only after this post-PR2127 refresh is committed and merged; the next substantive slice must be created from fresh main.

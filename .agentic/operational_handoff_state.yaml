@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 41e6e9ae6d3b8b1fdb8b0d7f00bfaf33fb59a1e5
-  short: 41e6e9ae
-  subject: Record onboarding O0 baseline (#2125)
+  full: e964dfde0adfda0fdcc4977cd90ddf54122ee58a
+  short: e964dfde
+  subject: Close out v1.0.3 DOI metadata (#2127)
 last_substantive_work_state:
-  full: 41e6e9ae6d3b8b1fdb8b0d7f00bfaf33fb59a1e5
-  short: 41e6e9ae
-  subject: Record onboarding O0 baseline (#2125)
+  full: e964dfde0adfda0fdcc4977cd90ddf54122ee58a
+  short: e964dfde
+  subject: Close out v1.0.3 DOI metadata (#2127)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
