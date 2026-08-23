@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `120c5a93dfe8f71d7628217776b11535c26180ba` (`120c5a93`), after `Add governed Planner-Kit-Executor surface (#2129)`.
-Last substantive work state is `120c5a93dfe8f71d7628217776b11535c26180ba` (`120c5a93`), after `Add governed Planner-Kit-Executor surface (#2129)`.
+Current verified main/admin HEAD is `80a1987c7fbc0a3f56e022732fbf72de6fafb72d` (`80a1987c`), after `Add measured first-chat onboarding (#2131)`.
+Last substantive work state is `80a1987c7fbc0a3f56e022732fbf72de6fafb72d` (`80a1987c`), after `Add measured first-chat onboarding (#2131)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
