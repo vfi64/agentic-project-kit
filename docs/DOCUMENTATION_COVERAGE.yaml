@@ -52,6 +52,40 @@ rules:
     - Documentation System Audit Contract
     - agentic-kit docs-audit
     - review-only
+- id: planner-kit-executor-coverage
+  description: Governed Planner-Kit-Executor commands and Hermes adapter boundary must
+    remain visible without creating a parallel workflow authority.
+  documents:
+  - path: README.md
+    terms:
+    - Planner-Kit-Executor Contract
+    - agentic-kit executor plan INTENT
+    - agentic-kit executor run INTENT
+    - hermes
+    - generated command manifest
+    - cockpit/action registry
+    - dry-run by default
+  - path: docs/architecture/PLANNER_KIT_EXECUTOR_CONTRACT.md
+    terms:
+    - Planner-Kit-Executor Contract
+    - Hermes is the first named executor/browser adapter
+    - command manifest and cockpit registry
+    - agentic-kit executor plan INTENT
+    - agentic-kit executor run INTENT
+    - dry-run by default
+    - block_dirty_worktree
+    - allow_bounded
+    - PASS
+    - PENDING
+    - HARD-FAIL
+  - path: docs/TEST_GATES.md
+    terms:
+    - Planner-Kit-Executor Gate
+    - agentic-kit executor plan INTENT
+    - agentic-kit executor run INTENT
+    - tests/test_planner_executor.py
+    - dry-run-by-default
+    - cockpit/action registry
 - id: planning-doc-slice-gate-coverage
   description: Temporary planning-documentation slice gate must remain discoverable
     and must keep helper-local success separate from governed slice success.
@@ -201,6 +235,8 @@ rules:
     - agentic-kit chat refresher
     - agentic-kit chat session-start
     - agentic-kit commands sync-entrypoints
+    - agentic-kit executor plan
+    - agentic-kit executor run
     - agentic-kit work-order upload
     - agentic-kit workspace dpa-intake
     - agentic-kit workspace remove

@@ -38,9 +38,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2127-handoff-refresh`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- branch: `codex/planner-executor-integration`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -156,15 +156,6 @@ Wenn der Bootstrap grün ist:
       "id": "p5c-physical-migration",
       "status": "blocked",
       "summary": "Plan physical migration after legacy profile deprecation for P5"
-    },
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "planner-kit-executor-hermes-integration",
-      "status": "next",
-      "summary": "Add governed Planner-Kit-Executor integration with Hermes as the first executor adapter for post-1.0"
     },
     {
       "files": [
@@ -420,15 +411,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2127-handoff-refresh",
+    "branch": "codex/planner-executor-integration",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "e964dfde0adfda0fdcc4977cd90ddf54122ee58a",
-    "head_matches_origin_main": true,
-    "head_short": "e964dfde",
+    "head": "c1331d3bb91e1ff4725e42e6ea8807b2197ec0c1",
+    "head_matches_origin_main": false,
+    "head_short": "c1331d3b",
     "local_path": "cd /path/to/",
-    "origin_main": "e964dfde0adfda0fdcc4977cd90ddf54122ee58a",
-    "origin_main_short": "e964dfde",
-    "worktree_clean": false
+    "origin_main": "c00c720d90a54b63906c9294f5c85f12a9b6968d",
+    "origin_main_short": "c00c720d",
+    "worktree_clean": true
   }
 }
 ```
@@ -453,7 +444,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` oder dem externen Workspace-State bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: a6c875ef652f). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK a6c875ef652f. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 0b7a1d404319). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 0b7a1d404319. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -463,5 +454,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 0a3db8afbe6641cfaee1a538af090762236c438615964bec5438601c00e883f9
-- docs/reference/agentic-kit-commands.json: 0a6582ccfd04be23fe1beb49bffae18e7b50dacf8aa3e596e5eed2ced14f2943
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 0ca728c6db8c0189004df72a1275500475d197d3bd491ff858708a0537598bf7
+- docs/reference/agentic-kit-commands.json: 2def882e32fccea5e746f13fa8dce86308450d7ecb65b601dea6b1347b921121

@@ -180,6 +180,7 @@ def infer_safety(command: dict[str, Any]) -> str:
     leaf = _leaf(command)
 
     exact_read_only_commands = {
+        "agentic-kit executor plan",
         "agentic-kit handoff post-merge-refresh-status",
         "agentic-kit transfer post-merge-check",
         "agentic-kit workspace adopt",

@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-23T19:29:27.516694+00:00",
+  "generated_at_utc": "2026-08-23T20:01:19.837856+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,15 +57,15 @@
     "package_version": "1.0.3"
   },
   "repo": {
-    "branch": "docs/post-pr2127-handoff-refresh",
+    "branch": "codex/planner-executor-integration",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "e964dfde0adfda0fdcc4977cd90ddf54122ee58a",
-    "head_matches_origin_main": true,
-    "head_short": "e964dfde",
+    "head": "c1331d3bb91e1ff4725e42e6ea8807b2197ec0c1",
+    "head_matches_origin_main": false,
+    "head_short": "c1331d3b",
     "local_path": "cd /path/to/",
-    "origin_main": "e964dfde0adfda0fdcc4977cd90ddf54122ee58a",
-    "origin_main_short": "e964dfde",
-    "worktree_clean": false
+    "origin_main": "c00c720d90a54b63906c9294f5c85f12a9b6968d",
+    "origin_main_short": "c00c720d",
+    "worktree_clean": true
   },
   "schema_version": 1,
   "short_term_memory": {
@@ -78,15 +78,6 @@
         "id": "p5c-physical-migration",
         "status": "blocked",
         "summary": "Plan physical migration after legacy profile deprecation for P5"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "planner-kit-executor-hermes-integration",
-        "status": "next",
-        "summary": "Add governed Planner-Kit-Executor integration with Hermes as the first executor adapter for post-1.0"
       },
       {
         "files": [

@@ -36,6 +36,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Post-release archive check | Unit tests plus agentic-kit post-release-check CLI smoke command |
 | TODO validation change | Unit tests plus agentic-kit check-todo CLI smoke command |
 | Project health check change | Unit tests plus agentic-kit doctor CLI smoke command |
+| Planner-Kit-Executor change | Unit tests plus CLI smoke commands for `agentic-kit executor plan INTENT` and `agentic-kit executor run INTENT`; confirm `run` is dry-run-by-default, resolves through the command manifest or cockpit/action registry, blocks dirty worktrees by default, and blocks bounded actions without explicit step and CLI allow signals |
 | DPA repository adoption gate change | Unit tests plus CLI smoke command for `agentic-kit dpa repo-adoption-assessment`; confirm it remains read-only and does not claim external-repo conformance |
 | Workspace DPA intake orchestration change | Unit tests plus CLI smoke command for `agentic-kit workspace dpa-intake`; confirm it remains read-only by default, writes evidence only under the DPA assessment evidence root when explicitly executed, and does not claim external-repo conformance |
 | Workspace remove lifecycle change | Unit tests plus CLI smoke command for `agentic-kit workspace remove`; confirm it is dry-run by default, removes only exact Kit-generated workspace files, unknown or modified `.agentic/` paths block execution, and project docs/source files are preserved |
@@ -235,6 +236,26 @@ The documentation mesh is split into explicit document classes:
 - historical-plan documents such as roadmap summaries, status reports, and v0.3.0 output-repair planning files.
 
 The hard audit checks only machine-checkable drift classes, including version mismatches, stale current-state wording, missing historical-source-of-truth banners, and release DOI list mismatches. It must not claim semantic proof of documentation quality.
+
+## Planner-Kit-Executor Gate
+
+Changes to the governed Planner-Kit-Executor surface must preserve Kit command
+authority. `agentic-kit executor plan INTENT` is a read-only diagnostic over the
+intent schema, generated command manifest, and cockpit/action registry.
+`agentic-kit executor run INTENT` is dry-run-by-default and may execute only
+resolved read-only steps unless a bounded cockpit action has both step-level
+`allow_bounded` and CLI `--allow-bounded`.
+
+Required evidence:
+
+    python -m pytest -q tests/test_planner_executor.py
+    agentic-kit executor plan INTENT
+    agentic-kit executor run INTENT
+    agentic-kit check-docs
+
+The gate must confirm that raw external commands, direct Hermes commands, dirty
+worktrees, destructive actions, and non-read-only direct manifest commands fail
+closed instead of becoming a second workflow authority.
 
 ## Status Current-State Audit Gate
 

@@ -448,7 +448,7 @@ roadmap:
   - .agentic/config.yaml
 - id: planner-kit-executor-hermes-integration
   phase: post-1.0
-  status: next
+  status: done
   title: Add governed Planner-Kit-Executor integration with Hermes as the first executor adapter
   depends_on:
   - public-installation-and-update-readiness
@@ -476,18 +476,37 @@ roadmap:
   - id: H1
     goal: Gap analysis and proof-of-concept contract for a Hermes-backed executor
       adapter, with no direct command taxonomy fork.
+    evidence:
+    - docs/architecture/PLANNER_KIT_EXECUTOR_CONTRACT.md
+    - src/agentic_project_kit/planner_executor.py
+    - tests/test_planner_executor.py
   - id: H2
     goal: Minimal read-only executor adapter surface if H1 shows a bounded fit.
+    evidence:
+    - agentic-kit executor plan INTENT
+    - docs/reference/agentic-kit-commands.json
+    - tests/test_planner_executor.py
   - id: H3-plus
     goal: Incremental mutation-capable slices only after capability, evidence, rollback,
       and gate semantics are explicit.
+    evidence:
+    - agentic-kit executor run INTENT
+    - docs/architecture/PLANNER_KIT_EXECUTOR_CONTRACT.md
+    - tests/test_planner_executor.py
   evidence:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/architecture/ARCHITECTURE_CONTRACT.md
+  - docs/architecture/PLANNER_KIT_EXECUTOR_CONTRACT.md
   - docs/reference/agentic-kit-commands.json
   - docs/reports/HERMES_EXECUTOR_H0_INVENTORY_20260823.md
+  - src/agentic_project_kit/planner_executor.py
+  - tests/test_planner_executor.py
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/architecture/PLANNER_KIT_EXECUTOR_CONTRACT.md
+  - src/agentic_project_kit/planner_executor.py
+  - src/agentic_project_kit/cli_commands/executor.py
+  - tests/test_planner_executor.py
   - docs/architecture/ARCHITECTURE_CONTRACT.md
   - docs/reference/agentic-kit-commands.json
 - id: measured-agent-onboarding

@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: a6c875ef652f
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 0b7a1d404319
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `251`
+- Command count: `253`
 
 ## Commands
 
@@ -1286,6 +1286,39 @@ Fail if expected target paths are missing from a change set.
 |---|---:|---|---:|---|---|
 | `changed` | `TyperOption` | --changed | `False` | `[]` | Changed repository path. Repeat for multiple paths. |
 | `expected` | `TyperOption` | --expected | `False` | `[]` | Expected target path. Repeat for multiple paths. |
+
+### `agentic-kit executor plan`
+
+- Safety: `READ_ONLY`
+- Surface: `diagnostic`
+- When to use: Resolve a planner intent against Kit-owned command and cockpit authorities.
+- Dry-run available: `False`
+
+Resolve a planner intent against Kit-owned command and cockpit authorities.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `intent_path` | `TyperArgument` | intent_path | `True` |  | Planner-executor intent YAML path. |
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit executor run`
+
+- Safety: `BOUNDED`
+- Surface: `primitive`
+- When to use: Run a governed planner intent through Kit-owned execution surfaces.
+- Dry-run available: `True`
+
+Run a governed planner intent through Kit-owned execution surfaces.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `intent_path` | `TyperArgument` | intent_path | `True` |  | Planner-executor intent YAML path. |
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Execute allowed steps. Default is dry-run. |
+| `allow_bounded` | `TyperOption` | --allow-bounded | `False` | `False` | Allow steps that are both bounded and marked allow_bounded in the intent. |
+| `report` | `TyperOption` | --report | `False` |  | Write bounded JSON result under docs/reports/ or tmp/. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit github-create`
 
