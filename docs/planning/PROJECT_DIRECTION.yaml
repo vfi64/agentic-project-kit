@@ -446,6 +446,91 @@ roadmap:
   - .github/workflows/release.yml
   - Dockerfile
   - .agentic/config.yaml
+- id: planner-kit-executor-hermes-integration
+  phase: post-1.0
+  status: next
+  title: Add governed Planner-Kit-Executor integration with Hermes as the first executor adapter
+  depends_on:
+  - public-installation-and-update-readiness
+  - workflow-kernel-and-transfer-hardening
+  acceptance:
+  - Kit remains the sole command, rule, documentation, state, release, and handoff
+    authority; Planner and Executor integration must not create a parallel workflow
+    taxonomy.
+  - Hermes is introduced only as the first executor/browser adapter behind existing
+    agentic-kit command and capability boundaries.
+  - The first slices are read-only H0/H1 work that inventories command/contract surfaces,
+    record gaps, and define the smallest proof-of-concept contract before any runtime
+    mutation path is added.
+  - Any later executor action is represented as a bounded agentic-kit command or
+    cockpit/action-registry surface with tests, evidence, failure states, and
+    post-merge handoff.
+  - Browser/executor credentials, GUI sessions, and external side effects stay outside
+    durable planning authority unless explicitly represented as capability boundaries.
+  implementation_slices:
+  - id: H0
+    goal: Read-only inventory of current Kit command, state, handoff, GUI/action,
+      and release authority boundaries relevant to Planner-Kit-Executor integration.
+  - id: H1
+    goal: Gap analysis and proof-of-concept contract for a Hermes-backed executor
+      adapter, with no direct command taxonomy fork.
+  - id: H2
+    goal: Minimal read-only executor adapter surface if H1 shows a bounded fit.
+  - id: H3-plus
+    goal: Incremental mutation-capable slices only after capability, evidence, rollback,
+      and gate semantics are explicit.
+  evidence:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/architecture/ARCHITECTURE_CONTRACT.md
+  - docs/reference/agentic-kit-commands.json
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/architecture/ARCHITECTURE_CONTRACT.md
+  - docs/reference/agentic-kit-commands.json
+- id: measured-agent-onboarding
+  phase: post-1.0
+  status: next
+  title: Add measured first-chat onboarding without creating a second planner
+  depends_on:
+  - public-installation-and-update-readiness
+  - command-manifest-hardening
+  acceptance:
+  - O0 records a baseline first-contact/onboarding measurement before adding new
+    user-facing guidance.
+  - O1 may add `docs/ONBOARDING.md` and a README anchor only with documentation
+    coverage and gate updates in the same slice.
+  - O2 binds onboarding guidance to the command manifest and existing workspace
+    detection messaging rather than duplicating command help or planning rules.
+  - O3 adds a small glossary only where it reduces first-chat ambiguity without
+    becoming a competing rulebook.
+  - O4 makes the onboarding measurement repeatable so later guidance changes can
+    be compared instead of guessed.
+  - O5 aligns generated site/quickstart projections after the canonical docs and
+    gates are green.
+  implementation_slices:
+  - id: O0
+    goal: Read-only baseline measurement of first-chat onboarding friction and missing
+      orientation anchors.
+  - id: O1
+    goal: Minimal onboarding document and README anchor, covered by docs gates.
+  - id: O2
+    goal: Drift binding against the command manifest and workspace-detection message
+      sources.
+  - id: O3
+    goal: Minimal glossary for terms that repeatedly block new users or agents.
+  - id: O4
+    goal: Repeatable onboarding measurement command or report contract.
+  - id: O5
+    goal: Site and quickstart projection alignment from the canonical onboarding
+      source.
+  evidence:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/DOCUMENTATION_COVERAGE.yaml
+  - docs/reference/agentic-kit-commands.json
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/DOCUMENTATION_COVERAGE.yaml
+  - docs/reference/agentic-kit-commands.json
 - id: dpa-repo-adoption-assessment
   phase: unphased
   status: done
