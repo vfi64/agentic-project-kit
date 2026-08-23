@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-21T18:39:11.672723+00:00",
+  "generated_at_utc": "2026-08-23T16:22:39.684691+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -54,17 +54,17 @@
     "source": "repository files and command references"
   },
   "release": {
-    "package_version": "1.0.2"
+    "package_version": "1.0.3"
   },
   "repo": {
-    "branch": "docs/post-pr2117-handoff-refresh",
+    "branch": "codex/release-103-prepare",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f45160a5c755aaa61fd2c307b38c2fc8efec9f60",
+    "head": "81c40e0165755a9bbf2a813fa2911a58027e379b",
     "head_matches_origin_main": true,
-    "head_short": "f45160a5",
+    "head_short": "81c40e01",
     "local_path": "cd /path/to/",
-    "origin_main": "f45160a5c755aaa61fd2c307b38c2fc8efec9f60",
-    "origin_main_short": "f45160a5",
+    "origin_main": "81c40e0165755a9bbf2a813fa2911a58027e379b",
+    "origin_main_short": "81c40e01",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -78,15 +78,6 @@
         "id": "p5c-physical-migration",
         "status": "blocked",
         "summary": "Plan physical migration after legacy profile deprecation for P5"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "public-installation-and-update-readiness",
-        "status": "next",
-        "summary": "Close public installation, PyPI publication, update, and Docker readiness gaps for v1.0.2"
       },
       {
         "files": [
