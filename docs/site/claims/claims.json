@@ -51,7 +51,7 @@
       "blockers": [],
       "evidence": [
         {
-          "detail": "project.version=1.0.2",
+          "detail": "project.version=1.0.3",
           "evidence_type": "pyproject-value",
           "status": "verified"
         }

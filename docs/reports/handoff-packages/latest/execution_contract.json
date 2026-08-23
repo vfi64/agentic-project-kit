@@ -1,13 +1,13 @@
 {
   "command_reference": {
-    "ack": "COMMAND_MANIFEST_ACK 072c9526b5cd",
+    "ack": "COMMAND_MANIFEST_ACK a6c875ef652f",
     "json": "docs/reference/agentic-kit-commands.json",
-    "manifest_sha": "072c9526b5cd",
+    "manifest_sha": "a6c875ef652f",
     "markdown": "docs/reference/AGENTIC_KIT_COMMANDS.md",
     "must_not_reconstruct_commands_from_memory": true,
     "source_hashes": {
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "8d62c0cade803e7ded40d71beeb85d83b0a1d7d3a360baec4cf6580454b7ae18",
-      "docs/reference/agentic-kit-commands.json": "22064c2979254ad22231ed7f0a58f3069ec80ddb675a99e42643203b1feb3015"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "0a3db8afbe6641cfaee1a538af090762236c438615964bec5438601c00e883f9",
+      "docs/reference/agentic-kit-commands.json": "0a6582ccfd04be23fe1beb49bffae18e7b50dacf8aa3e596e5eed2ced14f2943"
     }
   },
   "current_state_contract": {
@@ -22,15 +22,6 @@
         "id": "p5c-physical-migration",
         "status": "blocked",
         "summary": "Plan physical migration after legacy profile deprecation for P5"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "public-installation-and-update-readiness",
-        "status": "next",
-        "summary": "Close public installation, PyPI publication, update, and Docker readiness gaps for v1.0.2"
       },
       {
         "files": [
@@ -278,14 +269,14 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2117-handoff-refresh",
+      "branch": "codex/release-103-prepare",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "f45160a5c755aaa61fd2c307b38c2fc8efec9f60",
-      "head_matches_origin_main": true,
+      "head": "52eedcfbb9745320a203c053728681bb888ef251",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
-      "origin_main": "f45160a5c755aaa61fd2c307b38c2fc8efec9f60",
-      "worktree_clean": false
+      "origin_main": "81c40e0165755a9bbf2a813fa2911a58027e379b",
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -430,14 +421,14 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2117-handoff-refresh",
+    "branch": "codex/release-103-prepare",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f45160a5c755aaa61fd2c307b38c2fc8efec9f60",
-    "head_matches_origin_main": true,
+    "head": "52eedcfbb9745320a203c053728681bb888ef251",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
-    "origin_main": "f45160a5c755aaa61fd2c307b38c2fc8efec9f60",
-    "worktree_clean": false
+    "origin_main": "81c40e0165755a9bbf2a813fa2911a58027e379b",
+    "worktree_clean": true
   },
   "rules": [
     {
@@ -659,8 +650,8 @@
   ],
   "schema_version": 1,
   "source_hashes": {
-    "docs/reference/AGENTIC_KIT_COMMANDS.md": "8d62c0cade803e7ded40d71beeb85d83b0a1d7d3a360baec4cf6580454b7ae18",
-    "docs/reference/agentic-kit-commands.json": "22064c2979254ad22231ed7f0a58f3069ec80ddb675a99e42643203b1feb3015"
+    "docs/reference/AGENTIC_KIT_COMMANDS.md": "0a3db8afbe6641cfaee1a538af090762236c438615964bec5438601c00e883f9",
+    "docs/reference/agentic-kit-commands.json": "0a6582ccfd04be23fe1beb49bffae18e7b50dacf8aa3e596e5eed2ced14f2943"
   },
   "validation": {
     "path": ".agentic/successor_handoff_package/validation_report.json",

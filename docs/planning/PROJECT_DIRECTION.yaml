@@ -397,7 +397,8 @@ roadmap:
   - docs/planning/PROJECT_DIRECTION.yaml
 - id: public-installation-and-update-readiness
   phase: post-1.0
-  status: next
+  status: done
+  completed_by_pr: 2115
   title: Close public installation, PyPI publication, update, and Docker readiness gaps
   target_release: v1.0.2
   depends_on:
@@ -427,6 +428,7 @@ roadmap:
   - docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md
   - docs/reports/FIRST_CONTACT_POST_FIX_CHECKOUT_VALIDATION_20260820.md
   - docs/reports/release/release-prepare-1.0.2.json
+  - docs/reports/release/post-release-doi-closeout-1.0.2.json
   - README.md
   - site/templates/quickstart.html
   - site/templates/index.html

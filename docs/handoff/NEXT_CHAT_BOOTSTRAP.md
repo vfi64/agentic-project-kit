@@ -6,10 +6,10 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `f45160a5c755aaa61fd2c307b38c2fc8efec9f60` (`f45160a5`)
-- Handoff freshness marker: `f45160a5`
-- Branch at generation: `docs/post-pr2117-handoff-refresh`
-- Worktree clean at generation: `False`
+- HEAD: `52eedcfbb9745320a203c053728681bb888ef251` (`52eedcfb`)
+- Handoff freshness marker: `52eedcfb`
+- Branch at generation: `codex/release-103-prepare`
+- Worktree clean at generation: `True`
 
 ## Successor handoff package
 
@@ -72,7 +72,6 @@ Wenn der Bootstrap grün ist:
 Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 
 - `p5c-physical-migration` (blocked): Plan physical migration after legacy profile deprecation for P5
-- `public-installation-and-update-readiness` (next): Close public installation, PyPI publication, update, and Docker readiness gaps for v1.0.2
 - `v2-0-legacy-profile-removal` (planned): Remove the implicit legacy profile in 2.0.0 for unphased
 - `pre-gui-hardening-line` (next): Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for pre-GUI
 - `workflow-kernel-and-transfer-hardening` (planned): Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI
@@ -103,7 +102,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 ### RESULT: PASS ###
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 072c9526b5cd). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 072c9526b5cd. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: a6c875ef652f). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK a6c875ef652f. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -113,5 +112,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 8d62c0cade803e7ded40d71beeb85d83b0a1d7d3a360baec4cf6580454b7ae18
-- docs/reference/agentic-kit-commands.json: 22064c2979254ad22231ed7f0a58f3069ec80ddb675a99e42643203b1feb3015
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 0a3db8afbe6641cfaee1a538af090762236c438615964bec5438601c00e883f9
+- docs/reference/agentic-kit-commands.json: 0a6582ccfd04be23fe1beb49bffae18e7b50dacf8aa3e596e5eed2ced14f2943

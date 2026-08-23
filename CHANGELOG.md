@@ -1,3 +1,10 @@
+## v1.0.3 - 2026-08-23
+
+- Zenodo DOI verification pending for v1.0.3.
+- Close out v1.0.2 DOI metadata
+- Harden PR lifecycle settle cleanup
+- Preserve release evidence, handoff continuity, and bounded PR lifecycle cleanup governance.
+
 ## v1.0.2 - 2026-08-20
 
 - Harden local Docker usage with bounded container smoke evidence and explicit scope boundaries.
