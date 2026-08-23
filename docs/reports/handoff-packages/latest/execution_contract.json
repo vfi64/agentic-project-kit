@@ -28,6 +28,24 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
+        "id": "planner-kit-executor-hermes-integration",
+        "status": "next",
+        "summary": "Add governed Planner-Kit-Executor integration with Hermes as the first executor adapter for post-1.0"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "measured-agent-onboarding",
+        "status": "next",
+        "summary": "Add measured first-chat onboarding without creating a second planner for post-1.0"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
         "id": "v2-0-legacy-profile-removal",
         "status": "planned",
         "summary": "Remove the implicit legacy profile in 2.0.0 for unphased"
@@ -269,14 +287,14 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2119-handoff-refresh",
+      "branch": "codex/plan-hermes-onboarding",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "18eb6040930471061345fadc33a686323d9134f2",
-      "head_matches_origin_main": true,
+      "head": "66a9679474f5d2f2b56cceef87d4c83f6df90c83",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
-      "origin_main": "18eb6040930471061345fadc33a686323d9134f2",
-      "worktree_clean": false
+      "origin_main": "6f76b0a83518fab966d3bc31134bd2283e3aa4a8",
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -421,14 +439,14 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2119-handoff-refresh",
+    "branch": "codex/plan-hermes-onboarding",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "18eb6040930471061345fadc33a686323d9134f2",
-    "head_matches_origin_main": true,
+    "head": "66a9679474f5d2f2b56cceef87d4c83f6df90c83",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
-    "origin_main": "18eb6040930471061345fadc33a686323d9134f2",
-    "worktree_clean": false
+    "origin_main": "6f76b0a83518fab966d3bc31134bd2283e3aa4a8",
+    "worktree_clean": true
   },
   "rules": [
     {

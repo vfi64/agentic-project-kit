@@ -6,10 +6,10 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `18eb6040930471061345fadc33a686323d9134f2` (`18eb6040`)
-- Handoff freshness marker: `18eb6040`
-- Branch at generation: `docs/post-pr2119-handoff-refresh`
-- Worktree clean at generation: `False`
+- HEAD: `66a9679474f5d2f2b56cceef87d4c83f6df90c83` (`66a96794`)
+- Handoff freshness marker: `66a96794`
+- Branch at generation: `codex/plan-hermes-onboarding`
+- Worktree clean at generation: `True`
 
 ## Successor handoff package
 
@@ -72,6 +72,8 @@ Wenn der Bootstrap grün ist:
 Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 
 - `p5c-physical-migration` (blocked): Plan physical migration after legacy profile deprecation for P5
+- `planner-kit-executor-hermes-integration` (next): Add governed Planner-Kit-Executor integration with Hermes as the first executor adapter for post-1.0
+- `measured-agent-onboarding` (next): Add measured first-chat onboarding without creating a second planner for post-1.0
 - `v2-0-legacy-profile-removal` (planned): Remove the implicit legacy profile in 2.0.0 for unphased
 - `pre-gui-hardening-line` (next): Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for pre-GUI
 - `workflow-kernel-and-transfer-hardening` (planned): Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI

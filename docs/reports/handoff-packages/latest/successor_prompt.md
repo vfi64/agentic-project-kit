@@ -38,9 +38,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2119-handoff-refresh`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- branch: `codex/plan-hermes-onboarding`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -156,6 +156,24 @@ Wenn der Bootstrap grün ist:
       "id": "p5c-physical-migration",
       "status": "blocked",
       "summary": "Plan physical migration after legacy profile deprecation for P5"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "planner-kit-executor-hermes-integration",
+      "status": "next",
+      "summary": "Add governed Planner-Kit-Executor integration with Hermes as the first executor adapter for post-1.0"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "measured-agent-onboarding",
+      "status": "next",
+      "summary": "Add measured first-chat onboarding without creating a second planner for post-1.0"
     },
     {
       "files": [
@@ -402,15 +420,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2119-handoff-refresh",
+    "branch": "codex/plan-hermes-onboarding",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "18eb6040930471061345fadc33a686323d9134f2",
-    "head_matches_origin_main": true,
-    "head_short": "18eb6040",
+    "head": "66a9679474f5d2f2b56cceef87d4c83f6df90c83",
+    "head_matches_origin_main": false,
+    "head_short": "66a96794",
     "local_path": "cd /path/to/",
-    "origin_main": "18eb6040930471061345fadc33a686323d9134f2",
-    "origin_main_short": "18eb6040",
-    "worktree_clean": false
+    "origin_main": "6f76b0a83518fab966d3bc31134bd2283e3aa4a8",
+    "origin_main_short": "6f76b0a8",
+    "worktree_clean": true
   }
 }
 ```
