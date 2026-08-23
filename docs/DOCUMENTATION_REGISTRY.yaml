@@ -649,6 +649,10 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable appendix for the 2026-08-15 Decomplexification Audit, including per-command classifications and reduction tracks.
+  - path: docs/reports/HERMES_EXECUTOR_H0_INVENTORY_20260823.md
+    class: evidence/log
+    owner: maintainers
+    notes: Read-only H0 inventory evidence for Planner-Kit-Executor integration with Hermes as the first executor adapter.
   - path: docs/architecture/evidence/path-literal-audit-2026-07-04.md
     class: evidence/log
     owner: maintainers
