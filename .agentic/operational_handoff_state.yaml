@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 50592bdf0ec4c8ddd13579d398bfc9da7a545455
-  short: 50592bdf
-  subject: Record Hermes executor and onboarding plans (#2121)
+  full: c9e125ae38fef6756c178ff375fbf6072e935a10
+  short: c9e125ae
+  subject: Record Hermes executor H0 inventory (#2123)
 last_substantive_work_state:
-  full: 50592bdf0ec4c8ddd13579d398bfc9da7a545455
-  short: 50592bdf
-  subject: Record Hermes executor and onboarding plans (#2121)
+  full: c9e125ae38fef6756c178ff375fbf6072e935a10
+  short: c9e125ae
+  subject: Record Hermes executor H0 inventory (#2123)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

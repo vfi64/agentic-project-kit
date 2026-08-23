@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-23T17:47:03.970234+00:00",
+  "generated_at_utc": "2026-08-23T17:53:48.643293+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,15 +57,15 @@
     "package_version": "1.0.3"
   },
   "repo": {
-    "branch": "codex/hermes-executor-h0-inventory",
+    "branch": "docs/post-pr2123-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "42c5b7a4716dfda7dc554d270ef65a205e24cddd",
-    "head_matches_origin_main": false,
-    "head_short": "42c5b7a4",
+    "head": "c9e125ae38fef6756c178ff375fbf6072e935a10",
+    "head_matches_origin_main": true,
+    "head_short": "c9e125ae",
     "local_path": "cd /path/to/",
-    "origin_main": "be575977d59e29dec2e8d2abdf7a9b86461a1fda",
-    "origin_main_short": "be575977",
-    "worktree_clean": true
+    "origin_main": "c9e125ae38fef6756c178ff375fbf6072e935a10",
+    "origin_main_short": "c9e125ae",
+    "worktree_clean": false
   },
   "schema_version": 1,
   "short_term_memory": {
