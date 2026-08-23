@@ -514,6 +514,8 @@ roadmap:
   - id: O0
     goal: Read-only baseline measurement of first-chat onboarding friction and missing
       orientation anchors.
+    evidence:
+    - docs/reports/ONBOARDING_O0_BASELINE_20260823.md
   - id: O1
     goal: Minimal onboarding document and README anchor, covered by docs gates.
   - id: O2
@@ -530,6 +532,7 @@ roadmap:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/DOCUMENTATION_COVERAGE.yaml
   - docs/reference/agentic-kit-commands.json
+  - docs/reports/ONBOARDING_O0_BASELINE_20260823.md
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/DOCUMENTATION_COVERAGE.yaml
