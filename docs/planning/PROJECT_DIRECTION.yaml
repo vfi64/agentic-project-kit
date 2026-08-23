@@ -511,7 +511,7 @@ roadmap:
   - docs/reference/agentic-kit-commands.json
 - id: measured-agent-onboarding
   phase: post-1.0
-  status: next
+  status: done
   title: Add measured first-chat onboarding without creating a second planner
   depends_on:
   - public-installation-and-update-readiness
@@ -537,25 +537,50 @@ roadmap:
     - docs/reports/ONBOARDING_O0_BASELINE_20260823.md
   - id: O1
     goal: Minimal onboarding document and README anchor, covered by docs gates.
+    evidence:
+    - docs/ONBOARDING.md
+    - README.md
+    - docs/DOCUMENTATION_COVERAGE.yaml
   - id: O2
     goal: Drift binding against the command manifest and workspace-detection message
       sources.
+    evidence:
+    - src/agentic_project_kit/onboarding_measurement.py
+    - tests/test_onboarding_measurement.py
   - id: O3
     goal: Minimal glossary for terms that repeatedly block new users or agents.
+    evidence:
+    - docs/ONBOARDING.md
   - id: O4
     goal: Repeatable onboarding measurement command or report contract.
+    evidence:
+    - agentic-kit onboarding measure
+    - src/agentic_project_kit/cli_commands/onboarding.py
+    - tests/test_onboarding_measurement.py
   - id: O5
     goal: Site and quickstart projection alignment from the canonical onboarding
       source.
+    evidence:
+    - src/agentic_project_kit/site_generator.py
+    - site/templates/quickstart.html
+    - docs/site/quickstart/quickstart.json
   evidence:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/DOCUMENTATION_COVERAGE.yaml
+  - docs/ONBOARDING.md
   - docs/reference/agentic-kit-commands.json
   - docs/reports/ONBOARDING_O0_BASELINE_20260823.md
+  - src/agentic_project_kit/onboarding_measurement.py
+  - tests/test_onboarding_measurement.py
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/DOCUMENTATION_COVERAGE.yaml
+  - docs/ONBOARDING.md
   - docs/reference/agentic-kit-commands.json
+  - src/agentic_project_kit/onboarding_measurement.py
+  - src/agentic_project_kit/cli_commands/onboarding.py
+  - src/agentic_project_kit/site_generator.py
+  - tests/test_onboarding_measurement.py
 - id: dpa-repo-adoption-assessment
   phase: unphased
   status: done

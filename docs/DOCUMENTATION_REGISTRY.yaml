@@ -138,6 +138,12 @@ class_rules:
     gate_coverage: doc-mesh audit, lifecycle audit, release DOI list checks, and historical banner checks.
 
 documents:
+  - path: docs/ONBOARDING.md
+    class: user-facing description
+    status: active
+    owner: maintainers
+    review_policy: required
+    summary: Canonical first-chat onboarding route selector and glossary.
   - path: docs/planning/MASTER_IMPLEMENTATION_Q.md
     class: planning
     owner: maintainers

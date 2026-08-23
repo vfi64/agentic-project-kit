@@ -1,6 +1,6 @@
 {
-  "command_count": 253,
-  "diagnostic_count": 120,
+  "command_count": 254,
+  "diagnostic_count": 121,
   "entries": [
     {
       "diagnostic_priority": "reference_lookup",
@@ -4176,6 +4176,35 @@
       "safety": "READ_ONLY",
       "surface": "diagnostic",
       "when_to_use": "Lint instruction text against the current command manifest."
+    },
+    {
+      "diagnostic_priority": "advanced_diagnostic",
+      "dry_run_available": false,
+      "group": "onboarding",
+      "help": "Measure onboarding guidance against the command manifest and workspace detection.",
+      "lifecycle_rank": null,
+      "params": [
+        {
+          "help": "Repository root.",
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "required": false
+        },
+        {
+          "help": "Print machine-readable JSON.",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        }
+      ],
+      "qualified_name": "agentic-kit onboarding measure",
+      "safety": "READ_ONLY",
+      "surface": "diagnostic",
+      "when_to_use": "Measure onboarding guidance against the command manifest and workspace detection."
     },
     {
       "diagnostic_priority": "advanced_diagnostic",
@@ -10434,6 +10463,7 @@
     "gui": 1,
     "handoff": 5,
     "instruction": 1,
+    "onboarding": 1,
     "pass-already-done": 2,
     "patterns": 2,
     "pr": 4,
@@ -10457,11 +10487,11 @@
   "safety_counts": {
     "BOUNDED": 166,
     "DESTRUCTIVE": 9,
-    "READ_ONLY": 78
+    "READ_ONLY": 79
   },
   "schema_version": 1,
   "surface_counts": {
-    "diagnostic": 120,
+    "diagnostic": 121,
     "orchestrator": 31,
     "primitive": 102
   }

@@ -181,6 +181,7 @@ def infer_safety(command: dict[str, Any]) -> str:
 
     exact_read_only_commands = {
         "agentic-kit executor plan",
+        "agentic-kit onboarding measure",
         "agentic-kit handoff post-merge-refresh-status",
         "agentic-kit transfer post-merge-check",
         "agentic-kit workspace adopt",

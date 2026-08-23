@@ -38,9 +38,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2129-handoff-refresh`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- branch: `codex/measured-agent-onboarding`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -156,15 +156,6 @@ Wenn der Bootstrap grün ist:
       "id": "p5c-physical-migration",
       "status": "blocked",
       "summary": "Plan physical migration after legacy profile deprecation for P5"
-    },
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "measured-agent-onboarding",
-      "status": "next",
-      "summary": "Add measured first-chat onboarding without creating a second planner for post-1.0"
     },
     {
       "files": [
@@ -411,15 +402,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2129-handoff-refresh",
+    "branch": "codex/measured-agent-onboarding",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "120c5a93dfe8f71d7628217776b11535c26180ba",
-    "head_matches_origin_main": true,
-    "head_short": "120c5a93",
+    "head": "59d76576e61c9a419f110e5ed5db87b262847700",
+    "head_matches_origin_main": false,
+    "head_short": "59d76576",
     "local_path": "cd /path/to/",
-    "origin_main": "120c5a93dfe8f71d7628217776b11535c26180ba",
-    "origin_main_short": "120c5a93",
-    "worktree_clean": false
+    "origin_main": "17ea3831ff1f8ce0481c16d8089ee315da03b8a8",
+    "origin_main_short": "17ea3831",
+    "worktree_clean": true
   }
 }
 ```
@@ -444,7 +435,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` oder dem externen Workspace-State bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 0b7a1d404319). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 0b7a1d404319. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: ce4296199644). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK ce4296199644. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -454,5 +445,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 0ca728c6db8c0189004df72a1275500475d197d3bd491ff858708a0537598bf7
-- docs/reference/agentic-kit-commands.json: 2def882e32fccea5e746f13fa8dce86308450d7ecb65b601dea6b1347b921121
+- docs/reference/AGENTIC_KIT_COMMANDS.md: ef011217feba6368e28acd16f276f0f4d8322d95fb45aad8f4f0a8e37c0d193d
+- docs/reference/agentic-kit-commands.json: 9ff62ecc91257d782049bfabb35896c3cbf0ce742b9ea0f96e7b9720c2e8ebdf
