@@ -1,9 +1,9 @@
 {
-  "accepted_at": "2026-08-23T17:53:48.191635+00:00",
+  "accepted_at": "2026-08-23T18:18:15.354305+00:00",
   "accepted_gate_result": "pass",
   "accepted_gate_set_id": "dpa-current-handoff-minimal-gate-set-v1",
   "accepted_lifecycle_outcome": "accepted",
-  "branch": "docs/post-pr2123-handoff-refresh",
+  "branch": "docs/post-pr2125-handoff-refresh",
   "claims": {
     "generated_outputs_manually_patched": false,
     "kit_conformance_claimed": false,
@@ -17,17 +17,17 @@
   },
   "schema_version": 1,
   "source": {
-    "fingerprint": "91de12f95c7a1926ccdee18070135da20b8f9e2ba30defc57331b00e0c1d5a7f",
+    "fingerprint": "4999a6a8a547b1c59adc9ec6b0bb0aa54b4303c67b6aca79e7db0b9957d9250d",
     "path": ".agentic/operational_handoff_state.yaml"
   },
   "status": "accepted",
   "target": {
-    "complete_target_fingerprint": "fbdce863722f6032253d37786f54383e2e2692968b0a1c7c909494851dc4b9fd",
+    "complete_target_fingerprint": "b12f0f59739275a9ce05452b2ac640e452dbe3060b4535f0c1047aa8f2222b9e",
     "path": "docs/handoff/CURRENT_HANDOFF.md",
-    "payload_fingerprint": "fbdce863722f6032253d37786f54383e2e2692968b0a1c7c909494851dc4b9fd",
-    "pre_write_fingerprint": "e2d27157fd6472115942b33bb92e9f6a4cf0e6dfe457ecb7a50f7b94630941bc"
+    "payload_fingerprint": "b12f0f59739275a9ce05452b2ac640e452dbe3060b4535f0c1047aa8f2222b9e",
+    "pre_write_fingerprint": "fbdce863722f6032253d37786f54383e2e2692968b0a1c7c909494851dc4b9fd"
   },
   "target_scope": "CURRENT_HANDOFF_OPERATIONAL_STATE_BLOCK",
-  "validation_ref": "c9e125ae38fef6756c178ff375fbf6072e935a10",
+  "validation_ref": "41e6e9ae6d3b8b1fdb8b0d7f00bfaf33fb59a1e5",
   "writer_id": "WRT-CH-001"
 }
