@@ -86,6 +86,37 @@ rules:
     - tests/test_planner_executor.py
     - dry-run-by-default
     - cockpit/action registry
+- id: measured-agent-onboarding-coverage
+  description: First-chat onboarding must remain measurable and bound to command
+    manifest and workspace detection sources.
+  documents:
+  - path: README.md
+    terms:
+    - First-chat route selection
+    - docs/ONBOARDING.md
+    - agentic-kit onboarding measure
+    - command manifest
+    - workspace-detection message
+  - path: docs/ONBOARDING.md
+    terms:
+    - First-Chat Onboarding
+    - Create a new governed project
+    - Add the Kit operating layer to an existing repository
+    - Work on this Kit repository
+    - agentic-kit init NAME
+    - agentic-kit workspace init --root PATH
+    - agentic-kit command-for
+    - command manifest
+    - governed project
+    - operating layer
+    - handoff
+  - path: docs/TEST_GATES.md
+    terms:
+    - Onboarding Measurement Gate
+    - agentic-kit onboarding measure
+    - docs/ONBOARDING.md
+    - workspace_detection.NON_WORKSPACE_NEXT_STEP
+    - tests/test_onboarding_measurement.py
 - id: planning-doc-slice-gate-coverage
   description: Temporary planning-documentation slice gate must remain discoverable
     and must keep helper-local success separate from governed slice success.
@@ -237,6 +268,7 @@ rules:
     - agentic-kit commands sync-entrypoints
     - agentic-kit executor plan
     - agentic-kit executor run
+    - agentic-kit onboarding measure
     - agentic-kit work-order upload
     - agentic-kit workspace dpa-intake
     - agentic-kit workspace remove

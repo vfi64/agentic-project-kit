@@ -37,6 +37,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | TODO validation change | Unit tests plus agentic-kit check-todo CLI smoke command |
 | Project health check change | Unit tests plus agentic-kit doctor CLI smoke command |
 | Planner-Kit-Executor change | Unit tests plus CLI smoke commands for `agentic-kit executor plan INTENT` and `agentic-kit executor run INTENT`; confirm `run` is dry-run-by-default, resolves through the command manifest or cockpit/action registry, blocks dirty worktrees by default, and blocks bounded actions without explicit step and CLI allow signals |
+| Onboarding guidance change | Unit tests plus CLI smoke command for `agentic-kit onboarding measure`; confirm docs/ONBOARDING.md remains bound to the generated command manifest and `workspace_detection.NON_WORKSPACE_NEXT_STEP` |
 | DPA repository adoption gate change | Unit tests plus CLI smoke command for `agentic-kit dpa repo-adoption-assessment`; confirm it remains read-only and does not claim external-repo conformance |
 | Workspace DPA intake orchestration change | Unit tests plus CLI smoke command for `agentic-kit workspace dpa-intake`; confirm it remains read-only by default, writes evidence only under the DPA assessment evidence root when explicitly executed, and does not claim external-repo conformance |
 | Workspace remove lifecycle change | Unit tests plus CLI smoke command for `agentic-kit workspace remove`; confirm it is dry-run by default, removes only exact Kit-generated workspace files, unknown or modified `.agentic/` paths block execution, and project docs/source files are preserved |
@@ -256,6 +257,22 @@ Required evidence:
 The gate must confirm that raw external commands, direct Hermes commands, dirty
 worktrees, destructive actions, and non-read-only direct manifest commands fail
 closed instead of becoming a second workflow authority.
+
+## Onboarding Measurement Gate
+
+Changes to first-chat guidance, workspace detection wording, public onboarding
+links, or generated quickstart projections must keep `docs/ONBOARDING.md`
+measurable and command-manifest-bound.
+
+Required evidence:
+
+    python -m pytest -q tests/test_onboarding_measurement.py
+    agentic-kit onboarding measure
+    agentic-kit check-docs
+
+The gate must confirm that `docs/ONBOARDING.md` contains the three first routes,
+the minimal glossary, required command-manifest entries, and snippets derived
+from `workspace_detection.NON_WORKSPACE_NEXT_STEP`.
 
 ## Status Current-State Audit Gate
 

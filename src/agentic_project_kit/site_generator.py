@@ -722,6 +722,10 @@ def _build_quickstart_projection(
         },
         "docs": [
             {
+                "label": "First-chat onboarding",
+                "path": "docs/ONBOARDING.md",
+            },
+            {
                 "label": "Brownfield external repository guide",
                 "path": "docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md",
             },

@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 0b7a1d404319
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: ce4296199644
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `253`
+- Command count: `254`
 
 ## Commands
 
@@ -1468,6 +1468,20 @@ Lint instruction text against the current command manifest.
 | `require_ack` | `TyperOption` | --require-ack, --no-require-ack | `False` | `True` | Require the current COMMAND_MANIFEST_ACK line. |
 | `strict_unknown` | `TyperOption` | --strict-unknown | `False` | `False` | Treat unknown raw git/gh commands as blocking. |
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit onboarding measure`
+
+- Safety: `READ_ONLY`
+- Surface: `diagnostic`
+- When to use: Measure onboarding guidance against the command manifest and workspace detection.
+- Dry-run available: `False`
+
+Measure onboarding guidance against the command manifest and workspace detection.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit pass-already-done classify`

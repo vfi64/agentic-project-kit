@@ -80,7 +80,9 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     assert commands["entries"][0]["diagnostic_priority"] == "common_blocker"
     assert claims["claim_count"] == 0
     assert quickstart["kind"] == "site_quickstart_projection"
+    assert quickstart["docs"][0]["path"] == "docs/ONBOARDING.md"
     assert quickstart["flows"][0]["commands"][0]["qualified_name"] == "agentic-kit init"
+    assert "First-chat onboarding" in (output / "quickstart" / "index.html").read_text(encoding="utf-8")
     assert "Docker" in (output / "quickstart" / "index.html").read_text(encoding="utf-8")
     assert "agentic-kit workspace init" in (
         output / "commands" / "guided.html"

@@ -95,6 +95,12 @@ agentic-kit --help
 
 ## Quick start
 
+First-chat route selection is in `docs/ONBOARDING.md`. It separates creating a
+new governed project, adding the Kit operating layer to an existing repository,
+and working on this Kit repository. Use `agentic-kit onboarding measure` to
+check that the onboarding guide still matches the command manifest and
+workspace-detection message.
+
 For the generated install and usage walkthrough, including the PyPI install
 path, the source install path, a Docker-based safe package test, new
 repositories, and existing repositories, see

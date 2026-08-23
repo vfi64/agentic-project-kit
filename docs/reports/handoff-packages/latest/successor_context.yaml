@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-23T20:06:45.289920+00:00",
+  "generated_at_utc": "2026-08-23T20:16:16.868995+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,14 +57,14 @@
     "package_version": "1.0.3"
   },
   "repo": {
-    "branch": "docs/post-pr2129-handoff-refresh",
+    "branch": "codex/measured-agent-onboarding",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "120c5a93dfe8f71d7628217776b11535c26180ba",
+    "head": "17ea3831ff1f8ce0481c16d8089ee315da03b8a8",
     "head_matches_origin_main": true,
-    "head_short": "120c5a93",
+    "head_short": "17ea3831",
     "local_path": "cd /path/to/",
-    "origin_main": "120c5a93dfe8f71d7628217776b11535c26180ba",
-    "origin_main_short": "120c5a93",
+    "origin_main": "17ea3831ff1f8ce0481c16d8089ee315da03b8a8",
+    "origin_main_short": "17ea3831",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -78,15 +78,6 @@
         "id": "p5c-physical-migration",
         "status": "blocked",
         "summary": "Plan physical migration after legacy profile deprecation for P5"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "measured-agent-onboarding",
-        "status": "next",
-        "summary": "Add measured first-chat onboarding without creating a second planner for post-1.0"
       },
       {
         "files": [

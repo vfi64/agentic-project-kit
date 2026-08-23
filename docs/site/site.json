@@ -222,7 +222,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "commands=253",
+            "detail": "commands=254",
             "evidence_type": "generated-artifact",
             "status": "verified"
           }
@@ -249,8 +249,8 @@
     }
   },
   "command_catalog": {
-    "command_count": 253,
-    "diagnostic_count": 120,
+    "command_count": 254,
+    "diagnostic_count": 121,
     "entries": [
       {
         "diagnostic_priority": "reference_lookup",
@@ -4426,6 +4426,35 @@
         "safety": "READ_ONLY",
         "surface": "diagnostic",
         "when_to_use": "Lint instruction text against the current command manifest."
+      },
+      {
+        "diagnostic_priority": "advanced_diagnostic",
+        "dry_run_available": false,
+        "group": "onboarding",
+        "help": "Measure onboarding guidance against the command manifest and workspace detection.",
+        "lifecycle_rank": null,
+        "params": [
+          {
+            "help": "Repository root.",
+            "name": "project_root",
+            "opts": [
+              "--root"
+            ],
+            "required": false
+          },
+          {
+            "help": "Print machine-readable JSON.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          }
+        ],
+        "qualified_name": "agentic-kit onboarding measure",
+        "safety": "READ_ONLY",
+        "surface": "diagnostic",
+        "when_to_use": "Measure onboarding guidance against the command manifest and workspace detection."
       },
       {
         "diagnostic_priority": "advanced_diagnostic",
@@ -10684,6 +10713,7 @@
       "gui": 1,
       "handoff": 5,
       "instruction": 1,
+      "onboarding": 1,
       "pass-already-done": 2,
       "patterns": 2,
       "pr": 4,
@@ -10707,11 +10737,11 @@
     "safety_counts": {
       "BOUNDED": 166,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 78
+      "READ_ONLY": 79
     },
     "schema_version": 1,
     "surface_counts": {
-      "diagnostic": 120,
+      "diagnostic": 121,
       "orchestrator": 31,
       "primitive": 102
     }
@@ -10719,27 +10749,27 @@
   "kind": "agentic_project_kit_generated_site",
   "metadata": {
     "build_commit": "docs-pages-fallback",
-    "command_count": 253,
-    "command_group_count": 34,
+    "command_count": 254,
+    "command_group_count": 35,
     "concept_doi": "10.5281/zenodo.20101359",
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "0b7a1d404319",
+    "manifest_sha": "ce4296199644",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.3",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.3",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "0b7a1d404319",
+    "reproduced_manifest_sha": "ce4296199644",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 166,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 78
+      "READ_ONLY": 79
     },
     "surface_counts": {
-      "diagnostic": 120,
+      "diagnostic": 121,
       "orchestrator": 31,
       "primitive": 102
     },
@@ -10748,8 +10778,8 @@
   "roadmap_projection": {
     "roadmap_counts": {
       "blocked": 1,
-      "done": 16,
-      "next": 2,
+      "done": 17,
+      "next": 1,
       "planned": 5
     },
     "status": "active",
