@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 0ca728c6db8c0189004df72a1275500475d197d3bd491ff858708a0537598bf7
 - docs/reference/agentic-kit-commands.json: 2def882e32fccea5e746f13fa8dce86308450d7ecb65b601dea6b1347b921121
-## Operational documentation refresh state after PR #2127
+## Operational documentation refresh state after PR #2129
 
-Current administrative handoff refresh state is `e964dfde` (`Close out v1.0.3 DOI metadata (#2127)`). Continue next only after this post-PR2127 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `120c5a93` (`Add governed Planner-Kit-Executor surface (#2129)`). Continue next only after this post-PR2129 refresh is committed and merged; the next substantive slice must be created from fresh main.
