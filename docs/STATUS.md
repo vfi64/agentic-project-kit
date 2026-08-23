@@ -7,10 +7,10 @@ Current verified release: 1.0.2.
 Current release tag: v1.0.2.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22032882`.
-Current verified main: `50592bdf` (`Record Hermes executor and onboarding plans (#2121)`).
-Latest substantive work: PR #2121 (`Record Hermes executor and onboarding plans (#2121)`).
+Current verified main: `c9e125ae` (`Record Hermes executor H0 inventory (#2123)`).
+Latest substantive work: PR #2123 (`Record Hermes executor H0 inventory (#2123)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2121 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2123 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -416,6 +416,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2121
+## Operational documentation refresh state after PR #2123
 
-Current administrative handoff refresh state is `50592bdf` (`Record Hermes executor and onboarding plans (#2121)`). Continue next only after this post-PR2121 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `c9e125ae` (`Record Hermes executor H0 inventory (#2123)`). Continue next only after this post-PR2123 refresh is committed and merged; the next substantive slice must be created from fresh main.
