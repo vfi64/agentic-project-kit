@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: ef011217feba6368e28acd16f276f0f4d8322d95fb45aad8f4f0a8e37c0d193d
 - docs/reference/agentic-kit-commands.json: 9ff62ecc91257d782049bfabb35896c3cbf0ce742b9ea0f96e7b9720c2e8ebdf
-## Operational documentation refresh state after PR #2129
+## Operational documentation refresh state after PR #2131
 
-Current administrative handoff refresh state is `120c5a93` (`Add governed Planner-Kit-Executor surface (#2129)`). Continue next only after this post-PR2129 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `80a1987c` (`Add measured first-chat onboarding (#2131)`). Continue next only after this post-PR2131 refresh is committed and merged; the next substantive slice must be created from fresh main.
