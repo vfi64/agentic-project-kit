@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `dc32e6269c7144d0373706496f124c749eb9e8b1` (`dc32e626`), after `Revalidate Hermes executor boundary (#2143)`.
-Last substantive work state is `dc32e6269c7144d0373706496f124c749eb9e8b1` (`dc32e626`), after `Revalidate Hermes executor boundary (#2143)`.
+Current verified main/admin HEAD is `244351a2c53e582e3e585836ae2bf16197419ecd` (`244351a2`), after `Define B1 refresh metric (#2145)`.
+Last substantive work state is `244351a2c53e582e3e585836ae2bf16197419ecd` (`244351a2`), after `Define B1 refresh metric (#2145)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
