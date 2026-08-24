@@ -2405,12 +2405,14 @@ plans:
     goal: Decide refresh/realbetrieb outcome only after B1 reaches an evaluable
       state.
   - id: B3
-    status: stage_1_baseline_frozen
+    status: stage_1_in_progress
     goal: Freeze the BOUNDED command baseline, audit side effects in Stage 1 report-only
       batches, and reserve Stage 2 safety mutations for maintainer adjudication.
     evidence:
     - docs/reports/safety_audit/POST_V1_0_4_B3_BASELINE_FREEZE_20260824.md
     - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
+    - docs/reports/safety_audit/POST_V1_0_4_B3_WORKSPACE_COMMAND_AUDIT_BATCH_20260824.md
+    - docs/reports/safety_audit/b3_workspace_command_audit_batch_20260824.json
   state_model:
     A1_to_A2:
       allowed_transitions:
@@ -2438,8 +2440,9 @@ plans:
       manifest_sha: 2ab1c7c2a951
       baseline_list: docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
       baseline_count: 166
-      audited_count: 0
-      audit_status: stage_1_baseline_frozen
+      audited_count: 4
+      audit_status: stage_1_in_progress
+      latest_batch: docs/reports/safety_audit/b3_workspace_command_audit_batch_20260824.json
       stage_1_boundary: report_only_side_effect_audit
       stage_2_boundary: maintainer_gated_safety_reclassification
       must_record:
@@ -2456,6 +2459,8 @@ plans:
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_SETUP_20260824.md
   - docs/reports/safety_audit/POST_V1_0_4_B3_BASELINE_FREEZE_20260824.md
   - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
+  - docs/reports/safety_audit/POST_V1_0_4_B3_WORKSPACE_COMMAND_AUDIT_BATCH_20260824.md
+  - docs/reports/safety_audit/b3_workspace_command_audit_batch_20260824.json
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/reports/POST_V1_0_4_A0_PLANNING_RECONCILIATION_20260824.md
@@ -2467,6 +2472,8 @@ plans:
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_SETUP_20260824.md
   - docs/reports/safety_audit/POST_V1_0_4_B3_BASELINE_FREEZE_20260824.md
   - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
+  - docs/reports/safety_audit/POST_V1_0_4_B3_WORKSPACE_COMMAND_AUDIT_BATCH_20260824.md
+  - docs/reports/safety_audit/b3_workspace_command_audit_batch_20260824.json
 - id: obsolete-pr660-handoff-overlay
   status: done
   title: Obsolete PR660 handoff overlay centralized
