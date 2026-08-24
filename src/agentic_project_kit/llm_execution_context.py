@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import hashlib
+from importlib import resources
 import json
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from agentic_project_kit.command_manifest import load_manifest
 from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 
 try:
     import yaml
@@ -20,6 +23,9 @@ COMMAND_REFERENCE_MD = Path(LEGACY_DEFAULTS.reference_root) / "AGENTIC_KIT_COMMA
 COMPILED_CONTEXT = Path(".agentic/compiled_agent_context.yaml")
 TRANSFER_SAFETY_RULES = Path(".agentic/transfer_safety_rules.yaml")
 ONE_COMMAND_PROTOCOL = Path(".agentic/transfer/one_command_transfer_protocol.yaml")
+PACKAGE_REFERENCE_PACKAGE = "agentic_project_kit.reference"
+PACKAGE_TRANSFER_SAFETY_RULES_RESOURCE = "transfer_safety_rules.yaml"
+PACKAGE_ONE_COMMAND_PROTOCOL_RESOURCE = "one_command_transfer_protocol.yaml"
 
 CANONICAL_SOURCES = (
     COMPILED_CONTEXT,
@@ -61,18 +67,29 @@ def build_llm_execution_context(root: str | Path = ".") -> dict[str, Any]:
     """
 
     root_path = Path(root)
+    external_workspace = is_external_manifest_workspace(root_path)
     command_reference = _load_command_reference(root_path)
-    transfer_rules = _load_yaml(root_path / TRANSFER_SAFETY_RULES)
-    protocol = _load_yaml(root_path / ONE_COMMAND_PROTOCOL)
+    transfer_rules = _load_yaml_with_package_fallback(
+        root_path / TRANSFER_SAFETY_RULES,
+        PACKAGE_TRANSFER_SAFETY_RULES_RESOURCE,
+        source_relative=TRANSFER_SAFETY_RULES,
+    )
+    protocol = _load_yaml_with_package_fallback(
+        root_path / ONE_COMMAND_PROTOCOL,
+        PACKAGE_ONE_COMMAND_PROTOCOL_RESOURCE,
+        source_relative=ONE_COMMAND_PROTOCOL,
+    )
+    source_hashes = _source_hashes(root_path)
 
     return {
         "schema_version": 1,
         "kind": "llm_execution_context",
+        "workspace_mode": "external_manifest_workspace" if external_workspace else "self_hosting",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "generated_from_current_repo": True,
         "projection_only_not_source_of_truth": True,
         "source_files": [str(path) for path in CANONICAL_SOURCES],
-        "source_hashes": _source_hashes(root_path),
+        "source_hashes": source_hashes,
         "command_reference": {
             "json": str(COMMAND_REFERENCE_JSON),
             "markdown": str(COMMAND_REFERENCE_MD),
@@ -87,10 +104,18 @@ def build_llm_execution_context(root: str | Path = ".") -> dict[str, Any]:
         "context_quality": {
             "generated_from_current_repo_sources": True,
             "source_hashes_present": True,
-            "source_hashes_complete": all(_source_hashes(root_path).values()),
+            "source_hashes_complete": all(
+                value and value != "missing" for value in source_hashes.values()
+            ),
+            "kit_internal_sources_required_locally": not external_workspace,
             "machine_readable": True,
             "projection_only_not_source_of_truth": True,
             "must_be_regenerated_from_rules_not_cached": True,
+        },
+        "external_workspace_policy": {
+            "active": external_workspace,
+            "kit_internal_files_must_not_be_supplied_by_target_repo_user": external_workspace,
+            "target_repo_decisions_must_be_documented_or_blocked": external_workspace,
         },
         "running_chat_refresh_contract": transfer_rules.get("running_chat_refresh_contract", {}),
         "shell_placeholder_policy": transfer_rules.get("shell_placeholder_policy", {}),
@@ -155,12 +180,7 @@ def build_llm_execution_context(root: str | Path = ".") -> dict[str, Any]:
             "prefer_small_python_patch_scripts_with_stable_checks": True,
         },
         "volatile_cleanup": {
-            "known_paths": [
-                ".agentic/transfer/inbox/next_command.py.txt",
-                ".agentic/transfer/outbox/last_result.txt",
-                "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-                "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-            ],
+            "known_paths": _volatile_cleanup_paths(root_path),
             "only_when_not_target_changes": True,
             "must_not_discard_substantive_changes": True,
         },
@@ -184,6 +204,34 @@ def _source_hashes(root: Path) -> dict[str, str]:
     return hashes
 
 
+def _workspace_relative(root: Path, path: Path) -> str:
+    try:
+        return path.relative_to(root).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def _volatile_cleanup_paths(root: Path) -> list[str]:
+    workspace = load_workspace(root, suppress_legacy_profile_warning=True)
+    paths = [
+        ".agentic/transfer/inbox/next_command.py.txt",
+        ".agentic/transfer/outbox/last_result.txt",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
+        _workspace_relative(root, workspace.transfer_inbox() / "next_command.py.txt"),
+        _workspace_relative(root, workspace.transfer_outbox() / "last_result.txt"),
+        _workspace_relative(
+            root,
+            workspace.transfer_handoff_report_file("latest-transfer-handoff-report.json"),
+        ),
+        _workspace_relative(
+            root,
+            workspace.transfer_handoff_report_file("latest-transfer-handoff-report.log"),
+        ),
+    ]
+    return list(dict.fromkeys(paths))
+
+
 def _load_yaml(path: Path) -> dict[str, Any]:
     if yaml is None or not path.exists():
         return {}
@@ -191,21 +239,46 @@ def _load_yaml(path: Path) -> dict[str, Any]:
     return raw if isinstance(raw, dict) else {}
 
 
-def _load_command_reference(root: Path) -> dict[str, Any]:
-    path = load_workspace(root).reference_file("agentic-kit-commands.json")
-    if not path.exists():
+def _load_yaml_with_package_fallback(
+    path: Path,
+    resource_name: str,
+    *,
+    source_relative: Path,
+) -> dict[str, Any]:
+    loaded = _load_yaml(path)
+    if loaded:
+        return loaded
+    source_checkout_path = Path(__file__).resolve().parents[2] / source_relative
+    loaded = _load_yaml(source_checkout_path)
+    if loaded:
+        return loaded
+    if yaml is None:
         return {}
     try:
-        raw = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
+        raw = (
+            resources.files(PACKAGE_REFERENCE_PACKAGE)
+            .joinpath(resource_name)
+            .read_text(encoding="utf-8")
+        )
+    except (FileNotFoundError, ModuleNotFoundError):
+        return {}
+    parsed = yaml.safe_load(raw)
+    return parsed if isinstance(parsed, dict) else {}
+
+
+def _load_command_reference(root: Path) -> dict[str, Any]:
+    try:
+        raw = load_manifest(root)
+    except (FileNotFoundError, json.JSONDecodeError, RuntimeError):
         return {}
     return raw if isinstance(raw, dict) else {}
 
 
 def _command_reference_meta(command_reference: dict[str, Any]) -> dict[str, Any]:
-    meta = command_reference.get("metadata")
-    if isinstance(meta, dict):
-        return meta
+    for key in ("metadata", "meta"):
+        meta = command_reference.get(key)
+        if isinstance(meta, dict):
+            return meta
     return {key: command_reference.get(key, "") for key in ("generated_by", "kind")}
 
 

@@ -45,6 +45,10 @@ exclude = [
   "/.git",
 ]
 
+[tool.hatch.build.targets.wheel.force-include]
+".agentic/transfer_safety_rules.yaml" = "agentic_project_kit/reference/transfer_safety_rules.yaml"
+".agentic/transfer/one_command_transfer_protocol.yaml" = "agentic_project_kit/reference/one_command_transfer_protocol.yaml"
+
 [project.scripts]
 agentic-kit = "agentic_project_kit.cli:app"
 agentic-kit-gui = "agentic_project_kit.gui_cockpit:main"

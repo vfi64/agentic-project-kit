@@ -188,7 +188,7 @@ def restore_known_volatile(
         "result_status": status,
         "final_signal": final_signal,
         "next_action": next_action,
-        "known_paths": KNOWN_VOLATILE_TRANSFER_PATHS,
+        "known_paths": _known_volatile_transfer_paths(Path(".")),
         "result": result,
     }
     _echo_transfer_payload_json_or_summary(

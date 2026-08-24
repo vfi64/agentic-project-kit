@@ -106,3 +106,59 @@ def test_llm_execution_context_encodes_pr_handoff_lifecycle_order(tmp_path: Path
         "./.venv/bin/agentic-kit transfer publish-last-report",
         "./.venv/bin/agentic-kit transfer require-fresh-llm-context --json",
     ]
+
+
+def test_llm_execution_context_uses_packaged_transfer_policy_for_external_workspace(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    import agentic_project_kit.llm_execution_context as llm_context
+
+    (tmp_path / ".agentic").mkdir()
+    (tmp_path / ".agentic/config.yaml").write_text(
+        """
+kit_schema_version: 2
+project:
+  name: external-demo
+  type: python
+profile: python-default
+hygiene:
+  doc_lifecycle: warn
+  review_budgets:
+    governance: 180
+    reference: 365
+    workflow: 270
+""".lstrip(),
+        encoding="utf-8",
+    )
+    resource_root = tmp_path / "resources"
+    resource_root.mkdir()
+    (resource_root / "transfer_safety_rules.yaml").write_text(
+        """
+running_chat_refresh_contract:
+  refresh_required_for_running_chats: true
+shell_placeholder_policy:
+  no_angle_bracket_placeholders_in_executable_blocks: true
+transfer_priorities: {}
+known_failure_classes: {}
+preflight_rules: {}
+post_patch_rules: {}
+""".lstrip(),
+        encoding="utf-8",
+    )
+    (resource_root / "one_command_transfer_protocol.yaml").write_text(
+        "schema_version: 1\n", encoding="utf-8"
+    )
+    monkeypatch.setattr(
+        llm_context,
+        "__file__",
+        str(tmp_path / "installed/agentic_project_kit/llm_execution_context.py"),
+    )
+    monkeypatch.setattr(llm_context.resources, "files", lambda package: resource_root)
+
+    context = build_llm_execution_context(tmp_path)
+
+    assert context["workspace_mode"] == "external_manifest_workspace"
+    assert context["running_chat_refresh_contract"]["refresh_required_for_running_chats"] is True
+    assert context["shell_placeholder_policy"]["no_angle_bracket_placeholders_in_executable_blocks"] is True
+    assert context["external_workspace_policy"]["kit_internal_files_must_not_be_supplied_by_target_repo_user"] is True

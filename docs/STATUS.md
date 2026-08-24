@@ -7,12 +7,12 @@ Current verified release: 1.0.4.
 Current release tag: v1.0.4.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22072575`.
-Current verified main: `8409a6ce` (`Refresh successor package after PR2163 (#2164)`).
-Latest substantive work: PR #2164 (`Refresh successor package after PR2163 (#2164)`).
-Latest administrative refresh-only descendant: PR #2162 (`e2576298`, `Refresh handoff state after PR2161 (#2162)`).
-Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2164 administrative refresh.
-Next safe step: continue from fresh main with the next planned governed slice.
+Current verified main: `2f935c31` (`Refresh handoff state after PR2164 (#2165)`).
+Latest substantive work before the current branch: PR #2163 (`Record B1 closeout settle observation (#2163)`).
+Latest administrative refresh-only descendant: PR #2165 (`2f935c31`, `Refresh handoff state after PR2164 (#2165)`).
+Current governed slice: B1-KIT-004/005 external fresh-context and `pr-merge-safe` repair on `codex/b1-external-merge-context`, with installed-wheel Comm-SCI retest evidence in `docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md`.
+Post-merge handoff status: PASS/NOOP after PR #2165 administrative refresh.
+Next safe step: finish local gates, open/complete the B1-KIT-004/005 repair PR, then run post-merge settle from fresh main.
 
 ## Historical State Snapshots
 

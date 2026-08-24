@@ -2403,6 +2403,7 @@ plans:
     - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
     - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_CLOSEOUT_SETTLE_OBSERVATION_20260824.md
+    - docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md
     observed_cycles:
     - id: B1-COMM-SCI-20260824-001
       state: merged_after_cycle_002_prebase
@@ -2451,16 +2452,20 @@ plans:
       - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
       - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
     - id: B1-KIT-004
-      status: planned
+      status: implemented_retest_pass
       goal: Make transfer fresh-LLM-context carriers external-workspace aware
         so refresh and merge preflight agree on report paths and contracts.
-      evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+      evidence:
+      - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+      - docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md
     - id: B1-KIT-005
-      status: planned
+      status: implemented_retest_pass
       goal: Provide an external-workspace pr-merge-safe route that does not require
         Kit self-hosting rule snapshots and does not turn Kit-generated transient
         carriers into blocking dirty worktree state.
-      evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+      evidence:
+      - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+      - docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md
     - id: B1-KIT-006
       status: planned
       goal: Add or document a base-branch-aware external post-merge check for
@@ -2514,11 +2519,11 @@ plans:
       recorded_cycles: 2
       merge_boundary_cycles: 1
       latest_cycle_report: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
-      latest_cycle_result: "PR #4 merged to feature/ui-access-levels-v2 after local green gates; Kit merge wrapper blocked on external fresh-context/rule-state assumptions and GitHub reported no remote checks."
+      latest_cycle_result: "PR #4 merged to feature/ui-access-levels-v2 after local green gates; subsequent Kit repair slice fixed and retested external fresh-context and pr-merge-safe rule-state assumptions; GitHub still reported no remote checks."
       latest_findings:
       - external_pr_no_checks_reported
-      - external_fresh_llm_context_carrier_path_mismatch
-      - external_pr_merge_safe_requires_self_hosting_rule_state
+      - external_fresh_llm_context_carrier_path_mismatch_fixed
+      - external_pr_merge_safe_external_preflight_fixed
       - external_post_merge_check_main_only
       - command_for_task_tag_gap_for_health_commands
       - kit_post_merge_settle_non_return_after_admin_refresh

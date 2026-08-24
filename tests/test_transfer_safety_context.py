@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+import tomllib
 
 from agentic_project_kit.transfer_safety_context import build_transfer_safety_header
 from agentic_project_kit.transfer_safety_context import write_transfer_outbox
@@ -16,6 +17,52 @@ def test_transfer_safety_header_contains_known_failure_classes() -> None:
     assert "python_transfer_txt_suffix_not_syntax_validated" in header["known_failure_classes"]
     assert "expected_branch_must_match" in header["preflight_rules"]
     assert "changed_python_files_must_compile_before_cli_import" in header["post_patch_rules"]
+
+
+def test_transfer_safety_runtime_resources_are_declared_for_wheel() -> None:
+    pyproject = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
+    force_include = pyproject["tool"]["hatch"]["build"]["targets"]["wheel"]["force-include"]
+
+    assert force_include[".agentic/transfer_safety_rules.yaml"] == (
+        "agentic_project_kit/reference/transfer_safety_rules.yaml"
+    )
+    assert force_include[".agentic/transfer/one_command_transfer_protocol.yaml"] == (
+        "agentic_project_kit/reference/one_command_transfer_protocol.yaml"
+    )
+
+
+def test_transfer_safety_loaders_use_packaged_resources_without_local_rule_files(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    import agentic_project_kit.transfer_safety_context as context
+
+    resource_root = tmp_path / "resources"
+    resource_root.mkdir()
+    (resource_root / "transfer_safety_rules.yaml").write_text(
+        """
+canonical_transfer_files:
+  llm_to_local: .agentic/transfer/inbox/next_command.py.txt
+transfer_priorities: {}
+known_failure_classes: {}
+preflight_rules: {}
+post_patch_rules: {}
+""".lstrip(),
+        encoding="utf-8",
+    )
+    (resource_root / "one_command_transfer_protocol.yaml").write_text(
+        "schema_version: 1\n", encoding="utf-8"
+    )
+
+    monkeypatch.setattr(
+        context,
+        "__file__",
+        str(tmp_path / "installed/agentic_project_kit/transfer_safety_context.py"),
+    )
+    monkeypatch.setattr(context.resources, "files", lambda package: resource_root)
+
+    assert context.load_transfer_safety_rules(tmp_path / "external")["transfer_priorities"] == {}
+    assert context.load_one_command_transfer_protocol(tmp_path / "external")["schema_version"] == 1
 
 
 def test_transfer_outbox_is_json_with_safety_header(tmp_path: Path) -> None:

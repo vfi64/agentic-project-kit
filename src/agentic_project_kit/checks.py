@@ -9,6 +9,7 @@ from agentic_project_kit.workspace import Workspace, load_workspace
 from agentic_project_kit.workspace_detection import (
     non_workspace_message,
     is_non_workspace_root,
+    is_agentic_project_kit_development_checkout,
 )
 
 
@@ -230,7 +231,7 @@ def check_docs(project_root: Path) -> list[str]:
 
 
 def _load_manifest_workspace_for_checks(project_root: Path) -> Workspace | None | ValueError:
-    if _is_agentic_project_kit_development_checkout(project_root):
+    if is_agentic_project_kit_development_checkout(project_root):
         return None
     if not (project_root / ".agentic/config.yaml").exists():
         return None
@@ -276,7 +277,7 @@ def build_check_context(project_root: Path) -> CheckContext:
         )
     mode = (
         "selfhosting_checkout"
-        if _is_agentic_project_kit_development_checkout(project_root)
+        if is_agentic_project_kit_development_checkout(project_root)
         else "repository_state"
     )
     return CheckContext(
@@ -287,14 +288,6 @@ def build_check_context(project_root: Path) -> CheckContext:
         gate_documents=STATE_GATE_DOCUMENTS,
         check_renders_statuses=False,
         skip_status_renderer="agentic-kit doctor",
-    )
-
-
-def _is_agentic_project_kit_development_checkout(project_root: Path) -> bool:
-    return (
-        (project_root / "src" / "agentic_project_kit").is_dir()
-        and (project_root / "docs" / "reference" / "agentic-kit-commands.json").exists()
-        and (project_root / "pyproject.toml").exists()
     )
 
 
