@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `3b6556327f91c4232dcd9e2983aa35099e7af85a` (`3b655632`), after `Audit B3 boot and cockpit command safety batch (#2153)`.
-Last substantive work state is `3b6556327f91c4232dcd9e2983aa35099e7af85a` (`3b655632`), after `Audit B3 boot and cockpit command safety batch (#2153)`.
+Current verified main/admin HEAD is `333fa8892cb323ee43594dfc527e8059246a6f1b` (`333fa889`), after `Record B1 Comm-SCI cycle results (#2155)`.
+Last substantive work state is `333fa8892cb323ee43594dfc527e8059246a6f1b` (`333fa889`), after `Record B1 Comm-SCI cycle results (#2155)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
