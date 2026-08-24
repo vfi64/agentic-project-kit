@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-23T22:01:16.466692+00:00",
+  "generated_at_utc": "2026-08-24T05:16:43.821973+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,15 +57,15 @@
     "package_version": "1.0.4"
   },
   "repo": {
-    "branch": "docs/post-pr2135-handoff-refresh",
+    "branch": "codex/a0-planning-reconciliation",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "17462d5da71e993dbb3b7018c661507c77a8980b",
-    "head_matches_origin_main": true,
-    "head_short": "17462d5d",
+    "head": "c9a45b4bad3c6c4c4f9e25b80a529f3c293fe747",
+    "head_matches_origin_main": false,
+    "head_short": "c9a45b4b",
     "local_path": "cd /path/to/",
-    "origin_main": "17462d5da71e993dbb3b7018c661507c77a8980b",
-    "origin_main_short": "17462d5d",
-    "worktree_clean": false
+    "origin_main": "375d135cb6534679635113edc478c6cb7cc64aff",
+    "origin_main_short": "375d135c",
+    "worktree_clean": true
   },
   "schema_version": 1,
   "short_term_memory": {
@@ -132,15 +132,6 @@
         "id": "documentation-artifact-governance-os",
         "status": "planned",
         "summary": "Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "master-implementation-q",
-        "status": "active",
-        "summary": "Master Implementation Q2 rest sequence"
       },
       {
         "files": [
@@ -258,6 +249,15 @@
         "id": "post-merge-lifecycle-state-model",
         "status": "active",
         "summary": "Post-merge lifecycle state model and command authority"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "post-v1-0-4-hygiene-boundary-work-program",
+        "status": "active",
+        "summary": "Post-v1.0.4 hygiene, boundary, and open-question work program"
       },
       {
         "files": [

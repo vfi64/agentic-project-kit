@@ -38,9 +38,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2135-handoff-refresh`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- branch: `codex/a0-planning-reconciliation`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -216,15 +216,6 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "master-implementation-q",
-      "status": "active",
-      "summary": "Master Implementation Q2 rest sequence"
-    },
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
       "id": "lifecycle-backlog-clearance",
       "status": "active",
       "summary": "Clear current documentation lifecycle backlog before suite-level strict mode"
@@ -342,6 +333,15 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
+      "id": "post-v1-0-4-hygiene-boundary-work-program",
+      "status": "active",
+      "summary": "Post-v1.0.4 hygiene, boundary, and open-question work program"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
       "id": "mechanize-doc-registry-scope-reconcile",
       "status": "planned",
       "summary": "Mechanize documentation registry scope reconciliation"
@@ -402,15 +402,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2135-handoff-refresh",
+    "branch": "codex/a0-planning-reconciliation",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "17462d5da71e993dbb3b7018c661507c77a8980b",
-    "head_matches_origin_main": true,
-    "head_short": "17462d5d",
+    "head": "c9a45b4bad3c6c4c4f9e25b80a529f3c293fe747",
+    "head_matches_origin_main": false,
+    "head_short": "c9a45b4b",
     "local_path": "cd /path/to/",
-    "origin_main": "17462d5da71e993dbb3b7018c661507c77a8980b",
-    "origin_main_short": "17462d5d",
-    "worktree_clean": false
+    "origin_main": "375d135cb6534679635113edc478c6cb7cc64aff",
+    "origin_main_short": "375d135c",
+    "worktree_clean": true
   }
 }
 ```

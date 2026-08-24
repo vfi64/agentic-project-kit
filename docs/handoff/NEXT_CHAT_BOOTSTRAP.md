@@ -6,10 +6,10 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `17462d5da71e993dbb3b7018c661507c77a8980b` (`17462d5d`)
-- Handoff freshness marker: `17462d5d`
-- Branch at generation: `docs/post-pr2135-handoff-refresh`
-- Worktree clean at generation: `False`
+- HEAD: `c9a45b4bad3c6c4c4f9e25b80a529f3c293fe747` (`c9a45b4b`)
+- Handoff freshness marker: `c9a45b4b`
+- Branch at generation: `codex/a0-planning-reconciliation`
+- Worktree clean at generation: `True`
 
 ## Successor handoff package
 
@@ -78,7 +78,6 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 - `release-and-doi-governance` (planned): Keep release metadata, publish, and DOI closeout behind authoritative commands for pre-GUI
 - `gui-gatekeeper-workbench` (planned): Build the local gatekeeper/workbench GUI over deterministic actions for GUI
 - `documentation-artifact-governance-os` (planned): Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance
-- `master-implementation-q` (active): Master Implementation Q2 rest sequence
 - `lifecycle-backlog-clearance` (active): Clear current documentation lifecycle backlog before suite-level strict mode
 - `governance-doc-backfill` (active): Backfill reviewed governance document registry entries
 - `planning-ideas-residual-cleanup` (planned): Resolve remaining planning and idea residual documents
@@ -92,6 +91,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 - `docs-centralize-and-remove-command` (planned): Build governed docs centralize-and-remove command before K3
 - `standard-error-hardening-backlog` (active): Standard-error hardening backlog and legacy ns command coverage map
 - `post-merge-lifecycle-state-model` (active): Post-merge lifecycle state model and command authority
+- `post-v1-0-4-hygiene-boundary-work-program` (active): Post-v1.0.4 hygiene, boundary, and open-question work program
 - `mechanize-doc-registry-scope-reconcile` (planned): Mechanize documentation registry scope reconciliation
 - `mechanize-failure-mode-review-automation` (planned): Mechanize failure-mode review automation
 - `mechanize-pre-gui-hardening-readiness` (planned): Mechanize pre-GUI hardening readiness
