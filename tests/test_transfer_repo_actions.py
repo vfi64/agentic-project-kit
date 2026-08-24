@@ -845,7 +845,11 @@ def test_transfer_post_merge_check_cli_help(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     monkeypatch.chdir(tmp_path)
 
-    result = CliRunner().invoke(app, ["transfer", "post-merge-check", "--help"])
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "post-merge-check", "--help"],
+        terminal_width=140,
+    )
 
     assert result.exit_code == 0
     assert "post-merge-check" in result.stdout
