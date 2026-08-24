@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 03b6935880b89cccbdd6f4283a81cdcf78545f7f7c266d94ebb5240cccf9b880
 - docs/reference/agentic-kit-commands.json: 4dd0d99b9bcd8926104e7d1e76e3af20a68e47113c98a6093cd968a10b251643
-## Operational documentation refresh state after PR #2151
+## Operational documentation refresh state after PR #2153
 
-Current administrative handoff refresh state is `009b717f` (`Audit B3 workspace command safety batch (#2151)`). Continue next only after this post-PR2151 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `3b655632` (`Audit B3 boot and cockpit command safety batch (#2153)`). Continue next only after this post-PR2153 refresh is committed and merged; the next substantive slice must be created from fresh main.
