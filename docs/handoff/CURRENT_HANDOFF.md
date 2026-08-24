@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `333fa8892cb323ee43594dfc527e8059246a6f1b` (`333fa889`), after `Record B1 Comm-SCI cycle results (#2155)`.
-Last substantive work state is `333fa8892cb323ee43594dfc527e8059246a6f1b` (`333fa889`), after `Record B1 Comm-SCI cycle results (#2155)`.
+Current verified main/admin HEAD is `78b1244ac3b6f99bdd635bdd31196ea42ee42f66` (`78b1244a`), after `Fix external command manifest fallback (#2158)`.
+Last substantive work state is `78b1244ac3b6f99bdd635bdd31196ea42ee42f66` (`78b1244a`), after `Fix external command manifest fallback (#2158)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
