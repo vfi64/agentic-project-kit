@@ -7,10 +7,10 @@ Current verified release: 1.0.4.
 Current release tag: v1.0.4.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22072575`.
-Current verified main: `009b717f` (`Audit B3 workspace command safety batch (#2151)`).
-Latest substantive work: PR #2151 (`Audit B3 workspace command safety batch (#2151)`).
+Current verified main: `3b655632` (`Audit B3 boot and cockpit command safety batch (#2153)`).
+Latest substantive work: PR #2153 (`Audit B3 boot and cockpit command safety batch (#2153)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2151 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2153 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -416,6 +416,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2151
+## Operational documentation refresh state after PR #2153
 
-Current administrative handoff refresh state is `009b717f` (`Audit B3 workspace command safety batch (#2151)`). Continue next only after this post-PR2151 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `3b655632` (`Audit B3 boot and cockpit command safety batch (#2153)`). Continue next only after this post-PR2153 refresh is committed and merged; the next substantive slice must be created from fresh main.
