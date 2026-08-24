@@ -896,13 +896,35 @@ roadmap:
   - docs/archive/RULE_REGISTRY_IMPROVEMENT_PLAN.md
 plans:
 - id: master-implementation-q
-  status: active
+  status: done
   title: Master Implementation Q2 rest sequence
-  rationale: 'Central ordering authority for the Q2 rest sequence after PR1806: CM3/CM4, LC/ID/K3, P5b/P5d/P5c-PLAN/P6, LC3/TH1, and L.'
+  disposition: historical_superseded
+  superseded_by:
+  - post-v1-0-4-hygiene-boundary-work-program
+  rationale: 'Historical ordering authority for the Q2 rest sequence after PR1806:
+    CM3/CM4, LC/ID/K3, P5b/P5d/P5c-PLAN/P6, LC3/TH1, and L. A0 reconciliation
+    after v1.0.4 keeps the historical evidence but removes this item as an
+    active planning driver because the listed sequence is either done or
+    maintainer-gated, and current work is now represented in the canonical
+    Direction records.'
+  preserved_information:
+    historical_source: docs/planning/MASTER_IMPLEMENTATION_Q.md
+    original_status: active
+    original_status_date: '2026-07-11'
+    original_review_policy: review_after:release:>=0.4.13
+    disposition_reason: 'The Q2 rest sequence no longer represents the next active
+      work order after v1.0.4: CM3/CM4, LC/ID/K3, P5b/P5d/P6, LC3/TH1, and L
+      are marked done in Direction; P5c remains maintainer-gated and blocked
+      rather than ordinary active work.'
+    reconciliation_evidence:
+    - docs/reports/POST_V1_0_4_A0_PLANNING_RECONCILIATION_20260824.md
+    - docs/planning/PROJECT_DIRECTION.yaml
   source_files:
-  - docs/planning/MASTER_IMPLEMENTATION_Q.md
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/reports/POST_V1_0_4_A0_PLANNING_RECONCILIATION_20260824.md
   acceptance:
-  - Master Q2 is the central planning anchor for remaining Q work.
+  - Master Q2 remains preserved as historical evidence, not as the active central
+    planning anchor.
   - P4b and P5a remain completed prerequisites and are verified by Turn 0 probes.
   - P5b enforces active path and identity classes; false positives remain visible but non-blocking.
   - P5c remains plan-only and maintainer-gated for execution.
@@ -2309,6 +2331,103 @@ plans:
   - docs/reports/POST_0_5_0_C1_REFRESH_FRICTION_20260811.md
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
+- id: post-v1-0-4-hygiene-boundary-work-program
+  status: active
+  title: Post-v1.0.4 hygiene, boundary, and open-question work program
+  depends_on:
+  - v1-0-milestone
+  - release-command-authority
+  - planner-kit-executor-hermes-integration
+  - measured-agent-onboarding
+  intent: 'Register the maintainer-requested A/B program in the canonical Direction
+    authority after v1.0.4 without creating a second planning source, parallel
+    workflow, synthetic handoff PR chain, or unsupported completion claim.'
+  scope_boundaries:
+    primary_now: Aufgabe A first, especially A0-A4.
+    allowed_after_a0: B3 may start after A0 because it is independent report-only
+      safety audit work.
+    maintainer_gated:
+    - A2 fixes or adjudication after the A1 findings report.
+    - A3 remote branch deletion, issue closure, or PR closure after report-only
+      classification.
+    - B2 refresh adjudication until B1 reaches B1_EVALUABLE.
+    - B3 Stage 2 safety reclassification, including any BOUNDED to READ_ONLY change.
+    non_goals:
+    - No GUI expansion or second planner/workflow authority.
+    - No release publication, version bump, tag push, or PyPI action.
+    - No destructive remote ref, PR, or issue mutation from report-only phases.
+  implementation_slices:
+  - id: A0
+    status: done
+    goal: Reconcile active planning, retire obsolete active anchors, and register
+      this A/B work program in PROJECT_DIRECTION.yaml.
+    evidence:
+    - docs/reports/POST_V1_0_4_A0_PLANNING_RECONCILIATION_20260824.md
+  - id: A1
+    status: next
+    goal: Produce report-only gate findings around PR #2116, PR #2117, and PR
+      #2119 without fixing or adjudicating them in the same slice.
+  - id: A2
+    status: blocked_pending_maintainer_adjudication
+    goal: Fix or adjudicate only the A1 findings selected by the maintainer.
+  - id: A3
+    status: next
+    goal: Classify remote branches, open PRs, and open issues with multiple signals,
+      preserving active PR heads and Dependabot refs, and without deletion before
+      maintainer approval.
+  - id: A4
+    status: next
+    goal: Revalidate Hermes executor independence boundaries; report-only when
+      current evidence is sufficient, otherwise create a small follow-up gap item.
+  - id: B0
+    status: planned_after_a0
+    goal: Define the external-repo refresh metric before B1 realbetrieb work starts.
+  - id: B1
+    status: setup_not_started
+    goal: Prepare and run the long-term foreign-repo evidence cycle in vfi64/Comm-SCI-Control-private
+      only after mirror backup and non-git inventory.
+  - id: B2
+    status: blocked_until_B1_EVALUABLE
+    goal: Decide refresh/realbetrieb outcome only after B1 reaches an evaluable
+      state.
+  - id: B3
+    status: planned_after_a0
+    goal: Freeze the BOUNDED command baseline, audit side effects in Stage 1 report-only
+      batches, and reserve Stage 2 safety mutations for maintainer adjudication.
+  state_model:
+    A1_to_A2:
+      allowed_transitions:
+      - A1_report_only_done -> A2_maintainer_adjudication_pending
+      - A2_maintainer_adjudication_pending -> A2_selected_fix_slice
+    B1:
+      current_state: setup_not_started
+      allowed_states:
+      - setup_not_started
+      - B1_SETUP_COMPLETE
+      - realbetrieb_running
+      - B1_EVALUABLE
+      - final_adjudication_complete
+      required_setup_evidence:
+      - mirror backup ref for vfi64/Comm-SCI-Control-private
+      - non-git inventory before mutation
+      completion_rule: One successful setup or run slice is not B1 completion; B1
+        is only evaluable after the configured realbetrieb window produces enough
+        evidence for adjudication.
+    B3:
+      baseline_ref: 375d135c
+      manifest_sha: 2ab1c7c2a951
+      audit_status: not_started
+      stage_1_boundary: report_only_side_effect_audit
+      stage_2_boundary: maintainer_gated_safety_reclassification
+      must_record:
+      - baseline list of all BOUNDED commands at baseline_ref
+      - per-batch call-chain side-effect evidence
+      - explicit separation of Stage 1 findings and Stage 2 mutation proposals
+  evidence:
+  - docs/reports/POST_V1_0_4_A0_PLANNING_RECONCILIATION_20260824.md
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/reports/POST_V1_0_4_A0_PLANNING_RECONCILIATION_20260824.md
 - id: obsolete-pr660-handoff-overlay
   status: done
   title: Obsolete PR660 handoff overlay centralized
