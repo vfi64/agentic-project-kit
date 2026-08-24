@@ -2413,6 +2413,8 @@ plans:
     - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
     - docs/reports/safety_audit/POST_V1_0_4_B3_WORKSPACE_COMMAND_AUDIT_BATCH_20260824.md
     - docs/reports/safety_audit/b3_workspace_command_audit_batch_20260824.json
+    - docs/reports/safety_audit/POST_V1_0_4_B3_BOOT_COCKPIT_COMMAND_AUDIT_BATCH_20260824.md
+    - docs/reports/safety_audit/b3_boot_cockpit_command_audit_batch_20260824.json
   state_model:
     A1_to_A2:
       allowed_transitions:
@@ -2440,9 +2442,9 @@ plans:
       manifest_sha: 2ab1c7c2a951
       baseline_list: docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
       baseline_count: 166
-      audited_count: 4
+      audited_count: 10
       audit_status: stage_1_in_progress
-      latest_batch: docs/reports/safety_audit/b3_workspace_command_audit_batch_20260824.json
+      latest_batch: docs/reports/safety_audit/b3_boot_cockpit_command_audit_batch_20260824.json
       stage_1_boundary: report_only_side_effect_audit
       stage_2_boundary: maintainer_gated_safety_reclassification
       must_record:
@@ -2461,6 +2463,8 @@ plans:
   - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
   - docs/reports/safety_audit/POST_V1_0_4_B3_WORKSPACE_COMMAND_AUDIT_BATCH_20260824.md
   - docs/reports/safety_audit/b3_workspace_command_audit_batch_20260824.json
+  - docs/reports/safety_audit/POST_V1_0_4_B3_BOOT_COCKPIT_COMMAND_AUDIT_BATCH_20260824.md
+  - docs/reports/safety_audit/b3_boot_cockpit_command_audit_batch_20260824.json
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/reports/POST_V1_0_4_A0_PLANNING_RECONCILIATION_20260824.md
@@ -2474,6 +2478,8 @@ plans:
   - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
   - docs/reports/safety_audit/POST_V1_0_4_B3_WORKSPACE_COMMAND_AUDIT_BATCH_20260824.md
   - docs/reports/safety_audit/b3_workspace_command_audit_batch_20260824.json
+  - docs/reports/safety_audit/POST_V1_0_4_B3_BOOT_COCKPIT_COMMAND_AUDIT_BATCH_20260824.md
+  - docs/reports/safety_audit/b3_boot_cockpit_command_audit_batch_20260824.json
 - id: obsolete-pr660-handoff-overlay
   status: done
   title: Obsolete PR660 handoff overlay centralized
