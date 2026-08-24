@@ -8,10 +8,11 @@ Current release tag: v1.0.4.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22072575`.
 Current verified main: `330a04f5` (`Refresh successor package after PR2160 (#2161)`).
-Latest substantive work: PR #2161 (`Refresh successor package after PR2160 (#2161)`).
+Latest substantive result slice: PR #2160 (`Record B1 Comm-SCI cycle 002 results`).
+Latest administrative refresh-only descendant: PR #2162 (`e2576298`, `Refresh handoff state after PR2161 (#2162)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2161 administrative refresh.
-Next safe step: continue from fresh main with the next planned governed slice.
+Post-merge handoff status: PASS/NOOP after PR #2162 administrative refresh.
+Next safe step: implement the highest-value B1 external-workspace follow-up, starting with B1-KIT-004/B1-KIT-005 unless maintainers choose another queued B1 finding.
 
 ## Historical State Snapshots
 
