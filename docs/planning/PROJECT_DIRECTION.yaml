@@ -2401,17 +2401,32 @@ plans:
     evidence:
     - docs/reports/POST_V1_0_4_B1_COMM_SCI_SETUP_20260824.md
     - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
+    - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
     observed_cycles:
     - id: B1-COMM-SCI-20260824-001
-      state: pr_open_handoff_pass
+      state: merged_after_cycle_002_prebase
       report: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
       external_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/3
-      merge_boundary_outcome: pending_pr_open
+      merge_boundary_outcome: merged_before_cycle_002_base_update
       refresh_denominator_counted: false
       kit_findings:
       - doctor_json_missing
       - command_manifest_unavailable_in_external_pypi_workspace
       - external_pr_no_checks_reported
+    - id: B1-COMM-SCI-20260824-002
+      state: merged_with_handoff_package
+      report: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+      external_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/4
+      external_merge_commit: 181397ce1aeb252f7bcc7872b71da56032186693
+      merge_boundary_outcome: merged_to_feature_branch_via_pinned_gh_after_kit_wrapper_blocked
+      refresh_denominator_counted: true
+      refresh_boundary_note: measured on feature/ui-access-levels-v2, not main
+      kit_findings:
+      - external_pr_no_checks_reported
+      - external_fresh_llm_context_carrier_path_mismatch
+      - external_pr_merge_safe_requires_self_hosting_rule_state
+      - external_post_merge_check_main_only
+      - command_for_task_tag_gap_for_health_commands
     follow_up_items:
     - id: B1-KIT-002
       status: implemented_retest_pass
@@ -2427,10 +2442,33 @@ plans:
         documented text-only boundary.
       evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
     - id: B1-KIT-003
-      status: planned
+      status: confirmed_repeated
       goal: Keep no-checks external PR state distinct from green remote CI in
         future readiness reporting.
-      evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
+      evidence:
+      - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
+      - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+    - id: B1-KIT-004
+      status: planned
+      goal: Make transfer fresh-LLM-context carriers external-workspace aware
+        so refresh and merge preflight agree on report paths and contracts.
+      evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+    - id: B1-KIT-005
+      status: planned
+      goal: Provide an external-workspace pr-merge-safe route that does not require
+        Kit self-hosting rule snapshots and does not turn Kit-generated transient
+        carriers into blocking dirty worktree state.
+      evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+    - id: B1-KIT-006
+      status: planned
+      goal: Add or document a base-branch-aware external post-merge check for
+        governed integration branches that are not main.
+      evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+    - id: B1-KIT-007
+      status: review
+      goal: Decide whether command-for task tags should include common health
+        commands such as doctor and check-docs.
+      evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
   - id: B2
     status: blocked_until_B1_EVALUABLE
     goal: Decide refresh/realbetrieb outcome only after B1 reaches an evaluable
@@ -2465,14 +2503,16 @@ plans:
       required_setup_evidence:
       - mirror backup ref for vfi64/Comm-SCI-Control-private
       - non-git inventory before mutation
-      recorded_cycles: 1
-      merge_boundary_cycles: 0
-      latest_cycle_report: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
-      latest_cycle_result: "PR-created and handoff-PASS; PR #3 remains open and maintainer-owned."
+      recorded_cycles: 2
+      merge_boundary_cycles: 1
+      latest_cycle_report: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+      latest_cycle_result: "PR #4 merged to feature/ui-access-levels-v2 after local green gates; Kit merge wrapper blocked on external fresh-context/rule-state assumptions and GitHub reported no remote checks."
       latest_findings:
-      - doctor_json_missing
-      - command_manifest_unavailable_in_external_pypi_workspace
       - external_pr_no_checks_reported
+      - external_fresh_llm_context_carrier_path_mismatch
+      - external_pr_merge_safe_requires_self_hosting_rule_state
+      - external_post_merge_check_main_only
+      - command_for_task_tag_gap_for_health_commands
       completion_rule: One successful setup or run slice is not B1 completion; B1
         is only evaluable after the configured realbetrieb window produces enough
         evidence for adjudication.
@@ -2499,6 +2539,7 @@ plans:
   - docs/reports/POST_V1_0_4_B0_REFRESH_METRIC_DEFINITION_20260824.md
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_SETUP_20260824.md
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
+  - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
   - docs/reports/safety_audit/POST_V1_0_4_B3_BASELINE_FREEZE_20260824.md
   - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
   - docs/reports/safety_audit/POST_V1_0_4_B3_WORKSPACE_COMMAND_AUDIT_BATCH_20260824.md
@@ -2515,6 +2556,7 @@ plans:
   - docs/reports/POST_V1_0_4_B0_REFRESH_METRIC_DEFINITION_20260824.md
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_SETUP_20260824.md
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
+  - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
   - docs/reports/safety_audit/POST_V1_0_4_B3_BASELINE_FREEZE_20260824.md
   - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
   - docs/reports/safety_audit/POST_V1_0_4_B3_WORKSPACE_COMMAND_AUDIT_BATCH_20260824.md

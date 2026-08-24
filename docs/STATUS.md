@@ -9,9 +9,9 @@ Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22072575`.
 Current verified main: `78b1244a` (`Fix external command manifest fallback (#2158)`).
 Latest substantive work: PR #2158 (`Fix external command manifest fallback (#2158)`).
-Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
+Current governed slice: record B1 Comm-SCI Cycle 002 external-repo results as a separate Kit evidence slice.
 Post-merge handoff status: PASS/NOOP after PR #2158 administrative refresh.
-Next safe step: continue from fresh main with the next planned governed slice.
+Next safe step: after the Cycle 002 evidence slice is merged and refreshed, continue B1 realbetrieb until the B0 evaluability threshold is reached.
 
 ## Historical State Snapshots
 
