@@ -2390,8 +2390,10 @@ plans:
     evidence:
     - docs/reports/POST_V1_0_4_A4_HERMES_BOUNDARY_REVALIDATION_20260824.md
   - id: B0
-    status: planned_after_a0
+    status: done
     goal: Define the external-repo refresh metric before B1 realbetrieb work starts.
+    evidence:
+    - docs/reports/POST_V1_0_4_B0_REFRESH_METRIC_DEFINITION_20260824.md
   - id: B1
     status: setup_not_started
     goal: Prepare and run the long-term foreign-repo evidence cycle in vfi64/Comm-SCI-Control-private
@@ -2411,6 +2413,9 @@ plans:
       - A2_maintainer_adjudication_pending -> A2_selected_fix_slice
     B1:
       current_state: setup_not_started
+      measurement_definition: docs/reports/POST_V1_0_4_B0_REFRESH_METRIC_DEFINITION_20260824.md
+      evaluable_threshold: at least five real cycles, including at least three
+        merge-boundary cycles with measurable post-merge refresh outcomes
       allowed_states:
       - setup_not_started
       - B1_SETUP_COMPLETE
@@ -2438,12 +2443,16 @@ plans:
   - docs/reports/POST_V1_0_4_A1_RELEASE_GATE_FINDINGS_20260824.md
   - docs/reports/branch_hygiene/REMOTE_HYGIENE_A3_CLASSIFICATION_20260824.md
   - docs/reports/branch_hygiene/remote_hygiene_a3_classification_20260824.json
+  - docs/reports/POST_V1_0_4_A4_HERMES_BOUNDARY_REVALIDATION_20260824.md
+  - docs/reports/POST_V1_0_4_B0_REFRESH_METRIC_DEFINITION_20260824.md
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/reports/POST_V1_0_4_A0_PLANNING_RECONCILIATION_20260824.md
   - docs/reports/POST_V1_0_4_A1_RELEASE_GATE_FINDINGS_20260824.md
   - docs/reports/branch_hygiene/REMOTE_HYGIENE_A3_CLASSIFICATION_20260824.md
   - docs/reports/branch_hygiene/remote_hygiene_a3_classification_20260824.json
+  - docs/reports/POST_V1_0_4_A4_HERMES_BOUNDARY_REVALIDATION_20260824.md
+  - docs/reports/POST_V1_0_4_B0_REFRESH_METRIC_DEFINITION_20260824.md
 - id: obsolete-pr660-handoff-overlay
   status: done
   title: Obsolete PR660 handoff overlay centralized
