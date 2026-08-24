@@ -2395,11 +2395,40 @@ plans:
     evidence:
     - docs/reports/POST_V1_0_4_B0_REFRESH_METRIC_DEFINITION_20260824.md
   - id: B1
-    status: B1_SETUP_COMPLETE
+    status: realbetrieb_running
     goal: Prepare and run the long-term foreign-repo evidence cycle in vfi64/Comm-SCI-Control-private
       only after mirror backup and non-git inventory.
     evidence:
     - docs/reports/POST_V1_0_4_B1_COMM_SCI_SETUP_20260824.md
+    - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
+    observed_cycles:
+    - id: B1-COMM-SCI-20260824-001
+      state: pr_open_handoff_pass
+      report: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
+      external_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/3
+      merge_boundary_outcome: pending_pr_open
+      refresh_denominator_counted: false
+      kit_findings:
+      - doctor_json_missing
+      - command_manifest_unavailable_in_external_pypi_workspace
+      - external_pr_no_checks_reported
+    follow_up_items:
+    - id: B1-KIT-002
+      status: planned_high_priority
+      goal: Make command-for and manifest-dependent commands work from PyPI installs
+        in external workspaces without requiring the target repo to carry Kit
+        reference docs.
+      evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
+    - id: B1-KIT-001
+      status: planned
+      goal: Decide whether doctor needs a JSON output contract or an explicitly
+        documented text-only boundary.
+      evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
+    - id: B1-KIT-003
+      status: planned
+      goal: Keep no-checks external PR state distinct from green remote CI in
+        future readiness reporting.
+      evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
   - id: B2
     status: blocked_until_B1_EVALUABLE
     goal: Decide refresh/realbetrieb outcome only after B1 reaches an evaluable
@@ -2421,7 +2450,7 @@ plans:
       - A1_report_only_done -> A2_maintainer_adjudication_pending
       - A2_maintainer_adjudication_pending -> A2_selected_fix_slice
     B1:
-      current_state: B1_SETUP_COMPLETE
+      current_state: realbetrieb_running
       measurement_definition: docs/reports/POST_V1_0_4_B0_REFRESH_METRIC_DEFINITION_20260824.md
       evaluable_threshold: at least five real cycles, including at least three
         merge-boundary cycles with measurable post-merge refresh outcomes
@@ -2434,6 +2463,14 @@ plans:
       required_setup_evidence:
       - mirror backup ref for vfi64/Comm-SCI-Control-private
       - non-git inventory before mutation
+      recorded_cycles: 1
+      merge_boundary_cycles: 0
+      latest_cycle_report: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
+      latest_cycle_result: "PR-created and handoff-PASS; PR #3 remains open and maintainer-owned."
+      latest_findings:
+      - doctor_json_missing
+      - command_manifest_unavailable_in_external_pypi_workspace
+      - external_pr_no_checks_reported
       completion_rule: One successful setup or run slice is not B1 completion; B1
         is only evaluable after the configured realbetrieb window produces enough
         evidence for adjudication.
@@ -2459,6 +2496,7 @@ plans:
   - docs/reports/POST_V1_0_4_A4_HERMES_BOUNDARY_REVALIDATION_20260824.md
   - docs/reports/POST_V1_0_4_B0_REFRESH_METRIC_DEFINITION_20260824.md
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_SETUP_20260824.md
+  - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
   - docs/reports/safety_audit/POST_V1_0_4_B3_BASELINE_FREEZE_20260824.md
   - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
   - docs/reports/safety_audit/POST_V1_0_4_B3_WORKSPACE_COMMAND_AUDIT_BATCH_20260824.md
@@ -2474,6 +2512,7 @@ plans:
   - docs/reports/POST_V1_0_4_A4_HERMES_BOUNDARY_REVALIDATION_20260824.md
   - docs/reports/POST_V1_0_4_B0_REFRESH_METRIC_DEFINITION_20260824.md
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_SETUP_20260824.md
+  - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
   - docs/reports/safety_audit/POST_V1_0_4_B3_BASELINE_FREEZE_20260824.md
   - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
   - docs/reports/safety_audit/POST_V1_0_4_B3_WORKSPACE_COMMAND_AUDIT_BATCH_20260824.md
