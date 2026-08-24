@@ -7,12 +7,12 @@ Current verified release: 1.0.4.
 Current release tag: v1.0.4.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22072575`.
-Current verified main: `330a04f5` (`Refresh successor package after PR2160 (#2161)`).
-Latest substantive result slice: PR #2160 (`Record B1 Comm-SCI cycle 002 results`).
+Current verified main: `8409a6ce` (`Refresh successor package after PR2163 (#2164)`).
+Latest substantive work: PR #2164 (`Refresh successor package after PR2163 (#2164)`).
 Latest administrative refresh-only descendant: PR #2162 (`e2576298`, `Refresh handoff state after PR2161 (#2162)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2162 administrative refresh.
-Next safe step: implement the highest-value B1 external-workspace follow-up, starting with B1-KIT-004/B1-KIT-005 unless maintainers choose another queued B1 finding.
+Post-merge handoff status: PASS/NOOP after PR #2164 administrative refresh.
+Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
 
@@ -417,6 +417,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2161
+## Operational documentation refresh state after PR #2164
 
-Current administrative handoff refresh state is `330a04f5` (`Refresh successor package after PR2160 (#2161)`). Continue next only after this post-PR2161 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `8409a6ce` (`Refresh successor package after PR2163 (#2164)`). Continue next only after this post-PR2164 refresh is committed and merged; the next substantive slice must be created from fresh main.
