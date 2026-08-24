@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 244351a2c53e582e3e585836ae2bf16197419ecd
-  short: 244351a2
-  subject: Define B1 refresh metric (#2145)
+  full: a427f94e7754cdf2ef6ee58f8d63cade19645884
+  short: a427f94e
+  subject: Prepare B1 Comm-SCI realbetrieb (#2147)
 last_substantive_work_state:
-  full: 244351a2c53e582e3e585836ae2bf16197419ecd
-  short: 244351a2
-  subject: Define B1 refresh metric (#2145)
+  full: a427f94e7754cdf2ef6ee58f8d63cade19645884
+  short: a427f94e
+  subject: Prepare B1 Comm-SCI realbetrieb (#2147)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
