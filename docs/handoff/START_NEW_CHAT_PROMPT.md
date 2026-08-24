@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 03b6935880b89cccbdd6f4283a81cdcf78545f7f7c266d94ebb5240cccf9b880
 - docs/reference/agentic-kit-commands.json: 4dd0d99b9bcd8926104e7d1e76e3af20a68e47113c98a6093cd968a10b251643
-## Operational documentation refresh state after PR #2141
+## Operational documentation refresh state after PR #2143
 
-Current administrative handoff refresh state is `0aa6c57a` (`Classify remote hygiene state (#2141)`). Continue next only after this post-PR2141 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `dc32e626` (`Revalidate Hermes executor boundary (#2143)`). Continue next only after this post-PR2143 refresh is committed and merged; the next substantive slice must be created from fresh main.
