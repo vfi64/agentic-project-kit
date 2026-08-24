@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 03b6935880b89cccbdd6f4283a81cdcf78545f7f7c266d94ebb5240cccf9b880
 - docs/reference/agentic-kit-commands.json: 4dd0d99b9bcd8926104e7d1e76e3af20a68e47113c98a6093cd968a10b251643
-## Operational documentation refresh state after PR #2147
+## Operational documentation refresh state after PR #2149
 
-Current administrative handoff refresh state is `a427f94e` (`Prepare B1 Comm-SCI realbetrieb (#2147)`). Continue next only after this post-PR2147 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `924e7cb8` (`Freeze B3 safety audit baseline (#2149)`). Continue next only after this post-PR2149 refresh is committed and merged; the next substantive slice must be created from fresh main.

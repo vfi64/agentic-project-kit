@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-24T07:49:07.254851+00:00",
+  "generated_at_utc": "2026-08-24T07:53:38.161664+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,15 +57,15 @@
     "package_version": "1.0.4"
   },
   "repo": {
-    "branch": "codex/b3-safety-baseline-freeze",
+    "branch": "docs/post-pr2149-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "75a75709281318d9684b8252e8c12963f3f6a299",
-    "head_matches_origin_main": false,
-    "head_short": "75a75709",
+    "head": "924e7cb825010ee1a82ed42d2083adea9bb0b2e7",
+    "head_matches_origin_main": true,
+    "head_short": "924e7cb8",
     "local_path": "cd /path/to/",
-    "origin_main": "5748220662619b02387303062f43dbe619183338",
-    "origin_main_short": "57482206",
-    "worktree_clean": true
+    "origin_main": "924e7cb825010ee1a82ed42d2083adea9bb0b2e7",
+    "origin_main_short": "924e7cb8",
+    "worktree_clean": false
   },
   "schema_version": 1,
   "short_term_memory": {
