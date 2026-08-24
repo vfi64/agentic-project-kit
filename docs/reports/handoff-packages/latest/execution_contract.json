@@ -269,14 +269,14 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "codex/b0-refresh-metric-definition",
+      "branch": "docs/post-pr2145-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "21114c08dee7f0689b1f24d02621121b7ecfef65",
-      "head_matches_origin_main": false,
+      "head": "244351a2c53e582e3e585836ae2bf16197419ecd",
+      "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "6269fbe8f3769ea2ecde0b181cc62e2ee7909d08",
-      "worktree_clean": true
+      "origin_main": "244351a2c53e582e3e585836ae2bf16197419ecd",
+      "worktree_clean": false
     },
     "scope": "current-continuation-state"
   },
@@ -421,14 +421,14 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "codex/b0-refresh-metric-definition",
+    "branch": "docs/post-pr2145-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "21114c08dee7f0689b1f24d02621121b7ecfef65",
-    "head_matches_origin_main": false,
+    "head": "244351a2c53e582e3e585836ae2bf16197419ecd",
+    "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "6269fbe8f3769ea2ecde0b181cc62e2ee7909d08",
-    "worktree_clean": true
+    "origin_main": "244351a2c53e582e3e585836ae2bf16197419ecd",
+    "worktree_clean": false
   },
   "rules": [
     {

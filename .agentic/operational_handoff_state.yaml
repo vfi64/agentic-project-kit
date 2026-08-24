@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: dc32e6269c7144d0373706496f124c749eb9e8b1
-  short: dc32e626
-  subject: Revalidate Hermes executor boundary (#2143)
+  full: 244351a2c53e582e3e585836ae2bf16197419ecd
+  short: 244351a2
+  subject: Define B1 refresh metric (#2145)
 last_substantive_work_state:
-  full: dc32e6269c7144d0373706496f124c749eb9e8b1
-  short: dc32e626
-  subject: Revalidate Hermes executor boundary (#2143)
+  full: 244351a2c53e582e3e585836ae2bf16197419ecd
+  short: 244351a2
+  subject: Define B1 refresh metric (#2145)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
