@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a427f94e7754cdf2ef6ee58f8d63cade19645884
-  short: a427f94e
-  subject: Prepare B1 Comm-SCI realbetrieb (#2147)
+  full: 924e7cb825010ee1a82ed42d2083adea9bb0b2e7
+  short: 924e7cb8
+  subject: Freeze B3 safety audit baseline (#2149)
 last_substantive_work_state:
-  full: a427f94e7754cdf2ef6ee58f8d63cade19645884
-  short: a427f94e
-  subject: Prepare B1 Comm-SCI realbetrieb (#2147)
+  full: 924e7cb825010ee1a82ed42d2083adea9bb0b2e7
+  short: 924e7cb8
+  subject: Freeze B3 safety audit baseline (#2149)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
