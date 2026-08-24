@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "kind": "b3_safety_audit_batch",
+  "date": "2026-08-24",
+  "repo": "vfi64/agentic-project-kit",
+  "baseline_ref": "5748220662619b02387303062f43dbe619183338",
+  "baseline_list": "docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json",
+  "batch_id": "B3-BC-002",
+  "batch_scope": "artifact-gc, boot, and cockpit command groups",
+  "stage": "stage_1_report_only",
+  "stage_2_authorized": false,
+  "coverage": {
+    "baseline_total": 166,
+    "batch_audited": 6,
+    "cumulative_audited_after_batch": 10
+  },
+  "findings": [
+    {
+      "qualified_name": "agentic-kit boot prompt",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Read-only bootloader rendering; no writer, subprocess, local mutation, git mutation, or remote mutation path was observed.",
+      "recommended_review": "stage_2_read_only_reclassification_candidate"
+    },
+    {
+      "qualified_name": "agentic-kit boot closeout",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Read-only generated-bootstrap and mandatory-source drift check; it may fail with exit code 1 but does not write or mutate repository state.",
+      "recommended_review": "stage_2_read_only_reclassification_candidate"
+    },
+    {
+      "qualified_name": "agentic-kit cockpit select",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Read-only cockpit action selection rendering; no action is executed and no hidden state is written.",
+      "recommended_review": "stage_2_read_only_reclassification_candidate"
+    }
+  ],
+  "commands": [
+    {
+      "qualified_name": "agentic-kit artifact-gc",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Dry-run by default for the default, tmp-log, transfer-run, and report-retention modes; executing modes delete only narrow registered transient, aged tmp, transfer-run, or report-retention artifacts. The local-tmp-contents mode is also bounded but writes a local GC report even during dry-run.",
+      "side_effects": [
+        "process_execution: git status --porcelain checks whether exact next-turn working artifacts are untracked",
+        "local_bounded_write: unlink exact transient command files or untracked next-turn working artifacts only with --execute",
+        "local_bounded_write: unlink expired tmp logs only with --execute and only within the selected tmp root",
+        "local_bounded_write: unlink expired transfer-run reports only with --execute and never latest report names",
+        "local_bounded_write: unlink expired unreferenced report-retention artifacts only with --execute and only under allowed report roots",
+        "evidence_write: .agentic/tmp/local-gc-last.json for --local-tmp-contents, including dry-run mode"
+      ],
+      "dry_run_behavior": "Default invocation renders collect_candidates output only. Mode-specific dry-runs return PENDING candidates without unlinking, except --local-tmp-contents also writes the local GC report artifact.",
+      "call_chain": [
+        "src/agentic_project_kit/cli.py:81",
+        "src/agentic_project_kit/cli_commands/artifact_gc.py:89",
+        "src/agentic_project_kit/cli_commands/artifact_gc.py:135",
+        "src/agentic_project_kit/cli_commands/artifact_gc.py:163",
+        "src/agentic_project_kit/cli_commands/artifact_gc.py:181",
+        "src/agentic_project_kit/cli_commands/artifact_gc.py:198",
+        "src/agentic_project_kit/cli_commands/artifact_gc.py:215",
+        "src/agentic_project_kit/cli_commands/artifact_gc.py:230",
+        "src/agentic_project_kit/communication_artifact_gc.py:135",
+        "src/agentic_project_kit/communication_artifact_gc.py:171",
+        "src/agentic_project_kit/communication_artifact_gc.py:227",
+        "src/agentic_project_kit/communication_artifact_gc.py:388",
+        "src/agentic_project_kit/communication_artifact_gc.py:432",
+        "src/agentic_project_kit/local_garbage_collector.py:115"
+      ],
+      "test_evidence": [
+        "tests/test_communication_artifact_gc.py:8",
+        "tests/test_communication_artifact_gc.py:12",
+        "tests/test_communication_artifact_gc.py:38",
+        "tests/test_communication_artifact_gc.py:88",
+        "tests/test_communication_artifact_gc.py:151",
+        "tests/test_communication_artifact_gc.py:165",
+        "tests/test_communication_artifact_gc.py:194",
+        "tests/test_report_retention_gc.py:26",
+        "tests/test_report_retention_gc.py:41",
+        "tests/test_report_retention_gc.py:90"
+      ],
+      "recommended_review": "keep_bounded"
+    },
+    {
+      "qualified_name": "agentic-kit boot prompt",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Renders mandatory boot source presence and workflow-rule guidance from repository files.",
+      "side_effects": [
+        "none_observed"
+      ],
+      "dry_run_behavior": "No separate dry-run flag; the command is render-only.",
+      "call_chain": [
+        "src/agentic_project_kit/cli.py:125",
+        "src/agentic_project_kit/cli_commands/boot.py:15",
+        "src/agentic_project_kit/cli_commands/boot.py:17",
+        "src/agentic_project_kit/chat_bootloader.py:89",
+        "src/agentic_project_kit/chat_bootloader.py:94"
+      ],
+      "test_evidence": [
+        "tests/test_chat_boot.py:80",
+        "tests/test_chat_boot.py:96"
+      ],
+      "recommended_review": "stage_2_read_only_reclassification_candidate"
+    },
+    {
+      "qualified_name": "agentic-kit boot write",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Writes the generated successor bootstrap projection to the requested path or workspace handoff path.",
+      "side_effects": [
+        "local_bounded_write: creates output parent directories",
+        "local_bounded_write: writes docs/handoff/NEXT_CHAT_BOOTSTRAP.md or the explicitly requested output path"
+      ],
+      "dry_run_behavior": "No dry-run flag; invoking the command writes the projection.",
+      "call_chain": [
+        "src/agentic_project_kit/cli.py:125",
+        "src/agentic_project_kit/cli_commands/boot.py:28",
+        "src/agentic_project_kit/cli_commands/boot.py:34",
+        "src/agentic_project_kit/chat_bootloader.py:146",
+        "src/agentic_project_kit/chat_bootloader.py:155",
+        "src/agentic_project_kit/chat_bootloader.py:156"
+      ],
+      "test_evidence": [
+        "tests/test_chat_boot.py:127",
+        "tests/test_boot_closeout_cli.py:27"
+      ],
+      "recommended_review": "keep_bounded"
+    },
+    {
+      "qualified_name": "agentic-kit boot closeout",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Checks generated bootstrap drift and mandatory boot-source presence; reports PASS/FAIL and exits nonzero on findings.",
+      "side_effects": [
+        "none_observed"
+      ],
+      "dry_run_behavior": "No separate dry-run flag; the command is check-only.",
+      "call_chain": [
+        "src/agentic_project_kit/cli.py:125",
+        "src/agentic_project_kit/cli_commands/boot.py:47",
+        "src/agentic_project_kit/cli_commands/boot.py:49",
+        "src/agentic_project_kit/chat_bootloader.py:160",
+        "src/agentic_project_kit/chat_bootloader.py:210"
+      ],
+      "test_evidence": [
+        "tests/test_boot_closeout_cli.py:27",
+        "tests/test_chat_boot.py:138",
+        "tests/test_chat_boot.py:164"
+      ],
+      "recommended_review": "stage_2_read_only_reclassification_candidate"
+    },
+    {
+      "qualified_name": "agentic-kit cockpit run",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Executes cockpit registry actions after safety checks. Read-only actions are allowed by default; BOUNDED actions require --allow-bounded; DESTRUCTIVE and unknown-safety actions are blocked.",
+      "side_effects": [
+        "process_execution: subprocess.run executes the resolved action command after registry and safety checks",
+        "blocked_destructive_candidate: destructive actions are never executed",
+        "blocked_bounded_default: bounded actions are not executed without explicit allow flag"
+      ],
+      "dry_run_behavior": "No dry-run flag; default safety behavior blocks bounded and destructive actions while allowing read-only actions.",
+      "call_chain": [
+        "src/agentic_project_kit/cli.py:141",
+        "src/agentic_project_kit/cli_commands/cockpit.py:72",
+        "src/agentic_project_kit/cli_commands/cockpit.py:79",
+        "src/agentic_project_kit/cockpit.py:303",
+        "src/agentic_project_kit/cockpit.py:311",
+        "src/agentic_project_kit/cockpit.py:314",
+        "src/agentic_project_kit/cockpit.py:316",
+        "src/agentic_project_kit/cockpit.py:321",
+        "src/agentic_project_kit/cockpit.py:540"
+      ],
+      "test_evidence": [
+        "tests/test_cockpit.py:131",
+        "tests/test_cockpit.py:152",
+        "tests/test_cockpit.py:161",
+        "tests/test_cockpit.py:169",
+        "tests/test_cockpit.py:189",
+        "tests/test_cockpit.py:209",
+        "tests/test_cockpit.py:230",
+        "tests/test_cockpit.py:239"
+      ],
+      "recommended_review": "keep_bounded"
+    },
+    {
+      "qualified_name": "agentic-kit cockpit select",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Renders the cockpit action list and next-step hints without executing any action.",
+      "side_effects": [
+        "none_observed"
+      ],
+      "dry_run_behavior": "No separate dry-run flag; the command is inspect-only.",
+      "call_chain": [
+        "src/agentic_project_kit/cli.py:141",
+        "src/agentic_project_kit/cli_commands/cockpit.py:66",
+        "src/agentic_project_kit/cli_commands/cockpit.py:68",
+        "src/agentic_project_kit/cli_commands/cockpit.py:69",
+        "src/agentic_project_kit/cockpit.py:452"
+      ],
+      "test_evidence": [
+        "tests/test_cockpit.py:98",
+        "tests/test_cockpit.py:119"
+      ],
+      "recommended_review": "stage_2_read_only_reclassification_candidate"
+    }
+  ]
+}
