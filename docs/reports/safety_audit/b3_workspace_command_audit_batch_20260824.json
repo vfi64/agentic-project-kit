@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "kind": "b3_safety_audit_batch",
+  "date": "2026-08-24",
+  "repo": "vfi64/agentic-project-kit",
+  "baseline_ref": "5748220662619b02387303062f43dbe619183338",
+  "baseline_list": "docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json",
+  "batch_id": "B3-WS-001",
+  "batch_scope": "workspace command group",
+  "stage": "stage_1_report_only",
+  "stage_2_authorized": false,
+  "coverage": {
+    "baseline_total": 166,
+    "batch_audited": 4,
+    "cumulative_audited_after_batch": 4
+  },
+  "findings": [],
+  "commands": [
+    {
+      "qualified_name": "agentic-kit workspace dpa-intake",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Read-only by default; optional bounded evidence JSON write only when an evidence target is requested and execute is true.",
+      "side_effects": [
+        "process_execution: git rev-parse HEAD may run for ref resolution",
+        "evidence_write: docs/architecture/evidence/dpa/assessment/*.json only with explicit evidence request and execute"
+      ],
+      "dry_run_behavior": "Default has no evidence target and returns before writer execution.",
+      "call_chain": [
+        "src/agentic_project_kit/cli_commands/workspace.py:56",
+        "src/agentic_project_kit/cli_commands/workspace.py:95",
+        "src/agentic_project_kit/workspace_dpa_intake.py:132",
+        "src/agentic_project_kit/workspace_dpa_intake.py:163",
+        "src/agentic_project_kit/workspace_dpa_intake.py:229",
+        "src/agentic_project_kit/workspace_dpa_intake.py:260"
+      ],
+      "test_evidence": [
+        "tests/test_workspace_dpa_intake.py:84",
+        "tests/test_workspace_dpa_intake.py:108",
+        "tests/test_workspace_dpa_intake.py:146"
+      ],
+      "recommended_review": "keep_bounded"
+    },
+    {
+      "qualified_name": "agentic-kit workspace init",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Plans workspace creation by default; writes generated .agentic files, .gitignore, and optional managed CI/pre-commit templates only with --execute.",
+      "side_effects": [
+        "local_bounded_write: generated .agentic namespace and docs/archive seed when missing",
+        "local_bounded_write: .gitignore .agentic/tmp/ entry",
+        "local_bounded_write: optional managed CI/pre-commit injection targets"
+      ],
+      "dry_run_behavior": "Default command builds and renders the plan without calling execute_workspace_init.",
+      "call_chain": [
+        "src/agentic_project_kit/cli_commands/workspace.py:112",
+        "src/agentic_project_kit/cli_commands/workspace.py:125",
+        "src/agentic_project_kit/cli_commands/workspace.py:135",
+        "src/agentic_project_kit/workspace_init.py:90",
+        "src/agentic_project_kit/workspace_init.py:158",
+        "src/agentic_project_kit/workspace_init.py:256",
+        "src/agentic_project_kit/workspace_init.py:466",
+        "src/agentic_project_kit/workspace_init.py:478"
+      ],
+      "test_evidence": [
+        "tests/test_workspace_init.py:45",
+        "tests/test_workspace_init.py:62",
+        "tests/test_workspace_init.py:284",
+        "tests/test_workspace_init.py:307"
+      ],
+      "recommended_review": "keep_bounded"
+    },
+    {
+      "qualified_name": "agentic-kit workspace remove",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Plans exact generated workspace-file removal by default; executes only for PASS plans with --execute and blocks modified, unknown, absolute, parent-relative, .git, and unapproved .github paths.",
+      "side_effects": [
+        "local_bounded_write: unlink exact generated .agentic files and approved managed injection targets",
+        "local_bounded_write: prune empty generated directories",
+        "blocked_destructive_candidate: refuses modified/unknown/protected remove paths"
+      ],
+      "dry_run_behavior": "Default builds and renders a remove plan without calling execute_workspace_remove.",
+      "call_chain": [
+        "src/agentic_project_kit/cli_commands/workspace.py:161",
+        "src/agentic_project_kit/cli_commands/workspace.py:172",
+        "src/agentic_project_kit/cli_commands/workspace.py:174",
+        "src/agentic_project_kit/workspace_remove.py:87",
+        "src/agentic_project_kit/workspace_remove.py:167",
+        "src/agentic_project_kit/workspace_remove.py:188",
+        "src/agentic_project_kit/workspace_remove.py:277",
+        "src/agentic_project_kit/workspace_remove.py:286"
+      ],
+      "test_evidence": [
+        "tests/test_workspace_remove.py:29",
+        "tests/test_workspace_remove.py:43",
+        "tests/test_workspace_remove.py:145",
+        "tests/test_workspace_remove.py:166",
+        "tests/test_workspace_remove.py:180",
+        "tests/test_workspace_remove.py:196",
+        "tests/test_workspace_remove.py:212"
+      ],
+      "recommended_review": "keep_bounded"
+    },
+    {
+      "qualified_name": "agentic-kit workspace upgrade",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Plans schema upgrade by default; writes manifest backups and upgraded .agentic/config.yaml only with --execute and only when an upgrade step exists.",
+      "side_effects": [
+        "local_bounded_write: .agentic/config.yaml.bak.vN",
+        "local_bounded_write: upgraded .agentic/config.yaml",
+        "blocked_destructive_candidate: refuses newer schemas, missing steps, changed manifests, or existing backups"
+      ],
+      "dry_run_behavior": "Default builds previews/diffs and does not call execute_workspace_upgrade.",
+      "call_chain": [
+        "src/agentic_project_kit/cli_commands/workspace.py:203",
+        "src/agentic_project_kit/cli_commands/workspace.py:215",
+        "src/agentic_project_kit/cli_commands/workspace.py:217",
+        "src/agentic_project_kit/workspace_upgrade.py:95",
+        "src/agentic_project_kit/workspace_upgrade.py:137",
+        "src/agentic_project_kit/workspace_upgrade.py:147",
+        "src/agentic_project_kit/workspace_upgrade.py:154"
+      ],
+      "test_evidence": [
+        "tests/test_workspace_upgrade.py:44",
+        "tests/test_workspace_upgrade.py:74",
+        "tests/test_workspace_upgrade.py:103"
+      ],
+      "recommended_review": "keep_bounded"
+    }
+  ]
+}
