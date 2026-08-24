@@ -2370,13 +2370,18 @@ plans:
     evidence:
     - docs/reports/POST_V1_0_4_A1_RELEASE_GATE_FINDINGS_20260824.md
   - id: A2
-    status: blocked_pending_maintainer_adjudication
+    status: not_required_after_A1_no_open_findings
     goal: Fix or adjudicate only the A1 findings selected by the maintainer.
+    evidence:
+    - docs/reports/POST_V1_0_4_A1_RELEASE_GATE_FINDINGS_20260824.md
   - id: A3
-    status: next
+    status: classification_done_deletion_pending_maintainer_adjudication
     goal: Classify remote branches, open PRs, and open issues with multiple signals,
       preserving active PR heads and Dependabot refs, and without deletion before
       maintainer approval.
+    evidence:
+    - docs/reports/branch_hygiene/REMOTE_HYGIENE_A3_CLASSIFICATION_20260824.md
+    - docs/reports/branch_hygiene/remote_hygiene_a3_classification_20260824.json
   - id: A4
     status: next
     goal: Revalidate Hermes executor independence boundaries; report-only when
@@ -2428,10 +2433,14 @@ plans:
   evidence:
   - docs/reports/POST_V1_0_4_A0_PLANNING_RECONCILIATION_20260824.md
   - docs/reports/POST_V1_0_4_A1_RELEASE_GATE_FINDINGS_20260824.md
+  - docs/reports/branch_hygiene/REMOTE_HYGIENE_A3_CLASSIFICATION_20260824.md
+  - docs/reports/branch_hygiene/remote_hygiene_a3_classification_20260824.json
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/reports/POST_V1_0_4_A0_PLANNING_RECONCILIATION_20260824.md
   - docs/reports/POST_V1_0_4_A1_RELEASE_GATE_FINDINGS_20260824.md
+  - docs/reports/branch_hygiene/REMOTE_HYGIENE_A3_CLASSIFICATION_20260824.md
+  - docs/reports/branch_hygiene/remote_hygiene_a3_classification_20260824.json
 - id: obsolete-pr660-handoff-overlay
   status: done
   title: Obsolete PR660 handoff overlay centralized
