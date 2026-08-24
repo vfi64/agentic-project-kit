@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-24T07:53:38.161664+00:00",
+  "generated_at_utc": "2026-08-24T08:09:43.671814+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,15 +57,15 @@
     "package_version": "1.0.4"
   },
   "repo": {
-    "branch": "docs/post-pr2149-handoff-refresh",
+    "branch": "codex/b3-workspace-safety-audit-batch",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "924e7cb825010ee1a82ed42d2083adea9bb0b2e7",
-    "head_matches_origin_main": true,
-    "head_short": "924e7cb8",
+    "head": "7122919beeeff51dd7d1650b9b6372aa439de51c",
+    "head_matches_origin_main": false,
+    "head_short": "7122919b",
     "local_path": "cd /path/to/",
-    "origin_main": "924e7cb825010ee1a82ed42d2083adea9bb0b2e7",
-    "origin_main_short": "924e7cb8",
-    "worktree_clean": false
+    "origin_main": "4f3b2b63a897b90e7cc5468241baebd56a3912f5",
+    "origin_main_short": "4f3b2b63",
+    "worktree_clean": true
   },
   "schema_version": 1,
   "short_term_memory": {
