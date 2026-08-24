@@ -2364,9 +2364,11 @@ plans:
     evidence:
     - docs/reports/POST_V1_0_4_A0_PLANNING_RECONCILIATION_20260824.md
   - id: A1
-    status: next
+    status: done
     goal: Produce report-only gate findings around PR #2116, PR #2117, and PR
       #2119 without fixing or adjudicating them in the same slice.
+    evidence:
+    - docs/reports/POST_V1_0_4_A1_RELEASE_GATE_FINDINGS_20260824.md
   - id: A2
     status: blocked_pending_maintainer_adjudication
     goal: Fix or adjudicate only the A1 findings selected by the maintainer.
@@ -2425,9 +2427,11 @@ plans:
       - explicit separation of Stage 1 findings and Stage 2 mutation proposals
   evidence:
   - docs/reports/POST_V1_0_4_A0_PLANNING_RECONCILIATION_20260824.md
+  - docs/reports/POST_V1_0_4_A1_RELEASE_GATE_FINDINGS_20260824.md
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/reports/POST_V1_0_4_A0_PLANNING_RECONCILIATION_20260824.md
+  - docs/reports/POST_V1_0_4_A1_RELEASE_GATE_FINDINGS_20260824.md
 - id: obsolete-pr660-handoff-overlay
   status: done
   title: Obsolete PR660 handoff overlay centralized
