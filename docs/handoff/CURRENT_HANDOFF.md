@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `924e7cb825010ee1a82ed42d2083adea9bb0b2e7` (`924e7cb8`), after `Freeze B3 safety audit baseline (#2149)`.
-Last substantive work state is `924e7cb825010ee1a82ed42d2083adea9bb0b2e7` (`924e7cb8`), after `Freeze B3 safety audit baseline (#2149)`.
+Current verified main/admin HEAD is `009b717f04668f869211be31871e2f8fbe1cfbe6` (`009b717f`), after `Audit B3 workspace command safety batch (#2151)`.
+Last substantive work state is `009b717f04668f869211be31871e2f8fbe1cfbe6` (`009b717f`), after `Audit B3 workspace command safety batch (#2151)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
