@@ -196,7 +196,7 @@ agentic-kit init my-docs-project \
 
 `agentic-kit doctor` validates the project contract when `.agentic/project.yaml` is present and reports selected profiles and policy packs.
 
-After `agentic-kit workspace init --root PATH --execute`, `.agentic/config.yaml` enables external workspace health mode without the self-hosting Kit documentation set. `check`/`check-docs` inspect `.agentic/state/` and `.agentic/registries/`; use `--context` or `--json` when you need evidence of that gate mode. Only `doctor` renders statuses, marks not-applicable Kit checks as `SKIP`, and reports `command manifest` as `WARN` when the repo-local source audit is skipped but the packaged command manifest is available. Kit-specific version drift is project-owned release governance.
+After `agentic-kit workspace init --root PATH --execute`, `.agentic/config.yaml` enables external workspace health mode without the self-hosting Kit documentation set. `check`/`check-docs` inspect `.agentic/state/` and `.agentic/registries/`. On external workspaces, `doctor` marks not-applicable Kit checks, skips repo-local source audit, checks packaged command manifest availability, and treats Kit-specific version drift as project-owned release governance. Fresh LLM-context carriers use the workspace namespace, including `.agentic/state/handoff/transfer_handoff_reports/` externally. `transfer pr-merge-safe` may run externally without self-hosting rule snapshots after fresh-context passes and the worktree is clean except known transient carriers.
 
 ## Policy-pack doctor checks
 

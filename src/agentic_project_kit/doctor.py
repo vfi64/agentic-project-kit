@@ -24,6 +24,7 @@ from agentic_project_kit.workspace import (
 )
 from agentic_project_kit.workspace_detection import (
     has_generated_project_contract,
+    is_agentic_project_kit_development_checkout,
     is_non_workspace_root,
     non_workspace_message,
 )
@@ -71,7 +72,7 @@ def build_doctor_report(project_root: Path) -> DoctorReport:
     workspace = _load_manifest_workspace_for_doctor(root)
     external_manifest_workspace = (
         isinstance(workspace, Workspace)
-        and not _is_agentic_project_kit_development_checkout(root)
+        and not is_agentic_project_kit_development_checkout(root)
     )
     generated_project_contract = has_generated_project_contract(root)
     checks = [
@@ -381,7 +382,7 @@ def _version_drift_check(project_root: Path, *, external_manifest_workspace: boo
 
 
 def _standard_gates_audit_suite_check(project_root: Path) -> DoctorCheck:
-    if not _is_agentic_project_kit_development_checkout(project_root):
+    if not is_agentic_project_kit_development_checkout(project_root):
         return DoctorCheck(
             "standard audit suite",
             DoctorStatus.SKIP,
@@ -401,15 +402,6 @@ def _standard_gates_audit_suite_check(project_root: Path) -> DoctorCheck:
         f"{blocker.name}: {blocker.detail}" for blocker in result.blockers
     )
     return DoctorCheck("standard audit suite", DoctorStatus.FAIL, blockers)
-
-
-def _is_agentic_project_kit_development_checkout(project_root: Path) -> bool:
-    return (
-        (project_root / "src" / "agentic_project_kit").is_dir()
-        and (project_root / "docs" / "reference" / "agentic-kit-commands.json").exists()
-        and (project_root / "pyproject.toml").exists()
-    )
-
 def _read_pyproject_version(path: Path) -> str | None:
     if not path.exists():
         return None

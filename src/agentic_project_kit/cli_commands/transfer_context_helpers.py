@@ -3,6 +3,8 @@ from __future__ import annotations
 # ruff: noqa: F403,F405
 
 from agentic_project_kit.cli_commands.transfer_shared import *
+from agentic_project_kit.workspace import load_workspace
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 
 
 def _clean_post_merge_status_is_noop() -> bool:
@@ -22,9 +24,13 @@ def _evaluate_llm_context_freshness(
 
     from agentic_project_kit.llm_execution_context import build_llm_execution_context
 
+    workspace = load_workspace(root, suppress_legacy_profile_warning=True)
+    external_manifest_workspace = is_external_manifest_workspace(root)
     paths = {
-        "outbox": root / ".agentic/transfer/outbox/last_result.txt",
-        "latest_handoff_report": root / "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "outbox": workspace.transfer_outbox() / "last_result.txt",
+        "latest_handoff_report": workspace.transfer_handoff_report_file(
+            "latest-transfer-handoff-report.json"
+        ),
     }
     required_context_keys = [
         "source_hashes",
@@ -113,20 +119,48 @@ def _evaluate_llm_context_freshness(
             status["fresh"] = False
             local_blockers.append("generated_at_missing")
         if missing_keys:
-            local_blockers.append("context_keys_missing")
+            externally_optional_keys = (
+                {"running_chat_refresh_contract"}
+                if external_manifest_workspace
+                else set()
+            )
+            missing_required_keys = [
+                key for key in missing_keys if key not in externally_optional_keys
+            ]
+            if missing_required_keys:
+                local_blockers.append("context_keys_missing")
+            else:
+                status.setdefault("warnings", []).append(
+                    "external_workspace_self_hosting_context_keys_not_adopted"
+                )
+                warnings.append(name + "_external_workspace_self_hosting_context_keys_not_adopted")
         if missing_markers:
             local_blockers.append("markers_missing")
         if forbidden_hits:
             local_blockers.append("forbidden_placeholder_present")
         if not status["source_hashes_complete"]:
-            local_blockers.append("source_hashes_incomplete")
+            if external_manifest_workspace and status["source_hashes_match_current_repo"]:
+                status.setdefault("warnings", []).append(
+                    "external_workspace_kit_internal_source_hashes_incomplete"
+                )
+                warnings.append(name + "_external_workspace_kit_internal_source_hashes_incomplete")
+            else:
+                local_blockers.append("source_hashes_incomplete")
         if not status["source_hashes_match_current_repo"]:
             local_blockers.append("source_hashes_mismatch")
         if not status["refresh_required_for_running_chats"]:
-            local_blockers.append("running_chat_refresh_contract_missing")
+            if external_manifest_workspace:
+                status.setdefault("warnings", []).append(
+                    "external_workspace_running_chat_refresh_contract_not_adopted"
+                )
+                warnings.append(
+                    name + "_external_workspace_running_chat_refresh_contract_not_adopted"
+                )
+            else:
+                local_blockers.append("running_chat_refresh_contract_missing")
         age_warning_only = (
             age_only_stale
-            and status["source_hashes_complete"]
+            and (status["source_hashes_complete"] or external_manifest_workspace)
             and status["source_hashes_match_current_repo"]
         )
         status["age_warning_only"] = age_warning_only
@@ -284,6 +318,29 @@ KNOWN_VOLATILE_TRANSFER_PATHS = [
 ]
 
 
+def _path_text_relative_to(root: Path, path: Path) -> str:
+    try:
+        return path.relative_to(root).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def _known_volatile_transfer_paths(root: Path | str = ".") -> list[str]:
+    root_path = Path(root)
+    workspace = load_workspace(root_path, suppress_legacy_profile_warning=True)
+    dynamic_paths = [
+        workspace.transfer_inbox() / "next_command.py.txt",
+        workspace.transfer_outbox() / "last_result.txt",
+        workspace.transfer_handoff_report_file("latest-transfer-handoff-report.json"),
+        workspace.transfer_handoff_report_file("latest-transfer-handoff-report.log"),
+    ]
+    paths = [
+        *KNOWN_VOLATILE_TRANSFER_PATHS,
+        *(_path_text_relative_to(root_path, path) for path in dynamic_paths),
+    ]
+    return list(dict.fromkeys(paths))
+
+
 def _completed_process_payload(completed: subprocess.CompletedProcess[str]) -> dict[str, object]:
     return {
         "argv": list(completed.args),
@@ -301,7 +358,7 @@ def _restore_known_volatile_paths(root: Path | str = ".") -> dict[str, object]:
     checks: list[dict[str, object]] = []
     errors: list[str] = []
 
-    for relative_path in KNOWN_VOLATILE_TRANSFER_PATHS:
+    for relative_path in _known_volatile_transfer_paths(root_path):
         check = subprocess.run(
             ["git", "ls-files", "--error-unmatch", relative_path],
             cwd=root_path,
@@ -348,6 +405,88 @@ def _restore_known_volatile_paths(root: Path | str = ".") -> dict[str, object]:
         "restore": restore_result,
         "errors": errors,
     }
+
+
+def _git_status_short(root: Path) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", "status", "--short", "--untracked-files=all"],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+
+def _dirty_paths_from_status(status_text: str) -> list[str]:
+    paths: list[str] = []
+    for line in status_text.splitlines():
+        if not line.strip():
+            continue
+        paths.append(line[3:] if len(line) > 3 else line.strip())
+    return paths
+
+
+def _ensure_external_merge_preflight_or_exit(*, json_output: bool) -> bool:
+    root = Path(".").resolve()
+    if not is_external_manifest_workspace(root):
+        return False
+
+    status = _git_status_short(root)
+    if status.returncode != 0:
+        payload = {
+            "schema_version": 1,
+            "kind": "external_pr_merge_preflight",
+            "result_status": "BLOCKED",
+            "returncode": 2,
+            "final_signal": "f",
+            "reasons": ["git_status_failed"],
+            "stderr": status.stderr.strip(),
+            "next_action": "Repair git repository state before running external pr-merge-safe.",
+        }
+        _echo_transfer_payload_json_or_summary(
+            payload,
+            json_output=json_output,
+            title="TRANSFER_EXTERNAL_PR_MERGE_PREFLIGHT",
+        )
+        raise typer.Exit(code=2)
+
+    known_paths = set(_known_volatile_transfer_paths(root))
+    dirty_paths = _dirty_paths_from_status(status.stdout)
+    nonvolatile_dirty = [path for path in dirty_paths if path not in known_paths]
+    restore_result: dict[str, object] | None = None
+    if dirty_paths and not nonvolatile_dirty:
+        restore_result = _restore_known_volatile_paths(root)
+        status = _git_status_short(root)
+        if status.returncode != 0:
+            nonvolatile_dirty = ["git_status_failed_after_restore"]
+        else:
+            dirty_paths = _dirty_paths_from_status(status.stdout)
+            nonvolatile_dirty = [path for path in dirty_paths if path not in known_paths]
+
+    if nonvolatile_dirty:
+        payload = {
+            "schema_version": 1,
+            "kind": "external_pr_merge_preflight",
+            "result_status": "BLOCKED",
+            "returncode": 2,
+            "final_signal": "f",
+            "reasons": ["external_dirty_worktree"],
+            "dirty_paths": dirty_paths,
+            "nonvolatile_dirty_paths": nonvolatile_dirty,
+            "known_volatile_paths": sorted(known_paths),
+            "restore_result": restore_result,
+            "next_action": (
+                "Review or clean target-repository changes before running external pr-merge-safe."
+            ),
+        }
+        _echo_transfer_payload_json_or_summary(
+            payload,
+            json_output=json_output,
+            title="TRANSFER_EXTERNAL_PR_MERGE_PREFLIGHT",
+        )
+        raise typer.Exit(code=2)
+
+    return True
 
 def _run_transfer_subprocess(argv: list[str], *, cwd: Path | None = None) -> dict[str, object]:
     completed = subprocess.run(argv, cwd=cwd or Path("."), text=True, capture_output=True, check=False)

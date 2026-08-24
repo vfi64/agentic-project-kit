@@ -81,8 +81,14 @@ def pr_merge_safe_command(
     if not skip_llm_context_gate:
         require_fresh = _public_transfer_attr("_require_fresh_llm_context_or_exit", _require_fresh_llm_context_or_exit)
         require_fresh(max_age_minutes=60, json_output=json_output)
-    require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
-    require_capability("rules_confirmed")
+    external_preflight = _public_transfer_attr(
+        "_ensure_external_merge_preflight_or_exit",
+        _ensure_external_merge_preflight_or_exit,
+    )
+    external_merge_preflight_passed = external_preflight(json_output=json_output)
+    if not external_merge_preflight_passed:
+        require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
+        require_capability("rules_confirmed")
     merge_safe = _public_transfer_attr("pr_merge_safe", pr_merge_safe)
     result = merge_safe(
         pr_number,

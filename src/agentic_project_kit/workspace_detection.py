@@ -33,5 +33,22 @@ def has_generated_project_contract(project_root: Path) -> bool:
     return (Path(project_root) / ".agentic/project.yaml").exists()
 
 
+def is_agentic_project_kit_development_checkout(project_root: Path) -> bool:
+    root = Path(project_root)
+    return (
+        (root / "src" / "agentic_project_kit").is_dir()
+        and (root / "docs" / "reference" / "agentic-kit-commands.json").exists()
+        and (root / "pyproject.toml").exists()
+    )
+
+
+def is_external_manifest_workspace(project_root: Path) -> bool:
+    root = Path(project_root)
+    return (
+        (root / ".agentic/config.yaml").exists()
+        and not is_agentic_project_kit_development_checkout(root)
+    )
+
+
 def non_workspace_message(project_root: Path) -> str:
     return f"{Path(project_root).resolve()} is {NON_WORKSPACE_LABEL}. {NON_WORKSPACE_NEXT_STEP}"

@@ -22,6 +22,7 @@ from agentic_project_kit import __version__ as PACKAGE_VERSION
 from agentic_project_kit.project_direction import load_project_direction
 from agentic_project_kit.repo_identity import detect_repo_full_name, default_local_path_hint
 from agentic_project_kit.workspace import KitConfig, Workspace, load_workspace
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 
 _LEGACY_WORKSPACE = Workspace(root=Path("."), config=KitConfig())
 
@@ -37,19 +38,8 @@ def _workspace_path_text(ws: Workspace, path: Path) -> str:
         return path.as_posix()
 
 
-def _is_agentic_project_kit_development_checkout(root: Path) -> bool:
-    return (
-        (root / "src" / "agentic_project_kit").is_dir()
-        and (root / "docs" / "reference" / "agentic-kit-commands.json").exists()
-        and (root / "pyproject.toml").exists()
-    )
-
-
 def _is_external_workspace(ws: Workspace) -> bool:
-    return (
-        (ws.root / ".agentic/config.yaml").exists()
-        and not _is_agentic_project_kit_development_checkout(ws.root)
-    )
+    return is_external_manifest_workspace(ws.root)
 
 
 NEXT_CHAT_BOOTSTRAP = _LEGACY_WORKSPACE.handoff_file("NEXT_CHAT_BOOTSTRAP.md")

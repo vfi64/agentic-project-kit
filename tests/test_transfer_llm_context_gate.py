@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 from pathlib import Path
 
 from typer.testing import CliRunner
@@ -38,6 +39,54 @@ def _write_fresh_context_reports(tmp_path: Path) -> None:
     latest.parent.mkdir(parents=True, exist_ok=True)
     outbox.write_text(json.dumps(payload), encoding="utf-8")
     latest.write_text(json.dumps(payload), encoding="utf-8")
+
+
+def _write_external_workspace_manifest(tmp_path: Path) -> None:
+    manifest = tmp_path / ".agentic/config.yaml"
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    manifest.write_text(
+        """
+kit_schema_version: 2
+project:
+  name: external-demo
+  type: python
+profile: python-default
+modules:
+  doc_registry: true
+  release_governance: true
+  rule_registry: true
+  transfer: true
+transfer:
+  visibility: repo
+hygiene:
+  doc_lifecycle: warn
+  review_budgets:
+    governance: 180
+    reference: 365
+    workflow: 270
+paths:
+  docs_root: docs
+gates:
+  extra: []
+  skip: []
+""".lstrip(),
+        encoding="utf-8",
+    )
+
+
+def _init_git_repo(path: Path) -> None:
+    subprocess.run(["git", "init"], cwd=path, check=True, stdout=subprocess.PIPE)
+    subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=path, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=path, check=True)
+    (path / "README.md").write_text("base\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=path, check=True)
+    subprocess.run(["git", "commit", "-m", "Initial"], cwd=path, check=True, stdout=subprocess.PIPE)
+    subprocess.run(["git", "branch", "-M", "main"], cwd=path, check=True, stdout=subprocess.PIPE)
+
+
+def _commit_all(path: Path, message: str) -> None:
+    subprocess.run(["git", "add", "."], cwd=path, check=True)
+    subprocess.run(["git", "commit", "-m", message], cwd=path, check=True, stdout=subprocess.PIPE)
 
 
 def test_require_fresh_llm_context_blocks_when_reports_missing(tmp_path, monkeypatch):
@@ -151,6 +200,7 @@ def test_require_fresh_llm_context_passes_with_valid_outbox_and_stale_published_
     from agentic_project_kit.transfer_safety_context import write_transfer_outbox
     from typer.testing import CliRunner
 
+    _copy_context_sources(tmp_path)
     monkeypatch.chdir(tmp_path)
 
     (tmp_path / ".agentic/transfer_safety_rules.yaml").parent.mkdir(parents=True, exist_ok=True)
@@ -203,6 +253,108 @@ post_patch_rules: {}
     assert "outbox" in data["valid_contexts"]
     assert "latest_handoff_report" not in data["valid_contexts"]
     assert "latest_handoff_report_stale_or_not_fresh" in data["blockers"]
+
+
+def test_require_fresh_llm_context_uses_external_workspace_latest_report_path(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    from agentic_project_kit.llm_context_carriers import refresh_llm_context_carriers
+
+    _write_external_workspace_manifest(tmp_path)
+    refresh_llm_context_carriers(tmp_path)
+    (tmp_path / ".agentic/transfer/outbox/last_result.txt").unlink()
+    legacy_latest = tmp_path / "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
+    assert not legacy_latest.exists()
+
+    monkeypatch.chdir(tmp_path)
+    result = CliRunner().invoke(app, ["transfer", "require-fresh-llm-context", "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert payload["valid_contexts"] == ["latest_handoff_report"]
+    checked_latest = payload["checked"]["latest_handoff_report"]
+    assert checked_latest["path"].endswith(
+        ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json"
+    )
+    assert "outbox_missing" in payload["blockers"]
+    assert any("external_workspace" in warning for warning in payload["warnings"])
+
+
+def test_pr_merge_safe_external_workspace_skips_self_hosting_rules_after_clean_preflight(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    from agentic_project_kit.transfer_repo_actions import RepoActionResult
+
+    _init_git_repo(tmp_path)
+    _write_external_workspace_manifest(tmp_path)
+    _commit_all(tmp_path, "Adopt external workspace")
+    volatile_latest = (
+        tmp_path
+        / ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json"
+    )
+    volatile_latest.parent.mkdir(parents=True, exist_ok=True)
+    volatile_latest.write_text("{}\n", encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_fresh_llm_context_or_exit",
+        lambda *, max_age_minutes, json_output: None,
+    )
+    called: dict[str, object] = {}
+
+    def fake_pr_merge_safe(*args, **kwargs):
+        called["args"] = args
+        called["kwargs"] = kwargs
+        return RepoActionResult(
+            action="pr-merge-safe",
+            command=["gh", "pr", "merge"],
+            returncode=0,
+            stdout="merged\n",
+            stderr="",
+            result_status="PASS",
+            next_action="done",
+        )
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.transfer.pr_merge_safe", fake_pr_merge_safe)
+
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "pr-merge-safe", "123", "--expected-head-sha", "abc123", "--json"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert called["args"][0] == 123
+    assert not volatile_latest.exists()
+
+
+def test_pr_merge_safe_external_workspace_blocks_substantive_dirty_worktree(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    _init_git_repo(tmp_path)
+    _write_external_workspace_manifest(tmp_path)
+    _commit_all(tmp_path, "Adopt external workspace")
+    (tmp_path / "product.py").write_text("print('change')\n", encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_fresh_llm_context_or_exit",
+        lambda *, max_age_minutes, json_output: None,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "pr-merge-safe", "123", "--expected-head-sha", "abc123", "--json"],
+    )
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "BLOCKED"
+    assert "external_dirty_worktree" in payload["reasons"]
+    assert payload["nonvolatile_dirty_paths"] == ["product.py"]
 
 
 def test_require_fresh_llm_context_can_warn_on_clean_post_merge_carrier_staleness(monkeypatch):

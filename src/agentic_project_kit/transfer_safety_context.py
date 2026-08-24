@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+from importlib import resources
 import json
 import subprocess
 from pathlib import Path
@@ -13,6 +14,9 @@ import yaml
 TRANSFER_SAFETY_RULES = Path(".agentic/transfer_safety_rules.yaml")
 ONE_COMMAND_TRANSFER_PROTOCOL = Path(".agentic/transfer/one_command_transfer_protocol.yaml")
 OUTBOX_LAST_RESULT = Path(".agentic/transfer/outbox/last_result.txt")
+PACKAGE_REFERENCE_PACKAGE = "agentic_project_kit.reference"
+PACKAGE_TRANSFER_SAFETY_RULES_RESOURCE = "transfer_safety_rules.yaml"
+PACKAGE_ONE_COMMAND_PROTOCOL_RESOURCE = "one_command_transfer_protocol.yaml"
 META_COMMAND_PREFERENCE_SOURCES = (
     ".agentic/transfer_safety_rules.yaml",
     ".agentic/transfer/one_command_transfer_protocol.yaml",
@@ -58,8 +62,14 @@ def load_transfer_safety_rules(root: Path | str = ".") -> dict[str, Any]:
             if not isinstance(loaded, dict):
                 raise ValueError(f"transfer safety rules must be a mapping: {path}")
             return loaded
+    packaged = _load_packaged_yaml(PACKAGE_TRANSFER_SAFETY_RULES_RESOURCE)
+    if packaged is not None:
+        return packaged
     searched = ", ".join(str(path) for path in candidates)
-    raise FileNotFoundError(f"transfer safety rules not found; searched: {searched}")
+    raise FileNotFoundError(
+        "transfer safety rules not found; searched: "
+        f"{searched}, packaged resource {PACKAGE_TRANSFER_SAFETY_RULES_RESOURCE}"
+    )
 
 
 def load_one_command_transfer_protocol(root: Path | str = ".") -> dict[str, Any]:
@@ -74,8 +84,29 @@ def load_one_command_transfer_protocol(root: Path | str = ".") -> dict[str, Any]
             if not isinstance(loaded, dict):
                 raise ValueError(f"one-command transfer protocol must be a mapping: {path}")
             return loaded
+    packaged = _load_packaged_yaml(PACKAGE_ONE_COMMAND_PROTOCOL_RESOURCE)
+    if packaged is not None:
+        return packaged
     searched = ", ".join(str(path) for path in candidates)
-    raise FileNotFoundError(f"one-command transfer protocol not found; searched: {searched}")
+    raise FileNotFoundError(
+        "one-command transfer protocol not found; searched: "
+        f"{searched}, packaged resource {PACKAGE_ONE_COMMAND_PROTOCOL_RESOURCE}"
+    )
+
+
+def _load_packaged_yaml(resource_name: str) -> dict[str, Any] | None:
+    try:
+        raw = (
+            resources.files(PACKAGE_REFERENCE_PACKAGE)
+            .joinpath(resource_name)
+            .read_text(encoding="utf-8")
+        )
+    except (FileNotFoundError, ModuleNotFoundError):
+        return None
+    loaded = yaml.safe_load(raw)
+    if not isinstance(loaded, dict):
+        raise ValueError(f"packaged transfer resource must be a mapping: {resource_name}")
+    return loaded
 
 
 def _load_meta_command_preference(rules: dict[str, Any], protocol: dict[str, Any]) -> dict[str, Any]:
