@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 from typer.testing import CliRunner
 
@@ -239,3 +240,23 @@ def test_command_for_cli_json_shape() -> None:
     assert payload["matched_prefix"] == "git push"
     assert payload["commands"][0]["qualified_name"] == "agentic-kit transfer push-current"
     assert payload["commands"][0]["surface"] == "primitive"
+
+
+def test_command_for_cli_uses_packaged_manifest_in_external_workspace(tmp_path: Path) -> None:
+    result = CliRunner().invoke(
+        app,
+        [
+            "command-for",
+            "--root",
+            str(tmp_path),
+            "--raw",
+            "git push origin main",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["status"] == "match"
+    assert payload["matched_prefix"] == "git push"
+    assert payload["commands"][0]["qualified_name"] == "agentic-kit transfer push-current"

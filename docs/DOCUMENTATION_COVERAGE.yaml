@@ -1267,6 +1267,10 @@ rules:
     - agentic-kit doctor
     - SKIP
     - not-applicable Kit checks
+    - command manifest
+    - WARN
+    - repo-local source audit
+    - packaged command manifest
     - Kit-specific version drift
     - project-owned release governance
     - docs/STATUS.md

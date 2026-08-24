@@ -203,6 +203,8 @@ def test_doctor_report_passes_for_manifest_operating_layer_workspace(tmp_path: P
     assert "external-demo" in check_by_name["workspace manifest"].detail
     assert check_by_name["workspace schema"].status == DoctorStatus.WARN
     assert "workspace upgrade" in check_by_name["workspace schema"].detail
+    assert check_by_name["command manifest"].status == DoctorStatus.WARN
+    assert "packaged command manifest available" in check_by_name["command manifest"].detail
     assert check_by_name["documentation gates"].status == DoctorStatus.PASS
     assert check_by_name["project contract"].status == DoctorStatus.SKIP
     assert check_by_name["policy pack checks"].status == DoctorStatus.SKIP

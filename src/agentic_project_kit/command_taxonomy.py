@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-import json
 from pathlib import Path
 from typing import Any
 
-from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
+from agentic_project_kit.command_manifest import load_manifest
 
 ALLOWED_COMMAND_CATEGORIES: tuple[str, ...] = (
     "core",
@@ -22,8 +21,6 @@ ALLOWED_COMMAND_CATEGORIES: tuple[str, ...] = (
     "work-order",
     "advanced/internal",
 )
-
-COMMAND_REFERENCE_PATH = Path(LEGACY_DEFAULTS.reference_root) / "agentic-kit-commands.json"
 
 
 @dataclass(frozen=True)
@@ -66,11 +63,10 @@ class CommandTaxonomyReport:
 
 
 def load_command_reference(project_root: Path) -> list[dict[str, Any]]:
-    path = load_workspace(project_root).reference_file("agentic-kit-commands.json")
-    data = json.loads(path.read_text(encoding="utf-8"))
+    data = load_manifest(project_root)
     commands = data.get("commands") if isinstance(data, dict) else data
     if not isinstance(commands, list):
-        raise ValueError(f"Unsupported command reference shape in {path}")
+        raise ValueError("Unsupported command reference shape")
     return [command for command in commands if isinstance(command, dict)]
 
 

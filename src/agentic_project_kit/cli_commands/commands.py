@@ -15,7 +15,9 @@ from agentic_project_kit.command_manifest import (
     build_current_reference,
     evaluate_command_manifest,
     load_manifest,
+    package_manifest_source_path,
     render_command_manifest_audit,
+    render_json,
     render_markdown,
 )
 from agentic_project_kit.command_authority_audit import (
@@ -71,6 +73,17 @@ def commands_sync_entrypoints_command(
     data = build_current_reference()
     rendered = render_markdown(data)
     payload = sync_entrypoint_files(root, manifest=data, markdown=rendered, execute=execute)
+    package_path = package_manifest_source_path(root)
+    if package_path.exists() or package_path.parent.exists():
+        package_relative = package_path.relative_to(root).as_posix()
+        package_json = render_json(data)
+        package_current = package_path.read_text(encoding="utf-8") if package_path.exists() else ""
+        if package_current != package_json:
+            payload["changed_paths"].append(package_relative)
+            payload["changed"] = True
+            if execute:
+                package_path.parent.mkdir(parents=True, exist_ok=True)
+                package_path.write_text(package_json, encoding="utf-8")
     if json_output:
         typer.echo(json.dumps(payload, indent=2, sort_keys=True))
         return

@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from agentic_project_kit.checks import check_docs, check_todo
+from agentic_project_kit.command_manifest import load_manifest
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_report
 from agentic_project_kit.standard_gates_audit_suite import evaluate_standard_gates_audit_suite
 from agentic_project_kit.contract import (
@@ -80,14 +81,20 @@ def build_doctor_report(project_root: Path) -> DoctorReport:
         _path_check(root, ".github/workflows/ci.yml", required=False),
         _workspace_manifest_check(workspace, generated_project_contract=generated_project_contract),
         _workspace_schema_currency_check(workspace, generated_project_contract=generated_project_contract),
-        _project_contract_check(root, contract_data, external_manifest_workspace=external_manifest_workspace),
-        _policy_pack_check(root, contract_data, external_manifest_workspace=external_manifest_workspace),
-        _docs_check(root),
-        _doc_lifecycle_check(root),
-        _todo_check(root, workspace),
-        _standard_gates_audit_suite_check(root),
-        _version_drift_check(root, external_manifest_workspace=external_manifest_workspace),
     ]
+    if external_manifest_workspace:
+        checks.append(_external_command_manifest_resource_check(root))
+    checks.extend(
+        [
+            _project_contract_check(root, contract_data, external_manifest_workspace=external_manifest_workspace),
+            _policy_pack_check(root, contract_data, external_manifest_workspace=external_manifest_workspace),
+            _docs_check(root),
+            _doc_lifecycle_check(root),
+            _todo_check(root, workspace),
+            _standard_gates_audit_suite_check(root),
+            _version_drift_check(root, external_manifest_workspace=external_manifest_workspace),
+        ]
+    )
     return DoctorReport(project_root=root, checks=checks)
 
 
@@ -179,6 +186,34 @@ def _workspace_schema_currency_check(
         "workspace schema",
         DoctorStatus.PASS,
         f"manifest schema v{data.manifest_schema_version} is current",
+    )
+
+
+def _external_command_manifest_resource_check(project_root: Path) -> DoctorCheck:
+    try:
+        manifest = load_manifest(project_root)
+    except Exception as exc:
+        return DoctorCheck(
+            "command manifest",
+            DoctorStatus.FAIL,
+            f"packaged command manifest unavailable: {exc}",
+        )
+    commands = manifest.get("commands")
+    if not isinstance(commands, list) or not commands:
+        return DoctorCheck(
+            "command manifest",
+            DoctorStatus.FAIL,
+            "packaged command manifest contains no commands",
+        )
+    meta = manifest.get("meta") if isinstance(manifest.get("meta"), dict) else {}
+    manifest_sha = str(meta.get("manifest_sha") or "UNKNOWN")
+    return DoctorCheck(
+        "command manifest",
+        DoctorStatus.WARN,
+        (
+            "repo-local command-manifest audit skipped for external workspace; "
+            f"packaged command manifest available ({len(commands)} commands; manifest_sha: {manifest_sha})"
+        ),
     )
 
 

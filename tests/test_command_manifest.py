@@ -9,9 +9,12 @@ from typer import Typer
 from agentic_project_kit.command_manifest import (
     JSON_PATH,
     MD_PATH,
+    PACKAGE_JSON_PATH,
     SURFACE_VALUES,
+    build_current_reference,
     build_reference_from_app,
     evaluate_command_manifest,
+    load_manifest,
     manifest_sha,
     render_markdown,
 )
@@ -32,6 +35,12 @@ def _write_manifest(root: Path, data: dict[str, object]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     (root / MD_PATH).write_text(render_markdown(data), encoding="utf-8")
+
+
+def _write_package_manifest(root: Path, data: dict[str, object]) -> None:
+    path = root / PACKAGE_JSON_PATH
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
 def test_manifest_sha_is_stable_for_field_order() -> None:
@@ -68,8 +77,6 @@ def test_fixture_reference_contains_required_manifest_fields() -> None:
 
 
 def test_selector_commands_are_read_only_in_current_reference() -> None:
-    from agentic_project_kit.command_manifest import build_current_reference
-
     data = build_current_reference()
     by_name = {command["qualified_name"]: command for command in data["commands"]}
 
@@ -78,8 +85,6 @@ def test_selector_commands_are_read_only_in_current_reference() -> None:
 
 
 def test_workspace_adopt_is_read_only_in_current_reference() -> None:
-    from agentic_project_kit.command_manifest import build_current_reference
-
     data = build_current_reference()
     by_name = {command["qualified_name"]: command for command in data["commands"]}
 
@@ -87,8 +92,6 @@ def test_workspace_adopt_is_read_only_in_current_reference() -> None:
 
 
 def test_workspace_remove_is_bounded_dry_run_available_in_current_reference() -> None:
-    from agentic_project_kit.command_manifest import build_current_reference
-
     data = build_current_reference()
     by_name = {command["qualified_name"]: command for command in data["commands"]}
 
@@ -98,8 +101,6 @@ def test_workspace_remove_is_bounded_dry_run_available_in_current_reference() ->
 
 
 def test_current_reference_classifies_every_command_surface() -> None:
-    from agentic_project_kit.command_manifest import build_current_reference
-
     data = build_current_reference()
     by_name = {command["qualified_name"]: command for command in data["commands"]}
     surfaces = {name: command.get("surface") for name, command in by_name.items()}
@@ -127,8 +128,6 @@ def test_current_reference_classifies_every_command_surface() -> None:
 
 
 def test_orchestrator_lifecycle_rank_projects_normal_flow() -> None:
-    from agentic_project_kit.command_manifest import build_current_reference
-
     data = build_current_reference()
     by_name = {command["qualified_name"]: command for command in data["commands"]}
     expected_order = [
@@ -241,3 +240,39 @@ def test_audit_detects_replaces_raw_shape(tmp_path: Path, monkeypatch) -> None:
 
     assert not audit.ok
     assert any(finding.code == "REPLACES_RAW_INVALID" for finding in audit.findings)
+
+
+def test_load_manifest_falls_back_to_packaged_reference_for_external_workspace(tmp_path: Path) -> None:
+    manifest = load_manifest(tmp_path)
+    names = {
+        str(command.get("qualified_name"))
+        for command in manifest.get("commands", [])
+        if isinstance(command, dict)
+    }
+
+    assert "agentic-kit command-for" in names
+
+
+def test_load_manifest_can_require_workspace_reference(tmp_path: Path) -> None:
+    try:
+        load_manifest(tmp_path, allow_package_fallback=False)
+    except FileNotFoundError:
+        return
+
+    raise AssertionError("strict workspace manifest load unexpectedly used package fallback")
+
+
+def test_audit_detects_source_package_manifest_drift(tmp_path: Path, monkeypatch) -> None:
+    data = build_current_reference()
+    _write_manifest(tmp_path, data)
+    package_data = copy.deepcopy(data)
+    package_data["commands"] = list(package_data["commands"])
+    package_data["commands"][0] = dict(package_data["commands"][0])
+    package_data["commands"][0]["when_to_use"] = "stale packaged manifest"
+    _write_package_manifest(tmp_path, package_data)
+    monkeypatch.chdir(tmp_path)
+
+    audit = evaluate_command_manifest(tmp_path)
+
+    assert not audit.ok
+    assert any(finding.code == "PACKAGE_JSON_DRIFT" for finding in audit.findings)
