@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 17462d5da71e993dbb3b7018c661507c77a8980b
-  short: 17462d5d
-  subject: Close out release v1.0.4 DOI metadata (#2135)
+  full: 9950de98dfd1f5707e9200f2e1819ab657e1db56
+  short: 9950de98
+  subject: Reconcile planning after v1.0.4 (#2137)
 last_substantive_work_state:
-  full: 17462d5da71e993dbb3b7018c661507c77a8980b
-  short: 17462d5d
-  subject: Close out release v1.0.4 DOI metadata (#2135)
+  full: 9950de98dfd1f5707e9200f2e1819ab657e1db56
+  short: 9950de98
+  subject: Reconcile planning after v1.0.4 (#2137)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
