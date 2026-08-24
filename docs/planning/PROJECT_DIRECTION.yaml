@@ -2405,9 +2405,12 @@ plans:
     goal: Decide refresh/realbetrieb outcome only after B1 reaches an evaluable
       state.
   - id: B3
-    status: planned_after_a0
+    status: stage_1_baseline_frozen
     goal: Freeze the BOUNDED command baseline, audit side effects in Stage 1 report-only
       batches, and reserve Stage 2 safety mutations for maintainer adjudication.
+    evidence:
+    - docs/reports/safety_audit/POST_V1_0_4_B3_BASELINE_FREEZE_20260824.md
+    - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
   state_model:
     A1_to_A2:
       allowed_transitions:
@@ -2431,9 +2434,12 @@ plans:
         is only evaluable after the configured realbetrieb window produces enough
         evidence for adjudication.
     B3:
-      baseline_ref: 375d135c
+      baseline_ref: 57482206
       manifest_sha: 2ab1c7c2a951
-      audit_status: not_started
+      baseline_list: docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
+      baseline_count: 166
+      audited_count: 0
+      audit_status: stage_1_baseline_frozen
       stage_1_boundary: report_only_side_effect_audit
       stage_2_boundary: maintainer_gated_safety_reclassification
       must_record:
@@ -2448,6 +2454,8 @@ plans:
   - docs/reports/POST_V1_0_4_A4_HERMES_BOUNDARY_REVALIDATION_20260824.md
   - docs/reports/POST_V1_0_4_B0_REFRESH_METRIC_DEFINITION_20260824.md
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_SETUP_20260824.md
+  - docs/reports/safety_audit/POST_V1_0_4_B3_BASELINE_FREEZE_20260824.md
+  - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/reports/POST_V1_0_4_A0_PLANNING_RECONCILIATION_20260824.md
@@ -2457,6 +2465,8 @@ plans:
   - docs/reports/POST_V1_0_4_A4_HERMES_BOUNDARY_REVALIDATION_20260824.md
   - docs/reports/POST_V1_0_4_B0_REFRESH_METRIC_DEFINITION_20260824.md
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_SETUP_20260824.md
+  - docs/reports/safety_audit/POST_V1_0_4_B3_BASELINE_FREEZE_20260824.md
+  - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
 - id: obsolete-pr660-handoff-overlay
   status: done
   title: Obsolete PR660 handoff overlay centralized
