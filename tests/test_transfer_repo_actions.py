@@ -841,20 +841,34 @@ def test_admin_refresh_pr_fails_when_existing_branch_has_multiple_open_prs(tmp_p
     assert "Multiple open admin refresh PRs found" in result.stderr
 
 
-def test_transfer_post_merge_check_cli_help(tmp_path, monkeypatch):
-    _init_repo(tmp_path)
-    monkeypatch.chdir(tmp_path)
+def test_transfer_post_merge_check_cli_accepts_base_branch_alias(monkeypatch):
+    from agentic_project_kit.cli_commands import transfer_repo_after_pr
+
+    calls = []
+
+    def fake_post_merge_check(*, main_branch="main"):
+        calls.append(main_branch)
+        return transfer_repo_actions.RepoActionResult(
+            "post-merge-check",
+            "PASS",
+            0,
+            ["agentic-kit", "transfer", "post-merge-check"],
+            "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n",
+            "",
+            "STATE=READY\nNEXT=none",
+        )
+
+    monkeypatch.setattr(transfer_repo_after_pr, "post_merge_check", fake_post_merge_check)
 
     result = CliRunner().invoke(
         app,
-        ["transfer", "post-merge-check", "--help"],
-        terminal_width=140,
+        ["transfer", "post-merge-check", "--base-branch", "feature/ui-access-levels-v2", "--json"],
     )
 
     assert result.exit_code == 0
-    assert "post-merge-check" in result.stdout
-    assert "--base-branch" in result.stdout
-    assert "external integration branches" in result.stdout
+    assert calls == ["feature/ui-access-levels-v2"]
+    payload = json.loads(result.stdout)
+    assert payload["next_action"] == "STATE=READY\nNEXT=none"
 
 
 def test_transfer_branch_create_cli_blocks_without_rule_acknowledgement(tmp_path, monkeypatch):
