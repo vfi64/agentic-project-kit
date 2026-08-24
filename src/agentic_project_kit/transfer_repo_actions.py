@@ -21,6 +21,7 @@ from agentic_project_kit.transfer_operation_monitor import MonitorDecision
 from agentic_project_kit.transfer_operation_monitor import guard_branch
 from agentic_project_kit.transfer_operation_monitor import guard_pr_create
 from agentic_project_kit.workspace import KitConfig, Workspace, load_workspace
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 from agentic_project_kit.workspace_lock import acquire_workspace_lock, workspace_mutation_lock
 
 
@@ -478,11 +479,21 @@ def _successor_package_freshness_check(repo_root: Path | None = None) -> Success
         findings.append("execution_contract.json missing rule IDs: " + ", ".join(missing))
 
     combined = "\n".join([successor_prompt, start_prompt, execution_text])
-    for needle in (
+    required_bootstrap_needles = [
         "Zusätzliche Startbremse nach dem Bootstrap",
-        "RESULT=NEW_CHAT_BOOTSTRAP_DONE",
         "Übergabe akzeptiert, keine Admin-Arbeit nötig",
-    ):
+    ]
+    if is_external_manifest_workspace(root):
+        required_bootstrap_needles.extend(
+            [
+                "validation_report.json PASS",
+                "execution_contract.json",
+            ]
+        )
+    else:
+        required_bootstrap_needles.append("RESULT=NEW_CHAT_BOOTSTRAP_DONE")
+
+    for needle in required_bootstrap_needles:
         if needle not in combined:
             findings.append(f"successor handoff package missing bootstrap acceptance marker: {needle}")
 
@@ -1491,7 +1502,12 @@ def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
             branch_completed.stdout,
             f"Expected branch {main_branch} before post-merge lifecycle check. Current branch: {branch}\n",
         )
-        return _result("post-merge-check", branch_command, completed, "STATE=BLOCKED; NEXT=switch_to_main_and_sync")
+        return _result(
+            "post-merge-check",
+            branch_command,
+            completed,
+            "STATE=BLOCKED; NEXT=switch_to_expected_branch_and_sync",
+        )
 
     command = [_agentic_kit_command(), "handoff", "post-merge-refresh-status"]
     completed = _run(command)

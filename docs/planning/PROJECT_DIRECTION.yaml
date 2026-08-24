@@ -2404,6 +2404,7 @@ plans:
     - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_CLOSEOUT_SETTLE_OBSERVATION_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md
+    - docs/reports/POST_V1_0_4_B1_KIT_006_EXTERNAL_POST_MERGE_BASE_BRANCH_20260824.md
     observed_cycles:
     - id: B1-COMM-SCI-20260824-001
       state: merged_after_cycle_002_prebase
@@ -2467,10 +2468,12 @@ plans:
       - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
       - docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md
     - id: B1-KIT-006
-      status: planned
+      status: implemented_retest_pass
       goal: Add or document a base-branch-aware external post-merge check for
         governed integration branches that are not main.
-      evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+      evidence:
+      - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+      - docs/reports/POST_V1_0_4_B1_KIT_006_EXTERNAL_POST_MERGE_BASE_BRANCH_20260824.md
     - id: B1-KIT-007
       status: review
       goal: Decide whether command-for task tags should include common health

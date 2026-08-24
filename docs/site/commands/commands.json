@@ -7695,10 +7695,11 @@
       "lifecycle_rank": null,
       "params": [
         {
-          "help": "Expected current branch after merge.",
+          "help": "Expected current branch after merge. Use --base-branch for external integration branches that are not main.",
           "name": "main_branch",
           "opts": [
-            "--main-branch"
+            "--main-branch",
+            "--base-branch"
           ],
           "required": false
         },
