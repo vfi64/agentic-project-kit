@@ -7,12 +7,12 @@ Current verified release: 1.0.4.
 Current release tag: v1.0.4.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22072575`.
-Current verified main: `2f935c31` (`Refresh handoff state after PR2164 (#2165)`).
-Latest substantive work before the current branch: PR #2163 (`Record B1 closeout settle observation (#2163)`).
+Current verified main: `6533a98a` (`Fix external context merge preflight (#2166)`).
+Latest substantive work: PR #2166 (`Fix external context merge preflight (#2166)`).
 Latest administrative refresh-only descendant: PR #2165 (`2f935c31`, `Refresh handoff state after PR2164 (#2165)`).
-Current governed slice: B1-KIT-004/005 external fresh-context and `pr-merge-safe` repair on `codex/b1-external-merge-context`, with installed-wheel Comm-SCI retest evidence in `docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md`.
-Post-merge handoff status: PASS/NOOP after PR #2165 administrative refresh.
-Next safe step: finish local gates, open/complete the B1-KIT-004/005 repair PR, then run post-merge settle from fresh main.
+Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
+Post-merge handoff status: PASS/NOOP after PR #2166 administrative refresh.
+Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
 
@@ -417,6 +417,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2164
+## Operational documentation refresh state after PR #2166
 
-Current administrative handoff refresh state is `8409a6ce` (`Refresh successor package after PR2163 (#2164)`). Continue next only after this post-PR2164 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `6533a98a` (`Fix external context merge preflight (#2166)`). Continue next only after this post-PR2166 refresh is committed and merged; the next substantive slice must be created from fresh main.

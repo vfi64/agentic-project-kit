@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `2f935c31e186c14bf41e35362081c658cf213f65` (`2f935c31`), after `Refresh handoff state after PR2164 (#2165)`.
-Last substantive work state before the current branch is `3cb9af423a1959633a7faf92f26f23bd62ed9a61` (`3cb9af42`), after `Record B1 closeout settle observation (#2163)`.
+Current verified main/admin HEAD is `6533a98addb253e0b21cc63ebb18d6b8459e1eaa` (`6533a98a`), after `Fix external context merge preflight (#2166)`.
+Last substantive work state is `6533a98addb253e0b21cc63ebb18d6b8459e1eaa` (`6533a98a`), after `Fix external context merge preflight (#2166)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
@@ -15,7 +15,7 @@ PR #1246 refreshed operational handoff after PR #1245.
 PR #1245 is an administrative handoff/evidence refresh after PR #1244.
 
 A successor chat must treat operational documentation freshness as part of handoff freshness: STATUS, CURRENT_HANDOFF, START_NEW_CHAT_PROMPT, NEXT_CHAT_BOOTSTRAP, and the active roadmap must mention current safe/admin markers before they are used as authoritative orientation.
-Continue the B1-KIT-004/005 external fresh-context and `pr-merge-safe` repair from branch `codex/b1-external-merge-context`; evidence is recorded in `docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md`. After merge, run post-merge settle from fresh main. Preserve the WRT-CH-001 generated-block boundary and do not manually patch generated successor handoff projections.
+Continue with the next governed DPA DP2 slice from fresh main after post-merge closeout reports NOOP. Preserve the WRT-CH-001 generated-block boundary and do not manually patch generated successor handoff projections.
 
 <!-- agentic:generated operational-handoff-state end -->
 

@@ -2,8 +2,8 @@
 schema_version: 2
 artifact_type: chat_switch_prompt
 role: start_new_chat
-current_handoff_marker: 9d2416cb
-current_branch_at_generation: codex/command-authority-gate
+current_handoff_marker: 6533a98a
+current_branch_at_generation: docs/post-pr2166-handoff-refresh
 canonical_bootstrap: docs/handoff/NEXT_CHAT_BOOTSTRAP.md
 successor_context: docs/reports/handoff-packages/latest/successor_context.yaml
 paired_prompt: docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md
@@ -31,7 +31,7 @@ required_terms:
 
 # Start New Chat Prompt
 
-Current handoff marker: `9d2416cb`.
+Current handoff marker: `6533a98a`.
 
 Copy `docs/reports/handoff-packages/latest/successor_prompt.md` into the successor chat.
 
@@ -87,6 +87,3 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 03b6935880b89cccbdd6f4283a81cdcf78545f7f7c266d94ebb5240cccf9b880
 - docs/reference/agentic-kit-commands.json: 4dd0d99b9bcd8926104e7d1e76e3af20a68e47113c98a6093cd968a10b251643
-## Operational documentation refresh state after PR #2164
-
-Current administrative handoff refresh state is `8409a6ce` (`Refresh successor package after PR2163 (#2164)`). Continue next only after this post-PR2164 refresh is committed and merged; the next substantive slice must be created from fresh main.
