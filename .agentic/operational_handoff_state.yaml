@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9950de98dfd1f5707e9200f2e1819ab657e1db56
-  short: 9950de98
-  subject: Reconcile planning after v1.0.4 (#2137)
+  full: b7127d1d736b6c52d157eee0206c6c32cbba6737
+  short: b7127d1d
+  subject: Record release-environment gate findings (#2139)
 last_substantive_work_state:
-  full: 9950de98dfd1f5707e9200f2e1819ab657e1db56
-  short: 9950de98
-  subject: Reconcile planning after v1.0.4 (#2137)
+  full: b7127d1d736b6c52d157eee0206c6c32cbba6737
+  short: b7127d1d
+  subject: Record release-environment gate findings (#2139)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
