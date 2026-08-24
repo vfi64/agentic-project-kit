@@ -2383,9 +2383,12 @@ plans:
     - docs/reports/branch_hygiene/REMOTE_HYGIENE_A3_CLASSIFICATION_20260824.md
     - docs/reports/branch_hygiene/remote_hygiene_a3_classification_20260824.json
   - id: A4
-    status: next
+    status: done
+    disposition: already_satisfied
     goal: Revalidate Hermes executor independence boundaries; report-only when
       current evidence is sufficient, otherwise create a small follow-up gap item.
+    evidence:
+    - docs/reports/POST_V1_0_4_A4_HERMES_BOUNDARY_REVALIDATION_20260824.md
   - id: B0
     status: planned_after_a0
     goal: Define the external-repo refresh metric before B1 realbetrieb work starts.
