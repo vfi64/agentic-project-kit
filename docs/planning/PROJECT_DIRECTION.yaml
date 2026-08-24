@@ -2402,6 +2402,7 @@ plans:
     - docs/reports/POST_V1_0_4_B1_COMM_SCI_SETUP_20260824.md
     - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
     - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+    - docs/reports/POST_V1_0_4_B1_KIT_CLOSEOUT_SETTLE_OBSERVATION_20260824.md
     observed_cycles:
     - id: B1-COMM-SCI-20260824-001
       state: merged_after_cycle_002_prebase
@@ -2427,6 +2428,7 @@ plans:
       - external_pr_merge_safe_requires_self_hosting_rule_state
       - external_post_merge_check_main_only
       - command_for_task_tag_gap_for_health_commands
+      - kit_post_merge_settle_non_return_after_admin_refresh
     follow_up_items:
     - id: B1-KIT-002
       status: implemented_retest_pass
@@ -2469,6 +2471,12 @@ plans:
       goal: Decide whether command-for task tags should include common health
         commands such as doctor and check-docs.
       evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+    - id: B1-KIT-008
+      status: planned
+      goal: Make post-merge-settle return cleanly after generated admin refresh
+        PRs have reached a terminal PASS/NOOP state, with bounded progress or
+        timeout evidence for long waits.
+      evidence: docs/reports/POST_V1_0_4_B1_KIT_CLOSEOUT_SETTLE_OBSERVATION_20260824.md
   - id: B2
     status: blocked_until_B1_EVALUABLE
     goal: Decide refresh/realbetrieb outcome only after B1 reaches an evaluable
@@ -2513,6 +2521,7 @@ plans:
       - external_pr_merge_safe_requires_self_hosting_rule_state
       - external_post_merge_check_main_only
       - command_for_task_tag_gap_for_health_commands
+      - kit_post_merge_settle_non_return_after_admin_refresh
       completion_rule: One successful setup or run slice is not B1 completion; B1
         is only evaluable after the configured realbetrieb window produces enough
         evidence for adjudication.
