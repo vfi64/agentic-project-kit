@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 78b1244ac3b6f99bdd635bdd31196ea42ee42f66
-  short: 78b1244a
-  subject: Fix external command manifest fallback (#2158)
+  full: 330a04f506de75a852e3699615dbc0ba05f22f8b
+  short: 330a04f5
+  subject: Refresh successor package after PR2160 (#2161)
 last_substantive_work_state:
-  full: 78b1244ac3b6f99bdd635bdd31196ea42ee42f66
-  short: 78b1244a
-  subject: Fix external command manifest fallback (#2158)
+  full: 330a04f506de75a852e3699615dbc0ba05f22f8b
+  short: 330a04f5
+  subject: Refresh successor package after PR2160 (#2161)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

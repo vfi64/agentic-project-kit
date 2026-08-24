@@ -7,11 +7,11 @@ Current verified release: 1.0.4.
 Current release tag: v1.0.4.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22072575`.
-Current verified main: `78b1244a` (`Fix external command manifest fallback (#2158)`).
-Latest substantive work: PR #2158 (`Fix external command manifest fallback (#2158)`).
-Current governed slice: record B1 Comm-SCI Cycle 002 external-repo results as a separate Kit evidence slice.
-Post-merge handoff status: PASS/NOOP after PR #2158 administrative refresh.
-Next safe step: after the Cycle 002 evidence slice is merged and refreshed, continue B1 realbetrieb until the B0 evaluability threshold is reached.
+Current verified main: `330a04f5` (`Refresh successor package after PR2160 (#2161)`).
+Latest substantive work: PR #2161 (`Refresh successor package after PR2160 (#2161)`).
+Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
+Post-merge handoff status: PASS/NOOP after PR #2161 administrative refresh.
+Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
 
@@ -416,6 +416,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2158
+## Operational documentation refresh state after PR #2161
 
-Current administrative handoff refresh state is `78b1244a` (`Fix external command manifest fallback (#2158)`). Continue next only after this post-PR2158 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `330a04f5` (`Refresh successor package after PR2160 (#2161)`). Continue next only after this post-PR2161 refresh is committed and merged; the next substantive slice must be created from fresh main.

@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 03b6935880b89cccbdd6f4283a81cdcf78545f7f7c266d94ebb5240cccf9b880
 - docs/reference/agentic-kit-commands.json: 4dd0d99b9bcd8926104e7d1e76e3af20a68e47113c98a6093cd968a10b251643
-## Operational documentation refresh state after PR #2158
+## Operational documentation refresh state after PR #2161
 
-Current administrative handoff refresh state is `78b1244a` (`Fix external command manifest fallback (#2158)`). Continue next only after this post-PR2158 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `330a04f5` (`Refresh successor package after PR2160 (#2161)`). Continue next only after this post-PR2161 refresh is committed and merged; the next substantive slice must be created from fresh main.
