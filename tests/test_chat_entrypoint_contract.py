@@ -7,7 +7,13 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
-from agentic_project_kit.command_manifest import JSON_PATH, MD_PATH, evaluate_command_manifest, load_manifest
+from agentic_project_kit.command_manifest import (
+    JSON_PATH,
+    MD_PATH,
+    PACKAGE_JSON_PATH,
+    evaluate_command_manifest,
+    load_manifest,
+)
 from agentic_project_kit.command_authority_audit import evaluate_command_authority
 from agentic_project_kit.chat_entrypoint_contract import (
     command_manifest_ack_line,
@@ -247,6 +253,7 @@ def test_sync_entrypoints_repairs_stale_manifest_sha_and_agents_block(tmp_path: 
     assert "COMMAND_MANIFEST_ACK stale" not in prompt_text
     assert prompt_text.count("Command manifest entrypoint:") == 1
     assert "## Tail\nkeep this paragraph" in prompt_text
+    assert not (tmp_path / PACKAGE_JSON_PATH).exists()
 
     idempotent = CliRunner().invoke(
         app,

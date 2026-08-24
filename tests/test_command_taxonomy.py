@@ -69,6 +69,16 @@ def test_command_taxonomy_report_requires_valid_categories(tmp_path: Path) -> No
     assert {entry.category for entry in report.entries} <= set(ALLOWED_COMMAND_CATEGORIES)
 
 
+def test_command_taxonomy_report_uses_packaged_manifest_in_external_workspace(
+    tmp_path: Path,
+) -> None:
+    report = build_command_taxonomy_report(tmp_path)
+
+    assert report.ok
+    assert report.command_count > 0
+    assert any(entry.qualified_name == "agentic-kit command-for" for entry in report.entries)
+
+
 def test_render_command_taxonomy_report() -> None:
     report = build_command_taxonomy_report(Path("."))
 

@@ -2414,11 +2414,13 @@ plans:
       - external_pr_no_checks_reported
     follow_up_items:
     - id: B1-KIT-002
-      status: planned_high_priority
+      status: implemented_retest_pass
       goal: Make command-for and manifest-dependent commands work from PyPI installs
         in external workspaces without requiring the target repo to carry Kit
         reference docs.
-      evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
+      evidence:
+      - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
+      - docs/reports/POST_V1_0_4_B1_KIT_002_EXTERNAL_MANIFEST_RESOURCE_20260824.md
     - id: B1-KIT-001
       status: planned
       goal: Decide whether doctor needs a JSON output contract or an explicitly

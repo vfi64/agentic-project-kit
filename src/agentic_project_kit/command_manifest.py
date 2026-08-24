@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+from importlib import resources
 import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -12,6 +13,9 @@ from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
 JSON_PATH = Path(LEGACY_DEFAULTS.reference_root) / "agentic-kit-commands.json"
 MD_PATH = Path(LEGACY_DEFAULTS.reference_root) / "AGENTIC_KIT_COMMANDS.md"
+PACKAGE_REFERENCE_PACKAGE = "agentic_project_kit.reference"
+PACKAGE_JSON_RESOURCE = "agentic-kit-commands.json"
+PACKAGE_JSON_PATH = Path("src/agentic_project_kit/reference") / PACKAGE_JSON_RESOURCE
 SAFETY_VALUES = {"READ_ONLY", "BOUNDED", "DESTRUCTIVE"}
 SURFACE_VALUES = {"orchestrator", "diagnostic", "primitive"}
 
@@ -476,18 +480,57 @@ def render_markdown(data: dict[str, Any]) -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
+def render_json(data: dict[str, Any]) -> str:
+    return json.dumps(data, indent=2, sort_keys=True) + "\n"
+
+
+def package_manifest_source_path(root: Path) -> Path:
+    return root / PACKAGE_JSON_PATH
+
+
+def _read_packaged_manifest_text() -> str:
+    try:
+        return (
+            resources.files(PACKAGE_REFERENCE_PACKAGE)
+            .joinpath(PACKAGE_JSON_RESOURCE)
+            .read_text(encoding="utf-8")
+        )
+    except (FileNotFoundError, ModuleNotFoundError) as exc:
+        raise FileNotFoundError(
+            "Packaged agentic-kit command manifest is missing from the installed distribution; "
+            "reinstall agentic-project-kit from a complete wheel or source checkout."
+        ) from exc
+
+
+def load_packaged_manifest() -> dict[str, Any]:
+    return json.loads(_read_packaged_manifest_text())
+
+
 def write_reference(root: Path) -> dict[str, Any]:
     data = build_current_reference()
     json_path = load_workspace(root).reference_file("agentic-kit-commands.json")
     md_path = load_workspace(root).reference_file("AGENTIC_KIT_COMMANDS.md")
+    package_path = package_manifest_source_path(root)
     json_path.parent.mkdir(parents=True, exist_ok=True)
-    json_path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    rendered_json = render_json(data)
+    json_path.write_text(rendered_json, encoding="utf-8")
     md_path.write_text(render_markdown(data), encoding="utf-8")
+    package_path.parent.mkdir(parents=True, exist_ok=True)
+    package_path.write_text(rendered_json, encoding="utf-8")
     return data
 
 
-def load_manifest(root: Path) -> dict[str, Any]:
-    return json.loads(load_workspace(root).reference_file("agentic-kit-commands.json").read_text(encoding="utf-8"))
+def load_manifest(root: Path, *, allow_package_fallback: bool = True) -> dict[str, Any]:
+    path = load_workspace(root).reference_file("agentic-kit-commands.json")
+    if path.exists():
+        return json.loads(path.read_text(encoding="utf-8"))
+    if allow_package_fallback:
+        return load_packaged_manifest()
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _is_source_checkout(root: Path) -> bool:
+    return (root / "src" / "agentic_project_kit").is_dir()
 
 
 def evaluate_command_manifest(root: Path = Path(".")) -> CommandManifestAudit:
@@ -497,7 +540,7 @@ def evaluate_command_manifest(root: Path = Path(".")) -> CommandManifestAudit:
     md_path = load_workspace(root).reference_file("AGENTIC_KIT_COMMANDS.md")
 
     try:
-        committed = load_manifest(root)
+        committed = load_manifest(root, allow_package_fallback=False)
     except Exception as exc:
         return CommandManifestAudit(
             root=root.as_posix(),
@@ -567,6 +610,27 @@ def evaluate_command_manifest(root: Path = Path(".")) -> CommandManifestAudit:
         findings.append(
             CommandManifestFinding("BLOCK", "JSON_DRIFT", f"{json_path.as_posix()} differs from CLI")
         )
+    if _is_source_checkout(root):
+        package_path = package_manifest_source_path(root)
+        try:
+            packaged = json.loads(package_path.read_text(encoding="utf-8"))
+        except Exception as exc:
+            findings.append(
+                CommandManifestFinding(
+                    "BLOCK",
+                    "PACKAGE_JSON_UNREADABLE",
+                    f"{package_path.as_posix()}: {exc}",
+                )
+            )
+        else:
+            if packaged != current:
+                findings.append(
+                    CommandManifestFinding(
+                        "BLOCK",
+                        "PACKAGE_JSON_DRIFT",
+                        f"{package_path.as_posix()} differs from CLI",
+                    )
+                )
     expected_md = render_markdown(committed)
     actual_md = md_path.read_text(encoding="utf-8") if md_path.exists() else ""
     if actual_md != expected_md:
