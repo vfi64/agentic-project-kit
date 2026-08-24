@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-24T06:31:48.180750+00:00",
+  "generated_at_utc": "2026-08-24T06:37:55.917133+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,15 +57,15 @@
     "package_version": "1.0.4"
   },
   "repo": {
-    "branch": "codex/a4-hermes-boundary-revalidation",
+    "branch": "docs/post-pr2143-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "bbd91d95d38fe96f81d0049419c01c1848d5d4ba",
-    "head_matches_origin_main": false,
-    "head_short": "bbd91d95",
+    "head": "dc32e6269c7144d0373706496f124c749eb9e8b1",
+    "head_matches_origin_main": true,
+    "head_short": "dc32e626",
     "local_path": "cd /path/to/",
-    "origin_main": "3eeeaedd823bbff0e23f69c5620b727f51973798",
-    "origin_main_short": "3eeeaedd",
-    "worktree_clean": true
+    "origin_main": "dc32e6269c7144d0373706496f124c749eb9e8b1",
+    "origin_main_short": "dc32e626",
+    "worktree_clean": false
   },
   "schema_version": 1,
   "short_term_memory": {

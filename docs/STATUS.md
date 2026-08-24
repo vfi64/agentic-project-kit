@@ -7,10 +7,10 @@ Current verified release: 1.0.4.
 Current release tag: v1.0.4.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22072575`.
-Current verified main: `0aa6c57a` (`Classify remote hygiene state (#2141)`).
-Latest substantive work: PR #2141 (`Classify remote hygiene state (#2141)`).
+Current verified main: `dc32e626` (`Revalidate Hermes executor boundary (#2143)`).
+Latest substantive work: PR #2143 (`Revalidate Hermes executor boundary (#2143)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2141 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2143 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -416,6 +416,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2141
+## Operational documentation refresh state after PR #2143
 
-Current administrative handoff refresh state is `0aa6c57a` (`Classify remote hygiene state (#2141)`). Continue next only after this post-PR2141 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `dc32e626` (`Revalidate Hermes executor boundary (#2143)`). Continue next only after this post-PR2143 refresh is committed and merged; the next substantive slice must be created from fresh main.
