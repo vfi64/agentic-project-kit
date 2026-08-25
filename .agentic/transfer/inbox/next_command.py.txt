@@ -1,0 +1,103 @@
+from __future__ import annotations
+
+import json
+import subprocess
+from pathlib import Path
+
+HOME = Path.home()
+KIT_CANDIDATES = [
+    HOME / "Dropbox/Privat/GitHub/agentic-project-kit",
+    HOME / "Library/CloudStorage/Dropbox/Privat/GitHub/agentic-project-kit",
+]
+COMM_CANDIDATES = [
+    HOME / "Dropbox/Privat/GitHub/Comm-SCI-Control-private",
+    HOME / "Library/CloudStorage/Dropbox/Privat/GitHub/Comm-SCI-Control-private",
+]
+
+
+def find_repo(candidates: list[Path]) -> Path | None:
+    for path in candidates:
+        if (path / ".git").exists():
+            return path
+    return None
+
+
+def run(path: Path, *args: str) -> dict[str, object]:
+    result = subprocess.run(
+        list(args),
+        cwd=path,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+        timeout=120,
+    )
+    return {
+        "argv": list(args),
+        "returncode": result.returncode,
+        "stdout": result.stdout,
+        "stderr": result.stderr,
+    }
+
+
+def git(path: Path, *args: str) -> dict[str, object]:
+    return run(path, "git", *args)
+
+
+def inspect_kit(path: Path) -> dict[str, object]:
+    return {
+        "path": str(path),
+        "current_branch": git(path, "branch", "--show-current"),
+        "current_head": git(path, "rev-parse", "HEAD"),
+        "status_short_branch": git(path, "status", "--short", "--branch"),
+        "status_short": git(path, "status", "--short"),
+        "local_main": git(path, "rev-parse", "main"),
+        "local_origin_main": git(path, "rev-parse", "origin/main"),
+        "remote_main": git(path, "ls-remote", "origin", "refs/heads/main"),
+    }
+
+
+def inspect_comm(path: Path) -> dict[str, object]:
+    return {
+        "path": str(path),
+        "current_branch": git(path, "branch", "--show-current"),
+        "current_head": git(path, "rev-parse", "HEAD"),
+        "status_short_branch": git(path, "status", "--short", "--branch"),
+        "status_short": git(path, "status", "--short"),
+        "local_target_branch": git(path, "rev-parse", "feature/ui-access-levels-v2"),
+        "local_origin_target": git(path, "rev-parse", "origin/feature/ui-access-levels-v2"),
+        "remote_target": git(path, "ls-remote", "origin", "refs/heads/feature/ui-access-levels-v2"),
+        "local_main": git(path, "rev-parse", "main"),
+        "local_origin_main": git(path, "rev-parse", "origin/main"),
+        "remote_main": git(path, "ls-remote", "origin", "refs/heads/main"),
+    }
+
+
+def main() -> int:
+    kit = find_repo(KIT_CANDIDATES)
+    comm = find_repo(COMM_CANDIDATES)
+
+    report: dict[str, object] = {
+        "kind": "b1_local_remote_preflight",
+        "purpose": "Record local-vs-remote state before any further B1 local mutation.",
+        "safety": "read_only_payload_no_fetch_pull_checkout_reset_commit_push_merge_or_file_write",
+        "kit": inspect_kit(kit) if kit else {"error": "kit_repo_not_found"},
+        "comm_sci": inspect_comm(comm) if comm else {"error": "comm_sci_repo_not_found"},
+        "interpretation_required": True,
+    }
+
+    failed = kit is None or comm is None
+    if not failed:
+        for section in (report["kit"], report["comm_sci"]):
+            assert isinstance(section, dict)
+            for value in section.values():
+                if isinstance(value, dict) and value.get("returncode") not in (None, 0):
+                    failed = True
+
+    report["result_status"] = "FAIL" if failed else "PASS"
+    print(json.dumps(report, indent=2, ensure_ascii=False))
+    return 1 if failed else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
