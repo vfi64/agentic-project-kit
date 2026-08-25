@@ -1,0 +1,21 @@
+schema_version: 1
+id: b1-local-remote-preflight-20260825
+title: Compare Codex-left local checkouts with remote refs before further B1 work
+branch: transfer/b1-local-remote-preflight-20260825
+safety: Read-only inspection only. No fetch, pull, checkout, reset, commit, push, merge, or file mutation in either product checkout.
+label: b1-local-remote-preflight
+allow_blocked_start: true
+report_path: docs/reports/command_runs/b1-local-remote-preflight.json
+actions:
+  - command:
+      - ./.venv/bin/python
+      - .agentic/transfer/inbox/next_command.py.txt
+publish_last_report: true
+commit:
+  message: Publish B1 local/remote preflight transfer report
+  paths:
+    - docs/reports/command_runs
+    - docs/reports/terminal/transfer_handoff_reports
+push:
+  branch: transfer/b1-local-remote-preflight-20260825
+expected_chat_reply: g
