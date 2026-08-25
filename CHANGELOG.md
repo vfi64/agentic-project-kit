@@ -1,6 +1,5 @@
 ## v1.0.5 - 2026-08-25
 
-- Zenodo DOI verification pending for v1.0.5.
 - Close out release v1.0.4 DOI metadata
 - Reconcile planning after v1.0.4
 - Record release-environment gate findings
@@ -19,6 +18,9 @@
 - Fix external post-merge base branch checks
 - Classify B1 release note titles
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.5 DOI `10.5281/zenodo.22090891`.
+
+Zenodo v1.0.5 DOI: 10.5281/zenodo.22090891
 ## v1.0.4 - 2026-08-23
 
 - Close out v1.0.3 DOI metadata with preserved release evidence.

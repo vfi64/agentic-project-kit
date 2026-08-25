@@ -3,10 +3,10 @@
 ## Current State
 
 Current version: 1.0.5
-Current verified release: 1.0.4.
-Current release tag: v1.0.4.
+Current verified release: 1.0.5.
+Current release tag: v1.0.5.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.22072575`.
+Verified Zenodo version DOI: `10.5281/zenodo.22090891`.
 Current verified main: `81dc82cf` (`Prepare release v1.0.5 (#2172)`).
 Latest substantive work: PR #2172 (`Prepare release v1.0.5 (#2172)`).
 Latest administrative refresh-only descendant: PR #2165 (`2f935c31`, `Refresh handoff state after PR2164 (#2165)`).
