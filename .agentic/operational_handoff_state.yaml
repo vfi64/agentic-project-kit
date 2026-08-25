@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7ac386b9811c8a664f17c975b6d5c3e4b8cca2c7
-  short: 7ac386b9
-  subject: Fix external post-merge base branch checks (#2168)
+  full: b3b3f2fdaaf41ed4c4e1dfa0f49865160c0a1aa0
+  short: b3b3f2fd
+  subject: Classify B1 release note titles (#2170)
 last_substantive_work_state:
-  full: 7ac386b9811c8a664f17c975b6d5c3e4b8cca2c7
-  short: 7ac386b9
-  subject: Fix external post-merge base branch checks (#2168)
+  full: b3b3f2fdaaf41ed4c4e1dfa0f49865160c0a1aa0
+  short: b3b3f2fd
+  subject: Classify B1 release note titles (#2170)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
