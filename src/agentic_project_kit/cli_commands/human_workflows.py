@@ -11,6 +11,7 @@ import typer
 
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_release_blockers
 from agentic_project_kit.release_metadata_authority_gate import release_anchor_changes
+from agentic_project_kit.release_prepare import refresh_dpa_readiness_command_manifest_ack
 from agentic_project_kit.work_discard_changes import discard_all_changes
 from agentic_project_kit.workspace import load_workspace
 
@@ -29,6 +30,30 @@ def _run_step(name: str, argv: list[str], *, allowed_returncodes: set[int] | Non
         "allowed_returncodes": sorted(allowed),
         "stdout": completed.stdout,
         "stderr": completed.stderr,
+    }
+
+
+def _dpa_readiness_ack_refresh_step() -> dict[str, object]:
+    try:
+        result = refresh_dpa_readiness_command_manifest_ack(Path("."), dry_run=False)
+    except Exception as exc:
+        return {
+            "name": "dpa-readiness-ack-refresh",
+            "argv": ["agentic-kit", "release", "prepare", "--internal-dpa-readiness-ack-refresh"],
+            "returncode": 2,
+            "ok": False,
+            "allowed_returncodes": [0],
+            "stdout": "",
+            "stderr": str(exc),
+        }
+    return {
+        "name": "dpa-readiness-ack-refresh",
+        "argv": ["agentic-kit", "release", "prepare", "--internal-dpa-readiness-ack-refresh"],
+        "returncode": 0 if result["ok"] else 2,
+        "ok": bool(result["ok"]),
+        "allowed_returncodes": [0],
+        "stdout": json.dumps(result, indent=2, sort_keys=True) + "\n",
+        "stderr": "",
     }
 
 
@@ -678,6 +703,8 @@ def release_prepare_command(
                 _agentic("commands", "sync-entrypoints", "--execute", "--json"),
             )
         )
+    if not dry_run and all(step["ok"] for step in steps):
+        steps.append(_dpa_readiness_ack_refresh_step())
     evidence_path = ""
     if not dry_run and all(step["ok"] for step in steps):
         report_step = _write_release_prepare_report_step(

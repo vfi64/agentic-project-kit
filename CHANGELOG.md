@@ -1,3 +1,24 @@
+## v1.0.5 - 2026-08-25
+
+- Zenodo DOI verification pending for v1.0.5.
+- Close out release v1.0.4 DOI metadata
+- Reconcile planning after v1.0.4
+- Record release-environment gate findings
+- Classify remote hygiene state
+- Revalidate Hermes executor boundary
+- Define B1 refresh metric
+- Prepare B1 Comm-SCI realbetrieb
+- Freeze B3 safety audit baseline
+- Audit B3 workspace command safety batch
+- Audit B3 boot and cockpit command safety batch
+- Record B1 Comm-SCI cycle results
+- Fix external command manifest fallback
+- Record B1 Comm-SCI cycle 002 results
+- Record B1 closeout settle observation
+- Fix external context merge preflight
+- Fix external post-merge base branch checks
+- Classify B1 release note titles
+
 ## v1.0.4 - 2026-08-23
 
 - Close out v1.0.3 DOI metadata with preserved release evidence.

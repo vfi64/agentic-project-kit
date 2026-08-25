@@ -12,8 +12,9 @@ from agentic_project_kit.dpa_current_handoff_lifecycle import (
     evaluate_current_handoff_text_lifecycle,
 )
 from agentic_project_kit.dpa_readiness import DEFAULT_READINESS_PATH
+from agentic_project_kit.command_manifest import manifest_sha
 from agentic_project_kit.release import CommandResult, build_release_state_report
-from agentic_project_kit.release_prepare import prepare_release_state
+from agentic_project_kit.release_prepare import prepare_release_state, refresh_dpa_readiness_command_manifest_ack
 from agentic_project_kit import release_metadata_prep
 
 
@@ -218,6 +219,43 @@ def test_prepare_release_state_noop_does_not_require_dpa_write_authority(tmp_pat
 
     assert first.changed_paths
     assert second.changed_paths == []
+
+
+def test_refresh_dpa_readiness_command_manifest_ack_tracks_current_manifest(tmp_path: Path) -> None:
+    project = tmp_path / "project"
+    commands = [
+        {
+            "qualified_name": "agentic-kit test-command",
+            "safety": "READ_ONLY",
+            "surface": "diagnostic",
+            "when_to_use": "Exercise the DPA readiness ACK refresh test.",
+        }
+    ]
+    sha = manifest_sha(commands)
+    command_ref = project / "docs" / "reference" / "agentic-kit-commands.json"
+    command_ref.parent.mkdir(parents=True, exist_ok=True)
+    command_ref.write_text(
+        json.dumps({"meta": {"manifest_sha": sha}, "commands": commands}),
+        encoding="utf-8",
+    )
+    readiness_record = project / DEFAULT_READINESS_PATH
+    readiness_record.parent.mkdir(parents=True, exist_ok=True)
+    readiness_record.write_text(
+        json.dumps({"status": "DP2_AUTHORIZED", "command_manifest_ack": "COMMAND_MANIFEST_ACK stale"}),
+        encoding="utf-8",
+    )
+
+    result = refresh_dpa_readiness_command_manifest_ack(project)
+
+    assert result["status"] == "UPDATED"
+    assert result["changed_paths"] == [DEFAULT_READINESS_PATH.as_posix()]
+    payload = json.loads(readiness_record.read_text(encoding="utf-8"))
+    assert payload["command_manifest_ack"] == f"COMMAND_MANIFEST_ACK {sha}"
+
+    second = refresh_dpa_readiness_command_manifest_ack(project)
+
+    assert second["status"] == "CURRENT"
+    assert second["changed_paths"] == []
 
 
 def test_prepare_release_state_dry_run_does_not_write(tmp_path: Path) -> None:
