@@ -2402,6 +2402,7 @@ plans:
     - docs/reports/POST_V1_0_4_B1_COMM_SCI_SETUP_20260824.md
     - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
     - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+    - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
     - docs/reports/POST_V1_0_4_B1_KIT_CLOSEOUT_SETTLE_OBSERVATION_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_006_EXTERNAL_POST_MERGE_BASE_BRANCH_20260824.md
@@ -2431,6 +2432,26 @@ plans:
       - external_post_merge_check_main_only
       - command_for_task_tag_gap_for_health_commands
       - kit_post_merge_settle_non_return_after_admin_refresh
+    - id: B1-COMM-SCI-20260825-003
+      state: merged_with_handoff_and_successor_refresh
+      report: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
+      external_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/5
+      external_handoff_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/6
+      external_successor_refresh_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/7
+      external_merge_commit: 0a25a5fc5f9cb78c00e443d26e93986c6ad0b3af
+      final_external_head: 72fa240413cff5fee5ed1faee09a5a9b5bcd5ee7
+      merge_boundary_outcome: merged_to_feature_branch_after_pr_merge_safe_reached_no_checks_refusal
+      refresh_denominator_counted: true
+      refresh_boundary_note: measured on feature/ui-access-levels-v2, not main;
+        two administrative refresh PRs were needed after the work PR
+      kit_findings:
+      - doctor_json_missing
+      - external_pr_no_checks_reported
+      - external_rule_ack_blocks_transfer_commit_and_push
+      - external_pr_merge_safe_reaches_no_checks_refusal
+      - external_post_merge_check_base_branch_retest_pass
+      - command_for_manifestless_warning
+      - mixed_handoff_evidence_requires_extra_successor_refresh
     follow_up_items:
     - id: B1-KIT-002
       status: implemented_retest_pass
@@ -2440,11 +2461,14 @@ plans:
       evidence:
       - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
       - docs/reports/POST_V1_0_4_B1_KIT_002_EXTERNAL_MANIFEST_RESOURCE_20260824.md
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
     - id: B1-KIT-001
       status: planned
       goal: Decide whether doctor needs a JSON output contract or an explicitly
         documented text-only boundary.
-      evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
+      evidence:
+      - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
     - id: B1-KIT-003
       status: confirmed_repeated
       goal: Keep no-checks external PR state distinct from green remote CI in
@@ -2452,6 +2476,7 @@ plans:
       evidence:
       - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
       - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
     - id: B1-KIT-004
       status: implemented_retest_pass
       goal: Make transfer fresh-LLM-context carriers external-workspace aware
@@ -2459,6 +2484,7 @@ plans:
       evidence:
       - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
       - docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
     - id: B1-KIT-005
       status: implemented_retest_pass
       goal: Provide an external-workspace pr-merge-safe route that does not require
@@ -2467,6 +2493,7 @@ plans:
       evidence:
       - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
       - docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
     - id: B1-KIT-006
       status: implemented_retest_pass
       goal: Add or document a base-branch-aware external post-merge check for
@@ -2474,6 +2501,7 @@ plans:
       evidence:
       - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
       - docs/reports/POST_V1_0_4_B1_KIT_006_EXTERNAL_POST_MERGE_BASE_BRANCH_20260824.md
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
     - id: B1-KIT-007
       status: review
       goal: Decide whether command-for task tags should include common health
@@ -2485,6 +2513,21 @@ plans:
         PRs have reached a terminal PASS/NOOP state, with bounded progress or
         timeout evidence for long waits.
       evidence: docs/reports/POST_V1_0_4_B1_KIT_CLOSEOUT_SETTLE_OBSERVATION_20260824.md
+    - id: B1-KIT-009
+      status: planned
+      goal: Make external transfer commit/push and rule acknowledgement use adopted
+        external workspace rule sources instead of Kit self-hosting rule sources.
+      evidence: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
+    - id: B1-KIT-010
+      status: planned
+      goal: Suppress or route LegacyProfileDeprecationWarning so command-for JSON
+        output remains clean in manifest-less non-workspaces.
+      evidence: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
+    - id: B1-KIT-011
+      status: planned
+      goal: Reduce mixed handoff/status/report refresh loops so one real external
+        work PR does not require multiple visible administrative PRs.
+      evidence: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
   - id: B2
     status: blocked_until_B1_EVALUABLE
     goal: Decide refresh/realbetrieb outcome only after B1 reaches an evaluable
@@ -2519,16 +2562,19 @@ plans:
       required_setup_evidence:
       - mirror backup ref for vfi64/Comm-SCI-Control-private
       - non-git inventory before mutation
-      recorded_cycles: 2
-      merge_boundary_cycles: 1
-      latest_cycle_report: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
-      latest_cycle_result: "PR #4 merged to feature/ui-access-levels-v2 after local green gates; subsequent Kit repair slice fixed and retested external fresh-context and pr-merge-safe rule-state assumptions; GitHub still reported no remote checks."
+      recorded_cycles: 3
+      merge_boundary_cycles: 2
+      latest_cycle_report: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
+      latest_cycle_result: "PR #5 merged to feature/ui-access-levels-v2 after full local green gates; PR #6/#7 refreshed handoff state until post-merge-check returned PASS. pr-merge-safe reached the external PR verification step but refused no-checks."
       latest_findings:
       - external_pr_no_checks_reported
       - external_fresh_llm_context_carrier_path_mismatch_fixed
       - external_pr_merge_safe_external_preflight_fixed
-      - external_post_merge_check_main_only
+      - external_transfer_commit_push_rule_ack_still_self_hosting
+      - external_post_merge_check_base_branch_retest_pass
       - command_for_task_tag_gap_for_health_commands
+      - command_for_manifestless_warning
+      - mixed_handoff_evidence_requires_extra_successor_refresh
       - kit_post_merge_settle_non_return_after_admin_refresh
       completion_rule: One successful setup or run slice is not B1 completion; B1
         is only evaluable after the configured realbetrieb window produces enough
@@ -2557,6 +2603,7 @@ plans:
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_SETUP_20260824.md
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+  - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
   - docs/reports/safety_audit/POST_V1_0_4_B3_BASELINE_FREEZE_20260824.md
   - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
   - docs/reports/safety_audit/POST_V1_0_4_B3_WORKSPACE_COMMAND_AUDIT_BATCH_20260824.md
@@ -2574,6 +2621,7 @@ plans:
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_SETUP_20260824.md
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
   - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
+  - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
   - docs/reports/safety_audit/POST_V1_0_4_B3_BASELINE_FREEZE_20260824.md
   - docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json
   - docs/reports/safety_audit/POST_V1_0_4_B3_WORKSPACE_COMMAND_AUDIT_BATCH_20260824.md
