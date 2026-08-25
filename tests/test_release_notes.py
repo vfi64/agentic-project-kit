@@ -326,6 +326,29 @@ def test_release_notes_generator_classifies_post_050_closing_titles(tmp_path: Pa
     ]
 
 
+def test_release_notes_generator_classifies_post_104_b1_titles(tmp_path: Path) -> None:
+    report = build_release_notes_report(
+        tmp_path,
+        version="1.0.5",
+        from_tag="v1.0.4",
+        command_runner=FakeRunner(
+            subjects=[
+                "Revalidate Hermes executor boundary (#2143)",
+                "Define B1 refresh metric (#2145)",
+                "Prepare B1 Comm-SCI realbetrieb (#2147)",
+            ]
+        ),
+    )
+
+    assert report.validation.status == "PASS"
+    assert report.unclassified_items == ()
+    assert [item.category for item in report.items] == [
+        "Governance",
+        "Tests / Gates",
+        "Tests / Gates",
+    ]
+
+
 def test_release_notes_generator_treats_report_projection_commits_as_administrative(
     tmp_path: Path,
 ) -> None:

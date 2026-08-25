@@ -621,6 +621,7 @@ def _classify_subject(subject: str) -> str:
             "repository identity",
             "mutation lock",
             "dpa",
+            "executor boundary",
             "command-for",
             "command surface",
         )
@@ -639,6 +640,9 @@ def _classify_subject(subject: str) -> str:
             "coverage",
             "hygiene",
             "pages deploy",
+            "comm-sci",
+            "realbetrieb",
+            "metric",
         )
     ) or lowered.startswith(("verify ", "guard ")):
         return "Tests / Gates"
