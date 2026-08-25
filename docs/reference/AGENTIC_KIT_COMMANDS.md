@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 2ab1c7c2a951
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: f115e17d2607
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -2742,7 +2742,7 @@ Render the current four-slice patch/handoff workflow state.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `main_branch` | `TyperOption` | --main-branch | `False` | `main` | Expected current branch after merge. |
+| `main_branch` | `TyperOption` | --main-branch, --base-branch | `False` | `main` | Expected current branch after merge. Use --base-branch for external integration branches that are not main. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer post-merge-complete`

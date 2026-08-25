@@ -432,6 +432,38 @@ def test_post_merge_check_noop_on_main(tmp_path, monkeypatch):
     ]
 
 
+def test_post_merge_check_accepts_configured_base_branch(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    calls = []
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/ui-access-levels-v2\n", "")
+        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+            return subprocess.CompletedProcess(
+                command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", ""
+            )
+        return subprocess.CompletedProcess(command, 99, "", "unexpected command\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._agentic_kit_command", lambda: "agentic-kit"
+    )
+
+    result = post_merge_check(main_branch="feature/ui-access-levels-v2")
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert "STATE=READY" in result.next_action
+    assert calls == [
+        ["git", "branch", "--show-current"],
+        ["agentic-kit", "handoff", "post-merge-refresh-status"],
+    ]
+
+
 def test_post_merge_check_requires_main_branch(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     monkeypatch.chdir(tmp_path)
@@ -442,6 +474,7 @@ def test_post_merge_check_requires_main_branch(tmp_path, monkeypatch):
     assert result.result_status == "FAIL"
     assert result.returncode == 2
     assert "Expected branch main" in result.stderr
+    assert "NEXT=switch_to_expected_branch_and_sync" in result.next_action
 
 
 def test_post_merge_check_detects_refresh_required(tmp_path, monkeypatch):
@@ -808,14 +841,34 @@ def test_admin_refresh_pr_fails_when_existing_branch_has_multiple_open_prs(tmp_p
     assert "Multiple open admin refresh PRs found" in result.stderr
 
 
-def test_transfer_post_merge_check_cli_help(tmp_path, monkeypatch):
-    _init_repo(tmp_path)
-    monkeypatch.chdir(tmp_path)
+def test_transfer_post_merge_check_cli_accepts_base_branch_alias(monkeypatch):
+    from agentic_project_kit.cli_commands import transfer_repo_after_pr
 
-    result = CliRunner().invoke(app, ["transfer", "post-merge-check", "--help"])
+    calls = []
+
+    def fake_post_merge_check(*, main_branch="main"):
+        calls.append(main_branch)
+        return transfer_repo_actions.RepoActionResult(
+            "post-merge-check",
+            "PASS",
+            0,
+            ["agentic-kit", "transfer", "post-merge-check"],
+            "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n",
+            "",
+            "STATE=READY\nNEXT=none",
+        )
+
+    monkeypatch.setattr(transfer_repo_after_pr, "post_merge_check", fake_post_merge_check)
+
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "post-merge-check", "--base-branch", "feature/ui-access-levels-v2", "--json"],
+    )
 
     assert result.exit_code == 0
-    assert "post-merge-check" in result.stdout
+    assert calls == ["feature/ui-access-levels-v2"]
+    payload = json.loads(result.stdout)
+    assert payload["next_action"] == "STATE=READY\nNEXT=none"
 
 
 def test_transfer_branch_create_cli_blocks_without_rule_acknowledgement(tmp_path, monkeypatch):
@@ -2935,6 +2988,66 @@ def test_successor_package_freshness_detects_missing_execution_contract(tmp_path
 
     findings = actions._successor_package_freshness_findings(tmp_path)
     assert any("missing docs/reports/handoff-packages/latest/execution_contract.json" in item for item in findings)
+
+
+def test_successor_package_freshness_accepts_external_bootstrap_contract(tmp_path, monkeypatch) -> None:
+    import json
+    import subprocess
+
+    from agentic_project_kit import transfer_repo_actions as actions
+
+    (tmp_path / ".agentic").mkdir()
+    (tmp_path / ".agentic" / "config.yaml").write_text(
+        "kit_schema_version: 1\n"
+        "project:\n"
+        "  name: external-demo\n"
+        "  type: generic\n"
+        "profile: generic\n",
+        encoding="utf-8",
+    )
+    package_dir = tmp_path / ".agentic" / "state" / "handoff" / "packages" / "latest"
+    package_dir.mkdir(parents=True)
+    (tmp_path / ".agentic" / "state" / "handoff").mkdir(parents=True, exist_ok=True)
+
+    head = "abc123"
+    (package_dir / "validation_report.json").write_text(
+        json.dumps({"status": "PASS", "generated_head": head}),
+        encoding="utf-8",
+    )
+    (package_dir / "execution_contract.json").write_text(
+        json.dumps(
+            {
+                "kind": "successor_execution_contract",
+                "rules": [
+                    {"rule_id": "local-copy-paste-protocol"},
+                    {"rule_id": "strict-start-decision"},
+                    {"rule_id": "protected-file-preservation"},
+                    {"rule_id": "bootstrap_acceptance_gate"},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    external_bootstrap = (
+        "Zusätzliche Startbremse nach dem Bootstrap\n"
+        "validation_report.json PASS\n"
+        "execution_contract.json wurde gelesen\n"
+        "Übergabe akzeptiert, keine Admin-Arbeit nötig\n"
+    )
+    (package_dir / "successor_prompt.md").write_text(external_bootstrap, encoding="utf-8")
+    (tmp_path / ".agentic" / "state" / "handoff" / "START_NEW_CHAT_PROMPT.md").write_text(
+        external_bootstrap,
+        encoding="utf-8",
+    )
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(
+        actions,
+        "_run",
+        lambda command: subprocess.CompletedProcess(command, 0, head + "\n", ""),
+    )
+
+    assert actions._successor_package_freshness_findings(tmp_path) == []
 
 
 def test_successor_package_freshness_detects_stale_generated_head(tmp_path, monkeypatch) -> None:

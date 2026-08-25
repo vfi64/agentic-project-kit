@@ -8,7 +8,13 @@ from agentic_project_kit.cli_commands.transfer_shared import *
 @transfer_app.command("post-merge-check")
 def post_merge_check_command(
     main_branch: str = typer.Option(
-        "main", "--main-branch", help="Expected current branch after merge."
+        "main",
+        "--main-branch",
+        "--base-branch",
+        help=(
+            "Expected current branch after merge. Use --base-branch for external "
+            "integration branches that are not main."
+        ),
     ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:

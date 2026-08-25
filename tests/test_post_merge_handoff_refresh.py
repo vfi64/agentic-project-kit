@@ -52,3 +52,59 @@ def test_evaluate_post_merge_handoff_refresh_passes_current_head_and_subject(tmp
     assert calls["current_head"] == "abc1234"
     assert calls["current_subject"] == "Refresh handoff after PR978 (#979)"
     assert calls["successor_prompt_text"] == "fresh successor prompt"
+
+
+def test_evaluate_post_merge_handoff_refresh_skips_missing_external_state(tmp_path, monkeypatch):
+    agentic = tmp_path / ".agentic"
+    agentic.mkdir()
+    (agentic / "config.yaml").write_text(
+        "kit_schema_version: 2\n"
+        "project:\n"
+        "  name: external-target\n"
+        "  type: python\n"
+        "profile: python-default\n"
+        "modules:\n"
+        "  doc_registry: true\n"
+        "  release_governance: true\n"
+        "  rule_registry: true\n"
+        "  transfer: true\n"
+        "transfer:\n"
+        "  visibility: repo\n"
+        "hygiene:\n"
+        "  doc_lifecycle: warn\n"
+        "  review_budgets:\n"
+        "    governance: 180\n"
+        "    reference: 365\n"
+        "    workflow: 270\n"
+        "paths:\n"
+        "  docs_root: docs\n"
+        "gates:\n"
+        "  extra: []\n"
+        "  skip: []\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.post_merge_handoff_refresh._git_short_head",
+        lambda project_root: "abc1234",
+    )
+
+    status = evaluate_post_merge_handoff_refresh(tmp_path)
+
+    assert status.result == "NOOP"
+    assert status.refresh_required is False
+    assert status.state_path == ".agentic/state/handoff/handoff_state.yaml"
+    assert status.warning == "external_handoff_state_not_required"
+
+
+def test_evaluate_post_merge_handoff_refresh_missing_self_hosting_state_blocks(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        "agentic_project_kit.post_merge_handoff_refresh._git_short_head",
+        lambda project_root: "def5678",
+    )
+
+    status = evaluate_post_merge_handoff_refresh(tmp_path)
+
+    assert status.result == "STATE_UNAVAILABLE"
+    assert status.refresh_required is True
+    assert status.next_safe_action == "restore_or_generate_handoff_state"
+    assert status.warning == "handoff_state_missing"

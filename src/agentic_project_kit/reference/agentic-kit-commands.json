@@ -13121,13 +13121,14 @@
       "params": [
         {
           "default": "main",
-          "help": "Expected current branch after merge.",
+          "help": "Expected current branch after merge. Use --base-branch for external integration branches that are not main.",
           "is_flag": false,
           "metavar": null,
           "multiple": false,
           "name": "main_branch",
           "opts": [
-            "--main-branch"
+            "--main-branch",
+            "--base-branch"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -17843,7 +17844,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "2ab1c7c2a951",
+    "manifest_sha": "f115e17d2607",
     "schema_version": 1
   },
   "schema_version": 2,

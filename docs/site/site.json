@@ -7945,10 +7945,11 @@
         "lifecycle_rank": null,
         "params": [
           {
-            "help": "Expected current branch after merge.",
+            "help": "Expected current branch after merge. Use --base-branch for external integration branches that are not main.",
             "name": "main_branch",
             "opts": [
-              "--main-branch"
+              "--main-branch",
+              "--base-branch"
             ],
             "required": false
           },
@@ -10755,13 +10756,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "2ab1c7c2a951",
+    "manifest_sha": "f115e17d2607",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.4",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.4",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "2ab1c7c2a951",
+    "reproduced_manifest_sha": "f115e17d2607",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 166,

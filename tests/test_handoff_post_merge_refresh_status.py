@@ -55,3 +55,22 @@ def test_post_merge_refresh_status_treats_refresh_only_head_as_fresh(monkeypatch
     assert "refresh_required=False" in result.stdout
     assert "result=REFRESH_REQUIRED" not in result.stdout
     assert "next_safe_action=create_administrative_handoff_refresh" not in result.stdout
+
+
+def test_post_merge_refresh_status_reports_missing_state_without_traceback(tmp_path, monkeypatch):
+    from typer.testing import CliRunner
+
+    from agentic_project_kit.cli_commands.handoff import handoff_app
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(
+        "agentic_project_kit.post_merge_handoff_refresh._git_short_head",
+        lambda project_root: "abc1234",
+    )
+
+    result = CliRunner().invoke(handoff_app, ["post-merge-refresh-status"])
+
+    assert result.exit_code == 1
+    assert "result=STATE_UNAVAILABLE" in result.stdout
+    assert "state_path=.agentic/handoff_state.yaml" in result.stdout
+    assert "Traceback" not in result.output
