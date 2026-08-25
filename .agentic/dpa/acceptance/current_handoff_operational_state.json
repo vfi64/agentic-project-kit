@@ -1,33 +1,33 @@
 {
-  "accepted_at": "2026-08-25T05:26:37.649794+00:00",
+  "accepted_at": "2026-08-25T05:39:22.068047+00:00",
   "accepted_gate_result": "pass",
   "accepted_gate_set_id": "dpa-current-handoff-minimal-gate-set-v1",
   "accepted_lifecycle_outcome": "accepted",
-  "branch": "docs/post-pr2172-handoff-refresh",
+  "branch": "main",
   "claims": {
     "generated_outputs_manually_patched": false,
     "kit_conformance_claimed": false,
     "production_mutation_performed": false
   },
-  "contract_id": "DPA-CURRENT-HANDOFF-OPERATIONAL-STATE-v1",
+  "contract_id": "DPA-CURRENT-HANDOFF-POST-RELEASE-DOI-CLOSEOUT-v1",
   "kind": "dpa_acceptance_state",
   "renderer": {
-    "id": "agentic_project_kit.operational_handoff_projection",
+    "id": "agentic_project_kit.post_release_closeout",
     "semantic_version": "1"
   },
   "schema_version": 1,
   "source": {
-    "fingerprint": "758509eaa39d3b7e11d237357374dcbb343079829e0249be0d487794dbca4dd7",
-    "path": ".agentic/operational_handoff_state.yaml"
+    "fingerprint": "5ab3f4d0a7ddaccf811c31198f57674e3110b89f68f48230a67e9d9508aa5936",
+    "path": "<agentic-kit-post-release-doi-closeout-inputs>"
   },
   "status": "accepted",
   "target": {
-    "complete_target_fingerprint": "682a8e1a21eb0f79a5530b5672a4b0ce78202189899b84d19a851e5f96d7af22",
+    "complete_target_fingerprint": "6b6fefa147e6a0b4e087c280a271d31ce97626f1ca06ecdee9fb20250c50faff",
     "path": "docs/handoff/CURRENT_HANDOFF.md",
-    "payload_fingerprint": "682a8e1a21eb0f79a5530b5672a4b0ce78202189899b84d19a851e5f96d7af22",
-    "pre_write_fingerprint": "1f1941ffaf4299d36f9d0f86213b1b72cc4e062621ae5562ddbabf0c2d6cfa73"
+    "payload_fingerprint": "6b6fefa147e6a0b4e087c280a271d31ce97626f1ca06ecdee9fb20250c50faff",
+    "pre_write_fingerprint": "682a8e1a21eb0f79a5530b5672a4b0ce78202189899b84d19a851e5f96d7af22"
   },
-  "target_scope": "CURRENT_HANDOFF_OPERATIONAL_STATE_BLOCK",
-  "validation_ref": "81dc82cf2ef75efd45259cd4772ec8977918178c",
-  "writer_id": "WRT-CH-001"
+  "target_scope": "CURRENT_HANDOFF_POST_RELEASE_DOI_METADATA",
+  "validation_ref": "541869e8c46b1ffb35cca042daf592374f026e97",
+  "writer_id": "WRT-CH-003"
 }
