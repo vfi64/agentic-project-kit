@@ -87,3 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 01d4137eac0c8222b17a3a17716fb5dcbba419797a4e726ded2300d73be523b7
 - docs/reference/agentic-kit-commands.json: b1f7faf7b2703845bd97c34f8e40d29161b9d03be642280a825d9173a08fa674
+## Operational documentation refresh state after PR #2168
+
+Current administrative handoff refresh state is `7ac386b9` (`Fix external post-merge base branch checks (#2168)`). Continue next only after this post-PR2168 refresh is committed and merged; the next substantive slice must be created from fresh main.

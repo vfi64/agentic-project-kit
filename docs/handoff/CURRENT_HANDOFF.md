@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `6533a98addb253e0b21cc63ebb18d6b8459e1eaa` (`6533a98a`), after `Fix external context merge preflight (#2166)`.
-Last substantive work state is `6533a98addb253e0b21cc63ebb18d6b8459e1eaa` (`6533a98a`), after `Fix external context merge preflight (#2166)`.
+Current verified main/admin HEAD is `7ac386b9811c8a664f17c975b6d5c3e4b8cca2c7` (`7ac386b9`), after `Fix external post-merge base branch checks (#2168)`.
+Last substantive work state is `7ac386b9811c8a664f17c975b6d5c3e4b8cca2c7` (`7ac386b9`), after `Fix external post-merge base branch checks (#2168)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

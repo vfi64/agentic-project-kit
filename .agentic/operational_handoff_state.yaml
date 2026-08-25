@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6533a98addb253e0b21cc63ebb18d6b8459e1eaa
-  short: 6533a98a
-  subject: Fix external context merge preflight (#2166)
+  full: 7ac386b9811c8a664f17c975b6d5c3e4b8cca2c7
+  short: 7ac386b9
+  subject: Fix external post-merge base branch checks (#2168)
 last_substantive_work_state:
-  full: 6533a98addb253e0b21cc63ebb18d6b8459e1eaa
-  short: 6533a98a
-  subject: Fix external context merge preflight (#2166)
+  full: 7ac386b9811c8a664f17c975b6d5c3e4b8cca2c7
+  short: 7ac386b9
+  subject: Fix external post-merge base branch checks (#2168)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
