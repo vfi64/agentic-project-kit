@@ -127,3 +127,17 @@ claims:
       source: docs/reference/agentic-kit-commands.json
       output: commands/commands.json
       assertion: manifest-command-coverage
+
+  - id: b1-brownfield-evaluable
+    text: Five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary.
+    required: true
+    evidence:
+      - type: file-contains
+        path: docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json
+        contains: '"status": "B1_EVALUABLE"'
+      - type: file-contains
+        path: docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
+        contains: "B1 is not a proof of general Brownfield portability."
+      - type: file-contains
+        path: site/templates/workflows.html
+        contains: "Five real maintenance cycles provide evidence beyond self-hosting"

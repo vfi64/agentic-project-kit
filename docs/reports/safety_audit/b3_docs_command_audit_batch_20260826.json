@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "kind": "b3_safety_audit_batch",
+  "date": "2026-08-26",
+  "repo": "vfi64/agentic-project-kit",
+  "baseline_ref": "5748220662619b02387303062f43dbe619183338",
+  "baseline_list": "docs/reports/safety_audit/b3_bounded_command_baseline_20260824.json",
+  "batch_id": "B3-DOCS-003",
+  "batch_scope": "documentation, command-reference, and project-direction BOUNDED commands affected by the B1/website closeout",
+  "stage": "stage_1_report_only",
+  "stage_2_authorized": false,
+  "coverage": {
+    "baseline_total": 166,
+    "batch_audited": 9,
+    "cumulative_audited_after_batch": 19
+  },
+  "findings": [],
+  "commands": [
+    {
+      "qualified_name": "agentic-kit commands sync-entrypoints",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Dry-run by default. Computes the current command reference and synchronized entrypoint edits, then writes docs/reference, package manifest resource, and agent-facing entrypoint text only with --execute.",
+      "side_effects": [
+        "local_bounded_write: sync_entrypoint_files may update reviewed command reference and entrypoint files only with --execute",
+        "local_bounded_write: package manifest resource is created or updated only with --execute"
+      ],
+      "dry_run_behavior": "Default invocation reports changed paths and generated manifest metadata without writing.",
+      "call_chain": [
+        "src/agentic_project_kit/cli_commands/commands.py:65",
+        "src/agentic_project_kit/cli_commands/commands.py:73",
+        "src/agentic_project_kit/cli_commands/commands.py:75",
+        "src/agentic_project_kit/cli_commands/commands.py:84"
+      ],
+      "test_evidence": [
+        "tests/test_chat_entrypoint_contract.py:196",
+        "tests/test_agentic_kit_command_reference_is_current.py"
+      ],
+      "recommended_review": "keep_bounded"
+    },
+    {
+      "qualified_name": "agentic-kit direction render",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Renders PROJECT_DIRECTION.yaml to stdout by default. With --output it writes only inside repository tmp/ after rejecting paths outside the repo or outside tmp/.",
+      "side_effects": [
+        "local_bounded_write: tmp/*.md, tmp/*.txt, or tmp/*.json output only when --output is supplied",
+        "blocked_write: committed output paths and paths outside the repository are rejected"
+      ],
+      "dry_run_behavior": "No explicit dry-run flag, but default invocation writes nothing and prints the rendering.",
+      "call_chain": [
+        "src/agentic_project_kit/cli_commands/direction.py:44",
+        "src/agentic_project_kit/cli_commands/direction.py:60",
+        "src/agentic_project_kit/cli_commands/direction.py:65",
+        "src/agentic_project_kit/cli_commands/direction.py:68"
+      ],
+      "test_evidence": [
+        "tests/test_project_direction.py:336",
+        "tests/test_project_direction.py:352"
+      ],
+      "recommended_review": "keep_bounded"
+    },
+    {
+      "qualified_name": "agentic-kit doc-registry check-unregistered",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Builds an unregistered-document candidate report and optional strict-scope failure. It does not write files or mutate the registry.",
+      "side_effects": [
+        "none: read-only candidate report",
+        "process-independent: no git, subprocess, file write, delete, or remote mutation observed in the CLI path"
+      ],
+      "dry_run_behavior": "Default invocation is inspection only.",
+      "call_chain": [
+        "src/agentic_project_kit/cli_commands/doc_registry.py:87",
+        "src/agentic_project_kit/cli_commands/doc_registry.py:100",
+        "src/agentic_project_kit/documentation_registry.py:724"
+      ],
+      "test_evidence": [
+        "tests/test_documentation_registry.py:851"
+      ],
+      "recommended_review": "keep_bounded"
+    },
+    {
+      "qualified_name": "agentic-kit doc-registry reconcile",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Dry-run only in the current implementation. Passing --execute returns a BLOCK payload because mutation is reserved for a later slice.",
+      "side_effects": [
+        "none: current implementation renders reconcile state only",
+        "blocked_write: --execute exits BLOCK and does not write"
+      ],
+      "dry_run_behavior": "Default invocation builds and renders a reconcile report without mutation.",
+      "call_chain": [
+        "src/agentic_project_kit/cli_commands/doc_registry.py:48",
+        "src/agentic_project_kit/cli_commands/doc_registry.py:61",
+        "src/agentic_project_kit/cli_commands/doc_registry.py:78"
+      ],
+      "test_evidence": [
+        "tests/test_documentation_registry.py:885",
+        "tests/test_documentation_registry.py:901"
+      ],
+      "recommended_review": "keep_bounded"
+    },
+    {
+      "qualified_name": "agentic-kit doc-registry register",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Adds exactly one reviewed registry entry after validating class, path existence, duplicate state, and full candidate registry validity.",
+      "side_effects": [
+        "local_bounded_write: docs documentation registry YAML is rewritten only after validation passes",
+        "blocked_write: invalid class, missing path, duplicate path, invalid registry, or invalid candidate registry all fail before write"
+      ],
+      "dry_run_behavior": "No dry-run flag; the command is intentionally a single-entry bounded writer.",
+      "call_chain": [
+        "src/agentic_project_kit/cli_commands/doc_registry.py:19",
+        "src/agentic_project_kit/cli_commands/doc_registry.py:28",
+        "src/agentic_project_kit/documentation_registry.py:623",
+        "src/agentic_project_kit/documentation_registry.py:645",
+        "src/agentic_project_kit/documentation_registry.py:714"
+      ],
+      "test_evidence": [
+        "tests/test_documentation_registry.py:825"
+      ],
+      "recommended_review": "keep_bounded"
+    },
+    {
+      "qualified_name": "agentic-kit docs lifecycle apply",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Requires --execute and a known plan step, but the current apply core intentionally supports only no-op confirm-current and defer operations and reports mutation=none.",
+      "side_effects": [
+        "none: current apply implementation never edits, moves, archives, or deletes files",
+        "blocked_write: missing --execute, unknown step ids, and unsafe operations return BLOCK"
+      ],
+      "dry_run_behavior": "Without --execute the command blocks rather than pretending to apply a plan.",
+      "call_chain": [
+        "src/agentic_project_kit/cli_commands/docs.py:112",
+        "src/agentic_project_kit/doc_lifecycle.py:931",
+        "src/agentic_project_kit/doc_lifecycle.py:943",
+        "src/agentic_project_kit/doc_lifecycle.py:967",
+        "src/agentic_project_kit/doc_lifecycle.py:980"
+      ],
+      "test_evidence": [
+        "tests/test_docs_lifecycle_apply_cli.py"
+      ],
+      "recommended_review": "keep_bounded"
+    },
+    {
+      "qualified_name": "agentic-kit docs lifecycle bootstrap",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Dry-run by default. With --execute, stamps missing lifecycle headers through a workspace mutation lock and only for computed bootstrap candidates.",
+      "side_effects": [
+        "local_bounded_write: lifecycle headers are inserted or updated only with --execute",
+        "local_temp_or_lock_write: workspace mutation lock state may be used during execution"
+      ],
+      "dry_run_behavior": "Default invocation reports candidate headers without writing.",
+      "call_chain": [
+        "src/agentic_project_kit/cli_commands/docs.py:39",
+        "src/agentic_project_kit/doc_lifecycle_sweep.py:48",
+        "src/agentic_project_kit/doc_lifecycle_sweep.py:74",
+        "src/agentic_project_kit/doc_lifecycle_sweep.py:75"
+      ],
+      "test_evidence": [
+        "tests/test_docs_lifecycle_cli.py",
+        "tests/test_docs_lifecycle_reconcile_cli.py"
+      ],
+      "recommended_review": "keep_bounded"
+    },
+    {
+      "qualified_name": "agentic-kit docs lifecycle sweep",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Dry-run by default. Execution requires explicit selected ids and applies only computed lifecycle candidates, with additional guards for unknown ids and defer dates.",
+      "side_effects": [
+        "local_bounded_write: selected archive, confirm-current, or defer actions only with --execute and explicit --only",
+        "local_temp_or_lock_write: workspace mutation lock state may be used during execution",
+        "blocked_write: missing --only, unknown ids, and invalid defer dates block before applying"
+      ],
+      "dry_run_behavior": "Default invocation emits an action plan and mutation=none.",
+      "call_chain": [
+        "src/agentic_project_kit/cli_commands/docs.py:74",
+        "src/agentic_project_kit/doc_lifecycle_sweep.py:48",
+        "src/agentic_project_kit/doc_lifecycle_sweep.py:65",
+        "src/agentic_project_kit/doc_lifecycle_sweep.py:75",
+        "src/agentic_project_kit/doc_lifecycle_sweep.py:79"
+      ],
+      "test_evidence": [
+        "tests/test_doc_lifecycle.py",
+        "tests/test_doc_lifecycle_sweep.py"
+      ],
+      "recommended_review": "keep_bounded"
+    },
+    {
+      "qualified_name": "agentic-kit docs-registry",
+      "current_safety": "BOUNDED",
+      "observed_behavior": "Renders a documentation registry summary by default. It writes a JSON report only when --report is provided.",
+      "side_effects": [
+        "evidence_write: optional --report path writes documentation registry summary JSON",
+        "none: default invocation is read-only"
+      ],
+      "dry_run_behavior": "Default invocation writes nothing.",
+      "call_chain": [
+        "src/agentic_project_kit/cli_commands/checks.py:133",
+        "src/agentic_project_kit/cli_commands/checks.py:138",
+        "src/agentic_project_kit/cli_commands/checks.py:139",
+        "src/agentic_project_kit/documentation_registry.py:213"
+      ],
+      "test_evidence": [
+        "tests/test_documentation_registry.py"
+      ],
+      "recommended_review": "keep_bounded"
+    }
+  ]
+}

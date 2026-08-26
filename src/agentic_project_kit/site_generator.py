@@ -23,6 +23,7 @@ FORMER_PRODUCT_NAME = "Agentic Project Kit"
 SITE_KIND = "agentic_project_kit_generated_site"
 DOCS_PAGES_FALLBACK_KIND = "agentic_project_kit_docs_pages_fallback"
 DOCS_PAGES_FALLBACK_BUILD_COMMIT = "docs-pages-fallback"
+B1_EVIDENCE_SOURCE = "docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json"
 
 
 @dataclass(frozen=True)
@@ -159,6 +160,7 @@ class SiteFoundationReport:
     command_catalog: SiteCommandCatalog | None
     status_projection: SiteStatusProjection
     roadmap_projection: SiteRoadmapProjection
+    workflow_projection: dict[str, object]
     claim_report: ClaimEvaluationReport
     blockers: tuple[str, ...]
 
@@ -186,6 +188,7 @@ class SiteFoundationReport:
             ),
             "status_projection": self.status_projection.as_dict(),
             "roadmap_projection": self.roadmap_projection.as_dict(),
+            "workflow_projection": self.workflow_projection,
             "claim_report": self.claim_report.as_dict(),
             "blockers": list(self.blockers),
             "blocker_count": len(self.blockers),
@@ -305,6 +308,7 @@ def collect_site_foundation_metadata(
     command_catalog = _build_command_catalog(commands, blockers)
     status_projection = status_projection or _read_status_projection(root)
     roadmap_projection = _read_roadmap_projection(root)
+    workflow_projection = _build_workflow_projection(root, command_catalog)
     claim_report = evaluate_site_claims(root, command_catalog=command_catalog)
     blockers.extend(claim_report.blockers)
     concept_doi = status_projection.concept_doi or _citation_value(root, "doi")
@@ -340,6 +344,7 @@ def collect_site_foundation_metadata(
         command_catalog=command_catalog,
         status_projection=status_projection,
         roadmap_projection=roadmap_projection,
+        workflow_projection=workflow_projection,
         claim_report=claim_report,
         blockers=tuple(blockers),
     )
@@ -380,9 +385,11 @@ def build_site(
     (output / "commands").mkdir(parents=True, exist_ok=True)
     (output / "claims").mkdir(parents=True, exist_ok=True)
     (output / "quickstart").mkdir(parents=True, exist_ok=True)
+    (output / "workflows").mkdir(parents=True, exist_ok=True)
 
     index_html = render_index_html(root, report)
     quickstart_projection = _build_quickstart_projection(metadata, command_catalog)
+    workflow_projection = report.workflow_projection
     site_json = json.dumps(
         {
             "schema_version": 1,
@@ -391,6 +398,7 @@ def build_site(
             "command_catalog": command_catalog.as_dict(),
             "status_projection": report.status_projection.as_dict(),
             "roadmap_projection": report.roadmap_projection.as_dict(),
+            "workflow_projection": workflow_projection,
             "claim_report": report.claim_report.as_dict(),
         },
         indent=2,
@@ -408,6 +416,14 @@ def build_site(
     )
     (output / "quickstart" / "index.html").write_text(
         render_quickstart_html(root, metadata, quickstart_projection),
+        encoding="utf-8",
+    )
+    (output / "workflows" / "workflows.json").write_text(
+        json.dumps(workflow_projection, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    (output / "workflows" / "index.html").write_text(
+        render_workflows_html(root, metadata, workflow_projection),
         encoding="utf-8",
     )
     (output / "claims" / "claims.json").write_text(
@@ -618,6 +634,37 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
             [claim for claim in report.claim_report.claims if claim.status == "planned"],
             empty="No planned public claims are currently declared.",
         ),
+        "workflow_mode_count": str(len(report.workflow_projection.get("modes", []))),
+        "brownfield_cycle_count": escape(
+            _projection_value(report.workflow_projection, "brownfield.real_cycles", "not recorded")
+        ),
+        "brownfield_status": escape(
+            _projection_value(report.workflow_projection, "brownfield.status", "not recorded")
+        ),
+    }
+    return template.safe_substitute(values).rstrip() + "\n"
+
+
+def render_workflows_html(
+    root: Path,
+    metadata: SiteFoundationMetadata,
+    projection: dict[str, object],
+) -> str:
+    template_path = root / "site" / "templates" / "workflows.html"
+    template = Template(template_path.read_text(encoding="utf-8"))
+    values = {
+        "product_name": escape(metadata.product_name),
+        "package_version": escape(metadata.package_version),
+        "manifest_sha": escape(metadata.manifest_sha),
+        "mode_cards": _workflow_mode_cards(projection),
+        "core_workflow_items": _workflow_step_items(projection),
+        "boundary_items": _workflow_boundary_items(projection),
+        "brownfield_items": _brownfield_fact_items(projection),
+        "brownfield_status": escape(_projection_value(projection, "brownfield.status", "not recorded")),
+        "brownfield_source": escape(_projection_value(projection, "brownfield.source", "")),
+        "brownfield_evidence_type": escape(
+            _projection_value(projection, "brownfield.rule_ack_evidence_type", "not recorded")
+        ),
     }
     return template.safe_substitute(values).rstrip() + "\n"
 
@@ -789,6 +836,287 @@ def _quickstart_commands(
     return rows
 
 
+def _build_workflow_projection(
+    root: Path,
+    command_catalog: SiteCommandCatalog | None,
+) -> dict[str, object]:
+    command_catalog = command_catalog or SiteCommandCatalog(entries=())
+    brownfield = _read_b1_evidence(root)
+    return {
+        "schema_version": 1,
+        "kind": "site_workflow_projection",
+        "source": "site_generator.py",
+        "modes": [
+            {
+                "id": "file-transfer",
+                "title": "File Transfer",
+                "maturity": "primary web-LLM path",
+                "best_for": "Web or hosted LLMs without direct terminal or repository access.",
+                "summary": (
+                    "The human and the LLM exchange bounded Kit transfer files while the "
+                    "repository remains the source of truth."
+                ),
+                "commands": _quickstart_commands(
+                    command_catalog,
+                    (
+                        "agentic-kit transfer read-user-task",
+                        "agentic-kit transfer submit-user-task",
+                        "agentic-kit transfer remote-next",
+                        "agentic-kit transfer chat-switch-complete",
+                    ),
+                ),
+            },
+            {
+                "id": "copy-paste",
+                "title": "Copy and Paste",
+                "maturity": "manual fallback",
+                "best_for": "Small manual web-LLM sessions where a file-transfer carrier is not needed.",
+                "summary": (
+                    "The LLM proposes a bounded terminal block, the human runs it, and the "
+                    "important output is returned to the conversation."
+                ),
+                "commands": _quickstart_commands(
+                    command_catalog,
+                    (
+                        "agentic-kit workflow request",
+                        "agentic-kit workflow run",
+                        "agentic-kit transfer log-header",
+                        "agentic-kit transfer chat-switch-complete",
+                    ),
+                ),
+            },
+            {
+                "id": "agent-direct",
+                "title": "Agent Direct",
+                "maturity": "executor-controlled workspace path",
+                "best_for": "Executors with controlled repository and terminal access.",
+                "summary": (
+                    "The executor can run Kit commands directly, but repository governance, "
+                    "evidence, safety classes and handoff state remain separate from the agent."
+                ),
+                "commands": _quickstart_commands(
+                    command_catalog,
+                    (
+                        "agentic-kit command-for",
+                        "agentic-kit transfer remote-work-start",
+                        "agentic-kit transfer pr-create-complete",
+                        "agentic-kit transfer protected-diff-plan",
+                        "agentic-kit transfer chat-switch-complete",
+                    ),
+                ),
+            },
+            {
+                "id": "gui",
+                "title": "GUI",
+                "maturity": "experimental early surface",
+                "best_for": "Local operator visibility over manifest-backed actions and readiness checks.",
+                "summary": (
+                    "The GUI entry point is available, but full parity with every CLI command "
+                    "is not claimed. The manifest remains the command authority."
+                ),
+                "commands": _quickstart_commands(
+                    command_catalog,
+                    (
+                        "agentic-kit gui-readiness-gate",
+                        "agentic-kit cockpit run",
+                        "agentic-kit cockpit select",
+                    ),
+                ),
+            },
+        ],
+        "core_workflow": [
+            {
+                "title": "Select the interaction mode",
+                "detail": "Choose File Transfer, Copy and Paste, Agent Direct, or the experimental GUI surface.",
+            },
+            {
+                "title": "Inspect before mutation",
+                "detail": "Use read-only or dry-run commands where available and keep target-owned decisions explicit.",
+            },
+            {
+                "title": "Run a bounded slice",
+                "detail": "Make one coherent change on a branch, record gates and evidence, and keep PR review visible.",
+            },
+            {
+                "title": "Close the handoff",
+                "detail": "Generate the successor package so another session or executor can continue from repository state.",
+            },
+        ],
+        "boundaries": [
+            "Git records history and diffs; the Kit adds machine-readable operational state and handoff contracts.",
+            "GitHub PRs coordinate review; the Kit wraps PR lifecycle checks when evidence is available.",
+            "CI validates configured checks; the Kit records when remote target-CI is absent or not claimed.",
+            "AGENTS.md guides an executor; the Kit keeps durable governance, evidence and command metadata in the repository.",
+            "The executor is replaceable; repository governance persists.",
+            "The Kit itself makes no LLM API calls and does not require an LLM API; executor services may have their own costs.",
+            "YAML and JSON state are versioned, diffable and reviewable, but they create file volume and projection-refresh work.",
+        ],
+        "brownfield": brownfield,
+    }
+
+
+def _read_b1_evidence(root: Path) -> dict[str, object]:
+    path = root / B1_EVIDENCE_SOURCE
+    if not path.exists():
+        return {
+            "source": B1_EVIDENCE_SOURCE,
+            "status": "not_recorded",
+            "real_cycles": "not recorded",
+            "merge_boundary_cycles": "not recorded",
+            "summary": "No consolidated B1 evidence report is currently available.",
+        }
+    try:
+        loaded = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return {
+            "source": B1_EVIDENCE_SOURCE,
+            "status": "invalid",
+            "real_cycles": "not recorded",
+            "merge_boundary_cycles": "not recorded",
+            "summary": f"B1 evidence JSON is not parseable: {exc}",
+        }
+    data = loaded if isinstance(loaded, dict) else {}
+    cycles = data.get("cycle_totals") if isinstance(data.get("cycle_totals"), dict) else {}
+    seams = data.get("seam_metric") if isinstance(data.get("seam_metric"), dict) else {}
+    tests = data.get("tests") if isinstance(data.get("tests"), dict) else {}
+    defects = data.get("defects") if isinstance(data.get("defects"), list) else []
+    return {
+        "source": B1_EVIDENCE_SOURCE,
+        "status": _string(data.get("status")),
+        "real_cycles": cycles.get("real_cycles", ""),
+        "merge_boundary_cycles": cycles.get("merge_boundary_cycles", ""),
+        "administrative_refresh_prs": cycles.get("administrative_refresh_prs", ""),
+        "admin_refresh_rate": cycles.get("admin_refresh_rate", ""),
+        "observable_admin_refresh_share": _string(cycles.get("observable_admin_refresh_share")),
+        "seam_metric_name": _string(seams.get("definition")),
+        "legacy_seams_start": seams.get("start", ""),
+        "legacy_seams_end": seams.get("end", ""),
+        "full_suite_min": tests.get("full_suite_min", ""),
+        "full_suite_max": tests.get("full_suite_max", ""),
+        "cycle_005_test_boundary": _string(tests.get("cycle_005_test_boundary")),
+        "defect_count": len(defects),
+        "rule_ack_evidence_type": _string(data.get("rule_ack_evidence_type")),
+        "summary": _string(data.get("public_summary")),
+        "generalization_boundary": _string(data.get("generalization_boundary")),
+    }
+
+
+def _workflow_mode_cards(projection: dict[str, object]) -> str:
+    modes = projection.get("modes")
+    if not isinstance(modes, list) or not modes:
+        return "        <article class=\"panel\"><p>No workflow modes are currently projected.</p></article>"
+    cards = []
+    for mode in modes:
+        if not isinstance(mode, dict):
+            continue
+        cards.append(
+            "        <article class=\"panel workflow-card\" id=\"mode-"
+            f"{escape(_string(mode.get('id')))}\">"
+            f"<p class=\"eyebrow\">{escape(_string(mode.get('maturity')))}</p>"
+            f"<h2>{escape(_string(mode.get('title')))}</h2>"
+            f"<p>{escape(_string(mode.get('summary')))}</p>"
+            f"<p><strong>Best for:</strong> {escape(_string(mode.get('best_for')))}</p>"
+            "<ul class=\"summary-list command-flow\">"
+            f"\n{_mode_command_items(mode)}\n"
+            "</ul>"
+            "</article>"
+        )
+    return "\n".join(cards)
+
+
+def _mode_command_items(mode: dict[str, object]) -> str:
+    commands = mode.get("commands")
+    if not isinstance(commands, list) or not commands:
+        return "          <li>No manifest-backed commands are projected for this mode.</li>"
+    rows = []
+    for command in commands:
+        if not isinstance(command, dict):
+            continue
+        name = _string(command.get("qualified_name"))
+        metadata = " · ".join(
+            part
+            for part in (
+                _string(command.get("surface")),
+                _string(command.get("safety")),
+                "dry-run" if command.get("dry_run_available") is True else "",
+            )
+            if part
+        )
+        rows.append(
+            "          <li>"
+            f"<a href=\"../commands/index.html\"><code>{escape(name)}</code></a>"
+            f"<span>{escape(_string(command.get('when_to_use')) or 'Manifest metadata unavailable.')}</span>"
+            f"<small>{escape(metadata or 'not in manifest')}</small>"
+            "</li>"
+        )
+    return "\n".join(rows)
+
+
+def _workflow_step_items(projection: dict[str, object]) -> str:
+    steps = projection.get("core_workflow")
+    if not isinstance(steps, list) or not steps:
+        return "          <li>No core workflow is currently projected.</li>"
+    rows = []
+    for step in steps:
+        if not isinstance(step, dict):
+            continue
+        rows.append(
+            "          <li>"
+            f"<strong>{escape(_string(step.get('title')))}</strong>"
+            f"<span>{escape(_string(step.get('detail')))}</span>"
+            "</li>"
+        )
+    return "\n".join(rows)
+
+
+def _workflow_boundary_items(projection: dict[str, object]) -> str:
+    boundaries = projection.get("boundaries")
+    if not isinstance(boundaries, list) or not boundaries:
+        return "          <li>No boundaries are currently projected.</li>"
+    return "\n".join(f"          <li><span>{escape(str(item))}</span></li>" for item in boundaries)
+
+
+def _brownfield_fact_items(projection: dict[str, object]) -> str:
+    brownfield = projection.get("brownfield")
+    if not isinstance(brownfield, dict):
+        return "          <li>No Brownfield evidence is currently projected.</li>"
+    facts = (
+        ("Status", brownfield.get("status")),
+        ("Real cycles", brownfield.get("real_cycles")),
+        ("Merge-boundary cycles", brownfield.get("merge_boundary_cycles")),
+        ("Administrative refresh PRs", brownfield.get("administrative_refresh_prs")),
+        ("Legacy seams", f"{brownfield.get('legacy_seams_start')} to {brownfield.get('legacy_seams_end')}"),
+        ("Full-suite runs", f"{brownfield.get('full_suite_min')} to {brownfield.get('full_suite_max')} tests"),
+        ("Cycle 005", brownfield.get("cycle_005_test_boundary")),
+        ("Core defects found", brownfield.get("defect_count")),
+    )
+    rows = []
+    for label, value in facts:
+        rows.append(
+            "          <li>"
+            f"<strong>{escape(str(label))}</strong>"
+            f"<span>{escape(_display_value(value))}</span>"
+            "</li>"
+        )
+    return "\n".join(rows)
+
+
+def _display_value(value: object) -> str:
+    text = "" if value is None else str(value)
+    if not text or text == "None to None" or text == "None to None tests":
+        return "not recorded"
+    return text
+
+
+def _projection_value(projection: dict[str, object], dotted_path: str, default: str) -> str:
+    current: object = projection
+    for part in dotted_path.split("."):
+        if not isinstance(current, dict):
+            return default
+        current = current.get(part)
+    return str(current) if current not in (None, "") else default
+
+
 def render_quickstart_html(
     root: Path,
     metadata: SiteFoundationMetadata,
@@ -929,9 +1257,23 @@ def render_command_view_html(
 
 def _command_table_row(entry: SiteCommandEntry, metadata: SiteFoundationMetadata) -> str:
     dry_run = "yes" if entry.dry_run_available else "no"
-    params = ", ".join(str(param.get("name") or "") for param in entry.params) or "none"
+    params = "; ".join(_format_param(param) for param in entry.params) or "none"
+    command_text = " ".join(
+        (
+            entry.qualified_name,
+            entry.group,
+            entry.surface,
+            entry.safety,
+            entry.when_to_use,
+            entry.help,
+            params,
+        )
+    ).lower()
     return (
-        "          <tr>"
+        "          <tr"
+        f" data-command-text=\"{escape(command_text, quote=True)}\""
+        f" data-safety=\"{escape(entry.safety, quote=True)}\""
+        f" data-surface=\"{escape(entry.surface, quote=True)}\">"
         f"<td><code>{escape(entry.qualified_name)}</code></td>"
         f"<td>{escape(entry.group)}</td>"
         f"<td>{escape(entry.surface)}</td>"
@@ -943,6 +1285,16 @@ def _command_table_row(entry: SiteCommandEntry, metadata: SiteFoundationMetadata
         f"<td><code>{escape(metadata.manifest_sha)}</code></td>"
         "</tr>"
     )
+
+
+def _format_param(param: dict[str, object]) -> str:
+    name = _string(param.get("name")) or "<unnamed>"
+    opts = param.get("opts")
+    opts_text = "/".join(str(item) for item in opts) if isinstance(opts, list) else ""
+    default = param.get("default")
+    default_text = "" if default in (None, "") else f" default={default}"
+    required = " required" if param.get("required") is True else ""
+    return " ".join(part for part in (name, opts_text, required, default_text) if part).strip()
 
 
 def _read_pyproject(root: Path, blockers: list[str]) -> dict[str, Any]:
@@ -1041,6 +1393,7 @@ def _param_summary(param: dict[str, Any]) -> dict[str, object]:
         "required": bool(param.get("required")),
         "opts": [str(item) for item in param.get("opts") or []],
         "help": _string(param.get("help")),
+        "default": param.get("default"),
     }
 
 

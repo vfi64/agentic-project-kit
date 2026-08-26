@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "kind": "b1_brownfield_evidence_closeout",
+  "status": "B1_EVALUABLE",
+  "date": "2026-08-26",
+  "kit_repo": "vfi64/agentic-project-kit",
+  "kit_main_head": "7cf492c1b8a705ab1e3f792636a9760718a1d29a",
+  "kit_release_version": "1.0.5",
+  "pypi_latest_version": "1.0.5",
+  "command_manifest_sha": "4306de047e3f",
+  "target_repo_public_label": "one familiar private Brownfield repository",
+  "target_integration_branch": "feature/ui-access-levels-v2",
+  "b0_metric_source": "docs/reports/POST_V1_0_4_B0_REFRESH_METRIC_DEFINITION_20260824.md",
+  "cycle_totals": {
+    "real_cycles": 5,
+    "merge_boundary_cycles": 4,
+    "administrative_refresh_prs": 6,
+    "merged_prs_in_window": 11,
+    "admin_refresh_rate": "6/4 = 1.5",
+    "observable_admin_refresh_share": "6/11"
+  },
+  "seam_metric": {
+    "definition": "Comm-SCI tools/count_legacy_seams.py legacy_seams_remaining",
+    "start": 72,
+    "end": 58,
+    "deltas": [
+      {
+        "cycle": "001",
+        "from": 72,
+        "to": 67
+      },
+      {
+        "cycle": "002",
+        "from": 67,
+        "to": 61
+      },
+      {
+        "cycle": "003",
+        "from": 61,
+        "to": 59
+      },
+      {
+        "cycle": "004",
+        "from": 59,
+        "to": 58
+      },
+      {
+        "cycle": "005",
+        "from": 58,
+        "to": 58,
+        "note": "CI configuration slice; no App2 seam change"
+      }
+    ]
+  },
+  "tests": {
+    "full_suite_min": 1483,
+    "full_suite_max": 1490,
+    "full_suite_cycles": [
+      {
+        "cycle": "001",
+        "tests_passed": 1483
+      },
+      {
+        "cycle": "002",
+        "tests_passed": 1488
+      },
+      {
+        "cycle": "003",
+        "tests_passed": 1489
+      },
+      {
+        "cycle": "004",
+        "tests_passed": 1490
+      }
+    ],
+    "cycle_005_test_boundary": "Cycle 005 changed CI configuration rather than functional code, so it has no historical local full-suite entry.",
+    "cycle_005_remote_ci_runs": [
+      {
+        "run_id": 32938530335,
+        "head_sha": "114f9019c8c6957f8b0e28d9ce7926373f1defaf",
+        "head_branch": "codex/b1-cycle-004-ci-feature-branch-checks",
+        "event": "pull_request",
+        "job": "pytest (3.11)",
+        "conclusion": "success"
+      },
+      {
+        "run_id": 32938873386,
+        "head_sha": "a75b308e74132ce51187281c5e8439d813c9c29d",
+        "head_branch": "codex/b1-cycle-005-ci-handoff-refresh",
+        "event": "pull_request",
+        "job": "pytest (3.11)",
+        "conclusion": "success"
+      },
+      {
+        "run_id": 32939086344,
+        "head_sha": "37ef94f61af8e92bd915d9bdd1f042d5a1ace76e",
+        "head_branch": "codex/b1-cycle-005-final-successor-refresh",
+        "event": "pull_request",
+        "job": "pytest (3.11)",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "cycles": [
+    {
+      "id": "B1-COMM-SCI-20260824-001",
+      "task": "Modularize App2 bridge helper seams",
+      "target_pr": 3,
+      "state": "merged",
+      "merge_commit": "47e536270a520568aa6a1fa4feff9594ef0f74b8",
+      "full_suite_passed": 1483,
+      "remote_ci": "no-checks",
+      "seams_to": 67,
+      "report": "docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md"
+    },
+    {
+      "id": "B1-COMM-SCI-20260824-002",
+      "task": "Modularize App2 bridge runtime helpers",
+      "target_pr": 4,
+      "state": "merged",
+      "merge_commit": "181397ce1aeb252f7bcc7872b71da56032186693",
+      "full_suite_passed": 1488,
+      "remote_ci": "no-checks",
+      "seams_to": 61,
+      "report": "docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md"
+    },
+    {
+      "id": "B1-COMM-SCI-20260825-003",
+      "task": "Modularize App2 rule-file loading seam",
+      "target_pr": 5,
+      "handoff_prs": [
+        6,
+        7
+      ],
+      "state": "merged_with_handoff_refresh",
+      "merge_commit": "0a25a5fc5f9cb78c00e443d26e93986c6ad0b3af",
+      "final_head": "72fa240413cff5fee5ed1faee09a5a9b5bcd5ee7",
+      "full_suite_passed": 1489,
+      "remote_ci": "no-checks",
+      "seams_to": 59,
+      "report": "docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md"
+    },
+    {
+      "id": "B1-COMM-SCI-20260825-004",
+      "task": "Modularize App2 window geometry seam",
+      "target_pr": 8,
+      "handoff_prs": [
+        9,
+        10
+      ],
+      "state": "merged_with_handoff_refresh",
+      "merge_commit": "40f8cea120a4cad2bafa5b912a625094eb777a50",
+      "final_head": "291fe142311a8de26a8115d66fda3ea19ef4733c",
+      "full_suite_passed": 1490,
+      "remote_ci": "no-checks",
+      "seams_to": 58,
+      "report": "docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_004_RESULTS_20260826.md"
+    },
+    {
+      "id": "B1-COMM-SCI-20260826-005",
+      "task": "Enable CI for feature branch PRs",
+      "target_pr": 11,
+      "handoff_prs": [
+        12,
+        13
+      ],
+      "state": "merged_with_real_remote_ci",
+      "merge_commit": "8e3f3c6794a8d1df2e7a7ceb70f12cbd7c1bd4b9",
+      "final_head": "bce40ba2edd9cf46bf423e41c47381287c7fe7fb",
+      "full_suite_passed": null,
+      "remote_ci": "success",
+      "seams_to": 58,
+      "report": "docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md"
+    }
+  ],
+  "defects": [
+    {
+      "id": "B1-KIT-002",
+      "category": "external_command_manifest_handling",
+      "trigger_cycle": "001",
+      "observed_behavior": "Manifest-dependent commands failed in an external PyPI workspace without repo-local docs/reference/agentic-kit-commands.json.",
+      "root_cause": "The command manifest was not packaged as an installed Kit resource and several loaders expected the Kit source tree.",
+      "fix_pr": 2158,
+      "fix_merge_commit": "78b1244ac3b6f99bdd635bdd31196ea42ee42f66",
+      "released_in": "1.0.5",
+      "status": "fixed",
+      "evidence_types": [
+        "kit_main",
+        "released_package",
+        "external_retest"
+      ]
+    },
+    {
+      "id": "B1-KIT-004-005",
+      "category": "external_merge_preflight",
+      "trigger_cycle": "002",
+      "observed_behavior": "Fresh-context and merge preflight used self-hosting paths and rule state in the external workspace.",
+      "root_cause": "External workspace detection and known volatile transfer paths were incomplete for the merge wrapper.",
+      "fix_pr": 2166,
+      "fix_merge_commit": "6533a98addb253e0b21cc63ebb18d6b8459e1eaa",
+      "released_in": "1.0.5",
+      "status": "fixed",
+      "evidence_types": [
+        "kit_main",
+        "released_package",
+        "external_retest"
+      ]
+    },
+    {
+      "id": "B1-KIT-006",
+      "category": "external_post_merge_base_branch_handling",
+      "trigger_cycle": "002",
+      "observed_behavior": "post-merge-check required main and could not evaluate the external feature integration branch.",
+      "root_cause": "The post-merge lifecycle assumed a main branch instead of accepting an explicit external base branch.",
+      "fix_pr": 2168,
+      "fix_merge_commit": "7ac386b9811c8a664f17c975b6d5c3e4b8cca2c7",
+      "released_in": "1.0.5",
+      "status": "fixed",
+      "evidence_types": [
+        "kit_main",
+        "released_package",
+        "external_retest"
+      ]
+    },
+    {
+      "id": "B1-KIT-009",
+      "category": "external_rule_acknowledgement",
+      "trigger_cycle": "003",
+      "observed_behavior": "rules acknowledge, transfer commit, and transfer push-current expected Kit self-hosting rule sources in an adopted external workspace.",
+      "root_cause": "Rule source validation did not distinguish self-hosting rule files from target-owned external workspace rule sources.",
+      "fix_pr": 2180,
+      "fix_merge_commit": "cd9543a766341fa889a103acb7859157722351f1",
+      "released_in": null,
+      "status": "fixed_on_main_retested_from_checkout",
+      "evidence_types": [
+        "kit_main",
+        "external_retest"
+      ]
+    }
+  ],
+  "rule_ack_evidence_type": "kit_main_external_retest_not_released_package",
+  "remaining_limitations": [
+    "pr-merge-safe successfully merged remote Comm-SCI PRs in Cycle 005 but did not return locally after the remote merge.",
+    "Mixed handoff/report/status updates required extra administrative successor-refresh PRs.",
+    "Comm-SCI .gitignore did not ignore .agentic/rule_ack/ after the external Rule-Ack retest, leaving a local hygiene follow-up.",
+    "doctor --json remains unsupported.",
+    "command-for task tags still do not behave like natural-language discovery for every health-check intent."
+  ],
+  "public_summary": "Five real maintenance cycles in one familiar private Brownfield repository reached the B0 evaluability threshold: five real cycles, four merge-boundary cycles, legacy seams reduced from 72 to 58, and full-suite runs stayed green across cycles that ran them, growing from 1,483 to 1,490 tests. Cycle 005 changed CI configuration and has remote CI evidence but no historical local full-suite entry.",
+  "generalization_boundary": "stronger evidence than self-hosting, weaker evidence than an independent user adopting the Kit on an unrelated repository"
+}

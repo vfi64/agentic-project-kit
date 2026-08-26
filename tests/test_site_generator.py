@@ -50,14 +50,18 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
         "site.json",
         "static/runtime-map.svg",
         "static/site.css",
+        "workflows/index.html",
+        "workflows/workflows.json",
     )
     html = (output / "index.html").read_text(encoding="utf-8")
     data = json.loads((output / "site.json").read_text(encoding="utf-8"))
     commands = json.loads((output / "commands" / "commands.json").read_text(encoding="utf-8"))
     claims = json.loads((output / "claims" / "claims.json").read_text(encoding="utf-8"))
     quickstart = json.loads((output / "quickstart" / "quickstart.json").read_text(encoding="utf-8"))
+    workflows = json.loads((output / "workflows" / "workflows.json").read_text(encoding="utf-8"))
     assert "Agentic Execution Runtime" in html
     assert "Repository Memory" in html
+    assert "Choose How You Want To Work" in html
     assert "Verified now" in html
     assert "1.2.3" in html
     assert "abc123" in html
@@ -82,7 +86,18 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     assert quickstart["kind"] == "site_quickstart_projection"
     assert quickstart["docs"][0]["path"] == "docs/ONBOARDING.md"
     assert quickstart["flows"][0]["commands"][0]["qualified_name"] == "agentic-kit init"
+    assert workflows["kind"] == "site_workflow_projection"
+    assert [mode["id"] for mode in workflows["modes"]] == [
+        "file-transfer",
+        "copy-paste",
+        "agent-direct",
+        "gui",
+    ]
+    assert workflows["brownfield"]["status"] == "not_recorded"
     assert "First-chat onboarding" in (output / "quickstart" / "index.html").read_text(encoding="utf-8")
+    assert "Executor Is Replaceable; Repository Governance Persists" in (
+        output / "workflows" / "index.html"
+    ).read_text(encoding="utf-8")
     assert "Docker" in (output / "quickstart" / "index.html").read_text(encoding="utf-8")
     assert "agentic-kit workspace init" in (
         output / "commands" / "guided.html"
@@ -90,6 +105,10 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     assert "agentic-kit check-docs" in (
         output / "commands" / "diagnostics.html"
     ).read_text(encoding="utf-8")
+    command_html = (output / "commands" / "index.html").read_text(encoding="utf-8")
+    assert 'id="command-search"' in command_html
+    assert 'data-safety="BOUNDED"' in command_html
+    assert "default=" in command_html
 
 
 def test_docs_pages_fallback_writes_redirect_and_generated_site(tmp_path: Path) -> None:
@@ -114,6 +133,8 @@ def test_docs_pages_fallback_writes_redirect_and_generated_site(tmp_path: Path) 
         "site/site.json",
         "site/static/runtime-map.svg",
         "site/static/site.css",
+        "site/workflows/index.html",
+        "site/workflows/workflows.json",
     )
     redirect = (root / "docs" / "index.html").read_text(encoding="utf-8")
     generated_site = (root / "docs" / "site" / "site.json").read_text(encoding="utf-8")
@@ -199,6 +220,62 @@ def test_public_site_templates_name_remote_target_ci_limitation() -> None:
     assert limitation in Path("site/templates/claims.html").read_text(encoding="utf-8")
 
 
+def test_workflow_projection_reads_brownfield_closeout_evidence(tmp_path: Path) -> None:
+    root = _write_site_fixture(tmp_path)
+    report_path = root / "docs" / "reports" / "POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json"
+    report_path.parent.mkdir(parents=True)
+    report_path.write_text(
+        json.dumps(
+            {
+                "status": "B1_EVALUABLE",
+                "rule_ack_evidence_type": "kit_main_external_retest_not_released_package",
+                "public_summary": "Five cycles.",
+                "generalization_boundary": "one repo only",
+                "cycle_totals": {
+                    "real_cycles": 5,
+                    "merge_boundary_cycles": 4,
+                    "administrative_refresh_prs": 6,
+                    "admin_refresh_rate": "6/4 = 1.5",
+                    "observable_admin_refresh_share": "6/11",
+                },
+                "seam_metric": {
+                    "definition": "legacy_seams_remaining",
+                    "start": 72,
+                    "end": 58,
+                },
+                "tests": {
+                    "full_suite_min": 1483,
+                    "full_suite_max": 1490,
+                    "cycle_005_test_boundary": "remote CI only",
+                },
+                "defects": [
+                    {"id": "B1-KIT-002"},
+                    {"id": "B1-KIT-004-005"},
+                    {"id": "B1-KIT-006"},
+                    {"id": "B1-KIT-009"},
+                ],
+            },
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    result = build_site(root, output_dir=tmp_path / "out", build_commit="abc123")
+
+    assert result.ok
+    workflows = json.loads(
+        (tmp_path / "out" / "workflows" / "workflows.json").read_text(encoding="utf-8")
+    )
+    assert workflows["brownfield"]["status"] == "B1_EVALUABLE"
+    assert workflows["brownfield"]["real_cycles"] == 5
+    assert workflows["brownfield"]["legacy_seams_end"] == 58
+    assert (
+        workflows["brownfield"]["rule_ack_evidence_type"]
+        == "kit_main_external_retest_not_released_package"
+    )
+
+
 def _write_site_fixture(
     root: Path,
     *,
@@ -238,7 +315,15 @@ def _write_site_fixture(
             "dry_run_available": False,
             "when_to_use": f"Run {qualified_name}.",
             "help": "",
-            "params": [],
+            "params": [
+                {
+                    "name": "root",
+                    "required": False,
+                    "opts": ["--root"],
+                    "default": ".",
+                    "help": "Repository root.",
+                }
+            ],
         }
         for (qualified_name, group, safety), surface in zip(command_names, surfaces, strict=False)
     ]
@@ -265,17 +350,25 @@ def _write_site_fixture(
         (
             "<html>${product_name} ${package_version} ${build_commit} "
             "${orchestrator_count} ${release_tag} Repository Memory Verified now "
+            "Choose How You Want To Work ${workflow_mode_count} ${brownfield_status} "
             "pip install ${package_name} ${repository_url} "
             "${guided_command_items} ${common_diagnostic_items}</html>\n"
         ),
         encoding="utf-8",
     )
     (root / "site" / "templates" / "commands.html").write_text(
-        "<html>${title} ${rows}</html>\n",
+        '<html>${title} <input id="command-search"> ${rows}</html>\n',
         encoding="utf-8",
     )
     (root / "site" / "templates" / "quickstart.html").write_text(
         "<html>${product_name} ${package_name} Docker ${new_repo_command_items} ${existing_repo_command_items} ${docs_link_items}</html>\n",
+        encoding="utf-8",
+    )
+    (root / "site" / "templates" / "workflows.html").write_text(
+        (
+            "<html>${product_name} Executor Is Replaceable; Repository Governance Persists "
+            "${mode_cards} ${core_workflow_items} ${boundary_items} ${brownfield_items}</html>\n"
+        ),
         encoding="utf-8",
     )
     (root / "site" / "templates" / "claims.html").write_text(

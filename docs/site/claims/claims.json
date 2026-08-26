@@ -1,6 +1,6 @@
 {
   "blockers": [],
-  "claim_count": 13,
+  "claim_count": 14,
   "claims": [
     {
       "blockers": [],
@@ -231,12 +231,37 @@
       "required": true,
       "status": "verified",
       "text": "The website command catalog is generated from the Kit's current command manifest."
+    },
+    {
+      "blockers": [],
+      "evidence": [
+        {
+          "detail": "docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json contains required text",
+          "evidence_type": "file-contains",
+          "status": "verified"
+        },
+        {
+          "detail": "docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md contains required text",
+          "evidence_type": "file-contains",
+          "status": "verified"
+        },
+        {
+          "detail": "site/templates/workflows.html contains required text",
+          "evidence_type": "file-contains",
+          "status": "verified"
+        }
+      ],
+      "id": "b1-brownfield-evaluable",
+      "planned": false,
+      "required": true,
+      "status": "verified",
+      "text": "Five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary."
     }
   ],
   "kind": "site_claim_evaluation_report",
   "required_counts": {
     "optional": 6,
-    "required": 7
+    "required": 8
   },
   "schema_blockers": [],
   "schema_version": 1,
@@ -244,6 +269,6 @@
   "status_counts": {
     "planned": 0,
     "unverified": 0,
-    "verified": 13
+    "verified": 14
   }
 }

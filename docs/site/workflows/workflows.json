@@ -1,0 +1,217 @@
+{
+  "boundaries": [
+    "Git records history and diffs; the Kit adds machine-readable operational state and handoff contracts.",
+    "GitHub PRs coordinate review; the Kit wraps PR lifecycle checks when evidence is available.",
+    "CI validates configured checks; the Kit records when remote target-CI is absent or not claimed.",
+    "AGENTS.md guides an executor; the Kit keeps durable governance, evidence and command metadata in the repository.",
+    "The executor is replaceable; repository governance persists.",
+    "The Kit itself makes no LLM API calls and does not require an LLM API; executor services may have their own costs.",
+    "YAML and JSON state are versioned, diffable and reviewable, but they create file volume and projection-refresh work."
+  ],
+  "brownfield": {
+    "admin_refresh_rate": "6/4 = 1.5",
+    "administrative_refresh_prs": 6,
+    "cycle_005_test_boundary": "Cycle 005 changed CI configuration rather than functional code, so it has no historical local full-suite entry.",
+    "defect_count": 4,
+    "full_suite_max": 1490,
+    "full_suite_min": 1483,
+    "generalization_boundary": "stronger evidence than self-hosting, weaker evidence than an independent user adopting the Kit on an unrelated repository",
+    "legacy_seams_end": 58,
+    "legacy_seams_start": 72,
+    "merge_boundary_cycles": 4,
+    "observable_admin_refresh_share": "6/11",
+    "real_cycles": 5,
+    "rule_ack_evidence_type": "kit_main_external_retest_not_released_package",
+    "seam_metric_name": "Comm-SCI tools/count_legacy_seams.py legacy_seams_remaining",
+    "source": "docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json",
+    "status": "B1_EVALUABLE",
+    "summary": "Five real maintenance cycles in one familiar private Brownfield repository reached the B0 evaluability threshold: five real cycles, four merge-boundary cycles, legacy seams reduced from 72 to 58, and full-suite runs stayed green across cycles that ran them, growing from 1,483 to 1,490 tests. Cycle 005 changed CI configuration and has remote CI evidence but no historical local full-suite entry."
+  },
+  "core_workflow": [
+    {
+      "detail": "Choose File Transfer, Copy and Paste, Agent Direct, or the experimental GUI surface.",
+      "title": "Select the interaction mode"
+    },
+    {
+      "detail": "Use read-only or dry-run commands where available and keep target-owned decisions explicit.",
+      "title": "Inspect before mutation"
+    },
+    {
+      "detail": "Make one coherent change on a branch, record gates and evidence, and keep PR review visible.",
+      "title": "Run a bounded slice"
+    },
+    {
+      "detail": "Generate the successor package so another session or executor can continue from repository state.",
+      "title": "Close the handoff"
+    }
+  ],
+  "kind": "site_workflow_projection",
+  "modes": [
+    {
+      "best_for": "Web or hosted LLMs without direct terminal or repository access.",
+      "commands": [
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer read-user-task",
+          "safety": "BOUNDED",
+          "surface": "primitive",
+          "when_to_use": "Run agentic-kit transfer read-user-task."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer submit-user-task",
+          "safety": "BOUNDED",
+          "surface": "primitive",
+          "when_to_use": "Run agentic-kit transfer submit-user-task."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer remote-next",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Run the next repo-backed transfer order for local or remote work handoff."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer chat-switch-complete",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Create a deterministic successor handoff package and prompt projections."
+        }
+      ],
+      "id": "file-transfer",
+      "maturity": "primary web-LLM path",
+      "summary": "The human and the LLM exchange bounded Kit transfer files while the repository remains the source of truth.",
+      "title": "File Transfer"
+    },
+    {
+      "best_for": "Small manual web-LLM sessions where a file-transfer carrier is not needed.",
+      "commands": [
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit workflow request",
+          "safety": "BOUNDED",
+          "surface": "primitive",
+          "when_to_use": "Request the configured declarative workflow without running it."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit workflow run",
+          "safety": "BOUNDED",
+          "surface": "primitive",
+          "when_to_use": "Run the current workflow, or set a stored workflow item and run it."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer log-header",
+          "safety": "BOUNDED",
+          "surface": "primitive",
+          "when_to_use": "Render the dynamic local-to-LLM copy/paste log header from rule files."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer chat-switch-complete",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Create a deterministic successor handoff package and prompt projections."
+        }
+      ],
+      "id": "copy-paste",
+      "maturity": "manual fallback",
+      "summary": "The LLM proposes a bounded terminal block, the human runs it, and the important output is returned to the conversation.",
+      "title": "Copy and Paste"
+    },
+    {
+      "best_for": "Executors with controlled repository and terminal access.",
+      "commands": [
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit command-for",
+          "safety": "READ_ONLY",
+          "surface": "diagnostic",
+          "when_to_use": "Select the deterministic wrapper command for a raw command or task tag."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer remote-work-start",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Prepare a remote work branch with freshness, status, and transfer safety checks."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer pr-create-complete",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Create, validate, merge, and optionally close out a PR without manual PR/SHA copying."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer protected-diff-plan",
+          "safety": "READ_ONLY",
+          "surface": "diagnostic",
+          "when_to_use": "Write the current diff to /tmp and run the Python protected change planner on it."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer chat-switch-complete",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Create a deterministic successor handoff package and prompt projections."
+        }
+      ],
+      "id": "agent-direct",
+      "maturity": "executor-controlled workspace path",
+      "summary": "The executor can run Kit commands directly, but repository governance, evidence, safety classes and handoff state remain separate from the agent.",
+      "title": "Agent Direct"
+    },
+    {
+      "best_for": "Local operator visibility over manifest-backed actions and readiness checks.",
+      "commands": [
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit gui-readiness-gate",
+          "safety": "BOUNDED",
+          "surface": "diagnostic",
+          "when_to_use": "Run the pre-GUI readiness gate."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit cockpit run",
+          "safety": "BOUNDED",
+          "surface": "primitive",
+          "when_to_use": "Run agentic-kit cockpit run."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit cockpit select",
+          "safety": "BOUNDED",
+          "surface": "primitive",
+          "when_to_use": "Run agentic-kit cockpit select."
+        }
+      ],
+      "id": "gui",
+      "maturity": "experimental early surface",
+      "summary": "The GUI entry point is available, but full parity with every CLI command is not claimed. The manifest remains the command authority.",
+      "title": "GUI"
+    }
+  ],
+  "schema_version": 1,
+  "source": "site_generator.py"
+}

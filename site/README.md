@@ -102,3 +102,21 @@ S4e quickstart projection adds `quickstart/index.html` and
   metadata projected from `docs/reference/agentic-kit-commands.json`.
 - documentation links point back to canonical repository docs, including the
   Brownfield external repository guide and generated command reference.
+
+S4f workflow projection adds `workflows/index.html` and
+`workflows/workflows.json`:
+
+- the public entry point is `Choose How You Want To Work`, not a raw command
+  list.
+- File Transfer, Copy and Paste, Agent Direct, and the experimental early GUI surface
+  are generated from one projection, with manifest-backed command
+  metadata where commands exist.
+- the page explains that the Kit complements Git and CI; it does not replace them.
+- Executor Is Replaceable; Repository Governance Persists is rendered as a
+  workflow boundary, not as a claim for one required runtime.
+- YAML/JSON state is documented as versioned, diffable, reviewable, and
+  portable, with file-volume and projection-refresh tradeoffs.
+- Brownfield evidence is read from
+  `docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json`; the current
+  status is `B1_EVALUABLE`, and general Brownfield portability is explicitly not
+  claimed from one familiar private repository.

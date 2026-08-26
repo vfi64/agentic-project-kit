@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Workflows - ${product_name}</title>
+    <link rel="stylesheet" href="../static/site.css">
+  </head>
+  <body>
+    <main class="page">
+      <nav class="topnav" aria-label="Site">
+        <a href="../index.html">Overview</a>
+        <a href="../quickstart/index.html">Quickstart</a>
+        <a href="index.html">Workflows</a>
+        <a href="../commands/guided.html">Guided</a>
+        <a href="../commands/diagnostics.html">Diagnostics</a>
+        <a href="../commands/index.html">Complete</a>
+        <a href="../claims/index.html">Claims</a>
+      </nav>
+
+      <section class="overview" aria-labelledby="workflow-title">
+        <div>
+          <p class="eyebrow">Core workflows</p>
+          <h1 id="workflow-title">Choose How You Want To Work</h1>
+          <p class="lede">Start with the communication mode, then follow the generated workflow to manifest-backed commands. The command list is the reference layer, not the first thing a new user has to decode.</p>
+          <p class="catalog-meta">Version <code>${package_version}</code> · Manifest <code>${manifest_sha}</code></p>
+        </div>
+        <article class="panel">
+          <p class="eyebrow">Separation</p>
+          <h2>Executor Is Replaceable; Repository Governance Persists</h2>
+          <p>Codex, Claude, hosted models, local models, or humans may execute work where their environment allows it. The repository keeps the durable state, command manifest, gates, evidence and handoff boundary.</p>
+        </article>
+      </section>
+
+      <section class="section-grid" aria-label="Workflow modes">
+${mode_cards}
+      </section>
+
+      <section class="band" aria-labelledby="minimal-cycle-title">
+        <div>
+          <p class="eyebrow">Minimal cycle</p>
+          <h2 id="minimal-cycle-title">Task To Handoff</h2>
+          <ul class="summary-list">
+${core_workflow_items}
+          </ul>
+        </div>
+        <article class="panel">
+          <p class="eyebrow">Why not only Git, CI and AGENTS.md?</p>
+          <p>The Kit complements Git and CI; it does not replace them. Git records history, GitHub coordinates PRs, CI validates configured checks, and AGENTS.md guides an executor. The Kit keeps long-lived operational state, governance, evidence, command metadata and handoffs in the repository.</p>
+        </article>
+      </section>
+
+      <section class="section-grid" aria-label="Workflow boundaries">
+        <article class="panel">
+          <p class="eyebrow">Boundaries</p>
+          <h2>What Persists</h2>
+          <ul class="summary-list">
+${boundary_items}
+          </ul>
+        </article>
+        <article class="panel">
+          <p class="eyebrow">State format</p>
+          <h2>Why YAML And JSON</h2>
+          <p>Repository state is versioned, diffable, reviewable, and portable between sessions, machines and executors. The tradeoff is more files and explicit projection refresh work instead of an invisible state service.</p>
+        </article>
+      </section>
+
+      <section class="status-board" aria-labelledby="brownfield-title">
+        <div class="status-board-head">
+          <p class="eyebrow">Evidence-bound Brownfield result</p>
+          <h2 id="brownfield-title">B1 Closeout</h2>
+          <p>Five real maintenance cycles provide evidence beyond self-hosting, but one familiar repository is not enough to establish general Brownfield portability.</p>
+          <p class="catalog-meta">Status <code>${brownfield_status}</code> · Source <code>${brownfield_source}</code> · Rule-Ack evidence <code>${brownfield_evidence_type}</code></p>
+        </div>
+        <article>
+          <h3>Measured Facts</h3>
+          <ul class="summary-list">
+${brownfield_items}
+          </ul>
+        </article>
+        <article>
+          <h3>Limits</h3>
+          <ul class="summary-list">
+            <li><span>The Brownfield repository was familiar and private, not an independent public adopter.</span></li>
+            <li><span>Cycle 005 changed CI configuration and has no historical local full-suite entry.</span></li>
+            <li><span>The external merge wrapper still has a local non-return defect after successful remote merge.</span></li>
+            <li><span>Fixes on Kit main and fixes in a released package are separate evidence types.</span></li>
+          </ul>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
