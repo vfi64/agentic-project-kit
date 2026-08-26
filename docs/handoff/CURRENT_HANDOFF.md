@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `9c453446390332b62e567f28d363bfc3acb9f5b4` (`9c453446`), after `Finalize B1 community post evidence (#2191)`.
-Last substantive work state is `9c453446390332b62e567f28d363bfc3acb9f5b4` (`9c453446`), after `Finalize B1 community post evidence (#2191)`.
+Current verified main/admin HEAD is `3c6abe94cb89b2c17a5a9ac25fc5741db6eb3a6f` (`3c6abe94`), after `Fix public site pre-post details (#2193)`.
+Last substantive work state is `3c6abe94cb89b2c17a5a9ac25fc5741db6eb3a6f` (`3c6abe94`), after `Fix public site pre-post details (#2193)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
