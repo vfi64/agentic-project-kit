@@ -11743,7 +11743,7 @@
       "merge_boundary_cycles": 4,
       "observable_admin_refresh_share": "6/11",
       "real_cycles": 5,
-      "rule_ack_evidence_type": "kit_main_external_retest_not_released_package",
+      "rule_ack_evidence_type": "released_package_targeted_external_retest",
       "seam_metric_name": "Comm-SCI tools/count_legacy_seams.py legacy_seams_remaining",
       "source": "docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json",
       "status": "B1_EVALUABLE",

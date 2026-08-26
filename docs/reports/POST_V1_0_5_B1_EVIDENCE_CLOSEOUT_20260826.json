@@ -4,10 +4,18 @@
   "status": "B1_EVALUABLE",
   "date": "2026-08-26",
   "kit_repo": "vfi64/agentic-project-kit",
-  "kit_main_head": "7cf492c1b8a705ab1e3f792636a9760718a1d29a",
-  "kit_release_version": "1.0.5",
-  "pypi_latest_version": "1.0.5",
-  "command_manifest_sha": "4306de047e3f",
+  "kit_main_head": "3f1f0eaf41a42a874bf9adff9dacd170c2de83db",
+  "kit_release_version": "1.0.6",
+  "pypi_latest_version": "1.0.6",
+  "command_manifest_sha": "f88f3c276299",
+  "post_closeout_addenda": [
+    {
+      "id": "B1-KIT-009-v1.0.6-released-package-retest",
+      "report": "docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md",
+      "scope": "targeted released-package retest, not a sixth B1 maintenance cycle",
+      "result": "PASS"
+    }
+  ],
   "target_repo_public_label": "one familiar private Brownfield repository",
   "target_integration_branch": "feature/ui-access-levels-v2",
   "b0_metric_source": "docs/reports/POST_V1_0_4_B0_REFRESH_METRIC_DEFINITION_20260824.md",
@@ -230,15 +238,16 @@
       "root_cause": "Rule source validation did not distinguish self-hosting rule files from target-owned external workspace rule sources.",
       "fix_pr": 2180,
       "fix_merge_commit": "cd9543a766341fa889a103acb7859157722351f1",
-      "released_in": null,
-      "status": "fixed_on_main_retested_from_checkout",
+      "released_in": "1.0.6",
+      "status": "released_package_targeted_retest_pass",
       "evidence_types": [
         "kit_main",
+        "released_package",
         "external_retest"
       ]
     }
   ],
-  "rule_ack_evidence_type": "kit_main_external_retest_not_released_package",
+  "rule_ack_evidence_type": "released_package_targeted_external_retest",
   "remaining_limitations": [
     "pr-merge-safe successfully merged remote Comm-SCI PRs in Cycle 005 but did not return locally after the remote merge.",
     "Mixed handoff/report/status updates required extra administrative successor-refresh PRs.",

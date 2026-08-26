@@ -1,8 +1,9 @@
 # Post-v1.0.5 B1/Website/Reddit/B2/B3 Closeout
 
-Status: prepared_for_review  
-Date: 2026-08-26  
+Status: final_drafts_ready_not_posted
+Date: 2026-08-26
 Branch: `codex/b1-evidence-closeout`
+Post-v1.0.6 finalization branch: `codex/finalize-b1-community-post`
 
 ## B1
 
@@ -58,17 +59,24 @@ so the committed `docs/site/` projection remains byte-for-byte current.
 
 ## Reddit
 
-Drafts only; nothing is posted automatically.
+Final drafts only; nothing is posted automatically.
 
 - English draft:
   `docs/reports/REDDIT_B1_BROWNFIELD_POST_EN_20260826.md`
 - German draft:
   `docs/reports/REDDIT_B1_BROWNFIELD_POST_DE_20260826.md`
+- v1.0.6 Rule-Ack released-package retest addendum:
+  `docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md`
 
 Both drafts use the same quantitative claims as the B1 report and website:
 five cycles, four merge-boundary cycles, seams 72 to 58, full-suite evidence
 1,483 to 1,490 for cycles that ran it, Cycle 005 remote-CI boundary, four
 external Kit defects, and the known merge-wrapper non-return limitation.
+
+Post-v1.0.6 update: B1-KIT-009 now has targeted released-package evidence from
+a PyPI install on the adopted Comm-SCI integration branch. This is not counted
+as a sixth B1 maintenance cycle and does not close the separate full
+merge-wrapper non-return follow-up.
 
 Avoided claims:
 
@@ -112,11 +120,11 @@ adjudication point.
 
 ## Remaining Review Points
 
-- B1-KIT-009 needs released-package validation after a future release before it
-  can be claimed as PyPI evidence.
+- B1-KIT-009 has targeted released-package validation in v1.0.6; it is not a
+  full external merge-cycle retest.
 - `pr-merge-safe` still needs a fix for local non-return after a successful
   remote merge.
 - B1-KIT-011 should reduce extra administrative refresh PRs without weakening
   handoff evidence.
-- The Reddit drafts need maintainer choice of target community, title and timing
-  before publication.
+- The finalized Reddit drafts still need maintainer choice of target community,
+  title and timing before publication.

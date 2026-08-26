@@ -1,9 +1,11 @@
 # Post-v1.0.5 B1 Evidence Closeout
 
-Status: B1_EVALUABLE  
-Date: 2026-08-26  
-Kit main verified for this report: `7cf492c1b8a705ab1e3f792636a9760718a1d29a`  
-Current released package during closeout: `agentic-project-kit==1.0.5`  
+Status: B1_EVALUABLE
+Date: 2026-08-26
+Kit main verified for this report: `7cf492c1b8a705ab1e3f792636a9760718a1d29a`
+Current released package during original closeout: `agentic-project-kit==1.0.5`
+Post-v1.0.6 addendum:
+`docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md`
 Machine-readable companion: `docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json`
 
 ## Scope
@@ -85,11 +87,13 @@ that the safety boundary worked, but at visible PR-cost.
 | B1-KIT-002 external command-manifest handling | Cycle 001 | installed package lacked a manifest resource fallback | PR #2158, merge `78b1244a` | fixed in v1.0.5 | `kit_main`, `released_package`, `external_retest` |
 | B1-KIT-004/005 external merge preflight | Cycle 002 | external context paths and self-hosting rule state leaked into preflight | PR #2166, merge `6533a98a` | fixed in v1.0.5 | `kit_main`, `released_package`, `external_retest` |
 | B1-KIT-006 external post-merge base branch | Cycle 002 | post-merge check assumed `main` | PR #2168, merge `7ac386b9` | fixed in v1.0.5 | `kit_main`, `released_package`, `external_retest` |
-| B1-KIT-009 external rule acknowledgement | Cycles 003-005 | rule source validation expected Kit self-hosting sources | PR #2180, merge `cd9543a7` | fixed on main and externally retested from checkout | `kit_main`, `external_retest` |
+| B1-KIT-009 external rule acknowledgement | Cycles 003-005 | rule source validation expected Kit self-hosting sources | PR #2180, merge `cd9543a7` | fixed in v1.0.6 and targeted-retested from PyPI | `kit_main`, `released_package`, `external_retest` |
 
-B1-KIT-009 is not yet `released_package` evidence. It needs a later package
-release and an external installed-package retest before public copy can claim
-that status.
+B1-KIT-009 was originally only `kit_main` plus checkout-based external retest
+evidence at this closeout. The post-v1.0.6 addendum records a targeted PyPI
+retest on the adopted Comm-SCI integration branch. That addendum updates the
+evidence type for Rule-Ack, but it does not add a sixth maintenance cycle and
+does not close the separate full merge-wrapper non-return limitation.
 
 ## Friction And Bypasses
 
