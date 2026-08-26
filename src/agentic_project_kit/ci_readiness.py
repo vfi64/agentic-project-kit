@@ -6,6 +6,8 @@ import time
 from dataclasses import dataclass
 from typing import Any, Callable
 
+from agentic_project_kit.github_actions_run_checks import fetch_action_run_checks
+
 READY_TO_MERGE = "READY_TO_MERGE"
 ALREADY_MERGED = "ALREADY_MERGED"
 WAITING = "WAITING"
@@ -56,6 +58,7 @@ def normalize_status_checks(snapshot: dict[str, Any]) -> list[dict[str, str]]:
                 "name": str(item.get("name") or item.get("context") or ""),
                 "status": str(item.get("status") or item.get("state") or "").upper(),
                 "conclusion": str(item.get("conclusion") or "").upper(),
+                "stale_remote_evidence": str(bool(item.get("staleRemoteEvidence"))).upper(),
             }
         )
     return checks
@@ -120,7 +123,25 @@ def classify_pr_readiness(
             True,
         )
 
-    pending = [check for check in checks if check not in successful]
+    successful_names = {check["name"] for check in successful}
+    stale = [
+        check
+        for check in checks
+        if check["stale_remote_evidence"] == "TRUE" and check["name"] not in successful_names
+    ]
+    if stale:
+        return ReadinessDecision(
+            BLOCKED,
+            tuple(f"stale queued/no-job remote check: {check['name'] or '<unknown>'}" for check in stale),
+            True,
+        )
+
+    pending = [
+        check
+        for check in checks
+        if check not in successful
+        and not (check["stale_remote_evidence"] == "TRUE" and check["name"] in successful_names)
+    ]
     if pending:
         return ReadinessDecision(
             WAITING,
@@ -187,7 +208,7 @@ def gh_pr_snapshot_provider(pr_number: int) -> SnapshotProvider:
                 "view",
                 str(pr_number),
                 "--json",
-                "state,headRefOid,mergeStateStatus,mergeable,statusCheckRollup",
+                "state,headRefOid,headRefName,mergeStateStatus,mergeable,statusCheckRollup",
             ],
             check=False,
             capture_output=True,
@@ -196,9 +217,32 @@ def gh_pr_snapshot_provider(pr_number: int) -> SnapshotProvider:
         if completed.returncode != 0:
             details = completed.stderr.strip() or completed.stdout.strip() or "gh pr view failed"
             raise RuntimeError(details)
-        return json.loads(completed.stdout)
+        payload = json.loads(completed.stdout)
+        if not isinstance(payload, dict):
+            raise RuntimeError("gh pr view did not return a JSON object")
+        checks = payload.get("statusCheckRollup") or []
+        if isinstance(checks, list) and not checks:
+            head_sha = str(payload.get("headRefOid") or "")
+            head_branch = str(payload.get("headRefName") or "")
+            if head_sha and head_branch:
+                try:
+                    payload["statusCheckRollup"] = fetch_action_run_checks(
+                        commit_sha=head_sha,
+                        branch=head_branch,
+                        run_gh_json=_run_gh_json,
+                    )
+                except RuntimeError as exc:
+                    payload["statusCheckRollupFallbackError"] = str(exc)
+        return payload
 
     return provider
+
+
+def _run_gh_json(args: list[str]) -> Any:
+    completed = subprocess.run(["gh", *args], text=True, capture_output=True, check=False)
+    if completed.returncode != 0:
+        raise RuntimeError(completed.stderr.strip() or completed.stdout.strip())
+    return json.loads(completed.stdout)
 
 
 def render_pr_readiness(decision: ReadinessDecision) -> str:

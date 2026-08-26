@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from typing import Any
 from typing import Literal
 
+from agentic_project_kit.github_actions_run_checks import fetch_action_run_checks
 from agentic_project_kit.next_turn_pr_status import (
     PrStatusDecision,
     attach_failed_run_logs,
@@ -49,6 +50,7 @@ class MergeIfGreenResult:
     main_verification_required: bool = False
     main_status_decision: PrStatusDecision | None = None
     main_verification_error: str = ""
+    dry_run: bool = False
 
 
 def decide_merge(status: PrStatusDecision) -> tuple[MergeDecision, str]:
@@ -177,39 +179,15 @@ def fetch_merge_commit_sha(pr: str) -> str:
 
 
 def fetch_main_run_payload(commit_sha: str, branch: str) -> dict[str, Any]:
-    runs = _run_gh_json(
-        [
-            "run",
-            "list",
-            "--branch",
-            branch,
-            "--commit",
-            commit_sha,
-            "--limit",
-            "20",
-            "--json",
-            "databaseId,status,conclusion,name,workflowName,url",
-        ]
-    )
-    if not isinstance(runs, list):
-        raise RuntimeError("gh run list did not return a JSON array")
-    checks: list[dict[str, Any]] = []
-    for run in runs:
-        if not isinstance(run, dict):
-            continue
-        checks.append(
-            {
-                "name": run.get("name") or run.get("workflowName") or "workflow",
-                "status": run.get("status"),
-                "conclusion": run.get("conclusion"),
-                "detailsUrl": run.get("url") or "",
-            }
-        )
     return {
         "state": "OPEN",
         "mergeStateStatus": "CLEAN",
         "headRefOid": commit_sha,
-        "statusCheckRollup": checks,
+        "statusCheckRollup": fetch_action_run_checks(
+            commit_sha=commit_sha,
+            branch=branch,
+            run_gh_json=_run_gh_json,
+        ),
     }
 
 
@@ -304,6 +282,7 @@ def merge_if_green(
             expected_base_branch=effective_expected_base_branch,
             expected_head_sha=effective_expected_head_sha,
             main_verification_required=False,
+            dry_run=dry_run,
         )
 
     args = build_merge_args(
@@ -352,6 +331,7 @@ def merge_if_green(
         main_verification_required=verify_main,
         main_status_decision=main_status,
         main_verification_error=main_error,
+        dry_run=False,
     )
 
 
@@ -359,6 +339,12 @@ def main_verification_passed(result: MergeIfGreenResult) -> bool:
     if not result.main_verification_required:
         return True
     return result.main_status_decision is not None and result.main_status_decision.decision == "green"
+
+
+def merge_result_passed(result: MergeIfGreenResult) -> bool:
+    if result.dry_run:
+        return result.decision == "merge" and result.status_decision.decision == "green"
+    return result.decision == "merge" and result.merged and main_verification_passed(result)
 
 
 def _render_failed_run_diagnostics(status: PrStatusDecision | None) -> list[str]:
@@ -388,7 +374,7 @@ def render_result(result: MergeIfGreenResult) -> str:
     main_status = result.main_status_decision
     main_decision = main_status.decision if main_status is not None else "not-run"
     main_failed_hint = main_status.failed_run_log_hint if main_status is not None else "none"
-    final_marker = "### RESULT: PASS ###" if main_verification_passed(result) else "### RESULT: FAIL ###"
+    final_marker = "### RESULT: PASS ###" if merge_result_passed(result) else "### RESULT: FAIL ###"
     lines = [
         "NEXT_TURN_MERGE_IF_GREEN",
         f"pr={result.pr}",
@@ -404,6 +390,7 @@ def render_result(result: MergeIfGreenResult) -> str:
         f"expected_base_branch={result.expected_base_branch or '(unspecified)'}",
         f"expected_head_sha={result.expected_head_sha or '(unknown)'}",
         f"merged={str(result.merged).lower()}",
+        f"dry_run={str(result.dry_run).lower()}",
         f"merge_commit_sha={result.merge_commit_sha or '(unknown)'}",
         f"main_verification_required={str(result.main_verification_required).lower()}",
         f"main_verification_decision={main_decision}",
@@ -414,6 +401,8 @@ def render_result(result: MergeIfGreenResult) -> str:
         *[f"- {item}" for item in result.status_decision.failed_checks],
         "pending_checks:",
         *[f"- {item}" for item in result.status_decision.pending_checks],
+        "stale_checks:",
+        *[f"- {item}" for item in result.status_decision.stale_checks],
         "unknown_checks:",
         *[f"- {item}" for item in result.status_decision.unknown_checks],
         "main_failed_run_diagnostics:",
@@ -452,7 +441,7 @@ def main() -> int:
     print(render_result(result))
     if args.dry_run:
         return 0
-    return 0 if result.decision == "merge" and main_verification_passed(result) else 1
+    return 0 if merge_result_passed(result) else 1
 
 
 if __name__ == "__main__":

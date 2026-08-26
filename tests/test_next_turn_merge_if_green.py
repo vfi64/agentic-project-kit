@@ -8,6 +8,8 @@ from agentic_project_kit.next_turn_merge_if_green import (
     PrMergeRefs,
     build_merge_args,
     decide_merge,
+    fetch_main_run_payload,
+    merge_result_passed,
     main_verification_passed,
     render_result,
     verify_merge_refs,
@@ -367,7 +369,7 @@ def test_render_result_contains_contract_lines() -> None:
         decision="merge",
         reason="PR is green",
         status_decision=st,
-        merged=False,
+        merged=True,
         merge_output="",
         base_ref_name="main",
         base_ref_oid="base",
@@ -383,8 +385,43 @@ def test_render_result_contains_contract_lines() -> None:
     assert "base_ref_name=main" in rendered
     assert "head_ref_oid=abc" in rendered
     assert "expected_head_sha=abc" in rendered
+    assert "dry_run=false" in rendered
     assert "main_verification_required=false" in rendered
     assert "### RESULT: PASS ###" in rendered
+
+
+def test_render_result_marks_refused_no_checks_merge_as_fail() -> None:
+    st = status(
+        {
+            "state": "OPEN",
+            "mergeStateStatus": "UNKNOWN",
+            "headRefOid": "abc",
+            "statusCheckRollup": [],
+        }
+    )
+
+    result = MergeIfGreenResult(
+        pr="1",
+        decision="refuse",
+        reason="PR checks are not green: no-checks",
+        status_decision=st,
+        merged=False,
+        merge_output="",
+        base_ref_name="main",
+        base_ref_oid="base",
+        head_ref_name="feature",
+        head_ref_oid="abc",
+        expected_base_branch="main",
+        expected_head_sha="abc",
+    )
+
+    rendered = render_result(result)
+
+    assert merge_result_passed(result) is False
+    assert "decision=refuse" in rendered
+    assert "status_decision=no-checks" in rendered
+    assert "stale_checks:" in rendered
+    assert "### RESULT: FAIL ###" in rendered
 
 
 def test_verify_main_ci_waits_until_green_for_merge_commit() -> None:
@@ -446,6 +483,59 @@ def test_verify_main_ci_attaches_failed_log_diagnostics() -> None:
     assert diagnostic.run_id == "123456"
     assert diagnostic.log_status == "fetched"
     assert diagnostic.log_excerpt == "123456\nfailed line"
+
+
+def test_fetch_main_run_payload_marks_old_queued_zero_job_run_as_stale(monkeypatch) -> None:
+    calls: list[list[str]] = []
+
+    def fake_run_gh_json(args: list[str]):
+        calls.append(args)
+        if args[:3] == ["run", "list", "--branch"]:
+            return [
+                {
+                    "databaseId": 123456,
+                    "name": "CI",
+                    "workflowName": "CI",
+                    "status": "queued",
+                    "conclusion": "",
+                    "url": "https://github.com/vfi64/agentic-project-kit/actions/runs/123456",
+                    "createdAt": "2026-08-26T15:39:51Z",
+                    "updatedAt": "2026-08-26T15:39:51Z",
+                }
+            ]
+        if args == ["api", "repos/{owner}/{repo}/actions/runs/123456/jobs"]:
+            return {"total_count": 0, "jobs": []}
+        raise AssertionError(args)
+
+    monkeypatch.setattr(merge_if_green_module, "_run_gh_json", fake_run_gh_json)
+
+    payload = fetch_main_run_payload("abc123def456", "main")
+
+    assert payload["statusCheckRollup"] == [
+        {
+            "name": "CI",
+            "status": "queued",
+            "conclusion": "",
+            "detailsUrl": "https://github.com/vfi64/agentic-project-kit/actions/runs/123456",
+            "jobCount": 0,
+            "staleRemoteEvidence": True,
+        }
+    ]
+    assert calls == [
+        [
+            "run",
+            "list",
+            "--branch",
+            "main",
+            "--commit",
+            "abc123def456",
+            "--limit",
+            "20",
+            "--json",
+            "createdAt,databaseId,status,conclusion,name,workflowName,url,updatedAt",
+        ],
+        ["api", "repos/{owner}/{repo}/actions/runs/123456/jobs"],
+    ]
 
 
 def test_render_result_marks_post_merge_red_main_ci_as_fail() -> None:
@@ -526,3 +616,5 @@ def test_clean_merge_state_for_green_pr_still_allows_dry_run_merge_decision() ->
     assert result.decision == "merge"
     assert result.reason == "DRY_RUN: PR is green"
     assert result.merged is False
+    assert result.dry_run is True
+    assert merge_result_passed(result) is True

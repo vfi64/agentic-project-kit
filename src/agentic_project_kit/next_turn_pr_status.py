@@ -9,7 +9,9 @@ import subprocess
 from dataclasses import dataclass, replace
 from typing import Any, Literal
 
-Decision = Literal["green", "red", "pending", "no-checks", "unknown", "not-open"]
+from agentic_project_kit.github_actions_run_checks import fetch_action_run_checks
+
+Decision = Literal["green", "red", "pending", "no-checks", "stale", "unknown", "not-open"]
 FailedLogStatus = Literal["not-fetched", "fetched", "unavailable", "missing-run-id"]
 
 
@@ -35,6 +37,7 @@ class PrStatusDecision:
     successful_checks: tuple[str, ...]
     pending_checks: tuple[str, ...]
     failed_checks: tuple[str, ...]
+    stale_checks: tuple[str, ...]
     unknown_checks: tuple[str, ...]
     failed_run_log_hint: str
     failed_run_diagnostics: tuple[FailedRunDiagnostic, ...]
@@ -68,6 +71,7 @@ def classify_pr_status(payload: dict[str, Any], *, pr: str = "") -> PrStatusDeci
     successful: list[str] = []
     pending: list[str] = []
     failed: list[str] = []
+    stale: list[str] = []
     unknown: list[str] = []
     failed_diagnostics: list[FailedRunDiagnostic] = []
 
@@ -83,7 +87,10 @@ def classify_pr_status(payload: dict[str, Any], *, pr: str = "") -> PrStatusDeci
             name = _check_name(item)
             status = str(item.get("status") or "").upper()
             conclusion = str(item.get("conclusion") or "").upper()
-            if status != "COMPLETED":
+            stale_remote_evidence = bool(item.get("staleRemoteEvidence"))
+            if stale_remote_evidence and status != "COMPLETED":
+                stale.append(name)
+            elif status != "COMPLETED":
                 pending.append(name)
             elif conclusion == "SUCCESS":
                 successful.append(name)
@@ -93,10 +100,14 @@ def classify_pr_status(payload: dict[str, Any], *, pr: str = "") -> PrStatusDeci
             else:
                 unknown.append(name)
 
+        successful_names = set(successful)
+        uncovered_stale = [name for name in stale if name not in successful_names]
         if failed:
             decision = "red"
         elif pending:
             decision = "pending"
+        elif uncovered_stale:
+            decision = "stale"
         elif unknown:
             decision = "unknown"
         else:
@@ -116,6 +127,7 @@ def classify_pr_status(payload: dict[str, Any], *, pr: str = "") -> PrStatusDeci
         successful_checks=tuple(successful),
         pending_checks=tuple(pending),
         failed_checks=tuple(failed),
+        stale_checks=tuple(stale),
         unknown_checks=tuple(unknown),
         failed_run_log_hint=hint,
         failed_run_diagnostics=tuple(failed_diagnostics),
@@ -187,6 +199,8 @@ def render_decision(decision: PrStatusDecision) -> str:
         *[f"- {item}" for item in decision.pending_checks],
         "failed_checks:",
         *[f"- {item}" for item in decision.failed_checks],
+        "stale_checks:",
+        *[f"- {item}" for item in decision.stale_checks],
         "unknown_checks:",
         *[f"- {item}" for item in decision.unknown_checks],
         f"failed_run_log_hint={decision.failed_run_log_hint}",
@@ -207,7 +221,8 @@ def render_decision(decision: PrStatusDecision) -> str:
             lines.append(f"  error={diagnostic.error}")
         lines.append("  log_excerpt:")
         lines.extend(_render_indented_block(diagnostic.log_excerpt, indent="    "))
-    lines.append("### RESULT: PASS ###")
+    marker = "PASS" if decision.decision == "green" else "FAIL"
+    lines.append(f"### RESULT: {marker} ###")
     return "\n".join(lines)
 
 
@@ -216,6 +231,10 @@ def _run_gh(args: list[str]) -> str:
     if completed.returncode != 0:
         raise RuntimeError(completed.stderr.strip() or completed.stdout.strip())
     return completed.stdout
+
+
+def _run_gh_json(args: list[str]) -> Any:
+    return json.loads(_run_gh(args))
 
 
 def fetch_pr_payload(pr: str) -> dict[str, Any]:
@@ -229,6 +248,23 @@ def fetch_pr_payload(pr: str) -> dict[str, Any]:
     payload = json.loads(raw)
     if not isinstance(payload, dict):
         raise RuntimeError("gh pr view did not return a JSON object")
+    checks = payload.get("statusCheckRollup") or []
+    if isinstance(checks, list) and not checks:
+        head_sha = str(payload.get("headRefOid") or "")
+        head_branch = str(payload.get("headRefName") or "")
+        if head_sha and head_branch:
+            try:
+                fallback_checks = fetch_action_run_checks(
+                    commit_sha=head_sha,
+                    branch=head_branch,
+                    run_gh_json=_run_gh_json,
+                )
+            except RuntimeError as exc:
+                payload["statusCheckRollupFallbackError"] = str(exc)
+                fallback_checks = []
+            if fallback_checks:
+                payload["statusCheckRollup"] = fallback_checks
+                payload["statusCheckRollupSource"] = "actions_head_runs_fallback"
     return payload
 
 
