@@ -349,6 +349,35 @@ def test_release_notes_generator_classifies_post_104_b1_titles(tmp_path: Path) -
     ]
 
 
+def test_release_notes_generator_classifies_post_105_b1_and_workflow_titles(tmp_path: Path) -> None:
+    report = build_release_notes_report(
+        tmp_path,
+        version="1.0.6",
+        from_tag="v1.0.5",
+        command_runner=FakeRunner(
+            subjects=[
+                "Record v1.0.5 DOI closeout (#2174)",
+                "Record B1 Comm-SCI cycle 003 results (#2176)",
+                "Record B1 Comm-SCI cycles 004 and 005 (#2178)",
+                "Support external workspace rule acknowledgement (#2180)",
+                "Complete B1 evidence closeout and website projection (#2182)",
+                "Harden GitHub Actions closeout loop handling (#2185)",
+            ]
+        ),
+    )
+
+    assert report.validation.status == "PASS"
+    assert report.unclassified_items == ()
+    assert [item.category for item in report.items] == [
+        "Release",
+        "Tests / Gates",
+        "Tests / Gates",
+        "Governance",
+        "Docs",
+        "Fixed",
+    ]
+
+
 def test_release_notes_generator_treats_report_projection_commits_as_administrative(
     tmp_path: Path,
 ) -> None:

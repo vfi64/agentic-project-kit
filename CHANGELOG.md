@@ -1,3 +1,13 @@
+## v1.0.6 - 2026-08-26
+
+- Zenodo DOI verification pending for v1.0.6.
+- Record v1.0.5 DOI closeout
+- Record B1 Comm-SCI cycle 003 results
+- Record B1 Comm-SCI cycles 004 and 005
+- Support external workspace rule acknowledgement
+- Complete B1 evidence closeout and website projection
+- Harden GitHub Actions closeout loop handling
+
 ## v1.0.5 - 2026-08-25
 
 - Close out release v1.0.4 DOI metadata
