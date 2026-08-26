@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f5976e2818122f5497415b8fa61889f67addc793
-  short: f5976e28
-  subject: Harden GitHub Actions closeout loop handling (#2185)
+  full: 4e30f785d7d90ec543def331b5e74ae09b99c294
+  short: 4e30f785
+  subject: Prepare release v1.0.6 (#2187)
 last_substantive_work_state:
-  full: f5976e2818122f5497415b8fa61889f67addc793
-  short: f5976e28
-  subject: Harden GitHub Actions closeout loop handling (#2185)
+  full: 4e30f785d7d90ec543def331b5e74ae09b99c294
+  short: 4e30f785
+  subject: Prepare release v1.0.6 (#2187)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

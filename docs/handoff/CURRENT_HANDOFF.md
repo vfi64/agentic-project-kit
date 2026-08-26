@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `f5976e2818122f5497415b8fa61889f67addc793` (`f5976e28`), after `Harden GitHub Actions closeout loop handling (#2185)`.
-Last substantive work state is `f5976e2818122f5497415b8fa61889f67addc793` (`f5976e28`), after `Harden GitHub Actions closeout loop handling (#2185)`.
+Current verified main/admin HEAD is `4e30f785d7d90ec543def331b5e74ae09b99c294` (`4e30f785`), after `Prepare release v1.0.6 (#2187)`.
+Last substantive work state is `4e30f785d7d90ec543def331b5e74ae09b99c294` (`4e30f785`), after `Prepare release v1.0.6 (#2187)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
