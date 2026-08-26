@@ -117,7 +117,7 @@
             "status": "verified"
           },
           {
-            "detail": "docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md contains required text",
+            "detail": "docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md contains required text",
             "evidence_type": "file-contains",
             "status": "verified"
           }

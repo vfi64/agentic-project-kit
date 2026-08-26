@@ -799,8 +799,8 @@ rules:
     terms:
     - pypi-package-installable
     - python -m pip install agentic-project-kit
-    - V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md
-    - Successfully installed agentic-project-kit-1.0.1
+    - POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
+    - "Installed package: `agentic-project-kit==1.0.6` from PyPI"
   - path: docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md
     terms:
     - Historical PyPI Validation

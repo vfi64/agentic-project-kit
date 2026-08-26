@@ -11,6 +11,7 @@ from agentic_project_kit.site_generator import (
     build_docs_pages_fallback,
     build_site,
     collect_site_foundation_metadata,
+    _command_summary_items,
     _guided_lifecycle_entries,
 )
 
@@ -218,6 +219,47 @@ def test_public_site_templates_name_remote_target_ci_limitation() -> None:
 
     assert limitation in Path("site/templates/index.html").read_text(encoding="utf-8")
     assert limitation in Path("site/templates/claims.html").read_text(encoding="utf-8")
+
+
+def test_public_quickstart_uses_current_package_version_token() -> None:
+    template = Path("site/templates/quickstart.html").read_text(encoding="utf-8")
+
+    assert "The public <code>${package_version}</code> package is available on PyPI" in template
+    assert "1.0.1" not in template
+
+
+def test_homepage_common_blocker_summaries_are_human_readable() -> None:
+    entries = (
+        SiteCommandEntry(
+            qualified_name="agentic-kit check-docs",
+            group="root",
+            surface="diagnostic",
+            safety="READ_ONLY",
+            dry_run_available=False,
+            diagnostic_priority="common_blocker",
+            when_to_use="Run agentic-kit check-docs.",
+            help="",
+            params=(),
+        ),
+        SiteCommandEntry(
+            qualified_name="agentic-kit workflow-guard check",
+            group="workflow-guard",
+            surface="diagnostic",
+            safety="READ_ONLY",
+            dry_run_available=False,
+            diagnostic_priority="common_blocker",
+            when_to_use="Run agentic-kit workflow-guard check.",
+            help="",
+            params=(),
+        ),
+    )
+
+    html = _command_summary_items(entries, limit=2)
+
+    assert "Run agentic-kit check-docs." not in html
+    assert "Run agentic-kit workflow-guard check." not in html
+    assert "Check required documentation coverage" in html
+    assert "Inspect workflow and governance files" in html
 
 
 def test_workflow_projection_reads_brownfield_closeout_evidence(tmp_path: Path) -> None:
