@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 31c6b771b8f0ab6b080f5ae79f3c438282af9e0c
-  short: 31c6b771
-  subject: Record B1 Comm-SCI cycle 003 results (#2176)
+  full: 8018c4926e27173d8b534756bbb1e91a7eb4138f
+  short: 8018c492
+  subject: Record B1 Comm-SCI cycles 004 and 005 (#2178)
 last_substantive_work_state:
-  full: 31c6b771b8f0ab6b080f5ae79f3c438282af9e0c
-  short: 31c6b771
-  subject: Record B1 Comm-SCI cycle 003 results (#2176)
+  full: 8018c4926e27173d8b534756bbb1e91a7eb4138f
+  short: 8018c492
+  subject: Record B1 Comm-SCI cycles 004 and 005 (#2178)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
