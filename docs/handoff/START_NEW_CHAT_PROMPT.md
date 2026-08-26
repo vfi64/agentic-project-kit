@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 8175681b021033786d38d3c254d4f7d2f013fdeb37cca3aabc08e4d64e977739
 - docs/reference/agentic-kit-commands.json: 506e48f5daa6cfc248e3177632269c198da6f2b67d9bf4c1d1bb770f6f8e063c
-## Operational documentation refresh state after PR #2185
+## Operational documentation refresh state after PR #2187
 
-Current administrative handoff refresh state is `f5976e28` (`Harden GitHub Actions closeout loop handling (#2185)`). Continue next only after this post-PR2185 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `4e30f785` (`Prepare release v1.0.6 (#2187)`). Continue next only after this post-PR2187 refresh is committed and merged; the next substantive slice must be created from fresh main.
