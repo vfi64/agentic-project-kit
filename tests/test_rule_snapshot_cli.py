@@ -7,6 +7,7 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
+from agentic_project_kit.rule_source_validator import external_manifest_rule_source_paths
 from agentic_project_kit.transfer_state import build_transfer_state
 from tests.test_rule_source_validator import write_minimal_sources
 
@@ -27,6 +28,18 @@ def _write_and_commit_minimal_sources(root: Path) -> None:
     subprocess.run(["git", "add", "."], cwd=root, check=True)
     subprocess.run(
         ["git", "commit", "-m", "Add minimal rule sources"],
+        cwd=root,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+
+
+def _write_and_commit_external_workspace(root: Path) -> None:
+    init = CliRunner().invoke(app, ["workspace", "init", "--root", str(root), "--execute"])
+    assert init.exit_code == 0, init.output
+    subprocess.run(["git", "add", "."], cwd=root, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Adopt external workspace"],
         cwd=root,
         check=True,
         stdout=subprocess.PIPE,
@@ -58,6 +71,24 @@ def test_rules_snapshot_cli_json_passes_for_repository() -> None:
     assert data["fail_closed"] is False
     assert isinstance(data["source_digests"], list)
     assert data["sources_total"] == data["validation"]["sources_total"]
+
+
+def test_rules_snapshot_cli_json_passes_for_external_manifest_workspace(tmp_path: Path) -> None:
+    _init_repo(tmp_path)
+    _write_and_commit_external_workspace(tmp_path)
+
+    result = CliRunner().invoke(app, ["rules", "snapshot", "--root", str(tmp_path), "--json"])
+
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.output)
+
+    assert data["is_valid"] is True
+    assert data["fail_closed"] is False
+    assert data["validation"]["workspace_mode"] == "external_manifest_workspace"
+    assert data["validation"]["source_paths"] == list(external_manifest_rule_source_paths())
+    assert data["validation"]["missing_required_paths"] == []
+    assert ".agentic/compiled_agent_context.yaml" not in data["validation"]["source_paths"]
+    assert "docs/STATUS.md" not in data["validation"]["source_paths"]
 
 
 def test_rules_snapshot_cli_fails_closed_for_missing_source(tmp_path: Path) -> None:
@@ -111,6 +142,31 @@ def test_rules_acknowledge_cli_writes_current_acknowledgement(tmp_path: Path) ->
     assert data["sources_total"] > 0
     assert data["missing_sources_total"] == 0
     assert data["declared_next_allowed_action"] == "run_next_command"
+
+
+def test_rules_acknowledge_confirms_external_manifest_workspace(tmp_path: Path) -> None:
+    _init_repo(tmp_path)
+    _write_and_commit_external_workspace(tmp_path)
+
+    result = CliRunner().invoke(
+        app,
+        ["rules", "acknowledge", "--root", str(tmp_path), "--json"],
+    )
+
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.output)
+
+    assert data["written"] is True
+    assert data["acknowledgement"]["sources_total"] == len(external_manifest_rule_source_paths())
+    assert data["acknowledgement"]["missing_sources_total"] == 0
+
+    state = build_transfer_state(tmp_path)
+
+    assert "rule_snapshot_fail_closed" not in state.reasons
+    assert state.rule_snapshot["validation"]["workspace_mode"] == "external_manifest_workspace"
+    assert state.rule_acknowledgement["present"] is True
+    assert state.rule_acknowledgement["decision"]["is_confirmed"] is True
+    assert state.capabilities["rules_confirmed"] is True
 
 
 def test_rules_acknowledge_cli_makes_transfer_state_rules_confirmed(tmp_path: Path) -> None:
