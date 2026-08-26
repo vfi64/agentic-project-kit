@@ -340,6 +340,10 @@ def _write_site_fixture(root: Path) -> Path:
         "<html>${product_name} ${new_repo_command_items} ${existing_repo_command_items} ${docs_link_items}</html>\n",
         encoding="utf-8",
     )
+    (root / "site" / "templates" / "workflows.html").write_text(
+        "<html>${product_name} ${mode_cards} ${core_workflow_items} ${boundary_items} ${brownfield_items}</html>\n",
+        encoding="utf-8",
+    )
     (root / "site" / "templates" / "claims.html").write_text(
         "<html>${claim_count} ${rows}</html>\n",
         encoding="utf-8",

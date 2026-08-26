@@ -595,6 +595,16 @@ rules:
     - docs/site/
     - legacy `main` `/docs`
     - excluded from Python sdist and wheel artifacts
+    - workflows/index.html
+    - workflows/workflows.json
+    - Choose How You Want To Work
+    - File Transfer
+    - Copy and Paste
+    - Agent Direct
+    - experimental early GUI surface
+    - POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json
+    - B1_EVALUABLE
+    - general Brownfield portability is not claimed
   - path: docs/TEST_GATES.md
     terms:
     - Website Generation Gate
@@ -614,6 +624,21 @@ rules:
     - 'surface: orchestrator'
     - 'surface: diagnostic'
     - invalid command `surface`
+    - search, safety filter and surface filter
+    - workflows/index.html
+    - workflows/workflows.json
+    - Choose How You Want To Work
+    - File Transfer
+    - Copy and Paste
+    - Agent Direct
+    - experimental early GUI surface
+    - The Kit itself makes no LLM API calls
+    - POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json
+    - B1_EVALUABLE
+    - general Brownfield portability
+    - '`kit_main`'
+    - '`released_package`'
+    - '`external_retest`'
     - --docs-pages-fallback
     - docs/index.html
     - docs/.nojekyll
@@ -685,6 +710,19 @@ rules:
     - byte-for-byte comparison
     - stable `docs-pages-fallback` build commit
     - excluded from Python sdist and wheel artifacts
+    - workflows/index.html
+    - workflows/workflows.json
+    - Choose How You Want To Work
+    - File Transfer
+    - Copy and Paste
+    - Agent Direct
+    - experimental early GUI surface
+    - the Kit complements Git and CI; it does not replace them
+    - Executor Is Replaceable; Repository Governance Persists
+    - YAML/JSON state
+    - POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json
+    - B1_EVALUABLE
+    - general Brownfield portability
   - path: docs/TEST_GATES.md
     terms:
     - Claim-evidence rendering
@@ -725,6 +763,11 @@ rules:
     - idempotent across post-merge handoff/status refreshes
     - volatile current-state details
     - excluded from Python sdist and wheel artifacts
+    - workflows/index.html
+    - workflows/workflows.json
+    - Brownfield public claims
+    - POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json
+    - B1_EVALUABLE
 - id: pypi-docker-first-contact-coverage
   description: Public PyPI installation and safe Docker first-contact validation must keep Git prerequisites and evidence boundaries visible.
   documents:

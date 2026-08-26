@@ -215,6 +215,39 @@ dd {
   color: var(--accent-2);
 }
 
+.filter-panel {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) repeat(2, minmax(160px, 0.35fr));
+  gap: 12px;
+  align-items: end;
+  margin: 0 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 14px;
+}
+
+.filter-panel label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.filter-panel input,
+.filter-panel select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 10px 12px;
+  font: inherit;
+  text-transform: none;
+}
+
 .summary-list {
   display: grid;
   gap: 10px;
@@ -337,6 +370,7 @@ th {
   .quickstart-grid,
   .metrics,
   .command-links,
+  .filter-panel,
   .status-board,
   .compact-details,
   dl {

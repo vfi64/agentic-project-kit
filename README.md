@@ -475,22 +475,22 @@ GUI and website projections may add presentation-only guidance over that surface
 
 ## Generated website foundation
 
-`site/scripts/build.py` uses `agentic_project_kit.site_generator` to write the
-ignored `site/dist/` artifact from repository sources. It derives package
-version, Python requirement, command count, `meta.manifest_sha`,
-`manifest_sha(commands)`, and build commit from current repo state. The site is
-not a second hand-maintained technical truth surface; future technical claim
-status must be computed from evidence bindings.
+`site/scripts/build.py` uses `agentic_project_kit.site_generator` for ignored
+`site/dist/`: package version, Python requirement, command
+count, `meta.manifest_sha`, `manifest_sha(commands)`, and build commit. The
+site is not a second hand-maintained technical truth surface.
 
-Published Pages entry point: <https://vfi64.github.io/agentic-project-kit/>.
-The generated quickstart is at
-<https://vfi64.github.io/agentic-project-kit/site/quickstart/>.
+Pages: <https://vfi64.github.io/agentic-project-kit/>. Workflow
+chooser: <https://vfi64.github.io/agentic-project-kit/site/workflows/>
+(`workflows/index.html`, `workflows/workflows.json`). `Choose How You Want To Work`:
+File Transfer, Copy and Paste, Agent Direct, and
+experimental early GUI surface. Brownfield evidence:
+`docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json`; status
+`B1_EVALUABLE`; general Brownfield portability is not claimed.
 
-For legacy `main` `/docs` GitHub Pages,
-`python site/scripts/build.py --docs-pages-fallback --json` writes
-`docs/index.html`, `docs/.nojekyll`, and `docs/site/`; `site/dist/` stays
-ignored.
-`site/` and `/docs` Pages fallback files are excluded from Python sdist and wheel artifacts.
+legacy `main` `/docs`: `python site/scripts/build.py --docs-pages-fallback --json`
+writes `docs/index.html`, `docs/.nojekyll`, and `docs/site/`; `site/dist/`
+stays ignored. `site/` and `/docs` Pages fallback files are excluded from Python sdist and wheel artifacts.
 
 - `agentic-kit workspace dpa-intake`: run the deterministic one-shot DPA intake for a target repository by resolving exact-ref evidence, running workspace adoption analysis and DPA repo-adoption assessment, generating an adjudication plan, and optionally writing bounded intake evidence without migration or external-repo conformance claims.
 - `agentic-kit workspace remove`: plan or execute bounded removal of exact Kit-generated workspace files while preserving modified, unknown, source, and project-documentation paths.

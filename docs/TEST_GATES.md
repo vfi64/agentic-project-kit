@@ -304,6 +304,18 @@ HTML command lists. `commands/guided.html` is generated from
 and `commands/commands.json` plus `commands/index.html` from the complete
 manifest. The build must fail on missing or invalid command `surface`, `safety`,
 `dry_run_available`, `when_to_use` or `params` metadata.
+The complete command reference must keep search, safety filter and surface filter
+controls bound to manifest-derived row metadata; added filters are
+presentation helpers and must not rewrite the manifest safety or surface values.
+
+The generated workflow chooser is `workflows/index.html`, with machine-readable
+projection data in `workflows/workflows.json`. It must start from
+`Choose How You Want To Work` and project the current public modes: File Transfer,
+Copy and Paste, Agent Direct, and the experimental early GUI surface.
+Workflow pages must keep the distinction between Git history, GitHub PR review,
+CI checks, AGENTS.md executor guidance, and the Kit's durable repository state,
+rules, evidence, command metadata and handoffs. The Kit itself makes no LLM API calls;
+executor services may have their own costs.
 
 Claim-evidence rendering must compute status during the build. `site/content/claims.yaml`
 must not store derived `status` or `verified` fields. Supported evidence types
@@ -312,6 +324,12 @@ are `pyproject-entrypoint`, `pyproject-value`, `command-manifest`,
 the build when unverified; optional claims render as unverified without blocking
 unrelated website publication. `pytest-node` evidence must execute the named test node.
 `generated-artifact` evidence must validate manifest-command coverage rather than file existence.
+Brownfield public claims must be evidence-bound to
+`docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json` and may currently
+claim only `B1_EVALUABLE`: five real maintenance cycles provide evidence beyond
+self-hosting, but one familiar private repository is not enough to establish
+general Brownfield portability. The website must not collapse `kit_main`,
+`released_package`, and `external_retest` evidence types into one release claim.
 
 GitHub Pages workflow changes must parse as YAML and keep `.github/workflows/pages.yml`
 build-gated by the generated site build and site tests. The workflow must run

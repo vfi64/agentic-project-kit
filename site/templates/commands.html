@@ -11,6 +11,7 @@
       <nav class="topnav" aria-label="Site">
         <a href="../index.html">Overview</a>
         <a href="../quickstart/index.html">Quickstart</a>
+        <a href="../workflows/index.html">Workflows</a>
         <a href="guided.html">Guided</a>
         <a href="diagnostics.html">Diagnostics</a>
         <a href="index.html">Complete</a>
@@ -22,6 +23,26 @@
         <h1 id="command-title">${title}</h1>
         <p class="lede">${description}</p>
         <p class="catalog-meta">Version <code>${package_version}</code> · Manifest <code>${manifest_sha}</code> · Commands <code>${command_count}</code></p>
+      </section>
+
+      <section class="filter-panel" aria-label="Command filters">
+        <label>Search <input id="command-search" type="search" placeholder="agentic-kit transfer"></label>
+        <label>Safety
+          <select id="safety-filter">
+            <option value="">All</option>
+            <option value="READ_ONLY">READ_ONLY</option>
+            <option value="BOUNDED">BOUNDED</option>
+            <option value="DESTRUCTIVE">DESTRUCTIVE</option>
+          </select>
+        </label>
+        <label>Surface
+          <select id="surface-filter">
+            <option value="">All</option>
+            <option value="orchestrator">orchestrator</option>
+            <option value="diagnostic">diagnostic</option>
+            <option value="primitive">primitive</option>
+          </select>
+        </label>
       </section>
 
       <section class="table-wrap" aria-label="${title}">
@@ -44,6 +65,27 @@ ${rows}
           </tbody>
         </table>
       </section>
+      <script>
+        const rows = Array.from(document.querySelectorAll("tbody tr"));
+        const search = document.querySelector("#command-search");
+        const safety = document.querySelector("#safety-filter");
+        const surface = document.querySelector("#surface-filter");
+        function applyFilters() {
+          const query = search.value.trim().toLowerCase();
+          const safetyValue = safety.value;
+          const surfaceValue = surface.value;
+          for (const row of rows) {
+            const text = row.dataset.commandText || "";
+            const okQuery = !query || text.includes(query);
+            const okSafety = !safetyValue || row.dataset.safety === safetyValue;
+            const okSurface = !surfaceValue || row.dataset.surface === surfaceValue;
+            row.hidden = !(okQuery && okSafety && okSurface);
+          }
+        }
+        search.addEventListener("input", applyFilters);
+        safety.addEventListener("change", applyFilters);
+        surface.addEventListener("change", applyFilters);
+      </script>
     </main>
   </body>
 </html>

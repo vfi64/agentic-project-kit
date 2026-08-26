@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Workflows - Agentic Execution Runtime</title>
+    <link rel="stylesheet" href="../static/site.css">
+  </head>
+  <body>
+    <main class="page">
+      <nav class="topnav" aria-label="Site">
+        <a href="../index.html">Overview</a>
+        <a href="../quickstart/index.html">Quickstart</a>
+        <a href="index.html">Workflows</a>
+        <a href="../commands/guided.html">Guided</a>
+        <a href="../commands/diagnostics.html">Diagnostics</a>
+        <a href="../commands/index.html">Complete</a>
+        <a href="../claims/index.html">Claims</a>
+      </nav>
+
+      <section class="overview" aria-labelledby="workflow-title">
+        <div>
+          <p class="eyebrow">Core workflows</p>
+          <h1 id="workflow-title">Choose How You Want To Work</h1>
+          <p class="lede">Start with the communication mode, then follow the generated workflow to manifest-backed commands. The command list is the reference layer, not the first thing a new user has to decode.</p>
+          <p class="catalog-meta">Version <code>1.0.5</code> · Manifest <code>4306de047e3f</code></p>
+        </div>
+        <article class="panel">
+          <p class="eyebrow">Separation</p>
+          <h2>Executor Is Replaceable; Repository Governance Persists</h2>
+          <p>Codex, Claude, hosted models, local models, or humans may execute work where their environment allows it. The repository keeps the durable state, command manifest, gates, evidence and handoff boundary.</p>
+        </article>
+      </section>
+
+      <section class="section-grid" aria-label="Workflow modes">
+        <article class="panel workflow-card" id="mode-file-transfer"><p class="eyebrow">primary web-LLM path</p><h2>File Transfer</h2><p>The human and the LLM exchange bounded Kit transfer files while the repository remains the source of truth.</p><p><strong>Best for:</strong> Web or hosted LLMs without direct terminal or repository access.</p><ul class="summary-list command-flow">
+          <li><a href="../commands/index.html"><code>agentic-kit transfer read-user-task</code></a><span>Run agentic-kit transfer read-user-task.</span><small>primitive · BOUNDED</small></li>
+          <li><a href="../commands/index.html"><code>agentic-kit transfer submit-user-task</code></a><span>Run agentic-kit transfer submit-user-task.</span><small>primitive · BOUNDED</small></li>
+          <li><a href="../commands/index.html"><code>agentic-kit transfer remote-next</code></a><span>Run the next repo-backed transfer order for local or remote work handoff.</span><small>orchestrator · BOUNDED</small></li>
+          <li><a href="../commands/index.html"><code>agentic-kit transfer chat-switch-complete</code></a><span>Create a deterministic successor handoff package and prompt projections.</span><small>orchestrator · BOUNDED</small></li>
+</ul></article>
+        <article class="panel workflow-card" id="mode-copy-paste"><p class="eyebrow">manual fallback</p><h2>Copy and Paste</h2><p>The LLM proposes a bounded terminal block, the human runs it, and the important output is returned to the conversation.</p><p><strong>Best for:</strong> Small manual web-LLM sessions where a file-transfer carrier is not needed.</p><ul class="summary-list command-flow">
+          <li><a href="../commands/index.html"><code>agentic-kit workflow request</code></a><span>Request the configured declarative workflow without running it.</span><small>primitive · BOUNDED</small></li>
+          <li><a href="../commands/index.html"><code>agentic-kit workflow run</code></a><span>Run the current workflow, or set a stored workflow item and run it.</span><small>primitive · BOUNDED</small></li>
+          <li><a href="../commands/index.html"><code>agentic-kit transfer log-header</code></a><span>Render the dynamic local-to-LLM copy/paste log header from rule files.</span><small>primitive · BOUNDED</small></li>
+          <li><a href="../commands/index.html"><code>agentic-kit transfer chat-switch-complete</code></a><span>Create a deterministic successor handoff package and prompt projections.</span><small>orchestrator · BOUNDED</small></li>
+</ul></article>
+        <article class="panel workflow-card" id="mode-agent-direct"><p class="eyebrow">executor-controlled workspace path</p><h2>Agent Direct</h2><p>The executor can run Kit commands directly, but repository governance, evidence, safety classes and handoff state remain separate from the agent.</p><p><strong>Best for:</strong> Executors with controlled repository and terminal access.</p><ul class="summary-list command-flow">
+          <li><a href="../commands/index.html"><code>agentic-kit command-for</code></a><span>Select the deterministic wrapper command for a raw command or task tag.</span><small>diagnostic · READ_ONLY</small></li>
+          <li><a href="../commands/index.html"><code>agentic-kit transfer remote-work-start</code></a><span>Prepare a remote work branch with freshness, status, and transfer safety checks.</span><small>orchestrator · BOUNDED</small></li>
+          <li><a href="../commands/index.html"><code>agentic-kit transfer pr-create-complete</code></a><span>Create, validate, merge, and optionally close out a PR without manual PR/SHA copying.</span><small>orchestrator · BOUNDED</small></li>
+          <li><a href="../commands/index.html"><code>agentic-kit transfer protected-diff-plan</code></a><span>Write the current diff to /tmp and run the Python protected change planner on it.</span><small>diagnostic · READ_ONLY</small></li>
+          <li><a href="../commands/index.html"><code>agentic-kit transfer chat-switch-complete</code></a><span>Create a deterministic successor handoff package and prompt projections.</span><small>orchestrator · BOUNDED</small></li>
+</ul></article>
+        <article class="panel workflow-card" id="mode-gui"><p class="eyebrow">experimental early surface</p><h2>GUI</h2><p>The GUI entry point is available, but full parity with every CLI command is not claimed. The manifest remains the command authority.</p><p><strong>Best for:</strong> Local operator visibility over manifest-backed actions and readiness checks.</p><ul class="summary-list command-flow">
+          <li><a href="../commands/index.html"><code>agentic-kit gui-readiness-gate</code></a><span>Run the pre-GUI readiness gate.</span><small>diagnostic · BOUNDED</small></li>
+          <li><a href="../commands/index.html"><code>agentic-kit cockpit run</code></a><span>Run agentic-kit cockpit run.</span><small>primitive · BOUNDED</small></li>
+          <li><a href="../commands/index.html"><code>agentic-kit cockpit select</code></a><span>Run agentic-kit cockpit select.</span><small>primitive · BOUNDED</small></li>
+</ul></article>
+      </section>
+
+      <section class="band" aria-labelledby="minimal-cycle-title">
+        <div>
+          <p class="eyebrow">Minimal cycle</p>
+          <h2 id="minimal-cycle-title">Task To Handoff</h2>
+          <ul class="summary-list">
+          <li><strong>Select the interaction mode</strong><span>Choose File Transfer, Copy and Paste, Agent Direct, or the experimental GUI surface.</span></li>
+          <li><strong>Inspect before mutation</strong><span>Use read-only or dry-run commands where available and keep target-owned decisions explicit.</span></li>
+          <li><strong>Run a bounded slice</strong><span>Make one coherent change on a branch, record gates and evidence, and keep PR review visible.</span></li>
+          <li><strong>Close the handoff</strong><span>Generate the successor package so another session or executor can continue from repository state.</span></li>
+          </ul>
+        </div>
+        <article class="panel">
+          <p class="eyebrow">Why not only Git, CI and AGENTS.md?</p>
+          <p>The Kit complements Git and CI; it does not replace them. Git records history, GitHub coordinates PRs, CI validates configured checks, and AGENTS.md guides an executor. The Kit keeps long-lived operational state, governance, evidence, command metadata and handoffs in the repository.</p>
+        </article>
+      </section>
+
+      <section class="section-grid" aria-label="Workflow boundaries">
+        <article class="panel">
+          <p class="eyebrow">Boundaries</p>
+          <h2>What Persists</h2>
+          <ul class="summary-list">
+          <li><span>Git records history and diffs; the Kit adds machine-readable operational state and handoff contracts.</span></li>
+          <li><span>GitHub PRs coordinate review; the Kit wraps PR lifecycle checks when evidence is available.</span></li>
+          <li><span>CI validates configured checks; the Kit records when remote target-CI is absent or not claimed.</span></li>
+          <li><span>AGENTS.md guides an executor; the Kit keeps durable governance, evidence and command metadata in the repository.</span></li>
+          <li><span>The executor is replaceable; repository governance persists.</span></li>
+          <li><span>The Kit itself makes no LLM API calls and does not require an LLM API; executor services may have their own costs.</span></li>
+          <li><span>YAML and JSON state are versioned, diffable and reviewable, but they create file volume and projection-refresh work.</span></li>
+          </ul>
+        </article>
+        <article class="panel">
+          <p class="eyebrow">State format</p>
+          <h2>Why YAML And JSON</h2>
+          <p>Repository state is versioned, diffable, reviewable, and portable between sessions, machines and executors. The tradeoff is more files and explicit projection refresh work instead of an invisible state service.</p>
+        </article>
+      </section>
+
+      <section class="status-board" aria-labelledby="brownfield-title">
+        <div class="status-board-head">
+          <p class="eyebrow">Evidence-bound Brownfield result</p>
+          <h2 id="brownfield-title">B1 Closeout</h2>
+          <p>Five real maintenance cycles provide evidence beyond self-hosting, but one familiar repository is not enough to establish general Brownfield portability.</p>
+          <p class="catalog-meta">Status <code>B1_EVALUABLE</code> · Source <code>docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json</code> · Rule-Ack evidence <code>kit_main_external_retest_not_released_package</code></p>
+        </div>
+        <article>
+          <h3>Measured Facts</h3>
+          <ul class="summary-list">
+          <li><strong>Status</strong><span>B1_EVALUABLE</span></li>
+          <li><strong>Real cycles</strong><span>5</span></li>
+          <li><strong>Merge-boundary cycles</strong><span>4</span></li>
+          <li><strong>Administrative refresh PRs</strong><span>6</span></li>
+          <li><strong>Legacy seams</strong><span>72 to 58</span></li>
+          <li><strong>Full-suite runs</strong><span>1483 to 1490 tests</span></li>
+          <li><strong>Cycle 005</strong><span>Cycle 005 changed CI configuration rather than functional code, so it has no historical local full-suite entry.</span></li>
+          <li><strong>Core defects found</strong><span>4</span></li>
+          </ul>
+        </article>
+        <article>
+          <h3>Limits</h3>
+          <ul class="summary-list">
+            <li><span>The Brownfield repository was familiar and private, not an independent public adopter.</span></li>
+            <li><span>Cycle 005 changed CI configuration and has no historical local full-suite entry.</span></li>
+            <li><span>The external merge wrapper still has a local non-return defect after successful remote merge.</span></li>
+            <li><span>Fixes on Kit main and fixes in a released package are separate evidence types.</span></li>
+          </ul>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
