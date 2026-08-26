@@ -35,6 +35,8 @@ This slice hardens the deterministic PR/merge status core:
   `staleRemoteEvidence`;
 - stale duplicate run records are neutralized when a same-named successful run
   exists for the same head;
+- empty PR check rollups can be supplemented from exact head-SHA GitHub Actions
+  runs on the PR branch;
 - PR status rendering exposes `stale_checks`.
 
 ## Current Remote Evidence
@@ -61,9 +63,15 @@ replacement evidence exists, and preserve the anomaly as diagnostic evidence.
 Deletion of a workflow run is an evidence-retention decision, not a clean CI
 completion.
 
+If GitHub opens a PR with an empty check rollup, the governed path may use
+same-branch, same-commit Actions runs as replacement evidence. If neither PR
+checks nor exact-head replacement runs exist, the PR remains blocked; do not
+merge it through raw GitHub commands.
+
 ## Regression Tests
 
 - `tests/test_next_turn_pr_status.py`
 - `tests/test_next_turn_merge_if_green.py`
+- `tests/test_pr_ci_readiness.py`
 - `tests/test_transfer_pr_actions.py`
 - `tests/test_transfer_repo_actions.py`

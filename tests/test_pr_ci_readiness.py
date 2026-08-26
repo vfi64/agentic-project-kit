@@ -8,6 +8,7 @@ from agentic_project_kit.ci_readiness import (
     TIMEOUT,
     WAITING,
     classify_pr_readiness,
+    gh_pr_snapshot_provider,
     render_pr_readiness,
     wait_for_pr_readiness,
 )
@@ -84,6 +85,42 @@ def test_no_checks_waits_instead_of_false_pass():
     assert "no status checks" in decision.reasons[0]
 
 
+def test_stale_zero_job_check_blocks_without_wait_loop():
+    snapshot = clean_snapshot()
+    snapshot["statusCheckRollup"] = [
+        {
+            "name": "CI",
+            "status": "QUEUED",
+            "conclusion": "",
+            "staleRemoteEvidence": True,
+        }
+    ]
+
+    decision = classify_pr_readiness(snapshot)
+
+    assert decision.outcome == BLOCKED
+    assert decision.terminal
+    assert decision.reasons == ("stale queued/no-job remote check: CI",)
+
+
+def test_stale_duplicate_check_does_not_block_same_named_success():
+    snapshot = clean_snapshot()
+    snapshot["statusCheckRollup"] = [
+        {"name": "CI", "status": "COMPLETED", "conclusion": "SUCCESS"},
+        {
+            "name": "CI",
+            "status": "QUEUED",
+            "conclusion": "",
+            "staleRemoteEvidence": True,
+        },
+    ]
+
+    decision = classify_pr_readiness(snapshot)
+
+    assert decision.outcome == READY_TO_MERGE
+    assert decision.success
+
+
 def test_missing_expected_check_waits_not_passes():
     decision = classify_pr_readiness(clean_snapshot(), expected_checks=("test", "lint"))
     assert decision.outcome == WAITING
@@ -151,6 +188,84 @@ def test_wait_for_pr_readiness_turns_provider_error_into_terminal_failure():
     assert decision.terminal
     assert not decision.success
     assert decision.reasons == ("gh unavailable",)
+
+
+def test_gh_pr_snapshot_provider_uses_exact_head_actions_fallback(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(command, check=False, capture_output=True, text=True):
+        calls.append(command)
+        if command[:3] == ["gh", "pr", "view"]:
+            return type(
+                "Completed",
+                (),
+                {
+                    "returncode": 0,
+                    "stdout": (
+                        '{"state":"OPEN","headRefOid":"abc123","headRefName":"feature",'
+                        '"mergeStateStatus":"CLEAN","mergeable":"MERGEABLE","statusCheckRollup":[]}'
+                    ),
+                    "stderr": "",
+                },
+            )()
+        if command[:4] == ["gh", "run", "list", "--branch"]:
+            return type(
+                "Completed",
+                (),
+                {
+                    "returncode": 0,
+                    "stdout": (
+                        '[{"databaseId":123456,"name":"CI","workflowName":"CI",'
+                        '"status":"completed","conclusion":"success",'
+                        '"url":"https://github.com/vfi64/agentic-project-kit/actions/runs/123456",'
+                        '"createdAt":"2026-08-26T15:39:51Z","updatedAt":"2026-08-26T15:42:00Z"}]'
+                    ),
+                    "stderr": "",
+                },
+            )()
+        if command == ["gh", "api", "repos/{owner}/{repo}/actions/runs/123456/jobs"]:
+            return type("Completed", (), {"returncode": 0, "stdout": '{"total_count":1}', "stderr": ""})()
+        raise AssertionError(command)
+
+    import agentic_project_kit.ci_readiness as ci_readiness
+
+    monkeypatch.setattr(ci_readiness.subprocess, "run", fake_run)
+
+    payload = gh_pr_snapshot_provider(2185)()
+
+    assert payload["statusCheckRollup"][0]["name"] == "CI"
+    assert payload["statusCheckRollup"][0]["conclusion"] == "success"
+    assert calls[0][:3] == ["gh", "pr", "view"]
+    assert calls[1][:4] == ["gh", "run", "list", "--branch"]
+
+
+def test_gh_pr_snapshot_provider_keeps_no_checks_when_actions_fallback_fails(monkeypatch):
+    def fake_run(command, check=False, capture_output=True, text=True):
+        if command[:3] == ["gh", "pr", "view"]:
+            return type(
+                "Completed",
+                (),
+                {
+                    "returncode": 0,
+                    "stdout": (
+                        '{"state":"OPEN","headRefOid":"abc123","headRefName":"feature",'
+                        '"mergeStateStatus":"CLEAN","mergeable":"MERGEABLE","statusCheckRollup":[]}'
+                    ),
+                    "stderr": "",
+                },
+            )()
+        if command[:4] == ["gh", "run", "list", "--branch"]:
+            return type("Completed", (), {"returncode": 1, "stdout": "", "stderr": "actions unavailable"})()
+        raise AssertionError(command)
+
+    import agentic_project_kit.ci_readiness as ci_readiness
+
+    monkeypatch.setattr(ci_readiness.subprocess, "run", fake_run)
+
+    payload = gh_pr_snapshot_provider(2185)()
+
+    assert payload["statusCheckRollup"] == []
+    assert payload["statusCheckRollupFallbackError"] == "actions unavailable"
 
 
 def test_render_pr_readiness_includes_machine_readable_outcome():

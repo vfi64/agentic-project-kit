@@ -9,6 +9,8 @@ import subprocess
 from dataclasses import dataclass, replace
 from typing import Any, Literal
 
+from agentic_project_kit.github_actions_run_checks import fetch_action_run_checks
+
 Decision = Literal["green", "red", "pending", "no-checks", "stale", "unknown", "not-open"]
 FailedLogStatus = Literal["not-fetched", "fetched", "unavailable", "missing-run-id"]
 
@@ -231,6 +233,10 @@ def _run_gh(args: list[str]) -> str:
     return completed.stdout
 
 
+def _run_gh_json(args: list[str]) -> Any:
+    return json.loads(_run_gh(args))
+
+
 def fetch_pr_payload(pr: str) -> dict[str, Any]:
     raw = _run_gh([
         "pr",
@@ -242,6 +248,23 @@ def fetch_pr_payload(pr: str) -> dict[str, Any]:
     payload = json.loads(raw)
     if not isinstance(payload, dict):
         raise RuntimeError("gh pr view did not return a JSON object")
+    checks = payload.get("statusCheckRollup") or []
+    if isinstance(checks, list) and not checks:
+        head_sha = str(payload.get("headRefOid") or "")
+        head_branch = str(payload.get("headRefName") or "")
+        if head_sha and head_branch:
+            try:
+                fallback_checks = fetch_action_run_checks(
+                    commit_sha=head_sha,
+                    branch=head_branch,
+                    run_gh_json=_run_gh_json,
+                )
+            except RuntimeError as exc:
+                payload["statusCheckRollupFallbackError"] = str(exc)
+                fallback_checks = []
+            if fallback_checks:
+                payload["statusCheckRollup"] = fallback_checks
+                payload["statusCheckRollupSource"] = "actions_head_runs_fallback"
     return payload
 
 
