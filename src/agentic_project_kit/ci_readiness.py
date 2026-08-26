@@ -208,7 +208,7 @@ def gh_pr_snapshot_provider(pr_number: int) -> SnapshotProvider:
                 "view",
                 str(pr_number),
                 "--json",
-                "state,headRefOid,mergeStateStatus,mergeable,statusCheckRollup",
+                "state,headRefOid,headRefName,mergeStateStatus,mergeable,statusCheckRollup",
             ],
             check=False,
             capture_output=True,

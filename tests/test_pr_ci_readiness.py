@@ -236,6 +236,7 @@ def test_gh_pr_snapshot_provider_uses_exact_head_actions_fallback(monkeypatch):
     assert payload["statusCheckRollup"][0]["name"] == "CI"
     assert payload["statusCheckRollup"][0]["conclusion"] == "success"
     assert calls[0][:3] == ["gh", "pr", "view"]
+    assert "headRefName" in calls[0][5]
     assert calls[1][:4] == ["gh", "run", "list", "--branch"]
 
 
