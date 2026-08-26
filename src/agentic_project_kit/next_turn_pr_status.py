@@ -9,7 +9,7 @@ import subprocess
 from dataclasses import dataclass, replace
 from typing import Any, Literal
 
-Decision = Literal["green", "red", "pending", "no-checks", "unknown", "not-open"]
+Decision = Literal["green", "red", "pending", "no-checks", "stale", "unknown", "not-open"]
 FailedLogStatus = Literal["not-fetched", "fetched", "unavailable", "missing-run-id"]
 
 
@@ -35,6 +35,7 @@ class PrStatusDecision:
     successful_checks: tuple[str, ...]
     pending_checks: tuple[str, ...]
     failed_checks: tuple[str, ...]
+    stale_checks: tuple[str, ...]
     unknown_checks: tuple[str, ...]
     failed_run_log_hint: str
     failed_run_diagnostics: tuple[FailedRunDiagnostic, ...]
@@ -68,6 +69,7 @@ def classify_pr_status(payload: dict[str, Any], *, pr: str = "") -> PrStatusDeci
     successful: list[str] = []
     pending: list[str] = []
     failed: list[str] = []
+    stale: list[str] = []
     unknown: list[str] = []
     failed_diagnostics: list[FailedRunDiagnostic] = []
 
@@ -83,7 +85,10 @@ def classify_pr_status(payload: dict[str, Any], *, pr: str = "") -> PrStatusDeci
             name = _check_name(item)
             status = str(item.get("status") or "").upper()
             conclusion = str(item.get("conclusion") or "").upper()
-            if status != "COMPLETED":
+            stale_remote_evidence = bool(item.get("staleRemoteEvidence"))
+            if stale_remote_evidence and status != "COMPLETED":
+                stale.append(name)
+            elif status != "COMPLETED":
                 pending.append(name)
             elif conclusion == "SUCCESS":
                 successful.append(name)
@@ -93,10 +98,14 @@ def classify_pr_status(payload: dict[str, Any], *, pr: str = "") -> PrStatusDeci
             else:
                 unknown.append(name)
 
+        successful_names = set(successful)
+        uncovered_stale = [name for name in stale if name not in successful_names]
         if failed:
             decision = "red"
         elif pending:
             decision = "pending"
+        elif uncovered_stale:
+            decision = "stale"
         elif unknown:
             decision = "unknown"
         else:
@@ -116,6 +125,7 @@ def classify_pr_status(payload: dict[str, Any], *, pr: str = "") -> PrStatusDeci
         successful_checks=tuple(successful),
         pending_checks=tuple(pending),
         failed_checks=tuple(failed),
+        stale_checks=tuple(stale),
         unknown_checks=tuple(unknown),
         failed_run_log_hint=hint,
         failed_run_diagnostics=tuple(failed_diagnostics),
@@ -187,6 +197,8 @@ def render_decision(decision: PrStatusDecision) -> str:
         *[f"- {item}" for item in decision.pending_checks],
         "failed_checks:",
         *[f"- {item}" for item in decision.failed_checks],
+        "stale_checks:",
+        *[f"- {item}" for item in decision.stale_checks],
         "unknown_checks:",
         *[f"- {item}" for item in decision.unknown_checks],
         f"failed_run_log_hint={decision.failed_run_log_hint}",
@@ -207,7 +219,8 @@ def render_decision(decision: PrStatusDecision) -> str:
             lines.append(f"  error={diagnostic.error}")
         lines.append("  log_excerpt:")
         lines.extend(_render_indented_block(diagnostic.log_excerpt, indent="    "))
-    lines.append("### RESULT: PASS ###")
+    marker = "PASS" if decision.decision == "green" else "FAIL"
+    lines.append(f"### RESULT: {marker} ###")
     return "\n".join(lines)
 
 

@@ -6,6 +6,7 @@ import subprocess
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from typing import Any
 from typing import Literal
 
@@ -49,6 +50,7 @@ class MergeIfGreenResult:
     main_verification_required: bool = False
     main_status_decision: PrStatusDecision | None = None
     main_verification_error: str = ""
+    dry_run: bool = False
 
 
 def decide_merge(status: PrStatusDecision) -> tuple[MergeDecision, str]:
@@ -176,6 +178,59 @@ def fetch_merge_commit_sha(pr: str) -> str:
     return str(merge_commit.get("oid") or "")
 
 
+def _run_id_from_url(url: str) -> str:
+    marker = "/actions/runs/"
+    if marker not in url:
+        return ""
+    tail = url.split(marker, 1)[1]
+    return tail.split("/", 1)[0]
+
+
+def _parse_github_datetime(value: object) -> datetime | None:
+    if not value:
+        return None
+    text = str(value)
+    if text.endswith("Z"):
+        text = text[:-1] + "+00:00"
+    try:
+        parsed = datetime.fromisoformat(text)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def _stale_zero_job_run(run: dict[str, Any], *, now: datetime, stale_after_seconds: int) -> bool:
+    status = str(run.get("status") or "").lower()
+    conclusion = str(run.get("conclusion") or "")
+    if status not in {"queued", "in_progress"} or conclusion:
+        return False
+    try:
+        job_count = int(run.get("jobCount"))
+    except (TypeError, ValueError):
+        return False
+    if job_count != 0:
+        return False
+    updated_at = _parse_github_datetime(run.get("updatedAt") or run.get("updated_at") or run.get("createdAt"))
+    if updated_at is None:
+        return False
+    return (now - updated_at).total_seconds() >= stale_after_seconds
+
+
+def _fetch_run_job_count(run_id: str) -> int | None:
+    try:
+        payload = _run_gh_json(["api", f"repos/{{owner}}/{{repo}}/actions/runs/{run_id}/jobs"])
+    except RuntimeError:
+        return None
+    if not isinstance(payload, dict):
+        return None
+    try:
+        return int(payload.get("total_count"))
+    except (TypeError, ValueError):
+        return None
+
+
 def fetch_main_run_payload(commit_sha: str, branch: str) -> dict[str, Any]:
     runs = _run_gh_json(
         [
@@ -188,21 +243,33 @@ def fetch_main_run_payload(commit_sha: str, branch: str) -> dict[str, Any]:
             "--limit",
             "20",
             "--json",
-            "databaseId,status,conclusion,name,workflowName,url",
+            "createdAt,databaseId,status,conclusion,name,workflowName,url,updatedAt",
         ]
     )
     if not isinstance(runs, list):
         raise RuntimeError("gh run list did not return a JSON array")
     checks: list[dict[str, Any]] = []
+    now = datetime.now(timezone.utc)
     for run in runs:
         if not isinstance(run, dict):
             continue
+        run_id = str(run.get("databaseId") or _run_id_from_url(str(run.get("url") or "")))
+        job_count = _fetch_run_job_count(run_id) if run_id else None
+        enriched_run = dict(run)
+        if job_count is not None:
+            enriched_run["jobCount"] = job_count
         checks.append(
             {
                 "name": run.get("name") or run.get("workflowName") or "workflow",
                 "status": run.get("status"),
                 "conclusion": run.get("conclusion"),
                 "detailsUrl": run.get("url") or "",
+                "jobCount": job_count,
+                "staleRemoteEvidence": _stale_zero_job_run(
+                    enriched_run,
+                    now=now,
+                    stale_after_seconds=600,
+                ),
             }
         )
     return {
@@ -304,6 +371,7 @@ def merge_if_green(
             expected_base_branch=effective_expected_base_branch,
             expected_head_sha=effective_expected_head_sha,
             main_verification_required=False,
+            dry_run=dry_run,
         )
 
     args = build_merge_args(
@@ -352,6 +420,7 @@ def merge_if_green(
         main_verification_required=verify_main,
         main_status_decision=main_status,
         main_verification_error=main_error,
+        dry_run=False,
     )
 
 
@@ -359,6 +428,12 @@ def main_verification_passed(result: MergeIfGreenResult) -> bool:
     if not result.main_verification_required:
         return True
     return result.main_status_decision is not None and result.main_status_decision.decision == "green"
+
+
+def merge_result_passed(result: MergeIfGreenResult) -> bool:
+    if result.dry_run:
+        return result.decision == "merge" and result.status_decision.decision == "green"
+    return result.decision == "merge" and result.merged and main_verification_passed(result)
 
 
 def _render_failed_run_diagnostics(status: PrStatusDecision | None) -> list[str]:
@@ -388,7 +463,7 @@ def render_result(result: MergeIfGreenResult) -> str:
     main_status = result.main_status_decision
     main_decision = main_status.decision if main_status is not None else "not-run"
     main_failed_hint = main_status.failed_run_log_hint if main_status is not None else "none"
-    final_marker = "### RESULT: PASS ###" if main_verification_passed(result) else "### RESULT: FAIL ###"
+    final_marker = "### RESULT: PASS ###" if merge_result_passed(result) else "### RESULT: FAIL ###"
     lines = [
         "NEXT_TURN_MERGE_IF_GREEN",
         f"pr={result.pr}",
@@ -404,6 +479,7 @@ def render_result(result: MergeIfGreenResult) -> str:
         f"expected_base_branch={result.expected_base_branch or '(unspecified)'}",
         f"expected_head_sha={result.expected_head_sha or '(unknown)'}",
         f"merged={str(result.merged).lower()}",
+        f"dry_run={str(result.dry_run).lower()}",
         f"merge_commit_sha={result.merge_commit_sha or '(unknown)'}",
         f"main_verification_required={str(result.main_verification_required).lower()}",
         f"main_verification_decision={main_decision}",
@@ -414,6 +490,8 @@ def render_result(result: MergeIfGreenResult) -> str:
         *[f"- {item}" for item in result.status_decision.failed_checks],
         "pending_checks:",
         *[f"- {item}" for item in result.status_decision.pending_checks],
+        "stale_checks:",
+        *[f"- {item}" for item in result.status_decision.stale_checks],
         "unknown_checks:",
         *[f"- {item}" for item in result.status_decision.unknown_checks],
         "main_failed_run_diagnostics:",
@@ -452,7 +530,7 @@ def main() -> int:
     print(render_result(result))
     if args.dry_run:
         return 0
-    return 0 if result.decision == "merge" and main_verification_passed(result) else 1
+    return 0 if merge_result_passed(result) else 1
 
 
 if __name__ == "__main__":

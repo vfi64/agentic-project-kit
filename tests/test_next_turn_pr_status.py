@@ -113,6 +113,55 @@ def test_classify_no_checks_pr_status() -> None:
     assert decision.decision == "no-checks"
 
 
+def test_classify_stale_zero_job_check_without_success_as_stale() -> None:
+    decision = classify_pr_status(
+        {
+            "state": "OPEN",
+            "mergeStateStatus": "CLEAN",
+            "headRefOid": "abc",
+            "statusCheckRollup": [
+                {
+                    "name": "CI",
+                    "status": "QUEUED",
+                    "conclusion": None,
+                    "jobCount": 0,
+                    "staleRemoteEvidence": True,
+                },
+            ],
+        },
+        pr="3",
+    )
+
+    assert decision.decision == "stale"
+    assert decision.stale_checks == ("CI",)
+    assert decision.pending_checks == ()
+
+
+def test_classify_stale_duplicate_is_neutralized_by_successful_same_named_check() -> None:
+    decision = classify_pr_status(
+        {
+            "state": "OPEN",
+            "mergeStateStatus": "CLEAN",
+            "headRefOid": "abc",
+            "statusCheckRollup": [
+                {"name": "CI", "status": "COMPLETED", "conclusion": "SUCCESS"},
+                {
+                    "name": "CI",
+                    "status": "QUEUED",
+                    "conclusion": None,
+                    "jobCount": 0,
+                    "staleRemoteEvidence": True,
+                },
+            ],
+        },
+        pr="3",
+    )
+
+    assert decision.decision == "green"
+    assert decision.successful_checks == ("CI",)
+    assert decision.stale_checks == ("CI",)
+
+
 def test_classify_not_open_pr_status() -> None:
     decision = classify_pr_status(
         {
@@ -141,5 +190,23 @@ def test_render_decision_contains_required_contract_lines() -> None:
     rendered = render_decision(decision)
     assert "NEXT_TURN_PR_STATUS" in rendered
     assert "decision=green" in rendered
+    assert "stale_checks:" in rendered
     assert "failed_run_diagnostics:" in rendered
     assert "### RESULT: PASS ###" in rendered
+
+
+def test_render_decision_marks_no_checks_as_failed_readiness() -> None:
+    decision = classify_pr_status(
+        {
+            "state": "OPEN",
+            "mergeStateStatus": "UNKNOWN",
+            "headRefOid": "abc",
+            "statusCheckRollup": [],
+        },
+        pr="5",
+    )
+
+    rendered = render_decision(decision)
+
+    assert "decision=no-checks" in rendered
+    assert "### RESULT: FAIL ###" in rendered
