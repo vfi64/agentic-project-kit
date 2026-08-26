@@ -13,11 +13,12 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   pages-state:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     outputs:
       deploy-ready: ${{ steps.pages.outputs.deploy-ready }}
 
@@ -48,6 +49,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: pages-state
 
     steps:
@@ -79,6 +81,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs:
       - pages-state
       - build

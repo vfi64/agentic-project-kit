@@ -37,7 +37,9 @@ This slice hardens the deterministic PR/merge status core:
   exists for the same head;
 - empty PR check rollups can be supplemented from exact head-SHA GitHub Actions
   runs on the PR branch;
-- PR status rendering exposes `stale_checks`.
+- PR status rendering exposes `stale_checks`;
+- CI and Pages workflows set bounded job timeouts and cancel superseded runs in
+  their concurrency groups.
 
 ## Current Remote Evidence
 
@@ -67,6 +69,10 @@ If GitHub opens a PR with an empty check rollup, the governed path may use
 same-branch, same-commit Actions runs as replacement evidence. If neither PR
 checks nor exact-head replacement runs exist, the PR remains blocked; do not
 merge it through raw GitHub commands.
+
+Workflow-level timeouts protect future runs from real in-job hangs. They do not
+retroactively cancel GitHub's stale queued/no-job records; those records have no
+job process to stop and must be treated as remote anomaly evidence.
 
 ## Regression Tests
 
