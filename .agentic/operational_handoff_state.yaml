@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 8018c4926e27173d8b534756bbb1e91a7eb4138f
-  short: 8018c492
-  subject: Record B1 Comm-SCI cycles 004 and 005 (#2178)
+  full: cd9543a766341fa889a103acb7859157722351f1
+  short: cd9543a7
+  subject: Support external workspace rule acknowledgement (#2180)
 last_substantive_work_state:
-  full: 8018c4926e27173d8b534756bbb1e91a7eb4138f
-  short: 8018c492
-  subject: Record B1 Comm-SCI cycles 004 and 005 (#2178)
+  full: cd9543a766341fa889a103acb7859157722351f1
+  short: cd9543a7
+  subject: Support external workspace rule acknowledgement (#2180)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

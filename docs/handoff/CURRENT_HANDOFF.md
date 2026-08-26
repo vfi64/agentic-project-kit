@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `8018c4926e27173d8b534756bbb1e91a7eb4138f` (`8018c492`), after `Record B1 Comm-SCI cycles 004 and 005 (#2178)`.
-Last substantive work state is `8018c4926e27173d8b534756bbb1e91a7eb4138f` (`8018c492`), after `Record B1 Comm-SCI cycles 004 and 005 (#2178)`.
+Current verified main/admin HEAD is `cd9543a766341fa889a103acb7859157722351f1` (`cd9543a7`), after `Support external workspace rule acknowledgement (#2180)`.
+Last substantive work state is `cd9543a766341fa889a103acb7859157722351f1` (`cd9543a7`), after `Support external workspace rule acknowledgement (#2180)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
