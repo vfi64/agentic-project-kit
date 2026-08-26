@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: cd9543a766341fa889a103acb7859157722351f1
-  short: cd9543a7
-  subject: Support external workspace rule acknowledgement (#2180)
+  full: 89e69c7183cf837e2427a814492dfef0c282fffc
+  short: 89e69c71
+  subject: Complete B1 evidence closeout and website projection
 last_substantive_work_state:
-  full: cd9543a766341fa889a103acb7859157722351f1
-  short: cd9543a7
-  subject: Support external workspace rule acknowledgement (#2180)
+  full: 89e69c7183cf837e2427a814492dfef0c282fffc
+  short: 89e69c71
+  subject: Complete B1 evidence closeout and website projection
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
