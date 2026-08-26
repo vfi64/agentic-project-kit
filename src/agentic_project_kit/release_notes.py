@@ -624,6 +624,8 @@ def _classify_subject(subject: str) -> str:
             "executor boundary",
             "command-for",
             "command surface",
+            "rule acknowledgement",
+            "rule ack",
         )
     ):
         return "Governance"
