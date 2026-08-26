@@ -1,8 +1,10 @@
 # Reddit-Entwurf: Brownfield-B1-Ergebnis
 
-Status: Entwurf, nicht veröffentlicht  
-Datum: 2026-08-26  
-Evidenzbasis: `docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md`
+Status: finaler Entwurf, nicht veröffentlicht
+Datum: 2026-08-26
+Evidenzbasis:
+`docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md` und
+`docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md`
 
 ## Mögliche Titel
 
@@ -52,15 +54,19 @@ nahm für Post-Merge-Prüfungen `main` an, obwohl das Ziel ein Integrationsbranc
 war. Der vierte betraf Rule-Acknowledgement: Externe Workspaces brauchen
 zielrepo-eigene Regelquellen statt die Self-Hosting-Regeldateien des Kits.
 
-Drei dieser Fixes sind im veröffentlichten Paket 1.0.5 und wurden aus einem
-PyPI-Install heraus erneut geprüft. Der Rule-Ack-Fix ist auf Kit-main und aus
-einem Checkout extern erneut geprüft, aber noch keine Released-Package-Evidenz.
+Drei dieser Fixes wurden mit 1.0.5 veröffentlicht und aus einem PyPI-Install
+heraus erneut geprüft. Der Rule-Ack-Fix wurde mit 1.0.6 veröffentlicht; ein
+gezielter PyPI-Retest auf dem adoptierten Comm-SCI-Integrationsbranch zeigt,
+dass externe Rule-Source-Validierung und Rule-Acknowledgement bestehen. Ich
+zähle das nicht als sechsten Wartungszyklus und nicht als neuen vollständigen
+Merge-Wrapper-Retest.
 
-Auch die Merge-Geschichte ist keine perfekte Erfolgserzählung. Nachdem das
-Zielrepo echte Remote-CI hatte, konnte der Safe-Merge-Wrapper die PRs zwar
-mergen, aber der lokale Wrapper kehrte nach erfolgreichem Remote-Merge nicht
-sauber zurück. Genau solche Reibung sollte der Test sichtbar machen, nicht
-verstecken.
+Auch die Merge-Geschichte ist keine perfekte Erfolgserzählung. Während B1,
+nachdem das Zielrepo echte Remote-CI hatte, konnte der Safe-Merge-Wrapper die
+PRs zwar mergen, aber der lokale Wrapper kehrte nach erfolgreichem Remote-Merge
+nicht sauber zurück. Die 1.0.6-Linie enthält Folge-Härtung, aber ich behandle
+sie nicht als Beweis dafür, dass ein frischer Comm-SCI-Mergezyklus jetzt
+reibungslos wäre.
 
 Der Claim bleibt deshalb bewusst eng:
 
@@ -94,6 +100,14 @@ Weitere Fragen, zu denen mich Einschätzungen interessieren würden:
   hinweg, ohne eine einzelne Agent-Runtime zur Source of Truth zu machen?
 - Falls das überengineert wirkt: Welchen Teil würdet ihr zuerst entfernen, ohne
   die zugrunde liegende Sicherheitseigenschaft zu verlieren?
+
+Links:
+
+- Projektseite: https://vfi64.github.io/agentic-project-kit/
+- Repository: https://github.com/vfi64/agentic-project-kit
+- PyPI 1.0.6: https://pypi.org/project/agentic-project-kit/1.0.6/
+- B1-Evidence-Closeout:
+  https://github.com/vfi64/agentic-project-kit/blob/main/docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
 
 ## Bewusst vermiedene Claims
 

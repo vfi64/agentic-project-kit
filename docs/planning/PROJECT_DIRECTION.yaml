@@ -2407,6 +2407,7 @@ plans:
     - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
     - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
     - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json
+    - docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
     - docs/reports/POST_V1_0_4_B1_KIT_CLOSEOUT_SETTLE_OBSERVATION_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_006_EXTERNAL_POST_MERGE_BASE_BRANCH_20260824.md
@@ -2554,7 +2555,7 @@ plans:
         timeout evidence for long waits.
       evidence: docs/reports/POST_V1_0_4_B1_KIT_CLOSEOUT_SETTLE_OBSERVATION_20260824.md
     - id: B1-KIT-009
-      status: implemented_on_main_external_retest_pass
+      status: released_package_targeted_retest_pass
       goal: Make external transfer commit/push and rule acknowledgement use adopted
         external workspace rule sources instead of Kit self-hosting rule sources.
       evidence:
@@ -2562,6 +2563,7 @@ plans:
       - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_004_RESULTS_20260826.md
       - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
       - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
+      - docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
     - id: B1-KIT-010
       status: planned
       goal: Suppress or route LegacyProfileDeprecationWarning so command-for JSON
@@ -2621,7 +2623,7 @@ plans:
       recorded_cycles: 5
       merge_boundary_cycles: 4
       latest_cycle_report: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
-      latest_cycle_result: "B1 closeout adjudicated the five recorded Comm-SCI cycles as B1_EVALUABLE under the predeclared B0 threshold: five real cycles, four merge-boundary cycles, six pure administrative refresh PRs, legacy seams 72->58, full-suite runs green where historically run, and Cycle 005 remote CI success without a historical local full-suite entry. Rule-Ack is fixed on Kit main and externally retested from checkout, but not yet released-package validated; pr-merge-safe still does not return locally after successful remote merge."
+      latest_cycle_result: "B1 closeout adjudicated the five recorded Comm-SCI cycles as B1_EVALUABLE under the predeclared B0 threshold: five real cycles, four merge-boundary cycles, six pure administrative refresh PRs, legacy seams 72->58, full-suite runs green where historically run, and Cycle 005 remote CI success without a historical local full-suite entry. Rule-Ack is released in v1.0.6 and has targeted external PyPI retest evidence on the adopted Comm-SCI integration branch; pr-merge-safe still does not return locally after successful remote merge until a new external merge-cycle retest proves otherwise."
       latest_findings:
       - feature_branch_ci_no_checks_resolved_by_target_repo_config
       - external_fresh_llm_context_carrier_path_mismatch_fixed
@@ -2665,6 +2667,7 @@ plans:
   - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
   - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
   - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json
+  - docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
   - docs/reports/POST_V1_0_5_B1_WEBSITE_REDDIT_B2_B3_CLOSEOUT_20260826.md
   - docs/reports/REDDIT_B1_BROWNFIELD_POST_EN_20260826.md
   - docs/reports/REDDIT_B1_BROWNFIELD_POST_DE_20260826.md
@@ -2693,6 +2696,7 @@ plans:
   - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
   - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
   - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json
+  - docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
   - docs/reports/POST_V1_0_5_B1_WEBSITE_REDDIT_B2_B3_CLOSEOUT_20260826.md
   - docs/reports/REDDIT_B1_BROWNFIELD_POST_EN_20260826.md
   - docs/reports/REDDIT_B1_BROWNFIELD_POST_DE_20260826.md

@@ -1,8 +1,10 @@
 # Reddit Draft: Brownfield B1 Result
 
-Status: draft, not posted  
-Date: 2026-08-26  
-Evidence base: `docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md`
+Status: final draft, not posted
+Date: 2026-08-26
+Evidence base:
+`docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md` and
+`docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md`
 
 ## Possible Titles
 
@@ -48,14 +50,17 @@ target branch was an integration branch. The fourth was rule acknowledgement:
 external workspaces needed target-owned rule sources instead of the Kit's own
 self-hosting rule files.
 
-Three of those fixes are in the released 1.0.5 package and were retested from a
-PyPI install. The rule-ack fix is on Kit main and retested from a checkout, but
-is not yet released-package evidence.
+Three of those fixes shipped in 1.0.5 and were retested from a PyPI install.
+The rule-ack fix shipped in 1.0.6; a targeted PyPI retest on the adopted
+Comm-SCI integration branch shows external rule-source validation and rule
+acknowledgement passing. I am not counting that as a sixth maintenance cycle or
+as a new full merge-wrapper retest.
 
-The merge story is also not a perfect victory lap. After the target repo got
-real remote CI, the safe merge wrapper did merge the PRs, but the local wrapper
-did not return cleanly after a successful remote merge. That is exactly the kind
-of friction I wanted this test to reveal instead of hide.
+The merge story is also not a perfect victory lap. During B1, after the target
+repo got real remote CI, the safe merge wrapper did merge the PRs, but the local
+wrapper did not return cleanly after a successful remote merge. The 1.0.6 line
+contains follow-up hardening, but I am not treating it as proof that a fresh
+Comm-SCI merge cycle is now friction-free.
 
 So the claim is deliberately narrow:
 
@@ -88,6 +93,14 @@ Related questions I would genuinely like opinions on:
   interfaces without making one agent runtime the source of truth?
 - If this looks overengineered, which part would you remove first without losing
   the safety property it provides?
+
+Links:
+
+- Project site: https://vfi64.github.io/agentic-project-kit/
+- Repository: https://github.com/vfi64/agentic-project-kit
+- PyPI 1.0.6: https://pypi.org/project/agentic-project-kit/1.0.6/
+- B1 evidence closeout:
+  https://github.com/vfi64/agentic-project-kit/blob/main/docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
 
 ## Claims Deliberately Avoided
 
