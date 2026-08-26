@@ -9,6 +9,7 @@ from agentic_project_kit.chat_bootloader import MANDATORY_BOOT_SOURCES
 from agentic_project_kit.handoff_prompt import MANDATORY_SUCCESSOR_CHAT_SOURCES
 from agentic_project_kit.handoff_state import load_handoff_state, validate_handoff_state
 from agentic_project_kit.rule_refresh import COMMUNICATION_RULE_SOURCES, HANDOFF_RULE_SOURCES
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 
 
 CANONICAL_YAML_RULE_SOURCES = (
@@ -19,9 +20,18 @@ CANONICAL_YAML_RULE_SOURCES = (
     ".agentic/rule_preservation.yaml",
 )
 
+EXTERNAL_MANIFEST_RULE_SOURCES = (
+    ".agentic/config.yaml",
+    ".agentic/registries/rules.yaml",
+    ".agentic/rules/README.md",
+    ".agentic/state/status.md",
+    ".agentic/state/handoff/README.md",
+)
+
 
 @dataclass(frozen=True)
 class RuleSourceValidationResult:
+    workspace_mode: str
     source_paths: tuple[str, ...]
     missing_required_paths: tuple[str, ...]
     yaml_parse_error_paths: tuple[str, ...]
@@ -43,6 +53,7 @@ class RuleSourceValidationResult:
     def as_json_data(self) -> dict[str, object]:
         return {
             "schema_version": 1,
+            "workspace_mode": self.workspace_mode,
             "sources_total": self.sources_total,
             "is_valid": self.is_valid,
             "fail_closed": self.fail_closed,
@@ -73,11 +84,32 @@ def canonical_rule_source_paths() -> tuple[str, ...]:
     return tuple(ordered)
 
 
+def external_manifest_rule_source_paths() -> tuple[str, ...]:
+    """Return rule-source paths owned by an initialized external target workspace."""
+
+    return EXTERNAL_MANIFEST_RULE_SOURCES
+
+
+def rule_source_paths_for_root(root: str | Path = ".") -> tuple[str, ...]:
+    """Return the rule-source contract for the detected workspace mode."""
+
+    root_path = Path(root)
+    if is_external_manifest_workspace(root_path):
+        return external_manifest_rule_source_paths()
+    return canonical_rule_source_paths()
+
+
 def validate_rule_sources(root: str | Path = ".") -> RuleSourceValidationResult:
     """Validate canonical rule sources without writing files or generating snapshots."""
 
     root_path = Path(root)
-    source_paths = canonical_rule_source_paths()
+    external_workspace = is_external_manifest_workspace(root_path)
+    source_paths = (
+        external_manifest_rule_source_paths()
+        if external_workspace
+        else canonical_rule_source_paths()
+    )
+    workspace_mode = "external_manifest_workspace" if external_workspace else "self_hosting"
     missing_required_paths: list[str] = []
     yaml_parse_error_paths: list[str] = []
     handoff_state_errors: list[str] = []
@@ -98,7 +130,7 @@ def validate_rule_sources(root: str | Path = ".") -> RuleSourceValidationResult:
                 blocking_reasons.append(f"yaml parse error in rule source: {source}: {exc}")
 
     handoff_path = root_path / ".agentic/handoff_state.yaml"
-    if handoff_path.exists() and handoff_path.is_file():
+    if not external_workspace and handoff_path.exists() and handoff_path.is_file():
         try:
             handoff_state_errors.extend(validate_handoff_state(load_handoff_state(handoff_path)))
         except (OSError, ValueError, yaml.YAMLError) as exc:
@@ -107,6 +139,7 @@ def validate_rule_sources(root: str | Path = ".") -> RuleSourceValidationResult:
         blocking_reasons.append(f"handoff_state invalid: {error}")
 
     return RuleSourceValidationResult(
+        workspace_mode=workspace_mode,
         source_paths=source_paths,
         missing_required_paths=tuple(missing_required_paths),
         yaml_parse_error_paths=tuple(yaml_parse_error_paths),
@@ -118,6 +151,7 @@ def validate_rule_sources(root: str | Path = ".") -> RuleSourceValidationResult:
 def render_rule_source_validation(result: RuleSourceValidationResult) -> str:
     lines = [
         "RULE_SOURCE_VALIDATION",
+        f"workspace_mode={result.workspace_mode}",
         f"sources_total={result.sources_total}",
         f"is_valid={result.is_valid}",
         f"fail_closed={result.fail_closed}",

@@ -1273,6 +1273,11 @@ rules:
     - packaged command manifest
     - Kit-specific version drift
     - project-owned release governance
+    - rules snapshot
+    - rules acknowledge
+    - external workspace rule sources
+    - .agentic/rules/README.md
+    - .agentic/state/status.md
     - docs/STATUS.md
     - docs/handoff/CURRENT_HANDOFF.md
     - CHANGELOG.md
