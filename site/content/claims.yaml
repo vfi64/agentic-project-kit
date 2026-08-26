@@ -63,8 +63,8 @@ claims:
         path: site/templates/quickstart.html
         contains: "python -m pip install ${package_name}"
       - type: file-contains
-        path: docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md
-        contains: "Successfully installed agentic-project-kit-1.0.1"
+        path: docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
+        contains: "Installed package: `agentic-project-kit==1.0.6` from PyPI"
 
   - id: command-manifest-synchronization
     text: The public command catalog is generated from the current command manifest and checked for synchronization.

@@ -25,6 +25,17 @@ DOCS_PAGES_FALLBACK_KIND = "agentic_project_kit_docs_pages_fallback"
 DOCS_PAGES_FALLBACK_BUILD_COMMIT = "docs-pages-fallback"
 B1_EVIDENCE_SOURCE = "docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json"
 
+SITE_COMMAND_SUMMARY_OVERRIDES = {
+    "agentic-kit check-docs": (
+        "Check required documentation coverage, current-state anchors and public "
+        "workflow documentation before treating a slice as ready."
+    ),
+    "agentic-kit workflow-guard check": (
+        "Inspect workflow and governance files for known unsafe, stale, or "
+        "ambiguous execution patterns before continuing."
+    ),
+}
+
 
 @dataclass(frozen=True)
 class SiteFoundationMetadata:
@@ -734,10 +745,14 @@ def _command_summary_items(
         rows.append(
             "          <li>"
             f"<code>{escape(entry.qualified_name)}</code>"
-            f"<span>{escape(entry.when_to_use)}</span>"
+            f"<span>{escape(_command_summary_text(entry))}</span>"
             "</li>"
         )
     return "\n".join(rows)
+
+
+def _command_summary_text(entry: SiteCommandEntry) -> str:
+    return SITE_COMMAND_SUMMARY_OVERRIDES.get(entry.qualified_name, entry.when_to_use)
 
 
 def _claim_summary_items(claims: list[object], *, empty: str) -> str:
