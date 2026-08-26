@@ -2403,6 +2403,8 @@ plans:
     - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
     - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
     - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
+    - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_004_RESULTS_20260826.md
+    - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
     - docs/reports/POST_V1_0_4_B1_KIT_CLOSEOUT_SETTLE_OBSERVATION_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_006_EXTERNAL_POST_MERGE_BASE_BRANCH_20260824.md
@@ -2452,6 +2454,40 @@ plans:
       - external_post_merge_check_base_branch_retest_pass
       - command_for_manifestless_warning
       - mixed_handoff_evidence_requires_extra_successor_refresh
+    - id: B1-COMM-SCI-20260825-004
+      state: merged_with_handoff_and_successor_refresh
+      report: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_004_RESULTS_20260826.md
+      external_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/8
+      external_handoff_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/9
+      external_successor_refresh_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/10
+      external_merge_commit: 40f8cea120a4cad2bafa5b912a625094eb777a50
+      final_external_head: 291fe142311a8de26a8115d66fda3ea19ef4733c
+      merge_boundary_outcome: merged_to_feature_branch_after_pr_merge_safe_still_reached_no_checks_refusal
+      refresh_denominator_counted: true
+      refresh_boundary_note: measured on feature/ui-access-levels-v2, not main;
+        two administrative refresh PRs were needed after the work PR
+      kit_findings:
+      - external_rule_ack_blocks_transfer_commit_and_push
+      - external_pr_no_checks_reported
+      - mixed_handoff_evidence_requires_extra_successor_refresh
+    - id: B1-COMM-SCI-20260826-005
+      state: merged_with_real_remote_ci_and_handoff_refresh
+      report: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
+      external_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/11
+      external_handoff_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/12
+      external_successor_refresh_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/13
+      external_merge_commit: 8e3f3c6794a8d1df2e7a7ceb70f12cbd7c1bd4b9
+      final_external_head: bce40ba2edd9cf46bf423e41c47381287c7fe7fb
+      merge_boundary_outcome: merged_to_feature_branch_by_pr_merge_safe_after_real_green_remote_ci
+      refresh_denominator_counted: true
+      refresh_boundary_note: first B1 cycle with real green remote CI for the
+        feature integration branch; two administrative refresh PRs were still
+        needed after the work PR
+      kit_findings:
+      - external_rule_ack_blocks_transfer_commit_and_push
+      - feature_branch_ci_no_checks_resolved_by_target_repo_config
+      - external_pr_merge_safe_non_return_after_remote_merge
+      - mixed_handoff_evidence_requires_extra_successor_refresh
     follow_up_items:
     - id: B1-KIT-002
       status: implemented_retest_pass
@@ -2477,6 +2513,8 @@ plans:
       - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md
       - docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
       - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_004_RESULTS_20260826.md
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
     - id: B1-KIT-004
       status: implemented_retest_pass
       goal: Make transfer fresh-LLM-context carriers external-workspace aware
@@ -2517,7 +2555,10 @@ plans:
       status: planned
       goal: Make external transfer commit/push and rule acknowledgement use adopted
         external workspace rule sources instead of Kit self-hosting rule sources.
-      evidence: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
+      evidence:
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_004_RESULTS_20260826.md
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
     - id: B1-KIT-010
       status: planned
       goal: Suppress or route LegacyProfileDeprecationWarning so command-for JSON
@@ -2527,7 +2568,15 @@ plans:
       status: planned
       goal: Reduce mixed handoff/status/report refresh loops so one real external
         work PR does not require multiple visible administrative PRs.
-      evidence: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
+      evidence:
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_004_RESULTS_20260826.md
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
+    - id: B1-KIT-012
+      status: planned
+      goal: Make external pr-merge-safe return a terminal PASS result after it
+        successfully merges a remote PR instead of hanging until interrupted.
+      evidence: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
   - id: B2
     status: blocked_until_B1_EVALUABLE
     goal: Decide refresh/realbetrieb outcome only after B1 reaches an evaluable
@@ -2562,16 +2611,17 @@ plans:
       required_setup_evidence:
       - mirror backup ref for vfi64/Comm-SCI-Control-private
       - non-git inventory before mutation
-      recorded_cycles: 3
-      merge_boundary_cycles: 2
-      latest_cycle_report: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
-      latest_cycle_result: "PR #5 merged to feature/ui-access-levels-v2 after full local green gates; PR #6/#7 refreshed handoff state until post-merge-check returned PASS. pr-merge-safe reached the external PR verification step but refused no-checks."
+      recorded_cycles: 5
+      merge_boundary_cycles: 4
+      latest_cycle_report: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
+      latest_cycle_result: "PR #11 changed Comm-SCI pull_request CI to include feature/** bases, received real green remote CI, and was remotely merged by pr-merge-safe. PR #12/#13 refreshed handoff state until post-merge-check returned PASS. Rule-Ack still blocks external commit/push; pr-merge-safe still does not return locally after successful remote merge."
       latest_findings:
-      - external_pr_no_checks_reported
+      - feature_branch_ci_no_checks_resolved_by_target_repo_config
       - external_fresh_llm_context_carrier_path_mismatch_fixed
       - external_pr_merge_safe_external_preflight_fixed
       - external_transfer_commit_push_rule_ack_still_self_hosting
       - external_post_merge_check_base_branch_retest_pass
+      - external_pr_merge_safe_non_return_after_remote_merge
       - command_for_task_tag_gap_for_health_commands
       - command_for_manifestless_warning
       - mixed_handoff_evidence_requires_extra_successor_refresh
