@@ -3,13 +3,13 @@
 ## Current State
 
 Current version: 1.0.6
-Current verified release: 1.0.5.
-Current release tag: v1.0.5.
+Current verified release: 1.0.6.
+Current release tag: v1.0.6.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.22090891`.
+Verified Zenodo version DOI: `10.5281/zenodo.22116691`.
 Current verified main: `4e30f785` (`Prepare release v1.0.6 (#2187)`).
 Latest substantive work: PR #2187 (`Prepare release v1.0.6 (#2187)`).
-Latest administrative refresh-only descendant: PR #2165 (`2f935c31`, `Refresh handoff state after PR2164 (#2165)`).
+Latest administrative refresh-only descendant: PR #2188 (`ff47206a`, `Refresh handoff state after PR2187 (#2188)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
 Post-merge handoff status: PASS/NOOP after PR #2187 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
