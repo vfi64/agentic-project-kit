@@ -1,6 +1,5 @@
 ## v1.0.6 - 2026-08-26
 
-- Zenodo DOI verification pending for v1.0.6.
 - Record v1.0.5 DOI closeout
 - Record B1 Comm-SCI cycle 003 results
 - Record B1 Comm-SCI cycles 004 and 005
@@ -8,6 +7,9 @@
 - Complete B1 evidence closeout and website projection
 - Harden GitHub Actions closeout loop handling
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.6 DOI `10.5281/zenodo.22116691`.
+
+Zenodo v1.0.6 DOI: 10.5281/zenodo.22116691
 ## v1.0.5 - 2026-08-25
 
 - Close out release v1.0.4 DOI metadata

@@ -11678,7 +11678,7 @@
     "package_name": "agentic-project-kit",
     "package_version": "1.0.6",
     "product_name": "Agentic Execution Runtime",
-    "release_tag": "v1.0.5",
+    "release_tag": "v1.0.6",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
     "reproduced_manifest_sha": "f88f3c276299",
     "requires_python": ">=3.10",
@@ -11692,7 +11692,7 @@
       "orchestrator": 31,
       "primitive": 102
     },
-    "version_doi": "10.5281/zenodo.22090891"
+    "version_doi": "10.5281/zenodo.22116691"
   },
   "roadmap_projection": {
     "roadmap_counts": {
@@ -11712,13 +11712,13 @@
   "schema_version": 1,
   "status_projection": {
     "concept_doi": "10.5281/zenodo.20101359",
-    "current_release_tag": "v1.0.5",
+    "current_release_tag": "v1.0.6",
     "current_verified_main": "See docs/STATUS.md",
-    "current_verified_release": "1.0.5",
+    "current_verified_release": "1.0.6",
     "current_version": "1.0.6",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
-    "version_doi": "10.5281/zenodo.22090891"
+    "version_doi": "10.5281/zenodo.22116691"
   },
   "workflow_projection": {
     "boundaries": [
