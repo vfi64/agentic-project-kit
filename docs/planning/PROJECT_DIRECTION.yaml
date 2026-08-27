@@ -659,6 +659,167 @@ roadmap:
   - docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
   - docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
   - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
+- id: deterministic-ci-runtime-optimization
+  phase: pre-GUI
+  status: next
+  title: Reduce workflow runtime without reducing deterministic assurance
+  depends_on:
+  - pre-gui-hardening-line
+  - workflow-kernel-and-transfer-hardening
+  rationale: >-
+    Post-v1.0.6 operation showed avoidable workflow cost: documentation registry
+    registration can leave generated scope counters stale, every PR and later
+    main push runs the full test suite, and administrative handoff refreshes
+    repeat CI and Pages events even when they only propagate post-merge state.
+    Runtime optimization is allowed only when deterministic evidence remains at
+    least as strong as before.
+  safety_boundary: >-
+    No gate may be removed or narrowed by heuristic confidence. Any reduced path
+    must be selected by a deterministic classifier, must emit reviewable evidence,
+    and must fall back to the full suite on ambiguity, code, workflow, release,
+    governance, architecture, manifest, or unsafe state changes.
+  acceptance:
+  - doc-registry register keeps docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
+    consistent or fails closed with an actionable drift report.
+  - CI runtime changes first preserve the exact test set and only change execution
+    mechanics after isolation evidence passes.
+  - A stable required check remains visible to branch protection; internal gate
+    selection must not rely on skipped required checks as success.
+  - Main-push CI reduction is allowed only when the final main tree is proven to
+    match an already verified PR integration tree or when an equivalent fail-closed
+    proof exists; otherwise full CI runs.
+  - Administrative refresh PRs may use a narrower gate only when the diff matches
+    an exact generated-handoff allowlist and package/handoff validation is PASS.
+  - Pages build/deploy runs only when generated-site inputs or release/version
+    state require it; GitHub's platform `pages-build-deployment` event may remain
+    separately visible.
+  - Workflow failure registration starts in diagnostic-only mode; it records
+    failure class, evidence pointers, and repair proposals, but repairs occur
+    only on a branch and never by automatic direct main mutation.
+  - Receipt-store work remains a later architecture slice unless exactly-one
+    receipt, append-only enforcement, and successor read-path discovery can be
+    proven deterministically.
+  implementation_slices:
+  - id: CI0-doc-registry-autoreconcile
+    goal: Make single-document registry updates update deterministic scope counters
+      in the same command, without broad YAML reformatting.
+    acceptance:
+    - doc-registry register updates only the new registry entry plus necessary
+      scope-projection counts.
+    - doc-registry reconcile --execute is either implemented for deterministic
+      projections or doc-registry register uses the same renderer internally.
+    - The command fails closed when the projection cannot be reconciled safely.
+    - Regression tests cover new report registration, minimal diff behavior, and
+      no second full-suite-only discovery of counter drift.
+    gates:
+    - python -m pytest -q tests/test_documentation_registry.py
+    - agentic-kit doc-registry check-unregistered --json
+    - agentic-kit direction validate
+    - agentic-kit check-docs
+  - id: CI1-runtime-baseline
+    goal: Record measured CI and local gate timing before optimization.
+    acceptance:
+    - Report timing for install, Ruff, full pytest, targeted pytest groups, CLI
+      smoke, Pages build, Pages tests, PR-CI, main-push CI, and admin-refresh CI.
+    - Distinguish mass-of-tests runtime from individual slow-test outliers.
+    - Keep this slice read-only except for the evidence report and direction/status
+      bookkeeping.
+    gates:
+    - agentic-kit direction validate
+    - agentic-kit check-docs
+  - id: CI2-pytest-parallel-shadow
+    goal: Evaluate parallel pytest without reducing test coverage.
+    acceptance:
+    - Add fixed-worker shadow runs before making parallel pytest a required gate.
+    - Detect order dependence, shared-state leaks, live-repo collisions, and marker
+      conflicts.
+    - Keep serial full-suite fallback until multiple shadow runs match serial PASS.
+    gates:
+    - python -m pytest -q
+    - python -m pytest -q -n fixed-worker-count
+    - ruff check .
+  - id: CI3-main-push-dedupe-tree-proof
+    goal: Replace redundant full main-push CI after PR merge with a proof gate when
+      the final tree was already tested.
+    acceptance:
+    - Compare the final main tree to the tested PR integration tree or record why
+      no safe equivalence proof exists.
+    - Direct main pushes, stale base, unknown merge method, failed/missing PR checks,
+      or workflow/release/governance changes fall back to full CI.
+    - The branch-protection-visible required check remains deterministic and
+      fail-closed.
+    gates:
+    - targeted tests for tree-proof logic
+    - GitHub Actions PR and post-merge observation evidence
+  - id: CI4-admin-refresh-light-ci
+    goal: Give administrative handoff refresh PRs a narrow deterministic gate when
+      their diff is exactly generated refresh state.
+    acceptance:
+    - The classifier accepts only the known generated handoff/state/package/report
+      paths and rejects extra, missing, or manually edited product files.
+    - Accepted refresh PRs run handoff check, post-merge refresh status, successor
+      package validation, protected-diff-plan, and registry/docs checks required
+      by touched files.
+    - Any classifier uncertainty or non-allowlisted path falls back to full CI.
+    gates:
+    - tests for admin-refresh diff classification
+    - agentic-kit handoff check
+    - agentic-kit transfer post-merge-check
+    - agentic-kit check-docs
+  - id: CI5-pages-path-gating
+    goal: Run Pages build/deploy only when site inputs, release/version projection,
+      or explicit dispatch require it.
+    acceptance:
+    - Site input paths are generated from a maintained manifest, not a hand-written
+      guess.
+    - PRs still run site tests when site generator or site claims change.
+    - Deploy remains main-only and keeps least-privilege Pages permissions separate
+      from normal PR CI.
+    gates:
+    - tests/test_site_generator.py
+    - tests/test_site_claims.py
+    - GitHub Pages workflow evidence
+  - id: CI6-failure-registry-diagnostic
+    goal: Add a workflow failure registry that records recurring CI/workflow
+      failures and proposes repair plans without mutating main.
+    acceptance:
+    - Failure records contain workflow run ID, failing job, failure class, evidence
+      pointers, suspected root cause, and next safe action.
+    - Known classes include registry counter drift, stale LLM context carrier,
+      dirty volatile carrier, missing checks, queued/stuck run, Pages deploy issue,
+      timeout, and test failure.
+    - LLM-assisted analysis is advisory only; repairs are branch-and-PR work.
+    gates:
+    - tests for failure classification and report schema
+    - agentic-kit workflow-guard check
+    - agentic-kit check-docs
+  - id: CI7-receipt-store-decision
+    goal: Decide whether to replace post-merge SHA-propagation refresh PRs with an
+      append-only receipt store.
+    acceptance:
+    - A prototype or design report proves or rejects exactly-one receipt, append-only
+      enforcement, and successor read-path discovery.
+    - Terminal-report retention is handled as a separate evidence policy decision.
+    - No current refresh PR mechanism is removed before the replacement proves
+      fail-closed parity.
+    gates:
+    - receipt feasibility/design evidence
+    - successor read-path validation evidence
+  evidence:
+  - docs/reports/POST_V1_0_6_REFRESH_RECEIPT_FEASIBILITY_20260827.md
+  - .github/workflows/ci.yml
+  - .github/workflows/pages.yml
+  - tests/test_documentation_registry.py
+  - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/TEST_GATES.md
+  - .github/workflows/ci.yml
+  - .github/workflows/pages.yml
+  - src/agentic_project_kit/documentation_registry.py
+  - src/agentic_project_kit/transfer_repo_actions.py
+  - src/agentic_project_kit/post_merge_handoff_refresh.py
+  - docs/reports/POST_V1_0_6_REFRESH_RECEIPT_FEASIBILITY_20260827.md
 - id: workflow-kernel-and-transfer-hardening
   phase: pre-GUI
   status: planned

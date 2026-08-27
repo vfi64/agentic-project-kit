@@ -7,12 +7,12 @@ Current verified release: 1.0.6.
 Current release tag: v1.0.6.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22116691`.
-Current verified main: `fca3d1f0` (`Assess refresh receipt feasibility (#2195)`).
+Current verified main/admin descendant: `aa19501e` (`Refresh handoff state after PR2195 (#2196)`).
 Latest substantive work: PR #2195 (`Assess refresh receipt feasibility (#2195)`).
-Latest administrative refresh-only descendant: PR #2188 (`ff47206a`, `Refresh handoff state after PR2187 (#2188)`).
-Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
+Latest administrative refresh-only descendant: PR #2196 (`aa19501e`, `Refresh handoff state after PR2195 (#2196)`).
+Current governed slice: `deterministic-ci-runtime-optimization` planning is staged on branch `codex/deterministic-ci-runtime-plan`; implementation should begin with CI0 document-registry autoreconcile and CI1 runtime baseline before any CI-reduction behavior changes.
 Post-merge handoff status: PASS/NOOP after PR #2195 administrative refresh.
-Next safe step: continue from fresh main with the next planned governed slice.
+Next safe step: start the successor chat from the generated handoff package, verify branch/head freshness, then implement CI0 and CI1 from `docs/planning/PROJECT_DIRECTION.yaml#deterministic-ci-runtime-optimization` without weakening deterministic gates.
 
 ## Historical State Snapshots
 
