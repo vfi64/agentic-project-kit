@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3c6abe94cb89b2c17a5a9ac25fc5741db6eb3a6f
-  short: 3c6abe94
-  subject: Fix public site pre-post details (#2193)
+  full: fca3d1f0d0ed8e620a7fd12cbe49ee2740677df4
+  short: fca3d1f0
+  subject: Assess refresh receipt feasibility (#2195)
 last_substantive_work_state:
-  full: 3c6abe94cb89b2c17a5a9ac25fc5741db6eb3a6f
-  short: 3c6abe94
-  subject: Fix public site pre-post details (#2193)
+  full: fca3d1f0d0ed8e620a7fd12cbe49ee2740677df4
+  short: fca3d1f0
+  subject: Assess refresh receipt feasibility (#2195)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
