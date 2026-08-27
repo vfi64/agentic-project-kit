@@ -1536,3 +1536,7 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Post-L5 documentation lifecycle audit evidence in warn mode showing 45 visible non-blocking findings, zero blocking findings, and strict adoption left maintainer-gated.
+  - path: docs/reports/POST_V1_0_6_REFRESH_RECEIPT_FEASIBILITY_20260827.md
+    class: evidence/log
+    owner: maintainers
+    notes: Post-v1.0.6 analysis-only feasibility report for replacing post-merge handoff refresh churn with a governed receipt store; no implementation change.
