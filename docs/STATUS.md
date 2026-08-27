@@ -7,11 +7,11 @@ Current verified release: 1.0.6.
 Current release tag: v1.0.6.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22116691`.
-Current verified main: `3c6abe94` (`Fix public site pre-post details (#2193)`).
-Latest substantive work: PR #2193 (`Fix public site pre-post details (#2193)`).
+Current verified main: `fca3d1f0` (`Assess refresh receipt feasibility (#2195)`).
+Latest substantive work: PR #2195 (`Assess refresh receipt feasibility (#2195)`).
 Latest administrative refresh-only descendant: PR #2188 (`ff47206a`, `Refresh handoff state after PR2187 (#2188)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2193 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2195 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -417,6 +417,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2193
+## Operational documentation refresh state after PR #2195
 
-Current administrative handoff refresh state is `3c6abe94` (`Fix public site pre-post details (#2193)`). Continue next only after this post-PR2193 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `fca3d1f0` (`Assess refresh receipt feasibility (#2195)`). Continue next only after this post-PR2195 refresh is committed and merged; the next substantive slice must be created from fresh main.
