@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 90688dd4d12d02e89d49c6030de9f04b9ebac2de
-  short: 90688dd4
-  subject: Harden deterministic CI runtime policy (#2197)
+  full: a6ee8d0f766d0825dfd718ade3b7832535c8835c
+  short: a6ee8d0f
+  subject: Keep admin refresh light CI diagnostic-only (#2200)
 last_substantive_work_state:
-  full: 90688dd4d12d02e89d49c6030de9f04b9ebac2de
-  short: 90688dd4
-  subject: Harden deterministic CI runtime policy (#2197)
+  full: a6ee8d0f766d0825dfd718ade3b7832535c8835c
+  short: a6ee8d0f
+  subject: Keep admin refresh light CI diagnostic-only (#2200)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
