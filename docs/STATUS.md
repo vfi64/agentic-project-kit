@@ -7,11 +7,11 @@ Current verified release: 1.0.6.
 Current release tag: v1.0.6.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22116691`.
-Current verified main: `1e01507f` (`Accept combined post-merge refresh as light CI (#2202)`).
-Latest substantive work: PR #2202 (`Accept combined post-merge refresh as light CI (#2202)`).
+Current verified main: `6c26c5ca` (`Fix admin refresh light push diff evidence (#2204)`).
+Latest substantive work: PR #2204 (`Fix admin refresh light push diff evidence (#2204)`).
 Latest administrative refresh-only descendant: PR #2196 (`aa19501e`, `Refresh handoff state after PR2195 (#2196)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2202 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2204 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -417,6 +417,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2202
+## Operational documentation refresh state after PR #2204
 
-Current administrative handoff refresh state is `1e01507f` (`Accept combined post-merge refresh as light CI (#2202)`). Continue next only after this post-PR2202 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `6c26c5ca` (`Fix admin refresh light push diff evidence (#2204)`). Continue next only after this post-PR2204 refresh is committed and merged; the next substantive slice must be created from fresh main.
