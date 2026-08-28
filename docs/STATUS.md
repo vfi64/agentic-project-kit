@@ -7,12 +7,12 @@ Current verified release: 1.0.6.
 Current release tag: v1.0.6.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22116691`.
-Current verified main: `aa19501e` (`Refresh handoff state after PR2195 (#2196)`).
-Latest substantive work: PR #2195 (`Assess refresh receipt feasibility (#2195)`).
+Current verified main: `90688dd4` (`Harden deterministic CI runtime policy (#2197)`).
+Latest substantive work: PR #2197 (`Harden deterministic CI runtime policy (#2197)`).
 Latest administrative refresh-only descendant: PR #2196 (`aa19501e`, `Refresh handoff state after PR2195 (#2196)`).
-Current governed slice: `deterministic-ci-runtime-optimization` implementation is prepared on branch `codex/deterministic-ci-runtime-plan`: CI0 doc-registry autoreconcile, CI1 baseline evidence, CI2 shadow parallel pytest, CI3 fail-closed tree-proof classification, CI4 admin-refresh-light CI, CI5 Pages path gating, CI6 diagnostic failure registry, and CI7 receipt-store deferral.
-Post-merge handoff status: PASS/NOOP after PR #2195 administrative refresh.
-Next safe step: review the branch diff, run the standard local gates, then observe GitHub Actions PR/main and Pages evidence before promoting any shadow or tree-proof optimization beyond fail-closed policy.
+Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
+Post-merge handoff status: PASS/NOOP after PR #2197 administrative refresh.
+Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
 
@@ -417,6 +417,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2195
+## Operational documentation refresh state after PR #2197
 
-Current administrative handoff refresh state is `fca3d1f0` (`Assess refresh receipt feasibility (#2195)`). Continue next only after this post-PR2195 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `90688dd4` (`Harden deterministic CI runtime policy (#2197)`). Continue next only after this post-PR2197 refresh is committed and merged; the next substantive slice must be created from fresh main.
