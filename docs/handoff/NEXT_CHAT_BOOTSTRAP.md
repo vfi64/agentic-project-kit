@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `04a633874d590cb8d914b04855e3762d0a6b20ec` (`04a63387`)
-- Handoff freshness marker: `04a63387`
-- Branch at generation: `docs/post-pr2208-handoff-refresh`
+- HEAD: `b1dcf9a1d60ffc6e85c316a919e133cbce2d654e` (`b1dcf9a1`)
+- Handoff freshness marker: `b1dcf9a1`
+- Branch at generation: `docs/post-pr2210-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -74,7 +74,6 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 - `p5c-physical-migration` (blocked): Plan physical migration after legacy profile deprecation for P5
 - `v2-0-legacy-profile-removal` (planned): Remove the implicit legacy profile in 2.0.0 for unphased
 - `pre-gui-hardening-line` (next): Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for pre-GUI
-- `deterministic-ci-runtime-optimization` (next): Reduce workflow runtime without reducing deterministic assurance for pre-GUI
 - `workflow-kernel-and-transfer-hardening` (planned): Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI
 - `release-and-doi-governance` (planned): Keep release metadata, publish, and DOI closeout behind authoritative commands for pre-GUI
 - `gui-gatekeeper-workbench` (planned): Build the local gatekeeper/workbench GUI over deterministic actions for GUI

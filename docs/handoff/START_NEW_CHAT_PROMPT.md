@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: b5957725bd1fb58d95bc69505e4323f1898065a7002ed5054796994eab8a6a88
 - docs/reference/agentic-kit-commands.json: d0f29397fd033ec4d29c12eb5d15e810b448c3c752c84472b99632042239c7e5
-## Operational documentation refresh state after PR #2208
+## Operational documentation refresh state after PR #2210
 
-Current administrative handoff refresh state is `04a63387` (`Handle optional skipped shadow check in merge gates (#2208)`). Continue next only after this post-PR2208 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `b1dcf9a1` (`Fix pr-merge-safe self-hosting context (#2210)`). Continue next only after this post-PR2210 refresh is committed and merged; the next substantive slice must be created from fresh main.

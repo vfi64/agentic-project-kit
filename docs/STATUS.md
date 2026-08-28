@@ -7,11 +7,11 @@ Current verified release: 1.0.6.
 Current release tag: v1.0.6.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22116691`.
-Current verified main: `04a63387` (`Handle optional skipped shadow check in merge gates (#2208)`).
-Latest substantive work: PR #2208 (`Handle optional skipped shadow check in merge gates (#2208)`).
+Current verified main: `b1dcf9a1` (`Fix pr-merge-safe self-hosting context (#2210)`).
+Latest substantive work: PR #2210 (`Fix pr-merge-safe self-hosting context (#2210)`).
 Latest administrative refresh-only descendant: PR #2196 (`aa19501e`, `Refresh handoff state after PR2195 (#2196)`).
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2208 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2210 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -417,6 +417,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2208
+## Operational documentation refresh state after PR #2210
 
-Current administrative handoff refresh state is `04a63387` (`Handle optional skipped shadow check in merge gates (#2208)`). Continue next only after this post-PR2208 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `b1dcf9a1` (`Fix pr-merge-safe self-hosting context (#2210)`). Continue next only after this post-PR2210 refresh is committed and merged; the next substantive slice must be created from fresh main.

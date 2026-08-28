@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 04a633874d590cb8d914b04855e3762d0a6b20ec
-  short: 04a63387
-  subject: Handle optional skipped shadow check in merge gates (#2208)
+  full: b1dcf9a1d60ffc6e85c316a919e133cbce2d654e
+  short: b1dcf9a1
+  subject: Fix pr-merge-safe self-hosting context (#2210)
 last_substantive_work_state:
-  full: 04a633874d590cb8d914b04855e3762d0a6b20ec
-  short: 04a63387
-  subject: Handle optional skipped shadow check in merge gates (#2208)
+  full: b1dcf9a1d60ffc6e85c316a919e133cbce2d654e
+  short: b1dcf9a1
+  subject: Fix pr-merge-safe self-hosting context (#2210)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

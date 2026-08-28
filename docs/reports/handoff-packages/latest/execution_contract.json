@@ -46,15 +46,6 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "deterministic-ci-runtime-optimization",
-        "status": "next",
-        "summary": "Reduce workflow runtime without reducing deterministic assurance for pre-GUI"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
         "id": "workflow-kernel-and-transfer-hardening",
         "status": "planned",
         "summary": "Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI"
@@ -278,13 +269,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2208-handoff-refresh",
+      "branch": "docs/post-pr2210-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "04a633874d590cb8d914b04855e3762d0a6b20ec",
+      "head": "b1dcf9a1d60ffc6e85c316a919e133cbce2d654e",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "04a633874d590cb8d914b04855e3762d0a6b20ec",
+      "origin_main": "b1dcf9a1d60ffc6e85c316a919e133cbce2d654e",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -430,13 +421,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2208-handoff-refresh",
+    "branch": "docs/post-pr2210-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "04a633874d590cb8d914b04855e3762d0a6b20ec",
+    "head": "b1dcf9a1d60ffc6e85c316a919e133cbce2d654e",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "04a633874d590cb8d914b04855e3762d0a6b20ec",
+    "origin_main": "b1dcf9a1d60ffc6e85c316a919e133cbce2d654e",
     "worktree_clean": false
   },
   "rules": [
