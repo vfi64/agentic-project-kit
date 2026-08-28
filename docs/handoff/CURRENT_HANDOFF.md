@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `fca3d1f0d0ed8e620a7fd12cbe49ee2740677df4` (`fca3d1f0`), after `Assess refresh receipt feasibility (#2195)`.
-Last substantive work state is `fca3d1f0d0ed8e620a7fd12cbe49ee2740677df4` (`fca3d1f0`), after `Assess refresh receipt feasibility (#2195)`.
+Current verified main/admin HEAD is `90688dd4d12d02e89d49c6030de9f04b9ebac2de` (`90688dd4`), after `Harden deterministic CI runtime policy (#2197)`.
+Last substantive work state is `90688dd4d12d02e89d49c6030de9f04b9ebac2de` (`90688dd4`), after `Harden deterministic CI runtime policy (#2197)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
@@ -18,21 +18,6 @@ A successor chat must treat operational documentation freshness as part of hando
 Continue with the next governed DPA DP2 slice from fresh main after post-merge closeout reports NOOP. Preserve the WRT-CH-001 generated-block boundary and do not manually patch generated successor handoff projections.
 
 <!-- agentic:generated operational-handoff-state end -->
-
-## Active Working Slice: Deterministic CI Runtime Optimization
-
-Branch: `codex/deterministic-ci-runtime-plan`.
-
-The current branch prepares `docs/planning/PROJECT_DIRECTION.yaml#deterministic-ci-runtime-optimization`.
-Implemented artifacts cover CI0 through CI7: doc-registry register/reconcile
-scope-counter autoreconcile, CI1 runtime baseline evidence, non-blocking
-`pytest-parallel-shadow`, fail-closed main-push tree-proof classification,
-exact-diff `admin-refresh-light`, manifest-driven Pages path gating,
-diagnostic-only failure registry records, and receipt-store replacement deferral.
-
-Remote PR/main Actions observation remains the next evidence step before any
-promotion of shadow parallel pytest or main-push tree-proof reduction. The
-serial full-suite fallback remains the required gate.
 
 ## Post-PR1245 Administrative Handoff Refresh State
 
