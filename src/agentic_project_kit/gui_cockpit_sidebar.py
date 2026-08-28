@@ -340,6 +340,7 @@ class CockpitSidebarMixin:
         selected = self.current_communication_mode()
         self.basic_view = build_basic_cockpit_view_model(
             self.project_root,
+            gatekeeper_status=getattr(self, "_gatekeeper_status", None),
             communication_mode=selected,
             access_level=self.basic_view.access_level,
         )
@@ -367,6 +368,7 @@ class CockpitSidebarMixin:
         # Access level is a visibility convenience only; safety remains the execution boundary.
         self.basic_view = build_basic_cockpit_view_model(
             self.project_root,
+            gatekeeper_status=getattr(self, "_gatekeeper_status", None),
             communication_mode=communication_mode,
             access_level=selected,
         )

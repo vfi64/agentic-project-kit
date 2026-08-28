@@ -4,8 +4,8 @@ Status: active
 
 This contract governs runtime optimization for GitHub Actions. It is a
 deterministic gate policy, not a confidence heuristic. No optimized path may
-weaken safety, determinism, or evidence strength compared with the standard
-serial full-suite fallback.
+weaken safety, determinism, or evidence strength compared with the complete
+full-suite fallback.
 
 ## Required Check Boundary
 
@@ -16,37 +16,57 @@ success.
 The default mode is `FULL_CI`. Any missing, invalid, ambiguous, or unsafe input
 selects `FULL_CI`.
 
-## CI2 Pytest Parallel Shadow
+`FULL_CI` uses a shallow checkout for the test worktree. The workflow may fetch
+only the exact commit endpoints needed for changed-path classification:
+pull-request base/head commits on PR events and push `before..current` commits
+on push events. If those endpoints cannot be fetched and verified as commits,
+changed-path classification falls back to the full repository path set, which
+selects the conservative full lane. A full-history checkout is not required for
+normal test execution and must not be used as a substitute for deterministic
+endpoint proof.
 
-`pytest-parallel-shadow` is a non-blocking GitHub Actions job. It runs
-`python -m pytest -q -n 4 --durations=20` with a fixed worker count and
-`continue-on-error: true`. The shadow pytest step records the real exit code
-and emits a GitHub warning on non-zero exit, but exits zero so an
-order-dependent or shared-state shadow failure cannot block a PR while the
-serial required gate remains authoritative.
+## CI2 Pytest Parallel Required Lane
 
-The serial full-suite fallback remains the required gate until repeated shadow
-evidence proves parity with serial PASS. Shadow output is diagnostic evidence
-for order dependence, shared-state leaks, live-repo collisions, marker
-conflicts, and slow GUI/Tkinter isolation risk.
+The branch-protection-visible `test` job runs the exact pytest suite with a
+fixed four-worker xdist command:
+
+```bash
+python -m pytest -q -n 4 --durations=20
+```
+
+This parallel full-suite gate is an execution-mechanics change, not a narrower test selection. The
+promotion is based on repeated local and GitHub Actions shadow evidence with
+real `PYTEST_PARALLEL_SHADOW_RC=0` outcomes. The serial suite remains part of
+the local completion/release evidence contract, but it is no longer the normal
+CI critical path once xdist parity is established.
+
+`pytest-parallel-shadow` remains available only as a manual `workflow_dispatch` diagnostic job.
+It is not run for ordinary PR, main-push, or admin-refresh cycles, because the
+required `test` job now carries the parallel full-suite gate directly.
 
 ## CI3 Main-Push Tree Proof
 
 Main-push CI reduction is allowed only with a tree equivalence proof:
 
 - final main tree SHA is present;
-- tested PR integration tree SHA is present;
+- tested pull-request head tree SHA is present;
 - both tree SHAs match;
-- successful PR checks are proven;
-- no workflow, code, test, release, governance, architecture, manifest, or site
-  path changed.
+- the push commit is associated with exactly one merged pull request targeting
+  `main`;
+- the pull request's merge commit SHA matches the push commit;
+- the branch-protection-visible `CI` / `test` check passed for that pull
+  request;
+- no workflow or GitHub Actions helper path changed.
 
 If any condition is missing, `main_push_tree_proof` selects `FULL_CI`. Direct
 main pushes, stale base, unknown merge method, failed checks, missing checks, or
-unsafe changed paths must not skip the full suite.
+workflow changes must not skip the full suite.
 
-The current workflow records the classifier result but does not claim a
-tree-proof reduction until those proof inputs are wired.
+Code, test, documentation, governance, manifest, release-state, and site-source
+paths may use the tree-proof lane only when the exact final main tree is proven
+to be the same tree that already carried a successful pull-request `CI` /
+`test` check. This preserves the required check's meaning while avoiding the
+redundant post-merge full-suite run.
 
 ## CI4 Admin Refresh Light CI
 

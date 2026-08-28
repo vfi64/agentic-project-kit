@@ -14,7 +14,10 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
+  actions: read
+  checks: read
   contents: read
+  pull-requests: read
 
 jobs:
   test:
@@ -24,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - uses: actions/setup-python@v6
         with:
@@ -39,13 +42,44 @@ jobs:
           CURRENT_SHA: ${{ github.sha }}
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           set -euo pipefail
-          if [ "$EVENT_NAME" = "pull_request" ]; then
-            git diff --name-only "$PR_BASE_SHA" "$PR_HEAD_SHA" > "$RUNNER_TEMP/changed-paths.txt" || git ls-files > "$RUNNER_TEMP/changed-paths.txt"
-          elif [ "$EVENT_NAME" = "push" ] && [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
-            git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" > "$RUNNER_TEMP/changed-paths.txt" || git ls-files > "$RUNNER_TEMP/changed-paths.txt"
-          else
+          fetch_commit() {
+            local sha="$1"
+            local fallback_ref="${2:-}"
+            if [ -z "$sha" ]; then
+              return 1
+            fi
+            if git cat-file -e "${sha}^{commit}" 2>/dev/null; then
+              return 0
+            fi
+            if git fetch --no-tags --depth=1 origin "$sha" 2>/dev/null; then
+              git cat-file -e "${sha}^{commit}" 2>/dev/null
+              return $?
+            fi
+            if [ -n "$fallback_ref" ] && git fetch --no-tags --depth=1 origin "$fallback_ref" 2>/dev/null; then
+              git cat-file -e "${sha}^{commit}" 2>/dev/null
+              return $?
+            fi
+            return 1
+          }
+          diff_ready=false
+          if [ "$EVENT_NAME" = "pull_request" ] \
+            && fetch_commit "$PR_BASE_SHA" "+refs/heads/${PR_BASE_REF}:refs/remotes/origin/${PR_BASE_REF}" \
+            && fetch_commit "$PR_HEAD_SHA" "+refs/pull/${PR_NUMBER}/head:refs/remotes/pull/${PR_NUMBER}/head"; then
+            git diff --name-only "$PR_BASE_SHA" "$PR_HEAD_SHA" > "$RUNNER_TEMP/changed-paths.txt"
+            diff_ready=true
+          elif [ "$EVENT_NAME" = "push" ] \
+            && [ -n "$BEFORE_SHA" ] \
+            && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ] \
+            && fetch_commit "$BEFORE_SHA"; then
+            git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" > "$RUNNER_TEMP/changed-paths.txt"
+            diff_ready=true
+          fi
+          if [ "$diff_ready" != "true" ]; then
+            echo "::notice title=ci-runtime-policy::changed paths unavailable; falling back to full-repository path set"
             git ls-files > "$RUNNER_TEMP/changed-paths.txt"
           fi
           cat "$RUNNER_TEMP/changed-paths.txt"
@@ -57,6 +91,8 @@ jobs:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
           EVENT_NAME: ${{ github.event_name }}
           CURRENT_SHA: ${{ github.sha }}
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           set -euo pipefail
           VALIDATION_STATUS="$(python - <<'PY'
@@ -76,10 +112,41 @@ jobs:
           if [ "$EVENT_NAME" = "push" ]; then
             FINAL_TREE="$(git rev-parse "${CURRENT_SHA}^{tree}" 2>/dev/null || true)"
           fi
+          TESTED_TREE=""
+          PR_CHECKS_PASSED="unknown"
+          if [ "$EVENT_NAME" = "push" ]; then
+            PYTHONPATH=src python -m agentic_project_kit.ci_github_proof \
+              --repo "$GITHUB_REPOSITORY" \
+              --current-sha "$CURRENT_SHA" \
+              --base-branch main \
+              --required-workflow CI \
+              --required-check test \
+              --output "$RUNNER_TEMP/main-push-pr-proof.json"
+            TESTED_TREE="$(python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          proof = json.loads(Path(os.environ["RUNNER_TEMP"], "main-push-pr-proof.json").read_text(encoding="utf-8"))
+          print(proof.get("tested_tree_sha", "") if proof.get("status") == "PASS" else "")
+          PY
+          )"
+            PR_CHECKS_PASSED="$(python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          proof = json.loads(Path(os.environ["RUNNER_TEMP"], "main-push-pr-proof.json").read_text(encoding="utf-8"))
+          print("true" if proof.get("status") == "PASS" and proof.get("pr_checks_passed") is True else "false")
+          PY
+          )"
+          fi
           PYTHONPATH=src python -m agentic_project_kit.ci_runtime_policy main-push \
             --changed-paths-file "$RUNNER_TEMP/changed-paths.txt" \
             --event-name "$EVENT_NAME" \
             --final-tree "$FINAL_TREE" \
+            --tested-tree "$TESTED_TREE" \
+            --pr-checks-passed "$PR_CHECKS_PASSED" \
             --output "$RUNNER_TEMP/main-push-policy.json"
           python - <<'PY'
           import json
@@ -109,7 +176,7 @@ jobs:
 
       - name: Tests
         if: steps.runtime-policy.outputs.gate-mode == 'full'
-        run: python -m pytest -q
+        run: python -m pytest -q -n 4 --durations=20
 
       - name: CLI smoke
         if: steps.runtime-policy.outputs.gate-mode == 'full'
@@ -198,6 +265,7 @@ jobs:
           PY
 
   pytest-parallel-shadow:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     continue-on-error: true

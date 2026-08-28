@@ -60,26 +60,31 @@ deterministic CI runtime optimization. The `CI` workflow keeps `test` as the
 branch-protection-visible required job, and any optimized lane must be selected
 inside that job by a deterministic classifier.
 
-The default lane is serial full-suite fallback. Missing, invalid, ambiguous, or
-unsafe inputs must select full CI. Runtime policy changes require:
+The default lane is complete full-suite fallback. Missing, invalid, ambiguous,
+or unsafe inputs must select full CI. Runtime policy changes require:
 
-    python -m pytest -q tests/test_ci_runtime_policy.py tests/test_ci_workflow_runtime_policy.py
+    python -m pytest -q tests/test_ci_runtime_policy.py tests/test_ci_github_proof.py tests/test_ci_workflow_runtime_policy.py
     python -m pytest -q
     python -m pytest -q -n 4 --durations=20
     ruff check .
 
-`pytest-parallel-shadow` is diagnostic-only while `continue-on-error: true`
-remains configured. The pytest shadow step records its real exit code and emits
-a warning on non-zero exit, but exits zero so shadow flakiness cannot block PR
-readiness while the serial full-suite fallback remains authoritative. It must
-use a fixed worker count and must not replace the serial fallback until repeated
-shadow evidence proves serial PASS parity and exposes no order dependence,
-shared-state leaks, live-repo collisions, or marker conflicts.
+The normal `FULL_CI` lane runs the complete pytest suite in the required `test`
+job with a fixed four-worker xdist command:
+
+    python -m pytest -q -n 4 --durations=20
+
+This preserves the test set and changes only execution mechanics after repeated
+shadow evidence showed serial/parallel PASS parity. The serial command remains
+part of local completion and release evidence, but it is not the CI critical
+path for ordinary PRs after promotion. `pytest-parallel-shadow` remains a
+manual `workflow_dispatch` diagnostic job rather than running on every PR,
+main-push, or admin-refresh cycle.
 
 `main_push_tree_proof` may select a reduced main-push path only with tree equivalence proof:
-final main tree, tested PR integration tree, successful PR
-checks, and no workflow/code/test/release/governance/architecture/manifest/site
-path change. Otherwise it selects full CI.
+final main tree, tested pull-request head tree, exactly one associated merged
+PR targeting `main`, a matching merge commit SHA, a successful `CI` / `test`
+check for that PR, and no workflow or GitHub Actions helper path change.
+Otherwise it selects full CI.
 
 `admin-refresh-light` may run only when an exact generated handoff allowlist
 variant and successor package validation `PASS` are proven from a post-PR admin

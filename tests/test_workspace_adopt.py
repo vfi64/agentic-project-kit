@@ -10,6 +10,7 @@ from agentic_project_kit.cli import app
 from agentic_project_kit.workspace import load_workspace
 from agentic_project_kit.workspace_adopt import (
     PRIVATE_PUBLIC_BOUNDARY,
+    analyze_workspace_agentic_collision,
     analyze_workspace_adoption,
 )
 
@@ -90,6 +91,30 @@ profile: generic
 
     assert report.agentic.status == "already_initialized"
     assert report.agentic.manifest_version == 1
+
+
+def test_agentic_collision_analysis_skips_full_adoption_baseline(monkeypatch, tmp_path: Path) -> None:
+    _write(
+        tmp_path / ".agentic" / "config.yaml",
+        """
+kit_schema_version: 1
+project: {name: initialized, type: generic}
+profile: generic
+""",
+    )
+
+    def fail_full_baseline(_root: Path) -> None:
+        raise AssertionError("full adoption baseline should not run")
+
+    monkeypatch.setattr(
+        "agentic_project_kit.workspace_adopt._documentation_age_baseline",
+        fail_full_baseline,
+    )
+
+    collision = analyze_workspace_agentic_collision(tmp_path)
+
+    assert collision.status == "already_initialized"
+    assert collision.manifest_version == 1
 
 
 def test_adopt_makes_no_writes(tmp_path: Path) -> None:

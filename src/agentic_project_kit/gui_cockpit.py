@@ -35,10 +35,11 @@ from agentic_project_kit.gui_cockpit_common import (
 from agentic_project_kit.gui_cockpit_header import CockpitHeaderMixin
 from agentic_project_kit.gui_cockpit_sidebar import CockpitSidebarMixin
 from agentic_project_kit.gui_cockpit_task import CockpitTaskMixin
+from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperStatus
 from agentic_project_kit.gui_panel_state import read_panel_state, write_panel_state
 from agentic_project_kit.gui_tk_widgets import maximize_root_window
 from agentic_project_kit.gui_viewmodel import build_basic_cockpit_view_model
-from agentic_project_kit.workspace_adopt import analyze_workspace_adoption
+from agentic_project_kit.workspace_adopt import analyze_workspace_agentic_collision
 
 
 GUI_GROUP_IDS = (
@@ -65,12 +66,19 @@ MAIN_CONTENT_GROUP_IDS = (
 
 
 class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, CockpitTaskMixin):
-    def __init__(self, root: Any, project_root: Path | None = None) -> None:
+    def __init__(
+        self,
+        root: Any,
+        project_root: Path | None = None,
+        *,
+        gatekeeper_status: GuiGatekeeperStatus | None = None,
+    ) -> None:
         import tkinter as tk
         from tkinter import ttk
 
         self.root = root
         self.project_root = (project_root or Path(".")).resolve()
+        self._gatekeeper_status = gatekeeper_status
         self.activity_log = ActivityLog()
         self.gui_group_frames: dict[str, Any | None] = dict.fromkeys(GUI_GROUP_IDS)
         self.panel_expanded_state: dict[str, bool] = {}
@@ -164,6 +172,7 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
             self.panel_expanded_state = {}
         self.basic_view = build_basic_cockpit_view_model(
             self.project_root,
+            gatekeeper_status=self._gatekeeper_status,
             communication_mode=communication_mode,
             access_level=access_level,
         )
@@ -174,7 +183,7 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
 
     def _manifest_status(self) -> str:
         try:
-            report = analyze_workspace_adoption(self.project_root)
+            agentic = analyze_workspace_agentic_collision(self.project_root)
         except RuntimeError:
             return "invalid"
         return {
@@ -182,7 +191,7 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
             "ready_for_workspace_init": "ready-for-init",
             "foreign_agentic_directory": "foreign",
             "invalid_workspace_manifest": "invalid",
-        }.get(report.agentic.status, report.agentic.status.replace("_", "-"))
+        }.get(agentic.status, agentic.status.replace("_", "-"))
 
     def _project_branch_label(self) -> str:
         try:

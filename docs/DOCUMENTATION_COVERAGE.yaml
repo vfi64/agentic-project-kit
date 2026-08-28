@@ -1247,9 +1247,10 @@ rules:
     terms:
     - CI Runtime Policy Contract
     - branch-protection-visible `CI` workflow keeps the required `test` job
-    - serial full-suite fallback
+    - shallow checkout
+    - parallel full-suite gate
     - pytest-parallel-shadow
-    - fixed worker count
+    - manual `workflow_dispatch` diagnostic job
     - tree equivalence proof
     - admin-refresh-light
     - generated handoff allowlist
@@ -1266,8 +1267,9 @@ rules:
     - CI Runtime Policy Gate
     - docs/governance/CI_RUNTIME_POLICY_CONTRACT.md
     - branch-protection-visible required job
-    - serial full-suite fallback
+    - complete pytest suite
     - python -m pytest -q -n 4 --durations=20
+    - manual `workflow_dispatch` diagnostic job
     - main_push_tree_proof
     - tree equivalence proof
     - admin-refresh-light
@@ -1300,7 +1302,7 @@ rules:
     - full pytest
     - Pytest Outliers
     - Remote CI Baseline
-    - CI2 may add parallel pytest only as a shadow run
+    - CI2 required parallel pytest promotion
     - CI3 must keep a branch-protection-visible deterministic check
     - CI4 may narrow admin-refresh PR CI
     - CI5 may gate Pages only from a maintained path manifest

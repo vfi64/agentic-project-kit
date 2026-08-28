@@ -25,23 +25,39 @@ def test_ci_required_job_keeps_full_gate_as_default() -> None:
     data = yaml.safe_load(CI_WORKFLOW.read_text(encoding="utf-8"))
 
     assert data["name"] == "CI"
-    assert data["permissions"] == {"contents": "read"}
+    assert data["permissions"] == {
+        "actions": "read",
+        "checks": "read",
+        "contents": "read",
+        "pull-requests": "read",
+    }
     test_job = data["jobs"]["test"]
     assert "if" not in test_job
 
     steps = test_job["steps"]
     runs = "\n".join(_run_steps(steps))
     classify_step = _step_by_name(steps, "Classify CI runtime policy")
+    checkout_step = steps[0]
 
+    assert checkout_step["uses"] == "actions/checkout@v6"
+    assert checkout_step["with"] == {"fetch-depth": 1}
+    assert "fetch_commit()" in runs
+    assert 'git fetch --no-tags --depth=1 origin "$sha"' in runs
+    assert 'refs/pull/${PR_NUMBER}/head' in runs
+    assert "changed paths unavailable; falling back to full-repository path set" in runs
     assert "PYTHONPATH=src python -m agentic_project_kit.ci_runtime_policy admin-refresh" in runs
+    assert "PYTHONPATH=src python -m agentic_project_kit.ci_github_proof" in runs
     assert "PYTHONPATH=src python -m agentic_project_kit.ci_runtime_policy main-push" in runs
     assert 'FINAL_TREE="$(git rev-parse "${CURRENT_SHA}^{tree}"' in runs
     assert '--final-tree "$FINAL_TREE"' in runs
+    assert '--tested-tree "$TESTED_TREE"' in runs
+    assert '--pr-checks-passed "$PR_CHECKS_PASSED"' in runs
     assert '"admin-refresh-light"' in str(classify_step["run"])
     assert '"tree-proof"' in str(classify_step["run"])
     assert _step_by_name(steps, "Install package")["if"] != "false"
     assert _step_by_name(steps, "Ruff")["if"] == "steps.runtime-policy.outputs.gate-mode == 'full'"
     assert _step_by_name(steps, "Tests")["if"] == "steps.runtime-policy.outputs.gate-mode == 'full'"
+    assert _step_by_name(steps, "Tests")["run"] == "python -m pytest -q -n 4 --durations=20"
     assert _step_by_name(steps, "CLI smoke")["if"] == "steps.runtime-policy.outputs.gate-mode == 'full'"
 
 
@@ -93,11 +109,12 @@ def test_main_push_tree_proof_lane_is_inside_required_test_job() -> None:
     assert "TREE_PROOF" in str(tree_proof["run"])
 
 
-def test_parallel_pytest_is_shadow_only_and_uses_fixed_worker_count() -> None:
+def test_parallel_pytest_is_required_and_shadow_is_manual_diagnostic_only() -> None:
     data = yaml.safe_load(CI_WORKFLOW.read_text(encoding="utf-8"))
 
     assert "pytest-parallel-shadow" in data["jobs"]
     shadow = data["jobs"]["pytest-parallel-shadow"]
+    assert shadow["if"] == "github.event_name == 'workflow_dispatch'"
     assert shadow["continue-on-error"] is True
     assert shadow["timeout-minutes"] == 20
     assert "needs" not in data["jobs"]["test"]

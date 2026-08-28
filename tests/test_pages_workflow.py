@@ -37,8 +37,11 @@ def test_pages_workflow_builds_site_and_deploys_actions_artifact() -> None:
         "gate-mode": "${{ steps.policy.outputs.gate-mode }}",
     }
     assert pages_gate_steps[0]["uses"] == "actions/checkout@v6"
-    assert pages_gate_steps[0]["with"] == {"fetch-depth": 0}
+    assert pages_gate_steps[0]["with"] == {"fetch-depth": 1}
     pages_gate_run = "\n".join(step.get("run", "") for step in pages_gate_steps)
+    assert "fetch_commit()" in pages_gate_run
+    assert 'git fetch --no-tags --depth=1 origin "$sha"' in pages_gate_run
+    assert "changed paths unavailable; falling back to full-repository path set" in pages_gate_run
     assert "PYTHONPATH=src python -m agentic_project_kit.ci_runtime_policy pages" in pages_gate_run
     assert "--manifest site/pages_input_manifest.json" in pages_gate_run
     assert "build-required=" in pages_gate_run
