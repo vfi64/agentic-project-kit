@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `6c26c5ca875651812448355c44d43748a85d3862` (`6c26c5ca`), after `Fix admin refresh light push diff evidence (#2204)`.
-Last substantive work state is `6c26c5ca875651812448355c44d43748a85d3862` (`6c26c5ca`), after `Fix admin refresh light push diff evidence (#2204)`.
+Current verified main/admin HEAD is `f234348b66968130ba4707f996705f4bd63f8aea` (`f234348b`), after `Optimize deterministic CI runtime`.
+Last substantive work state is `f234348b66968130ba4707f996705f4bd63f8aea` (`f234348b`), after `Optimize deterministic CI runtime`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
