@@ -10,7 +10,9 @@ from agentic_project_kit.ci_runtime_policy import (
     DIAGNOSTIC_ONLY,
     FULL_CI,
     TREE_PROOF,
+    admin_refresh_current_handoff_paths,
     admin_refresh_expected_paths,
+    admin_refresh_expected_path_variants,
     build_failure_record,
     classify_admin_refresh_light,
     classify_failure_class,
@@ -41,12 +43,12 @@ def _pages_manifest() -> dict[str, object]:
     }
 
 
-def test_admin_refresh_light_accepts_exact_generated_handoff_path_set() -> None:
+def test_admin_refresh_light_accepts_exact_successor_package_refresh_path_set() -> None:
     changed_paths = admin_refresh_expected_paths(2195)
 
     decision = classify_admin_refresh_light(
         changed_paths,
-        branch="docs/post-pr2195-handoff-refresh",
+        branch="docs/post-pr2195-successor-package-refresh",
         validation_status="PASS",
     )
 
@@ -55,7 +57,26 @@ def test_admin_refresh_light_accepts_exact_generated_handoff_path_set() -> None:
     assert decision.changed_paths == changed_paths
     assert decision.missing_paths == ()
     assert decision.unexpected_paths == ()
-    assert "exact generated admin refresh path set for PR 2195" in decision.reasons
+    assert decision.mutation == "successor-package-refresh"
+    assert "exact successor-package-refresh path set for PR 2195" in decision.reasons
+
+
+def test_admin_refresh_light_accepts_exact_current_handoff_refresh_path_set() -> None:
+    changed_paths = admin_refresh_current_handoff_paths()
+
+    decision = classify_admin_refresh_light(
+        changed_paths,
+        branch="docs/post-pr2197-handoff-refresh",
+        validation_status="PASS",
+    )
+
+    assert decision.status == "PASS"
+    assert decision.mode == ADMIN_REFRESH_LIGHT
+    assert decision.changed_paths == changed_paths
+    assert decision.missing_paths == ()
+    assert decision.unexpected_paths == ()
+    assert decision.mutation == "current-handoff-refresh"
+    assert "exact current-handoff-refresh path set for PR 2197" in decision.reasons
 
 
 def test_admin_refresh_light_rejects_extra_product_path() -> None:
@@ -73,7 +94,11 @@ def test_admin_refresh_light_rejects_extra_product_path() -> None:
 
 
 def test_admin_refresh_light_rejects_missing_generated_path() -> None:
-    changed_paths = tuple(path for path in admin_refresh_expected_paths(2195) if path != "docs/STATUS.md")
+    changed_paths = tuple(
+        path
+        for path in admin_refresh_expected_paths(2195)
+        if path != "docs/reports/handoff-packages/latest/validation_report.json"
+    )
 
     decision = classify_admin_refresh_light(
         changed_paths,
@@ -82,7 +107,8 @@ def test_admin_refresh_light_rejects_missing_generated_path() -> None:
     )
 
     assert decision.mode == FULL_CI
-    assert decision.missing_paths == ("docs/STATUS.md",)
+    assert "admin refresh path set does not match exact" in decision.reasons[0]
+    assert decision.missing_paths or decision.unexpected_paths
 
 
 def test_admin_refresh_light_rejects_non_pass_validation_status() -> None:
@@ -96,12 +122,22 @@ def test_admin_refresh_light_rejects_non_pass_validation_status() -> None:
     assert "successor package validation is not PASS" in decision.reasons
 
 
-def test_admin_refresh_light_can_infer_source_pr_from_report_path() -> None:
-    changed_paths = admin_refresh_expected_paths(2195)
+def test_admin_refresh_light_report_path_can_prove_source_pr_but_not_path_variant() -> None:
+    changed_paths = (*admin_refresh_expected_paths(2195), "docs/reports/terminal/post-pr2195-successor-chat-handoff.md")
 
     decision = classify_admin_refresh_light(changed_paths, validation_status="PASS")
 
-    assert decision.mode == ADMIN_REFRESH_LIGHT
+    assert decision.mode == FULL_CI
+    assert decision.unexpected_paths == ("docs/reports/terminal/post-pr2195-successor-chat-handoff.md",)
+
+
+def test_admin_refresh_light_path_variants_are_distinct_exact_sets() -> None:
+    variants = dict(admin_refresh_expected_path_variants(2198))
+
+    assert set(variants) == {"successor-package-refresh", "current-handoff-refresh"}
+    assert "docs/reports/handoff-packages/latest/validation_report.json" in variants["successor-package-refresh"]
+    assert ".agentic/dpa/acceptance/current_handoff_operational_state.json" in variants["current-handoff-refresh"]
+    assert set(variants["successor-package-refresh"]).isdisjoint(variants["current-handoff-refresh"])
 
 
 def test_admin_refresh_light_invalid_path_falls_back_to_full_ci() -> None:

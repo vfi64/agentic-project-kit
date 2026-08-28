@@ -108,6 +108,41 @@ magnitude as product PRs even when they carry only generated handoff state.
 Recent `Pages` push runs complete in about 29s-53s, with the latest successful
 main run at 49s.
 
+## Remote Follow-up Observation
+
+After PR #2197 merged, read-only GitHub Actions inspection on 2026-08-28 showed
+that the first implementation stayed safe but did not yet deliver the intended
+cycle-time reduction for post-merge administrative refreshes.
+
+| Lane | Run | Event and branch | Overall | Job/step evidence |
+|---|---|---|---:|---|
+| PR #2197 CI | <https://github.com/vfi64/agentic-project-kit/actions/runs/33141249255> | pull_request, `codex/deterministic-ci-runtime-plan` | 7m10s | required `test` job 7m06s; serial pytest step 6m45s; shadow job 2m19s. |
+| PR #2197 main push | <https://github.com/vfi64/agentic-project-kit/actions/runs/33141972900> | push, `main` at `90688dd4` | 9m42s | required `test` job 9m38s; serial pytest step 9m23s; shadow job 2m06s. |
+| PR #2198 main push | <https://github.com/vfi64/agentic-project-kit/actions/runs/33168537147> | push, `main` at `f17c21c3` | 9m14s | required `test` job 9m10s; serial pytest step 8m52s; shadow job 2m20s. |
+| PR #2199 CI | <https://github.com/vfi64/agentic-project-kit/actions/runs/33168998555> | pull_request, `docs/post-pr2198-successor-package-refresh` | 7m12s | required `test` job passed; `pytest-parallel-shadow` failed and was still treated as PR-blocking status evidence. |
+
+The run order for `CI #7674` and `CI #7675` is chronologically correct:
+`CI #7674` started at 2026-08-28T11:48:13Z as the push run for merge commit
+`f17c21c3`, and `CI #7675` started at 2026-08-28T11:55:25Z as the pull-request
+run for PR #2199. GitHub lists newer workflow runs first, so #7675 appears above
+#7674 even though #7674 started first. The overlap is operationally undesirable:
+the successor package PR was opened while the main-push CI for the preceding
+admin refresh was still running.
+
+The observations identify two corrective constraints:
+
+- `admin-refresh-light` must accept only exact generated refresh variants, but
+  those variants must match the actual deterministic refresh PRs:
+  `current-handoff-refresh` and `successor-package-refresh`.
+- `pytest-parallel-shadow` must remain diagnostic-only in branch-protection
+  evidence. It may record and warn on the real xdist exit code, but it must not
+  block PR readiness while serial pytest remains the authoritative gate.
+
+Main-push dedupe remains fail-closed until tested-tree and successful-PR-check
+proof inputs are wired. The long main-push runs above are therefore expected for
+now, but they are not acceptable evidence that the optimization slice is
+complete for administrative refresh PR cycle time.
+
 ## Optimization Constraints
 
 - CI2 may add parallel pytest only as a shadow run until repeated shadow PASS

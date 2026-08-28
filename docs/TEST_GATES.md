@@ -69,21 +69,24 @@ unsafe inputs must select full CI. Runtime policy changes require:
     ruff check .
 
 `pytest-parallel-shadow` is diagnostic-only while `continue-on-error: true`
-remains configured. It must use a fixed worker count and must not replace the
-serial full-suite fallback until repeated shadow evidence proves serial PASS
-parity and exposes no order dependence, shared-state leaks, live-repo
-collisions, or marker conflicts.
+remains configured. The pytest shadow step records its real exit code and emits
+a warning on non-zero exit, but exits zero so shadow flakiness cannot block PR
+readiness while the serial full-suite fallback remains authoritative. It must
+use a fixed worker count and must not replace the serial fallback until repeated
+shadow evidence proves serial PASS parity and exposes no order dependence,
+shared-state leaks, live-repo collisions, or marker conflicts.
 
 `main_push_tree_proof` may select a reduced main-push path only with tree equivalence proof:
 final main tree, tested PR integration tree, successful PR
 checks, and no workflow/code/test/release/governance/architecture/manifest/site
 path change. Otherwise it selects full CI.
 
-`admin-refresh-light` may run only when an exact generated handoff allowlist and
-successor package validation `PASS` are proven. It must run handoff check,
-post-merge refresh status, protected-diff-plan coverage, doc-registry reconcile,
-doc-registry unregistered checks, check-docs, and targeted successor/package
-regression tests.
+`admin-refresh-light` may run only when an exact generated handoff allowlist variant and
+successor package validation `PASS` are proven from a post-PR admin branch. It
+must run handoff check, variant-specific artifact validation, protected-diff-plan
+coverage, doc-registry reconcile, doc-registry unregistered checks, check-docs,
+and targeted successor/package regression tests. Post-merge status checks remain
+post-merge lifecycle gates, not PR-checkout substitutes.
 
 `pages_path_gate` is driven by `site/pages_input_manifest.json`. It may select
 `BUILD_SKIPPED` only for deterministically irrelevant main-push changes. Explicit

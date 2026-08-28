@@ -52,9 +52,13 @@ def test_admin_refresh_light_gate_runs_only_handoff_registry_and_docs_checks() -
     run = str(admin_step["run"])
 
     assert admin_step["if"] == "steps.runtime-policy.outputs.gate-mode == 'admin-refresh-light'"
+    assert "POLICY_MUTATION=" in run
     assert "agentic-kit handoff check" in run
-    assert "agentic-kit handoff post-merge-refresh-status" in run
-    assert 'agentic-kit transfer post-merge-check --base-branch "$BRANCH_NAME" --json' in run
+    assert "agentic-kit dpa current-handoff-refresh --json" in run
+    assert "successor handoff validation_report.json is not PASS" in run
+    assert "unexpected admin refresh mutation" in run
+    assert "agentic-kit handoff post-merge-refresh-status" not in run
+    assert "agentic-kit transfer post-merge-check" not in run
     assert "python -m agentic_project_kit.protected_change_planner" in run
     assert "agentic-kit transfer protected-diff-plan" in run
     assert "agentic-kit doc-registry reconcile --json" in run
@@ -87,7 +91,11 @@ def test_parallel_pytest_is_shadow_only_and_uses_fixed_worker_count() -> None:
     assert shadow["timeout-minutes"] == 20
     assert "needs" not in data["jobs"]["test"]
     assert "needs" not in shadow
-    assert "python -m pytest -q -n 4 --durations=20" in "\n".join(_run_steps(shadow["steps"]))
+    shadow_run = "\n".join(_run_steps(shadow["steps"]))
+    assert "python -m pytest -q -n 4 --durations=20" in shadow_run
+    assert "PYTEST_PARALLEL_SHADOW_RC=$rc" in shadow_run
+    assert "::warning title=pytest-parallel-shadow::diagnostic shadow pytest failed" in shadow_run
+    assert "exit 0" in shadow_run
 
 
 def test_pytest_xdist_is_dev_dependency_only() -> None:
