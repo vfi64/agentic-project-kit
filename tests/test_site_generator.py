@@ -150,6 +150,15 @@ def test_docs_pages_fallback_writes_redirect_and_generated_site(tmp_path: Path) 
     )
 
 
+def test_readme_public_pages_links_use_live_actions_routes() -> None:
+    readme = Path("README.md").read_text(encoding="utf-8")
+
+    assert "https://vfi64.github.io/agentic-project-kit/quickstart/" in readme
+    assert "https://vfi64.github.io/agentic-project-kit/workflows/" in readme
+    assert "https://vfi64.github.io/agentic-project-kit/site/quickstart" not in readme
+    assert "https://vfi64.github.io/agentic-project-kit/site/workflows" not in readme
+
+
 def test_docs_pages_fallback_ignores_volatile_status_refresh(tmp_path: Path) -> None:
     root = _write_site_fixture(tmp_path)
 

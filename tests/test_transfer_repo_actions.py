@@ -29,6 +29,7 @@ from agentic_project_kit.transfer_repo_actions import (
     repo_status,
     result_terminal,
 )
+from agentic_project_kit.transfer_operation_monitor import GitState
 from tests.test_rule_source_validator import write_minimal_sources
 from pathlib import Path
 
@@ -926,28 +927,35 @@ def test_pr_wait_ci_auto_resolves_head_sha_when_omitted(monkeypatch):
 def test_pr_merge_safe_auto_resolves_head_sha_when_omitted(monkeypatch):
     calls = []
 
-    class PassingMonitor:
-        decision = transfer_repo_actions.MonitorDecision.CONTINUE
-        actual_branch = "main"
-        required_branch = "main"
-        reason = "test_monitor_pass"
-
-    def fake_guard_branch(**kwargs):
-        calls.append(["guard_branch", kwargs])
-        return PassingMonitor()
-
     def fake_run(command, cwd=None):
         calls.append(command)
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
-        if command == ["gh", "pr", "view", "123", "--json", "headRefOid", "--jq", ".headRefOid"]:
-            return subprocess.CompletedProcess(command, 0, "b" * 40 + "\n", "")
+        if command == [
+            "gh",
+            "pr",
+            "view",
+            "123",
+            "--json",
+            "baseRefName,headRefName,headRefOid,state,url",
+        ]:
+            payload = {
+                "baseRefName": "main",
+                "headRefName": "feature/work",
+                "headRefOid": "b" * 40,
+                "state": "OPEN",
+                "url": "https://example.invalid/pr/123",
+            }
+            return subprocess.CompletedProcess(command, 0, json.dumps(payload), "")
         if command[:4] == ["agentic-kit", "pr", "merge-if-green", "123"]:
             return subprocess.CompletedProcess(command, 0, "merged\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
-    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions.guard_branch", fake_guard_branch)
     monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions.read_git_state",
+        lambda _root=".": GitState(branch="main", dirty_status="", head="m" * 40),
+    )
     monkeypatch.setattr(
         "agentic_project_kit.transfer_repo_actions._agentic_kit_command",
         lambda: "agentic-kit",
@@ -959,8 +967,102 @@ def test_pr_merge_safe_auto_resolves_head_sha_when_omitted(monkeypatch):
 
     assert result.result_status == "PASS"
     assert result.returncode == 0
-    assert ["gh", "pr", "view", "123", "--json", "headRefOid", "--jq", ".headRefOid"] in calls
     assert ["--expected-head-sha", "b" * 40] == calls[-1][4:6]
+
+
+def test_pr_merge_safe_allows_clean_pr_head_branch_without_switch(monkeypatch):
+    calls = []
+    expected_head = "c" * 40
+
+    def fake_guard_branch(**kwargs):
+        calls.append(["guard_branch", kwargs])
+        raise AssertionError("clean local PR head branch must not switch to main")
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if command == [
+            "gh",
+            "pr",
+            "view",
+            "123",
+            "--json",
+            "baseRefName,headRefName,headRefOid,state,url",
+        ]:
+            payload = {
+                "baseRefName": "main",
+                "headRefName": "feature/work",
+                "headRefOid": expected_head,
+                "state": "OPEN",
+                "url": "https://example.invalid/pr/123",
+            }
+            return subprocess.CompletedProcess(command, 0, json.dumps(payload), "")
+        if command[:4] == ["agentic-kit", "pr", "merge-if-green", "123"]:
+            return subprocess.CompletedProcess(command, 0, "merged\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "read_git_state",
+        lambda _root=".": GitState(
+            branch="feature/work",
+            dirty_status="",
+            head=expected_head,
+        ),
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._agentic_kit_command",
+        lambda: "agentic-kit",
+    )
+
+    result = transfer_repo_actions.pr_merge_safe(
+        123,
+        expected_head_sha=expected_head,
+        main_branch="main",
+    )
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert not any(call == ["git", "switch", "main"] for call in calls)
+
+
+def test_pr_merge_safe_blocks_unexpected_base_branch(monkeypatch):
+    expected_head = "d" * 40
+
+    def fake_run(command, cwd=None):
+        if command == [
+            "gh",
+            "pr",
+            "view",
+            "123",
+            "--json",
+            "baseRefName,headRefName,headRefOid,state,url",
+        ]:
+            payload = {
+                "baseRefName": "release",
+                "headRefName": "feature/work",
+                "headRefOid": expected_head,
+                "state": "OPEN",
+                "url": "https://example.invalid/pr/123",
+            }
+            return subprocess.CompletedProcess(command, 0, json.dumps(payload), "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.pr_merge_safe(
+        123,
+        expected_head_sha=expected_head,
+        main_branch="main",
+    )
+
+    assert result.result_status == "FAIL"
+    assert result.returncode == 2
+    assert "PR base branch is unexpected" in result.stderr
+    assert "expected main, got release" in result.stderr
 
 
 def test_pr_wait_ci_auto_sha_failure_fails_closed(monkeypatch):
@@ -1650,34 +1752,58 @@ def test_branch_switch_monitor_blocks_before_switch(monkeypatch):
     assert ["git", "switch", "feature/demo"] not in calls
 
 
-def test_pr_merge_safe_monitor_blocks_before_sha_lookup(monkeypatch):
+def test_pr_merge_safe_blocks_dirty_worktree_before_merge(monkeypatch):
     calls = []
-
-    class BlockMonitor:
-        decision = transfer_repo_actions.MonitorDecision.BLOCK
-        actual_branch = "feature/work"
-        required_branch = "main"
-        reason = "dirty_worktree_blocks_branch_switch"
-
-    def fake_guard_branch(**kwargs):
-        calls.append(["guard_branch", kwargs])
-        return BlockMonitor()
+    expected_head = "d" * 40
 
     def fake_run(command, cwd=None):
         calls.append(command)
-        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
-            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if command == [
+            "gh",
+            "pr",
+            "view",
+            "123",
+            "--json",
+            "baseRefName,headRefName,headRefOid,state,url",
+        ]:
+            payload = {
+                "baseRefName": "main",
+                "headRefName": "feature/work",
+                "headRefOid": expected_head,
+                "state": "OPEN",
+                "url": "https://example.invalid/pr/123",
+            }
+            return subprocess.CompletedProcess(command, 0, json.dumps(payload), "")
+        if command == [
+            "./.venv/bin/agentic-kit",
+            "transfer",
+            "normalize-session",
+            "--repair-known-volatile",
+        ]:
+            return subprocess.CompletedProcess(command, 2, "", "dirty product file\n")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
-    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
     monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "read_git_state",
+        lambda _root=".": GitState(
+            branch="feature/work",
+            dirty_status=" M product.py",
+            head=expected_head,
+        ),
+    )
 
-    result = transfer_repo_actions.pr_merge_safe(123, expected_head_sha="", main_branch="main")
+    result = transfer_repo_actions.pr_merge_safe(123, expected_head_sha=expected_head, main_branch="main")
 
     assert result.returncode == 2
     assert result.result_status == "FAIL"
     assert "Transfer operation monitor blocked pr-merge-safe" in result.stderr
-    assert ["gh", "pr", "view", "123", "--json", "headRefOid", "--jq", ".headRefOid"] not in calls
+    assert "dirty_worktree_blocks_pr_merge_safe" in result.stderr
+    assert not any(
+        len(command) >= 3 and command[0].endswith("agentic-kit") and command[1:3] == ["pr", "merge-if-green"]
+        for command in calls
+    )
 
 
 def test_admin_refresh_pr_monitor_blocks_before_status(monkeypatch):
@@ -2176,29 +2302,36 @@ def test_transfer_delete_merged_work_branch_refuses_current_branch(monkeypatch):
 
 def test_pr_merge_safe_repairs_known_volatile_before_merge(monkeypatch):
     calls = []
-
-    class BlockMonitor:
-        decision = transfer_repo_actions.MonitorDecision.BLOCK
-        actual_branch = "feature/work"
-        required_branch = "main"
-        reason = "dirty_worktree_blocks_branch_switch"
-
-    class ContinueMonitor:
-        decision = transfer_repo_actions.MonitorDecision.CONTINUE
-        actual_branch = "main"
-        required_branch = "main"
-        reason = "already_on_required_branch"
-
-    monitors = [BlockMonitor(), ContinueMonitor()]
-
-    def fake_guard_branch(**kwargs):
-        calls.append(["guard_branch", kwargs])
-        return monitors.pop(0)
+    expected_head = "0123456789abcdef0123456789abcdef01234567"
+    states = [
+        GitState(
+            branch="feature/work",
+            dirty_status="?? .agentic/transfer/outbox/last_result.txt",
+            head=expected_head,
+        ),
+        GitState(branch="feature/work", dirty_status="", head=expected_head),
+    ]
 
     def fake_run(command, cwd=None):
         calls.append(command)
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if command == [
+            "gh",
+            "pr",
+            "view",
+            "123",
+            "--json",
+            "baseRefName,headRefName,headRefOid,state,url",
+        ]:
+            payload = {
+                "baseRefName": "main",
+                "headRefName": "feature/work",
+                "headRefOid": expected_head,
+                "state": "OPEN",
+                "url": "https://example.invalid/pr/123",
+            }
+            return subprocess.CompletedProcess(command, 0, json.dumps(payload), "")
         if (
             len(command) >= 4
             and command[0].endswith("agentic-kit")
@@ -2209,12 +2342,18 @@ def test_pr_merge_safe_repairs_known_volatile_before_merge(monkeypatch):
             return subprocess.CompletedProcess(command, 0, "merged\n", "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
-    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
     monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "read_git_state",
+        lambda _root=".": states.pop(0)
+        if states
+        else GitState(branch="feature/work", dirty_status="", head=expected_head),
+    )
 
     result = transfer_repo_actions.pr_merge_safe(
         123,
-        expected_head_sha="0123456789abcdef0123456789abcdef01234567",
+        expected_head_sha=expected_head,
         main_branch="main",
     )
 
@@ -2230,26 +2369,31 @@ def test_pr_merge_safe_repairs_known_volatile_before_merge(monkeypatch):
         and len(call) >= 3 and call[0].endswith("agentic-kit") and call[1:3] == ["pr", "merge-if-green"]
         for call in calls
     )
-    assert len([call for call in calls if isinstance(call, list) and call and call[0] == "guard_branch"]) == 2
-
 
 def test_pr_merge_safe_still_blocks_when_volatile_repair_fails(monkeypatch):
     calls = []
-
-    class BlockMonitor:
-        decision = transfer_repo_actions.MonitorDecision.BLOCK
-        actual_branch = "feature/work"
-        required_branch = "main"
-        reason = "dirty_worktree_blocks_branch_switch"
-
-    def fake_guard_branch(**kwargs):
-        calls.append(["guard_branch", kwargs])
-        return BlockMonitor()
+    expected_head = "0123456789abcdef0123456789abcdef01234567"
 
     def fake_run(command, cwd=None):
         calls.append(command)
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if command == [
+            "gh",
+            "pr",
+            "view",
+            "123",
+            "--json",
+            "baseRefName,headRefName,headRefOid,state,url",
+        ]:
+            payload = {
+                "baseRefName": "main",
+                "headRefName": "feature/work",
+                "headRefOid": expected_head,
+                "state": "OPEN",
+                "url": "https://example.invalid/pr/123",
+            }
+            return subprocess.CompletedProcess(command, 0, json.dumps(payload), "")
         if command == [
             "./.venv/bin/agentic-kit",
             "transfer",
@@ -2259,18 +2403,27 @@ def test_pr_merge_safe_still_blocks_when_volatile_repair_fails(monkeypatch):
             return subprocess.CompletedProcess(command, 2, "", "dirty product file\n")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
-    monkeypatch.setattr(transfer_repo_actions, "guard_branch", fake_guard_branch)
     monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "read_git_state",
+        lambda _root=".": GitState(
+            branch="feature/work",
+            dirty_status=" M product.py",
+            head=expected_head,
+        ),
+    )
 
     result = transfer_repo_actions.pr_merge_safe(
         123,
-        expected_head_sha="0123456789abcdef0123456789abcdef01234567",
+        expected_head_sha=expected_head,
         main_branch="main",
     )
 
     assert result.returncode == 2
     assert result.result_status == "FAIL"
     assert "Transfer operation monitor blocked pr-merge-safe" in result.stderr
+    assert "dirty_worktree_blocks_pr_merge_safe" in result.stderr
     assert any(
         isinstance(call, list)
         and len(call) >= 4 and call[0].endswith("agentic-kit") and call[1:] == ["transfer", "normalize-session", "--repair-known-volatile"]
@@ -3494,6 +3647,22 @@ def test_pr_merge_safe_recovers_when_inner_merge_left_pr_merged(monkeypatch):
         calls.append(command)
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if command == [
+            "gh",
+            "pr",
+            "view",
+            "42",
+            "--json",
+            "baseRefName,headRefName,headRefOid,state,url",
+        ]:
+            payload = {
+                "baseRefName": "main",
+                "headRefName": "feature/recover",
+                "headRefOid": "d" * 40,
+                "state": "OPEN",
+                "url": "https://example.invalid/pr/42",
+            }
+            return subprocess.CompletedProcess(command, 0, json.dumps(payload), "")
         if len(command) >= 3 and command[0].endswith("agentic-kit") and command[1:3] == ["pr", "merge-if-green"]:
             return subprocess.CompletedProcess(command, 1, "", "main verification timed out\n")
         if command == ["gh", "pr", "view", "42", "--json", "number,state,mergedAt,mergeCommit,headRefOid,url,title"]:
@@ -3515,6 +3684,11 @@ def test_pr_merge_safe_recovers_when_inner_merge_left_pr_merged(monkeypatch):
 
     monkeypatch.setattr(transfer_repo_actions, "guard_branch", lambda **_kwargs: PassingMonitor())
     monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "read_git_state",
+        lambda _root=".": GitState(branch="main", dirty_status="", head="m" * 40),
+    )
 
     result = transfer_repo_actions.pr_merge_safe(
         42,

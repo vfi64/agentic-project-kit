@@ -607,6 +607,8 @@ rules:
     - docs/site/
     - legacy `main` `/docs`
     - excluded from Python sdist and wheel artifacts
+    - https://vfi64.github.io/agentic-project-kit/quickstart/
+    - https://vfi64.github.io/agentic-project-kit/workflows/
     - workflows/index.html
     - workflows/workflows.json
     - Choose How You Want To Work
@@ -663,6 +665,8 @@ rules:
     - byte-for-byte comparison
     - stable `docs-pages-fallback` build commit
     - excluded from Python sdist and wheel artifacts
+    - live GitHub Actions Pages site
+    - README links to the live GitHub Actions Pages site
   - path: site/README.md
     terms:
     - Generated Website
@@ -699,10 +703,13 @@ rules:
     - generated-artifact
     - .github/workflows/pages.yml
     - GitHub Pages workflow
+    - Actions artifact
     - actions/upload-pages-artifact
     - actions/deploy-pages
     - 'build_type: workflow'
     - GitHub Actions deployment
+    - The `/site/` prefix belongs
+    - legacy docs-source fallback
     - static/runtime-map.svg
     - Repository Memory
     - Runtime Structure
@@ -1253,6 +1260,8 @@ rules:
     - manual `workflow_dispatch` diagnostic job
     - optional diagnostic allowlist
     - skipped required checks
+    - dependency cache
+    - pyproject.toml
     - tree equivalence proof
     - admin-refresh-light
     - generated handoff allowlist
@@ -1274,6 +1283,10 @@ rules:
     - manual `workflow_dispatch` diagnostic job
     - optional diagnostic allowlist
     - skipped required checks
+    - Dependency caching
+    - pyproject.toml
+    - PR merge-safe self-hosting context
+    - exact clean local PR head branch
     - main_push_tree_proof
     - tree equivalence proof
     - admin-refresh-light

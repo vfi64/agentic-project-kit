@@ -21,6 +21,13 @@ def _step_by_name(steps: list[dict[str, object]], name: str) -> dict[str, object
     raise AssertionError(f"missing step: {name}")
 
 
+def _step_by_uses(steps: list[dict[str, object]], uses: str) -> dict[str, object]:
+    for step in steps:
+        if step.get("uses") == uses:
+            return step
+    raise AssertionError(f"missing uses step: {uses}")
+
+
 def test_ci_required_job_keeps_full_gate_as_default() -> None:
     data = yaml.safe_load(CI_WORKFLOW.read_text(encoding="utf-8"))
 
@@ -41,6 +48,11 @@ def test_ci_required_job_keeps_full_gate_as_default() -> None:
 
     assert checkout_step["uses"] == "actions/checkout@v6"
     assert checkout_step["with"] == {"fetch-depth": 1}
+    assert _step_by_uses(steps, "actions/setup-python@v6")["with"] == {
+        "python-version": "3.13",
+        "cache": "pip",
+        "cache-dependency-path": "pyproject.toml",
+    }
     assert "fetch_commit()" in runs
     assert 'git fetch --no-tags --depth=1 origin "$sha"' in runs
     assert 'refs/pull/${PR_NUMBER}/head' in runs
@@ -120,6 +132,11 @@ def test_parallel_pytest_is_required_and_shadow_is_manual_diagnostic_only() -> N
     assert "needs" not in data["jobs"]["test"]
     assert "needs" not in shadow
     shadow_run = "\n".join(_run_steps(shadow["steps"]))
+    assert _step_by_uses(shadow["steps"], "actions/setup-python@v6")["with"] == {
+        "python-version": "3.13",
+        "cache": "pip",
+        "cache-dependency-path": "pyproject.toml",
+    }
     assert "python -m pytest -q -n 4 --durations=20" in shadow_run
     assert "PYTEST_PARALLEL_SHADOW_RC=$rc" in shadow_run
     assert "::warning title=pytest-parallel-shadow::diagnostic shadow pytest failed" in shadow_run

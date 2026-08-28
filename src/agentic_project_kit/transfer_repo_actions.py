@@ -20,6 +20,7 @@ from agentic_project_kit.safe_push import safe_push
 from agentic_project_kit.transfer_operation_monitor import MonitorDecision
 from agentic_project_kit.transfer_operation_monitor import guard_branch
 from agentic_project_kit.transfer_operation_monitor import guard_pr_create
+from agentic_project_kit.transfer_operation_monitor import read_git_state
 from agentic_project_kit.workspace import KitConfig, Workspace, load_workspace
 from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 from agentic_project_kit.workspace_lock import acquire_workspace_lock, workspace_mutation_lock
@@ -43,6 +44,15 @@ class RepoActionResult:
 class SuccessorPackageFreshnessCheck:
     findings: tuple[str, ...]
     notes: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class PrMergeSafeContext:
+    base_ref_name: str
+    head_ref_name: str
+    head_ref_oid: str
+    state: str
+    url: str
 
 
 _LEGACY_WORKSPACE = Workspace(root=Path("."), config=KitConfig())
@@ -142,6 +152,56 @@ def _resolve_pr_head_sha(pr_number: int, *, action: str) -> tuple[str, RepoActio
         return "", _result(action, command, bad, "Inspect PR head SHA lookup failure before continuing.")
 
     return head_sha, None
+
+
+def _resolve_pr_merge_safe_context(
+    pr_number: int,
+    *,
+    action: str,
+) -> tuple[PrMergeSafeContext | None, RepoActionResult | None]:
+    command = [
+        "gh",
+        "pr",
+        "view",
+        str(pr_number),
+        "--json",
+        "baseRefName,headRefName,headRefOid,state,url",
+    ]
+    completed = _run(command)
+    if completed.returncode != 0:
+        return None, _result(action, command, completed, "Inspect PR refs lookup failure before continuing.")
+
+    try:
+        data = json.loads(completed.stdout or "{}")
+    except json.JSONDecodeError as exc:
+        bad = subprocess.CompletedProcess(
+            command,
+            2,
+            completed.stdout,
+            f"Could not parse PR refs lookup JSON: {exc}\n",
+        )
+        return None, _result(action, command, bad, "Inspect PR refs lookup output before continuing.")
+
+    if not isinstance(data, dict):
+        bad = subprocess.CompletedProcess(command, 2, completed.stdout, "PR refs lookup did not return an object.\n")
+        return None, _result(action, command, bad, "Inspect PR refs lookup output before continuing.")
+
+    context = PrMergeSafeContext(
+        base_ref_name=str(data.get("baseRefName") or ""),
+        head_ref_name=str(data.get("headRefName") or ""),
+        head_ref_oid=str(data.get("headRefOid") or ""),
+        state=str(data.get("state") or ""),
+        url=str(data.get("url") or ""),
+    )
+    if len(context.head_ref_oid) != 40:
+        bad = subprocess.CompletedProcess(
+            command,
+            2,
+            completed.stdout,
+            f"Resolved PR head SHA is not a full 40-character SHA: {context.head_ref_oid}\n",
+        )
+        return None, _result(action, command, bad, "Inspect PR refs lookup failure before continuing.")
+    return context, None
 
 
 def _pr_state_lookup(pr_number: int, *, action: str) -> tuple[dict, RepoActionResult | None]:
@@ -635,6 +695,100 @@ def _recover_known_volatile_branch_switch_block(
         allow_main_mutation=allow_main_mutation,
         auto_switch=auto_switch,
     )
+
+
+def _pr_merge_safe_block(
+    *,
+    reason: str,
+    actual_branch: str,
+    required_branch: str,
+    details: str = "",
+) -> RepoActionResult:
+    message = (
+        "Transfer operation monitor blocked pr-merge-safe: "
+        f"{reason}; actual_branch={actual_branch}; required_branch={required_branch}"
+    )
+    if details:
+        message = f"{message}; {details}"
+    completed = subprocess.CompletedProcess(
+        ["transfer-monitor", "pr-merge-safe", "--branch", required_branch],
+        2,
+        "",
+        f"{message}\n",
+    )
+    return _result(
+        "pr-merge-safe",
+        list(completed.args),
+        completed,
+        "Inspect transfer operation monitor block before merging PR.",
+    )
+
+
+def _repair_known_volatile_before_pr_merge_safe() -> bool:
+    repair_command = [
+        _agentic_kit_command(),
+        "transfer",
+        "normalize-session",
+        "--repair-known-volatile",
+    ]
+    repair = _run(repair_command)
+    return repair.returncode == 0
+
+
+def _guard_pr_merge_safe_execution_context(
+    *,
+    context: PrMergeSafeContext,
+    expected_head_sha: str,
+    main_branch: str,
+) -> RepoActionResult | None:
+    state = read_git_state(".")
+    if state.dirty_status and _repair_known_volatile_before_pr_merge_safe():
+        state = read_git_state(".")
+
+    required_branch = f"{main_branch} or {context.head_ref_name or '<pr-head>'}"
+    if state.dirty_status:
+        return _pr_merge_safe_block(
+            reason="dirty_worktree_blocks_pr_merge_safe",
+            actual_branch=state.branch,
+            required_branch=required_branch,
+        )
+
+    if state.branch == main_branch:
+        return None
+
+    if context.head_ref_name and state.branch == context.head_ref_name:
+        if state.head != expected_head_sha:
+            return _pr_merge_safe_block(
+                reason="local_pr_branch_head_mismatch",
+                actual_branch=state.branch,
+                required_branch=context.head_ref_name,
+                details=f"actual_head={state.head}; expected_head={expected_head_sha}",
+            )
+        return None
+
+    monitor = guard_branch(
+        command_kind="pr-merge-safe",
+        required_branch=main_branch,
+        allow_main_mutation=True,
+        auto_switch=True,
+    )
+    if monitor.decision == MonitorDecision.BLOCK:
+        monitor = _recover_known_volatile_branch_switch_block(
+            command_kind="pr-merge-safe",
+            required_branch=main_branch,
+            monitor=monitor,
+            allow_main_mutation=True,
+            auto_switch=True,
+        )
+    if monitor.decision == MonitorDecision.BLOCK:
+        return _monitor_block_result(
+            action="pr-merge-safe",
+            command_kind="pr-merge-safe",
+            required_branch=main_branch,
+            monitor=monitor,
+            next_action="Inspect transfer operation monitor block before merging PR.",
+        )
+    return None
 
 
 def _verify_current_branch(action: str, expected_branch: str, *, command: list[str]) -> RepoActionResult | None:
@@ -1417,37 +1571,56 @@ def _pr_merge_safe_unlocked(
     merge_state_timeout_seconds: int = 60,
     merge_state_poll_seconds: int = 5,
 ) -> RepoActionResult:
-    monitor = guard_branch(
-        command_kind="pr-merge-safe",
-        required_branch=main_branch,
-        allow_main_mutation=True,
-        auto_switch=True,
-    )
-    if monitor.decision == MonitorDecision.BLOCK:
-        monitor = _recover_known_volatile_branch_switch_block(
-            command_kind="pr-merge-safe",
-            required_branch=main_branch,
-            monitor=monitor,
-            allow_main_mutation=True,
-            auto_switch=True,
-        )
-    if monitor.decision == MonitorDecision.BLOCK:
-        return _monitor_block_result(
-            action="pr-merge-safe",
-            command_kind="pr-merge-safe",
-            required_branch=main_branch,
-            monitor=monitor,
-            next_action="Inspect transfer operation monitor block before merging PR.",
-        )
-
     if expected_head_sha:
         guarded = _full_sha_guard("pr-merge-safe", expected_head_sha)
         if guarded is not None:
             return guarded
-    else:
-        expected_head_sha, failure = _resolve_pr_head_sha(pr_number, action="pr-merge-safe")
-        if failure is not None:
-            return failure
+
+    context, failure = _resolve_pr_merge_safe_context(pr_number, action="pr-merge-safe")
+    if failure is not None:
+        return failure
+    if context is None:
+        completed = subprocess.CompletedProcess(
+            ["pr-merge-safe", "--resolve-pr-context"],
+            2,
+            "",
+            "PR refs lookup did not produce a merge-safe context.\n",
+        )
+        return _result("pr-merge-safe", list(completed.args), completed, "Inspect PR refs lookup failure before continuing.")
+
+    if context.base_ref_name != main_branch:
+        completed = subprocess.CompletedProcess(
+            ["pr-merge-safe", "--main-branch", main_branch],
+            2,
+            "",
+            (
+                "Refusing to continue pr-merge-safe because the PR base branch is unexpected: "
+                f"expected {main_branch}, got {context.base_ref_name or '<missing>'}\n"
+            ),
+        )
+        return _result("pr-merge-safe", list(completed.args), completed, "Stop and inspect the PR base branch mismatch.")
+
+    if expected_head_sha and context.head_ref_oid != expected_head_sha:
+        completed = subprocess.CompletedProcess(
+            ["pr-merge-safe", "--expected-head-sha"],
+            2,
+            "",
+            (
+                "Refusing to continue pr-merge-safe because the PR head changed: "
+                f"expected {expected_head_sha}, got {context.head_ref_oid}\n"
+            ),
+        )
+        return _result("pr-merge-safe", list(completed.args), completed, "Stop and inspect the PR head SHA mismatch.")
+
+    expected_head_sha = expected_head_sha or context.head_ref_oid
+    context_guard = _guard_pr_merge_safe_execution_context(
+        context=context,
+        expected_head_sha=expected_head_sha,
+        main_branch=main_branch,
+    )
+    if context_guard is not None:
+        return context_guard
+
     preflight = _remote_mutation_preflight(
         action="pr-merge-safe",
         mutation="pr-merge-safe",

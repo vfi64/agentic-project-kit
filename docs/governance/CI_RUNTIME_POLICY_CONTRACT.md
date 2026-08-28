@@ -31,6 +31,11 @@ selects the conservative full lane. A full-history checkout is not required for
 normal test execution and must not be used as a substitute for deterministic
 endpoint proof.
 
+GitHub Actions dependency cache use is performance-only. The workflow may use
+`actions/setup-python` pip caching keyed by `pyproject.toml`, but cache hit,
+cache miss, cache restore failure, or dependency download timing must not change
+gate-mode selection, test selection, safety policy, or PASS/FAIL meaning.
+
 ## CI2 Pytest Parallel Required Lane
 
 The branch-protection-visible `test` job runs the exact pytest suite with a

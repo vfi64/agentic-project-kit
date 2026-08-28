@@ -31,6 +31,7 @@ def test_pages_workflow_builds_site_and_deploys_actions_artifact() -> None:
     build_steps = build["steps"]
     build_runs = [step.get("run", "") for step in build_steps]
     build_uses = [step.get("uses", "") for step in build_steps]
+    setup_python = next(step for step in build_steps if step.get("uses") == "actions/setup-python@v6")
 
     assert pages_gate["outputs"] == {
         "build-required": "${{ steps.policy.outputs.build-required }}",
@@ -56,6 +57,11 @@ def test_pages_workflow_builds_site_and_deploys_actions_artifact() -> None:
 
     assert build["needs"] == ["pages-gate", "pages-state"]
     assert build["if"] == "needs.pages-gate.outputs.build-required == 'true'"
+    assert setup_python["with"] == {
+        "python-version": "3.13",
+        "cache": "pip",
+        "cache-dependency-path": "pyproject.toml",
+    }
     assert 'pip install -e ".[dev]"' in "\n".join(build_runs)
     assert "python site/scripts/build.py --output site/dist --json" in build_runs
     assert "python -m pytest tests/test_site_generator.py tests/test_site_claims.py -q" in build_runs
