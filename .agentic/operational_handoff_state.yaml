@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6c26c5ca875651812448355c44d43748a85d3862
-  short: 6c26c5ca
-  subject: Fix admin refresh light push diff evidence (#2204)
+  full: f234348b66968130ba4707f996705f4bd63f8aea
+  short: f234348b
+  subject: Optimize deterministic CI runtime
 last_substantive_work_state:
-  full: 6c26c5ca875651812448355c44d43748a85d3862
-  short: 6c26c5ca
-  subject: Fix admin refresh light push diff evidence (#2204)
+  full: f234348b66968130ba4707f996705f4bd63f8aea
+  short: f234348b
+  subject: Optimize deterministic CI runtime
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
