@@ -378,6 +378,35 @@ def test_release_notes_generator_classifies_post_105_b1_and_workflow_titles(tmp_
     ]
 
 
+def test_release_notes_generator_classifies_post_106_ci_and_receipt_titles(tmp_path: Path) -> None:
+    report = build_release_notes_report(
+        tmp_path,
+        version="1.0.7",
+        from_tag="v1.0.6",
+        command_runner=FakeRunner(
+            subjects=[
+                "Finalize B1 community post evidence (#2191)",
+                "Assess refresh receipt feasibility (#2195)",
+                "Harden deterministic CI runtime policy (#2197)",
+                "Optimize deterministic CI runtime (#2206)",
+                "Handle optional skipped shadow check in merge gates (#2208)",
+                "Fix pr-merge-safe self-hosting context (#2210)",
+            ]
+        ),
+    )
+
+    assert report.validation.status == "PASS"
+    assert report.unclassified_items == ()
+    assert [item.category for item in report.items] == [
+        "Docs",
+        "Transfer / Handoff",
+        "Governance",
+        "Tests / Gates",
+        "Tests / Gates",
+        "Fixed",
+    ]
+
+
 def test_release_notes_generator_treats_report_projection_commits_as_administrative(
     tmp_path: Path,
 ) -> None:
