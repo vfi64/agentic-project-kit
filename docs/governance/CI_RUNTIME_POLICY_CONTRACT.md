@@ -76,6 +76,9 @@ protected-diff-plan coverage, doc-registry reconcile, doc-registry unregistered
 checks, check-docs, and targeted regression tests for touched contracts.
 Post-merge status checks remain post-merge lifecycle gates; the PR light gate
 must not rely on main-only post-merge state while validating a PR checkout.
+The same light gate may run on a main push when the changed paths prove the
+source PR through the terminal handoff report; in that case protected-diff-plan
+uses the push `before..current` diff instead of pull-request base/head SHAs.
 
 ## CI5 Pages Path Gate
 

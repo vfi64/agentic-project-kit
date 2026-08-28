@@ -91,6 +91,9 @@ gate must run handoff check, variant-specific artifact validation,
 protected-diff-plan coverage, doc-registry reconcile, doc-registry unregistered
 checks, check-docs, and targeted successor/package regression tests. Post-merge
 status checks remain post-merge lifecycle gates, not PR-checkout substitutes.
+When the same admin-light lane runs on a main push, its protected-diff-plan
+evidence must use the deterministic push `before..current` diff because PR
+base/head SHAs are unavailable.
 
 `pages_path_gate` is driven by `site/pages_input_manifest.json`. It may select
 `BUILD_SKIPPED` only for deterministically irrelevant main-push changes. Explicit
