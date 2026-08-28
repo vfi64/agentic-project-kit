@@ -1251,6 +1251,8 @@ rules:
     - parallel full-suite gate
     - pytest-parallel-shadow
     - manual `workflow_dispatch` diagnostic job
+    - optional diagnostic allowlist
+    - skipped required checks
     - tree equivalence proof
     - admin-refresh-light
     - generated handoff allowlist
@@ -1270,6 +1272,8 @@ rules:
     - complete pytest suite
     - python -m pytest -q -n 4 --durations=20
     - manual `workflow_dispatch` diagnostic job
+    - optional diagnostic allowlist
+    - skipped required checks
     - main_push_tree_proof
     - tree equivalence proof
     - admin-refresh-light

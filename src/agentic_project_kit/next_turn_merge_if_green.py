@@ -405,6 +405,8 @@ def render_result(result: MergeIfGreenResult) -> str:
         *[f"- {item}" for item in result.status_decision.stale_checks],
         "unknown_checks:",
         *[f"- {item}" for item in result.status_decision.unknown_checks],
+        "skipped_optional_checks:",
+        *[f"- {item}" for item in result.status_decision.skipped_optional_checks],
         "main_failed_run_diagnostics:",
         *_render_failed_run_diagnostics(main_status),
         final_marker,

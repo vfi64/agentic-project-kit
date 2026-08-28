@@ -13,6 +13,12 @@ The branch-protection-visible `CI` workflow keeps the required `test` job. Gate
 selection happens inside that job so a skipped optional job cannot stand in for
 success.
 
+PR readiness and merge wrappers may ignore completed `SKIPPED` checks only when
+the exact check name is listed in the optional diagnostic allowlist; currently
+that allowlist contains only `pytest-parallel-shadow`. The fail-closed rule
+covers `skipped required checks` and unlisted skipped checks; they must not
+count as success.
+
 The default mode is `FULL_CI`. Any missing, invalid, ambiguous, or unsafe input
 selects `FULL_CI`.
 

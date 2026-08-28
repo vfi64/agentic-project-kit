@@ -24,6 +24,70 @@ def test_classify_green_pr_status() -> None:
     assert decision.successful_checks == ("test",)
 
 
+def test_optional_skipped_shadow_does_not_block_green_required_check() -> None:
+    decision = classify_pr_status(
+        {
+            "state": "OPEN",
+            "mergeStateStatus": "CLEAN",
+            "headRefOid": "abc",
+            "statusCheckRollup": [
+                {"name": "test", "status": "COMPLETED", "conclusion": "SUCCESS"},
+                {
+                    "name": "pytest-parallel-shadow",
+                    "status": "COMPLETED",
+                    "conclusion": "SKIPPED",
+                },
+            ],
+        },
+        pr="1",
+    )
+
+    assert decision.decision == "green"
+    assert decision.successful_checks == ("test",)
+    assert decision.unknown_checks == ()
+    assert decision.skipped_optional_checks == ("pytest-parallel-shadow",)
+
+
+def test_unlisted_skipped_check_blocks_as_unknown() -> None:
+    decision = classify_pr_status(
+        {
+            "state": "OPEN",
+            "mergeStateStatus": "CLEAN",
+            "headRefOid": "abc",
+            "statusCheckRollup": [
+                {"name": "test", "status": "COMPLETED", "conclusion": "SUCCESS"},
+                {"name": "deploy", "status": "COMPLETED", "conclusion": "SKIPPED"},
+            ],
+        },
+        pr="1",
+    )
+
+    assert decision.decision == "unknown"
+    assert decision.unknown_checks == ("deploy",)
+
+
+def test_optional_skipped_shadow_alone_is_not_green() -> None:
+    decision = classify_pr_status(
+        {
+            "state": "OPEN",
+            "mergeStateStatus": "CLEAN",
+            "headRefOid": "abc",
+            "statusCheckRollup": [
+                {
+                    "name": "pytest-parallel-shadow",
+                    "status": "COMPLETED",
+                    "conclusion": "SKIPPED",
+                },
+            ],
+        },
+        pr="1",
+    )
+
+    assert decision.decision == "no-checks"
+    assert decision.successful_checks == ()
+    assert decision.skipped_optional_checks == ("pytest-parallel-shadow",)
+
+
 def test_classify_red_pr_status() -> None:
     decision = classify_pr_status(
         {
