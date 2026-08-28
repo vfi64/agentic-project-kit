@@ -121,6 +121,9 @@ jobs:
         if: steps.runtime-policy.outputs.gate-mode == 'admin-refresh-light'
         shell: bash
         env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          CURRENT_SHA: ${{ github.sha }}
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
@@ -163,8 +166,15 @@ jobs:
               exit 1
               ;;
           esac
-          git diff "$PR_BASE_SHA" "$PR_HEAD_SHA" --output "$RUNNER_TEMP/admin-refresh-pr.diff"
-          python -m agentic_project_kit.protected_change_planner --diff-file "$RUNNER_TEMP/admin-refresh-pr.diff"
+          if [ "$EVENT_NAME" = "pull_request" ] && [ -n "$PR_BASE_SHA" ] && [ -n "$PR_HEAD_SHA" ]; then
+            git diff "$PR_BASE_SHA" "$PR_HEAD_SHA" --output "$RUNNER_TEMP/admin-refresh.diff"
+          elif [ "$EVENT_NAME" = "push" ] && [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            git diff "$BEFORE_SHA" "$CURRENT_SHA" --output "$RUNNER_TEMP/admin-refresh.diff"
+          else
+            echo "cannot determine admin refresh diff endpoints for $EVENT_NAME" >&2
+            exit 1
+          fi
+          python -m agentic_project_kit.protected_change_planner --diff-file "$RUNNER_TEMP/admin-refresh.diff"
           agentic-kit transfer protected-diff-plan --label ci-admin-refresh-clean-worktree --json
           agentic-kit doc-registry reconcile --json
           agentic-kit doc-registry check-unregistered --json

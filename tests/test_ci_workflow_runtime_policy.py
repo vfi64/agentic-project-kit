@@ -52,6 +52,11 @@ def test_admin_refresh_light_gate_runs_only_handoff_registry_and_docs_checks() -
     run = str(admin_step["run"])
 
     assert admin_step["if"] == "steps.runtime-policy.outputs.gate-mode == 'admin-refresh-light'"
+    assert admin_step["env"]["EVENT_NAME"] == "${{ github.event_name }}"
+    assert admin_step["env"]["BEFORE_SHA"] == "${{ github.event.before }}"
+    assert admin_step["env"]["CURRENT_SHA"] == "${{ github.sha }}"
+    assert admin_step["env"]["PR_BASE_SHA"] == "${{ github.event.pull_request.base.sha }}"
+    assert admin_step["env"]["PR_HEAD_SHA"] == "${{ github.event.pull_request.head.sha }}"
     assert "POLICY_MUTATION=" in run
     assert "agentic-kit handoff check" in run
     assert "validate_successor_package()" in run
@@ -59,6 +64,9 @@ def test_admin_refresh_light_gate_runs_only_handoff_registry_and_docs_checks() -
     assert "post-merge-settle-refresh)" in run
     assert "validate_successor_package" in run
     assert "successor handoff validation_report.json is not PASS" in run
+    assert 'git diff "$PR_BASE_SHA" "$PR_HEAD_SHA" --output "$RUNNER_TEMP/admin-refresh.diff"' in run
+    assert 'git diff "$BEFORE_SHA" "$CURRENT_SHA" --output "$RUNNER_TEMP/admin-refresh.diff"' in run
+    assert "cannot determine admin refresh diff endpoints" in run
     assert "unexpected admin refresh mutation" in run
     assert "agentic-kit handoff post-merge-refresh-status" not in run
     assert "agentic-kit transfer post-merge-check" not in run
