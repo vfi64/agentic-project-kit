@@ -38,8 +38,8 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `codex/deterministic-ci-runtime-plan`
-- head_matches_origin_main: `False`
+- branch: `docs/post-pr2198-successor-package-refresh`
+- head_matches_origin_main: `True`
 - worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
@@ -411,14 +411,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "codex/deterministic-ci-runtime-plan",
+    "branch": "docs/post-pr2198-successor-package-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "281a361d282ce086160c1c04b1e1cede3332a9d5",
-    "head_matches_origin_main": false,
-    "head_short": "281a361d",
+    "head": "f17c21c372219e051d8d361491246f51b387a182",
+    "head_matches_origin_main": true,
+    "head_short": "f17c21c3",
     "local_path": "cd /path/to/",
-    "origin_main": "aa19501e8406b5f57e72e427dc08418fa4935513",
-    "origin_main_short": "aa19501e",
+    "origin_main": "f17c21c372219e051d8d361491246f51b387a182",
+    "origin_main_short": "f17c21c3",
     "worktree_clean": true
   }
 }
