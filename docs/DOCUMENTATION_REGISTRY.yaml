@@ -1546,3 +1546,6 @@ documents:
   - path: docs/governance/CI_RUNTIME_POLICY_CONTRACT.md
     class: governance/system
     owner: maintainers
+  - path: docs/reports/POST_V1_0_6_CI_PAGES_RELEASE_REVALIDATION_20260828.md
+    class: evidence/log
+    owner: maintainers

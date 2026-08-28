@@ -64,6 +64,9 @@ deploys with `actions/deploy-pages` only after the repository Pages API reports
 the workflow records that state and skips the Pages-specific steps
 after a successful build rather than turning `main` red for a missing repository
 setting.
+When Pages is served from the Actions artifact, public links use the deployment
+root, for example `/quickstart/` and `/workflows/`. The `/site/` prefix belongs
+only to the legacy docs-source fallback.
 
 Legacy GitHub Pages source `/docs` is supported as a generated fallback, not as a
 new manual website source. `python site/scripts/build.py --docs-pages-fallback --json`

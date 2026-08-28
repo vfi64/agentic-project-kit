@@ -52,6 +52,20 @@ def test_required_ci_test_passed_requires_exact_workflow_check_success() -> None
             [
                 {
                     "__typename": "CheckRun",
+                    "workflowName": "CI",
+                    "name": "test",
+                    "status": "COMPLETED",
+                    "conclusion": "SKIPPED",
+                }
+            ]
+        )
+        is False
+    )
+    assert (
+        required_ci_test_passed(
+            [
+                {
+                    "__typename": "CheckRun",
                     "workflowName": "Pages",
                     "name": "test",
                     "status": "COMPLETED",
@@ -111,6 +125,45 @@ def test_resolve_main_push_pr_tree_proof_accepts_exact_tree_and_required_check()
     assert proof.source_pr == 2205
     assert proof.final_tree_sha == "tree123"
     assert proof.tested_tree_sha == "tree123"
+    assert proof.pr_checks_passed is True
+
+
+def test_resolve_main_push_pr_tree_proof_ignores_skipped_shadow_when_required_check_passed() -> None:
+    pr_view = _pr_view()
+    pr_view["statusCheckRollup"].append(
+        {
+            "__typename": "CheckRun",
+            "workflowName": "CI",
+            "name": "pytest-parallel-shadow",
+            "status": "COMPLETED",
+            "conclusion": "SKIPPED",
+        }
+    )
+
+    def json_runner(argv: list[str]) -> Any:
+        if argv[:2] == ["gh", "api"]:
+            return [_associated_pr()]
+        if argv[:2] == ["gh", "pr"]:
+            return pr_view
+        raise AssertionError(argv)
+
+    def text_runner(argv: list[str]) -> str:
+        if argv[:2] == ["git", "rev-parse"]:
+            return "tree123"
+        if argv[:2] == ["git", "cat-file"]:
+            return ""
+        if argv[:2] == ["git", "fetch"]:
+            return ""
+        raise AssertionError(argv)
+
+    proof = resolve_main_push_pr_tree_proof(
+        repo="vfi64/agentic-project-kit",
+        current_sha=CURRENT_SHA,
+        json_runner=json_runner,
+        text_runner=text_runner,
+    )
+
+    assert proof.status == "PASS"
     assert proof.pr_checks_passed is True
 
 

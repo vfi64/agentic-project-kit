@@ -33,6 +33,7 @@ jobs:
         with:
           python-version: "3.13"
           cache: "pip"
+          cache-dependency-path: pyproject.toml
 
       - name: Determine changed paths
         shell: bash
@@ -277,6 +278,7 @@ jobs:
         with:
           python-version: "3.13"
           cache: "pip"
+          cache-dependency-path: pyproject.toml
 
       - name: Install package
         run: |

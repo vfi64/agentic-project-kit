@@ -103,7 +103,7 @@ workspace-detection message.
 For the generated install and usage walkthrough, including the PyPI install
 path, the source install path, a Docker-based safe package test, new
 repositories, and existing repositories, see
-<https://vfi64.github.io/agentic-project-kit/site/quickstart/>.
+<https://vfi64.github.io/agentic-project-kit/quickstart/>.
 
 Evidence labels stay separate:
 
@@ -483,7 +483,7 @@ count, `meta.manifest_sha`, `manifest_sha(commands)`, and build commit. The
 site is not a second hand-maintained technical truth surface.
 
 Pages: <https://vfi64.github.io/agentic-project-kit/>. Workflow
-chooser: <https://vfi64.github.io/agentic-project-kit/site/workflows/>
+chooser: <https://vfi64.github.io/agentic-project-kit/workflows/>
 (`workflows/index.html`, `workflows/workflows.json`). `Choose How You Want To Work`:
 File Transfer, Copy and Paste, Agent Direct, and
 experimental early GUI surface. Brownfield evidence:

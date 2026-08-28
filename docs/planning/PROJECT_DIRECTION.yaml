@@ -661,7 +661,7 @@ roadmap:
   - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
 - id: deterministic-ci-runtime-optimization
   phase: pre-GUI
-  status: next
+  status: done
   title: Reduce workflow runtime without reducing deterministic assurance
   depends_on:
   - pre-gui-hardening-line
@@ -819,6 +819,32 @@ roadmap:
   - tests/test_ci_workflow_runtime_policy.py
   - tests/test_documentation_registry.py
   - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
+  closeout:
+    result: implemented_after_v1_0_6
+    notes:
+    - CI checkout remains shallow; diff endpoints are fetched explicitly and
+      fail closed to full-repository classification when unavailable.
+    - The branch-protection-visible CI job keeps a stable `test` check while
+      choosing full, admin-refresh-light, or tree-proof gates through tested
+      Python classifiers.
+    - Required full pytest now runs the complete suite with fixed-worker xdist;
+      the shadow job remains manual diagnostic evidence and is skipped in
+      ordinary PR/admin-refresh runs.
+    - Dependency caching is treated as runtime-only. Cache hit, miss, restore
+      failure, or download timing must not affect gate-mode selection, selected
+      tests, or PASS/FAIL semantics.
+    - Main-push dedupe requires a tree-equivalence proof and GitHub proof of
+      successful PR checks for the exact head SHA; workflow changes still fall
+      back to full CI.
+    - Admin refresh and Pages lanes are path-gated through exact allowlists and
+      validation status, with ambiguity falling back to stronger work.
+    - Failure registry remains diagnostic-only, and receipt-store replacement
+      remains deferred until exactly-one receipt, append-only enforcement, and
+      successor read-path discovery can be proven deterministically.
+    follow_up:
+    - Re-evaluate B3 after the CI line because its remaining 147/166 command
+      audit items are now a large safety-audit cost center relative to current
+      product goals.
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/governance/CI_RUNTIME_POLICY_CONTRACT.md
