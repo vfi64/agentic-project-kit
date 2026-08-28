@@ -71,6 +71,60 @@ def test_decide_merge_refuses_red_pr() -> None:
     assert "not green" in reason
 
 
+def test_decide_merge_accepts_green_required_check_with_optional_skipped_shadow() -> None:
+    decision, reason = decide_merge(
+        status(
+            {
+                "state": "OPEN",
+                "mergeStateStatus": "CLEAN",
+                "headRefOid": "abc",
+                "statusCheckRollup": [
+                    {"name": "test", "status": "COMPLETED", "conclusion": "SUCCESS"},
+                    {
+                        "name": "pytest-parallel-shadow",
+                        "status": "COMPLETED",
+                        "conclusion": "SKIPPED",
+                    },
+                ],
+            }
+        )
+    )
+
+    assert decision == "merge"
+    assert reason == "PR is green"
+
+
+def test_merge_if_green_accepts_optional_skipped_shadow(monkeypatch) -> None:
+    commands: list[list[str]] = []
+
+    def fake_run(args: list[str]) -> subprocess.CompletedProcess[str]:
+        commands.append(args)
+        return subprocess.CompletedProcess(args=["gh", *args], returncode=0, stdout="merged", stderr="")
+
+    monkeypatch.setattr(merge_if_green_module, "_run_gh", fake_run)
+
+    payload = green_payload(head_ref_oid="abc123")
+    payload["statusCheckRollup"] = [
+        {"name": "test", "status": "COMPLETED", "conclusion": "SUCCESS"},
+        {
+            "name": "pytest-parallel-shadow",
+            "status": "COMPLETED",
+            "conclusion": "SKIPPED",
+        },
+    ]
+    result = merge_if_green_module.merge_if_green(
+        "123",
+        expected_head_sha="abc123",
+        verify_main=False,
+        pr_payload_fetcher=lambda _pr: payload,
+    )
+
+    assert result.decision == "merge"
+    assert result.merged
+    assert result.status_decision.skipped_optional_checks == ("pytest-parallel-shadow",)
+    assert commands == [["pr", "merge", "123", "--squash", "--match-head-commit", "abc123", "--delete-branch"]]
+
+
 def test_decide_merge_refuses_pending_pr() -> None:
     decision, reason = decide_merge(
         status(

@@ -80,6 +80,12 @@ path for ordinary PRs after promotion. `pytest-parallel-shadow` remains a
 manual `workflow_dispatch` diagnostic job rather than running on every PR,
 main-push, or admin-refresh cycle.
 
+PR readiness and merge gates must not treat skipped required checks as success.
+Completed `SKIPPED` checks are neutral only when the exact check name is in the
+explicit optional diagnostic allowlist; currently that allowlist contains only
+`pytest-parallel-shadow`. Unknown or unlisted skipped checks must block or wait
+fail-closed instead of becoming merge evidence.
+
 `main_push_tree_proof` may select a reduced main-push path only with tree equivalence proof:
 final main tree, tested pull-request head tree, exactly one associated merged
 PR targeting `main`, a matching merge commit SHA, a successful `CI` / `test`

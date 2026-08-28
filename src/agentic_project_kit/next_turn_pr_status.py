@@ -10,6 +10,13 @@ from dataclasses import dataclass, replace
 from typing import Any, Literal
 
 from agentic_project_kit.github_actions_run_checks import fetch_action_run_checks
+from agentic_project_kit.github_check_policy import (
+    is_failed_check_conclusion,
+    is_optional_skipped_check,
+    is_successful_check_conclusion,
+    normalize_check_conclusion,
+    normalize_check_status,
+)
 
 Decision = Literal["green", "red", "pending", "no-checks", "stale", "unknown", "not-open"]
 FailedLogStatus = Literal["not-fetched", "fetched", "unavailable", "missing-run-id"]
@@ -39,6 +46,7 @@ class PrStatusDecision:
     failed_checks: tuple[str, ...]
     stale_checks: tuple[str, ...]
     unknown_checks: tuple[str, ...]
+    skipped_optional_checks: tuple[str, ...]
     failed_run_log_hint: str
     failed_run_diagnostics: tuple[FailedRunDiagnostic, ...]
 
@@ -73,6 +81,7 @@ def classify_pr_status(payload: dict[str, Any], *, pr: str = "") -> PrStatusDeci
     failed: list[str] = []
     stale: list[str] = []
     unknown: list[str] = []
+    skipped_optional: list[str] = []
     failed_diagnostics: list[FailedRunDiagnostic] = []
 
     if state != "OPEN":
@@ -85,16 +94,18 @@ def classify_pr_status(payload: dict[str, Any], *, pr: str = "") -> PrStatusDeci
                 unknown.append("unknown")
                 continue
             name = _check_name(item)
-            status = str(item.get("status") or "").upper()
-            conclusion = str(item.get("conclusion") or "").upper()
+            status = normalize_check_status(item.get("status"))
+            conclusion = normalize_check_conclusion(item.get("conclusion"))
             stale_remote_evidence = bool(item.get("staleRemoteEvidence"))
             if stale_remote_evidence and status != "COMPLETED":
                 stale.append(name)
             elif status != "COMPLETED":
                 pending.append(name)
-            elif conclusion == "SUCCESS":
+            elif is_successful_check_conclusion(conclusion):
                 successful.append(name)
-            elif conclusion in {"FAILURE", "CANCELLED", "TIMED_OUT", "ACTION_REQUIRED"}:
+            elif is_optional_skipped_check(name, status=status, conclusion=conclusion):
+                skipped_optional.append(name)
+            elif is_failed_check_conclusion(conclusion):
                 failed.append(name)
                 failed_diagnostics.append(_failed_run_diagnostic(item, name=name, conclusion=conclusion))
             else:
@@ -110,6 +121,8 @@ def classify_pr_status(payload: dict[str, Any], *, pr: str = "") -> PrStatusDeci
             decision = "stale"
         elif unknown:
             decision = "unknown"
+        elif not successful:
+            decision = "no-checks"
         else:
             decision = "green"
 
@@ -129,6 +142,7 @@ def classify_pr_status(payload: dict[str, Any], *, pr: str = "") -> PrStatusDeci
         failed_checks=tuple(failed),
         stale_checks=tuple(stale),
         unknown_checks=tuple(unknown),
+        skipped_optional_checks=tuple(skipped_optional),
         failed_run_log_hint=hint,
         failed_run_diagnostics=tuple(failed_diagnostics),
     )
@@ -203,6 +217,8 @@ def render_decision(decision: PrStatusDecision) -> str:
         *[f"- {item}" for item in decision.stale_checks],
         "unknown_checks:",
         *[f"- {item}" for item in decision.unknown_checks],
+        "skipped_optional_checks:",
+        *[f"- {item}" for item in decision.skipped_optional_checks],
         f"failed_run_log_hint={decision.failed_run_log_hint}",
         "failed_run_diagnostics:",
     ]

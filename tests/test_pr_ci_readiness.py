@@ -42,6 +42,60 @@ def test_clean_ci_snapshot_is_ready_to_merge():
     assert decision.success
 
 
+def test_optional_skipped_shadow_does_not_block_readiness():
+    snapshot = clean_snapshot()
+    snapshot["statusCheckRollup"].append(
+        {
+            "name": "pytest-parallel-shadow",
+            "status": "COMPLETED",
+            "conclusion": "SKIPPED",
+        }
+    )
+
+    decision = classify_pr_readiness(
+        snapshot,
+        expected_head_sha="abc123",
+        expected_checks=("test",),
+    )
+
+    assert decision.outcome == READY_TO_MERGE
+    assert decision.success
+
+
+def test_unlisted_skipped_check_blocks_readiness():
+    snapshot = clean_snapshot()
+    snapshot["statusCheckRollup"].append(
+        {
+            "name": "deploy",
+            "status": "COMPLETED",
+            "conclusion": "SKIPPED",
+        }
+    )
+
+    decision = classify_pr_readiness(snapshot, expected_head_sha="abc123")
+
+    assert decision.outcome == BLOCKED
+    assert decision.terminal
+    assert decision.reasons == ("check skipped: deploy",)
+
+
+def test_only_optional_skipped_shadow_waits_for_required_evidence():
+    snapshot = clean_snapshot()
+    snapshot["statusCheckRollup"] = [
+        {
+            "name": "pytest-parallel-shadow",
+            "status": "COMPLETED",
+            "conclusion": "SKIPPED",
+        }
+    ]
+
+    decision = classify_pr_readiness(snapshot)
+
+    assert decision.outcome == WAITING
+    assert not decision.success
+    assert decision.reasons == ("no successful required checks reported yet",)
+
+
 def test_changed_head_sha_blocks_merge_readiness():
     snapshot = clean_snapshot()
     snapshot["headRefOid"] = "moved"

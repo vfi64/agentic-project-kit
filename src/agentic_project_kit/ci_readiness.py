@@ -7,6 +7,11 @@ from dataclasses import dataclass
 from typing import Any, Callable
 
 from agentic_project_kit.github_actions_run_checks import fetch_action_run_checks
+from agentic_project_kit.github_check_policy import (
+    is_failed_check_conclusion,
+    is_optional_skipped_check,
+    is_successful_check_conclusion,
+)
 
 READY_TO_MERGE = "READY_TO_MERGE"
 ALREADY_MERGED = "ALREADY_MERGED"
@@ -16,15 +21,6 @@ TIMEOUT = "TIMEOUT"
 GH_ERROR = "GH_ERROR"
 
 SUCCESS_OUTCOMES = {READY_TO_MERGE, ALREADY_MERGED}
-FAILED_CONCLUSIONS = {
-    "ACTION_REQUIRED",
-    "CANCELLED",
-    "FAILURE",
-    "STARTUP_FAILURE",
-    "STALE",
-    "TIMED_OUT",
-}
-SUCCESS_CONCLUSIONS = {"SUCCESS", "NEUTRAL", "SKIPPED"}
 
 
 @dataclass(frozen=True)
@@ -94,10 +90,19 @@ def classify_pr_readiness(
     successful = [
         check
         for check in checks
-        if check["status"] == "COMPLETED" and check["conclusion"] in SUCCESS_CONCLUSIONS
+        if check["status"] == "COMPLETED" and is_successful_check_conclusion(check["conclusion"])
+    ]
+    optional_skipped = [
+        check
+        for check in checks
+        if is_optional_skipped_check(
+            check["name"],
+            status=check["status"],
+            conclusion=check["conclusion"],
+        )
     ]
 
-    if state == "MERGED" and checks and len(successful) == len(checks):
+    if state == "MERGED" and checks and len(successful) + len(optional_skipped) == len(checks):
         return ReadinessDecision(ALREADY_MERGED, (), True)
 
     if state != "OPEN":
@@ -115,11 +120,25 @@ def classify_pr_readiness(
             False,
         )
 
-    failed = [check for check in checks if check["conclusion"] in FAILED_CONCLUSIONS]
+    failed = [check for check in checks if is_failed_check_conclusion(check["conclusion"])]
     if failed:
         return ReadinessDecision(
             BLOCKED,
             tuple(f"check failed: {check['name'] or '<unknown>'}" for check in failed),
+            True,
+        )
+
+    skipped = [
+        check
+        for check in checks
+        if check["status"] == "COMPLETED"
+        and check["conclusion"] == "SKIPPED"
+        and check not in optional_skipped
+    ]
+    if skipped:
+        return ReadinessDecision(
+            BLOCKED,
+            tuple(f"check skipped: {check['name'] or '<unknown>'}" for check in skipped),
             True,
         )
 
@@ -140,6 +159,7 @@ def classify_pr_readiness(
         check
         for check in checks
         if check not in successful
+        and check not in optional_skipped
         and not (check["stale_remote_evidence"] == "TRUE" and check["name"] in successful_names)
     ]
     if pending:
@@ -148,6 +168,9 @@ def classify_pr_readiness(
             tuple(f"check pending: {check['name'] or '<unknown>'}" for check in pending),
             False,
         )
+
+    if not successful:
+        return ReadinessDecision(WAITING, ("no successful required checks reported yet",), False)
 
     merge_state = str(snapshot.get("mergeStateStatus") or "").upper()
     mergeable = snapshot.get("mergeable")
