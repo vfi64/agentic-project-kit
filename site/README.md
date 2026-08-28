@@ -54,11 +54,16 @@ Supported evidence types:
 
 S4c Pages deployment adds `.github/workflows/pages.yml`. The GitHub Pages
 workflow builds a fresh `site/dist/` artifact and runs the site tests on `main`.
-It configures Pages, uploads with `actions/upload-pages-artifact`, and deploys
-with `actions/deploy-pages` only after the repository Pages API reports
+The Pages path gate reads `site/pages_input_manifest.json` and selects
+`BUILD_REQUIRED` for site inputs, release/version projection state, explicit
+dispatch, invalid paths, or manifest problems. It selects `BUILD_SKIPPED` only
+for deterministically irrelevant main-push changes. When a build is required,
+the workflow configures Pages, uploads with `actions/upload-pages-artifact`, and
+deploys with `actions/deploy-pages` only after the repository Pages API reports
 `build_type: workflow`. When Pages is not enabled or not set to GitHub Actions deployment,
-the workflow records that state and skips the Pages-specific steps after a
-successful build rather than turning `main` red for a missing repository setting.
+the workflow records that state and skips the Pages-specific steps
+after a successful build rather than turning `main` red for a missing repository
+setting.
 
 Legacy GitHub Pages source `/docs` is supported as a generated fallback, not as a
 new manual website source. `python site/scripts/build.py --docs-pages-fallback --json`

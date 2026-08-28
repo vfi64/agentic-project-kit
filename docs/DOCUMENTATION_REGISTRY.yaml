@@ -1540,3 +1540,9 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Post-v1.0.6 analysis-only feasibility report for replacing post-merge handoff refresh churn with a governed receipt store; no implementation change.
+  - path: docs/reports/POST_V1_0_6_DETERMINISTIC_CI_RUNTIME_BASELINE_20260827.md
+    class: evidence/log
+    owner: maintainers
+  - path: docs/governance/CI_RUNTIME_POLICY_CONTRACT.md
+    class: governance/system
+    owner: maintainers

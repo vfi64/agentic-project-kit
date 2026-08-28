@@ -8,7 +8,7 @@ Current version: 1.0.6
 
 `agentic-project-kit` is a local Python package and CLI for governing AI-assisted repository work with explicit contracts, gates, evidence, handoffs, policy selection, task tracking, GitHub automation, and release validation.
 
-Generated website: <https://vfi64.github.io/agentic-project-kit/>. It serves the current public projection with install, new-repo, existing-repo, command, and claim-evidence views.
+Generated website: <https://vfi64.github.io/agentic-project-kit/>.
 
 ## Why this exists
 
@@ -56,9 +56,8 @@ python -m pip install agentic-project-kit
 agentic-kit --version
 ```
 
-The first public PyPI validation confirmed that the published package installs
-in an isolated Docker container. Its historical first-contact findings are
-recorded in `docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md`.
+Historical first-contact findings:
+`docs/reports/V1_0_1_DOCKER_PYPI_FIRST_CONTACT_20260820.md`.
 
 Git is a system prerequisite for `agentic-kit init` and Git-backed workflows.
 `pip install agentic-project-kit` cannot install Git portably across macOS,
@@ -108,8 +107,8 @@ repositories, and existing repositories, see
 
 Evidence labels stay separate:
 
-- Historical PyPI Validation: a published package was installed from
-  `pypi.org`.
+- Historical PyPI Validation: The first public PyPI validation confirmed a
+  published package was installed from `pypi.org`.
 - Post-fix Build/Checkout Validation: a local checkout or local wheel was tested
   before publication.
 - Post-release PyPI Validation: a later published package was installed from
@@ -333,12 +332,15 @@ compatibility while planning `workspace init`.
 
 ## Documentation registry
 
-`agentic-kit docs-registry` shows the read-only documentation registry summary.
-Reviewed single-entry additions use `agentic-kit doc-registry register --path PATH
---class CLASS --json`; `agentic-kit doc-registry check-unregistered --json`
-warns without broad migration. `docs/DOC_REGISTRY_SCOPE.yaml` declares required
-files, required paths, and exemptions; `agentic-kit doc-registry check-unregistered --strict-scope`
+`agentic-kit docs-registry` shows the read-only summary. Reviewed additions use
+`agentic-kit doc-registry register --path PATH --class CLASS --json`;
+`agentic-kit doc-registry check-unregistered --json` warns without broad
+migration. `docs/DOC_REGISTRY_SCOPE.yaml` declares required files, required
+paths, and exemptions; `agentic-kit doc-registry check-unregistered --strict-scope`
 fails only on declared required scope violations.
+`agentic-kit doc-registry reconcile --execute` refreshes only the scope decision table; `doc-registry
+register` uses the same projection path so scope counters remain current or
+fails closed before writing a registry entry.
 
 ## Rule registry
 

@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-08-13T21:20:26.833294+00:00",
+    "created_at_utc": "2026-08-28T03:25:22.061197+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -93,8 +93,8 @@
       "status": "active"
     },
     "command_reference": {
-      "command_count": 251,
-      "generated_by": "scripts/generate_agentic_kit_command_reference.py",
+      "command_count": 254,
+      "generated_by": "",
       "important_wrappers": [
         {
           "help": "Continue chat/local transfer communication through the safest available wrapper path.",
@@ -243,6 +243,7 @@
         {
           "help": "",
           "options": [
+            "--base-branch",
             "--json",
             "--main-branch"
           ],
@@ -291,6 +292,7 @@
     },
     "context_quality": {
       "generated_from_current_repo_sources": true,
+      "kit_internal_sources_required_locally": true,
       "machine_readable": true,
       "must_be_regenerated_from_rules_not_cached": true,
       "projection_only_not_source_of_truth": true,
@@ -306,11 +308,16 @@
       "transfer_file_second": true,
       "wrapper_first": true
     },
-    "generated_at_utc": "2026-08-13T21:20:27.088391+00:00",
+    "external_workspace_policy": {
+      "active": false,
+      "kit_internal_files_must_not_be_supplied_by_target_repo_user": false,
+      "target_repo_decisions_must_be_documented_or_blocked": false
+    },
+    "generated_at_utc": "2026-08-28T03:25:22.308255+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/release-100-prepare",
-      "head": "91109e0569d051fd871b4cc133a0badcf918a161",
+      "branch": "codex/deterministic-ci-runtime-plan",
+      "head": "cc5776a73607fd29d6caa661fdebd72c1e54ddcf",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -370,8 +377,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "44d6cbcff3b727dea59ae5cfeaa491fce8851e9025949cf44d6e9ddebf60c8f7",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "12e8f10d247c2e9f4aa12cce1dbdad07f0f33500505543ae097f331379cce2d9",
-      "docs/reference/agentic-kit-commands.json": "4c5ed6ebdda00568e92d3012df461fefd7384ad23453366b66107e2900d3e9d0"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "b5957725bd1fb58d95bc69505e4323f1898065a7002ed5054796994eab8a6a88",
+      "docs/reference/agentic-kit-commands.json": "d0f29397fd033ec4d29c12eb5d15e810b448c3c752c84472b99632042239c7e5"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -389,7 +396,8 @@
       ],
       "must_not_discard_substantive_changes": true,
       "only_when_not_target_changes": true
-    }
+    },
+    "workspace_mode": "self_hosting"
   },
   "protocol_header": {
     "authoritative_sources": [
@@ -411,11 +419,11 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "df9f65aa806d3d2dc34416563e24b782a22bafeb4108ac1706170c3948efceda"
+        "sha256": "e18cca966b8fb575512ce472183063a93ada75154a57ffb9ceda503dcf9b0b86"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "a70caf51dbf909ecf92be3ce3295092725e35984b2f78136401ec63d957179b0"
+        "sha256": "267a96fdf5752b154b214793635b9b2cd0d0e198a54e2564120adb73c5d8e2d8"
       }
     ],
     "canonical_cli_usage": {
@@ -916,12 +924,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/release-100-prepare",
+      "branch": "codex/deterministic-ci-runtime-plan",
       "dirty_status": "",
-      "head": "91109e0569d051fd871b4cc133a0badcf918a161",
+      "head": "cc5776a73607fd29d6caa661fdebd72c1e54ddcf",
       "head_matches_upstream": false,
-      "upstream": "",
-      "upstream_head": ""
+      "upstream": "origin/codex/deterministic-ci-runtime-plan",
+      "upstream_head": "5aa04936b6b6bf6b255b09ed9c97a0065ee8326a"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -983,11 +991,11 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "df9f65aa806d3d2dc34416563e24b782a22bafeb4108ac1706170c3948efceda"
+        "sha256": "e18cca966b8fb575512ce472183063a93ada75154a57ffb9ceda503dcf9b0b86"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "a70caf51dbf909ecf92be3ce3295092725e35984b2f78136401ec63d957179b0"
+        "sha256": "267a96fdf5752b154b214793635b9b2cd0d0e198a54e2564120adb73c5d8e2d8"
       }
     ],
     "canonical_cli_usage": {
@@ -1488,12 +1496,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/release-100-prepare",
+      "branch": "codex/deterministic-ci-runtime-plan",
       "dirty_status": "",
-      "head": "91109e0569d051fd871b4cc133a0badcf918a161",
+      "head": "cc5776a73607fd29d6caa661fdebd72c1e54ddcf",
       "head_matches_upstream": false,
-      "upstream": "",
-      "upstream_head": ""
+      "upstream": "origin/codex/deterministic-ci-runtime-plan",
+      "upstream_head": "5aa04936b6b6bf6b255b09ed9c97a0065ee8326a"
     },
     "schema_version": 1,
     "terminal_block_rules": {

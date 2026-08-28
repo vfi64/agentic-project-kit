@@ -95,7 +95,7 @@ def test_lifecycle_apply_confirm_current_is_noop_with_execute(tmp_path: Path) ->
     assert target.read_text(encoding="utf-8") == before
 
 
-def test_lifecycle_apply_defer_is_noop_with_execute(tmp_path: Path) -> None:
+def test_lifecycle_apply_blocks_manual_reconcile_review_with_execute(tmp_path: Path) -> None:
     _write_registry(tmp_path, path="docs/planning/PROJECT_DIRECTION.md")
     _write_doc(
         tmp_path / "docs" / "planning" / "PROJECT_DIRECTION.md",
@@ -120,7 +120,7 @@ def test_lifecycle_apply_defer_is_noop_with_execute(tmp_path: Path) -> None:
     step_id = next(
         step["id"]
         for step in plan_payload["steps"]
-        if step["operation"] == "defer" and step["source"] == "doc-registry-reconcile"
+        if step["operation"] == "manual-review" and step["source"] == "doc-registry-reconcile"
     )
 
     result = runner.invoke(
@@ -140,11 +140,12 @@ def test_lifecycle_apply_defer_is_noop_with_execute(tmp_path: Path) -> None:
         ],
     )
 
-    assert result.exit_code == 0, result.output
+    assert result.exit_code == 2, result.output
     payload = json.loads(result.output)
-    assert payload["result_status"] == "PASS"
-    assert payload["applied"]["operation"] == "defer"
-    assert payload["applied"]["effect"] == "no-op"
+    assert payload["mode"] == "blocked"
+    assert payload["result_status"] == "BLOCK"
+    assert payload["reason"] == "unsafe_operation"
+    assert payload["step"]["operation"] == "manual-review"
 
 
 def test_lifecycle_apply_rejects_manual_review_operations(tmp_path: Path) -> None:

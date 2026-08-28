@@ -7,9 +7,9 @@ from typing import Annotated
 import typer
 
 from agentic_project_kit.documentation_registry import (
-    build_doc_registry_reconcile_report,
     render_doc_registry_reconcile_report,
     build_unregistered_document_candidates_report,
+    reconcile_documentation_registry,
     register_documentation_registry_entry,
 )
 
@@ -52,30 +52,13 @@ def doc_registry_reconcile(
         bool,
         typer.Option(
             "--execute",
-            help="Reserved for a later slice; current implementation is dry-run only.",
+            help="Refresh deterministic scope decision projections.",
         ),
     ] = False,
     json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
 ) -> None:
     """Reconcile documentation registry, declared scope, and decision projection."""
-    if execute:
-        payload = {
-            "schema_version": 1,
-            "kind": "doc_registry_reconcile_report",
-            "result_status": "BLOCK",
-            "mode": "execute",
-            "message": "--execute is reserved for a later K2c slice; dry-run only.",
-        }
-        if json_output:
-            typer.echo(json.dumps(payload, indent=2, sort_keys=True))
-        else:
-            typer.echo("DOC_REGISTRY_RECONCILE")
-            typer.echo("STATE: BLOCK")
-            typer.echo("MODE: execute")
-            typer.echo("MESSAGE: --execute is reserved for a later K2c slice; dry-run only.")
-        raise typer.Exit(2)
-
-    report = build_doc_registry_reconcile_report(project_root.resolve())
+    report = reconcile_documentation_registry(project_root.resolve(), execute=execute)
     if json_output:
         typer.echo(json.dumps(report, indent=2, sort_keys=True))
     else:

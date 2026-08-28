@@ -30,6 +30,7 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Generator behavior | Generator test plus generated-project file inspection |
 | Website generation | Website Generation Gate: unit tests for `agentic_project_kit.site_generator`, local `site/scripts/build.py --json` smoke build, and generated-output inspection; `site/dist/` must stay ignored |
 | GitHub workflow change | Local workflow review plus GitHub Actions run |
+| CI runtime policy change | CI Runtime Policy Gate: keep `test` as the required CI job; run policy unit tests plus workflow-structure tests; reduced lanes must be selected by deterministic classifiers and fall back to full CI on ambiguity |
 | Packaging/release change | python -m build, twine check dist/*, release workflow result |
 | Release planning change | Unit tests plus agentic-kit release-plan CLI smoke command |
 | Release state validation change | Unit tests plus agentic-kit release-check CLI smoke command |
@@ -51,6 +52,51 @@ The standard lint gate is `ruff check .` with the explicit rule scope in `pyproj
 That scope intentionally preserves the historical default rule families E4, E7, E9, and F.
 Do not rely on Ruff's upstream defaults for CI behavior, because new Ruff releases may expand
 their defaults and turn unrelated repository-wide style findings into gate failures.
+
+## CI Runtime Policy Gate
+
+`docs/governance/CI_RUNTIME_POLICY_CONTRACT.md` is the source-of-truth for
+deterministic CI runtime optimization. The `CI` workflow keeps `test` as the
+branch-protection-visible required job, and any optimized lane must be selected
+inside that job by a deterministic classifier.
+
+The default lane is serial full-suite fallback. Missing, invalid, ambiguous, or
+unsafe inputs must select full CI. Runtime policy changes require:
+
+    python -m pytest -q tests/test_ci_runtime_policy.py tests/test_ci_workflow_runtime_policy.py
+    python -m pytest -q
+    python -m pytest -q -n 4 --durations=20
+    ruff check .
+
+`pytest-parallel-shadow` is diagnostic-only while `continue-on-error: true`
+remains configured. It must use a fixed worker count and must not replace the
+serial full-suite fallback until repeated shadow evidence proves serial PASS
+parity and exposes no order dependence, shared-state leaks, live-repo
+collisions, or marker conflicts.
+
+`main_push_tree_proof` may select a reduced main-push path only with tree equivalence proof:
+final main tree, tested PR integration tree, successful PR
+checks, and no workflow/code/test/release/governance/architecture/manifest/site
+path change. Otherwise it selects full CI.
+
+`admin-refresh-light` may run only when an exact generated handoff allowlist and
+successor package validation `PASS` are proven. It must run handoff check,
+post-merge refresh status, protected-diff-plan coverage, doc-registry reconcile,
+doc-registry unregistered checks, check-docs, and targeted successor/package
+regression tests.
+
+`pages_path_gate` is driven by `site/pages_input_manifest.json`. It may select
+`BUILD_SKIPPED` only for deterministically irrelevant main-push changes. Explicit
+dispatch, unavailable paths, invalid paths, manifest problems, site inputs,
+release/version projection state, or `.github/workflows/pages.yml` select
+`BUILD_REQUIRED`.
+
+The failure registry is diagnostic-only. Failure records classify registry
+counter drift, stale LLM context carrier, dirty volatile carrier, missing checks,
+queued/stuck run, Pages deploy issue, timeout, and test failure, but repair work
+stays branch-and-PR only. The receipt-store decision keeps the current refresh PR
+mechanism until exactly-one receipt, append-only enforcement, and successor read-path discovery
+are proven.
 
 ## Pytest Marker Routing
 
@@ -132,6 +178,9 @@ Registry/schema changes must preserve these boundaries:
 - use `agentic-kit doc-registry check-unregistered --strict-scope` only as an
   opt-in hard check for declared required scope paths; do not add it to the
   standard gate suite while the checked-in scope is empty.
+- keep `agentic-kit doc-registry register` and `agentic-kit doc-registry reconcile --execute`
+  on the same deterministic scope decision table renderer so registry
+  additions update scope counters or fail closed before writing.
 - update tests when allowed classes, required fields, guard semantics, or registry reporting change.
 
 Required evidence for this registry gate:
@@ -139,6 +188,7 @@ Required evidence for this registry gate:
     python -m pytest -q tests/test_documentation_registry.py
     agentic-kit docs-registry
     agentic-kit docs-registry --report tmp/agentic-docs-registry-summary.json
+    agentic-kit doc-registry reconcile --execute --json
     agentic-kit doc-registry check-unregistered --json
     agentic-kit doc-registry check-unregistered --strict-scope --json
     agentic-kit check-docs
@@ -332,7 +382,11 @@ general Brownfield portability. The website must not collapse `kit_main`,
 `released_package`, and `external_retest` evidence types into one release claim.
 
 GitHub Pages workflow changes must parse as YAML and keep `.github/workflows/pages.yml`
-build-gated by the generated site build and site tests. The workflow must run
+build-gated by the generated site build and site tests. The Pages path gate must
+read `site/pages_input_manifest.json` and select `BUILD_REQUIRED` for site
+inputs, release/version projection state, explicit dispatch, invalid paths, or
+manifest problems. It may select `BUILD_SKIPPED` only for deterministically
+irrelevant main-push changes. When a build is required, the workflow must run
 `python site/scripts/build.py --output site/dist --json`, run
 `python -m pytest tests/test_site_generator.py tests/test_site_claims.py -q`,
 configure Pages, upload `site/dist` with `actions/upload-pages-artifact`, and

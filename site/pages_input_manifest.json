@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "purpose": "Deterministic GitHub Pages build gating inputs.",
+  "site_input_paths": [
+    "site/",
+    "src/agentic_project_kit/site_generator.py",
+    "src/agentic_project_kit/site_claims.py",
+    "src/agentic_project_kit/command_manifest.py",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md"
+  ],
+  "release_state_paths": [
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "docs/releases/VERIFIED_RELEASES.md",
+    "docs/STATUS.md"
+  ],
+  "workflow_paths": [
+    ".github/workflows/pages.yml",
+    "site/pages_input_manifest.json"
+  ],
+  "required_pull_request_test_paths": [
+    "tests/test_pages_workflow.py",
+    "tests/test_site_generator.py",
+    "tests/test_site_claims.py",
+    "tests/test_site_fallback_staleness.py",
+    "tests/test_ci_runtime_policy.py"
+  ]
+}

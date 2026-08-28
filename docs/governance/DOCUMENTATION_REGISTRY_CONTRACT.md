@@ -97,9 +97,16 @@ single-entry mutations use `agentic-kit doc-registry register --path PATH --clas
 
 The register command validates that the path exists, the class is known, the path
 is not already registered, and the resulting registry still passes the
-documentation-registry guard before writing. `agentic-kit doc-registry
-check-unregistered --json` lists unregistered document candidates as WARN, not
-FAIL, because broad migration remains disabled.
+documentation-registry guard before writing. When
+`docs/governance/DOC_REGISTRY_SCOPE_DECISION.md` exists, the command also
+precomputes the deterministic scope decision table from the candidate registry
+and writes the registry only when that table can be safely reconciled. If the
+projection structure is missing or malformed, registration fails closed without
+adding the entry. `agentic-kit doc-registry check-unregistered --json` lists
+unregistered document candidates as WARN, not FAIL, because broad migration
+remains disabled.
+Register and reconcile use the same projection path. The shared renderer
+preserves existing maintainer decisions. Registration fails closed without adding the entry when projection reconciliation is unsafe.
 
 ## Declarative scope
 
@@ -121,6 +128,10 @@ violations; the standard suite does not enable `--strict-scope` in this slice.
 `docs/governance/DOC_REGISTRY_SCOPE_DECISION.md` is a machine-generated decision
 template that counts Markdown files by `docs/` subdirectory and leaves the
 required/exempt/undecided decision blank for maintainers.
+`agentic-kit doc-registry reconcile --execute` is the bounded update path for
+that projection: it refreshes only the canonical scope decision table, preserves
+existing maintainer decisions in the proposed column, and blocks when the table
+cannot be identified deterministically.
 
 ## Migration boundary
 
