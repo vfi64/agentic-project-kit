@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `04a633874d590cb8d914b04855e3762d0a6b20ec` (`04a63387`), after `Handle optional skipped shadow check in merge gates (#2208)`.
-Last substantive work state is `04a633874d590cb8d914b04855e3762d0a6b20ec` (`04a63387`), after `Handle optional skipped shadow check in merge gates (#2208)`.
+Current verified main/admin HEAD is `b1dcf9a1d60ffc6e85c316a919e133cbce2d654e` (`b1dcf9a1`), after `Fix pr-merge-safe self-hosting context (#2210)`.
+Last substantive work state is `b1dcf9a1d60ffc6e85c316a919e133cbce2d654e` (`b1dcf9a1`), after `Fix pr-merge-safe self-hosting context (#2210)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
