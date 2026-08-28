@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f234348b66968130ba4707f996705f4bd63f8aea
-  short: f234348b
-  subject: Optimize deterministic CI runtime
+  full: 04a633874d590cb8d914b04855e3762d0a6b20ec
+  short: 04a63387
+  subject: Handle optional skipped shadow check in merge gates (#2208)
 last_substantive_work_state:
-  full: f234348b66968130ba4707f996705f4bd63f8aea
-  short: f234348b
-  subject: Optimize deterministic CI runtime
+  full: 04a633874d590cb8d914b04855e3762d0a6b20ec
+  short: 04a63387
+  subject: Handle optional skipped shadow check in merge gates (#2208)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
