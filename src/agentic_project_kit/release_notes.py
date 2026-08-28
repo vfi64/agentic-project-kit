@@ -604,6 +604,7 @@ def _classify_subject(subject: str) -> str:
             "merge wrapper",
             "pr merge",
             "wrapper",
+            "receipt",
         )
     ):
         return "Transfer / Handoff"
@@ -645,6 +646,8 @@ def _classify_subject(subject: str) -> str:
             "comm-sci",
             "realbetrieb",
             "metric",
+            "ci runtime",
+            "deterministic ci",
         )
     ) or lowered.startswith(("verify ", "guard ")):
         return "Tests / Gates"
@@ -663,6 +666,7 @@ def _classify_subject(subject: str) -> str:
             "site",
             "pages",
             "onboarding",
+            "community post",
         )
     ):
         return "Docs"
