@@ -2235,7 +2235,7 @@
         },
         {
           "default": false,
-          "help": "Reserved for a later slice; current implementation is dry-run only.",
+          "help": "Refresh deterministic scope decision projections.",
           "is_flag": true,
           "metavar": null,
           "multiple": false,
@@ -17844,7 +17844,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "f88f3c276299",
+    "manifest_sha": "17ca990dda88",
     "schema_version": 1
   },
   "schema_version": 2,

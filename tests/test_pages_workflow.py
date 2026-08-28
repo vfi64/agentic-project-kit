@@ -23,12 +23,25 @@ def test_pages_workflow_builds_site_and_deploys_actions_artifact() -> None:
     assert "workflow_dispatch" in data[True]
 
     pages_state = data["jobs"]["pages-state"]
+    pages_gate = data["jobs"]["pages-gate"]
     build = data["jobs"]["build"]
     deploy = data["jobs"]["deploy"]
     pages_state_step = pages_state["steps"][0]
+    pages_gate_steps = pages_gate["steps"]
     build_steps = build["steps"]
     build_runs = [step.get("run", "") for step in build_steps]
     build_uses = [step.get("uses", "") for step in build_steps]
+
+    assert pages_gate["outputs"] == {
+        "build-required": "${{ steps.policy.outputs.build-required }}",
+        "gate-mode": "${{ steps.policy.outputs.gate-mode }}",
+    }
+    assert pages_gate_steps[0]["uses"] == "actions/checkout@v6"
+    assert pages_gate_steps[0]["with"] == {"fetch-depth": 0}
+    pages_gate_run = "\n".join(step.get("run", "") for step in pages_gate_steps)
+    assert "PYTHONPATH=src python -m agentic_project_kit.ci_runtime_policy pages" in pages_gate_run
+    assert "--manifest site/pages_input_manifest.json" in pages_gate_run
+    assert "build-required=" in pages_gate_run
 
     assert pages_state["outputs"]["deploy-ready"] == "${{ steps.pages.outputs.deploy-ready }}"
     assert pages_state_step["uses"] == "actions/github-script@v8"
@@ -38,7 +51,8 @@ def test_pages_workflow_builds_site_and_deploys_actions_artifact() -> None:
     assert 'buildType === "workflow"' in pages_state_script
     assert "GitHub Pages is not enabled yet" in pages_state_script
 
-    assert build["needs"] == "pages-state"
+    assert build["needs"] == ["pages-gate", "pages-state"]
+    assert build["if"] == "needs.pages-gate.outputs.build-required == 'true'"
     assert 'pip install -e ".[dev]"' in "\n".join(build_runs)
     assert "python site/scripts/build.py --output site/dist --json" in build_runs
     assert "python -m pytest tests/test_site_generator.py tests/test_site_claims.py -q" in build_runs
@@ -55,8 +69,11 @@ def test_pages_workflow_builds_site_and_deploys_actions_artifact() -> None:
         for step in build_steps
     )
 
-    assert deploy["needs"] == ["pages-state", "build"]
-    assert deploy["if"] == "needs.pages-state.outputs.deploy-ready == 'true'"
+    assert deploy["needs"] == ["pages-gate", "pages-state", "build"]
+    assert deploy["if"] == (
+        "needs.pages-gate.outputs.build-required == 'true' && "
+        "needs.pages-state.outputs.deploy-ready == 'true'"
+    )
     assert deploy["environment"]["name"] == "github-pages"
     assert deploy["steps"] == [
         {

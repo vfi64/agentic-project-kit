@@ -1446,7 +1446,7 @@
         },
         {
           "default": false,
-          "help": "Reserved for a later slice; current implementation is dry-run only.",
+          "help": "Refresh deterministic scope decision projections.",
           "name": "execute",
           "opts": [
             "--execute"

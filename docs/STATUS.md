@@ -10,9 +10,9 @@ Verified Zenodo version DOI: `10.5281/zenodo.22116691`.
 Current verified main: `aa19501e` (`Refresh handoff state after PR2195 (#2196)`).
 Latest substantive work: PR #2195 (`Assess refresh receipt feasibility (#2195)`).
 Latest administrative refresh-only descendant: PR #2196 (`aa19501e`, `Refresh handoff state after PR2195 (#2196)`).
-Current governed slice: `deterministic-ci-runtime-optimization` planning is staged on branch `codex/deterministic-ci-runtime-plan`; implementation should begin with CI0 document-registry autoreconcile and CI1 runtime baseline before any CI-reduction behavior changes.
+Current governed slice: `deterministic-ci-runtime-optimization` implementation is prepared on branch `codex/deterministic-ci-runtime-plan`: CI0 doc-registry autoreconcile, CI1 baseline evidence, CI2 shadow parallel pytest, CI3 fail-closed tree-proof classification, CI4 admin-refresh-light CI, CI5 Pages path gating, CI6 diagnostic failure registry, and CI7 receipt-store deferral.
 Post-merge handoff status: PASS/NOOP after PR #2195 administrative refresh.
-Next safe step: start the successor chat from the generated handoff package, verify branch/head freshness, then implement CI0 and CI1 from `docs/planning/PROJECT_DIRECTION.yaml#deterministic-ci-runtime-optimization` without weakening deterministic gates.
+Next safe step: review the branch diff, run the standard local gates, then observe GitHub Actions PR/main and Pages evidence before promoting any shadow or tree-proof optimization beyond fail-closed policy.
 
 ## Historical State Snapshots
 

@@ -14,12 +14,14 @@ from agentic_project_kit.documentation_registry import (
     REGISTRY_PATH,
     SCOPE_PATH,
     REQUIRED_CLASS_RULE_FIELDS,
+    append_documentation_registry_entry_text,
     build_doc_registry_scope_decision_rows,
     build_unregistered_document_candidates_report,
     build_documentation_registry_summary,
     check_documentation_registry,
     find_unregistered_document_candidates,
     load_documentation_registry,
+    render_doc_registry_scope_decision_table,
     register_documentation_registry_entry,
 )
 from agentic_project_kit.documentation_system_audit import build_documentation_system_audit
@@ -126,6 +128,19 @@ def _write_scope(
             }
         )
         _write(project / REGISTRY_PATH, yaml.safe_dump(registry, sort_keys=False))
+
+
+def _write_scope_decision(project: Path, table: str) -> None:
+    _write(
+        project / "docs/governance/DOC_REGISTRY_SCOPE_DECISION.md",
+        "# Documentation Registry Scope Decision Template\n\n"
+        "Status: decided\n"
+        "Decision status: decided 2026-07-08\n"
+        "Review policy: required\n\n"
+        f"{table}\n\n"
+        "Notes:\n"
+        "- This template is evidence for a maintainer decision.\n",
+    )
 
 
 def _read_registry(project: Path) -> dict[str, object]:
@@ -589,6 +604,7 @@ def test_docs_register_adds_entry_for_valid_path_and_class(tmp_path: Path) -> No
         "class": "planning",
         "owner": "maintainers",
     }
+    assert result["scope_decision_update"]["status"] == "SKIP"
     assert check_documentation_registry(project) == []
 
 
@@ -654,6 +670,99 @@ def test_docs_register_preserves_existing_entries_and_schema(tmp_path: Path) -> 
     assert after["version"] == before["version"]
     assert after["class_rules"] == before["class_rules"]
     assert after["documents"][:-1] == before["documents"]
+
+
+def test_docs_register_entry_append_does_not_reserialize_registry_text() -> None:
+    before = (
+        "version: 1\n"
+        "purpose: >-\n"
+        "  Keep folded scalar formatting.\n"
+        "documents:\n"
+        "- path: docs/STATUS.md\n"
+        "  class: planning\n"
+        "  owner: maintainers\n"
+    )
+
+    after = append_documentation_registry_entry_text(
+        before,
+        path="docs/new-plan.md",
+        document_class="planning",
+        owner="maintainers",
+    )
+
+    assert after.startswith(before)
+    assert after.endswith(
+        "- path: docs/new-plan.md\n"
+        "  class: planning\n"
+        "  owner: maintainers\n"
+    )
+
+    indented = before.replace("- path:", "  - path:").replace("  class:", "    class:")
+    indented = indented.replace("  owner:", "    owner:")
+    with_indented_entry = append_documentation_registry_entry_text(
+        indented,
+        path="docs/other-plan.md",
+        document_class="planning",
+        owner="maintainers",
+    )
+    assert with_indented_entry.endswith(
+        "  - path: docs/other-plan.md\n"
+        "    class: planning\n"
+        "    owner: maintainers\n"
+    )
+
+
+def test_docs_register_updates_scope_decision_counts(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write(project / "docs/planning/new-plan.md", "# New plan\n")
+    _write_scope_decision(
+        project,
+        "\n".join(
+            [
+                "| docs path | md files | registered | unregistered | proposed: required / exempt / undecided |",
+                "|---|---:|---:|---:|---|",
+                "| docs/planning/ | 1 | 0 | 1 | required |",
+            ]
+        ),
+    )
+
+    result = register_documentation_registry_entry(
+        project,
+        document_path="docs/planning/new-plan.md",
+        document_class="planning",
+    )
+
+    decision = (
+        project / "docs/governance/DOC_REGISTRY_SCOPE_DECISION.md"
+    ).read_text(encoding="utf-8")
+    assert result["result_status"] == "PASS"
+    assert result["scope_decision_update"]["status"] == "PASS"
+    assert result["scope_decision_update"]["written"] is True
+    assert "| docs/planning/ | 1 | 1 | 0 | required |" in decision
+
+
+def test_docs_register_fails_closed_on_malformed_scope_decision_table(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write(project / "docs/new-plan.md", "# New plan\n")
+    _write(
+        project / "docs/governance/DOC_REGISTRY_SCOPE_DECISION.md",
+        "# Documentation Registry Scope Decision Template\n\n"
+        "| docs path | md files | registered | unregistered |\n"
+        "|---|---:|---:|---:|\n"
+        "| docs/ | 3 | 1 | 2 |\n",
+    )
+    before = (project / REGISTRY_PATH).read_text(encoding="utf-8")
+
+    result = register_documentation_registry_entry(
+        project,
+        document_path="docs/new-plan.md",
+        document_class="planning",
+    )
+
+    assert result["result_status"] == "FAIL"
+    assert result["code"] == "FAIL_SCOPE_DECISION_PROJECTION"
+    assert result["written"] is False
+    assert (project / REGISTRY_PATH).read_text(encoding="utf-8") == before
 
 
 def test_docs_check_unregistered_lists_as_warn(tmp_path: Path) -> None:
@@ -898,11 +1007,42 @@ def test_doc_registry_reconcile_json_reports_clean_state() -> None:
     assert payload["rendered_scope_decision_table"].startswith("| docs path | md files |")
 
 
-def test_doc_registry_reconcile_execute_is_reserved() -> None:
-    result = CliRunner().invoke(app, ["doc-registry", "reconcile", "--execute", "--json"])
+def test_doc_registry_reconcile_execute_refreshes_scope_decision_table(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write_scope_decision(
+        project,
+        "\n".join(
+            [
+                "| docs path | md files | registered | unregistered | proposed: required / exempt / undecided |",
+                "|---|---:|---:|---:|---|",
+                "| docs/ | 99 | 0 | 99 | required |",
+            ]
+        ),
+    )
 
-    assert result.exit_code == 2
+    result = CliRunner().invoke(
+        app,
+        [
+            "doc-registry",
+            "reconcile",
+            "--root",
+            str(project),
+            "--execute",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
     payload = json.loads(result.output)
-    assert payload["result_status"] == "BLOCK"
+    decision = (
+        project / "docs/governance/DOC_REGISTRY_SCOPE_DECISION.md"
+    ).read_text(encoding="utf-8")
+    expected_table = render_doc_registry_scope_decision_table(
+        [dict(row) for row in build_doc_registry_scope_decision_rows(project)],
+        proposed_by_path={"docs/": "required"},
+    )
+    assert payload["result_status"] == "PASS"
     assert payload["mode"] == "execute"
-    assert "dry-run only" in payload["message"]
+    assert payload["scope_decision_table_stale"] is False
+    assert payload["scope_decision_update"]["written"] is True
+    assert expected_table in decision

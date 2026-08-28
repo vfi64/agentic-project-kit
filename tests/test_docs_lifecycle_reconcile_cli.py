@@ -92,8 +92,8 @@ def test_lifecycle_plan_includes_reconcile_advisory_steps(tmp_path: Path) -> Non
     payload = json.loads(result.output)
     reconcile_steps = [step for step in payload["steps"] if step["source"] == "doc-registry-reconcile"]
     assert reconcile_steps
-    assert reconcile_steps[0]["operation"] == "defer"
-    assert reconcile_steps[0]["safety_class"] == "advisory"
+    assert reconcile_steps[0]["operation"] == "manual-review"
+    assert reconcile_steps[0]["safety_class"] == "human-decision-required"
     assert reconcile_steps[0]["execute"] is False
 
 

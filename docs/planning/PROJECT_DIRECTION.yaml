@@ -806,16 +806,26 @@ roadmap:
     - receipt feasibility/design evidence
     - successor read-path validation evidence
   evidence:
+  - docs/reports/POST_V1_0_6_DETERMINISTIC_CI_RUNTIME_BASELINE_20260827.md
   - docs/reports/POST_V1_0_6_REFRESH_RECEIPT_FEASIBILITY_20260827.md
+  - docs/governance/CI_RUNTIME_POLICY_CONTRACT.md
   - .github/workflows/ci.yml
   - .github/workflows/pages.yml
+  - site/pages_input_manifest.json
+  - src/agentic_project_kit/ci_runtime_policy.py
+  - tests/test_ci_runtime_policy.py
+  - tests/test_ci_workflow_runtime_policy.py
   - tests/test_documentation_registry.py
   - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/governance/CI_RUNTIME_POLICY_CONTRACT.md
+  - docs/reports/POST_V1_0_6_DETERMINISTIC_CI_RUNTIME_BASELINE_20260827.md
   - docs/TEST_GATES.md
   - .github/workflows/ci.yml
   - .github/workflows/pages.yml
+  - site/pages_input_manifest.json
+  - src/agentic_project_kit/ci_runtime_policy.py
   - src/agentic_project_kit/documentation_registry.py
   - src/agentic_project_kit/transfer_repo_actions.py
   - src/agentic_project_kit/post_merge_handoff_refresh.py

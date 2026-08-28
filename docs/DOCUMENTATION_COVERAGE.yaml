@@ -305,6 +305,8 @@ rules:
     - agentic-kit doc-registry register
     - agentic-kit doc-registry check-unregistered
     - agentic-kit doc-registry check-unregistered --strict-scope
+    - agentic-kit doc-registry reconcile
+    - agentic-kit doc-registry reconcile --execute
     - agentic-kit rule-registry register
     - agentic-kit patterns list
     - agentic-kit patterns show
@@ -321,6 +323,9 @@ rules:
     - docs/DOC_REGISTRY_SCOPE.yaml
     - agentic-kit doc-registry check-unregistered --strict-scope
     - declared required scope
+    - agentic-kit doc-registry reconcile --execute
+    - scope counters remain current
+    - fails closed before writing a registry entry
   - path: docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md
     terms:
     - Declarative scope
@@ -330,12 +335,19 @@ rules:
     - exempt_paths
     - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
     - standard suite does not enable
+    - agentic-kit doc-registry reconcile --execute
+    - same projection path
+    - preserves existing maintainer decisions
+    - fails closed without adding the entry
   - path: docs/TEST_GATES.md
     terms:
     - docs/DOC_REGISTRY_SCOPE.yaml
     - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
     - agentic-kit doc-registry check-unregistered --strict-scope
     - standard gate suite while the checked-in scope is empty
+    - agentic-kit doc-registry reconcile --execute --json
+    - same deterministic scope decision table renderer
+    - fail closed before writing
   - path: docs/DOC_REGISTRY_SCOPE.yaml
     terms:
     - 'schema_version: 1'
@@ -1227,6 +1239,73 @@ rules:
     - explicit rule scope in `pyproject.toml`
     - historical default rule families E4, E7, E9, and F
     - Do not rely on Ruff's upstream defaults
+- id: ci-runtime-policy-coverage
+  description: Deterministic CI runtime optimization must remain fail-closed, visible,
+    and test-backed.
+  documents:
+  - path: docs/governance/CI_RUNTIME_POLICY_CONTRACT.md
+    terms:
+    - CI Runtime Policy Contract
+    - branch-protection-visible `CI` workflow keeps the required `test` job
+    - serial full-suite fallback
+    - pytest-parallel-shadow
+    - fixed worker count
+    - tree equivalence proof
+    - admin-refresh-light
+    - generated handoff allowlist
+    - site/pages_input_manifest.json
+    - pages_path_gate
+    - BUILD_REQUIRED
+    - BUILD_SKIPPED
+    - diagnostic-only mode
+    - exactly-one receipt
+    - append-only enforcement
+    - successor read-path discovery
+  - path: docs/TEST_GATES.md
+    terms:
+    - CI Runtime Policy Gate
+    - docs/governance/CI_RUNTIME_POLICY_CONTRACT.md
+    - branch-protection-visible required job
+    - serial full-suite fallback
+    - python -m pytest -q -n 4 --durations=20
+    - main_push_tree_proof
+    - tree equivalence proof
+    - admin-refresh-light
+    - exact generated handoff allowlist
+    - site/pages_input_manifest.json
+    - pages_path_gate
+    - BUILD_REQUIRED
+    - BUILD_SKIPPED
+    - failure registry is diagnostic-only
+    - exactly-one receipt
+    - append-only enforcement
+    - successor read-path discovery
+  - path: site/README.md
+    terms:
+    - Pages path gate
+    - site/pages_input_manifest.json
+    - BUILD_REQUIRED
+    - BUILD_SKIPPED
+    - release/version projection state
+    - deterministically irrelevant main-push changes
+  - path: site/pages_input_manifest.json
+    terms:
+    - site_input_paths
+    - release_state_paths
+    - workflow_paths
+    - required_pull_request_test_paths
+  - path: docs/reports/POST_V1_0_6_DETERMINISTIC_CI_RUNTIME_BASELINE_20260827.md
+    terms:
+    - CI1 baseline
+    - full pytest
+    - Pytest Outliers
+    - Remote CI Baseline
+    - CI2 may add parallel pytest only as a shadow run
+    - CI3 must keep a branch-protection-visible deterministic check
+    - CI4 may narrow admin-refresh PR CI
+    - CI5 may gate Pages only from a maintained path manifest
+    - CI6 starts diagnostic-only
+    - CI7 remains a design/prototype decision
 - id: cli-package-readme-coverage
   description: CLI package modularization must remain visible after the monolith split.
   documents:

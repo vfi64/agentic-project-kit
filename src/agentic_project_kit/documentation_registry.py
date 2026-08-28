@@ -85,6 +85,19 @@ class DocumentationRegistryScope:
     errors: tuple[str, ...] = ()
 
 
+@dataclass(frozen=True)
+class ScopeDecisionProjection:
+    status: str
+    code: str
+    path: str
+    written: bool
+    table_stale: bool
+    message: str
+    rendered_table: str = ""
+    findings: tuple[str, ...] = ()
+    content: str | None = None
+
+
 def _load_registry_workspace(project_root: Path):
     return load_workspace(project_root, suppress_legacy_profile_warning=True)
 
@@ -408,47 +421,85 @@ def _markdown_files_under_scope(project_root: Path, scope: DocumentationRegistry
 
 
 def build_doc_registry_reconcile_scope_decision_rows(project_root: Path) -> list[dict[str, Any]]:
-    """Build deterministic docs-root rows for the scope decision table.
-
-    This is read-only and intentionally limited to Markdown files under docs/.
-    """
-    docs_root = project_root / "docs"
-    if not docs_root.exists():
-        return []
-
-    rows: list[dict[str, Any]] = []
-    registry = load_documentation_registry(project_root)
-    registered_paths = _registered_document_paths_from_registry(registry)
-
-    for docs_path in sorted(p for p in docs_root.iterdir() if p.is_dir()):
-        md_files = sorted(
-            candidate.relative_to(project_root).as_posix()
-            for candidate in docs_path.rglob("*.md")
-            if candidate.is_file() and not candidate.is_symlink()
-        )
-        registered = [path for path in md_files if path in registered_paths]
-        rows.append(
-            {
-                "docs_path": docs_path.relative_to(project_root).as_posix() + "/",
-                "md_files": len(md_files),
-                "registered": len(registered),
-                "unregistered": len(md_files) - len(registered),
-            }
-        )
-    return rows
+    """Compatibility alias for the canonical scope-decision row builder."""
+    return [dict(row) for row in build_doc_registry_scope_decision_rows(project_root)]
 
 
-def render_doc_registry_scope_decision_table(rows: list[dict[str, Any]]) -> str:
+def render_doc_registry_scope_decision_table(
+    rows: list[dict[str, Any]],
+    *,
+    proposed_by_path: dict[str, str] | None = None,
+) -> str:
+    proposed_by_path = proposed_by_path or {}
     lines = [
         "| docs path | md files | registered | unregistered | proposed: required / exempt / undecided |",
         "|---|---:|---:|---:|---|",
     ]
     for row in rows:
+        proposed = proposed_by_path.get(str(row["docs_path"]), "")
         lines.append(
             f"| {row['docs_path']} | {row['md_files']} | {row['registered']} | "
-            f"{row['unregistered']} |  |"
+            f"{row['unregistered']} | {proposed} |"
         )
     return "\n".join(lines)
+
+
+def build_scope_decision_projection(
+    project_root: Path,
+    *,
+    registry: dict[str, Any] | None = None,
+    write: bool = False,
+) -> ScopeDecisionProjection:
+    workspace = _load_registry_workspace(project_root)
+    decision_path = workspace.governance_file("DOC_REGISTRY_SCOPE_DECISION.md")
+    relative_decision_path = workspace.path_text(decision_path)
+
+    if not decision_path.exists():
+        return ScopeDecisionProjection(
+            status="SKIP",
+            code="SKIP_SCOPE_DECISION_MISSING",
+            path=relative_decision_path,
+            written=False,
+            table_stale=False,
+            message="Scope decision projection is absent; no table update was attempted.",
+        )
+
+    decision_text = decision_path.read_text(encoding="utf-8")
+    rows = build_doc_registry_scope_decision_rows(project_root, registry=registry)
+    replacement = _replace_scope_decision_table(decision_text, rows)
+    if replacement["status"] != "PASS":
+        return ScopeDecisionProjection(
+            status="BLOCK",
+            code=replacement["code"],
+            path=relative_decision_path,
+            written=False,
+            table_stale=True,
+            message=replacement["message"],
+            findings=tuple(replacement["findings"]),
+        )
+
+    updated_text = str(replacement["content"])
+    rendered_table = str(replacement["rendered_table"])
+    table_stale = updated_text != decision_text
+    if write and table_stale:
+        decision_path.write_text(updated_text, encoding="utf-8")
+
+    return ScopeDecisionProjection(
+        status="PASS",
+        code="PASS",
+        path=relative_decision_path,
+        written=bool(write and table_stale),
+        table_stale=table_stale,
+        message=(
+            "Scope decision table refreshed."
+            if write and table_stale
+            else "Scope decision table already current."
+            if not table_stale
+            else "Scope decision table can be refreshed deterministically."
+        ),
+        rendered_table=rendered_table,
+        content=updated_text,
+    )
 
 
 def build_doc_registry_reconcile_report(project_root: Path) -> dict[str, Any]:
@@ -470,17 +521,14 @@ def build_doc_registry_reconcile_report(project_root: Path) -> dict[str, Any]:
         path for path in scope_required_markdown if path not in registered_paths
     ]
 
-    rows = build_doc_registry_reconcile_scope_decision_rows(project_root)
-    rendered_scope_table = render_doc_registry_scope_decision_table(rows)
-
     scope_path = workspace.docs_file("DOC_REGISTRY_SCOPE.yaml")
     decision_path = workspace.governance_file("DOC_REGISTRY_SCOPE_DECISION.md")
-    decision_present = decision_path.exists()
-    decision_text = decision_path.read_text(encoding="utf-8") if decision_present else ""
-    decision_table_stale = (
-        decision_present
-        and rendered_scope_table not in decision_text
+    projection = build_scope_decision_projection(
+        project_root,
+        registry=registry,
+        write=False,
     )
+    rows = build_doc_registry_scope_decision_rows(project_root, registry=registry)
 
     findings: list[dict[str, str]] = []
     for error in scope.errors:
@@ -505,7 +553,17 @@ def build_doc_registry_reconcile_report(project_root: Path) -> dict[str, Any]:
             }
         )
 
-    if decision_table_stale:
+    if projection.status == "BLOCK":
+        findings.append(
+            {
+                "severity": "BLOCK",
+                "kind": "scope_decision_projection_unreconciled",
+                "path": workspace.path_text(decision_path),
+                "message": projection.message,
+                "next_action": "Repair the scope decision table structure before registry reconciliation.",
+            }
+        )
+    elif projection.table_stale:
         findings.append(
             {
                 "severity": "WARN",
@@ -537,11 +595,43 @@ def build_doc_registry_reconcile_report(project_root: Path) -> dict[str, Any]:
         "scope_required_markdown_count": len(scope_required_markdown),
         "strict_scope_violation_count": len(strict_scope_violations),
         "strict_scope_violations": strict_scope_violations,
-        "scope_decision_present": decision_present,
-        "scope_decision_table_stale": decision_table_stale,
+        "scope_decision_present": decision_path.exists(),
+        "scope_decision_table_stale": projection.table_stale,
+        "scope_decision_projection_status": projection.status,
+        "scope_decision_projection_code": projection.code,
         "scope_decision_rows": rows,
-        "rendered_scope_decision_table": rendered_scope_table,
+        "rendered_scope_decision_table": projection.rendered_table,
         "findings": findings,
+    }
+
+
+def reconcile_documentation_registry(
+    project_root: Path,
+    *,
+    execute: bool = False,
+) -> dict[str, Any]:
+    report = build_doc_registry_reconcile_report(project_root)
+    if not execute:
+        return report
+
+    if report["result_status"] == "BLOCK":
+        return {
+            **report,
+            "mode": "execute",
+            "scope_decision_update": {
+                "status": "SKIP",
+                "code": "SKIP_BLOCKED_RECONCILE",
+                "written": False,
+                "message": "Reconcile had blocking findings; no projection was written.",
+            },
+        }
+
+    projection = build_scope_decision_projection(project_root, write=True)
+    refreshed_report = build_doc_registry_reconcile_report(project_root)
+    return {
+        **refreshed_report,
+        "mode": "execute",
+        "scope_decision_update": _scope_decision_projection_payload(projection),
     }
 
 
@@ -557,9 +647,17 @@ def render_doc_registry_reconcile_report(report: dict[str, Any]) -> str:
         f"UNREGISTERED_CANDIDATES: {report['unregistered_candidate_count']}",
         f"STRICT_SCOPE_VIOLATIONS: {report['strict_scope_violation_count']}",
         f"SCOPE_DECISION_TABLE_STALE: {report['scope_decision_table_stale']}",
-        "",
-        "FINDINGS:",
     ]
+    scope_decision_update = report.get("scope_decision_update")
+    if isinstance(scope_decision_update, dict):
+        lines.extend(
+            [
+                f"SCOPE_DECISION_UPDATE_STATUS: {scope_decision_update.get('status')}",
+                f"SCOPE_DECISION_UPDATE_WRITTEN: {scope_decision_update.get('written')}",
+                f"SCOPE_DECISION_UPDATE_CODE: {scope_decision_update.get('code')}",
+            ]
+        )
+    lines.extend(["", "FINDINGS:"])
     findings = report.get("findings", [])
     if not findings:
         lines.append("- none")
@@ -711,16 +809,101 @@ def register_documentation_registry_entry(
             "findings": candidate_findings,
         }
 
-    registry_path.write_text(
-        yaml.safe_dump(candidate_registry, sort_keys=False, allow_unicode=True),
-        encoding="utf-8",
+    projection = build_scope_decision_projection(
+        project_root,
+        registry=candidate_registry,
+        write=False,
     )
+    if projection.status == "BLOCK":
+        return {
+            **base_payload,
+            "result_status": "FAIL",
+            "code": "FAIL_SCOPE_DECISION_PROJECTION",
+            "findings": list(projection.findings) or [projection.message],
+            "scope_decision_update": _scope_decision_projection_payload(projection),
+        }
+
+    original_registry_text = registry_path.read_text(encoding="utf-8")
+    candidate_registry_text = append_documentation_registry_entry_text(
+        original_registry_text,
+        path=normalized_path,
+        document_class=normalized_class,
+        owner=normalized_owner,
+    )
+    scope_decision_written = False
+    try:
+        registry_path.write_text(candidate_registry_text, encoding="utf-8")
+        if projection.status == "PASS" and projection.table_stale and projection.content is not None:
+            (project_root / projection.path).write_text(projection.content, encoding="utf-8")
+            scope_decision_written = True
+    except OSError:
+        registry_path.write_text(original_registry_text, encoding="utf-8")
+        raise
+
+    post_write_projection = build_scope_decision_projection(
+        project_root,
+        registry=candidate_registry,
+        write=False,
+    )
+    if post_write_projection.status == "BLOCK" or post_write_projection.table_stale:
+        registry_path.write_text(original_registry_text, encoding="utf-8")
+        return {
+            **base_payload,
+            "result_status": "FAIL",
+            "code": "FAIL_SCOPE_DECISION_DRIFT",
+            "findings": list(post_write_projection.findings)
+            or [post_write_projection.message],
+            "scope_decision_update": _scope_decision_projection_payload(
+                post_write_projection
+            ),
+        }
+
+    scope_decision_update = _scope_decision_projection_payload(projection)
+    scope_decision_update["written"] = scope_decision_written
+    if scope_decision_written:
+        scope_decision_update["message"] = "Scope decision table refreshed."
+
     return {
         **base_payload,
         "result_status": "PASS",
         "code": "PASS",
         "written": True,
+        "scope_decision_update": scope_decision_update,
     }
+
+
+def append_documentation_registry_entry_text(
+    registry_text: str,
+    *,
+    path: str,
+    document_class: str,
+    owner: str,
+) -> str:
+    """Append one document entry without reserializing the full YAML registry."""
+    if "\ndocuments:\n" not in f"\n{registry_text}":
+        raise ValueError("documentation registry is missing a top-level documents list")
+    item_indent = ""
+    lines = registry_text.splitlines()
+    for index, line in enumerate(lines):
+        if line.strip() != "documents:":
+            continue
+        for item_line in lines[index + 1 :]:
+            if item_line.strip().startswith("- "):
+                item_indent = item_line[: len(item_line) - len(item_line.lstrip())]
+                break
+        break
+    entry = yaml.safe_dump(
+        {
+            "path": path,
+            "class": document_class,
+            "owner": owner,
+        },
+        sort_keys=False,
+        allow_unicode=True,
+    ).splitlines()
+    rendered_entry = f"{item_indent}- {entry[0]}\n"
+    rendered_entry += "".join(f"{item_indent}  {line}\n" for line in entry[1:])
+    return registry_text.rstrip("\n") + "\n" + rendered_entry
 
 
 def build_unregistered_document_candidates_report(
@@ -767,8 +950,15 @@ def build_unregistered_document_candidates_report(
     }
 
 
-def build_doc_registry_scope_decision_rows(project_root: Path) -> list[dict[str, int | str]]:
-    registered_paths = _registered_document_paths(project_root)
+def build_doc_registry_scope_decision_rows(
+    project_root: Path,
+    *,
+    registry: dict[str, Any] | None = None,
+) -> list[dict[str, int | str]]:
+    if registry is None:
+        registered_paths = _registered_document_paths(project_root)
+    else:
+        registered_paths = _registered_document_paths_from_registry(registry)
     counters: dict[str, Counter[str]] = {}
     for rel in _iter_docs_markdown_files(
         project_root,
@@ -793,6 +983,78 @@ def build_doc_registry_scope_decision_rows(project_root: Path) -> list[dict[str,
     ]
 
 
+def _replace_scope_decision_table(
+    decision_text: str,
+    rows: list[dict[str, Any]],
+) -> dict[str, Any]:
+    lines = decision_text.splitlines()
+    header = (
+        "| docs path | md files | registered | unregistered | "
+        "proposed: required / exempt / undecided |"
+    )
+    separator = "|---|---:|---:|---:|---|"
+    header_indexes = [index for index, line in enumerate(lines) if line.strip() == header]
+    if len(header_indexes) != 1:
+        return {
+            "status": "BLOCK",
+            "code": "BLOCK_SCOPE_DECISION_HEADER",
+            "message": "Scope decision table must contain exactly one canonical header.",
+            "findings": [f"canonical table header count={len(header_indexes)}"],
+        }
+
+    header_index = header_indexes[0]
+    separator_index = header_index + 1
+    if separator_index >= len(lines) or lines[separator_index].strip() != separator:
+        return {
+            "status": "BLOCK",
+            "code": "BLOCK_SCOPE_DECISION_SEPARATOR",
+            "message": "Scope decision table separator is missing or non-canonical.",
+            "findings": ["canonical table separator must immediately follow the header"],
+        }
+
+    proposed_by_path: dict[str, str] = {}
+    row_index = separator_index + 1
+    while row_index < len(lines) and lines[row_index].startswith("| docs"):
+        cells = [cell.strip() for cell in lines[row_index].strip("|").split("|")]
+        if len(cells) != 5:
+            return {
+                "status": "BLOCK",
+                "code": "BLOCK_SCOPE_DECISION_ROW",
+                "message": "Scope decision table contains a row with an unexpected column count.",
+                "findings": [f"line {row_index + 1}: expected 5 columns, got {len(cells)}"],
+            }
+        docs_path = cells[0]
+        proposed_by_path[docs_path] = cells[4]
+        row_index += 1
+
+    rendered_table = render_doc_registry_scope_decision_table(
+        rows,
+        proposed_by_path=proposed_by_path,
+    )
+    rendered_lines = rendered_table.splitlines()
+    updated_lines = lines[:header_index] + rendered_lines + lines[row_index:]
+    trailing_newline = "\n" if decision_text.endswith("\n") else ""
+    return {
+        "status": "PASS",
+        "code": "PASS",
+        "message": "Scope decision table can be updated deterministically.",
+        "findings": [],
+        "rendered_table": rendered_table,
+        "content": "\n".join(updated_lines) + trailing_newline,
+    }
+
+
+def _scope_decision_projection_payload(projection: ScopeDecisionProjection) -> dict[str, Any]:
+    return {
+        "status": projection.status,
+        "code": projection.code,
+        "path": projection.path,
+        "written": projection.written,
+        "table_stale": projection.table_stale,
+        "message": projection.message,
+    }
+
+
 def render_doc_registry_scope_decision_template(project_root: Path) -> str:
     rows = build_doc_registry_scope_decision_rows(project_root)
     lines = [
@@ -806,15 +1068,8 @@ def render_doc_registry_scope_decision_template(project_root: Path) -> str:
         "Counts exclude generated report prefixes that are already outside the registry candidate scan.",
         "No scope recommendation is encoded here; maintainers fill the proposed column after review.",
         "",
-        "| docs path | md files | registered | unregistered | proposed: required / exempt / undecided |",
-        "|---|---:|---:|---:|---|",
     ]
-    for row in rows:
-        lines.append(
-            "| {docs_path} | {md_files} | {registered} | {unregistered} |  |".format(
-                **row
-            )
-        )
+    lines.append(render_doc_registry_scope_decision_table([dict(row) for row in rows]))
     lines.extend(
         [
             "",

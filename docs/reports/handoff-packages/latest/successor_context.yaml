@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-27T17:16:28.941390+00:00",
+  "generated_at_utc": "2026-08-27T20:53:07.619963+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,14 +57,14 @@
     "package_version": "1.0.6"
   },
   "repo": {
-    "branch": "docs/post-pr2195-handoff-refresh",
+    "branch": "codex/deterministic-ci-runtime-plan",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "fca3d1f0d0ed8e620a7fd12cbe49ee2740677df4",
-    "head_matches_origin_main": true,
-    "head_short": "fca3d1f0",
+    "head": "5aa04936b6b6bf6b255b09ed9c97a0065ee8326a",
+    "head_matches_origin_main": false,
+    "head_short": "5aa04936",
     "local_path": "cd /path/to/",
-    "origin_main": "fca3d1f0d0ed8e620a7fd12cbe49ee2740677df4",
-    "origin_main_short": "fca3d1f0",
+    "origin_main": "aa19501e8406b5f57e72e427dc08418fa4935513",
+    "origin_main_short": "aa19501e",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -96,6 +96,15 @@
         "id": "pre-gui-hardening-line",
         "status": "next",
         "summary": "Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for pre-GUI"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "deterministic-ci-runtime-optimization",
+        "status": "next",
+        "summary": "Reduce workflow runtime without reducing deterministic assurance for pre-GUI"
       },
       {
         "files": [

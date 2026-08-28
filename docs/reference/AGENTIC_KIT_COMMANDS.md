@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: f88f3c276299
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 17ca990dda88
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -592,7 +592,7 @@ Reconcile documentation registry, declared scope, and decision projection.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
-| `execute` | `TyperOption` | --execute | `False` | `False` | Reserved for a later slice; current implementation is dry-run only. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Refresh deterministic scope decision projections. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit doc-registry register`

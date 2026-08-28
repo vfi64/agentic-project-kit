@@ -13,10 +13,150 @@ concurrency:
   group: ci-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Determine changed paths
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          CURRENT_SHA: ${{ github.sha }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git diff --name-only "$PR_BASE_SHA" "$PR_HEAD_SHA" > "$RUNNER_TEMP/changed-paths.txt" || git ls-files > "$RUNNER_TEMP/changed-paths.txt"
+          elif [ "$EVENT_NAME" = "push" ] && [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" > "$RUNNER_TEMP/changed-paths.txt" || git ls-files > "$RUNNER_TEMP/changed-paths.txt"
+          else
+            git ls-files > "$RUNNER_TEMP/changed-paths.txt"
+          fi
+          cat "$RUNNER_TEMP/changed-paths.txt"
+
+      - name: Classify CI runtime policy
+        id: runtime-policy
+        shell: bash
+        env:
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+          EVENT_NAME: ${{ github.event_name }}
+          CURRENT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          VALIDATION_STATUS="$(python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("docs/reports/handoff-packages/latest/validation_report.json")
+          print(json.loads(path.read_text(encoding="utf-8")).get("status", "") if path.exists() else "")
+          PY
+          )"
+          PYTHONPATH=src python -m agentic_project_kit.ci_runtime_policy admin-refresh \
+            --changed-paths-file "$RUNNER_TEMP/changed-paths.txt" \
+            --branch "$BRANCH_NAME" \
+            --validation-status "$VALIDATION_STATUS" \
+            --output "$RUNNER_TEMP/admin-refresh-policy.json"
+          FINAL_TREE=""
+          if [ "$EVENT_NAME" = "push" ]; then
+            FINAL_TREE="$(git rev-parse "${CURRENT_SHA}^{tree}" 2>/dev/null || true)"
+          fi
+          PYTHONPATH=src python -m agentic_project_kit.ci_runtime_policy main-push \
+            --changed-paths-file "$RUNNER_TEMP/changed-paths.txt" \
+            --event-name "$EVENT_NAME" \
+            --final-tree "$FINAL_TREE" \
+            --output "$RUNNER_TEMP/main-push-policy.json"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          admin = json.loads(Path(os.environ["RUNNER_TEMP"], "admin-refresh-policy.json").read_text(encoding="utf-8"))
+          main_push = json.loads(Path(os.environ["RUNNER_TEMP"], "main-push-policy.json").read_text(encoding="utf-8"))
+          gate_mode = "full"
+          if admin["mode"] == "ADMIN_REFRESH_LIGHT":
+              gate_mode = "admin-refresh-light"
+          if main_push["mode"] == "TREE_PROOF":
+              gate_mode = "tree-proof"
+          with Path(os.environ["GITHUB_OUTPUT"]).open("a", encoding="utf-8") as output:
+              output.write(f"gate-mode={gate_mode}\n")
+          PY
+
+      - name: Install package
+        if: steps.runtime-policy.outputs.gate-mode != 'tree-proof'
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Ruff
+        if: steps.runtime-policy.outputs.gate-mode == 'full'
+        run: ruff check .
+
+      - name: Tests
+        if: steps.runtime-policy.outputs.gate-mode == 'full'
+        run: python -m pytest -q
+
+      - name: CLI smoke
+        if: steps.runtime-policy.outputs.gate-mode == 'full'
+        run: |
+          agentic-kit --help
+          agentic-kit todo --help
+
+      - name: Admin refresh light gate
+        if: steps.runtime-policy.outputs.gate-mode == 'admin-refresh-light'
+        shell: bash
+        env:
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          agentic-kit handoff check
+          agentic-kit handoff post-merge-refresh-status
+          agentic-kit transfer post-merge-check --base-branch "$BRANCH_NAME" --json
+          git diff "$PR_BASE_SHA" "$PR_HEAD_SHA" --output "$RUNNER_TEMP/admin-refresh-pr.diff"
+          python -m agentic_project_kit.protected_change_planner --diff-file "$RUNNER_TEMP/admin-refresh-pr.diff"
+          agentic-kit transfer protected-diff-plan --label ci-admin-refresh-clean-worktree --json
+          agentic-kit doc-registry reconcile --json
+          agentic-kit doc-registry check-unregistered --json
+          agentic-kit check-docs
+          python -m pytest -q tests/test_successor_handoff_package.py tests/test_chat_entrypoint_contract.py tests/test_documentation_registry.py tests/test_docs_lifecycle_apply_cli.py tests/test_docs_lifecycle_reconcile_cli.py tests/test_ci_runtime_policy.py
+
+      - name: Main push tree proof gate
+        if: steps.runtime-policy.outputs.gate-mode == 'tree-proof'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          policy = json.loads(Path(os.environ["RUNNER_TEMP"], "main-push-policy.json").read_text(encoding="utf-8"))
+          if policy["mode"] != "TREE_PROOF":
+              raise SystemExit("main-push tree proof gate selected without TREE_PROOF policy")
+          print(json.dumps(policy, indent=2, sort_keys=True))
+          PY
+
+  pytest-parallel-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    continue-on-error: true
 
     steps:
       - uses: actions/checkout@v6
@@ -31,13 +171,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
 
-      - name: Ruff
-        run: ruff check .
-
-      - name: Tests
-        run: python -m pytest -q
-
-      - name: CLI smoke
-        run: |
-          agentic-kit --help
-          agentic-kit todo --help
+      - name: Pytest parallel shadow
+        run: python -m pytest -q -n 4 --durations=20

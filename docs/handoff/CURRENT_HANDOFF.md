@@ -19,6 +19,21 @@ Continue with the next governed DPA DP2 slice from fresh main after post-merge c
 
 <!-- agentic:generated operational-handoff-state end -->
 
+## Active Working Slice: Deterministic CI Runtime Optimization
+
+Branch: `codex/deterministic-ci-runtime-plan`.
+
+The current branch prepares `docs/planning/PROJECT_DIRECTION.yaml#deterministic-ci-runtime-optimization`.
+Implemented artifacts cover CI0 through CI7: doc-registry register/reconcile
+scope-counter autoreconcile, CI1 runtime baseline evidence, non-blocking
+`pytest-parallel-shadow`, fail-closed main-push tree-proof classification,
+exact-diff `admin-refresh-light`, manifest-driven Pages path gating,
+diagnostic-only failure registry records, and receipt-store replacement deferral.
+
+Remote PR/main Actions observation remains the next evidence step before any
+promotion of shadow parallel pytest or main-push tree-proof reduction. The
+serial full-suite fallback remains the required gate.
+
 ## Post-PR1245 Administrative Handoff Refresh State
 
 Current main/admin HEAD: `e97af592` (`Refresh handoff state after PR1244 (#1245)`).

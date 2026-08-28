@@ -38,8 +38,8 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2195-handoff-refresh`
-- head_matches_origin_main: `True`
+- branch: `codex/deterministic-ci-runtime-plan`
+- head_matches_origin_main: `False`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
@@ -174,6 +174,15 @@ Wenn der Bootstrap grün ist:
       "id": "pre-gui-hardening-line",
       "status": "next",
       "summary": "Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for pre-GUI"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "deterministic-ci-runtime-optimization",
+      "status": "next",
+      "summary": "Reduce workflow runtime without reducing deterministic assurance for pre-GUI"
     },
     {
       "files": [
@@ -402,14 +411,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2195-handoff-refresh",
+    "branch": "codex/deterministic-ci-runtime-plan",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "fca3d1f0d0ed8e620a7fd12cbe49ee2740677df4",
-    "head_matches_origin_main": true,
-    "head_short": "fca3d1f0",
+    "head": "5aa04936b6b6bf6b255b09ed9c97a0065ee8326a",
+    "head_matches_origin_main": false,
+    "head_short": "5aa04936",
     "local_path": "cd /path/to/",
-    "origin_main": "fca3d1f0d0ed8e620a7fd12cbe49ee2740677df4",
-    "origin_main_short": "fca3d1f0",
+    "origin_main": "aa19501e8406b5f57e72e427dc08418fa4935513",
+    "origin_main_short": "aa19501e",
     "worktree_clean": false
   }
 }
@@ -435,7 +444,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` oder dem externen Workspace-State bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: f88f3c276299). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK f88f3c276299. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 17ca990dda88). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 17ca990dda88. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -445,5 +454,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 8175681b021033786d38d3c254d4f7d2f013fdeb37cca3aabc08e4d64e977739
-- docs/reference/agentic-kit-commands.json: 506e48f5daa6cfc248e3177632269c198da6f2b67d9bf4c1d1bb770f6f8e063c
+- docs/reference/AGENTIC_KIT_COMMANDS.md: b5957725bd1fb58d95bc69505e4323f1898065a7002ed5054796994eab8a6a88
+- docs/reference/agentic-kit-commands.json: d0f29397fd033ec4d29c12eb5d15e810b448c3c752c84472b99632042239c7e5
