@@ -281,11 +281,11 @@
       "branch": "codex/deterministic-ci-runtime-plan",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "5aa04936b6b6bf6b255b09ed9c97a0065ee8326a",
+      "head": "281a361d282ce086160c1c04b1e1cede3332a9d5",
       "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "aa19501e8406b5f57e72e427dc08418fa4935513",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -433,11 +433,11 @@
     "branch": "codex/deterministic-ci-runtime-plan",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "5aa04936b6b6bf6b255b09ed9c97a0065ee8326a",
+    "head": "281a361d282ce086160c1c04b1e1cede3332a9d5",
     "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "aa19501e8406b5f57e72e427dc08418fa4935513",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {

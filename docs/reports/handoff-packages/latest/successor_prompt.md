@@ -40,7 +40,7 @@ Critical rule IDs:
 
 - branch: `codex/deterministic-ci-runtime-plan`
 - head_matches_origin_main: `False`
-- worktree_clean: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -413,13 +413,13 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/deterministic-ci-runtime-plan",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "5aa04936b6b6bf6b255b09ed9c97a0065ee8326a",
+    "head": "281a361d282ce086160c1c04b1e1cede3332a9d5",
     "head_matches_origin_main": false,
-    "head_short": "5aa04936",
+    "head_short": "281a361d",
     "local_path": "cd /path/to/",
     "origin_main": "aa19501e8406b5f57e72e427dc08418fa4935513",
     "origin_main_short": "aa19501e",
-    "worktree_clean": false
+    "worktree_clean": true
   }
 }
 ```
