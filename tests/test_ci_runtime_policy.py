@@ -255,7 +255,7 @@ def test_pages_manifest_loader_fails_closed_for_missing_manifest(tmp_path: Path)
 
 def test_main_push_tree_proof_accepts_only_safe_equivalent_tree() -> None:
     decision = classify_main_push_tree_proof(
-        ["docs/handoff/CURRENT_HANDOFF.md"],
+        ["src/agentic_project_kit/demo.py", "tests/test_demo.py"],
         event_name="push",
         final_tree_sha="tree123",
         tested_tree_sha="tree123",
@@ -266,7 +266,7 @@ def test_main_push_tree_proof_accepts_only_safe_equivalent_tree() -> None:
     assert decision.mode == TREE_PROOF
 
 
-def test_main_push_tree_proof_falls_back_without_complete_proof() -> None:
+def test_main_push_tree_proof_falls_back_without_complete_proof_or_workflow_change() -> None:
     assert classify_main_push_tree_proof(
         ["docs/handoff/CURRENT_HANDOFF.md"],
         event_name="pull_request",
@@ -279,13 +279,6 @@ def test_main_push_tree_proof_falls_back_without_complete_proof() -> None:
         event_name="push",
         final_tree_sha="tree123",
         tested_tree_sha="other",
-        pr_checks_passed=True,
-    ).mode == FULL_CI
-    assert classify_main_push_tree_proof(
-        ["src/agentic_project_kit/demo.py"],
-        event_name="push",
-        final_tree_sha="tree123",
-        tested_tree_sha="tree123",
         pr_checks_passed=True,
     ).mode == FULL_CI
     assert classify_main_push_tree_proof(
@@ -302,6 +295,15 @@ def test_main_push_tree_proof_falls_back_without_complete_proof() -> None:
         tested_tree_sha="tree123",
         pr_checks_passed=None,
     ).mode == FULL_CI
+    workflow_change = classify_main_push_tree_proof(
+        [".github/workflows/ci.yml"],
+        event_name="push",
+        final_tree_sha="tree123",
+        tested_tree_sha="tree123",
+        pr_checks_passed=True,
+    )
+    assert workflow_change.mode == FULL_CI
+    assert "workflow or GitHub Actions helper paths changed" in workflow_change.reasons
 
 
 def test_failure_registry_classifies_known_diagnostic_failures() -> None:

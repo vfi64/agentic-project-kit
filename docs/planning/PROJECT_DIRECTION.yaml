@@ -686,8 +686,9 @@ roadmap:
   - A stable required check remains visible to branch protection; internal gate
     selection must not rely on skipped required checks as success.
   - Main-push CI reduction is allowed only when the final main tree is proven to
-    match an already verified PR integration tree or when an equivalent fail-closed
-    proof exists; otherwise full CI runs.
+    match an already verified PR tree or when an equivalent fail-closed proof exists;
+    workflow and GitHub Actions helper changes still run full CI because the PR
+    check may have used the base-branch workflow definition.
   - Administrative refresh PRs may use a narrower gate only when the diff matches
     an exact generated-handoff allowlist and package/handoff validation is PASS.
   - Pages build/deploy runs only when generated-site inputs or release/version
@@ -733,7 +734,8 @@ roadmap:
     - Add fixed-worker shadow runs before making parallel pytest a required gate.
     - Detect order dependence, shared-state leaks, live-repo collisions, and marker
       conflicts.
-    - Keep serial full-suite fallback until multiple shadow runs match serial PASS.
+    - Promote parallel pytest to the required CI test job only after multiple shadow
+      runs match serial PASS.
     gates:
     - python -m pytest -q
     - python -m pytest -q -n fixed-worker-count
@@ -742,10 +744,10 @@ roadmap:
     goal: Replace redundant full main-push CI after PR merge with a proof gate when
       the final tree was already tested.
     acceptance:
-    - Compare the final main tree to the tested PR integration tree or record why
-      no safe equivalence proof exists.
+    - Compare the final main tree to the tested PR tree or record why no safe
+      equivalence proof exists.
     - Direct main pushes, stale base, unknown merge method, failed/missing PR checks,
-      or workflow/release/governance changes fall back to full CI.
+      tree mismatch, or workflow/GitHub Actions helper changes fall back to full CI.
     - The branch-protection-visible required check remains deterministic and
       fail-closed.
     gates:

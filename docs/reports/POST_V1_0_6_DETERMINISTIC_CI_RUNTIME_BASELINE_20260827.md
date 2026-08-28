@@ -72,8 +72,8 @@ alone.
 | 8-20 | 67.88s | thirteen additional `test_gui_cockpit.py` calls at about 5.16s-5.66s each |
 
 The top 20 recorded slow calls account for about 282.57s of the 430.72s local
-serial run. CI2 should therefore treat GUI/Tkinter isolation as the main
-parallelization risk rather than assuming simple worker scaling.
+serial run. The initial CI2 baseline therefore treated GUI/Tkinter isolation as
+the main parallelization risk rather than assuming simple worker scaling.
 
 ## CI2 Shadow Observation
 
@@ -85,11 +85,66 @@ four-worker shadow command passed locally:
 | `.venv/bin/python -m pytest -q -n 4 --durations=20` | PASS | 225.30s | 2931 passed, 469 warnings |
 | `.venv/bin/python -m pytest -q -n 4 --durations=20` | PASS | 230.23s | 2932 passed, 469 warnings |
 
-These are local shadow PASS observations, not enough to promote parallel pytest
-to the required gate. The slowest calls remain GUI/Tkinter tests, so repeated
-shadow evidence must still watch for order dependence, shared-state leaks,
-live-repo collisions, and marker conflicts before the serial full-suite fallback
-is removed.
+These were local shadow PASS observations, not enough by themselves to promote
+parallel pytest to the required gate. At this stage, the slowest calls still
+were GUI/Tkinter tests, so repeated shadow evidence still had to watch for order
+dependence, shared-state leaks, live-repo collisions, and marker conflicts
+before the serial full-suite fallback could be removed.
+
+## CI2 Promotion and Regression Diagnosis
+
+Follow-up GitHub Actions inspection on 2026-08-28 showed that the first
+implementation shortened admin-refresh lanes but regressed ordinary `FULL_CI`
+runtime. The regression was concentrated in the serial pytest step after the CI
+workflow started using a full-history checkout for diff/tree classification.
+
+| Run | Lane | Required test evidence | Parallel evidence |
+|---|---|---:|---:|
+| <https://github.com/vfi64/agentic-project-kit/actions/runs/33097211301> | pre-slice main push | `2906 passed` in 152.85s | n/a |
+| <https://github.com/vfi64/agentic-project-kit/actions/runs/33141249255> | PR #2197 | `2932 passed` in 403.11s | `2932 passed` in 120.93s |
+| <https://github.com/vfi64/agentic-project-kit/actions/runs/33176783563> | PR #2202 | `2935 passed` in 525.89s | `2935 passed` in 100.33s, `PYTEST_PARALLEL_SHADOW_RC=0` |
+| <https://github.com/vfi64/agentic-project-kit/actions/runs/33181160222> | PR #2204 | `2935 passed` in 472.72s | `2935 passed` in 121.13s, `PYTEST_PARALLEL_SHADOW_RC=0` |
+| <https://github.com/vfi64/agentic-project-kit/actions/runs/33183065798> | post-PR2205 main push | admin-light required job in 35s | `2935 passed` in 123.87s, `PYTEST_PARALLEL_SHADOW_RC=0` |
+
+The added CI-policy tests were not the runtime cause: the touched CI-policy and
+documentation-registry test modules ran locally together in about 4s. The
+dominant cost was the serial full-suite execution under the changed CI checkout
+shape. The follow-up optimization therefore promotes the fixed-worker parallel
+pytest command to the branch-protection-visible `test` job and restores shallow
+checkout with exact endpoint fetches for changed-path classification.
+
+## GUI/Tkinter Bottleneck Remediation
+
+Targeted profiling on 2026-08-28 showed that the headless Tkinter visibility
+matrix was not blocked by Tk widget construction itself. A single matrix test
+spent about 47s of 53s in `CockpitGui._manifest_status()`, which called the
+full `workspace adopt` analyzer and repeatedly ran the documentation age Git-log
+baseline. That full adoption report is useful for `workspace adopt`, but it is
+too broad for the GUI chrome label.
+
+The gate-conformant remediation keeps the production gatekeeper live and removes
+only irrelevant work from the GUI status path:
+
+- `workspace_adopt` now exposes a lightweight `.agentic/` collision-status
+  analysis for callers that do not need a full adoption report.
+- `CockpitGui._manifest_status()` uses that lightweight status instead of the
+  full `analyze_workspace_adoption()` report.
+- Headless GUI tests can inject a deterministic `GuiGatekeeperStatus` snapshot,
+  while the default `CockpitGui` constructor path still passes no override and
+  remains live.
+
+| Probe | Before | After |
+|---|---:|---:|
+| `tests/test_gui_cockpit.py::test_gui_builds_headless_for_every_mode_and_level` | 48.27s | 0.75s |
+| full `tests/test_gui_cockpit.py` module | previously dominated by multiple 10s-47s calls | 83 passed in 3.56s |
+| full local pytest, serial | 430.72s | 145.91s |
+| full local pytest, `-n 4` | 206.96s before GUI remediation | 48.11s |
+| new injection/default-path protection tests | n/a | 3 passed in 0.50s |
+
+This is not a CI reduction: the GUI assertions still run, and the full adoption
+report remains covered by workspace-adoption tests. The change narrows only the
+runtime work performed for a GUI label and for deterministic headless GUI
+matrix tests.
 
 ## Remote CI Baseline
 
@@ -151,8 +206,8 @@ complete for administrative refresh PR cycle time.
 
 ## Optimization Constraints
 
-- CI2 may add parallel pytest only as a shadow run until repeated shadow PASS
-  evidence proves parity with serial PASS.
+- CI2 required parallel pytest promotion is allowed only after repeated shadow
+  PASS evidence proves parity with serial PASS.
 - CI3 must keep a branch-protection-visible deterministic check and may dedupe
   main-push CI only with a fail-closed tree equivalence proof.
 - CI4 may narrow admin-refresh PR CI only when an exact generated-handoff

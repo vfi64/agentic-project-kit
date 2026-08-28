@@ -49,27 +49,14 @@ ADMIN_REFRESH_PROMPT_PROJECTION_PATHS = frozenset(
     }
 )
 
-MAIN_PUSH_DEDUPE_UNSAFE_PREFIXES = (
+MAIN_PUSH_DEDUPE_ALWAYS_FULL_PREFIXES = (
     ".github/workflows/",
-    "src/",
-    "tests/",
-    "docs/architecture/",
-    "docs/governance/",
-    "docs/planning/",
-    "site/",
+    ".github/actions/",
 )
 
-MAIN_PUSH_DEDUPE_UNSAFE_FILES = frozenset(
+MAIN_PUSH_DEDUPE_ALWAYS_FULL_FILES = frozenset(
     {
-        "AGENTS.md",
-        "CHANGELOG.md",
-        "CITATION.cff",
-        "README.md",
-        "SECURITY.md",
-        "pyproject.toml",
-        "docs/DOCUMENTATION_COVERAGE.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml",
-        "docs/TEST_GATES.md",
+        ".github/dependabot.yml",
     }
 )
 
@@ -369,9 +356,9 @@ def classify_pages_build(
     )
 
 
-def _is_main_push_dedupe_unsafe(path: str) -> bool:
-    return path in MAIN_PUSH_DEDUPE_UNSAFE_FILES or any(
-        path.startswith(prefix) for prefix in MAIN_PUSH_DEDUPE_UNSAFE_PREFIXES
+def _requires_main_push_full_ci_even_with_tree_proof(path: str) -> bool:
+    return path in MAIN_PUSH_DEDUPE_ALWAYS_FULL_FILES or any(
+        path.startswith(prefix) for prefix in MAIN_PUSH_DEDUPE_ALWAYS_FULL_PREFIXES
     )
 
 
@@ -395,13 +382,13 @@ def classify_main_push_tree_proof(
     reasons: list[str] = []
     if invalid:
         reasons.append("invalid changed paths require full CI")
-    unsafe = tuple(path for path in paths if _is_main_push_dedupe_unsafe(path))
+    unsafe = tuple(path for path in paths if _requires_main_push_full_ci_even_with_tree_proof(path))
     if unsafe:
-        reasons.append("workflow, code, test, release, governance, architecture, manifest, or site paths changed")
+        reasons.append("workflow or GitHub Actions helper paths changed")
     if not final_tree_sha or not tested_tree_sha:
         reasons.append("final and tested tree SHAs are required for a safe equivalence proof")
     elif final_tree_sha != tested_tree_sha:
-        reasons.append("final main tree does not match tested PR integration tree")
+        reasons.append("final main tree does not match tested pull-request tree")
     if pr_checks_passed is not True:
         reasons.append("successful PR checks were not proven")
     if reasons:
@@ -418,7 +405,7 @@ def classify_main_push_tree_proof(
         kind="main_push_tree_proof",
         status="PASS",
         mode=TREE_PROOF,
-        reasons=("final main tree matches the tested PR integration tree and PR checks passed",),
+        reasons=("final main tree matches the tested pull-request tree and PR checks passed",),
         changed_paths=paths,
     )
 

@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Determine changed paths
         shell: bash
@@ -36,9 +36,27 @@ jobs:
           CURRENT_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
-          if [ "$EVENT_NAME" = "push" ] && [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
-            git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" > "$RUNNER_TEMP/changed-paths.txt" || git ls-files > "$RUNNER_TEMP/changed-paths.txt"
-          else
+          fetch_commit() {
+            local sha="$1"
+            if [ -z "$sha" ]; then
+              return 1
+            fi
+            if git cat-file -e "${sha}^{commit}" 2>/dev/null; then
+              return 0
+            fi
+            git fetch --no-tags --depth=1 origin "$sha" 2>/dev/null \
+              && git cat-file -e "${sha}^{commit}" 2>/dev/null
+          }
+          diff_ready=false
+          if [ "$EVENT_NAME" = "push" ] \
+            && [ -n "$BEFORE_SHA" ] \
+            && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ] \
+            && fetch_commit "$BEFORE_SHA"; then
+            git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" > "$RUNNER_TEMP/changed-paths.txt"
+            diff_ready=true
+          fi
+          if [ "$diff_ready" != "true" ]; then
+            echo "::notice title=pages-path-gate::changed paths unavailable; falling back to full-repository path set"
             git ls-files > "$RUNNER_TEMP/changed-paths.txt"
           fi
           cat "$RUNNER_TEMP/changed-paths.txt"

@@ -28,8 +28,10 @@ from agentic_project_kit.gui_cockpit_actions import CockpitActionsMixin
 from agentic_project_kit.gui_cockpit_header import CockpitHeaderMixin
 from agentic_project_kit.gui_cockpit_sidebar import CockpitSidebarMixin
 from agentic_project_kit.gui_cockpit_task import CockpitTaskMixin
+from agentic_project_kit.gui_gatekeeper_status import GuiGatekeeperActionStatus, GuiGatekeeperStatus
 from agentic_project_kit.gui_panel_state import PANEL_STATE_RELATIVE_PATH, read_panel_state, write_panel_state
 from agentic_project_kit.gui_open_folder import open_folder_in_file_manager
+from agentic_project_kit.gui_viewmodel import build_basic_cockpit_view_model
 
 
 COCKPIT_SOURCE_PATHS = (
@@ -54,6 +56,29 @@ GUI_VISIBILITY_GROUPS = (
 )
 
 pytestmark = pytest.mark.gui
+_HEADLESS_DEFAULT_GATEKEEPER = object()
+
+
+def _clean_gui_gatekeeper_status() -> GuiGatekeeperStatus:
+    return GuiGatekeeperStatus(
+        branch="main",
+        git_dirty=False,
+        workflow_state="IDLE",
+        current_work_present=True,
+        current_work_state="READY",
+        ready_for_read_only_actions=True,
+        ready_for_mutating_actions=False,
+        action_statuses=(
+            GuiGatekeeperActionStatus(
+                action_id="doctor",
+                safety_class="read-only",
+                mutation_scope="none",
+                enabled=True,
+                reason="read-only action allowed in clean GUI gatekeeper state",
+            ),
+        ),
+        blockers=(),
+    )
 
 
 class _FakeStringVar:
@@ -293,6 +318,7 @@ def _build_headless_cockpit(
     access_level: str,
     panel_state: dict[str, bool] | None = None,
     project_root: Path | None = None,
+    gatekeeper_status: GuiGatekeeperStatus | None | object = _HEADLESS_DEFAULT_GATEKEEPER,
 ) -> CockpitGui:
     _install_fake_tk(monkeypatch)
     monkeypatch.setattr(CockpitHeaderMixin, "_start_from_ref_options", lambda _self: ("latest main",))
@@ -306,7 +332,16 @@ def _build_headless_cockpit(
 
     monkeypatch.setattr("agentic_project_kit.gui_cockpit.write_panel_state", write_state)
     root = _FakeRoot()
-    gui = CockpitGui(root, project_root=project_root or Path("."))
+    resolved_gatekeeper_status = (
+        _clean_gui_gatekeeper_status()
+        if gatekeeper_status is _HEADLESS_DEFAULT_GATEKEEPER
+        else gatekeeper_status
+    )
+    gui = CockpitGui(
+        root,
+        project_root=project_root or Path("."),
+        gatekeeper_status=resolved_gatekeeper_status,
+    )
     gui.mode_var.set(_mode_option(gui, communication_mode))
     gui.update_mode_explanation()
     gui.access_level_var.set(access_level)
@@ -374,6 +409,75 @@ def test_gui_builds_headless_for_every_mode_and_level(monkeypatch) -> None:
 
             assert gui.basic_view.communication_mode == mode
             assert gui.basic_view.access_level == level
+
+
+def test_headless_cockpit_reuses_injected_gatekeeper_status(monkeypatch) -> None:
+    status = _clean_gui_gatekeeper_status()
+    calls: list[GuiGatekeeperStatus | None] = []
+
+    def recording_build(
+        project_root: Path | str,
+        *,
+        gatekeeper_status: GuiGatekeeperStatus | None = None,
+        communication_mode: str = "file_transfer",
+        access_level: str = "basic",
+    ):
+        calls.append(gatekeeper_status)
+        return build_basic_cockpit_view_model(
+            project_root,
+            gatekeeper_status=gatekeeper_status,
+            communication_mode=communication_mode,
+            access_level=access_level,
+        )
+
+    monkeypatch.setattr(
+        "agentic_project_kit.gui_cockpit.build_basic_cockpit_view_model",
+        recording_build,
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.gui_cockpit_sidebar.build_basic_cockpit_view_model",
+        recording_build,
+    )
+
+    _build_headless_cockpit(
+        monkeypatch,
+        communication_mode="copy_paste",
+        access_level="advanced",
+        gatekeeper_status=status,
+    )
+
+    assert calls == [status, status, status]
+
+
+def test_cockpit_gui_default_keeps_live_gatekeeper_status_path(monkeypatch, tmp_path: Path) -> None:
+    _install_fake_tk(monkeypatch)
+    monkeypatch.setattr(CockpitHeaderMixin, "_start_from_ref_options", lambda _self: ("latest main",))
+    monkeypatch.setattr("agentic_project_kit.gui_cockpit.read_panel_state", lambda _root: {})
+    calls: list[GuiGatekeeperStatus | None] = []
+
+    def recording_build(
+        project_root: Path | str,
+        *,
+        gatekeeper_status: GuiGatekeeperStatus | None = None,
+        communication_mode: str = "file_transfer",
+        access_level: str = "basic",
+    ):
+        calls.append(gatekeeper_status)
+        return build_basic_cockpit_view_model(
+            project_root,
+            gatekeeper_status=gatekeeper_status or _clean_gui_gatekeeper_status(),
+            communication_mode=communication_mode,
+            access_level=access_level,
+        )
+
+    monkeypatch.setattr(
+        "agentic_project_kit.gui_cockpit.build_basic_cockpit_view_model",
+        recording_build,
+    )
+
+    CockpitGui(_FakeRoot(), project_root=tmp_path)
+
+    assert calls == [None]
 
 
 class _AgenticCommandHarness(CockpitTaskMixin):

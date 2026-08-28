@@ -182,6 +182,12 @@ def analyze_workspace_adoption(root: Path | str = Path(".")) -> WorkspaceAdoptRe
     )
 
 
+def analyze_workspace_agentic_collision(root: Path | str = Path(".")) -> AgenticCollision:
+    """Return the `.agentic/` collision status without building a full adoption report."""
+
+    return _agentic_collision(Path(root))
+
+
 def render_workspace_adopt_report(report: WorkspaceAdoptReport) -> str:
     lines = [
         "WORKSPACE_ADOPT",
