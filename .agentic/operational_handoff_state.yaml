@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b1dcf9a1d60ffc6e85c316a919e133cbce2d654e
-  short: b1dcf9a1
-  subject: Fix pr-merge-safe self-hosting context (#2210)
+  full: 724551f66a76e6b1a4106a17ebc50b365b050326
+  short: 724551f6
+  subject: Classify post-v1.0.6 release note items (#2212)
 last_substantive_work_state:
-  full: b1dcf9a1d60ffc6e85c316a919e133cbce2d654e
-  short: b1dcf9a1
-  subject: Fix pr-merge-safe self-hosting context (#2210)
+  full: 724551f66a76e6b1a4106a17ebc50b365b050326
+  short: 724551f6
+  subject: Classify post-v1.0.6 release note items (#2212)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
