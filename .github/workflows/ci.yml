@@ -136,12 +136,8 @@ jobs:
           PY
           )"
           agentic-kit handoff check
-          case "$POLICY_MUTATION" in
-            current-handoff-refresh)
-              agentic-kit dpa current-handoff-refresh --json
-              ;;
-            successor-package-refresh)
-              python - <<'PY'
+          validate_successor_package() {
+            python - <<'PY'
           import json
           from pathlib import Path
 
@@ -150,6 +146,17 @@ jobs:
               raise SystemExit("successor handoff validation_report.json is not PASS")
           print(json.dumps(report, indent=2, sort_keys=True))
           PY
+          }
+          case "$POLICY_MUTATION" in
+            current-handoff-refresh)
+              agentic-kit dpa current-handoff-refresh --json
+              ;;
+            successor-package-refresh)
+              validate_successor_package
+              ;;
+            post-merge-settle-refresh)
+              agentic-kit dpa current-handoff-refresh --json
+              validate_successor_package
               ;;
             *)
               echo "unexpected admin refresh mutation: $POLICY_MUTATION" >&2

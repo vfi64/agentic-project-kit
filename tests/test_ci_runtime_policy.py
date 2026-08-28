@@ -13,6 +13,7 @@ from agentic_project_kit.ci_runtime_policy import (
     admin_refresh_current_handoff_paths,
     admin_refresh_expected_paths,
     admin_refresh_expected_path_variants,
+    admin_refresh_post_merge_settle_paths,
     build_failure_record,
     classify_admin_refresh_light,
     classify_failure_class,
@@ -79,6 +80,24 @@ def test_admin_refresh_light_accepts_exact_current_handoff_refresh_path_set() ->
     assert "exact current-handoff-refresh path set for PR 2197" in decision.reasons
 
 
+def test_admin_refresh_light_accepts_exact_post_merge_settle_refresh_path_set() -> None:
+    changed_paths = admin_refresh_post_merge_settle_paths(2200)
+
+    decision = classify_admin_refresh_light(
+        changed_paths,
+        branch="docs/post-pr2200-handoff-refresh",
+        validation_status="PASS",
+    )
+
+    assert decision.status == "PASS"
+    assert decision.mode == ADMIN_REFRESH_LIGHT
+    assert decision.changed_paths == changed_paths
+    assert decision.missing_paths == ()
+    assert decision.unexpected_paths == ()
+    assert decision.mutation == "post-merge-settle-refresh"
+    assert "exact post-merge-settle-refresh path set for PR 2200" in decision.reasons
+
+
 def test_admin_refresh_light_rejects_extra_product_path() -> None:
     changed_paths = (*admin_refresh_expected_paths(2195), "src/agentic_project_kit/demo.py")
 
@@ -131,13 +150,21 @@ def test_admin_refresh_light_report_path_can_prove_source_pr_but_not_path_varian
     assert decision.unexpected_paths == ("docs/reports/terminal/post-pr2195-successor-chat-handoff.md",)
 
 
-def test_admin_refresh_light_path_variants_are_distinct_exact_sets() -> None:
+def test_admin_refresh_light_path_variants_include_combined_settle_set() -> None:
     variants = dict(admin_refresh_expected_path_variants(2198))
 
-    assert set(variants) == {"successor-package-refresh", "current-handoff-refresh"}
+    assert set(variants) == {
+        "successor-package-refresh",
+        "current-handoff-refresh",
+        "post-merge-settle-refresh",
+    }
     assert "docs/reports/handoff-packages/latest/validation_report.json" in variants["successor-package-refresh"]
     assert ".agentic/dpa/acceptance/current_handoff_operational_state.json" in variants["current-handoff-refresh"]
-    assert set(variants["successor-package-refresh"]).isdisjoint(variants["current-handoff-refresh"])
+    combined = set(variants["post-merge-settle-refresh"])
+    assert set(variants["successor-package-refresh"]) < combined
+    assert set(variants["current-handoff-refresh"]) < combined
+    assert "docs/handoff/START_NEW_CHAT_PROMPT.md" in combined
+    assert "docs/reports/terminal/post-pr2198-successor-chat-handoff.md" in combined
 
 
 def test_admin_refresh_light_invalid_path_falls_back_to_full_ci() -> None:
