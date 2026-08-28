@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `a6ee8d0f766d0825dfd718ade3b7832535c8835c` (`a6ee8d0f`), after `Keep admin refresh light CI diagnostic-only (#2200)`.
-Last substantive work state is `a6ee8d0f766d0825dfd718ade3b7832535c8835c` (`a6ee8d0f`), after `Keep admin refresh light CI diagnostic-only (#2200)`.
+Current verified main/admin HEAD is `1e01507f89162e11ae1def4163c6e4ffe52a3fe7` (`1e01507f`), after `Accept combined post-merge refresh as light CI (#2202)`.
+Last substantive work state is `1e01507f89162e11ae1def4163c6e4ffe52a3fe7` (`1e01507f`), after `Accept combined post-merge refresh as light CI (#2202)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
