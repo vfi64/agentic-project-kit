@@ -54,7 +54,10 @@ def test_admin_refresh_light_gate_runs_only_handoff_registry_and_docs_checks() -
     assert admin_step["if"] == "steps.runtime-policy.outputs.gate-mode == 'admin-refresh-light'"
     assert "POLICY_MUTATION=" in run
     assert "agentic-kit handoff check" in run
+    assert "validate_successor_package()" in run
     assert "agentic-kit dpa current-handoff-refresh --json" in run
+    assert "post-merge-settle-refresh)" in run
+    assert "validate_successor_package" in run
     assert "successor handoff validation_report.json is not PASS" in run
     assert "unexpected admin refresh mutation" in run
     assert "agentic-kit handoff post-merge-refresh-status" not in run

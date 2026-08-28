@@ -43,6 +43,12 @@ ADMIN_REFRESH_SUCCESSOR_PACKAGE_PATHS = frozenset(
     }
 )
 
+ADMIN_REFRESH_PROMPT_PROJECTION_PATHS = frozenset(
+    {
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    }
+)
+
 MAIN_PUSH_DEDUPE_UNSAFE_PREFIXES = (
     ".github/workflows/",
     "src/",
@@ -151,11 +157,24 @@ def admin_refresh_current_handoff_paths() -> tuple[str, ...]:
     return tuple(sorted(ADMIN_REFRESH_CURRENT_HANDOFF_PATHS))
 
 
+def admin_refresh_post_merge_settle_paths(source_pr: int) -> tuple[str, ...]:
+    return tuple(
+        sorted(
+            {
+                *ADMIN_REFRESH_CURRENT_HANDOFF_PATHS,
+                *ADMIN_REFRESH_SUCCESSOR_PACKAGE_PATHS,
+                *ADMIN_REFRESH_PROMPT_PROJECTION_PATHS,
+                f"docs/reports/terminal/post-pr{source_pr}-successor-chat-handoff.md",
+            }
+        )
+    )
+
+
 def admin_refresh_expected_path_variants(source_pr: int) -> tuple[tuple[str, tuple[str, ...]], ...]:
-    del source_pr
     return (
         ("successor-package-refresh", tuple(sorted(ADMIN_REFRESH_SUCCESSOR_PACKAGE_PATHS))),
         ("current-handoff-refresh", tuple(sorted(ADMIN_REFRESH_CURRENT_HANDOFF_PATHS))),
+        ("post-merge-settle-refresh", admin_refresh_post_merge_settle_paths(source_pr)),
     )
 
 

@@ -61,13 +61,17 @@ generated handoff allowlist variant. Supported variants are:
 - `successor-package-refresh`: `docs/handoff/NEXT_CHAT_BOOTSTRAP.md` and the
   latest machine-readable successor package files under
   `docs/reports/handoff-packages/latest/`.
+- `post-merge-settle-refresh`: the exact union of `current-handoff-refresh`,
+  `successor-package-refresh`, `docs/handoff/START_NEW_CHAT_PROMPT.md`, and
+  `docs/reports/terminal/post-pr<source-pr>-successor-chat-handoff.md`.
 
 Extra paths, missing paths, invalid paths, manually edited product files,
 unknown source PRs, or non-PASS successor validation select `FULL_CI`.
 
 Accepted refresh PRs run handoff check, variant-specific artifact validation
 (`agentic-kit dpa current-handoff-refresh --json` for current-handoff refreshes
-or `validation_report.json` PASS verification for successor-package refreshes),
+or `validation_report.json` PASS verification for successor-package refreshes;
+the combined post-merge settle variant runs both),
 protected-diff-plan coverage, doc-registry reconcile, doc-registry unregistered
 checks, check-docs, and targeted regression tests for touched contracts.
 Post-merge status checks remain post-merge lifecycle gates; the PR light gate
