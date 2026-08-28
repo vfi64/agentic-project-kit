@@ -126,9 +126,36 @@ jobs:
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
+          POLICY_MUTATION="$(python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          policy = json.loads(Path(os.environ["RUNNER_TEMP"], "admin-refresh-policy.json").read_text(encoding="utf-8"))
+          print(policy.get("mutation", "none"))
+          PY
+          )"
           agentic-kit handoff check
-          agentic-kit handoff post-merge-refresh-status
-          agentic-kit transfer post-merge-check --base-branch "$BRANCH_NAME" --json
+          case "$POLICY_MUTATION" in
+            current-handoff-refresh)
+              agentic-kit dpa current-handoff-refresh --json
+              ;;
+            successor-package-refresh)
+              python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("docs/reports/handoff-packages/latest/validation_report.json").read_text(encoding="utf-8"))
+          if report.get("status") != "PASS" or report.get("findings"):
+              raise SystemExit("successor handoff validation_report.json is not PASS")
+          print(json.dumps(report, indent=2, sort_keys=True))
+          PY
+              ;;
+            *)
+              echo "unexpected admin refresh mutation: $POLICY_MUTATION" >&2
+              exit 1
+              ;;
+          esac
           git diff "$PR_BASE_SHA" "$PR_HEAD_SHA" --output "$RUNNER_TEMP/admin-refresh-pr.diff"
           python -m agentic_project_kit.protected_change_planner --diff-file "$RUNNER_TEMP/admin-refresh-pr.diff"
           agentic-kit transfer protected-diff-plan --label ci-admin-refresh-clean-worktree --json
@@ -172,4 +199,13 @@ jobs:
           pip install -e ".[dev]"
 
       - name: Pytest parallel shadow
-        run: python -m pytest -q -n 4 --durations=20
+        shell: bash
+        run: |
+          set +e
+          python -m pytest -q -n 4 --durations=20
+          rc=$?
+          echo "PYTEST_PARALLEL_SHADOW_RC=$rc"
+          if [ "$rc" -ne 0 ]; then
+            echo "::warning title=pytest-parallel-shadow::diagnostic shadow pytest failed with exit code $rc"
+          fi
+          exit 0

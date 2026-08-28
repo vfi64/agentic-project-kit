@@ -20,7 +20,10 @@ selects `FULL_CI`.
 
 `pytest-parallel-shadow` is a non-blocking GitHub Actions job. It runs
 `python -m pytest -q -n 4 --durations=20` with a fixed worker count and
-`continue-on-error: true`.
+`continue-on-error: true`. The shadow pytest step records the real exit code
+and emits a GitHub warning on non-zero exit, but exits zero so an
+order-dependent or shared-state shadow failure cannot block a PR while the
+serial required gate remains authoritative.
 
 The serial full-suite fallback remains the required gate until repeated shadow
 evidence proves parity with serial PASS. Shadow output is diagnostic evidence
@@ -48,19 +51,27 @@ tree-proof reduction until those proof inputs are wired.
 ## CI4 Admin Refresh Light CI
 
 `admin-refresh-light` is allowed only for administrative handoff refresh PRs
-whose diff exactly matches the generated handoff allowlist for one source PR and
-whose successor package validation is `PASS`.
+whose branch proves one source PR and whose diff exactly matches one known
+generated handoff allowlist variant. Supported variants are:
 
-The allowlist contains only generated handoff state, canonical handoff prompt
-projections, latest successor package files, and the matching
-`docs/reports/terminal/post-pr<N>-successor-chat-handoff.md` report. Extra
-paths, missing paths, invalid paths, manually edited product files, or
-non-PASS validation select `FULL_CI`.
+- `current-handoff-refresh`: `.agentic/handoff_state.yaml`,
+  `.agentic/operational_handoff_state.yaml`,
+  `.agentic/dpa/acceptance/current_handoff_operational_state.json`,
+  `docs/STATUS.md`, and `docs/handoff/CURRENT_HANDOFF.md`.
+- `successor-package-refresh`: `docs/handoff/NEXT_CHAT_BOOTSTRAP.md` and the
+  latest machine-readable successor package files under
+  `docs/reports/handoff-packages/latest/`.
 
-Accepted refresh PRs run handoff check, post-merge refresh status, successor
-package validation coverage, protected-diff-plan coverage, doc-registry
-reconcile, doc-registry unregistered checks, check-docs, and targeted regression
-tests for touched contracts.
+Extra paths, missing paths, invalid paths, manually edited product files,
+unknown source PRs, or non-PASS successor validation select `FULL_CI`.
+
+Accepted refresh PRs run handoff check, variant-specific artifact validation
+(`agentic-kit dpa current-handoff-refresh --json` for current-handoff refreshes
+or `validation_report.json` PASS verification for successor-package refreshes),
+protected-diff-plan coverage, doc-registry reconcile, doc-registry unregistered
+checks, check-docs, and targeted regression tests for touched contracts.
+Post-merge status checks remain post-merge lifecycle gates; the PR light gate
+must not rely on main-only post-merge state while validating a PR checkout.
 
 ## CI5 Pages Path Gate
 

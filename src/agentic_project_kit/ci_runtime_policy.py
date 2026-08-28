@@ -17,19 +17,24 @@ DIAGNOSTIC_ONLY = "DIAGNOSTIC_ONLY"
 
 PAGES_INPUT_MANIFEST = Path("site/pages_input_manifest.json")
 
-ADMIN_REFRESH_BRANCH_RE = re.compile(r"^(?:docs|codex)/post-pr(?P<pr>[1-9][0-9]*)-handoff-refresh$")
+ADMIN_REFRESH_BRANCH_RE = re.compile(
+    r"^(?:docs|codex)/post-pr(?P<pr>[1-9][0-9]*)-(?:handoff-refresh|successor-package-refresh)$"
+)
 POST_PR_REPORT_RE = re.compile(r"^docs/reports/terminal/post-pr(?P<pr>[1-9][0-9]*)-successor-chat-handoff\.md$")
 
-ADMIN_REFRESH_STATIC_PATHS = frozenset(
+ADMIN_REFRESH_CURRENT_HANDOFF_PATHS = frozenset(
     {
         ".agentic/handoff_state.yaml",
         ".agentic/operational_handoff_state.yaml",
         ".agentic/dpa/acceptance/current_handoff_operational_state.json",
         "docs/STATUS.md",
         "docs/handoff/CURRENT_HANDOFF.md",
-        "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    }
+)
+
+ADMIN_REFRESH_SUCCESSOR_PACKAGE_PATHS = frozenset(
+    {
         "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
-        "docs/handoff/START_NEW_CHAT_PROMPT.md",
         "docs/reports/handoff-packages/latest/execution_contract.json",
         "docs/reports/handoff-packages/latest/source_manifest.json",
         "docs/reports/handoff-packages/latest/successor_context.yaml",
@@ -98,6 +103,7 @@ def _decision(
     unexpected_paths: Iterable[str] = (),
     invalid_paths: Iterable[str] = (),
     diagnostic_only: bool = False,
+    mutation: str = "none",
 ) -> CiPolicyDecision:
     return CiPolicyDecision(
         schema_version=1,
@@ -111,6 +117,7 @@ def _decision(
         unexpected_paths=tuple(unexpected_paths),
         invalid_paths=tuple(invalid_paths),
         diagnostic_only=diagnostic_only,
+        mutation=mutation,
     )
 
 
@@ -136,14 +143,32 @@ def read_changed_paths(path: Path) -> tuple[str, ...]:
 
 
 def admin_refresh_expected_paths(source_pr: int) -> tuple[str, ...]:
-    return tuple(
-        sorted(
-            {
-                *ADMIN_REFRESH_STATIC_PATHS,
-                f"docs/reports/terminal/post-pr{source_pr}-successor-chat-handoff.md",
-            }
-        )
+    del source_pr
+    return tuple(sorted(ADMIN_REFRESH_SUCCESSOR_PACKAGE_PATHS))
+
+
+def admin_refresh_current_handoff_paths() -> tuple[str, ...]:
+    return tuple(sorted(ADMIN_REFRESH_CURRENT_HANDOFF_PATHS))
+
+
+def admin_refresh_expected_path_variants(source_pr: int) -> tuple[tuple[str, tuple[str, ...]], ...]:
+    del source_pr
+    return (
+        ("successor-package-refresh", tuple(sorted(ADMIN_REFRESH_SUCCESSOR_PACKAGE_PATHS))),
+        ("current-handoff-refresh", tuple(sorted(ADMIN_REFRESH_CURRENT_HANDOFF_PATHS))),
     )
+
+
+def _closest_admin_refresh_variant(
+    actual: set[str],
+    variants: tuple[tuple[str, tuple[str, ...]], ...],
+) -> tuple[str, set[str]]:
+    ranked = sorted(
+        ((len(actual ^ set(paths)), name, set(paths)) for name, paths in variants),
+        key=lambda item: (item[0], item[1]),
+    )
+    _, name, expected = ranked[0]
+    return name, expected
 
 
 def source_pr_from_admin_refresh_context(
@@ -197,34 +222,44 @@ def classify_admin_refresh_light(
             reasons=("source PR could not be proven from branch or post-pr report path",),
             changed_paths=paths,
         )
-    expected = set(admin_refresh_expected_paths(resolved_pr))
     actual = set(paths)
-    missing = tuple(sorted(expected - actual))
-    unexpected = tuple(sorted(actual - expected))
-    reasons: list[str] = []
     if validation_status != "PASS":
-        reasons.append("successor package validation is not PASS")
-    if missing:
-        reasons.append("admin refresh changed-path set is missing expected generated paths")
-    if unexpected:
-        reasons.append("admin refresh changed-path set contains non-allowlisted paths")
-    if reasons:
         return _decision(
             kind="admin_refresh_light_ci",
             status="PASS",
             mode=FULL_CI,
-            reasons=reasons,
+            reasons=("successor package validation is not PASS",),
             changed_paths=paths,
-            missing_paths=missing,
-            unexpected_paths=unexpected,
         )
+    variants = admin_refresh_expected_path_variants(resolved_pr)
+    for mutation, variant_paths in variants:
+        expected = set(variant_paths)
+        if actual == expected:
+            return _decision(
+                kind="admin_refresh_light_ci",
+                status="PASS",
+                mode=ADMIN_REFRESH_LIGHT,
+                reasons=(f"exact {mutation} path set for PR {resolved_pr}",),
+                changed_paths=paths,
+                matched_paths=tuple(sorted(actual)),
+                mutation=mutation,
+            )
+    closest_name, expected = _closest_admin_refresh_variant(actual, variants)
+    missing = tuple(sorted(expected - actual))
+    unexpected = tuple(sorted(actual - expected))
+    reasons: list[str] = [f"admin refresh path set does not match exact {closest_name} variant"]
+    if missing:
+        reasons.append("admin refresh changed-path set is missing expected generated paths")
+    if unexpected:
+        reasons.append("admin refresh changed-path set contains non-allowlisted paths")
     return _decision(
         kind="admin_refresh_light_ci",
         status="PASS",
-        mode=ADMIN_REFRESH_LIGHT,
-        reasons=(f"exact generated admin refresh path set for PR {resolved_pr}",),
+        mode=FULL_CI,
+        reasons=reasons,
         changed_paths=paths,
-        matched_paths=tuple(sorted(actual)),
+        missing_paths=missing,
+        unexpected_paths=unexpected,
     )
 
 
