@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `f234348b66968130ba4707f996705f4bd63f8aea` (`f234348b`), after `Optimize deterministic CI runtime`.
-Last substantive work state is `f234348b66968130ba4707f996705f4bd63f8aea` (`f234348b`), after `Optimize deterministic CI runtime`.
+Current verified main/admin HEAD is `04a633874d590cb8d914b04855e3762d0a6b20ec` (`04a63387`), after `Handle optional skipped shadow check in merge gates (#2208)`.
+Last substantive work state is `04a633874d590cb8d914b04855e3762d0a6b20ec` (`04a63387`), after `Handle optional skipped shadow check in merge gates (#2208)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
