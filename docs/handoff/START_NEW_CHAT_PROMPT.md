@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: b5957725bd1fb58d95bc69505e4323f1898065a7002ed5054796994eab8a6a88
 - docs/reference/agentic-kit-commands.json: d0f29397fd033ec4d29c12eb5d15e810b448c3c752c84472b99632042239c7e5
-## Operational documentation refresh state after PR #2195
+## Operational documentation refresh state after PR #2200
 
-Current administrative handoff refresh state is `fca3d1f0` (`Assess refresh receipt feasibility (#2195)`). Continue next only after this post-PR2195 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `a6ee8d0f` (`Keep admin refresh light CI diagnostic-only (#2200)`). Continue next only after this post-PR2200 refresh is committed and merged; the next substantive slice must be created from fresh main.
