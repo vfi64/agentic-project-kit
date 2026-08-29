@@ -1,3 +1,20 @@
+## v1.0.7 - 2026-08-29
+
+- Zenodo DOI verification pending for v1.0.7.
+- Record v1.0.6 DOI closeout
+- Finalize B1 community post evidence
+- Fix public site pre-post details
+- Assess refresh receipt feasibility
+- Harden deterministic CI runtime policy
+- Keep admin refresh light CI diagnostic-only
+- Accept combined post-merge refresh as light CI
+- Fix admin refresh light push diff evidence
+- Optimize deterministic CI runtime
+- Handle optional skipped shadow check in merge gates
+- Fix pr-merge-safe self-hosting context
+- Classify post-v1.0.6 release note items
+- Harden status admin refresh descendant projection
+
 ## v1.0.6 - 2026-08-26
 
 - Record v1.0.5 DOI closeout
