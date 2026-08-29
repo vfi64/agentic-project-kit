@@ -1,6 +1,5 @@
 ## v1.0.7 - 2026-08-29
 
-- Zenodo DOI verification pending for v1.0.7.
 - Record v1.0.6 DOI closeout
 - Finalize B1 community post evidence
 - Fix public site pre-post details
@@ -15,6 +14,9 @@
 - Classify post-v1.0.6 release note items
 - Harden status admin refresh descendant projection
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.7 DOI `10.5281/zenodo.22159845`.
+
+Zenodo v1.0.7 DOI: 10.5281/zenodo.22159845
 ## v1.0.6 - 2026-08-26
 
 - Record v1.0.5 DOI closeout
