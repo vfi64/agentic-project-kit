@@ -641,7 +641,7 @@ Future repair tools should stay bounded to mechanical edits and must not rewrite
 
 ## Status current-state audit
 
-`agentic-kit audit-status-current-state` checks that `docs/STATUS.md` Current verified main, the handoff validation report, `release-status`, `origin/main`, and the current `CHANGELOG.md` release block agree. It allows bounded admin-refresh lag, but blocks stale current-state claims, including a pending DOI line after STATUS records a verified Zenodo version DOI for the same current version and active Current governed slice / Next safe step instructions that still tell maintainers to publish, prepare, or verify an already verified current release.
+`agentic-kit audit-status-current-state` checks that `docs/STATUS.md` Current verified main, the handoff validation report, `release-status`, `origin/main`, and the `CHANGELOG.md` release block agree. It allows bounded admin-refresh lag, but blocks stale current-state claims: a pending DOI line after STATUS records a verified DOI for the same version, stale concrete administrative refresh-only descendant markers, and active Current governed slice / Next safe step instructions that still tell maintainers to publish, prepare, or verify an already verified current release.
 
 ## Path literal audit
 

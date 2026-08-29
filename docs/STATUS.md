@@ -9,7 +9,7 @@ Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22116691`.
 Current verified main: `724551f6` (`Classify post-v1.0.6 release note items (#2212)`).
 Latest substantive work: PR #2212 (`Classify post-v1.0.6 release note items (#2212)`).
-Latest administrative refresh-only descendant: PR #2196 (`aa19501e`, `Refresh handoff state after PR2195 (#2196)`).
+Latest administrative refresh-only descendant: post-PR2212 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
 Post-merge handoff status: PASS/NOOP after PR #2212 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.

@@ -2805,6 +2805,7 @@ def test_admin_refresh_updates_status_current_state_block() -> None:
             "Current verified release: 0.4.11.",
             "Current verified main: `old1234` (`Old subject (#1)`).",
             "Latest substantive transfer hardening: PR #1 (`Old subject (#1)`).",
+            "Latest administrative refresh-only descendant: PR #2 (`oldref`, `Old refresh (#2)`).",
             "Current governed slice: `codex/old-release-prep` prepares release 0.4.11",
             "and must not leak after a later release is verified.",
             "Post-merge handoff status: PASS/NOOP after PR #1 administrative refresh PR #2.",
@@ -2826,6 +2827,8 @@ def test_admin_refresh_updates_status_current_state_block() -> None:
 
     assert "Current verified main: `3a681620` (`Add status current-state audit (#1613)`)." in updated
     assert "Latest substantive work: PR #1613 (`Add status current-state audit (#1613)`)." in updated
+    assert transfer_repo_actions._admin_refresh_descendant_refresh_text(1613) in updated
+    assert "Latest administrative refresh-only descendant: PR #2" not in updated
     assert transfer_repo_actions._CURRENT_GOVERNED_SLICE_REFRESH_TEXT in updated
     assert "Post-merge handoff status: PASS/NOOP after PR #1613 administrative refresh." in updated
     assert "Next safe step: continue from fresh main with the next planned governed slice." in updated

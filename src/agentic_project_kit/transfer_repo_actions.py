@@ -1744,6 +1744,15 @@ _NEXT_SAFE_STEP_REFRESH_TEXT = (
 )
 
 
+def _admin_refresh_descendant_refresh_text(after_pr: int) -> str:
+    return (
+        "Latest administrative refresh-only descendant: post-"
+        f"PR{after_pr} refresh is represented by this source-tree update; final "
+        "refresh PR/merge identifiers are validated by the post-merge handoff "
+        "status gate, not precomputed in STATUS.md."
+    )
+
+
 def _refresh_current_state_multiline_field(
     block: str,
     *,
@@ -1781,6 +1790,10 @@ def _refresh_status_current_state_block(text: str, *, after_pr: int, short: str,
         (
             r"^Latest substantive .*$",
             f"Latest substantive work: PR #{after_pr} (`{subject}`).",
+        ),
+        (
+            r"^Latest administrative refresh-only descendant:.*$",
+            _admin_refresh_descendant_refresh_text(after_pr),
         ),
         (
             r"^Post-merge handoff status:.*$",
