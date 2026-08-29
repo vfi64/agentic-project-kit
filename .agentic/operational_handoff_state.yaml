@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a39871c0b8a5c192a83575a2a61999a19813b53c
-  short: a39871c0
-  subject: Prepare release 1.0.7 metadata (#2218)
+  full: a3be4ca1590683f3d2cdf75d3ceb8869c9d3aaaf
+  short: a3be4ca1
+  subject: Refresh successor package after PR2220 (#2221)
 last_substantive_work_state:
-  full: a39871c0b8a5c192a83575a2a61999a19813b53c
-  short: a39871c0
-  subject: Prepare release 1.0.7 metadata (#2218)
+  full: a3be4ca1590683f3d2cdf75d3ceb8869c9d3aaaf
+  short: a3be4ca1
+  subject: Refresh successor package after PR2220 (#2221)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
