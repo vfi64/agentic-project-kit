@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5fd28ff00b2fe9945cf6e45b9fde50a671300778
-  short: 5fd28ff0
-  subject: Harden status admin refresh descendant projection (#2214)
+  full: a39871c0b8a5c192a83575a2a61999a19813b53c
+  short: a39871c0
+  subject: Prepare release 1.0.7 metadata (#2218)
 last_substantive_work_state:
-  full: 5fd28ff00b2fe9945cf6e45b9fde50a671300778
-  short: 5fd28ff0
-  subject: Harden status admin refresh descendant projection (#2214)
+  full: a39871c0b8a5c192a83575a2a61999a19813b53c
+  short: a39871c0
+  subject: Prepare release 1.0.7 metadata (#2218)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
