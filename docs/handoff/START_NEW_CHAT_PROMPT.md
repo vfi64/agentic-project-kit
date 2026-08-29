@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 70def8f6264c2d0dfbd12c9e78a7b59007716029b5e2737a2a803e498863ddfe
 - docs/reference/agentic-kit-commands.json: 81730dad5c5c3db1d8099cfa5e1fc247bbe8147e04164919dd43a6ed6c7aba41
-## Operational documentation refresh state after PR #2221
+## Operational documentation refresh state after PR #2223
 
-Current administrative handoff refresh state is `a3be4ca1` (`Refresh successor package after PR2220 (#2221)`). Continue next only after this post-PR2221 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `2782731f` (`Preserve substantive anchor across refresh-only handoff (#2223)`). Continue next only after this post-PR2223 refresh is committed and merged; the next substantive slice must be created from fresh main.
