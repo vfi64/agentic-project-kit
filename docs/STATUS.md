@@ -7,11 +7,11 @@ Current verified release: 1.0.7.
 Current release tag: v1.0.7.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22159845`.
-Current verified main: `2782731f` (`Preserve substantive anchor across refresh-only handoff (#2223)`).
-Latest substantive work: PR #2223 (`Preserve substantive anchor across refresh-only handoff (#2223)`).
-Latest administrative refresh-only descendant: post-PR2223 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
+Current verified main: `4d5901f4` (`Refresh successor package after PR2225 (#2226)`).
+Latest substantive work: PR #2225 (`Record B1 cycle 006 merge wrapper retest (#2225)`).
+Latest administrative refresh-only descendant: post-PR2226 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2223 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2226 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -417,6 +417,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2223
+## Operational documentation refresh state after PR #2226
 
-Current administrative handoff refresh state is `2782731f` (`Preserve substantive anchor across refresh-only handoff (#2223)`). Continue next only after this post-PR2223 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `4d5901f4` (`Refresh successor package after PR2225 (#2226)`). Continue next only after this post-PR2226 refresh is committed and merged; the next substantive slice must be created from fresh main.
