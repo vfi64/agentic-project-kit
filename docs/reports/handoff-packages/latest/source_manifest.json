@@ -60,10 +60,10 @@
       "yaml_valid": true
     },
     {
-      "bytes": 91078,
+      "bytes": 91215,
       "exists": true,
       "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-      "registry_document_count": 314,
+      "registry_document_count": 315,
       "yaml_valid": true
     },
     {
@@ -117,7 +117,7 @@
       "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md"
     },
     {
-      "bytes": 191922,
+      "bytes": 194091,
       "exists": true,
       "path": "docs/planning/PROJECT_DIRECTION.yaml",
       "yaml_valid": true
