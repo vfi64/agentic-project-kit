@@ -1,0 +1,132 @@
+{
+  "authorized_route": "agentic-kit release-prep",
+  "base_ref": "origin/main",
+  "changed_paths_against_base": [
+    ".agentic/dpa/acceptance/current_handoff_operational_state.json",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "docs/reference/agentic-kit-commands.json",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py",
+    "src/agentic_project_kit/reference/agentic-kit-commands.json"
+  ],
+  "date": "2026-08-29",
+  "from_tag": "v1.0.6",
+  "kind": "release_prepare_evidence",
+  "release_metadata_anchor_paths": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py"
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-notes-generate",
+        "--version",
+        "1.0.7",
+        "--from-tag",
+        "v1.0.6",
+        "--to-ref",
+        "main",
+        "--include-github-metadata",
+        "--summary-lines-json",
+        "tmp/release-107-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-notes-generate",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 48810,
+      "stdout_sha256": "3257f159d4b21db5ce1aaf4404927a354e745e1ebaee05547cb2c3ce1e2e1a79"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-prep",
+        "--version",
+        "1.0.7",
+        "--date",
+        "2026-08-29",
+        "--summary-lines-from",
+        "tmp/release-107-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-prep",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 291,
+      "stdout_sha256": "957f779d3d934e2d35bce857524274312a50cf202db753182c7c32ef3b4bbc5e"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "commands",
+        "sync-entrypoints",
+        "--execute",
+        "--json"
+      ],
+      "name": "commands-sync-entrypoints",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 419,
+      "stdout_sha256": "6efcf510bc8822441a32012c6308713fede218f2ca95e5007cabcbd05c54159e"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "agentic-kit",
+        "release",
+        "prepare",
+        "--internal-dpa-readiness-ack-refresh"
+      ],
+      "name": "dpa-readiness-ack-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 416,
+      "stdout_sha256": "42bbdf59587d4b382c96e4e14dc5b42dc026ddca6f611a223844b619c791890d"
+    }
+  ],
+  "summary_lines_path": "tmp/release-107-summary-lines.json",
+  "to_ref": "main",
+  "version": "1.0.7"
+}
