@@ -159,6 +159,11 @@ def audit_status_current_state(
         status_verified_version_doi=status_verified_version_doi,
         release_current_state=release_current_state,
     )
+    _audit_status_admin_refresh_descendant_freshness(
+        findings=findings,
+        blockers=blockers,
+        current_block=current_block,
+    )
     _audit_status_main_marker(
         root=root,
         run_git=run_git,
@@ -451,6 +456,35 @@ def _is_stale_current_release_instruction(line: str, version: str) -> bool:
     if release_ref and stale_verb:
         return True
     return "pre-release" in normalized
+
+
+def _audit_status_admin_refresh_descendant_freshness(
+    *,
+    findings: list[StatusCurrentStateFinding],
+    blockers: list[StatusCurrentStateFinding],
+    current_block: str,
+) -> None:
+    substantive_pr = _single_int_marker(current_block, r"^Latest substantive work:\s*PR #([0-9]+)\b")
+    admin_pr = _single_int_marker(current_block, r"^Latest administrative refresh-only descendant:\s*PR #([0-9]+)\b")
+    ok = admin_pr is None or substantive_pr is None or admin_pr > substantive_pr
+    _finding(
+        findings,
+        blockers,
+        "docs/STATUS.md",
+        "status_admin_refresh_descendant_not_stale",
+        ok,
+        f"latest_substantive_pr={substantive_pr}; administrative_refresh_descendant_pr={admin_pr}",
+    )
+
+
+def _single_int_marker(text: str, pattern: str) -> int | None:
+    values = _marker_values(text, pattern)
+    if len(values) != 1:
+        return None
+    try:
+        return int(values[0])
+    except ValueError:
+        return None
 
 
 _CURRENT_VERIFIED_MAIN_PATTERN = r"^Current verified main:\s*`?([0-9a-f]{7,40})`?"

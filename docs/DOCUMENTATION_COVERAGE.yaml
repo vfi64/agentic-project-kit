@@ -372,6 +372,7 @@ rules:
     - Current verified main
     - CHANGELOG.md
     - pending DOI line
+    - administrative refresh-only descendant
     - Current governed slice / Next safe step instructions
     - already verified current release
     - handoff validation report
@@ -383,6 +384,7 @@ rules:
     - docs/STATUS.md
     - CHANGELOG.md
     - pending DOI lines
+    - administrative refresh-only descendant
     - Current governed slice / Next safe step instructions
     - already verified current release
     - validation_report.json

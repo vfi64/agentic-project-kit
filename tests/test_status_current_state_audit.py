@@ -706,6 +706,69 @@ def test_status_audit_allows_current_state_instruction_not_to_repeat_verified_re
     )
 
 
+def test_status_audit_blocks_stale_admin_refresh_descendant_marker(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    status = tmp_path / "docs" / "STATUS.md"
+    status.write_text(
+        status.read_text(encoding="utf-8").replace(
+            "Post-merge handoff status: PASS/NOOP.",
+            "\n".join(
+                [
+                    "Latest substantive work: PR #2212 (`Classify post-v1.0.6 release note items (#2212)`).",
+                    "Latest administrative refresh-only descendant: PR #2196 (`aa19501e`, `Refresh handoff state after PR2195 (#2196)`).",
+                    "Post-merge handoff status: PASS/NOOP.",
+                ]
+            ),
+        ),
+        encoding="utf-8",
+    )
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=_git_runner(),
+        release_status_builder=lambda _root: _release_status(),
+    )
+
+    blockers = [
+        finding
+        for finding in result.blockers
+        if finding.check == "status_admin_refresh_descendant_not_stale"
+    ]
+    assert blockers
+    assert "latest_substantive_pr=2212" in blockers[0].detail
+    assert "administrative_refresh_descendant_pr=2196" in blockers[0].detail
+
+
+def test_status_audit_allows_non_concrete_admin_refresh_descendant_pointer(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    status = tmp_path / "docs" / "STATUS.md"
+    status.write_text(
+        status.read_text(encoding="utf-8").replace(
+            "Post-merge handoff status: PASS/NOOP.",
+            "\n".join(
+                [
+                    "Latest substantive work: PR #2212 (`Classify post-v1.0.6 release note items (#2212)`).",
+                    "Latest administrative refresh-only descendant: post-PR2212 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.",
+                    "Post-merge handoff status: PASS/NOOP.",
+                ]
+            ),
+        ),
+        encoding="utf-8",
+    )
+
+    result = audit_status_current_state(
+        tmp_path,
+        git_runner=_git_runner(),
+        release_status_builder=lambda _root: _release_status(),
+    )
+
+    assert result.ok is True
+    assert not any(
+        finding.check == "status_admin_refresh_descendant_not_stale"
+        for finding in result.blockers
+    )
+
+
 def test_changelog_pending_doi_title_is_not_pending_marker(tmp_path: Path) -> None:
     _write_project(tmp_path)
     changelog = tmp_path / "CHANGELOG.md"

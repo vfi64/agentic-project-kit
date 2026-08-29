@@ -354,7 +354,7 @@ from `workspace_detection.NON_WORKSPACE_NEXT_STEP`.
 
 Use `agentic-kit audit-status-current-state` when changing `docs/STATUS.md`, current-state handoff projections, release-state reporting, or post-merge status-refresh behavior.
 
-The gate compares `docs/STATUS.md`, `CHANGELOG.md`, `docs/reports/handoff-packages/latest/validation_report.json`, `release-status`, and `origin/main`. It must allow only a direct first-parent administrative refresh commit after the validated substantive safe-state, but block stale Current verified main claims, duplicate live current-state markers, release-version drift, stale pending DOI lines in the current CHANGELOG block after STATUS records a verified Zenodo version DOI, active Current governed slice / Next safe step instructions that tell maintainers to publish, prepare, or verify an already verified current release, and validation reports that are no longer reachable from `origin/main`.
+The gate compares `docs/STATUS.md`, `CHANGELOG.md`, `docs/reports/handoff-packages/latest/validation_report.json`, `release-status`, and `origin/main`. It must allow only a direct first-parent administrative refresh commit after the validated substantive safe-state, but block stale Current verified main claims, duplicate live current-state markers, release-version drift, stale pending DOI lines in the current CHANGELOG block after STATUS records a verified Zenodo version DOI, stale concrete administrative refresh-only descendant markers, active Current governed slice / Next safe step instructions that tell maintainers to publish, prepare, or verify an already verified current release, and validation reports that are no longer reachable from `origin/main`.
 
 ## Website Generation Gate
 
