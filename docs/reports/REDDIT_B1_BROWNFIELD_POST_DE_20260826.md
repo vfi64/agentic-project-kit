@@ -4,7 +4,9 @@ Status: finaler Entwurf, nicht veröffentlicht
 Datum: 2026-08-26
 Evidenzbasis:
 `docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md` und
-`docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md`
+`docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md`;
+Post-v1.0.7-Merge-Wrapper-Korrektur:
+`docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md`
 
 ## Mögliche Titel
 
@@ -61,12 +63,15 @@ dass externe Rule-Source-Validierung und Rule-Acknowledgement bestehen. Ich
 zähle das nicht als sechsten Wartungszyklus und nicht als neuen vollständigen
 Merge-Wrapper-Retest.
 
-Auch die Merge-Geschichte ist keine perfekte Erfolgserzählung. Während B1,
-nachdem das Zielrepo echte Remote-CI hatte, konnte der Safe-Merge-Wrapper die
-PRs zwar mergen, aber der lokale Wrapper kehrte nach erfolgreichem Remote-Merge
-nicht sauber zurück. Die 1.0.6-Linie enthält Folge-Härtung, aber ich behandle
-sie nicht als Beweis dafür, dass ein frischer Comm-SCI-Mergezyklus jetzt
-reibungslos wäre.
+Die Merge-Geschichte ist besser, als es der ursprüngliche Closeout behaupten
+konnte. Während B1, nachdem das Zielrepo echte Remote-CI hatte, konnte der
+Safe-Merge-Wrapper die PRs zwar mergen, aber der lokale Wrapper kehrte nach
+erfolgreichem Remote-Merge nicht sauber zurück. Ein späterer Comm-SCI-Retest
+gegen das veröffentlichte 1.0.7-Paket hat genau diesen Follow-up geschlossen:
+`pr-merge-safe` kehrte nach einem echten externen Remote-Merge in 8,034 Sekunden
+mit terminalem PASS zurück. Die verbleibende externe Reibung ist enger:
+generierter Rule-Ack-Zustand kann Merge-Preflight weiterhin als lokalen Dirty
+State blockieren.
 
 Der Claim bleibt deshalb bewusst eng:
 
@@ -105,9 +110,11 @@ Links:
 
 - Projektseite: https://vfi64.github.io/agentic-project-kit/
 - Repository: https://github.com/vfi64/agentic-project-kit
-- PyPI 1.0.6: https://pypi.org/project/agentic-project-kit/1.0.6/
+- PyPI 1.0.7: https://pypi.org/project/agentic-project-kit/1.0.7/
 - B1-Evidence-Closeout:
   https://github.com/vfi64/agentic-project-kit/blob/main/docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
+- 1.0.7-Merge-Wrapper-Retest:
+  https://github.com/vfi64/agentic-project-kit/blob/main/docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
 
 ## Bewusst vermiedene Claims
 

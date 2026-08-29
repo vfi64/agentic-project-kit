@@ -4,7 +4,9 @@ Status: final draft, not posted
 Date: 2026-08-26
 Evidence base:
 `docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md` and
-`docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md`
+`docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md`;
+post-v1.0.7 merge-wrapper correction:
+`docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md`
 
 ## Possible Titles
 
@@ -56,11 +58,13 @@ Comm-SCI integration branch shows external rule-source validation and rule
 acknowledgement passing. I am not counting that as a sixth maintenance cycle or
 as a new full merge-wrapper retest.
 
-The merge story is also not a perfect victory lap. During B1, after the target
-repo got real remote CI, the safe merge wrapper did merge the PRs, but the local
-wrapper did not return cleanly after a successful remote merge. The 1.0.6 line
-contains follow-up hardening, but I am not treating it as proof that a fresh
-Comm-SCI merge cycle is now friction-free.
+The merge story is better than the original closeout could claim. During B1,
+after the target repo got real remote CI, the safe merge wrapper did merge the
+PRs, but the local wrapper did not return cleanly after a successful remote
+merge. A later Comm-SCI retest against the published 1.0.7 package closed that
+specific follow-up: `pr-merge-safe` returned terminal PASS in 8.034 seconds
+after a real external remote merge. The remaining external friction is narrower:
+generated Rule-Ack state can still block merge preflight as local dirty state.
 
 So the claim is deliberately narrow:
 
@@ -98,9 +102,11 @@ Links:
 
 - Project site: https://vfi64.github.io/agentic-project-kit/
 - Repository: https://github.com/vfi64/agentic-project-kit
-- PyPI 1.0.6: https://pypi.org/project/agentic-project-kit/1.0.6/
+- PyPI 1.0.7: https://pypi.org/project/agentic-project-kit/1.0.7/
 - B1 evidence closeout:
   https://github.com/vfi64/agentic-project-kit/blob/main/docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
+- 1.0.7 merge-wrapper retest:
+  https://github.com/vfi64/agentic-project-kit/blob/main/docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
 
 ## Claims Deliberately Avoided
 

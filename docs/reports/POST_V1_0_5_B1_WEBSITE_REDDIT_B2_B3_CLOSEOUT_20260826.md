@@ -67,16 +67,26 @@ Final drafts only; nothing is posted automatically.
   `docs/reports/REDDIT_B1_BROWNFIELD_POST_DE_20260826.md`
 - v1.0.6 Rule-Ack released-package retest addendum:
   `docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md`
+- v1.0.7 merge-wrapper released-package retest addendum:
+  `docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md`
 
 Both drafts use the same quantitative claims as the B1 report and website:
 five cycles, four merge-boundary cycles, seams 72 to 58, full-suite evidence
 1,483 to 1,490 for cycles that ran it, Cycle 005 remote-CI boundary, four
-external Kit defects, and the known merge-wrapper non-return limitation.
+external Kit defects, and the historical merge-wrapper non-return limitation
+that was still open at the time of this closeout.
 
 Post-v1.0.6 update: B1-KIT-009 now has targeted released-package evidence from
 a PyPI install on the adopted Comm-SCI integration branch. This is not counted
 as a sixth B1 maintenance cycle and does not close the separate full
 merge-wrapper non-return follow-up.
+
+Post-v1.0.7 correction: the separate merge-wrapper follow-up has now been
+retested through a real Comm-SCI maintenance cycle. PR #14 merged with
+`agentic-project-kit==1.0.7` from PyPI, and `pr-merge-safe` returned terminal
+PASS in 8.034 seconds after the successful remote merge. The old non-return
+limitation is obsolete for that retested path; the remaining external issue is
+the generated `.agentic/rule_ack/current.json` volatility/preflight gap.
 
 Avoided claims:
 
@@ -122,8 +132,11 @@ adjudication point.
 
 - B1-KIT-009 has targeted released-package validation in v1.0.6; it is not a
   full external merge-cycle retest.
-- `pr-merge-safe` still needs a fix for local non-return after a successful
-  remote merge.
+- `pr-merge-safe` local non-return after successful remote merge is closed for
+  the post-v1.0.7 Comm-SCI retest path.
+- External Rule-Ack generated-state cleanup still needs a small follow-up:
+  `.agentic/rule_ack/current.json` can block external merge preflight as
+  nonvolatile dirty state.
 - B1-KIT-011 should reduce extra administrative refresh PRs without weakening
   handoff evidence.
 - The finalized Reddit drafts still need maintainer choice of target community,

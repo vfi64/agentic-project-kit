@@ -1549,3 +1549,6 @@ documents:
   - path: docs/reports/POST_V1_0_6_CI_PAGES_RELEASE_REVALIDATION_20260828.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
+    class: evidence/log
+    owner: maintainers

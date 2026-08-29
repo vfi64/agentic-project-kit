@@ -2607,6 +2607,7 @@ plans:
     - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
     - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json
     - docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
+    - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
     - docs/reports/POST_V1_0_4_B1_KIT_CLOSEOUT_SETTLE_OBSERVATION_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_006_EXTERNAL_POST_MERGE_BASE_BRANCH_20260824.md
@@ -2690,6 +2691,23 @@ plans:
       - feature_branch_ci_no_checks_resolved_by_target_repo_config
       - external_pr_merge_safe_non_return_after_remote_merge
       - mixed_handoff_evidence_requires_extra_successor_refresh
+    - id: B1-COMM-SCI-20260829-006
+      state: merged_with_released_1_0_7_merge_wrapper_retest
+      report: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
+      external_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/14
+      external_successor_refresh_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/15
+      external_merge_commit: 08b41e12f820989ade4fafed9866f1f9fb119cb6
+      final_external_head: 116263507217f640b4c89aa951a92b05651351d4
+      merge_boundary_outcome: merged_to_feature_branch_by_pypi_1_0_7_pr_merge_safe_terminal_pass
+      refresh_denominator_counted: true
+      refresh_boundary_note: sixth observed Comm-SCI cycle after B1_EVALUABLE;
+        product PR plus one successor-package-refresh PR, no separate external
+        handoff PR
+      kit_findings:
+      - external_pr_merge_safe_terminal_pass_retested_from_released_1_0_7
+      - external_post_merge_settle_terminal_ready_after_single_successor_refresh
+      - external_rule_ack_current_json_nonvolatile_dirty_gap
+      - external_pr_create_requires_fresh_llm_context_carriers
     follow_up_items:
     - id: B1-KIT-002
       status: implemented_retest_pass
@@ -2748,11 +2766,13 @@ plans:
         commands such as doctor and check-docs.
       evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
     - id: B1-KIT-008
-      status: planned
+      status: released_package_retest_pass
       goal: Make post-merge-settle return cleanly after generated admin refresh
         PRs have reached a terminal PASS/NOOP state, with bounded progress or
         timeout evidence for long waits.
-      evidence: docs/reports/POST_V1_0_4_B1_KIT_CLOSEOUT_SETTLE_OBSERVATION_20260824.md
+      evidence:
+      - docs/reports/POST_V1_0_4_B1_KIT_CLOSEOUT_SETTLE_OBSERVATION_20260824.md
+      - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
     - id: B1-KIT-009
       status: released_package_targeted_retest_pass
       goal: Make external transfer commit/push and rule acknowledgement use adopted
@@ -2769,18 +2789,27 @@ plans:
         output remains clean in manifest-less non-workspaces.
       evidence: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
     - id: B1-KIT-011
-      status: planned
+      status: released_package_retest_improved_not_closed
       goal: Reduce mixed handoff/status/report refresh loops so one real external
         work PR does not require multiple visible administrative PRs.
       evidence:
       - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
       - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_004_RESULTS_20260826.md
       - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
+      - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
     - id: B1-KIT-012
-      status: planned
+      status: released_package_retest_pass
       goal: Make external pr-merge-safe return a terminal PASS result after it
         successfully merges a remote PR instead of hanging until interrupted.
-      evidence: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
+      evidence:
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
+      - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
+    - id: B1-KIT-013
+      status: planned
+      goal: Treat external `.agentic/rule_ack/current.json` consistently as
+        generated local acknowledgement state, or route external Rule-Ack output
+        outside target worktrees before merge preflight.
+      evidence: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
   - id: B2
     status: adjudicated_boundary_retained
     goal: Decide refresh/realbetrieb outcome only after B1 reaches an evaluable
@@ -2819,21 +2848,22 @@ plans:
       required_setup_evidence:
       - mirror backup ref for vfi64/Comm-SCI-Control-private
       - non-git inventory before mutation
-      recorded_cycles: 5
-      merge_boundary_cycles: 4
-      latest_cycle_report: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
-      latest_cycle_result: "B1 closeout adjudicated the five recorded Comm-SCI cycles as B1_EVALUABLE under the predeclared B0 threshold: five real cycles, four merge-boundary cycles, six pure administrative refresh PRs, legacy seams 72->58, full-suite runs green where historically run, and Cycle 005 remote CI success without a historical local full-suite entry. Rule-Ack is released in v1.0.6 and has targeted external PyPI retest evidence on the adopted Comm-SCI integration branch; pr-merge-safe still does not return locally after successful remote merge until a new external merge-cycle retest proves otherwise."
+      recorded_cycles: 6
+      merge_boundary_cycles: 5
+      latest_cycle_report: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
+      latest_cycle_result: "B1 closeout adjudicated the first five recorded Comm-SCI cycles as B1_EVALUABLE under the predeclared B0 threshold. Cycle 006 adds released-package retest evidence from agentic-project-kit==1.0.7: a real Comm-SCI product task reduced legacy seams 58->55, local full suite reported 1491 passed, remote product PR CI succeeded, pr-merge-safe returned terminal PASS in 8.034 seconds after successful remote merge, and post-merge-settle ended READY after one successor-package-refresh PR. The remaining external follow-up is the `.agentic/rule_ack/current.json` volatility/preflight gap."
       latest_findings:
       - feature_branch_ci_no_checks_resolved_by_target_repo_config
       - external_fresh_llm_context_carrier_path_mismatch_fixed
       - external_pr_merge_safe_external_preflight_fixed
       - external_transfer_commit_push_rule_ack_fixed_on_main_retested_from_checkout
       - external_post_merge_check_base_branch_retest_pass
-      - external_pr_merge_safe_non_return_after_remote_merge
+      - external_pr_merge_safe_terminal_pass_retested_from_released_1_0_7
+      - external_post_merge_settle_terminal_ready_after_single_successor_refresh
+      - external_rule_ack_current_json_nonvolatile_dirty_gap
       - command_for_task_tag_gap_for_health_commands
       - command_for_manifestless_warning
-      - mixed_handoff_evidence_requires_extra_successor_refresh
-      - kit_post_merge_settle_non_return_after_admin_refresh
+      - mixed_handoff_evidence_requires_successor_refresh
       completion_rule: B1_EVALUABLE means the configured realbetrieb threshold
         produced enough evidence for B2 adjudication; it does not claim general
         Brownfield portability or independent-user adoption.
@@ -2867,6 +2897,7 @@ plans:
   - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
   - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json
   - docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
+  - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
   - docs/reports/POST_V1_0_5_B1_WEBSITE_REDDIT_B2_B3_CLOSEOUT_20260826.md
   - docs/reports/REDDIT_B1_BROWNFIELD_POST_EN_20260826.md
   - docs/reports/REDDIT_B1_BROWNFIELD_POST_DE_20260826.md
@@ -2896,6 +2927,7 @@ plans:
   - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
   - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json
   - docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
+  - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
   - docs/reports/POST_V1_0_5_B1_WEBSITE_REDDIT_B2_B3_CLOSEOUT_20260826.md
   - docs/reports/REDDIT_B1_BROWNFIELD_POST_EN_20260826.md
   - docs/reports/REDDIT_B1_BROWNFIELD_POST_DE_20260826.md
