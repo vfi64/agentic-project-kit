@@ -55,6 +55,13 @@ class PrMergeSafeContext:
     url: str
 
 
+@dataclass(frozen=True)
+class CommitState:
+    full: str
+    short: str
+    subject: str
+
+
 _LEGACY_WORKSPACE = Workspace(root=Path("."), config=KitConfig())
 
 
@@ -1753,6 +1760,61 @@ def _admin_refresh_descendant_refresh_text(after_pr: int) -> str:
     )
 
 
+def _is_refresh_only_commit_subject(subject: str) -> bool:
+    normalized = subject.strip()
+    return normalized.startswith(
+        (
+            "Refresh handoff state after PR",
+            "Refresh successor handoff after PR",
+            "Refresh successor package after PR",
+        )
+    )
+
+
+def _pr_number_from_subject(subject: str) -> int | None:
+    match = re.search(r"\(#(?P<number>[1-9][0-9]*)\)\s*$", subject.strip())
+    if not match:
+        return None
+    return int(match.group("number"))
+
+
+def _latest_non_refresh_commit_state(fallback: CommitState) -> CommitState:
+    completed = _run(["git", "log", "--format=%H%x00%s"])
+    if completed.returncode != 0:
+        return fallback
+    for line in completed.stdout.splitlines():
+        parts = line.split("\x00", 1)
+        if len(parts) != 2:
+            continue
+        full, subject = parts[0].strip(), parts[1].strip()
+        if not re.fullmatch(r"[0-9a-f]{40}", full):
+            continue
+        if _is_refresh_only_commit_subject(subject):
+            continue
+        return CommitState(full=full, short=full[:8], subject=subject)
+    return fallback
+
+
+def _replace_yaml_mapping_section(text: str, section: str, replacements: dict[str, str]) -> str:
+    pattern = re.compile(
+        rf"(?ms)^(?P<header>{re.escape(section)}:\n)(?P<body>(?:^[ \t].*\n?)*)"
+    )
+    match = pattern.search(text)
+    if not match:
+        return text
+
+    body = match.group("body")
+    for key, value in replacements.items():
+        body = re.sub(
+            rf"^(\s*{re.escape(key)}:\s*).*$",
+            lambda match: f"{match.group(1)}{value}",
+            body,
+            count=1,
+            flags=re.MULTILINE,
+        )
+    return text[: match.start("body")] + body + text[match.end("body") :]
+
+
 def _refresh_current_state_multiline_field(
     block: str,
     *,
@@ -1776,20 +1838,24 @@ def _refresh_current_state_multiline_field(
     return block[: match.start()] + replacement + suffix + block[match.end() :]
 
 
-def _refresh_status_current_state_block(text: str, *, after_pr: int, short: str, subject: str) -> str:
+def _refresh_status_current_state_block(
+    text: str,
+    *,
+    after_pr: int,
+    short: str,
+    subject: str,
+    latest_substantive_after_pr: int | None = None,
+    latest_substantive_subject: str | None = None,
+) -> str:
     match = re.search(r"(?ms)^## Current State\s*(.*?)(?=^## |\Z)", text)
     if not match:
         return text
 
     block = match.group(0)
-    replacements = (
+    replacements = [
         (
             r"^Current verified main:.*$",
             f"Current verified main: `{short}` (`{subject}`).",
-        ),
-        (
-            r"^Latest substantive .*$",
-            f"Latest substantive work: PR #{after_pr} (`{subject}`).",
         ),
         (
             r"^Latest administrative refresh-only descendant:.*$",
@@ -1799,7 +1865,24 @@ def _refresh_status_current_state_block(text: str, *, after_pr: int, short: str,
             r"^Post-merge handoff status:.*$",
             f"Post-merge handoff status: PASS/NOOP after PR #{after_pr} administrative refresh.",
         ),
-    )
+    ]
+    if not _is_refresh_only_commit_subject(subject):
+        replacements.insert(
+            1,
+            (
+                r"^Latest substantive .*$",
+                f"Latest substantive work: PR #{after_pr} (`{subject}`).",
+            ),
+        )
+    elif latest_substantive_after_pr is not None and latest_substantive_subject:
+        replacements.insert(
+            1,
+            (
+                r"^Latest substantive .*$",
+                f"Latest substantive work: PR #{latest_substantive_after_pr} "
+                f"(`{latest_substantive_subject}`).",
+            ),
+        )
     for pattern, replacement in replacements:
         block = re.sub(pattern, replacement, block, count=1, flags=re.MULTILINE)
     block = _refresh_current_state_multiline_field(
@@ -1835,8 +1918,18 @@ def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = N
         full = _run(["git", "rev-parse", "HEAD"]).stdout.strip()
         short = _run(["git", "rev-parse", "--short=8", "HEAD"]).stdout.strip() or full[:8]
         subject = _run(["git", "log", "-1", "--format=%s"]).stdout.strip()
+        current_state = CommitState(full=full, short=short, subject=subject)
+        substantive_state = (
+            _latest_non_refresh_commit_state(current_state)
+            if _is_refresh_only_commit_subject(subject)
+            else current_state
+        )
+        substantive_subject_yaml = _yaml_inline_scalar(substantive_state.subject)
+        substantive_pr = _pr_number_from_subject(substantive_state.subject)
         subject_yaml = _yaml_inline_scalar(subject)
+        refresh_only_subject = _is_refresh_only_commit_subject(subject)
         prompt_path = _admin_refresh_successor_prompt_path(after_pr, ws=workspace)
+        prompt_path_yaml = _yaml_inline_scalar(prompt_path)
 
         touched: list[str] = []
         successor_prompt_pattern = re.compile(r"post-pr\d+-successor-chat-handoff\.md")
@@ -1854,15 +1947,32 @@ def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = N
             current = file_path.read_text(encoding="utf-8")
             updated = current
             if file_path == workspace.handoff_state_path():
-                updated = re.sub(r"^(\s*commit:\s*)[0-9a-f]{7,40}\s*$", rf"\g<1>{short}", updated, count=1, flags=re.MULTILINE)
-                updated = re.sub(r"^(\s*current_head:\s*)[0-9a-f]{7,40}\s*$", rf"\g<1>{short}", updated, count=1, flags=re.MULTILINE)
-                updated = re.sub(r"^(\s*commit_subject:\s*).*$", rf"\g<1>{subject_yaml}", updated, count=1, flags=re.MULTILINE)
-                updated = re.sub(r"^(\s*current_head_subject:\s*).*$", rf"\g<1>{subject_yaml}", updated, count=1, flags=re.MULTILINE)
-                updated = re.sub(
-                    r"^(\s*latest_successor_prompt:\s*).*$",
-                    rf"\g<1>{prompt_path}",
+                if not refresh_only_subject:
+                    updated = _replace_yaml_mapping_section(
+                        updated,
+                        "safe_state",
+                        {
+                            "commit": short,
+                            "commit_subject": subject_yaml,
+                        },
+                    )
+                elif substantive_state != current_state:
+                    updated = _replace_yaml_mapping_section(
+                        updated,
+                        "safe_state",
+                        {
+                            "commit": substantive_state.short,
+                            "commit_subject": substantive_subject_yaml,
+                        },
+                    )
+                updated = _replace_yaml_mapping_section(
                     updated,
-                    flags=re.MULTILINE,
+                    "administrative_evidence_state",
+                    {
+                        "current_head": short,
+                        "current_head_subject": subject_yaml,
+                        "latest_successor_prompt": prompt_path_yaml,
+                    },
                 )
                 updated = successor_prompt_pattern.sub(
                     f"post-pr{after_pr}-successor-chat-handoff.md",
@@ -1879,9 +1989,35 @@ def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = N
                 )
                 updated = re.sub(r"main at [0-9a-f]{7,40}", f"main at {short}", updated)
             if file_path == workspace.operational_handoff_state_path():
-                updated = re.sub(r"^(\s*full:\s*)[0-9a-f]{40}\s*$", rf"\g<1>{full}", updated, flags=re.MULTILINE)
-                updated = re.sub(r"^(\s*short:\s*)[0-9a-f]{7,40}\s*$", rf"\g<1>{short}", updated, flags=re.MULTILINE)
-                updated = re.sub(r"^(\s*subject:\s*).*$", rf"\g<1>{subject_yaml}", updated, flags=re.MULTILINE)
+                updated = _replace_yaml_mapping_section(
+                    updated,
+                    "current_head",
+                    {
+                        "full": full,
+                        "short": short,
+                        "subject": subject_yaml,
+                    },
+                )
+                if not refresh_only_subject:
+                    updated = _replace_yaml_mapping_section(
+                        updated,
+                        "last_substantive_work_state",
+                        {
+                            "full": full,
+                            "short": short,
+                            "subject": subject_yaml,
+                        },
+                    )
+                elif substantive_state != current_state:
+                    updated = _replace_yaml_mapping_section(
+                        updated,
+                        "last_substantive_work_state",
+                        {
+                            "full": substantive_state.full,
+                            "short": substantive_state.short,
+                            "subject": substantive_subject_yaml,
+                        },
+                    )
             if updated != current:
                 file_path.write_text(updated, encoding="utf-8")
                 touched.append(file_name)
@@ -1914,6 +2050,8 @@ def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = N
                     after_pr=after_pr,
                     short=short,
                     subject=subject,
+                    latest_substantive_after_pr=substantive_pr,
+                    latest_substantive_subject=substantive_state.subject,
                 )
                 refreshed = operational_refresh_marker_pattern.sub("", current).rstrip() + marker
             elif file_path == workspace.handoff_file("CURRENT_HANDOFF.md"):

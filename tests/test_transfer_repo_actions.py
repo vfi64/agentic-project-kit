@@ -2794,6 +2794,160 @@ last_substantive_work_state:
     assert "Updated operational handoff docs:" in result.stdout
 
 
+def test_refresh_operational_handoff_docs_preserves_substantive_state_for_refresh_only_subject(
+    tmp_path: Path, monkeypatch
+):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / ".agentic").mkdir()
+    (tmp_path / "docs" / "handoff").mkdir(parents=True)
+    (tmp_path / "docs" / "planning").mkdir(parents=True)
+
+    substantive_full = "8b6802ada9970c850090b8f4b0066a57ace25a4d"
+    substantive_short = "8b6802ad"
+    substantive_subject = "Record release 1.0.7 DOI closeout (#2220)"
+    refresh_full = "a3be4ca1590683f3d2cdf75d3ceb8869c9d3aaaf"
+    refresh_short = "a3be4ca1"
+    refresh_subject = "Refresh successor package after PR2220 (#2221)"
+
+    (tmp_path / ".agentic" / "handoff_state.yaml").write_text(
+        f"""
+schema_version: 1
+safe_state:
+  branch: main
+  commit: {substantive_short}
+  commit_subject: {substantive_subject}
+  semantics: last_substantive_work_state
+  working_tree_expected_clean: true
+first_instruction: Start the next chat from the fresh post-PR2220 successor handoff prompt. Verify main at {substantive_short}, confirm the post-PR2220 operational handoff refresh passes explicit summary inspection.
+handoff_maintenance:
+  latest_successor_prompt: docs/reports/terminal/post-pr2220-successor-chat-handoff.md
+administrative_evidence_state:
+  current_head: {substantive_short}
+  current_head_subject: {substantive_subject}
+  latest_successor_prompt: docs/reports/terminal/post-pr2220-successor-chat-handoff.md
+""".lstrip(),
+        encoding="utf-8",
+    )
+    (tmp_path / ".agentic" / "operational_handoff_state.yaml").write_text(
+        f"""
+schema_version: 1
+current_head:
+  full: {substantive_full}
+  short: {substantive_short}
+  subject: {substantive_subject}
+last_substantive_work_state:
+  full: {substantive_full}
+  short: {substantive_short}
+  subject: {substantive_subject}
+""".lstrip(),
+        encoding="utf-8",
+    )
+
+    Path("docs/STATUS.md").write_text(
+        "\n".join(
+            [
+                "> STATUS boundary.",
+                "",
+                "## Current State",
+                "",
+                "Current version: 1.0.7",
+                "Current verified release: 1.0.7.",
+                "Current release tag: v1.0.7.",
+                f"Current verified main: `{substantive_short}` (`{substantive_subject}`).",
+                f"Latest substantive work: PR #2220 (`{substantive_subject}`).",
+                "Latest administrative refresh-only descendant: old.",
+                "Current governed slice: old.",
+                "Post-merge handoff status: old.",
+                "Next safe step: old.",
+                "",
+                "## Historical State Snapshots",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    for name in [
+        "docs/handoff/CURRENT_HANDOFF.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    ]:
+        Path(name).write_text("Curated text\n", encoding="utf-8")
+
+    def fake_run(command, cwd=None):
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, refresh_full + "\n", "")
+        if command == ["git", "rev-parse", "--short=8", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, refresh_short + "\n", "")
+        if command == ["git", "log", "-1", "--format=%s"]:
+            return subprocess.CompletedProcess(command, 0, refresh_subject + "\n", "")
+        if command == ["git", "log", "--format=%H%x00%s"]:
+            history = "\n".join(
+                [
+                    f"{refresh_full}\x00{refresh_subject}",
+                    "c4f5f69818eb440ab44b70a7a06c793b99df1c12\x00Refresh handoff state after PR2221 (#2222)",
+                    f"{substantive_full}\x00{substantive_subject}",
+                ]
+            )
+            return subprocess.CompletedProcess(command, 0, history + "\n", "")
+        if command == ["agentic-kit", "transfer", "prepare-successor-handoff", "--render-prompt"]:
+            for package_path in [
+                "docs/reports/handoff-packages/latest/execution_contract.json",
+                "docs/reports/handoff-packages/latest/source_manifest.json",
+                "docs/reports/handoff-packages/latest/successor_context.yaml",
+                "docs/reports/handoff-packages/latest/successor_prompt.md",
+                "docs/reports/handoff-packages/latest/validation_report.json",
+            ]:
+                Path(package_path).parent.mkdir(parents=True, exist_ok=True)
+                Path(package_path).write_text("fresh package\n", encoding="utf-8")
+            return subprocess.CompletedProcess(command, 0, "fresh successor prompt\n", "")
+        if command == ["agentic-kit", "boot", "write"]:
+            Path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md").write_text("bootstrap\n", encoding="utf-8")
+            return subprocess.CompletedProcess(command, 0, "WROTE docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n", "")
+        if command == [
+            "agentic-kit",
+            "handoff",
+            "prompt",
+            "--intended-output",
+            "docs/reports/terminal/post-pr2221-successor-chat-handoff.md",
+        ]:
+            return subprocess.CompletedProcess(command, 0, "successor prompt\n", "")
+        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+            handoff_data = yaml.safe_load(Path(".agentic/handoff_state.yaml").read_text(encoding="utf-8"))
+            operational_data = yaml.safe_load(
+                Path(".agentic/operational_handoff_state.yaml").read_text(encoding="utf-8")
+            )
+            assert handoff_data["safe_state"]["commit"] == substantive_short
+            assert handoff_data["safe_state"]["commit_subject"] == substantive_subject
+            assert handoff_data["administrative_evidence_state"]["current_head"] == refresh_short
+            assert handoff_data["administrative_evidence_state"]["current_head_subject"] == refresh_subject
+            assert operational_data["current_head"]["full"] == refresh_full
+            assert operational_data["last_substantive_work_state"]["full"] == substantive_full
+            status = Path("docs/STATUS.md").read_text(encoding="utf-8")
+            assert f"Current verified main: `{refresh_short}` (`{refresh_subject}`)." in status
+            assert f"Latest substantive work: PR #2220 (`{substantive_subject}`)." in status
+            assert transfer_repo_actions._admin_refresh_descendant_refresh_text(2221) in status
+            return subprocess.CompletedProcess(command, 0, "result=NOOP\nrefresh_required=False\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._agentic_kit_command",
+        lambda: "agentic-kit",
+    )
+
+    result = transfer_repo_actions._refresh_operational_handoff_docs(
+        2221,
+        ws=transfer_repo_actions._LEGACY_WORKSPACE,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert (
+        Path("docs/reports/terminal/post-pr2221-successor-chat-handoff.md").read_text(
+            encoding="utf-8"
+        )
+        == "successor prompt\n"
+    )
+
+
 def test_admin_refresh_updates_status_current_state_block() -> None:
     status = "\n".join(
         [
@@ -2836,6 +2990,43 @@ def test_admin_refresh_updates_status_current_state_block() -> None:
     assert "publish release 0.4.11" not in updated
     assert "\n\n## Historical State Snapshots" in updated
     assert "Current verified main: `history1` (`Historical`)." in updated
+
+
+def test_admin_refresh_status_current_state_preserves_latest_substantive_for_refresh_only_subject() -> None:
+    status = "\n".join(
+        [
+            "> STATUS boundary.",
+            "",
+            "## Current State",
+            "",
+            "Current version: 1.0.7",
+            "Current verified release: 1.0.7.",
+            "Current verified main: `8b6802ad` (`Record release 1.0.7 DOI closeout (#2220)`).",
+            "Latest substantive work: PR #2221 (`Refresh successor package after PR2220 (#2221)`).",
+            "Latest administrative refresh-only descendant: old.",
+            "Current governed slice: old.",
+            "Post-merge handoff status: old.",
+            "Next safe step: old.",
+            "",
+            "## Historical State Snapshots",
+            "",
+        ]
+    )
+
+    updated = transfer_repo_actions._refresh_status_current_state_block(
+        status,
+        after_pr=2221,
+        short="a3be4ca1",
+        subject="Refresh successor package after PR2220 (#2221)",
+        latest_substantive_after_pr=2220,
+        latest_substantive_subject="Record release 1.0.7 DOI closeout (#2220)",
+    )
+
+    assert "Current verified main: `a3be4ca1` (`Refresh successor package after PR2220 (#2221)`)." in updated
+    assert "Latest substantive work: PR #2220 (`Record release 1.0.7 DOI closeout (#2220)`)." in updated
+    assert "Latest substantive work: PR #2221" not in updated
+    assert transfer_repo_actions._admin_refresh_descendant_refresh_text(2221) in updated
+    assert "Post-merge handoff status: PASS/NOOP after PR #2221 administrative refresh." in updated
 
 
 
