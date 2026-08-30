@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `aad7a402525c5204494972c13605aa164d501442` (`aad7a402`), after `Resolve wrapper entrypoint for external workspaces (#2232)`.
-Last substantive work state is `aad7a402525c5204494972c13605aa164d501442` (`aad7a402`), after `Resolve wrapper entrypoint for external workspaces (#2232)`.
+Current verified main/admin HEAD is `d2ffa645a8829c03bcc0ccf9d28243847f587f54` (`d2ffa645`), after `Expand untracked dirs in PR create preflight (#2234)`.
+Last substantive work state is `d2ffa645a8829c03bcc0ccf9d28243847f587f54` (`d2ffa645`), after `Expand untracked dirs in PR create preflight (#2234)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

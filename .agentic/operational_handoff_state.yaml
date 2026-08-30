@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: aad7a402525c5204494972c13605aa164d501442
-  short: aad7a402
-  subject: Resolve wrapper entrypoint for external workspaces (#2232)
+  full: d2ffa645a8829c03bcc0ccf9d28243847f587f54
+  short: d2ffa645
+  subject: Expand untracked dirs in PR create preflight (#2234)
 last_substantive_work_state:
-  full: aad7a402525c5204494972c13605aa164d501442
-  short: aad7a402
-  subject: Resolve wrapper entrypoint for external workspaces (#2232)
+  full: d2ffa645a8829c03bcc0ccf9d28243847f587f54
+  short: d2ffa645
+  subject: Expand untracked dirs in PR create preflight (#2234)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
