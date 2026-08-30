@@ -10,6 +10,9 @@ def default_agentic_kit(root: Path) -> str:
     local = root / ".venv" / "bin" / "agentic-kit"
     if local_agentic_kit_is_runnable(local):
         return _display_path(local)
+    current = current_agentic_kit()
+    if current:
+        return current
     found = shutil.which("agentic-kit")
     return found or "agentic-kit"
 
@@ -19,6 +22,13 @@ def default_python(root: Path) -> str:
     if local_executable_is_runnable(local):
         return _display_path(local)
     return sys.executable
+
+
+def current_agentic_kit() -> str:
+    current = Path(sys.executable).parent / "agentic-kit"
+    if local_agentic_kit_is_runnable(current):
+        return _display_path(current)
+    return ""
 
 
 def local_agentic_kit_is_runnable(path: Path) -> bool:

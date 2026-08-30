@@ -8,6 +8,7 @@ from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
 from agentic_project_kit.cli_commands import transfer as transfer_module
+from agentic_project_kit.cli_commands import transfer_pr_create_flow
 
 
 def test_transfer_pr_complete_command_is_registered_in_source() -> None:
@@ -273,6 +274,7 @@ def test_transfer_pr_create_complete_orchestrates_create_and_complete(monkeypatc
 
 def test_transfer_pr_create_complete_writes_final_live_status(monkeypatch, tmp_path: Path) -> None:
     monkeypatch.chdir(tmp_path)
+    agentic_kit = transfer_pr_create_flow.default_agentic_kit(Path("."))
 
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
@@ -280,16 +282,16 @@ def test_transfer_pr_create_complete_writes_final_live_status(monkeypatch, tmp_p
             return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
         if command == ["git", "rev-parse", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "0123456789abcdef0123456789abcdef01234567\n", "")
-        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create"]:
+        if command[:3] == [agentic_kit, "transfer", "pr-create"]:
             return subprocess.CompletedProcess(
                 command,
                 0,
                 '{"stdout":"https://github.com/vfi64/agentic-project-kit/pull/123\\n"}\n',
                 "",
             )
-        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]:
+        if command[:3] == [agentic_kit, "transfer", "pr-complete"]:
             return subprocess.CompletedProcess(command, 0, "completed\n", "")
-        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile"]:
+        if command[:3] == [agentic_kit, "transfer", "restore-known-volatile"]:
             return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}\n', "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
