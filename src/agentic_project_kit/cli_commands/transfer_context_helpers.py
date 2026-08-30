@@ -3,7 +3,11 @@ from __future__ import annotations
 # ruff: noqa: F403,F405
 
 from agentic_project_kit.cli_commands.transfer_shared import *
-from agentic_project_kit.volatile_paths import KNOWN_VOLATILE_TRANSFER_PATHS
+from agentic_project_kit.volatile_paths import (
+    KNOWN_VOLATILE_TRANSFER_PATHS,
+    is_known_volatile_status_path,
+    status_path_from_short_line,
+)
 from agentic_project_kit.workspace import load_workspace
 from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 
@@ -415,7 +419,7 @@ def _dirty_paths_from_status(status_text: str) -> list[str]:
     for line in status_text.splitlines():
         if not line.strip():
             continue
-        paths.append(line[3:] if len(line) > 3 else line.strip())
+        paths.append(status_path_from_short_line(line))
     return paths
 
 
@@ -445,7 +449,9 @@ def _ensure_external_merge_preflight_or_exit(*, json_output: bool) -> bool:
 
     known_paths = set(_known_volatile_transfer_paths(root))
     dirty_paths = _dirty_paths_from_status(status.stdout)
-    nonvolatile_dirty = [path for path in dirty_paths if path not in known_paths]
+    nonvolatile_dirty = [
+        path for path in dirty_paths if path not in known_paths and not is_known_volatile_status_path(path)
+    ]
     restore_result: dict[str, object] | None = None
     if dirty_paths and not nonvolatile_dirty:
         restore_result = _restore_known_volatile_paths(root)
@@ -454,7 +460,11 @@ def _ensure_external_merge_preflight_or_exit(*, json_output: bool) -> bool:
             nonvolatile_dirty = ["git_status_failed_after_restore"]
         else:
             dirty_paths = _dirty_paths_from_status(status.stdout)
-            nonvolatile_dirty = [path for path in dirty_paths if path not in known_paths]
+            nonvolatile_dirty = [
+                path
+                for path in dirty_paths
+                if path not in known_paths and not is_known_volatile_status_path(path)
+            ]
 
     if nonvolatile_dirty:
         payload = {

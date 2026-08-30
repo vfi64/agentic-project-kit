@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from agentic_project_kit.cli_commands.transfer_shared import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import *
+from agentic_project_kit.volatile_paths import split_known_volatile_status
 
 
 @transfer_app.command("normalize-session")
@@ -54,7 +55,7 @@ def normalize_session(
         volatile_repair_result = _restore_known_volatile_paths(root)
 
     branch_result = run(["git", "branch", "--show-current"])
-    status_result = run(["git", "status", "--short"])
+    status_result = run(["git", "status", "--short", "--untracked-files=all"])
     head_result = run(["git", "rev-parse", "HEAD"])
     upstream_result = run(["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"])
     upstream_head_result = (
@@ -73,7 +74,11 @@ def normalize_session(
     head = head_result["stdout"].strip()
     upstream = upstream_result["stdout"].strip() if upstream_result["ok"] else ""
     upstream_head = upstream_head_result["stdout"].strip() if upstream_head_result["ok"] else ""
-    dirty_status = status_result["stdout"]
+    raw_dirty_status = status_result["stdout"]
+    dirty_status, ignored_known_volatile_dirty_status = split_known_volatile_status(
+        raw_dirty_status,
+        extra_known_paths=known_volatile_paths,
+    )
 
     ack_path = root / ".agentic" / "rule_ack" / "current.json"
     rule_ack: dict[str, Any] = {
@@ -167,6 +172,8 @@ def normalize_session(
             "upstream_head": upstream_head,
             "head_matches_upstream": checks["head_matches_upstream"],
             "dirty_status": dirty_status,
+            "raw_dirty_status": raw_dirty_status,
+            "ignored_known_volatile_dirty_status": ignored_known_volatile_dirty_status,
             "worktree_clean": checks["worktree_clean"],
         },
         "rule_ack": rule_ack,

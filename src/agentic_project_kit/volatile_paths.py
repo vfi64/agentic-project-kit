@@ -15,6 +15,32 @@ LEGACY_TRANSFER_HANDOFF_REPORT_JSON_PATH = (
 LEGACY_TRANSFER_HANDOFF_REPORT_LOG_PATH = (
     f"{LEGACY_TRANSFER_HANDOFF_REPORT_DIRECTORY_PATH}/latest-transfer-handoff-report.log"
 )
+STATE_TRANSFER_HANDOFF_REPORT_DIRECTORY_PATH = (
+    ".agentic/state/handoff/transfer_handoff_reports"
+)
+STATE_TRANSFER_HANDOFF_REPORT_JSON_PATH = (
+    f"{STATE_TRANSFER_HANDOFF_REPORT_DIRECTORY_PATH}/latest-transfer-handoff-report.json"
+)
+STATE_TRANSFER_HANDOFF_REPORT_LOG_PATH = (
+    f"{STATE_TRANSFER_HANDOFF_REPORT_DIRECTORY_PATH}/latest-transfer-handoff-report.log"
+)
+LEGACY_LOCAL_GC_REPORT_PATH = "tmp/local-gc-last.json"
+LEGACY_LOCAL_GC_RUN_MARKER_PATH = "tmp/local-gc-last-run-id.txt"
+LEGACY_LOCAL_COMMAND_STACK_STATE_PATH = "tmp/local-command-stack-state.json"
+STATE_LOCAL_GC_REPORT_PATH = ".agentic/tmp/local-gc-last.json"
+STATE_LOCAL_GC_RUN_MARKER_PATH = ".agentic/tmp/local-gc-last-run-id.txt"
+STATE_LOCAL_COMMAND_STACK_STATE_PATH = ".agentic/tmp/local-command-stack-state.json"
+STATE_WORKSPACE_LOCK_PATH = ".agentic/tmp/workspace.lock"
+
+KNOWN_RUNTIME_STATUS_PATHS = (
+    LEGACY_LOCAL_GC_REPORT_PATH,
+    LEGACY_LOCAL_GC_RUN_MARKER_PATH,
+    LEGACY_LOCAL_COMMAND_STACK_STATE_PATH,
+    STATE_LOCAL_GC_REPORT_PATH,
+    STATE_LOCAL_GC_RUN_MARKER_PATH,
+    STATE_LOCAL_COMMAND_STACK_STATE_PATH,
+    STATE_WORKSPACE_LOCK_PATH,
+)
 
 KNOWN_VOLATILE_TRANSFER_PATHS = (
     TRANSFER_INBOX_NEXT_COMMAND_PATH,
@@ -22,6 +48,8 @@ KNOWN_VOLATILE_TRANSFER_PATHS = (
     RULE_ACK_CURRENT_PATH,
     LEGACY_TRANSFER_HANDOFF_REPORT_JSON_PATH,
     LEGACY_TRANSFER_HANDOFF_REPORT_LOG_PATH,
+    STATE_TRANSFER_HANDOFF_REPORT_JSON_PATH,
+    STATE_TRANSFER_HANDOFF_REPORT_LOG_PATH,
 )
 
 
@@ -42,7 +70,40 @@ def is_known_volatile_status_path(path: str) -> bool:
     if not normalized:
         return False
     return (
-        is_rule_ack_path(normalized)
+        normalized in KNOWN_RUNTIME_STATUS_PATHS
+        or is_rule_ack_path(normalized)
+        or normalized == TRANSFER_INBOX_NEXT_COMMAND_PATH
         or _is_dir_or_child(normalized, TRANSFER_OUTBOX_DIRECTORY_PATH)
         or normalized.startswith(f"{LEGACY_TRANSFER_HANDOFF_REPORT_DIRECTORY_PATH}/latest-")
+        or normalized.startswith(f"{STATE_TRANSFER_HANDOFF_REPORT_DIRECTORY_PATH}/latest-")
     )
+
+
+def status_path_from_short_line(line: str) -> str:
+    raw = line.rstrip()
+    if len(raw) >= 3 and raw[2] == " ":
+        path_text = raw[3:]
+    else:
+        path_text = raw.strip()
+    if " -> " in path_text:
+        path_text = path_text.split(" -> ", 1)[1]
+    return normalize_status_path(path_text)
+
+
+def split_known_volatile_status(
+    status_text: str,
+    *,
+    extra_known_paths: tuple[str, ...] | list[str] = (),
+) -> tuple[str, list[str]]:
+    extra = {normalize_status_path(path) for path in extra_known_paths}
+    kept_lines: list[str] = []
+    ignored_lines: list[str] = []
+    for line in status_text.splitlines():
+        if not line.strip():
+            continue
+        path = status_path_from_short_line(line)
+        if path in extra or is_known_volatile_status_path(path):
+            ignored_lines.append(line)
+            continue
+        kept_lines.append(line)
+    return "\n".join(kept_lines), ignored_lines
