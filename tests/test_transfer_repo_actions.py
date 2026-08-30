@@ -2577,7 +2577,15 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_ad
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["./.venv/bin/agentic-kit", "rules", "acknowledge"]:
             return subprocess.CompletedProcess(command, 0, "", "")
-        if command == ["./.venv/bin/agentic-kit", "transfer", "post-merge-complete", "--after-pr", "123"]:
+        if command == [
+            "./.venv/bin/agentic-kit",
+            "transfer",
+            "post-merge-complete",
+            "--after-pr",
+            "123",
+            "--main-branch",
+            "main",
+        ]:
             return subprocess.CompletedProcess(command, 2, "post merge follow-up needed\n", "")
         if command == ["gh", "pr", "view", "123", "--json", "state,mergedAt,mergeCommit"]:
             return subprocess.CompletedProcess(
@@ -2586,9 +2594,9 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_ad
                 '{"state":"MERGED","mergedAt":"2026-06-18T08:00:00Z","mergeCommit":{"oid":"abc"}}\n',
                 "",
             )
-        if command == ["./.venv/bin/agentic-kit", "transfer", "sync-main"]:
+        if command == ["./.venv/bin/agentic-kit", "transfer", "sync-main", "--main-branch", "main"]:
             return subprocess.CompletedProcess(command, 0, "synced\n", "")
-        if command == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"]:
+        if command == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check", "--main-branch", "main"]:
             prior_checks = sum(1 for item in calls if item == command)
             if prior_checks == 1:
                 return subprocess.CompletedProcess(
@@ -2623,6 +2631,8 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_ad
             "456",
             "--expected-head-sha",
             "b" * 40,
+            "--main-branch",
+            "main",
             "--merge-method",
             "squash",
             "--timeout-seconds",
