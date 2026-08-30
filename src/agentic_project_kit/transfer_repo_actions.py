@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import re
-import sys
 import subprocess
 from dataclasses import dataclass, asdict
 from pathlib import Path
@@ -10,6 +9,7 @@ from pathlib import Path
 import yaml
 
 from agentic_project_kit.chat_entrypoint_contract import ensure_command_reference_in_prompt
+from agentic_project_kit.cli_executable import default_agentic_kit
 from agentic_project_kit.dpa_current_handoff_lifecycle import (
     DEFAULT_READINESS_PATH,
     evaluate_current_handoff_lifecycle,
@@ -103,10 +103,7 @@ def _successor_package_refresh_paths(ws: Workspace) -> tuple[str, ...]:
 
 
 def _agentic_kit_command() -> str:
-    candidate = Path(sys.executable).parent / "agentic-kit"
-    if candidate.exists():
-        return str(candidate)
-    return "agentic-kit"
+    return default_agentic_kit(Path("."))
 
 
 def _safe_push_runner(command: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:

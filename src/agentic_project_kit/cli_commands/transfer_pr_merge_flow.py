@@ -2,9 +2,10 @@ from __future__ import annotations
 
 # ruff: noqa: F403,F405
 
-from agentic_project_kit.transfer_observed_subprocess import run_observed_subprocess
 from agentic_project_kit.cli_commands.transfer_shared import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import *
+from agentic_project_kit.cli_executable import default_agentic_kit
+from agentic_project_kit.transfer_observed_subprocess import run_observed_subprocess
 
 
 def _resolve_expected_head_sha_alias(expected_head_sha: str) -> str:
@@ -171,7 +172,7 @@ def pr_complete_command(
     from datetime import datetime, timezone
 
     resolved_head_sha = _resolve_expected_head_sha_alias(expected_head_sha)
-    agentic_kit = "./.venv/bin/agentic-kit"
+    agentic_kit = default_agentic_kit(Path("."))
     steps: list[dict[str, object]] = []
 
     live_status_parent = os.environ.get("AGENTIC_KIT_WRAPPER_LIVE_STATUS_PARENT", "")
@@ -370,6 +371,10 @@ def pr_complete_command(
             ],
         ),
         (
+            "rules-acknowledge-before-pr-merge-safe",
+            [agentic_kit, "rules", "acknowledge"],
+        ),
+        (
             "pr-merge-safe",
             [
                 agentic_kit,
@@ -395,7 +400,7 @@ def pr_complete_command(
     for name, argv in step_plan:
         if name == "pr-wait-ci":
             update_parent_live_status("waiting_ci", step=name)
-        elif name == "pr-merge-safe":
+        elif name in {"rules-acknowledge-before-pr-merge-safe", "pr-merge-safe"}:
             update_parent_live_status("merging", step=name)
         else:
             update_parent_live_status("post_merge", step=name)

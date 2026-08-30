@@ -131,9 +131,26 @@ def test_default_agentic_kit_falls_back_when_local_venv_shebang_is_not_runnable(
     local.parent.mkdir(parents=True)
     local.write_text("#!/missing/container/python\n", encoding="utf-8")
 
+    monkeypatch.setattr(cli_executable.sys, "executable", "/missing/current/python")
     monkeypatch.setattr(cli_executable.shutil, "which", lambda name: "/usr/local/bin/agentic-kit")
 
     assert _default_agentic_kit(tmp_path) == "/usr/local/bin/agentic-kit"
+
+
+def test_default_agentic_kit_uses_current_entrypoint_when_workspace_has_no_venv(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    current_bin = tmp_path / "current-bin"
+    current_bin.mkdir()
+    current_python = current_bin / "python"
+    current_agentic_kit = current_bin / "agentic-kit"
+    current_agentic_kit.write_text("#!/usr/bin/env python\n", encoding="utf-8")
+
+    monkeypatch.setattr(cli_executable.sys, "executable", str(current_python))
+    monkeypatch.setattr(cli_executable.shutil, "which", lambda name: "/usr/local/bin/agentic-kit")
+
+    assert _default_agentic_kit(tmp_path / "external-workspace") == str(current_agentic_kit)
 
 
 def test_default_python_falls_back_when_local_venv_shebang_is_not_runnable(

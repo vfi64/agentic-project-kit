@@ -2558,6 +2558,10 @@ def test_admin_refresh_pr_reuses_existing_local_branch_without_open_pr(tmp_path,
 
 def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_admin_refresh(monkeypatch):
     calls = []
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer_pr_merge_flow.default_agentic_kit",
+        lambda root: "./.venv/bin/agentic-kit",
+    )
 
     def fake_run(command, text=True, capture_output=True, timeout=None):
         calls.append(command)

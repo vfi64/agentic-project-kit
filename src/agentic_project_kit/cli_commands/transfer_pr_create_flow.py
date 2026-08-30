@@ -7,6 +7,7 @@ from agentic_project_kit.cli_commands.transfer_shared import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import _known_volatile_transfer_paths
 from agentic_project_kit.cli_commands.transfer_pr_merge_flow import _resolve_expected_head_sha_alias
+from agentic_project_kit.cli_executable import default_agentic_kit
 from agentic_project_kit.volatile_paths import (
     RULE_ACK_DIRECTORY_PATH,
     TRANSFER_OUTBOX_LAST_RESULT_PATH,
@@ -370,7 +371,7 @@ def pr_create_complete_command(
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
     require_capability("rules_confirmed")
 
-    agentic_kit = "./.venv/bin/agentic-kit"
+    agentic_kit = default_agentic_kit(Path("."))
     steps: list[dict[str, object]] = []
     blockers: list[str] = []
     resolved_head = "" if head == "current" else head
@@ -454,7 +455,7 @@ def pr_create_complete_command(
     def pr_is_merged_for_outer_followup() -> bool:
         if pr_number is None:
             return False
-        command = ["gh", "pr", "list", str(pr_number), "--json", "state,mergedAt,mergeCommit"]
+        command = ["gh", "pr", "view", str(pr_number), "--json", "state,mergedAt,mergeCommit"]
         completed = subprocess.run(command, text=True, capture_output=True)
         steps.append(
             {
