@@ -113,6 +113,18 @@ def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
         ],
         [
             "git",
+            "ls-files",
+            "--error-unmatch",
+            ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        ],
+        [
+            "git",
+            "ls-files",
+            "--error-unmatch",
+            ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.log",
+        ],
+        [
+            "git",
             "restore",
             "--",
             ".agentic/transfer/inbox/next_command.py.txt",
@@ -120,6 +132,8 @@ def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
             RULE_ACK_CURRENT_PATH,
             "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
             "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
+            ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.log",
         ]
     ]
 
@@ -207,10 +221,36 @@ def test_sync_main_orchestrates_safe_startup_sequence(monkeypatch):
     assert calls == [
         [agentic_kit, "transfer", "restore-known-volatile", "--json"],
         [agentic_kit, "rules", "acknowledge"],
-        [agentic_kit, "transfer", "branch-switch", "main", "--pull"],
+        [agentic_kit, "transfer", "branch-switch", "main", "--pull", "--json"],
         [agentic_kit, "rules", "acknowledge"],
-        [agentic_kit, "transfer", "normalize-session", "--repair-known-volatile"],
+        [agentic_kit, "transfer", "normalize-session", "--json"],
     ]
+
+
+def test_sync_main_blocks_when_json_step_reports_block(monkeypatch):
+    calls: list[list[str]] = []
+    agentic_kit = "/runtime/bin/agentic-kit"
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[-1:] == ["--json"] and command[1:3] == ["transfer", "normalize-session"]:
+            return _completed(command, stdout='{"result_status": "BLOCK", "blockers": ["rule_ack_not_current"]}\n')
+        return _completed(command, stdout='{"result_status": "PASS"}\n' if command[-1:] == ["--json"] else "ok\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer_context_flow.default_agentic_kit",
+        lambda root: agentic_kit,
+    )
+
+    result = CliRunner().invoke(app, ["transfer", "sync-main", "--json"])
+
+    assert result.exit_code == 1
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "FAIL"
+    assert payload["blockers"] == ["normalize-session_failed"]
+    assert calls[-1] == [agentic_kit, "transfer", "normalize-session", "--json"]
 
 
 def test_command_reference_refresh_runs_generator_and_reports_changed_files(monkeypatch):

@@ -70,6 +70,38 @@ def test_git_state_ignores_workspace_runtime_lock_file(tmp_path: Path) -> None:
     assert state.dirty_status == ""
 
 
+def test_git_state_ignores_transfer_and_local_runtime_artifacts(tmp_path: Path) -> None:
+    repo = init_repo(tmp_path)
+    for relative in (
+        ".agentic/rule_ack/current.json",
+        ".agentic/transfer/outbox/last_result.txt",
+        ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "tmp/local-command-stack-state.json",
+        "tmp/local-gc-last-run-id.txt",
+        "tmp/local-gc-last.json",
+    ):
+        path = repo / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("{}\n", encoding="utf-8")
+
+    state = read_git_state(repo)
+
+    assert state.dirty_status == ""
+
+
+def test_git_state_keeps_product_dirty_when_runtime_artifacts_exist(tmp_path: Path) -> None:
+    repo = init_repo(tmp_path)
+    runtime = repo / ".agentic" / "rule_ack" / "current.json"
+    runtime.parent.mkdir(parents=True)
+    runtime.write_text("{}\n", encoding="utf-8")
+    (repo / "Config").mkdir()
+    (repo / "Config" / "Comm-SCI-Config.json").write_text("{}\n", encoding="utf-8")
+
+    state = read_git_state(repo)
+
+    assert state.dirty_status == "?? Config/Comm-SCI-Config.json"
+
+
 def test_guard_blocks_feature_mutation_on_main_without_explicit_allowance(tmp_path: Path) -> None:
     repo = init_repo(tmp_path)
 

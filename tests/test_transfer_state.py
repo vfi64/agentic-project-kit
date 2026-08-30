@@ -129,6 +129,28 @@ def test_transfer_state_blocks_dirty_worktree(tmp_path, monkeypatch):
 
     assert snapshot.primary_state == PRIMARY_BLOCKED
     assert "dirty_worktree" in snapshot.reasons
+
+
+def test_transfer_state_does_not_block_on_known_volatile_runtime_artifacts(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    _set_origin_main(tmp_path)
+    _write_rule_ack(tmp_path)
+    for relative in (
+        ".agentic/transfer/outbox/last_result.txt",
+        ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "tmp/local-command-stack-state.json",
+        "tmp/local-gc-last-run-id.txt",
+        "tmp/local-gc-last.json",
+    ):
+        path = tmp_path / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("{}\n", encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+
+    snapshot = build_transfer_state(tmp_path)
+
+    assert "dirty_worktree" not in snapshot.reasons
     assert snapshot.capabilities["run_next_command"] is False
 
 

@@ -5,6 +5,11 @@ from enum import Enum
 from pathlib import Path
 import subprocess
 
+from agentic_project_kit.volatile_paths import (
+    is_known_volatile_status_path,
+    status_path_from_short_line,
+)
+
 
 class MonitorDecision(str, Enum):
     CONTINUE = "continue"
@@ -64,7 +69,10 @@ def read_git_state(root: Path | str = ".") -> GitState:
     branch = _run_git(root_path, ["branch", "--show-current"]).stdout.strip()
     status_lines = _run_git(root_path, ["status", "--short", "--untracked-files=all"]).stdout.splitlines()
     dirty_status = "\n".join(
-        line for line in status_lines if line[3:] not in IGNORED_RUNTIME_STATUS_PATHS
+        line
+        for line in status_lines
+        if status_path_from_short_line(line) not in IGNORED_RUNTIME_STATUS_PATHS
+        and not is_known_volatile_status_path(status_path_from_short_line(line))
     ).strip()
     head = _run_git(root_path, ["rev-parse", "HEAD"]).stdout.strip()
     return GitState(branch=branch, dirty_status=dirty_status, head=head)

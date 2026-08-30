@@ -268,16 +268,30 @@ def sync_main(
     def step(name: str, argv: list[str]) -> dict[str, object]:
         item = _run_transfer_subprocess(argv)
         item["name"] = name
+        try:
+            payload = json.loads(str(item.get("stdout") or ""))
+        except json.JSONDecodeError:
+            payload = None
+        if isinstance(payload, dict):
+            result_status = str(payload.get("result_status") or "")
+            if result_status:
+                item["payload_result_status"] = result_status
+            if result_status in {"BLOCK", "BLOCKED", "FAIL", "FAILED", "ERROR"}:
+                item["ok"] = False
         steps.append(item)
         return item
 
     step("restore-before-sync", [agentic_kit, "transfer", "restore-known-volatile", "--json"])
     step("rules-acknowledge-before-sync", [agentic_kit, "rules", "acknowledge"])
-    step("switch-and-pull-main", [agentic_kit, "transfer", "branch-switch", main_branch, "--pull"])
+    step("switch-and-pull-main", [agentic_kit, "transfer", "branch-switch", main_branch, "--pull", "--json"])
     step("rules-acknowledge-after-pull", [agentic_kit, "rules", "acknowledge"])
-    step("normalize-session", [agentic_kit, "transfer", "normalize-session", "--repair-known-volatile"])
+    step("normalize-session", [agentic_kit, "transfer", "normalize-session", "--json"])
 
-    blockers = [str(item["name"]) + "_failed" for item in steps if item["returncode"] != 0]
+    blockers = [
+        str(item["name"]) + "_failed"
+        for item in steps
+        if item["returncode"] != 0 or item.get("ok") is False
+    ]
     status = "PASS" if not blockers else "FAIL"
     final_signal = "d" if status == "PASS" else "f"
     next_action = (

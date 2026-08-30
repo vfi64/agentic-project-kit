@@ -14,7 +14,7 @@ from agentic_project_kit.rule_ack import (
 )
 from agentic_project_kit.repo_identity import detect_repo_full_name
 from agentic_project_kit.rule_snapshot import build_derived_rule_snapshot
-from agentic_project_kit.volatile_paths import RULE_ACK_CURRENT_PATH, is_rule_ack_path
+from agentic_project_kit.volatile_paths import RULE_ACK_CURRENT_PATH, split_known_volatile_status
 from agentic_project_kit.workspace import load_workspace
 
 PRIMARY_READY = "READY"
@@ -89,14 +89,9 @@ def _read_latest_result(project_root: Path) -> dict[str, Any] | None:
 
 
 def _read_dirty_worktree(project_root: Path) -> str:
-    status = _run_git(project_root, "status", "--short")
-    kept_lines: list[str] = []
-    for line in status.splitlines():
-        path_text = line[3:] if len(line) > 3 else ""
-        if is_rule_ack_path(path_text):
-            continue
-        kept_lines.append(line)
-    return "\n".join(kept_lines)
+    status = _run_git(project_root, "status", "--short", "--untracked-files=all")
+    dirty_status, _ignored = split_known_volatile_status(status)
+    return dirty_status
 
 
 def _has_pending_transfer_order(project_root: Path) -> bool:
