@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 70def8f6264c2d0dfbd12c9e78a7b59007716029b5e2737a2a803e498863ddfe
 - docs/reference/agentic-kit-commands.json: 81730dad5c5c3db1d8099cfa5e1fc247bbe8147e04164919dd43a6ed6c7aba41
-## Operational documentation refresh state after PR #2234
+## Operational documentation refresh state after PR #2236
 
-Current administrative handoff refresh state is `d2ffa645` (`Expand untracked dirs in PR create preflight (#2234)`). Continue next only after this post-PR2234 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `77d9238b` (`Propagate PR base branch through completion wrappers (#2236)`). Continue next only after this post-PR2236 refresh is committed and merged; the next substantive slice must be created from fresh main.
