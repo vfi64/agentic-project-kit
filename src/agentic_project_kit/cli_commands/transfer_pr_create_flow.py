@@ -100,7 +100,11 @@ def _auto_preflight_pr_create_complete(*, root: Path) -> None:
             allow_nonzero=True,
         )
 
-    status_result = run_step("git_status", ["git", "status", "--porcelain"], allow_nonzero=True)
+    status_result = run_step(
+        "git_status",
+        ["git", "status", "--porcelain", "--untracked-files=all"],
+        allow_nonzero=True,
+    )
     if status_result.returncode != 0:
         return
     status = status_result.stdout.splitlines()

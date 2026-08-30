@@ -67,3 +67,12 @@ def test_pr_create_complete_preflight_has_unexpected_dirt_blocker() -> None:
     assert TRANSFER_OUTBOX_LAST_RESULT_PATH in volatile_paths
     assert "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json" in volatile_paths
     assert "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log" in volatile_paths
+
+
+def test_pr_create_complete_preflight_expands_untracked_dirs_before_dirt_filter() -> None:
+    text = _source()
+
+    helper_pos = text.index("def _auto_preflight_pr_create_complete(")
+    helper_text = text[helper_pos : text.index('@transfer_app.command("pr-create")')]
+
+    assert '["git", "status", "--porcelain", "--untracked-files=all"]' in helper_text
