@@ -170,6 +170,7 @@ def test_changed_paths_from_status_ignores_known_volatile_carriers() -> None:
         [
             " M src/agentic_project_kit/gui_cockpit.py",
             "?? tests/test_work_cycle.py",
+            "?? .agentic/rule_ack/current.json",
             " M .agentic/transfer/outbox/last_result.txt",
             " M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
         ]

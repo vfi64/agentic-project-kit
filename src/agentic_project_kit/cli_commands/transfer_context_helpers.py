@@ -3,6 +3,7 @@ from __future__ import annotations
 # ruff: noqa: F403,F405
 
 from agentic_project_kit.cli_commands.transfer_shared import *
+from agentic_project_kit.volatile_paths import KNOWN_VOLATILE_TRANSFER_PATHS
 from agentic_project_kit.workspace import load_workspace
 from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 
@@ -309,14 +310,6 @@ def _ensure_fresh_llm_context_or_exit(*, max_age_minutes: int, json_output: bool
 
     _emit_llm_context_gate_result(payload, json_output=json_output)
     raise typer.Exit(code=2)
-
-KNOWN_VOLATILE_TRANSFER_PATHS = [
-    ".agentic/transfer/inbox/next_command.py.txt",
-    ".agentic/transfer/outbox/last_result.txt",
-    "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-    "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-]
-
 
 def _path_text_relative_to(root: Path, path: Path) -> str:
     try:

@@ -8,6 +8,7 @@ from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
 from agentic_project_kit.cli_commands.transfer import _restore_known_volatile_paths
+from agentic_project_kit.volatile_paths import RULE_ACK_CURRENT_PATH
 
 
 def _completed(argv: list[str], stdout: str = "", stderr: str = "", returncode: int = 0):
@@ -97,6 +98,7 @@ def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
     assert calls == [
         ["git", "ls-files", "--error-unmatch", ".agentic/transfer/inbox/next_command.py.txt"],
         ["git", "ls-files", "--error-unmatch", ".agentic/transfer/outbox/last_result.txt"],
+        ["git", "ls-files", "--error-unmatch", RULE_ACK_CURRENT_PATH],
         [
             "git",
             "ls-files",
@@ -115,6 +117,7 @@ def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
             "--",
             ".agentic/transfer/inbox/next_command.py.txt",
             ".agentic/transfer/outbox/last_result.txt",
+            RULE_ACK_CURRENT_PATH,
             "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
             "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
         ]
@@ -136,15 +139,20 @@ def test_restore_known_volatile_removes_untracked_outbox_and_restores_tracked_re
     outbox = tmp_path / ".agentic/transfer/outbox/last_result.txt"
     outbox.parent.mkdir(parents=True)
     outbox.write_text('{"result_status": "PASS"}\n', encoding="utf-8")
+    rule_ack = tmp_path / RULE_ACK_CURRENT_PATH
+    rule_ack.parent.mkdir(parents=True)
+    rule_ack.write_text('{"repo_head": "abc123"}\n', encoding="utf-8")
 
     payload = _restore_known_volatile_paths(tmp_path)
 
     assert payload["ok"] is True
     assert "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json" in payload["tracked_paths"]
     assert ".agentic/transfer/outbox/last_result.txt" in payload["removed_untracked"]
+    assert RULE_ACK_CURRENT_PATH in payload["removed_untracked"]
     assert latest_json.read_text(encoding="utf-8") == '{"state": "old"}\n'
     assert latest_log.read_text(encoding="utf-8") == "old\n"
     assert not outbox.exists()
+    assert not rule_ack.exists()
 
 
 def test_divergence_status_reports_ahead_behind(monkeypatch):
