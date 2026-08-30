@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from agentic_project_kit.cli_commands.transfer_shared import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import *
-from agentic_project_kit.cli_executable import default_python
+from agentic_project_kit.cli_executable import default_agentic_kit, default_python
 from agentic_project_kit.workspace import load_workspace
 
 
@@ -263,6 +263,7 @@ def sync_main(
 ) -> None:
     """Synchronize main, acknowledge rules, and normalize the session."""
     steps: list[dict[str, object]] = []
+    agentic_kit = default_agentic_kit(Path("."))
 
     def step(name: str, argv: list[str]) -> dict[str, object]:
         item = _run_transfer_subprocess(argv)
@@ -270,11 +271,11 @@ def sync_main(
         steps.append(item)
         return item
 
-    step("restore-before-sync", ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"])
-    step("rules-acknowledge-before-sync", ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
-    step("switch-and-pull-main", ["./.venv/bin/agentic-kit", "transfer", "branch-switch", main_branch, "--pull"])
-    step("rules-acknowledge-after-pull", ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
-    step("normalize-session", ["./.venv/bin/agentic-kit", "transfer", "normalize-session", "--repair-known-volatile"])
+    step("restore-before-sync", [agentic_kit, "transfer", "restore-known-volatile", "--json"])
+    step("rules-acknowledge-before-sync", [agentic_kit, "rules", "acknowledge"])
+    step("switch-and-pull-main", [agentic_kit, "transfer", "branch-switch", main_branch, "--pull"])
+    step("rules-acknowledge-after-pull", [agentic_kit, "rules", "acknowledge"])
+    step("normalize-session", [agentic_kit, "transfer", "normalize-session", "--repair-known-volatile"])
 
     blockers = [str(item["name"]) + "_failed" for item in steps if item["returncode"] != 0]
     status = "PASS" if not blockers else "FAIL"

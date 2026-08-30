@@ -154,5 +154,6 @@ def test_sync_main_uses_restore_known_volatile_wrapper_for_mixed_tracked_and_unt
 
     source = Path("src/agentic_project_kit/cli_commands/transfer_context_flow.py").read_text(encoding="utf-8")
 
-    assert 'step("restore-before-sync", ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"])' in source
+    assert 'agentic_kit = default_agentic_kit(Path("."))' in source
+    assert 'step("restore-before-sync", [agentic_kit, "transfer", "restore-known-volatile", "--json"])' in source
     assert 'step("restore-before-sync", ["git", "restore", "--", *KNOWN_VOLATILE_TRANSFER_PATHS])' not in source
