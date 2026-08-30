@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4943ff041cfa9f6b3062bfae1910db6540c19a0e
-  short: 4943ff04
-  subject: Resolve sync-main wrapper entrypoint (#2238)
+  full: 07501db6dc1de6103941e04a5562d80cff057354
+  short: 07501db6
+  subject: Normalize sync-main volatile session state (#2240)
 last_substantive_work_state:
-  full: 4943ff041cfa9f6b3062bfae1910db6540c19a0e
-  short: 4943ff04
-  subject: Resolve sync-main wrapper entrypoint (#2238)
+  full: 07501db6dc1de6103941e04a5562d80cff057354
+  short: 07501db6
+  subject: Normalize sync-main volatile session state (#2240)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
