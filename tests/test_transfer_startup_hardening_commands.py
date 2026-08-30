@@ -187,12 +187,17 @@ def test_divergence_status_reports_ahead_behind(monkeypatch):
 
 def test_sync_main_orchestrates_safe_startup_sequence(monkeypatch):
     calls: list[list[str]] = []
+    agentic_kit = "/runtime/bin/agentic-kit"
 
     def fake_run(argv, *args, **kwargs):
         calls.append(list(argv))
         return _completed(list(argv), stdout="ok\n")
 
     monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer_context_flow.default_agentic_kit",
+        lambda root: agentic_kit,
+    )
 
     result = CliRunner().invoke(app, ["transfer", "sync-main", "--json"])
 
@@ -200,11 +205,11 @@ def test_sync_main_orchestrates_safe_startup_sequence(monkeypatch):
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "PASS"
     assert calls == [
-        ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"],
-        ["./.venv/bin/agentic-kit", "rules", "acknowledge"],
-        ["./.venv/bin/agentic-kit", "transfer", "branch-switch", "main", "--pull"],
-        ["./.venv/bin/agentic-kit", "rules", "acknowledge"],
-        ["./.venv/bin/agentic-kit", "transfer", "normalize-session", "--repair-known-volatile"],
+        [agentic_kit, "transfer", "restore-known-volatile", "--json"],
+        [agentic_kit, "rules", "acknowledge"],
+        [agentic_kit, "transfer", "branch-switch", "main", "--pull"],
+        [agentic_kit, "rules", "acknowledge"],
+        [agentic_kit, "transfer", "normalize-session", "--repair-known-volatile"],
     ]
 
 
