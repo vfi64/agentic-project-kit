@@ -455,7 +455,7 @@ def pr_create_complete_command(
     def pr_is_merged_for_outer_followup() -> bool:
         if pr_number is None:
             return False
-        command = ["gh", "pr", "list", str(pr_number), "--json", "state,mergedAt,mergeCommit"]
+        command = ["gh", "pr", "view", str(pr_number), "--json", "state,mergedAt,mergeCommit"]
         completed = subprocess.run(command, text=True, capture_output=True)
         steps.append(
             {

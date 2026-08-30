@@ -4,11 +4,29 @@ import json
 import subprocess
 from pathlib import Path
 
+import pytest
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
 from agentic_project_kit.cli_commands import transfer as transfer_module
 from agentic_project_kit.cli_commands import transfer_pr_create_flow
+from agentic_project_kit.cli_commands import transfer_pr_merge_flow
+
+TEST_AGENTIC_KIT = "./.venv/bin/agentic-kit"
+
+
+@pytest.fixture(autouse=True)
+def stable_agentic_kit_subprocess_command(monkeypatch) -> None:
+    monkeypatch.setattr(
+        transfer_pr_create_flow,
+        "default_agentic_kit",
+        lambda root: TEST_AGENTIC_KIT,
+    )
+    monkeypatch.setattr(
+        transfer_pr_merge_flow,
+        "default_agentic_kit",
+        lambda root: TEST_AGENTIC_KIT,
+    )
 
 
 def test_transfer_pr_complete_command_is_registered_in_source() -> None:
@@ -27,6 +45,30 @@ def test_transfer_pr_complete_command_is_registered_in_source() -> None:
         command.name == "pr-complete" and command.callback.__name__ == "pr_complete_command"
         for command in transfer_module.transfer_app.registered_commands
     )
+
+
+def test_transfer_pr_wrappers_resolve_agentic_kit_executable_from_runtime() -> None:
+    create_text = Path("src/agentic_project_kit/cli_commands/transfer_pr_create_flow.py").read_text(
+        encoding="utf-8"
+    )
+    merge_text = Path("src/agentic_project_kit/cli_commands/transfer_pr_merge_flow.py").read_text(
+        encoding="utf-8"
+    )
+
+    assert 'agentic_kit = default_agentic_kit(Path("."))' in create_text
+    assert 'agentic_kit = default_agentic_kit(Path("."))' in merge_text
+
+
+def test_transfer_pr_create_complete_outer_followup_uses_pr_view() -> None:
+    text = Path("src/agentic_project_kit/cli_commands/transfer_pr_create_flow.py").read_text(
+        encoding="utf-8"
+    )
+    start = text.index("def pr_is_merged_for_outer_followup()")
+    end = text.index("def post_merge_check_is_green_for_outer_followup()")
+    section = text[start:end]
+
+    assert '"gh", "pr", "view", str(pr_number)' in section
+    assert '"gh", "pr", "list", str(pr_number)' not in section
 
 
 def test_transfer_pr_complete_orchestrates_wait_merge_sync_ack_and_post_merge(monkeypatch) -> None:
