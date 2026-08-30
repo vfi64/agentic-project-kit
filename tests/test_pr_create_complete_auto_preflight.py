@@ -2,6 +2,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from agentic_project_kit.cli_commands import transfer_pr_create_flow
+from agentic_project_kit.volatile_paths import (
+    RULE_ACK_CURRENT_PATH,
+    TRANSFER_OUTBOX_LAST_RESULT_PATH,
+)
+
 
 PR_CREATE_FLOW = Path("src/agentic_project_kit/cli_commands/transfer_pr_create_flow.py")
 
@@ -18,7 +24,8 @@ def test_pr_create_complete_has_automatic_preflight_helper() -> None:
     assert "refresh-llm-context-carriers" in text or "refresh_llm_context_carriers" in text
     assert "require-fresh-llm-context" in text or "require_fresh_llm_context" in text
     assert "restore-known-volatile" in text or "restore_known_volatile" in text
-    assert ".agentic/transfer/outbox/last_result.txt" in text
+    assert "TRANSFER_OUTBOX_LAST_RESULT_PATH" in text
+    assert "RULE_ACK_DIRECTORY_PATH" in text
 
 
 def test_pr_create_complete_runs_auto_preflight_before_gate_and_github_mutation() -> None:
@@ -53,5 +60,10 @@ def test_pr_create_complete_preflight_has_unexpected_dirt_blocker() -> None:
     helper_text = text[helper_pos : text.index('@transfer_app.command("pr-create")')]
 
     assert "unexpected_dirt" in helper_text
-    assert "latest-transfer-handoff-report.json" in helper_text
-    assert "latest-transfer-handoff-report.log" in helper_text
+    assert "_known_volatile_transfer_paths" in helper_text
+    assert "RULE_ACK_DIRECTORY_PATH" in helper_text
+    volatile_paths = transfer_pr_create_flow._known_volatile_transfer_paths(Path("."))
+    assert RULE_ACK_CURRENT_PATH in volatile_paths
+    assert TRANSFER_OUTBOX_LAST_RESULT_PATH in volatile_paths
+    assert "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json" in volatile_paths
+    assert "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log" in volatile_paths

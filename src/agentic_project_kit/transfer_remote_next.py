@@ -14,6 +14,7 @@ from agentic_project_kit.safe_push import validate_branch_name
 from agentic_project_kit.transfer_local_runner import TransferLocalRun, run_local_transfer
 from agentic_project_kit.transfer_runner import DEFAULT_INBOX
 from agentic_project_kit.transfer_safety_context import build_local_to_llm_payload
+from agentic_project_kit.volatile_paths import RULE_ACK_CURRENT_PATH
 from agentic_project_kit.workspace import LEGACY_DEFAULTS, Workspace, load_workspace
 
 REMOTE_NEXT_LATEST_JSON_NAME = "latest-remote-next-report.json"
@@ -28,7 +29,7 @@ PUBLISHED_REPORT_DIR = Path(LEGACY_DEFAULTS.transfer_handoff_reports_root)
 PUBLISHED_LATEST_JSON = PUBLISHED_REPORT_DIR / "latest-transfer-handoff-report.json"
 PUBLISHED_LATEST_LOG = PUBLISHED_REPORT_DIR / "latest-transfer-handoff-report.log"
 COMMAND_RUN_LATEST = Path(LEGACY_DEFAULTS.command_runs_root) / "LATEST_COMMAND_RUN.txt"
-RULE_ACK_PATH = Path(".agentic/rule_ack/current.json")
+RULE_ACK_PATH = Path(RULE_ACK_CURRENT_PATH)
 EXECUTABLE_TRANSFER_ORDER_KIND = "llm_to_local_transfer_order"
 
 

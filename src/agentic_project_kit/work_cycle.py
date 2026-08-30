@@ -4,6 +4,8 @@ from dataclasses import dataclass
 import re
 from typing import Any, Literal
 
+from agentic_project_kit.volatile_paths import is_known_volatile_status_path
+
 WorkPhase = Literal["start", "changes", "check", "finish", "recover"]
 
 
@@ -121,12 +123,6 @@ BLOCKER_EXPLANATIONS: dict[str, str] = {
     "conflict-status": "A conflict or interrupted operation needs diagnosis.",
     "patch-cycle-status": "The patch-cycle state needs diagnosis.",
 }
-
-_VOLATILE_STATUS_PATH_PREFIXES = (
-    ".agentic/transfer/outbox/",
-    "docs/reports/terminal/transfer_handoff_reports/latest-",
-)
-
 
 def derive_work_phase(
     *,
@@ -297,7 +293,7 @@ def changed_paths_from_status(status_text: str) -> tuple[ChangedPath, ...]:
 
 
 def _is_volatile_status_path(path: str) -> bool:
-    return any(path.startswith(prefix) for prefix in _VOLATILE_STATUS_PATH_PREFIXES)
+    return is_known_volatile_status_path(path)
 
 
 def build_work_finish_args(

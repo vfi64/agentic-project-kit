@@ -24,6 +24,7 @@ from agentic_project_kit.rule_source_validator import (
     render_rule_source_validation,
     validate_rule_sources,
 )
+from agentic_project_kit.volatile_paths import RULE_ACK_CURRENT_PATH
 
 rules_app = typer.Typer(help="Generate repo-backed rule refresh files.")
 
@@ -110,7 +111,7 @@ def snapshot(
 @rules_app.command("acknowledge")
 def acknowledge(
     project_root: Annotated[Path, typer.Option("--root")] = Path("."),
-    output_path: Annotated[Path, typer.Option("--output")] = Path(".agentic/rule_ack/current.json"),
+    output_path: Annotated[Path, typer.Option("--output")] = Path(RULE_ACK_CURRENT_PATH),
     next_allowed_action: Annotated[str, typer.Option("--next-allowed-action")] = "run_next_command",
     json_output: Annotated[bool, typer.Option("--json")] = False,
 ) -> None:

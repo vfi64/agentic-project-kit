@@ -14,6 +14,7 @@ from agentic_project_kit.rule_ack import (
 )
 from agentic_project_kit.repo_identity import detect_repo_full_name
 from agentic_project_kit.rule_snapshot import build_derived_rule_snapshot
+from agentic_project_kit.volatile_paths import RULE_ACK_CURRENT_PATH, is_rule_ack_path
 from agentic_project_kit.workspace import load_workspace
 
 PRIMARY_READY = "READY"
@@ -92,9 +93,7 @@ def _read_dirty_worktree(project_root: Path) -> str:
     kept_lines: list[str] = []
     for line in status.splitlines():
         path_text = line[3:] if len(line) > 3 else ""
-        if path_text == ".agentic/rule_ack/current.json":
-            continue
-        if path_text.startswith(".agentic/rule_ack/"):
+        if is_rule_ack_path(path_text):
             continue
         kept_lines.append(line)
     return "\n".join(kept_lines)
@@ -258,7 +257,7 @@ def _build_transfer_file_state(
 
 
 def _read_rule_acknowledgement(project_root: Path):
-    path = project_root / ".agentic/rule_ack/current.json"
+    path = project_root / RULE_ACK_CURRENT_PATH
     if not path.exists():
         return None
     try:
@@ -358,7 +357,7 @@ def build_transfer_state(project_root: Path = Path(".")) -> TransferStateSnapsho
         },
         rule_snapshot=rule_snapshot.as_json_data(),
         rule_acknowledgement={
-            "path": ".agentic/rule_ack/current.json",
+            "path": RULE_ACK_CURRENT_PATH,
             "present": acknowledgement is not None,
             "decision": acknowledgement_decision.as_json_data(),
         },

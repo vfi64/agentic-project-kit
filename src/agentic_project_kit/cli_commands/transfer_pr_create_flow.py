@@ -5,7 +5,12 @@ import sys
 
 from agentic_project_kit.cli_commands.transfer_shared import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import *
+from agentic_project_kit.cli_commands.transfer_context_helpers import _known_volatile_transfer_paths
 from agentic_project_kit.cli_commands.transfer_pr_merge_flow import _resolve_expected_head_sha_alias
+from agentic_project_kit.volatile_paths import (
+    RULE_ACK_DIRECTORY_PATH,
+    TRANSFER_OUTBOX_LAST_RESULT_PATH,
+)
 from agentic_project_kit.workspace import load_workspace
 
 
@@ -86,10 +91,7 @@ def _auto_preflight_pr_create_complete(*, root: Path) -> None:
     )
 
     workspace = load_workspace(root)
-    volatile_carriers = {
-        workspace.path_text(workspace.transfer_handoff_report_file("latest-transfer-handoff-report.json")),
-        workspace.path_text(workspace.transfer_handoff_report_file("latest-transfer-handoff-report.log")),
-    }
+    volatile_carriers = set(_known_volatile_transfer_paths(root))
     for rel_path in sorted(volatile_carriers):
         run_step(
             "restore_known_volatile_tracked_carrier",
@@ -107,7 +109,12 @@ def _auto_preflight_pr_create_complete(*, root: Path) -> None:
             continue
         marker = line[:2]
         rel = line[3:]
-        if marker == "??" and (rel.startswith(workspace.path_text(workspace.tmp()) + "/") or rel == ".agentic/transfer/outbox/last_result.txt"):
+        if marker == "??" and (
+            rel.startswith(workspace.path_text(workspace.tmp()) + "/")
+            or rel == TRANSFER_OUTBOX_LAST_RESULT_PATH
+        ):
+            continue
+        if marker == "??" and rel.rstrip("/") == RULE_ACK_DIRECTORY_PATH:
             continue
         if rel in volatile_carriers:
             continue
