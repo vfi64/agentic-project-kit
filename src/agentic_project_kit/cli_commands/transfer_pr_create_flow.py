@@ -598,6 +598,8 @@ def pr_create_complete_command(
             str(pr_number),
             "--expected-head-sha",
             expected_head_sha,
+            "--main-branch",
+            base,
             "--merge-method",
             merge_method,
             "--timeout-seconds",
@@ -639,8 +641,14 @@ def pr_create_complete_command(
         # closeout look like a new failure even though the lifecycle is already done.
         update_live_status("post_merge", step="outer-post-merge-followup")
         post_merge_steps = [
-            ("post-pr-sync-main-after-complete", [agentic_kit, "transfer", "sync-main"]),
-            ("post-pr-post-merge-check", [agentic_kit, "transfer", "post-merge-check"]),
+            (
+                "post-pr-sync-main-after-complete",
+                [agentic_kit, "transfer", "sync-main", "--main-branch", base],
+            ),
+            (
+                "post-pr-post-merge-check",
+                [agentic_kit, "transfer", "post-merge-check", "--main-branch", base],
+            ),
             ("post-pr-repo-status", [agentic_kit, "transfer", "repo-status"]),
         ]
         for name, argv in post_merge_steps:

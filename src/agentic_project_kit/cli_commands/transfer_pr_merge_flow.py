@@ -277,7 +277,7 @@ def pr_complete_command(
             return int(existing_match.group(1))
         return None
     def run_admin_refresh_followup_if_needed() -> tuple[bool, str]:
-        sync_command = [agentic_kit, "transfer", "sync-main"]
+        sync_command = [agentic_kit, "transfer", "sync-main", "--main-branch", main_branch]
         sync = run_observed_step(
             "sync-main-before-post-merge-check-after-merged-pr-failure",
             sync_command,
@@ -285,7 +285,7 @@ def pr_complete_command(
         if int(sync["returncode"]) != 0:
             return False, "sync-main_failed_before_post-merge-check_after_merged_pr_failure"
 
-        check_command = [agentic_kit, "transfer", "post-merge-check"]
+        check_command = [agentic_kit, "transfer", "post-merge-check", "--main-branch", main_branch]
         check = run_observed_step(
             "post-merge-check-after-merged-pr-failure",
             check_command,
@@ -336,6 +336,8 @@ def pr_complete_command(
             str(admin_pr_number),
             "--expected-head-sha",
             admin_head_sha,
+            "--main-branch",
+            main_branch,
             "--merge-method",
             merge_method,
             "--timeout-seconds",
@@ -393,7 +395,18 @@ def pr_complete_command(
         ("main-switch", ["git", "switch", main_branch]),
         ("main-pull", ["git", "pull", "--ff-only", "origin", main_branch]),
         ("rules-acknowledge", [agentic_kit, "rules", "acknowledge"]),
-        ("post-merge-complete", [agentic_kit, "transfer", "post-merge-complete", "--after-pr", str(pr_number)]),
+        (
+            "post-merge-complete",
+            [
+                agentic_kit,
+                "transfer",
+                "post-merge-complete",
+                "--after-pr",
+                str(pr_number),
+                "--main-branch",
+                main_branch,
+            ],
+        ),
     ]
 
     failed_step = None

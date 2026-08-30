@@ -119,7 +119,15 @@ def test_transfer_pr_complete_orchestrates_wait_merge_sync_ack_and_post_merge(mo
     assert calls[3] == ["git", "switch", "main"]
     assert calls[4] == ["git", "pull", "--ff-only", "origin", "main"]
     assert calls[5] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"]
-    assert calls[6] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-complete", "--after-pr", "123"]
+    assert calls[6] == [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "post-merge-complete",
+        "--after-pr",
+        "123",
+        "--main-branch",
+        "main",
+    ]
 
 
 def test_transfer_pr_complete_blocks_on_first_failed_step(monkeypatch) -> None:
@@ -210,6 +218,8 @@ def test_transfer_pr_complete_settles_when_merge_step_times_out_after_remote_mer
         ["./.venv/bin/agentic-kit", "transfer", "sync-main"],
         ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"],
     ]
+    assert calls[4][-2:] == ["--main-branch", "main"]
+    assert calls[5][-2:] == ["--main-branch", "main"]
 
 
 def test_transfer_pr_complete_settles_when_post_merge_complete_times_out_after_remote_merge(monkeypatch) -> None:
@@ -324,8 +334,71 @@ def test_transfer_pr_create_complete_orchestrates_create_and_complete(monkeypatc
     assert calls[3][:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]
     assert "123" in calls[3]
     assert "0123456789abcdef0123456789abcdef01234567" in calls[3]
+    assert calls[3][calls[3].index("--main-branch") + 1] == "main"
     assert "--skip-llm-context-gate" in calls[3]
     assert "--json" in calls[3]
+
+
+def test_transfer_pr_create_complete_passes_base_branch_to_inner_pr_complete(monkeypatch) -> None:
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "0123456789abcdef0123456789abcdef01234567\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                '{"stdout":"https://github.com/vfi64/agentic-project-kit/pull/123\\n"}\n',
+                "",
+            )
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]:
+            return subprocess.CompletedProcess(command, 0, "completed\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile"]:
+            return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}\n', "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
+        lambda capability: None,
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
+        lambda **kwargs: None,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "pr-create-complete",
+            "--title",
+            "Demo",
+            "--body",
+            "Body",
+            "--base",
+            "feature/integration",
+            "--head",
+            "current",
+            "--merge-method",
+            "squash",
+            "--skip-llm-context-gate",
+        ],
+    )
+
+    assert result.exit_code == 0
+    pr_complete_calls = [
+        call
+        for call in calls
+        if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]
+    ]
+    assert pr_complete_calls
+    assert pr_complete_calls[-1][pr_complete_calls[-1].index("--main-branch") + 1] == "feature/integration"
 
 
 def test_transfer_pr_create_complete_writes_final_live_status(monkeypatch, tmp_path: Path) -> None:
@@ -675,8 +748,16 @@ def test_transfer_pr_create_complete_post_merge_complete_does_not_repeat_inner_c
     assert "789" in result.stdout
     assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"] for call in calls)
     assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-complete"] for call in calls)
-    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "sync-main"] for call in calls)
-    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] for call in calls)
+    assert any(
+        call[:3] == ["./.venv/bin/agentic-kit", "transfer", "sync-main"]
+        and call[-2:] == ["--main-branch", "main"]
+        for call in calls
+    )
+    assert any(
+        call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"]
+        and call[-2:] == ["--main-branch", "main"]
+        for call in calls
+    )
     assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "repo-status"] for call in calls)
     assert not any("PR_NUMMER" in " ".join(call) for call in calls)
     assert not any("<" in " ".join(call) or ">" in " ".join(call) for call in calls)
