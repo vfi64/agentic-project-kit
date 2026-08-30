@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 70def8f6264c2d0dfbd12c9e78a7b59007716029b5e2737a2a803e498863ddfe
 - docs/reference/agentic-kit-commands.json: 81730dad5c5c3db1d8099cfa5e1fc247bbe8147e04164919dd43a6ed6c7aba41
-## Operational documentation refresh state after PR #2230
+## Operational documentation refresh state after PR #2232
 
-Current administrative handoff refresh state is `1679da31` (`Treat external rule ack as volatile carrier (#2230)`). Continue next only after this post-PR2230 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `aad7a402` (`Resolve wrapper entrypoint for external workspaces (#2232)`). Continue next only after this post-PR2232 refresh is committed and merged; the next substantive slice must be created from fresh main.
