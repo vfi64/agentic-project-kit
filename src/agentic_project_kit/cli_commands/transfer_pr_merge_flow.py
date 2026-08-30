@@ -371,6 +371,10 @@ def pr_complete_command(
             ],
         ),
         (
+            "rules-acknowledge-before-pr-merge-safe",
+            [agentic_kit, "rules", "acknowledge"],
+        ),
+        (
             "pr-merge-safe",
             [
                 agentic_kit,
@@ -396,7 +400,7 @@ def pr_complete_command(
     for name, argv in step_plan:
         if name == "pr-wait-ci":
             update_parent_live_status("waiting_ci", step=name)
-        elif name == "pr-merge-safe":
+        elif name in {"rules-acknowledge-before-pr-merge-safe", "pr-merge-safe"}:
             update_parent_live_status("merging", step=name)
         else:
             update_parent_live_status("post_merge", step=name)

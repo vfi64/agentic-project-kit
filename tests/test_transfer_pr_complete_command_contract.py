@@ -71,6 +71,17 @@ def test_transfer_pr_create_complete_outer_followup_uses_pr_view() -> None:
     assert '"gh", "pr", "list", str(pr_number)' not in section
 
 
+def test_transfer_pr_complete_acknowledges_rules_before_safe_merge() -> None:
+    text = Path("src/agentic_project_kit/cli_commands/transfer_pr_merge_flow.py").read_text(
+        encoding="utf-8"
+    )
+
+    ack_index = text.index('"rules-acknowledge-before-pr-merge-safe"')
+    merge_index = text.index('"pr-merge-safe"', ack_index)
+
+    assert ack_index < merge_index
+
+
 def test_transfer_pr_complete_orchestrates_wait_merge_sync_ack_and_post_merge(monkeypatch) -> None:
     calls: list[list[str]] = []
 
@@ -98,16 +109,17 @@ def test_transfer_pr_complete_orchestrates_wait_merge_sync_ack_and_post_merge(mo
     assert "TRANSFER_PR_COMPLETE" in result.stdout
     assert "STATE:" in result.stdout
     assert "PASS" in result.stdout
-    assert [call[:3] for call in calls[:2]] == [
+    assert [call[:3] for call in calls[:3]] == [
         ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"],
+        ["./.venv/bin/agentic-kit", "rules", "acknowledge"],
         ["./.venv/bin/agentic-kit", "transfer", "pr-merge-safe"],
     ]
     assert "--skip-llm-context-gate" not in calls[0]
-    assert "--skip-llm-context-gate" in calls[1]
-    assert calls[2] == ["git", "switch", "main"]
-    assert calls[3] == ["git", "pull", "--ff-only", "origin", "main"]
-    assert calls[4] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"]
-    assert calls[5] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-complete", "--after-pr", "123"]
+    assert "--skip-llm-context-gate" in calls[2]
+    assert calls[3] == ["git", "switch", "main"]
+    assert calls[4] == ["git", "pull", "--ff-only", "origin", "main"]
+    assert calls[5] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"]
+    assert calls[6] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-complete", "--after-pr", "123"]
 
 
 def test_transfer_pr_complete_blocks_on_first_failed_step(monkeypatch) -> None:
@@ -139,6 +151,7 @@ def test_transfer_pr_complete_blocks_on_first_failed_step(monkeypatch) -> None:
     assert "pr-merge-safe" in result.stdout
     assert [call[:3] for call in calls] == [
         ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"],
+        ["./.venv/bin/agentic-kit", "rules", "acknowledge"],
         ["./.venv/bin/agentic-kit", "transfer", "pr-merge-safe"],
         ["gh", "pr", "view"],
     ]
@@ -191,6 +204,7 @@ def test_transfer_pr_complete_settles_when_merge_step_times_out_after_remote_mer
     assert any(step["name"] == "pr-merge-safe" and step["timed_out"] is True for step in payload["steps"])
     assert [call[:3] for call in calls] == [
         ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"],
+        ["./.venv/bin/agentic-kit", "rules", "acknowledge"],
         ["./.venv/bin/agentic-kit", "transfer", "pr-merge-safe"],
         ["gh", "pr", "view"],
         ["./.venv/bin/agentic-kit", "transfer", "sync-main"],
@@ -523,6 +537,7 @@ def test_transfer_pr_complete_updates_parent_live_phases_when_wrapped(monkeypatc
     assert result.exit_code == 0
     assert phases == [
         ("waiting_ci", True, "pr-wait-ci"),
+        ("merging", False, "rules-acknowledge-before-pr-merge-safe"),
         ("merging", False, "pr-merge-safe"),
         ("post_merge", False, "main-switch"),
         ("post_merge", False, "main-pull"),
@@ -707,9 +722,10 @@ def test_transfer_pr_complete_continues_when_wait_ci_blocks_but_pr_status_is_gre
     assert result.exit_code == 0
     assert "TRANSFER_PR_COMPLETE" in result.stdout
     assert "PASS" in result.stdout
-    assert [call[:3] for call in calls[:3]] == [
+    assert [call[:3] for call in calls[:4]] == [
         ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"],
         ["./.venv/bin/agentic-kit", "transfer", "pr-status"],
+        ["./.venv/bin/agentic-kit", "rules", "acknowledge"],
         ["./.venv/bin/agentic-kit", "transfer", "pr-merge-safe"],
     ]
 
