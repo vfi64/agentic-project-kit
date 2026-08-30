@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 8922573c312e4e2686902c120a1749a421414227
-  short: 8922573c
-  subject: Refresh chat-switch handoff package (#2228)
+  full: 1679da315a335f49db32b01c7fbbc5c16e2b75ce
+  short: 1679da31
+  subject: Treat external rule ack as volatile carrier (#2230)
 last_substantive_work_state:
-  full: 8922573c312e4e2686902c120a1749a421414227
-  short: 8922573c
-  subject: Refresh chat-switch handoff package (#2228)
+  full: 1679da315a335f49db32b01c7fbbc5c16e2b75ce
+  short: 1679da31
+  subject: Treat external rule ack as volatile carrier (#2230)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
