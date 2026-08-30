@@ -7,11 +7,11 @@ Current verified release: 1.0.7.
 Current release tag: v1.0.7.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22159845`.
-Current verified main: `aad7a402` (`Resolve wrapper entrypoint for external workspaces (#2232)`).
-Latest substantive work: PR #2232 (`Resolve wrapper entrypoint for external workspaces (#2232)`).
-Latest administrative refresh-only descendant: post-PR2232 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
+Current verified main: `d2ffa645` (`Expand untracked dirs in PR create preflight (#2234)`).
+Latest substantive work: PR #2234 (`Expand untracked dirs in PR create preflight (#2234)`).
+Latest administrative refresh-only descendant: post-PR2234 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2232 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2234 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -417,6 +417,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2232
+## Operational documentation refresh state after PR #2234
 
-Current administrative handoff refresh state is `aad7a402` (`Resolve wrapper entrypoint for external workspaces (#2232)`). Continue next only after this post-PR2232 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `d2ffa645` (`Expand untracked dirs in PR create preflight (#2234)`). Continue next only after this post-PR2234 refresh is committed and merged; the next substantive slice must be created from fresh main.
