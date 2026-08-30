@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `8922573c312e4e2686902c120a1749a421414227` (`8922573c`), after `Refresh chat-switch handoff package (#2228)`.
-Last substantive work state is `8922573c312e4e2686902c120a1749a421414227` (`8922573c`), after `Refresh chat-switch handoff package (#2228)`.
+Current verified main/admin HEAD is `1679da315a335f49db32b01c7fbbc5c16e2b75ce` (`1679da31`), after `Treat external rule ack as volatile carrier (#2230)`.
+Last substantive work state is `1679da315a335f49db32b01c7fbbc5c16e2b75ce` (`1679da31`), after `Treat external rule ack as volatile carrier (#2230)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
