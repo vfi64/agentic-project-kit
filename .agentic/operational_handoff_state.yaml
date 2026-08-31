@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 013027f551d62641e931944b10d37b1161dbaea0
-  short: 013027f5
-  subject: Mark status projection retest pass (#2253)
+  full: b4dcee73bfd158a7ff93c5a25841771025aadc06
+  short: b4dcee73
+  subject: Prepare release 1.0.8 (#2255)
 last_substantive_work_state:
-  full: 013027f551d62641e931944b10d37b1161dbaea0
-  short: 013027f5
-  subject: Mark status projection retest pass (#2253)
+  full: b4dcee73bfd158a7ff93c5a25841771025aadc06
+  short: b4dcee73
+  subject: Prepare release 1.0.8 (#2255)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
