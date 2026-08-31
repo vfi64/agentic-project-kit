@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `697c1f6cd1d42731a4bf2ee65720b23e20172de6` (`697c1f6c`), after `Refresh status post-merge field as multiline (#2251)`.
-Last substantive work state is `697c1f6cd1d42731a4bf2ee65720b23e20172de6` (`697c1f6c`), after `Refresh status post-merge field as multiline (#2251)`.
+Current verified main/admin HEAD is `013027f551d62641e931944b10d37b1161dbaea0` (`013027f5`), after `Mark status projection retest pass (#2253)`.
+Last substantive work state is `013027f551d62641e931944b10d37b1161dbaea0` (`013027f5`), after `Mark status projection retest pass (#2253)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
