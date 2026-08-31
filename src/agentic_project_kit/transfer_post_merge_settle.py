@@ -4,6 +4,12 @@ import re
 from dataclasses import asdict, dataclass, field
 from typing import Callable
 
+from agentic_project_kit.transfer_post_merge_state import (
+    NEEDS_HANDOFF_REFRESH_STATE,
+    NEEDS_SUCCESSOR_PACKAGE_REFRESH_STATE,
+    READY_STATE,
+    post_merge_state as classify_post_merge_state,
+)
 from agentic_project_kit.transfer_repo_actions import (
     RepoActionResult,
     admin_refresh_pr,
@@ -46,27 +52,13 @@ class PostMergeSettleResult:
 RefreshFactory = Callable[[int], RepoActionResult]
 
 _REFRESHABLE_STATES = {
-    "NEEDS_HANDOFF_REFRESH": "handoff-refresh",
-    "NEEDS_SUCCESSOR_PACKAGE_REFRESH": "successor-package-refresh",
+    NEEDS_HANDOFF_REFRESH_STATE: "handoff-refresh",
+    NEEDS_SUCCESSOR_PACKAGE_REFRESH_STATE: "successor-package-refresh",
 }
 
 
 def _post_merge_state(result: RepoActionResult) -> str:
-    combined = f"{result.next_action}\n{result.stdout}\n{result.stderr}"
-    if "result=NOOP" in combined and result.returncode == 0 and result.result_status == "PASS":
-        return "READY"
-    if "result=REFRESH_REQUIRED" in combined:
-        # Legacy handoff status reports STATE=BLOCKED while still naming a safe refresh action.
-        return "NEEDS_HANDOFF_REFRESH"
-
-    for match in re.finditer(r"^STATE=([A-Z_]+)", combined, flags=re.MULTILINE):
-        state = match.group(1)
-        if state in {"READY", "NEEDS_HANDOFF_REFRESH", "NEEDS_SUCCESSOR_PACKAGE_REFRESH", "BLOCKED"}:
-            return state
-
-    if result.returncode != 0 or result.result_status != "PASS":
-        return "CHECK_FAILED"
-    return "UNKNOWN"
+    return classify_post_merge_state(result)
 
 
 def _extract_pr_number(text: str) -> int | None:
@@ -158,9 +150,9 @@ def _refresh_factory(
     state: str,
     main_branch: str,
 ) -> RefreshFactory | None:
-    if state == "NEEDS_SUCCESSOR_PACKAGE_REFRESH":
+    if state == NEEDS_SUCCESSOR_PACKAGE_REFRESH_STATE:
         return lambda after_pr: successor_package_refresh_pr(after_pr, main_branch=main_branch)
-    if state == "NEEDS_HANDOFF_REFRESH":
+    if state == NEEDS_HANDOFF_REFRESH_STATE:
         return lambda after_pr: admin_refresh_pr(after_pr, main_branch=main_branch)
     return None
 
@@ -205,7 +197,7 @@ def post_merge_settle(
         steps.append(PostMergeSettleStep(check_name, check))
         state = _post_merge_state(check)
 
-        if state == "READY":
+        if state == READY_STATE:
             return _complete(
                 after_pr=after_pr,
                 lifecycle_state="COMPLETE" if refresh_prs else "READY",

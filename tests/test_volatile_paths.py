@@ -31,6 +31,12 @@ def test_known_volatile_status_path_matching_is_allowlisted() -> None:
     assert is_known_volatile_status_path(
         ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json"
     )
+    assert is_known_volatile_status_path(
+        ".agentic/state/handoff/transfer_handoff_reports/20260831T000000Z-demo.json"
+    )
+    assert is_known_volatile_status_path(
+        "docs/reports/terminal/transfer_handoff_reports/20260831T000000Z-demo.log"
+    )
     assert is_known_volatile_status_path("tmp/local-gc-last.json")
     assert is_known_volatile_status_path(".agentic/tmp/local-gc-last.json")
     assert is_known_volatile_status_path("tmp/local-command-stack-state.json")
@@ -40,6 +46,9 @@ def test_known_volatile_status_path_matching_is_allowlisted() -> None:
         ".agentic/state/handoff/transfer_runs/20260831T000000Z-demo.log"
     )
     assert not is_known_volatile_status_path("docs/reports/transfer_runs/notes.md")
+    assert not is_known_volatile_status_path(
+        ".agentic/state/handoff/transfer_handoff_reports/notes.md"
+    )
     assert not is_known_volatile_status_path("Config/Comm-SCI-Config.json")
 
 
@@ -54,6 +63,7 @@ def test_split_known_volatile_status_keeps_product_changes() -> None:
             "?? .agentic/rule_ack/current.json",
             "?? .agentic/transfer/outbox/last_result.txt",
             "?? .agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            "?? .agentic/state/handoff/transfer_handoff_reports/20260831T000000Z-demo.log",
             "?? tmp/local-gc-last.json",
             "?? docs/reports/transfer_runs/20260831T000000Z-demo.json",
             " M Config/Comm-SCI-Config.json",
@@ -67,6 +77,7 @@ def test_split_known_volatile_status_keeps_product_changes() -> None:
         "?? .agentic/rule_ack/current.json",
         "?? .agentic/transfer/outbox/last_result.txt",
         "?? .agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "?? .agentic/state/handoff/transfer_handoff_reports/20260831T000000Z-demo.log",
         "?? tmp/local-gc-last.json",
         "?? docs/reports/transfer_runs/20260831T000000Z-demo.json",
     ]
