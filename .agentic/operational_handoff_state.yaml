@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f406370b15c422081a943a792b92d254e85a5b0a
-  short: f406370b
-  subject: Handle release status HTTP timeouts (#2257)
+  full: d9ea0592237dfd5144db787d023dc652825d5359
+  short: d9ea0592
+  subject: Refresh release 1.0.8 notes (#2259)
 last_substantive_work_state:
-  full: f406370b15c422081a943a792b92d254e85a5b0a
-  short: f406370b
-  subject: Handle release status HTTP timeouts (#2257)
+  full: d9ea0592237dfd5144db787d023dc652825d5359
+  short: d9ea0592
+  subject: Refresh release 1.0.8 notes (#2259)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
