@@ -18,6 +18,8 @@
 - Handle committed CURRENT_HANDOFF drift in admin refresh
 - Refresh status post-merge field as multiline
 - Mark status projection retest pass
+- Prepare release 1.0.8
+- Handle release status HTTP timeouts
 
 ## v1.0.7 - 2026-08-29
 
