@@ -1552,3 +1552,7 @@ documents:
   - path: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
+    class: evidence/log
+    owner: maintainers
+    notes: Post-v1.0.7 Comm-SCI Cycle 007 Brownfield evidence for App2 provider-settings seam reduction, target PR #16, successor refresh PR #17, 55-to-44 legacy seam count, and current Kit external post-merge lifecycle retest.

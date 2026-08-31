@@ -47,7 +47,7 @@ A generated project includes:
 
 ## Installation
 
-Install the public package from PyPI in a virtual environment:
+Install the package from PyPI in a virtual environment:
 
 ```bash
 python -m venv .venv
@@ -199,7 +199,7 @@ After `agentic-kit workspace init --root PATH --execute`, `.agentic/config.yaml`
 
 ## Policy-pack doctor checks
 
-`agentic-kit doctor` also activates lightweight policy-pack checks from `.agentic/project.yaml`.
+`agentic-kit doctor` activates lightweight policy-pack checks from `.agentic/project.yaml`.
 
 They verify structural prerequisites:
 
@@ -487,8 +487,8 @@ chooser: <https://vfi64.github.io/agentic-project-kit/workflows/>
 (`workflows/index.html`, `workflows/workflows.json`). `Choose How You Want To Work`:
 File Transfer, Copy and Paste, Agent Direct, and
 experimental early GUI surface. Brownfield evidence:
-`docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json`; status
-`B1_EVALUABLE`; general Brownfield portability is not claimed.
+`docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json`; Cycle 007
+report; `B1_EVALUABLE`; general Brownfield portability is not claimed.
 
 legacy `main` `/docs`: `python site/scripts/build.py --docs-pages-fallback --json`
 writes `docs/index.html`, `docs/.nojekyll`, and `docs/site/`; `site/dist/`
