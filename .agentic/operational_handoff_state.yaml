@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 07501db6dc1de6103941e04a5562d80cff057354
-  short: 07501db6
-  subject: Normalize sync-main volatile session state (#2240)
+  full: c57b4430a310b88dcbbbd099e66a307c973daa36
+  short: c57b4430
+  subject: Accept volatile ack in post-merge preflight (#2242)
 last_substantive_work_state:
-  full: 07501db6dc1de6103941e04a5562d80cff057354
-  short: 07501db6
-  subject: Normalize sync-main volatile session state (#2240)
+  full: c57b4430a310b88dcbbbd099e66a307c973daa36
+  short: c57b4430
+  subject: Accept volatile ack in post-merge preflight (#2242)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

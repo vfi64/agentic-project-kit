@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 70def8f6264c2d0dfbd12c9e78a7b59007716029b5e2737a2a803e498863ddfe
 - docs/reference/agentic-kit-commands.json: 81730dad5c5c3db1d8099cfa5e1fc247bbe8147e04164919dd43a6ed6c7aba41
-## Operational documentation refresh state after PR #2240
+## Operational documentation refresh state after PR #2242
 
-Current administrative handoff refresh state is `07501db6` (`Normalize sync-main volatile session state (#2240)`). Continue next only after this post-PR2240 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `c57b4430` (`Accept volatile ack in post-merge preflight (#2242)`). Continue next only after this post-PR2242 refresh is committed and merged; the next substantive slice must be created from fresh main.
