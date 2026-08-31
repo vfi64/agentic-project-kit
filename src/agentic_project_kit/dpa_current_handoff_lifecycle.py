@@ -136,6 +136,17 @@ def _git(root: Path, args: list[str]) -> str:
     return completed.stdout.strip() or "UNKNOWN"
 
 
+def _git_path_is_clean(root: Path, rel_path: str) -> bool:
+    for args in (
+        ["diff", "--quiet", "--", rel_path],
+        ["diff", "--cached", "--quiet", "--", rel_path],
+    ):
+        completed = subprocess.run(["git", *args], cwd=root, text=True, capture_output=True, check=False)
+        if completed.returncode != 0:
+            return False
+    return True
+
+
 def _load_acceptance_state(path: Path) -> dict[str, Any] | None:
     if not path.exists():
         return None
@@ -239,6 +250,7 @@ def evaluate_current_handoff_lifecycle(
     execute: bool = False,
     initialize_acceptance: bool = False,
     require_dp2_authorized: bool = True,
+    allow_committed_target_drift: bool = False,
 ) -> DpaCurrentHandoffResult:
     resolved_root = Path(root).resolve()
     workspace = load_workspace(resolved_root)
@@ -262,6 +274,7 @@ def evaluate_current_handoff_lifecycle(
         execute=execute,
         initialize_acceptance=initialize_acceptance,
         require_dp2_authorized=require_dp2_authorized,
+        allow_committed_target_drift=allow_committed_target_drift,
         projected_text=projected_text,
         source_path=source,
         writer_id=WRITER_ID,
@@ -292,6 +305,7 @@ def evaluate_current_handoff_text_lifecycle(
     execute: bool = False,
     initialize_acceptance: bool = False,
     require_dp2_authorized: bool = True,
+    allow_committed_target_drift: bool = False,
     lock_command: str = "dpa current-handoff-lifecycle",
     preflight_findings: tuple[DpaCurrentHandoffFinding, ...] = (),
 ) -> DpaCurrentHandoffResult:
@@ -380,15 +394,18 @@ def evaluate_current_handoff_text_lifecycle(
                 )
             )
         elif accepted_target != target_before:
-            findings.append(
-                _acceptance_finding(
-                    "target-drift",
-                    "Current target bytes differ from the accepted complete-target fingerprint",
-                    path=target,
-                    root=resolved_root,
+            if allow_committed_target_drift and _git_path_is_clean(resolved_root, target_rel):
+                freshness = "stale"
+            else:
+                findings.append(
+                    _acceptance_finding(
+                        "target-drift",
+                        "Current target bytes differ from the accepted complete-target fingerprint",
+                        path=target,
+                        root=resolved_root,
+                    )
                 )
-            )
-            freshness = "stale"
+                freshness = "stale"
         elif would_change:
             freshness = "stale"
         elif accepted_source_path == source_rel and accepted_source == source_fingerprint:

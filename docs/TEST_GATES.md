@@ -783,6 +783,19 @@ Tests:
 
 The gate also checks active next-step instructions in `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, and `.agentic/handoff_state.yaml`: they must not point to closeout evidence that already exists, and active handoff instructions must not reference an older release version than `.agentic/handoff_state.yaml` declares as current.
 
+## CURRENT_HANDOFF DPA Target Drift
+
+`agentic-kit dpa current-handoff-refresh` and release-preparation writers must
+continue to block `target-drift` by default when
+`.agentic/dpa/acceptance/current_handoff_operational_state.json` no longer
+matches `docs/handoff/CURRENT_HANDOFF.md`.
+
+The administrative post-merge handoff refresh route may explicitly accept
+`CURRENT_HANDOFF` target drift only when that target path is clean in both the
+working tree and index. This permits a reviewed PR to change curated handoff
+text and then have the generated operational block re-accepted, while preserving
+the blocker for local/manual uncommitted handoff edits.
+
 ## Communication artifact garbage collector
 
 `agentic-kit artifact-gc` reports transient communication artifacts without deleting them. `agentic-kit artifact-gc --execute` removes only registered transient `.agentic/commands/current.yaml` and `.agentic/commands/current.sh` compatibility files plus untracked fixed-slot working copies `docs/reports/terminal/next-turn-latest.log` and `docs/reports/command_runs/next-turn-latest.json`. It must not delete tracked repo evidence or `docs/reports/terminal/LATEST_TERMINAL_LOG.txt`, because that file is part of the committed terminal-evidence pointer chain.

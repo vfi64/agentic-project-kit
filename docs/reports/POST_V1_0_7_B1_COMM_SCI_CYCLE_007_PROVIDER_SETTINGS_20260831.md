@@ -208,6 +208,22 @@ Documentation registry scope projection:
 - Scope of repair: existing Reconcile logic is reused; no new registry,
   planning authority, or alternate projection source was introduced.
 
+Committed CURRENT_HANDOFF target drift during admin refresh:
+
+- Symptom: after Kit PR #2248 merged this Cycle 007 evidence closeout,
+  `post-merge-complete` reached the administrative handoff refresh route but
+  blocked with DPA `target-drift` because
+  `.agentic/dpa/acceptance/current_handoff_operational_state.json` still
+  fingerprinted the previously accepted PR #2246 `CURRENT_HANDOFF` bytes. The
+  current `CURRENT_HANDOFF` change was already part of the clean merged PR #2248
+  tree.
+- Kit repair in follow-up: the DPA current-handoff lifecycle now keeps
+  `target-drift` fail-closed by default, but the admin-refresh caller can
+  explicitly accept drift only when the target path has no unstaged or staged
+  changes. Uncommitted handoff drift remains blocked.
+- Scope of repair: this is not a general drift bypass. Release preparation and
+  normal DPA refresh calls keep the default target-drift blocker.
+
 ## Post-Merge Lifecycle
 
 After the Kit repair in PR #2246 and refresh PR #2247, the target lifecycle was
@@ -263,7 +279,7 @@ Final target verification:
 | Task source | Maintainer-requested continuation of Comm-SCI App2 legacy seam reduction |
 | Branch and PR | `codex/b1-cycle-007-provider-settings-seams`, PR #16; refresh branch `docs/post-pr16-successor-package-refresh`, PR #17 |
 | Seam result | `legacy_seams_remaining=55 -> 44` |
-| Kit-owned fixes during cycle | Rule-Ack volatile carrier, external successor-refresh post-merge classification, timestamped transfer handoff report volatility |
+| Kit-owned fixes during cycle | Rule-Ack volatile carrier, external successor-refresh post-merge classification, timestamped transfer handoff report volatility, stale documentation-registry projection guard, committed-clean CURRENT_HANDOFF drift handling for admin refresh |
 | Target-owned friction | `Config/Comm-SCI-Config.json` test side effect; target `ruff` unavailable in `.venc313` |
 | Manual cleanup after final Kit repair | None for Rule-Ack or transfer report volatility; target config was restored because target tests rewrote it |
 | Refresh events by the B0 definition | One pure administrative successor-package-refresh PR after the product PR |

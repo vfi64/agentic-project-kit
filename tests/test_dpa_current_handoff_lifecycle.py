@@ -51,6 +51,12 @@ next_safe_substantive_slice:
     return _git(root, "rev-parse", "HEAD")
 
 
+def _commit_all(root: Path, message: str) -> str:
+    _git(root, "add", ".")
+    _git(root, "commit", "-qm", message)
+    return _git(root, "rev-parse", "HEAD")
+
+
 def test_current_handoff_refresh_requires_explicit_initial_acceptance(tmp_path: Path) -> None:
     _repo(tmp_path)
 
@@ -121,6 +127,95 @@ def test_current_handoff_refresh_blocks_target_drift_before_write(tmp_path: Path
     assert result.result_status == "BLOCKED"
     assert [finding.code for finding in result.findings] == ["target-drift"]
     assert "manual tamper" in target.read_text(encoding="utf-8")
+
+
+def test_current_handoff_refresh_blocks_committed_target_drift_by_default(tmp_path: Path) -> None:
+    head = _repo(tmp_path)
+    accepted = evaluate_current_handoff_lifecycle(
+        tmp_path,
+        execute=True,
+        initialize_acceptance=True,
+        require_dp2_authorized=False,
+        validation_ref=head,
+    )
+    assert accepted.result_status == "ACCEPTED"
+    _commit_all(tmp_path, "Accept handoff state")
+
+    target = tmp_path / "docs/handoff/CURRENT_HANDOFF.md"
+    target.write_text(target.read_text(encoding="utf-8") + "\nmerged handoff note\n", encoding="utf-8")
+    merged_head = _commit_all(tmp_path, "Merge handoff note")
+
+    result = evaluate_current_handoff_lifecycle(
+        tmp_path,
+        execute=True,
+        require_dp2_authorized=False,
+        validation_ref=merged_head,
+    )
+
+    assert result.result_status == "BLOCKED"
+    assert [finding.code for finding in result.findings] == ["target-drift"]
+
+
+def test_current_handoff_refresh_accepts_opt_in_committed_target_drift(tmp_path: Path) -> None:
+    head = _repo(tmp_path)
+    accepted = evaluate_current_handoff_lifecycle(
+        tmp_path,
+        execute=True,
+        initialize_acceptance=True,
+        require_dp2_authorized=False,
+        validation_ref=head,
+    )
+    assert accepted.result_status == "ACCEPTED"
+    old_target_fingerprint = accepted.plan.projected_complete_target_fingerprint
+    _commit_all(tmp_path, "Accept handoff state")
+
+    target = tmp_path / "docs/handoff/CURRENT_HANDOFF.md"
+    target.write_text(target.read_text(encoding="utf-8") + "\nmerged handoff note\n", encoding="utf-8")
+    merged_head = _commit_all(tmp_path, "Merge handoff note")
+
+    result = evaluate_current_handoff_lifecycle(
+        tmp_path,
+        execute=True,
+        require_dp2_authorized=False,
+        validation_ref=merged_head,
+        allow_committed_target_drift=True,
+    )
+
+    assert result.result_status == "ACCEPTED"
+    assert result.plan.freshness == "stale"
+    assert result.plan.target_before_fingerprint != old_target_fingerprint
+    state = json.loads((tmp_path / DEFAULT_ACCEPTANCE_STATE_PATH).read_text(encoding="utf-8"))
+    assert state["validation_ref"] == merged_head
+    assert state["target"]["pre_write_fingerprint"] == result.plan.target_before_fingerprint
+    assert state["target"]["complete_target_fingerprint"] == result.plan.projected_complete_target_fingerprint
+
+
+def test_current_handoff_refresh_opt_in_still_blocks_uncommitted_target_drift(tmp_path: Path) -> None:
+    head = _repo(tmp_path)
+    accepted = evaluate_current_handoff_lifecycle(
+        tmp_path,
+        execute=True,
+        initialize_acceptance=True,
+        require_dp2_authorized=False,
+        validation_ref=head,
+    )
+    assert accepted.result_status == "ACCEPTED"
+    committed_head = _commit_all(tmp_path, "Accept handoff state")
+
+    target = tmp_path / "docs/handoff/CURRENT_HANDOFF.md"
+    target.write_text(target.read_text(encoding="utf-8") + "\nuncommitted handoff note\n", encoding="utf-8")
+
+    result = evaluate_current_handoff_lifecycle(
+        tmp_path,
+        execute=True,
+        require_dp2_authorized=False,
+        validation_ref=committed_head,
+        allow_committed_target_drift=True,
+    )
+
+    assert result.result_status == "BLOCKED"
+    assert [finding.code for finding in result.findings] == ["target-drift"]
+    assert "uncommitted handoff note" in target.read_text(encoding="utf-8")
 
 
 def test_current_handoff_refresh_blocks_stale_validation_ref(tmp_path: Path) -> None:
