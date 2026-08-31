@@ -31,6 +31,8 @@ STATE_LOCAL_GC_REPORT_PATH = ".agentic/tmp/local-gc-last.json"
 STATE_LOCAL_GC_RUN_MARKER_PATH = ".agentic/tmp/local-gc-last-run-id.txt"
 STATE_LOCAL_COMMAND_STACK_STATE_PATH = ".agentic/tmp/local-command-stack-state.json"
 STATE_WORKSPACE_LOCK_PATH = ".agentic/tmp/workspace.lock"
+LEGACY_TRANSFER_RUN_DIRECTORY_PATH = "docs/reports/transfer_runs"
+STATE_TRANSFER_RUN_DIRECTORY_PATH = ".agentic/state/handoff/transfer_runs"
 
 KNOWN_RUNTIME_STATUS_PATHS = (
     LEGACY_LOCAL_GC_REPORT_PATH,
@@ -74,9 +76,19 @@ def is_known_volatile_status_path(path: str) -> bool:
         or is_rule_ack_path(normalized)
         or normalized == TRANSFER_INBOX_NEXT_COMMAND_PATH
         or _is_dir_or_child(normalized, TRANSFER_OUTBOX_DIRECTORY_PATH)
+        or _is_transfer_run_report_path(normalized)
         or normalized.startswith(f"{LEGACY_TRANSFER_HANDOFF_REPORT_DIRECTORY_PATH}/latest-")
         or normalized.startswith(f"{STATE_TRANSFER_HANDOFF_REPORT_DIRECTORY_PATH}/latest-")
     )
+
+
+def _is_transfer_run_report_path(path: str) -> bool:
+    if not (
+        _is_dir_or_child(path, LEGACY_TRANSFER_RUN_DIRECTORY_PATH)
+        or _is_dir_or_child(path, STATE_TRANSFER_RUN_DIRECTORY_PATH)
+    ):
+        return False
+    return path.endswith((".json", ".log"))
 
 
 def status_path_from_short_line(line: str) -> str:
