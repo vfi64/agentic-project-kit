@@ -8,7 +8,13 @@ from agentic_project_kit.transfer_repo_actions import RepoActionResult
 TARGET = "agentic_project_kit.transfer_post_merge_lifecycle"
 
 
-def _result(action: str, stdout: str, *, returncode: int = 0) -> RepoActionResult:
+def _result(
+    action: str,
+    stdout: str,
+    *,
+    returncode: int = 0,
+    next_action: str = "next",
+) -> RepoActionResult:
     return RepoActionResult(
         action=action,
         result_status="PASS" if returncode == 0 else "FAIL",
@@ -16,7 +22,7 @@ def _result(action: str, stdout: str, *, returncode: int = 0) -> RepoActionResul
         command=[action],
         stdout=stdout,
         stderr="",
-        next_action="next",
+        next_action=next_action,
     )
 
 
@@ -53,8 +59,8 @@ def test_post_merge_complete_noop_stops_without_refresh(monkeypatch):
 def test_post_merge_complete_treats_refresh_required_output_as_lifecycle_state_even_on_nonzero_returncode(monkeypatch):
     post_merge_outputs = iter(
         [
-            "POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n",
-            "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n",
+            ("POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n", 1),
+            ("POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", 0),
         ]
     )
     calls: list[str] = []
@@ -62,10 +68,11 @@ def test_post_merge_complete_treats_refresh_required_output_as_lifecycle_state_e
 
     def fake_post_merge_check(**_kwargs):
         calls.append("post_merge_check")
+        stdout, returncode = next(post_merge_outputs)
         return _result(
             "post-merge-check",
-            next(post_merge_outputs),
-            returncode=1,
+            stdout,
+            returncode=returncode,
         )
 
     monkeypatch.setattr(f"{TARGET}.post_merge_check", fake_post_merge_check)
@@ -92,6 +99,78 @@ def test_post_merge_complete_treats_refresh_required_output_as_lifecycle_state_e
     assert result.lifecycle_state == "COMPLETE"
     assert result.refresh_pr == 1092
     assert calls == ["post_merge_check", "pull_current", "post_merge_check"]
+
+
+def test_post_merge_complete_runs_successor_package_refresh_when_requested(monkeypatch):
+    post_merge_outputs = iter(
+        [
+            (
+                "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n"
+                "validation_report.json generated_head does not match HEAD or refresh-only ancestry\n",
+                1,
+                "STATE=NEEDS_SUCCESSOR_PACKAGE_REFRESH\nNEXT=refresh_successor_package",
+            ),
+            ("POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", 0, "STATE=READY\nNEXT=none"),
+        ]
+    )
+    calls: list[str] = []
+    _patch_successful_pull(monkeypatch, calls)
+
+    def fake_post_merge_check(**_kwargs):
+        calls.append("post_merge_check")
+        stdout, returncode, next_action = next(post_merge_outputs)
+        return _result(
+            "post-merge-check",
+            stdout,
+            returncode=returncode,
+            next_action=next_action,
+        )
+
+    def fake_successor_package_refresh_pr(after_pr, **_kwargs):
+        calls.append(f"successor_package_refresh_pr:{after_pr}")
+        return _result(
+            "successor-package-refresh-pr",
+            "https://github.com/vfi64/agentic-project-kit/pull/1090\n",
+        )
+
+    def fake_pr_wait_ci(pr_number, **_kwargs):
+        calls.append(f"pr_wait_ci:{pr_number}")
+        return _result("pr-wait-ci", "ci green\n")
+
+    def fake_pr_merge_safe(pr_number, **_kwargs):
+        calls.append(f"pr_merge_safe:{pr_number}")
+        return _result("pr-merge-safe", "merged\n")
+
+    monkeypatch.setattr(f"{TARGET}.post_merge_check", fake_post_merge_check)
+    monkeypatch.setattr(
+        f"{TARGET}.successor_package_refresh_pr",
+        fake_successor_package_refresh_pr,
+    )
+    monkeypatch.setattr(f"{TARGET}.pr_wait_ci", fake_pr_wait_ci)
+    monkeypatch.setattr(f"{TARGET}.pr_merge_safe", fake_pr_merge_safe)
+
+    result = post_merge_complete(1083)
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+    assert result.lifecycle_state == "COMPLETE"
+    assert result.refresh_pr == 1090
+    assert [step.name for step in result.steps] == [
+        "initial-post-merge-check",
+        "successor-package-refresh-pr",
+        "successor-package-refresh-pr-wait-ci",
+        "successor-package-refresh-pr-merge-safe",
+        "final-main-sync",
+        "final-post-merge-check",
+    ]
+    assert calls == [
+        "post_merge_check",
+        "successor_package_refresh_pr:1083",
+        "pr_wait_ci:1090",
+        "pr_merge_safe:1090",
+        "pull_current",
+        "post_merge_check",
+    ]
 
 
 def test_post_merge_complete_refresh_required_completes_after_one_refresh(monkeypatch):
@@ -407,7 +486,7 @@ def test_post_merge_complete_blocks_unknown_initial_state(monkeypatch):
     assert [step.name for step in result.steps] == ["initial-post-merge-check"]
 
 
-def test_post_merge_complete_blocks_when_initial_check_failed_even_if_output_says_noop(monkeypatch):
+def test_post_merge_complete_blocks_when_initial_check_failed_without_refresh_state(monkeypatch):
     from agentic_project_kit.transfer_post_merge_lifecycle import post_merge_complete
     from agentic_project_kit.transfer_repo_actions import RepoActionResult
 
@@ -420,10 +499,10 @@ def test_post_merge_complete_blocks_when_initial_check_failed_even_if_output_say
             "POST_MERGE_HANDOFF_REFRESH\n"
             "refresh_required=False\n"
             "result=NOOP\n"
-            "validation_report.json generated_head does not match HEAD or refresh-only ancestry\n"
+            "unexpected non-refresh failure\n"
         ),
         stderr="",
-        next_action="STATE=NEEDS_SUCCESSOR_PACKAGE_REFRESH\nNEXT=refresh_successor_package",
+        next_action="STATE=BLOCKED\nNEXT=diagnose_post_merge_check",
     )
 
     monkeypatch.setattr(
@@ -436,7 +515,7 @@ def test_post_merge_complete_blocks_when_initial_check_failed_even_if_output_say
     assert result.result_status == "BLOCKED"
     assert result.returncode == 1
     assert result.lifecycle_state == "INITIAL_POST_MERGE_CHECK_FAILED"
-    assert "NEEDS_SUCCESSOR_PACKAGE_REFRESH" in result.next_action
+    assert "diagnose_post_merge_check" in result.next_action
     assert "Post-merge lifecycle is complete" not in result.next_action
 
 

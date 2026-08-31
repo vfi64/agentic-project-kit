@@ -219,6 +219,28 @@ def test_inspect_local_state_classifies_rule_ack_as_known_volatile_artifact(tmp_
     assert local_state.product_paths == ()
 
 
+def test_inspect_local_state_classifies_timestamped_state_handoff_reports(tmp_path):
+    report = (
+        tmp_path
+        / ".agentic/state/handoff/transfer_handoff_reports/20260831T000000Z-demo.json"
+    )
+    report.parent.mkdir(parents=True)
+    report.write_text("{}\n", encoding="utf-8")
+
+    import subprocess
+
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True)
+
+    local_state = inspect_local_state(tmp_path)
+
+    assert local_state.clean is False
+    assert local_state.blocked_reason == "dirty_report_artifacts_before_post_merge_complete"
+    assert local_state.report_artifact_paths == (
+        ".agentic/state/handoff/transfer_handoff_reports/20260831T000000Z-demo.json",
+    )
+    assert local_state.product_paths == ()
+
+
 def test_inspect_local_state_classifies_dirty_product_paths(tmp_path):
     (tmp_path / "src").mkdir()
     (tmp_path / "src/example.py").write_text("print('hello')\n", encoding="utf-8")

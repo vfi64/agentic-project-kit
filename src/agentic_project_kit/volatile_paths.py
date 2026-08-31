@@ -77,8 +77,7 @@ def is_known_volatile_status_path(path: str) -> bool:
         or normalized == TRANSFER_INBOX_NEXT_COMMAND_PATH
         or _is_dir_or_child(normalized, TRANSFER_OUTBOX_DIRECTORY_PATH)
         or _is_transfer_run_report_path(normalized)
-        or normalized.startswith(f"{LEGACY_TRANSFER_HANDOFF_REPORT_DIRECTORY_PATH}/latest-")
-        or normalized.startswith(f"{STATE_TRANSFER_HANDOFF_REPORT_DIRECTORY_PATH}/latest-")
+        or _is_transfer_handoff_report_path(normalized)
     )
 
 
@@ -86,6 +85,15 @@ def _is_transfer_run_report_path(path: str) -> bool:
     if not (
         _is_dir_or_child(path, LEGACY_TRANSFER_RUN_DIRECTORY_PATH)
         or _is_dir_or_child(path, STATE_TRANSFER_RUN_DIRECTORY_PATH)
+    ):
+        return False
+    return path.endswith((".json", ".log"))
+
+
+def _is_transfer_handoff_report_path(path: str) -> bool:
+    if not (
+        _is_dir_or_child(path, LEGACY_TRANSFER_HANDOFF_REPORT_DIRECTORY_PATH)
+        or _is_dir_or_child(path, STATE_TRANSFER_HANDOFF_REPORT_DIRECTORY_PATH)
     ):
         return False
     return path.endswith((".json", ".log"))

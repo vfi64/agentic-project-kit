@@ -191,6 +191,29 @@ def test_restore_known_volatile_removes_untracked_transfer_run_reports(tmp_path:
     assert product.exists()
 
 
+def test_restore_known_volatile_removes_untracked_transfer_handoff_reports(tmp_path: Path):
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True, text=True)
+    report = (
+        tmp_path
+        / ".agentic/state/handoff/transfer_handoff_reports/20260831T000000Z-demo.log"
+    )
+    report.parent.mkdir(parents=True)
+    report.write_text("temporary handoff report\n", encoding="utf-8")
+    product = tmp_path / "src/example.py"
+    product.parent.mkdir()
+    product.write_text("print('keep')\n", encoding="utf-8")
+
+    payload = _restore_known_volatile_paths(tmp_path)
+
+    assert payload["ok"] is True
+    assert (
+        ".agentic/state/handoff/transfer_handoff_reports/20260831T000000Z-demo.log"
+        in payload["removed_untracked"]
+    )
+    assert not report.exists()
+    assert product.exists()
+
+
 def test_divergence_status_reports_ahead_behind(monkeypatch):
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
