@@ -328,6 +328,8 @@ def _known_volatile_transfer_paths(root: Path | str = ".") -> list[str]:
     dynamic_paths = [
         workspace.transfer_inbox() / "next_command.py.txt",
         workspace.transfer_outbox() / "last_result.txt",
+        workspace.transfer_run_file("latest-transfer-report.json"),
+        workspace.transfer_run_file("latest-transfer-report.log"),
         workspace.transfer_handoff_report_file("latest-transfer-handoff-report.json"),
         workspace.transfer_handoff_report_file("latest-transfer-handoff-report.log"),
     ]
@@ -354,8 +356,14 @@ def _restore_known_volatile_paths(root: Path | str = ".") -> dict[str, object]:
     skipped_missing: list[str] = []
     checks: list[dict[str, object]] = []
     errors: list[str] = []
+    paths = list(_known_volatile_transfer_paths(root_path))
+    status = _git_status_short(root_path)
+    if status.returncode == 0:
+        paths.extend(
+            path for path in _dirty_paths_from_status(status.stdout) if is_known_volatile_status_path(path)
+        )
 
-    for relative_path in _known_volatile_transfer_paths(root_path):
+    for relative_path in dict.fromkeys(paths):
         check = subprocess.run(
             ["git", "ls-files", "--error-unmatch", relative_path],
             cwd=root_path,

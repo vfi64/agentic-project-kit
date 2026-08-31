@@ -96,6 +96,7 @@ def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "PASS"
     assert calls == [
+        ["git", "status", "--short", "--untracked-files=all"],
         ["git", "ls-files", "--error-unmatch", ".agentic/transfer/inbox/next_command.py.txt"],
         ["git", "ls-files", "--error-unmatch", ".agentic/transfer/outbox/last_result.txt"],
         ["git", "ls-files", "--error-unmatch", RULE_ACK_CURRENT_PATH],
@@ -123,6 +124,8 @@ def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
             "--error-unmatch",
             ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.log",
         ],
+        ["git", "ls-files", "--error-unmatch", "docs/reports/transfer_runs/latest-transfer-report.json"],
+        ["git", "ls-files", "--error-unmatch", "docs/reports/transfer_runs/latest-transfer-report.log"],
         [
             "git",
             "restore",
@@ -134,6 +137,8 @@ def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
             "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
             ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json",
             ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.log",
+            "docs/reports/transfer_runs/latest-transfer-report.json",
+            "docs/reports/transfer_runs/latest-transfer-report.log",
         ]
     ]
 
@@ -167,6 +172,23 @@ def test_restore_known_volatile_removes_untracked_outbox_and_restores_tracked_re
     assert latest_log.read_text(encoding="utf-8") == "old\n"
     assert not outbox.exists()
     assert not rule_ack.exists()
+
+
+def test_restore_known_volatile_removes_untracked_transfer_run_reports(tmp_path: Path):
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True, text=True)
+    report = tmp_path / "docs/reports/transfer_runs/20260831T000000Z-demo.json"
+    report.parent.mkdir(parents=True)
+    report.write_text("{}\n", encoding="utf-8")
+    product = tmp_path / "src/example.py"
+    product.parent.mkdir()
+    product.write_text("print('keep')\n", encoding="utf-8")
+
+    payload = _restore_known_volatile_paths(tmp_path)
+
+    assert payload["ok"] is True
+    assert "docs/reports/transfer_runs/20260831T000000Z-demo.json" in payload["removed_untracked"]
+    assert not report.exists()
+    assert product.exists()
 
 
 def test_divergence_status_reports_ahead_behind(monkeypatch):

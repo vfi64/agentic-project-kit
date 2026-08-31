@@ -63,6 +63,28 @@ def test_write_post_merge_complete_report_writes_latest_and_timestamped_reports(
     assert "END SUMMARY" in log_text
 
 
+def test_write_post_merge_complete_report_uses_manifest_transfer_namespace(tmp_path):
+    manifest = tmp_path / ".agentic" / "config.yaml"
+    manifest.parent.mkdir(parents=True)
+    manifest.write_text(
+        "kit_schema_version: 1\n"
+        "project:\n"
+        "  name: fixture\n"
+        "  type: generic\n"
+        "profile: generic\n",
+        encoding="utf-8",
+    )
+
+    report = write_post_merge_complete_report(FakePostMergeCompleteResult(), after_pr=1090, cwd=tmp_path)
+
+    assert report["latest_json_path"] == ".agentic/state/handoff/transfer_runs/latest-transfer-report.json"
+    assert report["latest_log_path"] == ".agentic/state/handoff/transfer_runs/latest-transfer-report.log"
+    assert str(report["remote_report_path"]).startswith(".agentic/state/handoff/transfer_runs/")
+    assert (tmp_path / str(report["latest_json_path"])).exists()
+    assert (tmp_path / str(report["remote_report_path"])).exists()
+    assert not (tmp_path / LATEST_JSON).exists()
+
+
 def test_render_post_merge_complete_result_includes_human_readable_sections():
     result = FakePostMergeCompleteResult()
     local_report = {

@@ -14,9 +14,8 @@ from agentic_project_kit.transfer_post_merge_lifecycle import post_merge_complet
 from agentic_project_kit.llm_context_carriers import refresh_llm_context_carriers
 from agentic_project_kit.llm_execution_context import build_llm_execution_context
 from agentic_project_kit.transfer_uplink import (
-    LATEST_JSON,
-    LATEST_LOG,
-    TRANSFER_RUN_DIR,
+    LATEST_JSON_NAME,
+    LATEST_LOG_NAME,
     publish_latest_transfer_report,
     safe_transfer_report_label,
 )
@@ -24,6 +23,7 @@ from agentic_project_kit.volatile_paths import (
     is_known_volatile_status_path,
     status_path_from_short_line,
 )
+from agentic_project_kit.workspace import load_workspace
 
 _SUMMARY_WIDTH = 84
 _LABEL_WIDTH = 22
@@ -219,10 +219,13 @@ def _render_report_log(report: dict[str, object], rendered_result: str) -> str:
 
 def write_post_merge_complete_report(result, *, after_pr: int, cwd: Path | None = None) -> dict[str, object]:
     root = Path(".") if cwd is None else cwd
+    workspace = load_workspace(root)
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid4().hex[:8]
     label = _report_label(after_pr)
-    timestamped_json = TRANSFER_RUN_DIR / f"{run_id}-{label}.json"
-    timestamped_log = TRANSFER_RUN_DIR / f"{run_id}-{label}.log"
+    latest_json = workspace.transfer_run_file(LATEST_JSON_NAME)
+    latest_log = workspace.transfer_run_file(LATEST_LOG_NAME)
+    timestamped_json = workspace.transfer_run_file(f"{run_id}-{label}.json")
+    timestamped_log = workspace.transfer_run_file(f"{run_id}-{label}.log")
     signal = _final_signal(result)
     rendered_result = render_post_merge_complete_result(result)
 
@@ -242,10 +245,10 @@ def write_post_merge_complete_report(result, *, after_pr: int, cwd: Path | None 
         "final_signal": signal,
         "chat_reply": _chat_reply(signal, result.next_action),
         "next_action": result.next_action,
-        "latest_log_path": str(LATEST_LOG),
-        "latest_json_path": str(LATEST_JSON),
-        "timestamped_log_path": str(timestamped_log),
-        "remote_report_path": str(timestamped_json),
+        "latest_log_path": workspace.path_text(latest_log),
+        "latest_json_path": workspace.path_text(latest_json),
+        "timestamped_log_path": workspace.path_text(timestamped_log),
+        "remote_report_path": workspace.path_text(timestamped_json),
         "transfer_upload": "done",
         "transfer_report_written": "done",
         "post_merge_complete": result.as_json_data(),
@@ -256,14 +259,13 @@ def write_post_merge_complete_report(result, *, after_pr: int, cwd: Path | None 
     log_text = _render_report_log(report, rendered_result)
 
     for relative_path, content in (
-        (LATEST_LOG, log_text),
+        (latest_log, log_text),
         (timestamped_log, log_text),
-        (LATEST_JSON, json.dumps(report, indent=2, sort_keys=True) + "\n"),
+        (latest_json, json.dumps(report, indent=2, sort_keys=True) + "\n"),
         (timestamped_json, json.dumps(report, indent=2, sort_keys=True) + "\n"),
     ):
-        target = root / relative_path
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(content, encoding="utf-8")
+        relative_path.parent.mkdir(parents=True, exist_ok=True)
+        relative_path.write_text(content, encoding="utf-8")
 
     return report
 
