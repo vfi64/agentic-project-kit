@@ -7,16 +7,16 @@ Current verified release: 1.0.7.
 Current release tag: v1.0.7.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22159845`.
-Current verified main: `3c433ff8` (`Handle committed CURRENT_HANDOFF drift in admin refresh (#2249)`).
-Latest substantive work: PR #2249 (`Handle committed CURRENT_HANDOFF drift in admin refresh (#2249)`).
-Latest administrative refresh-only descendant: post-PR2249 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
+Current verified main: `697c1f6c` (`Refresh status post-merge field as multiline (#2251)`).
+Latest substantive work: PR #2251 (`Refresh status post-merge field as multiline (#2251)`).
+Latest administrative refresh-only descendant: post-PR2251 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
 Latest Brownfield external evidence: Cycle 007 report
 `docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md`
 records Comm-SCI App2 provider-settings seam reduction from `55` to `44`,
 target PR #16, target successor refresh PR #17, final target head
 `ea21b3a3`, and post-merge-settle `READY`.
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2249 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2251 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -422,6 +422,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2249
+## Operational documentation refresh state after PR #2251
 
-Current administrative handoff refresh state is `3c433ff8` (`Handle committed CURRENT_HANDOFF drift in admin refresh (#2249)`). Continue next only after this post-PR2249 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `697c1f6c` (`Refresh status post-merge field as multiline (#2251)`). Continue next only after this post-PR2251 refresh is committed and merged; the next substantive slice must be created from fresh main.

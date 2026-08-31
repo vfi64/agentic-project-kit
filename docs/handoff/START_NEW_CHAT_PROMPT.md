@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 70def8f6264c2d0dfbd12c9e78a7b59007716029b5e2737a2a803e498863ddfe
 - docs/reference/agentic-kit-commands.json: 81730dad5c5c3db1d8099cfa5e1fc247bbe8147e04164919dd43a6ed6c7aba41
-## Operational documentation refresh state after PR #2249
+## Operational documentation refresh state after PR #2251
 
-Current administrative handoff refresh state is `3c433ff8` (`Handle committed CURRENT_HANDOFF drift in admin refresh (#2249)`). Continue next only after this post-PR2249 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `697c1f6c` (`Refresh status post-merge field as multiline (#2251)`). Continue next only after this post-PR2251 refresh is committed and merged; the next substantive slice must be created from fresh main.

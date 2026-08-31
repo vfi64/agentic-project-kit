@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3c433ff8cceedb2072afc09f569d24d0ecdc07cc
-  short: 3c433ff8
-  subject: Handle committed CURRENT_HANDOFF drift in admin refresh (#2249)
+  full: 697c1f6cd1d42731a4bf2ee65720b23e20172de6
+  short: 697c1f6c
+  subject: Refresh status post-merge field as multiline (#2251)
 last_substantive_work_state:
-  full: 3c433ff8cceedb2072afc09f569d24d0ecdc07cc
-  short: 3c433ff8
-  subject: Handle committed CURRENT_HANDOFF drift in admin refresh (#2249)
+  full: 697c1f6cd1d42731a4bf2ee65720b23e20172de6
+  short: 697c1f6c
+  subject: Refresh status post-merge field as multiline (#2251)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
