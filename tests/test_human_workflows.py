@@ -636,9 +636,21 @@ def test_release_prepare_write_syncs_command_entrypoints(monkeypatch, tmp_path):
     )
     release_prep_call = calls[release_prep_index]
     sync_call = calls[sync_index]
+    handoff_index = next(
+        index
+        for index, call in enumerate(calls)
+        if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "chat-switch-complete"]
+    )
+    docs_pages_index = next(
+        index
+        for index, call in enumerate(calls)
+        if call == ["./.venv/bin/python", "site/scripts/build.py", "--docs-pages-fallback", "--json"]
+    )
     assert "--dry-run" not in release_prep_call
     assert "--execute" in sync_call
     assert sync_index > release_prep_index
+    assert handoff_index > sync_index
+    assert docs_pages_index > handoff_index
     report = tmp_path / "docs" / "reports" / "release" / "release-prepare-1.2.3.json"
     assert report.exists()
     try:
@@ -646,6 +658,8 @@ def test_release_prepare_write_syncs_command_entrypoints(monkeypatch, tmp_path):
         assert payload["authorized_route"] == "agentic-kit release-prep"
         assert payload["release_metadata_anchor_paths"] == ["README.md", "pyproject.toml"]
         assert any(step["name"] == "release-prep" for step in payload["steps"])
+        assert any(step["name"] == "successor-handoff-refresh" for step in payload["steps"])
+        assert any(step["name"] == "docs-pages-fallback-refresh" for step in payload["steps"])
     finally:
         report.unlink(missing_ok=True)
 

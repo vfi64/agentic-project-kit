@@ -1,3 +1,24 @@
+## v1.0.8 - 2026-08-31
+
+- Zenodo DOI verification pending for v1.0.8.
+- Record release 1.0.7 DOI closeout
+- Preserve substantive anchor across refresh-only handoff
+- Record B1 cycle 006 merge wrapper retest
+- Refresh chat-switch handoff package
+- Treat external rule ack as volatile carrier
+- Resolve wrapper entrypoint for external workspaces
+- Expand untracked dirs in PR create preflight
+- Propagate PR base branch through completion wrappers
+- Resolve sync-main wrapper entrypoint
+- Normalize sync-main volatile session state
+- Accept volatile ack in post-merge preflight
+- Use workspace paths for post-merge reports
+- Handle external successor post-merge refresh
+- Close out Comm-SCI cycle 007 evidence
+- Handle committed CURRENT_HANDOFF drift in admin refresh
+- Refresh status post-merge field as multiline
+- Mark status projection retest pass
+
 ## v1.0.7 - 2026-08-29
 
 - Record v1.0.6 DOI closeout
