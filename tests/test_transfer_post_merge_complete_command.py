@@ -181,6 +181,22 @@ def test_inspect_local_state_classifies_dirty_report_artifacts(tmp_path):
     assert local_state.product_paths == ()
 
 
+def test_inspect_local_state_classifies_rule_ack_as_known_volatile_artifact(tmp_path):
+    (tmp_path / ".agentic/rule_ack").mkdir(parents=True)
+    (tmp_path / ".agentic/rule_ack/current.json").write_text("{}\n", encoding="utf-8")
+
+    import subprocess
+
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True)
+
+    local_state = inspect_local_state(tmp_path)
+
+    assert local_state.clean is False
+    assert local_state.blocked_reason == "dirty_report_artifacts_before_post_merge_complete"
+    assert local_state.report_artifact_paths == (".agentic/rule_ack/current.json",)
+    assert local_state.product_paths == ()
+
+
 def test_inspect_local_state_classifies_dirty_product_paths(tmp_path):
     (tmp_path / "src").mkdir()
     (tmp_path / "src/example.py").write_text("print('hello')\n", encoding="utf-8")
