@@ -2,52 +2,18 @@
   "authorized_route": "agentic-kit release-prep",
   "base_ref": "origin/main",
   "changed_paths_against_base": [
-    ".agentic/dpa/acceptance/current_handoff_operational_state.json",
-    "AGENTS.md",
     "CHANGELOG.md",
-    "CITATION.cff",
-    "README.md",
-    "docs/STATUS.md",
-    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
-    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-    "docs/handoff/CURRENT_HANDOFF.md",
     "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
-    "docs/handoff/START_NEW_CHAT_PROMPT.md",
-    "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "docs/reference/agentic-kit-commands.json",
     "docs/reports/handoff-packages/latest/execution_contract.json",
-    "docs/reports/handoff-packages/latest/source_manifest.json",
     "docs/reports/handoff-packages/latest/successor_context.yaml",
     "docs/reports/handoff-packages/latest/successor_prompt.md",
-    "docs/reports/handoff-packages/latest/validation_report.json",
-    "docs/site/claims/claims.json",
-    "docs/site/claims/index.html",
-    "docs/site/commands/commands.json",
-    "docs/site/commands/diagnostics.html",
-    "docs/site/commands/guided.html",
-    "docs/site/commands/index.html",
-    "docs/site/index.html",
-    "docs/site/quickstart/index.html",
-    "docs/site/quickstart/quickstart.json",
-    "docs/site/site.json",
-    "docs/site/workflows/index.html",
-    "pyproject.toml",
-    "src/agentic_project_kit/__init__.py",
-    "src/agentic_project_kit/cli_commands/human_workflows.py",
-    "src/agentic_project_kit/reference/agentic-kit-commands.json",
-    "tests/test_human_workflows.py"
+    "docs/reports/handoff-packages/latest/validation_report.json"
   ],
   "date": "2026-08-31",
   "from_tag": "v1.0.7",
   "kind": "release_prepare_evidence",
   "release_metadata_anchor_paths": [
-    "CHANGELOG.md",
-    "CITATION.cff",
-    "README.md",
-    "docs/STATUS.md",
-    "docs/handoff/CURRENT_HANDOFF.md",
-    "pyproject.toml",
-    "src/agentic_project_kit/__init__.py"
+    "CHANGELOG.md"
   ],
   "schema_version": 1,
   "steps": [
@@ -76,8 +42,8 @@
       "stderr_length": 0,
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "stdout_last_line": "}",
-      "stdout_length": 57902,
-      "stdout_sha256": "beb97e60a0069cb1830a7b4b7af520de440c1860c146fae937a87d70ff85c1b9"
+      "stdout_length": 65203,
+      "stdout_sha256": "67b005feb41daa3720e78666ae7418aa766da709dee681b943f06b41a776ae7f"
     },
     {
       "allowed_returncodes": [
@@ -101,8 +67,8 @@
       "stderr_length": 0,
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "stdout_last_line": "}",
-      "stdout_length": 106,
-      "stdout_sha256": "c34b14c6ae2430d3441e853b85166119278a206fe65f5179cdca404dcfdc33ab"
+      "stdout_length": 128,
+      "stdout_sha256": "33341af8d88d69f06fbb8b7262e39dcb36676ab3c731fa1d036f2c039a5da855"
     },
     {
       "allowed_returncodes": [
@@ -163,7 +129,7 @@
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "stdout_last_line": "}",
       "stdout_length": 8497,
-      "stdout_sha256": "57a0fab8a2ac8ce17c00c2c6ad18169324deed8be0a0d70e6259f6f1fcda0854"
+      "stdout_sha256": "5af47425991a8c39e283b0a8641495d2044012e9ef040f2071989954256a2201"
     },
     {
       "allowed_returncodes": [
