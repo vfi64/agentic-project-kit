@@ -7,11 +7,11 @@ Current verified release: 1.0.7.
 Current release tag: v1.0.7.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22159845`.
-Current verified main: `c57b4430` (`Accept volatile ack in post-merge preflight (#2242)`).
-Latest substantive work: PR #2242 (`Accept volatile ack in post-merge preflight (#2242)`).
-Latest administrative refresh-only descendant: post-PR2242 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
+Current verified main: `d08fc25f` (`Use workspace paths for post-merge reports (#2244)`).
+Latest substantive work: PR #2244 (`Use workspace paths for post-merge reports (#2244)`).
+Latest administrative refresh-only descendant: post-PR2244 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2242 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2244 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -417,6 +417,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2242
+## Operational documentation refresh state after PR #2244
 
-Current administrative handoff refresh state is `c57b4430` (`Accept volatile ack in post-merge preflight (#2242)`). Continue next only after this post-PR2242 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `d08fc25f` (`Use workspace paths for post-merge reports (#2244)`). Continue next only after this post-PR2244 refresh is committed and merged; the next substantive slice must be created from fresh main.

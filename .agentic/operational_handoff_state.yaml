@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c57b4430a310b88dcbbbd099e66a307c973daa36
-  short: c57b4430
-  subject: Accept volatile ack in post-merge preflight (#2242)
+  full: d08fc25ff16553d907545806fe60e2641499e44a
+  short: d08fc25f
+  subject: Use workspace paths for post-merge reports (#2244)
 last_substantive_work_state:
-  full: c57b4430a310b88dcbbbd099e66a307c973daa36
-  short: c57b4430
-  subject: Accept volatile ack in post-merge preflight (#2242)
+  full: d08fc25ff16553d907545806fe60e2641499e44a
+  short: d08fc25f
+  subject: Use workspace paths for post-merge reports (#2244)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
