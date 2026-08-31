@@ -124,7 +124,7 @@
     "name": "agentic-project-kit",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
     "requires_python": ">=3.10",
-    "version": "1.0.7"
+    "version": "1.0.8"
   },
   "schema_version": 1
 }

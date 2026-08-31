@@ -57,6 +57,20 @@ def _dpa_readiness_ack_refresh_step() -> dict[str, object]:
     }
 
 
+def _release_successor_handoff_refresh_step() -> dict[str, object]:
+    return _run_step(
+        "successor-handoff-refresh",
+        _agentic("transfer", "chat-switch-complete", "--json"),
+    )
+
+
+def _docs_pages_fallback_refresh_step() -> dict[str, object]:
+    return _run_step(
+        "docs-pages-fallback-refresh",
+        _python("site/scripts/build.py", "--docs-pages-fallback", "--json"),
+    )
+
+
 def _payload(action: str, steps: list[dict[str, object]], *, dry_run: bool = False, extra: dict[str, object] | None = None) -> dict[str, object]:
     blockers = [str(step["name"]) for step in steps if not step["ok"]]
     result_status = "PASS" if not blockers else "BLOCKED"
@@ -705,6 +719,10 @@ def release_prepare_command(
         )
     if not dry_run and all(step["ok"] for step in steps):
         steps.append(_dpa_readiness_ack_refresh_step())
+    if not dry_run and all(step["ok"] for step in steps):
+        steps.append(_release_successor_handoff_refresh_step())
+    if not dry_run and all(step["ok"] for step in steps):
+        steps.append(_docs_pages_fallback_refresh_step())
     evidence_path = ""
     if not dry_run and all(step["ok"] for step in steps):
         report_step = _write_release_prepare_report_step(

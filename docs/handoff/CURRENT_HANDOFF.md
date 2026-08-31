@@ -230,7 +230,7 @@ Status-date: 2026-05-27
 Project: agentic-project-kit
 Branch: codex/refresh-post-pr835-next-step-state
 Base branch: main
-Current version: 1.0.7
+Current version: 1.0.8
 
 ## Purpose
 

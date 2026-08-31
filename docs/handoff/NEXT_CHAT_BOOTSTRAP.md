@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `013027f551d62641e931944b10d37b1161dbaea0` (`013027f5`)
-- Handoff freshness marker: `013027f5`
-- Branch at generation: `docs/post-pr2253-handoff-refresh`
+- HEAD: `1296191bfcbac3c3fce1edff73808a50c8fd1020` (`1296191b`)
+- Handoff freshness marker: `1296191b`
+- Branch at generation: `codex/release-1.0.8-prepare`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -102,7 +102,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 ### RESULT: PASS ###
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 7f061e6ff4ea). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 7f061e6ff4ea. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 9f16193049b3). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 9f16193049b3. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -112,5 +112,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 70def8f6264c2d0dfbd12c9e78a7b59007716029b5e2737a2a803e498863ddfe
-- docs/reference/agentic-kit-commands.json: 81730dad5c5c3db1d8099cfa5e1fc247bbe8147e04164919dd43a6ed6c7aba41
+- docs/reference/AGENTIC_KIT_COMMANDS.md: f38cf8935fb881dcddd5e2ca18a400ec712185953f900b0fc372652ba6ba3126
+- docs/reference/agentic-kit-commands.json: 1d2079f01bd1134e72e3f0be7b31a6d0b6f7cc74c13e857c33e9989dac3b351c
