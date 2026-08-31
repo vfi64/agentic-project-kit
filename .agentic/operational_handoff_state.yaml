@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d08fc25ff16553d907545806fe60e2641499e44a
-  short: d08fc25f
-  subject: Use workspace paths for post-merge reports (#2244)
+  full: eb761ae3740fa138724e90c85122f32a7e96276c
+  short: eb761ae3
+  subject: Handle external successor post-merge refresh (#2246)
 last_substantive_work_state:
-  full: d08fc25ff16553d907545806fe60e2641499e44a
-  short: d08fc25f
-  subject: Use workspace paths for post-merge reports (#2244)
+  full: eb761ae3740fa138724e90c85122f32a7e96276c
+  short: eb761ae3
+  subject: Handle external successor post-merge refresh (#2246)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

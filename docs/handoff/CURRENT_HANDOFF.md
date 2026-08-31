@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `d08fc25ff16553d907545806fe60e2641499e44a` (`d08fc25f`), after `Use workspace paths for post-merge reports (#2244)`.
-Last substantive work state is `d08fc25ff16553d907545806fe60e2641499e44a` (`d08fc25f`), after `Use workspace paths for post-merge reports (#2244)`.
+Current verified main/admin HEAD is `eb761ae3740fa138724e90c85122f32a7e96276c` (`eb761ae3`), after `Handle external successor post-merge refresh (#2246)`.
+Last substantive work state is `eb761ae3740fa138724e90c85122f32a7e96276c` (`eb761ae3`), after `Handle external successor post-merge refresh (#2246)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
