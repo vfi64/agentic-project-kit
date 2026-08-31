@@ -2854,6 +2854,13 @@ plans:
         projections so registered report additions do not defer deterministic
         projection drift to the full pytest suite.
       evidence: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
+    - id: B1-KIT-017
+      status: implemented_retest_pending
+      goal: Allow post-merge administrative handoff refresh to re-accept
+        committed-clean CURRENT_HANDOFF target drift from the just-merged PR,
+        while keeping uncommitted target drift and normal DPA/release paths
+        fail-closed.
+      evidence: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
     - id: B1-TARGET-001
       status: recorded_target_friction
       goal: Decide in the target repository whether App2 tests that rewrite
@@ -3015,7 +3022,7 @@ plans:
       recorded_cycles: 7
       merge_boundary_cycles: 6
       latest_cycle_report: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
-      latest_cycle_result: "B1 closeout adjudicated the first five recorded Comm-SCI cycles as B1_EVALUABLE under the predeclared B0 threshold. Cycle 006 added released-package retest evidence from agentic-project-kit==1.0.7. Cycle 007 reduced Comm-SCI App2 legacy seams 55->44, local focused validation reported 185 passed, full target suite reported 1493 passed, App2 selftest and scripts/quality_gate.py --mode all passed, target PR #16 and successor refresh PR #17 merged, and post-merge-settle ended READY after one successor-package-refresh PR. The Cycle 006 `.agentic/rule_ack/current.json` gap and the Cycle 007 external successor post-merge refresh gap are fixed and retested; the tracked Config/Comm-SCI-Config.json test mutation remains target-owned friction."
+      latest_cycle_result: "B1 closeout adjudicated the first five recorded Comm-SCI cycles as B1_EVALUABLE under the predeclared B0 threshold. Cycle 006 added released-package retest evidence from agentic-project-kit==1.0.7. Cycle 007 reduced Comm-SCI App2 legacy seams 55->44, local focused validation reported 185 passed, full target suite reported 1493 passed, App2 selftest and scripts/quality_gate.py --mode all passed, target PR #16 and successor refresh PR #17 merged, and post-merge-settle ended READY after one successor-package-refresh PR. The Cycle 006 `.agentic/rule_ack/current.json` gap, the Cycle 007 external successor post-merge refresh gap, and the stale check-docs scope projection gap are fixed and retested; the committed-clean CURRENT_HANDOFF admin-refresh target-drift gap is fixed with retest pending; the tracked Config/Comm-SCI-Config.json test mutation remains target-owned friction."
       latest_findings:
       - feature_branch_ci_no_checks_resolved_by_target_repo_config
       - external_fresh_llm_context_carrier_path_mismatch_fixed
@@ -3028,6 +3035,7 @@ plans:
       - external_post_merge_complete_successor_package_refresh_gap_fixed_and_retested
       - dynamic_timestamped_handoff_reports_volatile_gap_fixed_and_retested
       - check_docs_scope_decision_projection_gap_fixed_and_retested
+      - current_handoff_committed_clean_target_drift_admin_refresh_gap_fixed_retest_pending
       - target_config_json_test_side_effect_recorded_as_target_owned_friction
       - command_for_task_tag_gap_for_health_commands
       - command_for_manifestless_warning

@@ -2060,6 +2060,7 @@ def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = N
                     execute=True,
                     initialize_acceptance=True,
                     require_dp2_authorized=(workspace.root / DEFAULT_READINESS_PATH).exists(),
+                    allow_committed_target_drift=True,
                 )
                 if not lifecycle.ok:
                     return subprocess.CompletedProcess(

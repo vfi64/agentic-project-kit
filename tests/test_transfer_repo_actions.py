@@ -3116,7 +3116,7 @@ def test_admin_refresh_replaces_existing_operational_refresh_marker(tmp_path: Pa
             "docs/reports/terminal/post-pr1338-successor-chat-handoff.md",
         ]:
             return subprocess.CompletedProcess(argv, 0, "successor prompt eed934fe\n", "")
-        if argv[-2:] == ["post-merge-refresh-status"]:
+        if argv[-2:] == ["handoff", "post-merge-refresh-status"]:
             return subprocess.CompletedProcess(argv, 0, "result=NOOP\n", "")
         return subprocess.CompletedProcess(argv, 0, "", "")
 
@@ -3135,6 +3135,100 @@ def test_admin_refresh_replaces_existing_operational_refresh_marker(tmp_path: Pa
     assert "eed934fe" in handoff
     assert "Current Operational Handoff State" in handoff
     assert "Operational documentation refresh state after PR #1338" not in handoff
+
+
+def test_admin_refresh_current_handoff_dpa_call_accepts_committed_target_drift(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    for rel in (
+        ".agentic/handoff_state.yaml",
+        ".agentic/operational_handoff_state.yaml",
+        "docs/STATUS.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    ):
+        (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+
+    (tmp_path / ".agentic/handoff_state.yaml").write_text(
+        "schema_version: 1\n"
+        "safe_state:\n"
+        "  commit: oldhead1\n"
+        "  commit_subject: Old subject (#1)\n"
+        "administrative_evidence_state:\n"
+        "  current_head: oldhead1\n"
+        "  current_head_subject: Old subject (#1)\n"
+        "  latest_successor_prompt: docs/reports/terminal/post-pr1-successor-chat-handoff.md\n",
+        encoding="utf-8",
+    )
+    (tmp_path / ".agentic/operational_handoff_state.yaml").write_text(
+        "schema_version: 1\n"
+        "current_head:\n"
+        "  full: oldhead100000000000000000000000000000000\n"
+        "  short: oldhead1\n"
+        "  subject: Old subject (#1)\n"
+        "last_substantive_work_state:\n"
+        "  full: oldhead100000000000000000000000000000000\n"
+        "  short: oldhead1\n"
+        "  subject: Old subject (#1)\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "docs/STATUS.md").write_text("Curated status\n", encoding="utf-8")
+    (tmp_path / "docs/handoff/CURRENT_HANDOFF.md").write_text("Merged handoff text\n", encoding="utf-8")
+    (tmp_path / "docs/handoff/START_NEW_CHAT_PROMPT.md").write_text("Prompt\n", encoding="utf-8")
+
+    full = "30028200f2111e886511c3ab24e9cb71f910d38a"
+    captured: dict[str, object] = {}
+
+    class FakeLifecycle:
+        ok = True
+
+    def fake_lifecycle(*args, **kwargs):
+        captured["args"] = args
+        captured["kwargs"] = kwargs
+        kwargs["target_path"].write_text("Refreshed current handoff\n", encoding="utf-8")
+        return FakeLifecycle()
+
+    def fake_run(argv: list[str], cwd=None) -> subprocess.CompletedProcess[str]:
+        if argv == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(argv, 0, full + "\n", "")
+        if argv == ["git", "rev-parse", "--short=8", "HEAD"]:
+            return subprocess.CompletedProcess(argv, 0, "30028200\n", "")
+        if argv == ["git", "log", "-1", "--format=%s"]:
+            return subprocess.CompletedProcess(argv, 0, "Close out Comm-SCI cycle 007 evidence (#2248)\n", "")
+        if argv[-2:] == ["prepare-successor-handoff", "--render-prompt"]:
+            for rel in (
+                "docs/reports/handoff-packages/latest/execution_contract.json",
+                "docs/reports/handoff-packages/latest/source_manifest.json",
+                "docs/reports/handoff-packages/latest/successor_context.yaml",
+                "docs/reports/handoff-packages/latest/successor_prompt.md",
+                "docs/reports/handoff-packages/latest/validation_report.json",
+            ):
+                (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+                (tmp_path / rel).write_text("{}", encoding="utf-8")
+            return subprocess.CompletedProcess(argv, 0, "", "")
+        if argv[-2:] == ["boot", "write"]:
+            (tmp_path / "docs/handoff/NEXT_CHAT_BOOTSTRAP.md").write_text("bootstrap\n", encoding="utf-8")
+            return subprocess.CompletedProcess(argv, 0, "", "")
+        if argv[-4:] == [
+            "handoff",
+            "prompt",
+            "--intended-output",
+            "docs/reports/terminal/post-pr2248-successor-chat-handoff.md",
+        ]:
+            return subprocess.CompletedProcess(argv, 0, "successor prompt\n", "")
+        if argv[-2:] == ["handoff", "post-merge-refresh-status"]:
+            return subprocess.CompletedProcess(argv, 0, "result=NOOP\n", "")
+        return subprocess.CompletedProcess(argv, 99, "", f"unexpected command: {argv}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "evaluate_current_handoff_lifecycle", fake_lifecycle)
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions._refresh_operational_handoff_docs(2248)
+
+    assert result.returncode == 0, result.stderr
+    assert captured["kwargs"]["allow_committed_target_drift"] is True
+    assert captured["kwargs"]["validation_ref"] == full
 
 
 

@@ -910,6 +910,12 @@ rules:
     - generated or command-updated Kit outputs
     - DP2 implementation blocked
     - full Probe PASS claim
+  - path: docs/TEST_GATES.md
+    terms:
+    - CURRENT_HANDOFF DPA Target Drift
+    - target-drift
+    - administrative post-merge handoff refresh route
+    - uncommitted handoff edits
 - id: p5c-physical-migration-plan-coverage
   description: P5c physical migration execution must remain visibly maintainer-gated and projection-first.
   documents:
