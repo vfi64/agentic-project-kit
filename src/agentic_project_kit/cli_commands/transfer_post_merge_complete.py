@@ -20,6 +20,10 @@ from agentic_project_kit.transfer_uplink import (
     publish_latest_transfer_report,
     safe_transfer_report_label,
 )
+from agentic_project_kit.volatile_paths import (
+    is_known_volatile_status_path,
+    status_path_from_short_line,
+)
 
 _SUMMARY_WIDTH = 84
 _LABEL_WIDTH = 22
@@ -96,21 +100,18 @@ def _report_label(after_pr: int) -> str:
 
 
 def _dirty_path_from_porcelain_line(line: str) -> str:
-    raw_path = line[3:] if len(line) > 3 else ""
-    if " -> " in raw_path:
-        raw_path = raw_path.split(" -> ", 1)[1]
-    return raw_path.strip().strip('"')
+    return status_path_from_short_line(line)
 
 
 def _is_report_artifact_path(path: str) -> bool:
-    return path.startswith(_REPORT_ARTIFACT_PREFIXES)
+    return path.startswith(_REPORT_ARTIFACT_PREFIXES) or is_known_volatile_status_path(path)
 
 
 def inspect_local_state(cwd: Path | None = None) -> LocalState:
     root = Path(".") if cwd is None else cwd
     try:
         completed = subprocess.run(
-            ["git", "status", "--porcelain"],
+            ["git", "status", "--porcelain", "--untracked-files=all"],
             cwd=root,
             check=False,
             capture_output=True,
