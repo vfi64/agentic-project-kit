@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `07501db6dc1de6103941e04a5562d80cff057354` (`07501db6`), after `Normalize sync-main volatile session state (#2240)`.
-Last substantive work state is `07501db6dc1de6103941e04a5562d80cff057354` (`07501db6`), after `Normalize sync-main volatile session state (#2240)`.
+Current verified main/admin HEAD is `c57b4430a310b88dcbbbd099e66a307c973daa36` (`c57b4430`), after `Accept volatile ack in post-merge preflight (#2242)`.
+Last substantive work state is `c57b4430a310b88dcbbbd099e66a307c973daa36` (`c57b4430`), after `Accept volatile ack in post-merge preflight (#2242)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
