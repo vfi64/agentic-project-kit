@@ -223,6 +223,22 @@ Committed CURRENT_HANDOFF target drift during admin refresh:
   changes. Uncommitted handoff drift remains blocked.
 - Scope of repair: this is not a general drift bypass. Release preparation and
   normal DPA refresh calls keep the default target-drift blocker.
+- Retest: Kit PR #2249 merged, its `post-merge-complete` route created and
+  merged admin refresh PR #2250, and the final post-merge check reported
+  `READY/NOOP` with latest successor prompt
+  `docs/reports/terminal/post-pr2249-successor-chat-handoff.md`.
+
+Stale STATUS post-merge continuation line:
+
+- Symptom: the admin-refresh STATUS projection updated
+  `Post-merge handoff status` after PR #2249, but preserved an old continuation
+  line that still said the successor package status came from PR #2246.
+- Kit repair in follow-up: the STATUS refresh now treats
+  `Post-merge handoff status` as a multiline current-state field ending at
+  `Next safe step`, so obsolete continuation lines are removed by the renderer.
+- Scope of repair: this only affects the current-state projection; it does not
+  infer semantic package freshness outside the existing post-merge handoff
+  status gate.
 
 ## Post-Merge Lifecycle
 
@@ -279,7 +295,7 @@ Final target verification:
 | Task source | Maintainer-requested continuation of Comm-SCI App2 legacy seam reduction |
 | Branch and PR | `codex/b1-cycle-007-provider-settings-seams`, PR #16; refresh branch `docs/post-pr16-successor-package-refresh`, PR #17 |
 | Seam result | `legacy_seams_remaining=55 -> 44` |
-| Kit-owned fixes during cycle | Rule-Ack volatile carrier, external successor-refresh post-merge classification, timestamped transfer handoff report volatility, stale documentation-registry projection guard, committed-clean CURRENT_HANDOFF drift handling for admin refresh |
+| Kit-owned fixes during cycle | Rule-Ack volatile carrier, external successor-refresh post-merge classification, timestamped transfer handoff report volatility, stale documentation-registry projection guard, committed-clean CURRENT_HANDOFF drift handling for admin refresh, stale STATUS continuation-line cleanup |
 | Target-owned friction | `Config/Comm-SCI-Config.json` test side effect; target `ruff` unavailable in `.venc313` |
 | Manual cleanup after final Kit repair | None for Rule-Ack or transfer report volatility; target config was restored because target tests rewrote it |
 | Refresh events by the B0 definition | One pure administrative successor-package-refresh PR after the product PR |

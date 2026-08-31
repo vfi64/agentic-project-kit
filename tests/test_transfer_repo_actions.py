@@ -2977,6 +2977,7 @@ def test_admin_refresh_updates_status_current_state_block() -> None:
             "Current governed slice: `codex/old-release-prep` prepares release 0.4.11",
             "and must not leak after a later release is verified.",
             "Post-merge handoff status: PASS/NOOP after PR #1 administrative refresh PR #2.",
+            "successor package status is `refresh_only_descendant` from PR #1.",
             "Next safe step: continue old work.",
             "handoff closeout, then regenerate and publish release 0.4.11 from fresh main.",
             "",
@@ -2999,6 +3000,7 @@ def test_admin_refresh_updates_status_current_state_block() -> None:
     assert "Latest administrative refresh-only descendant: PR #2" not in updated
     assert transfer_repo_actions._CURRENT_GOVERNED_SLICE_REFRESH_TEXT in updated
     assert "Post-merge handoff status: PASS/NOOP after PR #1613 administrative refresh." in updated
+    assert "successor package status is" not in updated
     assert "Next safe step: continue from fresh main with the next planned governed slice." in updated
     assert "codex/old-release-prep" not in updated
     assert "publish release 0.4.11" not in updated
@@ -3020,6 +3022,7 @@ def test_admin_refresh_status_current_state_preserves_latest_substantive_for_ref
             "Latest administrative refresh-only descendant: old.",
             "Current governed slice: old.",
             "Post-merge handoff status: old.",
+            "successor package status is `refresh_only_descendant` from PR #2246.",
             "Next safe step: old.",
             "",
             "## Historical State Snapshots",
@@ -3041,6 +3044,7 @@ def test_admin_refresh_status_current_state_preserves_latest_substantive_for_ref
     assert "Latest substantive work: PR #2221" not in updated
     assert transfer_repo_actions._admin_refresh_descendant_refresh_text(2221) in updated
     assert "Post-merge handoff status: PASS/NOOP after PR #2221 administrative refresh." in updated
+    assert "successor package status is" not in updated
 
 
 

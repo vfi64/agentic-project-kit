@@ -17,7 +17,6 @@ target PR #16, target successor refresh PR #17, final target head
 `ea21b3a3`, and post-merge-settle `READY`.
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
 Post-merge handoff status: PASS/NOOP after PR #2249 administrative refresh.
-successor package status is `refresh_only_descendant` from PR #2246.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
