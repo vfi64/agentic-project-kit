@@ -239,6 +239,9 @@ Stale STATUS post-merge continuation line:
 - Scope of repair: this only affects the current-state projection; it does not
   infer semantic package freshness outside the existing post-merge handoff
   status gate.
+- Retest: Kit PR #2251 merged, admin refresh PR #2252 merged, final
+  `post-merge-check` reported `READY/NOOP`, and `docs/STATUS.md` no longer
+  carried the stale PR #2246 successor-package continuation line.
 
 ## Post-Merge Lifecycle
 
