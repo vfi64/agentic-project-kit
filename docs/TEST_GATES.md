@@ -796,6 +796,11 @@ working tree and index. This permits a reviewed PR to change curated handoff
 text and then have the generated operational block re-accepted, while preserving
 the blocker for local/manual uncommitted handoff edits.
 
+The admin-refresh STATUS projection must also replace multiline current-state
+fields completely. In particular, stale continuation lines after
+`Post-merge handoff status` must not carry obsolete successor-package PR markers
+forward after a later refresh.
+
 ## Communication artifact garbage collector
 
 `agentic-kit artifact-gc` reports transient communication artifacts without deleting them. `agentic-kit artifact-gc --execute` removes only registered transient `.agentic/commands/current.yaml` and `.agentic/commands/current.sh` compatibility files plus untracked fixed-slot working copies `docs/reports/terminal/next-turn-latest.log` and `docs/reports/command_runs/next-turn-latest.json`. It must not delete tracked repo evidence or `docs/reports/terminal/LATEST_TERMINAL_LOG.txt`, because that file is part of the committed terminal-evidence pointer chain.

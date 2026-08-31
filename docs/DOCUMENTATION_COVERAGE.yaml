@@ -916,6 +916,8 @@ rules:
     - target-drift
     - administrative post-merge handoff refresh route
     - uncommitted handoff edits
+    - stale continuation lines
+    - obsolete successor-package PR markers
 - id: p5c-physical-migration-plan-coverage
   description: P5c physical migration execution must remain visibly maintainer-gated and projection-first.
   documents:

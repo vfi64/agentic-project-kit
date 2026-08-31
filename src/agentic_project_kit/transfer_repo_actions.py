@@ -1849,6 +1849,7 @@ def _refresh_status_current_state_block(
         return text
 
     block = match.group(0)
+    post_merge_status = f"Post-merge handoff status: PASS/NOOP after PR #{after_pr} administrative refresh."
     replacements = [
         (
             r"^Current verified main:.*$",
@@ -1857,10 +1858,6 @@ def _refresh_status_current_state_block(
         (
             r"^Latest administrative refresh-only descendant:.*$",
             _admin_refresh_descendant_refresh_text(after_pr),
-        ),
-        (
-            r"^Post-merge handoff status:.*$",
-            f"Post-merge handoff status: PASS/NOOP after PR #{after_pr} administrative refresh.",
         ),
     ]
     if not _is_refresh_only_commit_subject(subject):
@@ -1887,6 +1884,12 @@ def _refresh_status_current_state_block(
         label="Current governed slice",
         replacement=_CURRENT_GOVERNED_SLICE_REFRESH_TEXT,
         following_labels=("Post-merge handoff status", "Next safe step"),
+    )
+    block = _refresh_current_state_multiline_field(
+        block,
+        label="Post-merge handoff status",
+        replacement=post_merge_status,
+        following_labels=("Next safe step",),
     )
     block = _refresh_current_state_multiline_field(
         block,
