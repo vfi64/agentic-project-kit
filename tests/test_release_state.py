@@ -218,6 +218,25 @@ def test_release_lifecycle_status_include_remote_warns_for_inconclusive_remote_c
     assert "zenodo_version_doi_check_inconclusive" in status.warnings
 
 
+def test_release_lifecycle_status_include_remote_warns_when_http_getter_times_out(tmp_path: Path) -> None:
+    _seed_release_files(tmp_path)
+
+    def timed_out_http_getter(_url: str) -> CommandResult:
+        raise TimeoutError("read operation timed out")
+
+    status = build_release_lifecycle_status(
+        tmp_path,
+        command_runner=FakeRunner(tag_exists=True, remote_tag_exists=True, github_release_exists=True),
+        include_remote=True,
+        http_getter=timed_out_http_getter,
+    )
+
+    assert status.result_status == "PASS"
+    assert status.remote.status == "WARN"
+    assert "zenodo_concept_doi_check_inconclusive" in status.warnings
+    assert "zenodo_version_doi_check_inconclusive" in status.warnings
+
+
 def test_release_process_state_analysis_report_contract() -> None:
     path = Path("docs/reports/release/release_process_state_analysis.json")
     assert path.exists()

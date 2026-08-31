@@ -375,7 +375,7 @@ def _remote_release_status(
 
 
 def _doi_http_verified(doi: str, http_getter: ReleaseStateHttpGetter) -> bool | None:
-    result = http_getter(f"https://doi.org/{doi}")
+    result = _safe_http_get(f"https://doi.org/{doi}", http_getter)
     if result.returncode == 0:
         return True
     if result.returncode == 404:
@@ -385,10 +385,19 @@ def _doi_http_verified(doi: str, http_getter: ReleaseStateHttpGetter) -> bool | 
 
 def _zenodo_record_payload(doi: str, http_getter: ReleaseStateHttpGetter) -> str | None:
     record_id = doi.rsplit(".", 1)[-1]
-    result = http_getter(f"https://zenodo.org/api/records/{record_id}")
+    result = _safe_http_get(f"https://zenodo.org/api/records/{record_id}", http_getter)
     if result.returncode != 0:
         return None
     return result.stdout
+
+
+def _safe_http_get(url: str, http_getter: ReleaseStateHttpGetter) -> CommandResult:
+    try:
+        return http_getter(url)
+    except HTTPError as exc:
+        return CommandResult(exc.code, "", str(exc))
+    except (URLError, TimeoutError, OSError) as exc:
+        return CommandResult(2, "", str(exc))
 
 
 def _http_get(url: str) -> CommandResult:
@@ -398,7 +407,7 @@ def _http_get(url: str) -> CommandResult:
             return CommandResult(0, response.read().decode("utf-8", errors="replace"), "")
     except HTTPError as exc:
         return CommandResult(exc.code, "", str(exc))
-    except URLError as exc:
+    except (URLError, TimeoutError, OSError) as exc:
         return CommandResult(2, "", str(exc))
 
 
