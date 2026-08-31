@@ -19,6 +19,23 @@ Continue with the next governed DPA DP2 slice from fresh main after post-merge c
 
 <!-- agentic:generated operational-handoff-state end -->
 
+## Brownfield Cycle 007 Closeout State
+
+Cycle `B1-COMM-SCI-20260831-007` is complete. The curated evidence is
+`docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md`.
+Comm-SCI target PR #16 and successor refresh PR #17 are merged on
+`feature/ui-access-levels-v2`; final target head is
+`ea21b3a336fd1c54e83e5264bf61142c4d23245c`, post-merge-settle is `READY`, and
+the measured App2 legacy seam count is `legacy_seams_remaining=44`.
+
+PR #15 in `vfi64/Comm-SCI-Control-private` belongs to Cycle 006 as
+`Refresh successor package after PR14`; Cycle 007 uses PR #16 and PR #17.
+
+The immediate next safe product action after this evidence/planning closeout is
+Comm-SCI Cycle 008. B2 Decomplexification, Decision & Reduction, and new
+architecture work remain blocked until Brownfield completion and the recorded
+maintainer gates are satisfied.
+
 ## Post-PR1245 Administrative Handoff Refresh State
 
 Current main/admin HEAD: `e97af592` (`Refresh handoff state after PR1244 (#1245)`).

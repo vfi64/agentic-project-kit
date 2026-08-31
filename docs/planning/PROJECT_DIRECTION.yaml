@@ -2608,6 +2608,7 @@ plans:
     - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json
     - docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
     - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
+    - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
     - docs/reports/POST_V1_0_4_B1_KIT_CLOSEOUT_SETTLE_OBSERVATION_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_006_EXTERNAL_POST_MERGE_BASE_BRANCH_20260824.md
@@ -2708,6 +2709,29 @@ plans:
       - external_post_merge_settle_terminal_ready_after_single_successor_refresh
       - external_rule_ack_current_json_nonvolatile_dirty_gap
       - external_pr_create_requires_fresh_llm_context_carriers
+    - id: B1-COMM-SCI-20260831-007
+      state: merged_with_provider_settings_seam_reduction_and_successor_refresh
+      report: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
+      external_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/16
+      external_successor_refresh_pr: https://github.com/vfi64/Comm-SCI-Control-private/pull/17
+      external_merge_commit: f3ab6e26979d65d8449bf408d63cc29f33e005bf
+      final_external_head: ea21b3a336fd1c54e83e5264bf61142c4d23245c
+      merge_boundary_outcome: merged_to_feature_branch_by_current_kit_lifecycle_after_rule_ack_and_successor_refresh_repairs
+      refresh_denominator_counted: true
+      refresh_boundary_note: >-
+        seventh observed Comm-SCI cycle after B1_EVALUABLE;
+        product PR plus one successor-package-refresh PR, no separate external
+        handoff PR; PR #15 belongs to Cycle 006 as the successor refresh after
+        PR #14
+      seam_delta: "55 -> 44"
+      validation_summary: focused App2 handoff/runtime regression set 185 passed;
+        full target suite 1493 passed; App2 selftest PASS; scripts/quality_gate.py
+        --mode all PASS; target ruff unavailable in .venc313 and documented
+      kit_findings:
+      - external_rule_ack_current_json_volatile_gap_fixed_and_retested
+      - external_post_merge_complete_successor_package_refresh_gap_fixed_and_retested
+      - dynamic_timestamped_handoff_reports_volatile_gap_fixed_and_retested
+      - target_config_json_test_side_effect_recorded_as_target_owned_friction
     follow_up_items:
     - id: B1-KIT-002
       status: implemented_retest_pass
@@ -2805,15 +2829,155 @@ plans:
       - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
       - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
     - id: B1-KIT-013
-      status: planned
+      status: implemented_retest_pass
       goal: Treat external `.agentic/rule_ack/current.json` consistently as
         generated local acknowledgement state, or route external Rule-Ack output
         outside target worktrees before merge preflight.
-      evidence: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
+      evidence:
+      - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
+      - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
+    - id: B1-KIT-014
+      status: implemented_retest_pass
+      goal: Make post-merge-complete route external successor-package refresh
+        requirements through the bounded successor refresh lifecycle instead of
+        classifying refreshable post-merge states as an initial check failure.
+      evidence: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
+    - id: B1-KIT-015
+      status: implemented_retest_pass
+      goal: Classify timestamped transfer handoff reports as volatile generated
+        artifacts so external post-merge cleanup and preflight do not treat them
+        as product files.
+      evidence: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
+    - id: B1-KIT-016
+      status: implemented_retest_pass
+      goal: Make check-docs block stale documentation-registry scope decision
+        projections so registered report additions do not defer deterministic
+        projection drift to the full pytest suite.
+      evidence: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
+    - id: B1-TARGET-001
+      status: recorded_target_friction
+      goal: Decide in the target repository whether App2 tests that rewrite
+        Config/Comm-SCI-Config.json should move to in-memory or temporary config,
+        rather than hard-coding the product file as a Kit volatile path.
+      evidence: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
+    - id: B1-COMM-SCI-COMPLETION
+      status: planned
+      goal: Continue the Comm-SCI Brownfield seam-reduction field test after
+        Cycle 007 until legacy_seams_remaining reaches 0 or the maintainer
+        explicitly accepts a documented residual state.
+      depends_on:
+      - B1-COMM-SCI-20260831-007
+      next_cycle_baseline:
+        target_repository: vfi64/Comm-SCI-Control-private
+        target_branch: feature/ui-access-levels-v2
+        target_head: ea21b3a336fd1c54e83e5264bf61142c4d23245c
+        legacy_seams_remaining: 44
+        preferred_python: target .venc313 environment for App2 validation
+      required_practice:
+      - Use fresh remote/local verification before target mutation.
+      - Use a fresh worktree or branch if the target checkout is dirty or
+        historically loaded.
+      - Refresh mirror/inventory safety evidence before new target mutation when
+        current backup evidence is no longer sufficient.
+      - Run each target change through branch, PR, CI, pr-merge-safe,
+        post-merge-settle or post-merge-complete, and committed Kit evidence.
+      - Fix Kit workflow standard errors generically in the Kit with modular
+        core logic, tests, documentation, and evidence before continuing
+        Brownfield work.
+      - Preserve determinism, fail-closed behavior, safety gates, and evidence
+        quality; do not mark product files as volatile without a repository-owned
+        deterministic declaration and tests.
+      evidence:
+      - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
+    post_cycle_007_follow_up_program:
+      status: registered_deferred_after_cycle_007
+      source_request_date: '2026-08-30'
+      source_summary: Maintainer precision for continuing Brownfield first, then
+        measuring deterministic B2 decomplexification, and only later considering
+        reduction or architecture work after explicit gates.
+      immediate_next_step: Return to Comm-SCI Brownfield Cycle 008; do not start
+        B2, Decision & Reduction, or architecture work.
+      ordered_phases:
+      - id: cycle-007-closeout
+        status: done
+        completion_evidence: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
+      - id: brownfield-completion
+        status: planned
+        start_condition: Cycle 007 closeout evidence committed and post-merge
+          lifecycle clean.
+        completion_condition: legacy_seams_remaining equals 0 or maintainer
+          explicitly accepts a classified residual state with evidence.
+      - id: brownfield-closeout-consolidation
+        status: blocked
+        start_condition: Brownfield completion explicitly accepted by the maintainer.
+        purpose: Consolidate existing cycle evidence, seam trajectory, Kit defects,
+          self-hosting assumptions, external workspace findings, admin friction,
+          and target volatile/test-side-effect observations without creating a
+          new failure database.
+      - id: deterministic-b2-decomplexification
+        status: blocked
+        start_condition: Brownfield completion explicitly accepted by the maintainer.
+        phase_i: Read-only measurement and reconstruction of Kit self-hosting and
+          Comm-SCI external workflows, Actions API cost, admin chains, information
+          content, combined-refresh feasibility, and receipt-store delta.
+        phase_ii: Minimal plan and countercheck against code, tests, governance,
+          determinism, evidence, concurrency, read path, and historical replay.
+        phase_iii_start_condition: Explicit maintainer approval after Phase II.
+        hard_stop: Stop after Phase II; do not implement combined refresh, receipt
+          store, Decision & Reduction, or architecture work without explicit
+          maintainer approval.
+      - id: b2-implementation-if-approved
+        status: blocked
+        start_condition: B2 Phase II complete and explicit maintainer approval exists.
+        priority_order:
+        - Combined Refresh lifecycle slice first if still needed.
+        - Receipt data model only if still justified.
+        - Store/CAS/detection only after further maintainer gate.
+        - Server-side enforcement only after branch protection is actually
+          configured and externally verified.
+        - Reconciliation and read-path integration only if still justified.
+      - id: decision-reduction-checkpoint
+        status: blocked
+        start_condition: B2 Phase II completed, maintainer adjudication exists,
+          and any required approved B2 implementation or measurement closeout is
+          available.
+        purpose: Use existing evidence first, including the Decomplexification
+          Audit, then force KEEP/SIMPLIFY/MERGE/REMOVE/DEFER/REJECT decisions
+          before any new architecture program.
+        analysis_budget: maximum three bounded analysis slices unless the
+          maintainer explicitly grants a different small budget.
+      - id: approved-reduction-implementation
+        status: blocked
+        start_condition: Decision & Reduction checkpoint complete and explicit
+          maintainer approval exists for selected reductions.
+        principle: Prefer N -> N-1 or N -> N; persistent N -> N+1 mechanisms are
+          evidence-heavy exceptions.
+      - id: post-reduction-architecture-review-if-needed
+        status: blocked
+        default: not_needed
+        start_condition: Reduction and measurement are complete, a concrete
+          residual architecture problem remains evidenced, and the maintainer
+          explicitly accepts architecture work.
+      invariants:
+      - Repository state and current contracts are authoritative; this plan is not
+        a fact source for snapshots.
+      - Combined Refresh must be evaluated before Receipt Store.
+      - Receipt Store is not a dogma and must not be implemented before the
+        smaller lifecycle question is answered.
+      - No check, safety statement, determinism guarantee, or evidence requirement
+        may be weakened to reduce PR count or CI time.
+      - Terminalreport retention, GUI expansion, new safety taxonomy, new failure
+        system, and project-cognitive-state persistence are non-goals without a
+        later explicit maintainer task.
   - id: B2
-    status: adjudicated_boundary_retained
+    status: blocked_by_brownfield_completion
     goal: Decide refresh/realbetrieb outcome only after B1 reaches an evaluable
-      state.
+      state and only after the maintainer explicitly accepts Brownfield completion.
+      B2 starts with measurement and Combined Refresh feasibility, not with a
+      Receipt Store implementation or architecture rewrite.
+    start_condition: Brownfield completion explicitly accepted by maintainer.
+    phase_boundary: Phase I and Phase II are analysis, measurement, plan, and
+      countercheck only; after Phase II STOP until explicit maintainer approval.
     evidence:
     - docs/reports/POST_V1_0_5_B2_SUCCESSOR_PROJECTION_ADJUDICATION_20260826.md
   - id: B3
@@ -2848,10 +3012,10 @@ plans:
       required_setup_evidence:
       - mirror backup ref for vfi64/Comm-SCI-Control-private
       - non-git inventory before mutation
-      recorded_cycles: 6
-      merge_boundary_cycles: 5
-      latest_cycle_report: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
-      latest_cycle_result: "B1 closeout adjudicated the first five recorded Comm-SCI cycles as B1_EVALUABLE under the predeclared B0 threshold. Cycle 006 adds released-package retest evidence from agentic-project-kit==1.0.7: a real Comm-SCI product task reduced legacy seams 58->55, local full suite reported 1491 passed, remote product PR CI succeeded, pr-merge-safe returned terminal PASS in 8.034 seconds after successful remote merge, and post-merge-settle ended READY after one successor-package-refresh PR. The remaining external follow-up is the `.agentic/rule_ack/current.json` volatility/preflight gap."
+      recorded_cycles: 7
+      merge_boundary_cycles: 6
+      latest_cycle_report: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
+      latest_cycle_result: "B1 closeout adjudicated the first five recorded Comm-SCI cycles as B1_EVALUABLE under the predeclared B0 threshold. Cycle 006 added released-package retest evidence from agentic-project-kit==1.0.7. Cycle 007 reduced Comm-SCI App2 legacy seams 55->44, local focused validation reported 185 passed, full target suite reported 1493 passed, App2 selftest and scripts/quality_gate.py --mode all passed, target PR #16 and successor refresh PR #17 merged, and post-merge-settle ended READY after one successor-package-refresh PR. The Cycle 006 `.agentic/rule_ack/current.json` gap and the Cycle 007 external successor post-merge refresh gap are fixed and retested; the tracked Config/Comm-SCI-Config.json test mutation remains target-owned friction."
       latest_findings:
       - feature_branch_ci_no_checks_resolved_by_target_repo_config
       - external_fresh_llm_context_carrier_path_mismatch_fixed
@@ -2860,10 +3024,18 @@ plans:
       - external_post_merge_check_base_branch_retest_pass
       - external_pr_merge_safe_terminal_pass_retested_from_released_1_0_7
       - external_post_merge_settle_terminal_ready_after_single_successor_refresh
-      - external_rule_ack_current_json_nonvolatile_dirty_gap
+      - external_rule_ack_current_json_nonvolatile_dirty_gap_fixed_and_retested
+      - external_post_merge_complete_successor_package_refresh_gap_fixed_and_retested
+      - dynamic_timestamped_handoff_reports_volatile_gap_fixed_and_retested
+      - check_docs_scope_decision_projection_gap_fixed_and_retested
+      - target_config_json_test_side_effect_recorded_as_target_owned_friction
       - command_for_task_tag_gap_for_health_commands
       - command_for_manifestless_warning
       - mixed_handoff_evidence_requires_successor_refresh
+      next_brownfield_action: Continue Comm-SCI Cycle 008 from feature/ui-access-levels-v2
+        at ea21b3a336fd1c54e83e5264bf61142c4d23245c with legacy_seams_remaining=44;
+        do not start B2 until Brownfield completion is explicitly accepted by
+        the maintainer.
       completion_rule: B1_EVALUABLE means the configured realbetrieb threshold
         produced enough evidence for B2 adjudication; it does not claim general
         Brownfield portability or independent-user adoption.
@@ -2898,6 +3070,7 @@ plans:
   - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json
   - docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
   - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
+  - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
   - docs/reports/POST_V1_0_5_B1_WEBSITE_REDDIT_B2_B3_CLOSEOUT_20260826.md
   - docs/reports/REDDIT_B1_BROWNFIELD_POST_EN_20260826.md
   - docs/reports/REDDIT_B1_BROWNFIELD_POST_DE_20260826.md
@@ -2928,6 +3101,7 @@ plans:
   - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json
   - docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
   - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
+  - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
   - docs/reports/POST_V1_0_5_B1_WEBSITE_REDDIT_B2_B3_CLOSEOUT_20260826.md
   - docs/reports/REDDIT_B1_BROWNFIELD_POST_EN_20260826.md
   - docs/reports/REDDIT_B1_BROWNFIELD_POST_DE_20260826.md

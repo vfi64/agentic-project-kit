@@ -4,7 +4,10 @@ from typing import Any
 import re
 import yaml
 
-from agentic_project_kit.documentation_registry import check_documentation_registry
+from agentic_project_kit.documentation_registry import (
+    build_doc_registry_reconcile_report,
+    check_documentation_registry,
+)
 from agentic_project_kit.workspace import Workspace, load_workspace
 from agentic_project_kit.workspace_detection import (
     non_workspace_message,
@@ -226,7 +229,31 @@ def check_docs(project_root: Path) -> list[str]:
         errors.extend(check_state_gate_docs(project_root))
         errors.extend(check_documentation_coverage(project_root))
         errors.extend(check_documentation_registry(project_root))
+        errors.extend(check_documentation_registry_reconcile(project_root))
     errors.extend(check_changelog_quality(project_root))
+    return errors
+
+
+def check_documentation_registry_reconcile(project_root: Path) -> list[str]:
+    workspace = load_workspace(project_root, suppress_legacy_profile_warning=True)
+    registry_path = workspace.doc_registry_path()
+    if not registry_path.exists():
+        return []
+
+    try:
+        report = build_doc_registry_reconcile_report(project_root)
+    except (OSError, ValueError, yaml.YAMLError) as exc:
+        return [f"{workspace.path_text(registry_path)}: reconcile failed ({exc})"]
+
+    errors: list[str] = []
+    for finding in report.get("findings", []):
+        if not isinstance(finding, dict):
+            continue
+        severity = str(finding.get("severity") or "UNKNOWN")
+        kind = str(finding.get("kind") or "unknown")
+        path = str(finding.get("path") or workspace.path_text(registry_path))
+        message = str(finding.get("message") or "documentation registry reconcile finding")
+        errors.append(f"documentation registry reconcile {severity} {kind}: {path}: {message}")
     return errors
 
 

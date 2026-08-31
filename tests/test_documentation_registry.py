@@ -222,6 +222,30 @@ def test_check_docs_includes_documentation_registry_guard(tmp_path: Path) -> Non
     ) in errors
 
 
+def test_check_docs_includes_scope_decision_reconcile_guard(tmp_path: Path) -> None:
+    project = _write_minimal_project(tmp_path)
+    _write_scope_decision(
+        project,
+        "\n".join(
+            [
+                "| docs path | md files | registered | unregistered | proposed: required / exempt / undecided |",
+                "|---|---:|---:|---:|---|",
+                "| docs/ | 99 | 0 | 99 | required |",
+            ]
+        ),
+    )
+
+    errors = check_docs(project)
+
+    assert any(
+        error.startswith(
+            "documentation registry reconcile WARN scope_decision_table_stale: "
+            "docs/governance/DOC_REGISTRY_SCOPE_DECISION.md:"
+        )
+        for error in errors
+    )
+
+
 def test_documentation_registry_guard_reports_duplicate_paths(tmp_path: Path) -> None:
     project = _write_minimal_project(tmp_path)
     registry = _read_registry(project)
