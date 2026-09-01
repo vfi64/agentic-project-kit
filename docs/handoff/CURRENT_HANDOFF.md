@@ -36,6 +36,13 @@ Comm-SCI Cycle 008. B2 Decomplexification, Decision & Reduction, and new
 architecture work remain blocked until Brownfield completion and the recorded
 maintainer gates are satisfied.
 
+## Documentation Headroom Budget Slice
+
+The active Kit slice raises README and STATUS word-budget headroom and adds
+non-blocking Docs Audit warnings before Greenfield init repair work. Preserve
+current-state facts; move durable history into archive or evidence documents
+instead of deleting important status to satisfy a near-limit warning.
+
 ## Post-PR1245 Administrative Handoff Refresh State
 
 Current main/admin HEAD: `e97af592` (`Refresh handoff state after PR1244 (#1245)`).

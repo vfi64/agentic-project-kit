@@ -44,7 +44,7 @@
       "path": "AGENTS.md"
     },
     {
-      "bytes": 43939,
+      "bytes": 43957,
       "exists": true,
       "path": "README.md"
     },
@@ -54,7 +54,7 @@
       "path": "SECURITY.md"
     },
     {
-      "bytes": 60449,
+      "bytes": 60544,
       "exists": true,
       "path": "docs/DOCUMENTATION_COVERAGE.yaml",
       "yaml_valid": true
@@ -67,22 +67,22 @@
       "yaml_valid": true
     },
     {
-      "bytes": 33455,
+      "bytes": 33396,
       "exists": true,
       "path": "docs/STATUS.md"
     },
     {
-      "bytes": 61250,
+      "bytes": 61554,
       "exists": true,
       "path": "docs/TEST_GATES.md"
     },
     {
-      "bytes": 32599,
+      "bytes": 32941,
       "exists": true,
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
     {
-      "bytes": 6962,
+      "bytes": 6968,
       "exists": true,
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },

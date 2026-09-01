@@ -75,6 +75,44 @@ documents:
     assert "missing required section" in errors[0]
 
 
+def test_check_docs_keeps_word_budget_warnings_nonblocking(tmp_path: Path):
+    (tmp_path / "sentinel.yaml").write_text(
+        '''
+documents:
+  - path: README.md
+    required_sections:
+      - "# Demo"
+    max_words: 8
+    warn_words: 4
+''',
+        encoding="utf-8",
+    )
+    (tmp_path / "README.md").write_text("# Demo\n\nrequired-term one two three\n", encoding="utf-8")
+    _write_valid_state_gate_docs(tmp_path)
+
+    assert check_docs(tmp_path) == []
+
+
+def test_check_docs_rejects_invalid_word_budget(tmp_path: Path):
+    (tmp_path / "sentinel.yaml").write_text(
+        '''
+documents:
+  - path: README.md
+    required_sections:
+      - "# Demo"
+    max_words: 8
+    warn_words: 8
+''',
+        encoding="utf-8",
+    )
+    (tmp_path / "README.md").write_text("# Demo\n\nrequired-term one two three\n", encoding="utf-8")
+    _write_valid_state_gate_docs(tmp_path)
+
+    assert check_docs(tmp_path) == [
+        "README.md: invalid word budget (warn_words 8 must be below max_words 8)"
+    ]
+
+
 def test_check_docs_accepts_state_gate_docs_without_sentinel(tmp_path: Path):
     (tmp_path / "README.md").write_text("# Demo\nrequired-term\n", encoding="utf-8")
     _write_valid_state_gate_docs(tmp_path)

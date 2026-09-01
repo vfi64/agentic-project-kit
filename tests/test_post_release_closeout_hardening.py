@@ -204,7 +204,7 @@ def _write_closeout_files(root: Path, version: str) -> None:
     )
     (root / "README.md").write_text(
         f"Version `{version}` is the current release line prepared as a test release.\n"
-        f"Prepared release: `v{version}`; GitHub Release, tag publication, and Zenodo version DOI verification are pending.\n"
+        f"Prepared release: `v{version}`; GitHub Release, tag publication, PyPI publication, and Zenodo version DOI verification are pending.\n"
         "Current verified release: `v0.4.5` with Zenodo version DOI `10.5281/zenodo.20467371`.\n",
         encoding="utf-8",
     )

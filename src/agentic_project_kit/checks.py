@@ -4,6 +4,7 @@ from typing import Any
 import re
 import yaml
 
+from agentic_project_kit.document_budgets import count_words, evaluate_document_word_budget
 from agentic_project_kit.documentation_registry import (
     build_doc_registry_reconcile_report,
     check_documentation_registry,
@@ -183,10 +184,6 @@ def load_optional_yaml(path: Path) -> dict[str, Any]:
     return load_yaml(path)
 
 
-def count_words(text: str) -> int:
-    return len(text.split())
-
-
 def check_docs(project_root: Path) -> list[str]:
     if is_non_workspace_root(project_root):
         return [non_workspace_message(project_root)]
@@ -205,11 +202,13 @@ def check_docs(project_root: Path) -> list[str]:
             if section not in content:
                 errors.append(f"{doc['path']}: missing required section {section!r}")
 
-        max_words = doc.get("max_words")
-        if max_words is not None:
-            words = count_words(content)
-            if words > int(max_words):
-                errors.append(f"{doc['path']}: too long ({words}/{max_words} words)")
+        budget_result = evaluate_document_word_budget(
+            doc["path"],
+            content,
+            max_words=doc.get("max_words"),
+            warn_words=doc.get("warn_words"),
+        )
+        errors.extend(budget_result.errors)
 
         min_words = doc.get("min_words")
         if min_words is not None:

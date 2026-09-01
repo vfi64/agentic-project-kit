@@ -73,7 +73,10 @@ def _prepared_release_line(version: str) -> str:
 
 
 def _prepared_release_status_line(version: str) -> str:
-    return f"Prepared release: `v{version}`; GitHub Release, tag publication, and Zenodo version DOI verification are pending."
+    return (
+        f"Prepared release: `v{version}`; GitHub Release, tag publication, "
+        "PyPI publication, and Zenodo version DOI verification are pending."
+    )
 
 
 def _update_pyproject(text: str, version: str) -> str:
@@ -131,7 +134,7 @@ def _update_readme(text: str, version: str) -> str:
         updated = _replace_required(
             r"^Prepared release:\s*`v"
             + VERSION_RE
-            + r"`; GitHub Release, tag publication, and Zenodo version DOI verification are [^.]+\.$",
+            + r"`; GitHub Release, tag publication(?:, PyPI publication)?, and Zenodo version DOI verification are [^.]+\.$",
             _prepared_release_status_line(version),
             updated,
             label="README.md prepared release status",

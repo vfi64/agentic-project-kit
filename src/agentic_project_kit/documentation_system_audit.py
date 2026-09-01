@@ -9,6 +9,7 @@ from typing import Any
 import yaml
 
 from agentic_project_kit.checks import check_docs
+from agentic_project_kit.document_budgets import evaluate_document_word_budget
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_report
 from agentic_project_kit.doc_mesh import build_doc_mesh_report
 from agentic_project_kit.documentation_registry import build_documentation_registry_summary
@@ -16,8 +17,6 @@ from agentic_project_kit.workspace import KitConfig, Workspace, load_workspace
 
 
 _LEGACY_WORKSPACE = Workspace(root=Path("."), config=KitConfig())
-
-STATUS_HEADROOM_WORD_LIMIT = 4968
 
 
 def _workspace_path_text(ws: Workspace, path: Path) -> str:
@@ -70,6 +69,7 @@ class DocumentationAuditDimension:
     name: str
     ok: bool
     findings: tuple[str, ...]
+    warnings: tuple[str, ...] = ()
     review_only: bool = False
 
     def to_dict(self) -> dict[str, Any]:
@@ -78,6 +78,7 @@ class DocumentationAuditDimension:
             "ok": self.ok,
             "review_only": self.review_only,
             "findings": list(self.findings),
+            "warnings": list(self.warnings),
         }
 
 
@@ -120,11 +121,12 @@ def render_documentation_system_audit(report: DocumentationSystemAuditReport) ->
         status = "PASS" if dimension.ok else "FAIL"
         suffix = " (review-only boundary)" if dimension.review_only else ""
         lines.append(f"[{status}] {dimension.name}{suffix}")
-        if dimension.findings:
-            for finding in dimension.findings:
-                lines.append(f"- {finding}")
-        else:
+        if not dimension.findings and not dimension.warnings:
             lines.append("- no deterministic findings")
+        for finding in dimension.findings:
+            lines.append(f"- {finding}")
+        for warning in dimension.warnings:
+            lines.append(f"- warning: {warning}")
         lines.append("")
     lines.append(f"Overall: {'PASS' if report.ok else 'FAIL'}")
     return "\n".join(lines)
@@ -146,8 +148,8 @@ def _freshness_dimension(ws: Workspace, mesh_report: Any) -> DocumentationAuditD
         if finding.code in freshness_codes
     ]
     findings.extend(_status_handoff_sync_findings(ws))
-    findings.extend(_status_headroom_findings(ws))
-    return DocumentationAuditDimension("Aktualität", ok=not findings, findings=tuple(findings))
+    warnings = _document_budget_warnings(ws)
+    return DocumentationAuditDimension("Aktualität", ok=not findings, findings=tuple(findings), warnings=warnings)
 
 
 def _completeness_dimension(ws: Workspace, check_doc_errors: tuple[str, ...]) -> DocumentationAuditDimension:
@@ -196,13 +198,28 @@ def _redundancy_dimension(ws: Workspace) -> DocumentationAuditDimension:
 
 
 
-def _status_headroom_findings(ws: Workspace) -> tuple[str, ...]:
-    status_path = ws.status_path()
-    status = _read_optional(status_path)
-    words = len(status.split())
-    if words > STATUS_HEADROOM_WORD_LIMIT:
-        return (f"{_workspace_path_text(ws, status_path)} exceeds headroom limit: {words}/{STATUS_HEADROOM_WORD_LIMIT} words",)
-    return ()
+def _document_budget_warnings(ws: Workspace) -> tuple[str, ...]:
+    config = _load_yaml(ws.root_file("sentinel.yaml"))
+    warnings: list[str] = []
+    for document in config.get("documents", []) or []:
+        if not isinstance(document, dict):
+            continue
+        if document.get("warn_words") is None:
+            continue
+        relative_path = str(document.get("path") or "")
+        if not relative_path:
+            continue
+        path = ws.root / relative_path
+        if not path.exists():
+            continue
+        result = evaluate_document_word_budget(
+            relative_path,
+            path.read_text(encoding="utf-8"),
+            max_words=document.get("max_words"),
+            warn_words=document.get("warn_words"),
+        )
+        warnings.extend(result.warnings)
+    return tuple(warnings)
 
 
 def _status_handoff_sync_findings(ws: Workspace) -> tuple[str, ...]:

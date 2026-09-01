@@ -26,7 +26,7 @@ def _write(path: Path, text: str) -> None:
 def _seed_release_metadata(root: Path) -> None:
     _write(
         root / "README.md",
-        "Prepared release: `v0.4.9`; GitHub Release, tag publication, and Zenodo version DOI verification are pending.\n"
+        "Prepared release: `v0.4.9`; GitHub Release, tag publication, PyPI publication, and Zenodo version DOI verification are pending.\n"
         "Current verified release: `v0.4.8` with Zenodo version DOI `10.5281/zenodo.20727067`.\n",
     )
     _write(

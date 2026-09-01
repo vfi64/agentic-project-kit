@@ -7,7 +7,8 @@ documents:
       - "## Project health check"
       - "## Documentation coverage and drift checks"
       - "## Current status"
-    max_words: 5200
+    max_words: 6000
+    warn_words: 5200
   - path: AGENTS.md
     required_sections:
       - "## Required Reading Order"
@@ -21,6 +22,8 @@ documents:
       - "## Current Goal"
       - "## Live Status Commands"
       - "## Next Safe Step"
+    max_words: 6200
+    warn_words: 5000
   - path: docs/TEST_GATES.md
     required_sections:
       - "## Gate Matrix"

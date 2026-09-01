@@ -708,9 +708,11 @@ This file intentionally keeps compact anchors for deterministic tests and human 
 
 ## Documentation System Audit Gate
 
-`agentic-kit docs-audit` is the umbrella documentation-system audit. It reports Aktualität, Vollständigkeit, Korrektheit, Redundanzfreiheit, Stringenz der Dokumentenordnung, and Konsistenz.
+`agentic-kit docs-audit` is the umbrella documentation-system audit. It reports Aktualität, Vollständigkeit, Korrektheit, Redundanzfreiheit, Stringenz der Dokumentenordnung, Dokumentationsregistry, and Konsistenz.
 
 The gate aggregates deterministic findings from `agentic-kit check-docs`, `agentic-kit doc-mesh-audit`, and `agentic-kit doc-lifecycle-audit`. Full semantic redundancy freedom remains a review-only boundary.
+
+Document word budgets use the `sentinel.yaml` fields `max_words` and optional `warn_words`. `max_words` is the hard fail-closed limit; `warn_words` is a non-blocking Docs Audit warning that preserves headroom without forcing agents to delete important current-state information.
 
 Run this gate after changes to documentation governance, communication rules, handoff rules, summary rules, source ordering, or document lifecycle rules.
 
