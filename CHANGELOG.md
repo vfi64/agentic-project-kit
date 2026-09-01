@@ -1,6 +1,5 @@
 ## v1.0.8 - 2026-08-31
 
-- Zenodo DOI verification pending for v1.0.8.
 - Record release 1.0.7 DOI closeout
 - Preserve substantive anchor across refresh-only handoff
 - Record B1 cycle 006 merge wrapper retest
@@ -21,6 +20,9 @@
 - Prepare release 1.0.8
 - Handle release status HTTP timeouts
 
+Post-release verification complete: GitHub Release exists, PyPI publishes `agentic-project-kit==1.0.8`, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.8 DOI `10.5281/zenodo.22213857`.
+
+Zenodo v1.0.8 DOI: 10.5281/zenodo.22213857
 ## v1.0.7 - 2026-08-29
 
 - Record v1.0.6 DOI closeout

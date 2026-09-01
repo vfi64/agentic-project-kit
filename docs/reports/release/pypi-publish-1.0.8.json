@@ -1,0 +1,24 @@
+{
+  "evidence_kind": "pypi_publication_validation",
+  "package": "agentic-project-kit",
+  "publish_target": "pypi",
+  "published_version": "1.0.8",
+  "schema_version": 1,
+  "validated_at_utc": "2026-09-01T06:21:54Z",
+  "validation": {
+    "agentic_kit_version_output": "agentic-kit 1.0.8",
+    "command_for_release_status": "PASS",
+    "fresh_install_source": "https://pypi.org/simple",
+    "fresh_install_version": "1.0.8",
+    "pypi_latest_version": "1.0.8"
+  },
+  "workflow": {
+    "build_release_job": "PASS",
+    "head_sha": "293fb89b12a623b70f2d568445fabc4823518734",
+    "publish_pypi_job": "PASS",
+    "publish_testpypi_job": "SKIPPED",
+    "ref": "v1.0.8",
+    "run_id": 33476952300,
+    "url": "https://github.com/vfi64/agentic-project-kit/actions/runs/33476952300"
+  }
+}
