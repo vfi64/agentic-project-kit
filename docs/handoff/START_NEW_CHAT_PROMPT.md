@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: f38cf8935fb881dcddd5e2ca18a400ec712185953f900b0fc372652ba6ba3126
 - docs/reference/agentic-kit-commands.json: 1d2079f01bd1134e72e3f0be7b31a6d0b6f7cc74c13e857c33e9989dac3b351c
-## Operational documentation refresh state after PR #2261
+## Operational documentation refresh state after PR #2263
 
-Current administrative handoff refresh state is `792bd72b` (`Record release 1.0.8 DOI and PyPI closeout (#2261)`). Continue next only after this post-PR2261 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `253ea389` (`Add document headroom warning budgets (#2263)`). Continue next only after this post-PR2263 refresh is committed and merged; the next substantive slice must be created from fresh main.

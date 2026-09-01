@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `792bd72b5d5b8b2df2bc2d4343cf28d9329f9bbf` (`792bd72b`), after `Record release 1.0.8 DOI and PyPI closeout (#2261)`.
-Last substantive work state is `792bd72b5d5b8b2df2bc2d4343cf28d9329f9bbf` (`792bd72b`), after `Record release 1.0.8 DOI and PyPI closeout (#2261)`.
+Current verified main/admin HEAD is `253ea3893fae0a1fca161e72d4be6d47ede36e40` (`253ea389`), after `Add document headroom warning budgets (#2263)`.
+Last substantive work state is `253ea3893fae0a1fca161e72d4be6d47ede36e40` (`253ea389`), after `Add document headroom warning budgets (#2263)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
