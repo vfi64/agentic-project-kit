@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d9ea0592237dfd5144db787d023dc652825d5359
-  short: d9ea0592
-  subject: Refresh release 1.0.8 notes (#2259)
+  full: 792bd72b5d5b8b2df2bc2d4343cf28d9329f9bbf
+  short: 792bd72b
+  subject: Record release 1.0.8 DOI and PyPI closeout (#2261)
 last_substantive_work_state:
-  full: d9ea0592237dfd5144db787d023dc652825d5359
-  short: d9ea0592
-  subject: Refresh release 1.0.8 notes (#2259)
+  full: 792bd72b5d5b8b2df2bc2d4343cf28d9329f9bbf
+  short: 792bd72b
+  subject: Record release 1.0.8 DOI and PyPI closeout (#2261)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

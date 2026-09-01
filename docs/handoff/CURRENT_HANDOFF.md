@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `d9ea0592237dfd5144db787d023dc652825d5359` (`d9ea0592`), after `Refresh release 1.0.8 notes (#2259)`.
-Last substantive work state is `d9ea0592237dfd5144db787d023dc652825d5359` (`d9ea0592`), after `Refresh release 1.0.8 notes (#2259)`.
+Current verified main/admin HEAD is `792bd72b5d5b8b2df2bc2d4343cf28d9329f9bbf` (`792bd72b`), after `Record release 1.0.8 DOI and PyPI closeout (#2261)`.
+Last substantive work state is `792bd72b5d5b8b2df2bc2d4343cf28d9329f9bbf` (`792bd72b`), after `Record release 1.0.8 DOI and PyPI closeout (#2261)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
