@@ -46,12 +46,17 @@ rules:
     - Korrektheit
     - Redundanzfreiheit
     - Stringenz der Dokumentenordnung
+    - Dokumentationsregistry
     - Konsistenz
+    - warn_words
+    - max_words
   - path: docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md
     terms:
     - Documentation System Audit Contract
     - agentic-kit docs-audit
     - review-only
+    - warn_words
+    - max_words
 - id: planner-kit-executor-coverage
   description: Governed Planner-Kit-Executor commands and Hermes adapter boundary must
     remain visible without creating a parallel workflow authority.

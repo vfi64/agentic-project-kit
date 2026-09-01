@@ -232,9 +232,40 @@ def test_documentation_system_audit_pr_closeout_regex_matches_real_pr_numbers() 
 
 def test_documentation_system_audit_enforces_status_headroom() -> None:
     source = Path("src/agentic_project_kit/documentation_system_audit.py").read_text(encoding="utf-8")
-    assert "STATUS_HEADROOM_WORD_LIMIT = 4968" in source
+    assert "STATUS_HEADROOM_WORD_LIMIT" not in source
     status_words = len(Path("docs/STATUS.md").read_text(encoding="utf-8").split())
-    assert status_words <= 4968
+    assert status_words <= 6200
     report = build_documentation_system_audit(ROOT)
     rendered = render_documentation_system_audit(report)
     assert "docs/STATUS.md exceeds headroom limit" not in rendered
+
+
+def test_documentation_system_audit_reports_word_budget_warnings_without_failing(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    _stub_documentation_audit_dependencies(monkeypatch)
+    _write_documentation_audit_fixture(tmp_path)
+    (tmp_path / "sentinel.yaml").write_text(
+        '''
+documents:
+  - path: README.md
+    required_sections:
+      - "# README.md"
+    max_words: 10
+    warn_words: 3
+''',
+        encoding="utf-8",
+    )
+    (tmp_path / "README.md").write_text("# README.md\none two three\n", encoding="utf-8")
+
+    report = build_documentation_system_audit(tmp_path)
+    rendered = render_documentation_system_audit(report)
+
+    assert report.ok
+    assert "warning: README.md: word budget headroom low" in rendered
+    freshness = next(dimension for dimension in report.dimensions if dimension.name == "Aktualität")
+    assert freshness.findings == ()
+    assert freshness.warnings == (
+        "README.md: word budget headroom low (5/10 words; warn_words=3; remaining=5)",
+    )

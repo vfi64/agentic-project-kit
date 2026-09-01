@@ -137,7 +137,7 @@ def test_prepare_release_state_updates_expected_files(tmp_path: Path) -> None:
     assert readme.count("Current version:") == 1
     assert f"Current version: {TARGET_VERSION}" in readme
     assert (
-        f"Prepared release: `v{TARGET_VERSION}`; GitHub Release, tag publication, "
+        f"Prepared release: `v{TARGET_VERSION}`; GitHub Release, tag publication, PyPI publication, "
         "and Zenodo version DOI verification are pending."
     ) in readme
     assert f"Prepared release: `v{PREVIOUS_VERSION}`;" not in readme

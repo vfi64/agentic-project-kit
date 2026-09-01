@@ -464,8 +464,11 @@ def _metadata_updaters(version: str, doi: str, concept_doi: str) -> dict[str, Ca
 
     def update_readme(text: str) -> str:
         text = re.sub(
-            r"^Prepared release: `v[^`]+`; GitHub Release, tag publication, and Zenodo version DOI verification are [^.]+\.",
-            f"Prepared release: `{tag}`; GitHub Release, tag publication, and Zenodo version DOI verification are complete.",
+            r"^Prepared release: `v[^`]+`; GitHub Release, tag publication(?:, PyPI publication)?, and Zenodo version DOI verification are [^.]+\.",
+            (
+                f"Prepared release: `{tag}`; GitHub Release, tag publication, "
+                "PyPI publication, and Zenodo version DOI verification are complete."
+            ),
             text,
             count=1,
             flags=re.MULTILINE,

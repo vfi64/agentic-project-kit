@@ -2,16 +2,17 @@
 
 Status: active governance contract
 
-`agentic-kit docs-audit` is the umbrella documentation-system audit. It reports six dimensions in order:
+`agentic-kit docs-audit` is the umbrella documentation-system audit. It reports these dimensions in order:
 
 1. Aktualität
 2. Vollständigkeit
 3. Korrektheit
 4. Redundanzfreiheit
 5. Stringenz der Dokumentenordnung
-6. Konsistenz
+6. Dokumentationsregistry
+7. Konsistenz
 
-The command aggregates deterministic findings from existing documentation checks and names review-only boundaries where full semantic proof is not possible.
+The command aggregates deterministic findings from existing documentation checks and names review-only boundaries where full semantic proof is not possible. Document word budgets are configured in `sentinel.yaml`: `max_words` remains the hard fail-closed limit, while optional `warn_words` creates a non-blocking headroom warning so current information can be preserved while maintainers move durable history into archive or evidence documents.
 
 Required command:
 
