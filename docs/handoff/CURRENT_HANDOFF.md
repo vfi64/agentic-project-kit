@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `253ea3893fae0a1fca161e72d4be6d47ede36e40` (`253ea389`), after `Add document headroom warning budgets (#2263)`.
-Last substantive work state is `253ea3893fae0a1fca161e72d4be6d47ede36e40` (`253ea389`), after `Add document headroom warning budgets (#2263)`.
+Current verified main/admin HEAD is `c46606a940a2d5790ceffe566cf63621f2581f0c` (`c46606a9`), after `Fix external workspace first-cycle gates (#2265)`.
+Last substantive work state is `c46606a940a2d5790ceffe566cf63621f2581f0c` (`c46606a9`), after `Fix external workspace first-cycle gates (#2265)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
