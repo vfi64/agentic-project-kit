@@ -213,6 +213,23 @@ def test_doctor_report_passes_for_manifest_operating_layer_workspace(tmp_path: P
     assert "[SKIP] todo gates" in render_doctor_report(report)
 
 
+def test_doctor_report_skips_target_doc_lifecycle_for_external_workspace(tmp_path: Path):
+    _write_readme(tmp_path)
+    _write_manifest_workspace(tmp_path)
+    (tmp_path / "docs/planning").mkdir(parents=True)
+    (tmp_path / "docs/planning/MASTER_PLAN.md").write_text(
+        "# Master Plan\n\nStatus: target-owned non-kit wording\n",
+        encoding="utf-8",
+    )
+
+    report = build_doctor_report(tmp_path)
+
+    assert report.ok
+    lifecycle = _check_by_name(report, "document lifecycle audit")
+    assert lifecycle.status == DoctorStatus.SKIP
+    assert "target documentation lifecycle remains project-owned" in lifecycle.detail
+
+
 def test_doctor_report_passes_current_manifest_schema(tmp_path: Path):
     _write_readme(tmp_path)
     _write_manifest_workspace(tmp_path)

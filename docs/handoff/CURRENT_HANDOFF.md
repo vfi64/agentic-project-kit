@@ -43,6 +43,14 @@ non-blocking Docs Audit warnings before Greenfield init repair work. Preserve
 current-state facts; move durable history into archive or evidence documents
 instead of deleting important status to satisfy a near-limit warning.
 
+## Greenfield External Workspace Init Repair Slice
+
+The active Kit slice repairs external-workspace first-cycle defects found during
+the private `vfi64/agp-Cockpit` Greenfield test: external Governance, Doctor,
+Slice-Gate, Standard-Gates, empty Transfer-Status, Rule-Ack runtime ownership,
+and `work start` post-merge applicability must all respect the manifest-based
+external workspace boundary before Comm-SCI Cycle 008 continues.
+
 ## Post-PR1245 Administrative Handoff Refresh State
 
 Current main/admin HEAD: `e97af592` (`Refresh handoff state after PR1244 (#1245)`).

@@ -136,6 +136,32 @@ def test_transfer_inspect_cli_json(tmp_path, monkeypatch):
     assert '"transfer_id": "cli-transfer"' in result.stdout
 
 
+def test_transfer_status_empty_inbox_reports_state_without_traceback(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    write_minimal_sources(tmp_path)
+    _commit_all(tmp_path, "Add minimal sources")
+    ack = CliRunner().invoke(app, ["rules", "acknowledge", "--root", str(tmp_path)])
+    assert ack.exit_code == 0, ack.output
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(app, ["transfer", "status", "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["kind"] == "transfer_status_result"
+    assert payload["result_status"] == "PASS"
+    assert payload["transfer_files"]["state"] == "NO_COMMAND"
+
+
+def test_transfer_status_missing_explicit_path_still_fails(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(app, ["transfer", "status", "--path", "missing/current.yaml", "--json"])
+
+    assert result.exit_code == 1
+    assert "Transfer order not found" in result.stdout
+
+
 def test_transfer_apply_cli_blocks_without_rule_acknowledgement(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     _write_order(tmp_path)

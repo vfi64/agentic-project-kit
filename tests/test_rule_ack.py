@@ -78,7 +78,7 @@ def test_rule_acknowledgement_rejects_stale_snapshot_id(tmp_path: Path) -> None:
     assert "snapshot_id_mismatch" in decision.blocking_reasons
 
 
-def test_rule_acknowledgement_rejects_repo_head_mismatch(tmp_path: Path) -> None:
+def test_rule_acknowledgement_warns_on_repo_head_mismatch_without_blocking(tmp_path: Path) -> None:
     write_minimal_sources(tmp_path)
     snapshot = build_derived_rule_snapshot(tmp_path)
 
@@ -89,8 +89,10 @@ def test_rule_acknowledgement_rejects_repo_head_mismatch(tmp_path: Path) -> None
         required_next_allowed_action="run_next_command",
     )
 
-    assert decision.is_confirmed is False
-    assert "repo_head_mismatch" in decision.blocking_reasons
+    assert decision.is_confirmed is True
+    assert decision.fail_closed is False
+    assert decision.blocking_reasons == ()
+    assert decision.warnings == ("repo_head_mismatch",)
 
 
 def test_rule_acknowledgement_rejects_next_action_mismatch(tmp_path: Path) -> None:

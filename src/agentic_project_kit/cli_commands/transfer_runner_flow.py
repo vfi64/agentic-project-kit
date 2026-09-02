@@ -45,6 +45,26 @@ def status(
     path: Path = typer.Option(DEFAULT_INBOX, "--path", help="Transfer order path."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
+    if not path.exists() and path == DEFAULT_INBOX:
+        snapshot = build_transfer_state(Path("."))
+        payload = snapshot.as_json_data()
+        payload.update(
+            {
+                "kind": "transfer_status_result",
+                "path": str(path),
+                "result_status": "PASS",
+                "returncode": 0,
+            }
+        )
+        if json_output:
+            typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+        else:
+            typer.echo("TRANSFER_STATUS")
+            typer.echo(f"path={path}")
+            typer.echo(f"transfer_file_state={snapshot.transfer_files.get('state')}")
+            typer.echo(f"primary_state={snapshot.primary_state}")
+            typer.echo(f"next_action={snapshot.next_action}")
+        return
     order = _load_or_exit(path)
     result = inspect_transfer_order(order, Path("."))
     _emit_result(result, json_output)

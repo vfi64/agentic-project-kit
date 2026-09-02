@@ -11,10 +11,13 @@ from agentic_project_kit.slice_gate import (
     DirtyState,
     SliceGateReport,
     SliceGateStepResult,
+    external_planning_doc_steps,
     planning_doc_steps,
+    read_dirty_state,
     render_slice_gate_report,
     run_slice_gate,
 )
+from agentic_project_kit.workspace_init import build_workspace_init_plan, execute_workspace_init
 
 
 def test_planning_doc_slice_gate_renders_successful_machine_readable_result() -> None:
@@ -53,6 +56,59 @@ def test_planning_doc_slice_gate_contains_expected_gate_names() -> None:
         "docs-audit",
         "doctor",
     ]
+
+
+def test_external_planning_doc_slice_gate_uses_workspace_gate_names(tmp_path: Path) -> None:
+    plan = build_workspace_init_plan(tmp_path, execute=True)
+    execute_workspace_init(plan)
+
+    assert [step.name for step in planning_doc_steps(tmp_path)] == [
+        "check",
+        "governance-check",
+        "doctor",
+    ]
+    assert [step.name for step in external_planning_doc_steps()] == [
+        "check",
+        "governance-check",
+        "doctor",
+    ]
+
+
+def test_external_planning_doc_slice_gate_runs_without_self_hosting_tests(tmp_path: Path) -> None:
+    plan = build_workspace_init_plan(tmp_path, execute=True)
+    execute_workspace_init(plan)
+    seen: list[tuple[str, ...]] = []
+
+    def fake_runner(
+        command: tuple[str, ...],
+        root: Path,
+        env: dict[str, str],
+    ) -> subprocess.CompletedProcess[str]:
+        seen.append(command)
+        return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+    report = run_slice_gate(
+        "planning-doc",
+        project_root=tmp_path,
+        runner=fake_runner,
+        dirty_state_reader=lambda root: DirtyState("CLEAN"),
+    )
+
+    assert report.exit_code == 0
+    assert [step.name for step in report.step_results] == ["check", "governance-check", "doctor"]
+    assert not any("tests/test_slice_gate.py" in command for step in seen for command in step)
+
+
+def test_slice_gate_dirty_state_ignores_rule_ack_runtime_state(tmp_path: Path) -> None:
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, stdout=subprocess.PIPE)
+    rule_ack = tmp_path / ".agentic/rule_ack/current.json"
+    rule_ack.parent.mkdir(parents=True)
+    rule_ack.write_text("{}\n", encoding="utf-8")
+
+    dirty = read_dirty_state(tmp_path)
+
+    assert dirty.state == "CLEAN"
+    assert dirty.files == ()
 
 
 def test_planning_doc_slice_gate_blocks_when_governance_gate_fails() -> None:

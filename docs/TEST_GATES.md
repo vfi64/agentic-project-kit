@@ -600,7 +600,7 @@ Run these commands:
 
 `agentic-kit slice gate --kind planning-doc` is a temporary repo-local gate for planning-documentation slices. It must emit `SLICE_GATE_RESULT`, individual `gate=... status=PASS|FAIL` step lines, `slice_result=PASS|BLOCKED`, `next_safe_action=...`, and `chat_reply=d|f`.
 
-For `planning-doc`, the gate must run targeted tests plus `agentic-kit handoff check`, `agentic-kit check-docs`, `agentic-kit docs-audit`, and `agentic-kit doctor`. Helper-local PASS is not a slice PASS; slice PASS requires the repository governance gates to pass. Dirty state must be visible and must keep `merge_pr_ready=NO` until the changed files have been reviewed and committed intentionally.
+For `planning-doc` in the Kit development checkout, the gate must run targeted tests plus `agentic-kit handoff check`, `agentic-kit check-docs`, `agentic-kit docs-audit`, and `agentic-kit doctor`. In external workspace health mode, `agentic-kit slice gate --kind planning-doc` must instead run the external operating-layer gate set (`agentic-kit check --json`, `agentic-kit governance check`, and `agentic-kit doctor`) and must not require Kit self-hosting tests or Kit handoff documents. Helper-local PASS is not a slice PASS; slice PASS requires the repository governance gates to pass. Dirty state must be visible, known volatile Rule-Ack runtime state must not make the slice dirty, and nonvolatile dirty state must keep `merge_pr_ready=NO` until the changed files have been reviewed and committed intentionally.
 
 ## Project Direction Gate
 
@@ -608,7 +608,7 @@ Run `agentic-kit direction validate` when changing `docs/planning/PROJECT_DIRECT
 
 ## Documentation Lifecycle Gate
 
-`agentic-kit standard-gates-audit-suite` runs `agentic-kit doc-lifecycle-audit --json` as a visible warning-style step. Existing lifecycle hygiene findings must remain visible through the check detail, but a zero-exit lifecycle report must not fail the suite merely because report-only findings exist.
+`agentic-kit standard-gates-audit-suite` runs `agentic-kit doc-lifecycle-audit --json` as a visible warning-style step in the Kit development checkout. In external manifest workspaces, the same command must use the external operating-layer gate set (`agentic-kit check --json`, `agentic-kit governance check`, `agentic-kit doctor`, and `agentic-kit transfer state`) instead of Kit self-hosting release, registry, direction, or docs-audit gates. Existing lifecycle hygiene findings must remain visible through the check detail, but a zero-exit lifecycle report must not fail the suite merely because report-only findings exist.
 
 `agentic-kit doc-lifecycle-audit --strict` fails on deterministic lifecycle blockers: `HEADER_REGISTRY_MISMATCH`, `SUPERSEDED_TARGET_MISSING`, `REVIEW_DUE_RELEASE`, `REVIEW_DUE_DIRECTION`, and `SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE`. Time-based lifecycle findings, including `STALE_BY_BUDGET` and `REVIEW_DUE_DATE`, must stay non-blocking in strict mode.
 

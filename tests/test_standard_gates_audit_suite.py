@@ -6,12 +6,14 @@ from collections.abc import Sequence
 from agentic_project_kit import __version__ as PACKAGE_VERSION
 import agentic_project_kit.cli_executable as cli_executable
 from agentic_project_kit.standard_gates_audit_suite import (
+    EXTERNAL_STANDARD_GATE_COMMANDS,
     REQUIRED_STANDARD_GATE_COMMANDS,
     _default_agentic_kit,
     evaluate_standard_gates_audit_suite,
     render_standard_gates_audit_suite,
 )
 from agentic_project_kit.cli_executable import default_python
+from agentic_project_kit.workspace_init import build_workspace_init_plan, execute_workspace_init
 
 
 REQUIRED_NAMES = {
@@ -42,6 +44,23 @@ def test_standard_gates_audit_suite_contains_required_gates() -> None:
     command_names = {command[0] for command in REQUIRED_STANDARD_GATE_COMMANDS}
 
     assert REQUIRED_NAMES <= command_names
+
+
+def test_external_standard_gates_use_manifest_workspace_gate_set(tmp_path: Path) -> None:
+    plan = build_workspace_init_plan(tmp_path, execute=True)
+    execute_workspace_init(plan)
+    seen: list[tuple[str, ...]] = []
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        seen.append(tuple(args))
+        return 0, "PASS\n"
+
+    result = evaluate_standard_gates_audit_suite(tmp_path, runner=runner)
+
+    assert result.ok is True
+    assert [tuple(args[1:]) for args in seen] == list(EXTERNAL_STANDARD_GATE_COMMANDS)
+    assert not any("docs-audit" in args for args in seen)
+    assert not any("release-publish" in args for args in seen)
 
 
 def test_suite_contains_strict_scope_step() -> None:

@@ -342,6 +342,13 @@ pull_request_template_required = true
 
 The exact format may evolve, but the separation between universal governance and profile-specific checks is mandatory.
 
+Manifest-based external workspaces are governed operating layers, not Kit
+self-hosting checkouts. Their `doctor`, governance, slice-gate, and standard
+gate behavior must validate the generated `.agentic/` operating layer and must
+not require the Kit repository's own documentation constitution, release
+governance, or target-project documentation lifecycle unless the target
+repository explicitly adopts those contracts.
+
 ## 10. Profile and Policy Pack Model
 
 ### 10.1 Profiles

@@ -3,11 +3,18 @@ from __future__ import annotations
 import json
 import subprocess
 
+import pytest
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
 from agentic_project_kit.doc_lifecycle import DocLifecycleFinding
 from agentic_project_kit.cli_commands import human_workflows
+
+
+@pytest.fixture(autouse=True)
+def stable_workflow_executables(monkeypatch):
+    monkeypatch.setattr(human_workflows, "default_agentic_kit", lambda root: "./.venv/bin/agentic-kit")
+    monkeypatch.setattr(human_workflows, "default_python", lambda root: "./.venv/bin/python")
 
 
 def _completed(argv: list[str], stdout: str = '{"result_status": "PASS"}\n', stderr: str = "", returncode: int = 0):
@@ -47,6 +54,54 @@ def test_work_start_runs_safe_start_sequence(monkeypatch):
     ]
 
 
+def test_work_start_stops_after_failed_sync_main(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "sync-main"]:
+            return _completed(command, stdout='{"result_status": "BLOCKED"}\n', returncode=2)
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(app, ["work", "start", "--branch", "codex/demo", "--json"])
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["blockers"] == ["sync-main"]
+    assert calls == [["./.venv/bin/agentic-kit", "transfer", "sync-main"]]
+
+
+def test_work_start_skips_post_merge_check_for_external_first_cycle(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:3] == ["git", "show-ref", "--verify"]:
+            return _completed(command, returncode=1)
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+    monkeypatch.setattr(
+        human_workflows,
+        "_external_first_cycle_without_successor_package",
+        lambda root: True,
+    )
+
+    result = CliRunner().invoke(app, ["work", "start", "--branch", "codex/demo", "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    post_merge_step = next(step for step in payload["steps"] if step["name"] == "post-merge-check")
+    assert post_merge_step["argv"] == []
+    assert "first-cycle workspace" in post_merge_step["stdout"]
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] for call in calls)
+
+
 def test_work_start_from_ref_creates_branch_based_on_chosen_ref(monkeypatch):
     calls: list[list[str]] = []
 
@@ -83,6 +138,33 @@ def test_work_start_from_ref_creates_branch_based_on_chosen_ref(monkeypatch):
         "--start-point",
         "v0.4.11",
     ]
+
+
+def test_work_check_uses_external_workspace_gate_set(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+    monkeypatch.setattr(human_workflows, "is_external_manifest_workspace", lambda root: True)
+
+    result = CliRunner().invoke(app, ["work", "check", "--profile", "code", "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["workspace_mode"] == "external_manifest_workspace"
+    assert [step["name"] for step in payload["steps"]] == [
+        "repo-status",
+        "check",
+        "governance-check",
+        "doctor",
+        "standard-gates-audit-suite",
+    ]
+    assert not any(call[:3] == ["./.venv/bin/python", "-m", "pytest"] for call in calls)
+    assert not any(call[:2] == ["./.venv/bin/agentic-kit", "docs-audit"] for call in calls)
 
 
 def test_work_finish_dry_run_requires_paths(monkeypatch):
@@ -611,6 +693,8 @@ def test_release_prepare_is_dry_run_by_default_and_derives_tag(monkeypatch):
 def test_release_prepare_write_syncs_command_entrypoints(monkeypatch, tmp_path):
     calls: list[list[str]] = []
     monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(human_workflows, "default_agentic_kit", lambda root: "./.venv/bin/agentic-kit")
+    monkeypatch.setattr(human_workflows, "default_python", lambda root: "./.venv/bin/python")
 
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
@@ -667,6 +751,7 @@ def test_release_prepare_write_syncs_command_entrypoints(monkeypatch, tmp_path):
 def test_release_prepare_stops_before_release_prep_when_notes_block(monkeypatch, tmp_path):
     calls: list[list[str]] = []
     monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(human_workflows, "default_agentic_kit", lambda root: "./.venv/bin/agentic-kit")
 
     def fake_run(argv, *args, **kwargs):
         command = list(argv)

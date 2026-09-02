@@ -5,6 +5,7 @@ from pathlib import Path
 
 import yaml
 
+from agentic_project_kit.volatile_paths import RULE_ACK_DIRECTORY_PATH
 from agentic_project_kit.workspace import (
     ALLOWED_PROFILES,
     ALLOWED_PROJECT_TYPES,
@@ -29,6 +30,8 @@ from agentic_project_kit.workspace_lock import acquire_workspace_lock
 
 
 GITIGNORE_TMP_LINE = ".agentic/tmp/"
+GITIGNORE_RULE_ACK_LINE = f"{RULE_ACK_DIRECTORY_PATH}/"
+GITIGNORE_VOLATILE_LINES = (GITIGNORE_TMP_LINE, GITIGNORE_RULE_ACK_LINE)
 CI_TEMPLATE_PATH = ".agentic/ci/agentic-gate.yaml"
 PRE_COMMIT_TEMPLATE_PATH = ".agentic/ci/pre-commit-snippet.yaml"
 CI_INJECTION_TARGET = ".github/workflows/agentic-gate.yaml"
@@ -127,6 +130,7 @@ def build_workspace_init_plan(
         ".agentic/transfer/inbox",
         ".agentic/transfer/outbox",
         ".agentic/tmp",
+        RULE_ACK_DIRECTORY_PATH,
         ".agentic/ci",
     )
     injection_targets = tuple(
@@ -165,7 +169,7 @@ def execute_workspace_init(plan: WorkspaceInitPlan) -> None:
             path = plan.root / relative_path
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(content, encoding="utf-8")
-        _append_gitignore_tmp(plan.root)
+        _append_gitignore_volatile(plan.root)
         if plan.inject_ci:
             _inject_template(
                 plan.root,
@@ -449,30 +453,30 @@ Profile: `{project.profile}`
 
 Private/public boundary: no secrets, credentials, private chat fragments, or
 personal logs belong in any versioned part of `.agentic/`. Machine-local state
-lives under `.agentic/tmp/` and is ignored by construction.
+lives under `.agentic/tmp/`; local rule acknowledgement state lives under
+`.agentic/rule_ack/`. Both are ignored by construction.
 """
 
 
 def _gitignore_diff(root: Path) -> tuple[str, ...]:
     gitignore = root / ".gitignore"
     if not gitignore.exists():
-        return (f"+ {GITIGNORE_TMP_LINE}",)
+        return tuple(f"+ {line}" for line in GITIGNORE_VOLATILE_LINES)
     lines = gitignore.read_text(encoding="utf-8").splitlines()
-    if GITIGNORE_TMP_LINE in lines:
-        return ()
-    return (f"+ {GITIGNORE_TMP_LINE}",)
+    return tuple(f"+ {line}" for line in GITIGNORE_VOLATILE_LINES if line not in lines)
 
 
-def _append_gitignore_tmp(root: Path) -> None:
+def _append_gitignore_volatile(root: Path) -> None:
     gitignore = root / ".gitignore"
     existing = gitignore.read_text(encoding="utf-8") if gitignore.exists() else ""
     lines = existing.splitlines()
-    if GITIGNORE_TMP_LINE in lines:
+    missing = [line for line in GITIGNORE_VOLATILE_LINES if line not in lines]
+    if not missing:
         return
     prefix = existing
     if prefix and not prefix.endswith("\n"):
         prefix += "\n"
-    gitignore.write_text(prefix + GITIGNORE_TMP_LINE + "\n", encoding="utf-8")
+    gitignore.write_text(prefix + "\n".join(missing) + "\n", encoding="utf-8")
 
 
 def _inject_template(root: Path, *, source: str, target: str, header: str) -> None:

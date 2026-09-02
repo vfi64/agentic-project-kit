@@ -15,9 +15,9 @@ Latest Brownfield external evidence: Cycle 007 report
 records Comm-SCI App2 provider-settings seam reduction from `55` to `44`,
 target PR #16, target successor refresh PR #17, final target head
 `ea21b3a3`, and post-merge-settle `READY`.
-Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
+Current governed slice: repairing Greenfield external-workspace init/first-cycle workflow defects before Comm-SCI Cycle 008.
 Post-merge handoff status: PASS/NOOP after PR #2263 administrative refresh.
-Next safe step: continue from fresh main with the next planned governed slice.
+Next safe step: finish the Greenfield external-workspace workflow fix, merge it through the Kit lifecycle, then continue Comm-SCI Cycle 008.
 
 ## Historical State Snapshots
 
