@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 253ea3893fae0a1fca161e72d4be6d47ede36e40
-  short: 253ea389
-  subject: Add document headroom warning budgets (#2263)
+  full: c46606a940a2d5790ceffe566cf63621f2581f0c
+  short: c46606a9
+  subject: Fix external workspace first-cycle gates (#2265)
 last_substantive_work_state:
-  full: 253ea3893fae0a1fca161e72d4be6d47ede36e40
-  short: 253ea389
-  subject: Add document headroom warning budgets (#2263)
+  full: c46606a940a2d5790ceffe566cf63621f2581f0c
+  short: c46606a9
+  subject: Fix external workspace first-cycle gates (#2265)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
