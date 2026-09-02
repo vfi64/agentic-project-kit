@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `c46606a940a2d5790ceffe566cf63621f2581f0c` (`c46606a9`), after `Fix external workspace first-cycle gates (#2265)`.
-Last substantive work state is `c46606a940a2d5790ceffe566cf63621f2581f0c` (`c46606a9`), after `Fix external workspace first-cycle gates (#2265)`.
+Current verified main/admin HEAD is `134bd4e7ad4a4709c175dcaecf15ded905808034` (`134bd4e7`), after `Fix work start from integration refs (#2267)`.
+Last substantive work state is `134bd4e7ad4a4709c175dcaecf15ded905808034` (`134bd4e7`), after `Fix work start from integration refs (#2267)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

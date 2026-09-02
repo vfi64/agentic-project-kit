@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c46606a940a2d5790ceffe566cf63621f2581f0c
-  short: c46606a9
-  subject: Fix external workspace first-cycle gates (#2265)
+  full: 134bd4e7ad4a4709c175dcaecf15ded905808034
+  short: 134bd4e7
+  subject: Fix work start from integration refs (#2267)
 last_substantive_work_state:
-  full: c46606a940a2d5790ceffe566cf63621f2581f0c
-  short: c46606a9
-  subject: Fix external workspace first-cycle gates (#2265)
+  full: 134bd4e7ad4a4709c175dcaecf15ded905808034
+  short: 134bd4e7
+  subject: Fix work start from integration refs (#2267)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
