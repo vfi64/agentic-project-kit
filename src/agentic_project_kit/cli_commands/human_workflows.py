@@ -201,6 +201,13 @@ def _workflow_steps_ok(steps: list[dict[str, object]]) -> bool:
     return all(step["ok"] for step in steps)
 
 
+def _is_main_start_ref(ref: str) -> bool:
+    normalized = ref.strip()
+    if normalized == "main":
+        return True
+    return normalized in {"origin/main", "refs/heads/main", "refs/remotes/origin/main"}
+
+
 def _external_first_cycle_without_successor_package(root: Path = Path(".")) -> bool:
     if not is_external_manifest_workspace(root):
         return False
@@ -420,19 +427,35 @@ def work_start_command(
 ) -> None:
     """Start a human patch/slice workflow with the safe standard startup sequence."""
     base_ref = from_ref.strip() or "main"
-    steps = [_run_step("sync-main", _agentic("transfer", "sync-main"))]
-    if _workflow_steps_ok(steps):
-        steps.append(_run_step("rules-acknowledge", _agentic("rules", "acknowledge")))
-    if _workflow_steps_ok(steps):
-        if _external_first_cycle_without_successor_package(Path(".")):
+    starts_from_main = _is_main_start_ref(base_ref)
+    if starts_from_main:
+        steps = [_run_step("sync-main", _agentic("transfer", "sync-main", "--main-branch", "main"))]
+        if _workflow_steps_ok(steps):
+            steps.append(_run_step("rules-acknowledge", _agentic("rules", "acknowledge")))
+        if _workflow_steps_ok(steps):
+            if _external_first_cycle_without_successor_package(Path(".")):
+                steps.append(
+                    _noop_step(
+                        "post-merge-check",
+                        "External first-cycle workspace has no successor package yet; post-merge check is not applicable.\n",
+                    )
+                )
+            else:
+                steps.append(_run_step("post-merge-check", _agentic("transfer", "post-merge-check", "--main-branch", "main")))
+    else:
+        steps = [_run_step("fetch-start-ref", ["git", "fetch", "--all", "--prune", "--tags"])]
+        if _workflow_steps_ok(steps):
+            steps.append(_run_step("rules-acknowledge", _agentic("rules", "acknowledge")))
+        if _workflow_steps_ok(steps):
             steps.append(
                 _noop_step(
                     "post-merge-check",
-                    "External first-cycle workspace has no successor package yet; post-merge check is not applicable.\n",
+                    (
+                        f"Start ref {base_ref} is not the main branch; post-merge "
+                        "checks are deferred until an actual merge closeout on that base.\n"
+                    ),
                 )
             )
-        else:
-            steps.append(_run_step("post-merge-check", _agentic("transfer", "post-merge-check")))
     if _workflow_steps_ok(steps):
         steps.append(_run_step("repo-status", _agentic("transfer", "repo-status")))
     if _workflow_steps_ok(steps):

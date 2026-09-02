@@ -860,24 +860,54 @@ def _remote_mutation_preflight(
     return None
 
 
+def _branch_create_preflight(branch: str, start_point: str, command: list[str]) -> RepoActionResult | None:
+    state = read_git_state(Path("."))
+    if state.dirty_status:
+        completed = subprocess.CompletedProcess(
+            command,
+            2,
+            "",
+            (
+                "Transfer operation monitor blocked branch-create because the worktree "
+                "is dirty before branch creation.\n"
+                f"{state.dirty_status}\n"
+            ),
+        )
+        return _result("branch-create", command, completed, "Clean or preserve local changes before creating a branch.")
+
+    if not start_point.strip():
+        completed = subprocess.CompletedProcess(
+            command,
+            2,
+            "",
+            "Branch start point is empty.\n",
+        )
+        return _result("branch-create", command, completed, "Choose an explicit branch, tag, or commit start point.")
+
+    resolve_command = ["git", "rev-parse", "--verify", f"{start_point}^{{commit}}"]
+    resolved = _run(resolve_command)
+    if resolved.returncode != 0:
+        completed = subprocess.CompletedProcess(
+            command,
+            2,
+            resolved.stdout,
+            (
+                f"Branch start point does not resolve to a commit: {start_point}\n"
+                + resolved.stderr
+            ),
+        )
+        return _result("branch-create", command, completed, "Fetch or choose a resolvable branch, tag, or commit start point.")
+
+    return None
+
+
 def branch_create(branch: str, *, start_point: str = "main", push: bool = False) -> RepoActionResult:
     with workspace_mutation_lock(Path("."), 'branch_create'):
-        monitor = guard_branch(
-            command_kind="branch-create",
-            required_branch=start_point,
-            allow_main_mutation=True,
-            auto_switch=True,
-        )
-        if monitor.decision == MonitorDecision.BLOCK:
-            return _monitor_block_result(
-                action="branch-create",
-                command_kind="branch-create",
-                required_branch=start_point,
-                monitor=monitor,
-                next_action="Inspect transfer operation monitor block before creating branch.",
-            )
-
         command = ["git", "switch", "-c", branch, start_point]
+        preflight = _branch_create_preflight(branch, start_point, command)
+        if preflight is not None:
+            return preflight
+
         completed = _run(command)
         if completed.returncode != 0:
             return _result("branch-create", command, completed, "Inspect branch state before continuing.")

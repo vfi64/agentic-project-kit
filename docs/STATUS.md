@@ -15,9 +15,9 @@ Latest Brownfield external evidence: Cycle 007 report
 records Comm-SCI App2 provider-settings seam reduction from `55` to `44`,
 target PR #16, target successor refresh PR #17, final target head
 `ea21b3a3`, and post-merge-settle `READY`.
-Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
+Current governed slice: repair the Cycle 008 start-workflow defect found in Comm-SCI: `work start --from-ref origin/feature/ui-access-levels-v2` must preserve the non-main integration baseline, and Rule-Ack runtime state must stay locally ignored in older external workspaces.
 Post-merge handoff status: PASS/NOOP after PR #2265 administrative refresh.
-Next safe step: continue from fresh main with the next planned governed slice.
+Next safe step: merge the Cycle 008 start-workflow Kit repair, then restart Comm-SCI Cycle 008 from a fresh worktree on `origin/feature/ui-access-levels-v2`.
 
 ## Historical State Snapshots
 
