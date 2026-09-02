@@ -12,7 +12,7 @@ from agentic_project_kit.communication_rule_context import (
     build_communication_rule_capsule,
     require_current_communication_context,
 )
-from agentic_project_kit.rule_ack import build_rule_acknowledgement
+from agentic_project_kit.rule_ack import build_rule_acknowledgement, ensure_rule_ack_local_exclude
 from agentic_project_kit.rule_refresh import (
     refresh_communication_rules,
     refresh_handoff_rules,
@@ -143,6 +143,7 @@ def acknowledge(
         json.dumps(acknowledgement.as_json_data(), indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
+    local_exclude = ensure_rule_ack_local_exclude(root)
 
     relative_path = target.relative_to(root) if target.is_relative_to(root) else target
 
@@ -151,12 +152,16 @@ def acknowledge(
             "path": str(relative_path),
             "written": True,
             "acknowledgement": acknowledgement.as_json_data(),
+            "local_exclude": local_exclude.as_json_data(),
         }
         typer.echo(json.dumps(data, indent=2, sort_keys=True))
     else:
         typer.echo("RULE_ACKNOWLEDGEMENT")
         typer.echo(f"path={relative_path}")
         typer.echo("written=True")
+        typer.echo(f"local_exclude_updated={local_exclude.updated}")
+        if local_exclude.error:
+            typer.echo(f"local_exclude_error={local_exclude.error}")
         typer.echo(f"schema_version={acknowledgement.schema_version}")
         typer.echo(f"snapshot_id={acknowledgement.snapshot_id}")
         typer.echo(f"repo_head={acknowledgement.repo_head}")

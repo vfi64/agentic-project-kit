@@ -505,7 +505,7 @@ stays ignored. `site/` and `/docs` Pages fallback files are excluded from Python
 - `agentic-kit dpa renderer-readiness`: inspect Renderer Probe readiness, optionally writing bounded DPA probe evidence without renderer conformance claims.
 - `agentic-kit dpa probe-004-readiness`: inspect PROBE-004 migration and rollback readiness, optionally writing bounded DPA probe evidence without migration or rollback execution.
 - `agentic-kit dpa wrt-ch001-evidence`: observe a WRT-CH-001 administrative handoff refresh PR without claiming disposable fixture PASS.
-- `agentic-kit work start --from-ref REF`: create a fresh work branch based on a selected release tag or branch.
+- `agentic-kit work start --from-ref REF`: create a fresh work branch based on a selected release tag, branch, or remote-tracking integration ref; non-main refs do not run the post-merge check as a pre-PR gate.
 - `agentic-kit work discard-changes`: preview the explicitly destructive feature-branch discard flow; `--execute` requires a deliberate confirmation path.
 - `agentic-kit transfer list-refs --json`: list local release tags and branches for the guided work-start picker.
 - `workflow status --explain`: inspect the current state and next safe step.

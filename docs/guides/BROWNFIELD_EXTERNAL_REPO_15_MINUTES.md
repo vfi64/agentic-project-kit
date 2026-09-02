@@ -57,6 +57,11 @@ The write step creates `.agentic/config.yaml`, `.agentic/state/`,
 selections that would stage `.agentic/rule_ack/` runtime state. It does not
 modify application source files.
 
+Older external workspaces may not yet have the `.agentic/rule_ack/` ignore line.
+`agentic-kit rules acknowledge` writes a local Git exclude for that runtime path
+so acknowledgement state remains available to transfer gates without creating
+visible product-repository dirty state.
+
 ## 4. Run Health Gates
 
 Use Kit gates for the operating layer:
@@ -85,6 +90,11 @@ ignored just because some checks are skipped.
 
 Run the target project's own tests in the target project's own environment. A Kit
 virtual environment is not a replacement for the product repository's runtime.
+
+When the governed target branch is an integration branch rather than `main`,
+start work with `agentic-kit work start --from-ref origin/<branch>`. The wrapper
+fetches refs and creates the work branch from that ref, but it does not run the
+post-merge check as a feature-branch pre-PR gate.
 
 ## 5. Produce a Handoff
 

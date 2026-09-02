@@ -36,6 +36,19 @@ Comm-SCI Cycle 008. B2 Decomplexification, Decision & Reduction, and new
 architecture work remain blocked until Brownfield completion and the recorded
 maintainer gates are satisfied.
 
+## Comm-SCI Cycle 008 Start-Workflow Repair
+
+Cycle 008 exposed a Kit-owned start workflow defect before product mutation:
+`work start --from-ref origin/feature/ui-access-levels-v2` synchronized `main`
+and left the fresh target worktree on the wrong branch. The active Kit repair
+makes non-main start refs use fetch/rule-ack/repo-status/branch-create without a
+feature-branch post-merge pre-PR gate. It also makes `rules acknowledge` add a
+local Git exclude for `.agentic/rule_ack/` so older external workspaces do not
+show Rule-Ack runtime state as product dirty state.
+
+Do not continue Comm-SCI product edits until this repair is merged and retested
+from a fresh target worktree.
+
 ## Documentation Headroom Budget Slice
 
 The active Kit slice raises README and STATUS word-budget headroom and adds

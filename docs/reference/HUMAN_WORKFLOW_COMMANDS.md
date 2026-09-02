@@ -19,7 +19,15 @@ Typical use:
 
     agentic-kit work start --branch codex/my-slice --kind patch --json
 
-It runs sync-main, rules acknowledge, post-merge-check, repo-status, and then creates or switches to the requested branch.
+For the default `main` start ref, it runs sync-main, rules acknowledge,
+post-merge-check, repo-status, and then creates or switches to the requested
+branch.
+
+For a non-main `--from-ref`, such as a release tag or remote-tracking
+integration branch, it fetches refs, acknowledges rules, skips the post-merge
+check as a pre-PR gate, runs repo-status, and then creates or switches to the
+requested branch. The lower-level branch-create wrapper accepts any start point
+that resolves to a commit, including tags and `origin/...` refs.
 
 ## agentic-kit work check
 

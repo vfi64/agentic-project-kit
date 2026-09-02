@@ -1,11 +1,17 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
+import subprocess
 
+from typer.testing import CliRunner
+
+from agentic_project_kit.cli import app
 from agentic_project_kit.rule_ack import (
     RuleAcknowledgement,
     acknowledgement_from_json_data,
     build_rule_acknowledgement,
+    ensure_rule_ack_local_exclude,
     validate_rule_acknowledgement,
 )
 from agentic_project_kit.rule_snapshot import build_derived_rule_snapshot
@@ -158,3 +164,42 @@ def test_build_rule_acknowledgement_uses_snapshot_identity(tmp_path: Path) -> No
     assert ack.sources_total == snapshot.sources_total
     assert ack.missing_sources_total == len(snapshot.validation.missing_required_paths)
     assert ack.declared_next_allowed_action == "run_next_command"
+
+
+def test_ensure_rule_ack_local_exclude_is_idempotent(tmp_path: Path) -> None:
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, stdout=subprocess.PIPE)
+
+    first = ensure_rule_ack_local_exclude(tmp_path)
+    second = ensure_rule_ack_local_exclude(tmp_path)
+
+    exclude_path = subprocess.check_output(
+        ["git", "rev-parse", "--git-path", "info/exclude"],
+        cwd=tmp_path,
+        text=True,
+    ).strip()
+    assert first.updated is True
+    assert first.patterns == (".agentic/rule_ack/",)
+    assert second.updated is False
+    assert (tmp_path / exclude_path).read_text(encoding="utf-8").count(".agentic/rule_ack/") == 1
+
+
+def test_rules_acknowledge_keeps_rule_ack_runtime_state_locally_ignored(tmp_path: Path) -> None:
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, stdout=subprocess.PIPE)
+    subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=tmp_path, check=True)
+    write_minimal_sources(tmp_path)
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    subprocess.run(["git", "commit", "-m", "Add rule sources"], cwd=tmp_path, check=True, stdout=subprocess.PIPE)
+
+    result = CliRunner().invoke(app, ["rules", "acknowledge", "--root", str(tmp_path), "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["local_exclude"]["updated"] is True
+    assert payload["local_exclude"]["patterns"] == [".agentic/rule_ack/"]
+    status = subprocess.check_output(
+        ["git", "status", "--short", "--untracked-files=all", "--", ".agentic/rule_ack/current.json"],
+        cwd=tmp_path,
+        text=True,
+    )
+    assert status == ""

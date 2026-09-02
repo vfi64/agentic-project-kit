@@ -39,9 +39,9 @@ def test_work_start_runs_safe_start_sequence(monkeypatch):
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "PASS"
     assert calls[:4] == [
-        ["./.venv/bin/agentic-kit", "transfer", "sync-main"],
+        ["./.venv/bin/agentic-kit", "transfer", "sync-main", "--main-branch", "main"],
         ["./.venv/bin/agentic-kit", "rules", "acknowledge"],
-        ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"],
+        ["./.venv/bin/agentic-kit", "transfer", "post-merge-check", "--main-branch", "main"],
         ["./.venv/bin/agentic-kit", "transfer", "repo-status"],
     ]
     assert calls[-1] == [
@@ -71,7 +71,7 @@ def test_work_start_stops_after_failed_sync_main(monkeypatch):
     assert result.exit_code == 2
     payload = json.loads(result.stdout)
     assert payload["blockers"] == ["sync-main"]
-    assert calls == [["./.venv/bin/agentic-kit", "transfer", "sync-main"]]
+    assert calls == [["./.venv/bin/agentic-kit", "transfer", "sync-main", "--main-branch", "main"]]
 
 
 def test_work_start_skips_post_merge_check_for_external_first_cycle(monkeypatch):
@@ -130,6 +130,14 @@ def test_work_start_from_ref_creates_branch_based_on_chosen_ref(monkeypatch):
     assert result.exit_code == 0, result.output
     payload = json.loads(result.stdout)
     assert payload["from_ref"] == "v0.4.11"
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "sync-main"] for call in calls)
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] for call in calls)
+    assert calls[:4] == [
+        ["git", "fetch", "--all", "--prune", "--tags"],
+        ["./.venv/bin/agentic-kit", "rules", "acknowledge"],
+        ["./.venv/bin/agentic-kit", "transfer", "repo-status"],
+        ["git", "show-ref", "--verify", "--quiet", "refs/heads/codex/from-release"],
+    ]
     assert calls[-1] == [
         "./.venv/bin/agentic-kit",
         "transfer",
@@ -137,6 +145,56 @@ def test_work_start_from_ref_creates_branch_based_on_chosen_ref(monkeypatch):
         "codex/from-release",
         "--start-point",
         "v0.4.11",
+    ]
+
+
+def test_work_start_from_remote_integration_ref_does_not_sync_main_or_post_merge(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:3] == ["git", "show-ref", "--verify"]:
+            return _completed(command, returncode=1)
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "work",
+            "start",
+            "--branch",
+            "codex/cycle-008",
+            "--from-ref",
+            "origin/feature/ui-access-levels-v2",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert [step["name"] for step in payload["steps"]] == [
+        "fetch-start-ref",
+        "rules-acknowledge",
+        "post-merge-check",
+        "repo-status",
+        "branch-create",
+    ]
+    post_merge_step = next(step for step in payload["steps"] if step["name"] == "post-merge-check")
+    assert post_merge_step["argv"] == []
+    assert "not the main branch" in post_merge_step["stdout"]
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "sync-main"] for call in calls)
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] for call in calls)
+    assert calls[-1] == [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "branch-create",
+        "codex/cycle-008",
+        "--start-point",
+        "origin/feature/ui-access-levels-v2",
     ]
 
 

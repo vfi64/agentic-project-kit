@@ -1,9 +1,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
+import subprocess
 from typing import Any
 
 from agentic_project_kit.rule_snapshot import DerivedRuleSnapshot
+from agentic_project_kit.volatile_paths import RULE_ACK_DIRECTORY_PATH
+
+
+RULE_ACK_LOCAL_EXCLUDE_PATTERN = f"{RULE_ACK_DIRECTORY_PATH}/"
 
 
 @dataclass(frozen=True)
@@ -44,6 +50,22 @@ class RuleAcknowledgementDecision:
         }
 
 
+@dataclass(frozen=True)
+class RuleAckLocalExclude:
+    path: str
+    updated: bool
+    patterns: tuple[str, ...]
+    error: str = ""
+
+    def as_json_data(self) -> dict[str, object]:
+        return {
+            "path": self.path,
+            "updated": self.updated,
+            "patterns": list(self.patterns),
+            "error": self.error,
+        }
+
+
 def acknowledgement_from_json_data(data: dict[str, Any]) -> RuleAcknowledgement:
     return RuleAcknowledgement(
         schema_version=int(data.get("schema_version", 0)),
@@ -52,6 +74,49 @@ def acknowledgement_from_json_data(data: dict[str, Any]) -> RuleAcknowledgement:
         sources_total=int(data.get("sources_total", -1)),
         missing_sources_total=int(data.get("missing_sources_total", -1)),
         declared_next_allowed_action=str(data.get("declared_next_allowed_action", "")),
+    )
+
+
+def ensure_rule_ack_local_exclude(root: Path) -> RuleAckLocalExclude:
+    completed = subprocess.run(
+        ["git", "rev-parse", "--git-path", "info/exclude"],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if completed.returncode != 0:
+        return RuleAckLocalExclude(path="", updated=False, patterns=(), error=completed.stderr.strip())
+
+    raw_path = completed.stdout.strip()
+    if not raw_path:
+        return RuleAckLocalExclude(path="", updated=False, patterns=(), error="empty git exclude path")
+
+    exclude_path = Path(raw_path)
+    if not exclude_path.is_absolute():
+        exclude_path = root / exclude_path
+
+    try:
+        existing = exclude_path.read_text(encoding="utf-8") if exclude_path.exists() else ""
+        existing_patterns = {line.strip() for line in existing.splitlines()}
+        if RULE_ACK_LOCAL_EXCLUDE_PATTERN in existing_patterns:
+            return RuleAckLocalExclude(path=str(exclude_path), updated=False, patterns=())
+
+        exclude_path.parent.mkdir(parents=True, exist_ok=True)
+        separator = "" if not existing or existing.endswith("\n") else "\n"
+        addition = (
+            f"{separator}"
+            "# Agentic Project Kit local runtime state\n"
+            f"{RULE_ACK_LOCAL_EXCLUDE_PATTERN}\n"
+        )
+        exclude_path.write_text(existing + addition, encoding="utf-8")
+    except OSError as exc:
+        return RuleAckLocalExclude(path=str(exclude_path), updated=False, patterns=(), error=str(exc))
+
+    return RuleAckLocalExclude(
+        path=str(exclude_path),
+        updated=True,
+        patterns=(RULE_ACK_LOCAL_EXCLUDE_PATTERN,),
     )
 
 

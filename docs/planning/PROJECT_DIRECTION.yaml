@@ -2867,6 +2867,12 @@ plans:
         lines attached to the Post-merge handoff status field, so obsolete
         successor-package PR markers are not carried forward after refresh.
       evidence: docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
+    - id: B1-KIT-019
+      status: implemented_local_retest_pass
+      goal: Make work start preserve non-main start refs such as external
+        integration branches instead of synchronizing main first, and keep
+        Rule-Ack runtime state locally ignored in older external workspaces.
+      evidence: docs/reports/POST_V1_0_8_B1_COMM_SCI_CYCLE_008_START_WORKFLOW_REPAIR_20260902.md
     - id: B1-TARGET-001
       status: recorded_target_friction
       goal: Decide in the target repository whether App2 tests that rewrite
@@ -2902,6 +2908,7 @@ plans:
         deterministic declaration and tests.
       evidence:
       - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
+      - docs/reports/POST_V1_0_8_B1_COMM_SCI_CYCLE_008_START_WORKFLOW_REPAIR_20260902.md
     post_cycle_007_follow_up_program:
       status: registered_deferred_after_cycle_007
       source_request_date: '2026-08-30'
