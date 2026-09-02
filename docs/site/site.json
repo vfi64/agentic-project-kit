@@ -4419,7 +4419,17 @@
         "group": "governance",
         "help": "",
         "lifecycle_rank": null,
-        "params": [],
+        "params": [
+          {
+            "default": "PosixPath('.')",
+            "help": "Repository root.",
+            "name": "project_root",
+            "opts": [
+              "--root"
+            ],
+            "required": false
+          }
+        ],
         "qualified_name": "agentic-kit governance check",
         "safety": "READ_ONLY",
         "surface": "diagnostic",
@@ -11674,13 +11684,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "9f16193049b3",
+    "manifest_sha": "7dfdb6bd7c0d",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.8",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.8",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "9f16193049b3",
+    "reproduced_manifest_sha": "7dfdb6bd7c0d",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 166,

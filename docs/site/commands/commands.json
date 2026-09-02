@@ -4144,7 +4144,17 @@
       "group": "governance",
       "help": "",
       "lifecycle_rank": null,
-      "params": [],
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "required": false
+        }
+      ],
       "qualified_name": "agentic-kit governance check",
       "safety": "READ_ONLY",
       "surface": "diagnostic",

@@ -90,7 +90,7 @@ def build_doctor_report(project_root: Path) -> DoctorReport:
             _project_contract_check(root, contract_data, external_manifest_workspace=external_manifest_workspace),
             _policy_pack_check(root, contract_data, external_manifest_workspace=external_manifest_workspace),
             _docs_check(root),
-            _doc_lifecycle_check(root),
+            _doc_lifecycle_check(root, external_manifest_workspace=external_manifest_workspace),
             _todo_check(root, workspace),
             _standard_gates_audit_suite_check(root),
             _version_drift_check(root, external_manifest_workspace=external_manifest_workspace),
@@ -312,7 +312,13 @@ def _docs_check(project_root: Path) -> DoctorCheck:
     return DoctorCheck("documentation gates", DoctorStatus.PASS, "passed")
 
 
-def _doc_lifecycle_check(project_root: Path) -> DoctorCheck:
+def _doc_lifecycle_check(project_root: Path, *, external_manifest_workspace: bool = False) -> DoctorCheck:
+    if external_manifest_workspace:
+        return DoctorCheck(
+            "document lifecycle audit",
+            DoctorStatus.SKIP,
+            "skipped for external manifest workspace; target documentation lifecycle remains project-owned",
+        )
     report = build_doc_lifecycle_report(project_root)
     blockers = [finding for finding in report.findings if finding.severity in {"FAIL", "BLOCK"}]
     if blockers:

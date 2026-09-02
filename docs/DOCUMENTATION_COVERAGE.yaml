@@ -970,6 +970,7 @@ rules:
     - dry-run by default
     - --execute
     - .agentic/tmp/
+    - .agentic/rule_ack/
     - .agentic/state/status.md
     - .agentic/state/handoff/
     - .agentic/DOC_LIFECYCLE.md
@@ -1421,6 +1422,9 @@ rules:
     - agentic-kit check-docs
     - agentic-kit check
     - agentic-kit doctor
+    - agentic-kit governance check
+    - agentic-kit standard-gates-audit-suite
+    - agentic-kit slice gate --kind planning-doc
     - SKIP
     - not-applicable Kit checks
     - command manifest
@@ -1428,10 +1432,14 @@ rules:
     - repo-local source audit
     - packaged command manifest
     - Kit-specific version drift
+    - target documentation lifecycle remains project-owned
     - project-owned release governance
     - rules snapshot
     - rules acknowledge
     - external workspace rule sources
+    - repo_head
+    - Rule-Ack warning
+    - source snapshot drift remains blocking
     - .agentic/rules/README.md
     - .agentic/state/status.md
     - docs/STATUS.md
@@ -1444,6 +1452,9 @@ rules:
     - agentic-kit check --root .
     - agentic-kit doctor --root .
     - validation_report.json
+    - External first-cycle workspace
+    - transfer status
+    - NO_COMMAND
 - id: semantic-quality-boundary-coverage
   description: Semantic quality limits must remain explicit so deterministic checks
     are not oversold.

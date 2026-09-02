@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 9f16193049b3
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 7dfdb6bd7c0d
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -1342,7 +1342,9 @@ Create and push a GitHub repository for an initialized project.
 - When to use: Run agentic-kit governance check.
 - Dry-run available: `False`
 
-_No parameters._
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
 
 ### `agentic-kit gui initial-llm-prompt`
 

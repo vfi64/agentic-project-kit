@@ -8,6 +8,7 @@ import subprocess
 
 from agentic_project_kit import __version__ as PACKAGE_VERSION
 from agentic_project_kit.cli_executable import default_agentic_kit
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 
 
 Runner = Callable[[Sequence[str], Path], tuple[int, str]]
@@ -30,6 +31,13 @@ REQUIRED_STANDARD_GATE_COMMANDS: tuple[tuple[str, ...], ...] = (
     ("audit-planning-docs-consolidation",),
     ("audit-program-redundancy",),
     ("release-publish", "--version", "{version}", "--dry-run"),
+)
+
+EXTERNAL_STANDARD_GATE_COMMANDS: tuple[tuple[str, ...], ...] = (
+    ("check", "--json"),
+    ("governance", "check"),
+    ("doctor",),
+    ("transfer", "state"),
 )
 
 
@@ -129,7 +137,7 @@ def evaluate_standard_gates_audit_suite(
     executable = _default_agentic_kit(root)
     checks: list[StandardGateCheck] = []
 
-    for command in REQUIRED_STANDARD_GATE_COMMANDS:
+    for command in _standard_gate_commands_for_root(root):
         formatted = _format_command(command, version)
         returncode, output = run((executable, *formatted), root)
         checks.append(
@@ -146,6 +154,12 @@ def evaluate_standard_gates_audit_suite(
         version=version,
         checks=tuple(checks),
     )
+
+
+def _standard_gate_commands_for_root(root: Path) -> tuple[tuple[str, ...], ...]:
+    if is_external_manifest_workspace(root):
+        return EXTERNAL_STANDARD_GATE_COMMANDS
+    return REQUIRED_STANDARD_GATE_COMMANDS
 
 
 def render_standard_gates_audit_suite(result: StandardGatesAuditSuiteResult) -> str:

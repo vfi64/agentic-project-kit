@@ -32,6 +32,7 @@ class RuleAcknowledgementDecision:
     is_confirmed: bool
     fail_closed: bool
     blocking_reasons: tuple[str, ...]
+    warnings: tuple[str, ...] = ()
 
     def as_json_data(self) -> dict[str, object]:
         return {
@@ -39,6 +40,7 @@ class RuleAcknowledgementDecision:
             "is_confirmed": self.is_confirmed,
             "fail_closed": self.fail_closed,
             "blocking_reasons": list(self.blocking_reasons),
+            "warnings": list(self.warnings),
         }
 
 
@@ -77,6 +79,7 @@ def validate_rule_acknowledgement(
     required_next_allowed_action: str,
 ) -> RuleAcknowledgementDecision:
     blocking_reasons: list[str] = []
+    warnings: list[str] = []
 
     if snapshot.fail_closed:
         blocking_reasons.append("rule_snapshot_fail_closed")
@@ -89,7 +92,7 @@ def validate_rule_acknowledgement(
         if acknowledgement.snapshot_id != snapshot.snapshot_id:
             blocking_reasons.append("snapshot_id_mismatch")
         if acknowledgement.repo_head != repo_head:
-            blocking_reasons.append("repo_head_mismatch")
+            warnings.append("repo_head_mismatch")
         if acknowledgement.sources_total != snapshot.sources_total:
             blocking_reasons.append("sources_total_mismatch")
         if acknowledgement.missing_sources_total != len(snapshot.validation.missing_required_paths):
@@ -102,4 +105,5 @@ def validate_rule_acknowledgement(
         is_confirmed=not blocking_reasons,
         fail_closed=bool(blocking_reasons),
         blocking_reasons=tuple(blocking_reasons),
+        warnings=tuple(warnings),
     )

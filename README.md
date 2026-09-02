@@ -1,26 +1,26 @@
 # Agentic Project Kit
 
-> Handoff architecture: the deterministic Successor Handoff Package writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/` for this repo or `.agentic/state/handoff/packages/latest/` in external workspace mode. New chats verify the package and execution contract, not chat memory.
+> Handoff architecture: the deterministic Successor Handoff Package writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/` for this repo or `.agentic/state/handoff/packages/latest/` externally. New chats verify package and execution contract, not chat memory.
 
 
 Current version: 1.0.8
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/zenodo.20101359)
 
-`agentic-project-kit` is a local Python package and CLI for governing AI-assisted repository work with explicit contracts, gates, evidence, handoffs, policy selection, task tracking, GitHub automation, and release validation.
+`agentic-project-kit` is a local Python CLI for governing AI-assisted repository work with contracts, gates, evidence, handoffs, policy selection, task tracking, GitHub automation, and release validation.
 
 Generated website: <https://vfi64.github.io/agentic-project-kit/>.
 
 ## Why this exists
 
-AI-assisted development works best when project context is explicit, current, and machine-checkable. Otherwise, agents drift into stale handoffs, unclear branch rules, missing test evidence, and unstructured logs.
+AI-assisted development works best when context is explicit, current, and machine-checkable. Otherwise, agents drift into stale handoffs, unclear branch rules, missing test evidence, and unstructured logs.
 
-This kit turns those lessons into a reusable starter system for new repositories.
+The kit turns those lessons into reusable repository scaffolding.
 
-The goal is not making an LLM write code better by itself; it is making repository state, handoffs, documentation coverage, tasks, release state, and policy expectations visible enough to reduce context drift.
+Goal: make repository state, handoffs, documentation coverage, tasks, release state, and policy expectations visible enough to reduce context drift.
 
 ## Why not just Cookiecutter?
 
-Cookiecutter-style generators create initial files. `agentic-project-kit` targets the narrower problem of keeping AI-assisted repository work reviewable after the first commit.
+Cookiecutter-style generators create initial files. `agentic-project-kit` keeps AI-assisted repository work reviewable after the first commit.
 
 A generated project includes machine-readable state, current handoff files, documentation coverage expectations, task gates, local health checks, release-state validation, policy-pack fixtures, and evidence conventions. These are governance aids, not semantic-completeness or production-readiness claims.
 
@@ -105,14 +105,7 @@ path, the source install path, a Docker-based safe package test, new
 repositories, and existing repositories, see
 <https://vfi64.github.io/agentic-project-kit/quickstart/>.
 
-Evidence labels stay separate:
-
-- Historical PyPI Validation: The first public PyPI validation confirmed a
-  published package was installed from `pypi.org`.
-- Post-fix Build/Checkout Validation: a local checkout or local wheel was tested
-  before publication.
-- Post-release PyPI Validation: a later published package was installed from
-  `pypi.org` after release.
+Evidence labels: Historical PyPI Validation means The first public PyPI validation confirmed a package from `pypi.org`; Post-fix Build/Checkout Validation covers local checkout/wheel tests; Post-release PyPI Validation covers later packages.
 
 Docker without an official registry image uses the local source image:
 
@@ -195,7 +188,7 @@ agentic-kit init my-docs-project \
 
 `agentic-kit doctor` validates the project contract when `.agentic/project.yaml` is present and reports selected profiles and policy packs.
 
-After `agentic-kit workspace init --root PATH --execute`, `.agentic/config.yaml` enables external workspace health mode without the self-hosting Kit documentation set. `agentic-kit check`/`agentic-kit check-docs` inspect `.agentic/state/` and `.agentic/registries/`; `agentic-kit doctor` reports `SKIP`/`WARN`, skips not-applicable Kit checks plus repo-local source audit, verifies packaged command manifest availability, and treats Kit-specific version drift as project-owned release governance. `rules snapshot`/`rules acknowledge` use external workspace rule sources such as `.agentic/rules/README.md` and `.agentic/state/status.md` instead of `docs/STATUS.md` or `docs/handoff/CURRENT_HANDOFF.md`. Fresh carriers: `.agentic/state/handoff/transfer_handoff_reports/`; packages: `.agentic/state/handoff/packages/latest/`. External PR/merge preflights auto-clean only allowlisted volatile carriers such as `.agentic/rule_ack/current.json`; product files stay nonvolatile unless explicit policy classifies them safely. Run `transfer pr-merge-safe` after fresh context, rule acknowledgement, and a clean-except-known-transient worktree.
+After `agentic-kit workspace init --root PATH --execute`, `.agentic/config.yaml` enables external workspace health mode without the self-hosting Kit documentation set. `agentic-kit check`/`agentic-kit check-docs` inspect `.agentic/state/` and `.agentic/registries/`; `agentic-kit governance check`, `agentic-kit doctor`, `agentic-kit standard-gates-audit-suite`, and `agentic-kit slice gate --kind planning-doc` use external gate sets. `doctor` reports `SKIP`/`WARN`, skips not-applicable Kit checks plus repo-local source audit, treats target documentation lifecycle remains project-owned, verifies packaged command manifest availability, and treats Kit-specific version drift as project-owned release governance. `rules snapshot`/`rules acknowledge` use external workspace rule sources (`.agentic/rules/README.md`, `.agentic/state/status.md`); `repo_head` drift is a Rule-Ack warning, source snapshot drift remains blocking. Carriers: `.agentic/state/handoff/transfer_handoff_reports/`; packages: `.agentic/state/handoff/packages/latest/`. External first-cycle workspace start skips post-merge handoff checks only before a successor package exists; `transfer status` reports `NO_COMMAND` for empty inbox. PR/merge preflights only auto-clean allowlisted volatile carriers such as `.agentic/rule_ack/current.json`; `workspace init` ignores `.agentic/tmp/` and `.agentic/rule_ack/`; product files stay nonvolatile unless explicit policy classifies them safely. Run `transfer pr-merge-safe` after fresh context, rule acknowledgement, and clean-except-known-transient worktree.
 
 ## Policy-pack doctor checks
 
@@ -289,7 +282,7 @@ into an `adjudication_plan`, and can write bounded intake evidence with
 `READY_FOR_DPA_INTAKE_ADJUDICATION` means the repo is ready for Maintainer
 adjudication, not automatically conformant.
 
-`workspace adopt` is read-only: it proposes `.agentic/config.yaml`, reports the private/public boundary, a documentation age baseline, a DPA repo-adoption assessment, and foreign `.agentic/` directory. `agentic-kit dpa repo-adoption-assessment --root PATH` is the same DPA intake gate as a standalone command: it inventories candidate surfaces, including top-level architecture/specification files and common specification directories such as `JSON/`, records source authority and target identity, classifies `specification_authority`, generated, or command-updated outputs, records DPA-600/DPA-700 evidence requirements, requires exact-ref evidence before adoption readiness, and keeps `external_repo_conformance_claimed=false`. `workspace init` is dry-run by default; `--execute` creates `.agentic/state/status.md`, `.agentic/state/handoff/`, `.agentic/DOC_LIFECYCLE.md`, `docs/archive/README.md`, transfer/CI/prompt files, and a `hygiene` manifest block with warn-mode doc lifecycle defaults. It appends `.agentic/tmp/`; versioned `.agentic/` must not hold secrets, chat fragments, or logs.
+`workspace adopt` is read-only: it proposes `.agentic/config.yaml`, reports the private/public boundary, documentation age baseline, DPA repo-adoption assessment, and foreign `.agentic/` directory. `agentic-kit dpa repo-adoption-assessment --root PATH` inventories candidate surfaces, including top-level architecture/specification files and common specification directories such as `JSON/`, records source authority and target identity, classifies `specification_authority`, generated, or command-updated outputs, records DPA-600/DPA-700 evidence requirements, requires exact-ref evidence before adoption readiness, and keeps `external_repo_conformance_claimed=false`. `workspace init` is dry-run by default; `--execute` creates `.agentic/state/status.md`, `.agentic/state/handoff/`, `.agentic/DOC_LIFECYCLE.md`, `docs/archive/README.md`, transfer/CI/prompt files, and a `hygiene` manifest block with warn-mode doc lifecycle defaults. It appends `.agentic/tmp/` and `.agentic/rule_ack/`; versioned `.agentic/` must not hold secrets, chat fragments, logs, or local Rule-Ack runtime state.
 
 `agentic-kit workspace upgrade --root PATH` is also a dry-run by default. It
 plans deterministic manifest schema migrations step by step, prints the

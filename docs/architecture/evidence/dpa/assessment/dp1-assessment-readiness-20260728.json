@@ -3,7 +3,7 @@
   "kind": "dpa_dp1_assessment_readiness",
   "status": "DP2_AUTHORIZED",
   "status_date": "2026-07-29",
-  "command_manifest_ack": "COMMAND_MANIFEST_ACK 9f16193049b3",
+  "command_manifest_ack": "COMMAND_MANIFEST_ACK 7dfdb6bd7c0d",
   "kit_baseline_ref": "be37f052d67cc2646d56c103cef962823a01cee5",
   "dpa_lab_source_ref": "0cf944cc153e65a272c773286791f8891efdd1bc",
   "dpa_lab_merge_ref": "6f927efd625b4239f9ab0e710b48e7d9534fdfec",

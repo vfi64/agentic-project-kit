@@ -103,6 +103,58 @@ def test_commit_paths_allows_feature_branch_by_default(tmp_path, monkeypatch):
     assert result.returncode == 0
 
 
+def test_commit_paths_refuses_rule_ack_runtime_state(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    branch_create("feature/rule-ack-runtime", start_point="main")
+    path = tmp_path / ".agentic/rule_ack/current.json"
+    path.parent.mkdir(parents=True)
+    path.write_text("{}\n", encoding="utf-8")
+
+    result = commit_paths("Add rule ack", [".agentic/rule_ack/current.json"])
+
+    assert result.result_status == "FAIL"
+    assert result.returncode == 2
+    assert "Refusing to commit volatile rule acknowledgement path" in result.stderr
+
+
+def test_commit_paths_refuses_broad_selection_with_rule_ack_runtime_state(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    branch_create("feature/broad-rule-ack-runtime", start_point="main")
+    (tmp_path / "file.txt").write_text("content\n", encoding="utf-8")
+    path = tmp_path / ".agentic/rule_ack/current.json"
+    path.parent.mkdir(parents=True)
+    path.write_text("{}\n", encoding="utf-8")
+
+    result = commit_paths("Add all", ["."])
+    staged = subprocess.run(
+        ["git", "diff", "--cached", "--name-only"],
+        cwd=tmp_path,
+        text=True,
+        stdout=subprocess.PIPE,
+        check=True,
+    )
+
+    assert result.result_status == "FAIL"
+    assert result.returncode == 2
+    assert "Refusing to commit volatile rule acknowledgement path" in result.stderr
+    assert ".agentic/rule_ack" in result.stderr
+    assert staged.stdout == ""
+
+
+def test_commit_paths_allows_broad_selection_without_rule_ack_runtime_state(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    branch_create("feature/broad-commit-ok", start_point="main")
+    (tmp_path / "file.txt").write_text("content\n", encoding="utf-8")
+
+    result = commit_paths("Add all", ["."])
+
+    assert result.result_status == "PASS"
+    assert result.returncode == 0
+
+
 def test_transfer_commit_cli_supports_allow_main(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     _acknowledge_rules(tmp_path)

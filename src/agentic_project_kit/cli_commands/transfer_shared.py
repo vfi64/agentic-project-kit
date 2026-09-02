@@ -90,7 +90,10 @@ def _load_or_exit(path: Path):
     try:
         return load_transfer_order(path)
     except (FileNotFoundError, ValueError) as exc:
-        typer.echo(str(exc))
+        if isinstance(exc, FileNotFoundError):
+            typer.echo(f"Transfer order not found: {path}")
+        else:
+            typer.echo(str(exc))
         raise typer.Exit(code=1) from exc
 
 def _emit_result(result, json_output: bool) -> None:

@@ -52,6 +52,7 @@ def test_init_dry_run_writes_nothing_and_prints_tree(tmp_path: Path) -> None:
     assert "MODE=dry-run" in result.output
     assert ".agentic/config.yaml" in result.output
     assert "+ .agentic/tmp/" in result.output
+    assert "+ .agentic/rule_ack/" in result.output
     assert "DPA repo-adoption assessment:" in result.output
     assert "external_repo_conformance_claimed: false" in result.output
     assert "DPA workspace-init projection boundary:" in result.output
@@ -85,6 +86,7 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
         ".agentic/ci",
         ".agentic/dpa",
         ".agentic/registries",
+        ".agentic/rule_ack",
         ".agentic/rules",
         ".agentic/state",
         ".agentic/state/handoff",
@@ -261,6 +263,7 @@ def test_init_gitignore_append_is_idempotent(tmp_path: Path) -> None:
     assert first.exit_code == 0, first.output
     assert second.exit_code != 0
     assert (tmp_path / ".gitignore").read_text(encoding="utf-8").count(".agentic/tmp/") == 1
+    assert (tmp_path / ".gitignore").read_text(encoding="utf-8").count(".agentic/rule_ack/") == 1
 
 
 def test_init_refuses_existing_manifest(tmp_path: Path) -> None:
@@ -406,4 +409,4 @@ def test_init_json_shape(tmp_path: Path) -> None:
     assert payload["mode"] == "dry-run"
     assert payload["written"] is False
     assert payload["injection_targets"] == [".github/workflows/agentic-gate.yaml"]
-    assert payload["gitignore_diff"] == ["+ .agentic/tmp/"]
+    assert payload["gitignore_diff"] == ["+ .agentic/tmp/", "+ .agentic/rule_ack/"]

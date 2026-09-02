@@ -27,7 +27,8 @@ PRIVATE_PUBLIC_BOUNDARY = (
     "Regardless of mode: **no secrets, credentials, private chat fragments, or\n"
     "personal logs belong in any versioned part of `.agentic/`.** The task carrier\n"
     "contains the work order the user knowingly publishes — `SEND` already makes\n"
-    "the push explicit. Machine-local state lives under `.agentic/tmp/` and is\n"
+    "the push explicit. Machine-local state lives under `.agentic/tmp/`; local\n"
+    "rule acknowledgement state lives under `.agentic/rule_ack/`. Both are\n"
     "ignored by construction. `workspace adopt` and `workspace init` must print\n"
     "this boundary; documentation for public target repos must repeat it."
 )
@@ -58,6 +59,7 @@ WORKSPACE_INIT_TREE = (
     ".agentic/transfer/inbox/",
     ".agentic/transfer/outbox/",
     ".agentic/tmp/",
+    ".agentic/rule_ack/",
     ".agentic/ci/",
     ".agentic/ci/agentic-gate.yaml",
     ".agentic/ci/pre-commit-snippet.yaml",

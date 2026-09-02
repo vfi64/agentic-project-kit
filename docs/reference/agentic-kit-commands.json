@@ -6473,7 +6473,22 @@
       "group": "governance",
       "help": "",
       "name": "check",
-      "params": [],
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
       "path": [
         "governance",
         "check"
@@ -17844,7 +17859,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "9f16193049b3",
+    "manifest_sha": "7dfdb6bd7c0d",
     "schema_version": 1
   },
   "schema_version": 2,

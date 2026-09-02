@@ -21,6 +21,7 @@ from agentic_project_kit.transfer_operation_monitor import MonitorDecision
 from agentic_project_kit.transfer_operation_monitor import guard_branch
 from agentic_project_kit.transfer_operation_monitor import guard_pr_create
 from agentic_project_kit.transfer_operation_monitor import read_git_state
+from agentic_project_kit.volatile_paths import RULE_ACK_DIRECTORY_PATH, is_rule_ack_path, normalize_status_path
 from agentic_project_kit.workspace import KitConfig, Workspace, load_workspace
 from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 from agentic_project_kit.workspace_lock import acquire_workspace_lock, workspace_mutation_lock
@@ -982,6 +983,43 @@ def _main_commit_refusal(message: str) -> RepoActionResult:
     return _result("commit", completed.args, completed, "Create a feature/admin branch before committing.")
 
 
+def _rule_ack_commit_refusal(paths: list[str], blocked_paths: list[str]) -> RepoActionResult:
+    completed = subprocess.CompletedProcess(
+        ["git", "add", *paths],
+        2,
+        "",
+        (
+            "Refusing to commit volatile rule acknowledgement path(s): "
+            + ", ".join(blocked_paths)
+            + "\n"
+        ),
+    )
+    return _result(
+        "commit",
+        list(completed.args),
+        completed,
+        "Remove rule acknowledgement paths from the commit selection; they are runtime state.",
+    )
+
+
+def _selection_may_include_rule_ack(path: str) -> bool:
+    normalized = normalize_status_path(path)
+    if normalized in {"", "."}:
+        return True
+    return (
+        is_rule_ack_path(normalized)
+        or normalized == ".agentic"
+        or RULE_ACK_DIRECTORY_PATH.startswith(f"{normalized}/")
+    )
+
+
+def _selection_includes_dirty_rule_ack_state(paths: list[str]) -> bool:
+    if not any(_selection_may_include_rule_ack(path) for path in paths):
+        return False
+    status = _run(["git", "status", "--short", "--untracked-files=all", "--", RULE_ACK_DIRECTORY_PATH])
+    return bool(status.stdout.strip())
+
+
 def commit_paths(message: str, paths: list[str], *, allow_main: bool = False, required_branch: str = "") -> RepoActionResult:
     with acquire_workspace_lock(Path("."), "commit_paths"):
         return _commit_paths_unlocked(
@@ -1002,6 +1040,11 @@ def _commit_paths_unlocked(
     if not paths:
         completed = subprocess.CompletedProcess(["git", "add"], 2, "", "No paths supplied.\n")
         return _result("commit", ["git", "add"], completed, "Provide explicit paths for commit.")
+    rule_ack_paths = [path for path in paths if is_rule_ack_path(path)]
+    if rule_ack_paths:
+        return _rule_ack_commit_refusal(paths, rule_ack_paths)
+    if _selection_includes_dirty_rule_ack_state(paths):
+        return _rule_ack_commit_refusal(paths, [RULE_ACK_DIRECTORY_PATH])
 
     if required_branch:
         monitor = guard_branch(

@@ -9,11 +9,13 @@ import subprocess
 
 import typer
 
+from agentic_project_kit.cli_executable import default_agentic_kit, default_python
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_release_blockers
 from agentic_project_kit.release_metadata_authority_gate import release_anchor_changes
 from agentic_project_kit.release_prepare import refresh_dpa_readiness_command_manifest_ack
 from agentic_project_kit.work_discard_changes import discard_all_changes
 from agentic_project_kit.workspace import load_workspace
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 
 work_app = typer.Typer(help="Human-friendly meta commands for patch, PR, and recovery workflows.")
 release_flow_app = typer.Typer(help="Human-friendly meta commands for release readiness and preparation.")
@@ -107,11 +109,11 @@ def _exit_if_blocked(payload: dict[str, object]) -> None:
 
 
 def _agentic(*parts: str) -> list[str]:
-    return ["./.venv/bin/agentic-kit", *parts]
+    return [default_agentic_kit(Path(".")), *parts]
 
 
 def _python(*parts: str) -> list[str]:
-    return ["./.venv/bin/python", *parts]
+    return [default_python(Path(".")), *parts]
 
 
 def _latest_release_tag() -> str:
@@ -193,6 +195,27 @@ def _noop_step(name: str, message: str) -> dict[str, object]:
         "stdout": message,
         "stderr": "",
     }
+
+
+def _workflow_steps_ok(steps: list[dict[str, object]]) -> bool:
+    return all(step["ok"] for step in steps)
+
+
+def _external_first_cycle_without_successor_package(root: Path = Path(".")) -> bool:
+    if not is_external_manifest_workspace(root):
+        return False
+    try:
+        workspace = load_workspace(root, suppress_legacy_profile_warning=True)
+    except RuntimeError:
+        return False
+    package_root = workspace.handoff_packages_latest()
+    package_files = (
+        package_root / "execution_contract.json",
+        package_root / "successor_context.yaml",
+        package_root / "validation_report.json",
+        package_root / "source_manifest.json",
+    )
+    return not any(path.exists() for path in package_files)
 
 
 def _open_pr_closeout_body(title: str) -> str:
@@ -397,13 +420,22 @@ def work_start_command(
 ) -> None:
     """Start a human patch/slice workflow with the safe standard startup sequence."""
     base_ref = from_ref.strip() or "main"
-    steps = [
-        _run_step("sync-main", _agentic("transfer", "sync-main")),
-        _run_step("rules-acknowledge", _agentic("rules", "acknowledge")),
-        _run_step("post-merge-check", _agentic("transfer", "post-merge-check")),
-        _run_step("repo-status", _agentic("transfer", "repo-status")),
-    ]
-    if all(step["ok"] for step in steps):
+    steps = [_run_step("sync-main", _agentic("transfer", "sync-main"))]
+    if _workflow_steps_ok(steps):
+        steps.append(_run_step("rules-acknowledge", _agentic("rules", "acknowledge")))
+    if _workflow_steps_ok(steps):
+        if _external_first_cycle_without_successor_package(Path(".")):
+            steps.append(
+                _noop_step(
+                    "post-merge-check",
+                    "External first-cycle workspace has no successor package yet; post-merge check is not applicable.\n",
+                )
+            )
+        else:
+            steps.append(_run_step("post-merge-check", _agentic("transfer", "post-merge-check")))
+    if _workflow_steps_ok(steps):
+        steps.append(_run_step("repo-status", _agentic("transfer", "repo-status")))
+    if _workflow_steps_ok(steps):
         exists = subprocess.run(["git", "show-ref", "--verify", "--quiet", f"refs/heads/{branch}"])
         if exists.returncode == 0:
             steps.append(_run_step("git-switch-branch", ["git", "switch", branch]))
@@ -425,6 +457,19 @@ def work_check_command(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     """Run common human workflow gates without committing or pushing."""
+    if is_external_manifest_workspace(Path(".")):
+        steps = [
+            _run_step("repo-status", _agentic("transfer", "repo-status")),
+            _run_step("check", _agentic("check", "--json")),
+            _run_step("governance-check", _agentic("governance", "check")),
+            _run_step("doctor", _agentic("doctor")),
+            _run_step("standard-gates-audit-suite", _agentic("standard-gates-audit-suite")),
+        ]
+        payload = _payload("work-check", steps, extra={"profile": profile, "workspace_mode": "external_manifest_workspace"})
+        _emit(payload, json_output=json_output)
+        _exit_if_blocked(payload)
+        return
+
     steps: list[dict[str, object]] = [
         _run_step("repo-status", _agentic("transfer", "repo-status")),
         _run_step("command-reference-check", _agentic("transfer", "command-reference-check", "--json")),

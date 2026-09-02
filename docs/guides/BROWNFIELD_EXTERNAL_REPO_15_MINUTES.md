@@ -52,7 +52,9 @@ agentic-kit workspace init --root PATH --execute
 
 The write step creates `.agentic/config.yaml`, `.agentic/state/`,
 `.agentic/registries/`, transfer prompt files, CI/pre-commit templates, and a
-`hygiene` manifest block. It appends `.agentic/tmp/` to `.gitignore`. It does not
+`hygiene` manifest block. It appends `.agentic/tmp/` and `.agentic/rule_ack/` to
+`.gitignore`. `agentic-kit transfer commit` refuses direct or broad path
+selections that would stage `.agentic/rule_ack/` runtime state. It does not
 modify application source files.
 
 ## 4. Run Health Gates
@@ -63,10 +65,14 @@ Use Kit gates for the operating layer:
 agentic-kit check-docs --root PATH
 agentic-kit check --root PATH
 agentic-kit doctor --root PATH
+agentic-kit governance check --root PATH
+agentic-kit standard-gates-audit-suite
 ```
 
 `check` and `check-docs` are error-list gates with zero/non-zero exits. `doctor`
-renders a health report with `PASS`, `FAIL`, `WARN`, and `SKIP`.
+renders a health report with `PASS`, `FAIL`, `WARN`, and `SKIP`. In external
+workspace mode the standard gate suite and planning-doc slice gate use the
+external operating-layer gate set; they do not run Kit self-hosting tests.
 For audit evidence, run `agentic-kit check --root PATH --context` or
 `agentic-kit check-docs --root PATH --json` to show whether those gates are using
 the external workspace-state document set. These commands do not render

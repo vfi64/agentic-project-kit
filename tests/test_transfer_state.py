@@ -213,7 +213,7 @@ def test_transfer_state_blocks_when_rule_snapshot_fails_closed(tmp_path, monkeyp
     )
 
 
-def test_transfer_state_rejects_stale_rule_acknowledgement(tmp_path, monkeypatch):
+def test_transfer_state_accepts_prior_head_rule_acknowledgement_when_rules_match(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     _write_and_commit_minimal_sources(tmp_path)
     _write_rule_ack(tmp_path, repo_head="stale")
@@ -222,9 +222,32 @@ def test_transfer_state_rejects_stale_rule_acknowledgement(tmp_path, monkeypatch
     snapshot = build_transfer_state(tmp_path)
 
     assert snapshot.primary_state == PRIMARY_WAIT
-    assert snapshot.capabilities["rules_confirmed"] is False
-    assert "repo_head_mismatch" in snapshot.reasons
+    assert snapshot.capabilities["rules_confirmed"] is True
+    assert "repo_head_mismatch" not in snapshot.reasons
     assert snapshot.rule_acknowledgement["present"] is True
+    assert snapshot.rule_acknowledgement["decision"]["is_confirmed"] is True
+    assert snapshot.rule_acknowledgement["decision"]["warnings"] == ["repo_head_mismatch"]
+
+
+def test_transfer_state_rejects_rule_acknowledgement_when_rule_sources_change(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    _write_and_commit_minimal_sources(tmp_path)
+    _write_rule_ack(tmp_path)
+    (tmp_path / "docs/STATUS.md").write_text("# Changed Rules\n", encoding="utf-8")
+    subprocess.run(["git", "add", "docs/STATUS.md"], cwd=tmp_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "Change rule source"],
+        cwd=tmp_path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    monkeypatch.chdir(tmp_path)
+
+    snapshot = build_transfer_state(tmp_path)
+
+    assert snapshot.primary_state == PRIMARY_WAIT
+    assert snapshot.capabilities["rules_confirmed"] is False
+    assert "snapshot_id_mismatch" in snapshot.reasons
     assert snapshot.rule_acknowledgement["decision"]["is_confirmed"] is False
 
 

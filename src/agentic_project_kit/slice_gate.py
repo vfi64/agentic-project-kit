@@ -7,6 +7,9 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
+from agentic_project_kit.volatile_paths import split_known_volatile_status
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+
 SUPPORTED_KINDS = ("planning-doc",)
 
 
@@ -63,7 +66,9 @@ CommandRunner = Callable[[tuple[str, ...], Path, dict[str, str]], subprocess.Com
 DirtyStateReader = Callable[[Path], DirtyState]
 
 
-def planning_doc_steps() -> tuple[SliceGateStep, ...]:
+def planning_doc_steps(project_root: Path = Path(".")) -> tuple[SliceGateStep, ...]:
+    if is_external_manifest_workspace(project_root):
+        return external_planning_doc_steps()
     return (
         SliceGateStep(
             "targeted-tests",
@@ -92,6 +97,20 @@ def planning_doc_steps() -> tuple[SliceGateStep, ...]:
     )
 
 
+def external_planning_doc_steps() -> tuple[SliceGateStep, ...]:
+    return (
+        SliceGateStep(
+            "check",
+            (sys.executable, "-m", "agentic_project_kit.cli", "check", "--json"),
+        ),
+        SliceGateStep(
+            "governance-check",
+            (sys.executable, "-m", "agentic_project_kit.cli", "governance", "check"),
+        ),
+        SliceGateStep("doctor", (sys.executable, "-m", "agentic_project_kit.cli", "doctor")),
+    )
+
+
 def run_slice_gate(
     kind: str,
     *,
@@ -107,7 +126,7 @@ def run_slice_gate(
     command_runner = runner or run_command
     env = env_with_src()
     step_results: list[SliceGateStepResult] = []
-    for step in planning_doc_steps():
+    for step in planning_doc_steps(root):
         completed = command_runner(step.command, root, env)
         status = "PASS" if completed.returncode == 0 else "FAIL"
         step_results.append(
@@ -139,7 +158,7 @@ def run_command(
 
 def read_dirty_state(project_root: Path) -> DirtyState:
     completed = subprocess.run(
-        ["git", "status", "--short"],
+        ["git", "status", "--short", "--untracked-files=all"],
         cwd=project_root,
         text=True,
         stdout=subprocess.PIPE,
@@ -149,7 +168,8 @@ def read_dirty_state(project_root: Path) -> DirtyState:
     if completed.returncode != 0:
         error = (completed.stderr or completed.stdout or "git status failed").strip()
         return DirtyState("UNKNOWN", error=error)
-    files = tuple(line for line in completed.stdout.splitlines() if line.strip())
+    dirty_status, _ignored = split_known_volatile_status(completed.stdout)
+    files = tuple(line for line in dirty_status.splitlines() if line.strip())
     return DirtyState("DIRTY" if files else "CLEAN", files=files)
 
 
