@@ -7,17 +7,17 @@ Current verified release: 1.0.8.
 Current release tag: v1.0.8.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.22213857`.
-Current verified main: `c46606a9` (`Fix external workspace first-cycle gates (#2265)`).
-Latest substantive work: PR #2265 (`Fix external workspace first-cycle gates (#2265)`).
-Latest administrative refresh-only descendant: post-PR2265 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
+Current verified main: `134bd4e7` (`Fix work start from integration refs (#2267)`).
+Latest substantive work: PR #2267 (`Fix work start from integration refs (#2267)`).
+Latest administrative refresh-only descendant: post-PR2267 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
 Latest Brownfield external evidence: Cycle 007 report
 `docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md`
 records Comm-SCI App2 provider-settings seam reduction from `55` to `44`,
 target PR #16, target successor refresh PR #17, final target head
 `ea21b3a3`, and post-merge-settle `READY`.
-Current governed slice: repair the Cycle 008 start-workflow defect found in Comm-SCI: `work start --from-ref origin/feature/ui-access-levels-v2` must preserve the non-main integration baseline, and Rule-Ack runtime state must stay locally ignored in older external workspaces.
-Post-merge handoff status: PASS/NOOP after PR #2265 administrative refresh.
-Next safe step: merge the Cycle 008 start-workflow Kit repair, then restart Comm-SCI Cycle 008 from a fresh worktree on `origin/feature/ui-access-levels-v2`.
+Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
+Post-merge handoff status: PASS/NOOP after PR #2267 administrative refresh.
+Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
 
@@ -422,6 +422,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2265
+## Operational documentation refresh state after PR #2267
 
-Current administrative handoff refresh state is `c46606a9` (`Fix external workspace first-cycle gates (#2265)`). Continue next only after this post-PR2265 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `134bd4e7` (`Fix work start from integration refs (#2267)`). Continue next only after this post-PR2267 refresh is committed and merged; the next substantive slice must be created from fresh main.

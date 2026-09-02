@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 5cd8ae96da6d77b61147f3f6f617bbac0ed05d36b80b66de0a8f0c975376090c
 - docs/reference/agentic-kit-commands.json: 2261aa2d30ef01db3c0d86334ab9d28fb371cc9d9f1e475a02fa6907499ce4b0
-## Operational documentation refresh state after PR #2265
+## Operational documentation refresh state after PR #2267
 
-Current administrative handoff refresh state is `c46606a9` (`Fix external workspace first-cycle gates (#2265)`). Continue next only after this post-PR2265 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `134bd4e7` (`Fix work start from integration refs (#2267)`). Continue next only after this post-PR2267 refresh is committed and merged; the next substantive slice must be created from fresh main.
