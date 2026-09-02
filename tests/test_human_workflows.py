@@ -3,11 +3,18 @@ from __future__ import annotations
 import json
 import subprocess
 
+import pytest
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
 from agentic_project_kit.doc_lifecycle import DocLifecycleFinding
 from agentic_project_kit.cli_commands import human_workflows
+
+
+@pytest.fixture(autouse=True)
+def stable_workflow_executables(monkeypatch):
+    monkeypatch.setattr(human_workflows, "default_agentic_kit", lambda root: "./.venv/bin/agentic-kit")
+    monkeypatch.setattr(human_workflows, "default_python", lambda root: "./.venv/bin/python")
 
 
 def _completed(argv: list[str], stdout: str = '{"result_status": "PASS"}\n', stderr: str = "", returncode: int = 0):
