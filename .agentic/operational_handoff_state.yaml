@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 134bd4e7ad4a4709c175dcaecf15ded905808034
-  short: 134bd4e7
-  subject: Fix work start from integration refs (#2267)
+  full: 14e73fcedeedb1a1dcc6a9d6d6f25cf6c7d7aea1
+  short: 14e73fce
+  subject: Harden greenfield workflow closeout routing (#2269)
 last_substantive_work_state:
-  full: 134bd4e7ad4a4709c175dcaecf15ded905808034
-  short: 134bd4e7
-  subject: Fix work start from integration refs (#2267)
+  full: 14e73fcedeedb1a1dcc6a9d6d6f25cf6c7d7aea1
+  short: 14e73fce
+  subject: Harden greenfield workflow closeout routing (#2269)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

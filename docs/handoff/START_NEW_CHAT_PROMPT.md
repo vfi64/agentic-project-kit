@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 94689c99848db5dc5c44dc37b59b431eab94db25558202a4522bbb7a08f91708
 - docs/reference/agentic-kit-commands.json: e39c8c395837fec2237a077998718ab30933481cab289764c180709fc1e26337
-## Operational documentation refresh state after PR #2267
+## Operational documentation refresh state after PR #2269
 
-Current administrative handoff refresh state is `134bd4e7` (`Fix work start from integration refs (#2267)`). Continue next only after this post-PR2267 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `14e73fce` (`Harden greenfield workflow closeout routing (#2269)`). Continue next only after this post-PR2269 refresh is committed and merged; the next substantive slice must be created from fresh main.
