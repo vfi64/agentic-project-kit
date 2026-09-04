@@ -260,3 +260,46 @@ def test_command_for_cli_uses_packaged_manifest_in_external_workspace(tmp_path: 
     assert payload["status"] == "match"
     assert payload["matched_prefix"] == "git push"
     assert payload["commands"][0]["qualified_name"] == "agentic-kit transfer push-current"
+
+
+def test_command_for_cli_maps_natural_slice_finish_intent_to_work_finish() -> None:
+    result = CliRunner().invoke(
+        app,
+        [
+            "command-for",
+            "--raw",
+            "finish slice create pull request merge and post-merge handoff",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["status"] == "match"
+    assert payload["matched_prefix"] == (
+        "finish slice create pull request merge and post-merge handoff"
+    )
+    assert payload["commands"][0]["qualified_name"] == "agentic-kit work finish"
+    assert payload["commands"][0]["dry_run_available"] is True
+
+
+def test_command_for_cli_maps_post_merge_handoff_intent_to_pr_closeout_wrapper() -> None:
+    result = CliRunner().invoke(
+        app,
+        ["command-for", "--raw", "post-merge handoff for merged PR", "--json"],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["status"] == "match"
+    assert payload["matched_prefix"] == "post-merge handoff"
+    assert payload["commands"][0]["qualified_name"] == "agentic-kit transfer pr-closeout-complete"
+
+
+def test_command_for_cli_accepts_specific_finish_task_tag() -> None:
+    result = CliRunner().invoke(app, ["command-for", "--task", "slice-finish", "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["status"] == "match"
+    assert payload["commands"][0]["qualified_name"] == "agentic-kit work finish"

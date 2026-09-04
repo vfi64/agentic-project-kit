@@ -13599,11 +13599,23 @@
         "pr-closeout-complete"
       ],
       "qualified_name": "agentic-kit transfer pr-closeout-complete",
-      "replaces_raw": [],
+      "replaces_raw": [
+        "closeout merged pr",
+        "close out merged pr",
+        "complete pr closeout",
+        "finish pr closeout",
+        "handoff after merge",
+        "post merge handoff",
+        "post-merge handoff"
+      ],
       "safety": "BOUNDED",
       "surface": "orchestrator",
       "task_tags": [
         "bounded",
+        "closeout",
+        "handoff-after-merge",
+        "post-merge-handoff",
+        "pr-closeout",
         "transfer"
       ],
       "when_to_use": "Merge a substantive PR if needed, then finish post-merge handoff closeout."
@@ -16342,12 +16354,26 @@
         "finish"
       ],
       "qualified_name": "agentic-kit work finish",
-      "replaces_raw": [],
+      "replaces_raw": [
+        "close completed slice",
+        "closeout completed slice",
+        "create pr and merge",
+        "create pull request and merge",
+        "finish slice",
+        "finish slice create pull request merge and post-merge handoff",
+        "finish work",
+        "publish slice"
+      ],
       "safety": "BOUNDED",
       "surface": "orchestrator",
       "task_tags": [
         "bounded",
-        "work"
+        "closeout",
+        "finish",
+        "slice-closeout",
+        "slice-finish",
+        "work",
+        "work-finish"
       ],
       "when_to_use": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks."
     },
@@ -17859,7 +17885,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "7dfdb6bd7c0d",
+    "manifest_sha": "e99a42ad7fa2",
     "schema_version": 1
   },
   "schema_version": 2,

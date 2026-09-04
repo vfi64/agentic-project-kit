@@ -2612,6 +2612,8 @@ plans:
     - docs/reports/POST_V1_0_4_B1_KIT_CLOSEOUT_SETTLE_OBSERVATION_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_004_005_EXTERNAL_CONTEXT_MERGE_FIX_20260824.md
     - docs/reports/POST_V1_0_4_B1_KIT_006_EXTERNAL_POST_MERGE_BASE_BRANCH_20260824.md
+    - docs/reports/POST_V1_0_8_AGP_COCKPIT_GREENFIELD_ADJUDICATION_20260904.md
+    - docs/reports/POST_V1_0_8_AGP_COCKPIT_GREENFIELD_ADJUDICATION_20260904.json
     observed_cycles:
     - id: B1-COMM-SCI-20260824-001
       state: merged_after_cycle_002_prebase
@@ -2873,6 +2875,40 @@ plans:
         integration branches instead of synchronizing main first, and keep
         Rule-Ack runtime state locally ignored in older external workspaces.
       evidence: docs/reports/POST_V1_0_8_B1_COMM_SCI_CYCLE_008_START_WORKFLOW_REPAIR_20260902.md
+    - id: B1-KIT-GF-LEDGER
+      status: active
+      goal: Integrate the AGP Cockpit Greenfield KIT-GF finding ledger into the
+        existing B1 external-workspace plan without treating the external report
+        as implementation authority or creating a second failure database.
+      evidence:
+      - docs/reports/POST_V1_0_8_AGP_COCKPIT_GREENFIELD_ADJUDICATION_20260904.md
+      - docs/reports/POST_V1_0_8_AGP_COCKPIT_GREENFIELD_ADJUDICATION_20260904.json
+      accepted_lesson:
+        id: KIT-GF-LESSON-001
+        status: accepted_as_method
+        summary: Baseline first, bounded inventory, source/call-path mapping,
+          contextual adjudication, explicit negative outcomes, smallest justified
+          mutation, focused regression, then broader gates.
+      acceptance:
+      - Every KIT-GF finding is adjudicated against current main before further
+        product mutation.
+      - Existing B1 items remain authoritative where they already cover a finding.
+      - Open findings stay ordered by external first-cycle risk, not by the stale
+        release request from the imported handoff.
+      - Future release work starts from the current repository version, tag, PyPI
+        state, gates, and maintainer release boundary.
+    - id: B1-KIT-020
+      status: implemented_local_retest_pass
+      goal: Route natural slice-closeout and post-merge-handoff command-for
+        intents to the existing lifecycle wrappers, and make work-finish dry-run
+        surface the remote preflight required by execute.
+      evidence:
+      - docs/reports/POST_V1_0_8_AGP_COCKPIT_GREENFIELD_ADJUDICATION_20260904.md
+      - docs/reports/POST_V1_0_8_AGP_COCKPIT_GREENFIELD_ADJUDICATION_20260904.json
+      tests:
+      - tests/test_command_selector.py
+      - tests/test_command_manifest.py
+      - tests/test_human_workflows.py
     - id: B1-TARGET-001
       status: recorded_target_friction
       goal: Decide in the target repository whether App2 tests that rewrite
@@ -3093,6 +3129,8 @@ plans:
   - docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
   - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
   - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md
+  - docs/reports/POST_V1_0_8_AGP_COCKPIT_GREENFIELD_ADJUDICATION_20260904.md
+  - docs/reports/POST_V1_0_8_AGP_COCKPIT_GREENFIELD_ADJUDICATION_20260904.json
   - docs/reports/POST_V1_0_5_B1_WEBSITE_REDDIT_B2_B3_CLOSEOUT_20260826.md
   - docs/reports/REDDIT_B1_BROWNFIELD_POST_EN_20260826.md
   - docs/reports/REDDIT_B1_BROWNFIELD_POST_DE_20260826.md

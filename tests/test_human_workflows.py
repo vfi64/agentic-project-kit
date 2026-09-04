@@ -252,6 +252,76 @@ def test_work_finish_dry_run_requires_paths(monkeypatch):
     assert "path-selection" in payload["blockers"]
 
 
+def test_work_finish_dry_run_surfaces_remote_preflight(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "work",
+            "finish",
+            "--branch",
+            "codex/demo",
+            "--title",
+            "Demo",
+            "--message",
+            "Demo",
+            "--path",
+            "src/demo.py",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["dry_run"] is True
+    assert [step["name"] for step in payload["steps"]] == [
+        "repo-status",
+        "protected-diff-plan",
+        "remote-preflight",
+    ]
+    assert ["git", "ls-remote", "--exit-code", "origin", "HEAD"] in calls
+
+
+def test_work_finish_dry_run_blocks_when_remote_preflight_fails(monkeypatch):
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return _completed(command, stderr="Could not resolve host: github.com\n", returncode=128)
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "work",
+            "finish",
+            "--branch",
+            "codex/demo",
+            "--title",
+            "Demo",
+            "--message",
+            "Demo",
+            "--path",
+            "src/demo.py",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "BLOCKED"
+    assert "remote-preflight" in payload["blockers"]
+
+
 def test_work_finish_default_uses_existing_pr_lifecycle_wrapper(monkeypatch):
     calls: list[list[str]] = []
 

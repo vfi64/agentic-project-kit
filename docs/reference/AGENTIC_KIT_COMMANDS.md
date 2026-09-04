@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 7dfdb6bd7c0d
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: e99a42ad7fa2
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -2795,6 +2795,7 @@ Deterministically settle post-merge generated-output refresh state.
 - Surface: `orchestrator`
 - When to use: Merge a substantive PR if needed, then finish post-merge handoff closeout.
 - Dry-run available: `False`
+- Replaces raw: `closeout merged pr`, `close out merged pr`, `complete pr closeout`, `finish pr closeout`, `handoff after merge`, `post merge handoff`, `post-merge handoff`
 
 Merge a substantive PR if needed, then finish post-merge handoff closeout.
 
@@ -3372,6 +3373,7 @@ Preview or execute the explicit destructive discard-all workflow.
 - Surface: `orchestrator`
 - When to use: Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.
 - Dry-run available: `True`
+- Replaces raw: `close completed slice`, `closeout completed slice`, `create pr and merge`, `create pull request and merge`, `finish slice`, `finish slice create pull request merge and post-merge handoff`, `finish work`, `publish slice`
 
 Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.
 
