@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `134bd4e7ad4a4709c175dcaecf15ded905808034` (`134bd4e7`), after `Fix work start from integration refs (#2267)`.
-Last substantive work state is `134bd4e7ad4a4709c175dcaecf15ded905808034` (`134bd4e7`), after `Fix work start from integration refs (#2267)`.
+Current verified main/admin HEAD is `14e73fcedeedb1a1dcc6a9d6d6f25cf6c7d7aea1` (`14e73fce`), after `Harden greenfield workflow closeout routing (#2269)`.
+Last substantive work state is `14e73fcedeedb1a1dcc6a9d6d6f25cf6c7d7aea1` (`14e73fce`), after `Harden greenfield workflow closeout routing (#2269)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
