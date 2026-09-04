@@ -547,6 +547,8 @@ def work_finish_command(
     ]
     if not selected_paths:
         steps.append({"name": "path-selection", "argv": [], "returncode": 2, "ok": False, "allowed_returncodes": [0], "stdout": "", "stderr": "At least one --path is required for work finish."})
+    if dry_run and all(step["ok"] for step in steps):
+        steps.append(_remote_preflight_step())
     if not dry_run and all(step["ok"] for step in steps):
         steps.append(_remote_preflight_step())
         if all(step["ok"] for step in steps):

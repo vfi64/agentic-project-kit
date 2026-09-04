@@ -82,7 +82,7 @@
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
     {
-      "bytes": 6964,
+      "bytes": 6978,
       "exists": true,
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
@@ -117,18 +117,18 @@
       "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md"
     },
     {
-      "bytes": 206561,
+      "bytes": 208715,
       "exists": true,
       "path": "docs/planning/PROJECT_DIRECTION.yaml",
       "yaml_valid": true
     },
     {
-      "bytes": 174882,
+      "bytes": 175292,
       "exists": true,
       "path": "docs/reference/AGENTIC_KIT_COMMANDS.md"
     },
     {
-      "bytes": 481934,
+      "bytes": 482661,
       "exists": true,
       "path": "docs/reference/agentic-kit-commands.json"
     }

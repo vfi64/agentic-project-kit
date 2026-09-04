@@ -151,6 +151,20 @@ def test_orchestrator_lifecycle_rank_projects_normal_flow() -> None:
     assert all(isinstance(rank, int) for rank in ranks)
 
 
+def test_current_reference_routes_closeout_intents_to_existing_lifecycle_wrappers() -> None:
+    data = build_current_reference()
+    by_name = {command["qualified_name"]: command for command in data["commands"]}
+
+    work_finish = by_name["agentic-kit work finish"]
+    pr_closeout = by_name["agentic-kit transfer pr-closeout-complete"]
+
+    assert "finish slice" in work_finish["replaces_raw"]
+    assert "create pull request and merge" in work_finish["replaces_raw"]
+    assert "slice-finish" in work_finish["task_tags"]
+    assert "post-merge handoff" in pr_closeout["replaces_raw"]
+    assert "pr-closeout" in pr_closeout["task_tags"]
+
+
 def test_surface_contract_documents_compatibility_boundary() -> None:
     contract = Path("docs/governance/COMMAND_REFERENCE_REGISTRY_CONTRACT.md").read_text(
         encoding="utf-8"

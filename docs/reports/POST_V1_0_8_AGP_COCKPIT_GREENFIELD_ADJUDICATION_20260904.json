@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "kind": "agp_cockpit_greenfield_findings_adjudication",
+  "status": "implemented_local_retest_pass",
+  "date": "2026-09-04",
+  "kit_baseline": {
+    "origin_main": "78d071b8",
+    "version": "1.0.8",
+    "branch": "codex/greenfield-workflow-closeout-adjudication",
+    "open_pull_requests_at_baseline": 0,
+    "open_issues_at_baseline": 0
+  },
+  "source_evidence": [
+    "AGENTIC_KIT_GREENFIELD_FINDINGS.md",
+    "AGENTIC_KIT_GREENFIELD_FINDINGS.json",
+    "AGENTIC_KIT_GREENFIELD_REPAIR_HANDOFF.md",
+    "AGENTIC_KIT_GREENFIELD_SOURCE_INDEX.md",
+    "CODEX_AUFTRAG_GREENFIELD_FINDINGS_KIT_RELEASE.txt"
+  ],
+  "release_decision": {
+    "requested_version_was_stale": "1.0.3",
+    "current_repo_version": "1.0.8",
+    "release_prepared": false,
+    "reason": "Adjudication and repair precede any release decision; current repository state supersedes the stale source request."
+  },
+  "finding_adjudications": [
+    {
+      "id": "KIT-GF-001",
+      "status": "partially_addressed_needs_external_retest",
+      "summary": "Workspace init now creates manifest, state, registries, transfer directories, CI templates, and volatile runtime ignores; earlier lifecycle metadata friction is not re-proven closed by inspection alone.",
+      "next_action": "Include in fresh external first-cycle retest."
+    },
+    {
+      "id": "KIT-GF-002",
+      "status": "fixed_on_current_main",
+      "summary": "Planning-doc slice gate uses an external workspace gate set instead of self-hosting Kit gates.",
+      "next_action": "Retain current tests and contract."
+    },
+    {
+      "id": "KIT-GF-003",
+      "status": "partially_addressed_needs_first_cycle_handoff_retest",
+      "summary": "Transfer state models NO_COMMAND and successor package freshness handles refresh-only descendants; first bootstrap/no-previous-handoff still needs end-to-end retest.",
+      "next_action": "Retest with a fresh external workspace first cycle."
+    },
+    {
+      "id": "KIT-GF-004",
+      "status": "fixed_on_current_main",
+      "summary": "Governance check has an external manifest workspace path and tests cover it.",
+      "next_action": "No new product change."
+    },
+    {
+      "id": "KIT-GF-005",
+      "status": "mostly_addressed_retest_required",
+      "summary": "Work start skips first-cycle external post-merge checks and preserves non-main refs after PR 2267.",
+      "next_action": "Include virgin workspace and integration-ref cases in the external matrix."
+    },
+    {
+      "id": "KIT-GF-006",
+      "status": "fixed_on_current_main",
+      "summary": "Transfer status returns a PASS payload with NO_COMMAND when the default inbox is absent.",
+      "next_action": "No new product change."
+    },
+    {
+      "id": "KIT-GF-007",
+      "status": "open_planned",
+      "summary": "Adopt is read-only and init marks selected generated targets, but generated-vs-manual provenance is not systematic across all DPA/adopt adjudication surfaces.",
+      "next_action": "Plan a later DPA/adopt provenance slice."
+    },
+    {
+      "id": "KIT-GF-008",
+      "status": "fixed_on_current_main",
+      "summary": "Workspace init generates external CI templates and external standard gates use the external gate set.",
+      "next_action": "Include in external retest."
+    },
+    {
+      "id": "KIT-GF-009",
+      "status": "open_partially_mitigated",
+      "summary": "Work finish owns the lifecycle and this slice strengthens dry-run preflight, but first-push dirty-state convergence still needs execution evidence.",
+      "next_action": "Keep in first-cycle finish/closeout acceptance matrix."
+    },
+    {
+      "id": "KIT-GF-010",
+      "status": "mitigated_fixed_needs_released_package_retest",
+      "summary": "Rule acknowledgement is local runtime state, ignored locally, split from dirty-state blockers, and refused by transfer commit.",
+      "next_action": "Retest from released package after the next release."
+    },
+    {
+      "id": "KIT-GF-011",
+      "status": "improved_not_closed",
+      "summary": "Refresh-only descendant handling reduces false staleness, but B1-KIT-011 remains improved-not-closed for mixed handoff/status/report refresh loops.",
+      "next_action": "Continue under the existing B1-KIT-011 authority."
+    },
+    {
+      "id": "KIT-GF-012",
+      "status": "fixed_in_this_slice",
+      "summary": "Work finish dry-run now runs the same read-only remote preflight required by execute before reporting PASS.",
+      "next_action": "Covered by new human workflow regression tests."
+    },
+    {
+      "id": "KIT-GF-013",
+      "status": "open_planned",
+      "summary": "Patch-cycle and command-composition diagnostics exist, but no full recurrence-to-systemic-review escalation was found for the third-mutation failure-domain rule.",
+      "next_action": "Plan a bounded workflow-guard escalation slice without creating a separate failure database."
+    }
+  ],
+  "repairs_in_this_slice": [
+    {
+      "id": "closeout-intent-command-for",
+      "finding_ids": ["KIT-GF-011", "KIT-GF-013"],
+      "mechanism": "existing command-for and command manifest replaces_raw/task_tags",
+      "result": "Natural slice closeout and post-merge handoff intents route to existing lifecycle wrappers."
+    },
+    {
+      "id": "work-finish-dry-run-remote-preflight",
+      "finding_ids": ["KIT-GF-012"],
+      "mechanism": "existing work finish dry-run/execute lifecycle",
+      "result": "Dry-run now surfaces remote preflight failures before execute."
+    }
+  ],
+  "accepted_lesson": {
+    "id": "KIT-GF-LESSON-001",
+    "status": "accepted_as_method",
+    "summary": "Evidence-first convergence workflow: baseline, bounded inventory, source/call-path mapping, contextual adjudication, explicit negative outcomes, smallest justified mutation, focused regression, broader gates."
+  },
+  "focused_validation": [
+    {
+      "command": "python -m pytest -q tests/test_command_selector.py tests/test_command_manifest.py tests/test_human_workflows.py tests/test_transfer_startup_hardening_commands.py::test_command_composition_check_blocks_avoidable_low_level_work_finish_sequence",
+      "result": "PASS",
+      "summary": "60 passed"
+    },
+    {
+      "command": "ruff check touched source and tests",
+      "result": "PASS",
+      "summary": "All checks passed"
+    }
+  ],
+  "full_validation": [
+    {
+      "command": "python -m pytest -q",
+      "result": "PASS",
+      "summary": "3025 passed, 482 warnings"
+    },
+    {
+      "command": "ruff check .",
+      "result": "PASS",
+      "summary": "All checks passed"
+    },
+    {
+      "command": "agentic-kit check-docs",
+      "result": "PASS",
+      "summary": "Agentic project check passed"
+    },
+    {
+      "command": "agentic-kit direction validate --root .",
+      "result": "PASS",
+      "summary": "0 findings"
+    },
+    {
+      "command": "agentic-kit audit-command-manifest --json",
+      "result": "PASS",
+      "summary": "0 findings"
+    },
+    {
+      "command": "agentic-kit doctor",
+      "result": "PASS",
+      "summary": "Overall PASS; 76 document-lifecycle report-only findings"
+    },
+    {
+      "command": "python site/scripts/build.py --docs-pages-fallback --json",
+      "result": "PASS",
+      "summary": "16 fallback files, 14 generated-site files, 14 verified site claims"
+    },
+    {
+      "command": "agentic-kit transfer chat-switch-complete --render-prompt --json",
+      "result": "PASS",
+      "summary": "Successor handoff package and prompt projections refreshed"
+    }
+  ]
+}

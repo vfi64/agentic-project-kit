@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-09-02T18:54:27.525086+00:00",
+  "generated_at_utc": "2026-09-04T11:29:08.571429+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,14 +57,14 @@
     "package_version": "1.0.8"
   },
   "repo": {
-    "branch": "docs/post-pr2267-handoff-refresh",
+    "branch": "codex/greenfield-workflow-closeout-adjudication",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "134bd4e7ad4a4709c175dcaecf15ded905808034",
+    "head": "78d071b87ae72d05bc7e2277efeed534871b5034",
     "head_matches_origin_main": true,
-    "head_short": "134bd4e7",
+    "head_short": "78d071b8",
     "local_path": "cd /path/to/",
-    "origin_main": "134bd4e7ad4a4709c175dcaecf15ded905808034",
-    "origin_main_short": "134bd4e7",
+    "origin_main": "78d071b87ae72d05bc7e2277efeed534871b5034",
+    "origin_main_short": "78d071b8",
     "worktree_clean": false
   },
   "schema_version": 1,

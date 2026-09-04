@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `134bd4e7ad4a4709c175dcaecf15ded905808034` (`134bd4e7`)
-- Handoff freshness marker: `134bd4e7`
-- Branch at generation: `docs/post-pr2267-handoff-refresh`
+- HEAD: `78d071b87ae72d05bc7e2277efeed534871b5034` (`78d071b8`)
+- Handoff freshness marker: `78d071b8`
+- Branch at generation: `codex/greenfield-workflow-closeout-adjudication`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -102,7 +102,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 ### RESULT: PASS ###
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 7dfdb6bd7c0d). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 7dfdb6bd7c0d. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: e99a42ad7fa2). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK e99a42ad7fa2. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -112,5 +112,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 5cd8ae96da6d77b61147f3f6f617bbac0ed05d36b80b66de0a8f0c975376090c
-- docs/reference/agentic-kit-commands.json: 2261aa2d30ef01db3c0d86334ab9d28fb371cc9d9f1e475a02fa6907499ce4b0
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 94689c99848db5dc5c44dc37b59b431eab94db25558202a4522bbb7a08f91708
+- docs/reference/agentic-kit-commands.json: e39c8c395837fec2237a077998718ab30933481cab289764c180709fc1e26337

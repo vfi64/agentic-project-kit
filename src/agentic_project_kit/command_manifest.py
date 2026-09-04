@@ -25,8 +25,27 @@ RAW_REPLACEMENTS: dict[str, tuple[str, ...]] = {
     "agentic-kit transfer branch-create": ("git switch -c", "git checkout -b"),
     "agentic-kit transfer pr-create-complete": ("gh pr create",),
     "agentic-kit transfer pr-merge-safe": ("gh pr merge",),
+    "agentic-kit transfer pr-closeout-complete": (
+        "closeout merged pr",
+        "close out merged pr",
+        "complete pr closeout",
+        "finish pr closeout",
+        "handoff after merge",
+        "post merge handoff",
+        "post-merge handoff",
+    ),
     "agentic-kit transfer delete-merged-work-branch": ("git push --delete", "git branch -D"),
     "agentic-kit release ready": ("git tag", "gh release create"),
+    "agentic-kit work finish": (
+        "close completed slice",
+        "closeout completed slice",
+        "create pr and merge",
+        "create pull request and merge",
+        "finish slice",
+        "finish slice create pull request merge and post-merge handoff",
+        "finish work",
+        "publish slice",
+    ),
 }
 
 LIFECYCLE_RANKS: dict[str, int] = {
@@ -58,6 +77,22 @@ LIFECYCLE_RANKS: dict[str, int] = {
     "agentic-kit workspace remove": 95,
     "agentic-kit artifact-gc": 100,
     "agentic-kit github-create": 110,
+}
+
+EXTRA_TASK_TAGS: dict[str, tuple[str, ...]] = {
+    "agentic-kit transfer pr-closeout-complete": (
+        "closeout",
+        "handoff-after-merge",
+        "post-merge-handoff",
+        "pr-closeout",
+    ),
+    "agentic-kit work finish": (
+        "closeout",
+        "finish",
+        "slice-closeout",
+        "slice-finish",
+        "work-finish",
+    ),
 }
 
 
@@ -341,10 +376,12 @@ def infer_surface(command: dict[str, Any]) -> str:
 def _task_tags(command: dict[str, Any]) -> list[str]:
     tags = []
     group = str(command.get("group") or "")
+    qualified_name = str(command.get("qualified_name") or "")
     if group and group != "root":
         tags.append(group.replace(" ", "-"))
     safety = str(command.get("safety") or infer_safety(command)).lower()
     tags.append(safety.replace("_", "-"))
+    tags.extend(EXTRA_TASK_TAGS.get(qualified_name, ()))
     return sorted(dict.fromkeys(tags))
 
 
