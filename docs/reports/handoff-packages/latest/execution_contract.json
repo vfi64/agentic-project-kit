@@ -272,11 +272,11 @@
       "branch": "codex/greenfield-workflow-closeout-adjudication",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "78d071b87ae72d05bc7e2277efeed534871b5034",
-      "head_matches_origin_main": true,
+      "head": "72e6bc5c4df0b3a3664587dde066a0e63193d56d",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "78d071b87ae72d05bc7e2277efeed534871b5034",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -424,11 +424,11 @@
     "branch": "codex/greenfield-workflow-closeout-adjudication",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "78d071b87ae72d05bc7e2277efeed534871b5034",
-    "head_matches_origin_main": true,
+    "head": "72e6bc5c4df0b3a3664587dde066a0e63193d56d",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "78d071b87ae72d05bc7e2277efeed534871b5034",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {
