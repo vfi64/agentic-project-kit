@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 14e73fcedeedb1a1dcc6a9d6d6f25cf6c7d7aea1
-  short: 14e73fce
-  subject: Harden greenfield workflow closeout routing (#2269)
+  full: 5273ae40d1944ac5dcb4713f2ffc7a02e1dc5a73
+  short: 5273ae40
+  subject: Harden external PR lifecycle context (#2271)
 last_substantive_work_state:
-  full: 14e73fcedeedb1a1dcc6a9d6d6f25cf6c7d7aea1
-  short: 14e73fce
-  subject: Harden greenfield workflow closeout routing (#2269)
+  full: 5273ae40d1944ac5dcb4713f2ffc7a02e1dc5a73
+  short: 5273ae40
+  subject: Harden external PR lifecycle context (#2271)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
