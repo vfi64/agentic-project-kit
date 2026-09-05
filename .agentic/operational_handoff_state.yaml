@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5273ae40d1944ac5dcb4713f2ffc7a02e1dc5a73
-  short: 5273ae40
-  subject: Harden external PR lifecycle context (#2271)
+  full: b79ff5beb31d6e72d5f046b3eef638a02124f97d
+  short: b79ff5be
+  subject: Keep command-for JSON warning-free (#2273)
 last_substantive_work_state:
-  full: 5273ae40d1944ac5dcb4713f2ffc7a02e1dc5a73
-  short: 5273ae40
-  subject: Harden external PR lifecycle context (#2271)
+  full: b79ff5beb31d6e72d5f046b3eef638a02124f97d
+  short: b79ff5be
+  subject: Keep command-for JSON warning-free (#2273)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

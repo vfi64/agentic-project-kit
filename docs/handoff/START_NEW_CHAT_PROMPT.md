@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 94689c99848db5dc5c44dc37b59b431eab94db25558202a4522bbb7a08f91708
 - docs/reference/agentic-kit-commands.json: e39c8c395837fec2237a077998718ab30933481cab289764c180709fc1e26337
-## Operational documentation refresh state after PR #2271
+## Operational documentation refresh state after PR #2273
 
-Current administrative handoff refresh state is `5273ae40` (`Harden external PR lifecycle context (#2271)`). Continue next only after this post-PR2271 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `b79ff5be` (`Keep command-for JSON warning-free (#2273)`). Continue next only after this post-PR2273 refresh is committed and merged; the next substantive slice must be created from fresh main.
