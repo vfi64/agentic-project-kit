@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `b79ff5beb31d6e72d5f046b3eef638a02124f97d` (`b79ff5be`), after `Keep command-for JSON warning-free (#2273)`.
-Last substantive work state is `b79ff5beb31d6e72d5f046b3eef638a02124f97d` (`b79ff5be`), after `Keep command-for JSON warning-free (#2273)`.
+Current verified main/admin HEAD is `6d41a618ccc045554a36d32427e1603cfaab8066` (`6d41a618`), after `Treat successor projections as recoverable volatile state (#2275)`.
+Last substantive work state is `6d41a618ccc045554a36d32427e1603cfaab8066` (`6d41a618`), after `Treat successor projections as recoverable volatile state (#2275)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b79ff5beb31d6e72d5f046b3eef638a02124f97d
-  short: b79ff5be
-  subject: Keep command-for JSON warning-free (#2273)
+  full: 6d41a618ccc045554a36d32427e1603cfaab8066
+  short: 6d41a618
+  subject: Treat successor projections as recoverable volatile state (#2275)
 last_substantive_work_state:
-  full: b79ff5beb31d6e72d5f046b3eef638a02124f97d
-  short: b79ff5be
-  subject: Keep command-for JSON warning-free (#2273)
+  full: 6d41a618ccc045554a36d32427e1603cfaab8066
+  short: 6d41a618
+  subject: Treat successor projections as recoverable volatile state (#2275)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
