@@ -3,6 +3,7 @@ from pathlib import Path
 from agentic_project_kit.volatile_paths import (
     KNOWN_VOLATILE_TRANSFER_PATHS,
     RULE_ACK_CURRENT_PATH,
+    SUCCESSOR_HANDOFF_PACKAGE_FILENAMES,
     TRANSFER_INBOX_NEXT_COMMAND_PATH,
     TRANSFER_OUTBOX_LAST_RESULT_PATH,
 )
@@ -41,6 +42,63 @@ def test_normalize_session_known_volatile_paths_include_canonical_inbox() -> Non
     assert TRANSFER_INBOX_NEXT_COMMAND_PATH in KNOWN_VOLATILE_TRANSFER_PATHS
     assert TRANSFER_OUTBOX_LAST_RESULT_PATH in KNOWN_VOLATILE_TRANSFER_PATHS
     assert RULE_ACK_CURRENT_PATH in KNOWN_VOLATILE_TRANSFER_PATHS
+    assert "docs/reports/handoff-packages/latest/validation_report.json" in KNOWN_VOLATILE_TRANSFER_PATHS
+    assert "_known_volatile_transfer_paths(root)" in text
+
+
+def test_normalize_session_ignores_workspace_successor_projection_dirty_state(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    import json
+    import subprocess
+
+    from typer.testing import CliRunner
+
+    from agentic_project_kit.cli import app
+
+    work = tmp_path / "work"
+    work.mkdir()
+    subprocess.run(["git", "init", "-b", "main"], cwd=work, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=work, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=work, check=True)
+    (work / ".agentic").mkdir()
+    (work / ".agentic/config.yaml").write_text(
+        "kit_schema_version: 1\nprofile: generic\n",
+        encoding="utf-8",
+    )
+    package_root = work / ".agentic/state/handoff/packages/latest"
+    package_root.mkdir(parents=True)
+    for name in SUCCESSOR_HANDOFF_PACKAGE_FILENAMES:
+        (package_root / name).write_text("{}\n", encoding="utf-8")
+    subprocess.run(["git", "add", "."], cwd=work, check=True)
+    subprocess.run(["git", "commit", "-m", "Initial"], cwd=work, check=True, capture_output=True, text=True)
+    remote = tmp_path / "remote.git"
+    subprocess.run(["git", "init", "--bare", str(remote)], cwd=tmp_path, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "remote", "add", "origin", str(remote)], cwd=work, check=True)
+    subprocess.run(["git", "push", "-u", "origin", "main"], cwd=work, check=True, capture_output=True, text=True)
+    head = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=work,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    rule_ack = work / RULE_ACK_CURRENT_PATH
+    rule_ack.parent.mkdir(parents=True, exist_ok=True)
+    rule_ack.write_text(json.dumps({"repo_head": head[:7]}) + "\n", encoding="utf-8")
+    (package_root / "validation_report.json").write_text('{"generated_head": "new"}\n', encoding="utf-8")
+
+    monkeypatch.chdir(work)
+    result = CliRunner().invoke(app, ["transfer", "normalize-session", "--json"])
+
+    assert result.exit_code == 0, result.stdout
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert payload["repo"]["dirty_status"] == ""
+    assert " M .agentic/state/handoff/packages/latest/validation_report.json" in payload["repo"][
+        "ignored_known_volatile_dirty_status"
+    ]
 
 
 def test_normalize_session_ignores_current_rule_ack_dirty_state(tmp_path: Path, monkeypatch) -> None:

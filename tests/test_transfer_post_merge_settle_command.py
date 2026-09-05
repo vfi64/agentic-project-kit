@@ -71,3 +71,51 @@ def test_post_merge_settle_command_outputs_json(monkeypatch):
     assert result.exit_code == 0
     assert '"lifecycle_state": "COMPLETE"' in result.stdout
     assert '"refresh_prs": [' in result.stdout
+
+
+def test_post_merge_settle_restores_known_volatile_before_lifecycle(monkeypatch):
+    from pathlib import Path
+
+    from agentic_project_kit.cli_commands import transfer_post_merge_settle as command_module
+
+    restore_calls: list[Path] = []
+    post_merge_called = False
+
+    def fake_restore(root: Path) -> dict[str, object]:
+        restore_calls.append(root)
+        return {
+            "ok": True,
+            "after": {
+                "clean": True,
+                "dirty_paths": [],
+                "report_artifact_paths": [],
+                "product_paths": [],
+                "blocked_reason": "",
+            },
+        }
+
+    def fake_post_merge_settle(*_args, **_kwargs):
+        nonlocal post_merge_called
+        post_merge_called = True
+        return _FakeSettleResult()
+
+    monkeypatch.setattr(
+        command_module,
+        "inspect_local_state",
+        lambda _path: _CleanState(
+            clean=False,
+            dirty_paths=("docs/reports/handoff-packages/latest/validation_report.json",),
+            report_artifact_paths=("docs/reports/handoff-packages/latest/validation_report.json",),
+            product_paths=(),
+            blocked_reason="dirty_report_artifacts_before_post_merge_complete",
+        ),
+    )
+    monkeypatch.setattr(command_module, "restore_known_volatile_for_post_merge", fake_restore)
+    monkeypatch.setattr(command_module, "post_merge_settle", fake_post_merge_settle)
+
+    result = CliRunner().invoke(app, ["transfer", "post-merge-settle", "--after-pr", "1880", "--json"])
+
+    assert result.exit_code == 0
+    assert post_merge_called is True
+    assert restore_calls == [Path(".")]
+    assert '"known_volatile_preflight_cleanup": {' in result.stdout

@@ -241,6 +241,34 @@ def test_inspect_local_state_classifies_timestamped_state_handoff_reports(tmp_pa
     assert local_state.product_paths == ()
 
 
+def test_inspect_local_state_classifies_successor_projection_as_known_artifact(tmp_path):
+    projection = tmp_path / "docs/reports/handoff-packages/latest/validation_report.json"
+    projection.parent.mkdir(parents=True)
+    projection.write_text('{"generated_head": "old"}\n', encoding="utf-8")
+
+    import subprocess
+
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "initial"],
+        cwd=tmp_path,
+        check=True,
+        capture_output=True,
+        env={"GIT_AUTHOR_NAME": "Test", "GIT_AUTHOR_EMAIL": "test@example.invalid", "GIT_COMMITTER_NAME": "Test", "GIT_COMMITTER_EMAIL": "test@example.invalid"},
+    )
+    projection.write_text('{"generated_head": "new"}\n', encoding="utf-8")
+
+    local_state = inspect_local_state(tmp_path)
+
+    assert local_state.clean is False
+    assert local_state.blocked_reason == "dirty_report_artifacts_before_post_merge_complete"
+    assert local_state.report_artifact_paths == (
+        "docs/reports/handoff-packages/latest/validation_report.json",
+    )
+    assert local_state.product_paths == ()
+
+
 def test_inspect_local_state_classifies_dirty_product_paths(tmp_path):
     (tmp_path / "src").mkdir()
     (tmp_path / "src/example.py").write_text("print('hello')\n", encoding="utf-8")

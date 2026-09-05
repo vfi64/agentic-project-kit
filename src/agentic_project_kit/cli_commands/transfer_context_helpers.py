@@ -5,6 +5,8 @@ from __future__ import annotations
 from agentic_project_kit.cli_commands.transfer_shared import *
 from agentic_project_kit.volatile_paths import (
     KNOWN_VOLATILE_TRANSFER_PATHS,
+    SUCCESSOR_HANDOFF_PACKAGE_FILENAMES,
+    SUCCESSOR_HANDOFF_PROMPT_FILENAMES,
     is_known_volatile_status_path,
     status_path_from_short_line,
 )
@@ -332,6 +334,8 @@ def _known_volatile_transfer_paths(root: Path | str = ".") -> list[str]:
         workspace.transfer_run_file("latest-transfer-report.log"),
         workspace.transfer_handoff_report_file("latest-transfer-handoff-report.json"),
         workspace.transfer_handoff_report_file("latest-transfer-handoff-report.log"),
+        *(workspace.package_file(name) for name in SUCCESSOR_HANDOFF_PACKAGE_FILENAMES),
+        *(workspace.handoff_file(name) for name in SUCCESSOR_HANDOFF_PROMPT_FILENAMES),
     ]
     paths = [
         *KNOWN_VOLATILE_TRANSFER_PATHS,

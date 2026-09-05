@@ -33,6 +33,40 @@ STATE_LOCAL_COMMAND_STACK_STATE_PATH = ".agentic/tmp/local-command-stack-state.j
 STATE_WORKSPACE_LOCK_PATH = ".agentic/tmp/workspace.lock"
 LEGACY_TRANSFER_RUN_DIRECTORY_PATH = "docs/reports/transfer_runs"
 STATE_TRANSFER_RUN_DIRECTORY_PATH = ".agentic/state/handoff/transfer_runs"
+LEGACY_SUCCESSOR_HANDOFF_PACKAGE_DIRECTORY_PATH = "docs/reports/handoff-packages/latest"
+STATE_SUCCESSOR_HANDOFF_PACKAGE_DIRECTORY_PATH = ".agentic/state/handoff/packages/latest"
+SUCCESSOR_HANDOFF_PACKAGE_FILENAMES = (
+    "execution_contract.json",
+    "source_manifest.json",
+    "successor_context.yaml",
+    "successor_prompt.md",
+    "validation_report.json",
+)
+SUCCESSOR_HANDOFF_PROMPT_FILENAMES = (
+    "NEXT_CHAT_BOOTSTRAP.md",
+    "START_NEW_CHAT_PROMPT.md",
+    "CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+)
+LEGACY_SUCCESSOR_HANDOFF_PACKAGE_PATHS = tuple(
+    f"{LEGACY_SUCCESSOR_HANDOFF_PACKAGE_DIRECTORY_PATH}/{name}"
+    for name in SUCCESSOR_HANDOFF_PACKAGE_FILENAMES
+)
+STATE_SUCCESSOR_HANDOFF_PACKAGE_PATHS = tuple(
+    f"{STATE_SUCCESSOR_HANDOFF_PACKAGE_DIRECTORY_PATH}/{name}"
+    for name in SUCCESSOR_HANDOFF_PACKAGE_FILENAMES
+)
+LEGACY_SUCCESSOR_HANDOFF_PROMPT_PATHS = tuple(
+    f"docs/handoff/{name}" for name in SUCCESSOR_HANDOFF_PROMPT_FILENAMES
+)
+STATE_SUCCESSOR_HANDOFF_PROMPT_PATHS = tuple(
+    f".agentic/state/handoff/{name}" for name in SUCCESSOR_HANDOFF_PROMPT_FILENAMES
+)
+KNOWN_SUCCESSOR_HANDOFF_PROJECTION_PATHS = (
+    *LEGACY_SUCCESSOR_HANDOFF_PACKAGE_PATHS,
+    *STATE_SUCCESSOR_HANDOFF_PACKAGE_PATHS,
+    *LEGACY_SUCCESSOR_HANDOFF_PROMPT_PATHS,
+    *STATE_SUCCESSOR_HANDOFF_PROMPT_PATHS,
+)
 
 KNOWN_RUNTIME_STATUS_PATHS = (
     LEGACY_LOCAL_GC_REPORT_PATH,
@@ -52,6 +86,7 @@ KNOWN_VOLATILE_TRANSFER_PATHS = (
     LEGACY_TRANSFER_HANDOFF_REPORT_LOG_PATH,
     STATE_TRANSFER_HANDOFF_REPORT_JSON_PATH,
     STATE_TRANSFER_HANDOFF_REPORT_LOG_PATH,
+    *KNOWN_SUCCESSOR_HANDOFF_PROJECTION_PATHS,
 )
 
 
@@ -67,6 +102,10 @@ def is_rule_ack_path(path: str) -> bool:
     return _is_dir_or_child(normalize_status_path(path), RULE_ACK_DIRECTORY_PATH)
 
 
+def is_successor_handoff_projection_path(path: str) -> bool:
+    return normalize_status_path(path) in KNOWN_SUCCESSOR_HANDOFF_PROJECTION_PATHS
+
+
 def is_known_volatile_status_path(path: str) -> bool:
     normalized = normalize_status_path(path)
     if not normalized:
@@ -74,6 +113,7 @@ def is_known_volatile_status_path(path: str) -> bool:
     return (
         normalized in KNOWN_RUNTIME_STATUS_PATHS
         or is_rule_ack_path(normalized)
+        or is_successor_handoff_projection_path(normalized)
         or normalized == TRANSFER_INBOX_NEXT_COMMAND_PATH
         or _is_dir_or_child(normalized, TRANSFER_OUTBOX_DIRECTORY_PATH)
         or _is_transfer_run_report_path(normalized)

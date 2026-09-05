@@ -9,7 +9,10 @@ from uuid import uuid4
 
 import typer
 
-from agentic_project_kit.cli_commands.transfer_context_helpers import _restore_known_volatile_paths
+from agentic_project_kit.cli_commands.transfer_context_helpers import (
+    _known_volatile_transfer_paths,
+    _restore_known_volatile_paths,
+)
 from agentic_project_kit.transfer_post_merge_lifecycle import post_merge_complete
 from agentic_project_kit.llm_context_carriers import refresh_llm_context_carriers
 from agentic_project_kit.llm_execution_context import build_llm_execution_context
@@ -103,8 +106,19 @@ def _dirty_path_from_porcelain_line(line: str) -> str:
     return status_path_from_short_line(line)
 
 
-def _is_report_artifact_path(path: str) -> bool:
-    return path.startswith(_REPORT_ARTIFACT_PREFIXES) or is_known_volatile_status_path(path)
+def _known_report_artifact_paths(root: Path) -> set[str]:
+    try:
+        return set(_known_volatile_transfer_paths(root))
+    except (RuntimeError, OSError):
+        return set()
+
+
+def _is_report_artifact_path(path: str, *, known_paths: set[str] | None = None) -> bool:
+    return (
+        path in (known_paths or set())
+        or path.startswith(_REPORT_ARTIFACT_PREFIXES)
+        or is_known_volatile_status_path(path)
+    )
 
 
 def inspect_local_state(cwd: Path | None = None) -> LocalState:
@@ -139,8 +153,13 @@ def inspect_local_state(cwd: Path | None = None) -> LocalState:
         for path in (_dirty_path_from_porcelain_line(line) for line in completed.stdout.splitlines())
         if path
     )
-    report_artifact_paths = tuple(path for path in dirty_paths if _is_report_artifact_path(path))
-    product_paths = tuple(path for path in dirty_paths if not _is_report_artifact_path(path))
+    known_paths = _known_report_artifact_paths(root)
+    report_artifact_paths = tuple(
+        path for path in dirty_paths if _is_report_artifact_path(path, known_paths=known_paths)
+    )
+    product_paths = tuple(
+        path for path in dirty_paths if not _is_report_artifact_path(path, known_paths=known_paths)
+    )
     if not dirty_paths:
         return LocalState(clean=True, dirty_paths=(), report_artifact_paths=(), product_paths=())
     if product_paths:

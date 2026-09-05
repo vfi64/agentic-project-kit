@@ -1,0 +1,63 @@
+{
+  "branch": "codex/successor-projection-volatile-boundary",
+  "date": "2026-09-05",
+  "finding_impacts": [
+    {
+      "finding": "KIT-GF-011",
+      "impact": "implemented_local_retest_pass",
+      "scope": "tracked and untracked latest successor handoff projections are recognized by known-volatile recovery, normalize-session, post-merge-complete, and post-merge-settle"
+    },
+    {
+      "finding": "B1-KIT-011",
+      "impact": "improved_not_closed",
+      "scope": "broader mixed handoff/status/report refresh-loop reduction still needs release-package and external Greenfield retest evidence"
+    }
+  ],
+  "kind": "successor_projection_volatile_boundary_report",
+  "repaired_behavior": "Exact latest successor package files and generated handoff prompt projections are handled by the existing known-volatile transfer recovery boundary.",
+  "schema_version": 1,
+  "status": "implemented_local_retest_pass",
+  "test_evidence": [
+    {
+      "command": "python -m pytest -q tests/test_volatile_paths.py tests/test_transfer_normalize_session_contract.py tests/test_transfer_startup_hardening_commands.py tests/test_transfer_post_merge_complete_command.py tests/test_transfer_post_merge_settle_command.py",
+      "result": "PASS",
+      "summary": "77 passed"
+    },
+    {
+      "command": "python -m pytest -q",
+      "result": "PASS",
+      "summary": "3031 passed, 481 warnings"
+    },
+    {
+      "command": "ruff check .",
+      "result": "PASS",
+      "summary": "All checks passed"
+    },
+    {
+      "command": "agentic-kit check-docs",
+      "result": "PASS",
+      "summary": "Agentic project check passed"
+    },
+    {
+      "command": "agentic-kit direction validate --root .",
+      "result": "PASS",
+      "summary": "0 findings"
+    },
+    {
+      "command": "agentic-kit audit-command-manifest --json",
+      "result": "PASS",
+      "summary": "0 findings"
+    },
+    {
+      "command": "agentic-kit workflow-guard check",
+      "result": "PASS",
+      "summary": "Workflow guard passed"
+    },
+    {
+      "command": "agentic-kit doctor",
+      "result": "PASS",
+      "summary": "Overall PASS with 76 document-lifecycle report-only findings"
+    }
+  ],
+  "version_context": "post-v1.0.8 current checkout; not released-package evidence"
+}
