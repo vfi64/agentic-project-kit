@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "kind": "sampleproject_first_cycle_retest",
+  "status": "implemented_external_retest_partial_pass",
+  "date": "2026-09-05",
+  "kit_branch": "codex/external-first-cycle-retest",
+  "target": {
+    "repository": "vfi64/sampleproject",
+    "origin": "git@github.com:vfi64/sampleproject.git",
+    "upstream": "git@github.com:pypa/sampleproject.git",
+    "baseline_main_head": "621e497",
+    "setup_main_head": "9f85262",
+    "has_required_checks": false
+  },
+  "setup": {
+    "workspace_init": "PASS",
+    "check": "PASS",
+    "doctor": "PASS",
+    "governance_check": "PASS",
+    "standard_gates_audit_suite": "PASS",
+    "setup_branch": "codex/first-cycle-workspace-init",
+    "setup_commit": "b8c6121",
+    "setup_pr": 2,
+    "setup_pr_state": "MERGED",
+    "setup_pr_merged_at": "2026-09-05T10:03:44Z"
+  },
+  "first_cycle": {
+    "work_branch": "codex/first-cycle-runtime-smoke",
+    "work_start": {
+      "result": "PASS",
+      "first_cycle_post_merge_check": "NOOP",
+      "summary": "External first-cycle workspace has no successor package yet; post-merge check is not applicable."
+    },
+    "work_check": {
+      "result": "PASS",
+      "profile": "code",
+      "steps": [
+        "repo-status",
+        "check",
+        "governance-check",
+        "doctor",
+        "standard-gates-audit-suite"
+      ]
+    },
+    "work_finish_dry_run": {
+      "result": "PASS",
+      "paths": [
+        "docs/agentic-first-cycle-runtime-smoke.md"
+      ],
+      "steps": [
+        "repo-status",
+        "protected-diff-plan",
+        "remote-preflight"
+      ]
+    },
+    "commit": {
+      "result": "PASS",
+      "sha": "153c3b9",
+      "message": "Verify external first-cycle workflow"
+    },
+    "push_current": {
+      "result": "PASS",
+      "branch": "codex/first-cycle-runtime-smoke"
+    },
+    "pr_create_without_manual_gh_repo": {
+      "result": "PASS",
+      "pr": 3,
+      "url": "https://github.com/vfi64/sampleproject/pull/3"
+    },
+    "pr_existing_for_branch_without_manual_gh_repo": {
+      "result": "PASS",
+      "pr": 3,
+      "lookup_command": "gh pr list --head codex/first-cycle-runtime-smoke --base main --state all"
+    },
+    "pr_create_complete_existing_pr": {
+      "result": "BLOCKED",
+      "expected_blocker": "no-checks",
+      "recovered_pr": 3,
+      "failed_step": "pr-complete",
+      "pr_status_decision": "no-checks"
+    },
+    "cleanup": {
+      "result": "PASS",
+      "closed_pr": 3,
+      "deleted_branch": "codex/first-cycle-runtime-smoke"
+    }
+  },
+  "kit_repair": [
+    {
+      "id": "origin_github_cli_context",
+      "summary": "PR lifecycle commands derive GH_REPO from the repository origin remote when available, overriding stale GitHub CLI context from fork/upstream setups.",
+      "files": [
+        "src/agentic_project_kit/repo_identity.py",
+        "src/agentic_project_kit/ci_readiness.py",
+        "src/agentic_project_kit/cli_commands/transfer_pr_create_flow.py",
+        "src/agentic_project_kit/cli_commands/transfer_pr_merge_flow.py",
+        "src/agentic_project_kit/transfer_observed_subprocess.py"
+      ]
+    },
+    {
+      "id": "pr_create_complete_existing_pr_recovery",
+      "summary": "pr-create-complete delegates existing-PR lookup to transfer pr-existing-for-branch instead of using obsolete raw gh pr view --head.",
+      "files": [
+        "src/agentic_project_kit/cli_commands/transfer_pr_create_flow.py"
+      ]
+    }
+  ],
+  "finding_impact": {
+    "KIT-GF-001": "external_workspace_init_retested_pass",
+    "KIT-GF-003": "first_cycle_no_successor_package_start_retested_pass_post_merge_proof_blocked_by_no_checks",
+    "KIT-GF-005": "external_first_cycle_work_start_retested_pass",
+    "KIT-GF-009": "finish_plan_commit_push_pr_create_and_existing_pr_recovery_retested_merge_closeout_not_claimed_due_no_checks",
+    "KIT-GF-010": "rule_ack_local_runtime_state_observed_released_package_retest_still_deferred",
+    "KIT-GF-011": "pr_lifecycle_context_defect_fixed_broader_refresh_loop_item_remains_open"
+  },
+  "validation": [
+    {
+      "command": "python -m pytest -q focused transfer and CI readiness tests",
+      "result": "PASS",
+      "summary": "63 passed"
+    },
+    {
+      "command": "ruff check .",
+      "result": "PASS",
+      "summary": "All checks passed"
+    },
+    {
+      "command": "python -m pytest -q",
+      "result": "PASS",
+      "summary": "3026 passed, 482 warnings"
+    },
+    {
+      "command": "agentic-kit check-docs",
+      "result": "PASS",
+      "summary": "Agentic project check passed"
+    },
+    {
+      "command": "agentic-kit direction validate --root .",
+      "result": "PASS",
+      "summary": "0 findings"
+    },
+    {
+      "command": "agentic-kit audit-command-manifest --json",
+      "result": "PASS",
+      "summary": "0 findings"
+    },
+    {
+      "command": "agentic-kit doctor",
+      "result": "PASS",
+      "summary": "Overall PASS; 76 document-lifecycle report-only findings"
+    },
+    {
+      "command": "agentic-kit workflow-guard check",
+      "result": "PASS",
+      "summary": "Workflow guard passed"
+    },
+    {
+      "command": "agentic-kit doc-registry reconcile --root . --json",
+      "result": "PASS",
+      "summary": "Scope decision projection not stale after execute refresh"
+    },
+    {
+      "command": "external transfer pr-create without manual GH_REPO",
+      "result": "PASS",
+      "summary": "Created vfi64/sampleproject PR #3"
+    },
+    {
+      "command": "external transfer pr-create-complete --timeout-seconds 3",
+      "result": "EXPECTED_BLOCKED",
+      "summary": "Recovered PR #3, then blocked at no-checks"
+    }
+  ],
+  "boundaries": [
+    "The retest used the current local Kit checkout, not a released PyPI package.",
+    "The target repository has no required checks; no-checks remains not green.",
+    "Full merge and post-merge closeout were not claimed for sampleproject."
+  ]
+}

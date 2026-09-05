@@ -15,6 +15,14 @@ from agentic_project_kit.cli_commands import transfer_pr_merge_flow
 TEST_AGENTIC_KIT = "./.venv/bin/agentic-kit"
 
 
+def _fake_bind_example_repo(monkeypatch):
+    def bind(root):
+        monkeypatch.setenv("GH_REPO", "example-owner/example-repo")
+        return {"GH_REPO": "example-owner/example-repo"}
+
+    return bind
+
+
 @pytest.fixture(autouse=True)
 def stable_agentic_kit_subprocess_command(monkeypatch) -> None:
     monkeypatch.setattr(
@@ -304,6 +312,10 @@ def test_transfer_pr_create_complete_orchestrates_create_and_complete(monkeypatc
         "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
         lambda **kwargs: None,
     )
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer_pr_create_flow.bind_github_cli_env_for_origin",
+        _fake_bind_example_repo(monkeypatch),
+    )
 
     result = CliRunner().invoke(
         app,
@@ -370,6 +382,11 @@ def test_transfer_pr_create_complete_passes_base_branch_to_inner_pr_complete(mon
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
         lambda **kwargs: None,
+    )
+    monkeypatch.setattr(
+        transfer_pr_create_flow,
+        "bind_github_cli_env_for_origin",
+        _fake_bind_example_repo(monkeypatch),
     )
 
     result = CliRunner().invoke(
@@ -541,6 +558,11 @@ def test_transfer_pr_create_complete_passes_live_status_context_to_pr_complete(m
         "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
         lambda **kwargs: None,
     )
+    monkeypatch.setattr(
+        transfer_pr_create_flow,
+        "bind_github_cli_env_for_origin",
+        _fake_bind_example_repo(monkeypatch),
+    )
 
     result = CliRunner().invoke(
         app,
@@ -559,6 +581,7 @@ def test_transfer_pr_create_complete_passes_live_status_context_to_pr_complete(m
 
     assert result.exit_code == 0
     assert pr_complete_env["AGENTIC_KIT_WRAPPER_LIVE_STATUS_PARENT"] == "pr-create-complete"
+    assert pr_complete_env["GH_REPO"] == "example-owner/example-repo"
     assert pr_complete_env["AGENTIC_KIT_WRAPPER_LIVE_STATUS_BASE"] == "main"
     assert pr_complete_env["AGENTIC_KIT_WRAPPER_LIVE_STATUS_HEAD"] == "feature/demo"
     assert (
@@ -632,8 +655,13 @@ def test_transfer_pr_create_complete_uses_existing_pr_when_create_fails(monkeypa
             return subprocess.CompletedProcess(command, 0, "0123456789abcdef0123456789abcdef01234567\n", "")
         if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create"]:
             return subprocess.CompletedProcess(command, 1, "", "already exists\n")
-        if command[:3] == ["gh", "pr", "view"]:
-            return subprocess.CompletedProcess(command, 0, "456\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-existing-for-branch"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                json.dumps({"result_status": "PASS", "pr_number": 456}) + "\n",
+                "",
+            )
         if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]:
             return subprocess.CompletedProcess(command, 0, "completed\n", "")
         if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile"]:
@@ -670,7 +698,11 @@ def test_transfer_pr_create_complete_uses_existing_pr_when_create_fails(monkeypa
     assert result.exit_code == 0
     assert "TRANSFER_PR_CREATE_COMPLETE" in result.stdout
     assert "456" in result.stdout
-    assert any(call[:3] == ["gh", "pr", "view"] for call in calls)
+    assert not any(call[:3] == ["gh", "pr", "view"] and "--head" in call for call in calls)
+    assert any(
+        call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-existing-for-branch"]
+        for call in calls
+    )
     assert any(
         call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]
         for call in calls

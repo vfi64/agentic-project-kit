@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from pathlib import Path
 # ruff: noqa: F403,F405
 
 from agentic_project_kit.cli_commands.transfer_shared import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import *
 from agentic_project_kit.cli_executable import default_agentic_kit
+from agentic_project_kit.repo_identity import bind_github_cli_env_for_origin
 from agentic_project_kit.transfer_observed_subprocess import run_observed_subprocess
 
 
@@ -38,6 +40,7 @@ def pr_wait_ci_command(
     ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
+    bind_github_cli_env_for_origin(Path("."))
     wait_ci = _public_transfer_attr("pr_wait_ci", pr_wait_ci)
     result = wait_ci(
         pr_number,
@@ -86,6 +89,7 @@ def pr_merge_safe_command(
         "_ensure_external_merge_preflight_or_exit",
         _ensure_external_merge_preflight_or_exit,
     )
+    bind_github_cli_env_for_origin(Path("."))
     external_merge_preflight_passed = external_preflight(json_output=json_output)
     if not external_merge_preflight_passed:
         require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
@@ -167,12 +171,13 @@ def pr_complete_command(
         require_fresh = _public_transfer_attr("_require_fresh_llm_context_or_exit", _require_fresh_llm_context_or_exit)
         require_fresh(max_age_minutes=60, json_output=json_output)
 
-    import os
     import re
     from datetime import datetime, timezone
+    import os
 
     resolved_head_sha = _resolve_expected_head_sha_alias(expected_head_sha)
     agentic_kit = default_agentic_kit(Path("."))
+    bind_github_cli_env_for_origin(Path("."))
     steps: list[dict[str, object]] = []
 
     live_status_parent = os.environ.get("AGENTIC_KIT_WRAPPER_LIVE_STATUS_PARENT", "")

@@ -2883,6 +2883,8 @@ plans:
       evidence:
       - docs/reports/POST_V1_0_8_AGP_COCKPIT_GREENFIELD_ADJUDICATION_20260904.md
       - docs/reports/POST_V1_0_8_AGP_COCKPIT_GREENFIELD_ADJUDICATION_20260904.json
+      - docs/reports/POST_V1_0_8_SAMPLEPROJECT_FIRST_CYCLE_RETEST_20260905.md
+      - docs/reports/POST_V1_0_8_SAMPLEPROJECT_FIRST_CYCLE_RETEST_20260905.json
       accepted_lesson:
         id: KIT-GF-LESSON-001
         status: accepted_as_method
@@ -2909,6 +2911,24 @@ plans:
       - tests/test_command_selector.py
       - tests/test_command_manifest.py
       - tests/test_human_workflows.py
+    - id: B1-KIT-021
+      status: implemented_external_retest_partial_pass
+      goal: Pin GitHub CLI PR lifecycle commands to the target repository's
+        origin remote in fork/upstream external workspaces, and route
+        pr-create-complete existing-PR recovery through the existing
+        pr-existing-for-branch wrapper instead of obsolete raw GitHub CLI
+        argument forms.
+      evidence:
+      - docs/reports/POST_V1_0_8_SAMPLEPROJECT_FIRST_CYCLE_RETEST_20260905.md
+      - docs/reports/POST_V1_0_8_SAMPLEPROJECT_FIRST_CYCLE_RETEST_20260905.json
+      tests:
+      - tests/test_successor_handoff_package.py
+      - tests/test_transfer_pr_complete_command_contract.py
+      - tests/test_transfer_startup_hardening_commands.py
+      - tests/test_pr_ci_readiness.py
+      boundary: The neutral sampleproject fork has no required checks, so this
+        retest proves PR context, creation, and existing-PR recovery but does
+        not claim green-CI merge or post-merge closeout for no-check PRs.
     - id: B1-TARGET-001
       status: recorded_target_friction
       goal: Decide in the target repository whether App2 tests that rewrite
@@ -3090,6 +3110,7 @@ plans:
       - command_for_task_tag_gap_for_health_commands
       - command_for_manifestless_warning
       - mixed_handoff_evidence_requires_successor_refresh
+      - external_pr_lifecycle_origin_context_fixed_and_retested_without_manual_gh_repo
       next_brownfield_action: Continue Comm-SCI Cycle 008 from feature/ui-access-levels-v2
         at ea21b3a336fd1c54e83e5264bf61142c4d23245c with legacy_seams_remaining=44;
         do not start B2 until Brownfield completion is explicitly accepted by

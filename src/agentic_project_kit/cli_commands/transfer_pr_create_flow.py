@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import os
 import sys
+from pathlib import Path
 # ruff: noqa: F403,F405
 
 from agentic_project_kit.cli_commands.transfer_shared import *
@@ -8,13 +10,12 @@ from agentic_project_kit.cli_commands.transfer_context_helpers import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import _known_volatile_transfer_paths
 from agentic_project_kit.cli_commands.transfer_pr_merge_flow import _resolve_expected_head_sha_alias
 from agentic_project_kit.cli_executable import default_agentic_kit
+from agentic_project_kit.repo_identity import bind_github_cli_env_for_origin
 from agentic_project_kit.volatile_paths import (
     RULE_ACK_DIRECTORY_PATH,
     TRANSFER_OUTBOX_LAST_RESULT_PATH,
 )
 from agentic_project_kit.workspace import load_workspace
-
-
 
 def _auto_preflight_pr_create_complete(*, root: Path) -> None:
     """Prepare rule/context carriers before pr-create-complete mutates GitHub state."""
@@ -173,6 +174,7 @@ def pr_create_command(
             raise typer.Exit(code=2)
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
     require_capability("rules_confirmed")
+    bind_github_cli_env_for_origin(Path("."))
     create_pr = _public_transfer_attr("pr_create", pr_create)
     result = create_pr(base=base, head=resolved_head, title=title, body=body)
     echo_repo_result = _public_transfer_attr("_echo_repo_result", _echo_repo_result)
@@ -197,9 +199,18 @@ def pr_existing_for_branch_command(
     steps: list[dict[str, object]] = []
     blockers: list[str] = []
     resolved_head = head
+    bind_github_cli_env_for_origin(Path("."))
 
-    def run_step(name: str, argv: list[str]) -> subprocess.CompletedProcess[str]:
-        completed = subprocess.run(argv, text=True, capture_output=True, check=False)
+    def run_step(
+        name: str,
+        argv: list[str],
+        *,
+        env: dict[str, str] | None = None,
+    ) -> subprocess.CompletedProcess[str]:
+        kwargs: dict[str, object] = {}
+        if env is not None:
+            kwargs["env"] = env
+        completed = subprocess.run(argv, text=True, capture_output=True, check=False, **kwargs)
         steps.append(
             {
                 "name": name,
@@ -367,7 +378,6 @@ def pr_create_complete_command(
         allow_rule_carrier_publish=True,
     )
 
-    import os
     import re
     import subprocess
     from datetime import datetime, timezone
@@ -376,6 +386,7 @@ def pr_create_complete_command(
     require_capability("rules_confirmed")
 
     agentic_kit = default_agentic_kit(Path("."))
+    bind_github_cli_env_for_origin(Path("."))
     steps: list[dict[str, object]] = []
     blockers: list[str] = []
     resolved_head = "" if head == "current" else head
@@ -411,7 +422,10 @@ def pr_create_complete_command(
         *,
         env: dict[str, str] | None = None,
     ) -> subprocess.CompletedProcess[str]:
-        completed = subprocess.run(argv, text=True, capture_output=True, env=env)
+        kwargs: dict[str, object] = {}
+        if env is not None:
+            kwargs["env"] = env
+        completed = subprocess.run(argv, text=True, capture_output=True, **kwargs)
         step_payload_status = ""
         try:
             from agentic_project_kit.release_process_guardrails import (
@@ -570,21 +584,28 @@ def pr_create_complete_command(
             existing = run_step(
                 "pr-existing-for-branch",
                 [
-                    "gh",
-                    "pr",
-                    "view",
+                    agentic_kit,
+                    "transfer",
+                    "pr-existing-for-branch",
                     "--head",
                     resolved_head,
                     "--base",
                     base,
+                    "--state",
+                    "all",
                     "--json",
-                    "number",
-                    "--jq",
-                    ".[0].number // empty",
                 ],
             )
-            if existing.returncode == 0 and existing.stdout.strip().isdigit():
-                pr_number = int(existing.stdout.strip())
+            try:
+                existing_payload = json.loads(existing.stdout or "{}")
+            except json.JSONDecodeError:
+                existing_payload = {}
+            if (
+                existing.returncode == 0
+                and isinstance(existing_payload, dict)
+                and isinstance(existing_payload.get("pr_number"), int)
+            ):
+                pr_number = int(existing_payload["pr_number"])
                 blockers = [b for b in blockers if b != "pr-create_failed"]
             else:
                 blockers.append("existing_pr_number_not_found")
