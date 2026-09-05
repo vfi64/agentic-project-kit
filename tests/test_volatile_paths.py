@@ -1,17 +1,23 @@
 from __future__ import annotations
 
 from agentic_project_kit.volatile_paths import (
+    KNOWN_SUCCESSOR_HANDOFF_PROJECTION_PATHS,
     KNOWN_VOLATILE_TRANSFER_PATHS,
     RULE_ACK_CURRENT_PATH,
     split_known_volatile_status,
     status_path_from_short_line,
     is_known_volatile_status_path,
     is_rule_ack_path,
+    is_successor_handoff_projection_path,
 )
 
 
 def test_known_volatile_transfer_paths_include_rule_ack_current() -> None:
     assert RULE_ACK_CURRENT_PATH in KNOWN_VOLATILE_TRANSFER_PATHS
+    assert "docs/reports/handoff-packages/latest/validation_report.json" in KNOWN_VOLATILE_TRANSFER_PATHS
+    assert ".agentic/state/handoff/packages/latest/validation_report.json" in KNOWN_VOLATILE_TRANSFER_PATHS
+    assert "docs/handoff/NEXT_CHAT_BOOTSTRAP.md" in KNOWN_VOLATILE_TRANSFER_PATHS
+    assert ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md" in KNOWN_VOLATILE_TRANSFER_PATHS
 
 
 def test_rule_ack_path_matching_is_directory_scoped() -> None:
@@ -45,11 +51,32 @@ def test_known_volatile_status_path_matching_is_allowlisted() -> None:
     assert is_known_volatile_status_path(
         ".agentic/state/handoff/transfer_runs/20260831T000000Z-demo.log"
     )
+    assert is_known_volatile_status_path(
+        "docs/reports/handoff-packages/latest/validation_report.json"
+    )
+    assert is_known_volatile_status_path(
+        ".agentic/state/handoff/packages/latest/successor_context.yaml"
+    )
+    assert is_known_volatile_status_path("docs/handoff/START_NEW_CHAT_PROMPT.md")
+    assert is_known_volatile_status_path(
+        ".agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
+    )
     assert not is_known_volatile_status_path("docs/reports/transfer_runs/notes.md")
+    assert not is_known_volatile_status_path("docs/reports/handoff-packages/latest/notes.md")
     assert not is_known_volatile_status_path(
         ".agentic/state/handoff/transfer_handoff_reports/notes.md"
     )
     assert not is_known_volatile_status_path("Config/Comm-SCI-Config.json")
+
+
+def test_successor_handoff_projection_matching_is_exact_file_allowlist() -> None:
+    assert is_successor_handoff_projection_path("docs/reports/handoff-packages/latest/source_manifest.json")
+    assert is_successor_handoff_projection_path(".agentic/state/handoff/packages/latest/successor_prompt.md")
+    assert is_successor_handoff_projection_path("docs/handoff/NEXT_CHAT_BOOTSTRAP.md")
+    assert is_successor_handoff_projection_path(".agentic/state/handoff/START_NEW_CHAT_PROMPT.md")
+    assert not is_successor_handoff_projection_path("docs/reports/handoff-packages/latest")
+    assert not is_successor_handoff_projection_path("docs/reports/handoff-packages/latest/notes.md")
+    assert len(KNOWN_SUCCESSOR_HANDOFF_PROJECTION_PATHS) == 16
 
 
 def test_status_path_from_short_line_handles_renames() -> None:
@@ -66,6 +93,8 @@ def test_split_known_volatile_status_keeps_product_changes() -> None:
             "?? .agentic/state/handoff/transfer_handoff_reports/20260831T000000Z-demo.log",
             "?? tmp/local-gc-last.json",
             "?? docs/reports/transfer_runs/20260831T000000Z-demo.json",
+            " M docs/reports/handoff-packages/latest/validation_report.json",
+            " M .agentic/state/handoff/packages/latest/successor_prompt.md",
             " M Config/Comm-SCI-Config.json",
         ]
     )
@@ -80,4 +109,6 @@ def test_split_known_volatile_status_keeps_product_changes() -> None:
         "?? .agentic/state/handoff/transfer_handoff_reports/20260831T000000Z-demo.log",
         "?? tmp/local-gc-last.json",
         "?? docs/reports/transfer_runs/20260831T000000Z-demo.json",
+        " M docs/reports/handoff-packages/latest/validation_report.json",
+        " M .agentic/state/handoff/packages/latest/successor_prompt.md",
     ]

@@ -6,7 +6,11 @@ from pathlib import Path
 
 import typer
 
-from agentic_project_kit.cli_commands.transfer_post_merge_complete import inspect_local_state
+from agentic_project_kit.cli_commands.transfer_post_merge_complete import (
+    _cleanup_state_from_payload,
+    inspect_local_state,
+    restore_known_volatile_for_post_merge,
+)
 from agentic_project_kit.transfer_post_merge_settle import post_merge_settle
 
 _SUMMARY_WIDTH = 84
@@ -145,6 +149,10 @@ def register_transfer_post_merge_settle_command(transfer_app: typer.Typer) -> No
     ) -> None:
         """Deterministically settle post-merge generated-output refresh state."""
         local_state = inspect_local_state(Path("."))
+        preflight_cleanup: dict[str, object] | None = None
+        if not local_state.clean and not local_state.product_paths:
+            preflight_cleanup = restore_known_volatile_for_post_merge(Path("."))
+            local_state = _cleanup_state_from_payload(preflight_cleanup)
         if local_state.clean:
             result = post_merge_settle(
                 after_pr,
@@ -164,7 +172,9 @@ def register_transfer_post_merge_settle_command(transfer_app: typer.Typer) -> No
             )
 
         if json_output:
-            typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+            payload = result.as_json_data()
+            payload["known_volatile_preflight_cleanup"] = preflight_cleanup
+            typer.echo(json.dumps(payload, indent=2, sort_keys=True))
         else:
             typer.echo(render_post_merge_settle_result(result))
         if result.returncode != 0:

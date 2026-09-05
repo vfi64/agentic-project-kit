@@ -2817,7 +2817,7 @@ plans:
       - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
       - docs/reports/POST_V1_0_8_COMMAND_FOR_WARNING_HYGIENE_20260905.md
     - id: B1-KIT-011
-      status: released_package_retest_improved_not_closed
+      status: implemented_local_retest_improved_not_closed
       goal: Reduce mixed handoff/status/report refresh loops so one real external
         work PR does not require multiple visible administrative PRs.
       evidence:
@@ -2825,6 +2825,7 @@ plans:
       - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_004_RESULTS_20260826.md
       - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
       - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
+      - docs/reports/POST_V1_0_8_SUCCESSOR_PROJECTION_VOLATILE_BOUNDARY_20260905.md
     - id: B1-KIT-012
       status: released_package_retest_pass
       goal: Make external pr-merge-safe return a terminal PASS result after it

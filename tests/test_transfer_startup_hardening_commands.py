@@ -7,7 +7,10 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
-from agentic_project_kit.cli_commands.transfer import _restore_known_volatile_paths
+from agentic_project_kit.cli_commands.transfer import (
+    _known_volatile_transfer_paths,
+    _restore_known_volatile_paths,
+)
 from agentic_project_kit.volatile_paths import RULE_ACK_CURRENT_PATH
 
 
@@ -95,52 +98,12 @@ def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
     assert result.exit_code == 0
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "PASS"
-    assert calls == [
-        ["git", "status", "--short", "--untracked-files=all"],
-        ["git", "ls-files", "--error-unmatch", ".agentic/transfer/inbox/next_command.py.txt"],
-        ["git", "ls-files", "--error-unmatch", ".agentic/transfer/outbox/last_result.txt"],
-        ["git", "ls-files", "--error-unmatch", RULE_ACK_CURRENT_PATH],
-        [
-            "git",
-            "ls-files",
-            "--error-unmatch",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-        ],
-        [
-            "git",
-            "ls-files",
-            "--error-unmatch",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-        ],
-        [
-            "git",
-            "ls-files",
-            "--error-unmatch",
-            ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json",
-        ],
-        [
-            "git",
-            "ls-files",
-            "--error-unmatch",
-            ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.log",
-        ],
-        ["git", "ls-files", "--error-unmatch", "docs/reports/transfer_runs/latest-transfer-report.json"],
-        ["git", "ls-files", "--error-unmatch", "docs/reports/transfer_runs/latest-transfer-report.log"],
-        [
-            "git",
-            "restore",
-            "--",
-            ".agentic/transfer/inbox/next_command.py.txt",
-            ".agentic/transfer/outbox/last_result.txt",
-            RULE_ACK_CURRENT_PATH,
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-            "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log",
-            ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json",
-            ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.log",
-            "docs/reports/transfer_runs/latest-transfer-report.json",
-            "docs/reports/transfer_runs/latest-transfer-report.log",
-        ]
-    ]
+    expected_paths = _known_volatile_transfer_paths(Path("."))
+    assert calls[0] == ["git", "status", "--short", "--untracked-files=all"]
+    assert [call[-1] for call in calls[1:-1]] == expected_paths
+    assert calls[-1] == ["git", "restore", "--", *expected_paths]
+    assert "docs/reports/handoff-packages/latest/validation_report.json" in expected_paths
+    assert ".agentic/state/handoff/packages/latest/validation_report.json" in expected_paths
 
 
 def test_restore_known_volatile_removes_untracked_outbox_and_restores_tracked_reports(tmp_path: Path):
@@ -172,6 +135,23 @@ def test_restore_known_volatile_removes_untracked_outbox_and_restores_tracked_re
     assert latest_log.read_text(encoding="utf-8") == "old\n"
     assert not outbox.exists()
     assert not rule_ack.exists()
+
+
+def test_restore_known_volatile_restores_tracked_successor_projections(tmp_path: Path):
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True, text=True)
+    package_dir = tmp_path / "docs/reports/handoff-packages/latest"
+    package_dir.mkdir(parents=True)
+    validation_report = package_dir / "validation_report.json"
+    validation_report.write_text('{"generated_head": "old"}\n', encoding="utf-8")
+    subprocess.run(["git", "add", str(validation_report)], cwd=tmp_path, check=True)
+
+    validation_report.write_text('{"generated_head": "new"}\n', encoding="utf-8")
+
+    payload = _restore_known_volatile_paths(tmp_path)
+
+    assert payload["ok"] is True
+    assert "docs/reports/handoff-packages/latest/validation_report.json" in payload["tracked_paths"]
+    assert validation_report.read_text(encoding="utf-8") == '{"generated_head": "old"}\n'
 
 
 def test_restore_known_volatile_removes_untracked_transfer_run_reports(tmp_path: Path):

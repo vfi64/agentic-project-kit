@@ -38,7 +38,7 @@ def normalize_session(
 
     root = Path(".")
 
-    known_volatile_paths = KNOWN_VOLATILE_TRANSFER_PATHS
+    known_volatile_paths = tuple(_known_volatile_transfer_paths(root))
 
     def run(argv: list[str]) -> dict[str, Any]:
         completed = subprocess.run(argv, cwd=root, text=True, capture_output=True)
