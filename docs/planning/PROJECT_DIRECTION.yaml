@@ -2810,10 +2810,12 @@ plans:
       - docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
       - docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
     - id: B1-KIT-010
-      status: planned
+      status: implemented_local_retest_pass
       goal: Suppress or route LegacyProfileDeprecationWarning so command-for JSON
         output remains clean in manifest-less non-workspaces.
-      evidence: docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
+      evidence:
+      - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
+      - docs/reports/POST_V1_0_8_COMMAND_FOR_WARNING_HYGIENE_20260905.md
     - id: B1-KIT-011
       status: released_package_retest_improved_not_closed
       goal: Reduce mixed handoff/status/report refresh loops so one real external
@@ -3109,6 +3111,7 @@ plans:
       - target_config_json_test_side_effect_recorded_as_target_owned_friction
       - command_for_task_tag_gap_for_health_commands
       - command_for_manifestless_warning
+      - command_for_manifestless_warning_fixed_locally
       - mixed_handoff_evidence_requires_successor_refresh
       - external_pr_lifecycle_origin_context_fixed_and_retested_without_manual_gh_repo
       next_brownfield_action: Continue Comm-SCI Cycle 008 from feature/ui-access-levels-v2

@@ -557,8 +557,16 @@ def write_reference(root: Path) -> dict[str, Any]:
     return data
 
 
-def load_manifest(root: Path, *, allow_package_fallback: bool = True) -> dict[str, Any]:
-    path = load_workspace(root).reference_file("agentic-kit-commands.json")
+def load_manifest(
+    root: Path,
+    *,
+    allow_package_fallback: bool = True,
+    suppress_legacy_profile_warning: bool | None = None,
+) -> dict[str, Any]:
+    path = load_workspace(
+        root,
+        suppress_legacy_profile_warning=suppress_legacy_profile_warning,
+    ).reference_file("agentic-kit-commands.json")
     if path.exists():
         return json.loads(path.read_text(encoding="utf-8"))
     if allow_package_fallback:

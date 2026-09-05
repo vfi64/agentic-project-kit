@@ -1,0 +1,70 @@
+{
+  "branch": "codex/command-for-warning-hygiene",
+  "date": "2026-09-05",
+  "finding_impacts": [
+    {
+      "finding": "B1-KIT-010",
+      "impact": "implemented_local_retest_pass",
+      "scope": "command-for --json output hygiene in manifest-less non-workspaces"
+    },
+    {
+      "finding": "KIT-GF-010",
+      "impact": "not_closed",
+      "scope": "broader rule acknowledgement self-invalidation lifecycle remains separate"
+    }
+  ],
+  "kind": "command_for_warning_hygiene_report",
+  "manual_retests": [
+    {
+      "command": "agentic-kit command-for --root /tmp/... --task work --json",
+      "result": "PASS",
+      "summary": "Output was clean JSON without LegacyProfileDeprecationWarning."
+    }
+  ],
+  "repaired_behavior": "command-for suppresses legacy-profile warnings while loading the command manifest for read-only selector output.",
+  "schema_version": 1,
+  "status": "implemented_local_retest_pass",
+  "test_evidence": [
+    {
+      "command": "python -m pytest -q tests/test_command_selector.py tests/test_workspace_foundation.py",
+      "result": "PASS",
+      "summary": "51 passed"
+    },
+    {
+      "command": "python -m pytest -q",
+      "result": "PASS",
+      "summary": "3026 passed, 481 warnings"
+    },
+    {
+      "command": "ruff check .",
+      "result": "PASS",
+      "summary": "All checks passed"
+    },
+    {
+      "command": "agentic-kit check-docs",
+      "result": "PASS",
+      "summary": "Passed after doc-registry scope decision projection refresh"
+    },
+    {
+      "command": "agentic-kit direction validate --root .",
+      "result": "PASS",
+      "summary": "0 findings"
+    },
+    {
+      "command": "agentic-kit audit-command-manifest --json",
+      "result": "PASS",
+      "summary": "0 findings"
+    },
+    {
+      "command": "agentic-kit workflow-guard check",
+      "result": "PASS",
+      "summary": "Workflow guard passed"
+    },
+    {
+      "command": "agentic-kit doctor",
+      "result": "PASS",
+      "summary": "Overall PASS with 76 document-lifecycle report-only findings"
+    }
+  ],
+  "version_context": "post-v1.0.8 current checkout; not released-package evidence"
+}
