@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import warnings
 from pathlib import Path
 
 from typer.testing import CliRunner
@@ -12,6 +13,7 @@ from agentic_project_kit.command_selector import (
     select_for_raw,
     select_for_task,
 )
+from agentic_project_kit.workspace import LegacyProfileDeprecationWarning
 
 
 def _manifest() -> dict[str, object]:
@@ -243,19 +245,28 @@ def test_command_for_cli_json_shape() -> None:
 
 
 def test_command_for_cli_uses_packaged_manifest_in_external_workspace(tmp_path: Path) -> None:
-    result = CliRunner().invoke(
-        app,
-        [
-            "command-for",
-            "--root",
-            str(tmp_path),
-            "--raw",
-            "git push origin main",
-            "--json",
-        ],
-    )
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        result = CliRunner().invoke(
+            app,
+            [
+                "command-for",
+                "--root",
+                str(tmp_path),
+                "--raw",
+                "git push origin main",
+                "--json",
+            ],
+        )
 
     assert result.exit_code == 0, result.output
+    assert "LegacyProfileDeprecationWarning" not in result.output
+    assert "implicit legacy profile" not in result.output
+    assert not [
+        warning
+        for warning in caught
+        if issubclass(warning.category, LegacyProfileDeprecationWarning)
+    ]
     payload = json.loads(result.output)
     assert payload["status"] == "match"
     assert payload["matched_prefix"] == "git push"

@@ -134,7 +134,7 @@ def command_for_command(
     if bool(raw) == bool(task):
         typer.echo("Provide exactly one of --raw or --task.", err=True)
         raise typer.Exit(code=2)
-    manifest = load_manifest(root.resolve())
+    manifest = load_manifest(root.resolve(), suppress_legacy_profile_warning=True)
     selection = select_for_raw(manifest, raw) if raw is not None else select_for_task(manifest, str(task))
     if json_output:
         typer.echo(json.dumps(selection.payload, indent=2, sort_keys=True))
