@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 
@@ -83,6 +84,20 @@ def test_repo_identity_parses_ssh_url(tmp_path):
 
     assert detect_repo_full_name(scp_style) == "example-owner/example-repo"
     assert detect_repo_full_name(ssh_url) == "example-owner/example-repo"
+
+
+def test_github_cli_env_for_origin_overrides_stale_repo_context(tmp_path, monkeypatch):
+    from agentic_project_kit.repo_identity import github_cli_env_for_origin
+
+    repo = tmp_path / "repo"
+    _init_git_repo(repo, "git@github.com:example-owner/example-repo.git")
+    monkeypatch.setenv("GH_REPO", "stale-owner/stale-repo")
+
+    env = github_cli_env_for_origin(repo)
+
+    assert env is not None
+    assert env["GH_REPO"] == "example-owner/example-repo"
+    assert env["PATH"] == os.environ["PATH"]
 
 
 def test_repo_identity_no_origin_falls_back(tmp_path):

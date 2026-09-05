@@ -283,6 +283,7 @@ def test_gh_pr_snapshot_provider_uses_exact_head_actions_fallback(monkeypatch):
 
     import agentic_project_kit.ci_readiness as ci_readiness
 
+    monkeypatch.setattr(ci_readiness, "github_cli_env_for_origin", lambda root: None)
     monkeypatch.setattr(ci_readiness.subprocess, "run", fake_run)
 
     payload = gh_pr_snapshot_provider(2185)()
@@ -315,6 +316,7 @@ def test_gh_pr_snapshot_provider_keeps_no_checks_when_actions_fallback_fails(mon
 
     import agentic_project_kit.ci_readiness as ci_readiness
 
+    monkeypatch.setattr(ci_readiness, "github_cli_env_for_origin", lambda root: None)
     monkeypatch.setattr(ci_readiness.subprocess, "run", fake_run)
 
     payload = gh_pr_snapshot_provider(2185)()

@@ -4,6 +4,7 @@ import json
 import subprocess
 import time
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Callable
 
 from agentic_project_kit.github_actions_run_checks import fetch_action_run_checks
@@ -12,6 +13,7 @@ from agentic_project_kit.github_check_policy import (
     is_optional_skipped_check,
     is_successful_check_conclusion,
 )
+from agentic_project_kit.repo_identity import github_cli_env_for_origin
 
 READY_TO_MERGE = "READY_TO_MERGE"
 ALREADY_MERGED = "ALREADY_MERGED"
@@ -224,6 +226,10 @@ def wait_for_pr_readiness(
 
 def gh_pr_snapshot_provider(pr_number: int) -> SnapshotProvider:
     def provider() -> dict[str, Any]:
+        github_env = github_cli_env_for_origin(Path("."))
+        run_kwargs: dict[str, object] = {}
+        if github_env is not None:
+            run_kwargs["env"] = github_env
         completed = subprocess.run(
             [
                 "gh",
@@ -236,6 +242,7 @@ def gh_pr_snapshot_provider(pr_number: int) -> SnapshotProvider:
             check=False,
             capture_output=True,
             text=True,
+            **run_kwargs,
         )
         if completed.returncode != 0:
             details = completed.stderr.strip() or completed.stdout.strip() or "gh pr view failed"
@@ -262,7 +269,11 @@ def gh_pr_snapshot_provider(pr_number: int) -> SnapshotProvider:
 
 
 def _run_gh_json(args: list[str]) -> Any:
-    completed = subprocess.run(["gh", *args], text=True, capture_output=True, check=False)
+    github_env = github_cli_env_for_origin(Path("."))
+    run_kwargs: dict[str, object] = {}
+    if github_env is not None:
+        run_kwargs["env"] = github_env
+    completed = subprocess.run(["gh", *args], text=True, capture_output=True, check=False, **run_kwargs)
     if completed.returncode != 0:
         raise RuntimeError(completed.stderr.strip() or completed.stdout.strip())
     return json.loads(completed.stdout)

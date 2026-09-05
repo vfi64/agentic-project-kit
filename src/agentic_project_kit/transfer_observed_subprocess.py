@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import subprocess
+from collections.abc import Mapping
 
 
 def _timeout_output_text(value: str | bytes | None) -> str:
@@ -16,13 +17,18 @@ def run_observed_subprocess(
     argv: list[str],
     *,
     timeout_seconds: int,
+    env: Mapping[str, str] | None = None,
 ) -> dict[str, object]:
     try:
+        kwargs: dict[str, object] = {}
+        if env is not None:
+            kwargs["env"] = dict(env)
         completed = subprocess.run(
             argv,
             text=True,
             capture_output=True,
             timeout=timeout_seconds,
+            **kwargs,
         )
         return {
             "name": name,
