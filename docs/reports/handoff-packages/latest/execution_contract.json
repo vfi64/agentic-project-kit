@@ -272,11 +272,11 @@
       "branch": "codex/release-v1.0.9-greenfield-fixes",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "c2f01b2171ac225c1dc6e9af8e74b5efd38852fc",
-      "head_matches_origin_main": true,
+      "head": "ddbf15316adce2aa3a6b2923e2c278b9899ddd77",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "c2f01b2171ac225c1dc6e9af8e74b5efd38852fc",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -424,11 +424,11 @@
     "branch": "codex/release-v1.0.9-greenfield-fixes",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "c2f01b2171ac225c1dc6e9af8e74b5efd38852fc",
-    "head_matches_origin_main": true,
+    "head": "ddbf15316adce2aa3a6b2923e2c278b9899ddd77",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "c2f01b2171ac225c1dc6e9af8e74b5efd38852fc",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {
