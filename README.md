@@ -3,7 +3,7 @@
 > Handoff architecture: the deterministic Successor Handoff Package writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/` for this repo or `.agentic/state/handoff/packages/latest/` externally. New chats verify package and execution contract, not chat memory.
 
 
-Current version: 1.0.8
+Current version: 1.0.9
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/zenodo.20101359)
 
 `agentic-project-kit` is a local Python CLI for governing AI-assisted repository work with contracts, gates, evidence, handoffs, policy selection, task tracking, GitHub automation, and release validation.
@@ -733,8 +733,8 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Prepared release: `v1.0.8`; GitHub Release, tag publication, PyPI publication, and Zenodo version DOI verification are complete.
-Version `1.0.8` is the current release line prepared as a safety baseline after the pre-GUI transfer-wrapper, output-discipline, GUI wrapper-gating, PR diagnostics, and release-plan guard hardening work.
+Prepared release: `v1.0.9`; GitHub Release, tag publication, PyPI publication, and Zenodo version DOI verification are pending.
+Version `1.0.9` is the current release line prepared as a safety baseline after the pre-GUI transfer-wrapper, output-discipline, GUI wrapper-gating, PR diagnostics, and release-plan guard hardening work.
 Current verified release: `v1.0.8` with Zenodo version DOI `10.5281/zenodo.22213857`.
 Earlier verified version-specific DOI notes are maintained in `docs/releases/VERIFIED_RELEASES.md`; historical release records remain in this section and the verified release archive.
 

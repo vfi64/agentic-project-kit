@@ -52,7 +52,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "project.version=1.0.8",
+            "detail": "project.version=1.0.9",
             "evidence_type": "pyproject-value",
             "status": "verified"
           }
@@ -4483,7 +4483,7 @@
             "required": false
           },
           {
-            "default": "1.0.8",
+            "default": "1.0.9",
             "help": "",
             "name": "version",
             "opts": [
@@ -6016,7 +6016,7 @@
         "lifecycle_rank": 73,
         "params": [
           {
-            "default": "1.0.8",
+            "default": "1.0.9",
             "help": "",
             "name": "version",
             "opts": [
@@ -6923,7 +6923,7 @@
             "required": false
           },
           {
-            "default": "1.0.8",
+            "default": "1.0.9",
             "help": "",
             "name": "version",
             "opts": [
@@ -11684,13 +11684,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "e99a42ad7fa2",
+    "manifest_sha": "ce455b7df8c5",
     "package_name": "agentic-project-kit",
-    "package_version": "1.0.8",
+    "package_version": "1.0.9",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.8",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "e99a42ad7fa2",
+    "reproduced_manifest_sha": "ce455b7df8c5",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 166,
@@ -11725,7 +11725,7 @@
     "current_release_tag": "v1.0.8",
     "current_verified_main": "See docs/STATUS.md",
     "current_verified_release": "1.0.8",
-    "current_version": "1.0.8",
+    "current_version": "1.0.9",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
     "version_doi": "10.5281/zenodo.22213857"

@@ -1,0 +1,693 @@
+{
+  "administrative_items": [
+    {
+      "category": "Administrative Handoff Refresh",
+      "commit_sha": "758797acd405c36d826053214d421e9562ea6273",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-01T06:48:22Z",
+          "sha": "758797acd405c36d826053214d421e9562ea6273",
+          "subject": "Refresh handoff state after PR2261 (#2262)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2262,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "758797acd405c36d826053214d421e9562ea6273",
+          "number": 2262,
+          "title": "Refresh handoff state after PR2261",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2262"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Administrative operational handoff refresh after PR2261. No product-code changes.",
+        "labels": [],
+        "merge_commit_sha": "758797acd405c36d826053214d421e9562ea6273",
+        "number": 2262,
+        "state": "MERGED",
+        "title": "Refresh handoff state after PR2261",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2262"
+      },
+      "pr_number": 2262,
+      "title": "Refresh handoff state after PR2261"
+    },
+    {
+      "category": "Administrative Handoff Refresh",
+      "commit_sha": "b35f755d239e5b5db56e5b531f737de26858ff00",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-01T07:10:09Z",
+          "sha": "b35f755d239e5b5db56e5b531f737de26858ff00",
+          "subject": "Refresh handoff state after PR2263 (#2264)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2264,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "b35f755d239e5b5db56e5b531f737de26858ff00",
+          "number": 2264,
+          "title": "Refresh handoff state after PR2263",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2264"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Administrative operational handoff refresh after PR2263. No product-code changes.",
+        "labels": [],
+        "merge_commit_sha": "b35f755d239e5b5db56e5b531f737de26858ff00",
+        "number": 2264,
+        "state": "MERGED",
+        "title": "Refresh handoff state after PR2263",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2264"
+      },
+      "pr_number": 2264,
+      "title": "Refresh handoff state after PR2263"
+    },
+    {
+      "category": "Administrative Handoff Refresh",
+      "commit_sha": "9dbb93a3c53fc0c0397d123987dc5bd7c1e41599",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-02T13:18:23Z",
+          "sha": "9dbb93a3c53fc0c0397d123987dc5bd7c1e41599",
+          "subject": "Refresh handoff state after PR2265 (#2266)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2266,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "9dbb93a3c53fc0c0397d123987dc5bd7c1e41599",
+          "number": 2266,
+          "title": "Refresh handoff state after PR2265",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2266"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Administrative operational handoff refresh after PR2265. No product-code changes.",
+        "labels": [],
+        "merge_commit_sha": "9dbb93a3c53fc0c0397d123987dc5bd7c1e41599",
+        "number": 2266,
+        "state": "MERGED",
+        "title": "Refresh handoff state after PR2265",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2266"
+      },
+      "pr_number": 2266,
+      "title": "Refresh handoff state after PR2265"
+    },
+    {
+      "category": "Administrative Handoff Refresh",
+      "commit_sha": "78d071b87ae72d05bc7e2277efeed534871b5034",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-02T18:55:25Z",
+          "sha": "78d071b87ae72d05bc7e2277efeed534871b5034",
+          "subject": "Refresh handoff state after PR2267 (#2268)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2268,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "78d071b87ae72d05bc7e2277efeed534871b5034",
+          "number": 2268,
+          "title": "Refresh handoff state after PR2267",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2268"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Administrative operational handoff refresh after PR2267. No product-code changes.",
+        "labels": [],
+        "merge_commit_sha": "78d071b87ae72d05bc7e2277efeed534871b5034",
+        "number": 2268,
+        "state": "MERGED",
+        "title": "Refresh handoff state after PR2267",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2268"
+      },
+      "pr_number": 2268,
+      "title": "Refresh handoff state after PR2267"
+    },
+    {
+      "category": "Administrative Handoff Refresh",
+      "commit_sha": "f1fca7d5f676d4742ae4f3ea356537df6b4980c6",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-04T11:35:01Z",
+          "sha": "f1fca7d5f676d4742ae4f3ea356537df6b4980c6",
+          "subject": "Refresh handoff state after PR2269 (#2270)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2270,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "f1fca7d5f676d4742ae4f3ea356537df6b4980c6",
+          "number": 2270,
+          "title": "Refresh handoff state after PR2269",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2270"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Administrative operational handoff refresh after PR2269. No product-code changes.",
+        "labels": [],
+        "merge_commit_sha": "f1fca7d5f676d4742ae4f3ea356537df6b4980c6",
+        "number": 2270,
+        "state": "MERGED",
+        "title": "Refresh handoff state after PR2269",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2270"
+      },
+      "pr_number": 2270,
+      "title": "Refresh handoff state after PR2269"
+    },
+    {
+      "category": "Administrative Handoff Refresh",
+      "commit_sha": "f619420e32a082afa85c4079e26c04caed9e5ce5",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-05T10:36:10Z",
+          "sha": "f619420e32a082afa85c4079e26c04caed9e5ce5",
+          "subject": "Refresh handoff state after PR2271 (#2272)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2272,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "f619420e32a082afa85c4079e26c04caed9e5ce5",
+          "number": 2272,
+          "title": "Refresh handoff state after PR2271",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2272"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Administrative operational handoff refresh after PR2271. No product-code changes.",
+        "labels": [],
+        "merge_commit_sha": "f619420e32a082afa85c4079e26c04caed9e5ce5",
+        "number": 2272,
+        "state": "MERGED",
+        "title": "Refresh handoff state after PR2271",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2272"
+      },
+      "pr_number": 2272,
+      "title": "Refresh handoff state after PR2271"
+    },
+    {
+      "category": "Administrative Handoff Refresh",
+      "commit_sha": "4bbc987a8aed7a00c5f8111fe87698e940bc7785",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-05T17:12:38Z",
+          "sha": "4bbc987a8aed7a00c5f8111fe87698e940bc7785",
+          "subject": "Refresh handoff state after PR2273 (#2274)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2274,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "4bbc987a8aed7a00c5f8111fe87698e940bc7785",
+          "number": 2274,
+          "title": "Refresh handoff state after PR2273",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2274"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Administrative operational handoff refresh after PR2273. No product-code changes.",
+        "labels": [],
+        "merge_commit_sha": "4bbc987a8aed7a00c5f8111fe87698e940bc7785",
+        "number": 2274,
+        "state": "MERGED",
+        "title": "Refresh handoff state after PR2273",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2274"
+      },
+      "pr_number": 2274,
+      "title": "Refresh handoff state after PR2273"
+    },
+    {
+      "category": "Administrative Handoff Refresh",
+      "commit_sha": "c2f01b2171ac225c1dc6e9af8e74b5efd38852fc",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-05T17:32:33Z",
+          "sha": "c2f01b2171ac225c1dc6e9af8e74b5efd38852fc",
+          "subject": "Refresh handoff state after PR2275 (#2276)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2276,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "c2f01b2171ac225c1dc6e9af8e74b5efd38852fc",
+          "number": 2276,
+          "title": "Refresh handoff state after PR2275",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2276"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Administrative operational handoff refresh after PR2275. No product-code changes.",
+        "labels": [],
+        "merge_commit_sha": "c2f01b2171ac225c1dc6e9af8e74b5efd38852fc",
+        "number": 2276,
+        "state": "MERGED",
+        "title": "Refresh handoff state after PR2275",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2276"
+      },
+      "pr_number": 2276,
+      "title": "Refresh handoff state after PR2275"
+    }
+  ],
+  "deterministic_timestamp_source": "to_ref_committer_date_utc",
+  "from_tag": "v1.0.8",
+  "generated_at_utc": "2026-09-05T17:32:33Z",
+  "github_metadata_available": true,
+  "github_metadata_requested": true,
+  "items": [
+    {
+      "category": "Release",
+      "commit_sha": "792bd72b5d5b8b2df2bc2d4343cf28d9329f9bbf",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-01T06:44:31Z",
+          "sha": "792bd72b5d5b8b2df2bc2d4343cf28d9329f9bbf",
+          "subject": "Record release 1.0.8 DOI and PyPI closeout (#2261)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2261,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "792bd72b5d5b8b2df2bc2d4343cf28d9329f9bbf",
+          "number": 2261,
+          "title": "Record release 1.0.8 DOI and PyPI closeout",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2261"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Summary:\n- Record v1.0.8 DOI closeout after GitHub Release publication.\n- Add PyPI publication evidence from release workflow run 33476952300.\n- Refresh generated site metadata and successor handoff projections.\n\nValidation:\n- python -m pytest -q: 2991 passed.\n- ruff check .: PASS.\n- agentic-kit check-docs: PASS.\n- agentic-kit docs-audit: PASS.\n- agentic-kit doctor: PASS.\n- python -m build: PASS.\n- twine check dist/agentic_project_kit-1.0.8*: PASS.\n- agentic-kit release-status --version 1.0.8 --include-remote --json: PASS, remote DOI metadata verified.\n\nrelease-note-category: Administrative Handoff Refresh",
+        "labels": [],
+        "merge_commit_sha": "792bd72b5d5b8b2df2bc2d4343cf28d9329f9bbf",
+        "number": 2261,
+        "state": "MERGED",
+        "title": "Record release 1.0.8 DOI and PyPI closeout",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2261"
+      },
+      "pr_number": 2261,
+      "title": "Record release 1.0.8 DOI and PyPI closeout"
+    },
+    {
+      "category": "Docs",
+      "commit_sha": "253ea3893fae0a1fca161e72d4be6d47ede36e40",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-01T07:07:29Z",
+          "sha": "253ea3893fae0a1fca161e72d4be6d47ede36e40",
+          "subject": "Add document headroom warning budgets (#2263)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2263,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "253ea3893fae0a1fca161e72d4be6d47ede36e40",
+          "number": 2263,
+          "title": "Add document headroom warning budgets",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2263"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Summary: raises README and STATUS hard word budgets, adds non-blocking warn_words headroom reporting in docs-audit, centralizes document word-budget logic, and preserves PyPI publication in the deterministic README release status anchor. Validation: python -m pytest -q (2997 passed), ruff check ., agentic-kit check-docs, agentic-kit docs-audit, agentic-kit doctor.",
+        "labels": [],
+        "merge_commit_sha": "253ea3893fae0a1fca161e72d4be6d47ede36e40",
+        "number": 2263,
+        "state": "MERGED",
+        "title": "Add document headroom warning budgets",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2263"
+      },
+      "pr_number": 2263,
+      "title": "Add document headroom warning budgets"
+    },
+    {
+      "category": "Tests / Gates",
+      "commit_sha": "c46606a940a2d5790ceffe566cf63621f2581f0c",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-02T13:15:43Z",
+          "sha": "c46606a940a2d5790ceffe566cf63621f2581f0c",
+          "subject": "Fix external workspace first-cycle gates (#2265)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2265,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "c46606a940a2d5790ceffe566cf63621f2581f0c",
+          "number": 2265,
+          "title": "Fix external workspace first-cycle gates",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2265"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Fixes Greenfield external workspace init and first-cycle workflow defects found before Comm-SCI Cycle 008. Evidence: fresh Greenfield repro PASS for workspace init, check, governance check, doctor, slice gate, standard-gates-audit-suite, transfer status, work check, and work start; pytest -q 3013 passed; ruff check . PASS; check-docs PASS; docs-audit PASS; doctor PASS; standard-gates-audit-suite PASS.",
+        "labels": [],
+        "merge_commit_sha": "c46606a940a2d5790ceffe566cf63621f2581f0c",
+        "number": 2265,
+        "state": "MERGED",
+        "title": "Fix external workspace first-cycle gates",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2265"
+      },
+      "pr_number": 2265,
+      "title": "Fix external workspace first-cycle gates"
+    },
+    {
+      "category": "Fixed",
+      "commit_sha": "134bd4e7ad4a4709c175dcaecf15ded905808034",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-02T18:52:30Z",
+          "sha": "134bd4e7ad4a4709c175dcaecf15ded905808034",
+          "subject": "Fix work start from integration refs (#2267)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2267,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "134bd4e7ad4a4709c175dcaecf15ded905808034",
+          "number": 2267,
+          "title": "Fix work start from integration refs",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2267"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Human workflow finish: Fix work start from integration refs",
+        "labels": [],
+        "merge_commit_sha": "134bd4e7ad4a4709c175dcaecf15ded905808034",
+        "number": 2267,
+        "state": "MERGED",
+        "title": "Fix work start from integration refs",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2267"
+      },
+      "pr_number": 2267,
+      "title": "Fix work start from integration refs"
+    },
+    {
+      "category": "Fixed",
+      "commit_sha": "14e73fcedeedb1a1dcc6a9d6d6f25cf6c7d7aea1",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-04T11:32:21Z",
+          "sha": "14e73fcedeedb1a1dcc6a9d6d6f25cf6c7d7aea1",
+          "subject": "Harden greenfield workflow closeout routing (#2269)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2269,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "14e73fcedeedb1a1dcc6a9d6d6f25cf6c7d7aea1",
+          "number": 2269,
+          "title": "Harden greenfield workflow closeout routing",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2269"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Human workflow finish: Harden greenfield workflow closeout routing",
+        "labels": [],
+        "merge_commit_sha": "14e73fcedeedb1a1dcc6a9d6d6f25cf6c7d7aea1",
+        "number": 2269,
+        "state": "MERGED",
+        "title": "Harden greenfield workflow closeout routing",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2269"
+      },
+      "pr_number": 2269,
+      "title": "Harden greenfield workflow closeout routing"
+    },
+    {
+      "category": "Fixed",
+      "commit_sha": "5273ae40d1944ac5dcb4713f2ffc7a02e1dc5a73",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-05T10:34:30Z",
+          "sha": "5273ae40d1944ac5dcb4713f2ffc7a02e1dc5a73",
+          "subject": "Harden external PR lifecycle context (#2271)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2271,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "5273ae40d1944ac5dcb4713f2ffc7a02e1dc5a73",
+          "number": 2271,
+          "title": "Harden external PR lifecycle context",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2271"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Human workflow finish: Harden external PR lifecycle context",
+        "labels": [],
+        "merge_commit_sha": "5273ae40d1944ac5dcb4713f2ffc7a02e1dc5a73",
+        "number": 2271,
+        "state": "MERGED",
+        "title": "Harden external PR lifecycle context",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2271"
+      },
+      "pr_number": 2271,
+      "title": "Harden external PR lifecycle context"
+    },
+    {
+      "category": "Governance",
+      "commit_sha": "b79ff5beb31d6e72d5f046b3eef638a02124f97d",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-05T17:10:32Z",
+          "sha": "b79ff5beb31d6e72d5f046b3eef638a02124f97d",
+          "subject": "Keep command-for JSON warning-free (#2273)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2273,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "b79ff5beb31d6e72d5f046b3eef638a02124f97d",
+          "number": 2273,
+          "title": "Keep command-for JSON warning-free",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2273"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Human workflow finish: Keep command-for JSON warning-free",
+        "labels": [],
+        "merge_commit_sha": "b79ff5beb31d6e72d5f046b3eef638a02124f97d",
+        "number": 2273,
+        "state": "MERGED",
+        "title": "Keep command-for JSON warning-free",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2273"
+      },
+      "pr_number": 2273,
+      "title": "Keep command-for JSON warning-free"
+    },
+    {
+      "category": "Transfer / Handoff",
+      "commit_sha": "6d41a618ccc045554a36d32427e1603cfaab8066",
+      "confidence": "high",
+      "evidence": [
+        {
+          "committed_at": "2026-09-05T17:31:03Z",
+          "sha": "6d41a618ccc045554a36d32427e1603cfaab8066",
+          "subject": "Treat successor projections as recoverable volatile state (#2275)",
+          "type": "commit"
+        },
+        {
+          "range": "v1.0.8..main",
+          "type": "tag_diff"
+        },
+        {
+          "number": 2275,
+          "type": "pull_request"
+        },
+        {
+          "author": "vfi64",
+          "labels": [],
+          "merge_commit_sha": "6d41a618ccc045554a36d32427e1603cfaab8066",
+          "number": 2275,
+          "title": "Treat successor projections as recoverable volatile state",
+          "type": "github_pull_request_metadata",
+          "url": "https://github.com/vfi64/agentic-project-kit/pull/2275"
+        }
+      ],
+      "github_metadata": {
+        "author": "vfi64",
+        "body": "Human workflow finish: Treat successor projections as recoverable volatile state",
+        "labels": [],
+        "merge_commit_sha": "6d41a618ccc045554a36d32427e1603cfaab8066",
+        "number": 2275,
+        "state": "MERGED",
+        "title": "Treat successor projections as recoverable volatile state",
+        "url": "https://github.com/vfi64/agentic-project-kit/pull/2275"
+      },
+      "pr_number": 2275,
+      "title": "Treat successor projections as recoverable volatile state"
+    }
+  ],
+  "kind": "release_notes",
+  "missing_evidence": [],
+  "schema_version": 1,
+  "to_ref": "main",
+  "unclassified_items": [],
+  "validation": {
+    "reasons": [],
+    "status": "PASS"
+  },
+  "version": "1.0.9"
+}

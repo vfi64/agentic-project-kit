@@ -605,6 +605,7 @@ def _classify_subject(subject: str) -> str:
             "pr merge",
             "wrapper",
             "receipt",
+            "successor",
         )
     ):
         return "Transfer / Handoff"
