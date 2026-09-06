@@ -407,6 +407,39 @@ def test_release_notes_generator_classifies_post_106_ci_and_receipt_titles(tmp_p
     ]
 
 
+def test_release_notes_generator_classifies_post_108_greenfield_titles(tmp_path: Path) -> None:
+    report = build_release_notes_report(
+        tmp_path,
+        version="1.0.9",
+        from_tag="v1.0.8",
+        command_runner=FakeRunner(
+            subjects=[
+                "Record release 1.0.8 DOI and PyPI closeout (#2261)",
+                "Add document headroom warning budgets (#2263)",
+                "Fix external workspace first-cycle gates (#2265)",
+                "Fix work start from integration refs (#2267)",
+                "Harden greenfield workflow closeout routing (#2269)",
+                "Harden external PR lifecycle context (#2271)",
+                "Keep command-for JSON warning-free (#2273)",
+                "Treat successor projections as recoverable volatile state (#2275)",
+            ]
+        ),
+    )
+
+    assert report.validation.status == "PASS"
+    assert report.unclassified_items == ()
+    assert [item.category for item in report.items] == [
+        "Release",
+        "Docs",
+        "Tests / Gates",
+        "Fixed",
+        "Fixed",
+        "Fixed",
+        "Governance",
+        "Transfer / Handoff",
+    ]
+
+
 def test_release_notes_generator_treats_report_projection_commits_as_administrative(
     tmp_path: Path,
 ) -> None:

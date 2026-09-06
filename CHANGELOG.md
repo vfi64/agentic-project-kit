@@ -1,3 +1,15 @@
+## v1.0.9 - 2026-09-06
+
+- Zenodo DOI verification pending for v1.0.9.
+- Record release 1.0.8 DOI and PyPI closeout
+- Add document headroom warning budgets
+- Fix external workspace first-cycle gates
+- Fix work start from integration refs
+- Harden greenfield workflow closeout routing
+- Harden external PR lifecycle context
+- Keep command-for JSON warning-free
+- Treat successor projections as recoverable volatile state
+
 ## v1.0.8 - 2026-08-31
 
 - Record release 1.0.7 DOI closeout
