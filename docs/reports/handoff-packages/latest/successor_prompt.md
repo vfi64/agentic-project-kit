@@ -38,9 +38,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2279-handoff-refresh`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- branch: `codex/context-budget-graphify-planning`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -261,6 +261,24 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
+      "id": "context-budgeted-handoff-projections",
+      "status": "planned",
+      "summary": "Reduce agent token consumption through deterministic context projections"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "optional-structural-evidence-provider-evaluation",
+      "status": "planned",
+      "summary": "Evaluate optional structural evidence providers for impact-aware context"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
       "id": "next-turn-workflow-kernel",
       "status": "active",
       "summary": "Move recurring next-step execution from chat discipline into a deterministic local workflow kernel"
@@ -402,15 +420,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2279-handoff-refresh",
+    "branch": "codex/context-budget-graphify-planning",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "67e81ed25fd802b3ac9a69e3728c3fe35d0c48ce",
-    "head_matches_origin_main": true,
-    "head_short": "67e81ed2",
+    "head": "8d235a99237caf4a38385195546eb7db476b36a9",
+    "head_matches_origin_main": false,
+    "head_short": "8d235a99",
     "local_path": "cd /path/to/",
-    "origin_main": "67e81ed25fd802b3ac9a69e3728c3fe35d0c48ce",
-    "origin_main_short": "67e81ed2",
-    "worktree_clean": false
+    "origin_main": "638a14c83a8fe137fecd5d6c39d4ca872703ede7",
+    "origin_main_short": "638a14c8",
+    "worktree_clean": true
   }
 }
 ```
