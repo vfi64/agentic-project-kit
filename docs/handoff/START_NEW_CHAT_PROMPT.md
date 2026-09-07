@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 34ab97377109d83b6961ca26c837a2d6cd022265e74539113b313076d2fbc384
 - docs/reference/agentic-kit-commands.json: 2d410a602009389079669823b084d1b229a5be691f7b649ab2118cfd7627d60b
-## Operational documentation refresh state after PR #2281
+## Operational documentation refresh state after PR #2283
 
-Current administrative handoff refresh state is `7b2f2825` (`Plan context budgets and structural evidence evaluation (#2281)`). Continue next only after this post-PR2281 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `52d6b2bf` (`Harden patch recurrence workflow guard (#2283)`). Continue next only after this post-PR2283 refresh is committed and merged; the next substantive slice must be created from fresh main.

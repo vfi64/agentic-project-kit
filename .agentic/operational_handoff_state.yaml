@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7b2f2825657d0ae1988cc9e50b82a8b028ec849a
-  short: 7b2f2825
-  subject: Plan context budgets and structural evidence evaluation (#2281)
+  full: 52d6b2bfd8edc13c42f53000504ebf05aa2ae940
+  short: 52d6b2bf
+  subject: Harden patch recurrence workflow guard (#2283)
 last_substantive_work_state:
-  full: 7b2f2825657d0ae1988cc9e50b82a8b028ec849a
-  short: 7b2f2825
-  subject: Plan context budgets and structural evidence evaluation (#2281)
+  full: 52d6b2bfd8edc13c42f53000504ebf05aa2ae940
+  short: 52d6b2bf
+  subject: Harden patch recurrence workflow guard (#2283)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

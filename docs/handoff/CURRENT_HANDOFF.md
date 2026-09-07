@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `7b2f2825657d0ae1988cc9e50b82a8b028ec849a` (`7b2f2825`), after `Plan context budgets and structural evidence evaluation (#2281)`.
-Last substantive work state is `7b2f2825657d0ae1988cc9e50b82a8b028ec849a` (`7b2f2825`), after `Plan context budgets and structural evidence evaluation (#2281)`.
+Current verified main/admin HEAD is `52d6b2bfd8edc13c42f53000504ebf05aa2ae940` (`52d6b2bf`), after `Harden patch recurrence workflow guard (#2283)`.
+Last substantive work state is `52d6b2bfd8edc13c42f53000504ebf05aa2ae940` (`52d6b2bf`), after `Harden patch recurrence workflow guard (#2283)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
