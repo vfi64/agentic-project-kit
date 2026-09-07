@@ -5,6 +5,7 @@ from typer.testing import CliRunner
 from agentic_project_kit.cli import app
 from agentic_project_kit.run_summary_renderer import render_summary
 from agentic_project_kit.workflow_guard import (
+    check_patch_failure_discipline,
     check_required_rule_registry_files,
     check_rule_registry,
     check_structured_summary_evidence,
@@ -105,6 +106,22 @@ def test_workflow_guard_accepts_canonical_summary_evidence(tmp_path: Path) -> No
     path.parent.mkdir(parents=True)
     path.write_text(render_summary(_summary_payload()), encoding="utf-8")
     assert check_structured_summary_evidence([path]) == []
+
+
+def test_workflow_guard_surfaces_patch_failure_discipline_violation(tmp_path: Path) -> None:
+    first = tmp_path / "tmp" / "slice1-a-20260101-000001.log"
+    second = tmp_path / "tmp" / "slice1-b-20260101-000002.log"
+    first.parent.mkdir(parents=True)
+    first.write_text("block not found\n", encoding="utf-8")
+    second.write_text("function not found\n", encoding="utf-8")
+
+    findings = check_patch_failure_discipline(tmp_path, include_tmp=True)
+
+    assert findings
+    assert findings[0].pattern_id == "patch-cycle-diagnostic-gate"
+    assert findings[0].severity == "HARD-FAIL"
+    assert "next_mutation_allowed=false" in findings[0].message
+    assert findings[0].repair_mode == "run-bounded-patch-failure-diagnosis-before-continuing"
 
 
 def test_workflow_guard_policy_documents_repair_plan() -> None:

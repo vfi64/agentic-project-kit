@@ -23,6 +23,11 @@ failure, such as:
 After the diagnosis step, the next patch must be a minimal patch based on the
 observed current state.
 
+The machine-readable audit reports `NEXT_MUTATION_ALLOWED=false` when repeated
+failure evidence requires diagnosis before another mutation. `workflow-guard`
+uses the same audit path as a hard pre-mutation finding, including local `tmp/`
+evidence, so the rule is not only a chat instruction.
+
 ## Enforcement
 
 `agentic-kit audit-patch-failure-discipline` scans repo-backed command reports.

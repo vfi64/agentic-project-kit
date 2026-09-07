@@ -106,6 +106,18 @@ coverage:
     - kind: test
       path: tests/test_workflow_guard.py
     statement: registry drift and required registry file loss are hard findings
+  - assertion_id: workflow-guard-patch-cycle-diagnostic-gate
+    kind: guard
+    covered_surfaces:
+    - workflow-guard-cli
+    - workflow-guard-tests
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/workflow_guard.py
+    - kind: test
+      path: tests/test_workflow_guard.py
+    statement: repeated patch/test failures without later diagnosis surface as hard
+      workflow-guard findings before a third mutation
 - mechanism_id: patch-preflight
   test_coverage: direct
   assertions:

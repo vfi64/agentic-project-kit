@@ -112,6 +112,9 @@ mechanisms:
     - run_workflow_guard
     - protected_control_files
     - check_required_anchors
+    - check_patch_failure_discipline
+    - audit_patch_failure_discipline
+    - patch-cycle-diagnostic-gate
     - check_rule_registry
     - rule-registry-drift
     - rule-preservation-drift
@@ -119,11 +122,14 @@ mechanisms:
     required_terms:
     - test_workflow_guard_passes_current_repository_state
     - test_workflow_guard_enforces_rule_registry
+    - test_workflow_guard_surfaces_patch_failure_discipline_violation
     - structured-summary-drift
   - path: docs/workflow/WORKFLOW_GUARD.md
     required_terms:
     - diagnose-and-fail
     - protected control files
+    - patch-cycle diagnostic gate
+    - next_mutation_allowed=false
     - repair plan
   protected_rule_intent: Diagnose recurring workflow drift as hard findings before
     state-changing work continues.

@@ -10,6 +10,7 @@ def test_rule_preservation_registry_loads() -> None:
     assert "structured-summary-must-be-enforced" in ids
     assert "no-copy-terminal-evidence" in ids
     assert "transfer-safety-rules-must-be-preserved" in ids
+    assert "patch-cycle-diagnostic-gate" in ids
 
 def test_rule_preservation_current_repository_passes() -> None:
     assert validate_rule_preservation() == []
