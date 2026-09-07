@@ -1,4 +1,5 @@
 from pathlib import Path
+import shutil
 
 from typer.testing import CliRunner
 
@@ -6,6 +7,7 @@ from agentic_project_kit.cli import app
 from agentic_project_kit.governance import (
     CONSTITUTION_FILES,
     EXTERNAL_WORKSPACE_CONSTITUTION_FILES,
+    EXTERNAL_WORKSPACE_LOCAL_TRANSFER_DIRS,
     governance_check,
     render_governance_check,
 )
@@ -35,6 +37,17 @@ def test_governance_check_passes_for_external_manifest_workspace(tmp_path: Path)
     assert governance_check(tmp_path) == []
     for file_name in EXTERNAL_WORKSPACE_CONSTITUTION_FILES:
         assert (tmp_path / file_name).exists()
+    for dir_name in EXTERNAL_WORKSPACE_LOCAL_TRANSFER_DIRS:
+        assert (tmp_path / dir_name).is_dir()
+
+
+def test_governance_check_accepts_external_manifest_checkout_without_empty_transfer_dirs(tmp_path: Path):
+    plan = build_workspace_init_plan(tmp_path, execute=True)
+    execute_workspace_init(plan)
+    for dir_name in EXTERNAL_WORKSPACE_LOCAL_TRANSFER_DIRS:
+        shutil.rmtree(tmp_path / dir_name)
+
+    assert governance_check(tmp_path) == []
 
 
 def test_governance_check_cli_accepts_external_root(tmp_path: Path):

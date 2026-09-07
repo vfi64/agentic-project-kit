@@ -1423,6 +1423,9 @@ rules:
     - .agentic/config.yaml
     - .agentic/state/
     - .agentic/registries/
+    - .agentic/transfer/inbox
+    - .agentic/transfer/outbox
+    - local transfer work directories
     - self-hosting Kit documentation set
     - agentic-kit workspace init --root PATH --execute
     - agentic-kit check-docs
