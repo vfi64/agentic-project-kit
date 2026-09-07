@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `cc6751ae796bbcb71dd718177532116e4256a4ef` (`cc6751ae`), after `Skip self-hosting workflow guard checks externally (#2285)`.
-Last substantive work state is `cc6751ae796bbcb71dd718177532116e4256a4ef` (`cc6751ae`), after `Skip self-hosting workflow guard checks externally (#2285)`.
+Current verified main/admin HEAD is `46aceca10b89841a7138f242f01c6608f5e3620f` (`46aceca1`), after `Treat external transfer dirs as local workspace state (#2287)`.
+Last substantive work state is `46aceca10b89841a7138f242f01c6608f5e3620f` (`46aceca1`), after `Treat external transfer dirs as local workspace state (#2287)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
