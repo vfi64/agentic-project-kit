@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-09-06T19:47:21.193896+00:00",
+  "generated_at_utc": "2026-09-07T04:26:52.047756+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,15 +57,15 @@
     "package_version": "1.0.9"
   },
   "repo": {
-    "branch": "docs/post-pr2279-handoff-refresh",
+    "branch": "codex/context-budget-graphify-planning",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "67e81ed25fd802b3ac9a69e3728c3fe35d0c48ce",
-    "head_matches_origin_main": true,
-    "head_short": "67e81ed2",
+    "head": "8d235a99237caf4a38385195546eb7db476b36a9",
+    "head_matches_origin_main": false,
+    "head_short": "8d235a99",
     "local_path": "cd /path/to/",
-    "origin_main": "67e81ed25fd802b3ac9a69e3728c3fe35d0c48ce",
-    "origin_main_short": "67e81ed2",
-    "worktree_clean": false
+    "origin_main": "638a14c83a8fe137fecd5d6c39d4ca872703ede7",
+    "origin_main_short": "638a14c8",
+    "worktree_clean": true
   },
   "schema_version": 1,
   "short_term_memory": {
@@ -177,6 +177,24 @@
         "id": "decomplexification-audit-roadmap",
         "status": "planned",
         "summary": "Reduce command-surface complexity through compatibility-preserving facades"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "context-budgeted-handoff-projections",
+        "status": "planned",
+        "summary": "Reduce agent token consumption through deterministic context projections"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "optional-structural-evidence-provider-evaluation",
+        "status": "planned",
+        "summary": "Evaluate optional structural evidence providers for impact-aware context"
       },
       {
         "files": [

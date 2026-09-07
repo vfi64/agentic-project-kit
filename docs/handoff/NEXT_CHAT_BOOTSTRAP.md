@@ -6,10 +6,10 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `67e81ed25fd802b3ac9a69e3728c3fe35d0c48ce` (`67e81ed2`)
-- Handoff freshness marker: `67e81ed2`
-- Branch at generation: `docs/post-pr2279-handoff-refresh`
-- Worktree clean at generation: `False`
+- HEAD: `8d235a99237caf4a38385195546eb7db476b36a9` (`8d235a99`)
+- Handoff freshness marker: `8d235a99`
+- Branch at generation: `codex/context-budget-graphify-planning`
+- Worktree clean at generation: `True`
 
 ## Successor handoff package
 
@@ -83,6 +83,8 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 - `planning-ideas-residual-cleanup` (planned): Resolve remaining planning and idea residual documents
 - `pre-gui-hardening-plan` (active): Execute the pre-GUI hardening backlog in small wrapper-first slices
 - `decomplexification-audit-roadmap` (planned): Reduce command-surface complexity through compatibility-preserving facades
+- `context-budgeted-handoff-projections` (planned): Reduce agent token consumption through deterministic context projections
+- `optional-structural-evidence-provider-evaluation` (planned): Evaluate optional structural evidence providers for impact-aware context
 - `next-turn-workflow-kernel` (active): Move recurring next-step execution from chat discipline into a deterministic local workflow kernel
 - `release-command-authority` (active): Keep release preparation, publishing, and DOI closeout under explicit command authority
 - `rule-registry-hardening` (active): Preserve active rule identity, source validation, and refresh handshakes

@@ -127,6 +127,24 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
+        "id": "context-budgeted-handoff-projections",
+        "status": "planned",
+        "summary": "Reduce agent token consumption through deterministic context projections"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "optional-structural-evidence-provider-evaluation",
+        "status": "planned",
+        "summary": "Evaluate optional structural evidence providers for impact-aware context"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
         "id": "next-turn-workflow-kernel",
         "status": "active",
         "summary": "Move recurring next-step execution from chat discipline into a deterministic local workflow kernel"
@@ -269,14 +287,14 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2279-handoff-refresh",
+      "branch": "codex/context-budget-graphify-planning",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "67e81ed25fd802b3ac9a69e3728c3fe35d0c48ce",
-      "head_matches_origin_main": true,
+      "head": "8d235a99237caf4a38385195546eb7db476b36a9",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
-      "origin_main": "67e81ed25fd802b3ac9a69e3728c3fe35d0c48ce",
-      "worktree_clean": false
+      "origin_main": "638a14c83a8fe137fecd5d6c39d4ca872703ede7",
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -421,14 +439,14 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2279-handoff-refresh",
+    "branch": "codex/context-budget-graphify-planning",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "67e81ed25fd802b3ac9a69e3728c3fe35d0c48ce",
-    "head_matches_origin_main": true,
+    "head": "8d235a99237caf4a38385195546eb7db476b36a9",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
-    "origin_main": "67e81ed25fd802b3ac9a69e3728c3fe35d0c48ce",
-    "worktree_clean": false
+    "origin_main": "638a14c83a8fe137fecd5d6c39d4ca872703ede7",
+    "worktree_clean": true
   },
   "rules": [
     {
