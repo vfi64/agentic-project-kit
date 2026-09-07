@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-09-07T04:26:52.047756+00:00",
+  "generated_at_utc": "2026-09-07T04:29:30.638574+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,15 +57,15 @@
     "package_version": "1.0.9"
   },
   "repo": {
-    "branch": "codex/context-budget-graphify-planning",
+    "branch": "docs/post-pr2281-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "8d235a99237caf4a38385195546eb7db476b36a9",
-    "head_matches_origin_main": false,
-    "head_short": "8d235a99",
+    "head": "7b2f2825657d0ae1988cc9e50b82a8b028ec849a",
+    "head_matches_origin_main": true,
+    "head_short": "7b2f2825",
     "local_path": "cd /path/to/",
-    "origin_main": "638a14c83a8fe137fecd5d6c39d4ca872703ede7",
-    "origin_main_short": "638a14c8",
-    "worktree_clean": true
+    "origin_main": "7b2f2825657d0ae1988cc9e50b82a8b028ec849a",
+    "origin_main_short": "7b2f2825",
+    "worktree_clean": false
   },
   "schema_version": 1,
   "short_term_memory": {

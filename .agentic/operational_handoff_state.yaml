@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 67e81ed25fd802b3ac9a69e3728c3fe35d0c48ce
-  short: 67e81ed2
-  subject: Record release 1.0.9 DOI closeout (#2279)
+  full: 7b2f2825657d0ae1988cc9e50b82a8b028ec849a
+  short: 7b2f2825
+  subject: Plan context budgets and structural evidence evaluation (#2281)
 last_substantive_work_state:
-  full: 67e81ed25fd802b3ac9a69e3728c3fe35d0c48ce
-  short: 67e81ed2
-  subject: Record release 1.0.9 DOI closeout (#2279)
+  full: 7b2f2825657d0ae1988cc9e50b82a8b028ec849a
+  short: 7b2f2825
+  subject: Plan context budgets and structural evidence evaluation (#2281)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
