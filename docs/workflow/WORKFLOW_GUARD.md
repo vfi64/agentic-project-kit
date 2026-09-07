@@ -12,4 +12,10 @@ family without a later diagnosis marker, the guard reports
 `next_mutation_allowed=false` and blocks a third mutation until bounded diagnosis
 evidence exists.
 
+In external manifest workspaces, the workflow guard keeps path-level YAML,
+structured-summary, and patch-cycle diagnostics active, but skips Kit
+self-hosting rule-registry, rule-preservation, protected-control-file, and
+workflow-policy checks. Those self-hosting files belong to the Kit development
+checkout, not to an adopted target repository.
+
 Safe changes must be narrow and evidence-backed. Semantic rule loss, release-state conflict, broad document rewrite, and unclear YAML recovery require review and a repair plan before further mutation.

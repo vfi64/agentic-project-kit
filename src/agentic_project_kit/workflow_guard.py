@@ -11,6 +11,7 @@ from agentic_project_kit.run_summary_renderer import validate_rendered_summary_t
 from agentic_project_kit.rule_preservation import validate_rule_preservation
 from agentic_project_kit.rule_registry_validator import validate_rule_registry
 from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 
 WORKFLOW_GUARD_CONFIG = Path(LEGACY_DEFAULTS.docs_root) / "workflow" / "WORKFLOW_GUARD.md"
 CONTROL_FILE_PRESERVATION = Path(".agentic/control_file_preservation.yaml")
@@ -256,26 +257,38 @@ def check_rule_registry() -> list[GuardFinding]:
 
 
 def run_workflow_guard(paths: Iterable[str] | None = None) -> list[GuardFinding]:
+    root = Path(".")
+    external_manifest_workspace = is_external_manifest_workspace(root)
     requested = [Path(path) for path in (paths or [])]
-    protected = [Path(str(item["path"])) for item in protected_control_files() if isinstance(item.get("path"), str)]
-    yaml_targets = list(dict.fromkeys([*requested, *protected, *REQUIRED_RULE_REGISTRY_FILES, CONTROL_FILE_PRESERVATION]))
+    protected = [] if external_manifest_workspace else [
+        Path(str(item["path"])) for item in protected_control_files() if isinstance(item.get("path"), str)
+    ]
+    self_hosting_yaml_targets = [] if external_manifest_workspace else [
+        *REQUIRED_RULE_REGISTRY_FILES,
+        CONTROL_FILE_PRESERVATION,
+    ]
+    yaml_targets = list(dict.fromkeys([*requested, *protected, *self_hosting_yaml_targets]))
     findings: list[GuardFinding] = []
-    findings.extend(check_required_rule_registry_files())
+    if not external_manifest_workspace:
+        findings.extend(check_required_rule_registry_files())
     findings.extend(check_yaml_parseability(yaml_targets))
-    findings.extend(check_required_anchors())
+    if not external_manifest_workspace:
+        findings.extend(check_required_anchors())
     findings.extend(check_structured_summary_evidence(requested))
-    findings.extend(check_no_lossy_control_file_policy())
-    findings.extend(check_workflow_guard_document())
+    if not external_manifest_workspace:
+        findings.extend(check_no_lossy_control_file_policy())
+        findings.extend(check_workflow_guard_document())
     findings.extend(check_patch_failure_discipline(Path("."), include_tmp=True))
-    findings.extend(check_rule_registry())
-    for item in validate_rule_preservation():
-        findings.append(GuardFinding(
-            pattern_id="rule-preservation-drift",
-            severity="HARD-FAIL",
-            path=item.path,
-            message=f"{item.rule_id}: {item.message}",
-            repair_mode="restore-rule-surface-or-record-migration",
-        ))
+    if not external_manifest_workspace:
+        findings.extend(check_rule_registry())
+        for item in validate_rule_preservation():
+            findings.append(GuardFinding(
+                pattern_id="rule-preservation-drift",
+                severity="HARD-FAIL",
+                path=item.path,
+                message=f"{item.rule_id}: {item.message}",
+                repair_mode="restore-rule-surface-or-record-migration",
+            ))
     return findings
 
 

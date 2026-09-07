@@ -281,6 +281,11 @@ The guard must block at least these classes before further mutation:
 - repeated patch/test failures that trip the patch-cycle diagnostic gate and set `next_mutation_allowed=false`;
 - missing workflow guard policy documentation.
 
+In external manifest workspaces, the guard must not require Kit self-hosting
+rule registry, rule preservation, protected-control-file, or workflow-policy
+files. It should keep applicable path-level diagnostics and patch-cycle checks
+without converting absent Kit-internal files into tracebacks or false blockers.
+
 The guard is intentionally conservative: it diagnoses and hard-fails first. Automated repair is only acceptable for narrow, reversible, explicitly safe cases. Semantic rule loss, release-state conflict, broad document rewrite, and unclear YAML recovery require a repair plan and review-visible evidence before further mutation.
 
 Required evidence:

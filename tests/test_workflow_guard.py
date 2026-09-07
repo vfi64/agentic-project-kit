@@ -51,6 +51,30 @@ def test_workflow_guard_cli_passes_current_repository_state() -> None:
     assert "Workflow guard passed" in result.output
 
 
+def test_workflow_guard_skips_self_hosting_rule_checks_for_external_manifest_workspace(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    manifest = tmp_path / ".agentic" / "config.yaml"
+    manifest.parent.mkdir(parents=True)
+    manifest.write_text(
+        """
+schema_version: 2
+project:
+  name: external-target
+  type: python
+profiles: []
+transfer:
+  mode: repo
+""".lstrip(),
+        encoding="utf-8",
+    )
+
+    monkeypatch.chdir(tmp_path)
+
+    assert run_workflow_guard([]) == []
+
+
 def test_workflow_guard_enforces_rule_registry() -> None:
     assert check_rule_registry() == []
     text = Path("src/agentic_project_kit/workflow_guard.py").read_text(encoding="utf-8")
