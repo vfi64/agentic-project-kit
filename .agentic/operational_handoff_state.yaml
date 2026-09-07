@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: cc6751ae796bbcb71dd718177532116e4256a4ef
-  short: cc6751ae
-  subject: Skip self-hosting workflow guard checks externally (#2285)
+  full: 46aceca10b89841a7138f242f01c6608f5e3620f
+  short: 46aceca1
+  subject: Treat external transfer dirs as local workspace state (#2287)
 last_substantive_work_state:
-  full: cc6751ae796bbcb71dd718177532116e4256a4ef
-  short: cc6751ae
-  subject: Skip self-hosting workflow guard checks externally (#2285)
+  full: 46aceca10b89841a7138f242f01c6608f5e3620f
+  short: 46aceca1
+  subject: Treat external transfer dirs as local workspace state (#2287)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
