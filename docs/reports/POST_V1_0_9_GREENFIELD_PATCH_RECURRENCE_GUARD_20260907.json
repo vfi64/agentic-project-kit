@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "kind": "greenfield_patch_recurrence_guard_closeout",
+  "status": "implemented_local_retest_pass",
+  "date": "2026-09-07",
+  "baseline": {
+    "origin_main": "1c5f57a7",
+    "version": "1.0.9",
+    "branch": "codex/greenfield-patch-recurrence-guard"
+  },
+  "finding": {
+    "id": "KIT-GF-013",
+    "previous_status": "open_planned",
+    "current_status": "implemented_local_retest_pass",
+    "summary": "Repeated patch/test failures now route through the existing patch-failure audit and workflow guard before a third mutation in the same patch family.",
+    "boundary": "No new failure database or public CLI command was added."
+  },
+  "existing_mechanisms_reused": [
+    "docs/governance/PATCH_FAILURE_DIAGNOSIS_POLICY.md",
+    "agentic-kit audit-patch-failure-discipline",
+    "agentic-kit workflow-guard check",
+    "docs/TEST_GATES.md",
+    ".agentic/rule_mechanism_inventory.yaml",
+    ".agentic/rule_test_coverage.yaml",
+    ".agentic/rule_preservation.yaml"
+  ],
+  "repair": [
+    {
+      "surface": "patch_failure_discipline_audit",
+      "change": "Expose next_mutation_allowed in text and JSON audit output."
+    },
+    {
+      "surface": "workflow_guard",
+      "change": "Convert repeated patch/test failures without later diagnosis into a HARD-FAIL patch-cycle-diagnostic-gate finding."
+    },
+    {
+      "surface": "governance",
+      "change": "Bind the escalation rule into workflow guard docs, test gates, documentation coverage, rule mechanism inventory, rule test coverage, and rule preservation."
+    },
+    {
+      "surface": "planning",
+      "change": "Record B1-KIT-022 while preserving the remaining open Greenfield/Brownfield follow-ups."
+    }
+  ],
+  "contract": {
+    "one_failure": "One direct correction in the same patch family remains allowed.",
+    "two_failures_without_later_diagnosis": "Workflow guard reports patch-cycle-diagnostic-gate and next_mutation_allowed=false.",
+    "after_diagnosis": "The next mutation must be a minimal patch based on observed current state."
+  },
+  "focused_validation": [
+    {
+      "command": "./.venv/bin/python -m pytest -q tests/test_patch_failure_discipline_audit.py tests/test_workflow_guard.py tests/test_rule_preservation.py tests/test_rule_mechanism_inventory.py",
+      "result": "PASS",
+      "summary": "25 passed"
+    },
+    {
+      "command": "./.venv/bin/ruff check touched source and tests",
+      "result": "PASS",
+      "summary": "All checks passed"
+    },
+    {
+      "command": "agentic-kit workflow-guard check",
+      "result": "PASS",
+      "summary": "Workflow guard passed"
+    },
+    {
+      "command": "agentic-kit audit-patch-failure-discipline --include-tmp --json",
+      "result": "PASS",
+      "summary": "next_mutation_allowed=true; signal_count=0; violation_count=0"
+    },
+    {
+      "command": "agentic-kit rule-registry check",
+      "result": "PASS",
+      "summary": "Rule registry validation passed"
+    },
+    {
+      "command": "agentic-kit direction validate --root .",
+      "result": "PASS",
+      "summary": "FINDING_COUNT=0"
+    },
+    {
+      "command": "agentic-kit check-docs",
+      "result": "PASS",
+      "summary": "Agentic project check passed"
+    }
+  ],
+  "full_validation": [
+    {
+      "command": "./.venv/bin/python -m pytest -q",
+      "result": "PASS",
+      "summary": "3033 passed, 481 warnings"
+    },
+    {
+      "command": "./.venv/bin/ruff check .",
+      "result": "PASS",
+      "summary": "All checks passed"
+    },
+    {
+      "command": "agentic-kit audit-command-manifest --json",
+      "result": "PASS",
+      "summary": "0 findings"
+    },
+    {
+      "command": "agentic-kit docs-audit",
+      "result": "PASS",
+      "summary": "Scope decision projection refreshed through agentic-kit doc-registry reconcile --execute --json before PASS."
+    },
+    {
+      "command": "agentic-kit doctor",
+      "result": "PASS",
+      "summary": "Overall PASS; 76 document-lifecycle report-only findings"
+    }
+  ],
+  "remaining_work": [
+    "KIT-GF-001 external lifecycle retest",
+    "KIT-GF-003 first bootstrap/no-previous-handoff retest",
+    "KIT-GF-005 virgin workspace and non-main integration ref retest",
+    "KIT-GF-007 DPA/adopt generated-vs-manual provenance",
+    "KIT-GF-009 first-cycle finish/closeout execution evidence",
+    "KIT-GF-011 mixed handoff/status/report refresh-loop reduction",
+    "Comm-SCI Brownfield Cycle 008"
+  ]
+}

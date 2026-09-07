@@ -2959,6 +2959,8 @@ plans:
       - docs/reports/POST_V1_0_8_AGP_COCKPIT_GREENFIELD_ADJUDICATION_20260904.json
       - docs/reports/POST_V1_0_8_SAMPLEPROJECT_FIRST_CYCLE_RETEST_20260905.md
       - docs/reports/POST_V1_0_8_SAMPLEPROJECT_FIRST_CYCLE_RETEST_20260905.json
+      - docs/reports/POST_V1_0_9_GREENFIELD_PATCH_RECURRENCE_GUARD_20260907.md
+      - docs/reports/POST_V1_0_9_GREENFIELD_PATCH_RECURRENCE_GUARD_20260907.json
       accepted_lesson:
         id: KIT-GF-LESSON-001
         status: accepted_as_method
@@ -3003,6 +3005,21 @@ plans:
       boundary: The neutral sampleproject fork has no required checks, so this
         retest proves PR context, creation, and existing-PR recovery but does
         not claim green-CI merge or post-merge closeout for no-check PRs.
+    - id: B1-KIT-022
+      status: implemented_local_retest_pass
+      goal: Close KIT-GF-013 by routing repeated patch/test failure recurrence
+        through the existing patch-failure audit and workflow-guard mechanism,
+        so a third mutation in the same patch family is blocked until bounded
+        diagnosis evidence sets `next_mutation_allowed=true`.
+      evidence:
+      - docs/reports/POST_V1_0_9_GREENFIELD_PATCH_RECURRENCE_GUARD_20260907.md
+      - docs/reports/POST_V1_0_9_GREENFIELD_PATCH_RECURRENCE_GUARD_20260907.json
+      tests:
+      - tests/test_patch_failure_discipline_audit.py
+      - tests/test_workflow_guard.py
+      - tests/test_rule_preservation.py
+      boundary: This is not a new failure database; it hardens the existing
+        audit-patch-failure-discipline and workflow-guard path.
     - id: B1-TARGET-001
       status: recorded_target_friction
       goal: Decide in the target repository whether App2 tests that rewrite

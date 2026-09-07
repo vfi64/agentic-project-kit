@@ -61,3 +61,13 @@ rules:
   surfaces:
   - .agentic/transfer_safety_rules.yaml
   - src/agentic_project_kit/transfer_safety_context.py
+- id: patch-cycle-diagnostic-gate
+  status: active
+  required_terms:
+  - next_mutation_allowed=false
+  - check_patch_failure_discipline
+  - test_workflow_guard_surfaces_patch_failure_discipline_violation
+  surfaces:
+  - docs/workflow/WORKFLOW_GUARD.md
+  - src/agentic_project_kit/workflow_guard.py
+  - tests/test_workflow_guard.py

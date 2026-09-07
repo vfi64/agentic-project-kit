@@ -6,6 +6,7 @@ from typing import Iterable
 
 import yaml
 
+from agentic_project_kit.patch_failure_discipline_audit import audit_patch_failure_discipline
 from agentic_project_kit.run_summary_renderer import validate_rendered_summary_text
 from agentic_project_kit.rule_preservation import validate_rule_preservation
 from agentic_project_kit.rule_registry_validator import validate_rule_registry
@@ -215,6 +216,30 @@ def check_workflow_guard_document() -> list[GuardFinding]:
     ]
 
 
+def check_patch_failure_discipline(
+    root: Path = Path("."),
+    *,
+    include_tmp: bool = True,
+) -> list[GuardFinding]:
+    result = audit_patch_failure_discipline(root, include_tmp=include_tmp)
+    findings: list[GuardFinding] = []
+    for violation in result.violations:
+        findings.append(
+            GuardFinding(
+                pattern_id="patch-cycle-diagnostic-gate",
+                severity="HARD-FAIL",
+                path=violation.path,
+                message=(
+                    "Repeated patch/test failures in group "
+                    f"{violation.group!r} require bounded diagnosis before a third mutation; "
+                    "next_mutation_allowed=false"
+                ),
+                repair_mode="run-bounded-patch-failure-diagnosis-before-continuing",
+            )
+        )
+    return findings
+
+
 def check_rule_registry() -> list[GuardFinding]:
     findings: list[GuardFinding] = []
     for item in validate_rule_registry():
@@ -241,6 +266,7 @@ def run_workflow_guard(paths: Iterable[str] | None = None) -> list[GuardFinding]
     findings.extend(check_structured_summary_evidence(requested))
     findings.extend(check_no_lossy_control_file_policy())
     findings.extend(check_workflow_guard_document())
+    findings.extend(check_patch_failure_discipline(Path("."), include_tmp=True))
     findings.extend(check_rule_registry())
     for item in validate_rule_preservation():
         findings.append(GuardFinding(

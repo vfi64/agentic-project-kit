@@ -40,6 +40,8 @@ def test_patch_failure_discipline_fails_two_failures_without_later_diagnosis(tmp
     result = audit_patch_failure_discipline(tmp_path, include_tmp=True)
 
     assert result.ok is False
+    assert result.next_mutation_allowed is False
+    assert result.as_dict()["next_mutation_allowed"] is False
     assert result.violations
     assert result.violations[0].kind == "missing_diagnosis_after_repeated_patch_failure"
 
@@ -90,6 +92,7 @@ def test_render_patch_failure_discipline_lists_violations(tmp_path: Path) -> Non
 
     assert "PATCH_FAILURE_DISCIPLINE_AUDIT" in rendered
     assert "STATUS=FAIL" in rendered
+    assert "NEXT_MUTATION_ALLOWED=false" in rendered
     assert "VIOLATION=slice1" in rendered
 
 def test_patch_failure_discipline_default_ignores_historical_terminal_reports(tmp_path: Path) -> None:
@@ -108,4 +111,3 @@ def test_patch_failure_discipline_default_ignores_historical_terminal_reports(tm
 
     assert result.ok is True
     assert result.signals == ()
-

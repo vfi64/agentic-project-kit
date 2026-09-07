@@ -16,12 +16,16 @@ rules:
     - agentic-kit workflow-guard check
     - governance YAML parse failures
     - protected control files
+    - patch-cycle diagnostic gate
+    - next_mutation_allowed=false
     - repair plan
   - path: docs/workflow/WORKFLOW_GUARD.md
     terms:
     - Workflow Guard
     - diagnose-and-fail
     - protected control files
+    - patch-cycle diagnostic gate
+    - next_mutation_allowed=false
     - repair plan
 - id: documentation-system-audit-coverage
   description: Umbrella documentation-system audit must remain discoverable and must

@@ -70,6 +70,10 @@ class PatchFailureDisciplineResult:
         return "PASS" if self.ok else "FAIL"
 
     @property
+    def next_mutation_allowed(self) -> bool:
+        return self.ok
+
+    @property
     def returncode(self) -> int:
         return 0 if self.ok else 1
 
@@ -79,6 +83,7 @@ class PatchFailureDisciplineResult:
             "kind": "patch_failure_discipline_audit",
             "root": self.root,
             "status": self.status,
+            "next_mutation_allowed": self.next_mutation_allowed,
             "signal_count": len(self.signals),
             "violation_count": len(self.violations),
             "signals": [signal.as_dict() for signal in self.signals],
@@ -213,6 +218,7 @@ def render_patch_failure_discipline(result: PatchFailureDisciplineResult) -> str
     lines = [
         "PATCH_FAILURE_DISCIPLINE_AUDIT",
         f"STATUS={result.status}",
+        f"NEXT_MUTATION_ALLOWED={str(result.next_mutation_allowed).lower()}",
         f"SIGNAL_COUNT={len(result.signals)}",
         f"VIOLATION_COUNT={len(result.violations)}",
     ]

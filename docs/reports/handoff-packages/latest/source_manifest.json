@@ -21,7 +21,7 @@
       "yaml_valid": true
     },
     {
-      "bytes": 17770,
+      "bytes": 18016,
       "exists": true,
       "path": ".agentic/rule_mechanism_inventory.yaml",
       "yaml_valid": true
@@ -33,7 +33,7 @@
       "yaml_valid": true
     },
     {
-      "bytes": 1688,
+      "bytes": 2019,
       "exists": true,
       "path": ".agentic/rule_preservation.yaml",
       "yaml_valid": true
@@ -54,7 +54,7 @@
       "path": "SECURITY.md"
     },
     {
-      "bytes": 60917,
+      "bytes": 61053,
       "exists": true,
       "path": "docs/DOCUMENTATION_COVERAGE.yaml",
       "yaml_valid": true
@@ -72,7 +72,7 @@
       "path": "docs/STATUS.md"
     },
     {
-      "bytes": 62297,
+      "bytes": 62454,
       "exists": true,
       "path": "docs/TEST_GATES.md"
     },
@@ -82,7 +82,7 @@
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
     {
-      "bytes": 7230,
+      "bytes": 7225,
       "exists": true,
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
@@ -117,7 +117,7 @@
       "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md"
     },
     {
-      "bytes": 214281,
+      "bytes": 215263,
       "exists": true,
       "path": "docs/planning/PROJECT_DIRECTION.yaml",
       "yaml_valid": true

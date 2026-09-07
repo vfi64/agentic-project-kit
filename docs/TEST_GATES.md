@@ -278,13 +278,14 @@ The guard must block at least these classes before further mutation:
 - governance YAML parse failures;
 - missing required anchors in protected control files;
 - weakened no-hard-length-limit preservation policy;
+- repeated patch/test failures that trip the patch-cycle diagnostic gate and set `next_mutation_allowed=false`;
 - missing workflow guard policy documentation.
 
 The guard is intentionally conservative: it diagnoses and hard-fails first. Automated repair is only acceptable for narrow, reversible, explicitly safe cases. Semantic rule loss, release-state conflict, broad document rewrite, and unclear YAML recovery require a repair plan and review-visible evidence before further mutation.
 
 Required evidence:
 
-    python -m pytest -q tests/test_workflow_guard.py tests/test_patch_artifact_preflight.py
+    python -m pytest -q tests/test_workflow_guard.py tests/test_patch_artifact_preflight.py tests/test_patch_failure_discipline_audit.py
     agentic-kit workflow-guard check
     agentic-kit patch-preflight
     agentic-kit check-docs
