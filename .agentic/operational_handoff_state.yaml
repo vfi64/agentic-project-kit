@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 52d6b2bfd8edc13c42f53000504ebf05aa2ae940
-  short: 52d6b2bf
-  subject: Harden patch recurrence workflow guard (#2283)
+  full: cc6751ae796bbcb71dd718177532116e4256a4ef
+  short: cc6751ae
+  subject: Skip self-hosting workflow guard checks externally (#2285)
 last_substantive_work_state:
-  full: 52d6b2bfd8edc13c42f53000504ebf05aa2ae940
-  short: 52d6b2bf
-  subject: Harden patch recurrence workflow guard (#2283)
+  full: cc6751ae796bbcb71dd718177532116e4256a4ef
+  short: cc6751ae
+  subject: Skip self-hosting workflow guard checks externally (#2285)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

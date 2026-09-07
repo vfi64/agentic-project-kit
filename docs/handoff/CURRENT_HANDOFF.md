@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `52d6b2bfd8edc13c42f53000504ebf05aa2ae940` (`52d6b2bf`), after `Harden patch recurrence workflow guard (#2283)`.
-Last substantive work state is `52d6b2bfd8edc13c42f53000504ebf05aa2ae940` (`52d6b2bf`), after `Harden patch recurrence workflow guard (#2283)`.
+Current verified main/admin HEAD is `cc6751ae796bbcb71dd718177532116e4256a4ef` (`cc6751ae`), after `Skip self-hosting workflow guard checks externally (#2285)`.
+Last substantive work state is `cc6751ae796bbcb71dd718177532116e4256a4ef` (`cc6751ae`), after `Skip self-hosting workflow guard checks externally (#2285)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
