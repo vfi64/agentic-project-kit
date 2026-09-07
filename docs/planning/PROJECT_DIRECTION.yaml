@@ -1905,6 +1905,77 @@ plans:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/reports/DECOMPLEXIFICATION_AUDIT_20260815.md
   - docs/reports/DECOMPLEXIFICATION_AUDIT_20260815.json
+- id: context-budgeted-handoff-projections
+  status: planned
+  title: Reduce agent token consumption through deterministic context projections
+  depends_on:
+  - next-turn-workflow-kernel
+  - pre-gui-hardening-plan
+  rationale: >-
+    Long-running agentic work now carries substantial repo-backed state, evidence,
+    reports, and handoff projections. The reduction target is not less governance
+    but smaller task-specific context packets rendered from the same deterministic
+    repository authorities.
+  acceptance:
+  - Establish a measured baseline for successor prompts, handoff packages, status
+    pointers, evidence references, and common Greenfield/Brownfield bootstrap context.
+  - Define task-scoped context profiles for release, bugfix, planning, Greenfield,
+    Brownfield, and handoff-only work.
+  - Keep long evidence, full reports, and source documents in the repository; compact
+    projections may carry paths, checksums, head refs, status bits, and bounded
+    excerpts instead of repeating full content.
+  - Do not use LLM-generated summaries as source authority for any gate, release,
+    handoff, rule, documentation, or evidence claim.
+  - Preserve command-manifest ACK, required source discovery, post-merge handoff
+    freshness, release closeout, and documentation gates.
+  - Add deterministic tests or measurement reports before claiming token reduction.
+  success_metrics:
+  - Common successor/bootstrap context size decreases against the recorded baseline
+    for at least two task profiles.
+  - Required evidence discoverability remains intact through paths, checksums, and
+    validation reports.
+  - No existing gate becomes advisory-only merely to reduce prompt size.
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/reports/handoff-packages/latest/execution_contract.json
+  - docs/reports/handoff-packages/latest/successor_context.yaml
+- id: optional-structural-evidence-provider-evaluation
+  status: planned
+  title: Evaluate optional structural evidence providers for impact-aware context
+  depends_on:
+  - context-budgeted-handoff-projections
+  - post-v1-0-4-hygiene-boundary-work-program
+  rationale: >-
+    Local code graphs may reduce repeated file-reading and improve impact-scope
+    selection, but they must remain evidence inputs rather than a second governance
+    authority. Graphify is the first candidate because its public materials describe
+    local deterministic Tree-sitter parsing and file-based graph artifacts.
+  candidate_providers:
+  - name: Graphify
+    proposed_role: read-only structure and impact discovery provider
+    integration_boundary: optional adapter or agent-side skill only; no hard runtime
+      dependency in the core package before a separate architecture decision
+  acceptance:
+  - Verify the candidate repository license, package boundary, and commercial/hosted
+    terms from primary sources during the implementation slice.
+  - Keep raw graph artifacts out of committed project state unless a bounded retention,
+    size, privacy, and registry decision explicitly allows them.
+  - Prefer small committed projections such as graph digest, impact scope, affected
+    module list, cycle/god-node findings, and provenance statistics.
+  - Treat structural findings as triage evidence until deterministic false-positive
+    handling, override semantics, and tests justify a blocking gate.
+  - Compare value against existing Greenfield and Brownfield evidence instead of
+    adopting a graph provider because it is fashionable.
+  - Start only after the active B1 Comm-SCI Brownfield completion path has produced
+    enough current evidence to compare graph-aided impact scope against the existing
+    workflow.
+  success_metrics:
+  - Impact-scope evidence reduces broad file reads or missed secondary files in a
+    real Brownfield or Greenfield retest without weakening existing gates.
+  - Optional-provider absence leaves all core workflows functional and deterministic.
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/architecture/ARCHITECTURE_CONTRACT.md
 - id: next-turn-workflow-kernel
   status: active
   title: Move recurring next-step execution from chat discipline into a deterministic
