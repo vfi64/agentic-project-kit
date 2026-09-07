@@ -110,6 +110,7 @@ mechanisms:
   - path: src/agentic_project_kit/workflow_guard.py
     required_terms:
     - run_workflow_guard
+    - is_external_manifest_workspace
     - protected_control_files
     - check_required_anchors
     - check_patch_failure_discipline
@@ -121,6 +122,7 @@ mechanisms:
   - path: tests/test_workflow_guard.py
     required_terms:
     - test_workflow_guard_passes_current_repository_state
+    - test_workflow_guard_skips_self_hosting_rule_checks_for_external_manifest_workspace
     - test_workflow_guard_enforces_rule_registry
     - test_workflow_guard_surfaces_patch_failure_discipline_violation
     - structured-summary-drift
@@ -130,6 +132,7 @@ mechanisms:
     - protected control files
     - patch-cycle diagnostic gate
     - next_mutation_allowed=false
+    - external manifest workspaces
     - repair plan
   protected_rule_intent: Diagnose recurring workflow drift as hard findings before
     state-changing work continues.

@@ -118,6 +118,18 @@ coverage:
       path: tests/test_workflow_guard.py
     statement: repeated patch/test failures without later diagnosis surface as hard
       workflow-guard findings before a third mutation
+  - assertion_id: workflow-guard-external-manifest-skip
+    kind: behavior
+    covered_surfaces:
+    - workflow-guard-cli
+    - workflow-guard-tests
+    evidence_refs:
+    - kind: source
+      path: src/agentic_project_kit/workflow_guard.py
+    - kind: test
+      path: tests/test_workflow_guard.py
+    statement: external manifest workspaces skip Kit self-hosting registry and
+      preservation checks while keeping applicable workflow guard diagnostics
 - mechanism_id: patch-preflight
   test_coverage: direct
   assertions:
