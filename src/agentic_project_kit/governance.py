@@ -33,6 +33,9 @@ EXTERNAL_WORKSPACE_CONSTITUTION_FILES = (
     ".agentic/rules/README.md",
     ".agentic/state/status.md",
     ".agentic/state/handoff/README.md",
+)
+
+EXTERNAL_WORKSPACE_LOCAL_TRANSFER_DIRS = (
     ".agentic/transfer/inbox",
     ".agentic/transfer/outbox",
 )
