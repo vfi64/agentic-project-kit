@@ -838,6 +838,145 @@ def test_admin_refresh_pr_creates_branch_and_pr(tmp_path, monkeypatch):
     assert not any(command[:3] == ["gh", "pr", "create"] for command in calls)
 
 
+def test_admin_refresh_pr_uses_remote_tracking_base_without_switching_base(tmp_path, monkeypatch):
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    calls = []
+    wrapper_calls = []
+    guard_calls = []
+
+    class SwitchMonitor:
+        decision = transfer_repo_actions.MonitorDecision.SWITCH
+        actual_branch = "main"
+        required_branch = "feature/integration"
+        reason = "branch_switch_required"
+
+    def fake_guard_branch(**kwargs):
+        guard_calls.append(kwargs)
+        return SwitchMonitor()
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
+        if command == ["git", "status", "--short"]:
+            status_count = sum(1 for item in calls if item == ["git", "status", "--short"])
+            if status_count == 1:
+                return subprocess.CompletedProcess(command, 0, "", "")
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                " M .agentic/handoff_state.yaml\n"
+                " M .agentic/operational_handoff_state.yaml\n"
+                " M docs/STATUS.md\n"
+                " M docs/handoff/CURRENT_HANDOFF.md\n"
+                " M docs/handoff/NEXT_CHAT_BOOTSTRAP.md\n"
+                " M docs/handoff/START_NEW_CHAT_PROMPT.md\n"
+                " M docs/reports/handoff-packages/latest/execution_contract.json\n"
+                " M docs/reports/handoff-packages/latest/source_manifest.json\n"
+                " M docs/reports/handoff-packages/latest/successor_context.yaml\n"
+                " M docs/reports/handoff-packages/latest/successor_prompt.md\n"
+                " M docs/reports/handoff-packages/latest/validation_report.json\n"
+                "?? docs/reports/terminal/post-pr123-successor-chat-handoff.md\n",
+                "",
+            )
+        if command == [
+            "git",
+            "rev-parse",
+            "--verify",
+            "--quiet",
+            "origin/feature/integration^{commit}",
+        ]:
+            return subprocess.CompletedProcess(command, 0, "abc123\n", "")
+        if command == [
+            "git",
+            "switch",
+            "-c",
+            "docs/post-pr123-handoff-refresh",
+            "origin/feature/integration",
+        ]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        if command == ["agentic-kit", "handoff", "check"]:
+            return subprocess.CompletedProcess(command, 0, "Persistent handoff state check passed\n", "")
+        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+            return subprocess.CompletedProcess(command, 0, "POST_MERGE_HANDOFF_REFRESH\nresult=NOOP\n", "")
+        if command == ["agentic-kit", "transfer", "protected-diff-plan", "--label", "post-pr123-handoff-refresh"]:
+            return subprocess.CompletedProcess(command, 0, "PLAN: PASS\n", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    def fake_refresh_operational_handoff_docs(after_pr, *, ws=None):
+        assert after_pr == 123
+        assert ws is not None
+        return subprocess.CompletedProcess(
+            ["admin-refresh-operational-handoff-docs", "--after-pr", "123"],
+            0,
+            "Updated operational handoff docs:\n",
+            "",
+        )
+
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions.guard_branch", fake_guard_branch)
+    monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._agentic_kit_command",
+        lambda: "agentic-kit",
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_repo_actions._refresh_operational_handoff_docs",
+        fake_refresh_operational_handoff_docs,
+    )
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "commit_paths",
+        lambda message, paths, required_branch="", allow_main=False: wrapper_calls.append(
+            ("commit_paths", message, tuple(paths), required_branch, allow_main)
+        )
+        or transfer_repo_actions.RepoActionResult(
+            "commit", "PASS", 0, ["commit"], "committed\n", "", "Push current branch or inspect status."
+        ),
+    )
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "push_current",
+        lambda required_branch="": wrapper_calls.append(("push_current", required_branch))
+        or transfer_repo_actions.RepoActionResult(
+            "push-current", "PASS", 0, ["push-current"], "pushed\n", "", "Create or inspect pull request."
+        ),
+    )
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "pr_create",
+        lambda base, head, title, body: wrapper_calls.append((base, head, title, body))
+        or transfer_repo_actions.RepoActionResult(
+            "pr-create",
+            "PASS",
+            0,
+            ["pr-create"],
+            "https://github.com/vfi64/agentic-project-kit/pull/999\n",
+            "",
+            "Run agentic-kit transfer pr-status on the created PR.",
+        ),
+    )
+
+    result = admin_refresh_pr(123, main_branch="feature/integration")
+
+    assert result.result_status == "PASS"
+    assert guard_calls[0]["auto_switch"] is False
+    assert [
+        "git",
+        "switch",
+        "-c",
+        "docs/post-pr123-handoff-refresh",
+        "origin/feature/integration",
+    ] in calls
+    assert ["git", "switch", "feature/integration"] not in calls
+    assert any(
+        call[:3] == ("feature/integration", "docs/post-pr123-handoff-refresh", "Refresh handoff state after PR123")
+        for call in wrapper_calls
+        if isinstance(call, tuple)
+    )
+
+
 def test_admin_refresh_pr_requires_clean_main(tmp_path, monkeypatch):
     _init_repo(tmp_path)
     monkeypatch.chdir(tmp_path)

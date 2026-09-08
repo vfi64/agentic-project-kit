@@ -2296,7 +2296,7 @@ def _admin_refresh_pr_unlocked(
         command_kind="admin-refresh-pr",
         required_branch=main_branch,
         allow_main_mutation=True,
-        auto_switch=True,
+        auto_switch=False,
     )
     if monitor.decision == MonitorDecision.BLOCK:
         return _monitor_block_result(
@@ -2328,9 +2328,10 @@ def _admin_refresh_pr_unlocked(
         return preflight
 
     refresh_branch = ws.admin_refresh_branch(after_pr)
+    start_point = _admin_refresh_start_point(main_branch)
     transcript: list[str] = []
 
-    branch_create_step = ["git", "switch", "-c", refresh_branch, main_branch]
+    branch_create_step = ["git", "switch", "-c", refresh_branch, start_point]
     completed = _run(branch_create_step)
     transcript.append(f"$ {' '.join(branch_create_step)}\n{completed.stdout}{completed.stderr}")
     if completed.returncode != 0:
@@ -2349,7 +2350,7 @@ def _admin_refresh_pr_unlocked(
                     switched,
                     "Inspect existing admin refresh branch before continuing.",
                 )
-            reset_step = ["git", "reset", "--hard", main_branch]
+            reset_step = ["git", "reset", "--hard", start_point]
             reset = _run(reset_step)
             transcript.append(f"$ {' '.join(reset_step)}\n{reset.stdout}{reset.stderr}")
             if reset.returncode != 0:
@@ -2462,6 +2463,14 @@ def _admin_refresh_pr_unlocked(
         "",
     )
     return _result("admin-refresh-pr", completed.args, completed, "Run transfer pr-status on the created admin refresh PR.")
+
+
+def _admin_refresh_start_point(main_branch: str) -> str:
+    remote_ref = f"origin/{main_branch}"
+    remote = _run(["git", "rev-parse", "--verify", "--quiet", f"{remote_ref}^{{commit}}"])
+    if remote.returncode == 0:
+        return remote_ref
+    return main_branch
 
 
 def _successor_package_refresh_branch(after_pr: int, *, ws: Workspace) -> str:
