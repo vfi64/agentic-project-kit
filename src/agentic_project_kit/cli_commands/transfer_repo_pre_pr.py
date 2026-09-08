@@ -529,6 +529,7 @@ def delete_merged_work_branch_command(
 
     steps: list[dict[str, Any]] = []
     blockers: list[str] = []
+    idempotent_noops: list[str] = []
 
     def run_step(name: str, argv: list[str]) -> dict[str, Any]:
         completed = subprocess.run(argv, text=True, capture_output=True)
@@ -542,6 +543,14 @@ def delete_merged_work_branch_command(
         }
         steps.append(item)
         return item
+
+    def local_branch_absent() -> bool:
+        local_ref = run_step("verify-local-branch-absent", ["git", "show-ref", "--verify", "--quiet", f"refs/heads/{branch}"])
+        return local_ref["returncode"] == 1
+
+    def remote_branch_absent() -> bool:
+        remote_ref = run_step("verify-remote-branch-absent", ["git", "ls-remote", "--exit-code", "--heads", "origin", branch])
+        return remote_ref["returncode"] == 2
 
     allowed_prefixes = ("feature/", "fix/", "docs/", "chore/", "evidence/")
     current_branch = ""
@@ -594,12 +603,18 @@ def delete_merged_work_branch_command(
         delete_args = ["git", "branch", "-D" if force_local else "-d", branch]
         local_delete = run_step("delete-local-branch", delete_args)
         if local_delete["returncode"] != 0:
-            blockers.append("local_delete_failed")
+            if local_branch_absent():
+                idempotent_noops.append("local_branch_already_absent")
+            else:
+                blockers.append("local_delete_failed")
 
     if not blockers and remote:
         remote_delete = run_step("delete-remote-branch", ["git", "push", "origin", "--delete", branch])
         if remote_delete["returncode"] != 0:
-            blockers.append("remote_delete_failed")
+            if remote_branch_absent():
+                idempotent_noops.append("remote_branch_already_absent")
+            else:
+                blockers.append("remote_delete_failed")
 
     result_status = "PASS" if not blockers else "BLOCKED"
     final_signal = "d" if result_status == "PASS" else "f"
@@ -621,6 +636,7 @@ def delete_merged_work_branch_command(
         "local_requested": local,
         "remote_requested": remote,
         "blockers": blockers,
+        "idempotent_noops": idempotent_noops,
         "steps": steps,
         "next_action": next_action,
     }
