@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "kind": "greenfield_remaining_findings_closeout",
+  "status": "implemented_local_retest_pass",
+  "date": "2026-09-08",
+  "baseline": {
+    "origin_main": "c18c74cd",
+    "version": "1.0.9",
+    "branch": "codex/greenfield-remaining-fixes-1-0-10"
+  },
+  "external_ledger": {
+    "repository": "vfi64/agp-Cockpit",
+    "path": "docs/validation/AGENTIC_KIT_GREENFIELD_FINDINGS.json",
+    "role": "external evidence input; not Kit implementation authority"
+  },
+  "finding_status": [
+    {
+      "id": "KIT-GF-001",
+      "status": "external_init_retested_pass_remaining_provenance_under_gf_007",
+      "action": "none"
+    },
+    {
+      "id": "KIT-GF-002",
+      "status": "fixed",
+      "action": "none"
+    },
+    {
+      "id": "KIT-GF-003",
+      "status": "partially_addressed_post_merge_successor_evidence_deferred",
+      "action": "none"
+    },
+    {
+      "id": "KIT-GF-004",
+      "status": "fixed",
+      "action": "none"
+    },
+    {
+      "id": "KIT-GF-005",
+      "status": "external_first_cycle_start_retested_pass_closeout_tied_to_gf_009_and_gf_011",
+      "action": "none"
+    },
+    {
+      "id": "KIT-GF-006",
+      "status": "fixed",
+      "action": "none"
+    },
+    {
+      "id": "KIT-GF-007",
+      "status": "open_deferred",
+      "action": "defer_dpa_adopt_generated_vs_manual_provenance"
+    },
+    {
+      "id": "KIT-GF-008",
+      "status": "fixed",
+      "action": "none"
+    },
+    {
+      "id": "KIT-GF-009",
+      "status": "partially_mitigated_external_execution_evidence_deferred",
+      "action": "defer_first_cycle_finish_closeout_retest"
+    },
+    {
+      "id": "KIT-GF-010",
+      "status": "fixed_released_package_retest_pass_for_rule_ack_routing",
+      "action": "none"
+    },
+    {
+      "id": "KIT-GF-011",
+      "status": "improved_not_closed",
+      "action": "defer_refresh_loop_reduction"
+    },
+    {
+      "id": "KIT-GF-012",
+      "status": "fixed",
+      "action": "none"
+    },
+    {
+      "id": "KIT-GF-013",
+      "status": "fixed_in_v1_0_9",
+      "action": "none"
+    },
+    {
+      "id": "KIT-GF-014",
+      "status": "open_deferred",
+      "action": "defer_continuation_authority_detection"
+    },
+    {
+      "id": "KIT-GF-015",
+      "status": "open_deferred",
+      "action": "defer_canonical_document_fact_propagation"
+    },
+    {
+      "id": "KIT-GF-016",
+      "status": "open_deferred",
+      "action": "defer_contract_first_guided_execution"
+    },
+    {
+      "id": "KIT-GF-017",
+      "status": "likely_addressed_needs_fresh_external_retest_before_closure",
+      "action": "defer_verification"
+    },
+    {
+      "id": "KIT-GF-018",
+      "status": "fixed_in_this_slice",
+      "action": "patch_delete_merged_work_branch_idempotent_absent_refs"
+    }
+  ],
+  "repair": {
+    "finding": "KIT-GF-018",
+    "command": "transfer delete-merged-work-branch",
+    "postcondition": "After merged-PR verification, requested local and remote branch refs are absent.",
+    "changes": [
+      "Local delete failures are rechecked with git show-ref; an already absent local ref becomes an idempotent no-op.",
+      "Remote delete failures are rechecked with git ls-remote; an already absent remote head becomes an idempotent no-op.",
+      "The JSON payload records idempotent_noops while preserving blockers for all other failures."
+    ],
+    "non_goals": [
+      "No public command rename or removal.",
+      "No broader successor-refresh loop closure claim.",
+      "No full Greenfield ledger closure claim."
+    ]
+  },
+  "focused_validation": [
+    {
+      "target": "tests/test_transfer_repo_actions.py delete-merged-work-branch subset",
+      "result": "PASS",
+      "summary": "6 passed"
+    },
+    {
+      "target": "ruff touched source and tests",
+      "result": "PASS",
+      "summary": "All checks passed"
+    },
+    {
+      "target": "diff whitespace",
+      "result": "PASS",
+      "summary": "No whitespace errors"
+    }
+  ],
+  "release_assessment": {
+    "version": "1.0.10",
+    "recommendation": "worthwhile_if_standard_gates_pass",
+    "reason": [
+      "post-v1.0.9 external transfer target-branch and closeout hardening",
+      "remote-base admin refresh repair",
+      "KIT-GF-018 idempotent merged-work-branch cleanup"
+    ],
+    "boundary": "Do not claim that all Greenfield findings are closed."
+  },
+  "remaining_open_greenfield_work": [
+    "KIT-GF-007",
+    "KIT-GF-009",
+    "KIT-GF-011",
+    "KIT-GF-014",
+    "KIT-GF-015",
+    "KIT-GF-016",
+    "KIT-GF-017"
+  ],
+  "paused_context": {
+    "comm_sci_brownfield": "pause after current closeout because the maintainer identified it as compute- and token-intensive",
+    "next_lower_risk_direction": "token/context-budget reduction investigation"
+  }
+}

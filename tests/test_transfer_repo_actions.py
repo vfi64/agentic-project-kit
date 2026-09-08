@@ -2466,6 +2466,75 @@ def test_transfer_delete_merged_work_branch_deletes_local_and_remote(monkeypatch
     assert ["git", "push", "origin", "--delete", "feature/done"] in calls
 
 
+def test_transfer_delete_merged_work_branch_passes_when_remote_already_absent(monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command[:3] == ["gh", "pr", "view"]:
+            return subprocess.CompletedProcess(command, 0, "MERGED\t2026-09-07T20:00:00Z\t22\tfeature/done\n", "")
+        if command == ["git", "push", "origin", "--delete", "feature/done"]:
+            return subprocess.CompletedProcess(
+                command,
+                1,
+                "",
+                "error: unable to delete 'feature/done': remote ref does not exist\n",
+            )
+        if command == ["git", "ls-remote", "--exit-code", "--heads", "origin", "feature/done"]:
+            return subprocess.CompletedProcess(command, 2, "", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "delete-merged-work-branch", "feature/done", "--no-local", "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert payload["blockers"] == []
+    assert payload["idempotent_noops"] == ["remote_branch_already_absent"]
+    assert ["git", "push", "origin", "--delete", "feature/done"] in calls
+    assert ["git", "ls-remote", "--exit-code", "--heads", "origin", "feature/done"] in calls
+
+
+def test_transfer_delete_merged_work_branch_passes_when_local_already_absent(monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "main\n", "")
+        if command[:3] == ["gh", "pr", "view"]:
+            return subprocess.CompletedProcess(command, 0, "MERGED\t2026-09-07T20:00:00Z\t22\tfeature/done\n", "")
+        if command == ["git", "branch", "-d", "feature/done"]:
+            return subprocess.CompletedProcess(command, 1, "", "error: branch 'feature/done' not found\n")
+        if command == ["git", "show-ref", "--verify", "--quiet", "refs/heads/feature/done"]:
+            return subprocess.CompletedProcess(command, 1, "", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(app, ["transfer", "delete-merged-work-branch", "feature/done", "--no-remote", "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert payload["blockers"] == []
+    assert payload["idempotent_noops"] == ["local_branch_already_absent"]
+    assert ["git", "branch", "-d", "feature/done"] in calls
+    assert ["git", "show-ref", "--verify", "--quiet", "refs/heads/feature/done"] in calls
+
+
 def test_transfer_delete_merged_work_branch_refuses_main(monkeypatch):
     from typer.testing import CliRunner
     from agentic_project_kit.cli import app

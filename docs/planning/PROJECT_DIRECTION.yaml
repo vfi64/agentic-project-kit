@@ -2961,6 +2961,8 @@ plans:
       - docs/reports/POST_V1_0_8_SAMPLEPROJECT_FIRST_CYCLE_RETEST_20260905.json
       - docs/reports/POST_V1_0_9_GREENFIELD_PATCH_RECURRENCE_GUARD_20260907.md
       - docs/reports/POST_V1_0_9_GREENFIELD_PATCH_RECURRENCE_GUARD_20260907.json
+      - docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.md
+      - docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
       accepted_lesson:
         id: KIT-GF-LESSON-001
         status: accepted_as_method
@@ -3020,6 +3022,20 @@ plans:
       - tests/test_rule_preservation.py
       boundary: This is not a new failure database; it hardens the existing
         audit-patch-failure-discipline and workflow-guard path.
+    - id: B1-KIT-023
+      status: implemented_local_retest_pass
+      goal: Close KIT-GF-018 by making merged work-branch cleanup idempotent
+        when a verified merged PR's requested local or remote branch reference
+        is already absent.
+      evidence:
+      - docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.md
+      - docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+      tests:
+      - tests/test_transfer_repo_actions.py
+      boundary: This closes only the cleanup postcondition classification. It
+        does not close KIT-GF-009 first-cycle closeout execution evidence,
+        KIT-GF-011 refresh-loop reduction, or the broader deferred DPA/adopt
+        provenance and continuation-authority work.
     - id: B1-TARGET-001
       status: recorded_target_friction
       goal: Decide in the target repository whether App2 tests that rewrite
