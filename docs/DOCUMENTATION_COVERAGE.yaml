@@ -140,6 +140,7 @@ rules:
     - slice_result=PASS|BLOCKED
     - helper-local PASS is not a slice PASS
     - merge_pr_ready=NO
+    - external admin refresh
   - path: docs/TEST_GATES.md
     terms:
     - Planning-Documentation Slice Gate
@@ -149,6 +150,7 @@ rules:
     - slice_result=PASS|BLOCKED
     - helper-local PASS from slice PASS
     - agentic-kit docs-audit
+    - external admin refresh
 - id: project-direction-command-coverage
   description: Canonical project direction commands must remain discoverable and documented.
   documents:
