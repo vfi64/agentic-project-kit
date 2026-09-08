@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 777f898e22e5e184d2f42a8f8c7b9fc8450ee675
-  short: 777f898e
-  subject: Allow admin refresh from remote base refs (#2291)
+  full: 73ddf4f1be6b2333370bd2d2ed17841ac1eb6e95
+  short: 73ddf4f1
+  subject: Close greenfield branch cleanup idempotence (#2293)
 last_substantive_work_state:
-  full: 777f898e22e5e184d2f42a8f8c7b9fc8450ee675
-  short: 777f898e
-  subject: Allow admin refresh from remote base refs (#2291)
+  full: 73ddf4f1be6b2333370bd2d2ed17841ac1eb6e95
+  short: 73ddf4f1
+  subject: Close greenfield branch cleanup idempotence (#2293)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
