@@ -496,7 +496,7 @@ def pr_create_complete_command(
         return bool(payload.get("mergedAt")) or str(payload.get("state", "")).upper() == "MERGED"
 
     def post_merge_check_is_green_for_outer_followup() -> bool:
-        sync_command = [agentic_kit, "transfer", "sync-main"]
+        sync_command = [agentic_kit, "transfer", "sync-main", "--main-branch", base]
         sync = subprocess.run(sync_command, text=True, capture_output=True)
         steps.append(
             {
@@ -511,7 +511,7 @@ def pr_create_complete_command(
         if sync.returncode != 0:
             return False
 
-        command = [agentic_kit, "transfer", "post-merge-check"]
+        command = [agentic_kit, "transfer", "post-merge-check", "--main-branch", base]
         completed = subprocess.run(command, text=True, capture_output=True)
         steps.append(
             {

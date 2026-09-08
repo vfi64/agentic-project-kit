@@ -252,6 +252,50 @@ def test_sync_main_orchestrates_safe_startup_sequence(monkeypatch):
     ]
 
 
+def test_sync_main_skips_preswitch_rule_ack_for_external_target_branch(monkeypatch):
+    calls: list[list[str]] = []
+    agentic_kit = "/runtime/bin/agentic-kit"
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        return _completed(
+            command,
+            stdout='{"result_status": "PASS"}\n' if command[-1:] == ["--json"] else "ok\n",
+        )
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer_context_flow.default_agentic_kit",
+        lambda root: agentic_kit,
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer_context_flow._external_manifest_target_ref",
+        lambda root, ref: ref == "feature/external",
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer_context_flow.is_external_manifest_workspace",
+        lambda root: False,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "sync-main", "--main-branch", "feature/external", "--json"],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    assert payload["steps"][1]["name"] == "rules-acknowledge-before-sync"
+    assert payload["steps"][1]["skipped"] is True
+    assert calls == [
+        [agentic_kit, "transfer", "restore-known-volatile", "--json"],
+        [agentic_kit, "transfer", "branch-switch", "feature/external", "--pull", "--json"],
+        [agentic_kit, "rules", "acknowledge"],
+        [agentic_kit, "transfer", "normalize-session", "--json"],
+    ]
+
+
 def test_sync_main_blocks_when_json_step_reports_block(monkeypatch):
     calls: list[list[str]] = []
     agentic_kit = "/runtime/bin/agentic-kit"

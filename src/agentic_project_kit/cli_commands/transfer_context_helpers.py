@@ -11,7 +11,10 @@ from agentic_project_kit.volatile_paths import (
     status_path_from_short_line,
 )
 from agentic_project_kit.workspace import load_workspace
-from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+from agentic_project_kit.workspace_detection import (
+    is_agentic_project_kit_development_checkout,
+    is_external_manifest_workspace,
+)
 
 
 def _clean_post_merge_status_is_noop() -> bool:
@@ -435,27 +438,57 @@ def _dirty_paths_from_status(status_text: str) -> list[str]:
     return paths
 
 
-def _ensure_external_merge_preflight_or_exit(*, json_output: bool) -> bool:
+def _git_ref_contains_path(root: Path, ref: str, relative_path: str) -> bool:
+    if not ref or any(char in ref for char in ("\n", "\r")):
+        return False
+    completed = subprocess.run(
+        ["git", "cat-file", "-e", f"{ref}:{relative_path}"],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    return completed.returncode == 0
+
+
+def _external_manifest_target_ref(root: Path, ref: str) -> bool:
+    """Return true when a non-Kit checkout is switching to an external Kit layer."""
+
+    if is_agentic_project_kit_development_checkout(root):
+        return False
+    return _git_ref_contains_path(root, ref, ".agentic/config.yaml")
+
+
+def _ensure_external_transfer_clean_preflight_or_exit(
+    *,
+    json_output: bool,
+    target_ref: str = "",
+    kind: str = "external_pr_merge_preflight",
+    next_action: str = "Review or clean target-repository changes before continuing external transfer.",
+) -> bool:
     root = Path(".").resolve()
-    if not is_external_manifest_workspace(root):
+    external_current = is_external_manifest_workspace(root)
+    external_target = bool(target_ref) and _external_manifest_target_ref(root, target_ref)
+    if not external_current and not external_target:
         return False
 
     status = _git_status_short(root)
     if status.returncode != 0:
         payload = {
             "schema_version": 1,
-            "kind": "external_pr_merge_preflight",
+            "kind": kind,
             "result_status": "BLOCKED",
             "returncode": 2,
             "final_signal": "f",
             "reasons": ["git_status_failed"],
             "stderr": status.stderr.strip(),
-            "next_action": "Repair git repository state before running external pr-merge-safe.",
+            "target_ref": target_ref,
+            "next_action": "Repair git repository state before continuing external transfer.",
         }
         _echo_transfer_payload_json_or_summary(
             payload,
             json_output=json_output,
-            title="TRANSFER_EXTERNAL_PR_MERGE_PREFLIGHT",
+            title="TRANSFER_EXTERNAL_PREFLIGHT",
         )
         raise typer.Exit(code=2)
 
@@ -481,7 +514,7 @@ def _ensure_external_merge_preflight_or_exit(*, json_output: bool) -> bool:
     if nonvolatile_dirty:
         payload = {
             "schema_version": 1,
-            "kind": "external_pr_merge_preflight",
+            "kind": kind,
             "result_status": "BLOCKED",
             "returncode": 2,
             "final_signal": "f",
@@ -490,18 +523,38 @@ def _ensure_external_merge_preflight_or_exit(*, json_output: bool) -> bool:
             "nonvolatile_dirty_paths": nonvolatile_dirty,
             "known_volatile_paths": sorted(known_paths),
             "restore_result": restore_result,
-            "next_action": (
-                "Review or clean target-repository changes before running external pr-merge-safe."
-            ),
+            "target_ref": target_ref,
+            "next_action": next_action,
         }
         _echo_transfer_payload_json_or_summary(
             payload,
             json_output=json_output,
-            title="TRANSFER_EXTERNAL_PR_MERGE_PREFLIGHT",
+            title="TRANSFER_EXTERNAL_PREFLIGHT",
         )
         raise typer.Exit(code=2)
 
     return True
+
+
+def _ensure_external_merge_preflight_or_exit(*, json_output: bool) -> bool:
+    return _ensure_external_transfer_clean_preflight_or_exit(
+        json_output=json_output,
+        kind="external_pr_merge_preflight",
+        next_action="Review or clean target-repository changes before running external pr-merge-safe.",
+    )
+
+
+def _ensure_external_branch_switch_preflight_or_exit(
+    *,
+    branch: str,
+    json_output: bool,
+) -> bool:
+    return _ensure_external_transfer_clean_preflight_or_exit(
+        json_output=json_output,
+        target_ref=branch,
+        kind="external_branch_switch_preflight",
+        next_action="Review or clean target-repository changes before switching to the external Kit workspace branch.",
+    )
 
 def _run_transfer_subprocess(argv: list[str], *, cwd: Path | None = None) -> dict[str, object]:
     completed = subprocess.run(argv, cwd=cwd or Path("."), text=True, capture_output=True, check=False)

@@ -4151,6 +4151,8 @@ def test_pr_create_complete_clears_outer_sync_false_red_when_pr_merged_and_post_
     assert "outer-followup-pr-merged-check" in source
     assert "outer-followup-sync-main-before-post-merge-check" in source
     assert "outer-followup-post-merge-check-green-check" in source
+    assert '[agentic_kit, "transfer", "sync-main", "--main-branch", base]' in source
+    assert '[agentic_kit, "transfer", "post-merge-check", "--main-branch", base]' in source
     assert "outer_followup_false_red_cleared" in source
     assert "isMerged" not in source
     assert "mergedAt" in source
