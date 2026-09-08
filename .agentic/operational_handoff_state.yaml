@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 46aceca10b89841a7138f242f01c6608f5e3620f
-  short: 46aceca1
-  subject: Treat external transfer dirs as local workspace state (#2287)
+  full: 9fd7eb8f91117c0e1bc10747e4a6aa7adaaccb8b
+  short: 9fd7eb8f
+  subject: Harden external transfer target branch closeout (#2289)
 last_substantive_work_state:
-  full: 46aceca10b89841a7138f242f01c6608f5e3620f
-  short: 46aceca1
-  subject: Treat external transfer dirs as local workspace state (#2287)
+  full: 9fd7eb8f91117c0e1bc10747e4a6aa7adaaccb8b
+  short: 9fd7eb8f
+  subject: Harden external transfer target branch closeout (#2289)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
