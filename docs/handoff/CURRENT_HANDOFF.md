@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `9fd7eb8f91117c0e1bc10747e4a6aa7adaaccb8b` (`9fd7eb8f`), after `Harden external transfer target branch closeout (#2289)`.
-Last substantive work state is `9fd7eb8f91117c0e1bc10747e4a6aa7adaaccb8b` (`9fd7eb8f`), after `Harden external transfer target branch closeout (#2289)`.
+Current verified main/admin HEAD is `777f898e22e5e184d2f42a8f8c7b9fc8450ee675` (`777f898e`), after `Allow admin refresh from remote base refs (#2291)`.
+Last substantive work state is `777f898e22e5e184d2f42a8f8c7b9fc8450ee675` (`777f898e`), after `Allow admin refresh from remote base refs (#2291)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
