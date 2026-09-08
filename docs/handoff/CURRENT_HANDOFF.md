@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `777f898e22e5e184d2f42a8f8c7b9fc8450ee675` (`777f898e`), after `Allow admin refresh from remote base refs (#2291)`.
-Last substantive work state is `777f898e22e5e184d2f42a8f8c7b9fc8450ee675` (`777f898e`), after `Allow admin refresh from remote base refs (#2291)`.
+Current verified main/admin HEAD is `73ddf4f1be6b2333370bd2d2ed17841ac1eb6e95` (`73ddf4f1`), after `Close greenfield branch cleanup idempotence (#2293)`.
+Last substantive work state is `73ddf4f1be6b2333370bd2d2ed17841ac1eb6e95` (`73ddf4f1`), after `Close greenfield branch cleanup idempotence (#2293)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
