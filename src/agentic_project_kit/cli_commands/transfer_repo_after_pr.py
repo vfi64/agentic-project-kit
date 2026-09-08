@@ -2,6 +2,9 @@ from __future__ import annotations
 
 # ruff: noqa: F403,F405
 
+from agentic_project_kit.cli_commands.transfer_context_helpers import (
+    _ensure_external_branch_switch_preflight_or_exit,
+)
 from agentic_project_kit.cli_commands.transfer_shared import *
 
 
@@ -116,8 +119,13 @@ def branch_switch_command(
     ),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
-    require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
-    require_capability("rules_confirmed")
+    external_preflight = _public_transfer_attr(
+        "_ensure_external_branch_switch_preflight_or_exit",
+        _ensure_external_branch_switch_preflight_or_exit,
+    )
+    if not external_preflight(branch=branch, json_output=json_output):
+        require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
+        require_capability("rules_confirmed")
     result = branch_switch(branch, pull=pull)
     _echo_repo_result(result, json_output)
     if result.returncode != 0:

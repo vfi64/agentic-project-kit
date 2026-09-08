@@ -357,6 +357,44 @@ def test_pr_merge_safe_external_workspace_blocks_substantive_dirty_worktree(
     assert payload["nonvolatile_dirty_paths"] == ["product.py"]
 
 
+def test_branch_switch_allows_clean_foreign_repo_to_external_manifest_branch(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    from agentic_project_kit.cli_commands import transfer_repo_after_pr
+
+    _init_git_repo(tmp_path)
+    subprocess.run(["git", "switch", "-c", "feature/external"], cwd=tmp_path, check=True)
+    _write_external_workspace_manifest(tmp_path)
+    _commit_all(tmp_path, "Adopt external workspace")
+    subprocess.run(["git", "switch", "main"], cwd=tmp_path, check=True)
+    monkeypatch.chdir(tmp_path)
+
+    def fail_if_self_hosting_rule_ack_required(capability: str) -> None:
+        raise AssertionError(f"unexpected self-hosting transfer capability gate: {capability}")
+
+    monkeypatch.setattr(
+        transfer_repo_after_pr,
+        "_require_transfer_capability",
+        fail_if_self_hosting_rule_ack_required,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["transfer", "branch-switch", "feature/external", "--json"],
+    )
+
+    assert result.exit_code == 0, result.output
+    current = subprocess.run(
+        ["git", "branch", "--show-current"],
+        cwd=tmp_path,
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+    assert current.stdout.strip() == "feature/external"
+
+
 def test_require_fresh_llm_context_can_warn_on_clean_post_merge_carrier_staleness(monkeypatch):
     from agentic_project_kit.cli_commands import transfer as transfer_cli
 

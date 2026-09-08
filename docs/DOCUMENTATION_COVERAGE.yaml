@@ -1446,6 +1446,9 @@ rules:
     - rules snapshot
     - rules acknowledge
     - external workspace rule sources
+    - external target branch
+    - transfer branch-switch
+    - transfer sync-main --main-branch BRANCH
     - repo_head
     - Rule-Ack warning
     - source snapshot drift remains blocking

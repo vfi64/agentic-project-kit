@@ -264,6 +264,11 @@ def sync_main(
     """Synchronize main, acknowledge rules, and normalize the session."""
     steps: list[dict[str, object]] = []
     agentic_kit = default_agentic_kit(Path("."))
+    root = Path(".").resolve()
+    skip_preswitch_rule_ack = (
+        _external_manifest_target_ref(root, main_branch)
+        and not is_external_manifest_workspace(root)
+    )
 
     def step(name: str, argv: list[str]) -> dict[str, object]:
         item = _run_transfer_subprocess(argv)
@@ -282,7 +287,19 @@ def sync_main(
         return item
 
     step("restore-before-sync", [agentic_kit, "transfer", "restore-known-volatile", "--json"])
-    step("rules-acknowledge-before-sync", [agentic_kit, "rules", "acknowledge"])
+    if skip_preswitch_rule_ack:
+        steps.append(
+            {
+                "name": "rules-acknowledge-before-sync",
+                "argv": [agentic_kit, "rules", "acknowledge"],
+                "returncode": 0,
+                "ok": True,
+                "skipped": True,
+                "skip_reason": "target_branch_external_manifest_not_currently_checked_out",
+            }
+        )
+    else:
+        step("rules-acknowledge-before-sync", [agentic_kit, "rules", "acknowledge"])
     step("switch-and-pull-main", [agentic_kit, "transfer", "branch-switch", main_branch, "--pull", "--json"])
     step("rules-acknowledge-after-pull", [agentic_kit, "rules", "acknowledge"])
     step("normalize-session", [agentic_kit, "transfer", "normalize-session", "--json"])
