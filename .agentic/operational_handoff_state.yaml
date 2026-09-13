@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 73ddf4f1be6b2333370bd2d2ed17841ac1eb6e95
-  short: 73ddf4f1
-  subject: Close greenfield branch cleanup idempotence (#2293)
+  full: bf348ae19950a6cbffd614b7e66801d22d4f716e
+  short: bf348ae1
+  subject: Classify admin refresh release notes (#2295)
 last_substantive_work_state:
-  full: 73ddf4f1be6b2333370bd2d2ed17841ac1eb6e95
-  short: 73ddf4f1
-  subject: Close greenfield branch cleanup idempotence (#2293)
+  full: bf348ae19950a6cbffd614b7e66801d22d4f716e
+  short: bf348ae1
+  subject: Classify admin refresh release notes (#2295)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
