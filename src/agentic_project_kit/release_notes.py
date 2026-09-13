@@ -603,6 +603,7 @@ def _classify_subject(subject: str) -> str:
             "remote-next",
             "merge wrapper",
             "pr merge",
+            "remote base refs",
             "wrapper",
             "receipt",
             "successor",

@@ -440,6 +440,39 @@ def test_release_notes_generator_classifies_post_108_greenfield_titles(tmp_path:
     ]
 
 
+def test_release_notes_generator_classifies_post_109_workflow_titles(tmp_path: Path) -> None:
+    report = build_release_notes_report(
+        tmp_path,
+        version="1.0.10",
+        from_tag="v1.0.9",
+        command_runner=FakeRunner(
+            subjects=[
+                "Record release 1.0.9 DOI closeout (#2279)",
+                "Plan context budgets and structural evidence evaluation (#2281)",
+                "Harden patch recurrence workflow guard (#2283)",
+                "Skip self-hosting workflow guard checks externally (#2285)",
+                "Treat external transfer dirs as local workspace state (#2287)",
+                "Harden external transfer target branch closeout (#2289)",
+                "Allow admin refresh from remote base refs (#2291)",
+                "Close greenfield branch cleanup idempotence (#2293)",
+            ]
+        ),
+    )
+
+    assert report.validation.status == "PASS"
+    assert report.unclassified_items == ()
+    assert [item.category for item in report.items] == [
+        "Release",
+        "Docs",
+        "Fixed",
+        "Tests / Gates",
+        "Transfer / Handoff",
+        "Transfer / Handoff",
+        "Transfer / Handoff",
+        "Changed",
+    ]
+
+
 def test_release_notes_generator_treats_report_projection_commits_as_administrative(
     tmp_path: Path,
 ) -> None:
