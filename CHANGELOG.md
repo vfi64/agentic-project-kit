@@ -1,3 +1,16 @@
+## v1.0.10 - 2026-09-13
+
+- Zenodo DOI verification pending for v1.0.10.
+- Record release 1.0.9 DOI closeout
+- Plan context budgets and structural evidence evaluation
+- Harden patch recurrence workflow guard
+- Skip self-hosting workflow guard checks externally
+- Treat external transfer dirs as local workspace state
+- Harden external transfer target branch closeout
+- Allow admin refresh from remote base refs
+- Close greenfield branch cleanup idempotence
+- Classify admin refresh release notes
+
 ## v1.0.9 - 2026-09-06
 
 - Record release 1.0.8 DOI and PyPI closeout
