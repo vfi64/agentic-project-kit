@@ -9,6 +9,8 @@ from agentic_project_kit.transfer_repo_actions import RepoActionResult
 
 def test_pr_closeout_complete_resumes_when_pr_already_merged(monkeypatch) -> None:
     def fake_run(command, *, cwd=None):
+        if command == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"]:
+            return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}', "")
         if command == ["git", "status", "--porcelain"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command[:2] == ["git", "switch"]:
@@ -60,6 +62,7 @@ def test_pr_closeout_complete_resumes_when_pr_already_merged(monkeypatch) -> Non
     assert result.lifecycle_state == "COMPLETE"
     assert result.merged_pr is True
     assert [step.name for step in result.steps] == [
+        "restore-known-volatile-preflight",
         "local-clean-preflight",
         "switch-main",
         "sync-main-before-pr-closeout",
@@ -74,6 +77,8 @@ def test_pr_closeout_complete_uses_gh_supported_pr_fields(monkeypatch) -> None:
 
     def fake_run(command, *, cwd=None):
         captured_commands.append(command)
+        if command == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"]:
+            return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}', "")
         if command == ["git", "status", "--porcelain"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command[:2] == ["git", "switch"]:
@@ -122,3 +127,31 @@ def test_pr_closeout_complete_uses_gh_supported_pr_fields(monkeypatch) -> None:
     assert "mergedAt" in json_fields.split(",")
     assert "merged" not in json_fields.split(",")
     assert result.result_status == "PASS"
+
+
+def test_pr_closeout_complete_restores_known_volatile_before_dirty_preflight(monkeypatch) -> None:
+    calls: list[list[str]] = []
+
+    def fake_run(command, *, cwd=None):
+        calls.append(command)
+        if command == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"]:
+            return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}', "")
+        if command == ["git", "status", "--porcelain"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                " M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json\n",
+                "",
+            )
+        raise AssertionError(command)
+
+    monkeypatch.setattr("agentic_project_kit.pr_closeout_complete._run_command", fake_run)
+
+    result = pr_closeout_complete(1686)
+
+    assert result.result_status == "BLOCKED"
+    assert result.lifecycle_state == "DIRTY_WORKTREE"
+    assert calls[:2] == [
+        ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"],
+        ["git", "status", "--porcelain"],
+    ]
