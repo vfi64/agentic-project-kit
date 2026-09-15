@@ -45,7 +45,9 @@ Typical use:
 Finish a slice. It plans by default. On execution it commits selected work,
 refreshes and commits the generated successor handoff package, pushes the
 branch, opens the PR, waits for CI, merges, and runs the post-merge handoff
-refresh closeout.
+refresh closeout. The merge path requires the composite command's JSON
+completion proof, including the PR number, `PASS` status, and verified
+post-merge handoff completion; a zero process exit alone is insufficient.
 
 Typical use:
 
