@@ -368,6 +368,22 @@ rules:
     - docs/planning/PROJECT_DIRECTION.yaml
     - required_paths
     - exempt_paths
+- id: documentation-canonical-facts-coverage
+  description: Canonical documentation facts must remain single-source and their managed projections must stay drift-free.
+  documents:
+  - path: docs/DOCUMENTATION_REGISTRY.yaml
+    terms:
+    - canonical_facts
+    - managed_paths
+    - review_paths
+  - path: docs/governance/DOCUMENTATION_REGISTRY_CONTRACT.md
+    terms:
+    - canonical_facts
+    - managed projections
+    - review paths
+  - path: README.md
+    terms:
+    - agentic-project-kit
   - path: docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
     terms:
     - Documentation Registry Scope Decision Template

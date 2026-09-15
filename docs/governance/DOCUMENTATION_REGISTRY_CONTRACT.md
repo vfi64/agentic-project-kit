@@ -10,6 +10,14 @@ The documentation registry introduces a small, additive governance layer for cla
 
 The first registry slice is deliberately narrow. It defines document classes, class-level rule fields, a small initial document list, and a deterministic guard. It does not replace `docs/DOCUMENTATION_COVERAGE.yaml`, `agentic-kit check-docs`, `agentic-kit docs-audit`, `agentic-kit doc-mesh-audit`, lifecycle audit, handoff checks, release checks, or artifact GC.
 
+The registry may also define `canonical_facts`. Each fact has one registry-owned
+`id` and `value`, plus relative `managed_paths` and `review_paths`. Managed
+projections are deterministic paths and fail the documentation gate when the
+canonical value is absent. The review paths produce advisory findings only because
+their surrounding prose remains project-owned. This is the bounded fact-drift
+mechanism; it does not rewrite prose automatically.
+The registry contract calls these deterministic outputs managed projections.
+
 ## Document classes
 
 The first schema supports these classes:
@@ -81,6 +89,9 @@ The first guard validates only deterministic structure:
 - optional DPA `projection_contract` and `partition_contract` mappings use the
   supported schema version, known fields, required fields, and internally
   consistent parent/region references.
+- optional `canonical_facts` is a list of unique facts with non-empty `id` and
+  `value`; all projection paths are relative and must exist; missing values in
+  managed paths are blocking, while review-path drift is advisory.
 
 The guard intentionally does not claim semantic documentation quality. It cannot prove that a document is well-written, complete, or architecturally optimal.
 
@@ -153,3 +164,5 @@ The registry is hardened through:
   declared required scope;
 - targeted tests for allowed classes, required fields, duplicate path detection, missing path detection, and docs-audit participation;
 - documentation coverage anchors for the registry contract.
+- canonical-fact projection tests covering managed blocking drift and review-only
+  drift.

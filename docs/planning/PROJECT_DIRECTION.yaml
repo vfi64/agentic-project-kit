@@ -3054,6 +3054,23 @@ plans:
         does not claim PyPI validation, automatic migration, external-repository
         conformance, or closure of KIT-GF-009, KIT-GF-011, KIT-GF-014,
         KIT-GF-015, KIT-GF-016, or KIT-GF-017.
+    - id: B1-KIT-025
+      status: implemented_with_external_boundaries
+      goal: Close the remaining Greenfield implementation seams for continuation
+        authority, canonical documentation facts, and contract-first guided
+        execution while preserving explicit released-package evidence boundaries.
+      evidence:
+      - docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.md
+      - docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json
+      tests:
+      - tests/test_documentation_facts.py
+      - tests/test_transfer_continue.py
+      - tests/test_planner_executor.py
+      boundary: KIT-GF-014, KIT-GF-015, and KIT-GF-016 are closed for the
+        current checkout and bounded external fixture/smoke evidence. KIT-GF-009
+        and KIT-GF-011 still require their historical external/released-package
+        retests. KIT-GF-017 remains open until a published package is available
+        and the context-carrier retest passes.
     - id: B1-TARGET-001
       status: recorded_target_friction
       goal: Decide in the target repository whether App2 tests that rewrite

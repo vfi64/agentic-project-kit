@@ -14,6 +14,7 @@ from agentic_project_kit.dpa_registry_contracts import (
     DPA_REGISTRY_OPTIONAL_DOCUMENT_FIELDS,
     validate_dpa_registry_contracts,
 )
+from agentic_project_kit.documentation_facts import canonical_fact_findings
 from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
 REGISTRY_PATH = Path(LEGACY_DEFAULTS.docs_root) / LEGACY_DEFAULTS.documentation_registry_file
@@ -531,6 +532,8 @@ def build_doc_registry_reconcile_report(project_root: Path) -> dict[str, Any]:
     rows = build_doc_registry_scope_decision_rows(project_root, registry=registry)
 
     findings: list[dict[str, str]] = []
+    _, canonical_fact_report = canonical_fact_findings(project_root, registry)
+    findings.extend(canonical_fact_report)
     for error in scope.errors:
         findings.append(
             {
@@ -697,6 +700,8 @@ def documentation_registry_findings_for_data(
 
     errors.extend(_check_class_rules(registry))
     errors.extend(_check_document_entries(project_root, registry))
+    fact_errors, _ = canonical_fact_findings(project_root, registry)
+    errors.extend(fact_errors)
     return errors
 
 
