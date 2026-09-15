@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 96437c09498a267e1f0662c23ceded8482618960aca66ca095fa6ddd392b617c
 - docs/reference/agentic-kit-commands.json: a331305f16423e42a2a39f748e51fc1b9123c6f38d223de44deb6d2ccb449527
-## Operational documentation refresh state after PR #2321
+## Operational documentation refresh state after PR #2323
 
-Current administrative handoff refresh state is `1470bede` (`Recognize verified outer closeout follow-up (#2321)`). Continue next only after this post-PR2321 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `80967504` (`Close GF-007 provenance with external fixture evidence (#2323)`). Continue next only after this post-PR2323 refresh is committed and merged; the next substantive slice must be created from fresh main.
