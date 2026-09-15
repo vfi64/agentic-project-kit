@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `296c33c2516db5313bb35db3428d631c626854c4` (`296c33c2`), after `Persist generated transfer inbox carrier (#2301)`.
-Last substantive work state is `296c33c2516db5313bb35db3428d631c626854c4` (`296c33c2`), after `Persist generated transfer inbox carrier (#2301)`.
+Current verified main/admin HEAD is `151284869a52b19b67087e4ca66697b8a12f3693` (`15128486`), after `Preserve workspace-init provenance during adoption (#2303)`.
+Last substantive work state is `151284869a52b19b67087e4ca66697b8a12f3693` (`15128486`), after `Preserve workspace-init provenance during adoption (#2303)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

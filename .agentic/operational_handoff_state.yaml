@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 296c33c2516db5313bb35db3428d631c626854c4
-  short: 296c33c2
-  subject: Persist generated transfer inbox carrier (#2301)
+  full: 151284869a52b19b67087e4ca66697b8a12f3693
+  short: 15128486
+  subject: Preserve workspace-init provenance during adoption (#2303)
 last_substantive_work_state:
-  full: 296c33c2516db5313bb35db3428d631c626854c4
-  short: 296c33c2
-  subject: Persist generated transfer inbox carrier (#2301)
+  full: 151284869a52b19b67087e4ca66697b8a12f3693
+  short: 15128486
+  subject: Preserve workspace-init provenance during adoption (#2303)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
