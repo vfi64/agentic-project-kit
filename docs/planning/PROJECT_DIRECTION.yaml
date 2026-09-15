@@ -2963,6 +2963,8 @@ plans:
       - docs/reports/POST_V1_0_9_GREENFIELD_PATCH_RECURRENCE_GUARD_20260907.json
       - docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.md
       - docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+      - docs/reports/POST_V1_0_12_GREENFIELD_PROVENANCE_RETEST_20260915.md
+      - docs/reports/POST_V1_0_12_GREENFIELD_PROVENANCE_RETEST_20260915.json
       accepted_lesson:
         id: KIT-GF-LESSON-001
         status: accepted_as_method
@@ -3036,6 +3038,22 @@ plans:
         does not close KIT-GF-009 first-cycle closeout execution evidence,
         KIT-GF-011 refresh-loop reduction, or the broader deferred DPA/adopt
         provenance and continuation-authority work.
+    - id: B1-KIT-024
+      status: implemented_external_fixture_pass
+      goal: Close KIT-GF-007 by preserving workspace-init provenance and
+        distinguishing generated projections from manual preservation surfaces
+        during DPA repository-adoption assessment.
+      evidence:
+      - docs/reports/POST_V1_0_12_GREENFIELD_PROVENANCE_RETEST_20260915.md
+      - docs/reports/POST_V1_0_12_GREENFIELD_PROVENANCE_RETEST_20260915.json
+      tests:
+      - tests/test_dpa_repo_adoption_assessment.py
+      - tests/test_workspace_init.py
+      - tests/test_generator.py
+      boundary: The closure is for current-main external-fixture evidence. It
+        does not claim PyPI validation, automatic migration, external-repository
+        conformance, or closure of KIT-GF-009, KIT-GF-011, KIT-GF-014,
+        KIT-GF-015, KIT-GF-016, or KIT-GF-017.
     - id: B1-TARGET-001
       status: recorded_target_friction
       goal: Decide in the target repository whether App2 tests that rewrite

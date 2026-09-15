@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "kind": "greenfield_provenance_retest",
+  "status": "implemented_external_fixture_pass",
+  "date": "2026-09-15",
+  "baseline": {
+    "origin_main": "ee658e0d",
+    "version": "1.0.12",
+    "branch": "main",
+    "source": "current_checkout_external_fixture"
+  },
+  "finding_status": [
+    {
+      "id": "KIT-GF-007",
+      "status": "closed_current_main_external_fixture",
+      "action": "none",
+      "evidence": {
+        "fixture": "fresh temporary external workspace",
+        "workspace_init": {
+          "command": "agentic-kit workspace init --execute --json",
+          "result": "PASS",
+          "projection_manifest": ".agentic/dpa/workspace_init_projection.json"
+        },
+        "dpa_repo_adoption_assessment": {
+          "command": "agentic-kit dpa repo-adoption-assessment --validation-ref EXACT_HEAD --json",
+          "result_status": "READY_FOR_DPA_REPO_ADOPTION_ADJUDICATION",
+          "blocker_count": 0,
+          "generated_or_command_updated_surface_count": 11,
+          "manual_preservation_surface_count": 5,
+          "generated_surfaces_require_maintainer_adjudication": false,
+          "exact_validation_ref_recorded": true
+        }
+      }
+    },
+    {
+      "id": "KIT-GF-017",
+      "status": "open_external_release_retest_required",
+      "action": "defer_released_package_context_carrier_retest"
+    }
+  ],
+  "interpretation": {
+    "closed": [
+      "The current mainline implementation preserves workspace-init provenance and distinguishes generated projections from manual preservation surfaces in a fresh external fixture."
+    ],
+    "not_claimed": [
+      "This report is not a PyPI validation of version 1.0.12.",
+      "This report does not claim that all Greenfield findings are closed.",
+      "This report does not replace the required fresh released-package retest for KIT-GF-017."
+    ]
+  },
+  "remaining_open_greenfield_work": [
+    "KIT-GF-009",
+    "KIT-GF-011",
+    "KIT-GF-014",
+    "KIT-GF-015",
+    "KIT-GF-016",
+    "KIT-GF-017"
+  ]
+}
