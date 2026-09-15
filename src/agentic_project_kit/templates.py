@@ -254,14 +254,6 @@ def create_project(options: ProjectOptions, overwrite: bool = False) -> None:
     )
     files["docs/STATUS.md"] = GENERATED_STATUS
     files[DPA_WORKSPACE_INIT_HANDOFF_TEMPLATE_PATH] = GENERATED_HANDOFF
-    files[DPA_WORKSPACE_INIT_MANIFEST_PATH] = render_workspace_init_projection_manifest(
-        project_name=options.name,
-        project_type=options.project_type,
-        profile="",
-        profiles=options.profiles,
-        generated_target_paths=(DPA_WORKSPACE_INIT_HANDOFF_TEMPLATE_PATH,),
-        emits_current_handoff_template=True,
-    )
     files["docs/architecture/ARCHITECTURE_CONTRACT.md"] = ARCHITECTURE_CONTRACT
     files["docs/DOCUMENTATION_COVERAGE.yaml"] = DOCUMENTATION_COVERAGE
     files["CHANGELOG.md"] = CHANGELOG
@@ -284,6 +276,17 @@ def create_project(options: ProjectOptions, overwrite: bool = False) -> None:
 
     if options.pre_commit:
         files[".pre-commit-config.yaml"] = PRECOMMIT
+
+    files[DPA_WORKSPACE_INIT_MANIFEST_PATH] = render_workspace_init_projection_manifest(
+        project_name=options.name,
+        project_type=options.project_type,
+        profile="",
+        profiles=options.profiles,
+        generated_target_paths=tuple(
+            sorted(path for path in files if path != DPA_WORKSPACE_INIT_MANIFEST_PATH)
+        ),
+        emits_current_handoff_template=True,
+    )
 
     for rel_path, template in files.items():
         content = render_template_string(template, context)
