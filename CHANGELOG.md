@@ -1,3 +1,9 @@
+## v1.0.12 - 2026-09-15
+
+- Zenodo DOI verification pending for v1.0.12.
+- Prepare 1.0.11 release metadata
+- Fail closed on mismatched release commits
+
 ## v1.0.11 - 2026-09-15
 
 - Zenodo DOI verification pending for v1.0.11.
