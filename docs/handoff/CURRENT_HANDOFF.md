@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `151284869a52b19b67087e4ca66697b8a12f3693` (`15128486`), after `Preserve workspace-init provenance during adoption (#2303)`.
-Last substantive work state is `151284869a52b19b67087e4ca66697b8a12f3693` (`15128486`), after `Preserve workspace-init provenance during adoption (#2303)`.
+Current verified main/admin HEAD is `547860334c6d96a3c4b326e1586fc4e50ba4c80a` (`54786033`), after `Restore volatile handoff files before PR closeout (#2305)`.
+Last substantive work state is `547860334c6d96a3c4b326e1586fc4e50ba4c80a` (`54786033`), after `Restore volatile handoff files before PR closeout (#2305)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

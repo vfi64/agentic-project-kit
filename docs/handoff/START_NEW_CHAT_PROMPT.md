@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: ebc53cbcb088d0ed42cc1fe8bc36fd644bfae43dc2cb3e549ae9778eaf57849a
 - docs/reference/agentic-kit-commands.json: 4cd0f54410dc38c466a155cf96994ea79816207338ef91e0b0a19c249e4656c5
-## Operational documentation refresh state after PR #2303
+## Operational documentation refresh state after PR #2305
 
-Current administrative handoff refresh state is `15128486` (`Preserve workspace-init provenance during adoption (#2303)`). Continue next only after this post-PR2303 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `54786033` (`Restore volatile handoff files before PR closeout (#2305)`). Continue next only after this post-PR2305 refresh is committed and merged; the next substantive slice must be created from fresh main.
