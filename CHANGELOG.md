@@ -1,3 +1,12 @@
+## v1.0.11 - 2026-09-15
+
+- Zenodo DOI verification pending for v1.0.11.
+- Fail closed on stale continuation authority
+- Persist generated transfer inbox carrier
+- Preserve workspace-init provenance during adoption
+- Restore volatile handoff files before PR closeout
+- Classify provenance adoption in release notes
+
 ## v1.0.10 - 2026-09-13
 
 - Zenodo DOI verification pending for v1.0.10.
