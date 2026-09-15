@@ -440,6 +440,23 @@ def test_release_notes_generator_classifies_post_108_greenfield_titles(tmp_path:
     ]
 
 
+def test_release_notes_generator_classifies_provenance_adoption_as_governance(
+    tmp_path: Path,
+) -> None:
+    report = build_release_notes_report(
+        tmp_path,
+        version="1.0.11",
+        from_tag="v1.0.10",
+        command_runner=FakeRunner(
+            subjects=["Preserve workspace-init provenance during adoption (#2303)"]
+        ),
+    )
+
+    assert report.validation.status == "PASS"
+    assert report.unclassified_items == ()
+    assert report.items[0].category == "Governance"
+
+
 def test_release_notes_generator_classifies_post_109_workflow_titles(tmp_path: Path) -> None:
     report = build_release_notes_report(
         tmp_path,

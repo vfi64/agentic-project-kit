@@ -629,6 +629,7 @@ def _classify_subject(subject: str) -> str:
             "command surface",
             "rule acknowledgement",
             "rule ack",
+            "provenance",
         )
     ):
         return "Governance"
