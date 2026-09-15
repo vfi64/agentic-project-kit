@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `75c0d8c4c944bebccddc0f981b6a7a9e02f3e368` (`75c0d8c4`), after `Fail closed on stale continuation authority (#2299)`.
-Last substantive work state is `75c0d8c4c944bebccddc0f981b6a7a9e02f3e368` (`75c0d8c4`), after `Fail closed on stale continuation authority (#2299)`.
+Current verified main/admin HEAD is `296c33c2516db5313bb35db3428d631c626854c4` (`296c33c2`), after `Persist generated transfer inbox carrier (#2301)`.
+Last substantive work state is `296c33c2516db5313bb35db3428d631c626854c4` (`296c33c2`), after `Persist generated transfer inbox carrier (#2301)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
