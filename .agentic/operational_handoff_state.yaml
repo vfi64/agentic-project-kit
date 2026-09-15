@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 547860334c6d96a3c4b326e1586fc4e50ba4c80a
-  short: 54786033
-  subject: Restore volatile handoff files before PR closeout (#2305)
+  full: be798a0a5729e230240975a7d0f65b89df2a979d
+  short: be798a0a
+  subject: Classify provenance adoption in release notes (#2307)
 last_substantive_work_state:
-  full: 547860334c6d96a3c4b326e1586fc4e50ba4c80a
-  short: 54786033
-  subject: Restore volatile handoff files before PR closeout (#2305)
+  full: be798a0a5729e230240975a7d0f65b89df2a979d
+  short: be798a0a
+  subject: Classify provenance adoption in release notes (#2307)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
