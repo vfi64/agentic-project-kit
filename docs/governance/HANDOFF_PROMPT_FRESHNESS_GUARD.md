@@ -23,6 +23,15 @@ Before a successor handoff prompt is presented as authoritative, the prompt path
 
 The guard must warn prominently when the current git HEAD is not represented by `handoff_state.yaml` safe/admin state or when the configured/latest successor handoff prompt does not mention the current handoff commit marker.
 
+Mutating continuation has a stricter boundary than prompt rendering. Before
+`agentic-kit transfer continue` restores volatile state, fetches refs, or runs
+the next transfer order, the same freshness assessment is treated as a
+fail-closed blocker. The required recovery is the existing canonical handoff
+refresh and successor-package workflow; no second continuation authority is
+created. A missing handoff state remains allowed for external manifest
+workspaces where the operating-layer contract does not require self-hosting
+handoff state.
+
 The guard may be warning-based rather than fail-closed. A drifted repository still needs to render a repairable prompt. The forbidden outcome is a silent stale prompt.
 
 ## Closeout rule

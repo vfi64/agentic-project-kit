@@ -6,9 +6,12 @@ from typing import Any
 
 import yaml
 
+from agentic_project_kit.handoff_freshness import assess_continuation_authority
+from agentic_project_kit.handoff_state import load_handoff_state
 from agentic_project_kit.transfer_runner import DEFAULT_INBOX
 from agentic_project_kit.transfer_remote_next import EXECUTABLE_TRANSFER_ORDER_KIND
 from agentic_project_kit.transfer_remote_next import run_remote_next_transfer
+from agentic_project_kit.workspace import load_workspace
 
 
 def _run(argv: list[str], root: Path) -> subprocess.CompletedProcess[str]:
@@ -52,6 +55,21 @@ def _current_order_is_active(root: Path) -> bool:
     return _is_active_order(loaded if isinstance(loaded, dict) else None)
 
 
+def _continuation_authority_blockers(root: Path) -> tuple[str, ...]:
+    """Block continuation when the canonical handoff authority is stale."""
+
+    try:
+        workspace = load_workspace(root, suppress_legacy_profile_warning=True)
+        handoff_path = workspace.handoff_state_path()
+        if not handoff_path.exists():
+            return ()
+        data = load_handoff_state(str(handoff_path))
+        blockers = assess_continuation_authority(data, handoff_path)
+    except (OSError, ValueError, KeyError, TypeError, yaml.YAMLError) as exc:
+        return (f"continuation_authority_unreadable: {exc}",)
+    return tuple(blockers)
+
+
 def _active_order_branches(root: Path) -> list[str]:
     completed = _run(
         ["git", "for-each-ref", "--format=%(refname:short)", "refs/heads", "refs/remotes/origin"],
@@ -78,6 +96,25 @@ def _active_order_branches(root: Path) -> list[str]:
 def run_transfer_continue(root: Path | str = ".", branch: str | None = None) -> dict[str, Any]:
     root_path = Path(root)
     steps: list[dict[str, Any]] = []
+
+    authority_blockers = _continuation_authority_blockers(root_path)
+    if authority_blockers:
+        return {
+            "schema_version": 1,
+            "kind": "transfer_continue_result",
+            "result_status": "BLOCKED",
+            "returncode": 2,
+            "final_signal": "f",
+            "reasons": ["stale_or_ambiguous_continuation_authority"],
+            "authority_blockers": list(authority_blockers),
+            "candidate_branches": [],
+            "steps": steps,
+            "next_action": (
+                "Refresh the canonical handoff state and successor projections "
+                "before continuing transfer."
+            ),
+            "chat_reply": "f",
+        }
 
     restore = _run(["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"], root_path)
     steps.append({
