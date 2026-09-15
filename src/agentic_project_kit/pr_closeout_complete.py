@@ -171,6 +171,27 @@ def pr_closeout_complete(
 
     steps: list[PrCloseoutStep] = []
 
+    restore = _run_command(
+        ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"]
+    )
+    steps.append(
+        _completed_step(
+            "restore-known-volatile-preflight",
+            restore,
+            "Inspect known volatile transfer cleanup before checking worktree state.",
+        )
+    )
+    if restore.returncode != 0:
+        return _finish(
+            after_pr=after_pr,
+            result_status="BLOCKED",
+            returncode=2,
+            lifecycle_state="VOLATILE_RESTORE_BLOCKED",
+            next_action="Inspect restore-known-volatile failure before PR closeout.",
+            merged_pr=False,
+            steps=steps,
+        )
+
     clean, status = _is_worktree_clean()
     steps.append(_completed_step("local-clean-preflight", status, "Clean the worktree before PR closeout."))
     if not clean:
