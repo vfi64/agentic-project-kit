@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: ec44e19bc23c25c55cb9b70a02c1a750d07cebc7
-  short: ec44e19b
-  subject: Fail closed before release side effects (#2315)
+  full: cdb63a55d231100ffce74855b3a17e1647eee0c6
+  short: cdb63a55
+  subject: Require verifiable slice closeout proof (#2317)
 last_substantive_work_state:
-  full: ec44e19bc23c25c55cb9b70a02c1a750d07cebc7
-  short: ec44e19b
-  subject: Fail closed before release side effects (#2315)
+  full: cdb63a55d231100ffce74855b3a17e1647eee0c6
+  short: cdb63a55
+  subject: Require verifiable slice closeout proof (#2317)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
