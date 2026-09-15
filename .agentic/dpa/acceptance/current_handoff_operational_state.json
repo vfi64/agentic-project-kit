@@ -1,33 +1,33 @@
 {
-  "accepted_at": "2026-09-15T15:44:39.263582+00:00",
+  "accepted_at": "2026-09-15T15:53:43.354965+00:00",
   "accepted_gate_result": "pass",
   "accepted_gate_set_id": "dpa-current-handoff-minimal-gate-set-v1",
   "accepted_lifecycle_outcome": "accepted",
-  "branch": "main",
+  "branch": "docs/post-pr2309-handoff-refresh",
   "claims": {
     "generated_outputs_manually_patched": false,
     "kit_conformance_claimed": false,
     "production_mutation_performed": false
   },
-  "contract_id": "DPA-CURRENT-HANDOFF-RELEASE-PREP-v1",
+  "contract_id": "DPA-CURRENT-HANDOFF-OPERATIONAL-STATE-v1",
   "kind": "dpa_acceptance_state",
   "renderer": {
-    "id": "agentic_project_kit.release_prepare",
+    "id": "agentic_project_kit.operational_handoff_projection",
     "semantic_version": "1"
   },
   "schema_version": 1,
   "source": {
-    "fingerprint": "f1332691e6f2d7552bff01065379333db6a91d18dd9503f1497a824b4ba10a9d",
-    "path": "<agentic-kit-release-prep-inputs>"
+    "fingerprint": "f0f5a8767927036f7ed34a1a39e3b997cd7399ac447a272a4290487f38f0ec28",
+    "path": ".agentic/operational_handoff_state.yaml"
   },
   "status": "accepted",
   "target": {
-    "complete_target_fingerprint": "af3e7f8ae92a064035bd6a2ceb91c0e823396be0dbd120efd6e26b94154d26d8",
+    "complete_target_fingerprint": "5a5e4a70f2ad79131b9ce920799b5babf3a50f399420624a12b758ab95c5dfa9",
     "path": "docs/handoff/CURRENT_HANDOFF.md",
-    "payload_fingerprint": "af3e7f8ae92a064035bd6a2ceb91c0e823396be0dbd120efd6e26b94154d26d8",
-    "pre_write_fingerprint": "370f7b3966329423a8d9981286ff24b767b443ca83bc3b6daf14a3c1415f2076"
+    "payload_fingerprint": "5a5e4a70f2ad79131b9ce920799b5babf3a50f399420624a12b758ab95c5dfa9",
+    "pre_write_fingerprint": "af3e7f8ae92a064035bd6a2ceb91c0e823396be0dbd120efd6e26b94154d26d8"
   },
-  "target_scope": "CURRENT_HANDOFF_RELEASE_METADATA",
-  "validation_ref": "e08e8b374c756be273cbae89f50568a1010449eb",
-  "writer_id": "WRT-CH-002"
+  "target_scope": "CURRENT_HANDOFF_OPERATIONAL_STATE_BLOCK",
+  "validation_ref": "1a984be63c3acd925fc81203765a3879a231deb2",
+  "writer_id": "WRT-CH-001"
 }
