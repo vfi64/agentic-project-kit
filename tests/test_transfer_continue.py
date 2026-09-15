@@ -11,6 +11,7 @@ from agentic_project_kit import transfer_continue
 
 def test_transfer_continue_fetches_origin_before_inferring_active_order(monkeypatch) -> None:
     calls: list[list[str]] = []
+    monkeypatch.setattr(transfer_continue, "_continuation_authority_blockers", lambda root: ())
 
     def fake_run(argv: list[str], root) -> subprocess.CompletedProcess[str]:
         calls.append(argv)
@@ -44,6 +45,8 @@ def test_transfer_continue_fetches_origin_before_inferring_active_order(monkeypa
 
 
 def test_transfer_continue_blocks_when_fetch_fails_before_branch_inference(monkeypatch) -> None:
+    monkeypatch.setattr(transfer_continue, "_continuation_authority_blockers", lambda root: ())
+
     def fake_run(argv: list[str], root) -> subprocess.CompletedProcess[str]:
         if argv == ["git", "fetch", "origin"]:
             return subprocess.CompletedProcess(argv, 128, "", "network unavailable")
