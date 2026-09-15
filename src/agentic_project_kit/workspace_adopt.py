@@ -57,6 +57,7 @@ WORKSPACE_INIT_TREE = (
     ".agentic/state/handoff/transfer_handoff_reports/",
     ".agentic/transfer/",
     ".agentic/transfer/inbox/",
+    ".agentic/transfer/inbox/.gitkeep",
     ".agentic/transfer/outbox/",
     ".agentic/tmp/",
     ".agentic/rule_ack/",
