@@ -1,8 +1,9 @@
 ## v1.0.12 - 2026-09-15
 
 - Zenodo DOI verification pending for v1.0.12.
-- Prepare 1.0.11 release metadata
-- Fail closed on mismatched release commits
+- Harden release publishing to fail closed on mismatched release commits.
+- Verify release metadata and tag identity before live publication.
+- Preserve deterministic release evidence and post-merge handoff checks.
 
 ## v1.0.11 - 2026-09-15
 
