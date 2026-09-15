@@ -13,6 +13,10 @@ from agentic_project_kit.dpa_repo_adoption_assessment import (
     evaluate_dpa_repo_adoption_assessment,
     write_dpa_repo_adoption_assessment_json,
 )
+from agentic_project_kit.dpa_workspace_init_projection import (
+    DPA_WORKSPACE_INIT_MANIFEST_PATH,
+    render_workspace_init_projection_manifest,
+)
 
 runner = CliRunner()
 
@@ -94,6 +98,57 @@ def test_dpa_repo_adoption_assessment_blocks_foreign_agentic_dir(tmp_path: Path)
 
     assert result.result_status == "BLOCKED_FOR_DPA_REPO_ADOPTION"
     assert any(finding.code == "foreign-agentic-directory" for finding in result.findings)
+
+
+def test_dpa_repo_adoption_uses_workspace_init_provenance_for_generated_surfaces(
+    tmp_path: Path,
+) -> None:
+    generated_paths = (
+        "docs/STATUS.md",
+        "docs/handoff/CURRENT_HANDOFF.md",
+        ".agentic/state/status.md",
+    )
+    _write(tmp_path / "docs/STATUS.md", "# Generated status\n")
+    _write(tmp_path / "docs/handoff/CURRENT_HANDOFF.md", "# Generated handoff\n")
+    _write(tmp_path / ".agentic/config.yaml", "kit_schema_version: 1\n")
+    _write(tmp_path / ".agentic/state/status.md", "# Generated workspace status\n")
+    _write(
+        tmp_path / DPA_WORKSPACE_INIT_MANIFEST_PATH,
+        render_workspace_init_projection_manifest(
+            project_name="demo",
+            project_type="python-cli",
+            profile="",
+            generated_target_paths=generated_paths,
+            emits_current_handoff_template=True,
+        ),
+    )
+    _git_commit_all(tmp_path)
+
+    result = evaluate_dpa_repo_adoption_assessment(tmp_path)
+    surfaces = {surface.path: surface for surface in result.surfaces}
+
+    assert result.ok
+    for path in generated_paths + (DPA_WORKSPACE_INIT_MANIFEST_PATH,):
+        assert surfaces[path].classification == "generated_projection"
+        assert surfaces[path].generated_or_command_updated is True
+        assert surfaces[path].maintainer_adjudication_required is False
+
+
+def test_dpa_repo_adoption_blocks_invalid_workspace_init_provenance(tmp_path: Path) -> None:
+    _write(tmp_path / ".agentic/config.yaml", "kit_schema_version: 1\n")
+    _write(
+        tmp_path / DPA_WORKSPACE_INIT_MANIFEST_PATH,
+        '{"kind": "dpa_workspace_init_projection_manifest"}\n',
+    )
+    _git_commit_all(tmp_path)
+
+    result = evaluate_dpa_repo_adoption_assessment(tmp_path)
+
+    assert result.result_status == "BLOCKED_FOR_DPA_REPO_ADOPTION"
+    assert any(
+        finding.code == "workspace-init-projection-manifest-invalid"
+        for finding in result.findings
+    )
 
 
 def test_dpa_repo_adoption_assessment_writes_bounded_evidence(tmp_path: Path) -> None:

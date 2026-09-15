@@ -6,6 +6,10 @@ from pathlib import Path
 import subprocess
 from typing import Any
 
+from agentic_project_kit.dpa_workspace_init_projection import (
+    DPA_WORKSPACE_INIT_MANIFEST_PATH,
+    validate_workspace_init_projection_manifest,
+)
 from agentic_project_kit.workspace import load_workspace
 
 DPA_REPO_ADOPTION_MODEL = "dpa-repo-adoption-assessment-v1"
@@ -226,7 +230,10 @@ def evaluate_dpa_repo_adoption_assessment(
 
     current_ref = _current_validation_ref(base, validation_ref, findings)
     _agentic_collision_findings(base, findings)
-    surfaces = tuple(_classify_surface(path, base) for path in _candidate_paths(base))
+    generated_paths = _workspace_init_generated_paths(base, findings)
+    surfaces = tuple(
+        _classify_surface(path, base, generated_paths) for path in _candidate_paths(base)
+    )
     return DpaRepoAdoptionAssessment(
         root=base.as_posix(),
         current_validation_ref=current_ref,
@@ -357,9 +364,13 @@ def _is_excluded(path: Path, root: Path) -> bool:
     return any(part in EXCLUDED_DIRS for part in parts) or parts[:2] == (".agentic", "tmp")
 
 
-def _classify_surface(path: Path, root: Path) -> DpaRepoAdoptionSurface:
+def _classify_surface(
+    path: Path,
+    root: Path,
+    generated_paths: frozenset[str],
+) -> DpaRepoAdoptionSurface:
     relative = path.relative_to(root).as_posix()
-    classification = _classification(relative)
+    classification = _classification(relative, generated_paths)
     document_form = _document_form(classification, path)
     generated = classification in {"command_updated_state", "generated_projection"}
     return DpaRepoAdoptionSurface(
@@ -378,9 +389,11 @@ def _classify_surface(path: Path, root: Path) -> DpaRepoAdoptionSurface:
     )
 
 
-def _classification(relative: str) -> str:
+def _classification(relative: str, generated_paths: frozenset[str] = frozenset()) -> str:
     if relative == ".agentic/config.yaml":
         return "workspace_manifest"
+    if relative in generated_paths:
+        return "generated_projection"
     if relative in {"docs/STATUS.md", ".agentic/state/status.md"}:
         return "status_authority"
     if relative in {"docs/handoff/CURRENT_HANDOFF.md", ".agentic/state/handoff/README.md"}:
@@ -422,6 +435,47 @@ def _classification(relative: str) -> str:
     if relative.startswith("docs/"):
         return "manual_document"
     return "structured_or_manual_document"
+
+
+def _workspace_init_generated_paths(
+    root: Path,
+    findings: list[DpaRepoAdoptionFinding],
+) -> frozenset[str]:
+    manifest_path = root / DPA_WORKSPACE_INIT_MANIFEST_PATH
+    if not manifest_path.is_file() or manifest_path.is_symlink():
+        return frozenset()
+    try:
+        data = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        findings.append(
+            DpaRepoAdoptionFinding(
+                code="workspace-init-projection-manifest-invalid",
+                message=f"cannot read workspace-init provenance manifest: {exc}",
+                path=DPA_WORKSPACE_INIT_MANIFEST_PATH,
+            )
+        )
+        return frozenset()
+    if not isinstance(data, dict):
+        findings.append(
+            DpaRepoAdoptionFinding(
+                code="workspace-init-projection-manifest-invalid",
+                message="workspace-init provenance manifest must contain a JSON object",
+                path=DPA_WORKSPACE_INIT_MANIFEST_PATH,
+            )
+        )
+        return frozenset()
+    errors = validate_workspace_init_projection_manifest(data)
+    if errors:
+        findings.append(
+            DpaRepoAdoptionFinding(
+                code="workspace-init-projection-manifest-invalid",
+                message="; ".join(errors),
+                path=DPA_WORKSPACE_INIT_MANIFEST_PATH,
+            )
+        )
+        return frozenset()
+    paths = data["generated_target_paths"]
+    return frozenset({str(path) for path in paths} | {DPA_WORKSPACE_INIT_MANIFEST_PATH})
 
 
 def _document_form(classification: str, path: Path) -> str:

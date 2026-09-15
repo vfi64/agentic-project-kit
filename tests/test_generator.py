@@ -61,7 +61,9 @@ def test_generated_project_dpa_manifest_classifies_handoff_as_external_template(
     assert validate_workspace_init_projection_manifest(data) == ()
     assert data["writer_id"] == "WRT-CH-005"
     assert data["target_scope"] == "EXTERNAL_WORKSPACE_INITIALIZATION_TEMPLATE"
-    assert data["generated_target_paths"] == [DPA_WORKSPACE_INIT_HANDOFF_TEMPLATE_PATH]
+    assert DPA_WORKSPACE_INIT_HANDOFF_TEMPLATE_PATH in data["generated_target_paths"]
+    assert "docs/STATUS.md" in data["generated_target_paths"]
+    assert ".agentic/project.yaml" in data["generated_target_paths"]
     assert data["emits_current_handoff_template"] is True
     assert data["self_hosting_current_handoff"] is False
     assert data["kit_live_acceptance_state"] is False

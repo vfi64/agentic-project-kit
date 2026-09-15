@@ -160,7 +160,8 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
     )
     assert validate_workspace_init_projection_manifest(dpa_manifest) == ()
     assert dpa_manifest["writer_id"] == "WRT-CH-005"
-    assert dpa_manifest["generated_target_paths"] == [".agentic/state/handoff/README.md"]
+    assert ".agentic/state/handoff/README.md" in dpa_manifest["generated_target_paths"]
+    assert ".agentic/state/status.md" in dpa_manifest["generated_target_paths"]
     assert dpa_manifest["emits_current_handoff_template"] is False
     assert dpa_manifest["self_hosting_current_handoff"] is False
     assert dpa_manifest["kit_conformance_claimed"] is False

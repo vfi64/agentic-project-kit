@@ -360,6 +360,19 @@ def _planned_files(root: Path, project: ProjectSuggestion, manifest_yaml: str) -
         ".agentic/INITIAL_LLM_PROMPT.md": _initial_llm_prompt(project),
         ".agentic/transfer/inbox/.gitkeep": "# Transfer inbox carrier; executable orders are written here.\n",
     }
+    files[DPA_WORKSPACE_INIT_MANIFEST_PATH] = render_workspace_init_projection_manifest(
+        project_name=project.name,
+        project_type=project.type,
+        profile=project.profile,
+        generated_target_paths=tuple(
+            sorted(
+                path
+                for path in files
+                if path not in {DPA_WORKSPACE_INIT_MANIFEST_PATH, ".agentic/config.yaml"}
+            )
+        ),
+        emits_current_handoff_template=False,
+    )
     if not (root / "docs" / "archive" / "README.md").exists():
         files["docs/archive/README.md"] = _archive_readme_seed()
     return files
