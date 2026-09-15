@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 04c69ba7ab172da2c7061ba63130431d83674ec7
-  short: 04c69ba7
-  subject: Prepare corrected 1.0.12 release (#2313)
+  full: ec44e19bc23c25c55cb9b70a02c1a750d07cebc7
+  short: ec44e19b
+  subject: Fail closed before release side effects (#2315)
 last_substantive_work_state:
-  full: 04c69ba7ab172da2c7061ba63130431d83674ec7
-  short: 04c69ba7
-  subject: Prepare corrected 1.0.12 release (#2313)
+  full: ec44e19bc23c25c55cb9b70a02c1a750d07cebc7
+  short: ec44e19b
+  subject: Fail closed before release side effects (#2315)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
