@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-09-15T18:13:30.439047+00:00",
+  "generated_at_utc": "2026-09-15T18:16:50.891905+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,15 +57,15 @@
     "package_version": "1.0.12"
   },
   "repo": {
-    "branch": "codex/greenfield-gf009-closeout-proof-outer-followup",
+    "branch": "docs/post-pr2321-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "9ecd403e5da02ad568397c827dbf9c0dadb9ea91",
-    "head_matches_origin_main": false,
-    "head_short": "9ecd403e",
+    "head": "1470bedea99bd0208906bad829509cc1a3783e40",
+    "head_matches_origin_main": true,
+    "head_short": "1470bede",
     "local_path": "cd /path/to/",
-    "origin_main": "4da8d382b616a4361471df2f750c485070184447",
-    "origin_main_short": "4da8d382",
-    "worktree_clean": true
+    "origin_main": "1470bedea99bd0208906bad829509cc1a3783e40",
+    "origin_main_short": "1470bede",
+    "worktree_clean": false
   },
   "schema_version": 1,
   "short_term_memory": {
