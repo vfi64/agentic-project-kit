@@ -485,6 +485,10 @@ def evaluate_release_publish_plan(
             )
         )
 
+    live_execute_ready = execute and allow_execute and execute_capability_present and all(
+        check.status == "PASS" for check in checks
+    )
+
     planned_actions = [
         f"verify release-prep evidence for {version}",
         f"verify release metadata authority for {version}",
@@ -492,7 +496,7 @@ def evaluate_release_publish_plan(
         f"plan GitHub release {tag}",
         "plan post-release-check after live publish",
     ]
-    if execute and allow_execute and execute_capability_present:
+    if live_execute_ready:
         planned_actions.extend(
             [
                 f"execute git tag {tag}",
@@ -519,7 +523,7 @@ def evaluate_release_publish_plan(
         mode="execute" if execute else "dry-run" if dry_run else "unspecified",
         checks=tuple(checks),
         planned_actions=tuple(planned_actions),
-        execute_enabled=bool(execute and allow_execute and execute_capability_present),
+        execute_enabled=live_execute_ready,
     )
 
 
