@@ -117,6 +117,30 @@ def assess_handoff_prompt_freshness(
     return warnings
 
 
+def assess_continuation_authority(
+    data: dict[str, Any],
+    handoff_path: str | Path = ".agentic/handoff_state.yaml",
+    *,
+    current_head: str | None = None,
+    current_subject: str | None = None,
+) -> list[str]:
+    """Return blockers for mutating continuation when authority is stale.
+
+    Prompt rendering remains warning-based so it can produce a repairable
+    handoff. Continuation is different: it may run remote work and therefore
+    must stop before mutation when the existing handoff authority is stale or
+    incomplete. The existing freshness assessment remains the single source
+    of these findings.
+    """
+
+    return assess_handoff_prompt_freshness(
+        data,
+        handoff_path,
+        current_head=current_head,
+        current_subject=current_subject,
+    )
+
+
 
 def _assess_operational_document_freshness(
     project_root: Path,

@@ -845,6 +845,12 @@ Terminal logs must be finalized before commit and must not be written again afte
 
 The freshness gate must reject contradictory current-state claims across `docs/STATUS.md`, `docs/handoff/CURRENT_HANDOFF.md`, and `.agentic/handoff_state.yaml`, including mismatched current release versions, stale DOI baselines, obsolete next-step instructions, and strategy documents that present old baselines as current without a historical marker.
 
+The continuation gate reuses this same freshness assessment before any
+`transfer continue` mutation. A stale, incomplete, or unreadable canonical
+handoff authority must return `BLOCKED` before volatile restoration, remote
+fetch, or transfer-order execution. Prompt rendering may still emit a
+repairable warning; continuation may not proceed on that warning.
+
 ## Mandatory Final Summary Contract Gate
 
 Every relevant terminal work block must end with a machine-readable SUMMARY block containing WORK RESULT, EVIDENCE RESULT, OVERALL RESULT, REMOTE_EVIDENCE, terminal_log, command_report, NEXT_CHAT_REPLY, and the final result marker.
