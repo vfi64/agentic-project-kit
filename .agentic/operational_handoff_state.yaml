@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 8096750489f624f158fd500c3c841c5469d67014
-  short: 80967504
-  subject: Close GF-007 provenance with external fixture evidence (#2323)
+  full: 39fbb360f90a2e7d2b6e3003bacb0a0cba960ab9
+  short: 39fbb360
+  subject: Close remaining Greenfield implementation findings (#2325)
 last_substantive_work_state:
-  full: 8096750489f624f158fd500c3c841c5469d67014
-  short: 80967504
-  subject: Close GF-007 provenance with external fixture evidence (#2323)
+  full: 39fbb360f90a2e7d2b6e3003bacb0a0cba960ab9
+  short: 39fbb360
+  subject: Close remaining Greenfield implementation findings (#2325)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

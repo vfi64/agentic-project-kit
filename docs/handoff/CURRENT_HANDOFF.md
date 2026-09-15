@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `8096750489f624f158fd500c3c841c5469d67014` (`80967504`), after `Close GF-007 provenance with external fixture evidence (#2323)`.
-Last substantive work state is `8096750489f624f158fd500c3c841c5469d67014` (`80967504`), after `Close GF-007 provenance with external fixture evidence (#2323)`.
+Current verified main/admin HEAD is `39fbb360f90a2e7d2b6e3003bacb0a0cba960ab9` (`39fbb360`), after `Close remaining Greenfield implementation findings (#2325)`.
+Last substantive work state is `39fbb360f90a2e7d2b6e3003bacb0a0cba960ab9` (`39fbb360`), after `Close remaining Greenfield implementation findings (#2325)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
