@@ -287,14 +287,14 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "main",
+      "branch": "codex/release-1.0.11-metadata",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "e08e8b374c756be273cbae89f50568a1010449eb",
-      "head_matches_origin_main": true,
+      "head": "18bb6ea61ab162b39b7462fee7a5aaac805384d8",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "e08e8b374c756be273cbae89f50568a1010449eb",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -439,14 +439,14 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "main",
+    "branch": "codex/release-1.0.11-metadata",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "e08e8b374c756be273cbae89f50568a1010449eb",
-    "head_matches_origin_main": true,
+    "head": "18bb6ea61ab162b39b7462fee7a5aaac805384d8",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "e08e8b374c756be273cbae89f50568a1010449eb",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {
