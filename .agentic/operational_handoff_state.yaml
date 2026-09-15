@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 75c0d8c4c944bebccddc0f981b6a7a9e02f3e368
-  short: 75c0d8c4
-  subject: Fail closed on stale continuation authority (#2299)
+  full: 296c33c2516db5313bb35db3428d631c626854c4
+  short: 296c33c2
+  subject: Persist generated transfer inbox carrier (#2301)
 last_substantive_work_state:
-  full: 75c0d8c4c944bebccddc0f981b6a7a9e02f3e368
-  short: 75c0d8c4
-  subject: Fail closed on stale continuation authority (#2299)
+  full: 296c33c2516db5313bb35db3428d631c626854c4
+  short: 296c33c2
+  subject: Persist generated transfer inbox carrier (#2301)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
