@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `24120bd60cf6967b123fd17ebcccec52fc99f5d8` (`24120bd6`), after `Fail closed on mismatched release commits (#2311)`.
-Last substantive work state is `24120bd60cf6967b123fd17ebcccec52fc99f5d8` (`24120bd6`), after `Fail closed on mismatched release commits (#2311)`.
+Current verified main/admin HEAD is `04c69ba7ab172da2c7061ba63130431d83674ec7` (`04c69ba7`), after `Prepare corrected 1.0.12 release (#2313)`.
+Last substantive work state is `04c69ba7ab172da2c7061ba63130431d83674ec7` (`04c69ba7`), after `Prepare corrected 1.0.12 release (#2313)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
