@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d343323f699fbef52f20e80b64acf15312ddaf80
-  short: d343323f
-  subject: Accept verified closeout recovery proof (#2319)
+  full: 1470bedea99bd0208906bad829509cc1a3783e40
+  short: 1470bede
+  subject: Recognize verified outer closeout follow-up (#2321)
 last_substantive_work_state:
-  full: d343323f699fbef52f20e80b64acf15312ddaf80
-  short: d343323f
-  subject: Accept verified closeout recovery proof (#2319)
+  full: 1470bedea99bd0208906bad829509cc1a3783e40
+  short: 1470bede
+  subject: Recognize verified outer closeout follow-up (#2321)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

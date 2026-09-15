@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `d343323f699fbef52f20e80b64acf15312ddaf80` (`d343323f`), after `Accept verified closeout recovery proof (#2319)`.
-Last substantive work state is `d343323f699fbef52f20e80b64acf15312ddaf80` (`d343323f`), after `Accept verified closeout recovery proof (#2319)`.
+Current verified main/admin HEAD is `1470bedea99bd0208906bad829509cc1a3783e40` (`1470bede`), after `Recognize verified outer closeout follow-up (#2321)`.
+Last substantive work state is `1470bedea99bd0208906bad829509cc1a3783e40` (`1470bede`), after `Recognize verified outer closeout follow-up (#2321)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
