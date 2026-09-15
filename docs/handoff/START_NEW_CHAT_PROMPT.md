@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: c647fefe5c6ad76b01ceb1534cae46ed8f22ef35bd7bfc0d6b4e64f0326c2e3e
 - docs/reference/agentic-kit-commands.json: 6d39b77194ff0c81afe7a1c688943abf52c95a3ba75b270d7b7ab35ddc9d0684
-## Operational documentation refresh state after PR #2309
+## Operational documentation refresh state after PR #2311
 
-Current administrative handoff refresh state is `1a984be6` (`Prepare 1.0.11 release metadata (#2309)`). Continue next only after this post-PR2309 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `24120bd6` (`Fail closed on mismatched release commits (#2311)`). Continue next only after this post-PR2311 refresh is committed and merged; the next substantive slice must be created from fresh main.

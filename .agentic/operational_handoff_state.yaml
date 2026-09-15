@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 1a984be63c3acd925fc81203765a3879a231deb2
-  short: 1a984be6
-  subject: Prepare 1.0.11 release metadata (#2309)
+  full: 24120bd60cf6967b123fd17ebcccec52fc99f5d8
+  short: 24120bd6
+  subject: Fail closed on mismatched release commits (#2311)
 last_substantive_work_state:
-  full: 1a984be63c3acd925fc81203765a3879a231deb2
-  short: 1a984be6
-  subject: Prepare 1.0.11 release metadata (#2309)
+  full: 24120bd60cf6967b123fd17ebcccec52fc99f5d8
+  short: 24120bd6
+  subject: Fail closed on mismatched release commits (#2311)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
