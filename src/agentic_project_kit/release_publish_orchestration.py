@@ -204,6 +204,75 @@ def _run_release_prep_consistency_check(
     )
 
 
+def _release_commit_integrity_check(
+    *,
+    version: str,
+    tag: str,
+    root: Path,
+    runner: Runner,
+) -> ReleasePublishCheck:
+    status_rc, status_output = runner(("git", "status", "--porcelain"), root)
+    if status_rc != 0:
+        return ReleasePublishCheck(
+            name="release commit integrity",
+            status="FAIL",
+            detail="could not inspect worktree status: " + _last_line(status_output),
+            returncode=status_rc,
+        )
+    if status_output.strip():
+        return ReleasePublishCheck(
+            name="release commit integrity",
+            status="FAIL",
+            detail="live release requires a clean worktree before tagging",
+            returncode=1,
+        )
+
+    anchors = {
+        "pyproject.toml": rf'version\s*=\s*["\']{re.escape(version)}["\']',
+        "src/agentic_project_kit/__init__.py": rf'__version__\s*=\s*["\']{re.escape(version)}["\']',
+        "CHANGELOG.md": rf"^##\s+v{re.escape(version)}\s+-",
+        "README.md": rf"Version\s+`{re.escape(version)}`",
+        "CITATION.cff": rf"^version:\s+{re.escape(version)}$",
+        "docs/STATUS.md": rf"^Current version:\s+{re.escape(version)}$",
+        "docs/handoff/CURRENT_HANDOFF.md": rf"Current version:\s+{re.escape(version)}",
+    }
+    mismatches = []
+    for relative_path, pattern in anchors.items():
+        path = root / relative_path
+        if not path.exists() or re.search(pattern, path.read_text(encoding="utf-8"), re.MULTILINE) is None:
+            mismatches.append(relative_path)
+    if mismatches:
+        return ReleasePublishCheck(
+            name="release commit integrity",
+            status="FAIL",
+            detail="release metadata does not match target version: " + ", ".join(mismatches),
+            returncode=1,
+        )
+
+    head_rc, head_output = runner(("git", "rev-parse", "HEAD"), root)
+    if head_rc != 0:
+        return ReleasePublishCheck(
+            name="release commit integrity",
+            status="FAIL",
+            detail="could not resolve release commit: " + _last_line(head_output),
+            returncode=head_rc,
+        )
+    tag_rc, tag_output = runner(("git", "rev-parse", "--verify", f"refs/tags/{tag}"), root)
+    if tag_rc == 0 and tag_output.strip() != head_output.strip():
+        return ReleasePublishCheck(
+            name="release commit integrity",
+            status="FAIL",
+            detail=f"existing tag {tag} does not point to current release commit",
+            returncode=1,
+        )
+    return ReleasePublishCheck(
+        name="release commit integrity",
+        status="PASS",
+        detail="clean worktree and release metadata match the target commit",
+        returncode=0,
+    )
+
+
 def _release_already_current_verified(
     *,
     version: str,
@@ -390,6 +459,15 @@ def evaluate_release_publish_plan(
             runner=run,
         )
     )
+    if execute:
+        checks.append(
+            _release_commit_integrity_check(
+                version=version,
+                tag=tag,
+                root=root,
+                runner=run,
+            )
+        )
 
     capability_file = root / EXECUTE_CAPABILITY_PATH
     execute_capability_present = capability_file.exists()

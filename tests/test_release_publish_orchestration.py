@@ -28,7 +28,8 @@ def _write_current_verified_release_files(root: Path, *, version: str, doi: str)
     for relative_path, content in files.items():
         path = root / relative_path
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(content, encoding="utf-8")
+        if not path.exists():
+            path.write_text(content, encoding="utf-8")
 
 
 def test_release_publish_dry_run_plans_without_side_effects(tmp_path: Path) -> None:
@@ -138,6 +139,7 @@ def test_release_publish_execute_capability_runs_ordered_live_plan_with_fake_run
         "- Publish creates a verified GitHub release.\n",
         encoding="utf-8",
     )
+    _write_release_anchors(tmp_path, "9.9.9")
     seen: list[tuple[str, ...]] = []
     release_created = False
 
@@ -146,6 +148,10 @@ def test_release_publish_execute_capability_runs_ordered_live_plan_with_fake_run
         seen.append(tuple(args))
         if "release-prep" in args:
             return 0, json.dumps({"changed_paths": []}) + "\n"
+        if args == ("git", "status", "--porcelain"):
+            return 0, ""
+        if args == ("git", "rev-parse", "HEAD"):
+            return 0, "head\n"
         if args == ("git", "rev-parse", "--verify", "refs/tags/v9.9.9"):
             return 1, "missing local tag\n"
         if args == ("git", "ls-remote", "--exit-code", "--tags", "origin", "v9.9.9"):
@@ -183,14 +189,19 @@ def test_release_publish_execute_is_idempotent_when_tag_and_release_exist(tmp_pa
     capability = tmp_path / ".agentic" / "release" / "ENABLE_LIVE_PUBLISH"
     capability.parent.mkdir(parents=True)
     capability.write_text("test-only\n", encoding="utf-8")
+    _write_release_anchors(tmp_path, "9.9.9")
     seen: list[tuple[str, ...]] = []
 
     def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
         seen.append(tuple(args))
         if "release-prep" in args:
             return 0, json.dumps({"changed_paths": []}) + "\n"
+        if args == ("git", "status", "--porcelain"):
+            return 0, ""
+        if args == ("git", "rev-parse", "HEAD"):
+            return 0, "head\n"
         if args == ("git", "rev-parse", "--verify", "refs/tags/v9.9.9"):
-            return 0, "local tag exists\n"
+            return 0, "head\n"
         if args == ("git", "ls-remote", "--exit-code", "--tags", "origin", "v9.9.9"):
             return 0, "remote tag exists\n"
         if args == ("gh", "release", "view", "v9.9.9"):
@@ -278,3 +289,63 @@ def test_release_publish_blocks_if_release_prep_dry_run_would_change_metadata(tm
         check.name == "release-prep dry-run" and "CITATION.cff" in check.detail
         for check in plan.blockers
     )
+
+
+def _write_release_anchors(root: Path, version: str) -> None:
+    files = {
+        "pyproject.toml": f'version = "{version}"\n',
+        "src/agentic_project_kit/__init__.py": f'__version__ = "{version}"\n',
+        "CHANGELOG.md": f"## v{version} - 2026-09-15\n\n- Release.\n",
+        "README.md": f"Version `{version}`\n",
+        "CITATION.cff": f"version: {version}\n",
+        "docs/STATUS.md": f"Current version: {version}\n",
+        "docs/handoff/CURRENT_HANDOFF.md": f"Current version: {version}\n",
+    }
+    for relative_path, content in files.items():
+        path = root / relative_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if not path.exists():
+            path.write_text(content, encoding="utf-8")
+
+
+def test_release_publish_execute_blocks_dirty_worktree(tmp_path: Path) -> None:
+    capability = tmp_path / ".agentic" / "release" / "ENABLE_LIVE_PUBLISH"
+    capability.parent.mkdir(parents=True)
+    capability.write_text("test-only\n", encoding="utf-8")
+    _write_release_anchors(tmp_path, "9.9.9")
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        if "release-prep" in args:
+            return 0, json.dumps({"changed_paths": []}) + "\n"
+        if args == ("git", "status", "--porcelain"):
+            return 0, " M README.md\n"
+        return 0, "HEAD\n"
+
+    plan = evaluate_release_publish_plan(
+        tmp_path, version="9.9.9", execute=True, allow_execute=True, runner=runner
+    )
+
+    assert plan.ok is False
+    assert any(check.name == "release commit integrity" for check in plan.blockers)
+    assert not any(args[:2] == ("git", "tag") for args in ())
+
+
+def test_release_publish_execute_requires_matching_release_anchors(tmp_path: Path) -> None:
+    capability = tmp_path / ".agentic" / "release" / "ENABLE_LIVE_PUBLISH"
+    capability.parent.mkdir(parents=True)
+    capability.write_text("test-only\n", encoding="utf-8")
+    _write_release_anchors(tmp_path, "9.9.8")
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        if "release-prep" in args:
+            return 0, json.dumps({"changed_paths": []}) + "\n"
+        if args == ("git", "status", "--porcelain"):
+            return 0, ""
+        return 0, "HEAD\n"
+
+    plan = evaluate_release_publish_plan(
+        tmp_path, version="9.9.9", execute=True, allow_execute=True, runner=runner
+    )
+
+    assert plan.ok is False
+    assert any("target version" in check.detail for check in plan.blockers)
