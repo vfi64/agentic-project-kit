@@ -411,6 +411,21 @@ def test_work_finish_blocks_when_lifecycle_completion_proof_is_missing(monkeypat
     )
 
 
+def test_lifecycle_completion_proof_accepts_explicit_outer_followup_recovery():
+    step = {
+        "ok": True,
+        "returncode": 0,
+        "stdout": (
+            '{"result_status":"PASS","pr_number":2317,'
+            '"post_merge_complete_verified_by_inner_pr_complete":false,'
+            '"outer_followup_false_red_cleared":true}'
+        ),
+        "stderr": "",
+    }
+
+    assert human_workflows._validate_pr_create_complete_result(step)["ok"] is True  # noqa: SLF001
+
+
 def test_work_finish_blocks_before_commit_when_rules_acknowledge_fails(monkeypatch):
     calls: list[list[str]] = []
 
