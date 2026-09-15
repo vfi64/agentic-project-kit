@@ -169,6 +169,48 @@ def _extract_pr_number(text: str) -> int | None:
     return None
 
 
+def _validate_pr_create_complete_result(step: dict[str, object]) -> dict[str, object]:
+    """Require the composite PR lifecycle to prove its terminal post-merge state."""
+    if not step.get("ok"):
+        return step
+    raw = str(step.get("stdout") or "").strip()
+    try:
+        payload = json.loads(raw)
+    except json.JSONDecodeError:
+        step["ok"] = False
+        step["returncode"] = 2
+        step["stderr"] = (
+            str(step.get("stderr") or "")
+            + "\npr-create-complete did not return its required JSON completion proof."
+        ).strip()
+        return step
+    if not isinstance(payload, dict):
+        step["ok"] = False
+        step["returncode"] = 2
+        step["stderr"] = "pr-create-complete completion proof must be a JSON object."
+        return step
+    missing = [
+        key
+        for key in ("pr_number", "result_status", "post_merge_complete_verified_by_inner_pr_complete")
+        if key not in payload
+    ]
+    if missing or payload.get("result_status") != "PASS" or not isinstance(payload.get("pr_number"), int):
+        step["ok"] = False
+        step["returncode"] = 2
+        step["stderr"] = (
+            "pr-create-complete completion proof is incomplete: "
+            + ", ".join(missing or ["result_status=PASS and integer pr_number required"])
+        )
+        return step
+    if payload.get("post_merge_complete_verified_by_inner_pr_complete") is not True:
+        step["ok"] = False
+        step["returncode"] = 2
+        step["stderr"] = (
+            "pr-create-complete returned PASS without verified post-merge handoff completion."
+        )
+    return step
+
+
 def _current_head_sha_step() -> dict[str, object]:
     return _run_step("resolve-head-sha", ["git", "rev-parse", "HEAD"])
 
@@ -589,14 +631,39 @@ def work_finish_command(
             steps.append(_run_step("push-current", _agentic("transfer", "push-current", "--branch", branch)))
         if all(step["ok"] for step in steps):
             if merge:
-                steps.extend(
-                    [
-                        _run_step("pr-create-complete", _agentic("transfer", "pr-create-complete", "--title", title, "--body", f"Human workflow finish: {title}", "--base", "main", "--head", branch, "--merge-method", merge_method, "--post-merge-complete", "--skip-llm-context-gate", "--timeout-seconds", "300", "--interval-seconds", "10", "--json")),
-                        _run_step("sync-main", _agentic("transfer", "sync-main")),
-                        _run_step("post-merge-check", _agentic("transfer", "post-merge-check")),
-                        _run_step("repo-status", _agentic("transfer", "repo-status")),
-                    ]
+                lifecycle_step = _run_step(
+                    "pr-create-complete",
+                    _agentic(
+                        "transfer",
+                        "pr-create-complete",
+                        "--title",
+                        title,
+                        "--body",
+                        f"Human workflow finish: {title}",
+                        "--base",
+                        "main",
+                        "--head",
+                        branch,
+                        "--merge-method",
+                        merge_method,
+                        "--post-merge-complete",
+                        "--skip-llm-context-gate",
+                        "--timeout-seconds",
+                        "300",
+                        "--interval-seconds",
+                        "10",
+                        "--json",
+                    ),
                 )
+                steps.append(_validate_pr_create_complete_result(lifecycle_step))
+                if all(step["ok"] for step in steps):
+                    steps.extend(
+                        [
+                            _run_step("sync-main", _agentic("transfer", "sync-main")),
+                            _run_step("post-merge-check", _agentic("transfer", "post-merge-check")),
+                            _run_step("repo-status", _agentic("transfer", "repo-status")),
+                        ]
+                    )
             else:
                 pr_create_step = _run_step(
                     "pr-create",

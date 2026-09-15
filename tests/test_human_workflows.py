@@ -328,6 +328,14 @@ def test_work_finish_default_uses_existing_pr_lifecycle_wrapper(monkeypatch):
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
         calls.append(command)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"]:
+            return _completed(
+                command,
+                stdout=(
+                    '{"result_status":"PASS","pr_number":2317,'
+                    '"post_merge_complete_verified_by_inner_pr_complete":true}\n'
+                ),
+            )
         return _completed(command)
 
     monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
@@ -374,6 +382,32 @@ def test_work_finish_default_uses_existing_pr_lifecycle_wrapper(monkeypatch):
         and "docs/handoff/START_NEW_CHAT_PROMPT.md" in call
         and "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md" in call
         for call in calls
+    )
+
+
+def test_work_finish_blocks_when_lifecycle_completion_proof_is_missing(monkeypatch):
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"]:
+            return _completed(command)
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "work", "finish", "--branch", "codex/demo", "--title", "Demo",
+            "--message", "Demo", "--path", "src/demo.py", "--execute", "--json",
+        ],
+    )
+
+    assert result.exit_code == 2
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "BLOCKED"
+    assert "pr-create-complete" in payload["blockers"]
+    assert "completion proof is incomplete" in next(
+        step["stderr"] for step in payload["steps"] if step["name"] == "pr-create-complete"
     )
 
 
