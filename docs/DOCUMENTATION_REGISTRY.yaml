@@ -14,6 +14,15 @@ status:
     duplicate paths, and existence of registered documents. It does not prove
     semantic documentation quality.
 
+canonical_facts:
+  - id: project.package_name
+    value: agentic-project-kit
+    managed_paths:
+      - README.md
+      - docs/ONBOARDING.md
+    review_paths:
+      - docs/STATUS.md
+
 schema:
   required_class_rule_fields:
     - ownership
@@ -34,6 +43,11 @@ schema:
     - deferred_until
     - projection_contract
     - partition_contract
+  canonical_fact_fields:
+    - id
+    - value
+    - managed_paths
+    - review_paths
 
 class_rules:
   governance/system:

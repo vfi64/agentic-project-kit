@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "kind": "greenfield_remaining_closeout",
+  "status": "implemented_with_external_boundaries",
+  "date": "2026-09-15",
+  "baseline": {
+    "origin_main": "c2ce60b1",
+    "version": "1.0.12",
+    "branch": "codex/gf-009-017-closeout",
+    "source": "current_checkout"
+  },
+  "finding_status": [
+    {
+      "id": "KIT-GF-009",
+      "status": "implemented_current_checkout_external_execution_retest_required",
+      "evidence": [
+        "src/agentic_project_kit/cli_commands/human_workflows.py",
+        "tests/test_human_workflows.py",
+        "agentic-kit work finish --help"
+      ],
+      "boundary": "The deterministic wrapper owns commit, handoff refresh, push, PR, merge, and post-merge closeout. A real external first-cycle execution with remote PR checks remains required for full Greenfield closure."
+    },
+    {
+      "id": "KIT-GF-011",
+      "status": "implemented_current_checkout_retest_required",
+      "evidence": [
+        "src/agentic_project_kit/volatile_paths.py",
+        "src/agentic_project_kit/transfer_post_merge_lifecycle.py",
+        "tests/test_volatile_paths.py",
+        "tests/test_transfer_post_merge_complete_command.py",
+        "tests/test_transfer_post_merge_settle_command.py"
+      ],
+      "boundary": "The concrete successor-projection stale loop is covered by the known-volatile recovery path. Broader mixed refresh-loop closure still requires a released-package external retest."
+    },
+    {
+      "id": "KIT-GF-014",
+      "status": "closed_current_checkout_external_fixture",
+      "evidence": [
+        "src/agentic_project_kit/handoff_freshness.py",
+        "src/agentic_project_kit/transfer_continue.py",
+        "tests/test_transfer_continue.py"
+      ],
+      "result": "Stale or ambiguous continuation authority blocks before mutation; a missing handoff state remains allowed for external workspaces."
+    },
+    {
+      "id": "KIT-GF-015",
+      "status": "closed_current_checkout",
+      "evidence": [
+        "src/agentic_project_kit/documentation_facts.py",
+        "src/agentic_project_kit/documentation_registry.py",
+        "docs/DOCUMENTATION_REGISTRY.yaml",
+        "tests/test_documentation_facts.py"
+      ],
+      "result": "Canonical facts are defined once in the documentation registry; managed projections fail closed on drift and project-owned review paths remain advisory."
+    },
+    {
+      "id": "KIT-GF-016",
+      "status": "closed_current_checkout_external_smoke",
+      "evidence": [
+        "src/agentic_project_kit/planner_executor.py",
+        "docs/architecture/PLANNER_KIT_EXECUTOR_CONTRACT.md",
+        "tests/test_planner_executor.py",
+        "tmp/gf016-smoke.json",
+        "onboarding measure --json"
+      ],
+      "result": "External intent planning resolved through cockpit authority with PASS and dry-run execution returned PENDING without mutation; onboarding measurement returned PASS with zero findings."
+    },
+    {
+      "id": "KIT-GF-017",
+      "status": "open_pypi_release_retest_required",
+      "evidence": [
+        "docs/reports/POST_V1_0_12_GREENFIELD_PROVENANCE_RETEST_20260915.md"
+      ],
+      "result": "The isolated PyPI probe could not install agentic-project-kit==1.0.12 because that version is not available on the current PyPI index. Docker was also unavailable because the local Docker socket was not running.",
+      "next_action": "Publish an approved release containing the context-carrier fixes, then rerun the external released-package retest in Docker or another isolated environment."
+    }
+  ],
+  "validation": {
+    "focused_tests": "58 passed",
+    "check_docs": "PASS",
+    "direction_validate": "PASS, 0 findings",
+    "doctor": "PASS with report-only document lifecycle findings",
+    "pypi_1_0_12": "NOT_AVAILABLE",
+    "docker": "UNAVAILABLE"
+  },
+  "not_claimed": [
+    "No PyPI release was created by this slice.",
+    "No Docker validation PASS is claimed.",
+    "GF-009, GF-011, and GF-017 are not claimed as fully externally closed."
+  ]
+}

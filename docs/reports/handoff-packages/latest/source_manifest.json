@@ -54,13 +54,13 @@
       "path": "SECURITY.md"
     },
     {
-      "bytes": 61384,
+      "bytes": 61876,
       "exists": true,
       "path": "docs/DOCUMENTATION_COVERAGE.yaml",
       "yaml_valid": true
     },
     {
-      "bytes": 91577,
+      "bytes": 91845,
       "exists": true,
       "path": "docs/DOCUMENTATION_REGISTRY.yaml",
       "registry_document_count": 316,
@@ -82,7 +82,7 @@
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
     {
-      "bytes": 7228,
+      "bytes": 7225,
       "exists": true,
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
@@ -117,7 +117,7 @@
       "path": "docs/governance/CHAT_BOOTSTRAP_AND_DRIFT_CONTRACT.md"
     },
     {
-      "bytes": 217176,
+      "bytes": 218153,
       "exists": true,
       "path": "docs/planning/PROJECT_DIRECTION.yaml",
       "yaml_valid": true
