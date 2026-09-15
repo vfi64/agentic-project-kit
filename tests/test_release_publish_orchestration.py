@@ -314,7 +314,10 @@ def test_release_publish_execute_blocks_dirty_worktree(tmp_path: Path) -> None:
     capability.write_text("test-only\n", encoding="utf-8")
     _write_release_anchors(tmp_path, "9.9.9")
 
+    seen: list[tuple[str, ...]] = []
+
     def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        seen.append(tuple(args))
         if "release-prep" in args:
             return 0, json.dumps({"changed_paths": []}) + "\n"
         if args == ("git", "status", "--porcelain"):
@@ -327,7 +330,8 @@ def test_release_publish_execute_blocks_dirty_worktree(tmp_path: Path) -> None:
 
     assert plan.ok is False
     assert any(check.name == "release commit integrity" for check in plan.blockers)
-    assert not any(args[:2] == ("git", "tag") for args in ())
+    assert plan.execute_enabled is False
+    assert not any(args[:2] == ("git", "tag") for args in seen)
 
 
 def test_release_publish_execute_requires_matching_release_anchors(tmp_path: Path) -> None:
