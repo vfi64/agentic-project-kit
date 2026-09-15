@@ -202,11 +202,14 @@ def _validate_pr_create_complete_result(step: dict[str, object]) -> dict[str, ob
             + ", ".join(missing or ["result_status=PASS and integer pr_number required"])
         )
         return step
-    if payload.get("post_merge_complete_verified_by_inner_pr_complete") is not True:
+    handoff_verified = payload.get("post_merge_complete_verified_by_inner_pr_complete") is True
+    tolerated_outer_followup = payload.get("outer_followup_false_red_cleared") is True
+    if not handoff_verified and not tolerated_outer_followup:
         step["ok"] = False
         step["returncode"] = 2
         step["stderr"] = (
-            "pr-create-complete returned PASS without verified post-merge handoff completion."
+            "pr-create-complete returned PASS without verified post-merge handoff completion "
+            "or an explicitly cleared non-fatal outer follow-up."
         )
     return step
 
