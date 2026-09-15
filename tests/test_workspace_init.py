@@ -119,8 +119,9 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
         DPA_WORKSPACE_INIT_MANIFEST_PATH,
         ".agentic/ci/agentic-gate.yaml",
         ".agentic/ci/pre-commit-snippet.yaml",
-        ".agentic/INITIAL_LLM_PROMPT.md",
-        ".gitignore",
+            ".agentic/INITIAL_LLM_PROMPT.md",
+            ".agentic/transfer/inbox/.gitkeep",
+            ".gitignore",
     }
     actual_files = {
         path.relative_to(tmp_path).as_posix()
@@ -149,6 +150,9 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
     prompt = (tmp_path / ".agentic/INITIAL_LLM_PROMPT.md").read_text(encoding="utf-8")
     assert "repository `demo`" in prompt
     assert ".agentic/transfer/inbox/" in prompt
+    assert (tmp_path / ".agentic/transfer/inbox/.gitkeep").read_text(encoding="utf-8").startswith(
+        "# Transfer inbox carrier"
+    )
     assert "COMMAND_MANIFEST_ACK" in prompt
     assert "agentic-kit command-for" in prompt
     dpa_manifest = json.loads(

@@ -358,6 +358,7 @@ def _planned_files(root: Path, project: ProjectSuggestion, manifest_yaml: str) -
         CI_TEMPLATE_PATH: _ci_template(),
         PRE_COMMIT_TEMPLATE_PATH: _pre_commit_template(),
         ".agentic/INITIAL_LLM_PROMPT.md": _initial_llm_prompt(project),
+        ".agentic/transfer/inbox/.gitkeep": "# Transfer inbox carrier; executable orders are written here.\n",
     }
     if not (root / "docs" / "archive" / "README.md").exists():
         files["docs/archive/README.md"] = _archive_readme_seed()
