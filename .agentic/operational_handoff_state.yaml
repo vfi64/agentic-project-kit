@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: cdb63a55d231100ffce74855b3a17e1647eee0c6
-  short: cdb63a55
-  subject: Require verifiable slice closeout proof (#2317)
+  full: d343323f699fbef52f20e80b64acf15312ddaf80
+  short: d343323f
+  subject: Accept verified closeout recovery proof (#2319)
 last_substantive_work_state:
-  full: cdb63a55d231100ffce74855b3a17e1647eee0c6
-  short: cdb63a55
-  subject: Require verifiable slice closeout proof (#2317)
+  full: d343323f699fbef52f20e80b64acf15312ddaf80
+  short: d343323f
+  subject: Accept verified closeout recovery proof (#2319)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

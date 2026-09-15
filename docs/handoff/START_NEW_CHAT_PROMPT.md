@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 96437c09498a267e1f0662c23ceded8482618960aca66ca095fa6ddd392b617c
 - docs/reference/agentic-kit-commands.json: a331305f16423e42a2a39f748e51fc1b9123c6f38d223de44deb6d2ccb449527
-## Operational documentation refresh state after PR #2317
+## Operational documentation refresh state after PR #2319
 
-Current administrative handoff refresh state is `cdb63a55` (`Require verifiable slice closeout proof (#2317)`). Continue next only after this post-PR2317 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `d343323f` (`Accept verified closeout recovery proof (#2319)`). Continue next only after this post-PR2319 refresh is committed and merged; the next substantive slice must be created from fresh main.
