@@ -173,11 +173,8 @@ Remote branch commits are allowed; publication, release, and merge decisions rem
 
 ### Standing Maintainer Authorization for Bounded PR Closeout
 
-An explicit autonomous-slice grant covers that slice's commit, push, PR,
-green-CI merge, and associated post-merge handoff PR. Use Kit workflows,
-verify the expected SHA, and stop on red/missing CI, conflicts, or ambiguity.
-Direct `main` writes, releases, publication, version/access changes, unrelated
-work, and platform protections remain separately governed.
+An explicit autonomous-slice grant covers commit, push, PR, green-CI merge, and
+the associated handoff PR; use Kit workflows and preserve platform protections.
 
 
 ## Clean Handoff Command
