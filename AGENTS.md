@@ -171,6 +171,20 @@ Not allowed without explicit maintainer approval:
 
 Remote branch commits are allowed; publication, release, and merge decisions remain maintainer-owned.
 
+### Standing Maintainer Authorization for Bounded PR Closeout
+
+When the current maintainer task explicitly grants autonomous execution for a
+bounded slice, that grant covers the complete PR lifecycle for that slice:
+commit, push, PR creation, green-CI merge, and the associated post-merge
+handoff PR. The assistant must still use the repository Kit workflows, verify
+the expected head SHA, refuse red or missing CI, preserve protected-branch
+rules, and stop on conflicts or ambiguous state.
+
+This standing rule does not authorize direct writes to `main`, release tags,
+package publication, version changes, visibility/access changes, or unrelated
+work. Those remain separately maintainer-owned decisions. It also cannot
+override platform-level safety checks or GitHub branch/environment protection.
+
 
 ## Clean Handoff Command
 
