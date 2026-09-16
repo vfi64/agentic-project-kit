@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 719b818cbfe4c9aaf8983db0aab287e369e4b532
-  short: 719b818c
-  subject: Prepare release v1.0.13 (#2329)
+  full: 1ff0b3349e19607817941d7fb5763a30c2a0e1a2
+  short: 1ff0b334
+  subject: Authorize live publication for v1.0.13 (#2331)
 last_substantive_work_state:
-  full: 719b818cbfe4c9aaf8983db0aab287e369e4b532
-  short: 719b818c
-  subject: Prepare release v1.0.13 (#2329)
+  full: 1ff0b3349e19607817941d7fb5763a30c2a0e1a2
+  short: 1ff0b334
+  subject: Authorize live publication for v1.0.13 (#2331)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
