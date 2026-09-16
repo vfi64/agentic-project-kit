@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `39fbb360f90a2e7d2b6e3003bacb0a0cba960ab9` (`39fbb360`), after `Close remaining Greenfield implementation findings (#2325)`.
-Last substantive work state is `39fbb360f90a2e7d2b6e3003bacb0a0cba960ab9` (`39fbb360`), after `Close remaining Greenfield implementation findings (#2325)`.
+Current verified main/admin HEAD is `34a28ce57b1f0e0fd72d72fed2d007a85ab15a49` (`34a28ce5`), after `Fix generated-project context gate and release tag validation (#2327)`.
+Last substantive work state is `34a28ce57b1f0e0fd72d72fed2d007a85ab15a49` (`34a28ce5`), after `Fix generated-project context gate and release tag validation (#2327)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
