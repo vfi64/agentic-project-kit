@@ -113,6 +113,22 @@ def test_require_fresh_llm_context_passes_with_generated_reports(tmp_path, monke
     assert data["valid_contexts"]
 
 
+def test_require_fresh_llm_context_accepts_generated_project_without_kit_sources(tmp_path, monkeypatch):
+    (tmp_path / ".agentic").mkdir()
+    (tmp_path / ".agentic/project.yaml").write_text(
+        "schema_version: 1\nproject:\n  name: generated-demo\n", encoding="utf-8"
+    )
+    _write_fresh_context_reports(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    result = CliRunner().invoke(app, ["transfer", "require-fresh-llm-context", "--json"])
+
+    assert result.exit_code == 0, result.output
+    data = json.loads(result.stdout)
+    assert data["result_status"] == "PASS"
+    assert not any("source_hashes_incomplete" in blocker for blocker in data["blockers"])
+
+
 def test_transfer_continue_blocks_without_fresh_llm_context(tmp_path, monkeypatch):
     _copy_context_sources(tmp_path)
     monkeypatch.chdir(tmp_path)

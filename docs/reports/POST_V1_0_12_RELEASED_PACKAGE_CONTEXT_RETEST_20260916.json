@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "released_package_context_retest",
+  "status": "implementation_blocker_confirmed",
+  "date": "2026-09-16",
+  "package": {
+    "name": "agentic-project-kit",
+    "version": "1.0.12",
+    "source": "PyPI",
+    "container": "python:3.13-slim",
+    "docker_engine": "29.7.2",
+    "repository_mounted": false
+  },
+  "results": {
+    "install": "PASS",
+    "version": "PASS",
+    "init": "PASS",
+    "check": "PASS",
+    "doctor": "PASS",
+    "initial_context_gate": "BLOCKED_EXPECTED_MISSING_CARRIERS",
+    "refresh_llm_context_carriers": "PASS",
+    "post_refresh_context_gate": "BLOCKED_SOURCE_HASHES_INCOMPLETE"
+  },
+  "finding_status": [
+    {
+      "id": "KIT-GF-017",
+      "status": "open_repair_and_released_package_retest_required",
+      "reason": "Generated projects were treated as self-hosting for Kit-internal source hash completeness."
+    },
+    {
+      "id": "KIT-GF-009",
+      "status": "open_external_first_cycle_evidence_required"
+    },
+    {
+      "id": "KIT-GF-011",
+      "status": "open_external_released_package_evidence_required"
+    }
+  ],
+  "repair": {
+    "generated_workspace_mode": "generated_project",
+    "external_operating_workspace_predicate": true,
+    "remote_tag_target_must_match_head": true
+  },
+  "boundaries": [
+    "This is historical evidence for published v1.0.12, not a claim about v1.0.13.",
+    "No PyPI release was changed by this report.",
+    "GF-017 closes only after the published v1.0.13 retest passes."
+  ]
+}

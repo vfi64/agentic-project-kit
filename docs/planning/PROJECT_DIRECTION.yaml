@@ -3071,6 +3071,23 @@ plans:
         and KIT-GF-011 still require their historical external/released-package
         retests. KIT-GF-017 remains open until a published package is available
         and the context-carrier retest passes.
+    - id: B1-KIT-026
+      status: implemented_pending_release_retest
+      goal: Treat generated projects as external operating workspaces for
+        installed-package LLM context validation, and fail closed when an
+        existing remote release tag does not point to the current release
+        commit.
+      evidence:
+      - docs/reports/POST_V1_0_12_RELEASED_PACKAGE_CONTEXT_RETEST_20260916.md
+      - docs/reports/POST_V1_0_12_RELEASED_PACKAGE_CONTEXT_RETEST_20260916.json
+      tests:
+      - tests/test_llm_execution_context.py
+      - tests/test_transfer_llm_context_gate.py
+      - tests/test_release_publish_orchestration.py
+      boundary: The 1.0.12 released-package retest records the pre-fix blocker.
+        KIT-GF-017 is promoted only after the published 1.0.13 package passes
+        the refreshed generated-project context-carrier flow. KIT-GF-009 and
+        KIT-GF-011 still require their separate external first-cycle evidence.
     - id: B1-TARGET-001
       status: recorded_target_friction
       goal: Decide in the target repository whether App2 tests that rewrite
