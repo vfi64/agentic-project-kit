@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "kind": "greenfield_gf009_private_released_package_retest",
+  "status": "PASS",
+  "date": "2026-09-16",
+  "package": "agentic-project-kit==1.0.13",
+  "package_source": "PyPI",
+  "target_repository": "vfi64/kit-test-01",
+  "target_visibility": "private",
+  "finding": "KIT-GF-009",
+  "boundary": "External first-cycle work/PR/CI/merge/handoff closeout",
+  "evidence": {
+    "workspace_init": "PASS",
+    "external_gates": "PASS",
+    "first_cycle_work_start": "PASS",
+    "work_pr": 1,
+    "work_pr_ci": "PASS",
+    "work_pr_merge": "PASS",
+    "handoff_pr": 2,
+    "handoff_pr_ci": "PASS",
+    "handoff_pr_merge": "PASS",
+    "final_post_merge_check": "PASS_NOOP"
+  },
+  "conclusion": "KIT-GF-009 is externally closed for the tested boundary.",
+  "not_claimed": [
+    "General conformance of arbitrary external repositories",
+    "KIT-GF-011 successor refresh-loop closure"
+  ]
+}
