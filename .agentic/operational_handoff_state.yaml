@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7aaf5885f073fc6fd7f2c587ab13111a317d005c
-  short: 7aaf5885
-  subject: Remove temporary live publication marker (#2333)
+  full: 8da2d4f69b45094bcdc447675ff758d2736304cd
+  short: 8da2d4f6
+  subject: Record GF-009 private released-package retest (#2335)
 last_substantive_work_state:
-  full: 7aaf5885f073fc6fd7f2c587ab13111a317d005c
-  short: 7aaf5885
-  subject: Remove temporary live publication marker (#2333)
+  full: 8da2d4f69b45094bcdc447675ff758d2736304cd
+  short: 8da2d4f6
+  subject: Record GF-009 private released-package retest (#2335)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

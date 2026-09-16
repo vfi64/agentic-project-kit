@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 761547960558a98308084b53427e90779943fe494073e2b3858c230ae59186b9
 - docs/reference/agentic-kit-commands.json: 1d9a8057c9af47fa12fa707164c64b73123f4a49c98044c0242a4764ecb11b3a
-## Operational documentation refresh state after PR #2333
+## Operational documentation refresh state after PR #2335
 
-Current administrative handoff refresh state is `7aaf5885` (`Remove temporary live publication marker (#2333)`). Continue next only after this post-PR2333 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `8da2d4f6` (`Record GF-009 private released-package retest (#2335)`). Continue next only after this post-PR2335 refresh is committed and merged; the next substantive slice must be created from fresh main.
