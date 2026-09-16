@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 761547960558a98308084b53427e90779943fe494073e2b3858c230ae59186b9
 - docs/reference/agentic-kit-commands.json: 1d9a8057c9af47fa12fa707164c64b73123f4a49c98044c0242a4764ecb11b3a
-## Operational documentation refresh state after PR #2327
+## Operational documentation refresh state after PR #2329
 
-Current administrative handoff refresh state is `34a28ce5` (`Fix generated-project context gate and release tag validation (#2327)`). Continue next only after this post-PR2327 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `719b818c` (`Prepare release v1.0.13 (#2329)`). Continue next only after this post-PR2329 refresh is committed and merged; the next substantive slice must be created from fresh main.
