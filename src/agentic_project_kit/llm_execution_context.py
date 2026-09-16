@@ -10,7 +10,11 @@ from typing import Any
 
 from agentic_project_kit.command_manifest import load_manifest
 from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
-from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+from agentic_project_kit.workspace_detection import (
+    has_generated_project_contract,
+    is_external_manifest_workspace,
+    is_external_operating_workspace,
+)
 
 try:
     import yaml
@@ -67,7 +71,9 @@ def build_llm_execution_context(root: str | Path = ".") -> dict[str, Any]:
     """
 
     root_path = Path(root)
-    external_workspace = is_external_manifest_workspace(root_path)
+    external_manifest_workspace = is_external_manifest_workspace(root_path)
+    generated_project = has_generated_project_contract(root_path) and not external_manifest_workspace
+    external_workspace = is_external_operating_workspace(root_path)
     command_reference = _load_command_reference(root_path)
     transfer_rules = _load_yaml_with_package_fallback(
         root_path / TRANSFER_SAFETY_RULES,
@@ -84,7 +90,13 @@ def build_llm_execution_context(root: str | Path = ".") -> dict[str, Any]:
     return {
         "schema_version": 1,
         "kind": "llm_execution_context",
-        "workspace_mode": "external_manifest_workspace" if external_workspace else "self_hosting",
+        "workspace_mode": (
+            "external_manifest_workspace"
+            if external_manifest_workspace
+            else "generated_project"
+            if generated_project
+            else "self_hosting"
+        ),
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "generated_from_current_repo": True,
         "projection_only_not_source_of_truth": True,

@@ -14,6 +14,7 @@ from agentic_project_kit.workspace import load_workspace
 from agentic_project_kit.workspace_detection import (
     is_agentic_project_kit_development_checkout,
     is_external_manifest_workspace,
+    is_external_operating_workspace,
 )
 
 
@@ -36,6 +37,7 @@ def _evaluate_llm_context_freshness(
 
     workspace = load_workspace(root, suppress_legacy_profile_warning=True)
     external_manifest_workspace = is_external_manifest_workspace(root)
+    external_operating_workspace = is_external_operating_workspace(root)
     paths = {
         "outbox": workspace.transfer_outbox() / "last_result.txt",
         "latest_handoff_report": workspace.transfer_handoff_report_file(
@@ -149,7 +151,7 @@ def _evaluate_llm_context_freshness(
         if forbidden_hits:
             local_blockers.append("forbidden_placeholder_present")
         if not status["source_hashes_complete"]:
-            if external_manifest_workspace and status["source_hashes_match_current_repo"]:
+            if external_operating_workspace and status["source_hashes_match_current_repo"]:
                 status.setdefault("warnings", []).append(
                     "external_workspace_kit_internal_source_hashes_incomplete"
                 )
@@ -159,7 +161,7 @@ def _evaluate_llm_context_freshness(
         if not status["source_hashes_match_current_repo"]:
             local_blockers.append("source_hashes_mismatch")
         if not status["refresh_required_for_running_chats"]:
-            if external_manifest_workspace:
+            if external_operating_workspace:
                 status.setdefault("warnings", []).append(
                     "external_workspace_running_chat_refresh_contract_not_adopted"
                 )
@@ -170,7 +172,7 @@ def _evaluate_llm_context_freshness(
                 local_blockers.append("running_chat_refresh_contract_missing")
         age_warning_only = (
             age_only_stale
-            and (status["source_hashes_complete"] or external_manifest_workspace)
+            and (status["source_hashes_complete"] or external_operating_workspace)
             and status["source_hashes_match_current_repo"]
         )
         status["age_warning_only"] = age_warning_only

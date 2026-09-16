@@ -50,5 +50,21 @@ def is_external_manifest_workspace(project_root: Path) -> bool:
     )
 
 
+def is_external_operating_workspace(project_root: Path) -> bool:
+    """Return whether Kit-internal sources are optional for this target.
+
+    Generated projects use ``.agentic/project.yaml`` rather than the adopted
+    operating-layer manifest.  They are still external targets from the Kit's
+    perspective: Kit-internal source files are supplied by the installed
+    package, not copied into the generated repository.
+    """
+
+    root = Path(project_root)
+    return (
+        not is_agentic_project_kit_development_checkout(root)
+        and (is_external_manifest_workspace(root) or has_generated_project_contract(root))
+    )
+
+
 def non_workspace_message(project_root: Path) -> str:
     return f"{Path(project_root).resolve()} is {NON_WORKSPACE_LABEL}. {NON_WORKSPACE_NEXT_STEP}"

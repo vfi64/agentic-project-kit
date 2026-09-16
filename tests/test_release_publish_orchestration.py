@@ -154,7 +154,7 @@ def test_release_publish_execute_capability_runs_ordered_live_plan_with_fake_run
             return 0, "head\n"
         if args == ("git", "rev-parse", "--verify", "refs/tags/v9.9.9"):
             return 1, "missing local tag\n"
-        if args == ("git", "ls-remote", "--exit-code", "--tags", "origin", "v9.9.9"):
+        if args == ("git", "ls-remote", "--exit-code", "--refs", "origin", "refs/tags/v9.9.9"):
             return 1, "missing remote tag\n"
         if args == ("gh", "release", "view", "v9.9.9"):
             return (0, "release exists\n") if release_created else (1, "release not found\n")
@@ -202,8 +202,8 @@ def test_release_publish_execute_is_idempotent_when_tag_and_release_exist(tmp_pa
             return 0, "head\n"
         if args == ("git", "rev-parse", "--verify", "refs/tags/v9.9.9"):
             return 0, "head\n"
-        if args == ("git", "ls-remote", "--exit-code", "--tags", "origin", "v9.9.9"):
-            return 0, "remote tag exists\n"
+        if args == ("git", "ls-remote", "--exit-code", "--refs", "origin", "refs/tags/v9.9.9"):
+            return 0, "head\trefs/tags/v9.9.9\n"
         if args == ("gh", "release", "view", "v9.9.9"):
             return 0, "release exists\n"
         return 0, "PASS\n"
@@ -223,6 +223,43 @@ def test_release_publish_execute_is_idempotent_when_tag_and_release_exist(tmp_pa
     assert not any(tuple(args[:3]) == ("gh", "release", "create") for args in seen)
     assert ("gh", "release", "view", "v9.9.9") in seen
     assert any("post-release-check" in args for args in seen)
+
+
+def test_release_publish_blocks_when_existing_remote_tag_points_elsewhere(tmp_path: Path) -> None:
+    capability = tmp_path / ".agentic" / "release" / "ENABLE_LIVE_PUBLISH"
+    capability.parent.mkdir(parents=True)
+    capability.write_text("test-only\n", encoding="utf-8")
+    _write_release_anchors(tmp_path, "9.9.9")
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        if "release-prep" in args:
+            return 0, json.dumps({"changed_paths": []}) + "\n"
+        if args == ("git", "status", "--porcelain"):
+            return 0, ""
+        if args == ("git", "rev-parse", "HEAD"):
+            return 0, "head\n"
+        if args == ("git", "rev-parse", "--verify", "refs/tags/v9.9.9"):
+            return 1, "missing local tag\n"
+        if args == ("git", "ls-remote", "--exit-code", "--refs", "origin", "refs/tags/v9.9.9"):
+            return 0, "different\trefs/tags/v9.9.9\n"
+        return 0, "PASS\n"
+
+    plan = evaluate_release_publish_plan(
+        tmp_path,
+        version="9.9.9",
+        execute=True,
+        allow_execute=True,
+        runner=runner,
+    )
+
+    assert plan.ok is False
+    assert plan.execute_enabled is False
+    assert any(
+        check.name == "execute remote tag target v9.9.9"
+        and check.status == "FAIL"
+        and "different" in check.detail
+        for check in plan.checks
+    )
 
 
 def test_release_publish_dry_run_skips_release_prep_after_current_verified_closeout(tmp_path: Path) -> None:

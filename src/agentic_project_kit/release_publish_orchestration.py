@@ -326,6 +326,19 @@ def _append_live_release_publish_checks(
 ) -> None:
     tag_ref = f"refs/tags/{tag}"
 
+    head_rc, head_output = runner(("git", "rev-parse", "HEAD"), root)
+    if head_rc != 0:
+        checks.append(
+            ReleasePublishCheck(
+                name=f"execute remote tag target {tag}",
+                status="FAIL",
+                detail="could not resolve current HEAD: " + _last_line(head_output),
+                returncode=head_rc,
+            )
+        )
+        return
+    head = head_output.strip()
+
     tag_exists_rc, _tag_exists_output = runner(("git", "rev-parse", "--verify", tag_ref), root)
     if tag_exists_rc == 0:
         checks.append(
@@ -342,13 +355,29 @@ def _append_live_release_publish_checks(
         if rc != 0:
             return
 
-    remote_exists_rc, _remote_exists_output = runner(("git", "ls-remote", "--exit-code", "--tags", "origin", tag), root)
+    remote_exists_rc, remote_exists_output = runner(
+        ("git", "ls-remote", "--exit-code", "--refs", "origin", tag_ref), root
+    )
     if remote_exists_rc == 0:
+        remote_target = remote_exists_output.split()[0] if remote_exists_output.split() else ""
+        if remote_target != head:
+            checks.append(
+                ReleasePublishCheck(
+                    name=f"execute remote tag target {tag}",
+                    status="FAIL",
+                    detail=(
+                        f"remote tag points to {remote_target or 'unknown'}, "
+                        f"but current HEAD is {head}"
+                    ),
+                    returncode=1,
+                )
+            )
+            return
         checks.append(
             ReleasePublishCheck(
                 name=f"execute git push origin {tag}",
                 status="PASS",
-                detail="remote tag already exists",
+                detail="remote tag already exists at current HEAD",
                 returncode=0,
             )
         )
@@ -523,7 +552,7 @@ def evaluate_release_publish_plan(
         mode="execute" if execute else "dry-run" if dry_run else "unspecified",
         checks=tuple(checks),
         planned_actions=tuple(planned_actions),
-        execute_enabled=live_execute_ready,
+        execute_enabled=live_execute_ready and all(check.status == "PASS" for check in checks),
     )
 
 

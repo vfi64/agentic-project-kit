@@ -162,3 +162,18 @@ post_patch_rules: {}
     assert context["running_chat_refresh_contract"]["refresh_required_for_running_chats"] is True
     assert context["shell_placeholder_policy"]["no_angle_bracket_placeholders_in_executable_blocks"] is True
     assert context["external_workspace_policy"]["kit_internal_files_must_not_be_supplied_by_target_repo_user"] is True
+
+
+def test_llm_execution_context_classifies_generated_project_as_external_operating_workspace(
+    tmp_path: Path,
+) -> None:
+    (tmp_path / ".agentic").mkdir()
+    (tmp_path / ".agentic/project.yaml").write_text(
+        "schema_version: 1\nproject:\n  name: generated-demo\n", encoding="utf-8"
+    )
+
+    context = build_llm_execution_context(tmp_path)
+
+    assert context["workspace_mode"] == "generated_project"
+    assert context["context_quality"]["kit_internal_sources_required_locally"] is False
+    assert context["external_workspace_policy"]["active"] is True
