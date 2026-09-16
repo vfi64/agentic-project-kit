@@ -171,6 +171,11 @@ Not allowed without explicit maintainer approval:
 
 Remote branch commits are allowed; publication, release, and merge decisions remain maintainer-owned.
 
+### Standing Maintainer Authorization for Bounded PR Closeout
+
+An explicit autonomous-slice grant covers commit, push, PR, green-CI merge, and
+the associated handoff PR; use Kit workflows and preserve platform protections.
+
 
 ## Clean Handoff Command
 

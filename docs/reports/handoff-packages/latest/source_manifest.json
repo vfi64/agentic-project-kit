@@ -39,7 +39,7 @@
       "yaml_valid": true
     },
     {
-      "bytes": 20421,
+      "bytes": 21221,
       "exists": true,
       "path": "AGENTS.md"
     },
@@ -82,7 +82,7 @@
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
     {
-      "bytes": 7227,
+      "bytes": 7225,
       "exists": true,
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
