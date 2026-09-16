@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 1ff0b3349e19607817941d7fb5763a30c2a0e1a2
-  short: 1ff0b334
-  subject: Authorize live publication for v1.0.13 (#2331)
+  full: 7aaf5885f073fc6fd7f2c587ab13111a317d005c
+  short: 7aaf5885
+  subject: Remove temporary live publication marker (#2333)
 last_substantive_work_state:
-  full: 1ff0b3349e19607817941d7fb5763a30c2a0e1a2
-  short: 1ff0b334
-  subject: Authorize live publication for v1.0.13 (#2331)
+  full: 7aaf5885f073fc6fd7f2c587ab13111a317d005c
+  short: 7aaf5885
+  subject: Remove temporary live publication marker (#2333)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
