@@ -1,3 +1,14 @@
+## v1.0.13 - 2026-09-16
+
+- Zenodo DOI verification pending for v1.0.13.
+- Fail closed before release side effects
+- Require verifiable slice closeout proof
+- Accept verified closeout recovery proof
+- Recognize verified outer closeout follow-up
+- Close GF-007 provenance with external fixture evidence
+- Close remaining Greenfield implementation findings
+- Fix generated-project context gate and release tag validation
+
 ## v1.0.12 - 2026-09-15
 
 - Zenodo DOI verification pending for v1.0.12.
