@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 39fbb360f90a2e7d2b6e3003bacb0a0cba960ab9
-  short: 39fbb360
-  subject: Close remaining Greenfield implementation findings (#2325)
+  full: 34a28ce57b1f0e0fd72d72fed2d007a85ab15a49
+  short: 34a28ce5
+  subject: Fix generated-project context gate and release tag validation (#2327)
 last_substantive_work_state:
-  full: 39fbb360f90a2e7d2b6e3003bacb0a0cba960ab9
-  short: 39fbb360
-  subject: Close remaining Greenfield implementation findings (#2325)
+  full: 34a28ce57b1f0e0fd72d72fed2d007a85ab15a49
+  short: 34a28ce5
+  subject: Fix generated-project context gate and release tag validation (#2327)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
