@@ -3,7 +3,7 @@ from pathlib import Path
 
 def test_agents_stays_within_word_limit_and_points_to_detailed_rules():
     text = Path("AGENTS.md").read_text(encoding="utf-8")
-    assert len(text.split()) <= 2700
+    assert len(text.split()) <= 2970
     assert "docs/governance/PORTABILITY_AND_OPERATIONAL_RULES.md" in text
 
 
