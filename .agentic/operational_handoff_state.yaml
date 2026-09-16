@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 34a28ce57b1f0e0fd72d72fed2d007a85ab15a49
-  short: 34a28ce5
-  subject: Fix generated-project context gate and release tag validation (#2327)
+  full: 719b818cbfe4c9aaf8983db0aab287e369e4b532
+  short: 719b818c
+  subject: Prepare release v1.0.13 (#2329)
 last_substantive_work_state:
-  full: 34a28ce57b1f0e0fd72d72fed2d007a85ab15a49
-  short: 34a28ce5
-  subject: Fix generated-project context gate and release tag validation (#2327)
+  full: 719b818cbfe4c9aaf8983db0aab287e369e4b532
+  short: 719b818c
+  subject: Prepare release v1.0.13 (#2329)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
