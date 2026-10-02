@@ -18,6 +18,7 @@ PACKAGE_JSON_RESOURCE = "agentic-kit-commands.json"
 PACKAGE_JSON_PATH = Path("src/agentic_project_kit/reference") / PACKAGE_JSON_RESOURCE
 SAFETY_VALUES = {"READ_ONLY", "BOUNDED", "DESTRUCTIVE"}
 SURFACE_VALUES = {"orchestrator", "diagnostic", "primitive"}
+REMOTE_EFFECT_VALUES = {"none", "network_read", "fetch", "push", "pull_request", "merge", "release_publish", "delete_remote"}
 
 RAW_REPLACEMENTS: dict[str, tuple[str, ...]] = {
     "agentic-kit transfer push-current": ("git push",),
@@ -56,6 +57,7 @@ LIFECYCLE_RANKS: dict[str, int] = {
     "agentic-kit workspace upgrade": 25,
     "agentic-kit work start": 30,
     "agentic-kit work recover": 35,
+    "agentic-kit work rescue": 36,
     "agentic-kit workflow go": 40,
     "agentic-kit transfer remote-work-start": 45,
     "agentic-kit transfer remote-next": 46,
@@ -322,6 +324,7 @@ def infer_surface(command: dict[str, Any]) -> str:
         "agentic-kit transfer sync-main",
         "agentic-kit work finish",
         "agentic-kit work recover",
+        "agentic-kit work rescue",
         "agentic-kit work start",
         "agentic-kit workflow go",
         "agentic-kit workspace adopt",
@@ -397,6 +400,29 @@ def _dry_run_available(command: dict[str, Any]) -> bool:
     return "--dry-run" in opts or "--execute" in opts
 
 
+def infer_remote_effects(command: dict[str, Any]) -> list[str]:
+    qualified = str(command.get("qualified_name") or "")
+    effects: set[str] = set()
+
+    if any(term in qualified for term in ("fetch", "sync-main", "remote-work-start", "remote-next")):
+        effects.add("fetch")
+    if any(term in qualified for term in ("pr-wait-ci", "pr-existing", "post-merge-check", "ls-remote")):
+        effects.add("network_read")
+    if any(term in qualified for term in ("push-current", "pr-create", "pr-complete", "work finish")):
+        effects.add("push")
+    if any(term in qualified for term in ("pr-create", "admin-refresh-pr", "evidence-pr-complete", "work finish")):
+        effects.add("pull_request")
+    if any(term in qualified for term in ("pr-merge", "pr-complete", "pr-closeout-complete", "post-merge-complete", "work finish")):
+        effects.add("merge")
+    if any(term in qualified for term in ("release-publish", "post-release-doi-closeout", "github-create")):
+        effects.add("release_publish")
+    if "delete-merged-work-branch" in qualified or "remote-branch-cleanup" in qualified:
+        effects.add("delete_remote")
+    if not effects:
+        effects.add("none")
+    return sorted(effects)
+
+
 def _with_manifest_fields(command: dict[str, Any]) -> dict[str, Any]:
     enriched = dict(command)
     qualified_name = str(enriched.get("qualified_name") or "")
@@ -414,6 +440,7 @@ def _with_manifest_fields(command: dict[str, Any]) -> dict[str, Any]:
         if "dry_run_available" in enriched
         else _dry_run_available(enriched)
     )
+    enriched["remote_effects"] = list(enriched.get("remote_effects") or infer_remote_effects(enriched))
     return enriched
 
 
@@ -492,6 +519,8 @@ def render_markdown(data: dict[str, Any]) -> str:
         lines.append(f"- Surface: `{command.get('surface', '')}`")
         lines.append(f"- When to use: {command.get('when_to_use', '')}")
         lines.append(f"- Dry-run available: `{bool(command.get('dry_run_available'))}`")
+        remote_effects = command.get("remote_effects") or []
+        lines.append("- Remote effects: " + ", ".join(f"`{item}`" for item in remote_effects))
         replaces = command.get("replaces_raw") or []
         if replaces:
             lines.append("- Replaces raw: " + ", ".join(f"`{item}`" for item in replaces))
@@ -623,6 +652,16 @@ def evaluate_command_manifest(root: Path = Path(".")) -> CommandManifestAudit:
         if surface not in SURFACE_VALUES:
             findings.append(
                 CommandManifestFinding("BLOCK", "SURFACE_INVALID", f"{qualified}: {surface!r}")
+            )
+        remote_effects = command.get("remote_effects")
+        if (
+            not isinstance(remote_effects, list)
+            or not remote_effects
+            or any(effect not in REMOTE_EFFECT_VALUES for effect in remote_effects)
+            or ("none" in remote_effects and len(remote_effects) != 1)
+        ):
+            findings.append(
+                CommandManifestFinding("BLOCK", "REMOTE_EFFECTS_INVALID", f"{qualified}: {remote_effects!r}")
             )
         replaces_raw = command.get("replaces_raw", [])
         if replaces_raw is None:

@@ -11,6 +11,9 @@
         "list"
       ],
       "qualified_name": "agentic-kit actions list",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -46,6 +49,9 @@
         "show"
       ],
       "qualified_name": "agentic-kit actions show",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -193,6 +199,9 @@
         "artifact-gc"
       ],
       "qualified_name": "agentic-kit artifact-gc",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -240,6 +249,9 @@
         "audit-absolute-path-portability"
       ],
       "qualified_name": "agentic-kit audit-absolute-path-portability",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -287,6 +299,9 @@
         "audit-command-authority"
       ],
       "qualified_name": "agentic-kit audit-command-authority",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -334,6 +349,9 @@
         "audit-command-manifest"
       ],
       "qualified_name": "agentic-kit audit-command-manifest",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -381,6 +399,9 @@
         "audit-doc-currency"
       ],
       "qualified_name": "agentic-kit audit-doc-currency",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -442,6 +463,9 @@
         "audit-doc-orphans"
       ],
       "qualified_name": "agentic-kit audit-doc-orphans",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -475,6 +499,9 @@
         "audit-mutation-lock-coverage"
       ],
       "qualified_name": "agentic-kit audit-mutation-lock-coverage",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -522,6 +549,9 @@
         "audit-ns-legacy-references"
       ],
       "qualified_name": "agentic-kit audit-ns-legacy-references",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -583,6 +613,9 @@
         "audit-patch-failure-discipline"
       ],
       "qualified_name": "agentic-kit audit-patch-failure-discipline",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -644,6 +677,9 @@
         "audit-path-literals"
       ],
       "qualified_name": "agentic-kit audit-path-literals",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -691,6 +727,9 @@
         "audit-planning-docs-consolidation"
       ],
       "qualified_name": "agentic-kit audit-planning-docs-consolidation",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -738,6 +777,9 @@
         "audit-program-redundancy"
       ],
       "qualified_name": "agentic-kit audit-program-redundancy",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -799,6 +841,9 @@
         "audit-status-current-state"
       ],
       "qualified_name": "agentic-kit audit-status-current-state",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -833,6 +878,9 @@
         "check"
       ],
       "qualified_name": "agentic-kit boot check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -868,6 +916,9 @@
         "closeout"
       ],
       "qualified_name": "agentic-kit boot closeout",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -903,6 +954,9 @@
         "prompt"
       ],
       "qualified_name": "agentic-kit boot prompt",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -952,6 +1006,9 @@
         "report"
       ],
       "qualified_name": "agentic-kit boot report",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -1017,6 +1074,9 @@
         "write"
       ],
       "qualified_name": "agentic-kit boot write",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -1052,6 +1112,9 @@
         "refresher"
       ],
       "qualified_name": "agentic-kit chat refresher",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -1087,6 +1150,9 @@
         "session-start"
       ],
       "qualified_name": "agentic-kit chat session-start",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "orchestrator",
@@ -1149,6 +1215,9 @@
         "check"
       ],
       "qualified_name": "agentic-kit check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -1210,6 +1279,9 @@
         "check-docs"
       ],
       "qualified_name": "agentic-kit check-docs",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -1243,6 +1315,9 @@
         "check-todo"
       ],
       "qualified_name": "agentic-kit check-todo",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -1277,6 +1352,9 @@
         "actions"
       ],
       "qualified_name": "agentic-kit cockpit actions",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -1326,6 +1404,9 @@
         "gatekeeper-status"
       ],
       "qualified_name": "agentic-kit cockpit gatekeeper-status",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -1403,6 +1484,9 @@
         "run"
       ],
       "qualified_name": "agentic-kit cockpit run",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -1423,6 +1507,9 @@
         "select"
       ],
       "qualified_name": "agentic-kit cockpit select",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -1458,6 +1545,9 @@
         "status"
       ],
       "qualified_name": "agentic-kit cockpit status",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -1534,6 +1624,9 @@
         "command-for"
       ],
       "qualified_name": "agentic-kit command-for",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -1581,6 +1674,9 @@
         "command-taxonomy-check"
       ],
       "qualified_name": "agentic-kit command-taxonomy-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -1643,6 +1739,9 @@
         "render-md"
       ],
       "qualified_name": "agentic-kit commands render-md",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -1706,6 +1805,9 @@
         "sync-entrypoints"
       ],
       "qualified_name": "agentic-kit commands sync-entrypoints",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -1741,6 +1843,9 @@
         "local-feature-gate"
       ],
       "qualified_name": "agentic-kit dev local-feature-gate",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -1790,6 +1895,9 @@
         "audit-drift"
       ],
       "qualified_name": "agentic-kit direction audit-drift",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -1867,6 +1975,9 @@
         "render"
       ],
       "qualified_name": "agentic-kit direction render",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -1930,6 +2041,9 @@
         "validate"
       ],
       "qualified_name": "agentic-kit direction validate",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -2034,6 +2148,9 @@
         "doc-lifecycle-audit"
       ],
       "qualified_name": "agentic-kit doc-lifecycle-audit",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -2095,6 +2212,9 @@
         "doc-mesh-audit"
       ],
       "qualified_name": "agentic-kit doc-mesh-audit",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -2142,6 +2262,9 @@
         "doc-mesh-repair"
       ],
       "qualified_name": "agentic-kit doc-mesh-repair",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -2204,6 +2327,9 @@
         "check-unregistered"
       ],
       "qualified_name": "agentic-kit doc-registry check-unregistered",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -2267,6 +2393,9 @@
         "reconcile"
       ],
       "qualified_name": "agentic-kit doc-registry reconcile",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -2358,6 +2487,9 @@
         "register"
       ],
       "qualified_name": "agentic-kit doc-registry register",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -2450,6 +2582,9 @@
         "apply"
       ],
       "qualified_name": "agentic-kit docs lifecycle apply",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -2516,6 +2651,9 @@
         "bootstrap"
       ],
       "qualified_name": "agentic-kit docs lifecycle bootstrap",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -2580,6 +2718,9 @@
         "plan"
       ],
       "qualified_name": "agentic-kit docs lifecycle plan",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -2630,6 +2771,9 @@
         "propose-delete"
       ],
       "qualified_name": "agentic-kit docs lifecycle propose-delete",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
       "surface": "primitive",
@@ -2722,6 +2866,9 @@
         "report"
       ],
       "qualified_name": "agentic-kit docs lifecycle report",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -2831,6 +2978,9 @@
         "sweep"
       ],
       "qualified_name": "agentic-kit docs lifecycle sweep",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -2881,6 +3031,9 @@
         "triage"
       ],
       "qualified_name": "agentic-kit docs lifecycle triage",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -2958,6 +3111,9 @@
         "removed-source-audit"
       ],
       "qualified_name": "agentic-kit docs removed-source-audit",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -3006,6 +3162,9 @@
         "docs-audit"
       ],
       "qualified_name": "agentic-kit docs-audit",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -3053,6 +3212,9 @@
         "docs-registry"
       ],
       "qualified_name": "agentic-kit docs-registry",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -3086,6 +3248,9 @@
         "doctor"
       ],
       "qualified_name": "agentic-kit doctor",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -3218,6 +3383,9 @@
         "current-handoff-refresh"
       ],
       "qualified_name": "agentic-kit dpa current-handoff-refresh",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -3337,6 +3505,9 @@
         "dp2-decision-readiness"
       ],
       "qualified_name": "agentic-kit dpa dp2-decision-readiness",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -3456,6 +3627,9 @@
         "dp3-dp4-adjudication-check"
       ],
       "qualified_name": "agentic-kit dpa dp3-dp4-adjudication-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -3589,6 +3763,9 @@
         "dp5-block-new-gate"
       ],
       "qualified_name": "agentic-kit dpa dp5-block-new-gate",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -3708,6 +3885,9 @@
         "dp5-stage-check"
       ],
       "qualified_name": "agentic-kit dpa dp5-stage-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -3827,6 +4007,9 @@
         "dp5-strict-gate"
       ],
       "qualified_name": "agentic-kit dpa dp5-strict-gate",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -3947,6 +4130,9 @@
         "final-closeout-check"
       ],
       "qualified_name": "agentic-kit dpa final-closeout-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -4108,6 +4294,9 @@
         "fixture-evidence"
       ],
       "qualified_name": "agentic-kit dpa fixture-evidence",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -4241,6 +4430,9 @@
         "maintainer-record-check"
       ],
       "qualified_name": "agentic-kit dpa maintainer-record-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -4388,6 +4580,9 @@
         "post-dp2-scope-assessment"
       ],
       "qualified_name": "agentic-kit dpa post-dp2-scope-assessment",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -4493,6 +4688,9 @@
         "probe-002-readiness"
       ],
       "qualified_name": "agentic-kit dpa probe-002-readiness",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -4612,6 +4810,9 @@
         "probe-003-readiness"
       ],
       "qualified_name": "agentic-kit dpa probe-003-readiness",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -4731,6 +4932,9 @@
         "probe-004-readiness"
       ],
       "qualified_name": "agentic-kit dpa probe-004-readiness",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -4808,6 +5012,9 @@
         "readiness"
       ],
       "qualified_name": "agentic-kit dpa readiness",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -4955,6 +5162,9 @@
         "readonly-probe-execution"
       ],
       "qualified_name": "agentic-kit dpa readonly-probe-execution",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -5074,6 +5284,9 @@
         "renderer-readiness"
       ],
       "qualified_name": "agentic-kit dpa renderer-readiness",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -5179,6 +5392,9 @@
         "repo-adoption-assessment"
       ],
       "qualified_name": "agentic-kit dpa repo-adoption-assessment",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -5312,6 +5528,9 @@
         "stable-readiness-check"
       ],
       "qualified_name": "agentic-kit dpa stable-readiness-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -5445,6 +5664,9 @@
         "wrt-ch001-evidence"
       ],
       "qualified_name": "agentic-kit dpa wrt-ch001-evidence",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -5522,6 +5744,9 @@
         "classify-log"
       ],
       "qualified_name": "agentic-kit evidence classify-log",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -5557,6 +5782,9 @@
         "clean"
       ],
       "qualified_name": "agentic-kit evidence clean",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -5606,6 +5834,9 @@
         "clean-check"
       ],
       "qualified_name": "agentic-kit evidence clean-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -5725,6 +5956,9 @@
         "commit-paths"
       ],
       "qualified_name": "agentic-kit evidence commit-paths",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -6082,6 +6316,9 @@
         "finalize-log"
       ],
       "qualified_name": "agentic-kit evidence finalize-log",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -6117,6 +6354,9 @@
         "guard"
       ],
       "qualified_name": "agentic-kit evidence guard",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -6180,6 +6420,9 @@
         "inspect"
       ],
       "qualified_name": "agentic-kit evidence inspect",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -6229,6 +6472,9 @@
         "scope-check"
       ],
       "qualified_name": "agentic-kit evidence scope-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -6292,6 +6538,9 @@
         "plan"
       ],
       "qualified_name": "agentic-kit executor plan",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -6397,6 +6646,9 @@
         "run"
       ],
       "qualified_name": "agentic-kit executor run",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -6460,6 +6712,9 @@
         "github-create"
       ],
       "qualified_name": "agentic-kit github-create",
+      "remote_effects": [
+        "release_publish"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -6494,6 +6749,9 @@
         "check"
       ],
       "qualified_name": "agentic-kit governance check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -6543,6 +6801,9 @@
         "initial-llm-prompt"
       ],
       "qualified_name": "agentic-kit gui initial-llm-prompt",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -6605,6 +6866,9 @@
         "gui-readiness-gate"
       ],
       "qualified_name": "agentic-kit gui-readiness-gate",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -6639,6 +6903,9 @@
         "check"
       ],
       "qualified_name": "agentic-kit handoff check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -6659,6 +6926,9 @@
         "post-merge-refresh-status"
       ],
       "qualified_name": "agentic-kit handoff post-merge-refresh-status",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -6708,6 +6978,9 @@
         "prompt"
       ],
       "qualified_name": "agentic-kit handoff prompt",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -6757,6 +7030,9 @@
         "refresh"
       ],
       "qualified_name": "agentic-kit handoff refresh",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -6792,6 +7068,9 @@
         "show"
       ],
       "qualified_name": "agentic-kit handoff show",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -7019,6 +7298,9 @@
         "init"
       ],
       "qualified_name": "agentic-kit init",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -7125,6 +7407,9 @@
         "lint"
       ],
       "qualified_name": "agentic-kit instruction lint",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -7174,6 +7459,9 @@
         "measure"
       ],
       "qualified_name": "agentic-kit onboarding measure",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -7265,6 +7553,9 @@
         "classify"
       ],
       "qualified_name": "agentic-kit pass-already-done classify",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -7356,6 +7647,9 @@
         "report"
       ],
       "qualified_name": "agentic-kit pass-already-done report",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -7404,6 +7698,9 @@
         "patch-preflight"
       ],
       "qualified_name": "agentic-kit patch-preflight",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -7521,6 +7818,9 @@
         "patch-scope-preflight"
       ],
       "qualified_name": "agentic-kit patch-scope-preflight",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -7540,6 +7840,9 @@
         "list"
       ],
       "qualified_name": "agentic-kit patterns list",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -7575,6 +7878,9 @@
         "show"
       ],
       "qualified_name": "agentic-kit patterns show",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -7623,6 +7929,9 @@
         "post-release-check"
       ],
       "qualified_name": "agentic-kit post-release-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -7699,6 +8008,9 @@
         "post-release-doi-closeout"
       ],
       "qualified_name": "agentic-kit post-release-doi-closeout",
+      "remote_effects": [
+        "release_publish"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -7733,6 +8045,9 @@
         "closeout-check"
       ],
       "qualified_name": "agentic-kit pr closeout-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -7924,6 +8239,9 @@
         "merge-if-green"
       ],
       "qualified_name": "agentic-kit pr merge-if-green",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
       "surface": "primitive",
@@ -8001,6 +8319,9 @@
         "status"
       ],
       "qualified_name": "agentic-kit pr status",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -8092,6 +8413,9 @@
         "wait-ci"
       ],
       "qualified_name": "agentic-kit pr wait-ci",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -8126,6 +8450,9 @@
         "pr-closeout"
       ],
       "qualified_name": "agentic-kit pr-closeout",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -8173,6 +8500,9 @@
         "pr-hygiene"
       ],
       "qualified_name": "agentic-kit pr-hygiene",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -8191,6 +8521,9 @@
         "profile-explain"
       ],
       "qualified_name": "agentic-kit profile-explain",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -8252,6 +8585,9 @@
         "project-direction"
       ],
       "qualified_name": "agentic-kit project-direction",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -8359,6 +8695,9 @@
         "prepare"
       ],
       "qualified_name": "agentic-kit release prepare",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -8451,6 +8790,9 @@
         "ready"
       ],
       "qualified_name": "agentic-kit release ready",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [
         "git tag",
         "gh release create"
@@ -8502,6 +8844,9 @@
         "release-check"
       ],
       "qualified_name": "agentic-kit release-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -8591,6 +8936,9 @@
         "release-metadata-authority-gate"
       ],
       "qualified_name": "agentic-kit release-metadata-authority-gate",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -8764,6 +9112,9 @@
         "release-notes-generate"
       ],
       "qualified_name": "agentic-kit release-notes-generate",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -8811,6 +9162,9 @@
         "release-plan"
       ],
       "qualified_name": "agentic-kit release-plan",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -8844,6 +9198,9 @@
         "release-preflight"
       ],
       "qualified_name": "agentic-kit release-preflight",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -8962,6 +9319,9 @@
         "release-prep"
       ],
       "qualified_name": "agentic-kit release-prep",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -9068,6 +9428,9 @@
         "release-publish"
       ],
       "qualified_name": "agentic-kit release-publish",
+      "remote_effects": [
+        "release_publish"
+      ],
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
       "surface": "orchestrator",
@@ -9143,6 +9506,9 @@
         "release-status"
       ],
       "qualified_name": "agentic-kit release-status",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -9190,6 +9556,9 @@
         "remote-branch-hygiene"
       ],
       "qualified_name": "agentic-kit remote-branch-hygiene",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -9265,6 +9634,9 @@
         "remote-branch-hygiene-apply"
       ],
       "qualified_name": "agentic-kit remote-branch-hygiene-apply",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -9340,6 +9712,9 @@
         "remote-branch-hygiene-report"
       ],
       "qualified_name": "agentic-kit remote-branch-hygiene-report",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -9387,6 +9762,9 @@
         "remote-next"
       ],
       "qualified_name": "agentic-kit remote-next",
+      "remote_effects": [
+        "fetch"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -9434,6 +9812,9 @@
         "rn"
       ],
       "qualified_name": "agentic-kit rn",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -9481,6 +9862,9 @@
         "rnc"
       ],
       "qualified_name": "agentic-kit rnc",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -9500,6 +9884,9 @@
         "check"
       ],
       "qualified_name": "agentic-kit rule-registry check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -9731,6 +10118,9 @@
         "register"
       ],
       "qualified_name": "agentic-kit rule-registry register",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -9780,6 +10170,9 @@
         "report"
       ],
       "qualified_name": "agentic-kit rule-registry report",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -9857,6 +10250,9 @@
         "acknowledge"
       ],
       "qualified_name": "agentic-kit rules acknowledge",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -9920,6 +10316,9 @@
         "acknowledge-communication-refresh"
       ],
       "qualified_name": "agentic-kit rules acknowledge-communication-refresh",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -9983,6 +10382,9 @@
         "communication-refresh"
       ],
       "qualified_name": "agentic-kit rules communication-refresh",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -10032,6 +10434,9 @@
         "handoff-refresh"
       ],
       "qualified_name": "agentic-kit rules handoff-refresh",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -10081,6 +10486,9 @@
         "require-current-communication-context"
       ],
       "qualified_name": "agentic-kit rules require-current-communication-context",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -10130,6 +10538,9 @@
         "snapshot"
       ],
       "qualified_name": "agentic-kit rules snapshot",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -10179,6 +10590,9 @@
         "validate-sources"
       ],
       "qualified_name": "agentic-kit rules validate-sources",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -10312,6 +10726,9 @@
         "planning-doc"
       ],
       "qualified_name": "agentic-kit scaffold planning-doc",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -10361,6 +10778,9 @@
         "gate"
       ],
       "qualified_name": "agentic-kit slice gate",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -10423,6 +10843,9 @@
         "standard-gates-audit-suite"
       ],
       "qualified_name": "agentic-kit standard-gates-audit-suite",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -10442,6 +10865,9 @@
         "freshness-check"
       ],
       "qualified_name": "agentic-kit state freshness-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -10505,6 +10931,9 @@
         "mode-check"
       ],
       "qualified_name": "agentic-kit state mode-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -10582,6 +11011,9 @@
         "mode-write"
       ],
       "qualified_name": "agentic-kit state mode-write",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -10647,6 +11079,9 @@
         "complete"
       ],
       "qualified_name": "agentic-kit todo complete",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -10682,6 +11117,9 @@
         "list"
       ],
       "qualified_name": "agentic-kit todo list",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -10702,6 +11140,9 @@
         "render"
       ],
       "qualified_name": "agentic-kit todo render",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -10766,6 +11207,9 @@
         "admin-refresh-pr"
       ],
       "qualified_name": "agentic-kit transfer admin-refresh-pr",
+      "remote_effects": [
+        "pull_request"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -10815,6 +11259,9 @@
         "apply"
       ],
       "qualified_name": "agentic-kit transfer apply",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -10892,6 +11339,9 @@
         "branch-create"
       ],
       "qualified_name": "agentic-kit transfer branch-create",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [
         "git switch -c",
         "git checkout -b"
@@ -10972,6 +11422,9 @@
         "branch-delete"
       ],
       "qualified_name": "agentic-kit transfer branch-delete",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
       "surface": "primitive",
@@ -11035,6 +11488,9 @@
         "branch-switch"
       ],
       "qualified_name": "agentic-kit transfer branch-switch",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -11115,6 +11571,9 @@
         "chat-switch-complete"
       ],
       "qualified_name": "agentic-kit transfer chat-switch-complete",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -11166,6 +11625,9 @@
         "closeout"
       ],
       "qualified_name": "agentic-kit transfer closeout",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -11257,6 +11719,9 @@
         "command-composition-check"
       ],
       "qualified_name": "agentic-kit transfer command-composition-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -11292,6 +11757,9 @@
         "command-reference-check"
       ],
       "qualified_name": "agentic-kit transfer command-reference-check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -11327,6 +11795,9 @@
         "command-reference-refresh"
       ],
       "qualified_name": "agentic-kit transfer command-reference-refresh",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -11364,6 +11835,9 @@
         "command-stack-begin"
       ],
       "qualified_name": "agentic-kit transfer command-stack-begin",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -11401,6 +11875,9 @@
         "command-stack-end"
       ],
       "qualified_name": "agentic-kit transfer command-stack-end",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -11493,6 +11970,9 @@
         "commit"
       ],
       "qualified_name": "agentic-kit transfer commit",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [
         "git commit"
       ],
@@ -11572,6 +12052,9 @@
         "conflict-resolve-file"
       ],
       "qualified_name": "agentic-kit transfer conflict-resolve-file",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -11607,6 +12090,9 @@
         "conflict-status"
       ],
       "qualified_name": "agentic-kit transfer conflict-status",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -11672,6 +12158,9 @@
         "continue"
       ],
       "qualified_name": "agentic-kit transfer continue",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -11767,6 +12256,9 @@
         "delete-merged-work-branch"
       ],
       "qualified_name": "agentic-kit transfer delete-merged-work-branch",
+      "remote_effects": [
+        "delete_remote"
+      ],
       "replaces_raw": [
         "git push --delete",
         "git branch -D"
@@ -11861,6 +12353,9 @@
         "diagnose-removed-ns-commands"
       ],
       "qualified_name": "agentic-kit transfer diagnose-removed-ns-commands",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -11896,6 +12391,9 @@
         "divergence-status"
       ],
       "qualified_name": "agentic-kit transfer divergence-status",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -12113,6 +12611,9 @@
         "evidence-finalize-current-transfer"
       ],
       "qualified_name": "agentic-kit transfer evidence-finalize-current-transfer",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -12148,6 +12649,9 @@
         "evidence-inspect-latest"
       ],
       "qualified_name": "agentic-kit transfer evidence-inspect-latest",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -12436,6 +12940,11 @@
         "evidence-pr-complete"
       ],
       "qualified_name": "agentic-kit transfer evidence-pr-complete",
+      "remote_effects": [
+        "merge",
+        "pull_request",
+        "push"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -12485,6 +12994,9 @@
         "fetch-origin"
       ],
       "qualified_name": "agentic-kit transfer fetch-origin",
+      "remote_effects": [
+        "fetch"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -12534,6 +13046,9 @@
         "head-sha"
       ],
       "qualified_name": "agentic-kit transfer head-sha",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -12583,6 +13098,9 @@
         "inspect"
       ],
       "qualified_name": "agentic-kit transfer inspect",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -12618,6 +13136,9 @@
         "list-refs"
       ],
       "qualified_name": "agentic-kit transfer list-refs",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -12653,6 +13174,9 @@
         "log-header"
       ],
       "qualified_name": "agentic-kit transfer log-header",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -12702,6 +13226,9 @@
         "log-upload-hint"
       ],
       "qualified_name": "agentic-kit transfer log-upload-hint",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -12753,6 +13280,9 @@
         "normalize-files"
       ],
       "qualified_name": "agentic-kit transfer normalize-files",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -12818,6 +13348,9 @@
         "normalize-session"
       ],
       "qualified_name": "agentic-kit transfer normalize-session",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -12993,6 +13526,9 @@
         "order-create"
       ],
       "qualified_name": "agentic-kit transfer order-create",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -13042,6 +13578,9 @@
         "order-validate"
       ],
       "qualified_name": "agentic-kit transfer order-validate",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -13119,6 +13658,9 @@
         "patch-cycle-status"
       ],
       "qualified_name": "agentic-kit transfer patch-cycle-status",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -13169,6 +13711,9 @@
         "post-merge-check"
       ],
       "qualified_name": "agentic-kit transfer post-merge-check",
+      "remote_effects": [
+        "network_read"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -13317,6 +13862,9 @@
         "post-merge-complete"
       ],
       "qualified_name": "agentic-kit transfer post-merge-complete",
+      "remote_effects": [
+        "merge"
+      ],
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
       "surface": "orchestrator",
@@ -13465,6 +14013,9 @@
         "post-merge-settle"
       ],
       "qualified_name": "agentic-kit transfer post-merge-settle",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
       "surface": "orchestrator",
@@ -13599,6 +14150,9 @@
         "pr-closeout-complete"
       ],
       "qualified_name": "agentic-kit transfer pr-closeout-complete",
+      "remote_effects": [
+        "merge"
+      ],
       "replaces_raw": [
         "closeout merged pr",
         "close out merged pr",
@@ -13760,6 +14314,10 @@
         "pr-complete"
       ],
       "qualified_name": "agentic-kit transfer pr-complete",
+      "remote_effects": [
+        "merge",
+        "push"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -13865,6 +14423,10 @@
         "pr-create"
       ],
       "qualified_name": "agentic-kit transfer pr-create",
+      "remote_effects": [
+        "pull_request",
+        "push"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -14028,6 +14590,10 @@
         "pr-create-complete"
       ],
       "qualified_name": "agentic-kit transfer pr-create-complete",
+      "remote_effects": [
+        "pull_request",
+        "push"
+      ],
       "replaces_raw": [
         "gh pr create"
       ],
@@ -14107,6 +14673,9 @@
         "pr-existing-for-branch"
       ],
       "qualified_name": "agentic-kit transfer pr-existing-for-branch",
+      "remote_effects": [
+        "network_read"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -14254,6 +14823,9 @@
         "pr-merge-safe"
       ],
       "qualified_name": "agentic-kit transfer pr-merge-safe",
+      "remote_effects": [
+        "merge"
+      ],
       "replaces_raw": [
         "gh pr merge"
       ],
@@ -14347,6 +14919,9 @@
         "pr-status"
       ],
       "qualified_name": "agentic-kit transfer pr-status",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -14453,6 +15028,9 @@
         "pr-wait-ci"
       ],
       "qualified_name": "agentic-kit transfer pr-wait-ci",
+      "remote_effects": [
+        "network_read"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -14532,6 +15110,9 @@
         "prepare-successor-handoff"
       ],
       "qualified_name": "agentic-kit transfer prepare-successor-handoff",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -14595,6 +15176,9 @@
         "protected-diff-plan"
       ],
       "qualified_name": "agentic-kit transfer protected-diff-plan",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -14644,6 +15228,9 @@
         "publish-last-report"
       ],
       "qualified_name": "agentic-kit transfer publish-last-report",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
       "surface": "primitive",
@@ -14679,6 +15266,9 @@
         "pull-current"
       ],
       "qualified_name": "agentic-kit transfer pull-current",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -14728,6 +15318,9 @@
         "push-current"
       ],
       "qualified_name": "agentic-kit transfer push-current",
+      "remote_effects": [
+        "push"
+      ],
       "replaces_raw": [
         "git push"
       ],
@@ -14765,6 +15358,9 @@
         "read-user-task"
       ],
       "qualified_name": "agentic-kit transfer read-user-task",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -14828,6 +15424,9 @@
         "rebase-on-upstream"
       ],
       "qualified_name": "agentic-kit transfer rebase-on-upstream",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -14863,6 +15462,9 @@
         "refresh-llm-context-carriers"
       ],
       "qualified_name": "agentic-kit transfer refresh-llm-context-carriers",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -14915,6 +15517,9 @@
         "remote-next"
       ],
       "qualified_name": "agentic-kit transfer remote-next",
+      "remote_effects": [
+        "fetch"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -14979,6 +15584,9 @@
         "remote-work-start"
       ],
       "qualified_name": "agentic-kit transfer remote-work-start",
+      "remote_effects": [
+        "fetch"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -15042,6 +15650,9 @@
         "repo-diff"
       ],
       "qualified_name": "agentic-kit transfer repo-diff",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -15092,6 +15703,9 @@
         "repo-log"
       ],
       "qualified_name": "agentic-kit transfer repo-log",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -15143,6 +15757,9 @@
         "repo-status"
       ],
       "qualified_name": "agentic-kit transfer repo-status",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -15206,6 +15823,9 @@
         "require-fresh-llm-context"
       ],
       "qualified_name": "agentic-kit transfer require-fresh-llm-context",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -15241,6 +15861,9 @@
         "restore-known-volatile"
       ],
       "qualified_name": "agentic-kit transfer restore-known-volatile",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -15290,6 +15913,9 @@
         "run-and-log"
       ],
       "qualified_name": "agentic-kit transfer run-and-log",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -15341,6 +15967,9 @@
         "run-local"
       ],
       "qualified_name": "agentic-kit transfer run-local",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -15404,6 +16033,9 @@
         "run-sequence-and-log"
       ],
       "qualified_name": "agentic-kit transfer run-sequence-and-log",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -15439,6 +16071,9 @@
         "show-last-report"
       ],
       "qualified_name": "agentic-kit transfer show-last-report",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -15558,6 +16193,9 @@
         "standard-error-scan"
       ],
       "qualified_name": "agentic-kit transfer standard-error-scan",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -15595,6 +16233,9 @@
         "state"
       ],
       "qualified_name": "agentic-kit transfer state",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -15644,6 +16285,9 @@
         "status"
       ],
       "qualified_name": "agentic-kit transfer status",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -15735,6 +16379,9 @@
         "submit-user-task"
       ],
       "qualified_name": "agentic-kit transfer submit-user-task",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -15784,6 +16431,9 @@
         "sync-main"
       ],
       "qualified_name": "agentic-kit transfer sync-main",
+      "remote_effects": [
+        "fetch"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -15819,6 +16469,9 @@
         "verify-llm-context-refresh"
       ],
       "qualified_name": "agentic-kit transfer verify-llm-context-refresh",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -15882,6 +16535,9 @@
         "work-order-patch"
       ],
       "qualified_name": "agentic-kit transfer work-order-patch",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -15919,6 +16575,9 @@
         "workflow-next"
       ],
       "qualified_name": "agentic-kit transfer workflow-next",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -15953,6 +16612,9 @@
         "validate-contract"
       ],
       "qualified_name": "agentic-kit validate-contract",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -16057,6 +16719,9 @@
         "validate-output-contract"
       ],
       "qualified_name": "agentic-kit validate-output-contract",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -16105,6 +16770,9 @@
         "validate-sections"
       ],
       "qualified_name": "agentic-kit validate-sections",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -16153,6 +16821,9 @@
         "check"
       ],
       "qualified_name": "agentic-kit work check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -16216,6 +16887,9 @@
         "discard-changes"
       ],
       "qualified_name": "agentic-kit work discard-changes",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -16354,6 +17028,11 @@
         "finish"
       ],
       "qualified_name": "agentic-kit work finish",
+      "remote_effects": [
+        "merge",
+        "pull_request",
+        "push"
+      ],
       "replaces_raw": [
         "close completed slice",
         "closeout completed slice",
@@ -16404,6 +17083,9 @@
         "recover"
       ],
       "qualified_name": "agentic-kit work recover",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -16412,6 +17094,101 @@
         "work"
       ],
       "when_to_use": "Run safe recovery/status commands after interrupted work."
+    },
+    {
+      "dry_run_available": true,
+      "group": "work",
+      "help": "Rescue local main work before realigning main to the local base ref.",
+      "lifecycle_rank": 36,
+      "name": "rescue",
+      "params": [
+        {
+          "default": false,
+          "help": "Execute a signed local main rescue. Dry-run is the default.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Dry-run signature that must match before execute mutates local git state.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Optional local rescue branch name. Defaults to a deterministic rescue/... branch.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "rescue_branch",
+          "opts": [
+            "--rescue-branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "origin/main",
+          "help": "Local base ref used to realign main after rescue. Defaults to origin/main.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "base_ref",
+          "opts": [
+            "--base-ref"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "work",
+        "rescue"
+      ],
+      "qualified_name": "agentic-kit work rescue",
+      "remote_effects": [
+        "none"
+      ],
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "surface": "orchestrator",
+      "task_tags": [
+        "bounded",
+        "work"
+      ],
+      "when_to_use": "Rescue local main work before realigning main to the local base ref."
     },
     {
       "dry_run_available": false,
@@ -16482,6 +17259,9 @@
         "start"
       ],
       "qualified_name": "agentic-kit work start",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -16502,6 +17282,9 @@
         "check"
       ],
       "qualified_name": "agentic-kit work-order check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -16522,6 +17305,9 @@
         "list"
       ],
       "qualified_name": "agentic-kit work-order list",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -16585,6 +17371,9 @@
         "prepare"
       ],
       "qualified_name": "agentic-kit work-order prepare",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -16634,6 +17423,9 @@
         "run"
       ],
       "qualified_name": "agentic-kit work-order run",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -16669,6 +17461,9 @@
         "show"
       ],
       "qualified_name": "agentic-kit work-order show",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -16689,6 +17484,9 @@
         "templates"
       ],
       "qualified_name": "agentic-kit work-order templates",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -16724,6 +17522,9 @@
         "typed-next"
       ],
       "qualified_name": "agentic-kit work-order typed-next",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -16773,6 +17574,9 @@
         "typed-queue-status"
       ],
       "qualified_name": "agentic-kit work-order typed-queue-status",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -16836,6 +17640,9 @@
         "typed-run"
       ],
       "qualified_name": "agentic-kit work-order typed-run",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -16941,6 +17748,9 @@
         "upload"
       ],
       "qualified_name": "agentic-kit work-order upload",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -16976,6 +17786,9 @@
         "cleanup"
       ],
       "qualified_name": "agentic-kit workflow cleanup",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -17011,6 +17824,9 @@
         "fail-report"
       ],
       "qualified_name": "agentic-kit workflow fail-report",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -17047,6 +17863,9 @@
         "go"
       ],
       "qualified_name": "agentic-kit workflow go",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -17082,6 +17901,9 @@
         "list"
       ],
       "qualified_name": "agentic-kit workflow list",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -17117,6 +17939,9 @@
         "request"
       ],
       "qualified_name": "agentic-kit workflow request",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -17166,6 +17991,9 @@
         "run"
       ],
       "qualified_name": "agentic-kit workflow run",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -17215,6 +18043,9 @@
         "show"
       ],
       "qualified_name": "agentic-kit workflow show",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -17250,6 +18081,9 @@
         "state"
       ],
       "qualified_name": "agentic-kit workflow state",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -17299,6 +18133,9 @@
         "status"
       ],
       "qualified_name": "agentic-kit workflow status",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -17334,6 +18171,9 @@
         "upload"
       ],
       "qualified_name": "agentic-kit workflow upload",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -17369,6 +18209,9 @@
         "upload-output"
       ],
       "qualified_name": "agentic-kit workflow upload-output",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "primitive",
@@ -17404,6 +18247,9 @@
         "check"
       ],
       "qualified_name": "agentic-kit workflow-guard check",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -17439,6 +18285,9 @@
         "diagnose"
       ],
       "qualified_name": "agentic-kit workflow-guard diagnose",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "diagnostic",
@@ -17489,6 +18338,9 @@
         "adopt"
       ],
       "qualified_name": "agentic-kit workspace adopt",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
       "surface": "orchestrator",
@@ -17609,6 +18461,9 @@
         "dpa-intake"
       ],
       "qualified_name": "agentic-kit workspace dpa-intake",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -17743,6 +18598,9 @@
         "init"
       ],
       "qualified_name": "agentic-kit workspace init",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -17807,6 +18665,9 @@
         "remove"
       ],
       "qualified_name": "agentic-kit workspace remove",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -17871,6 +18732,9 @@
         "upgrade"
       ],
       "qualified_name": "agentic-kit workspace upgrade",
+      "remote_effects": [
+        "none"
+      ],
       "replaces_raw": [],
       "safety": "BOUNDED",
       "surface": "orchestrator",
@@ -17885,7 +18749,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "ffae97536a52",
+    "manifest_sha": "e2146511b40a",
     "schema_version": 1
   },
   "schema_version": 2,

@@ -46,6 +46,7 @@ def test_agentic_kit_command_reference_is_current() -> None:
     assert "agentic-kit work check" in qualified
     assert "agentic-kit work finish" in qualified
     assert "agentic-kit work recover" in qualified
+    assert "agentic-kit work rescue" in qualified
     assert "agentic-kit release check" not in qualified
 
 

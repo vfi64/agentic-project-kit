@@ -14,6 +14,7 @@ from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_release_blocke
 from agentic_project_kit.release_metadata_authority_gate import release_anchor_changes
 from agentic_project_kit.release_prepare import refresh_dpa_readiness_command_manifest_ack
 from agentic_project_kit.work_discard_changes import discard_all_changes
+from agentic_project_kit.work_rescue import rescue_main_work
 from agentic_project_kit.workspace import load_workspace
 from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 
@@ -784,6 +785,38 @@ def work_recover_command(json_output: bool = typer.Option(False, "--json", help=
                 "runs reset, clean, checkout, or broad restore over product files."
             ),
         },
+    )
+    _emit(payload, json_output=json_output)
+    _exit_if_blocked(payload)
+
+
+@work_app.command("rescue")
+def work_rescue_command(
+    execute: bool = typer.Option(False, "--execute", help="Execute a signed local main rescue. Dry-run is the default."),
+    expected_signature: str = typer.Option(
+        "",
+        "--expected-signature",
+        help="Dry-run signature that must match before execute mutates local git state.",
+    ),
+    rescue_branch: str = typer.Option(
+        "",
+        "--rescue-branch",
+        help="Optional local rescue branch name. Defaults to a deterministic rescue/... branch.",
+    ),
+    base_ref: str = typer.Option(
+        "origin/main",
+        "--base-ref",
+        help="Local base ref used to realign main after rescue. Defaults to origin/main.",
+    ),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    """Rescue local main work before realigning main to the local base ref."""
+    payload = rescue_main_work(
+        Path("."),
+        execute=execute,
+        expected_signature=expected_signature,
+        rescue_branch=rescue_branch,
+        base_ref=base_ref,
     )
     _emit(payload, json_output=json_output)
     _exit_if_blocked(payload)

@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: ffae97536a52
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: e2146511b40a
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `254`
+- Command count: `255`
 
 ## Commands
 
@@ -16,6 +16,7 @@ GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: ffae9753
 - Surface: `diagnostic`
 - When to use: Run agentic-kit actions list.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 _No parameters._
 
@@ -25,6 +26,7 @@ _No parameters._
 - Surface: `diagnostic`
 - When to use: Run agentic-kit actions show.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -36,6 +38,7 @@ _No parameters._
 - Surface: `orchestrator`
 - When to use: Dry-run by default garbage collector for transient communication artifacts.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Dry-run by default garbage collector for transient communication artifacts.
 
@@ -57,6 +60,7 @@ Dry-run by default garbage collector for transient communication artifacts.
 - Surface: `diagnostic`
 - When to use: Audit absolute local paths that may break portability.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Audit absolute local paths that may break portability.
 
@@ -71,6 +75,7 @@ Audit absolute local paths that may break portability.
 - Surface: `diagnostic`
 - When to use: Audit agent-facing command authority surfaces for current command-for guidance.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Audit agent-facing command authority surfaces for current command-for guidance.
 
@@ -85,6 +90,7 @@ Audit agent-facing command authority surfaces for current command-for guidance.
 - Surface: `diagnostic`
 - When to use: Audit command manifest hash, CLI coverage, safety metadata, and MD sync.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Audit command manifest hash, CLI coverage, safety metadata, and MD sync.
 
@@ -99,6 +105,7 @@ Audit command manifest hash, CLI coverage, safety metadata, and MD sync.
 - Surface: `diagnostic`
 - When to use: Audit current release/documentation currency across handoff and release docs.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Audit current release/documentation currency across handoff and release docs.
 
@@ -113,6 +120,7 @@ Audit current release/documentation currency across handoff and release docs.
 - Surface: `diagnostic`
 - When to use: Report registered documents without incoming repository references.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Report registered documents without incoming repository references.
 
@@ -128,6 +136,7 @@ Report registered documents without incoming repository references.
 - Surface: `diagnostic`
 - When to use: Audit mutating entrypoints for workspace mutation-lock coverage.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Audit mutating entrypoints for workspace mutation-lock coverage.
 
@@ -141,6 +150,7 @@ Audit mutating entrypoints for workspace mutation-lock coverage.
 - Surface: `diagnostic`
 - When to use: Audit remaining legacy ./ns/ns-menu/ns_release references.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Audit remaining legacy ./ns/ns-menu/ns_release references.
 
@@ -155,6 +165,7 @@ Audit remaining legacy ./ns/ns-menu/ns_release references.
 - Surface: `diagnostic`
 - When to use: Audit whether repeated patch failures were followed by diagnosis evidence.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Audit whether repeated patch failures were followed by diagnosis evidence.
 
@@ -170,6 +181,7 @@ Audit whether repeated patch failures were followed by diagnosis evidence.
 - Surface: `diagnostic`
 - When to use: Report hardcoded docs/tmp path literals in source modules.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Report hardcoded docs/tmp path literals in source modules.
 
@@ -185,6 +197,7 @@ Report hardcoded docs/tmp path literals in source modules.
 - Surface: `diagnostic`
 - When to use: Audit planning and handoff docs for consolidation candidates.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Audit planning and handoff docs for consolidation candidates.
 
@@ -199,6 +212,7 @@ Audit planning and handoff docs for consolidation candidates.
 - Surface: `diagnostic`
 - When to use: Audit source for risky bug/redundancy patterns.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Audit source for risky bug/redundancy patterns.
 
@@ -213,6 +227,7 @@ Audit source for risky bug/redundancy patterns.
 - Surface: `diagnostic`
 - When to use: Audit STATUS.md current-state claims against handoff, release, and origin/main state.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Audit STATUS.md current-state claims against handoff, release, and origin/main state.
 
@@ -228,6 +243,7 @@ Audit STATUS.md current-state claims against handoff, release, and origin/main s
 - Surface: `diagnostic`
 - When to use: Run agentic-kit boot check.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -239,6 +255,7 @@ Audit STATUS.md current-state claims against handoff, release, and origin/main s
 - Surface: `primitive`
 - When to use: Run agentic-kit boot closeout.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -250,6 +267,7 @@ Audit STATUS.md current-state claims against handoff, release, and origin/main s
 - Surface: `primitive`
 - When to use: Run agentic-kit boot prompt.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -261,6 +279,7 @@ Audit STATUS.md current-state claims against handoff, release, and origin/main s
 - Surface: `diagnostic`
 - When to use: Run agentic-kit boot report.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -273,6 +292,7 @@ Audit STATUS.md current-state claims against handoff, release, and origin/main s
 - Surface: `primitive`
 - When to use: Run agentic-kit boot write.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -286,6 +306,7 @@ Audit STATUS.md current-state claims against handoff, release, and origin/main s
 - Surface: `diagnostic`
 - When to use: Render the compact six-line command manifest refresher.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Render the compact six-line command manifest refresher.
 
@@ -299,6 +320,7 @@ Render the compact six-line command manifest refresher.
 - Surface: `orchestrator`
 - When to use: Render the session-start refresher and full inline command list.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Render the session-start refresher and full inline command list.
 
@@ -312,6 +334,7 @@ Render the session-start refresher and full inline command list.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit check.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -325,6 +348,7 @@ Render the session-start refresher and full inline command list.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit check-docs.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -338,6 +362,7 @@ Render the session-start refresher and full inline command list.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit check-todo.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -349,6 +374,7 @@ Render the session-start refresher and full inline command list.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit cockpit actions.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -360,6 +386,7 @@ Render the session-start refresher and full inline command list.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit cockpit gatekeeper-status.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -372,6 +399,7 @@ Render the session-start refresher and full inline command list.
 - Surface: `primitive`
 - When to use: Run agentic-kit cockpit run.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -386,6 +414,7 @@ Render the session-start refresher and full inline command list.
 - Surface: `primitive`
 - When to use: Run agentic-kit cockpit select.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 _No parameters._
 
@@ -395,6 +424,7 @@ _No parameters._
 - Surface: `diagnostic`
 - When to use: Run agentic-kit cockpit status.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -406,6 +436,7 @@ _No parameters._
 - Surface: `diagnostic`
 - When to use: Select the deterministic wrapper command for a raw command or task tag.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Select the deterministic wrapper command for a raw command or task tag.
 
@@ -422,6 +453,7 @@ Select the deterministic wrapper command for a raw command or task tag.
 - Surface: `diagnostic`
 - When to use: Check that public commands have stable GUI-usable taxonomy.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Check that public commands have stable GUI-usable taxonomy.
 
@@ -436,6 +468,7 @@ Check that public commands have stable GUI-usable taxonomy.
 - Surface: `diagnostic`
 - When to use: Render docs/reference/AGENTIC_KIT_COMMANDS.md from the JSON manifest.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Render docs/reference/AGENTIC_KIT_COMMANDS.md from the JSON manifest.
 
@@ -451,6 +484,7 @@ Render docs/reference/AGENTIC_KIT_COMMANDS.md from the JSON manifest.
 - Surface: `primitive`
 - When to use: Synchronize command reference files and command-manifest entrypoint headers.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Synchronize command reference files and command-manifest entrypoint headers.
 
@@ -466,6 +500,7 @@ Synchronize command reference files and command-manifest entrypoint headers.
 - Surface: `primitive`
 - When to use: Run the local feature gate through the supported agentic-kit CLI.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Run the local feature gate through the supported agentic-kit CLI.
 
@@ -479,6 +514,7 @@ Run the local feature gate through the supported agentic-kit CLI.
 - Surface: `diagnostic`
 - When to use: Report planning files that are not yet represented in project direction.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Report planning files that are not yet represented in project direction.
 
@@ -493,6 +529,7 @@ Report planning files that are not yet represented in project direction.
 - Surface: `diagnostic`
 - When to use: Render project direction without overwriting committed projections.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Render project direction without overwriting committed projections.
 
@@ -509,6 +546,7 @@ Render project direction without overwriting committed projections.
 - Surface: `diagnostic`
 - When to use: Validate docs/planning/PROJECT_DIRECTION.yaml.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Validate docs/planning/PROJECT_DIRECTION.yaml.
 
@@ -524,6 +562,7 @@ Validate docs/planning/PROJECT_DIRECTION.yaml.
 - Surface: `diagnostic`
 - When to use: Audit lifecycle status headers for planning, roadmap, strategy, and idea documents.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Audit lifecycle status headers for planning, roadmap, strategy, and idea documents.
 
@@ -542,6 +581,7 @@ Audit lifecycle status headers for planning, roadmap, strategy, and idea documen
 - Surface: `diagnostic`
 - When to use: Audit cross-document state, governance, architecture, and historical-plan drift.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Audit cross-document state, governance, architecture, and historical-plan drift.
 
@@ -557,6 +597,7 @@ Audit cross-document state, governance, architecture, and historical-plan drift.
 - Surface: `primitive`
 - When to use: Apply safe automatic documentation mesh repairs.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Apply safe automatic documentation mesh repairs.
 
@@ -571,6 +612,7 @@ Apply safe automatic documentation mesh repairs.
 - Surface: `diagnostic`
 - When to use: List unregistered docs candidates with optional strict declared-scope failure.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 List unregistered docs candidates with optional strict declared-scope failure.
 
@@ -586,6 +628,7 @@ List unregistered docs candidates with optional strict declared-scope failure.
 - Surface: `primitive`
 - When to use: Reconcile documentation registry, declared scope, and decision projection.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Reconcile documentation registry, declared scope, and decision projection.
 
@@ -601,6 +644,7 @@ Reconcile documentation registry, declared scope, and decision projection.
 - Surface: `primitive`
 - When to use: Add one reviewed document entry to the documentation registry.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Add one reviewed document entry to the documentation registry.
 
@@ -618,6 +662,7 @@ Add one reviewed document entry to the documentation registry.
 - Surface: `primitive`
 - When to use: Apply one safe documentation lifecycle plan step.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Apply one safe documentation lifecycle plan step.
 
@@ -635,6 +680,7 @@ Apply one safe documentation lifecycle plan step.
 - Surface: `primitive`
 - When to use: Stamp missing lifecycle headers without claiming semantic currency.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Stamp missing lifecycle headers without claiming semantic currency.
 
@@ -650,6 +696,7 @@ Stamp missing lifecycle headers without claiming semantic currency.
 - Surface: `diagnostic`
 - When to use: Build a dry-run lifecycle plan for one documentation scope.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Build a dry-run lifecycle plan for one documentation scope.
 
@@ -665,6 +712,7 @@ Build a dry-run lifecycle plan for one documentation scope.
 - Surface: `primitive`
 - When to use: List archive documents that may be old enough for manual deletion review.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 List archive documents that may be old enough for manual deletion review.
 
@@ -679,6 +727,7 @@ List archive documents that may be old enough for manual deletion review.
 - Surface: `diagnostic`
 - When to use: Build or write one documentation lifecycle evidence report.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Build or write one documentation lifecycle evidence report.
 
@@ -696,6 +745,7 @@ Build or write one documentation lifecycle evidence report.
 - Surface: `orchestrator`
 - When to use: Build or apply a bounded documentation lifecycle sweep plan.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Build or apply a bounded documentation lifecycle sweep plan.
 
@@ -714,6 +764,7 @@ Build or apply a bounded documentation lifecycle sweep plan.
 - Surface: `diagnostic`
 - When to use: Propose safe documentation lifecycle actions without applying changes.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Propose safe documentation lifecycle actions without applying changes.
 
@@ -728,6 +779,7 @@ Propose safe documentation lifecycle actions without applying changes.
 - Surface: `diagnostic`
 - When to use: Fail if removed documentation sources still have live refs or registry refs.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Fail if removed documentation sources still have live refs or registry refs.
 
@@ -744,6 +796,7 @@ Fail if removed documentation sources still have live refs or registry refs.
 - Surface: `diagnostic`
 - When to use: Run the umbrella documentation-system audit.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Run the umbrella documentation-system audit.
 
@@ -758,6 +811,7 @@ Run the umbrella documentation-system audit.
 - Surface: `primitive`
 - When to use: Show a read-only summary of the documentation registry.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Show a read-only summary of the documentation registry.
 
@@ -772,6 +826,7 @@ Show a read-only summary of the documentation registry.
 - Surface: `diagnostic`
 - When to use: Run a compact project health check.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Run a compact project health check.
 
@@ -785,6 +840,7 @@ Run a compact project health check.
 - Surface: `primitive`
 - When to use: Refresh CURRENT_HANDOFF through DPA freshness, locking and acceptance-state gates.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Refresh CURRENT_HANDOFF through DPA freshness, locking and acceptance-state gates.
 
@@ -805,6 +861,7 @@ Refresh CURRENT_HANDOFF through DPA freshness, locking and acceptance-state gate
 - Surface: `diagnostic`
 - When to use: Prepare DP2 decision readiness without recording Maintainer authorization.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Prepare DP2 decision readiness without recording Maintainer authorization.
 
@@ -824,6 +881,7 @@ Prepare DP2 decision readiness without recording Maintainer authorization.
 - Surface: `diagnostic`
 - When to use: Validate a bounded DP3/DP4 adjudication record without authorizing DP5.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Validate a bounded DP3/DP4 adjudication record without authorizing DP5.
 
@@ -843,6 +901,7 @@ Validate a bounded DP3/DP4 adjudication record without authorizing DP5.
 - Surface: `diagnostic`
 - When to use: Block new DP5 noncompliance against the accepted warn-stage baseline.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Block new DP5 noncompliance against the accepted warn-stage baseline.
 
@@ -863,6 +922,7 @@ Block new DP5 noncompliance against the accepted warn-stage baseline.
 - Surface: `diagnostic`
 - When to use: Validate a bounded DP5 lifecycle stage record.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Validate a bounded DP5 lifecycle stage record.
 
@@ -882,6 +942,7 @@ Validate a bounded DP5 lifecycle stage record.
 - Surface: `diagnostic`
 - When to use: Block all configured DP5 noncompliance in the accepted DPA scope.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Block all configured DP5 noncompliance in the accepted DPA scope.
 
@@ -901,6 +962,7 @@ Block all configured DP5 noncompliance in the accepted DPA scope.
 - Surface: `orchestrator`
 - When to use: Validate the bounded DP1-DP5 final closeout record.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Validate the bounded DP1-DP5 final closeout record.
 
@@ -920,6 +982,7 @@ Validate the bounded DP1-DP5 final closeout record.
 - Surface: `primitive`
 - When to use: Execute authorized non-production DPA fixture evidence cases.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Execute authorized non-production DPA fixture evidence cases.
 
@@ -942,6 +1005,7 @@ Execute authorized non-production DPA fixture evidence cases.
 - Surface: `diagnostic`
 - When to use: Validate a DP2 Maintainer Assessment record without authorizing DP2.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Validate a DP2 Maintainer Assessment record without authorizing DP2.
 
@@ -962,6 +1026,7 @@ Validate a DP2 Maintainer Assessment record without authorizing DP2.
 - Surface: `diagnostic`
 - When to use: Assess post-DP2 DP3-DP5 rollout, migration and strict-gate scope.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Assess post-DP2 DP3-DP5 rollout, migration and strict-gate scope.
 
@@ -983,6 +1048,7 @@ Assess post-DP2 DP3-DP5 rollout, migration and strict-gate scope.
 - Surface: `diagnostic`
 - When to use: Inspect PROBE-002 lifecycle and selected-writer readiness without production mutation.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Inspect PROBE-002 lifecycle and selected-writer readiness without production mutation.
 
@@ -1001,6 +1067,7 @@ Inspect PROBE-002 lifecycle and selected-writer readiness without production mut
 - Surface: `diagnostic`
 - When to use: Inspect PROBE-003 workflow serialization readiness without workflow mutation.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Inspect PROBE-003 workflow serialization readiness without workflow mutation.
 
@@ -1020,6 +1087,7 @@ Inspect PROBE-003 workflow serialization readiness without workflow mutation.
 - Surface: `diagnostic`
 - When to use: Inspect PROBE-004 migration and rollback readiness without migration.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Inspect PROBE-004 migration and rollback readiness without migration.
 
@@ -1039,6 +1107,7 @@ Inspect PROBE-004 migration and rollback readiness without migration.
 - Surface: `diagnostic`
 - When to use: Validate the DPA DP1 Assessment readiness record without mutating files.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Validate the DPA DP1 Assessment readiness record without mutating files.
 
@@ -1055,6 +1124,7 @@ Validate the DPA DP1 Assessment readiness record without mutating files.
 - Surface: `primitive`
 - When to use: Execute only non-mutating DP1 Probe fixture cases.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Execute only non-mutating DP1 Probe fixture cases.
 
@@ -1076,6 +1146,7 @@ Execute only non-mutating DP1 Probe fixture cases.
 - Surface: `diagnostic`
 - When to use: Inspect Renderer Probe readiness without renderer conformance claims.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Inspect Renderer Probe readiness without renderer conformance claims.
 
@@ -1095,6 +1166,7 @@ Inspect Renderer Probe readiness without renderer conformance claims.
 - Surface: `diagnostic`
 - When to use: Assess a foreign or new repo for DPA-governed adoption without mutation.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Assess a foreign or new repo for DPA-governed adoption without mutation.
 
@@ -1113,6 +1185,7 @@ Assess a foreign or new repo for DPA-governed adoption without mutation.
 - Surface: `diagnostic`
 - When to use: Validate Stable-DPA readiness and the bounded Stable Promotion record.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Validate Stable-DPA readiness and the bounded Stable Promotion record.
 
@@ -1133,6 +1206,7 @@ Validate Stable-DPA readiness and the bounded Stable Promotion record.
 - Surface: `primitive`
 - When to use: Observe a WRT-CH-001 admin refresh PR without claiming disposable fixture PASS.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Observe a WRT-CH-001 admin refresh PR without claiming disposable fixture PASS.
 
@@ -1153,6 +1227,7 @@ Observe a WRT-CH-001 admin refresh PR without claiming disposable fixture PASS.
 - Surface: `diagnostic`
 - When to use: Classify a terminal/evidence log for deterministic gatekeeper decisions.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Classify a terminal/evidence log for deterministic gatekeeper decisions.
 
@@ -1169,6 +1244,7 @@ Classify a terminal/evidence log for deterministic gatekeeper decisions.
 - Surface: `primitive`
 - When to use: Clean local evidence according to repo policy.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Clean local evidence according to repo policy.
 
@@ -1182,6 +1258,7 @@ Clean local evidence according to repo policy.
 - Surface: `diagnostic`
 - When to use: Pass when git status is clean except one expected in-progress log.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Pass when git status is clean except one expected in-progress log.
 
@@ -1196,6 +1273,7 @@ Pass when git status is clean except one expected in-progress log.
 - Surface: `primitive`
 - When to use: Commit an explicit evidence path set and verify the worktree is clean afterwards.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Commit an explicit evidence path set and verify the worktree is clean afterwards.
 
@@ -1215,6 +1293,7 @@ Commit an explicit evidence path set and verify the worktree is clean afterwards
 - Surface: `primitive`
 - When to use: Append a canonical summary, require strict inspection, then upload the evidence log.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Append a canonical summary, require strict inspection, then upload the evidence log.
 
@@ -1251,6 +1330,7 @@ Append a canonical summary, require strict inspection, then upload the evidence 
 - Surface: `primitive`
 - When to use: Fail if a terminal evidence log has contradictory final state.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Fail if a terminal evidence log has contradictory final state.
 
@@ -1264,6 +1344,7 @@ Fail if a terminal evidence log has contradictory final state.
 - Surface: `diagnostic`
 - When to use: Inspect explicit or latest terminal evidence before continuing after chat control signals.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Inspect explicit or latest terminal evidence before continuing after chat control signals.
 
@@ -1279,6 +1360,7 @@ Inspect explicit or latest terminal evidence before continuing after chat contro
 - Surface: `diagnostic`
 - When to use: Fail if expected target paths are missing from a change set.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Fail if expected target paths are missing from a change set.
 
@@ -1293,6 +1375,7 @@ Fail if expected target paths are missing from a change set.
 - Surface: `diagnostic`
 - When to use: Resolve a planner intent against Kit-owned command and cockpit authorities.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Resolve a planner intent against Kit-owned command and cockpit authorities.
 
@@ -1308,6 +1391,7 @@ Resolve a planner intent against Kit-owned command and cockpit authorities.
 - Surface: `primitive`
 - When to use: Run a governed planner intent through Kit-owned execution surfaces.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Run a governed planner intent through Kit-owned execution surfaces.
 
@@ -1326,6 +1410,7 @@ Run a governed planner intent through Kit-owned execution surfaces.
 - Surface: `orchestrator`
 - When to use: Create and push a GitHub repository for an initialized project.
 - Dry-run available: `False`
+- Remote effects: `release_publish`
 
 Create and push a GitHub repository for an initialized project.
 
@@ -1341,6 +1426,7 @@ Create and push a GitHub repository for an initialized project.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit governance check.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1352,6 +1438,7 @@ Create and push a GitHub repository for an initialized project.
 - Surface: `primitive`
 - When to use: Run agentic-kit gui initial-llm-prompt.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1364,6 +1451,7 @@ Create and push a GitHub repository for an initialized project.
 - Surface: `diagnostic`
 - When to use: Run the pre-GUI readiness gate.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Run the pre-GUI readiness gate.
 
@@ -1379,6 +1467,7 @@ Run the pre-GUI readiness gate.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit handoff check.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1390,6 +1479,7 @@ Run the pre-GUI readiness gate.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit handoff post-merge-refresh-status.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 _No parameters._
 
@@ -1399,6 +1489,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Run agentic-kit handoff prompt.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1411,6 +1502,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Run agentic-kit handoff refresh.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1423,6 +1515,7 @@ _No parameters._
 - Surface: `diagnostic`
 - When to use: Run agentic-kit handoff show.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1434,6 +1527,7 @@ _No parameters._
 - Surface: `orchestrator`
 - When to use: Create a governed project skeleton with selected profiles and policy packs.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Create a governed project skeleton with selected profiles and policy packs.
 
@@ -1460,6 +1554,7 @@ Create a governed project skeleton with selected profiles and policy packs.
 - Surface: `diagnostic`
 - When to use: Lint instruction text against the current command manifest.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Lint instruction text against the current command manifest.
 
@@ -1478,6 +1573,7 @@ Lint instruction text against the current command manifest.
 - Surface: `diagnostic`
 - When to use: Measure onboarding guidance against the command manifest and workspace detection.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Measure onboarding guidance against the command manifest and workspace detection.
 
@@ -1492,6 +1588,7 @@ Measure onboarding guidance against the command manifest and workspace detection
 - Surface: `diagnostic`
 - When to use: Run agentic-kit pass-already-done classify.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1507,6 +1604,7 @@ Measure onboarding guidance against the command manifest and workspace detection
 - Surface: `diagnostic`
 - When to use: Run agentic-kit pass-already-done report.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1522,6 +1620,7 @@ Measure onboarding guidance against the command manifest and workspace detection
 - Surface: `primitive`
 - When to use: Run agentic-kit patch-preflight.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1534,6 +1633,7 @@ Measure onboarding guidance against the command manifest and workspace detection
 - Surface: `primitive`
 - When to use: Diagnose patch size, protected paths, and diff-risk before closeout.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Diagnose patch size, protected paths, and diff-risk before closeout.
 
@@ -1553,6 +1653,7 @@ Diagnose patch size, protected paths, and diff-risk before closeout.
 - Surface: `diagnostic`
 - When to use: List known local patterns and anti-patterns.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 List known local patterns and anti-patterns.
 
@@ -1564,6 +1665,7 @@ _No parameters._
 - Surface: `diagnostic`
 - When to use: Show one local pattern catalog entry by stable ID.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Show one local pattern catalog entry by stable ID.
 
@@ -1577,6 +1679,7 @@ Show one local pattern catalog entry by stable ID.
 - Surface: `diagnostic`
 - When to use: Validate post-release GitHub and Zenodo state without guessing DOI metadata.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Validate post-release GitHub and Zenodo state without guessing DOI metadata.
 
@@ -1591,6 +1694,7 @@ Validate post-release GitHub and Zenodo state without guessing DOI metadata.
 - Surface: `orchestrator`
 - When to use: Record verified DOI metadata after GitHub release and Zenodo publication.
 - Dry-run available: `False`
+- Remote effects: `release_publish`
 
 Record verified DOI metadata after GitHub release and Zenodo publication.
 
@@ -1607,6 +1711,7 @@ Record verified DOI metadata after GitHub release and Zenodo publication.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit pr closeout-check.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1618,6 +1723,7 @@ Record verified DOI metadata after GitHub release and Zenodo publication.
 - Surface: `primitive`
 - When to use: Merge only when PR checks are green, refs match, and merge state is clean.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Merge only when PR checks are green, refs match, and merge state is clean.
 
@@ -1642,6 +1748,7 @@ Merge only when PR checks are green, refs match, and merge state is clean.
 - Surface: `diagnostic`
 - When to use: Print deterministic PR/CI status and fetch failed logs for red CI.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Print deterministic PR/CI status and fetch failed logs for red CI.
 
@@ -1658,6 +1765,7 @@ Print deterministic PR/CI status and fetch failed logs for red CI.
 - Surface: `primitive`
 - When to use: Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 
@@ -1675,6 +1783,7 @@ Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 - Surface: `primitive`
 - When to use: Run agentic-kit pr-closeout.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1686,6 +1795,7 @@ Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 - Surface: `primitive`
 - When to use: Run agentic-kit pr-hygiene.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1698,6 +1808,7 @@ Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 - Surface: `primitive`
 - When to use: List available project profiles and policy packs.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 List available project profiles and policy packs.
 
@@ -1709,6 +1820,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Render project direction sections from the YAML source.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Render project direction sections from the YAML source.
 
@@ -1724,6 +1836,7 @@ Render project direction sections from the YAML source.
 - Surface: `orchestrator`
 - When to use: Generate release summary evidence and run release-prep safely.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Generate release summary evidence and run release-prep safely.
 
@@ -1742,6 +1855,7 @@ Generate release summary evidence and run release-prep safely.
 - Surface: `orchestrator`
 - When to use: Run release readiness through the standard-error scan wrapper.
 - Dry-run available: `False`
+- Remote effects: `none`
 - Replaces raw: `git tag`, `gh release create`
 
 Run release readiness through the standard-error scan wrapper.
@@ -1760,6 +1874,7 @@ Run release readiness through the standard-error scan wrapper.
 - Surface: `diagnostic`
 - When to use: Validate release state for a target version.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Validate release state for a target version.
 
@@ -1774,6 +1889,7 @@ Validate release state for a target version.
 - Surface: `primitive`
 - When to use: Block manual release metadata anchor edits without release-prep evidence.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Block manual release metadata anchor edits without release-prep evidence.
 
@@ -1791,6 +1907,7 @@ Block manual release metadata anchor edits without release-prep evidence.
 - Surface: `primitive`
 - When to use: Generate deterministic evidence-backed release notes from a local git tag diff.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Generate deterministic evidence-backed release notes from a local git tag diff.
 
@@ -1814,6 +1931,7 @@ Generate deterministic evidence-backed release notes from a local git tag diff.
 - Surface: `diagnostic`
 - When to use: Print a release preparation checklist for the current project.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Print a release preparation checklist for the current project.
 
@@ -1828,6 +1946,7 @@ Print a release preparation checklist for the current project.
 - Surface: `primitive`
 - When to use: Validate before-metadata release readiness for a target version.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Validate before-metadata release readiness for a target version.
 
@@ -1841,6 +1960,7 @@ Validate before-metadata release readiness for a target version.
 - Surface: `orchestrator`
 - When to use: Prepare release metadata through the supported agentic-kit route.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Prepare release metadata through the supported agentic-kit route.
 
@@ -1863,6 +1983,7 @@ push, create GitHub releases, or write Zenodo DOI metadata.
 - Surface: `orchestrator`
 - When to use: Plan release publishing without live tag/release side effects.
 - Dry-run available: `True`
+- Remote effects: `release_publish`
 
 Plan release publishing without live tag/release side effects.
 
@@ -1881,6 +2002,7 @@ Plan release publishing without live tag/release side effects.
 - Surface: `diagnostic`
 - When to use: Render the local release lifecycle state without mutating release files.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Render the local release lifecycle state without mutating release files.
 
@@ -1897,6 +2019,7 @@ Render the local release lifecycle state without mutating release files.
 - Surface: `primitive`
 - When to use: Dry-run remote branch hygiene classification for K3.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Dry-run remote branch hygiene classification for K3.
 
@@ -1911,6 +2034,7 @@ Dry-run remote branch hygiene classification for K3.
 - Surface: `primitive`
 - When to use: Safely apply exactly one remote branch deletion candidate.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Safely apply exactly one remote branch deletion candidate.
 
@@ -1927,6 +2051,7 @@ Safely apply exactly one remote branch deletion candidate.
 - Surface: `diagnostic`
 - When to use: Write a K3 remote branch hygiene evidence report only with --execute.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Write a K3 remote branch hygiene evidence report only with --execute.
 
@@ -1943,6 +2068,7 @@ Write a K3 remote branch hygiene evidence report only with --execute.
 - Surface: `primitive`
 - When to use: Run agentic-kit remote-next.
 - Dry-run available: `False`
+- Remote effects: `fetch`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1955,6 +2081,7 @@ Write a K3 remote branch hygiene evidence report only with --execute.
 - Surface: `primitive`
 - When to use: Run agentic-kit rn.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1967,6 +2094,7 @@ Write a K3 remote branch hygiene evidence report only with --execute.
 - Surface: `primitive`
 - When to use: Run agentic-kit rnc.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1979,6 +2107,7 @@ Write a K3 remote branch hygiene evidence report only with --execute.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit rule-registry check.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 _No parameters._
 
@@ -1988,6 +2117,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Add one reviewed rule mechanism with direct evidence coverage.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Add one reviewed rule mechanism with direct evidence coverage.
 
@@ -2015,6 +2145,7 @@ Add one reviewed rule mechanism with direct evidence coverage.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit rule-registry report.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2027,6 +2158,7 @@ Add one reviewed rule mechanism with direct evidence coverage.
 - Surface: `primitive`
 - When to use: Run agentic-kit rules acknowledge.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2041,6 +2173,7 @@ Add one reviewed rule mechanism with direct evidence coverage.
 - Surface: `primitive`
 - When to use: Run agentic-kit rules acknowledge-communication-refresh.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2054,6 +2187,7 @@ Add one reviewed rule mechanism with direct evidence coverage.
 - Surface: `primitive`
 - When to use: Run agentic-kit rules communication-refresh.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2067,6 +2201,7 @@ Add one reviewed rule mechanism with direct evidence coverage.
 - Surface: `primitive`
 - When to use: Run agentic-kit rules handoff-refresh.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2079,6 +2214,7 @@ Add one reviewed rule mechanism with direct evidence coverage.
 - Surface: `primitive`
 - When to use: Run agentic-kit rules require-current-communication-context.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2091,6 +2227,7 @@ Add one reviewed rule mechanism with direct evidence coverage.
 - Surface: `primitive`
 - When to use: Run agentic-kit rules snapshot.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2103,6 +2240,7 @@ Add one reviewed rule mechanism with direct evidence coverage.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit rules validate-sources.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2115,6 +2253,7 @@ Add one reviewed rule mechanism with direct evidence coverage.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit scaffold planning-doc.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2133,6 +2272,7 @@ Add one reviewed rule mechanism with direct evidence coverage.
 - Surface: `primitive`
 - When to use: Run agentic-kit slice gate.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2145,6 +2285,7 @@ Add one reviewed rule mechanism with direct evidence coverage.
 - Surface: `diagnostic`
 - When to use: Run the audit suite required by standard project gates.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Run the audit suite required by standard project gates.
 
@@ -2160,6 +2301,7 @@ Run the audit suite required by standard project gates.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit state freshness-check.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 _No parameters._
 
@@ -2169,6 +2311,7 @@ _No parameters._
 - Surface: `diagnostic`
 - When to use: Run agentic-kit state mode-check.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2182,6 +2325,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Run agentic-kit state mode-write.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2196,6 +2340,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Mark a TODO item as done and store evidence.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Mark a TODO item as done and store evidence.
 
@@ -2211,6 +2356,7 @@ Mark a TODO item as done and store evidence.
 - Surface: `diagnostic`
 - When to use: List project TODO items from .agentic/todo.yaml.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 List project TODO items from .agentic/todo.yaml.
 
@@ -2224,6 +2370,7 @@ List project TODO items from .agentic/todo.yaml.
 - Surface: `diagnostic`
 - When to use: Regenerate docs/TODO.md from .agentic/todo.yaml.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Regenerate docs/TODO.md from .agentic/todo.yaml.
 
@@ -2235,6 +2382,7 @@ _No parameters._
 - Surface: `orchestrator`
 - When to use: Create or recover the administrative handoff refresh PR after a merged PR.
 - Dry-run available: `False`
+- Remote effects: `pull_request`
 
 Create or recover the administrative handoff refresh PR after a merged PR.
 
@@ -2250,6 +2398,7 @@ Create or recover the administrative handoff refresh PR after a merged PR.
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer apply.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2262,6 +2411,7 @@ Create or recover the administrative handoff refresh PR after a merged PR.
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer branch-create.
 - Dry-run available: `False`
+- Remote effects: `none`
 - Replaces raw: `git switch -c`, `git checkout -b`
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -2277,6 +2427,7 @@ Create or recover the administrative handoff refresh PR after a merged PR.
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer branch-delete.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2291,6 +2442,7 @@ Create or recover the administrative handoff refresh PR after a merged PR.
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer branch-switch.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2304,6 +2456,7 @@ Create or recover the administrative handoff refresh PR after a merged PR.
 - Surface: `orchestrator`
 - When to use: Create a deterministic successor handoff package and prompt projections.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Create a deterministic successor handoff package and prompt projections.
 
@@ -2320,6 +2473,7 @@ Create a deterministic successor handoff package and prompt projections.
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer closeout.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2332,6 +2486,7 @@ Create a deterministic successor handoff package and prompt projections.
 - Surface: `diagnostic`
 - When to use: Block common copied-command mistakes before running patch, transfer, or release gates.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Block common copied-command mistakes before running patch, transfer, or release gates.
 
@@ -2349,6 +2504,7 @@ Block common copied-command mistakes before running patch, transfer, or release 
 - Surface: `diagnostic`
 - When to use: Check whether the committed agentic-kit command reference is current.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Check whether the committed agentic-kit command reference is current.
 
@@ -2362,6 +2518,7 @@ Check whether the committed agentic-kit command reference is current.
 - Surface: `primitive`
 - When to use: Regenerate the agentic-kit command reference without committing changes.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Regenerate the agentic-kit command reference without committing changes.
 
@@ -2375,6 +2532,7 @@ Regenerate the agentic-kit command reference without committing changes.
 - Surface: `primitive`
 - When to use: Begin a repo-local command-stack state for deterministic local preflight cleanup.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Begin a repo-local command-stack state for deterministic local preflight cleanup.
 
@@ -2388,6 +2546,7 @@ Begin a repo-local command-stack state for deterministic local preflight cleanup
 - Surface: `primitive`
 - When to use: End the repo-local command-stack state after a local command stack completed.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 End the repo-local command-stack state after a local command stack completed.
 
@@ -2401,6 +2560,7 @@ End the repo-local command-stack state after a local command stack completed.
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer commit.
 - Dry-run available: `False`
+- Remote effects: `none`
 - Replaces raw: `git commit`
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -2417,6 +2577,7 @@ End the repo-local command-stack state after a local command stack completed.
 - Surface: `primitive`
 - When to use: Resolve one conflicted file by replacing it from an explicit source and staging it.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Resolve one conflicted file by replacing it from an explicit source and staging it.
 
@@ -2433,6 +2594,7 @@ Resolve one conflicted file by replacing it from an explicit source and staging 
 - Surface: `diagnostic`
 - When to use: Report merge/rebase conflict state without resolving anything.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Report merge/rebase conflict state without resolving anything.
 
@@ -2446,6 +2608,7 @@ Report merge/rebase conflict state without resolving anything.
 - Surface: `primitive`
 - When to use: Continue chat/local transfer communication through the safest available wrapper path.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Continue chat/local transfer communication through the safest available wrapper path.
 
@@ -2461,6 +2624,7 @@ Continue chat/local transfer communication through the safest available wrapper 
 - Surface: `primitive`
 - When to use: Delete a merged non-main work branch after PR merge-state verification.
 - Dry-run available: `False`
+- Remote effects: `delete_remote`
 - Replaces raw: `git push --delete`, `git branch -D`
 
 Delete a merged non-main work branch after PR merge-state verification.
@@ -2479,6 +2643,7 @@ Delete a merged non-main work branch after PR merge-state verification.
 - Surface: `diagnostic`
 - When to use: Diagnose ns command definitions/usages removed or reduced between release refs.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Diagnose ns command definitions/usages removed or reduced between release refs.
 
@@ -2496,6 +2661,7 @@ Diagnose ns command definitions/usages removed or reduced between release refs.
 - Surface: `diagnostic`
 - When to use: Report local/upstream divergence without mutating repository state.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Report local/upstream divergence without mutating repository state.
 
@@ -2509,6 +2675,7 @@ Report local/upstream divergence without mutating repository state.
 - Surface: `primitive`
 - When to use: Finalize the current transfer evidence log through the stricter evidence CLI.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Finalize the current transfer evidence log through the stricter evidence CLI.
 
@@ -2535,6 +2702,7 @@ Finalize the current transfer evidence log through the stricter evidence CLI.
 - Surface: `diagnostic`
 - When to use: Inspect the latest evidence log with the required-summary contract.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Inspect the latest evidence log with the required-summary contract.
 
@@ -2548,6 +2716,7 @@ Inspect the latest evidence log with the required-summary contract.
 - Surface: `orchestrator`
 - When to use: Finalize transfer evidence on an evidence branch and complete it through a PR.
 - Dry-run available: `False`
+- Remote effects: `merge`, `pull_request`, `push`
 
 Finalize transfer evidence on an evidence branch and complete it through a PR.
 
@@ -2579,6 +2748,7 @@ Finalize transfer evidence on an evidence branch and complete it through a PR.
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer fetch-origin.
 - Dry-run available: `False`
+- Remote effects: `fetch`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2591,6 +2761,7 @@ Finalize transfer evidence on an evidence branch and complete it through a PR.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit transfer head-sha.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2603,6 +2774,7 @@ Finalize transfer evidence on an evidence branch and complete it through a PR.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit transfer inspect.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2615,6 +2787,7 @@ Finalize transfer evidence on an evidence branch and complete it through a PR.
 - Surface: `diagnostic`
 - When to use: List local release tags and branches for safe work-start selection.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 List local release tags and branches for safe work-start selection.
 
@@ -2628,6 +2801,7 @@ List local release tags and branches for safe work-start selection.
 - Surface: `primitive`
 - When to use: Render the dynamic local-to-LLM copy/paste log header from rule files.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Render the dynamic local-to-LLM copy/paste log header from rule files.
 
@@ -2641,6 +2815,7 @@ Render the dynamic local-to-LLM copy/paste log header from rule files.
 - Surface: `primitive`
 - When to use: Render the terminal hint for copy/paste communication with the LLM.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Render the terminal hint for copy/paste communication with the LLM.
 
@@ -2655,6 +2830,7 @@ Render the terminal hint for copy/paste communication with the LLM.
 - Surface: `primitive`
 - When to use: Normalize active transfer files by adding missing command IDs and archiving stale active files.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Normalize active transfer files by adding missing command IDs and archiving stale active files.
 
@@ -2669,6 +2845,7 @@ Normalize active transfer files by adding missing command IDs and archiving stal
 - Surface: `primitive`
 - When to use: Normalize and summarize the local transfer session state.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Normalize and summarize the local transfer session state.
 
@@ -2688,6 +2865,7 @@ canonical transfer outbox file.
 - Surface: `primitive`
 - When to use: Generate a head-anchored executable remote-next transfer order.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Generate a head-anchored executable remote-next transfer order.
 
@@ -2711,6 +2889,7 @@ Generate a head-anchored executable remote-next transfer order.
 - Surface: `diagnostic`
 - When to use: Validate a remote-next transfer order without mutating the repository.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Validate a remote-next transfer order without mutating the repository.
 
@@ -2725,6 +2904,7 @@ Validate a remote-next transfer order without mutating the repository.
 - Surface: `diagnostic`
 - When to use: Render the current four-slice patch/handoff workflow state.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Render the current four-slice patch/handoff workflow state.
 
@@ -2741,6 +2921,7 @@ Render the current four-slice patch/handoff workflow state.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit transfer post-merge-check.
 - Dry-run available: `False`
+- Remote effects: `network_read`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2753,6 +2934,7 @@ Render the current four-slice patch/handoff workflow state.
 - Surface: `orchestrator`
 - When to use: Run the post-merge handoff refresh lifecycle after a merged PR.
 - Dry-run available: `False`
+- Remote effects: `merge`
 
 Run the post-merge handoff refresh lifecycle after a merged PR.
 
@@ -2774,6 +2956,7 @@ Run the post-merge handoff refresh lifecycle after a merged PR.
 - Surface: `orchestrator`
 - When to use: Deterministically settle post-merge generated-output refresh state.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Deterministically settle post-merge generated-output refresh state.
 
@@ -2795,6 +2978,7 @@ Deterministically settle post-merge generated-output refresh state.
 - Surface: `orchestrator`
 - When to use: Merge a substantive PR if needed, then finish post-merge handoff closeout.
 - Dry-run available: `False`
+- Remote effects: `merge`
 - Replaces raw: `closeout merged pr`, `close out merged pr`, `complete pr closeout`, `finish pr closeout`, `handoff after merge`, `post merge handoff`, `post-merge handoff`
 
 Merge a substantive PR if needed, then finish post-merge handoff closeout.
@@ -2816,6 +3000,7 @@ Merge a substantive PR if needed, then finish post-merge handoff closeout.
 - Surface: `orchestrator`
 - When to use: Wait for CI, safely merge an existing PR, and synchronize main.
 - Dry-run available: `False`
+- Remote effects: `merge`, `push`
 
 Wait for CI, safely merge an existing PR, and synchronize main.
 
@@ -2837,6 +3022,7 @@ Wait for CI, safely merge an existing PR, and synchronize main.
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer pr-create.
 - Dry-run available: `False`
+- Remote effects: `pull_request`, `push`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2853,6 +3039,7 @@ Wait for CI, safely merge an existing PR, and synchronize main.
 - Surface: `orchestrator`
 - When to use: Create, validate, merge, and optionally close out a PR without manual PR/SHA copying.
 - Dry-run available: `False`
+- Remote effects: `pull_request`, `push`
 - Replaces raw: `gh pr create`
 
 Create, validate, merge, and optionally close out a PR without manual PR/SHA copying.
@@ -2876,6 +3063,7 @@ Create, validate, merge, and optionally close out a PR without manual PR/SHA cop
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer pr-existing-for-branch.
 - Dry-run available: `False`
+- Remote effects: `network_read`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2890,6 +3078,7 @@ Create, validate, merge, and optionally close out a PR without manual PR/SHA cop
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer pr-merge-safe.
 - Dry-run available: `False`
+- Remote effects: `merge`
 - Replaces raw: `gh pr merge`
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -2910,6 +3099,7 @@ Create, validate, merge, and optionally close out a PR without manual PR/SHA cop
 - Surface: `diagnostic`
 - When to use: Run agentic-kit transfer pr-status.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2925,6 +3115,7 @@ Create, validate, merge, and optionally close out a PR without manual PR/SHA cop
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer pr-wait-ci.
 - Dry-run available: `False`
+- Remote effects: `network_read`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2941,6 +3132,7 @@ Create, validate, merge, and optionally close out a PR without manual PR/SHA cop
 - Surface: `primitive`
 - When to use: Deprecated compatibility alias for transfer chat-switch-complete.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Deprecated compatibility alias for transfer chat-switch-complete.
 
@@ -2957,6 +3149,7 @@ Deprecated compatibility alias for transfer chat-switch-complete.
 - Surface: `diagnostic`
 - When to use: Write the current diff to /tmp and run the Python protected change planner on it.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Write the current diff to /tmp and run the Python protected change planner on it.
 
@@ -2972,6 +3165,7 @@ Write the current diff to /tmp and run the Python protected change planner on it
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer publish-last-report.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2984,6 +3178,7 @@ Write the current diff to /tmp and run the Python protected change planner on it
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer pull-current.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2995,6 +3190,7 @@ Write the current diff to /tmp and run the Python protected change planner on it
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer push-current.
 - Dry-run available: `False`
+- Remote effects: `push`
 - Replaces raw: `git push`
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -3008,6 +3204,7 @@ Write the current diff to /tmp and run the Python protected change planner on it
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer read-user-task.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3019,6 +3216,7 @@ Write the current diff to /tmp and run the Python protected change planner on it
 - Surface: `primitive`
 - When to use: Rebase the current branch on its upstream with bounded conflict reporting.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Rebase the current branch on its upstream with bounded conflict reporting.
 
@@ -3034,6 +3232,7 @@ Rebase the current branch on its upstream with bounded conflict reporting.
 - Surface: `primitive`
 - When to use: Refresh outbox and latest handoff report with fresh generated LLM context.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Refresh outbox and latest handoff report with fresh generated LLM context.
 
@@ -3047,6 +3246,7 @@ Refresh outbox and latest handoff report with fresh generated LLM context.
 - Surface: `orchestrator`
 - When to use: Run the next repo-backed transfer order for local or remote work handoff.
 - Dry-run available: `False`
+- Remote effects: `fetch`
 
 Run the next repo-backed transfer order for local or remote work handoff.
 
@@ -3061,6 +3261,7 @@ Run the next repo-backed transfer order for local or remote work handoff.
 - Surface: `orchestrator`
 - When to use: Prepare a remote work branch with freshness, status, and transfer safety checks.
 - Dry-run available: `False`
+- Remote effects: `fetch`
 
 Prepare a remote work branch with freshness, status, and transfer safety checks.
 
@@ -3076,6 +3277,7 @@ Prepare a remote work branch with freshness, status, and transfer safety checks.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit transfer repo-diff.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3089,6 +3291,7 @@ Prepare a remote work branch with freshness, status, and transfer safety checks.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit transfer repo-log.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3101,6 +3304,7 @@ Prepare a remote work branch with freshness, status, and transfer safety checks.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit transfer repo-status.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3113,6 +3317,7 @@ Prepare a remote work branch with freshness, status, and transfer safety checks.
 - Surface: `diagnostic`
 - When to use: Require fresh generated LLM context before transfer planning.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Require fresh generated LLM context before transfer planning.
 
@@ -3128,6 +3333,7 @@ Require fresh generated LLM context before transfer planning.
 - Surface: `primitive`
 - When to use: Restore the canonical known volatile transfer files.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Restore the canonical known volatile transfer files.
 
@@ -3141,6 +3347,7 @@ Restore the canonical known volatile transfer files.
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer run-and-log.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3153,6 +3360,7 @@ Restore the canonical known volatile transfer files.
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer run-local.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3165,6 +3373,7 @@ Restore the canonical known volatile transfer files.
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer run-sequence-and-log.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3178,6 +3387,7 @@ Restore the canonical known volatile transfer files.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit transfer show-last-report.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3189,6 +3399,7 @@ Restore the canonical known volatile transfer files.
 - Surface: `primitive`
 - When to use: Run a bounded scan for known workflow standard errors before patch/transfer/release work.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Run a bounded scan for known workflow standard errors before patch/transfer/release work.
 
@@ -3208,6 +3419,7 @@ Run a bounded scan for known workflow standard errors before patch/transfer/rele
 - Surface: `diagnostic`
 - When to use: Run agentic-kit transfer state.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3219,6 +3431,7 @@ Run a bounded scan for known workflow standard errors before patch/transfer/rele
 - Surface: `diagnostic`
 - When to use: Run agentic-kit transfer status.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3231,6 +3444,7 @@ Run a bounded scan for known workflow standard errors before patch/transfer/rele
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer submit-user-task.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3246,6 +3460,7 @@ Run a bounded scan for known workflow standard errors before patch/transfer/rele
 - Surface: `orchestrator`
 - When to use: Synchronize main, acknowledge rules, and normalize the session.
 - Dry-run available: `False`
+- Remote effects: `fetch`
 
 Synchronize main, acknowledge rules, and normalize the session.
 
@@ -3260,6 +3475,7 @@ Synchronize main, acknowledge rules, and normalize the session.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit transfer verify-llm-context-refresh.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3271,6 +3487,7 @@ Synchronize main, acknowledge rules, and normalize the session.
 - Surface: `primitive`
 - When to use: Apply a guarded JSON/YAML text-replacement patch work order.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Apply a guarded JSON/YAML text-replacement patch work order.
 
@@ -3286,6 +3503,7 @@ Apply a guarded JSON/YAML text-replacement patch work order.
 - Surface: `primitive`
 - When to use: Read repo and transfer state and print the next safe wrapper command without mutating state.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Read repo and transfer state and print the next safe wrapper command without mutating state.
 
@@ -3299,6 +3517,7 @@ Read repo and transfer state and print the next safe wrapper command without mut
 - Surface: `diagnostic`
 - When to use: Validate the machine-readable project contract.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Validate the machine-readable project contract.
 
@@ -3312,6 +3531,7 @@ Validate the machine-readable project contract.
 - Surface: `diagnostic`
 - When to use: Validate an output file against a machine-readable output contract.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Validate an output file against a machine-readable output contract.
 
@@ -3330,6 +3550,7 @@ Validate an output file against a machine-readable output contract.
 - Surface: `diagnostic`
 - When to use: Validate that a text file contains required literal section markers.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Validate that a text file contains required literal section markers.
 
@@ -3344,6 +3565,7 @@ Validate that a text file contains required literal section markers.
 - Surface: `diagnostic`
 - When to use: Run common human workflow gates without committing or pushing.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Run common human workflow gates without committing or pushing.
 
@@ -3358,6 +3580,7 @@ Run common human workflow gates without committing or pushing.
 - Surface: `primitive`
 - When to use: Preview or execute the explicit destructive discard-all workflow.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Preview or execute the explicit destructive discard-all workflow.
 
@@ -3373,6 +3596,7 @@ Preview or execute the explicit destructive discard-all workflow.
 - Surface: `orchestrator`
 - When to use: Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.
 - Dry-run available: `True`
+- Remote effects: `merge`, `pull_request`, `push`
 - Replaces raw: `close completed slice`, `closeout completed slice`, `create pr and merge`, `create pull request and merge`, `finish slice`, `finish slice create pull request merge and post-merge handoff`, `finish work`, `publish slice`
 
 Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.
@@ -3394,11 +3618,30 @@ Finish a human work slice by planning or executing commit, push, PR, merge, and 
 - Surface: `orchestrator`
 - When to use: Run safe recovery/status commands after interrupted work.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Run safe recovery/status commands after interrupted work.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit work rescue`
+
+- Safety: `BOUNDED`
+- Surface: `orchestrator`
+- When to use: Rescue local main work before realigning main to the local base ref.
+- Dry-run available: `True`
+- Remote effects: `none`
+
+Rescue local main work before realigning main to the local base ref.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `execute` | `TyperOption` | --execute | `False` | `False` | Execute a signed local main rescue. Dry-run is the default. |
+| `expected_signature` | `TyperOption` | --expected-signature | `False` | `` | Dry-run signature that must match before execute mutates local git state. |
+| `rescue_branch` | `TyperOption` | --rescue-branch | `False` | `` | Optional local rescue branch name. Defaults to a deterministic rescue/... branch. |
+| `base_ref` | `TyperOption` | --base-ref | `False` | `origin/main` | Local base ref used to realign main after rescue. Defaults to origin/main. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit work start`
@@ -3407,6 +3650,7 @@ Run safe recovery/status commands after interrupted work.
 - Surface: `orchestrator`
 - When to use: Start a human patch/slice workflow with the safe standard startup sequence.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Start a human patch/slice workflow with the safe standard startup sequence.
 
@@ -3423,6 +3667,7 @@ Start a human patch/slice workflow with the safe standard startup sequence.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit work-order check.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 _No parameters._
 
@@ -3432,6 +3677,7 @@ _No parameters._
 - Surface: `diagnostic`
 - When to use: Run agentic-kit work-order list.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 _No parameters._
 
@@ -3441,6 +3687,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Run agentic-kit work-order prepare.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3454,6 +3701,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Run agentic-kit work-order run.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3466,6 +3714,7 @@ _No parameters._
 - Surface: `diagnostic`
 - When to use: Run agentic-kit work-order show.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3477,6 +3726,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Run agentic-kit work-order templates.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 _No parameters._
 
@@ -3486,6 +3736,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Run agentic-kit work-order typed-next.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3497,6 +3748,7 @@ _No parameters._
 - Surface: `diagnostic`
 - When to use: Run agentic-kit work-order typed-queue-status.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3509,6 +3761,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Run agentic-kit work-order typed-run.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3522,6 +3775,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Run agentic-kit work-order upload.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3538,6 +3792,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Cleanup completed or stale temporary workflow evidence branches.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Cleanup completed or stale temporary workflow evidence branches.
 
@@ -3551,6 +3806,7 @@ Cleanup completed or stale temporary workflow evidence branches.
 - Surface: `diagnostic`
 - When to use: Upload preserved FAILED workflow evidence without cleanup or retry.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Upload preserved FAILED workflow evidence without cleanup or retry.
 
@@ -3564,6 +3820,7 @@ Upload preserved FAILED workflow evidence without cleanup or retry.
 - Surface: `orchestrator`
 - When to use: Request the configured workflow and run one bounded step.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Request the configured workflow and run one bounded step.
 
@@ -3577,6 +3834,7 @@ Request the configured workflow and run one bounded step.
 - Surface: `diagnostic`
 - When to use: List stored local workflow items.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 List stored local workflow items.
 
@@ -3590,6 +3848,7 @@ List stored local workflow items.
 - Surface: `primitive`
 - When to use: Request the configured declarative workflow without running it.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Request the configured declarative workflow without running it.
 
@@ -3603,6 +3862,7 @@ Request the configured declarative workflow without running it.
 - Surface: `primitive`
 - When to use: Run the current workflow, or set a stored workflow item and run it.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Run the current workflow, or set a stored workflow item and run it.
 
@@ -3617,6 +3877,7 @@ Run the current workflow, or set a stored workflow item and run it.
 - Surface: `diagnostic`
 - When to use: Show the current workflow request or one stored workflow item.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Show the current workflow request or one stored workflow item.
 
@@ -3631,6 +3892,7 @@ Show the current workflow request or one stored workflow item.
 - Surface: `diagnostic`
 - When to use: Show guided workflow state; shortcut for workflow status --explain.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Show guided workflow state; shortcut for workflow status --explain.
 
@@ -3644,6 +3906,7 @@ Show guided workflow state; shortcut for workflow status --explain.
 - Surface: `diagnostic`
 - When to use: Print the current workflow state and bounded evidence pointers.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Print the current workflow state and bounded evidence pointers.
 
@@ -3658,6 +3921,7 @@ Print the current workflow state and bounded evidence pointers.
 - Surface: `primitive`
 - When to use: Alias for upload-output.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Alias for upload-output.
 
@@ -3671,6 +3935,7 @@ Alias for upload-output.
 - Surface: `primitive`
 - When to use: Alias for upload-output.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Alias for upload-output.
 
@@ -3684,6 +3949,7 @@ Alias for upload-output.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit workflow-guard check.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3695,6 +3961,7 @@ Alias for upload-output.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit workflow-guard diagnose.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3706,6 +3973,7 @@ Alias for upload-output.
 - Surface: `orchestrator`
 - When to use: Analyze an existing repository without writing workspace files.
 - Dry-run available: `False`
+- Remote effects: `none`
 
 Analyze an existing repository without writing workspace files.
 
@@ -3720,6 +3988,7 @@ Analyze an existing repository without writing workspace files.
 - Surface: `orchestrator`
 - When to use: Run the deterministic DPA repository-intake orchestration.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Run the deterministic DPA repository-intake orchestration.
 
@@ -3739,6 +4008,7 @@ Run the deterministic DPA repository-intake orchestration.
 - Surface: `orchestrator`
 - When to use: Plan or create a bounded operating-layer workspace.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Plan or create a bounded operating-layer workspace.
 
@@ -3759,6 +4029,7 @@ Plan or create a bounded operating-layer workspace.
 - Surface: `orchestrator`
 - When to use: Plan or remove exact Kit-generated operating-layer workspace files.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Plan or remove exact Kit-generated operating-layer workspace files.
 
@@ -3774,6 +4045,7 @@ Plan or remove exact Kit-generated operating-layer workspace files.
 - Surface: `orchestrator`
 - When to use: Plan or run deterministic workspace manifest schema upgrades.
 - Dry-run available: `True`
+- Remote effects: `none`
 
 Plan or run deterministic workspace manifest schema upgrades.
 
