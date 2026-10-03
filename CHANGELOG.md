@@ -1,3 +1,13 @@
+## v1.0.15 - 2026-10-03
+
+- Zenodo DOI verification pending for v1.0.15.
+- Record release 1.0.14 DOI closeout
+- KIT-GF-032 slice A: release version anchors of external workspaces
+- KIT-GF-032 slice B: release-prep, release-status and release scan in external workspaces
+- Respect external doc readiness in release scans
+- Add private tag release-publish route
+- KIT-GF-032 slice E: release ready passes in external workspaces with publication none
+
 ## v1.0.14 - 2026-10-03
 
 - Remove temporary live publication marker
