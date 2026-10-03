@@ -1,6 +1,5 @@
 ## v1.0.15 - 2026-10-03
 
-- Zenodo DOI verification pending for v1.0.15.
 - Record release 1.0.14 DOI closeout evidence for the verified GitHub Release and Zenodo archive
 - Add workspace-derived release version anchors for external workspaces (KIT-GF-032 slice A)
 - Add release-prep, release-status and release scan support for external workspaces (KIT-GF-032 slice B)
@@ -8,6 +7,9 @@
 - Add a private tag release-publish route for publication none: annotated tag and tag push without GitHub Release, PyPI or Zenodo (KIT-GF-032 slice D)
 - Let release ready pass in external workspaces with publication none: refreshed LLM-context carriers, workspace temp root and private release-notes fallback (KIT-GF-032 slice E)
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.15 DOI `10.5281/zenodo.23126837`.
+
+Zenodo v1.0.15 DOI: 10.5281/zenodo.23126837
 ## v1.0.14 - 2026-10-03
 
 - Remove temporary live publication marker
