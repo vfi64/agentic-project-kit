@@ -1,12 +1,14 @@
 ## v1.0.14 - 2026-10-03
 
-- Zenodo DOI verification pending for v1.0.14.
 - Remove temporary live publication marker
 - Record GF-009 private released-package retest
 - Document standing PR and handoff authorization
 - Add lossless main rescue workflow
 - Add private publication-none release policy
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.14 DOI `10.5281/zenodo.23120536`.
+
+Zenodo v1.0.14 DOI: 10.5281/zenodo.23120536
 ## v1.0.13 - 2026-09-16
 
 - Zenodo DOI verification pending for v1.0.13.
