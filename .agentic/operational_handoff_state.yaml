@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 43d30d2332fb1dfa9a276e8ede23b2c617db3a48
-  short: 43d30d23
-  subject: Record release 1.0.14 DOI closeout (#2348)
+  full: ec3cbe0050e1aef00a2e7448f9e9f3c3edf3a0d6
+  short: ec3cbe00
+  subject: 'KIT-GF-032 slice A: release version anchors of external workspaces (#2350)'
 last_substantive_work_state:
-  full: 43d30d2332fb1dfa9a276e8ede23b2c617db3a48
-  short: 43d30d23
-  subject: Record release 1.0.14 DOI closeout (#2348)
+  full: ec3cbe0050e1aef00a2e7448f9e9f3c3edf3a0d6
+  short: ec3cbe00
+  subject: 'KIT-GF-032 slice A: release version anchors of external workspaces (#2350)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
