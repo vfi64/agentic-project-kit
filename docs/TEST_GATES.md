@@ -679,6 +679,8 @@ Check post-release archive state after publishing:
 
 Publication policy is part of the workspace manifest. With `publication: none`, external workspaces must not require GitHub Release, PyPI, or Zenodo publication evidence; `release-publish` must plan and, behind the normal live-execute capability, perform only a private annotated tag plus `git push origin <tag>`. It must skip GitHub Release, PyPI, Zenodo, post-release-check, and Zenodo access. `post-release-check`, `post-release-doi-closeout`, and CHANGELOG quality checks must also skip those remote publication requirements.
 
+External release readiness must not depend on carriers that its own steps remove: in an external workspace `release ready` must regenerate the LLM-context carriers after sync-main and before the standard-error scan checks them. The release summary lines must land in the workspace temp root, never in an unignored `tmp/` of the target repository. With `publication: none`, unclassified release-note items must be listed under the private fallback category Changed with a warning; every other publication policy keeps blocking them. `release prepare --write` must skip the docs-pages fallback refresh when an external workspace has no site build script; in the Kit a missing script stays a failure.
+
 Before tagging:
 
     git status --short

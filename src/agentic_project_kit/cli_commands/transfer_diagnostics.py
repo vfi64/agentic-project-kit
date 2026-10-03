@@ -566,6 +566,7 @@ def standard_error_scan_command(
     # (its own test files, its DOI/handoff currency audit, its planning-document
     # consolidation) do not apply; they are recorded as skipped, never run.
     from agentic_project_kit.release_version_sources import is_kit_self_hosting
+    from agentic_project_kit.workspace import load_workspace
 
     external = not is_kit_self_hosting(project_root)
 
@@ -642,7 +643,8 @@ def standard_error_scan_command(
                     "stderr": "--from-tag was not provided and no local v* git tag could be derived.",
                 }
             )
-        summary_lines_path = project_root / "tmp" / f"release-{version.replace('.', '')}-summary-lines.json"
+        # The workspace temp root: tmp/ in the Kit, .agentic/tmp in external workspaces (KIT-GF-032).
+        summary_lines_path = load_workspace(project_root).tmp_file(f"release-{version.replace('.', '')}-summary-lines.json")
         step("release-status", ["./.venv/bin/agentic-kit", "release-status", "--include-remote", "--json"], allowed_returncodes={0, 2})
         step(
             "release-notes-generate",
