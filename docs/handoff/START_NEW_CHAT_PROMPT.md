@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 72e28d1e461f587888414a652978c831272d68ddb98ac27803d910fd9bb2d454
 - docs/reference/agentic-kit-commands.json: e90ce3b784375b8d6ddc3834adb7e98ed86fa4b3d6d5a249c5eeb16e18287923
-## Operational documentation refresh state after PR #2342
+## Operational documentation refresh state after PR #2344
 
-Current administrative handoff refresh state is `6836d519` (`Add private publication-none release policy (#2342)`). Continue next only after this post-PR2342 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `936341e6` (`Prepare release v1.0.14 (#2344)`). Continue next only after this post-PR2344 refresh is committed and merged; the next substantive slice must be created from fresh main.
