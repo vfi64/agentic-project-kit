@@ -454,21 +454,32 @@ def _write_release_prepare_report_step(
 
 
 def _doc_lifecycle_release_review_step(version: str) -> dict[str, object]:
-    blockers = build_doc_lifecycle_release_blockers(Path("."), version=version)
+    root = Path(".")
+    blockers = build_doc_lifecycle_release_blockers(root, version=version)
+    workspace = load_workspace(root, suppress_legacy_profile_warning=True)
+    external_warn_mode = is_external_manifest_workspace(root) and workspace.hygiene_doc_lifecycle != "strict"
+    blocked = bool(blockers) and not external_warn_mode
+    status = "BLOCKED" if blocked else "WARN" if blockers else "PASS"
     lines = [
         "DOC_LIFECYCLE_RELEASE_REVIEW",
-        f"STATUS={'BLOCKED' if blockers else 'PASS'}",
+        f"STATUS={status}",
         f"BLOCKER_COUNT={len(blockers)}",
     ]
+    if external_warn_mode:
+        lines.append(f"HYGIENE_MODE={workspace.hygiene_doc_lifecycle}")
+        lines.append("EXTERNAL_WORKSPACE_DOC_LIFECYCLE=warn_only")
     for finding in blockers:
-        lines.append(f"BLOCKER={finding.code}|{finding.path}|{finding.message}")
-    if blockers:
+        prefix = "WARNING" if external_warn_mode else "BLOCKER"
+        lines.append(f"{prefix}={finding.code}|{finding.path}|{finding.message}")
+    if blocked:
         lines.append("NEXT=Run docs lifecycle sweep before release readiness.")
+    elif blockers:
+        lines.append("NEXT=Continue release readiness; external doc_lifecycle is warn-only.")
     return {
         "name": "doc-lifecycle-release-review",
         "argv": ["agentic-kit", "doc-lifecycle-audit", "--json", "--current-version", version],
-        "returncode": 2 if blockers else 0,
-        "ok": not blockers,
+        "returncode": 2 if blocked else 0,
+        "ok": not blocked,
         "allowed_returncodes": [0],
         "stdout": "\n".join(lines) + "\n",
         "stderr": "",

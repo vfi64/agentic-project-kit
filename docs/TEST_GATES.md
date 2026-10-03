@@ -623,7 +623,7 @@ Run `agentic-kit direction validate` when changing `docs/planning/PROJECT_DIRECT
 
 `agentic-kit doc-lifecycle-audit --strict` fails on deterministic lifecycle blockers: `HEADER_REGISTRY_MISMATCH`, `SUPERSEDED_TARGET_MISSING`, `REVIEW_DUE_RELEASE`, `REVIEW_DUE_DIRECTION`, and `SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE`. Time-based lifecycle findings, including `STALE_BY_BUDGET` and `REVIEW_DUE_DATE`, must stay non-blocking in strict mode.
 
-`agentic-kit release ready` must include a documentation lifecycle release review step that blocks `REVIEW_DUE_RELEASE` findings for the requested version and directs maintainers to `agentic-kit docs lifecycle sweep` before release readiness.
+`agentic-kit release ready` must include a documentation lifecycle release review step that blocks `REVIEW_DUE_RELEASE` findings for the requested version and directs maintainers to `agentic-kit docs lifecycle sweep` before release readiness. In external manifest workspaces with `doc_lifecycle: warn`, release readiness records those lifecycle findings as warnings instead of blockers; `doc_lifecycle: strict` still blocks.
 
 ## Command Authority Gate
 

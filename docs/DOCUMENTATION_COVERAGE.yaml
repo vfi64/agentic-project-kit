@@ -3,6 +3,21 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: external-release-ready-doc-audit-coverage
+  description: External release readiness must keep Kit self-hosting documentation audits out of external workspaces while preserving strict lifecycle blocking.
+  documents:
+  - path: README.md
+    terms:
+    - external manifest workspaces
+    - release ready
+    - "doc_lifecycle: warn"
+    - Kit self-hosting documentation audits
+  - path: docs/TEST_GATES.md
+    terms:
+    - release ready
+    - "doc_lifecycle: warn"
+    - "doc_lifecycle: strict"
+    - warnings instead of blockers
 - id: release-version-anchors-coverage
   description: External workspaces must keep their own release version anchors visible in release documentation and gates (KIT-GF-032).
   documents:
