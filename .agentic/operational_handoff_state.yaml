@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b3cf1cadae041ed386515b1c8837a3a11f66eb36
-  short: b3cf1cad
-  subject: Add lossless main rescue workflow (#2340)
+  full: 6836d519857e8527d9ec2c27095328617ccfb83c
+  short: 6836d519
+  subject: Add private publication-none release policy (#2342)
 last_substantive_work_state:
-  full: b3cf1cadae041ed386515b1c8837a3a11f66eb36
-  short: b3cf1cad
-  subject: Add lossless main rescue workflow (#2340)
+  full: 6836d519857e8527d9ec2c27095328617ccfb83c
+  short: 6836d519
+  subject: Add private publication-none release policy (#2342)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

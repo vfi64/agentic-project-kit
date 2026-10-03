@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: be859cfbff1f6340d34f423bc0bae6a131e1274124aadf41b58e5b3ee71a2c88
 - docs/reference/agentic-kit-commands.json: 4f12f58661dce2f28f056dc2d93b023dfbe08c40bd0f13109ad1c996bf0b0aa0
-## Operational documentation refresh state after PR #2340
+## Operational documentation refresh state after PR #2342
 
-Current administrative handoff refresh state is `b3cf1cad` (`Add lossless main rescue workflow (#2340)`). Continue next only after this post-PR2340 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `6836d519` (`Add private publication-none release policy (#2342)`). Continue next only after this post-PR2342 refresh is committed and merged; the next substantive slice must be created from fresh main.
