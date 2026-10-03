@@ -18,6 +18,21 @@ rules:
     - "doc_lifecycle: warn"
     - "doc_lifecycle: strict"
     - warnings instead of blockers
+- id: external-release-ready-carriers-coverage
+  description: External release readiness must regenerate its LLM-context carriers, keep release summaries in the workspace temp root and use the private release-notes fallback under publication none (KIT-GF-032).
+  documents:
+  - path: README.md
+    terms:
+    - transfer refresh-llm-context-carriers
+    - workspace temp root
+    - private fallback
+    - site/scripts/build.py
+  - path: docs/TEST_GATES.md
+    terms:
+    - regenerate the LLM-context carriers after sync-main
+    - workspace temp root
+    - private fallback category
+    - docs-pages fallback refresh
 - id: release-version-anchors-coverage
   description: External workspaces must keep their own release version anchors visible in release documentation and gates (KIT-GF-032).
   documents:

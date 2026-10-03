@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -78,6 +78,7 @@ class ReleaseNotesReport:
     unclassified_items: tuple[ReleaseNoteItem, ...]
     missing_evidence: tuple[dict[str, object], ...]
     validation: ReleaseNotesValidation
+    warnings: tuple[str, ...] = ()
 
     def as_dict(self) -> dict[str, object]:
         return {
@@ -95,6 +96,7 @@ class ReleaseNotesReport:
             "unclassified_items": [item.as_dict() for item in self.unclassified_items],
             "missing_evidence": list(self.missing_evidence),
             "validation": self.validation.as_dict(),
+            "warnings": list(self.warnings),
         }
 
 
@@ -120,8 +122,12 @@ def build_release_notes_report(
     to_ref: str = "HEAD",
     command_runner: ReleaseNotesRunner | None = None,
     include_github_metadata: bool = False,
+    private_unclassified_fallback: bool | None = None,
 ) -> ReleaseNotesReport:
     runner = command_runner or run_command
+    if private_unclassified_fallback is None:
+        private_unclassified_fallback = _publication_is_private(project_root)
+    fallback_items: list[ReleaseNoteItem] = []
     plain_version = version.removeprefix("v")
     commits, evidence_errors = _collect_commits(project_root, from_tag=from_tag, to_ref=to_ref, runner=runner)
     pr_coverage, coverage_evidence = _collect_merge_pr_coverage(project_root, commits=commits, runner=runner)
@@ -159,6 +165,9 @@ def build_release_notes_report(
             github_metadata=github_metadata,
             pr_coverage=coverage,
         )
+        if item.category == "Unclassified" and private_unclassified_fallback:
+            item = _private_fallback_item(item)
+            fallback_items.append(item)
         if item.category == "Administrative Handoff Refresh":
             administrative_items.append(item)
         else:
@@ -190,6 +199,51 @@ def build_release_notes_report(
         unclassified_items=tuple(unclassified_items),
         missing_evidence=tuple(missing_evidence),
         validation=validation,
+        warnings=_fallback_warnings(fallback_items),
+    )
+
+
+PRIVATE_FALLBACK_CATEGORY = "Changed"
+
+
+def _publication_is_private(project_root: Path) -> bool:
+    """True when the workspace manifest sets publication: none (KIT-GF-032).
+
+    A private release only writes the workspace CHANGELOG and pushes a tag, so an
+    unclassified item is listed under a fallback category with a warning instead
+    of blocking the release.
+    """
+    try:
+        from agentic_project_kit.publication_policy import publication_policy_for
+
+        return not publication_policy_for(project_root).publishes_anywhere
+    except Exception:  # noqa: BLE001 - an unreadable manifest keeps the strict default
+        return False
+
+
+def _private_fallback_item(item: ReleaseNoteItem) -> ReleaseNoteItem:
+    return replace(
+        item,
+        category=PRIVATE_FALLBACK_CATEGORY,
+        confidence="fallback",
+        evidence=(
+            *item.evidence,
+            {
+                "type": "unclassified_private_fallback",
+                "category": PRIVATE_FALLBACK_CATEGORY,
+                "reason": "publication: none; no PR category, label or subject heuristic matched",
+            },
+        ),
+    )
+
+
+def _fallback_warnings(fallback_items: list[ReleaseNoteItem]) -> tuple[str, ...]:
+    if not fallback_items:
+        return ()
+    refs = ", ".join(item.commit_sha[:8] for item in fallback_items)
+    return (
+        "Unclassified release-note items listed under "
+        f"{PRIVATE_FALLBACK_CATEGORY} because publication is none: {refs}",
     )
 
 
@@ -237,7 +291,9 @@ def render_release_notes_markdown(report: ReleaseNotesReport) -> str:
     lines.append("")
 
     lines.append("## Known Issues")
-    if report.validation.status == "PASS":
+    if report.validation.status == "PASS" and report.warnings:
+        lines.extend(f"- {warning}" for warning in report.warnings)
+    elif report.validation.status == "PASS":
         lines.append("- None recorded by the deterministic release-notes generator.")
     else:
         for reason in report.validation.reasons:

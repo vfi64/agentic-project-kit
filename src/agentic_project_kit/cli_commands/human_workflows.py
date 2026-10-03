@@ -67,11 +67,25 @@ def _release_successor_handoff_refresh_step() -> dict[str, object]:
     )
 
 
+DOCS_PAGES_BUILD_SCRIPT = "site/scripts/build.py"
+
+
 def _docs_pages_fallback_refresh_step() -> dict[str, object]:
-    return _run_step(
-        "docs-pages-fallback-refresh",
-        _python("site/scripts/build.py", "--docs-pages-fallback", "--json"),
-    )
+    argv = _python(DOCS_PAGES_BUILD_SCRIPT, "--docs-pages-fallback", "--json")
+    if is_external_manifest_workspace(Path(".")) and not Path(DOCS_PAGES_BUILD_SCRIPT).exists():
+        # KIT-GF-032: the docs-pages fallback site is a Kit self-hosting artifact;
+        # an external workspace without the site build script records the step as skipped.
+        return {
+            "name": "docs-pages-fallback-refresh",
+            "argv": argv,
+            "returncode": 0,
+            "ok": True,
+            "skipped": True,
+            "allowed_returncodes": [0],
+            "stdout": f"SKIPPED: no {DOCS_PAGES_BUILD_SCRIPT} in this workspace; the docs-pages fallback site is a Kit self-hosting artifact (KIT-GF-032).",
+            "stderr": "",
+        }
+    return _run_step("docs-pages-fallback-refresh", argv)
 
 
 def _payload(action: str, steps: list[dict[str, object]], *, dry_run: bool = False, extra: dict[str, object] | None = None) -> dict[str, object]:
@@ -864,8 +878,13 @@ def release_ready_command(
     """Run release readiness through the standard-error scan wrapper."""
     release_date = date or date_cls.today().isoformat()
     effective_from_tag = from_tag or _latest_release_tag()
-    steps = [
-        _run_step("sync-main", _agentic("transfer", "sync-main")),
+    steps = [_run_step("sync-main", _agentic("transfer", "sync-main"))]
+    if is_external_manifest_workspace(Path(".")):
+        # KIT-GF-032: sync-main normalizes the session and removes the LLM-context
+        # carriers, which live in excluded runtime paths of an external workspace;
+        # regenerate them before the scan checks them.
+        steps.append(_run_step("refresh-llm-context-carriers", _agentic("transfer", "refresh-llm-context-carriers", "--json")))
+    steps += [
         _run_step("standard-error-scan", _agentic("transfer", "standard-error-scan", "--before-release", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--date", release_date, "--json"), allowed_returncodes={0}),
         _doc_lifecycle_release_review_step(version),
         _run_step("release-status", _agentic("release-status", "--include-remote", "--json"), allowed_returncodes={0, 2}),
