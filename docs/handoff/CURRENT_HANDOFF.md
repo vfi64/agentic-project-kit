@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `fa293dd72d3f43634be29793c35a1e24f645ebee` (`fa293dd7`), after `KIT-GF-032 slice E: release ready passes in external workspaces with publication none (#2358)`.
-Last substantive work state is `fa293dd72d3f43634be29793c35a1e24f645ebee` (`fa293dd7`), after `KIT-GF-032 slice E: release ready passes in external workspaces with publication none (#2358)`.
+Current verified main/admin HEAD is `7be27417265cc351d0efa4bf984520b9cc4c569d` (`7be27417`), after `Prepare release v1.0.15 (#2360)`.
+Last substantive work state is `7be27417265cc351d0efa4bf984520b9cc4c569d` (`7be27417`), after `Prepare release v1.0.15 (#2360)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
