@@ -44,7 +44,7 @@
       "path": "AGENTS.md"
     },
     {
-      "bytes": 46018,
+      "bytes": 46516,
       "exists": true,
       "path": "README.md"
     },
@@ -54,7 +54,7 @@
       "path": "SECURITY.md"
     },
     {
-      "bytes": 63156,
+      "bytes": 63236,
       "exists": true,
       "path": "docs/DOCUMENTATION_COVERAGE.yaml",
       "yaml_valid": true
@@ -72,7 +72,7 @@
       "path": "docs/STATUS.md"
     },
     {
-      "bytes": 65388,
+      "bytes": 65624,
       "exists": true,
       "path": "docs/TEST_GATES.md"
     },
