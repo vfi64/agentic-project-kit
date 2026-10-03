@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: ec3cbe0050e1aef00a2e7448f9e9f3c3edf3a0d6
-  short: ec3cbe00
-  subject: 'KIT-GF-032 slice A: release version anchors of external workspaces (#2350)'
+  full: 0ae4c18771d09be27c7b15d41c78aab386999b59
+  short: 0ae4c187
+  subject: 'KIT-GF-032 slice B: release-prep, release-status and release scan in external workspaces (#2352)'
 last_substantive_work_state:
-  full: ec3cbe0050e1aef00a2e7448f9e9f3c3edf3a0d6
-  short: ec3cbe00
-  subject: 'KIT-GF-032 slice A: release version anchors of external workspaces (#2350)'
+  full: 0ae4c18771d09be27c7b15d41c78aab386999b59
+  short: 0ae4c187
+  subject: 'KIT-GF-032 slice B: release-prep, release-status and release scan in external workspaces (#2352)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

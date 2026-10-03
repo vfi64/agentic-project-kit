@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `ec3cbe0050e1aef00a2e7448f9e9f3c3edf3a0d6` (`ec3cbe00`), after `KIT-GF-032 slice A: release version anchors of external workspaces (#2350)`.
-Last substantive work state is `ec3cbe0050e1aef00a2e7448f9e9f3c3edf3a0d6` (`ec3cbe00`), after `KIT-GF-032 slice A: release version anchors of external workspaces (#2350)`.
+Current verified main/admin HEAD is `0ae4c18771d09be27c7b15d41c78aab386999b59` (`0ae4c187`), after `KIT-GF-032 slice B: release-prep, release-status and release scan in external workspaces (#2352)`.
+Last substantive work state is `0ae4c18771d09be27c7b15d41c78aab386999b59` (`0ae4c187`), after `KIT-GF-032 slice B: release-prep, release-status and release scan in external workspaces (#2352)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
