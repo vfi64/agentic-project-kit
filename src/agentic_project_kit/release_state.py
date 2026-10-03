@@ -119,8 +119,24 @@ def build_release_lifecycle_status(
     http_getter: ReleaseStateHttpGetter | None = None,
 ) -> ReleaseLifecycleStatus:
     runner = command_runner or run_command
+    # KIT-GF-032 slice B: an external workspace reads its own version anchors
+    # and, without a Zenodo policy, has no DOI lifecycle and no remote checks.
+    from agentic_project_kit.publication_policy import publication_policy_for
+    from agentic_project_kit.release_version_sources import is_kit_self_hosting, package_version_file
+
+    policy = publication_policy_for(project_root)
+    external = not is_kit_self_hosting(project_root)
     package_version = _read_pyproject_version(project_root)
-    init_version = _read_init_version(project_root)
+    if external:
+        package_file = package_version_file(project_root)
+        init_version = (_match(r"^__version__\s*=\s*[\"']([^\"']+)[\"']", _read(project_root, package_file))
+                        if package_file else package_version)
+    else:
+        init_version = _read_init_version(project_root)
+    citation_required = (not external) or policy.uses_zenodo or (project_root / "CITATION.cff").exists()
+    doi_lifecycle = policy.uses_zenodo
+    if not policy.publishes_anywhere:
+        include_remote = False
     citation_text = _read(project_root, "CITATION.cff")
     citation_version = _match(r"^version:\s*([^\s]+)", citation_text)
     concept_doi = _match(r"^doi:\s*['\"]?([^'\"\s]+)", citation_text)
@@ -135,8 +151,9 @@ def build_release_lifecycle_status(
         version=resolved_version,
         package_version=package_version,
         init_version=init_version,
-        citation_version=citation_version,
+        citation_version=citation_version if citation_required else resolved_version,
         changelog=changelog,
+        external=external,
     )
     closed_out = _is_closed_out(project_root, resolved_version, version_doi)
     current_verified = current_verified_version == resolved_version and current_verified_doi == version_doi and bool(version_doi)
@@ -171,7 +188,11 @@ def build_release_lifecycle_status(
         version_doi=version_doi,
         closed_out=closed_out,
         current_verified=current_verified,
+        doi_lifecycle=doi_lifecycle,
+        policy=policy.value,
     )
+    if not doi_lifecycle:
+        warnings = tuple(w for w in warnings if w not in {"published_but_doi_not_closed_out"})
     current_state = _current_state(steps)
     result_status = "BLOCK" if blockers else ("PASS" if current_state == "current_verified" else "READY")
     return ReleaseLifecycleStatus(
@@ -418,12 +439,15 @@ def _is_prepared(
     init_version: str,
     citation_version: str,
     changelog: str,
+    external: bool = False,
 ) -> bool:
+    heading = (rf"(?m)^##\s+\[?v?{re.escape(version)}\]?(?:\s|$)" if external
+               else rf"(?m)^##\s+v{re.escape(version)}\b")
     return (
         package_version == version
         and init_version == version
         and citation_version == version
-        and bool(re.search(rf"(?m)^##\s+v{re.escape(version)}\b", changelog))
+        and bool(re.search(heading, changelog))
     )
 
 
@@ -481,7 +505,17 @@ def _steps(
     version_doi: str,
     closed_out: bool,
     current_verified: bool,
+    doi_lifecycle: bool = True,
+    policy: str = "github+pypi+zenodo",
 ) -> tuple[ReleaseLifecycleStep, ...]:
+    if not doi_lifecycle:
+        # Without a Zenodo policy the lifecycle ends with the tag (KIT-GF-032 slice B).
+        not_applicable = (f"publication={policy}; DOI lifecycle not applicable",)
+        version_doi = version_doi or ("n/a" if local_tag_exists else "")
+        closed_out = closed_out or local_tag_exists
+        current_verified = current_verified or local_tag_exists
+    else:
+        not_applicable = ()
     return (
         ReleaseLifecycleStep(
             "planned",
@@ -513,7 +547,7 @@ def _steps(
         ReleaseLifecycleStep(
             "doi_verified",
             "PASS" if version_doi else "PENDING",
-            ((f"version_doi={version_doi}",) if version_doi else ("version_doi=<missing>",)),
+            not_applicable or ((f"version_doi={version_doi}",) if version_doi else ("version_doi=<missing>",)),
             ("agentic-kit post-release-check --version <version>",),
             ("manual DOI metadata edits",),
             "closed_out",
@@ -521,7 +555,7 @@ def _steps(
         ReleaseLifecycleStep(
             "closed_out",
             "PASS" if closed_out else "PENDING",
-            (f"expected_paths={len(EXPECTED_DOI_CLOSEOUT_PATHS)}",),
+            not_applicable or (f"expected_paths={len(EXPECTED_DOI_CLOSEOUT_PATHS)}",),
             ("agentic-kit post-release-doi-closeout --version <version> --write --json",),
             ("partial DOI closeout commit",),
             "current_verified",

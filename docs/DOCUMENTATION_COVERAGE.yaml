@@ -12,6 +12,8 @@ rules:
     - literal package `__version__`
     - current-version line
     - self-hosting layout
+    - ends the lifecycle with the tag
+    - skips the Kit's self-hosting checks
   - path: docs/TEST_GATES.md
     terms:
     - Release version anchors

@@ -370,6 +370,13 @@ def prepare_release_state(
     normalized_summary_lines = _normalize_changelog_summary_lines(summary_lines)
     handoff_path = root / CURRENT_HANDOFF_RELATIVE_PATH
 
+    from agentic_project_kit.release_version_sources import is_kit_self_hosting
+
+    if not is_kit_self_hosting(root):
+        return _prepare_external_release_state(
+            root, version=version, date=date, summary_lines=normalized_summary_lines, dry_run=dry_run
+        )
+
     updates = {
         root / "pyproject.toml": _update_pyproject(_read(root / "pyproject.toml"), version),
         root / "src" / "agentic_project_kit" / "__init__.py": _update_package_init(
@@ -422,3 +429,72 @@ def prepare_release_state(
         _write_if_changed(path, text, dry_run=dry_run, changed=changed, root=root)
 
     return ReleasePrepareResult(version=version, date=date, changed_paths=sorted(changed), dry_run=dry_run)
+
+
+# --- KIT-GF-032 slice B: external workspaces -------------------------------------------------
+
+_EXTERNAL_LITERAL_VERSION = r'^(__version__\s*=\s*)(["\'])[^"\']+\2'
+
+
+def _external_changelog(text: str, version: str, date: str, *, summary_lines: Sequence[str],
+                        uses_zenodo: bool) -> str:
+    lines = _with_pending_doi_line(version, summary_lines) if uses_zenodo else tuple(summary_lines)
+    section = f"## v{version} - {date}\n\n" + "\n".join(f"- {line}" for line in lines) + "\n"
+    existing = re.compile(rf"^##\s+\[?v?{re.escape(version)}\]?(?:[ \t][^\n]*)?\n.*?(?=^##\s|\Z)",
+                          re.MULTILINE | re.DOTALL)
+    if existing.search(text):
+        return existing.sub(section.rstrip() + "\n\n", text, count=1)
+    versioned = re.search(r"^##\s+\[?v?\d+\.\d+\.\d+", text, flags=re.MULTILINE)
+    if versioned:
+        index = versioned.start()
+        return text[:index] + section + "\n" + text[index:]
+    # First release: after an Unreleased section if there is one, else at the end.
+    unreleased = re.search(r"^##\s+\[?unreleased\]?\s*$", text, flags=re.MULTILINE | re.IGNORECASE)
+    if unreleased:
+        following = re.search(r"^##\s", text[unreleased.end():], flags=re.MULTILINE)
+        if following:
+            index = unreleased.end() + following.start()
+            return text[:index] + section + "\n" + text[index:]
+    return text.rstrip("\n") + "\n\n" + section
+
+
+def _prepare_external_release_state(root: Path, *, version: str, date: str,
+                                    summary_lines: Sequence[str], dry_run: bool) -> ReleasePrepareResult:
+    """Update only the workspace's own version anchors (see release_version_sources)."""
+    from agentic_project_kit.publication_policy import publication_policy_for
+    from agentic_project_kit.release_version_sources import package_version_file
+
+    uses_zenodo = publication_policy_for(root).uses_zenodo
+    changed: list[str] = []
+    updates: dict[Path, str] = {root / "pyproject.toml": _update_pyproject(_read(root / "pyproject.toml"), version)}
+    package_file = package_version_file(root)
+    if package_file:
+        updates[root / package_file] = _replace_required(
+            _EXTERNAL_LITERAL_VERSION, rf"\g<1>\g<2>{version}\g<2>", _read(root / package_file),
+            label=f"{package_file} __version__")
+    citation = root / "CITATION.cff"
+    if citation.exists() or uses_zenodo:
+        text = _replace_required(r"^version:\s*[\"']?[^\"'\n]+[\"']?$", f"version: {version}",
+                                 _read(citation), label="CITATION.cff version")
+        if re.search(r"^date-released:", text, flags=re.MULTILINE):
+            text = _replace_required(r"^date-released:\s*[\"']?\d{4}-\d{2}-\d{2}[\"']?$",
+                                     f'date-released: "{date}"', text, label="CITATION.cff date-released")
+        updates[citation] = text
+    handoff_path = root / CURRENT_HANDOFF_RELATIVE_PATH
+    for path in (root / "docs" / "STATUS.md", handoff_path):
+        if path.exists() and "Current version:" in _read(path):
+            updates[path] = _update_current_version_doc(_read(path), version,
+                                                        label=f"{path.relative_to(root).as_posix()} current version")
+    changelog = root / "CHANGELOG.md"
+    if changelog.exists():
+        updates[changelog] = _external_changelog(_read(changelog), version, date,
+                                                 summary_lines=summary_lines, uses_zenodo=uses_zenodo)
+    if handoff_path in updates and _read(handoff_path) != updates[handoff_path]:
+        _require_dpa_current_handoff_preflight(root, target_path=handoff_path, projected_text=updates[handoff_path],
+                                               version=version, date=date, summary_lines=summary_lines)
+        _write_current_handoff_if_changed(handoff_path, updates.pop(handoff_path), dry_run=dry_run, changed=changed,
+                                          root=root, version=version, date=date, summary_lines=summary_lines)
+    for path, text in updates.items():
+        _write_if_changed(path, text, dry_run=dry_run, changed=changed, root=root)
+    return ReleasePrepareResult(version=version, date=date, changed_paths=sorted(changed), dry_run=dry_run)
+
