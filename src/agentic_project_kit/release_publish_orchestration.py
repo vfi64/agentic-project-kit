@@ -228,15 +228,10 @@ def _release_commit_integrity_check(
             returncode=1,
         )
 
-    anchors = {
-        "pyproject.toml": rf'version\s*=\s*["\']{re.escape(version)}["\']',
-        "src/agentic_project_kit/__init__.py": rf'__version__\s*=\s*["\']{re.escape(version)}["\']',
-        "CHANGELOG.md": rf"^##\s+v{re.escape(version)}\s+-",
-        "README.md": rf"Version\s+`{re.escape(version)}`",
-        "CITATION.cff": rf"^version:\s+{re.escape(version)}$",
-        "docs/STATUS.md": rf"^Current version:\s+{re.escape(version)}$",
-        "docs/handoff/CURRENT_HANDOFF.md": rf"Current version:\s+{re.escape(version)}",
-    }
+    # KIT-GF-032: the workspace's own version anchors (the Kit's set when self-hosting).
+    from agentic_project_kit.release_version_sources import release_version_anchors
+
+    anchors = {anchor.path: anchor.pattern for anchor in release_version_anchors(root, version)}
     mismatches = []
     for relative_path, pattern in anchors.items():
         path = root / relative_path
