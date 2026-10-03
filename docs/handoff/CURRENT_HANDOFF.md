@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `7b3cd57a0072907a65c77708053dcc1bcfdff6ab` (`7b3cd57a`), after `Respect external doc readiness in release scans (#2354)`.
-Last substantive work state is `7b3cd57a0072907a65c77708053dcc1bcfdff6ab` (`7b3cd57a`), after `Respect external doc readiness in release scans (#2354)`.
+Current verified main/admin HEAD is `281ed773094f98a77c43d1bfc76bfad8b675ce21` (`281ed773`), after `Add private tag release-publish route (#2356)`.
+Last substantive work state is `281ed773094f98a77c43d1bfc76bfad8b675ce21` (`281ed773`), after `Add private tag release-publish route (#2356)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
