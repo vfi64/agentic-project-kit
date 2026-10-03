@@ -693,7 +693,7 @@ def standard_error_scan_command(
         ],
         allowed_returncodes={0} if before_release else {0, 2},
     )
-    step("docs-audit", ["./.venv/bin/agentic-kit", "docs-audit"])
+    self_hosting_step("docs-audit", ["./.venv/bin/agentic-kit", "docs-audit"])
     self_hosting_step("audit-doc-currency", ["./.venv/bin/agentic-kit", "audit-doc-currency"])
     self_hosting_step("audit-planning-docs-consolidation", ["./.venv/bin/agentic-kit", "audit-planning-docs-consolidation"])
     step("audit-ns-legacy-references", ["./.venv/bin/agentic-kit", "audit-ns-legacy-references"])

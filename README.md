@@ -434,6 +434,8 @@ This command checks that the GitHub release exists and then looks for a verified
 
 External workspaces can set `publication: none` in `.agentic/config.yaml` when a repository must never publish a GitHub Release, PyPI package, or Zenodo archive. Under that policy, `post-release-check`, `post-release-doi-closeout`, CHANGELOG quality checks, and `release-publish` skip GitHub/PyPI/Zenodo publication requirements and do not query Zenodo. The default policy remains `github+pypi+zenodo` for release-managed Kit-style projects. Other supported manifest values are `github` and `github+pypi`.
 
+For external manifest workspaces, `agentic-kit release ready` keeps Kit self-hosting documentation audits out of the release scan. If the manifest sets `doc_lifecycle: warn`, lifecycle findings stay visible as warnings rather than release blockers; `doc_lifecycle: strict` keeps blocking behavior.
+
 ## TODO workflow
 
 Generated projects contain a machine-readable TODO file and a rendered Markdown view.

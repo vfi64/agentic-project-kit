@@ -13,6 +13,8 @@ import pytest
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
+from agentic_project_kit.cli_commands import human_workflows
+from agentic_project_kit.doc_lifecycle import DocLifecycleFinding
 from agentic_project_kit.release import CommandResult
 from agentic_project_kit.release_prepare import prepare_release_state
 from agentic_project_kit.release_state import build_release_lifecycle_status
@@ -136,9 +138,61 @@ def test_standard_error_scan_skips_kit_self_hosting_checks_in_external_workspace
     result = CliRunner().invoke(app, ["transfer", "standard-error-scan", "--root", str(tmp_path), "--json"])
     payload = json.loads(result.stdout)
     skipped = {step["name"] for step in payload["steps"] if step.get("skipped")}
-    assert skipped == {"command-reference-check", "audit-doc-currency", "audit-planning-docs-consolidation"}
-    assert not any(call[1:3] == ["transfer", "command-reference-check"] or call[1:2] == ["audit-doc-currency"]
-                   for call in calls)
+    assert skipped == {"command-reference-check", "docs-audit", "audit-doc-currency", "audit-planning-docs-consolidation"}
+    assert not any(
+        call[1:3] == ["transfer", "command-reference-check"]
+        or call[1:2] in (["docs-audit"], ["audit-doc-currency"])
+        for call in calls
+    )
     composition = next(call for call in calls if call[:3] == ["./.venv/bin/agentic-kit", "transfer",
                                                               "command-composition-check"])
     assert "--test-path" not in composition                     # the Kit's own release tests do not exist here
+
+
+def test_release_ready_external_doc_lifecycle_warn_mode_does_not_block(monkeypatch, tmp_path: Path):
+    monkeypatch.chdir(tmp_path)
+    _external(tmp_path)
+    monkeypatch.setattr(
+        human_workflows,
+        "build_doc_lifecycle_release_blockers",
+        lambda root, *, version: (
+            DocLifecycleFinding(
+                "REVIEW_DUE_RELEASE",
+                "docs/planning/PLAN.md",
+                "review_after release selector is due",
+            ),
+        ),
+    )
+
+    step = human_workflows._doc_lifecycle_release_review_step("0.1.1")
+
+    assert step["ok"] is True
+    assert step["returncode"] == 0
+    assert "STATUS=WARN" in step["stdout"]
+    assert "EXTERNAL_WORKSPACE_DOC_LIFECYCLE=warn_only" in step["stdout"]
+    assert "WARNING=REVIEW_DUE_RELEASE|docs/planning/PLAN.md|" in step["stdout"]
+
+
+def test_release_ready_external_doc_lifecycle_strict_mode_still_blocks(monkeypatch, tmp_path: Path):
+    monkeypatch.chdir(tmp_path)
+    _external(tmp_path)
+    manifest = tmp_path / ".agentic/config.yaml"
+    manifest.write_text(manifest.read_text(encoding="utf-8").replace("doc_lifecycle: warn", "doc_lifecycle: strict"), encoding="utf-8")
+    monkeypatch.setattr(
+        human_workflows,
+        "build_doc_lifecycle_release_blockers",
+        lambda root, *, version: (
+            DocLifecycleFinding(
+                "REVIEW_DUE_RELEASE",
+                "docs/planning/PLAN.md",
+                "review_after release selector is due",
+            ),
+        ),
+    )
+
+    step = human_workflows._doc_lifecycle_release_review_step("0.1.1")
+
+    assert step["ok"] is False
+    assert step["returncode"] == 2
+    assert "STATUS=BLOCKED" in step["stdout"]
+    assert "BLOCKER=REVIEW_DUE_RELEASE|docs/planning/PLAN.md|" in step["stdout"]
