@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 72e28d1e461f587888414a652978c831272d68ddb98ac27803d910fd9bb2d454
 - docs/reference/agentic-kit-commands.json: e90ce3b784375b8d6ddc3834adb7e98ed86fa4b3d6d5a249c5eeb16e18287923
-## Operational documentation refresh state after PR #2354
+## Operational documentation refresh state after PR #2356
 
-Current administrative handoff refresh state is `7b3cd57a` (`Respect external doc readiness in release scans (#2354)`). Continue next only after this post-PR2354 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `281ed773` (`Add private tag release-publish route (#2356)`). Continue next only after this post-PR2356 refresh is committed and merged; the next substantive slice must be created from fresh main.

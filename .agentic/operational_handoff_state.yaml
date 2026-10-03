@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7b3cd57a0072907a65c77708053dcc1bcfdff6ab
-  short: 7b3cd57a
-  subject: Respect external doc readiness in release scans (#2354)
+  full: 281ed773094f98a77c43d1bfc76bfad8b675ce21
+  short: 281ed773
+  subject: Add private tag release-publish route (#2356)
 last_substantive_work_state:
-  full: 7b3cd57a0072907a65c77708053dcc1bcfdff6ab
-  short: 7b3cd57a
-  subject: Respect external doc readiness in release scans (#2354)
+  full: 281ed773094f98a77c43d1bfc76bfad8b675ce21
+  short: 281ed773
+  subject: Add private tag release-publish route (#2356)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
