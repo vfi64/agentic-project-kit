@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: fa293dd72d3f43634be29793c35a1e24f645ebee
-  short: fa293dd7
-  subject: 'KIT-GF-032 slice E: release ready passes in external workspaces with publication none (#2358)'
+  full: 7be27417265cc351d0efa4bf984520b9cc4c569d
+  short: 7be27417
+  subject: Prepare release v1.0.15 (#2360)
 last_substantive_work_state:
-  full: fa293dd72d3f43634be29793c35a1e24f645ebee
-  short: fa293dd7
-  subject: 'KIT-GF-032 slice E: release ready passes in external workspaces with publication none (#2358)'
+  full: 7be27417265cc351d0efa4bf984520b9cc4c569d
+  short: 7be27417
+  subject: Prepare release v1.0.15 (#2360)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

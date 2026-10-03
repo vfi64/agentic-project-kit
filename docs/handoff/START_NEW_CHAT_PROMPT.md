@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 0d432886f5526b774b3b9a12d3db144b509a76ae7c47fe1a671a3b41447053a6
 - docs/reference/agentic-kit-commands.json: ab5e08fb99bcb17e6e80fed063538b39d4f0a4ebf5459dfa4f5ac343d4f54990
-## Operational documentation refresh state after PR #2358
+## Operational documentation refresh state after PR #2360
 
-Current administrative handoff refresh state is `fa293dd7` (`KIT-GF-032 slice E: release ready passes in external workspaces with publication none (#2358)`). Continue next only after this post-PR2358 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `7be27417` (`Prepare release v1.0.15 (#2360)`). Continue next only after this post-PR2360 refresh is committed and merged; the next substantive slice must be created from fresh main.
