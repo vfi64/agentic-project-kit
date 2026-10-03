@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 0ae4c18771d09be27c7b15d41c78aab386999b59
-  short: 0ae4c187
-  subject: 'KIT-GF-032 slice B: release-prep, release-status and release scan in external workspaces (#2352)'
+  full: 7b3cd57a0072907a65c77708053dcc1bcfdff6ab
+  short: 7b3cd57a
+  subject: Respect external doc readiness in release scans (#2354)
 last_substantive_work_state:
-  full: 0ae4c18771d09be27c7b15d41c78aab386999b59
-  short: 0ae4c187
-  subject: 'KIT-GF-032 slice B: release-prep, release-status and release scan in external workspaces (#2352)'
+  full: 7b3cd57a0072907a65c77708053dcc1bcfdff6ab
+  short: 7b3cd57a
+  subject: Respect external doc readiness in release scans (#2354)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
