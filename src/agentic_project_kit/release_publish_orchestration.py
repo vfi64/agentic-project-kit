@@ -253,7 +253,7 @@ def _release_commit_integrity_check(
             detail="could not resolve release commit: " + _last_line(head_output),
             returncode=head_rc,
         )
-    tag_rc, tag_output = runner(("git", "rev-parse", "--verify", f"refs/tags/{tag}"), root)
+    tag_rc, tag_output = runner(("git", "rev-parse", "--verify", _local_tag_target(tag)), root)
     if tag_rc == 0 and tag_output.strip() != head_output.strip():
         return ReleasePublishCheck(
             name="release commit integrity",
@@ -311,6 +311,29 @@ def _check_from_run(name: str, returncode: int, output: str, *, pass_detail: str
     )
 
 
+def _first_remote_object_id(output: str) -> str:
+    return output.split()[0] if output.split() else ""
+
+
+def _local_tag_target(tag: str) -> str:
+    return f"refs/tags/{tag}^{{}}"
+
+
+def _remote_tag_target(
+    *,
+    tag_ref: str,
+    root: Path,
+    runner: Runner,
+) -> tuple[int, str]:
+    peeled_rc, peeled_output = runner(("git", "ls-remote", "--exit-code", "origin", f"{tag_ref}^{{}}"), root)
+    if peeled_rc == 0:
+        return peeled_rc, _first_remote_object_id(peeled_output)
+    ref_rc, ref_output = runner(("git", "ls-remote", "--exit-code", "--refs", "origin", tag_ref), root)
+    if ref_rc == 0:
+        return ref_rc, _first_remote_object_id(ref_output)
+    return ref_rc, ref_output
+
+
 def _append_live_release_publish_checks(
     *,
     checks: list[ReleasePublishCheck],
@@ -335,13 +358,23 @@ def _append_live_release_publish_checks(
         return
     head = head_output.strip()
 
-    tag_exists_rc, _tag_exists_output = runner(("git", "rev-parse", "--verify", tag_ref), root)
+    tag_exists_rc, tag_exists_output = runner(("git", "rev-parse", "--verify", _local_tag_target(tag)), root)
     if tag_exists_rc == 0:
+        if tag_exists_output.strip() != head:
+            checks.append(
+                ReleasePublishCheck(
+                    name=f"execute local tag target {tag}",
+                    status="FAIL",
+                    detail=f"local tag points to {tag_exists_output.strip() or 'unknown'}, but current HEAD is {head}",
+                    returncode=1,
+                )
+            )
+            return
         checks.append(
             ReleasePublishCheck(
                 name=f"execute git tag {tag}",
                 status="PASS",
-                detail="local tag already exists",
+                detail="local tag already exists at current HEAD",
                 returncode=0,
             )
         )
@@ -351,11 +384,9 @@ def _append_live_release_publish_checks(
         if rc != 0:
             return
 
-    remote_exists_rc, remote_exists_output = runner(
-        ("git", "ls-remote", "--exit-code", "--refs", "origin", tag_ref), root
-    )
+    remote_exists_rc, remote_target_or_output = _remote_tag_target(tag_ref=tag_ref, root=root, runner=runner)
     if remote_exists_rc == 0:
-        remote_target = remote_exists_output.split()[0] if remote_exists_output.split() else ""
+        remote_target = remote_target_or_output
         if remote_target != head:
             checks.append(
                 ReleasePublishCheck(
@@ -409,6 +440,79 @@ def _append_live_release_publish_checks(
     checks.append(_check_from_run(f"execute post-release-check --version {version}", rc, output))
 
 
+def _append_private_tag_publish_checks(
+    *,
+    checks: list[ReleasePublishCheck],
+    tag: str,
+    root: Path,
+    runner: Runner,
+) -> None:
+    tag_ref = f"refs/tags/{tag}"
+    head_rc, head_output = runner(("git", "rev-parse", "HEAD"), root)
+    if head_rc != 0:
+        checks.append(
+            ReleasePublishCheck(
+                name=f"execute private tag target {tag}",
+                status="FAIL",
+                detail="could not resolve current HEAD: " + _last_line(head_output),
+                returncode=head_rc,
+            )
+        )
+        return
+    head = head_output.strip()
+
+    tag_exists_rc, tag_exists_output = runner(("git", "rev-parse", "--verify", _local_tag_target(tag)), root)
+    if tag_exists_rc == 0:
+        if tag_exists_output.strip() != head:
+            checks.append(
+                ReleasePublishCheck(
+                    name=f"execute private tag target {tag}",
+                    status="FAIL",
+                    detail=f"local tag points to {tag_exists_output.strip() or 'unknown'}, but current HEAD is {head}",
+                    returncode=1,
+                )
+            )
+            return
+        checks.append(
+            ReleasePublishCheck(
+                name=f"execute annotated private tag {tag}",
+                status="PASS",
+                detail="local tag already exists at current HEAD",
+                returncode=0,
+            )
+        )
+    else:
+        rc, output = runner(("git", "tag", "-a", tag, "-m", f"Release {tag}"), root)
+        checks.append(_check_from_run(f"execute annotated private tag {tag}", rc, output))
+        if rc != 0:
+            return
+
+    remote_exists_rc, remote_target_or_output = _remote_tag_target(tag_ref=tag_ref, root=root, runner=runner)
+    if remote_exists_rc == 0:
+        remote_target = remote_target_or_output
+        if remote_target != head:
+            checks.append(
+                ReleasePublishCheck(
+                    name=f"execute private remote tag target {tag}",
+                    status="FAIL",
+                    detail=f"remote tag points to {remote_target or 'unknown'}, but current HEAD is {head}",
+                    returncode=1,
+                )
+            )
+            return
+        checks.append(
+            ReleasePublishCheck(
+                name=f"execute git push origin {tag}",
+                status="PASS",
+                detail="remote tag already exists at current HEAD",
+                returncode=0,
+            )
+        )
+    else:
+        rc, output = runner(("git", "push", "origin", tag), root)
+        checks.append(_check_from_run(f"execute git push origin {tag}", rc, output))
+
+
 def evaluate_release_publish_plan(
     root: Path = Path("."),
     *,
@@ -425,22 +529,7 @@ def evaluate_release_publish_plan(
 
     checks: list[ReleasePublishCheck] = []
     policy = publication_policy_for(root)
-    if policy.value == "none":
-        check = ReleasePublishCheck(
-            name="publication policy",
-            status="PASS",
-            detail="publication: none; release-publish is disabled and no tag, GitHub Release, PyPI, or Zenodo action will run",
-            returncode=0,
-        )
-        return ReleasePublishPlan(
-            version=version,
-            tag=tag,
-            root=root.as_posix(),
-            mode="execute" if execute else "dry-run" if dry_run else "unspecified",
-            checks=(check,),
-            planned_actions=("publication policy none disables release publishing",),
-            execute_enabled=False,
-        )
+    private_publication = policy.value == "none"
 
     release_already_current_verified = _release_already_current_verified(version=version, root=root, runner=run)
 
@@ -486,22 +575,32 @@ def evaluate_release_publish_plan(
             runner=run,
         )
     )
-    checks.append(
-        _run_check(
-            name="docs audit",
-            args=(executable, "docs-audit"),
-            root=root,
-            runner=run,
+    if private_publication:
+        checks.append(
+            ReleasePublishCheck(
+                name="publication policy",
+                status="PASS",
+                detail="publication: none; private release will push an annotated tag only",
+                returncode=0,
+            )
         )
-    )
-    checks.append(
-        _run_check(
-            name="command reference check",
-            args=(executable, "transfer", "command-reference-check"),
-            root=root,
-            runner=run,
+    else:
+        checks.append(
+            _run_check(
+                name="docs audit",
+                args=(executable, "docs-audit"),
+                root=root,
+                runner=run,
+            )
         )
-    )
+        checks.append(
+            _run_check(
+                name="command reference check",
+                args=(executable, "transfer", "command-reference-check"),
+                root=root,
+                runner=run,
+            )
+        )
     if execute:
         checks.append(
             _release_commit_integrity_check(
@@ -535,27 +634,39 @@ def evaluate_release_publish_plan(
     planned_actions = [
         f"verify release-prep evidence for {version}",
         f"verify release metadata authority for {version}",
-        f"plan git tag {tag}",
-        f"plan GitHub release {tag}",
-        "plan post-release-check after live publish",
+        f"plan annotated git tag {tag}",
     ]
+    if private_publication:
+        planned_actions.append(f"plan git push origin {tag}")
+        planned_actions.append("skip GitHub Release, PyPI, and Zenodo publication because publication is none")
+    else:
+        planned_actions.extend([f"plan GitHub release {tag}", "plan post-release-check after live publish"])
     if live_execute_ready:
-        planned_actions.extend(
-            [
-                f"execute git tag {tag}",
-                f"execute git push origin {tag}",
-                f"execute GitHub release create/view for {tag}",
-                f"execute post-release-check --version {version}",
-            ]
-        )
-        _append_live_release_publish_checks(
-            checks=checks,
-            executable=executable,
-            version=version,
-            tag=tag,
-            root=root,
-            runner=run,
-        )
+        if private_publication:
+            planned_actions.extend([f"execute annotated private tag {tag}", f"execute git push origin {tag}"])
+            _append_private_tag_publish_checks(
+                checks=checks,
+                tag=tag,
+                root=root,
+                runner=run,
+            )
+        else:
+            planned_actions.extend(
+                [
+                    f"execute git tag {tag}",
+                    f"execute git push origin {tag}",
+                    f"execute GitHub release create/view for {tag}",
+                    f"execute post-release-check --version {version}",
+                ]
+            )
+            _append_live_release_publish_checks(
+                checks=checks,
+                executable=executable,
+                version=version,
+                tag=tag,
+                root=root,
+                runner=run,
+            )
     else:
         planned_actions.append("perform no tag, release, DOI, or metadata write in dry-run/fail-closed mode")
 

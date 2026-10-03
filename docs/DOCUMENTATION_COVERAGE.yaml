@@ -44,6 +44,8 @@ rules:
     - post-release-check
     - post-release-doi-closeout
     - release-publish
+    - private annotated tag
+    - git push origin <tag>
     - github+pypi+zenodo
   - path: docs/TEST_GATES.md
     terms:
@@ -53,6 +55,8 @@ rules:
     - post-release-check
     - post-release-doi-closeout
     - release-publish
+    - private annotated tag
+    - git push origin <tag>
 - id: workflow-guard-coverage
   description: Workflow guard diagnostics for recurring workflow failures must remain visible and test-backed.
   documents:
