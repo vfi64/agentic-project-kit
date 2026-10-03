@@ -1,3 +1,13 @@
+## v1.0.15 - 2026-10-03
+
+- Zenodo DOI verification pending for v1.0.15.
+- Record release 1.0.14 DOI closeout evidence for the verified GitHub Release and Zenodo archive
+- Add workspace-derived release version anchors for external workspaces (KIT-GF-032 slice A)
+- Add release-prep, release-status and release scan support for external workspaces (KIT-GF-032 slice B)
+- Scope documentation readiness to external workspaces: Kit self-hosting audits are skipped and doc_lifecycle warn stays non-blocking (KIT-GF-032 slice C)
+- Add a private tag release-publish route for publication none: annotated tag and tag push without GitHub Release, PyPI or Zenodo (KIT-GF-032 slice D)
+- Let release ready pass in external workspaces with publication none: refreshed LLM-context carriers, workspace temp root and private release-notes fallback (KIT-GF-032 slice E)
+
 ## v1.0.14 - 2026-10-03
 
 - Remove temporary live publication marker
