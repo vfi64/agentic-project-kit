@@ -47,6 +47,24 @@ def test_build_release_plan_accepts_explicit_version(tmp_path: Path):
     assert "git tag v2.0.0" in plan.steps[-1].commands
 
 
+def test_build_release_plan_publication_none_uses_local_tag_only(tmp_path: Path):
+    (tmp_path / "pyproject.toml").write_text('version = "1.2.3"\n', encoding="utf-8")
+    _write_publication_manifest(tmp_path, "none")
+
+    plan = build_release_plan(tmp_path)
+    commands = tuple(command for step in plan.steps for command in step.commands)
+
+    assert [step.name for step in plan.steps][-2:] == [
+        "Verify local target tag is unused",
+        "Create local tag",
+    ]
+    assert "git tag -l v1.2.3" in commands
+    assert "git tag v1.2.3" in commands
+    assert not any("git ls-remote" in command for command in commands)
+    assert not any("gh release" in command for command in commands)
+    assert not any("git push" in command for command in commands)
+
+
 def test_render_release_plan_contains_commands_and_evidence(tmp_path: Path):
     (tmp_path / "pyproject.toml").write_text('version = "1.2.3"\n', encoding="utf-8")
 
@@ -145,6 +163,46 @@ def test_build_release_state_report_allows_inconclusive_github_release_check(tmp
     assert readiness.status == ReleaseCheckStatus.WARN
     assert "metadata preparation may continue" in readiness.detail
     assert "before tagging or publishing" in readiness.detail
+
+
+def test_build_release_state_report_publication_none_skips_remote_checks(tmp_path: Path):
+    _write_release_files(tmp_path, "1.2.3")
+    _write_publication_manifest(tmp_path, "none")
+    seen: list[tuple[str, ...]] = []
+
+    def runner(_project_root: Path, command: Sequence[str]) -> CommandResult:
+        seen.append(tuple(command))
+        if command[:3] == ["git", "tag", "-l"]:
+            return CommandResult(0, "", "")
+        raise AssertionError(f"unexpected command: {command}")
+
+    report = build_release_state_report(tmp_path, command_runner=runner)
+
+    assert report.ok
+    assert ("git", "tag", "-l", "v1.2.3") in seen
+    assert not any(command[:2] == ("gh", "release") for command in seen)
+    assert _check_by_name(report, "publication policy").status == ReleaseCheckStatus.PASS
+    readiness = _check_by_name(report, "release publish readiness")
+    assert readiness.status == ReleaseCheckStatus.PASS
+    assert "publication: none" in readiness.detail
+
+
+def test_build_release_preflight_report_publication_none_skips_remote_checks(tmp_path: Path):
+    _write_publication_manifest(tmp_path, "none")
+    seen: list[tuple[str, ...]] = []
+
+    def runner(_project_root: Path, command: Sequence[str]) -> CommandResult:
+        seen.append(tuple(command))
+        if command[:3] == ["git", "tag", "-l"]:
+            return CommandResult(0, "", "")
+        raise AssertionError(f"unexpected command: {command}")
+
+    report = build_release_preflight_report(tmp_path, "1.2.3", command_runner=runner)
+
+    assert report.ok
+    assert ("git", "tag", "-l", "v1.2.3") in seen
+    assert not any(command[:2] == ("gh", "release") for command in seen)
+    assert _check_by_name(report, "publication policy").status == ReleaseCheckStatus.PASS
 
 
 def test_build_release_state_report_fails_for_missing_changelog_version(tmp_path: Path):
@@ -394,3 +452,20 @@ def test_release_plan_cli_allows_explicit_next_version_when_current_is_released(
     assert result.exit_code == 0
     assert "# Release preparation plan for target v1.2.4" in result.stdout
 
+
+
+def _write_publication_manifest(root: Path, publication: str) -> None:
+    manifest = root / ".agentic" / "config.yaml"
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    manifest.write_text(
+        "kit_schema_version: 2\n"
+        "profile: generic\n"
+        f"publication: {publication}\n"
+        "hygiene:\n"
+        "  doc_lifecycle: warn\n"
+        "  review_budgets:\n"
+        "    governance: 180\n"
+        "    reference: 365\n"
+        "    workflow: 270\n",
+        encoding="utf-8",
+    )

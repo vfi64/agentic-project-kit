@@ -9,6 +9,7 @@ import subprocess
 
 from agentic_project_kit import __version__ as PACKAGE_VERSION
 from agentic_project_kit.cli_executable import default_agentic_kit
+from agentic_project_kit.publication_policy import publication_policy_for
 from agentic_project_kit.release import CommandResult
 from agentic_project_kit.release_state import build_release_lifecycle_status
 
@@ -428,6 +429,24 @@ def evaluate_release_publish_plan(
     tag = f"v{version}"
 
     checks: list[ReleasePublishCheck] = []
+    policy = publication_policy_for(root)
+    if policy.value == "none":
+        check = ReleasePublishCheck(
+            name="publication policy",
+            status="PASS",
+            detail="publication: none; release-publish is disabled and no tag, GitHub Release, PyPI, or Zenodo action will run",
+            returncode=0,
+        )
+        return ReleasePublishPlan(
+            version=version,
+            tag=tag,
+            root=root.as_posix(),
+            mode="execute" if execute else "dry-run" if dry_run else "unspecified",
+            checks=(check,),
+            planned_actions=("publication policy none disables release publishing",),
+            execute_enabled=False,
+        )
+
     release_already_current_verified = _release_already_current_verified(version=version, root=root, runner=run)
 
     if not dry_run and not execute:

@@ -430,6 +430,8 @@ agentic-kit post-release-check --version 0.3.4
 
 This command checks that the GitHub release exists and then looks for a verified Zenodo version record derived from the DOI in `CITATION.cff`. If Zenodo has not archived the release yet, the command reports `WAITING` and leaves README/CITATION DOI metadata unchanged. It is intentionally separate from `release-check`, because `release-check` is a pre-release gate that expects the tag and GitHub release to be unused.
 
+External workspaces can set `publication: none` in `.agentic/config.yaml` when a repository must never publish a GitHub Release, PyPI package, or Zenodo archive. Under that policy, `post-release-check`, `post-release-doi-closeout`, CHANGELOG quality checks, and `release-publish` skip GitHub/PyPI/Zenodo publication requirements and do not query Zenodo. The default policy remains `github+pypi+zenodo` for release-managed Kit-style projects. Other supported manifest values are `github` and `github+pypi`.
+
 ## TODO workflow
 
 Generated projects contain a machine-readable TODO file and a rendered Markdown view.

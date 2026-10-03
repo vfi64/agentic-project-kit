@@ -675,6 +675,8 @@ Check post-release archive state after publishing:
 
     agentic-kit post-release-check --version <version>
 
+Publication policy is part of the workspace manifest. With `publication: none`, external workspaces must not require GitHub Release, PyPI, or Zenodo publication evidence; `post-release-check`, `post-release-doi-closeout`, CHANGELOG quality checks, and `release-publish` must skip those remote publication requirements and avoid Zenodo access.
+
 Before tagging:
 
     git status --short

@@ -4,6 +4,8 @@ from typing import Any
 import re
 import yaml
 
+from agentic_project_kit.publication_policy import publication_policy_for
+
 from agentic_project_kit.document_budgets import count_words, evaluate_document_word_budget
 from agentic_project_kit.documentation_registry import (
     build_doc_registry_reconcile_report,
@@ -377,6 +379,7 @@ def check_changelog_quality(project_root: Path) -> list[str]:
     content = path.read_text(encoding="utf-8")
     errors: list[str] = []
     seen_versions: set[str] = set()
+    require_zenodo_state = publication_policy_for(project_root).uses_zenodo
 
     for version, date, body in _release_sections(content):
         if version in seen_versions:
@@ -392,7 +395,7 @@ def check_changelog_quality(project_root: Path) -> list[str]:
             errors.append(f"CHANGELOG.md: v{version} missing release date in heading")
 
         has_zenodo_state = "zenodo" in normalized and ("doi" in normalized or "pending" in normalized)
-        if not has_zenodo_state:
+        if require_zenodo_state and not has_zenodo_state:
             errors.append(f"CHANGELOG.md: v{version} missing Zenodo DOI or pending verification marker")
 
         if not _substantive_changelog_bullets(body):

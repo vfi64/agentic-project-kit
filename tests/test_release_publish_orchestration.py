@@ -81,6 +81,26 @@ def test_release_publish_reports_failed_gate(tmp_path: Path) -> None:
     assert any(check.name == "release metadata authority gate" for check in plan.blockers)
 
 
+def test_release_publish_publication_none_does_not_run_remote_checks(tmp_path: Path) -> None:
+    _write_publication_manifest(tmp_path, "none")
+
+    def forbidden_runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        raise AssertionError(f"unexpected release-publish command: {args}")
+
+    plan = evaluate_release_publish_plan(
+        tmp_path,
+        version="9.9.9",
+        execute=True,
+        allow_execute=True,
+        runner=forbidden_runner,
+    )
+
+    assert plan.ok is True
+    assert plan.execute_enabled is False
+    assert plan.planned_actions == ("publication policy none disables release publishing",)
+    assert "publication: none" in plan.checks[0].detail
+
+
 def test_release_publish_default_version_follows_package_version(tmp_path: Path) -> None:
     seen: list[tuple[str, ...]] = []
 
@@ -390,3 +410,20 @@ def test_release_publish_execute_requires_matching_release_anchors(tmp_path: Pat
 
     assert plan.ok is False
     assert any("target version" in check.detail for check in plan.blockers)
+
+
+def _write_publication_manifest(root: Path, publication: str) -> None:
+    manifest = root / ".agentic" / "config.yaml"
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    manifest.write_text(
+        "kit_schema_version: 2\n"
+        "profile: generic\n"
+        f"publication: {publication}\n"
+        "hygiene:\n"
+        "  doc_lifecycle: warn\n"
+        "  review_budgets:\n"
+        "    governance: 180\n"
+        "    reference: 365\n"
+        "    workflow: 270\n",
+        encoding="utf-8",
+    )

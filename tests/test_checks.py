@@ -301,6 +301,21 @@ def test_changelog_quality_reports_missing_recent_date_and_zenodo_state(tmp_path
     assert "CHANGELOG.md: v0.4.1 missing Zenodo DOI or pending verification marker" in errors
 
 
+def test_changelog_quality_skips_zenodo_marker_for_publication_none(tmp_path: Path):
+    _write_publication_manifest(tmp_path, "none")
+    (tmp_path / "CHANGELOG.md").write_text(
+        "## v0.4.1 - 2026-05-21\n\n"
+        "- Added a tested GUI view-model contract while keeping destructive actions disabled.\n"
+        "- Hardened terminal safety with command-manifest routing and visible diagnostics.\n"
+        "- Recorded handoff governance evidence for future chats and maintainers.\n",
+        encoding="utf-8",
+    )
+
+    errors = check_changelog_quality(tmp_path)
+
+    assert "CHANGELOG.md: v0.4.1 missing Zenodo DOI or pending verification marker" not in errors
+
+
 def test_changelog_quality_is_called_by_check_docs(tmp_path: Path):
     (tmp_path / "README.md").write_text("# Demo\nrequired-term\n", encoding="utf-8")
     (tmp_path / "CHANGELOG.md").write_text(
@@ -544,3 +559,20 @@ def _write_documentation_registry(project_root: Path) -> None:
     path = project_root / "docs/DOCUMENTATION_REGISTRY.yaml"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(yaml.safe_dump(registry, sort_keys=False), encoding="utf-8")
+
+
+def _write_publication_manifest(root: Path, publication: str) -> None:
+    manifest = root / ".agentic" / "config.yaml"
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    manifest.write_text(
+        "kit_schema_version: 2\n"
+        "profile: generic\n"
+        f"publication: {publication}\n"
+        "hygiene:\n"
+        "  doc_lifecycle: warn\n"
+        "  review_budgets:\n"
+        "    governance: 180\n"
+        "    reference: 365\n"
+        "    workflow: 270\n",
+        encoding="utf-8",
+    )
