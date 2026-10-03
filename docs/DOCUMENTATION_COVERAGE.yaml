@@ -597,6 +597,8 @@ rules:
     - Surface classification is intent-oriented
     - "`diagnostic` must not be inferred from `READ_ONLY`"
     - Surface classification does not change command safety, compatibility, or deprecation status
+    - Remote-effect classification is conservative
+    - "remote_effects: none"
     - primitive does not mean unstable
     - agentic-kit command-for
     - tie-breaker after semantic task matching and safety checks
@@ -616,6 +618,9 @@ rules:
     - Surface classification is intent-oriented
     - "`diagnostic` must not be inferred from `READ_ONLY`"
     - Surface classification does not by itself change the compatibility or deprecation contract
+    - Remote-effect classification is conservative
+    - "`remote_effects` list"
+    - "`none` must appear alone"
     - primitive does not mean unstable
     - agentic-kit command-for
     - only after semantic task matching and safety or prerequisite checks

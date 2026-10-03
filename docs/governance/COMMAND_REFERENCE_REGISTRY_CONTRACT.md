@@ -35,6 +35,13 @@ Required maintenance path:
 
 The staleness test is the binding guard: if a command is added, removed, renamed, or its parameters change, the generated registry and Markdown must be updated in the same change.
 
+
+## Remote-effect contract
+
+Every generated command-reference entry must carry a non-empty `remote_effects` list. Remote-effect classification is conservative metadata for routing, review, and UI gating; it does not prove that a command will always touch or avoid a remote under every implementation path.
+
+Allowed values are `none`, `network_read`, `fetch`, `push`, `pull_request`, `merge`, `release_publish`, and `delete_remote`. `none` must appear alone. A local-only recovery route such as `agentic-kit work rescue` must stay classified as `none` and must not run fetch, push, pull-request, merge, release, or remote-delete operations.
+
 ## Transfer wrapper command layer
 
 The generated command reference is also the registry anchor for the transfer wrapper command layer.

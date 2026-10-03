@@ -683,6 +683,10 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Read-only O0 baseline evidence for measured first-chat onboarding friction and orientation-anchor planning.
+  - path: docs/reports/greenfield/KIT-GF-033-work-rescue-2026-10-02.md
+    class: evidence/log
+    owner: maintainers
+    notes: KIT-GF-033 Greenfield repair evidence for the local-only work rescue route, citing the agp-Cockpit source finding commit and external-workspace regression coverage.
   - path: docs/reports/release/post-release-doi-closeout-1.0.3.json
     class: evidence/log
     owner: maintainers

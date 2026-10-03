@@ -10,6 +10,7 @@ from agentic_project_kit.command_manifest import (
     JSON_PATH,
     MD_PATH,
     PACKAGE_JSON_PATH,
+    REMOTE_EFFECT_VALUES,
     SURFACE_VALUES,
     build_current_reference,
     build_reference_from_app,
@@ -74,6 +75,7 @@ def test_fixture_reference_contains_required_manifest_fields() -> None:
     assert command["when_to_use"] == "Say hello."
     assert command["replaces_raw"] == []
     assert command["dry_run_available"] is False
+    assert command["remote_effects"] == ["none"]
 
 
 def test_selector_commands_are_read_only_in_current_reference() -> None:
@@ -100,6 +102,23 @@ def test_workspace_remove_is_bounded_dry_run_available_in_current_reference() ->
     assert by_name["agentic-kit workspace remove"]["surface"] == "orchestrator"
 
 
+def test_current_reference_classifies_every_command_remote_effect() -> None:
+    data = build_current_reference()
+    by_name = {command["qualified_name"]: command for command in data["commands"]}
+
+    assert by_name["agentic-kit work rescue"]["remote_effects"] == ["none"]
+    assert "push" in by_name["agentic-kit transfer push-current"]["remote_effects"]
+    assert "pull_request" in by_name["agentic-kit transfer pr-create-complete"]["remote_effects"]
+    assert "merge" in by_name["agentic-kit transfer pr-merge-safe"]["remote_effects"]
+    assert all(
+        isinstance(command.get("remote_effects"), list)
+        and command["remote_effects"]
+        and all(effect in REMOTE_EFFECT_VALUES for effect in command["remote_effects"])
+        and ("none" not in command["remote_effects"] or len(command["remote_effects"]) == 1)
+        for command in by_name.values()
+    )
+
+
 def test_current_reference_classifies_every_command_surface() -> None:
     data = build_current_reference()
     by_name = {command["qualified_name"]: command for command in data["commands"]}
@@ -111,6 +130,7 @@ def test_current_reference_classifies_every_command_surface() -> None:
     assert surfaces["agentic-kit audit-command-manifest"] == "diagnostic"
     assert surfaces["agentic-kit transfer commit"] == "primitive"
     assert surfaces["agentic-kit work start"] == "orchestrator"
+    assert surfaces["agentic-kit work rescue"] == "orchestrator"
     assert surfaces["agentic-kit work finish"] == "orchestrator"
     assert surfaces["agentic-kit docs lifecycle sweep"] == "orchestrator"
     assert surfaces["agentic-kit artifact-gc"] == "orchestrator"
@@ -135,6 +155,7 @@ def test_orchestrator_lifecycle_rank_projects_normal_flow() -> None:
         "agentic-kit workspace adopt",
         "agentic-kit workspace init",
         "agentic-kit work start",
+        "agentic-kit work rescue",
         "agentic-kit workflow go",
         "agentic-kit work finish",
         "agentic-kit transfer pr-create-complete",
@@ -178,6 +199,7 @@ def test_surface_contract_documents_compatibility_boundary() -> None:
     assert "does not by itself change the compatibility or deprecation contract" in contract
     assert "primitive does not mean unstable" in contract
     assert "`lifecycle_rank` is generated presentation metadata" in contract
+    assert "Remote-effect classification is conservative" in contract
 
 
 def test_audit_detects_missing_safety(tmp_path: Path, monkeypatch) -> None:
@@ -191,6 +213,20 @@ def test_audit_detects_missing_safety(tmp_path: Path, monkeypatch) -> None:
 
     assert not audit.ok
     assert any(finding.code == "SAFETY_INVALID" for finding in audit.findings)
+
+
+def test_audit_detects_missing_remote_effects(tmp_path: Path, monkeypatch) -> None:
+    data = build_reference_from_app(_fixture_app())
+    data["commands"][0].pop("remote_effects")
+    data["meta"]["manifest_sha"] = manifest_sha(data["commands"])
+    _write_manifest(tmp_path, data)
+    _write_package_manifest(tmp_path, data)
+    monkeypatch.chdir(tmp_path)
+
+    audit = evaluate_command_manifest(tmp_path)
+
+    assert not audit.ok
+    assert any(finding.code == "REMOTE_EFFECTS_INVALID" for finding in audit.findings)
 
 
 def test_audit_detects_missing_surface(tmp_path: Path, monkeypatch) -> None:

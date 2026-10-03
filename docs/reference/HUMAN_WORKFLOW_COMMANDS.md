@@ -65,6 +65,17 @@ Typical use:
 
     agentic-kit work recover --json
 
+## agentic-kit work rescue
+
+Rescue local work from `main` before realigning `main` to the local `origin/main`. The command is dry-run by default and has no remote effect. On execution it creates a local `rescue/...` branch, commits dirty work there when needed, verifies that the rescue branch contains the original `HEAD`, and only then resets `main` to the local base ref.
+
+Typical use:
+
+    agentic-kit work rescue --json
+    agentic-kit work rescue --execute --expected-signature <dry-run-signature> --json
+
+Use this when `main` has uncommitted changes or local commits that block normal startup recovery.
+
 ## agentic-kit release ready
 
 Run release readiness through standard-error scan and release-status checks.

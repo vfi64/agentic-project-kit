@@ -389,7 +389,8 @@ HTML command lists. `commands/guided.html` is generated from
 `surface: orchestrator`, `commands/diagnostics.html` from `surface: diagnostic`,
 and `commands/commands.json` plus `commands/index.html` from the complete
 manifest. The build must fail on missing or invalid command `surface`, `safety`,
-`dry_run_available`, `when_to_use` or `params` metadata.
+`remote_effects`, `dry_run_available`, `when_to_use` or `params` metadata.
+Remote-effect classification is conservative command metadata; `none` must appear alone and local-only rescue routes must stay classified with `remote_effects: none`.
 The complete command reference must keep search, safety filter and surface filter
 controls bound to manifest-derived row metadata; added filters are
 presentation helpers and must not rewrite the manifest safety or surface values.
