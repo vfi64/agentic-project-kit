@@ -10,6 +10,7 @@ import re
 from agentic_project_kit.dpa_current_handoff_lifecycle import evaluate_current_handoff_text_lifecycle
 from agentic_project_kit.dpa_readiness import DEFAULT_READINESS_PATH
 from agentic_project_kit.post_release import build_post_release_report
+from agentic_project_kit.publication_policy import publication_policy_for
 from agentic_project_kit.release import CommandResult
 from agentic_project_kit.workspace import load_workspace
 
@@ -83,6 +84,22 @@ def post_release_doi_closeout(
     command_runner: CommandRunner | None = None,
     http_getter: HttpGetter | None = None,
 ) -> PostReleaseDoiCloseoutResult:
+    policy = publication_policy_for(project_root)
+    if not policy.uses_zenodo:
+        return PostReleaseDoiCloseoutResult(
+            version,
+            "PASS",
+            0,
+            write,
+            (),
+            (),
+            EXPECTED_DOI_CLOSEOUT_PATHS,
+            "",
+            "",
+            None,
+            f"publication: {policy.value}; DOI closeout is not required and no Zenodo metadata was queried.",
+        )
+
     report = build_post_release_report(
         project_root,
         version=version,

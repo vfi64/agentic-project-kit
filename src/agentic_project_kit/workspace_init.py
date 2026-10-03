@@ -8,6 +8,7 @@ import yaml
 from agentic_project_kit.volatile_paths import RULE_ACK_DIRECTORY_PATH
 from agentic_project_kit.workspace import (
     ALLOWED_PROFILES,
+    DEFAULT_PUBLICATION_POLICY,
     ALLOWED_PROJECT_TYPES,
     DEFAULT_REVIEW_BUDGETS,
     SUPPORTED_MANIFEST_SCHEMA_VERSION,
@@ -327,6 +328,7 @@ def _manifest_for(project: ProjectSuggestion) -> dict[str, object]:
         "transfer": {
             "visibility": "repo",
         },
+        "publication": DEFAULT_PUBLICATION_POLICY,
         "hygiene": default_hygiene_manifest(),
         "paths": {
             "docs_root": "docs",

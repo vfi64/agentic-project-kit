@@ -25,6 +25,8 @@ ALLOWED_MODULES = frozenset(
     {"release_governance", "doc_registry", "rule_registry", "transfer"}
 )
 ALLOWED_TRANSFER_VISIBILITIES = frozenset({"repo", "local"})
+ALLOWED_PUBLICATION_POLICIES = frozenset({"none", "github", "github+pypi", "github+pypi+zenodo"})
+DEFAULT_PUBLICATION_POLICY = "github+pypi+zenodo"
 ALLOWED_DOC_LIFECYCLE_MODES = frozenset({"off", "warn", "strict"})
 DEFAULT_DOC_LIFECYCLE_MODE = "warn"
 DEFAULT_REVIEW_BUDGETS = MappingProxyType(
@@ -41,6 +43,7 @@ ALLOWED_TOP_LEVEL_KEYS = frozenset(
         "profile",
         "modules",
         "transfer",
+        "publication",
         "hygiene",
         "paths",
         "gates",
@@ -175,6 +178,7 @@ class Workspace:
     project_type: str = "generic"
     modules: Mapping[str, bool] = field(default_factory=_default_modules)
     transfer_visibility: str = "repo"
+    publication: str = DEFAULT_PUBLICATION_POLICY
     hygiene_doc_lifecycle: str = DEFAULT_DOC_LIFECYCLE_MODE
     hygiene_review_budgets: Mapping[str, int] = field(default_factory=default_review_budgets)
     gates_extra: tuple[str, ...] = ()
@@ -429,6 +433,7 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
     profile = _parse_profile(manifest.get("profile", "python-default"), location)
     modules = _parse_modules(manifest.get("modules"), location)
     transfer_visibility = _parse_transfer_visibility(manifest.get("transfer"), location)
+    publication = _parse_publication(manifest.get("publication"), location)
     hygiene_doc_lifecycle, hygiene_review_budgets = _parse_hygiene(
         manifest.get("hygiene"),
         location,
@@ -444,6 +449,7 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
         project_type=project_type,
         modules=modules,
         transfer_visibility=transfer_visibility,
+        publication=publication,
         hygiene_doc_lifecycle=hygiene_doc_lifecycle,
         hygiene_review_budgets=hygiene_review_budgets,
         gates_extra=gates_extra,
@@ -556,6 +562,20 @@ def _parse_transfer_visibility(transfer: object, location: str) -> str:
             )
         )
     return visibility
+
+
+def _parse_publication(publication: object, location: str) -> str:
+    if publication is None:
+        return DEFAULT_PUBLICATION_POLICY
+    if not isinstance(publication, str) or publication not in ALLOWED_PUBLICATION_POLICIES:
+        allowed = ", ".join(sorted(ALLOWED_PUBLICATION_POLICIES))
+        raise RuntimeError(
+            _manifest_error(
+                f"{location}:publication",
+                f"invalid publication policy {publication!r}; expected one of {allowed}",
+            )
+        )
+    return publication
 
 
 def _parse_hygiene(

@@ -309,6 +309,29 @@ def test_manifest_defaults_resolve_into_namespace(tmp_path: Path) -> None:
     )
 
 
+def test_manifest_publication_policy_defaults_to_full_publication(tmp_path: Path) -> None:
+    _write_manifest(tmp_path, "kit_schema_version: 1\nprofile: generic\n")
+
+    ws = load_workspace(tmp_path)
+
+    assert ws.publication == "github+pypi+zenodo"
+
+
+def test_manifest_accepts_publication_none(tmp_path: Path) -> None:
+    _write_manifest(tmp_path, "kit_schema_version: 1\nprofile: generic\npublication: none\n")
+
+    ws = load_workspace(tmp_path)
+
+    assert ws.publication == "none"
+
+
+def test_manifest_rejects_unknown_publication_policy(tmp_path: Path) -> None:
+    _write_manifest(tmp_path, "kit_schema_version: 1\nprofile: generic\npublication: zenodo-only\n")
+
+    with pytest.raises(RuntimeError, match="invalid publication policy"):
+        load_workspace(tmp_path)
+
+
 def test_schema_v2_manifest_requires_explicit_hygiene(tmp_path: Path) -> None:
     _write_manifest(tmp_path, "kit_schema_version: 2\nprofile: generic\n")
 

@@ -9,6 +9,7 @@ import subprocess
 from typing import Any
 
 from agentic_project_kit.documentation_registry import build_documentation_registry_summary
+from agentic_project_kit.publication_policy import publication_policy_for
 
 
 @dataclass(frozen=True)
@@ -72,7 +73,40 @@ REMOTE_RELEASE_CHECK_NAMES = ("remote tag unused", "GitHub release unused")
 
 def build_release_plan(project_root: Path, version: str | None = None) -> ReleasePlan:
     resolved_version = version or read_project_version(project_root)
+    policy = publication_policy_for(project_root)
     warnings = tuple(validate_version(resolved_version))
+    local_target_step = ReleaseStep(
+        name="Verify local target tag is unused",
+        commands=("git tag -l v{version}".format(version=resolved_version),),
+        evidence="Local tag lookup shows no existing target release tag.",
+    )
+    local_tag_step = ReleaseStep(
+        name="Create local tag",
+        commands=("git tag v{version}".format(version=resolved_version),),
+        evidence="Local release tag exists for private no-publication release tracking.",
+    )
+    remote_target_step = ReleaseStep(
+        name="Verify target tag and release are unused",
+        commands=(
+            "git fetch --tags",
+            "git tag -l v{version}".format(version=resolved_version),
+            "git ls-remote --tags origin v{version}".format(version=resolved_version),
+            "gh release view v{version}".format(version=resolved_version),
+        ),
+        evidence="Local tag, remote tag, and GitHub release lookups show no existing target release.",
+    )
+    remote_publish_step = ReleaseStep(
+        name="Create and verify tag",
+        commands=(
+            "git tag v{version}".format(version=resolved_version),
+            "git push origin v{version}".format(version=resolved_version),
+            "gh run list --workflow Release --limit 5",
+            "gh release view v{version}".format(version=resolved_version),
+        ),
+        evidence="Release workflow succeeds and the GitHub release exists.",
+    )
+    target_step = local_target_step if policy.value == "none" else remote_target_step
+    publish_step = local_tag_step if policy.value == "none" else remote_publish_step
     return ReleasePlan(
         version=resolved_version,
         steps=(
@@ -105,26 +139,8 @@ def build_release_plan(project_root: Path, version: str | None = None) -> Releas
                 ),
                 evidence="pyproject, CHANGELOG, README, CITATION, STATUS, and CURRENT_HANDOFF mention the target release version.",
             ),
-            ReleaseStep(
-                name="Verify target tag and release are unused",
-                commands=(
-                    "git fetch --tags",
-                    "git tag -l v{version}".format(version=resolved_version),
-                    "git ls-remote --tags origin v{version}".format(version=resolved_version),
-                    "gh release view v{version}".format(version=resolved_version),
-                ),
-                evidence="Local tag, remote tag, and GitHub release lookups show no existing target release.",
-            ),
-            ReleaseStep(
-                name="Create and verify tag",
-                commands=(
-                    "git tag v{version}".format(version=resolved_version),
-                    "git push origin v{version}".format(version=resolved_version),
-                    "gh run list --workflow Release --limit 5",
-                    "gh release view v{version}".format(version=resolved_version),
-                ),
-                evidence="Release workflow succeeds and the GitHub release exists.",
-            ),
+            target_step,
+            publish_step,
         ),
         warnings=warnings,
     )
@@ -137,6 +153,7 @@ def build_release_state_report(
 ) -> ReleaseStateReport:
     resolved_command_runner = command_runner or run_command
     resolved_version = version or read_project_version(project_root)
+    policy = publication_policy_for(project_root)
     checks = [
         check_semantic_version(resolved_version),
         check_file_contains(project_root / "pyproject.toml", f'version = "{resolved_version}"', "pyproject version"),
@@ -151,10 +168,23 @@ def build_release_state_report(
             "CURRENT_HANDOFF version",
         ),
         check_local_tag_absent(project_root, resolved_version, resolved_command_runner),
-        check_remote_tag_absent(project_root, resolved_version, resolved_command_runner),
-        check_github_release_absent(project_root, resolved_version, resolved_command_runner),
     ]
-    checks.append(check_release_publish_readiness(checks, block_on_warn=False))
+    if policy.value == "none":
+        checks.append(
+            ReleaseCheckResult(
+                "publication policy",
+                ReleaseCheckStatus.PASS,
+                "publication: none; remote tag and GitHub release checks skipped",
+            )
+        )
+    else:
+        checks.extend(
+            [
+                check_remote_tag_absent(project_root, resolved_version, resolved_command_runner),
+                check_github_release_absent(project_root, resolved_version, resolved_command_runner),
+            ]
+        )
+    checks.append(check_release_publish_readiness(checks, block_on_warn=False, require_remote=policy.value != "none"))
     return ReleaseStateReport(
         version=resolved_version,
         checks=tuple(checks),
@@ -168,13 +198,27 @@ def build_release_preflight_report(
     command_runner: CommandRunner | None = None,
 ) -> ReleaseStateReport:
     resolved_command_runner = command_runner or run_command
+    policy = publication_policy_for(project_root)
     checks = [
         check_semantic_version(version),
         check_local_tag_absent(project_root, version, resolved_command_runner),
-        check_remote_tag_absent(project_root, version, resolved_command_runner),
-        check_github_release_absent(project_root, version, resolved_command_runner),
     ]
-    checks.append(check_release_publish_readiness(checks, block_on_warn=True))
+    if policy.value == "none":
+        checks.append(
+            ReleaseCheckResult(
+                "publication policy",
+                ReleaseCheckStatus.PASS,
+                "publication: none; remote tag and GitHub release checks skipped",
+            )
+        )
+    else:
+        checks.extend(
+            [
+                check_remote_tag_absent(project_root, version, resolved_command_runner),
+                check_github_release_absent(project_root, version, resolved_command_runner),
+            ]
+        )
+    checks.append(check_release_publish_readiness(checks, block_on_warn=True, require_remote=policy.value != "none"))
     return ReleaseStateReport(version=version, checks=tuple(checks))
 
 
@@ -250,7 +294,14 @@ def check_release_publish_readiness(
     checks: Sequence[ReleaseCheckResult],
     *,
     block_on_warn: bool = True,
+    require_remote: bool = True,
 ) -> ReleaseCheckResult:
+    if not require_remote:
+        return ReleaseCheckResult(
+            "release publish readiness",
+            ReleaseCheckStatus.PASS,
+            "publication: none; remote publication readiness is not required",
+        )
     remote_checks = {check.name: check for check in checks if check.name in REMOTE_RELEASE_CHECK_NAMES}
     missing_checks = [name for name in REMOTE_RELEASE_CHECK_NAMES if name not in remote_checks]
     if missing_checks:

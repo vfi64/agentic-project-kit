@@ -11,6 +11,7 @@ import urllib.parse
 import urllib.request
 
 from agentic_project_kit.documentation_registry import build_documentation_registry_summary
+from agentic_project_kit.publication_policy import publication_policy_for
 from agentic_project_kit.release import CommandResult, read_project_version, run_command
 
 ZENODO_HTTP_TIMEOUT_SECONDS = 5
@@ -52,17 +53,46 @@ def build_post_release_report(
     http_getter: HttpGetter | None = None,
 ) -> PostReleaseReport:
     resolved_version = version or read_project_version(project_root)
-    resolved_command_runner = command_runner or run_command
-    resolved_http_getter = http_getter or urlopen_text
+    policy = publication_policy_for(project_root)
+    checks: list[PostReleaseCheckResult] = []
 
-    github_release = check_github_release_exists(project_root, resolved_version, resolved_command_runner)
-    concept_doi = read_citation_doi(project_root)
-    concept_doi_check = check_concept_doi(concept_doi)
-    zenodo_check = check_zenodo_version_record(resolved_version, concept_doi, resolved_http_getter)
+    if policy.value == "none":
+        checks.append(
+            PostReleaseCheckResult(
+                "Publication policy",
+                PostReleaseStatus.PASS,
+                "publication: none; GitHub Release, PyPI, and Zenodo checks skipped",
+            )
+        )
+    else:
+        resolved_command_runner = command_runner or run_command
+        resolved_http_getter = http_getter or urlopen_text
+        if policy.uses_github:
+            checks.append(check_github_release_exists(project_root, resolved_version, resolved_command_runner))
+        else:
+            checks.append(
+                PostReleaseCheckResult(
+                    "GitHub release",
+                    PostReleaseStatus.PASS,
+                    f"publication: {policy.value}; GitHub Release check skipped",
+                )
+            )
+        if policy.uses_zenodo:
+            concept_doi = read_citation_doi(project_root)
+            checks.append(check_concept_doi(concept_doi))
+            checks.append(check_zenodo_version_record(resolved_version, concept_doi, resolved_http_getter))
+        else:
+            checks.append(
+                PostReleaseCheckResult(
+                    "Zenodo publication",
+                    PostReleaseStatus.PASS,
+                    f"publication: {policy.value}; Zenodo DOI checks skipped",
+                )
+            )
 
     return PostReleaseReport(
         version=resolved_version,
-        checks=(github_release, concept_doi_check, zenodo_check),
+        checks=tuple(checks),
         registry_summary=_load_registry_summary(project_root),
     )
 

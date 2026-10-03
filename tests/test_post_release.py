@@ -98,6 +98,55 @@ def test_post_release_report_warns_and_skips_zenodo_without_citation_doi(tmp_pat
     assert "lookup skipped" in report.checks[2].detail
 
 
+def test_publication_none_post_release_skips_github_and_zenodo(tmp_path: Path):
+    _write_project_files(tmp_path, version="1.2.3", doi="10.5281/zenodo.1000")
+    _write_publication_manifest(tmp_path, "none")
+
+    def forbidden_runner(_project_root: Path, command: Sequence[str]) -> CommandResult:
+        raise AssertionError(f"unexpected command: {command}")
+
+    def forbidden_http_getter(url: str) -> tuple[int, str]:
+        raise AssertionError(f"unexpected HTTP lookup: {url}")
+
+    report = build_post_release_report(
+        tmp_path,
+        command_runner=forbidden_runner,
+        http_getter=forbidden_http_getter,
+    )
+
+    assert report.ok
+    assert [(check.name, check.status) for check in report.checks] == [
+        ("Publication policy", PostReleaseStatus.PASS)
+    ]
+    assert "publication: none" in report.checks[0].detail
+
+
+def test_publication_none_doi_closeout_is_noop_without_zenodo_lookup(tmp_path: Path):
+    from agentic_project_kit.post_release_closeout import post_release_doi_closeout
+
+    _write_project_files(tmp_path, version="1.2.3", doi="10.5281/zenodo.1000")
+    _write_publication_manifest(tmp_path, "none")
+
+    def forbidden_runner(_project_root: Path, command: Sequence[str]) -> CommandResult:
+        raise AssertionError(f"unexpected command: {command}")
+
+    def forbidden_http_getter(url: str) -> tuple[int, str]:
+        raise AssertionError(f"unexpected HTTP lookup: {url}")
+
+    result = post_release_doi_closeout(
+        tmp_path,
+        version="1.2.3",
+        write=True,
+        command_runner=forbidden_runner,
+        http_getter=forbidden_http_getter,
+    )
+
+    assert result.ok
+    assert result.result_status == "PASS"
+    assert result.changed_paths == ()
+    assert "publication: none" in result.next_action
+
+
 def test_find_version_doi_accepts_v_prefixed_metadata_version():
     payload = _zenodo_payload(version="v1.2.3", doi="10.5281/zenodo.1001")
 
@@ -369,3 +418,20 @@ def _closeout_zenodo_payload(version: str, doi: str) -> dict[str, object]:
             ]
         }
     }
+
+
+def _write_publication_manifest(root: Path, publication: str) -> None:
+    manifest = root / ".agentic" / "config.yaml"
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    manifest.write_text(
+        "kit_schema_version: 2\n"
+        "profile: generic\n"
+        f"publication: {publication}\n"
+        "hygiene:\n"
+        "  doc_lifecycle: warn\n"
+        "  review_budgets:\n"
+        "    governance: 180\n"
+        "    reference: 365\n"
+        "    workflow: 270\n",
+        encoding="utf-8",
+    )
