@@ -1,3 +1,12 @@
+## v1.0.14 - 2026-10-03
+
+- Zenodo DOI verification pending for v1.0.14.
+- Remove temporary live publication marker
+- Record GF-009 private released-package retest
+- Document standing PR and handoff authorization
+- Add lossless main rescue workflow
+- Add private publication-none release policy
+
 ## v1.0.13 - 2026-09-16
 
 - Zenodo DOI verification pending for v1.0.13.

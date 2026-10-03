@@ -52,7 +52,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "project.version=1.0.13",
+            "detail": "project.version=1.0.14",
             "evidence_type": "pyproject-value",
             "status": "verified"
           }
@@ -4483,7 +4483,7 @@
             "required": false
           },
           {
-            "default": "1.0.13",
+            "default": "1.0.14",
             "help": "",
             "name": "version",
             "opts": [
@@ -6016,7 +6016,7 @@
         "lifecycle_rank": 73,
         "params": [
           {
-            "default": "1.0.13",
+            "default": "1.0.14",
             "help": "",
             "name": "version",
             "opts": [
@@ -6923,7 +6923,7 @@
             "required": false
           },
           {
-            "default": "1.0.13",
+            "default": "1.0.14",
             "help": "",
             "name": "version",
             "opts": [
@@ -11742,13 +11742,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "e2146511b40a",
+    "manifest_sha": "b887a3058bed",
     "package_name": "agentic-project-kit",
-    "package_version": "1.0.13",
+    "package_version": "1.0.14",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.9",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "e2146511b40a",
+    "reproduced_manifest_sha": "b887a3058bed",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 167,
@@ -11783,7 +11783,7 @@
     "current_release_tag": "v1.0.9",
     "current_verified_main": "See docs/STATUS.md",
     "current_verified_release": "1.0.9",
-    "current_version": "1.0.13",
+    "current_version": "1.0.14",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
     "version_doi": "10.5281/zenodo.22541661"
