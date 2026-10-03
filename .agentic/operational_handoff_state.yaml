@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 281ed773094f98a77c43d1bfc76bfad8b675ce21
-  short: 281ed773
-  subject: Add private tag release-publish route (#2356)
+  full: fa293dd72d3f43634be29793c35a1e24f645ebee
+  short: fa293dd7
+  subject: 'KIT-GF-032 slice E: release ready passes in external workspaces with publication none (#2358)'
 last_substantive_work_state:
-  full: 281ed773094f98a77c43d1bfc76bfad8b675ce21
-  short: 281ed773
-  subject: Add private tag release-publish route (#2356)
+  full: fa293dd72d3f43634be29793c35a1e24f645ebee
+  short: fa293dd7
+  subject: 'KIT-GF-032 slice E: release ready passes in external workspaces with publication none (#2358)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
