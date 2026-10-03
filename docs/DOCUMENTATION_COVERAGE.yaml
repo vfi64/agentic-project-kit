@@ -3,6 +3,20 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: release-version-anchors-coverage
+  description: External workspaces must keep their own release version anchors visible in release documentation and gates (KIT-GF-032).
+  documents:
+  - path: README.md
+    terms:
+    - version anchors
+    - literal package `__version__`
+    - current-version line
+    - self-hosting layout
+  - path: docs/TEST_GATES.md
+    terms:
+    - Release version anchors
+    - literal package `__version__`
+    - "`Current version:` line"
 - id: publication-policy-none-coverage
   description: External workspace publication policy must keep private no-publication repositories visible in release documentation and gates.
   documents:

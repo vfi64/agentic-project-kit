@@ -10,6 +10,10 @@ from typing import Any
 
 from agentic_project_kit.documentation_registry import build_documentation_registry_summary
 from agentic_project_kit.publication_policy import publication_policy_for
+from agentic_project_kit.release_version_sources import (
+    is_kit_self_hosting,
+    release_version_anchors,
+)
 
 
 @dataclass(frozen=True)
@@ -125,20 +129,7 @@ def build_release_plan(project_root: Path, version: str | None = None) -> Releas
                 commands=("python -m build", "twine check dist/*", "ls -lh dist/"),
                 evidence="Wheel and sdist build successfully and pass twine validation.",
             ),
-            ReleaseStep(
-                name="Check release notes and state files",
-                commands=(
-                    "grep -n 'version = \"{version}\"' pyproject.toml".format(version=resolved_version),
-                    "grep -n 'v{version}' CHANGELOG.md".format(version=resolved_version),
-                    "grep -n 'Version `{version}`' README.md".format(version=resolved_version),
-                    "grep -n 'version: {version}' CITATION.cff".format(version=resolved_version),
-                    "grep -n 'Current version: {version}' docs/STATUS.md".format(version=resolved_version),
-                    "grep -n 'Current version: {version}' docs/handoff/CURRENT_HANDOFF.md".format(
-                        version=resolved_version
-                    ),
-                ),
-                evidence="pyproject, CHANGELOG, README, CITATION, STATUS, and CURRENT_HANDOFF mention the target release version.",
-            ),
+            _release_notes_step(project_root, resolved_version),
             target_step,
             publish_step,
         ),
@@ -154,18 +145,15 @@ def build_release_state_report(
     resolved_command_runner = command_runner or run_command
     resolved_version = version or read_project_version(project_root)
     policy = publication_policy_for(project_root)
+    # KIT-GF-032: the anchors are the Kit's own files only in its self-hosting
+    # layout; an external workspace checks the files it actually has.
     checks = [
         check_semantic_version(resolved_version),
-        check_file_contains(project_root / "pyproject.toml", f'version = "{resolved_version}"', "pyproject version"),
-        check_file_contains(project_root / "src/agentic_project_kit/__init__.py", f"__version__ = \"{resolved_version}\"", "package __version__"),
-        check_file_contains(project_root / "CHANGELOG.md", f"v{resolved_version}", "CHANGELOG version"),
-        check_file_contains(project_root / "README.md", f"Version `{resolved_version}`", "README version"),
-        check_file_contains(project_root / "CITATION.cff", f"version: {resolved_version}", "CITATION version"),
-        check_file_contains(project_root / "docs/STATUS.md", f"Current version: {resolved_version}", "STATUS version"),
-        check_file_contains(
-            project_root / "docs/handoff/CURRENT_HANDOFF.md",
-            f"Current version: {resolved_version}",
-            "CURRENT_HANDOFF version",
+        *(
+            check_file_contains(project_root / anchor.path, anchor.needle, anchor.label)
+            if anchor.needle is not None
+            else check_file_matches(project_root / anchor.path, anchor.pattern, anchor.label)
+            for anchor in release_version_anchors(project_root, resolved_version, uses_zenodo=policy.uses_zenodo)
         ),
         check_local_tag_absent(project_root, resolved_version, resolved_command_runner),
     ]
@@ -227,6 +215,14 @@ def check_semantic_version(version: str) -> ReleaseCheckResult:
     if warnings:
         return ReleaseCheckResult("semantic version", ReleaseCheckStatus.FAIL, warnings[0])
     return ReleaseCheckResult("semantic version", ReleaseCheckStatus.PASS, f"{version} is valid")
+
+
+def check_file_matches(path: Path, pattern: str, name: str) -> ReleaseCheckResult:
+    if not path.exists():
+        return ReleaseCheckResult(name, ReleaseCheckStatus.FAIL, f"missing file: {path}")
+    if re.search(pattern, path.read_text(encoding="utf-8"), re.MULTILINE) is None:
+        return ReleaseCheckResult(name, ReleaseCheckStatus.FAIL, f"missing pattern: {pattern}")
+    return ReleaseCheckResult(name, ReleaseCheckStatus.PASS, f"found pattern: {pattern}")
 
 
 def check_file_contains(path: Path, needle: str, name: str) -> ReleaseCheckResult:
@@ -363,6 +359,30 @@ def run_command(project_root: Path, command: Sequence[str]) -> CommandResult:
     except OSError as exc:
         return CommandResult(returncode=127, stdout="", stderr=f"could not run {command[0]}: {exc}")
     return CommandResult(returncode=result.returncode, stdout=result.stdout, stderr=result.stderr)
+
+
+def _release_notes_step(project_root: Path, version: str) -> ReleaseStep:
+    if is_kit_self_hosting(project_root):
+        return ReleaseStep(
+            name="Check release notes and state files",
+            commands=(
+                "grep -n 'version = \"{version}\"' pyproject.toml".format(version=version),
+                "grep -n 'v{version}' CHANGELOG.md".format(version=version),
+                "grep -n 'Version `{version}`' README.md".format(version=version),
+                "grep -n 'version: {version}' CITATION.cff".format(version=version),
+                "grep -n 'Current version: {version}' docs/STATUS.md".format(version=version),
+                "grep -n 'Current version: {version}' docs/handoff/CURRENT_HANDOFF.md".format(version=version),
+            ),
+            evidence="pyproject, CHANGELOG, README, CITATION, STATUS, and CURRENT_HANDOFF mention the target release version.",
+        )
+    # KIT-GF-032: an external workspace checks its own version anchors.
+    anchors = release_version_anchors(project_root, version)
+    return ReleaseStep(
+        name="Check release notes and state files",
+        commands=tuple(f"grep -nE '{anchor.pattern}' {anchor.path}" for anchor in anchors),
+        evidence="The workspace's version anchors mention the target release version: "
+        + ", ".join(anchor.path for anchor in anchors) + ".",
+    )
 
 
 def read_project_version(project_root: Path) -> str:

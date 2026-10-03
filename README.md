@@ -420,6 +420,8 @@ agentic-kit release-check --version 0.3.4
 
 These commands help prevent release-state drift between `pyproject.toml`, `CHANGELOG.md`, project state files, local tags, remote tags, GitHub releases, and citation metadata.
 
+In an external workspace (a workspace manifest and no Kit package) `release-check`, `release-plan` and the release commit integrity check of `release-publish` use the workspace's own version anchors: `pyproject.toml`, a literal package `__version__` where the package declares one, `CHANGELOG.md` when present, `CITATION.cff` when present or required by a Zenodo publication policy, and `docs/STATUS.md` or `docs/handoff/CURRENT_HANDOFF.md` only when they carry a current-version line. The Kit's own files (`src/agentic_project_kit/__init__.py`, the README version marker) are anchors only in the Kit's self-hosting layout.
+
 This post-release command is separate from release-check: release-check is a pre-release gate, while post-release-check verifies the already-published release and its Zenodo archive state.
 
 Use `agentic-kit post-release-check` after publishing a GitHub release:

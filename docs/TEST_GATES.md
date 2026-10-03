@@ -671,6 +671,8 @@ Validate release state before tagging:
 
     agentic-kit release-check --version <version>
 
+Release version anchors follow the workspace: an external workspace checks `pyproject.toml`, a literal package `__version__`, `CHANGELOG.md`, `CITATION.cff` (present or Zenodo policy) and status files with a `Current version:` line; it must never require the Kit's own package path or README version marker.
+
 Check post-release archive state after publishing:
 
     agentic-kit post-release-check --version <version>
