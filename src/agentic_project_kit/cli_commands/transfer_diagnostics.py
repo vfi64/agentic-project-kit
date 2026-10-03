@@ -562,6 +562,28 @@ def standard_error_scan_command(
     def step(name: str, argv: list[str], *, allowed_returncodes: set[int] | None = None) -> None:
         steps.append(_run_standard_error_scan_step(name, argv, allowed_returncodes=allowed_returncodes))
 
+    # KIT-GF-032 slice B: in an external workspace the Kit's self-hosting checks
+    # (its own test files, its DOI/handoff currency audit, its planning-document
+    # consolidation) do not apply; they are recorded as skipped, never run.
+    from agentic_project_kit.release_version_sources import is_kit_self_hosting
+
+    external = not is_kit_self_hosting(project_root)
+
+    def self_hosting_step(name: str, argv: list[str], **kwargs) -> None:
+        if not external:
+            step(name, argv, **kwargs)
+            return
+        steps.append({
+            "name": name,
+            "argv": argv,
+            "returncode": 0,
+            "ok": True,
+            "skipped": True,
+            "allowed_returncodes": [0],
+            "stdout": "SKIPPED: Kit self-hosting check; not applicable in an external workspace (KIT-GF-032).",
+            "stderr": "",
+        })
+
     if before_release:
         step("post-merge-check", ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"])
     step("repo-status", ["./.venv/bin/agentic-kit", "transfer", "repo-status"])
@@ -579,6 +601,8 @@ def standard_error_scan_command(
         "--json",
     ]
     for test_path in release_tests:
+        if external and not (project_root / test_path).exists():
+            continue   # the Kit's own release tests exist only in the Kit
         command_check.extend(["--test-path", test_path])
     for command in [
         "agentic-kit transfer command-reference-check",
@@ -590,7 +614,7 @@ def standard_error_scan_command(
     ]:
         command_check.extend(["--command", command])
     step("command-composition-check", command_check)
-    step("command-reference-check", ["./.venv/bin/agentic-kit", "transfer", "command-reference-check", "--json"])
+    self_hosting_step("command-reference-check", ["./.venv/bin/agentic-kit", "transfer", "command-reference-check", "--json"])
     step("patch-cycle-status", ["./.venv/bin/agentic-kit", "transfer", "patch-cycle-status", "--include-ci", "--json"], allowed_returncodes={0, 2})
 
     if before_release:
@@ -670,8 +694,8 @@ def standard_error_scan_command(
         allowed_returncodes={0} if before_release else {0, 2},
     )
     step("docs-audit", ["./.venv/bin/agentic-kit", "docs-audit"])
-    step("audit-doc-currency", ["./.venv/bin/agentic-kit", "audit-doc-currency"])
-    step("audit-planning-docs-consolidation", ["./.venv/bin/agentic-kit", "audit-planning-docs-consolidation"])
+    self_hosting_step("audit-doc-currency", ["./.venv/bin/agentic-kit", "audit-doc-currency"])
+    self_hosting_step("audit-planning-docs-consolidation", ["./.venv/bin/agentic-kit", "audit-planning-docs-consolidation"])
     step("audit-ns-legacy-references", ["./.venv/bin/agentic-kit", "audit-ns-legacy-references"])
     step("audit-program-redundancy", ["./.venv/bin/agentic-kit", "audit-program-redundancy"])
     step("standard-gates-audit-suite", ["./.venv/bin/agentic-kit", "standard-gates-audit-suite"])
