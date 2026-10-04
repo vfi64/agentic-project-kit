@@ -41,6 +41,11 @@ rules:
     - version anchors
     - literal package `__version__`
     - current-version line
+    - release.version_anchors
+    - source_constant
+    - json_table
+    - APP_VERSION
+    - docs/releases/versions.json
     - self-hosting layout
     - ends the lifecycle with the tag
     - skips the Kit's self-hosting checks
@@ -49,6 +54,11 @@ rules:
     - Release version anchors
     - literal package `__version__`
     - "`Current version:` line"
+    - release.version_anchors
+    - source_constant
+    - json_table
+    - APP_VERSION
+    - docs/releases/versions.json
 - id: publication-policy-none-coverage
   description: External workspace publication policy must keep private no-publication repositories visible in release documentation and gates.
   documents:
@@ -59,6 +69,9 @@ rules:
     - post-release-check
     - post-release-doi-closeout
     - release-publish
+    - approval_signature
+    - --expected-signature
+    - .agentic/release/ENABLE_LIVE_PUBLISH
     - private annotated tag
     - git push origin <tag>
     - github+pypi+zenodo
@@ -70,6 +83,9 @@ rules:
     - post-release-check
     - post-release-doi-closeout
     - release-publish
+    - approval_signature
+    - --expected-signature
+    - .agentic/release/ENABLE_LIVE_PUBLISH
     - private annotated tag
     - git push origin <tag>
 - id: workflow-guard-coverage

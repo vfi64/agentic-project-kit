@@ -5777,6 +5777,15 @@
           "required": false
         },
         {
+          "default": "",
+          "help": "",
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "required": false
+        },
+        {
           "default": "PosixPath('.')",
           "help": "",
           "name": "root",

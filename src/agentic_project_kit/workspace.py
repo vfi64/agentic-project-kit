@@ -45,6 +45,7 @@ ALLOWED_TOP_LEVEL_KEYS = frozenset(
         "transfer",
         "publication",
         "hygiene",
+        "release",
         "paths",
         "gates",
     }

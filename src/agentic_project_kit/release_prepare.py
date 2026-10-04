@@ -462,7 +462,7 @@ def _prepare_external_release_state(root: Path, *, version: str, date: str,
                                     summary_lines: Sequence[str], dry_run: bool) -> ReleasePrepareResult:
     """Update only the workspace's own version anchors (see release_version_sources)."""
     from agentic_project_kit.publication_policy import publication_policy_for
-    from agentic_project_kit.release_version_sources import package_version_file
+    from agentic_project_kit.release_version_sources import additional_version_anchor_updates, package_version_file
 
     uses_zenodo = publication_policy_for(root).uses_zenodo
     changed: list[str] = []
@@ -489,6 +489,7 @@ def _prepare_external_release_state(root: Path, *, version: str, date: str,
     if changelog.exists():
         updates[changelog] = _external_changelog(_read(changelog), version, date,
                                                  summary_lines=summary_lines, uses_zenodo=uses_zenodo)
+    updates.update(additional_version_anchor_updates(root, version=version, date=date))
     if handoff_path in updates and _read(handoff_path) != updates[handoff_path]:
         _require_dpa_current_handoff_preflight(root, target_path=handoff_path, projected_text=updates[handoff_path],
                                                version=version, date=date, summary_lines=summary_lines)
@@ -497,4 +498,3 @@ def _prepare_external_release_state(root: Path, *, version: str, date: str,
     for path, text in updates.items():
         _write_if_changed(path, text, dry_run=dry_run, changed=changed, root=root)
     return ReleasePrepareResult(version=version, date=date, changed_paths=sorted(changed), dry_run=dry_run)
-

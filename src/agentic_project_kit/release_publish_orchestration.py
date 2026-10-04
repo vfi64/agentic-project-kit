@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 from dataclasses import asdict, dataclass
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -39,6 +40,8 @@ class ReleasePublishPlan:
     checks: tuple[ReleasePublishCheck, ...]
     planned_actions: tuple[str, ...]
     execute_enabled: bool
+    approval_signature: str = ""
+    approval_subject: dict[str, object] | None = None
 
     @property
     def ok(self) -> bool:
@@ -71,6 +74,8 @@ class ReleasePublishPlan:
             "checks": [check.as_dict() for check in self.checks],
             "blockers": [check.as_dict() for check in self.blockers],
             "planned_actions": list(self.planned_actions),
+            "approval_signature": self.approval_signature,
+            "approval_subject": self.approval_subject,
         }
 
 
@@ -334,6 +339,37 @@ def _remote_tag_target(
     return ref_rc, ref_output
 
 
+def _current_head(root: Path, runner: Runner) -> str:
+    rc, output = runner(("git", "rev-parse", "HEAD"), root)
+    if rc != 0:
+        return ""
+    return output.strip()
+
+
+def _approval_subject(
+    *,
+    version: str,
+    tag: str,
+    target_commit: str,
+    publication_policy: str,
+    planned_actions: Sequence[str],
+) -> dict[str, object]:
+    return {
+        "schema_version": 1,
+        "kind": "release_publish_approval",
+        "version": version,
+        "tag": tag,
+        "target_commit": target_commit,
+        "publication_policy": publication_policy,
+        "planned_actions": list(planned_actions),
+    }
+
+
+def _approval_signature(subject: dict[str, object]) -> str:
+    canonical = json.dumps(subject, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:24]
+
+
 def _append_live_release_publish_checks(
     *,
     checks: list[ReleasePublishCheck],
@@ -521,6 +557,7 @@ def evaluate_release_publish_plan(
     execute: bool = False,
     runner: Runner | None = None,
     allow_execute: bool = False,
+    expected_signature: str = "",
 ) -> ReleasePublishPlan:
     root = root.resolve()
     run = runner or _default_runner
@@ -611,26 +648,6 @@ def evaluate_release_publish_plan(
             )
         )
 
-    capability_file = root / EXECUTE_CAPABILITY_PATH
-    execute_capability_present = capability_file.exists()
-
-    if execute and not (allow_execute and execute_capability_present):
-        checks.append(
-            ReleasePublishCheck(
-                name="execute capability",
-                status="FAIL",
-                detail=(
-                    "live release publishing requires --allow-execute and "
-                    f"{EXECUTE_CAPABILITY_PATH}; dry-run remains the default supported path"
-                ),
-                returncode=2,
-            )
-        )
-
-    live_execute_ready = execute and allow_execute and execute_capability_present and all(
-        check.status == "PASS" for check in checks
-    )
-
     planned_actions = [
         f"verify release-prep evidence for {version}",
         f"verify release metadata authority for {version}",
@@ -641,6 +658,45 @@ def evaluate_release_publish_plan(
         planned_actions.append("skip GitHub Release, PyPI, and Zenodo publication because publication is none")
     else:
         planned_actions.extend([f"plan GitHub release {tag}", "plan post-release-check after live publish"])
+
+    target_commit = _current_head(root, run)
+    subject = _approval_subject(
+        version=version,
+        tag=tag,
+        target_commit=target_commit,
+        publication_policy=policy.value,
+        planned_actions=planned_actions,
+    )
+    signature = _approval_signature(subject) if target_commit else ""
+
+    capability_file = root / EXECUTE_CAPABILITY_PATH
+    execute_capability_present = capability_file.exists()
+    signature_matches = bool(expected_signature) and expected_signature == signature
+    if execute and expected_signature and not signature_matches:
+        checks.append(
+            ReleasePublishCheck(
+                name="release publish signature",
+                status="FAIL",
+                detail="expected signature does not match the current release-publish plan",
+                returncode=2,
+            )
+        )
+    if execute and not (allow_execute and (execute_capability_present or signature_matches)):
+        checks.append(
+            ReleasePublishCheck(
+                name="execute capability",
+                status="FAIL",
+                detail=(
+                    "live release publishing requires --allow-execute plus either "
+                    f"{EXECUTE_CAPABILITY_PATH} or a matching --expected-signature"
+                ),
+                returncode=2,
+            )
+        )
+
+    live_execute_ready = execute and allow_execute and (execute_capability_present or signature_matches) and all(
+        check.status == "PASS" for check in checks
+    )
     if live_execute_ready:
         if private_publication:
             planned_actions.extend([f"execute annotated private tag {tag}", f"execute git push origin {tag}"])
@@ -678,6 +734,8 @@ def evaluate_release_publish_plan(
         checks=tuple(checks),
         planned_actions=tuple(planned_actions),
         execute_enabled=live_execute_ready and all(check.status == "PASS" for check in checks),
+        approval_signature=signature,
+        approval_subject=subject,
     )
 
 
@@ -689,6 +747,7 @@ def render_release_publish_plan(plan: ReleasePublishPlan) -> str:
         f"TAG={plan.tag}",
         f"MODE={plan.mode}",
         f"EXECUTE_ENABLED={str(plan.execute_enabled).lower()}",
+        f"APPROVAL_SIGNATURE={plan.approval_signature}",
         f"CHECK_COUNT={len(plan.checks)}",
         f"BLOCKER_COUNT={len(plan.blockers)}",
     ]

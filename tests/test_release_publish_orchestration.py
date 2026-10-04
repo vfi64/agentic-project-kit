@@ -116,6 +116,83 @@ def test_release_publish_publication_none_plans_private_tag_route(tmp_path: Path
     assert not any(args[:3] == ("gh", "release", "view") for args in seen)
 
 
+
+def test_release_publish_signature_authorizes_publication_none_without_marker(tmp_path: Path) -> None:
+    _write_publication_manifest(tmp_path, "none")
+    _write_external_release_anchors(tmp_path, "9.9.9")
+    local_tag_exists = False
+    seen: list[tuple[str, ...]] = []
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        nonlocal local_tag_exists
+        seen.append(tuple(args))
+        if "release-prep" in args:
+            return 0, json.dumps({"changed_paths": []}) + "\n"
+        if args == ("git", "status", "--porcelain"):
+            return 0, ""
+        if args == ("git", "rev-parse", "HEAD"):
+            return 0, "head\n"
+        if args == ("git", "rev-parse", "--verify", "refs/tags/v9.9.9^{}"):
+            return (0, "head\n") if local_tag_exists else (1, "missing local tag\n")
+        if args == ("git", "tag", "-a", "v9.9.9", "-m", "Release v9.9.9"):
+            local_tag_exists = True
+            return 0, "created annotated tag\n"
+        if args == ("git", "ls-remote", "--exit-code", "origin", "refs/tags/v9.9.9^{}"):
+            return 1, "missing remote tag\n"
+        if args == ("git", "ls-remote", "--exit-code", "--refs", "origin", "refs/tags/v9.9.9"):
+            return 1, "missing remote tag\n"
+        if args == ("git", "push", "origin", "v9.9.9"):
+            return 0, "pushed tag\n"
+        if args and args[0] == "gh":
+            raise AssertionError(f"publication: none must not call GitHub release commands: {args}")
+        return 0, "PASS\n"
+
+    dry_run = evaluate_release_publish_plan(tmp_path, version="9.9.9", runner=runner)
+    assert dry_run.approval_signature
+    assert dry_run.approval_subject and dry_run.approval_subject["target_commit"] == "head"
+
+    plan = evaluate_release_publish_plan(
+        tmp_path,
+        version="9.9.9",
+        execute=True,
+        allow_execute=True,
+        expected_signature=dry_run.approval_signature,
+        runner=runner,
+    )
+
+    assert plan.ok is True
+    assert plan.execute_enabled is True
+    assert ("git", "tag", "-a", "v9.9.9", "-m", "Release v9.9.9") in seen
+    assert ("git", "push", "origin", "v9.9.9") in seen
+
+
+def test_release_publish_execute_rejects_stale_signature(tmp_path: Path) -> None:
+    _write_publication_manifest(tmp_path, "none")
+    _write_external_release_anchors(tmp_path, "9.9.9")
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        if "release-prep" in args:
+            return 0, json.dumps({"changed_paths": []}) + "\n"
+        if args == ("git", "status", "--porcelain"):
+            return 0, ""
+        if args == ("git", "rev-parse", "HEAD"):
+            return 0, "head\n"
+        return 0, "PASS\n"
+
+    plan = evaluate_release_publish_plan(
+        tmp_path,
+        version="9.9.9",
+        execute=True,
+        allow_execute=True,
+        expected_signature="stale",
+        runner=runner,
+    )
+
+    assert plan.ok is False
+    assert plan.execute_enabled is False
+    assert any(check.name == "release publish signature" for check in plan.blockers)
+
+
 def test_release_publish_publication_none_execute_pushes_annotated_private_tag(tmp_path: Path) -> None:
     _write_publication_manifest(tmp_path, "none")
     _write_external_release_anchors(tmp_path, "9.9.9")
@@ -182,6 +259,8 @@ def test_release_publish_cli_json_outputs_json_only(monkeypatch, tmp_path: Path)
             ),
             planned_actions=("plan annotated git tag v9.9.9", "plan git push origin v9.9.9"),
             execute_enabled=False,
+            approval_signature="sig",
+            approval_subject={"kind": "release_publish_approval"},
         )
 
     monkeypatch.setattr(release_publish_cli, "evaluate_release_publish_plan", fake_evaluate_release_publish_plan)
