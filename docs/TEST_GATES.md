@@ -41,14 +41,15 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 | Onboarding guidance change | Unit tests plus CLI smoke command for `agentic-kit onboarding measure`; confirm docs/ONBOARDING.md remains bound to the generated command manifest and `workspace_detection.NON_WORKSPACE_NEXT_STEP` |
 | DPA repository adoption gate change | Unit tests plus CLI smoke command for `agentic-kit dpa repo-adoption-assessment`; confirm it remains read-only and does not claim external-repo conformance |
 | Workspace DPA intake orchestration change | Unit tests plus CLI smoke command for `agentic-kit workspace dpa-intake`; confirm it remains read-only by default, writes evidence only under the DPA assessment evidence root when explicitly executed, and does not claim external-repo conformance |
-
-Workspace-init provenance is part of the DPA adoption gate: when a target contains the validated `.agentic/dpa/workspace_init_projection.json`, adoption must classify its listed generated outputs as `generated_projection` rather than manual-preservation surfaces. Invalid provenance manifests must block the assessment instead of being trusted. The regression tests cover both the manifest-backed classification and the unchanged legacy classification when no manifest is present.
-
-PR closeout must restore known volatile transfer artifacts before evaluating dirty-worktree state. This keeps generated handoff carriers from blocking `agentic-kit transfer pr-closeout-complete`, while any remaining product or unknown changes still block the closeout.
+| Workspace CI template change | Unit tests plus CLI smoke command for `agentic-kit workspace ci-update`; confirm the managed template pins `agentic-project-kit==<current version>`, runs pull requests plus main pushes only, uses concurrency, caches Playwright browsers, and refuses unmanaged injected workflows |
 | Workspace remove lifecycle change | Unit tests plus CLI smoke command for `agentic-kit workspace remove`; confirm it is dry-run by default, removes only exact Kit-generated workspace files, unknown or modified `.agentic/` paths block execution, and project docs/source files are preserved |
 | Planning-documentation slice gate | Unit tests plus CLI smoke command for `agentic-kit slice gate --kind planning-doc`; output must distinguish helper-local PASS from slice PASS |
 | TestPyPI validation | TestPyPI upload, fresh venv install, CLI smoke command |
 | Handoff/state change | Update docs/STATUS.md and docs/handoff/CURRENT_HANDOFF.md |
+
+Workspace-init provenance is part of the DPA adoption gate: when a target contains the validated `.agentic/dpa/workspace_init_projection.json`, adoption must classify its listed generated outputs as `generated_projection` rather than manual-preservation surfaces. Invalid provenance manifests must block the assessment instead of being trusted. The regression tests cover both the manifest-backed classification and the unchanged legacy classification when no manifest is present.
+
+PR closeout must restore known volatile transfer artifacts before evaluating dirty-worktree state. This keeps generated handoff carriers from blocking `agentic-kit transfer pr-closeout-complete`, while any remaining product or unknown changes still block the closeout.
 
 ## Ruff Gate Contract
 

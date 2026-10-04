@@ -13,6 +13,13 @@ from agentic_project_kit.workspace_init import (
     render_workspace_init_error,
     render_workspace_init_plan,
 )
+from agentic_project_kit.workspace_ci_update import (
+    WorkspaceCiUpdateError,
+    build_workspace_ci_update_plan,
+    execute_workspace_ci_update,
+    render_workspace_ci_update_error,
+    render_workspace_ci_update_plan,
+)
 from agentic_project_kit.workspace_remove import (
     WorkspaceRemoveError,
     build_workspace_remove_plan,
@@ -197,6 +204,48 @@ def workspace_remove_command(
             )
         else:
             typer.echo(render_workspace_remove_error(exc), nl=False)
+        raise typer.Exit(code=1) from exc
+
+
+@workspace_app.command("ci-update")
+def workspace_ci_update_command(
+    root: Annotated[Path, typer.Option("--root", help="Target repository root.")] = Path("."),
+    execute: Annotated[
+        bool,
+        typer.Option("--execute", help="Write the current managed CI template."),
+    ] = False,
+    json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
+) -> None:
+    """Plan or update the managed workspace CI template."""
+
+    try:
+        plan = build_workspace_ci_update_plan(root.resolve(), execute=execute)
+        if execute and plan.result_status == "PASS":
+            execute_workspace_ci_update(plan)
+        written = execute and plan.result_status == "PASS" and bool(plan.changed_paths)
+        if json_output:
+            typer.echo(json.dumps(plan.as_json_data(written=written), indent=2, sort_keys=True))
+        else:
+            typer.echo(render_workspace_ci_update_plan(plan, written=written), nl=False)
+        if plan.result_status == "BLOCKED":
+            raise typer.Exit(2)
+    except WorkspaceCiUpdateError as exc:
+        if json_output:
+            typer.echo(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "kind": "workspace_ci_update_result",
+                        "result_status": "FAIL",
+                        "code": exc.code,
+                        "error": str(exc),
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+        else:
+            typer.echo(render_workspace_ci_update_error(exc), nl=False)
         raise typer.Exit(code=1) from exc
 
 

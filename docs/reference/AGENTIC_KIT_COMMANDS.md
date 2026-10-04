@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: dbab7dde0a84
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: cfc8ccb6dd0b
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `255`
+- Command count: `256`
 
 ## Commands
 
@@ -3980,6 +3980,22 @@ Analyze an existing repository without writing workspace files.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Target repository root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+
+### `agentic-kit workspace ci-update`
+
+- Safety: `BOUNDED`
+- Surface: `primitive`
+- When to use: Plan or update the managed workspace CI template.
+- Dry-run available: `True`
+- Remote effects: `none`
+
+Plan or update the managed workspace CI template.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Target repository root. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Write the current managed CI template. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit workspace dpa-intake`

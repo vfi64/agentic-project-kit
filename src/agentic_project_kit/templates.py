@@ -1,6 +1,7 @@
 from dataclasses import asdict
 import subprocess
 
+from agentic_project_kit import __version__ as PACKAGE_VERSION
 from agentic_project_kit.contract import build_contract_data, render_contract_yaml
 from agentic_project_kit.dpa_workspace_init_projection import (
     DPA_WORKSPACE_INIT_HANDOFF_TEMPLATE_PATH,
@@ -175,8 +176,17 @@ CI = '''
 name: CI
 
 on:
-  push:
   pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   quality:
@@ -187,6 +197,12 @@ jobs:
         with:
           python-version: "3.12"
           cache: "pip"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-ms-playwright-${{ hashFiles('**/pyproject.toml', '**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-ms-playwright-
       - name: Install project
         run: |
           python -m pip install --upgrade pip
@@ -201,12 +217,12 @@ $kit_install_command
 '''
 
 KIT_INSTALL_COMMANDS = {
-    "pypi": "          pip install agentic-project-kit",
+    "pypi": f"          pip install agentic-project-kit=={PACKAGE_VERSION}",
     "testpypi": (
         "          pip install "
         "--index-url https://test.pypi.org/simple/ "
         "--extra-index-url https://pypi.org/simple/ "
-        "agentic-project-kit"
+        f"agentic-project-kit=={PACKAGE_VERSION}"
     ),
     "none": "          # agentic-project-kit install intentionally skipped",
 }

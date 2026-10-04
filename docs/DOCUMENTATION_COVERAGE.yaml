@@ -1078,6 +1078,19 @@ rules:
     - warn-mode doc lifecycle defaults
     - --inject-ci
     - --inject-pre-commit
+    - agentic-project-kit==<current version>
+    - agentic-kit workspace ci-update --root PATH --execute
+    - Playwright browsers
+    - workflow concurrency
+  - path: docs/TEST_GATES.md
+    terms:
+    - Workspace CI template change
+    - agentic-kit workspace ci-update
+    - agentic-project-kit==<current version>
+    - main pushes only
+    - concurrency
+    - Playwright browsers
+    - unmanaged injected workflows
 - id: workspace-remove-readme-coverage
   description: Bounded workspace removal must remain visible as the safe rollback path for exact Kit-generated operating-layer files.
   documents:

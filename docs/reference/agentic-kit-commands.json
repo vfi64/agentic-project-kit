@@ -18353,6 +18353,72 @@
     {
       "dry_run_available": true,
       "group": "workspace",
+      "help": "Plan or update the managed workspace CI template.",
+      "name": "ci-update",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Target repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write the current managed CI template.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "workspace",
+        "ci-update"
+      ],
+      "qualified_name": "agentic-kit workspace ci-update",
+      "remote_effects": [
+        "none"
+      ],
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "surface": "primitive",
+      "task_tags": [
+        "bounded",
+        "workspace"
+      ],
+      "when_to_use": "Plan or update the managed workspace CI template."
+    },
+    {
+      "dry_run_available": true,
+      "group": "workspace",
       "help": "Run the deterministic DPA repository-intake orchestration.",
       "lifecycle_rank": 21,
       "name": "dpa-intake",
@@ -18749,7 +18815,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "dbab7dde0a84",
+    "manifest_sha": "cfc8ccb6dd0b",
     "schema_version": 1
   },
   "schema_version": 2,
