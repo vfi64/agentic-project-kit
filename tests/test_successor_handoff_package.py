@@ -769,6 +769,7 @@ def test_successor_execution_contract_contains_required_agentic_kit_rule_ids() -
         "gc-retention-not-document-migration",
         "ns-legacy-not-active-control-plane",
         "generated-handoff-projection-update-policy",
+        "successor-final-head-identity",
         "patch-cycle-diagnostic-gate",
         "copy-paste-output-discipline",
     } <= rule_ids
@@ -787,6 +788,13 @@ def test_handoff_projection_contract_names_generated_paths_and_update_policy() -
     assert "docs/handoff/START_NEW_CHAT_PROMPT.md" in projection["dedicated_update_only_paths"]
     assert projection["initial_create_if_missing_paths"] == ["docs/handoff/START_NEW_CHAT_PROMPT.md"]
     assert projection["source_of_truth"] == "generator_and_machine_readable_successor_package"
+    identity = projection["final_head_identity"]
+    assert identity["committed_projection_head"] == "validation_report.generated_head"
+    assert identity["committed_exact_final_head_required"] is False
+    assert identity["exact_final_head_source"] == "post_merge_freshness_evidence.successor_package_current_head"
+    assert "refresh_only_descendant" in identity["allowed_final_head_statuses"]
+    assert identity["refresh_only_descendant_requires_diff_allowlist"] is True
+    assert "validation_report.generated_head" in identity["self_staling_loop_prevention"]
     assert projection["generator_command"] == "agentic-kit transfer prepare-successor-handoff --render-prompt"
     assert "manual direct edits to generated handoff projections" in projection["forbidden_update_path"]
     assert dpa_contract["writer_id"] == "WRT-CH-006"
@@ -798,10 +806,38 @@ def test_handoff_projection_contract_names_generated_paths_and_update_policy() -
     assert dpa_contract["initial_create_if_missing_paths"] == projection["initial_create_if_missing_paths"]
     assert {
         "generated-handoff-projection-update-policy",
+        "successor-final-head-identity",
         "patch-cycle-diagnostic-gate",
         "copy-paste-output-discipline",
     } <= set(contract["general_contract"]["rule_ids"])
 
+
+
+def test_validate_successor_outputs_requires_final_head_identity_contract() -> None:
+    import json
+
+    from agentic_project_kit.successor_handoff_package import (
+        build_execution_contract,
+        validate_successor_outputs,
+    )
+
+    contract = build_execution_contract(_minimal_successor_context())
+    del contract["handoff_projection_contract"]["final_head_identity"]
+
+    report = validate_successor_outputs(
+        {
+            "successor_prompt.md": "# prompt",
+            "execution_contract.json": json.dumps(contract),
+        },
+        _minimal_successor_context(),
+    )
+
+    codes = {finding["code"] for finding in report["findings"]}
+    assert report["status"] == "FAIL"
+    assert "missing_final_head_identity_contract" in codes
+    assert "committed_exact_final_head_requirement_would_self_stale" in codes
+    assert "missing_refresh_only_descendant_identity_status" in codes
+    assert "missing_refresh_only_descendant_diff_allowlist" in codes
 
 def test_validate_successor_outputs_requires_dpa_generated_output_contract() -> None:
     import json

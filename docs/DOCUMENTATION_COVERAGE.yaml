@@ -1426,6 +1426,8 @@ rules:
     - CI Runtime Policy Gate
     - docs/governance/CI_RUNTIME_POLICY_CONTRACT.md
     - branch-protection-visible required job
+    - successor_package_current_head
+    - refresh_only_descendant
     - complete pytest suite
     - python -m pytest -q -n 4 --durations=20
     - manual `workflow_dispatch` diagnostic job
@@ -1896,6 +1898,8 @@ rules:
     - agentic-kit transfer chat-switch-complete
     - successor handoff package
     - validation_report.json
+    - successor_package_head_status=refresh_only_descendant
+    - successor_package_current_head
   - path: AGENTS.md
     terms:
     - Clean Handoff Command
