@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3f055623adfb6714f190eed515aaec3267ef87aa
-  short: 3f055623
-  subject: Fix managed workspace CI template (#2366)
+  full: 6aaab1f8f3c2c11e889b9f8e56be8889a5768ca5
+  short: 6aaab1f8
+  subject: Add release button foundation (#2368)
 last_substantive_work_state:
-  full: 3f055623adfb6714f190eed515aaec3267ef87aa
-  short: 3f055623
-  subject: Fix managed workspace CI template (#2366)
+  full: 6aaab1f8f3c2c11e889b9f8e56be8889a5768ca5
+  short: 6aaab1f8
+  subject: Add release button foundation (#2368)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

@@ -7,16 +7,16 @@ Current verified release: 1.0.15.
 Current release tag: v1.0.15.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.23126837`.
-Current verified main: `3f055623` (`Fix managed workspace CI template (#2366)`).
-Latest substantive work: PR #2366 (`Fix managed workspace CI template (#2366)`).
-Latest administrative refresh-only descendant: post-PR2366 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
+Current verified main: `6aaab1f8` (`Add release button foundation (#2368)`).
+Latest substantive work: PR #2368 (`Add release button foundation (#2368)`).
+Latest administrative refresh-only descendant: post-PR2368 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
 Latest Brownfield external evidence: Cycle 007 report
 `docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md`
 records Comm-SCI App2 provider-settings seam reduction from `55` to `44`,
 target PR #16, target successor refresh PR #17, final target head
 `ea21b3a3`, and post-merge-settle `READY`.
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2366 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2368 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -422,6 +422,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2366
+## Operational documentation refresh state after PR #2368
 
-Current administrative handoff refresh state is `3f055623` (`Fix managed workspace CI template (#2366)`). Continue next only after this post-PR2366 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `6aaab1f8` (`Add release button foundation (#2368)`). Continue next only after this post-PR2368 refresh is committed and merged; the next substantive slice must be created from fresh main.
