@@ -6,6 +6,7 @@ from pathlib import Path
 import yaml
 from typer.testing import CliRunner
 
+from agentic_project_kit import __version__ as PACKAGE_VERSION
 from agentic_project_kit.cli import app
 from agentic_project_kit.command_manifest import load_manifest
 from agentic_project_kit.dpa_workspace_init_projection import (
@@ -186,7 +187,12 @@ def test_init_ci_template_yaml_matches_cli_inventory(tmp_path: Path) -> None:
         "name": "Agentic Gate",
         "on": {
             "pull_request": None,
-            "push": None,
+            "push": {"branches": ["main"]},
+        },
+        "permissions": {"contents": "read"},
+        "concurrency": {
+            "group": "agentic-gate-${{ github.event.pull_request.number || github.ref }}",
+            "cancel-in-progress": True,
         },
         "jobs": {
             "agentic-gate": {
@@ -194,8 +200,16 @@ def test_init_ci_template_yaml_matches_cli_inventory(tmp_path: Path) -> None:
                 "steps": [
                     {"uses": "actions/checkout@v4"},
                     {"uses": "actions/setup-python@v5", "with": {"python-version": "3.12", "cache": "pip"}},
+                    {
+                        "uses": "actions/cache@v4",
+                        "with": {
+                            "path": "~/.cache/ms-playwright",
+                            "key": "${{ runner.os }}-ms-playwright-${{ hashFiles('**/pyproject.toml', '**/package-lock.json') }}",
+                            "restore-keys": "${{ runner.os }}-ms-playwright-\n",
+                        },
+                    },
                     {"run": "python -m pip install --upgrade pip"},
-                    {"run": "python -m pip install agentic-project-kit"},
+                    {"run": f"python -m pip install agentic-project-kit=={PACKAGE_VERSION}"},
                     {"run": gate_command},
                 ],
             }
@@ -358,6 +372,9 @@ def test_inject_ci_copies_template_with_header_and_refuses_overwrite(tmp_path: P
     text = target.read_text(encoding="utf-8")
     assert text.startswith("# managed template — source of truth: .agentic/ci/agentic-gate.yaml\n")
     assert "agentic-kit standard-gates-audit-suite" in text
+    assert f"agentic-project-kit=={PACKAGE_VERSION}" in text
+    assert "branches:\n      - main" in text
+    assert "actions/cache@v4" in text
 
     other = tmp_path / "other"
     _write(other / ".github/workflows/agentic-gate.yaml", "existing\n")
@@ -369,6 +386,57 @@ def test_inject_ci_copies_template_with_header_and_refuses_overwrite(tmp_path: P
     assert second.exit_code != 0
     assert "refusing to overwrite injected template" in second.output
 
+
+
+def test_workspace_ci_update_refreshes_managed_source_and_injected_template(tmp_path: Path) -> None:
+    init = CliRunner().invoke(
+        app,
+        ["workspace", "init", "--root", str(tmp_path), "--execute", "--inject-ci"],
+    )
+    assert init.exit_code == 0, init.output
+    _write(tmp_path / ".agentic/ci/agentic-gate.yaml", "name: Old Gate\n")
+    _write(
+        tmp_path / ".github/workflows/agentic-gate.yaml",
+        "# managed template — source of truth: .agentic/ci/agentic-gate.yaml\nname: Old Gate\n",
+    )
+
+    dry_run = CliRunner().invoke(app, ["workspace", "ci-update", "--root", str(tmp_path), "--json"])
+    execute = CliRunner().invoke(
+        app,
+        ["workspace", "ci-update", "--root", str(tmp_path), "--execute", "--json"],
+    )
+
+    assert dry_run.exit_code == 0, dry_run.output
+    dry_payload = json.loads(dry_run.output)
+    assert dry_payload["changed_paths"] == [
+        ".agentic/ci/agentic-gate.yaml",
+        ".github/workflows/agentic-gate.yaml",
+    ]
+    assert execute.exit_code == 0, execute.output
+    payload = json.loads(execute.output)
+    assert payload["written"] is True
+    source = (tmp_path / ".agentic/ci/agentic-gate.yaml").read_text(encoding="utf-8")
+    injected = (tmp_path / ".github/workflows/agentic-gate.yaml").read_text(encoding="utf-8")
+    assert f"agentic-project-kit=={PACKAGE_VERSION}" in source
+    assert "actions/cache@v4" in source
+    assert "branches:\n      - main" in source
+    assert injected == "# managed template — source of truth: .agentic/ci/agentic-gate.yaml\n" + source
+
+
+def test_workspace_ci_update_blocks_unmanaged_injected_workflow(tmp_path: Path) -> None:
+    init = CliRunner().invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
+    _write(tmp_path / ".github/workflows/agentic-gate.yaml", "name: user workflow\n")
+
+    result = CliRunner().invoke(app, ["workspace", "ci-update", "--root", str(tmp_path), "--execute", "--json"])
+
+    assert init.exit_code == 0, init.output
+    assert result.exit_code == 2, result.output
+    payload = json.loads(result.output)
+    assert payload["result_status"] == "BLOCKED"
+    assert payload["blockers"] == [
+        {"path": ".github/workflows/agentic-gate.yaml", "reason": "unmanaged_ci_workflow"}
+    ]
+    assert (tmp_path / ".github/workflows/agentic-gate.yaml").read_text(encoding="utf-8") == "name: user workflow\n"
 
 def test_inject_pre_commit_appends_and_refuses_overwrite(tmp_path: Path) -> None:
     result = CliRunner().invoke(

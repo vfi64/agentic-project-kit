@@ -1,5 +1,5 @@
 {
-  "command_count": 255,
+  "command_count": 256,
   "diagnostic_count": 121,
   "entries": [
     {
@@ -11169,6 +11169,46 @@
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": true,
       "group": "workspace",
+      "help": "Plan or update the managed workspace CI template.",
+      "lifecycle_rank": null,
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Target repository root.",
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Write the current managed CI template.",
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Emit machine-readable JSON.",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        }
+      ],
+      "qualified_name": "agentic-kit workspace ci-update",
+      "safety": "BOUNDED",
+      "surface": "primitive",
+      "when_to_use": "Plan or update the managed workspace CI template."
+    },
+    {
+      "diagnostic_priority": "not_diagnostic",
+      "dry_run_available": true,
+      "group": "workspace",
       "help": "Run the deterministic DPA repository-intake orchestration.",
       "lifecycle_rank": 21,
       "params": [
@@ -11442,12 +11482,12 @@
     "work-order": 10,
     "workflow": 11,
     "workflow-guard": 2,
-    "workspace": 5
+    "workspace": 6
   },
   "guided_count": 32,
   "kind": "site_command_catalog",
   "safety_counts": {
-    "BOUNDED": 167,
+    "BOUNDED": 168,
     "DESTRUCTIVE": 9,
     "READ_ONLY": 79
   },
@@ -11455,6 +11495,6 @@
   "surface_counts": {
     "diagnostic": 121,
     "orchestrator": 32,
-    "primitive": 102
+    "primitive": 103
   }
 }

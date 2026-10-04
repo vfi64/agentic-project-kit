@@ -270,6 +270,7 @@ agentic-kit workspace dpa-intake --root PATH
 agentic-kit workspace adopt --root PATH
 agentic-kit dpa repo-adoption-assessment --root PATH
 agentic-kit workspace init --root PATH --execute [--inject-ci|--inject-pre-commit]
+agentic-kit workspace ci-update --root PATH [--execute]
 agentic-kit workspace remove --root PATH
 agentic-kit-gui --root PATH
 ```
@@ -284,7 +285,7 @@ into an `adjudication_plan`, and can write bounded intake evidence with
 `READY_FOR_DPA_INTAKE_ADJUDICATION` means the repo is ready for Maintainer
 adjudication, not automatically conformant.
 
-`workspace adopt` is read-only: it proposes `.agentic/config.yaml`, reports the private/public boundary, documentation age baseline, DPA repo-adoption assessment, and foreign `.agentic/` directory. `agentic-kit dpa repo-adoption-assessment --root PATH` inventories candidate surfaces, including top-level architecture/specification files and common specification directories such as `JSON/`, records source authority and target identity, classifies `specification_authority`, generated, or command-updated outputs, records DPA-600/DPA-700 evidence requirements, requires exact-ref evidence before adoption readiness, and keeps `external_repo_conformance_claimed=false`. `workspace init` is dry-run by default; `--execute` creates `.agentic/state/status.md`, `.agentic/state/handoff/`, `.agentic/DOC_LIFECYCLE.md`, `docs/archive/README.md`, transfer/CI/prompt files, and a `hygiene` manifest block with warn-mode doc lifecycle defaults. It appends `.agentic/tmp/` and `.agentic/rule_ack/`; versioned `.agentic/` must not hold secrets, chat fragments, logs, or local Rule-Ack runtime state.
+`workspace adopt` is read-only: it proposes `.agentic/config.yaml`, reports the private/public boundary, documentation age baseline, DPA repo-adoption assessment, and foreign `.agentic/` directory. `agentic-kit dpa repo-adoption-assessment --root PATH` inventories candidate surfaces, including top-level architecture/specification files and common specification directories such as `JSON/`, records source authority and target identity, classifies `specification_authority`, generated, or command-updated outputs, records DPA-600/DPA-700 evidence requirements, requires exact-ref evidence before adoption readiness, and keeps `external_repo_conformance_claimed=false`. `workspace init` is dry-run by default; `--execute` creates `.agentic/state/status.md`, `.agentic/state/handoff/`, `.agentic/DOC_LIFECYCLE.md`, `docs/archive/README.md`, transfer/CI/prompt files, and a `hygiene` manifest block with warn-mode doc lifecycle defaults. It appends `.agentic/tmp/` and `.agentic/rule_ack/`; versioned `.agentic/` must not hold secrets, chat fragments, logs, or local Rule-Ack runtime state. The managed CI template pins the installed `agentic-project-kit==<current version>`, runs `pull_request` plus `push` to `main`, uses workflow concurrency to avoid duplicate PR work, caches Playwright browsers, and can be refreshed with `agentic-kit workspace ci-update --root PATH --execute`.
 
 `agentic-kit workspace upgrade --root PATH` is also a dry-run by default. It
 plans deterministic manifest schema migrations step by step, prints the
@@ -597,7 +598,7 @@ agentic-kit github-create --owner YOUR_GITHUB_NAME --visibility private
 
 This command uses the official GitHub CLI `gh`. It does not ask for or store GitHub tokens.
 
-The generated CI workflow runs the basic project gate on push and pull request. The generated pull request template asks for intended outcome, required evidence, tests, and remaining risks.
+The generated CI workflow runs the basic project gate once per pull-request commit and once per `main` push. It pins the Kit package version and caches Playwright browsers. The generated pull request template asks for intended outcome, required evidence, tests, and remaining risks.
 
 ## Agentic development model
 
