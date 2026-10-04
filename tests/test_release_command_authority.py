@@ -45,7 +45,7 @@ def test_release_prepare_core_is_still_deterministic_metadata_authority(tmp_path
         tmp_path,
         version="0.4.9",
         date="2026-06-18",
-        summary_lines=["Release metadata prepared through explicit changelog summary input."],
+        summary_lines=["Release metadata records guarded handoff evidence and bounded scope."],
         dry_run=True,
     )
 

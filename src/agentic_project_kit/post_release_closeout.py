@@ -26,6 +26,12 @@ EXPECTED_DOI_CLOSEOUT_PATHS: tuple[str, ...] = (
     "docs/handoff/CURRENT_HANDOFF.md",
     "docs/releases/VERIFIED_RELEASES.md",
 )
+DOCS_PAGES_BUILD_SCRIPT = "site/scripts/build.py"
+DOCS_PAGES_FALLBACK_EXPECTED_PATHS: tuple[str, ...] = (
+    "docs/.nojekyll",
+    "docs/index.html",
+    "docs/site/",
+)
 
 _ALLOWED_WRITE_PATHS = frozenset(EXPECTED_DOI_CLOSEOUT_PATHS)
 DOI_CLOSEOUT_AUTHORIZED_ROUTE = "agentic-kit post-release-doi-closeout --write"
@@ -84,6 +90,7 @@ def post_release_doi_closeout(
     command_runner: CommandRunner | None = None,
     http_getter: HttpGetter | None = None,
 ) -> PostReleaseDoiCloseoutResult:
+    expected_paths = _expected_closeout_paths(project_root)
     policy = publication_policy_for(project_root)
     if not policy.uses_zenodo:
         return PostReleaseDoiCloseoutResult(
@@ -93,7 +100,7 @@ def post_release_doi_closeout(
             write,
             (),
             (),
-            EXPECTED_DOI_CLOSEOUT_PATHS,
+            expected_paths,
             "",
             "",
             None,
@@ -126,7 +133,7 @@ def post_release_doi_closeout(
             write,
             tuple(blockers),
             (),
-            EXPECTED_DOI_CLOSEOUT_PATHS,
+            expected_paths,
             version_doi,
             concept_doi,
             None,
@@ -189,7 +196,7 @@ def post_release_doi_closeout(
             write,
             tuple(blockers),
             tuple(changed_paths),
-            EXPECTED_DOI_CLOSEOUT_PATHS,
+            expected_paths,
             version_doi,
             concept_doi,
             None,
@@ -215,7 +222,7 @@ def post_release_doi_closeout(
                     write,
                     dpa_write_blockers,
                     tuple(changed_paths),
-                    EXPECTED_DOI_CLOSEOUT_PATHS,
+                    expected_paths,
                     version_doi,
                     concept_doi,
                     None,
@@ -225,13 +232,29 @@ def post_release_doi_closeout(
             if relative_path == CURRENT_HANDOFF_RELATIVE_PATH:
                 continue
             (project_root / relative_path).write_text(text, encoding="utf-8")
+        site_blockers, site_changed_paths = _refresh_docs_pages_fallback(project_root)
+        if site_blockers:
+            return PostReleaseDoiCloseoutResult(
+                version,
+                "BLOCKED",
+                2,
+                write,
+                site_blockers,
+                tuple(changed_paths),
+                expected_paths,
+                version_doi,
+                concept_doi,
+                None,
+                "Regenerate or repair the docs-pages fallback site before DOI closeout can finish.",
+            )
+        changed_paths.extend(path for path in site_changed_paths if path not in changed_paths)
         evidence_path = _write_doi_closeout_evidence(
             project_root,
             version=version,
             version_doi=version_doi,
             concept_doi=concept_doi,
             changed_paths=tuple(changed_paths),
-            expected_paths=EXPECTED_DOI_CLOSEOUT_PATHS,
+            expected_paths=expected_paths,
         )
 
     next_action = (
@@ -246,12 +269,29 @@ def post_release_doi_closeout(
         write,
         (),
         tuple(changed_paths),
-        EXPECTED_DOI_CLOSEOUT_PATHS,
+        expected_paths,
         version_doi,
         concept_doi,
         evidence_path,
         next_action,
     )
+
+
+def _expected_closeout_paths(project_root: Path) -> tuple[str, ...]:
+    if (project_root / DOCS_PAGES_BUILD_SCRIPT).exists():
+        return (*EXPECTED_DOI_CLOSEOUT_PATHS, *DOCS_PAGES_FALLBACK_EXPECTED_PATHS)
+    return EXPECTED_DOI_CLOSEOUT_PATHS
+
+
+def _refresh_docs_pages_fallback(project_root: Path) -> tuple[tuple[str, ...], tuple[str, ...]]:
+    if not (project_root / DOCS_PAGES_BUILD_SCRIPT).exists():
+        return (), ()
+    from agentic_project_kit.site_generator import build_docs_pages_fallback
+
+    result = build_docs_pages_fallback(project_root)
+    if not result.ok:
+        return tuple(f"docs_pages_fallback:{blocker}" for blocker in result.blockers), ()
+    return (), tuple(f"docs/{path}" for path in result.files)
 
 
 def render_post_release_doi_closeout_result(result: PostReleaseDoiCloseoutResult) -> str:

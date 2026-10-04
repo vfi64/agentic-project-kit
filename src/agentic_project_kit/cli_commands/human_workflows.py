@@ -878,18 +878,33 @@ def release_ready_command(
     """Run release readiness through the standard-error scan wrapper."""
     release_date = date or date_cls.today().isoformat()
     effective_from_tag = from_tag or _latest_release_tag()
+    summary_lines_path = load_workspace(Path(".")).tmp_file(f"release-{version.replace('.', '')}-ready-summary-lines.json")
     steps = [_run_step("sync-main", _agentic("transfer", "sync-main"))]
     if is_external_manifest_workspace(Path(".")):
         # KIT-GF-032: sync-main normalizes the session and removes the LLM-context
         # carriers, which live in excluded runtime paths of an external workspace;
         # regenerate them before the scan checks them.
         steps.append(_run_step("refresh-llm-context-carriers", _agentic("transfer", "refresh-llm-context-carriers", "--json")))
+    steps.append(_run_step("standard-error-scan", _agentic("transfer", "standard-error-scan", "--before-release", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--date", release_date, "--json"), allowed_returncodes={0}))
+    if all(step["ok"] for step in steps):
+        steps.append(_run_step("release-notes-generate", _agentic("release-notes-generate", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--include-github-metadata", "--summary-lines-json", str(summary_lines_path), "--json")))
+    if all(step["ok"] for step in steps):
+        steps.append(_run_step("release-prep-dry-run", _agentic("release-prep", "--version", version, "--date", release_date, "--summary-lines-from", str(summary_lines_path), "--dry-run", "--json")))
     steps += [
-        _run_step("standard-error-scan", _agentic("transfer", "standard-error-scan", "--before-release", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--date", release_date, "--json"), allowed_returncodes={0}),
         _doc_lifecycle_release_review_step(version),
         _run_step("release-status", _agentic("release-status", "--include-remote", "--json"), allowed_returncodes={0, 2}),
     ]
-    payload = _payload("release-ready", steps, extra={"version": version, "from_tag": effective_from_tag, "to_ref": to_ref, "date": release_date})
+    payload = _payload(
+        "release-ready",
+        steps,
+        extra={
+            "version": version,
+            "from_tag": effective_from_tag,
+            "to_ref": to_ref,
+            "date": release_date,
+            "summary_lines_path": str(summary_lines_path),
+        },
+    )
     _emit(payload, json_output=json_output)
     _exit_if_blocked(payload)
 
