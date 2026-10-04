@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: cabd1a8d3883e2559b4352e3028265f48838799555ebc56b34de242bc314a5f2
 - docs/reference/agentic-kit-commands.json: da286aa612a1bbca6d97629129be8fab60a8dcf8f829a19b8833e25ef718aeb6
-## Operational documentation refresh state after PR #2370
+## Operational documentation refresh state after PR #2372
 
-Current administrative handoff refresh state is `db547200` (`Fix release closeout quality gates (#2370)`). Continue next only after this post-PR2370 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `50b0e596` (`Harden successor final head identity (#2372)`). Continue next only after this post-PR2372 refresh is committed and merged; the next substantive slice must be created from fresh main.

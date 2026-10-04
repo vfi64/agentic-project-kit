@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: db547200ac8dcc4923644547f32051462f7d8a1c
-  short: db547200
-  subject: Fix release closeout quality gates (#2370)
+  full: 50b0e596f8b6873f943be5de374de385cbae6fe7
+  short: 50b0e596
+  subject: Harden successor final head identity (#2372)
 last_substantive_work_state:
-  full: db547200ac8dcc4923644547f32051462f7d8a1c
-  short: db547200
-  subject: Fix release closeout quality gates (#2370)
+  full: 50b0e596f8b6873f943be5de374de385cbae6fe7
+  short: 50b0e596
+  subject: Harden successor final head identity (#2372)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
