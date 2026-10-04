@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5c8db40e588b7d49e97a62d2637e4ec30231d5ed
-  short: 5c8db40e
-  subject: Fix work finish PR flow findings (#2379)
+  full: 5ed54c801d580fa3d91d365c72f69dbfb058f4e5
+  short: 5ed54c80
+  subject: Protect modified managed CI workflows (#2381)
 last_substantive_work_state:
-  full: 5c8db40e588b7d49e97a62d2637e4ec30231d5ed
-  short: 5c8db40e
-  subject: Fix work finish PR flow findings (#2379)
+  full: 5ed54c801d580fa3d91d365c72f69dbfb058f4e5
+  short: 5ed54c80
+  subject: Protect modified managed CI workflows (#2381)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
