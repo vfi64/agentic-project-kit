@@ -64,6 +64,32 @@ def _names(report) -> list[str]:
     return [check.name for check in report.checks]
 
 
+def _cockpit_extra_version_manifest(root: Path) -> None:
+    manifest = root / ".agentic/config.yaml"
+    manifest.write_text(
+        manifest.read_text(encoding="utf-8")
+        + "release:\n"
+        + "  version_anchors:\n"
+        + "    - kind: source_constant\n"
+        + "      path: src/agp_cockpit/version.py\n"
+        + "      name: APP_VERSION\n"
+        + "      label: APP_VERSION\n"
+        + "    - kind: json_table\n"
+        + "      path: docs/releases/versions.json\n"
+        + "      label: AGP_VERSION_MAP_V1 app version\n"
+        + "      list: releases\n"
+        + "      version_field: app\n"
+        + "      row:\n"
+        + "        app: '{version}'\n",
+        encoding="utf-8",
+    )
+    _write(root / "src/agp_cockpit/version.py", 'APP_VERSION = "0.1.0"\n')
+    _write(
+        root / "docs/releases/versions.json",
+        '{\n  "marker": "AGP_VERSION_MAP_V1",\n  "releases": [{"app": "0.1.0"}]\n}\n',
+    )
+
+
 def test_layout_detection(tmp_path: Path):
     assert is_kit_self_hosting(tmp_path)                       # legacy root, no manifest
     _manifest(tmp_path)
@@ -151,3 +177,28 @@ def test_release_commit_integrity_uses_the_workspace_anchors(tmp_path: Path):
     _write(tmp_path / "CHANGELOG.md", "## v0.1.0 - 2026-10-02\n")
     check = _release_commit_integrity_check(version="0.1.1", tag="v0.1.1", root=tmp_path, runner=runner)
     assert check.status == "FAIL" and "CHANGELOG.md" in check.detail and "CITATION" not in check.detail
+
+
+def test_manifest_declared_version_anchors_join_release_check_and_integrity(tmp_path: Path):
+    _cockpit_like(tmp_path, version="0.1.1")
+    _cockpit_extra_version_manifest(tmp_path)
+
+    report = build_release_state_report(tmp_path, "0.1.1", command_runner=_tag_runner([]))
+
+    failed = {c.name for c in report.checks if c.status == ReleaseCheckStatus.FAIL}
+    assert failed == {"APP_VERSION", "AGP_VERSION_MAP_V1 app version"}
+    paths = [a.path for a in release_version_anchors(tmp_path, "0.1.1")]
+    assert "src/agp_cockpit/version.py" in paths
+    assert "docs/releases/versions.json" in paths
+
+    def runner(command: Sequence[str], _root: Path):
+        if tuple(command) == ("git", "status", "--porcelain"):
+            return 0, ""
+        if tuple(command) == ("git", "rev-parse", "HEAD"):
+            return 0, "abc\n"
+        return 1, "no such tag"
+
+    check = _release_commit_integrity_check(version="0.1.1", tag="v0.1.1", root=tmp_path, runner=runner)
+    assert check.status == "FAIL"
+    assert "src/agp_cockpit/version.py" in check.detail
+    assert "docs/releases/versions.json" in check.detail

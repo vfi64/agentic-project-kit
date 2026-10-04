@@ -9396,6 +9396,20 @@
           "secondary_opts": []
         },
         {
+          "default": "",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
           "default": "PosixPath('.')",
           "help": "",
           "is_flag": false,
@@ -18815,7 +18829,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "cfc8ccb6dd0b",
+    "manifest_sha": "af553c98274c",
     "schema_version": 1
   },
   "schema_version": 2,

@@ -51,6 +51,60 @@ def _runner(tags: set[str], seen: list[tuple[str, ...]]):
     return runner
 
 
+def _write_cockpit_version_anchor_manifest(root: Path) -> None:
+    manifest = root / ".agentic/config.yaml"
+    manifest.write_text(
+        manifest.read_text(encoding="utf-8")
+        + "release:\n"
+        + "  version_anchors:\n"
+        + "    - kind: source_constant\n"
+        + "      path: src/agp_cockpit/version.py\n"
+        + "      name: APP_VERSION\n"
+        + "      label: APP_VERSION\n"
+        + "    - kind: json_table\n"
+        + "      path: docs/releases/versions.json\n"
+        + "      label: AGP_VERSION_MAP_V1 app version\n"
+        + "      list: releases\n"
+        + "      version_field: app\n"
+        + "      position: prepend\n"
+        + "      row:\n"
+        + "        app: '{version}'\n"
+        + "        extension: unknown\n"
+        + "        build_id: 'release-{version}'\n"
+        + "        kit: '{kit_version}'\n"
+        + "        date: '{date}'\n"
+        + "        tag: '{tag}'\n"
+        + "        published: false\n",
+        encoding="utf-8",
+    )
+
+
+def _write_cockpit_extra_version_files(root: Path, *, version: str) -> None:
+    _write(root / "src/agp_cockpit/version.py", f'APP_VERSION = "{version}"\n')
+    _write(
+        root / "docs/releases/versions.json",
+        json.dumps(
+            {
+                "schema_version": 1,
+                "marker": "AGP_VERSION_MAP_V1",
+                "releases": [
+                    {
+                        "app": version,
+                        "extension": "0.4.2",
+                        "build_id": f"release-{version}-r3",
+                        "kit": "1.0.15",
+                        "date": "2026-10-02",
+                        "tag": f"v{version}",
+                        "published": False,
+                    }
+                ],
+            },
+            indent=2,
+        )
+        + "\n",
+    )
+
+
 # --- release-status -----------------------------------------------------------------------
 
 def test_release_status_external_has_no_init_or_citation_blockers(tmp_path: Path):
@@ -98,6 +152,32 @@ def test_release_prep_external_dry_run_and_literal_package_version(tmp_path: Pat
     assert "0.1.0" in (tmp_path / "pyproject.toml").read_text(encoding="utf-8")   # dry run writes nothing
     prepare_release_state(tmp_path, version="0.1.1", date="2026-10-03", summary_lines=["x"])
     assert (tmp_path / "src/agp_cockpit/_version.py").read_text(encoding="utf-8") == "__version__ = '0.1.1'\n"
+
+
+
+def test_release_prep_external_updates_declared_version_anchors(tmp_path: Path):
+    _external(tmp_path)
+    _write_cockpit_version_anchor_manifest(tmp_path)
+    _write_cockpit_extra_version_files(tmp_path, version="0.1.0")
+
+    result = prepare_release_state(
+        tmp_path,
+        version="0.1.1",
+        date="2026-10-04",
+        summary_lines=["Prepare cockpit release button."],
+    )
+
+    assert result.changed_paths == [
+        "CHANGELOG.md",
+        "docs/releases/versions.json",
+        "pyproject.toml",
+        "src/agp_cockpit/version.py",
+    ]
+    assert 'APP_VERSION = "0.1.1"' in (tmp_path / "src/agp_cockpit/version.py").read_text(encoding="utf-8")
+    versions = json.loads((tmp_path / "docs/releases/versions.json").read_text(encoding="utf-8"))
+    assert versions["releases"][0]["app"] == "0.1.1"
+    assert versions["releases"][0]["tag"] == "v0.1.1"
+    assert versions["releases"][0]["date"] == "2026-10-04"
 
 
 def test_release_prep_external_first_release_and_rerun(tmp_path: Path):

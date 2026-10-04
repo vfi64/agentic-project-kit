@@ -17,6 +17,7 @@ def release_publish_command(
     dry_run: bool = typer.Option(True, "--dry-run/--no-dry-run"),
     execute: bool = typer.Option(False, "--execute"),
     allow_execute: bool = typer.Option(False, "--allow-execute"),
+    expected_signature: str = typer.Option("", "--expected-signature"),
     root: Path = typer.Option(Path("."), "--root"),
     json_output: bool = typer.Option(False, "--json"),
 ) -> None:
@@ -27,6 +28,7 @@ def release_publish_command(
         dry_run=dry_run,
         execute=execute,
         allow_execute=allow_execute,
+        expected_signature=expected_signature,
     )
     if json_output:
         typer.echo(json.dumps(plan.as_dict(), indent=2, sort_keys=True))

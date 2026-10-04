@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: cfc8ccb6dd0b
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: af553c98274c
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -1993,6 +1993,7 @@ Plan release publishing without live tag/release side effects.
 | `dry_run` | `TyperOption` | --dry-run, --no-dry-run | `False` | `True` |  |
 | `execute` | `TyperOption` | --execute | `False` | `False` |  |
 | `allow_execute` | `TyperOption` | --allow-execute | `False` | `False` |  |
+| `expected_signature` | `TyperOption` | --expected-signature | `False` | `` |  |
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
