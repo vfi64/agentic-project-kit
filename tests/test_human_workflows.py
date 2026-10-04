@@ -148,6 +148,43 @@ def test_work_start_from_ref_creates_branch_based_on_chosen_ref(monkeypatch):
     ]
 
 
+def test_release_ready_runs_release_prep_changelog_quality_dry_run(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+    monkeypatch.setattr(human_workflows, "_latest_release_tag", lambda: "v1.0.15")
+    monkeypatch.setattr(
+        human_workflows,
+        "_doc_lifecycle_release_review_step",
+        lambda version: {
+            "name": "doc-lifecycle-release-review",
+            "argv": [],
+            "returncode": 0,
+            "ok": True,
+            "allowed_returncodes": [0],
+            "stdout": f"STATUS=PASS VERSION={version}",
+            "stderr": "",
+        },
+    )
+
+    result = CliRunner().invoke(app, ["release", "ready", "--version", "1.0.16", "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "PASS"
+    step_names = [step["name"] for step in payload["steps"]]
+    assert "release-notes-generate" in step_names
+    assert "release-prep-dry-run" in step_names
+    prep_call = next(call for call in calls if call[:2] == ["./.venv/bin/agentic-kit", "release-prep"])
+    assert "--dry-run" in prep_call
+    assert "--summary-lines-from" in prep_call
+
+
 def test_work_start_from_remote_integration_ref_does_not_sync_main_or_post_merge(monkeypatch):
     calls: list[list[str]] = []
 

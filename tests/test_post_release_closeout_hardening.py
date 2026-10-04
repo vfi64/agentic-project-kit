@@ -4,6 +4,7 @@ from collections.abc import Sequence
 import hashlib
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 from agentic_project_kit.dpa_current_handoff_lifecycle import (
     DEFAULT_ACCEPTANCE_STATE_PATH,
@@ -89,6 +90,41 @@ def test_post_release_doi_closeout_preserves_historical_doi_anchors(tmp_path: Pa
     assert "Zenodo v0.4.4 DOI: 10.5281/zenodo.19000000" in changelog
     assert "- `v0.4.5` / `0.4.5`: Zenodo version DOI `10.5281/zenodo.20467371`; concept DOI `10.5281/zenodo.20101359`." in verified_releases
     assert "# Verified v0.4.5 version DOI: 10.5281/zenodo.20467371" in citation
+
+
+def test_post_release_doi_closeout_refreshes_docs_pages_fallback(tmp_path: Path, monkeypatch) -> None:
+    from agentic_project_kit import site_generator
+
+    _write_closeout_files(tmp_path, "1.2.3")
+    (tmp_path / "site/scripts").mkdir(parents=True)
+    (tmp_path / "site/scripts/build.py").write_text("# fixture marker\n", encoding="utf-8")
+    calls: list[Path] = []
+
+    def fake_build_docs_pages_fallback(root: Path):
+        calls.append(root)
+        (root / "docs/site").mkdir(parents=True, exist_ok=True)
+        (root / "docs/site/index.html").write_text("rebuilt site\n", encoding="utf-8")
+        (root / "docs/index.html").write_text("redirect\n", encoding="utf-8")
+        (root / "docs/.nojekyll").write_text("marker\n", encoding="utf-8")
+        return SimpleNamespace(ok=True, files=(".nojekyll", "index.html", "site/index.html"), blockers=())
+
+    monkeypatch.setattr(site_generator, "build_docs_pages_fallback", fake_build_docs_pages_fallback)
+
+    report = post_release_doi_closeout(
+        tmp_path,
+        version="1.2.3",
+        write=True,
+        command_runner=_runner(github_release=CommandResult(0, "v1.2.3\n", "")),
+        http_getter=_http_getter(json.dumps(_closeout_zenodo_payload("1.2.3", "10.5281/zenodo.99999999"))),
+    )
+
+    assert report.ok
+    assert calls == [tmp_path]
+    assert "docs/site/index.html" in report.changed_paths
+    assert "docs/site/" in report.expected_paths
+    assert "docs/site/index.html" in json.loads(
+        (tmp_path / "docs/reports/release/post-release-doi-closeout-1.2.3.json").read_text(encoding="utf-8")
+    )["changed_paths_at_closeout"]
 
 
 def test_post_release_doi_closeout_routes_current_handoff_through_dpa_lifecycle(tmp_path: Path) -> None:

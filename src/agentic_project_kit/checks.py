@@ -365,25 +365,24 @@ def _substantive_changelog_bullets(section_text: str) -> list[str]:
     ]
 
 
-def check_changelog_quality(project_root: Path) -> list[str]:
-    """Check recent release-history quality without pretending to judge prose quality.
+def check_changelog_quality_text(
+    content: str,
+    *,
+    uses_zenodo: bool,
+    path_label: str = "CHANGELOG.md",
+) -> list[str]:
+    """Check recent release-history text without pretending to judge prose quality.
 
     The guard is intentionally structural and category-based. It prevents recent
     release entries from collapsing into generic metadata-only bullets, but it does
     not require a naive minimum bullet count and does not rewrite historical evidence.
     """
-    path = project_root / "CHANGELOG.md"
-    if not path.exists():
-        return []
-
-    content = path.read_text(encoding="utf-8")
     errors: list[str] = []
     seen_versions: set[str] = set()
-    require_zenodo_state = publication_policy_for(project_root).uses_zenodo
 
     for version, date, body in _release_sections(content):
         if version in seen_versions:
-            errors.append(f"CHANGELOG.md: duplicate release section v{version}")
+            errors.append(f"{path_label}: duplicate release section v{version}")
         seen_versions.add(version)
 
         if _release_version_tuple(version) < CHANGELOG_QUALITY_MIN_VERSION:
@@ -392,21 +391,32 @@ def check_changelog_quality(project_root: Path) -> list[str]:
         section_text = f"v{version}\n{body}"
         normalized = section_text.lower()
         if date is None:
-            errors.append(f"CHANGELOG.md: v{version} missing release date in heading")
+            errors.append(f"{path_label}: v{version} missing release date in heading")
 
         has_zenodo_state = "zenodo" in normalized and ("doi" in normalized or "pending" in normalized)
-        if require_zenodo_state and not has_zenodo_state:
-            errors.append(f"CHANGELOG.md: v{version} missing Zenodo DOI or pending verification marker")
+        if uses_zenodo and not has_zenodo_state:
+            errors.append(f"{path_label}: v{version} missing Zenodo DOI or pending verification marker")
 
         if not _substantive_changelog_bullets(body):
-            errors.append(f"CHANGELOG.md: v{version} has no substantive release bullet beyond generic metadata")
+            errors.append(f"{path_label}: v{version} has no substantive release bullet beyond generic metadata")
 
         categories = _substance_categories(section_text)
         if len(categories) < 3:
             found = ", ".join(sorted(categories)) or "none"
-            errors.append(f"CHANGELOG.md: v{version} lacks enough release-quality categories (found: {found})")
+            errors.append(f"{path_label}: v{version} lacks enough release-quality categories (found: {found})")
 
     return errors
+
+
+def check_changelog_quality(project_root: Path) -> list[str]:
+    """Check recent release-history quality without pretending to judge prose quality."""
+    path = project_root / "CHANGELOG.md"
+    if not path.exists():
+        return []
+    return check_changelog_quality_text(
+        path.read_text(encoding="utf-8"),
+        uses_zenodo=publication_policy_for(project_root).uses_zenodo,
+    )
 
 
 def check_state_gate_docs(project_root: Path) -> list[str]:

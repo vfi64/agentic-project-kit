@@ -321,6 +321,32 @@ def test_release_prep_generated_changelog_rejects_removed_ns_route_references(tm
         raise AssertionError("prepare_release_state accepted removed ./ns release route reference")
 
 
+def test_release_prep_blocks_low_quality_changelog_before_writing(tmp_path: Path) -> None:
+    project = _copy_release_state_files(tmp_path)
+    pyproject_before = (project / "pyproject.toml").read_text(encoding="utf-8")
+    changelog_before = (project / "CHANGELOG.md").read_text(encoding="utf-8")
+
+    try:
+        prepare_release_state(
+            project,
+            version=TARGET_VERSION,
+            date=TARGET_DATE,
+            summary_lines=[
+                "Added release metadata update.",
+                "Added release metadata checklist.",
+            ],
+        )
+    except ValueError as exc:
+        message = str(exc)
+        assert "Release changelog quality blocked release-prep" in message
+        assert "lacks enough release-quality categories" in message
+    else:
+        raise AssertionError("release-prep accepted low-quality release summary lines")
+
+    assert (project / "pyproject.toml").read_text(encoding="utf-8") == pyproject_before
+    assert (project / "CHANGELOG.md").read_text(encoding="utf-8") == changelog_before
+
+
 def _runner():
     def run(_project_root: Path, command: Sequence[str]) -> CommandResult:
         if command[:3] == ["git", "tag", "-l"]:
@@ -350,7 +376,8 @@ def test_release_prep_cli_reads_summary_lines_from_release_notes_artifact(tmp_pa
                 "kind": "release_prep_summary_lines",
                 "version": TARGET_VERSION,
                 "summary_lines": [
-                    "Prepare release metadata from explicit release-notes summary evidence."
+                    "Prepare release metadata from explicit release-notes summary evidence.",
+                    "Guard bounded publish scope through the release handoff contract.",
                 ],
             }
         )
@@ -379,6 +406,7 @@ def test_release_prep_cli_reads_summary_lines_from_release_notes_artifact(tmp_pa
     assert payload["ok"] is True
     changelog = (project / "CHANGELOG.md").read_text(encoding="utf-8")
     assert "Prepare release metadata from explicit release-notes summary evidence." in changelog
+    assert "Guard bounded publish scope through the release handoff contract." in changelog
 
 
 def _copy_release_prep_project(tmp_path: Path) -> Path:

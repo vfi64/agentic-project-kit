@@ -50,9 +50,14 @@ def test_release_ready_external_refreshes_carriers_after_sync_main(monkeypatch, 
     steps = _release_ready_steps(monkeypatch)
     assert [step["name"] for step in steps] == [
         "sync-main", "refresh-llm-context-carriers", "standard-error-scan",
+        "release-notes-generate", "release-prep-dry-run",
         "doc-lifecycle-release-review", "release-status",
     ]
     assert steps[1]["argv"][-2:] == ["refresh-llm-context-carriers", "--json"]
+    prep_step = next(step for step in steps if step["name"] == "release-prep-dry-run")
+    assert "--dry-run" in prep_step["argv"]
+    summary_path = Path(prep_step["argv"][prep_step["argv"].index("--summary-lines-from") + 1])
+    assert summary_path == Path(".agentic/tmp/release-011-ready-summary-lines.json")
 
 
 def test_release_ready_without_manifest_keeps_its_steps(monkeypatch, tmp_path: Path):

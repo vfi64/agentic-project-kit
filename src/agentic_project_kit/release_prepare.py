@@ -189,6 +189,29 @@ def _update_changelog(text: str, version: str, date: str, *, summary_lines: Sequ
     return text[:index] + section + "\n" + text[index:]
 
 
+def _projected_changelog_section(text: str, version: str) -> str:
+    match = re.search(
+        rf"^##\s+\[?v?{re.escape(version)}\]?(?:[ \t][^\n]*)?\n.*?(?=^##\s|\Z)",
+        text,
+        flags=re.MULTILINE | re.DOTALL,
+    )
+    if match is None:
+        raise ValueError(f"Could not find projected CHANGELOG section for v{version}")
+    return match.group(0)
+
+
+def _require_projected_changelog_quality(root: Path, changelog_text: str, *, version: str) -> None:
+    from agentic_project_kit.checks import check_changelog_quality_text
+    from agentic_project_kit.publication_policy import publication_policy_for
+
+    errors = check_changelog_quality_text(
+        _projected_changelog_section(changelog_text, version),
+        uses_zenodo=publication_policy_for(root).uses_zenodo,
+    )
+    if errors:
+        raise ValueError("Release changelog quality blocked release-prep: " + "; ".join(errors))
+
+
 def _release_prep_source_fingerprint(*, version: str, date: str, summary_lines: Sequence[str]) -> str:
     payload = {
         "schema_version": 1,
@@ -377,6 +400,14 @@ def prepare_release_state(
             root, version=version, date=date, summary_lines=normalized_summary_lines, dry_run=dry_run
         )
 
+    projected_changelog = _update_changelog(
+        _read(root / "CHANGELOG.md"),
+        version,
+        date,
+        summary_lines=normalized_summary_lines,
+    )
+    _require_projected_changelog_quality(root, projected_changelog, version=version)
+
     updates = {
         root / "pyproject.toml": _update_pyproject(_read(root / "pyproject.toml"), version),
         root / "src" / "agentic_project_kit" / "__init__.py": _update_package_init(
@@ -395,12 +426,7 @@ def prepare_release_state(
             version,
             label="docs/handoff/CURRENT_HANDOFF.md current version",
         ),
-        root / "CHANGELOG.md": _update_changelog(
-            _read(root / "CHANGELOG.md"),
-            version,
-            date,
-            summary_lines=normalized_summary_lines,
-        ),
+        root / "CHANGELOG.md": projected_changelog,
     }
 
     if _read(handoff_path) != updates[handoff_path]:
@@ -489,6 +515,7 @@ def _prepare_external_release_state(root: Path, *, version: str, date: str,
     if changelog.exists():
         updates[changelog] = _external_changelog(_read(changelog), version, date,
                                                  summary_lines=summary_lines, uses_zenodo=uses_zenodo)
+        _require_projected_changelog_quality(root, updates[changelog], version=version)
     updates.update(additional_version_anchor_updates(root, version=version, date=date))
     if handoff_path in updates and _read(handoff_path) != updates[handoff_path]:
         _require_dpa_current_handoff_preflight(root, target_path=handoff_path, projected_text=updates[handoff_path],

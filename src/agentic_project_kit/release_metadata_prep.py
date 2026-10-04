@@ -25,6 +25,7 @@ def main(argv: list[str] | None = None) -> int:
             date=date.today().isoformat(),
             summary_lines=[
                 f"Release metadata prepared for v{version}; Zenodo DOI verification remains pending until publication.",
+                "Release-prep evidence records the guarded handoff contract and bounded publish scope.",
             ],
         )
     except ValueError as exc:

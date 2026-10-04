@@ -33,6 +33,11 @@ rules:
     - workspace temp root
     - private fallback category
     - docs-pages fallback refresh
+    - post-release-doi-closeout --write
+    - docs/site/
+    - release-prep --dry-run
+    - planned CHANGELOG section
+    - release-quality category gate
 - id: release-version-anchors-coverage
   description: External workspaces must keep their own release version anchors visible in release documentation and gates (KIT-GF-032).
   documents:
