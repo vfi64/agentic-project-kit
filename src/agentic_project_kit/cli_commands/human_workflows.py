@@ -90,17 +90,25 @@ def _docs_pages_fallback_refresh_step() -> dict[str, object]:
 
 def _payload(action: str, steps: list[dict[str, object]], *, dry_run: bool = False, extra: dict[str, object] | None = None) -> dict[str, object]:
     blockers = [str(step["name"]) for step in steps if not step["ok"]]
-    result_status = "PASS" if not blockers else "BLOCKED"
+    if blockers:
+        result_status = "BLOCKED"
+        next_action = "Inspect and fix blocked workflow steps."
+    elif dry_run and action == "work-finish":
+        result_status = "PLANNED"
+        next_action = "Dry run completed; rerun work finish with --execute to commit, push, create the PR, merge, and close out."
+    else:
+        result_status = "PASS"
+        next_action = "Workflow completed."
     payload: dict[str, object] = {
         "schema_version": 1,
         "kind": f"human_{action.replace('-', '_')}_result",
         "action": action,
         "result_status": result_status,
-        "returncode": 0 if result_status == "PASS" else 2,
+        "returncode": 2 if result_status == "BLOCKED" else 0,
         "dry_run": dry_run,
         "blockers": blockers,
         "steps": steps,
-        "next_action": "Workflow completed." if result_status == "PASS" else "Inspect and fix blocked workflow steps.",
+        "next_action": next_action,
     }
     if extra:
         payload.update(extra)
