@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6aaab1f8f3c2c11e889b9f8e56be8889a5768ca5
-  short: 6aaab1f8
-  subject: Add release button foundation (#2368)
+  full: db547200ac8dcc4923644547f32051462f7d8a1c
+  short: db547200
+  subject: Fix release closeout quality gates (#2370)
 last_substantive_work_state:
-  full: 6aaab1f8f3c2c11e889b9f8e56be8889a5768ca5
-  short: 6aaab1f8
-  subject: Add release button foundation (#2368)
+  full: db547200ac8dcc4923644547f32051462f7d8a1c
+  short: db547200
+  subject: Fix release closeout quality gates (#2370)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

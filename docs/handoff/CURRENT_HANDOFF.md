@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `6aaab1f8f3c2c11e889b9f8e56be8889a5768ca5` (`6aaab1f8`), after `Add release button foundation (#2368)`.
-Last substantive work state is `6aaab1f8f3c2c11e889b9f8e56be8889a5768ca5` (`6aaab1f8`), after `Add release button foundation (#2368)`.
+Current verified main/admin HEAD is `db547200ac8dcc4923644547f32051462f7d8a1c` (`db547200`), after `Fix release closeout quality gates (#2370)`.
+Last substantive work state is `db547200ac8dcc4923644547f32051462f7d8a1c` (`db547200`), after `Fix release closeout quality gates (#2370)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
