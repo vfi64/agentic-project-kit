@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 99a04701d892cb43f46eb830eea968dd1c5dbf04
-  short: 99a04701
-  subject: Record release 1.0.15 DOI closeout (#2364)
+  full: 3f055623adfb6714f190eed515aaec3267ef87aa
+  short: 3f055623
+  subject: Fix managed workspace CI template (#2366)
 last_substantive_work_state:
-  full: 99a04701d892cb43f46eb830eea968dd1c5dbf04
-  short: 99a04701
-  subject: Record release 1.0.15 DOI closeout (#2364)
+  full: 3f055623adfb6714f190eed515aaec3267ef87aa
+  short: 3f055623
+  subject: Fix managed workspace CI template (#2366)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
