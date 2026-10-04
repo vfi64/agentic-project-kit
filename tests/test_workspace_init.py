@@ -438,6 +438,36 @@ def test_workspace_ci_update_blocks_unmanaged_injected_workflow(tmp_path: Path) 
     ]
     assert (tmp_path / ".github/workflows/agentic-gate.yaml").read_text(encoding="utf-8") == "name: user workflow\n"
 
+
+def test_workspace_ci_update_blocks_modified_managed_injected_workflow(tmp_path: Path) -> None:
+    init = CliRunner().invoke(
+        app,
+        ["workspace", "init", "--root", str(tmp_path), "--execute", "--inject-ci"],
+    )
+    target = tmp_path / ".github/workflows/agentic-gate.yaml"
+    original = target.read_text(encoding="utf-8")
+    customized = original.replace(
+        "      - run: agentic-kit standard-gates-audit-suite\n",
+        "      - run: pytest\n      - run: agentic-kit standard-gates-audit-suite\n",
+    )
+    target.write_text(customized, encoding="utf-8")
+
+    result = CliRunner().invoke(
+        app,
+        ["workspace", "ci-update", "--root", str(tmp_path), "--execute", "--json"],
+    )
+
+    assert init.exit_code == 0, init.output
+    assert result.exit_code == 2, result.output
+    payload = json.loads(result.output)
+    assert payload["result_status"] == "BLOCKED"
+    assert payload["changed_paths"] == []
+    assert payload["blockers"] == [
+        {"path": ".github/workflows/agentic-gate.yaml", "reason": "modified_managed_ci_workflow"}
+    ]
+    assert target.read_text(encoding="utf-8") == customized
+
+
 def test_inject_pre_commit_appends_and_refuses_overwrite(tmp_path: Path) -> None:
     result = CliRunner().invoke(
         app,
