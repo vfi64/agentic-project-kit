@@ -7,6 +7,7 @@ import pytest
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
+from agentic_project_kit.communication_rule_context import git_blob_sha
 from agentic_project_kit.doc_lifecycle import DocLifecycleFinding
 from agentic_project_kit.cli_commands import human_workflows
 
@@ -422,6 +423,74 @@ def test_work_finish_default_uses_existing_pr_lifecycle_wrapper(monkeypatch):
         and "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md" in call
         for call in calls
     )
+
+
+def test_work_finish_execute_includes_pending_communication_refresh_carrier(monkeypatch, tmp_path):
+    carrier = tmp_path / "docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md"
+    carrier.parent.mkdir(parents=True)
+    carrier.write_text("# Communication Rules\n\nGenerated at: 2026-10-04T00:00:00+00:00\n", encoding="utf-8")
+    pending = tmp_path / ".agentic/rule_ack/communication_refresh_pending.json"
+    pending.parent.mkdir(parents=True)
+    pending.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "blocks_normal_go": True,
+                "local_path": "docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md",
+                "remote_path": "docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md",
+                "expected_blob_sha": git_blob_sha(carrier.read_bytes()),
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    monkeypatch.chdir(tmp_path)
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"]:
+            return _completed(
+                command,
+                stdout=(
+                    '{"result_status":"PASS","pr_number":2317,'
+                    '"post_merge_complete_verified_by_inner_pr_complete":true}\n'
+                ),
+            )
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "work",
+            "finish",
+            "--branch",
+            "codex/demo",
+            "--title",
+            "Demo",
+            "--message",
+            "Demo",
+            "--path",
+            ".agentic/config.yaml",
+            "--execute",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["paths"] == [
+        ".agentic/config.yaml",
+        "docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md",
+    ]
+    first_commit = next(
+        call for call in calls if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"]
+    )
+    assert ".agentic/config.yaml" in first_commit
+    assert "docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md" in first_commit
 
 
 def test_work_finish_blocks_when_lifecycle_completion_proof_is_missing(monkeypatch):
