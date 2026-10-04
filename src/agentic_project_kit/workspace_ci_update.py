@@ -53,6 +53,7 @@ class WorkspaceCiUpdatePlan:
                 "updates_managed_ci_template_only": True,
                 "requires_managed_injection_header": True,
                 "does_not_overwrite_unmanaged_workflows": True,
+                "does_not_overwrite_modified_managed_workflows": True,
             },
             "final_signal": "d" if self.ok else "f",
         }
@@ -69,7 +70,11 @@ def managed_ci_template_text() -> str:
 
 
 def managed_injected_ci_text() -> str:
-    return f"{MANAGED_CI_HEADER}\n{managed_ci_template_text()}"
+    return _managed_injected_ci_text_from_source(managed_ci_template_text())
+
+
+def _managed_injected_ci_text_from_source(source_text: str) -> str:
+    return f"{MANAGED_CI_HEADER}\n{source_text}"
 
 
 def build_workspace_ci_update_plan(
@@ -99,7 +104,8 @@ def build_workspace_ci_update_plan(
 
     source_path = root_path / CI_TEMPLATE_PATH
     desired_source = managed_ci_template_text()
-    if not source_path.exists() or source_path.read_text(encoding="utf-8") != desired_source:
+    current_source = source_path.read_text(encoding="utf-8") if source_path.exists() else None
+    if current_source != desired_source:
         changed.append(CI_TEMPLATE_PATH)
 
     injected_path = root_path / CI_INJECTION_TARGET
@@ -107,12 +113,16 @@ def build_workspace_ci_update_plan(
         current = injected_path.read_text(encoding="utf-8")
         if not current.startswith(f"{MANAGED_CI_HEADER}\n"):
             blockers.append(WorkspaceCiUpdateFinding(CI_INJECTION_TARGET, "unmanaged_ci_workflow"))
-        elif current != managed_injected_ci_text():
+        elif current == managed_injected_ci_text():
+            pass
+        elif current_source is not None and current == _managed_injected_ci_text_from_source(current_source):
             changed.append(CI_INJECTION_TARGET)
+        else:
+            blockers.append(WorkspaceCiUpdateFinding(CI_INJECTION_TARGET, "modified_managed_ci_workflow"))
 
     status: WorkspaceCiUpdateStatus = "BLOCKED" if blockers else "PASS"
     if blockers:
-        message = "workspace ci-update blocked by unmanaged workflow target"
+        message = "workspace ci-update blocked by workflow target drift"
     elif changed:
         message = "managed CI template update is available"
     else:
