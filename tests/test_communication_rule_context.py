@@ -6,6 +6,9 @@ import subprocess
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
+from agentic_project_kit.cli_commands.transfer_context_helpers import (
+    _require_current_communication_context_or_exit,
+)
 from agentic_project_kit.communication_rule_context import (
     PENDING_STATE_PATH,
     REQUIRED_LOADED_SECTIONS,
@@ -258,3 +261,35 @@ def test_pr_create_complete_blocks_when_d2_pending(tmp_path, monkeypatch) -> Non
     data = json.loads(result.output)
     assert data["kind"] == "communication_context_gate"
     assert data["required_next_reply"] == "d2"
+
+
+def test_pr_create_complete_gate_allows_pending_carrier_on_branch(tmp_path, monkeypatch) -> None:
+    write_sources(tmp_path)
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, stdout=subprocess.PIPE)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "add", "."], cwd=tmp_path, check=True)
+    subprocess.run(["git", "commit", "-m", "baseline"], cwd=tmp_path, check=True, stdout=subprocess.PIPE)
+    subprocess.run(["git", "update-ref", "refs/remotes/origin/main", "HEAD"], cwd=tmp_path, check=True)
+    refresh = CliRunner().invoke(
+        app,
+        ["rules", "communication-refresh", "--root", str(tmp_path), "--publish", "--json"],
+    )
+    assert refresh.exit_code == 0, refresh.output
+    subprocess.run(
+        ["git", "add", "docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md"],
+        cwd=tmp_path,
+        check=True,
+    )
+    subprocess.run(
+        ["git", "commit", "-m", "refresh communication rules"],
+        cwd=tmp_path,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    monkeypatch.chdir(tmp_path)
+
+    _require_current_communication_context_or_exit(
+        json_output=True,
+        allow_rule_carrier_publish=True,
+    )

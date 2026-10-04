@@ -157,6 +157,40 @@ def _path_args(paths: list[Path]) -> list[str]:
     return args
 
 
+def _git_blob_sha(data: bytes) -> str:
+    return hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\0" + data).hexdigest()
+
+
+def _paths_with_pending_communication_refresh(paths: list[Path], *, root: Path = Path(".")) -> list[Path]:
+    pending_path = root / ".agentic/rule_ack/communication_refresh_pending.json"
+    if not pending_path.exists():
+        return paths
+    try:
+        pending = json.loads(pending_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return paths
+    if not isinstance(pending, dict) or not pending.get("blocks_normal_go"):
+        return paths
+    candidate_text = str(pending.get("local_path") or pending.get("remote_path") or "")
+    expected_blob_sha = str(pending.get("expected_blob_sha") or "")
+    if not candidate_text or not expected_blob_sha:
+        return paths
+    candidate = Path(candidate_text)
+    if candidate.is_absolute() or ".." in candidate.parts:
+        return paths
+    candidate_path = root / candidate
+    try:
+        current_blob_sha = _git_blob_sha(candidate_path.read_bytes())
+    except OSError:
+        return paths
+    if current_blob_sha != expected_blob_sha:
+        return paths
+    normalized = list(paths)
+    if candidate not in normalized:
+        normalized.append(candidate)
+    return normalized
+
+
 def _handoff_closeout_paths() -> list[Path]:
     workspace = load_workspace(Path("."), suppress_legacy_profile_warning=True)
     return [
@@ -628,7 +662,7 @@ def work_finish_command(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     """Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks."""
-    selected_paths = paths or []
+    selected_paths = _paths_with_pending_communication_refresh(paths or [])
     pr_number: int | None = None
     expected_head_sha = ""
     steps: list[dict[str, object]] = [

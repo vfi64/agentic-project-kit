@@ -143,6 +143,8 @@ The local command aliases are `agentic-kit rn` for run-next/remote-next and `age
 
 The refresh file is not magical LLM memory. The assistant must read the remote rule capsule at `docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md`, verify the expected blob hash, and provide a machine-readable `RULE_REFRESH_ACK` before mutating workflows continue.
 
+Rule-source changes, including `.agentic/config.yaml`, rule registries, and communication-rule source documents, can make a communication refresh necessary. If a refresh is started on a work branch, `work finish` must carry the generated `docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md` capsule in that branch's own pull request when its blob matches the pending state. This lets the pull request publish the capsule instead of requiring it to already exist on `main` before the pull request can be created.
+
 `agentic-kit rules acknowledge-communication-refresh --ack-file <path> --json` validates that ACK. `agentic-kit rules require-current-communication-context --json` blocks when a `d2` pending state exists without a matching ACK.
 
 <!-- agentic-kit:command-reference-lifecycle-discipline:start -->
