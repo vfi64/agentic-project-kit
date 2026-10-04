@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-04T11:12:15.433091+00:00",
+  "generated_at_utc": "2026-10-04T11:21:32.728114+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,14 +57,14 @@
     "package_version": "1.0.15"
   },
   "repo": {
-    "branch": "codex/gf026-managed-ci-template",
+    "branch": "docs/post-pr2366-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f2a60d7ca6bd1552e61d7a6b354ec91ceec16dde",
+    "head": "3f055623adfb6714f190eed515aaec3267ef87aa",
     "head_matches_origin_main": true,
-    "head_short": "f2a60d7c",
+    "head_short": "3f055623",
     "local_path": "cd /path/to/",
-    "origin_main": "f2a60d7ca6bd1552e61d7a6b354ec91ceec16dde",
-    "origin_main_short": "f2a60d7c",
+    "origin_main": "3f055623adfb6714f190eed515aaec3267ef87aa",
+    "origin_main_short": "3f055623",
     "worktree_clean": false
   },
   "schema_version": 1,

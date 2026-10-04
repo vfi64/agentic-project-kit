@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: b568b0cc7d8fed10e5997f9c23afd24b29353de15fc1ae0bf4e9827ea099914b
 - docs/reference/agentic-kit-commands.json: a5b034308a25162bc96fb7a51071f1cacc8c8bba3be76b57b1817753ef26e8bc
-## Operational documentation refresh state after PR #2364
+## Operational documentation refresh state after PR #2366
 
-Current administrative handoff refresh state is `99a04701` (`Record release 1.0.15 DOI closeout (#2364)`). Continue next only after this post-PR2364 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `3f055623` (`Fix managed workspace CI template (#2366)`). Continue next only after this post-PR2366 refresh is committed and merged; the next substantive slice must be created from fresh main.
