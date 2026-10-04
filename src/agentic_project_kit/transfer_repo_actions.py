@@ -1280,6 +1280,12 @@ def _remote_head_sha(head: str) -> tuple[str, subprocess.CompletedProcess[str]]:
     return "", subprocess.CompletedProcess(command, 2, completed.stdout, f"Remote branch origin/{head} was not found.\n")
 
 
+def _remote_branch_is_ancestor_of_local(remote_sha: str, local_head: str) -> tuple[bool, subprocess.CompletedProcess[str]]:
+    command = ["git", "merge-base", "--is-ancestor", remote_sha, local_head]
+    completed = _run(command)
+    return completed.returncode == 0, completed
+
+
 def _verify_remote_branch_matches_local(
     *,
     action: str,
@@ -1386,17 +1392,55 @@ def ensure_remote_head(
         return _result(action, list(remote_completed.args), remote_completed, "Inspect remote branch lookup before creating a PR.")
 
     if remote_sha != local_head:
+        remote_is_ancestor, ancestor_completed = _remote_branch_is_ancestor_of_local(remote_sha, local_head)
+        if remote_is_ancestor and auto_push:
+            push_result = push_current(required_branch=head)
+            if push_result.returncode != 0:
+                completed = subprocess.CompletedProcess(
+                    push_result.command,
+                    push_result.returncode,
+                    push_result.stdout,
+                    push_result.stderr,
+                )
+                return _result(action, push_result.command, completed, "Inspect push-current failure before creating a PR.")
+            auto_pushed = True
+            local_completed = _run(local_command)
+            if local_completed.returncode != 0:
+                return _result(action, local_command, local_completed, "Inspect local HEAD after branch push.")
+            local_head = local_completed.stdout.strip()
+            remote_sha, remote_completed = _remote_head_sha(head)
+            if remote_completed.returncode not in {0, 2} or not remote_sha:
+                return _result(action, list(remote_completed.args), remote_completed, "Inspect remote branch lookup after branch push.")
+        else:
+            reason = (
+                "remote branch is not an ancestor of local HEAD"
+                if ancestor_completed.returncode == 1
+                else "could not prove remote branch is an ancestor of local HEAD"
+            )
+            completed = subprocess.CompletedProcess(
+                remote_completed.args,
+                2,
+                remote_completed.stdout,
+                (
+                    f"Remote branch origin/{head} does not match local HEAD. "
+                    f"remote={remote_sha or '<missing>'}; local={local_head}. "
+                    f"{reason}. Refusing PR create without force-push.\n"
+                    f"{ancestor_completed.stderr}"
+                ),
+            )
+            return _result(action, list(completed.args), completed, "Resolve remote branch divergence before creating a PR.")
+
+    if remote_sha != local_head:
         completed = subprocess.CompletedProcess(
             remote_completed.args,
             2,
             remote_completed.stdout,
             (
-                f"Remote branch origin/{head} does not match local HEAD. "
-                f"remote={remote_sha or '<missing>'}; local={local_head}. "
-                "Refusing PR create without force-push.\n"
+                f"Remote branch origin/{head} does not match local HEAD after push. "
+                f"remote={remote_sha or '<missing>'}; local={local_head}.\n"
             ),
         )
-        return _result(action, list(completed.args), completed, "Resolve remote branch divergence before creating a PR.")
+        return _result(action, list(completed.args), completed, "Resolve remote branch mismatch before creating a PR.")
 
     stdout = (
         "REMOTE_HEAD_VERIFIED\n"

@@ -106,6 +106,21 @@ def test_humanize_finish_dry_run_allows_confirm_publish() -> None:
     assert message.allow_confirm_publish is True
 
 
+def test_humanize_finish_planned_dry_run_allows_confirm_publish() -> None:
+    message = humanize_work_result(
+        {
+            "result_status": "PLANNED",
+            "action": "work-finish",
+            "dry_run": True,
+            "paths": ["src/example.py"],
+        }
+    )
+
+    assert message.headline == "Ready to publish."
+    assert message.suggested_next == "Confirm publish"
+    assert message.allow_confirm_publish is True
+
+
 def test_humanize_discard_dry_run_allows_confirm_discard() -> None:
     message = humanize_work_result(
         {

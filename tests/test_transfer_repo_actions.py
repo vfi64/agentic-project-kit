@@ -1715,6 +1715,71 @@ def test_pr_create_blocks_head_equal_base_before_gh_call(monkeypatch):
     assert not any(command[:3] == ["gh", "pr", "create"] for command in calls)
 
 
+def test_ensure_remote_head_pushes_existing_remote_when_fast_forward(monkeypatch):
+    calls = []
+    remote_heads = ["aaa111", "bbb222"]
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "bbb222\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "--heads", "origin", "feature/demo"]:
+            sha = remote_heads.pop(0)
+            return subprocess.CompletedProcess(command, 0, f"{sha}\trefs/heads/feature/demo\n", "")
+        if command == ["git", "merge-base", "--is-ancestor", "aaa111", "bbb222"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+    monkeypatch.setattr(
+        transfer_repo_actions,
+        "push_current",
+        lambda required_branch="": transfer_repo_actions.RepoActionResult(
+            "push-current",
+            "PASS",
+            0,
+            ["git", "push", "origin", required_branch],
+            "pushed\n",
+            "",
+            "Create or inspect pull request.",
+        ),
+    )
+
+    result = transfer_repo_actions.ensure_remote_head("feature/demo", auto_push=True, action="pr-create")
+
+    assert result.returncode == 0
+    assert result.result_status == "PASS"
+    assert "auto_pushed=true" in result.stdout
+    assert ["git", "merge-base", "--is-ancestor", "aaa111", "bbb222"] in calls
+
+
+def test_ensure_remote_head_blocks_existing_remote_when_diverged(monkeypatch):
+    calls = []
+
+    def fake_run(command, cwd=None):
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "bbb222\n", "")
+        if command == ["git", "ls-remote", "--exit-code", "--heads", "origin", "feature/demo"]:
+            return subprocess.CompletedProcess(command, 0, "aaa111\trefs/heads/feature/demo\n", "")
+        if command == ["git", "merge-base", "--is-ancestor", "aaa111", "bbb222"]:
+            return subprocess.CompletedProcess(command, 1, "", "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+
+    result = transfer_repo_actions.ensure_remote_head("feature/demo", auto_push=True, action="pr-create")
+
+    assert result.returncode == 2
+    assert result.result_status == "FAIL"
+    assert "not an ancestor" in result.stderr
+    assert ["git", "merge-base", "--is-ancestor", "aaa111", "bbb222"] in calls
+
+
 def test_push_current_with_required_branch_switches_before_push(monkeypatch):
     calls = []
 

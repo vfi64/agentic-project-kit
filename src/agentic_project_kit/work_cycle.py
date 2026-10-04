@@ -169,7 +169,7 @@ def humanize_work_result(payload: dict[str, Any]) -> WorkResultMessage:
     action = str(payload.get("action", ""))
     dry_run = bool(payload.get("dry_run"))
     blockers = tuple(str(item) for item in payload.get("blockers", ()) if str(item))
-    if status == "PASS" and action == "work-finish" and dry_run:
+    if status in {"PASS", "PLANNED"} and action == "work-finish" and dry_run:
         paths = payload.get("paths", ())
         path_count = len(paths) if isinstance(paths, list) else 0
         return WorkResultMessage(

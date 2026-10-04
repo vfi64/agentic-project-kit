@@ -319,6 +319,8 @@ def test_work_finish_dry_run_surfaces_remote_preflight(monkeypatch):
     assert result.exit_code == 0, result.output
     payload = json.loads(result.stdout)
     assert payload["dry_run"] is True
+    assert payload["result_status"] == "PLANNED"
+    assert "--execute" in payload["next_action"]
     assert [step["name"] for step in payload["steps"]] == [
         "repo-status",
         "protected-diff-plan",
