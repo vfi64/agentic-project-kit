@@ -3,10 +3,10 @@
 ## Current State
 
 Current version: 1.0.16
-Current verified release: 1.0.15.
-Current release tag: v1.0.15.
+Current verified release: 1.0.16.
+Current release tag: v1.0.16.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.23126837`.
+Verified Zenodo version DOI: `10.5281/zenodo.23137179`.
 Current verified main: `98db9bcc` (`Prepare release 1.0.16 (#2374)`).
 Latest substantive work: PR #2374 (`Prepare release 1.0.16 (#2374)`).
 Latest administrative refresh-only descendant: post-PR2374 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
