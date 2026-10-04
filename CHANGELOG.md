@@ -1,12 +1,14 @@
 ## v1.0.16 - 2026-10-04
 
-- Zenodo DOI verification pending for v1.0.16.
 - Record release 1.0.15 DOI closeout
 - Fix managed workspace CI template
 - Add release button foundation
 - Fix release closeout quality gates
 - Harden successor final head identity
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.16 DOI `10.5281/zenodo.23137179`.
+
+Zenodo v1.0.16 DOI: 10.5281/zenodo.23137179
 ## v1.0.15 - 2026-10-03
 
 - Record release 1.0.14 DOI closeout evidence for the verified GitHub Release and Zenodo archive
