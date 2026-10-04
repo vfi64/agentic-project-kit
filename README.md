@@ -246,6 +246,8 @@ The command writes a machine-readable successor context, source manifest, valida
 docs/reports/handoff-packages/latest/
 ```
 
+The successor package separates the committed projection head from the final repository identity. `validation_report.json` records the HEAD used to generate the committed package. After an admin refresh commit, `post-merge-check` may report `successor_package_head_status=refresh_only_descendant` and `successor_package_current_head=<sha>` when the only intervening changes are generated handoff refresh/projection files. That post-merge evidence is the exact final-HEAD authority; do not rerender and recommit projections only to chase their own commit SHA.
+
 In external workspace mode the default package path is `.agentic/state/handoff/packages/latest/`. It updates canonical chat-switch projections, including the initial `START_NEW_CHAT_PROMPT.md` when missing. A successor chat uses `successor_prompt.md`, runs `agentic-kit transfer repo-status`, `agentic-kit check --root .`, and `agentic-kit doctor --root .`, and stops unless `validation_report.json` is `PASS`.
 
 After a PR merge, run `agentic-kit transfer post-merge-settle --after-pr PR_NUMBER`; it stops at READY/NOOP and blocks repeated generated/admin refresh loops.

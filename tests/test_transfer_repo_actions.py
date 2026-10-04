@@ -3909,6 +3909,8 @@ def test_successor_package_freshness_allows_refresh_only_head_drift(monkeypatch,
     check = actions._successor_package_freshness_check(tmp_path)
     assert check.findings == ()
     assert "successor_package_head_status=refresh_only_descendant" in check.notes
+    assert "successor_package_identity_model=refresh_only_descendant" in check.notes
+    assert "successor_package_final_head_authority=post_merge_freshness_evidence" in check.notes
     assert "successor_package_generated_head=old" in check.notes
     assert "successor_package_current_head=new" in check.notes
 

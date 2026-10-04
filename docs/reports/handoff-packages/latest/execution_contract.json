@@ -287,13 +287,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2370-handoff-refresh",
+      "branch": "codex/gf011-handoff-identity",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "db547200ac8dcc4923644547f32051462f7d8a1c",
+      "head": "578670522e8671762c7fcbda71890313627e6f3e",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "db547200ac8dcc4923644547f32051462f7d8a1c",
+      "origin_main": "578670522e8671762c7fcbda71890313627e6f3e",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -307,6 +307,7 @@
       "ns-legacy-not-active-control-plane",
       "patch-cycle-diagnostic-gate",
       "repo-backed-rules-and-gates",
+      "successor-final-head-identity",
       "successor-package-not-prompt-only",
       "wrapper-first-complete-development-cycle"
     ],
@@ -404,6 +405,40 @@
       "target_scope": "GENERATED_SUCCESSOR_HANDOFF_PACKAGE_AND_PROMPT_PROJECTIONS",
       "writer_id": "WRT-CH-006"
     },
+    "final_head_identity": {
+      "allowed_final_head_statuses": [
+        "exact",
+        "refresh_only_descendant"
+      ],
+      "committed_exact_final_head_required": false,
+      "committed_projection_head": "validation_report.generated_head",
+      "committed_projection_must_validate": "PASS",
+      "committed_projection_status": "validation_report.status",
+      "durable_source_of_truth": "machine-readable successor package plus post-merge freshness evidence",
+      "exact_final_head_source": "post_merge_freshness_evidence.successor_package_current_head",
+      "problem": "A committed file cannot contain the SHA of the commit that first includes that file.",
+      "refresh_only_descendant_requires": [
+        "validation_report.status == PASS",
+        "validation_report.generated_head is an ancestor of the current HEAD",
+        "git diff generated_head..current_head touches only generated handoff refresh/projection paths",
+        "post-merge-check emits successor_package_current_head for the exact final HEAD"
+      ],
+      "refresh_only_descendant_requires_diff_allowlist": true,
+      "self_staling_loop_prevention": "Do not re-render and commit successor projections only to make validation_report.generated_head equal the commit that contains those projections. Use the checked refresh_only_descendant identity evidence as final-head authority.",
+      "volatile_exact_projection_allowed": true,
+      "workspace_projection_paths": [
+        "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "docs/handoff/START_NEW_CHAT_PROMPT.md",
+        "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+        "docs/reports/handoff-packages/latest/execution_contract.json",
+        "docs/reports/handoff-packages/latest/source_manifest.json",
+        "docs/reports/handoff-packages/latest/successor_context.yaml",
+        "docs/reports/handoff-packages/latest/successor_prompt.md",
+        "docs/reports/handoff-packages/latest/validation_report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+        "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.log"
+      ]
+    },
     "forbidden_update_path": [
       "manual direct edits to generated handoff projections",
       "adding durable rules only to docs/handoff/*.md",
@@ -439,13 +474,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2370-handoff-refresh",
+    "branch": "codex/gf011-handoff-identity",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "db547200ac8dcc4923644547f32051462f7d8a1c",
+    "head": "578670522e8671762c7fcbda71890313627e6f3e",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "db547200ac8dcc4923644547f32051462f7d8a1c",
+    "origin_main": "578670522e8671762c7fcbda71890313627e6f3e",
     "worktree_clean": false
   },
   "rules": [
@@ -616,6 +651,20 @@
       "priority": "critical",
       "rule_id": "generated-handoff-projection-update-policy",
       "scope": "generated handoff projections"
+    },
+    {
+      "must": [
+        "Treat validation_report.generated_head as the committed projection head, not necessarily the final commit that contains the projection files.",
+        "Accept refresh_only_descendant only when generated_head is an ancestor of the current HEAD and the intervening diff is limited to generated handoff refresh/projection paths.",
+        "Use post-merge-check successor_package_current_head as the exact final HEAD authority for successor startup."
+      ],
+      "must_not": [
+        "rerender and commit successor projections only to chase the self-created commit SHA",
+        "treat stale copied prompt text as stronger authority than machine-readable package plus post-merge evidence"
+      ],
+      "priority": "critical",
+      "rule_id": "successor-final-head-identity",
+      "scope": "successor handoff final repository identity"
     },
     {
       "forbidden": [

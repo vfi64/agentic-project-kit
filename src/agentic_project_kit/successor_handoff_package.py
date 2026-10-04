@@ -158,6 +158,7 @@ REQUIRED_EXECUTION_CONTRACT_RULE_IDS: frozenset[str] = frozenset(
         "gc-retention-not-document-migration",
         "ns-legacy-not-active-control-plane",
         "generated-handoff-projection-update-policy",
+        "successor-final-head-identity",
         "patch-cycle-diagnostic-gate",
         "copy-paste-output-discipline",
     }
@@ -172,6 +173,7 @@ GENERAL_CONTRACT_RULE_IDS: frozenset[str] = frozenset(
         "gc-retention-not-document-migration",
         "ns-legacy-not-active-control-plane",
         "generated-handoff-projection-update-policy",
+        "successor-final-head-identity",
         "patch-cycle-diagnostic-gate",
         "copy-paste-output-discipline",
     }
@@ -217,6 +219,36 @@ def _dedicated_successor_projection_update_paths(ws: Workspace) -> tuple[str, ..
 
 def _initial_create_if_missing_projection_paths(ws: Workspace) -> tuple[str, ...]:
     return (_workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md")),)
+
+
+def _final_head_identity_contract(ws: Workspace) -> dict[str, object]:
+    return {
+        "problem": "A committed file cannot contain the SHA of the commit that first includes that file.",
+        "committed_projection_head": "validation_report.generated_head",
+        "committed_projection_status": "validation_report.status",
+        "committed_projection_must_validate": "PASS",
+        "committed_exact_final_head_required": False,
+        "exact_final_head_source": "post_merge_freshness_evidence.successor_package_current_head",
+        "allowed_final_head_statuses": [
+            "exact",
+            "refresh_only_descendant",
+        ],
+        "refresh_only_descendant_requires": [
+            "validation_report.status == PASS",
+            "validation_report.generated_head is an ancestor of the current HEAD",
+            "git diff generated_head..current_head touches only generated handoff refresh/projection paths",
+            "post-merge-check emits successor_package_current_head for the exact final HEAD",
+        ],
+        "refresh_only_descendant_requires_diff_allowlist": True,
+        "self_staling_loop_prevention": (
+            "Do not re-render and commit successor projections only to make validation_report.generated_head "
+            "equal the commit that contains those projections. Use the checked refresh_only_descendant "
+            "identity evidence as final-head authority."
+        ),
+        "volatile_exact_projection_allowed": True,
+        "durable_source_of_truth": "machine-readable successor package plus post-merge freshness evidence",
+        "workspace_projection_paths": list(_generated_handoff_projection_paths(ws)),
+    }
 
 
 def _general_source_authorities(ws: Workspace) -> tuple[str, ...]:
@@ -806,6 +838,63 @@ def validate_successor_outputs(
                     "message": "handoff_projection_contract must forbid manual direct edits to generated handoff projections.",
                 }
             )
+        final_head_identity = projection_contract.get("final_head_identity")
+        if not isinstance(final_head_identity, dict):
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "missing_final_head_identity_contract",
+                    "message": "handoff_projection_contract must define the committed-package/final-HEAD identity boundary.",
+                }
+            )
+            final_head_identity = {}
+        if final_head_identity.get("committed_projection_head") != "validation_report.generated_head":
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "invalid_committed_projection_head_source",
+                    "message": "final_head_identity.committed_projection_head must be validation_report.generated_head.",
+                }
+            )
+        if final_head_identity.get("exact_final_head_source") != "post_merge_freshness_evidence.successor_package_current_head":
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "invalid_exact_final_head_source",
+                    "message": "final_head_identity.exact_final_head_source must point to post-merge freshness evidence.",
+                }
+            )
+        if final_head_identity.get("committed_exact_final_head_required") is not False:
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "committed_exact_final_head_requirement_would_self_stale",
+                    "message": "final_head_identity must state that committed exact final HEAD is not required for generated projections.",
+                }
+            )
+        allowed_final_head_statuses = final_head_identity.get("allowed_final_head_statuses")
+        if not isinstance(allowed_final_head_statuses, list) or "refresh_only_descendant" not in allowed_final_head_statuses:
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "missing_refresh_only_descendant_identity_status",
+                    "message": "final_head_identity.allowed_final_head_statuses must include refresh_only_descendant.",
+                }
+            )
+        if final_head_identity.get("refresh_only_descendant_requires_diff_allowlist") is not True:
+            findings.append(
+                {
+                    "severity": "error",
+                    "file": "execution_contract.json",
+                    "code": "missing_refresh_only_descendant_diff_allowlist",
+                    "message": "final_head_identity must require a generated-path diff allowlist for refresh_only_descendant.",
+                }
+            )
         dpa_contract = projection_contract.get("dpa_generated_output_contract")
         dpa_contract_errors = validate_successor_projection_dpa_contract(dpa_contract)
         for error in dpa_contract_errors:
@@ -987,6 +1076,7 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
         "dedicated_update_only_paths": list(_dedicated_successor_projection_update_paths(ws)),
         "initial_create_if_missing_paths": list(_initial_create_if_missing_projection_paths(ws)),
         "source_of_truth": "generator_and_machine_readable_successor_package",
+        "final_head_identity": _final_head_identity_contract(ws),
         "allowed_update_path": [
             "Change successor_handoff_package.py, execution contract inputs, or repo-backed rule sources.",
             "Add or update tests and validation for new handoff content.",
@@ -1145,6 +1235,20 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
                 "forbidden": [
                     "manual direct edits to generated handoff projection files as the primary source of a new rule",
                     "making copied prompt text the durable source of truth",
+                ],
+            },
+            {
+                "rule_id": "successor-final-head-identity",
+                "priority": "critical",
+                "scope": "successor handoff final repository identity",
+                "must": [
+                    "Treat validation_report.generated_head as the committed projection head, not necessarily the final commit that contains the projection files.",
+                    "Accept refresh_only_descendant only when generated_head is an ancestor of the current HEAD and the intervening diff is limited to generated handoff refresh/projection paths.",
+                    "Use post-merge-check successor_package_current_head as the exact final HEAD authority for successor startup.",
+                ],
+                "must_not": [
+                    "rerender and commit successor projections only to chase the self-created commit SHA",
+                    "treat stale copied prompt text as stronger authority than machine-readable package plus post-merge evidence",
                 ],
             },
             {

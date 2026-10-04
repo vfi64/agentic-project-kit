@@ -508,11 +508,19 @@ def _successor_package_freshness_check(repo_root: Path | None = None) -> Success
     generated_head = str(validation.get("generated_head") or "")
     if head and generated_head:
         if generated_head == head:
-            notes.append("successor_package_head_status=exact")
+            notes.extend(
+                [
+                    "successor_package_head_status=exact",
+                    "successor_package_identity_model=exact",
+                    f"successor_package_current_head={head}",
+                ]
+            )
         elif _is_refresh_only_successor_package_head(generated_head, head, ws):
             notes.extend(
                 [
                     "successor_package_head_status=refresh_only_descendant",
+                    "successor_package_identity_model=refresh_only_descendant",
+                    "successor_package_final_head_authority=post_merge_freshness_evidence",
                     f"successor_package_generated_head={generated_head}",
                     f"successor_package_current_head={head}",
                 ]

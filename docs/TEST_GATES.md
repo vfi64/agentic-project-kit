@@ -107,6 +107,13 @@ gate must run handoff check, variant-specific artifact validation,
 protected-diff-plan coverage, doc-registry reconcile, doc-registry unregistered
 checks, check-docs, and targeted successor/package regression tests. Post-merge
 status checks remain post-merge lifecycle gates, not PR-checkout substitutes.
+Successor package final-head identity is split deliberately: the committed
+`validation_report.generated_head` may be the parent of the refresh commit, while
+`post-merge-check` supplies exact final identity with
+`successor_package_current_head` only when `refresh_only_descendant` proves that
+the intervening diff is limited to generated handoff refresh/projection paths.
+Rerendering and recommitting successor projections only to make them name their
+own commit SHA is a self-staling loop and must not be required.
 When the same admin-light lane runs on a main push, its protected-diff-plan
 evidence must use the deterministic push `before..current` diff because PR
 base/head SHAs are unavailable.
