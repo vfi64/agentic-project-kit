@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5ed54c801d580fa3d91d365c72f69dbfb058f4e5
-  short: 5ed54c80
-  subject: Protect modified managed CI workflows (#2381)
+  full: 53c2d19ffcad11e1742d02ef88e3dc9ccc52d822
+  short: 53c2d19f
+  subject: Let communication refresh travel with work branch (#2383)
 last_substantive_work_state:
-  full: 5ed54c801d580fa3d91d365c72f69dbfb058f4e5
-  short: 5ed54c80
-  subject: Protect modified managed CI workflows (#2381)
+  full: 53c2d19ffcad11e1742d02ef88e3dc9ccc52d822
+  short: 53c2d19f
+  subject: Let communication refresh travel with work branch (#2383)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
