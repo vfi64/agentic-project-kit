@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3ac0fd085a6a5dfdf8e214ad8b4b7353e8199dea
-  short: 3ac0fd08
-  subject: Harden PR lifecycle completion (#2385)
+  full: 7e783920e967671a04ec1b3b8dfc81e7ae537460
+  short: 7e783920
+  subject: Fix release publish tags and lifecycle headers (#2387)
 last_substantive_work_state:
-  full: 3ac0fd085a6a5dfdf8e214ad8b4b7353e8199dea
-  short: 3ac0fd08
-  subject: Harden PR lifecycle completion (#2385)
+  full: 7e783920e967671a04ec1b3b8dfc81e7ae537460
+  short: 7e783920
+  subject: Fix release publish tags and lifecycle headers (#2387)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
