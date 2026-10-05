@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b8396354a17924f802ba4fdcbf6f3783f5448d06
-  short: b8396354
-  subject: Fix TMPDIR-aware Kit temp artifacts (#2403)
+  full: 1f0b069ddd452f8a6cdaaa09f022b7b05707481d
+  short: 1f0b069d
+  subject: Add release run orchestrator (#2405)
 last_substantive_work_state:
-  full: b8396354a17924f802ba4fdcbf6f3783f5448d06
-  short: b8396354
-  subject: Fix TMPDIR-aware Kit temp artifacts (#2403)
+  full: 1f0b069ddd452f8a6cdaaa09f022b7b05707481d
+  short: 1f0b069d
+  subject: Add release run orchestrator (#2405)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
