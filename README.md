@@ -643,7 +643,7 @@ The hard checks currently cover version mismatches, stale current-state wording,
 
 Future repair tools should stay bounded to mechanical edits and must not rewrite semantics.
 
-`agentic-kit doc-lifecycle-audit --json`; `agentic-kit doc-lifecycle-audit --strict`; `agentic-kit doc-lifecycle-audit --suggest-review-after`; `agentic-kit audit-doc-orphans`; `agentic-kit docs lifecycle sweep --dry-run`; `agentic-kit docs lifecycle bootstrap --dry-run`; `agentic-kit docs lifecycle propose-delete`.
+`agentic-kit doc-lifecycle-audit --json`; `agentic-kit doc-lifecycle-audit --strict`; `agentic-kit doc-lifecycle-audit --suggest-review-after`; `agentic-kit audit-doc-orphans`; `agentic-kit docs lifecycle sweep --dry-run`; `agentic-kit docs lifecycle bootstrap --dry-run`; `agentic-kit docs lifecycle propose-delete`. Lifecycle metadata such as `Status`, `Decision status`, and `Review policy` is recognized only in the document head before the first `##` section, so prose examples later in the file do not satisfy the gate.
 
 ## Status current-state audit
 

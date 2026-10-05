@@ -67,6 +67,38 @@ def test_doc_lifecycle_accepts_classified_documents(tmp_path: Path) -> None:
     assert [document.path for document in report.documents] == ["docs/ideas/EXAMPLE.md", "docs/strategy/NOW.md"]
 
 
+def test_doc_lifecycle_ignores_lifecycle_headers_after_first_section(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "docs/planning/ULTRA_REVIEW_REMEDIATION.md",
+        "# Ultra Review Remediation\n\n"
+        "## Context\n\n"
+        "The plan text mentions these labels but does not declare metadata.\n\n"
+        "Status: active\n"
+        "Decision status: current\n"
+        "Review policy: keep while useful\n",
+    )
+
+    report = build_doc_lifecycle_report(tmp_path)
+
+    codes = {finding.code for finding in report.findings}
+    assert {"missing-status", "missing-decision-status"} <= codes
+
+
+def test_doc_lifecycle_requires_review_policy_in_header_block(tmp_path: Path) -> None:
+    _write(
+        tmp_path / "docs/planning/REVIEW_POLICY_IN_BODY.md",
+        "# Review Policy In Body\n\n"
+        "Status: active\n"
+        "Decision status: current\n"
+        "## Context\n\n"
+        "Review policy: keep while useful\n",
+    )
+
+    report = build_doc_lifecycle_report(tmp_path)
+
+    assert any(finding.code == "missing-review-policy" for finding in report.findings)
+
+
 def test_doc_lifecycle_reports_missing_and_invalid_status(tmp_path: Path) -> None:
     _write(tmp_path / "docs/ideas/ISSUE.md", "# Issue\n\nStatus: idea note\n")
     _write(tmp_path / "docs/planning/MISSING.md", "# Missing\n\nDecision status: unclear\n")

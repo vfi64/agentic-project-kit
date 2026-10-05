@@ -328,15 +328,17 @@ def test_release_publish_execute_requires_capability_even_with_allow_execute(tmp
 
 
 def test_release_publish_execute_capability_runs_ordered_live_plan_with_fake_runner(tmp_path: Path) -> None:
+    _write_publication_manifest(
+        tmp_path,
+        "github",
+        release_lines=(
+            "  github_release_title_template: AGP Cockpit {version} (privat)\n"
+        ),
+    )
     capability = tmp_path / ".agentic" / "release" / "ENABLE_LIVE_PUBLISH"
     capability.parent.mkdir(parents=True)
     capability.write_text("test-only\n", encoding="utf-8")
-    (tmp_path / "CHANGELOG.md").write_text(
-        "## v9.9.9 - 2026-06-21\n\n"
-        "- Publish creates a verified GitHub release.\n",
-        encoding="utf-8",
-    )
-    _write_release_anchors(tmp_path, "9.9.9")
+    _write_external_release_anchors(tmp_path, "9.9.9")
     seen: list[tuple[str, ...]] = []
     release_created = False
 
@@ -351,6 +353,8 @@ def test_release_publish_execute_capability_runs_ordered_live_plan_with_fake_run
             return 0, "head\n"
         if args == ("git", "rev-parse", "--verify", "refs/tags/v9.9.9^{}"):
             return 1, "missing local tag\n"
+        if args == ("git", "tag", "-a", "v9.9.9", "-m", "Release v9.9.9"):
+            return 0, "created annotated tag\n"
         if args == ("git", "ls-remote", "--exit-code", "origin", "refs/tags/v9.9.9^{}"):
             return 1, "missing remote tag\n"
         if args == ("git", "ls-remote", "--exit-code", "--refs", "origin", "refs/tags/v9.9.9"):
@@ -372,16 +376,64 @@ def test_release_publish_execute_capability_runs_ordered_live_plan_with_fake_run
 
     assert plan.ok is True
     assert plan.execute_enabled is True
-    assert ("git", "tag", "v9.9.9") in seen
+    assert ("git", "tag", "-a", "v9.9.9", "-m", "Release v9.9.9") in seen
     assert ("git", "push", "origin", "v9.9.9") in seen
     create_commands = [args for args in seen if tuple(args[:3]) == ("gh", "release", "create")]
     assert len(create_commands) == 1
-    assert create_commands[0][:6] == ("gh", "release", "create", "v9.9.9", "--title", "v9.9.9")
+    assert create_commands[0][:6] == (
+        "gh",
+        "release",
+        "create",
+        "v9.9.9",
+        "--title",
+        "AGP Cockpit 9.9.9 (privat)",
+    )
     assert "--notes" in create_commands[0]
-    assert "Publish creates a verified GitHub release." in create_commands[0][-1]
+    assert "Private release tag route." in create_commands[0][-1]
     assert seen.count(("gh", "release", "view", "v9.9.9")) == 2
     assert any("post-release-check" in args for args in seen)
-    assert any("execute git tag v9.9.9" in action for action in plan.planned_actions)
+    assert any("execute annotated git tag v9.9.9" in action for action in plan.planned_actions)
+
+
+def test_release_publish_invalid_release_title_template_blocks_before_tagging(tmp_path: Path) -> None:
+    _write_publication_manifest(
+        tmp_path,
+        "github",
+        release_lines="  github_release_title_template: AGP Cockpit {unknown}\n",
+    )
+    capability = tmp_path / ".agentic" / "release" / "ENABLE_LIVE_PUBLISH"
+    capability.parent.mkdir(parents=True)
+    capability.write_text("test-only\n", encoding="utf-8")
+    _write_external_release_anchors(tmp_path, "9.9.9")
+    seen: list[tuple[str, ...]] = []
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        seen.append(tuple(args))
+        if "release-prep" in args:
+            return 0, json.dumps({"changed_paths": []}) + "\n"
+        if args == ("git", "status", "--porcelain"):
+            return 0, ""
+        if args == ("git", "rev-parse", "HEAD"):
+            return 0, "head\n"
+        return 0, "PASS\n"
+
+    plan = evaluate_release_publish_plan(
+        tmp_path,
+        version="9.9.9",
+        execute=True,
+        allow_execute=True,
+        runner=runner,
+    )
+
+    assert plan.ok is False
+    assert any(
+        check.name == "GitHub release title configuration"
+        and "unsupported placeholder" in check.detail
+        for check in plan.blockers
+    )
+    assert not any(args[:2] == ("git", "tag") for args in seen)
+    assert ("git", "push", "origin", "v9.9.9") not in seen
+    assert not any(tuple(args[:3]) == ("gh", "release", "create") for args in seen)
 
 
 def test_release_publish_execute_is_idempotent_when_tag_and_release_exist(tmp_path: Path) -> None:
@@ -401,6 +453,8 @@ def test_release_publish_execute_is_idempotent_when_tag_and_release_exist(tmp_pa
             return 0, "head\n"
         if args == ("git", "rev-parse", "--verify", "refs/tags/v9.9.9^{}"):
             return 0, "head\n"
+        if args == ("git", "cat-file", "-t", "refs/tags/v9.9.9"):
+            return 0, "tag\n"
         if args == ("git", "ls-remote", "--exit-code", "origin", "refs/tags/v9.9.9^{}"):
             return 0, "head\trefs/tags/v9.9.9^{}\n"
         if args == ("gh", "release", "view", "v9.9.9"):
@@ -422,6 +476,90 @@ def test_release_publish_execute_is_idempotent_when_tag_and_release_exist(tmp_pa
     assert not any(tuple(args[:3]) == ("gh", "release", "create") for args in seen)
     assert ("gh", "release", "view", "v9.9.9") in seen
     assert any("post-release-check" in args for args in seen)
+
+
+def test_release_publish_blocks_existing_lightweight_local_tag(tmp_path: Path) -> None:
+    capability = tmp_path / ".agentic" / "release" / "ENABLE_LIVE_PUBLISH"
+    capability.parent.mkdir(parents=True)
+    capability.write_text("test-only\n", encoding="utf-8")
+    _write_release_anchors(tmp_path, "9.9.9")
+    seen: list[tuple[str, ...]] = []
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        seen.append(tuple(args))
+        if "release-prep" in args:
+            return 0, json.dumps({"changed_paths": []}) + "\n"
+        if args == ("git", "status", "--porcelain"):
+            return 0, ""
+        if args == ("git", "rev-parse", "HEAD"):
+            return 0, "head\n"
+        if args == ("git", "rev-parse", "--verify", "refs/tags/v9.9.9^{}"):
+            return 0, "head\n"
+        if args == ("git", "cat-file", "-t", "refs/tags/v9.9.9"):
+            return 0, "commit\n"
+        return 0, "PASS\n"
+
+    plan = evaluate_release_publish_plan(
+        tmp_path,
+        version="9.9.9",
+        execute=True,
+        allow_execute=True,
+        runner=runner,
+    )
+
+    assert plan.ok is False
+    assert plan.execute_enabled is False
+    assert any(
+        check.name == "execute annotated git tag v9.9.9"
+        and "annotated tag is required" in check.detail
+        for check in plan.blockers
+    )
+    assert ("git", "push", "origin", "v9.9.9") not in seen
+    assert not any(tuple(args[:3]) == ("gh", "release", "create") for args in seen)
+
+
+def test_release_publish_blocks_existing_lightweight_remote_tag(tmp_path: Path) -> None:
+    capability = tmp_path / ".agentic" / "release" / "ENABLE_LIVE_PUBLISH"
+    capability.parent.mkdir(parents=True)
+    capability.write_text("test-only\n", encoding="utf-8")
+    _write_release_anchors(tmp_path, "9.9.9")
+    seen: list[tuple[str, ...]] = []
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        seen.append(tuple(args))
+        if "release-prep" in args:
+            return 0, json.dumps({"changed_paths": []}) + "\n"
+        if args == ("git", "status", "--porcelain"):
+            return 0, ""
+        if args == ("git", "rev-parse", "HEAD"):
+            return 0, "head\n"
+        if args == ("git", "rev-parse", "--verify", "refs/tags/v9.9.9^{}"):
+            return 1, "missing local tag\n"
+        if args == ("git", "tag", "-a", "v9.9.9", "-m", "Release v9.9.9"):
+            return 0, "created annotated tag\n"
+        if args == ("git", "ls-remote", "--exit-code", "origin", "refs/tags/v9.9.9^{}"):
+            return 1, "missing peeled tag\n"
+        if args == ("git", "ls-remote", "--exit-code", "--refs", "origin", "refs/tags/v9.9.9"):
+            return 0, "head\trefs/tags/v9.9.9\n"
+        return 0, "PASS\n"
+
+    plan = evaluate_release_publish_plan(
+        tmp_path,
+        version="9.9.9",
+        execute=True,
+        allow_execute=True,
+        runner=runner,
+    )
+
+    assert plan.ok is False
+    assert plan.execute_enabled is False
+    assert any(
+        check.name == "execute remote annotated tag v9.9.9"
+        and "not an annotated tag" in check.detail
+        for check in plan.blockers
+    )
+    assert ("git", "push", "origin", "v9.9.9") not in seen
+    assert not any(tuple(args[:3]) == ("gh", "release", "create") for args in seen)
 
 
 def test_release_publish_blocks_when_existing_remote_tag_points_elsewhere(tmp_path: Path) -> None:
@@ -605,13 +743,15 @@ def test_release_publish_execute_requires_matching_release_anchors(tmp_path: Pat
     assert any("target version" in check.detail for check in plan.blockers)
 
 
-def _write_publication_manifest(root: Path, publication: str) -> None:
+def _write_publication_manifest(root: Path, publication: str, *, release_lines: str = "") -> None:
     manifest = root / ".agentic" / "config.yaml"
     manifest.parent.mkdir(parents=True, exist_ok=True)
+    release_block = f"release:\n{release_lines}" if release_lines else ""
     manifest.write_text(
         "kit_schema_version: 2\n"
         "profile: generic\n"
         f"publication: {publication}\n"
+        f"{release_block}"
         "hygiene:\n"
         "  doc_lifecycle: warn\n"
         "  review_budgets:\n"
