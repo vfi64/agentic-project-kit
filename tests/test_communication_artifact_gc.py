@@ -130,22 +130,28 @@ def test_gc_keeps_tracked_next_turn_working_artifacts(tmp_path: Path) -> None:
     assert terminal.read_text(encoding="utf-8") == "tracked evidence\n"
 
 
-def test_tmp_log_gc_collects_only_expired_local_tmp_logs(tmp_path: Path) -> None:
+def test_tmp_log_gc_collects_only_expired_local_tmp_artifacts(tmp_path: Path) -> None:
     import os
     from agentic_project_kit.communication_artifact_gc import collect_expired_tmp_logs
-    expired = tmp_path / "agentic-project-kit-expired.log"
+
+    expired_log = tmp_path / "agentic-project-kit-expired.log"
+    expired_diff = tmp_path / "agentic-project-kit-protected.diff"
     fresh = tmp_path / "agentic-project-kit-fresh.log"
-    other = tmp_path / "other.log"
-    expired.write_text("old", encoding="utf-8")
+    other = tmp_path / "other.diff"
+    expired_log.write_text("old", encoding="utf-8")
+    expired_diff.write_text("diff", encoding="utf-8")
     fresh.write_text("new", encoding="utf-8")
     other.write_text("other", encoding="utf-8")
     now = 1_000_000.0
     old_time = now - (2 * 24 * 60 * 60)
     fresh_time = now - 60
-    os.utime(expired, (old_time, old_time))
+    os.utime(expired_log, (old_time, old_time))
+    os.utime(expired_diff, (old_time, old_time))
     os.utime(fresh, (fresh_time, fresh_time))
+
     found = collect_expired_tmp_logs(tmp_path, now=now)
-    assert found == [expired]
+
+    assert found == [expired_log, expired_diff]
 
 
 def test_tmp_log_gc_dry_run_does_not_delete_expired_log(tmp_path: Path) -> None:
@@ -380,6 +386,48 @@ def test_tmp_log_gc_keeps_protected_names_and_last_n_logs(tmp_path: Path) -> Non
     assert logs[1] in found
     assert logs[2] not in found
     assert logs[3] not in found
+
+def test_artifact_gc_cli_tmp_logs_uses_os_tempdir(tmp_path: Path, monkeypatch) -> None:
+    import os
+    import tempfile
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+
+    monkeypatch.setattr(tempfile, "gettempdir", lambda: str(tmp_path))
+    expired = tmp_path / "agentic-project-kit-protected.diff"
+    expired.write_text("diff", encoding="utf-8")
+    now = 1_000_000.0
+    old_time = now - (2 * 24 * 60 * 60)
+    os.utime(expired, (old_time, old_time))
+    monkeypatch.setattr("agentic_project_kit.communication_artifact_gc.time.time", lambda: now)
+
+    result = CliRunner().invoke(app, ["artifact-gc", "--tmp-logs"])
+
+    assert result.exit_code == 0, result.output
+    assert "PENDING_EXPIRED_TMP_LOGS" in result.output
+    assert expired.as_posix() in result.output
+
+
+def test_communication_gc_legacy_main_tmp_logs_uses_os_tempdir(tmp_path: Path, monkeypatch, capsys) -> None:
+    import os
+    import tempfile
+    from agentic_project_kit import communication_artifact_gc
+
+    monkeypatch.setattr(tempfile, "gettempdir", lambda: str(tmp_path))
+    expired = tmp_path / "agentic-project-kit-protected.diff"
+    expired.write_text("diff", encoding="utf-8")
+    now = 1_000_000.0
+    old_time = now - (2 * 24 * 60 * 60)
+    os.utime(expired, (old_time, old_time))
+    monkeypatch.setattr(communication_artifact_gc.time, "time", lambda: now)
+
+    exit_code = communication_artifact_gc.main(["--tmp-logs"])
+
+    output = capsys.readouterr().out
+    assert exit_code == 0
+    assert "PENDING_EXPIRED_TMP_LOGS" in output
+    assert expired.as_posix() in output
+
 
 def test_artifact_gc_cli_transfer_runs_dry_run(tmp_path: Path, monkeypatch) -> None:
     import os

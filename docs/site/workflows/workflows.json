@@ -162,7 +162,7 @@
           "qualified_name": "agentic-kit transfer protected-diff-plan",
           "safety": "READ_ONLY",
           "surface": "diagnostic",
-          "when_to_use": "Write the current diff to /tmp and run the Python protected change planner on it."
+          "when_to_use": "Write the current diff to the OS temp directory and run the Python protected change planner on it."
         },
         {
           "dry_run_available": false,

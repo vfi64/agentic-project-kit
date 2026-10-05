@@ -45,7 +45,7 @@
       "params": [
         {
           "default": false,
-          "help": "Collect expired local tmp logs.",
+          "help": "Collect expired local temp logs and protected-diff artifacts.",
           "name": "tmp_logs",
           "opts": [
             "--tmp-logs"
@@ -54,7 +54,7 @@
         },
         {
           "default": false,
-          "help": "Use repository-local tmp/ instead of /tmp for --tmp-logs.",
+          "help": "Use repository-local tmp/ instead of the OS temp directory for --tmp-logs.",
           "name": "local_tmp",
           "opts": [
             "--local-tmp"
@@ -9286,7 +9286,7 @@
       "diagnostic_priority": "advanced_diagnostic",
       "dry_run_available": false,
       "group": "transfer",
-      "help": "Write the current diff to /tmp and run the Python protected change planner on it.",
+      "help": "Write the current diff to the OS temp directory and run the Python protected change planner on it.",
       "lifecycle_rank": null,
       "params": [
         {
@@ -9320,7 +9320,7 @@
       "qualified_name": "agentic-kit transfer protected-diff-plan",
       "safety": "READ_ONLY",
       "surface": "diagnostic",
-      "when_to_use": "Write the current diff to /tmp and run the Python protected change planner on it."
+      "when_to_use": "Write the current diff to the OS temp directory and run the Python protected change planner on it."
     },
     {
       "diagnostic_priority": "not_diagnostic",

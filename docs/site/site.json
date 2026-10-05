@@ -320,7 +320,7 @@
         "params": [
           {
             "default": false,
-            "help": "Collect expired local tmp logs.",
+            "help": "Collect expired local temp logs and protected-diff artifacts.",
             "name": "tmp_logs",
             "opts": [
               "--tmp-logs"
@@ -329,7 +329,7 @@
           },
           {
             "default": false,
-            "help": "Use repository-local tmp/ instead of /tmp for --tmp-logs.",
+            "help": "Use repository-local tmp/ instead of the OS temp directory for --tmp-logs.",
             "name": "local_tmp",
             "opts": [
               "--local-tmp"
@@ -9561,7 +9561,7 @@
         "diagnostic_priority": "advanced_diagnostic",
         "dry_run_available": false,
         "group": "transfer",
-        "help": "Write the current diff to /tmp and run the Python protected change planner on it.",
+        "help": "Write the current diff to the OS temp directory and run the Python protected change planner on it.",
         "lifecycle_rank": null,
         "params": [
           {
@@ -9595,7 +9595,7 @@
         "qualified_name": "agentic-kit transfer protected-diff-plan",
         "safety": "READ_ONLY",
         "surface": "diagnostic",
-        "when_to_use": "Write the current diff to /tmp and run the Python protected change planner on it."
+        "when_to_use": "Write the current diff to the OS temp directory and run the Python protected change planner on it."
       },
       {
         "diagnostic_priority": "not_diagnostic",
@@ -11818,13 +11818,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "5f78167f2644",
+    "manifest_sha": "73c86e724b4e",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.18",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.18",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "5f78167f2644",
+    "reproduced_manifest_sha": "73c86e724b4e",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 168,
@@ -12028,7 +12028,7 @@
             "qualified_name": "agentic-kit transfer protected-diff-plan",
             "safety": "READ_ONLY",
             "surface": "diagnostic",
-            "when_to_use": "Write the current diff to /tmp and run the Python protected change planner on it."
+            "when_to_use": "Write the current diff to the OS temp directory and run the Python protected change planner on it."
           },
           {
             "dry_run_available": false,

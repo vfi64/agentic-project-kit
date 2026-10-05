@@ -70,7 +70,7 @@
       "params": [
         {
           "default": false,
-          "help": "Collect expired local tmp logs.",
+          "help": "Collect expired local temp logs and protected-diff artifacts.",
           "is_flag": true,
           "metavar": null,
           "multiple": false,
@@ -84,7 +84,7 @@
         },
         {
           "default": false,
-          "help": "Use repository-local tmp/ instead of /tmp for --tmp-logs.",
+          "help": "Use repository-local tmp/ instead of the OS temp directory for --tmp-logs.",
           "is_flag": true,
           "metavar": null,
           "multiple": false,
@@ -15167,7 +15167,7 @@
     {
       "dry_run_available": false,
       "group": "transfer",
-      "help": "Write the current diff to /tmp and run the Python protected change planner on it.",
+      "help": "Write the current diff to the OS temp directory and run the Python protected change planner on it.",
       "name": "protected-diff-plan",
       "params": [
         {
@@ -15228,7 +15228,7 @@
         "read-only",
         "transfer"
       ],
-      "when_to_use": "Write the current diff to /tmp and run the Python protected change planner on it."
+      "when_to_use": "Write the current diff to the OS temp directory and run the Python protected change planner on it."
     },
     {
       "dry_run_available": false,
@@ -18871,7 +18871,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "5f78167f2644",
+    "manifest_sha": "73c86e724b4e",
     "schema_version": 1
   },
   "schema_version": 2,

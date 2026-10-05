@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 import subprocess
 import sys
+import tempfile
 import time
 from collections import defaultdict
 from dataclasses import dataclass
@@ -44,6 +45,7 @@ ALLOWED_EXACT_PATHS = (
     "docs/reports/command_runs/next-turn-latest.json",
 )
 DEFAULT_TMP_LOG_TTL_SECONDS = 24 * 60 * 60
+TMP_ARTIFACT_PATTERNS = ("agentic-project-kit-*.log", "agentic-project-kit-*.diff")
 DEFAULT_KEEP_LAST_SLICE_LOGS = 12
 
 TRANSFER_RUNS_KEEP_NAMES = frozenset(
@@ -187,25 +189,30 @@ def execute_gc(root: Path | str = ".") -> tuple[str, str]:
     return "PASS_COLLECTED", "\n".join(removed)
 
 
+def default_os_tmp_root() -> Path:
+    return Path(tempfile.gettempdir())
+
+
 def collect_expired_tmp_logs(
-    tmp_root: Path | str = "/tmp",
+    tmp_root: Path | str | None = None,
     now: float | None = None,
     ttl_seconds: int = DEFAULT_TMP_LOG_TTL_SECONDS,
     keep_last: int = DEFAULT_KEEP_LAST_SLICE_LOGS,
 ) -> list[Path]:
-    root = Path(tmp_root)
+    root = default_os_tmp_root() if tmp_root is None else Path(tmp_root)
     if not root.exists() or not root.is_dir():
         return []
     now_value = time.time() if now is None else now
-    expired_agentic_logs: list[Path] = []
-    for path in root.glob("agentic-project-kit-*.log"):
-        if path.is_symlink() or not path.is_file():
-            continue
-        if path.name in PROTECTED_LOCAL_NAMES:
-            continue
-        age_seconds = now_value - path.stat().st_mtime
-        if age_seconds >= ttl_seconds:
-            expired_agentic_logs.append(path)
+    expired_agentic_artifacts: list[Path] = []
+    for pattern in TMP_ARTIFACT_PATTERNS:
+        for path in root.glob(pattern):
+            if path.is_symlink() or not path.is_file():
+                continue
+            if path.name in PROTECTED_LOCAL_NAMES:
+                continue
+            age_seconds = now_value - path.stat().st_mtime
+            if age_seconds >= ttl_seconds:
+                expired_agentic_artifacts.append(path)
 
     expired_slice_logs: list[Path] = []
     for pattern in LOCAL_LOG_PATTERNS:
@@ -221,11 +228,11 @@ def collect_expired_tmp_logs(
     unique_slice_logs = sorted(set(expired_slice_logs), key=lambda item: item.stat().st_mtime, reverse=True)
     if keep_last > 0:
         unique_slice_logs = unique_slice_logs[keep_last:]
-    return sorted(set(expired_agentic_logs).union(unique_slice_logs))
+    return sorted(set(expired_agentic_artifacts).union(unique_slice_logs))
 
 
 def execute_tmp_log_gc(
-    tmp_root: Path | str = "/tmp",
+    tmp_root: Path | str | None = None,
     execute: bool = False,
     now: float | None = None,
     ttl_seconds: int = DEFAULT_TMP_LOG_TTL_SECONDS,
@@ -238,7 +245,7 @@ def execute_tmp_log_gc(
     if not execute:
         return "PENDING_EXPIRED_TMP_LOGS", message
     removed: list[str] = []
-    root = Path(tmp_root)
+    root = default_os_tmp_root() if tmp_root is None else Path(tmp_root)
     for path in candidates:
         if path.is_symlink():
             return "FAIL_SYMLINK_ARTIFACT", path.as_posix()
@@ -463,7 +470,7 @@ def main(argv: list[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
     execute = "--execute" in args
     if "--tmp-logs" in args:
-        tmp_root = "tmp" if "--local-tmp" in args else "/tmp"
+        tmp_root: Path | str | None = "tmp" if "--local-tmp" in args else None
         outcome, message = execute_tmp_log_gc(tmp_root, execute=execute)
         print(outcome)
         if message:

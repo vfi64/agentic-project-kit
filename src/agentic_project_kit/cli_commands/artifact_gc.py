@@ -9,6 +9,7 @@ import typer
 from agentic_project_kit.communication_artifact_gc import (
     DEFAULT_TMP_LOG_TTL_SECONDS,
     collect_candidates,
+    default_os_tmp_root,
     execute_gc,
     execute_report_retention_gc,
     execute_tmp_log_gc,
@@ -87,8 +88,8 @@ def _ttl_from_older_than(older_than: str, *, default_ttl_seconds: int) -> int:
 
 
 def artifact_gc_command(
-    tmp_logs: bool = typer.Option(False, "--tmp-logs", help="Collect expired local tmp logs."),
-    local_tmp: bool = typer.Option(False, "--local-tmp", help="Use repository-local tmp/ instead of /tmp for --tmp-logs."),
+    tmp_logs: bool = typer.Option(False, "--tmp-logs", help="Collect expired local temp logs and protected-diff artifacts."),
+    local_tmp: bool = typer.Option(False, "--local-tmp", help="Use repository-local tmp/ instead of the OS temp directory for --tmp-logs."),
     local_tmp_contents: bool = typer.Option(
         False,
         "--local-tmp-contents",
@@ -161,7 +162,7 @@ def artifact_gc_command(
         return
 
     if tmp_logs:
-        tmp_root = load_workspace(Path(".")).tmp() if local_tmp else Path("/tmp")
+        tmp_root = load_workspace(Path(".")).tmp() if local_tmp else default_os_tmp_root()
         outcome, message = execute_tmp_log_gc(tmp_root, execute=execute, ttl_seconds=effective_ttl_seconds)
         if json_output:
             _emit_json(
