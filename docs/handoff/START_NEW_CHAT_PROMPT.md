@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: e8ab7fa796fae23f6304daf40ea2a238c72706c2761d3efec04015781275fd78
 - docs/reference/agentic-kit-commands.json: 9843a0ce0694924b0cb64b6a9d30de7c0c61e69de20ed81708deb3b9f739eea2
-## Operational documentation refresh state after PR #2403
+## Operational documentation refresh state after PR #2405
 
-Current administrative handoff refresh state is `b8396354` (`Fix TMPDIR-aware Kit temp artifacts (#2403)`). Continue next only after this post-PR2403 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `1f0b069d` (`Add release run orchestrator (#2405)`). Continue next only after this post-PR2405 refresh is committed and merged; the next substantive slice must be created from fresh main.
