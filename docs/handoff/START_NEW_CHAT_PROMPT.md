@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 4691017c8dd6f4d52861d943e4564b2509c8faca506594bb9d2859a5b7267623
 - docs/reference/agentic-kit-commands.json: 5d1659581323e20450b4e9637a90403fecce35696dc517ef396e65088087b436
-## Operational documentation refresh state after PR #2397
+## Operational documentation refresh state after PR #2399
 
-Current administrative handoff refresh state is `eec04ddf` (`Fix work finish rule acknowledgement before the handoff commit (KIT-GF-046) (#2397)`). Continue next only after this post-PR2397 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `0bc43067` (`Prepare release 1.0.18 (#2399)`). Continue next only after this post-PR2399 refresh is committed and merged; the next substantive slice must be created from fresh main.
