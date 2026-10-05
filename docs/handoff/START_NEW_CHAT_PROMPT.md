@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 901741a13fd9c951027162c444ce9b6f474582873661b78e7a1bbe03c037ceee
 - docs/reference/agentic-kit-commands.json: 4501cad85c8828272d053558a065a8b695247d115f9de2ebb82095375207d7f0
-## Operational documentation refresh state after PR #2401
+## Operational documentation refresh state after PR #2403
 
-Current administrative handoff refresh state is `e6494ef1` (`Record verified DOI for release 1.0.18 (#2401)`). Continue next only after this post-PR2401 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `b8396354` (`Fix TMPDIR-aware Kit temp artifacts (#2403)`). Continue next only after this post-PR2403 refresh is committed and merged; the next substantive slice must be created from fresh main.

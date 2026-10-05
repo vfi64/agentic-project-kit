@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e6494ef1b676cc1d0c7a5859ff7ca42dd2b2bbfd
-  short: e6494ef1
-  subject: Record verified DOI for release 1.0.18 (#2401)
+  full: b8396354a17924f802ba4fdcbf6f3783f5448d06
+  short: b8396354
+  subject: Fix TMPDIR-aware Kit temp artifacts (#2403)
 last_substantive_work_state:
-  full: e6494ef1b676cc1d0c7a5859ff7ca42dd2b2bbfd
-  short: e6494ef1
-  subject: Record verified DOI for release 1.0.18 (#2401)
+  full: b8396354a17924f802ba4fdcbf6f3783f5448d06
+  short: b8396354
+  subject: Fix TMPDIR-aware Kit temp artifacts (#2403)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `e6494ef1b676cc1d0c7a5859ff7ca42dd2b2bbfd` (`e6494ef1`), after `Record verified DOI for release 1.0.18 (#2401)`.
-Last substantive work state is `e6494ef1b676cc1d0c7a5859ff7ca42dd2b2bbfd` (`e6494ef1`), after `Record verified DOI for release 1.0.18 (#2401)`.
+Current verified main/admin HEAD is `b8396354a17924f802ba4fdcbf6f3783f5448d06` (`b8396354`), after `Fix TMPDIR-aware Kit temp artifacts (#2403)`.
+Last substantive work state is `b8396354a17924f802ba4fdcbf6f3783f5448d06` (`b8396354`), after `Fix TMPDIR-aware Kit temp artifacts (#2403)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
