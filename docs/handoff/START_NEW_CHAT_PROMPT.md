@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: da971b2b9ce72fdebf447e191b1d4f539433038a242f4a55f63fa5974cdf9900
 - docs/reference/agentic-kit-commands.json: 7bdb5a0bece11075f5f62ef23754cb20a20e196d886e846edab43ff4a62fc250
-## Operational documentation refresh state after PR #2393
+## Operational documentation refresh state after PR #2395
 
-Current administrative handoff refresh state is `9e2079b1` (`Record verified DOI for release 1.0.17 (#2393)`). Continue next only after this post-PR2393 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `a0eb51c0` (`Fix ci-update overwriting customized CI templates (KIT-GF-042) (#2395)`). Continue next only after this post-PR2395 refresh is committed and merged; the next substantive slice must be created from fresh main.

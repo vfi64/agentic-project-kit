@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9e2079b174ddd817bae3ab45bb5f7c03c3786f17
-  short: 9e2079b1
-  subject: Record verified DOI for release 1.0.17 (#2393)
+  full: a0eb51c0dfa9736c9b645a66444be965f50f3013
+  short: a0eb51c0
+  subject: Fix ci-update overwriting customized CI templates (KIT-GF-042) (#2395)
 last_substantive_work_state:
-  full: 9e2079b174ddd817bae3ab45bb5f7c03c3786f17
-  short: 9e2079b1
-  subject: Record verified DOI for release 1.0.17 (#2393)
+  full: a0eb51c0dfa9736c9b645a66444be965f50f3013
+  short: a0eb51c0
+  subject: Fix ci-update overwriting customized CI templates (KIT-GF-042) (#2395)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
