@@ -37,6 +37,7 @@ RAW_REPLACEMENTS: dict[str, tuple[str, ...]] = {
     ),
     "agentic-kit transfer delete-merged-work-branch": ("git push --delete", "git branch -D"),
     "agentic-kit release ready": ("git tag", "gh release create"),
+    "agentic-kit release run": ("release lifecycle", "publish release", "package index publish"),
     "agentic-kit work finish": (
         "close completed slice",
         "closeout completed slice",
@@ -71,6 +72,7 @@ LIFECYCLE_RANKS: dict[str, int] = {
     "agentic-kit transfer admin-refresh-pr": 63,
     "agentic-kit release ready": 70,
     "agentic-kit release prepare": 71,
+    "agentic-kit release run": 71,
     "agentic-kit release-prep": 72,
     "agentic-kit release-publish": 73,
     "agentic-kit post-release-doi-closeout": 74,
@@ -309,6 +311,7 @@ def infer_surface(command: dict[str, Any]) -> str:
         "agentic-kit post-release-doi-closeout",
         "agentic-kit release prepare",
         "agentic-kit release ready",
+        "agentic-kit release run",
         "agentic-kit release-prep",
         "agentic-kit release-publish",
         "agentic-kit transfer admin-refresh-pr",
@@ -402,6 +405,8 @@ def _dry_run_available(command: dict[str, Any]) -> bool:
 
 def infer_remote_effects(command: dict[str, Any]) -> list[str]:
     qualified = str(command.get("qualified_name") or "")
+    if qualified == "agentic-kit release run":
+        return ["merge", "pull_request", "push", "release_publish"]
     effects: set[str] = set()
 
     if any(term in qualified for term in ("fetch", "sync-main", "remote-work-start", "remote-next")):

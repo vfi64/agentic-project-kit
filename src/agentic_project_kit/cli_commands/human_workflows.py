@@ -13,6 +13,7 @@ from agentic_project_kit.cli_executable import default_agentic_kit, default_pyth
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_release_blockers
 from agentic_project_kit.release_metadata_authority_gate import release_anchor_changes
 from agentic_project_kit.release_prepare import refresh_dpa_readiness_command_manifest_ack
+from agentic_project_kit.release_run import ReleaseRunOptions, run_release
 from agentic_project_kit.work_discard_changes import discard_all_changes
 from agentic_project_kit.work_rescue import rescue_main_work
 from agentic_project_kit.workspace import load_workspace
@@ -1046,3 +1047,27 @@ def release_prepare_command(
     )
     _emit(payload, json_output=json_output)
     _exit_if_blocked(payload)
+
+
+@release_flow_app.command("run")
+def release_run_command(
+    version: str = typer.Option(..., "--version", help="Target release version."),
+    summary_lines: list[str] | None = typer.Option(None, "--summary-line", help="Release changelog summary line. Repeatable."),
+    execute: bool = typer.Option(False, "--execute", help="Execute the next approved release-run gate."),
+    expected_signature: str = typer.Option("", "--expected-signature", help="Approval signature for the next release-run gate."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    """Run the governed end-to-end release orchestrator with resumable approval gates."""
+    payload = run_release(
+        ReleaseRunOptions(
+            version=version,
+            summary_lines=tuple(summary_lines or ()),
+            execute=execute,
+            expected_signature=expected_signature,
+            json_output=json_output,
+            root=Path("."),
+        )
+    )
+    _emit(payload, json_output=json_output)
+    if payload["result_status"] == "BLOCKED":
+        raise typer.Exit(code=2)

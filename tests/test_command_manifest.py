@@ -107,6 +107,7 @@ def test_current_reference_classifies_every_command_remote_effect() -> None:
     by_name = {command["qualified_name"]: command for command in data["commands"]}
 
     assert by_name["agentic-kit work rescue"]["remote_effects"] == ["none"]
+    assert by_name["agentic-kit release run"]["remote_effects"] == ["merge", "pull_request", "push", "release_publish"]
     assert "push" in by_name["agentic-kit transfer push-current"]["remote_effects"]
     assert "pull_request" in by_name["agentic-kit transfer pr-create-complete"]["remote_effects"]
     assert "merge" in by_name["agentic-kit transfer pr-merge-safe"]["remote_effects"]
@@ -126,6 +127,7 @@ def test_current_reference_classifies_every_command_surface() -> None:
 
     assert surfaces
     assert all(surface in SURFACE_VALUES for surface in surfaces.values())
+    assert surfaces["agentic-kit release run"] == "orchestrator"
     assert surfaces["agentic-kit transfer pr-create-complete"] == "orchestrator"
     assert surfaces["agentic-kit audit-command-manifest"] == "diagnostic"
     assert surfaces["agentic-kit transfer commit"] == "primitive"

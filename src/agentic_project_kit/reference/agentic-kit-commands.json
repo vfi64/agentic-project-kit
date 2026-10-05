@@ -8834,6 +8834,108 @@
       "when_to_use": "Run release readiness through the standard-error scan wrapper."
     },
     {
+      "dry_run_available": true,
+      "group": "release",
+      "help": "Run the governed end-to-end release orchestrator with resumable approval gates.",
+      "lifecycle_rank": 71,
+      "name": "run",
+      "params": [
+        {
+          "default": null,
+          "help": "Target release version.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Release changelog summary line. Repeatable.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "summary_lines",
+          "opts": [
+            "--summary-line"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Execute the next approved release-run gate.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Approval signature for the next release-run gate.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "release",
+        "run"
+      ],
+      "qualified_name": "agentic-kit release run",
+      "remote_effects": [
+        "merge",
+        "pull_request",
+        "push",
+        "release_publish"
+      ],
+      "replaces_raw": [
+        "release lifecycle",
+        "publish release",
+        "package index publish"
+      ],
+      "safety": "BOUNDED",
+      "surface": "orchestrator",
+      "task_tags": [
+        "bounded",
+        "release"
+      ],
+      "when_to_use": "Run the governed end-to-end release orchestrator with resumable approval gates."
+    },
+    {
       "dry_run_available": false,
       "group": "root",
       "help": "Validate release state for a target version.",
@@ -18871,7 +18973,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "73c86e724b4e",
+    "manifest_sha": "799be87e8212",
     "schema_version": 1
   },
   "schema_version": 2,

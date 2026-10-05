@@ -7,6 +7,7 @@ The meta commands are intentionally conservative:
 - work finish executes the full four-part slice closeout by default after `--execute`: work commit, handoff commit, PR/CI/merge, and post-merge handoff refresh PR.
 - review-only PR publishing is an explicit opt-out with `--no-merge`.
 - release prepare is dry-run by default.
+- release run is resumable and stops at signed gates before irreversible release effects.
 - release version values are supplied by the caller.
 - previous release tags are derived from the latest local v* git tag unless explicitly supplied.
 - low-level transfer commands remain available for diagnosis and recovery.
@@ -104,6 +105,36 @@ report records them as `explicit_summary_lines` (KIT-GF-045).
 
 Use --write only when readiness checks are clean. A successful write also refreshes command entrypoints and writes
 `docs/reports/release/release-prepare-<version>.json` as release-metadata authority evidence for PR and CI gates.
+
+## agentic-kit release run
+
+Run the end-to-end release lifecycle through existing orchestrators. It composes
+`transfer sync-main`, `release ready`, `release prepare`, `work start`,
+`work finish`, `release-publish`, the configured package-index workflow,
+`post-release-check`, `post-release-doi-closeout`, and final `release-status`.
+
+Typical use:
+
+    agentic-kit release run --version <version> --json
+    agentic-kit release run --version <version> --execute --expected-signature <signature> --json
+
+The command records state and subprocess logs under the workspace temp root, for
+example `.agentic/tmp/release-run-<version>.json` and `.agentic/tmp/release-run-<version>.log`.
+Reruns resume at the first unfinished step.
+
+The command stops with `AWAITING_APPROVAL` at these gates:
+
+- B4: execute `work finish` for the release metadata branch.
+- C2: execute signed `release-publish`.
+- C3: dispatch and watch the configured package-index workflow.
+- D4: execute `work finish` for the DOI closeout branch.
+
+Each gate prints an `approval_signature` over the exact branch, paths, tag,
+target commit, or workflow it will affect. A rerun with `--execute
+--expected-signature <signature>` executes only that gate, then continues until
+the next gate or blocker. A stale signature blocks without running the gated
+remote effect. If the workspace publication policy is `none`, package-index
+publication, Zenodo wait, and DOI closeout are skipped.
 
 ## Preference and fallback rule
 
