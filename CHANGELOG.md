@@ -1,3 +1,11 @@
+## v1.0.18 - 2026-10-05
+
+- Zenodo DOI verification pending for v1.0.18.
+- Scope: fixes the agp-Cockpit greenfield findings KIT-GF-042 and KIT-GF-046
+- Record verified DOI for release 1.0.17
+- Fix ci-update overwriting customized CI templates (KIT-GF-042)
+- Fix work finish rule acknowledgement before the handoff commit (KIT-GF-046)
+
 ## v1.0.17 - 2026-10-05
 
 - Scope: fixes the agp-Cockpit greenfield findings KIT-GF-030, KIT-GF-031 and KIT-GF-039 to KIT-GF-045
