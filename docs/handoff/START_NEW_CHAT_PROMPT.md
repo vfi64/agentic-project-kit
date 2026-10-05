@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 8d09d1d22d1e9277020e1e60903a626ed433b66f027b31a3600f4af2c35c4cb3
 - docs/reference/agentic-kit-commands.json: 38ba36763251d73564af60dcd09a841b2248454ad184cd79758c863824860ddc
-## Operational documentation refresh state after PR #2385
+## Operational documentation refresh state after PR #2387
 
-Current administrative handoff refresh state is `3ac0fd08` (`Harden PR lifecycle completion (#2385)`). Continue next only after this post-PR2385 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `7e783920` (`Fix release publish tags and lifecycle headers (#2387)`). Continue next only after this post-PR2387 refresh is committed and merged; the next substantive slice must be created from fresh main.
