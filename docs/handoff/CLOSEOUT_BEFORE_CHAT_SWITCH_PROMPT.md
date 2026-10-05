@@ -49,5 +49,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: fc7fe5fc2227fb9be9e837baacf1317909e51e1fda4faf1c7e95225fd0cfbcb1
-- docs/reference/agentic-kit-commands.json: a0558d8137cda2c342481ca2e034959157d6ca645abf78835ea8ee7c5b612c4a
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 8d09d1d22d1e9277020e1e60903a626ed433b66f027b31a3600f4af2c35c4cb3
+- docs/reference/agentic-kit-commands.json: 38ba36763251d73564af60dcd09a841b2248454ad184cd79758c863824860ddc

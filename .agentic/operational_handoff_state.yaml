@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 53c2d19ffcad11e1742d02ef88e3dc9ccc52d822
-  short: 53c2d19f
-  subject: Let communication refresh travel with work branch (#2383)
+  full: 3ac0fd085a6a5dfdf8e214ad8b4b7353e8199dea
+  short: 3ac0fd08
+  subject: Harden PR lifecycle completion (#2385)
 last_substantive_work_state:
-  full: 53c2d19ffcad11e1742d02ef88e3dc9ccc52d822
-  short: 53c2d19f
-  subject: Let communication refresh travel with work branch (#2383)
+  full: 3ac0fd085a6a5dfdf8e214ad8b4b7353e8199dea
+  short: 3ac0fd08
+  subject: Harden PR lifecycle completion (#2385)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
