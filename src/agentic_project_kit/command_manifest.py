@@ -364,6 +364,7 @@ def infer_surface(command: dict[str, Any]) -> str:
         "agentic-kit check",
         "agentic-kit check-docs",
         "agentic-kit check-todo",
+        "agentic-kit ci status",
         "agentic-kit command-for",
     }
     if qualified in primitive_exact:
@@ -411,7 +412,7 @@ def infer_remote_effects(command: dict[str, Any]) -> list[str]:
 
     if any(term in qualified for term in ("fetch", "sync-main", "remote-work-start", "remote-next")):
         effects.add("fetch")
-    if any(term in qualified for term in ("pr-wait-ci", "pr-existing", "post-merge-check", "ls-remote")):
+    if any(term in qualified for term in ("ci status", "pr-wait-ci", "pr-existing", "post-merge-check", "ls-remote")):
         effects.add("network_read")
     if any(term in qualified for term in ("push-current", "pr-create", "pr-complete", "work finish")):
         effects.add("push")

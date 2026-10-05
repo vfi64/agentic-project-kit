@@ -3,6 +3,27 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: ci-status-command-coverage
+  description: Branch and commit CI status must remain available through a read-only Kit command without requiring a pull request.
+  documents:
+  - path: README.md
+    terms:
+    - agentic-kit ci status --commit SHA --branch BRANCH --json
+    - read-only CI verdict command
+    - PASS
+    - PENDING
+    - BLOCKED
+  - path: docs/TEST_GATES.md
+    terms:
+    - agentic-kit ci status --commit SHA --branch BRANCH --json
+    - read-only post-merge and branch CI status command
+    - without requiring a pull request
+    - structured `BLOCKED` findings
+  - path: docs/reference/HUMAN_WORKFLOW_COMMANDS.md
+    terms:
+    - agentic-kit ci status
+    - without a pull request
+    - structured `PASS`, `PENDING`, or `BLOCKED` JSON
 - id: release-run-orchestrator-coverage
   description: End-to-end release orchestration must remain visible as a resumable wrapper over existing release commands with signed gates and publication-policy branching.
   documents:

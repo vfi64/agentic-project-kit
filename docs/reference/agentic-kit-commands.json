@@ -1328,6 +1328,86 @@
     },
     {
       "dry_run_available": false,
+      "group": "ci",
+      "help": "Report the CI verdict for a commit or branch without requiring a pull request.",
+      "name": "status",
+      "params": [
+        {
+          "default": "",
+          "help": "Commit SHA to inspect.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "commit",
+          "opts": [
+            "--commit"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Branch name to inspect.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "--branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 20,
+          "help": "Maximum workflow runs to read.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "limit",
+          "opts": [
+            "--limit"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print JSON instead of the text report.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "ci",
+        "status"
+      ],
+      "qualified_name": "agentic-kit ci status",
+      "remote_effects": [
+        "network_read"
+      ],
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "surface": "diagnostic",
+      "task_tags": [
+        "ci",
+        "read-only"
+      ],
+      "when_to_use": "Report the CI verdict for a commit or branch without requiring a pull request."
+    },
+    {
+      "dry_run_available": false,
       "group": "cockpit",
       "help": "",
       "name": "actions",
@@ -18973,7 +19053,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "799be87e8212",
+    "manifest_sha": "cfea9fe4a7b5",
     "schema_version": 1
   },
   "schema_version": 2,
