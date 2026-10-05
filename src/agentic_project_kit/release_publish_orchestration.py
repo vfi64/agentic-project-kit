@@ -7,10 +7,14 @@ import json
 from pathlib import Path
 import re
 import subprocess
+from string import Formatter
+
+import yaml
 
 from agentic_project_kit import __version__ as PACKAGE_VERSION
 from agentic_project_kit.cli_executable import default_agentic_kit
 from agentic_project_kit.publication_policy import publication_policy_for
+from agentic_project_kit.release_version_sources import WORKSPACE_MANIFEST
 from agentic_project_kit.release import CommandResult
 from agentic_project_kit.release_state import build_release_lifecycle_status
 
@@ -77,6 +81,114 @@ class ReleasePublishPlan:
             "approval_signature": self.approval_signature,
             "approval_subject": self.approval_subject,
         }
+
+
+
+def _annotated_tag_command(tag: str) -> tuple[str, ...]:
+    return ("git", "tag", "-a", tag, "-m", f"Release {tag}")
+
+
+def _release_manifest(root: Path) -> dict[str, object]:
+    path = root / WORKSPACE_MANIFEST
+    if not path.exists():
+        return {}
+    try:
+        loaded = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except (OSError, yaml.YAMLError) as exc:
+        raise RuntimeError(f"{WORKSPACE_MANIFEST}: cannot read release configuration: {exc}") from exc
+    if not isinstance(loaded, dict):
+        return {}
+    release = loaded.get("release") or {}
+    if not isinstance(release, dict):
+        raise RuntimeError(f"{WORKSPACE_MANIFEST}:release: expected mapping")
+    return release
+
+
+def _github_release_title_template(root: Path) -> str:
+    release = _release_manifest(root)
+    if "github_release_title_template" not in release:
+        return ""
+    value = release["github_release_title_template"]
+    if not isinstance(value, str) or not value.strip():
+        raise RuntimeError(
+            f"{WORKSPACE_MANIFEST}:release.github_release_title_template: expected non-empty string"
+        )
+    return value.strip()
+
+
+def _render_github_release_title(template: str, *, version: str, tag: str) -> str:
+    if not template:
+        return tag
+    values = {"version": version, "tag": tag}
+    parts: list[str] = []
+    try:
+        parsed = Formatter().parse(template)
+        for literal_text, field_name, format_spec, conversion in parsed:
+            parts.append(literal_text)
+            if field_name is None:
+                continue
+            if field_name not in values or format_spec or conversion:
+                allowed = ", ".join(sorted(values))
+                raise RuntimeError(
+                    f"{WORKSPACE_MANIFEST}:release.github_release_title_template: "
+                    f"unsupported placeholder {field_name!r}; expected one of {allowed}"
+                )
+            parts.append(values[field_name])
+    except ValueError as exc:
+        raise RuntimeError(
+            f"{WORKSPACE_MANIFEST}:release.github_release_title_template: invalid format string: {exc}"
+        ) from exc
+    title = "".join(parts).strip()
+    if not title:
+        raise RuntimeError(
+            f"{WORKSPACE_MANIFEST}:release.github_release_title_template: rendered empty title"
+        )
+    return title
+
+
+def _github_release_title(root: Path, *, version: str, tag: str) -> str:
+    return _render_github_release_title(
+        _github_release_title_template(root),
+        version=version,
+        tag=tag,
+    )
+
+
+def _local_tag_object_ref(tag: str) -> str:
+    return f"refs/tags/{tag}"
+
+
+def _append_annotated_local_tag_check(
+    *,
+    checks: list[ReleasePublishCheck],
+    tag: str,
+    root: Path,
+    runner: Runner,
+    check_name: str,
+) -> bool:
+    rc, output = runner(("git", "cat-file", "-t", _local_tag_object_ref(tag)), root)
+    if rc != 0:
+        checks.append(
+            ReleasePublishCheck(
+                name=check_name,
+                status="FAIL",
+                detail="could not inspect local tag object type: " + _last_line(output),
+                returncode=rc,
+            )
+        )
+        return False
+    object_type = output.strip()
+    if object_type != "tag":
+        checks.append(
+            ReleasePublishCheck(
+                name=check_name,
+                status="FAIL",
+                detail=f"local tag object type is {object_type or 'unknown'}; annotated tag is required",
+                returncode=1,
+            )
+        )
+        return False
+    return True
 
 
 def _default_agentic_kit(root: Path) -> str:
@@ -339,6 +451,25 @@ def _remote_tag_target(
     return ref_rc, ref_output
 
 
+
+
+def _remote_tag_annotation_check(
+    *,
+    tag_ref: str,
+    root: Path,
+    runner: Runner,
+    check_name: str,
+) -> ReleasePublishCheck | None:
+    rc, output = runner(("git", "ls-remote", "--exit-code", "origin", f"{tag_ref}^{{}}"), root)
+    if rc == 0:
+        return None
+    return ReleasePublishCheck(
+        name=check_name,
+        status="FAIL",
+        detail="remote tag is not an annotated tag or cannot be peeled: " + _last_line(output),
+        returncode=1,
+    )
+
 def _current_head(root: Path, runner: Runner) -> str:
     rc, output = runner(("git", "rev-parse", "HEAD"), root)
     if rc != 0:
@@ -378,6 +509,7 @@ def _append_live_release_publish_checks(
     tag: str,
     root: Path,
     runner: Runner,
+    release_title: str,
 ) -> None:
     tag_ref = f"refs/tags/{tag}"
 
@@ -406,22 +538,39 @@ def _append_live_release_publish_checks(
                 )
             )
             return
+        if not _append_annotated_local_tag_check(
+            checks=checks,
+            tag=tag,
+            root=root,
+            runner=runner,
+            check_name=f"execute annotated git tag {tag}",
+        ):
+            return
         checks.append(
             ReleasePublishCheck(
-                name=f"execute git tag {tag}",
+                name=f"execute annotated git tag {tag}",
                 status="PASS",
-                detail="local tag already exists at current HEAD",
+                detail="local annotated tag already exists at current HEAD",
                 returncode=0,
             )
         )
     else:
-        rc, output = runner(("git", "tag", tag), root)
-        checks.append(_check_from_run(f"execute git tag {tag}", rc, output))
+        rc, output = runner(_annotated_tag_command(tag), root)
+        checks.append(_check_from_run(f"execute annotated git tag {tag}", rc, output))
         if rc != 0:
             return
 
     remote_exists_rc, remote_target_or_output = _remote_tag_target(tag_ref=tag_ref, root=root, runner=runner)
     if remote_exists_rc == 0:
+        annotation_failure = _remote_tag_annotation_check(
+            tag_ref=tag_ref,
+            root=root,
+            runner=runner,
+            check_name=f"execute remote annotated tag {tag}",
+        )
+        if annotation_failure is not None:
+            checks.append(annotation_failure)
+            return
         remote_target = remote_target_or_output
         if remote_target != head:
             checks.append(
@@ -462,7 +611,7 @@ def _append_live_release_publish_checks(
         )
     else:
         notes = _github_release_notes(root, version)
-        create_command = ("gh", "release", "create", tag, "--title", tag, "--notes", notes)
+        create_command = ("gh", "release", "create", tag, "--title", release_title, "--notes", notes)
         create_rc, create_output = runner(create_command, root)
         checks.append(_check_from_run(f"execute gh release create {tag}", create_rc, create_output))
         if create_rc != 0:
@@ -509,22 +658,39 @@ def _append_private_tag_publish_checks(
                 )
             )
             return
+        if not _append_annotated_local_tag_check(
+            checks=checks,
+            tag=tag,
+            root=root,
+            runner=runner,
+            check_name=f"execute annotated private tag {tag}",
+        ):
+            return
         checks.append(
             ReleasePublishCheck(
                 name=f"execute annotated private tag {tag}",
                 status="PASS",
-                detail="local tag already exists at current HEAD",
+                detail="local annotated tag already exists at current HEAD",
                 returncode=0,
             )
         )
     else:
-        rc, output = runner(("git", "tag", "-a", tag, "-m", f"Release {tag}"), root)
+        rc, output = runner(_annotated_tag_command(tag), root)
         checks.append(_check_from_run(f"execute annotated private tag {tag}", rc, output))
         if rc != 0:
             return
 
     remote_exists_rc, remote_target_or_output = _remote_tag_target(tag_ref=tag_ref, root=root, runner=runner)
     if remote_exists_rc == 0:
+        annotation_failure = _remote_tag_annotation_check(
+            tag_ref=tag_ref,
+            root=root,
+            runner=runner,
+            check_name=f"execute remote annotated tag {tag}",
+        )
+        if annotation_failure is not None:
+            checks.append(annotation_failure)
+            return
         remote_target = remote_target_or_output
         if remote_target != head:
             checks.append(
@@ -567,6 +733,7 @@ def evaluate_release_publish_plan(
     checks: list[ReleasePublishCheck] = []
     policy = publication_policy_for(root)
     private_publication = policy.value == "none"
+    release_title = tag
 
     release_already_current_verified = _release_already_current_verified(version=version, root=root, runner=run)
 
@@ -638,6 +805,26 @@ def evaluate_release_publish_plan(
                 runner=run,
             )
         )
+        try:
+            release_title = _github_release_title(root, version=version, tag=tag)
+        except RuntimeError as exc:
+            checks.append(
+                ReleasePublishCheck(
+                    name="GitHub release title configuration",
+                    status="FAIL",
+                    detail=str(exc),
+                    returncode=1,
+                )
+            )
+        else:
+            checks.append(
+                ReleasePublishCheck(
+                    name="GitHub release title configuration",
+                    status="PASS",
+                    detail=f"GitHub release title: {release_title}",
+                    returncode=0,
+                )
+            )
     if execute:
         checks.append(
             _release_commit_integrity_check(
@@ -657,7 +844,7 @@ def evaluate_release_publish_plan(
         planned_actions.append(f"plan git push origin {tag}")
         planned_actions.append("skip GitHub Release, PyPI, and Zenodo publication because publication is none")
     else:
-        planned_actions.extend([f"plan GitHub release {tag}", "plan post-release-check after live publish"])
+        planned_actions.extend([f"plan GitHub release {tag} titled {release_title}", "plan post-release-check after live publish"])
 
     target_commit = _current_head(root, run)
     subject = _approval_subject(
@@ -709,7 +896,7 @@ def evaluate_release_publish_plan(
         else:
             planned_actions.extend(
                 [
-                    f"execute git tag {tag}",
+                    f"execute annotated git tag {tag}",
                     f"execute git push origin {tag}",
                     f"execute GitHub release create/view for {tag}",
                     f"execute post-release-check --version {version}",
@@ -722,6 +909,7 @@ def evaluate_release_publish_plan(
                 tag=tag,
                 root=root,
                 runner=run,
+                release_title=release_title,
             )
     else:
         planned_actions.append("perform no tag, release, DOI, or metadata write in dry-run/fail-closed mode")

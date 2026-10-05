@@ -447,7 +447,7 @@ def _audit_document(
         )
     if decision_status is None:
         findings.append(DocLifecycleFinding("missing-decision-status", path_text, "document is missing a Decision status header"))
-    if status in {"idea-note", "active"} and "Review policy:" not in text:
+    if status in {"idea-note", "active"} and _first_header_value(text, "Review policy") is None:
         findings.append(DocLifecycleFinding("missing-review-policy", path_text, "active and idea documents need a Review policy"))
     if status in {"implemented", "superseded", "archived", "rejected"} and "Lifecycle note:" not in text:
         findings.append(DocLifecycleFinding("missing-lifecycle-note", path_text, "closed lifecycle documents need a Lifecycle note"))
@@ -548,9 +548,25 @@ def _workspace_lifecycle_hygiene(project_root: Path) -> tuple[str, Mapping[str, 
     return workspace.hygiene_doc_lifecycle, workspace.hygiene_review_budgets
 
 
+def _lifecycle_header_block(text: str) -> tuple[str, ...]:
+    """Return the document metadata block before the first content section.
+
+    Lifecycle metadata may follow the top-level title, but it must stay before
+    the first ``##`` section. Lines later in the document are ordinary content
+    and must not satisfy Status, Decision status, or Review policy checks.
+    """
+
+    lines: list[str] = []
+    for line in text.splitlines():
+        if line.startswith("## "):
+            break
+        lines.append(line)
+    return tuple(lines)
+
+
 def _first_header_value(text: str, key: str) -> str | None:
     prefix = f"{key}:"
-    for line in text.splitlines():
+    for line in _lifecycle_header_block(text):
         if line.startswith(prefix):
             value = line[len(prefix):].strip()
             return value or None
