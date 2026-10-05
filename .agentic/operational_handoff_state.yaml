@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7e783920e967671a04ec1b3b8dfc81e7ae537460
-  short: 7e783920
-  subject: Fix release publish tags and lifecycle headers (#2387)
+  full: e3d7927a5a8a980ef8cc415f0b29b463ebd05502
+  short: e3d7927a
+  subject: Let release orchestrators pass explicit changelog summary lines (KIT-GF-045) (#2389)
 last_substantive_work_state:
-  full: 7e783920e967671a04ec1b3b8dfc81e7ae537460
-  short: 7e783920
-  subject: Fix release publish tags and lifecycle headers (#2387)
+  full: e3d7927a5a8a980ef8cc415f0b29b463ebd05502
+  short: e3d7927a
+  subject: Let release orchestrators pass explicit changelog summary lines (KIT-GF-045) (#2389)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
