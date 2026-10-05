@@ -86,6 +86,10 @@ Typical use:
 
 If --from-tag is omitted, the command derives it from the latest local v* git tag.
 
+Repeat `--summary-line "<text>"` to add an explicit changelog summary line to the
+generated release-notes lines; it reaches the release-prep dry-run of the scan
+(KIT-GF-045).
+
 ## agentic-kit release prepare
 
 Generate release-notes summary evidence and run release-prep. It is dry-run by default.
@@ -93,6 +97,10 @@ Generate release-notes summary evidence and run release-prep. It is dry-run by d
 Typical use:
 
     agentic-kit release prepare --version <version> --from-tag <from-tag> --date <date> --dry-run --json
+
+Repeat `--summary-line "<text>"` with the same lines as in `release ready` when the
+generated lines alone do not cover the changelog quality categories; the evidence
+report records them as `explicit_summary_lines` (KIT-GF-045).
 
 Use --write only when readiness checks are clean. A successful write also refreshes command entrypoints and writes
 `docs/reports/release/release-prepare-<version>.json` as release-metadata authority evidence for PR and CI gates.

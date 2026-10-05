@@ -458,6 +458,15 @@ def _compact_step_for_report(step: dict[str, object]) -> dict[str, object]:
     }
 
 
+def _summary_line_args(summary_lines: list[str] | None) -> list[str]:
+    """KIT-GF-045: pass explicit changelog summary lines through to release-prep."""
+    args: list[str] = []
+    for line in summary_lines or []:
+        if line.strip():
+            args.extend(["--summary-line", line.strip()])
+    return args
+
+
 def _write_release_prepare_report_step(
     *,
     version: str,
@@ -467,6 +476,7 @@ def _write_release_prepare_report_step(
     summary_lines_path: Path,
     prior_steps: list[dict[str, object]],
     base_ref: str = "origin/main",
+    explicit_summary_lines: list[str] | None = None,
 ) -> dict[str, object]:
     workspace = load_workspace(Path("."), suppress_legacy_profile_warning=True)
     report_path = workspace.reports_dir() / "release" / f"release-prepare-{version}.json"
@@ -481,6 +491,7 @@ def _write_release_prepare_report_step(
             "to_ref": to_ref,
             "base_ref": base_ref,
             "summary_lines_path": str(summary_lines_path),
+            "explicit_summary_lines": list(explicit_summary_lines or []),
             "authorized_route": "agentic-kit release-prep",
             "changed_paths_against_base": changed_paths,
             "release_metadata_anchor_paths": release_anchor_changes(changed_paths),
@@ -915,9 +926,11 @@ def release_ready_command(
     from_tag: str = typer.Option("", "--from-tag", help="Previous release tag. Defaults to latest local v* git tag."),
     to_ref: str = typer.Option("main", "--to-ref", help="Target ref."),
     date: str = typer.Option("", "--date", help="Release date. Defaults to today."),
+    summary_lines: list[str] | None = typer.Option(None, "--summary-line", help="Additional release changelog summary line, combined with the generated release-notes lines (KIT-GF-045). Repeatable."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     """Run release readiness through the standard-error scan wrapper."""
+    summary_line_args = _summary_line_args(summary_lines)
     release_date = date or date_cls.today().isoformat()
     effective_from_tag = from_tag or _latest_release_tag()
     summary_lines_path = load_workspace(Path(".")).tmp_file(f"release-{version.replace('.', '')}-ready-summary-lines.json")
@@ -927,11 +940,11 @@ def release_ready_command(
         # carriers, which live in excluded runtime paths of an external workspace;
         # regenerate them before the scan checks them.
         steps.append(_run_step("refresh-llm-context-carriers", _agentic("transfer", "refresh-llm-context-carriers", "--json")))
-    steps.append(_run_step("standard-error-scan", _agentic("transfer", "standard-error-scan", "--before-release", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--date", release_date, "--json"), allowed_returncodes={0}))
+    steps.append(_run_step("standard-error-scan", _agentic("transfer", "standard-error-scan", "--before-release", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--date", release_date, *summary_line_args, "--json"), allowed_returncodes={0}))
     if all(step["ok"] for step in steps):
         steps.append(_run_step("release-notes-generate", _agentic("release-notes-generate", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--include-github-metadata", "--summary-lines-json", str(summary_lines_path), "--json")))
     if all(step["ok"] for step in steps):
-        steps.append(_run_step("release-prep-dry-run", _agentic("release-prep", "--version", version, "--date", release_date, "--summary-lines-from", str(summary_lines_path), "--dry-run", "--json")))
+        steps.append(_run_step("release-prep-dry-run", _agentic("release-prep", "--version", version, "--date", release_date, *summary_line_args, "--summary-lines-from", str(summary_lines_path), "--dry-run", "--json")))
     steps += [
         _doc_lifecycle_release_review_step(version),
         _run_step("release-status", _agentic("release-status", "--include-remote", "--json"), allowed_returncodes={0, 2}),
@@ -945,6 +958,7 @@ def release_ready_command(
             "to_ref": to_ref,
             "date": release_date,
             "summary_lines_path": str(summary_lines_path),
+            "explicit_summary_lines": list(summary_lines or []),
         },
     )
     _emit(payload, json_output=json_output)
@@ -958,9 +972,11 @@ def release_prepare_command(
     to_ref: str = typer.Option("main", "--to-ref", help="Target ref."),
     date: str = typer.Option("", "--date", help="Release date. Defaults to today."),
     dry_run: bool = typer.Option(True, "--dry-run/--write", help="Dry-run by default. Use --write to update release metadata."),
+    summary_lines: list[str] | None = typer.Option(None, "--summary-line", help="Additional release changelog summary line, combined with the generated release-notes lines (KIT-GF-045). Repeatable."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     """Generate release summary evidence and run release-prep safely."""
+    summary_line_args = _summary_line_args(summary_lines)
     release_date = date or date_cls.today().isoformat()
     effective_from_tag = from_tag or _latest_release_tag()
     summary_lines_path = load_workspace(Path(".")).tmp_file(f"release-{version.replace('.', '')}-summary-lines.json")
@@ -974,6 +990,7 @@ def release_prepare_command(
             version,
             "--date",
             release_date,
+            *summary_line_args,
             "--summary-lines-from",
             str(summary_lines_path),
             "--json",
@@ -1003,6 +1020,7 @@ def release_prepare_command(
             to_ref=to_ref,
             summary_lines_path=summary_lines_path,
             prior_steps=list(steps),
+            explicit_summary_lines=list(summary_lines or []),
         )
         if report_step["ok"]:
             evidence_path = str(report_step["stdout"]).strip()

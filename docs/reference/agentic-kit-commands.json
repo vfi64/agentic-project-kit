@@ -8676,6 +8676,20 @@
           ]
         },
         {
+          "default": null,
+          "help": "Additional release changelog summary line, combined with the generated release-notes lines (KIT-GF-045). Repeatable.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "summary_lines",
+          "opts": [
+            "--summary-line"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
           "default": false,
           "help": "Print machine-readable JSON.",
           "is_flag": true,
@@ -8765,6 +8779,20 @@
           "name": "date",
           "opts": [
             "--date"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Additional release changelog summary line, combined with the generated release-notes lines (KIT-GF-045). Repeatable.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "summary_lines",
+          "opts": [
+            "--summary-line"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -16174,6 +16202,20 @@
           "secondary_opts": []
         },
         {
+          "default": null,
+          "help": "Additional release changelog summary line for the release-prep dry-run (KIT-GF-045). Repeatable.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "summary_lines",
+          "opts": [
+            "--summary-line"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
           "default": "PosixPath('.')",
           "help": "Project root.",
           "is_flag": false,
@@ -18829,7 +18871,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "d65273fada6f",
+    "manifest_sha": "5bb15052bb28",
     "schema_version": 1
   },
   "schema_version": 2,
