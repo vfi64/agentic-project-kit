@@ -6,10 +6,10 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `7e783920e967671a04ec1b3b8dfc81e7ae537460` (`7e783920`)
-- Handoff freshness marker: `7e783920`
-- Branch at generation: `docs/post-pr2387-handoff-refresh`
-- Worktree clean at generation: `False`
+- HEAD: `27d72de5f82a55b075e236a257a2883fa52f347f` (`27d72de5`)
+- Handoff freshness marker: `27d72de5`
+- Branch at generation: `codex/release-summary-line`
+- Worktree clean at generation: `True`
 
 ## Successor handoff package
 
@@ -104,7 +104,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 ### RESULT: PASS ###
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: d65273fada6f). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK d65273fada6f. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 5bb15052bb28). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 5bb15052bb28. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -114,5 +114,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 8d09d1d22d1e9277020e1e60903a626ed433b66f027b31a3600f4af2c35c4cb3
-- docs/reference/agentic-kit-commands.json: 38ba36763251d73564af60dcd09a841b2248454ad184cd79758c863824860ddc
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 8a8fd424d59b37751e569abc4b8da326a74cb7f621b7938bf9dd3d116aafb385
+- docs/reference/agentic-kit-commands.json: 53bda02d7085f85f0dc1b72c91822913e920483abb218c057dfb178a6b9e9493
