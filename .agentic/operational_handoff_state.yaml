@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e3d7927a5a8a980ef8cc415f0b29b463ebd05502
-  short: e3d7927a
-  subject: Let release orchestrators pass explicit changelog summary lines (KIT-GF-045) (#2389)
+  full: 67c50dcc415e33ea2713dba7733b3c0df12c8331
+  short: 67c50dcc
+  subject: Prepare release 1.0.17 (#2391)
 last_substantive_work_state:
-  full: e3d7927a5a8a980ef8cc415f0b29b463ebd05502
-  short: e3d7927a
-  subject: Let release orchestrators pass explicit changelog summary lines (KIT-GF-045) (#2389)
+  full: 67c50dcc415e33ea2713dba7733b3c0df12c8331
+  short: 67c50dcc
+  subject: Prepare release 1.0.17 (#2391)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
