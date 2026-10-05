@@ -1,0 +1,70 @@
+{
+  "authorized_release_anchor_paths": [
+    "README.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/releases/VERIFIED_RELEASES.md",
+    "docs/.nojekyll",
+    "docs/index.html",
+    "docs/site/"
+  ],
+  "authorized_route": "agentic-kit post-release-doi-closeout --write",
+  "changed_paths_at_closeout": [
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "CITATION.cff",
+    "CHANGELOG.md",
+    "docs/releases/VERIFIED_RELEASES.md",
+    "docs/.nojekyll",
+    "docs/index.html",
+    "docs/site/claims/claims.json",
+    "docs/site/claims/index.html",
+    "docs/site/commands/commands.json",
+    "docs/site/commands/diagnostics.html",
+    "docs/site/commands/guided.html",
+    "docs/site/commands/index.html",
+    "docs/site/index.html",
+    "docs/site/quickstart/index.html",
+    "docs/site/quickstart/quickstart.json",
+    "docs/site/site.json",
+    "docs/site/static/runtime-map.svg",
+    "docs/site/static/site.css",
+    "docs/site/workflows/index.html",
+    "docs/site/workflows/workflows.json"
+  ],
+  "command": "agentic-kit post-release-doi-closeout --version 1.0.18 --write --json",
+  "concept_doi": "10.5281/zenodo.20101359",
+  "dpa_current_handoff": {
+    "contract_id": "DPA-CURRENT-HANDOFF-POST-RELEASE-DOI-CLOSEOUT-v1",
+    "renderer_id": "agentic_project_kit.post_release_closeout",
+    "target_scope": "CURRENT_HANDOFF_POST_RELEASE_DOI_METADATA",
+    "writer_id": "WRT-CH-003"
+  },
+  "evidence_kind": "post_release_doi_closeout_authority",
+  "expected_paths": [
+    "README.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/releases/VERIFIED_RELEASES.md",
+    "docs/.nojekyll",
+    "docs/index.html",
+    "docs/site/"
+  ],
+  "result_status": "PASS",
+  "schema_version": 1,
+  "source_authority": {
+    "github_release": "verified",
+    "post_release_check": "PASS",
+    "zenodo_concept_doi": "10.5281/zenodo.20101359",
+    "zenodo_version_doi": "10.5281/zenodo.23166532"
+  },
+  "tag": "v1.0.18",
+  "version": "1.0.18",
+  "version_doi": "10.5281/zenodo.23166532",
+  "write": true
+}
