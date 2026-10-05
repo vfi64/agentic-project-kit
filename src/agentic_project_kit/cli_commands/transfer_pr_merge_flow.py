@@ -83,8 +83,8 @@ def pr_merge_safe_command(
     ),
 ) -> None:
     if not skip_llm_context_gate:
-        require_fresh = _public_transfer_attr("_require_fresh_llm_context_or_exit", _require_fresh_llm_context_or_exit)
-        require_fresh(max_age_minutes=60, json_output=json_output)
+        ensure_fresh = _public_transfer_attr("_ensure_fresh_llm_context_or_exit", _ensure_fresh_llm_context_or_exit)
+        ensure_fresh(max_age_minutes=60, json_output=json_output)
     external_preflight = _public_transfer_attr(
         "_ensure_external_merge_preflight_or_exit",
         _ensure_external_merge_preflight_or_exit,
@@ -137,39 +137,18 @@ def pr_complete_command(
         False,
         "--post-merge-complete",
         help=(
-            "Invalid for pr-complete. Use pr-create-complete --post-merge-complete for new PRs, "
-            "or run post-merge-complete separately after an existing PR is merged."
+            "Accepted compatibility flag: pr-complete already runs post-merge-complete "
+            "after a successful merge."
         ),
     ),
 ) -> None:
     """Wait for CI, safely merge an existing PR, and synchronize main."""
     mutation_lock_contract = "workspace_mutation_lock"
     _ = mutation_lock_contract
-    if post_merge_complete:
-        payload = {
-            "schema_version": 1,
-            "kind": "transfer_pr_complete_result",
-            "action": "pr-complete",
-            "result_status": "BLOCKED",
-            "final_signal": "f",
-            "failed_step": "invalid_argument_post_merge_complete",
-            "blockers": ["invalid_argument_post_merge_complete"],
-            "next_action": (
-                "--post-merge-complete is not valid for transfer pr-complete. "
-                "For an existing PR: run transfer pr-complete, then transfer post-merge-complete --after-pr <PR>."
-            ),
-        }
-        if json_output:
-            typer.echo(json.dumps(payload, indent=2, sort_keys=True))
-        else:
-            typer.echo("TRANSFER_PR_COMPLETE_BLOCKED")
-            typer.echo("reason=invalid_argument_post_merge_complete")
-            typer.echo(f"NEXT: {payload['next_action']}")
-        raise typer.Exit(code=2)
 
     if not skip_llm_context_gate:
-        require_fresh = _public_transfer_attr("_require_fresh_llm_context_or_exit", _require_fresh_llm_context_or_exit)
-        require_fresh(max_age_minutes=60, json_output=json_output)
+        ensure_fresh = _public_transfer_attr("_ensure_fresh_llm_context_or_exit", _ensure_fresh_llm_context_or_exit)
+        ensure_fresh(max_age_minutes=60, json_output=json_output)
 
     import re
     from datetime import datetime, timezone
@@ -477,6 +456,7 @@ def pr_complete_command(
         "result_status": result_status,
         "final_signal": final_signal,
         "failed_step": failed_step,
+        "post_merge_complete_requested": post_merge_complete,
         "post_merge_complete_followup_required": post_merge_complete_followup_required,
         "remote_settle_recovery_required": remote_settle_recovery_required,
         "remote_settle_recovery_failed_step": remote_settle_recovery_failed_step,

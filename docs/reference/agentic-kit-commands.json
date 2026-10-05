@@ -14310,7 +14310,7 @@
         },
         {
           "default": false,
-          "help": "Invalid for pr-complete. Use pr-create-complete --post-merge-complete for new PRs, or run post-merge-complete separately after an existing PR is merged.",
+          "help": "Accepted compatibility flag: pr-complete already runs post-merge-complete after a successful merge.",
           "is_flag": true,
           "metavar": null,
           "multiple": false,
@@ -18829,7 +18829,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "9529749193c5",
+    "manifest_sha": "d65273fada6f",
     "schema_version": 1
   },
   "schema_version": 2,

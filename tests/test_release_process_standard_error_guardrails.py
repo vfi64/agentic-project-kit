@@ -138,10 +138,11 @@ def test_pr_create_complete_payload_guard_detects_blocked_json() -> None:
     assert rc_from_result_payload({"result_status": "BLOCKED", "blockers": ["inner"]}) == 2
 
 
-def test_pr_complete_invalid_post_merge_complete_message_is_present() -> None:
+def test_pr_complete_post_merge_complete_flag_is_accepted() -> None:
     source = Path("src/agentic_project_kit/cli_commands/transfer_pr_merge_flow.py").read_text(encoding="utf-8")
-    assert "invalid_argument_post_merge_complete" in source
-    assert "--post-merge-complete is not valid for transfer pr-complete" in source
+    assert "post_merge_complete_requested" in source
+    assert "pr-complete already runs post-merge-complete" in source
+    assert "invalid_argument_post_merge_complete" not in source
 
 
 def test_payload_guard_ignores_unrelated_json() -> None:

@@ -153,14 +153,15 @@ def test_transfer_continue_skip_llm_context_gate_reaches_continue_wrapper(tmp_pa
     assert result.exit_code != 2
     assert "TRANSFER_REQUIRE_FRESH_LLM_CONTEXT" not in result.stdout
 
-def test_pr_complete_blocks_without_fresh_llm_context(tmp_path, monkeypatch):
+def test_pr_complete_refreshes_missing_llm_context_before_lifecycle(tmp_path, monkeypatch):
     _copy_context_sources(tmp_path)
     monkeypatch.chdir(tmp_path)
 
     result = CliRunner().invoke(app, ["transfer", "pr-complete", "123"])
 
     assert result.exit_code == 2
-    assert "TRANSFER_REQUIRE_FRESH_LLM_CONTEXT" in result.stdout
+    assert "TRANSFER_REQUIRE_FRESH_LLM_CONTEXT" not in result.stdout
+    assert "TRANSFER_PR_COMPLETE" in result.stdout
 
 
 def test_pr_create_complete_blocks_without_fresh_llm_context(tmp_path, monkeypatch):
@@ -183,14 +184,15 @@ def test_pr_create_complete_blocks_without_fresh_llm_context(tmp_path, monkeypat
     assert "TRANSFER_REQUIRE_FRESH_LLM_CONTEXT" in result.stdout
 
 
-def test_pr_merge_safe_blocks_without_fresh_llm_context(tmp_path, monkeypatch):
+def test_pr_merge_safe_refreshes_missing_llm_context_before_merge_preflight(tmp_path, monkeypatch):
     _copy_context_sources(tmp_path)
     monkeypatch.chdir(tmp_path)
 
     result = CliRunner().invoke(app, ["transfer", "pr-merge-safe", "123"])
 
     assert result.exit_code == 2
-    assert "TRANSFER_REQUIRE_FRESH_LLM_CONTEXT" in result.stdout
+    assert "TRANSFER_REQUIRE_FRESH_LLM_CONTEXT" not in result.stdout
+    assert "Repair canonical rule sources" in result.stdout
 
 def test_pr_create_blocks_without_fresh_llm_context(tmp_path, monkeypatch):
     _copy_context_sources(tmp_path)
