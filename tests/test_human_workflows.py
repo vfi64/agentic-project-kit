@@ -485,6 +485,106 @@ def test_work_finish_default_uses_existing_pr_lifecycle_wrapper(monkeypatch):
     )
 
 
+def _work_finish_execute(monkeypatch, *, handoff_status_stdout: str, rules_ack_returncodes: list[int] | None = None):
+    calls: list[list[str]] = []
+    ack_codes = list(rules_ack_returncodes or [])
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:3] == ["git", "status", "--short"]:
+            return _completed(command, stdout=handoff_status_stdout)
+        if command[:3] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"] and ack_codes:
+            code = ack_codes.pop(0)
+            return _completed(command, stdout="snapshot_id=demo\n", returncode=code)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"]:
+            return _completed(
+                command,
+                stdout=(
+                    '{"result_status":"PASS","pr_number":2317,'
+                    '"post_merge_complete_verified_by_inner_pr_complete":true}\n'
+                ),
+            )
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+    result = CliRunner().invoke(
+        app,
+        [
+            "work",
+            "finish",
+            "--branch",
+            "codex/demo",
+            "--title",
+            "Demo",
+            "--message",
+            "Demo",
+            "--path",
+            "src/demo.py",
+            "--execute",
+            "--json",
+        ],
+    )
+    return result, calls
+
+
+def _is_handoff_commit(call: list[str]) -> bool:
+    return (
+        call[:3] == ["./.venv/bin/agentic-kit", "transfer", "commit"]
+        and "--message" in call
+        and call[call.index("--message") + 1] == "Refresh handoff for Demo"
+    )
+
+
+def test_work_finish_acknowledges_rules_after_handoff_refresh_before_handoff_commit(monkeypatch):
+    """KIT-GF-046: the refreshed handoff projections change the rule snapshot."""
+    result, calls = _work_finish_execute(
+        monkeypatch, handoff_status_stdout=" M docs/handoff/START_NEW_CHAT_PROMPT.md\n"
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    names = [step["name"] for step in payload["steps"]]
+    assert names.index("handoff-refresh") < names.index("rules-acknowledge-post-handoff-refresh")
+    assert names.index("rules-acknowledge-post-handoff-refresh") < names.index("handoff-commit")
+    refresh_index = next(
+        index
+        for index, call in enumerate(calls)
+        if call[:3] == ["./.venv/bin/agentic-kit", "transfer", "chat-switch-complete"]
+    )
+    handoff_commit_index = next(index for index, call in enumerate(calls) if _is_handoff_commit(call))
+    assert any(
+        call[:3] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"]
+        for call in calls[refresh_index:handoff_commit_index]
+    )
+
+
+def test_work_finish_skips_the_post_refresh_acknowledgement_without_handoff_changes(monkeypatch):
+    result, calls = _work_finish_execute(monkeypatch, handoff_status_stdout="")
+
+    assert result.exit_code == 0, result.output
+    steps = json.loads(result.stdout)["steps"]
+    names = [step["name"] for step in steps]
+    assert "rules-acknowledge-post-handoff-refresh" not in names
+    assert next(step for step in steps if step["name"] == "handoff-commit")["argv"] == []
+    assert not any(_is_handoff_commit(call) for call in calls)
+
+
+def test_work_finish_blocks_before_handoff_commit_when_post_refresh_acknowledgement_fails(monkeypatch):
+    result, calls = _work_finish_execute(
+        monkeypatch,
+        handoff_status_stdout=" M docs/handoff/START_NEW_CHAT_PROMPT.md\n",
+        rules_ack_returncodes=[0, 0, 2],
+    )
+
+    assert result.exit_code == 2, result.output
+    payload = json.loads(result.stdout)
+    assert payload["result_status"] == "BLOCKED"
+    assert payload["blockers"] == ["rules-acknowledge-post-handoff-refresh"]
+    assert not any(_is_handoff_commit(call) for call in calls)
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "push-current"] for call in calls)
+
+
 def test_work_finish_execute_includes_pending_communication_refresh_carrier(monkeypatch, tmp_path):
     carrier = tmp_path / "docs/reports/communication_rules/CURRENT_COMMUNICATION_RULES.md"
     carrier.parent.mkdir(parents=True)
