@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `53c2d19ffcad11e1742d02ef88e3dc9ccc52d822` (`53c2d19f`), after `Let communication refresh travel with work branch (#2383)`.
-Last substantive work state is `53c2d19ffcad11e1742d02ef88e3dc9ccc52d822` (`53c2d19f`), after `Let communication refresh travel with work branch (#2383)`.
+Current verified main/admin HEAD is `3ac0fd085a6a5dfdf8e214ad8b4b7353e8199dea` (`3ac0fd08`), after `Harden PR lifecycle completion (#2385)`.
+Last substantive work state is `3ac0fd085a6a5dfdf8e214ad8b4b7353e8199dea` (`3ac0fd08`), after `Harden PR lifecycle completion (#2385)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

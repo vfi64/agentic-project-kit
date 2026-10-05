@@ -85,8 +85,8 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: fc7fe5fc2227fb9be9e837baacf1317909e51e1fda4faf1c7e95225fd0cfbcb1
-- docs/reference/agentic-kit-commands.json: a0558d8137cda2c342481ca2e034959157d6ca645abf78835ea8ee7c5b612c4a
-## Operational documentation refresh state after PR #2383
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 8d09d1d22d1e9277020e1e60903a626ed433b66f027b31a3600f4af2c35c4cb3
+- docs/reference/agentic-kit-commands.json: 38ba36763251d73564af60dcd09a841b2248454ad184cd79758c863824860ddc
+## Operational documentation refresh state after PR #2385
 
-Current administrative handoff refresh state is `53c2d19f` (`Let communication refresh travel with work branch (#2383)`). Continue next only after this post-PR2383 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `3ac0fd08` (`Harden PR lifecycle completion (#2385)`). Continue next only after this post-PR2385 refresh is committed and merged; the next substantive slice must be created from fresh main.
