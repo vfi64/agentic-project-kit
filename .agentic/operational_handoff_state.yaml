@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a0eb51c0dfa9736c9b645a66444be965f50f3013
-  short: a0eb51c0
-  subject: Fix ci-update overwriting customized CI templates (KIT-GF-042) (#2395)
+  full: eec04ddfc5f37f0b2fcc29835492ff7fab86e5e7
+  short: eec04ddf
+  subject: Fix work finish rule acknowledgement before the handoff commit (KIT-GF-046) (#2397)
 last_substantive_work_state:
-  full: a0eb51c0dfa9736c9b645a66444be965f50f3013
-  short: a0eb51c0
-  subject: Fix ci-update overwriting customized CI templates (KIT-GF-042) (#2395)
+  full: eec04ddfc5f37f0b2fcc29835492ff7fab86e5e7
+  short: eec04ddf
+  subject: Fix work finish rule acknowledgement before the handoff commit (KIT-GF-046) (#2397)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
