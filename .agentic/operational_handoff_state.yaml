@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: eec04ddfc5f37f0b2fcc29835492ff7fab86e5e7
-  short: eec04ddf
-  subject: Fix work finish rule acknowledgement before the handoff commit (KIT-GF-046) (#2397)
+  full: 0bc43067570a8cfc10a7a68cd1cd2a1b3b4848d8
+  short: 0bc43067
+  subject: Prepare release 1.0.18 (#2399)
 last_substantive_work_state:
-  full: eec04ddfc5f37f0b2fcc29835492ff7fab86e5e7
-  short: eec04ddf
-  subject: Fix work finish rule acknowledgement before the handoff commit (KIT-GF-046) (#2397)
+  full: 0bc43067570a8cfc10a7a68cd1cd2a1b3b4848d8
+  short: 0bc43067
+  subject: Prepare release 1.0.18 (#2399)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
