@@ -1,0 +1,536 @@
+from __future__ import annotations
+
+from collections.abc import Callable, Sequence
+from dataclasses import dataclass
+import hashlib
+import json
+from pathlib import Path
+import re
+import subprocess
+import time
+from typing import Any
+
+import yaml
+
+from agentic_project_kit.cli_executable import default_agentic_kit
+from agentic_project_kit.publication_policy import publication_policy_for
+from agentic_project_kit.workspace import load_workspace
+
+
+Runner = Callable[[Sequence[str], Path], subprocess.CompletedProcess[str]]
+
+
+GATE_SEQUENCE = ("B4", "C2", "C3", "D4")
+
+
+@dataclass(frozen=True)
+class ReleaseRunOptions:
+    version: str
+    summary_lines: tuple[str, ...] = ()
+    execute: bool = False
+    expected_signature: str = ""
+    json_output: bool = False
+    root: Path = Path(".")
+
+
+def default_runner(argv: Sequence[str], cwd: Path) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(list(argv), cwd=cwd, text=True, capture_output=True, check=False)
+
+
+class ReleaseRun:
+    def __init__(self, options: ReleaseRunOptions, *, runner: Runner | None = None) -> None:
+        self.options = options
+        self.root = options.root.resolve()
+        self.runner = runner or default_runner
+        self.version = options.version.removeprefix("v")
+        self.tag = f"v{self.version}"
+        self.branch = f"codex/release-{self.version}"
+        self.doi_branch = f"codex/release-{self.version}-doi"
+        workspace = load_workspace(self.root, suppress_legacy_profile_warning=True)
+        safe_version = re.sub(r"[^A-Za-z0-9_.-]+", "-", self.version)
+        self.state_path = workspace.tmp_file(f"release-run-{safe_version}.json")
+        self.log_path = workspace.tmp_file(f"release-run-{safe_version}.log")
+        self.step_dir = workspace.tmp() / f"release-run-{safe_version}-steps"
+        self.executable = default_agentic_kit(self.root)
+        self.state = self._load_state()
+        self._approval_consumed = False
+
+    def run(self) -> dict[str, Any]:
+        self.state.setdefault("schema_version", 1)
+        self.state.setdefault("kind", "release_run_state")
+        self.state.setdefault("version", self.version)
+        self.state.setdefault("summary_lines", list(self.options.summary_lines))
+        self.state.setdefault("finished_steps", [])
+        self.state.setdefault("step_results", {})
+        self.state.setdefault("gates", {})
+        self.state.setdefault("publication_policy", publication_policy_for(self.root).value)
+        self._save_state()
+
+        policy = publication_policy_for(self.root)
+        sequence = self._step_sequence(private_publication=not policy.publishes_anywhere)
+        for step_id in sequence:
+            if self._is_finished(step_id):
+                continue
+            result = self._run_or_gate(step_id)
+            if result["result_status"] != "PASS":
+                return self._payload(result)
+            self._mark_finished(step_id, result)
+        return self._payload({"step_id": "complete", "result_status": "PASS", "next_action": "Release run completed."})
+
+    def _step_sequence(self, *, private_publication: bool) -> tuple[str, ...]:
+        if private_publication:
+            return ("A1", "A2", "A3", "B1", "B2", "B3", "B4", "C1", "C2")
+        return (
+            "A1",
+            "A2",
+            "A3",
+            "B1",
+            "B2",
+            "B3",
+            "B4",
+            "C1",
+            "C2",
+            "C3",
+            "C4",
+            "D1",
+            "D2",
+            "D3",
+            "D4",
+            "D5",
+        )
+
+    def _run_or_gate(self, step_id: str) -> dict[str, Any]:
+        if step_id in GATE_SEQUENCE:
+            gate = self._gate_details(step_id)
+            signature = _approval_signature(gate)
+            gate["approval_signature"] = signature
+            self.state.setdefault("gates", {})[step_id] = gate
+            self._save_state()
+            if not self.options.execute or self._approval_consumed:
+                return self._awaiting_approval(step_id, gate)
+            if self.options.expected_signature != signature:
+                return {
+                    "step_id": step_id,
+                    "result_status": "BLOCKED",
+                    "blockers": ["signature-mismatch"],
+                    "gate": gate,
+                    "next_action": self._next_action(step_id, signature),
+                }
+            self._approval_consumed = True
+        method = getattr(self, f"_step_{step_id.lower()}")
+        return method()
+
+    def _step_a1(self) -> dict[str, Any]:
+        return self._command("A1", [self.executable, "transfer", "sync-main"])
+
+    def _step_a2(self) -> dict[str, Any]:
+        return self._command("A2", [self.executable, "release", "ready", "--version", self.version, *self._summary_args(), "--json"], expected_status="PASS")
+
+    def _step_a3(self) -> dict[str, Any]:
+        return self._command("A3", [self.executable, "release", "prepare", "--version", self.version, *self._summary_args(), "--json"], expected_status="PASS")
+
+    def _step_b1(self) -> dict[str, Any]:
+        return self._command("B1", [self.executable, "work", "start", "--branch", self.branch, "--json"], expected_status="PASS")
+
+    def _step_b2(self) -> dict[str, Any]:
+        return self._command("B2", [self.executable, "release", "prepare", "--version", self.version, "--write", *self._summary_args(), "--json"], expected_status="PASS")
+
+    def _step_b3(self) -> dict[str, Any]:
+        paths = self._changed_paths()
+        self.state["b_paths"] = paths
+        self._save_state()
+        return self._work_finish("B3", branch=self.branch, paths=paths, execute=False, expected_status="PLANNED")
+
+    def _step_b4(self) -> dict[str, Any]:
+        expected = tuple(self.state.get("b_paths") or [])
+        current = tuple(self._changed_paths())
+        if current != expected:
+            return {
+                "step_id": "B4",
+                "result_status": "BLOCKED",
+                "blockers": ["changed-paths-drift"],
+                "expected_paths": list(expected),
+                "current_paths": list(current),
+                "next_action": "Rerun release run without --execute to refresh the B4 approval gate.",
+            }
+        return self._work_finish("B4", branch=self.branch, paths=list(expected), execute=True, expected_status="PASS")
+
+    def _step_c1(self) -> dict[str, Any]:
+        result = self._command(
+            "C1",
+            [self.executable, "release-publish", "--version", self.version, "--dry-run", "--json"],
+            release_publish=True,
+        )
+        signature = str((result.get("json") or {}).get("approval_signature") or "")
+        self.state["c1_release_publish_signature"] = signature
+        self._save_state()
+        return result
+
+    def _step_c2(self) -> dict[str, Any]:
+        release_signature = str(self.state.get("c1_release_publish_signature") or "")
+        return self._command(
+            "C2",
+            [
+                self.executable,
+                "release-publish",
+                "--version",
+                self.version,
+                "--execute",
+                "--allow-execute",
+                "--expected-signature",
+                release_signature,
+                "--json",
+            ],
+            release_publish=True,
+        )
+
+    def _step_c3(self) -> dict[str, Any]:
+        dispatch = dict(self.state.get("c3_dispatch") or {})
+        if dispatch.get("dispatched") and not dispatch.get("run_id"):
+            return {
+                "step_id": "C3",
+                "result_status": "BLOCKED",
+                "blockers": ["package-index-dispatch-run-id-missing"],
+                "next_action": "Record the package-index run id in the state file or inspect the workflow manually before rerunning.",
+            }
+        workflow = self._package_index_workflow()
+        if not dispatch.get("dispatched"):
+            argv = ["gh", "workflow", "run", workflow["file"]]
+            for value in workflow["inputs"]:
+                if "=" in value:
+                    name, raw = value.split("=", 1)
+                    argv.extend(["-f", f"{name}={raw}"])
+            dispatch_result = self._command("C3-dispatch", argv)
+            if dispatch_result["result_status"] != "PASS":
+                return dispatch_result
+            run_id = self._latest_workflow_run_id(workflow["file"])
+            dispatch = {"dispatched": True, "run_id": run_id, "workflow": workflow}
+            self.state["c3_dispatch"] = dispatch
+            self._save_state()
+            if not run_id:
+                return {
+                    "step_id": "C3",
+                    "result_status": "BLOCKED",
+                    "blockers": ["package-index-dispatch-run-id-missing"],
+                    "next_action": "Inspect GitHub Actions and record the workflow run id before rerunning.",
+                }
+        return self._command("C3-watch", ["gh", "run", "watch", str(dispatch["run_id"]), "--exit-status"])
+
+    def _step_c4(self) -> dict[str, Any]:
+        last: dict[str, Any] | None = None
+        for _ in range(3):
+            last = self._command("C4", [self.executable, "post-release-check", "--version", self.version, "--json"], expected_status="PASS")
+            if last["result_status"] == "PASS":
+                return last
+            time.sleep(1)
+        return last or {"step_id": "C4", "result_status": "BLOCKED", "blockers": ["post-release-check-not-run"]}
+
+    def _step_d1(self) -> dict[str, Any]:
+        return self._command("D1", [self.executable, "work", "start", "--branch", self.doi_branch, "--json"], expected_status="PASS")
+
+    def _step_d2(self) -> dict[str, Any]:
+        return self._command("D2", [self.executable, "post-release-doi-closeout", "--version", self.version, "--write", "--json"], expected_status="PASS")
+
+    def _step_d3(self) -> dict[str, Any]:
+        paths = self._changed_paths()
+        self.state["d_paths"] = paths
+        self._save_state()
+        return self._work_finish("D3", branch=self.doi_branch, paths=paths, execute=False, expected_status="PLANNED")
+
+    def _step_d4(self) -> dict[str, Any]:
+        expected = tuple(self.state.get("d_paths") or [])
+        current = tuple(self._changed_paths())
+        if current != expected:
+            return {
+                "step_id": "D4",
+                "result_status": "BLOCKED",
+                "blockers": ["changed-paths-drift"],
+                "expected_paths": list(expected),
+                "current_paths": list(current),
+                "next_action": "Rerun release run without --execute to refresh the D4 approval gate.",
+            }
+        return self._work_finish("D4", branch=self.doi_branch, paths=list(expected), execute=True, expected_status="PASS")
+
+    def _step_d5(self) -> dict[str, Any]:
+        result = self._command("D5", [self.executable, "release-status", "--version", self.version, "--include-remote", "--json"], expected_status="PASS")
+        current_state = str((result.get("json") or {}).get("current_state") or "")
+        if result["result_status"] == "PASS" and current_state != "current_verified":
+            return {
+                "step_id": "D5",
+                "result_status": "BLOCKED",
+                "blockers": ["release-status-not-current-verified"],
+                "current_state": current_state,
+            }
+        return result
+
+    def _work_finish(self, step_id: str, *, branch: str, paths: list[str], execute: bool, expected_status: str) -> dict[str, Any]:
+        argv = [
+            self.executable,
+            "work",
+            "finish",
+            "--branch",
+            branch,
+            "--title",
+            f"Release {self.version}" if branch == self.branch else f"Record DOI for release {self.version}",
+            "--message",
+            f"Prepare release {self.version}" if branch == self.branch else f"Record DOI for release {self.version}",
+        ]
+        for path in paths:
+            argv.extend(["--path", path])
+        argv.extend(["--execute" if execute else "--dry-run", "--json"])
+        return self._command(step_id, argv, expected_status=expected_status)
+
+    def _command(
+        self,
+        step_id: str,
+        argv: list[str],
+        *,
+        expected_status: str | None = None,
+        release_publish: bool = False,
+    ) -> dict[str, Any]:
+        self.log_path.parent.mkdir(parents=True, exist_ok=True)
+        self.step_dir.mkdir(parents=True, exist_ok=True)
+        started = time.monotonic()
+        completed = self.runner(argv, self.root)
+        duration = time.monotonic() - started
+        parsed = _parse_json(completed.stdout)
+        step_payload = {
+            "step_id": step_id,
+            "argv": argv,
+            "returncode": completed.returncode,
+            "duration_seconds": round(duration, 3),
+            "stdout": completed.stdout,
+            "stderr": completed.stderr,
+            "json": parsed,
+        }
+        self._append_log(step_payload)
+        (self.step_dir / f"{step_id}.json").write_text(json.dumps(step_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        blockers: list[str] = []
+        if completed.returncode != 0:
+            blockers.append("returncode")
+        if release_publish:
+            if not _release_publish_ok(parsed):
+                blockers.append("release-publish")
+        elif expected_status is not None and not _status_matches(parsed, expected_status):
+            blockers.append("result-status")
+        result_status = "PASS" if not blockers else "BLOCKED"
+        step_payload["result_status"] = result_status
+        step_payload["blockers"] = blockers
+        if result_status != "PASS":
+            step_payload["next_action"] = f"Inspect {self.log_path.as_posix()} and fix step {step_id}."
+        return step_payload
+
+    def _changed_paths(self) -> list[str]:
+        completed = self.runner(["git", "status", "--porcelain"], self.root)
+        self._append_log(
+            {
+                "step_id": "changed-paths",
+                "argv": ["git", "status", "--porcelain"],
+                "returncode": completed.returncode,
+                "duration_seconds": 0,
+                "stdout": completed.stdout,
+                "stderr": completed.stderr,
+            }
+        )
+        if completed.returncode != 0:
+            return []
+        paths: list[str] = []
+        for line in completed.stdout.splitlines():
+            if not line.strip():
+                continue
+            paths.append(line[3:].strip())
+        return sorted(dict.fromkeys(paths))
+
+    def _gate_details(self, gate_id: str) -> dict[str, Any]:
+        target_commit = self._current_head()
+        if gate_id == "B4":
+            return {
+                "kind": "release_run_gate",
+                "gate_id": gate_id,
+                "version": self.version,
+                "action": "execute work finish for release metadata branch",
+                "branch": self.branch,
+                "paths": list(self.state.get("b_paths") or []),
+                "target_commit": target_commit,
+            }
+        if gate_id == "C2":
+            return {
+                "kind": "release_run_gate",
+                "gate_id": gate_id,
+                "version": self.version,
+                "action": "execute signed release-publish",
+                "tag": self.tag,
+                "target_commit": target_commit,
+                "release_publish_signature": self.state.get("c1_release_publish_signature", ""),
+            }
+        if gate_id == "C3":
+            return {
+                "kind": "release_run_gate",
+                "gate_id": gate_id,
+                "version": self.version,
+                "action": "dispatch and watch package-index publication workflow",
+                "tag": self.tag,
+                "target_commit": target_commit,
+                "workflow": self._package_index_workflow(),
+            }
+        return {
+            "kind": "release_run_gate",
+            "gate_id": gate_id,
+            "version": self.version,
+            "action": "execute work finish for DOI closeout branch",
+            "branch": self.doi_branch,
+            "paths": list(self.state.get("d_paths") or []),
+            "target_commit": target_commit,
+        }
+
+    def _awaiting_approval(self, gate_id: str, gate: dict[str, Any]) -> dict[str, Any]:
+        signature = str(gate["approval_signature"])
+        return {
+            "step_id": gate_id,
+            "result_status": "AWAITING_APPROVAL",
+            "gate": gate,
+            "next_action": self._next_action(gate_id, signature),
+        }
+
+    def _next_action(self, gate_id: str, signature: str) -> str:
+        return f"agentic-kit release run --version {self.version} --execute --expected-signature {signature} --json"
+
+    def _summary_args(self) -> list[str]:
+        args: list[str] = []
+        for line in self.options.summary_lines or tuple(self.state.get("summary_lines") or []):
+            args.extend(["--summary-line", str(line)])
+        return args
+
+    def _latest_workflow_run_id(self, workflow_file: str) -> str:
+        completed = self.runner(["gh", "run", "list", "--workflow", workflow_file, "--limit", "1", "--json", "databaseId"], self.root)
+        payload = _parse_json(completed.stdout)
+        if isinstance(payload, list) and payload and isinstance(payload[0], dict):
+            return str(payload[0].get("databaseId") or "")
+        return ""
+
+    def _package_index_workflow(self) -> dict[str, Any]:
+        config = self._release_config()
+        workflow = config.get("package_index_workflow") if isinstance(config, dict) else None
+        if not isinstance(workflow, dict):
+            workflow = {}
+        file_name = str(workflow.get("file") or "")
+        if not file_name:
+            file_name = "release.yml"
+        raw_input = workflow.get("input") or workflow.get("inputs") or []
+        if isinstance(raw_input, str):
+            inputs = [raw_input]
+        elif isinstance(raw_input, list):
+            inputs = [str(item) for item in raw_input]
+        else:
+            inputs = []
+        return {"file": file_name, "inputs": inputs}
+
+    def _release_config(self) -> dict[str, Any]:
+        path = self.root / ".agentic" / "config.yaml"
+        if not path.exists():
+            return {}
+        loaded = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        if not isinstance(loaded, dict):
+            return {}
+        release = loaded.get("release")
+        return release if isinstance(release, dict) else {}
+
+    def _current_head(self) -> str:
+        completed = self.runner(["git", "rev-parse", "HEAD"], self.root)
+        if completed.returncode != 0:
+            return ""
+        return completed.stdout.strip()
+
+    def _is_finished(self, step_id: str) -> bool:
+        return step_id in set(self.state.get("finished_steps") or [])
+
+    def _mark_finished(self, step_id: str, result: dict[str, Any]) -> None:
+        finished = list(self.state.get("finished_steps") or [])
+        if step_id not in finished:
+            finished.append(step_id)
+        self.state["finished_steps"] = finished
+        self.state.setdefault("step_results", {})[step_id] = _compact_step_result(result)
+        self._save_state()
+
+    def _payload(self, current: dict[str, Any]) -> dict[str, Any]:
+        status = str(current.get("result_status") or "BLOCKED")
+        return {
+            "schema_version": 1,
+            "kind": "release_run_result",
+            "result_status": status,
+            "version": self.version,
+            "current_step": current.get("step_id", ""),
+            "gate": current.get("gate"),
+            "blockers": current.get("blockers", []),
+            "finished_steps": list(self.state.get("finished_steps") or []),
+            "state_path": self.state_path.as_posix(),
+            "log_path": self.log_path.as_posix(),
+            "next_action": current.get("next_action", "Continue release run."),
+        }
+
+    def _load_state(self) -> dict[str, Any]:
+        if not self.state_path.exists():
+            return {}
+        loaded = json.loads(self.state_path.read_text(encoding="utf-8"))
+        return loaded if isinstance(loaded, dict) else {}
+
+    def _save_state(self) -> None:
+        self.state_path.parent.mkdir(parents=True, exist_ok=True)
+        self.state_path.write_text(json.dumps(self.state, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    def _append_log(self, payload: dict[str, Any]) -> None:
+        self.log_path.parent.mkdir(parents=True, exist_ok=True)
+        with self.log_path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(payload, sort_keys=True) + "\n")
+
+
+def run_release(options: ReleaseRunOptions, *, runner: Runner | None = None) -> dict[str, Any]:
+    return ReleaseRun(options, runner=runner).run()
+
+
+def _parse_json(text: str) -> Any:
+    stripped = text.strip()
+    if not stripped:
+        return None
+    try:
+        return json.loads(stripped)
+    except json.JSONDecodeError:
+        return None
+
+
+def _status_matches(payload: Any, expected: str) -> bool:
+    if not isinstance(payload, dict):
+        return expected == "PASS"
+    if payload.get("result_status") == expected:
+        return True
+    if payload.get("status") == expected:
+        return True
+    if expected == "PASS" and payload.get("ok") is True:
+        return True
+    return False
+
+
+def _release_publish_ok(payload: Any) -> bool:
+    if not isinstance(payload, dict):
+        return False
+    if payload.get("status") != "PASS":
+        return False
+    if int(payload.get("blocker_count") or 0) != 0:
+        return False
+    checks = payload.get("checks")
+    if isinstance(checks, list):
+        return all(isinstance(check, dict) and check.get("status") == "PASS" for check in checks)
+    return True
+
+
+def _approval_signature(subject: dict[str, Any]) -> str:
+    raw = json.dumps(subject, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:24]
+
+
+def _compact_step_result(result: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "result_status": result.get("result_status"),
+        "returncode": result.get("returncode"),
+        "blockers": result.get("blockers", []),
+    }

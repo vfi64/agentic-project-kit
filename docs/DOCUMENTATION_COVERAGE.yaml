@@ -3,6 +3,31 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: release-run-orchestrator-coverage
+  description: End-to-end release orchestration must remain visible as a resumable wrapper over existing release commands with signed gates and publication-policy branching.
+  documents:
+  - path: README.md
+    terms:
+    - agentic-kit release run --version X
+    - resumable end-to-end release route
+    - signed approval gates
+    - "publication: none"
+  - path: docs/TEST_GATES.md
+    terms:
+    - agentic-kit release run --version X
+    - B4 `work finish --execute`
+    - C2 signed `release-publish --execute`
+    - C3 package-index workflow dispatch
+    - D4 DOI closeout `work finish --execute`
+    - workspace temp root
+    - "publication: none"
+  - path: docs/reference/HUMAN_WORKFLOW_COMMANDS.md
+    terms:
+    - agentic-kit release run
+    - AWAITING_APPROVAL
+    - approval_signature
+    - package-index workflow
+    - publication policy is `none`
 - id: external-release-ready-doc-audit-coverage
   description: External release readiness must keep Kit self-hosting documentation audits out of external workspaces while preserving strict lifecycle blocking.
   documents:

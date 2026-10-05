@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `b8396354a17924f802ba4fdcbf6f3783f5448d06` (`b8396354`)
-- Handoff freshness marker: `b8396354`
-- Branch at generation: `docs/post-pr2403-handoff-refresh`
+- HEAD: `28330a49bf5bc4f256a30894453dfa46aa46641b` (`28330a49`)
+- Handoff freshness marker: `28330a49`
+- Branch at generation: `codex-gf047-release-run`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -104,7 +104,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 ### RESULT: PASS ###
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 73c86e724b4e). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 73c86e724b4e. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 799be87e8212). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 799be87e8212. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -114,5 +114,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 901741a13fd9c951027162c444ce9b6f474582873661b78e7a1bbe03c037ceee
-- docs/reference/agentic-kit-commands.json: 4501cad85c8828272d053558a065a8b695247d115f9de2ebb82095375207d7f0
+- docs/reference/AGENTIC_KIT_COMMANDS.md: e8ab7fa796fae23f6304daf40ea2a238c72706c2761d3efec04015781275fd78
+- docs/reference/agentic-kit-commands.json: 9843a0ce0694924b0cb64b6a9d30de7c0c61e69de20ed81708deb3b9f739eea2

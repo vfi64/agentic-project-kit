@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 73c86e724b4e
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 799be87e8212
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `256`
+- Command count: `257`
 
 ## Commands
 
@@ -1868,6 +1868,25 @@ Run release readiness through the standard-error scan wrapper.
 | `to_ref` | `TyperOption` | --to-ref | `False` | `main` | Target ref. |
 | `date` | `TyperOption` | --date | `False` | `` | Release date. Defaults to today. |
 | `summary_lines` | `TyperOption` | --summary-line | `False` |  | Additional release changelog summary line, combined with the generated release-notes lines (KIT-GF-045). Repeatable. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit release run`
+
+- Safety: `BOUNDED`
+- Surface: `orchestrator`
+- When to use: Run the governed end-to-end release orchestrator with resumable approval gates.
+- Dry-run available: `True`
+- Remote effects: `merge`, `pull_request`, `push`, `release_publish`
+- Replaces raw: `release lifecycle`, `publish release`, `package index publish`
+
+Run the governed end-to-end release orchestrator with resumable approval gates.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `version` | `TyperOption` | --version | `True` |  | Target release version. |
+| `summary_lines` | `TyperOption` | --summary-line | `False` |  | Release changelog summary line. Repeatable. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Execute the next approved release-run gate. |
+| `expected_signature` | `TyperOption` | --expected-signature | `False` | `` | Approval signature for the next release-run gate. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit release-check`
