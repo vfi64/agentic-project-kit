@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 1f0b069ddd452f8a6cdaaa09f022b7b05707481d
-  short: 1f0b069d
-  subject: Add release run orchestrator (#2405)
+  full: 58364a964fab20d61871932ff6cb708a9c3158e4
+  short: 58364a96
+  subject: Add CI status command (#2407)
 last_substantive_work_state:
-  full: 1f0b069ddd452f8a6cdaaa09f022b7b05707481d
-  short: 1f0b069d
-  subject: Add release run orchestrator (#2405)
+  full: 58364a964fab20d61871932ff6cb708a9c3158e4
+  short: 58364a96
+  subject: Add CI status command (#2407)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
