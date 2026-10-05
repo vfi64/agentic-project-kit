@@ -1,6 +1,5 @@
 ## v1.0.17 - 2026-10-05
 
-- Zenodo DOI verification pending for v1.0.17.
 - Scope: fixes the agp-Cockpit greenfield findings KIT-GF-030, KIT-GF-031 and KIT-GF-039 to KIT-GF-045
 - Record verified DOI for release 1.0.16
 - Fix work finish PR flow findings
@@ -10,6 +9,9 @@
 - Fix release publish tags and lifecycle headers
 - Let release orchestrators pass explicit changelog summary lines (KIT-GF-045)
 
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.17 DOI `10.5281/zenodo.23161697`.
+
+Zenodo v1.0.17 DOI: 10.5281/zenodo.23161697
 ## v1.0.16 - 2026-10-04
 
 - Record release 1.0.15 DOI closeout
