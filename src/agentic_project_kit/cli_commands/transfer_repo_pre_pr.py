@@ -212,15 +212,16 @@ def protected_diff_plan_command(
     cached: bool = typer.Option(False, "--cached", help="Use staged diff."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
 ) -> None:
-    """Write the current diff to /tmp and run the Python protected change planner on it."""
+    """Write the current diff to the OS temp directory and run the Python protected change planner on it."""
     import json
     import re
     import subprocess
     import sys
-    from pathlib import Path
+
+    from agentic_project_kit.communication_artifact_gc import default_os_tmp_root
 
     safe_label = re.sub(r"[^A-Za-z0-9_.-]+", "-", label).strip("-") or "protected-change-plan"
-    diff_path = Path("/tmp") / f"{safe_label}.diff"
+    diff_path = default_os_tmp_root() / f"agentic-project-kit-{safe_label}.diff"
 
     diff_command = ["git", "diff"]
     if cached:

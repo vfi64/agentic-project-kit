@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 5f78167f2644
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 73c86e724b4e
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -44,8 +44,8 @@ Dry-run by default garbage collector for transient communication artifacts.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `tmp_logs` | `TyperOption` | --tmp-logs | `False` | `False` | Collect expired local tmp logs. |
-| `local_tmp` | `TyperOption` | --local-tmp | `False` | `False` | Use repository-local tmp/ instead of /tmp for --tmp-logs. |
+| `tmp_logs` | `TyperOption` | --tmp-logs | `False` | `False` | Collect expired local temp logs and protected-diff artifacts. |
+| `local_tmp` | `TyperOption` | --local-tmp | `False` | `False` | Use repository-local tmp/ instead of the OS temp directory for --tmp-logs. |
 | `local_tmp_contents` | `TyperOption` | --local-tmp-contents | `False` | `False` | Collect expired untracked files and empty directories under repository-local tmp/. |
 | `transfer_runs` | `TyperOption` | --transfer-runs | `False` | `False` | Collect expired docs/reports/transfer_runs files. |
 | `report_retention` | `TyperOption` | --report-retention | `False` | `False` | Collect expired report-like files and generated successor-handoff Markdown under selected docs/report surfaces. |
@@ -3150,11 +3150,11 @@ Deprecated compatibility alias for transfer chat-switch-complete.
 
 - Safety: `READ_ONLY`
 - Surface: `diagnostic`
-- When to use: Write the current diff to /tmp and run the Python protected change planner on it.
+- When to use: Write the current diff to the OS temp directory and run the Python protected change planner on it.
 - Dry-run available: `False`
 - Remote effects: `none`
 
-Write the current diff to /tmp and run the Python protected change planner on it.
+Write the current diff to the OS temp directory and run the Python protected change planner on it.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|

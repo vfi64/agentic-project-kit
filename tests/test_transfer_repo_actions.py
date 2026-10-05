@@ -2128,8 +2128,9 @@ def test_admin_refresh_pr_monitor_blocks_before_status(monkeypatch):
     assert ["git", "status", "--short"] not in calls
 
 
-def test_transfer_protected_diff_plan_runs_diff_and_python_planner(monkeypatch):
+def test_transfer_protected_diff_plan_runs_diff_and_python_planner(monkeypatch, tmp_path):
     calls: list[list[str]] = []
+    monkeypatch.setattr("agentic_project_kit.communication_artifact_gc.tempfile.gettempdir", lambda: str(tmp_path))
 
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
@@ -2151,8 +2152,12 @@ def test_transfer_protected_diff_plan_runs_diff_and_python_planner(monkeypatch):
     assert "PASS" in result.stdout
     assert calls[0][:2] == ["git", "diff"]
     assert "--output" in calls[0]
+    output_path = Path(calls[0][calls[0].index("--output") + 1])
+    assert output_path == tmp_path / "agentic-project-kit-demo.diff"
     assert calls[1][:3] == [sys.executable, "-m", "agentic_project_kit.protected_change_planner"]
     assert "--diff-file" in calls[1]
+    diff_file = Path(calls[1][calls[1].index("--diff-file") + 1])
+    assert diff_file == output_path
 
 
 def test_transfer_protected_diff_plan_blocks_on_python_planner_failure(monkeypatch):
