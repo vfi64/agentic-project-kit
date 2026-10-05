@@ -698,20 +698,26 @@ def work_finish_command(
             handoff_status = _handoff_projection_status_step()
             steps.append(handoff_status)
             if handoff_status["ok"] and str(handoff_status.get("stdout") or "").strip():
+                # KIT-GF-046: the handoff refresh rewrites rule-source projections (the
+                # command-manifest ACK); acknowledge the new rule snapshot before committing them.
                 steps.append(
-                    _run_step(
-                        "handoff-commit",
-                        _agentic(
-                            "transfer",
-                            "commit",
-                            "--branch",
-                            branch,
-                            "--message",
-                            f"Refresh handoff for {title}",
-                            *_path_args(_handoff_closeout_paths()),
-                        ),
-                    )
+                    _run_step("rules-acknowledge-post-handoff-refresh", _agentic("rules", "acknowledge"))
                 )
+                if _workflow_steps_ok(steps):
+                    steps.append(
+                        _run_step(
+                            "handoff-commit",
+                            _agentic(
+                                "transfer",
+                                "commit",
+                                "--branch",
+                                branch,
+                                "--message",
+                                f"Refresh handoff for {title}",
+                                *_path_args(_handoff_closeout_paths()),
+                            ),
+                        )
+                    )
             elif handoff_status["ok"]:
                 steps.append(_noop_step("handoff-commit", "No handoff projection changes to commit.\n"))
         if all(step["ok"] for step in steps):
