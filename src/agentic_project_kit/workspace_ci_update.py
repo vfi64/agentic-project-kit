@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
@@ -13,6 +15,21 @@ from agentic_project_kit.workspace_init import (
 from agentic_project_kit.workspace_lock import acquire_workspace_lock
 
 WorkspaceCiUpdateStatus = Literal["PASS", "BLOCKED"]
+
+# KIT-GF-042: every source template a released Kit has written to
+# .agentic/ci/agentic-gate.yaml, as SHA-256 of the text with its Kit version pin
+# normalized (_normalized_ci_template_text). A source template that matches none
+# of them was customized by the workspace and is never overwritten. When
+# _ci_template() changes, add the new hash here; a test enforces it.
+KIT_WRITTEN_CI_TEMPLATE_SHA256 = frozenset(
+    {
+        "0e9b4e1099765d73383c47765b5c1187c2aa693dc78f6e00b5a42a3d42c30450",  # b877ef35 (#1742)
+        "80bc57915aad145766e054e0a2b639cb1d4ebeda52e3366c44df62f05f92f10f",  # 0afa9726 (#1841)
+        "055d91884eabda12ac724d01de1cdad8ff1ff5ea43204ff346e251f76ea076a0",  # 665cbc76 (#1994)
+        "0c851f1e6bda125c5184fb158a9811a9ffb58f9e118bb00f23ed127ac1cdb559",  # 3f055623 (#2366), 1.0.16+
+    }
+)
+_KIT_PIN_PATTERN = re.compile(r"agentic-project-kit==[0-9A-Za-z.+!-]+")
 
 
 @dataclass(frozen=True)
@@ -54,6 +71,7 @@ class WorkspaceCiUpdatePlan:
                 "requires_managed_injection_header": True,
                 "does_not_overwrite_unmanaged_workflows": True,
                 "does_not_overwrite_modified_managed_workflows": True,
+                "does_not_overwrite_customized_ci_template": True,
             },
             "final_signal": "d" if self.ok else "f",
         }
@@ -75,6 +93,16 @@ def managed_injected_ci_text() -> str:
 
 def _managed_injected_ci_text_from_source(source_text: str) -> str:
     return f"{MANAGED_CI_HEADER}\n{source_text}"
+
+
+def _normalized_ci_template_text(text: str) -> str:
+    return _KIT_PIN_PATTERN.sub("agentic-project-kit=={KIT_VERSION}", text.replace("\r\n", "\n"))
+
+
+def is_kit_written_ci_template(text: str) -> bool:
+    """True when the text equals a source template some Kit release wrote (any version pin)."""
+    digest = hashlib.sha256(_normalized_ci_template_text(text).encode("utf-8")).hexdigest()
+    return digest in KIT_WRITTEN_CI_TEMPLATE_SHA256
 
 
 def build_workspace_ci_update_plan(
@@ -105,8 +133,14 @@ def build_workspace_ci_update_plan(
     source_path = root_path / CI_TEMPLATE_PATH
     desired_source = managed_ci_template_text()
     current_source = source_path.read_text(encoding="utf-8") if source_path.exists() else None
+    source_is_kit_written = current_source is None or is_kit_written_ci_template(current_source)
     if current_source != desired_source:
-        changed.append(CI_TEMPLATE_PATH)
+        if source_is_kit_written:
+            changed.append(CI_TEMPLATE_PATH)
+        else:
+            blockers.append(
+                WorkspaceCiUpdateFinding(CI_TEMPLATE_PATH, "modified_managed_ci_template")
+            )
 
     injected_path = root_path / CI_INJECTION_TARGET
     if injected_path.exists():
@@ -115,14 +149,23 @@ def build_workspace_ci_update_plan(
             blockers.append(WorkspaceCiUpdateFinding(CI_INJECTION_TARGET, "unmanaged_ci_workflow"))
         elif current == managed_injected_ci_text():
             pass
-        elif current_source is not None and current == _managed_injected_ci_text_from_source(current_source):
+        elif (
+            current_source is not None
+            and source_is_kit_written
+            and current == _managed_injected_ci_text_from_source(current_source)
+        ):
             changed.append(CI_INJECTION_TARGET)
         else:
-            blockers.append(WorkspaceCiUpdateFinding(CI_INJECTION_TARGET, "modified_managed_ci_workflow"))
+            blockers.append(
+                WorkspaceCiUpdateFinding(CI_INJECTION_TARGET, "modified_managed_ci_workflow")
+            )
 
     status: WorkspaceCiUpdateStatus = "BLOCKED" if blockers else "PASS"
     if blockers:
-        message = "workspace ci-update blocked by workflow target drift"
+        message = (
+            "workspace ci-update blocked: the managed CI template or workflow was customized; "
+            "it is never overwritten"
+        )
     elif changed:
         message = "managed CI template update is available"
     else:

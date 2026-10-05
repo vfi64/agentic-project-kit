@@ -387,6 +387,26 @@ def test_inject_ci_copies_template_with_header_and_refuses_overwrite(tmp_path: P
     assert "refusing to overwrite injected template" in second.output
 
 
+# Source template written by Kit 0.5.0 to 1.0.15 (665cbc76, #1994).
+LEGACY_KIT_CI_TEMPLATE_0_5 = """name: Agentic Gate
+"on":
+  pull_request:
+  push:
+
+jobs:
+  agentic-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install agentic-project-kit
+      - run: agentic-kit standard-gates-audit-suite
+"""
+
 
 def test_workspace_ci_update_refreshes_managed_source_and_injected_template(tmp_path: Path) -> None:
     init = CliRunner().invoke(
@@ -394,10 +414,10 @@ def test_workspace_ci_update_refreshes_managed_source_and_injected_template(tmp_
         ["workspace", "init", "--root", str(tmp_path), "--execute", "--inject-ci"],
     )
     assert init.exit_code == 0, init.output
-    _write(tmp_path / ".agentic/ci/agentic-gate.yaml", "name: Old Gate\n")
+    _write(tmp_path / ".agentic/ci/agentic-gate.yaml", LEGACY_KIT_CI_TEMPLATE_0_5)
     _write(
         tmp_path / ".github/workflows/agentic-gate.yaml",
-        "# managed template — source of truth: .agentic/ci/agentic-gate.yaml\nname: Old Gate\n",
+        "# managed template — source of truth: .agentic/ci/agentic-gate.yaml\n" + LEGACY_KIT_CI_TEMPLATE_0_5,
     )
 
     dry_run = CliRunner().invoke(app, ["workspace", "ci-update", "--root", str(tmp_path), "--json"])
@@ -466,6 +486,101 @@ def test_workspace_ci_update_blocks_modified_managed_injected_workflow(tmp_path:
         {"path": ".github/workflows/agentic-gate.yaml", "reason": "modified_managed_ci_workflow"}
     ]
     assert target.read_text(encoding="utf-8") == customized
+
+
+def test_workspace_ci_template_hash_registry_covers_the_current_template() -> None:
+    """KIT-GF-042: a changed _ci_template() must be added to KIT_WRITTEN_CI_TEMPLATE_SHA256."""
+    from agentic_project_kit.workspace_ci_update import is_kit_written_ci_template, managed_ci_template_text
+
+    assert is_kit_written_ci_template(managed_ci_template_text())
+    assert is_kit_written_ci_template(LEGACY_KIT_CI_TEMPLATE_0_5)
+    older_pin = managed_ci_template_text().replace(
+        f"agentic-project-kit=={PACKAGE_VERSION}", "agentic-project-kit==1.0.16"
+    )
+    assert is_kit_written_ci_template(older_pin)
+    assert not is_kit_written_ci_template(managed_ci_template_text() + "      - run: pytest\n")
+
+
+def test_workspace_ci_update_refreshes_an_older_pinned_kit_template(tmp_path: Path) -> None:
+    init = CliRunner().invoke(
+        app,
+        ["workspace", "init", "--root", str(tmp_path), "--execute", "--inject-ci"],
+    )
+    assert init.exit_code == 0, init.output
+    source_path = tmp_path / ".agentic/ci/agentic-gate.yaml"
+    older = source_path.read_text(encoding="utf-8").replace(
+        f"agentic-project-kit=={PACKAGE_VERSION}", "agentic-project-kit==1.0.16"
+    )
+    _write(source_path, older)
+    _write(
+        tmp_path / ".github/workflows/agentic-gate.yaml",
+        "# managed template — source of truth: .agentic/ci/agentic-gate.yaml\n" + older,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["workspace", "ci-update", "--root", str(tmp_path), "--execute", "--json"],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["changed_paths"] == [
+        ".agentic/ci/agentic-gate.yaml",
+        ".github/workflows/agentic-gate.yaml",
+    ]
+    assert f"agentic-project-kit=={PACKAGE_VERSION}" in source_path.read_text(encoding="utf-8")
+
+
+def test_workspace_ci_update_blocks_a_customized_source_template_and_its_projection(tmp_path: Path) -> None:
+    """KIT-GF-042 (agp-Cockpit): source template and workflow customized identically."""
+    init = CliRunner().invoke(
+        app,
+        ["workspace", "init", "--root", str(tmp_path), "--execute", "--inject-ci"],
+    )
+    assert init.exit_code == 0, init.output
+    source_path = tmp_path / ".agentic/ci/agentic-gate.yaml"
+    target = tmp_path / ".github/workflows/agentic-gate.yaml"
+    customized = source_path.read_text(encoding="utf-8").replace(
+        f"agentic-project-kit=={PACKAGE_VERSION}", "agentic-project-kit==1.0.16"
+    ) + "      - run: python -m pytest -q\n"
+    _write(source_path, customized)
+    _write(target, "# managed template — source of truth: .agentic/ci/agentic-gate.yaml\n" + customized)
+
+    dry_run = CliRunner().invoke(app, ["workspace", "ci-update", "--root", str(tmp_path), "--json"])
+    execute = CliRunner().invoke(
+        app,
+        ["workspace", "ci-update", "--root", str(tmp_path), "--execute", "--json"],
+    )
+
+    for result in (dry_run, execute):
+        assert result.exit_code == 2, result.output
+        payload = json.loads(result.output)
+        assert payload["result_status"] == "BLOCKED"
+        assert payload["changed_paths"] == []
+        assert payload["blockers"] == [
+            {"path": ".agentic/ci/agentic-gate.yaml", "reason": "modified_managed_ci_template"},
+            {"path": ".github/workflows/agentic-gate.yaml", "reason": "modified_managed_ci_workflow"},
+        ]
+    assert source_path.read_text(encoding="utf-8") == customized
+    assert target.read_text(encoding="utf-8").endswith(customized)
+
+
+def test_workspace_ci_update_blocks_a_customized_source_template_without_workflow(tmp_path: Path) -> None:
+    init = CliRunner().invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
+    assert init.exit_code == 0, init.output
+    source_path = tmp_path / ".agentic/ci/agentic-gate.yaml"
+    _write(source_path, "name: Workspace Gate\n")
+
+    result = CliRunner().invoke(
+        app,
+        ["workspace", "ci-update", "--root", str(tmp_path), "--execute", "--json"],
+    )
+
+    assert result.exit_code == 2, result.output
+    assert json.loads(result.output)["blockers"] == [
+        {"path": ".agentic/ci/agentic-gate.yaml", "reason": "modified_managed_ci_template"}
+    ]
+    assert source_path.read_text(encoding="utf-8") == "name: Workspace Gate\n"
 
 
 def test_inject_pre_commit_appends_and_refuses_overwrite(tmp_path: Path) -> None:
