@@ -222,7 +222,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "commands=257",
+            "detail": "commands=258",
             "evidence_type": "generated-artifact",
             "status": "verified"
           }
@@ -274,8 +274,8 @@
     }
   },
   "command_catalog": {
-    "command_count": 257,
-    "diagnostic_count": 121,
+    "command_count": 258,
+    "diagnostic_count": 122,
     "entries": [
       {
         "diagnostic_priority": "reference_lookup",
@@ -1086,6 +1086,55 @@
         "safety": "READ_ONLY",
         "surface": "diagnostic",
         "when_to_use": "Run agentic-kit check-todo."
+      },
+      {
+        "diagnostic_priority": "advanced_diagnostic",
+        "dry_run_available": false,
+        "group": "ci",
+        "help": "Report the CI verdict for a commit or branch without requiring a pull request.",
+        "lifecycle_rank": null,
+        "params": [
+          {
+            "default": "",
+            "help": "Commit SHA to inspect.",
+            "name": "commit",
+            "opts": [
+              "--commit"
+            ],
+            "required": false
+          },
+          {
+            "default": "",
+            "help": "Branch name to inspect.",
+            "name": "branch",
+            "opts": [
+              "--branch"
+            ],
+            "required": false
+          },
+          {
+            "default": 20,
+            "help": "Maximum workflow runs to read.",
+            "name": "limit",
+            "opts": [
+              "--limit"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Print JSON instead of the text report.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          }
+        ],
+        "qualified_name": "agentic-kit ci status",
+        "safety": "READ_ONLY",
+        "surface": "diagnostic",
+        "when_to_use": "Report the CI verdict for a commit or branch without requiring a pull request."
       },
       {
         "diagnostic_priority": "advanced_diagnostic",
@@ -11820,6 +11869,7 @@
       "actions": 2,
       "boot": 5,
       "chat": 2,
+      "ci": 1,
       "cockpit": 5,
       "commands": 2,
       "dev": 1,
@@ -11858,11 +11908,11 @@
     "safety_counts": {
       "BOUNDED": 169,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 79
+      "READ_ONLY": 80
     },
     "schema_version": 1,
     "surface_counts": {
-      "diagnostic": 121,
+      "diagnostic": 122,
       "orchestrator": 33,
       "primitive": 103
     }
@@ -11870,27 +11920,27 @@
   "kind": "agentic_project_kit_generated_site",
   "metadata": {
     "build_commit": "docs-pages-fallback",
-    "command_count": 257,
-    "command_group_count": 35,
+    "command_count": 258,
+    "command_group_count": 36,
     "concept_doi": "10.5281/zenodo.20101359",
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "799be87e8212",
+    "manifest_sha": "cfea9fe4a7b5",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.18",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.18",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "799be87e8212",
+    "reproduced_manifest_sha": "cfea9fe4a7b5",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 169,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 79
+      "READ_ONLY": 80
     },
     "surface_counts": {
-      "diagnostic": 121,
+      "diagnostic": 122,
       "orchestrator": 33,
       "primitive": 103
     },

@@ -399,6 +399,8 @@ and `commands/commands.json` plus `commands/index.html` from the complete
 manifest. The build must fail on missing or invalid command `surface`, `safety`,
 `remote_effects`, `dry_run_available`, `when_to_use` or `params` metadata.
 Remote-effect classification is conservative command metadata; `none` must appear alone and local-only rescue routes must stay classified with `remote_effects: none`.
+
+`agentic-kit ci status --commit SHA --branch BRANCH --json` must remain a read-only post-merge and branch CI status command. It must query GitHub Actions runs without requiring a pull request, return pure JSON under `--json`, classify green CI as `PASS`, pending CI as `PENDING`, and red or missing CI as structured `BLOCKED` findings without treating a red verdict as a command execution failure.
 The complete command reference must keep search, safety filter and surface filter
 controls bound to manifest-derived row metadata; added filters are
 presentation helpers and must not rewrite the manifest safety or surface values.

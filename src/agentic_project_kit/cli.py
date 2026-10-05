@@ -4,6 +4,7 @@ from agentic_project_kit.cli_commands.actions import actions_app
 from agentic_project_kit.cli_commands.boot import boot_app
 from agentic_project_kit.cli_commands.checks import register_check_commands
 from agentic_project_kit.cli_commands.chat import chat_app
+from agentic_project_kit.cli_commands.ci import ci_app
 from agentic_project_kit.cli_commands.cockpit import cockpit_app
 from agentic_project_kit.cli_commands.commands import (
     audit_command_authority_command,
@@ -39,15 +40,9 @@ from agentic_project_kit.cli_commands.slice import slice_app
 from agentic_project_kit.cli_commands.state import state_app
 from agentic_project_kit.cli_commands.todo import todo_app
 from agentic_project_kit.cli_commands.transfer import transfer_app
-from agentic_project_kit.cli_commands.transfer_post_merge_complete import (
-    register_transfer_post_merge_complete_command,
-)
-from agentic_project_kit.cli_commands.transfer_post_merge_settle import (
-    register_transfer_post_merge_settle_command,
-)
-from agentic_project_kit.cli_commands.transfer_pr_closeout_complete import (
-    register_transfer_pr_closeout_complete_command,
-)
+from agentic_project_kit.cli_commands.transfer_post_merge_complete import register_transfer_post_merge_complete_command
+from agentic_project_kit.cli_commands.transfer_post_merge_settle import register_transfer_post_merge_settle_command
+from agentic_project_kit.cli_commands.transfer_pr_closeout_complete import register_transfer_pr_closeout_complete_command
 from agentic_project_kit.cli_commands.validation import register_validation_commands
 from agentic_project_kit.cli_commands.version import register_version_callback
 from agentic_project_kit.cli_commands.work_orders import work_orders_app
@@ -74,7 +69,6 @@ from agentic_project_kit.cli_commands.artifact_gc import artifact_gc_command
 from agentic_project_kit.cli_commands.project_direction import project_direction_command
 from agentic_project_kit.cli_commands.mutation_lock_audit import register_mutation_lock_audit_command
 from agentic_project_kit.patch_artifact_preflight import register_patch_preflight_command
-
 app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
 register_version_callback(app)
 app.command("project-direction")(project_direction_command)
@@ -119,6 +113,7 @@ app.add_typer(rule_registry_app, name="rule-registry")
 app.add_typer(doc_registry_app, name="doc-registry")
 app.add_typer(docs_app, name="docs")
 app.add_typer(chat_app, name="chat")
+app.add_typer(ci_app, name="ci")
 app.add_typer(instruction_app, name="instruction")
 app.add_typer(onboarding_app, name="onboarding")
 app.add_typer(handoff_app, name="handoff")

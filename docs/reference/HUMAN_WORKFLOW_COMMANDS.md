@@ -106,6 +106,10 @@ report records them as `explicit_summary_lines` (KIT-GF-045).
 Use --write only when readiness checks are clean. A successful write also refreshes command entrypoints and writes
 `docs/reports/release/release-prepare-<version>.json` as release-metadata authority evidence for PR and CI gates.
 
+## agentic-kit ci status
+
+Use `agentic-kit ci status --commit <sha> --branch <branch> --json` when a workflow needs the GitHub Actions verdict for a commit or branch without a pull request, such as main after a merge. The command is read-only and returns structured `PASS`, `PENDING`, or `BLOCKED` JSON instead of requiring raw `gh run list` parsing.
+
 ## agentic-kit release run
 
 Run the end-to-end release lifecycle through existing orchestrators. It composes

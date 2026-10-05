@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 799be87e8212
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: cfea9fe4a7b5
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `257`
+- Command count: `258`
 
 ## Commands
 
@@ -367,6 +367,23 @@ Render the session-start refresher and full inline command list.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+
+### `agentic-kit ci status`
+
+- Safety: `READ_ONLY`
+- Surface: `diagnostic`
+- When to use: Report the CI verdict for a commit or branch without requiring a pull request.
+- Dry-run available: `False`
+- Remote effects: `network_read`
+
+Report the CI verdict for a commit or branch without requiring a pull request.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `commit` | `TyperOption` | --commit | `False` | `` | Commit SHA to inspect. |
+| `branch` | `TyperOption` | --branch | `False` | `` | Branch name to inspect. |
+| `limit` | `TyperOption` | --limit | `False` | `20` | Maximum workflow runs to read. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of the text report. |
 
 ### `agentic-kit cockpit actions`
 
