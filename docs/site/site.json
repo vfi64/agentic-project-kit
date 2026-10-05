@@ -5606,6 +5606,15 @@
             "required": false
           },
           {
+            "default": null,
+            "help": "Additional release changelog summary line, combined with the generated release-notes lines (KIT-GF-045). Repeatable.",
+            "name": "summary_lines",
+            "opts": [
+              "--summary-line"
+            ],
+            "required": false
+          },
+          {
             "default": false,
             "help": "Print machine-readable JSON.",
             "name": "json_output",
@@ -5660,6 +5669,15 @@
             "name": "date",
             "opts": [
               "--date"
+            ],
+            "required": false
+          },
+          {
+            "default": null,
+            "help": "Additional release changelog summary line, combined with the generated release-notes lines (KIT-GF-045). Repeatable.",
+            "name": "summary_lines",
+            "opts": [
+              "--summary-line"
             ],
             "required": false
           },
@@ -10160,6 +10178,15 @@
             "required": false
           },
           {
+            "default": null,
+            "help": "Additional release changelog summary line for the release-prep dry-run (KIT-GF-045). Repeatable.",
+            "name": "summary_lines",
+            "opts": [
+              "--summary-line"
+            ],
+            "required": false
+          },
+          {
             "default": "PosixPath('.')",
             "help": "Project root.",
             "name": "root",
@@ -11791,13 +11818,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "d65273fada6f",
+    "manifest_sha": "5bb15052bb28",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.16",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.16",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "d65273fada6f",
+    "reproduced_manifest_sha": "5bb15052bb28",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 168,

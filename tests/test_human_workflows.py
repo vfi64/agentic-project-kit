@@ -186,6 +186,66 @@ def test_release_ready_runs_release_prep_changelog_quality_dry_run(monkeypatch):
     assert "--summary-lines-from" in prep_call
 
 
+def test_release_ready_passes_explicit_summary_lines_to_scan_and_prep(monkeypatch):
+    # KIT-GF-045
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+    monkeypatch.setattr(human_workflows, "_latest_release_tag", lambda: "v1.0.16")
+    monkeypatch.setattr(
+        human_workflows,
+        "_doc_lifecycle_release_review_step",
+        lambda version: {
+            "name": "doc-lifecycle-release-review",
+            "argv": [],
+            "returncode": 0,
+            "ok": True,
+            "allowed_returncodes": [0],
+            "stdout": f"STATUS=PASS VERSION={version}",
+            "stderr": "",
+        },
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["release", "ready", "--version", "1.0.17", "--summary-line", "Guard managed CI workflows", "--json"],
+    )
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["explicit_summary_lines"] == ["Guard managed CI workflows"]
+    scan_call = next(call for call in calls if call[1:3] == ["transfer", "standard-error-scan"])
+    assert scan_call[scan_call.index("--summary-line") + 1] == "Guard managed CI workflows"
+    prep_call = next(call for call in calls if call[:2] == ["./.venv/bin/agentic-kit", "release-prep"])
+    assert prep_call[prep_call.index("--summary-line") + 1] == "Guard managed CI workflows"
+    assert "--summary-lines-from" in prep_call
+
+
+def test_release_without_summary_lines_keeps_the_generated_route(monkeypatch):
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "tag", "--sort=-creatordate"]:
+            return _completed(command, stdout="v1.2.2\n")
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(app, ["release", "prepare", "--version", "1.2.3", "--json"])
+
+    assert result.exit_code == 0, result.output
+    prep_call = next(call for call in calls if call[:2] == ["./.venv/bin/agentic-kit", "release-prep"])
+    assert "--summary-line" not in prep_call
+    assert "--summary-lines-from" in prep_call
+
+
 def test_work_start_from_remote_integration_ref_does_not_sync_main_or_post_merge(monkeypatch):
     calls: list[list[str]] = []
 
@@ -1031,6 +1091,45 @@ def test_release_prepare_write_syncs_command_entrypoints(monkeypatch, tmp_path):
         assert any(step["name"] == "docs-pages-fallback-refresh" for step in payload["steps"])
     finally:
         report.unlink(missing_ok=True)
+
+
+def test_release_prepare_write_passes_and_records_explicit_summary_lines(monkeypatch, tmp_path):
+    # KIT-GF-045: the explicit lines reach release-prep and the release-prepare evidence.
+    calls: list[list[str]] = []
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(human_workflows, "default_agentic_kit", lambda root: "./.venv/bin/agentic-kit")
+    monkeypatch.setattr(human_workflows, "default_python", lambda root: "./.venv/bin/python")
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "tag", "--sort=-creatordate"]:
+            return _completed(command, stdout="v1.2.2\n")
+        if command == ["git", "diff", "--name-only", "origin/main"]:
+            return _completed(command, stdout="pyproject.toml\nCHANGELOG.md\n")
+        return _completed(command)
+
+    monkeypatch.setattr("agentic_project_kit.cli_commands.human_workflows.subprocess.run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "release", "prepare", "--version", "1.2.3", "--write",
+            "--summary-line", "Guard managed CI workflows",
+            "--summary-line", "Record handoff evidence",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    prep_call = next(call for call in calls if call[:2] == ["./.venv/bin/agentic-kit", "release-prep"])
+    lines = [prep_call[i + 1] for i, arg in enumerate(prep_call) if arg == "--summary-line"]
+    assert lines == ["Guard managed CI workflows", "Record handoff evidence"]
+    assert "--summary-lines-from" in prep_call
+    assert "--dry-run" not in prep_call
+    report = tmp_path / "docs" / "reports" / "release" / "release-prepare-1.2.3.json"
+    payload = json.loads(report.read_text(encoding="utf-8"))
+    assert payload["explicit_summary_lines"] == ["Guard managed CI workflows", "Record handoff evidence"]
 
 
 def test_release_prepare_stops_before_release_prep_when_notes_block(monkeypatch, tmp_path):

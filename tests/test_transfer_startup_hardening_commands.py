@@ -1124,6 +1124,52 @@ def test_standard_error_scan_before_release_requires_post_merge_check(monkeypatc
     assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] for call in calls)
 
 
+def test_standard_error_scan_passes_explicit_summary_lines_to_release_prep(tmp_path: Path, monkeypatch):
+    # KIT-GF-045: the generated release-notes lines alone may not cover enough
+    # changelog quality categories; explicit lines must reach the release-prep dry-run.
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "src").mkdir()
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "docs/reference").mkdir(parents=True)
+    (tmp_path / ".agentic").mkdir()
+    _write_minimal_meta_preference_rules(tmp_path)
+    (tmp_path / "docs/reference/agentic-kit-commands.json").write_text('{"commands": []}\n', encoding="utf-8")
+
+    calls: list[list[str]] = []
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        return _completed(command, stdout='{"result_status": "PASS"}\n')
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "standard-error-scan",
+            "--root",
+            str(tmp_path),
+            "--before-release",
+            "--version",
+            "1.2.3",
+            "--from-tag",
+            "v1.2.2",
+            "--summary-line",
+            "Guard modified managed CI workflows",
+            "--json",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    prep_call = next(call for call in calls if call[:2] == ["./.venv/bin/agentic-kit", "release-prep"])
+    index = prep_call.index("--summary-line")
+    assert prep_call[index + 1] == "Guard modified managed CI workflows"
+    assert "--summary-lines-from" in prep_call
+    assert "--dry-run" in prep_call
+
+
 def test_transfer_meta_command_preference_header_is_rendered_from_rule_files(tmp_path: Path):
     from agentic_project_kit.cli_commands.transfer import _render_transfer_meta_command_preference_header
 

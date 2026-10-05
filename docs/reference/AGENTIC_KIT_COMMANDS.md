@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: d65273fada6f
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 5bb15052bb28
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -1847,6 +1847,7 @@ Generate release summary evidence and run release-prep safely.
 | `to_ref` | `TyperOption` | --to-ref | `False` | `main` | Target ref. |
 | `date` | `TyperOption` | --date | `False` | `` | Release date. Defaults to today. |
 | `dry_run` | `TyperOption` | --dry-run, --write | `False` | `True` | Dry-run by default. Use --write to update release metadata. |
+| `summary_lines` | `TyperOption` | --summary-line | `False` |  | Additional release changelog summary line, combined with the generated release-notes lines (KIT-GF-045). Repeatable. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit release ready`
@@ -1866,6 +1867,7 @@ Run release readiness through the standard-error scan wrapper.
 | `from_tag` | `TyperOption` | --from-tag | `False` | `` | Previous release tag. Defaults to latest local v* git tag. |
 | `to_ref` | `TyperOption` | --to-ref | `False` | `main` | Target ref. |
 | `date` | `TyperOption` | --date | `False` | `` | Release date. Defaults to today. |
+| `summary_lines` | `TyperOption` | --summary-line | `False` |  | Additional release changelog summary line, combined with the generated release-notes lines (KIT-GF-045). Repeatable. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit release-check`
@@ -3411,6 +3413,7 @@ Run a bounded scan for known workflow standard errors before patch/transfer/rele
 | `from_tag` | `TyperOption` | --from-tag | `False` | `` | Previous release tag for release notes checks. Defaults to the latest local v* git tag. |
 | `to_ref` | `TyperOption` | --to-ref | `False` | `main` | Target ref for release notes checks. |
 | `date` | `TyperOption` | --date | `False` | `` | Release date for release-prep dry-run. Defaults to today. |
+| `summary_lines` | `TyperOption` | --summary-line | `False` |  | Additional release changelog summary line for the release-prep dry-run (KIT-GF-045). Repeatable. |
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON only. |
 

@@ -550,6 +550,11 @@ def standard_error_scan_command(
     from_tag: str = typer.Option("", "--from-tag", help="Previous release tag for release notes checks. Defaults to the latest local v* git tag."),
     to_ref: str = typer.Option("main", "--to-ref", help="Target ref for release notes checks."),
     date: str = typer.Option("", "--date", help="Release date for release-prep dry-run. Defaults to today."),
+    summary_lines: list[str] | None = typer.Option(
+        None,
+        "--summary-line",
+        help="Additional release changelog summary line for the release-prep dry-run (KIT-GF-045). Repeatable.",
+    ),
     root: Path = typer.Option(Path("."), "--root", help="Project root."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
 ) -> None:
@@ -672,6 +677,7 @@ def standard_error_scan_command(
                 version,
                 "--date",
                 release_date,
+                *[arg for line in (summary_lines or []) if line.strip() for arg in ("--summary-line", line.strip())],
                 "--summary-lines-from",
                 str(summary_lines_path),
                 "--dry-run",
