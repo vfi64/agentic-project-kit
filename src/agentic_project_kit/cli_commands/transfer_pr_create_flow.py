@@ -11,11 +11,63 @@ from agentic_project_kit.cli_commands.transfer_context_helpers import _known_vol
 from agentic_project_kit.cli_commands.transfer_pr_merge_flow import _resolve_expected_head_sha_alias
 from agentic_project_kit.cli_executable import default_agentic_kit
 from agentic_project_kit.repo_identity import bind_github_cli_env_for_origin
+from agentic_project_kit.transfer_pr_branch_state import detect_branch_no_content_diff
 from agentic_project_kit.volatile_paths import (
     RULE_ACK_DIRECTORY_PATH,
     TRANSFER_OUTBOX_LAST_RESULT_PATH,
 )
 from agentic_project_kit.workspace import load_workspace
+
+
+
+def _done_payload_for_no_content_diff(
+    *,
+    action: str,
+    base: str,
+    head: str,
+    diff_status,
+    steps: list[dict[str, object]] | None = None,
+) -> dict[str, object]:
+    merged_pr = diff_status.merged_pr or {}
+    pr_number = merged_pr.get("number") if isinstance(merged_pr, dict) else None
+    payload_steps = list(steps or [])
+    payload_steps.extend(diff_status.as_payload().get("steps", []))
+    return {
+        "schema_version": 1,
+        "kind": f"transfer_{action.replace('-', '_')}_result",
+        "action": action,
+        "result_status": "PASS",
+        "final_signal": "d",
+        "already_done": True,
+        "base": base,
+        "head": head,
+        "pr_number": pr_number,
+        "merged_pr": merged_pr or None,
+        "blockers": [],
+        "steps": payload_steps,
+        "next_action": (
+            f"No pull request created: {head} has no content diff against {diff_status.base_ref}."
+            + (f" Previous merged PR: #{pr_number}." if pr_number else "")
+        ),
+    }
+
+
+def _emit_done_payload(payload: dict[str, object], *, json_output: bool, title: str) -> None:
+    if json_output:
+        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True))
+        return
+    _echo_transfer_payload_summary(
+        title=title,
+        result_status=str(payload["result_status"]),
+        final_signal=str(payload["final_signal"]),
+        next_action=str(payload["next_action"]),
+        fields={
+            "PR": payload.get("pr_number") or "none",
+            "HEAD": payload.get("head"),
+            "BASE": payload.get("base"),
+            "ALREADY_DONE": payload.get("already_done"),
+        },
+    )
 
 def _auto_preflight_pr_create_complete(*, root: Path) -> None:
     """Prepare rule/context carriers before pr-create-complete mutates GitHub state."""
@@ -175,6 +227,16 @@ def pr_create_command(
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
     require_capability("rules_confirmed")
     bind_github_cli_env_for_origin(Path("."))
+    diff_status = detect_branch_no_content_diff(Path("."), base=base, head=resolved_head)
+    if diff_status.no_content_diff:
+        payload = _done_payload_for_no_content_diff(
+            action="pr-create",
+            base=base,
+            head=resolved_head,
+            diff_status=diff_status,
+        )
+        _emit_done_payload(payload, json_output=json_output, title="TRANSFER_PR_CREATE")
+        return
     create_pr = _public_transfer_attr("pr_create", pr_create)
     result = create_pr(base=base, head=resolved_head, title=title, body=body)
     echo_repo_result = _public_transfer_attr("_echo_repo_result", _echo_repo_result)
@@ -553,6 +615,24 @@ def pr_create_complete_command(
         blockers.append("current_head_sha_invalid")
 
     inner_post_merge_followup_verified = False
+    if not blockers:
+        diff_status = detect_branch_no_content_diff(Path("."), base=base, head=resolved_head)
+        if diff_status.no_content_diff:
+            payload = _done_payload_for_no_content_diff(
+                action="pr-create-complete",
+                base=base,
+                head=resolved_head,
+                diff_status=diff_status,
+                steps=steps,
+            )
+            update_live_status("done", result_status="PASS", step="already-done-no-content-diff")
+            if json_output:
+                typer.echo(json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True))
+            else:
+                _emit_done_payload(payload, json_output=False, title="TRANSFER_PR_CREATE_COMPLETE")
+            return
+        steps.extend(diff_status.as_payload().get("steps", []))
+
     if not blockers:
         update_live_status("creating_pr", step="pr-create")
         create_result = run_step(

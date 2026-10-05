@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 9529749193c5
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: d65273fada6f
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -3015,7 +3015,7 @@ Wait for CI, safely merge an existing PR, and synchronize main.
 | `poll_seconds` | `TyperOption` | --interval-seconds, --poll-seconds | `False` | `10` | CI polling interval. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 | `skip_llm_context_gate` | `TyperOption` | --skip-llm-context-gate | `False` | `False` | Recovery-only: run PR completion without requiring fresh generated LLM context. |
-| `post_merge_complete` | `TyperOption` | --post-merge-complete | `False` | `False` | Invalid for pr-complete. Use pr-create-complete --post-merge-complete for new PRs, or run post-merge-complete separately after an existing PR is merged. |
+| `post_merge_complete` | `TyperOption` | --post-merge-complete | `False` | `False` | Accepted compatibility flag: pr-complete already runs post-merge-complete after a successful merge. |
 
 ### `agentic-kit transfer pr-create`
 

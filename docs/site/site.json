@@ -9037,7 +9037,7 @@
           },
           {
             "default": false,
-            "help": "Invalid for pr-complete. Use pr-create-complete --post-merge-complete for new PRs, or run post-merge-complete separately after an existing PR is merged.",
+            "help": "Accepted compatibility flag: pr-complete already runs post-merge-complete after a successful merge.",
             "name": "post_merge_complete",
             "opts": [
               "--post-merge-complete"
@@ -11791,13 +11791,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "9529749193c5",
+    "manifest_sha": "d65273fada6f",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.16",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.16",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "9529749193c5",
+    "reproduced_manifest_sha": "d65273fada6f",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 168,

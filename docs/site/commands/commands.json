@@ -8762,7 +8762,7 @@
         },
         {
           "default": false,
-          "help": "Invalid for pr-complete. Use pr-create-complete --post-merge-complete for new PRs, or run post-merge-complete separately after an existing PR is merged.",
+          "help": "Accepted compatibility flag: pr-complete already runs post-merge-complete after a successful merge.",
           "name": "post_merge_complete",
           "opts": [
             "--post-merge-complete"
