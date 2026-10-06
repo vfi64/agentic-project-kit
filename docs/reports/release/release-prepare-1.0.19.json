@@ -1,0 +1,210 @@
+{
+  "authorized_route": "agentic-kit release-prep",
+  "base_ref": "origin/main",
+  "changed_paths_against_base": [
+    ".agentic/dpa/acceptance/current_handoff_operational_state.json",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/site/claims/claims.json",
+    "docs/site/claims/index.html",
+    "docs/site/commands/commands.json",
+    "docs/site/commands/diagnostics.html",
+    "docs/site/commands/guided.html",
+    "docs/site/commands/index.html",
+    "docs/site/index.html",
+    "docs/site/quickstart/index.html",
+    "docs/site/quickstart/quickstart.json",
+    "docs/site/site.json",
+    "docs/site/workflows/index.html",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py",
+    "src/agentic_project_kit/reference/agentic-kit-commands.json"
+  ],
+  "date": "2026-10-06",
+  "explicit_summary_lines": [
+    "Add the governed release run orchestrator `agentic-kit release run` with resumable, signature-bound approval gates (KIT-GF-047).",
+    "Add the read-only `agentic-kit ci status` verdict for commits and branches without a pull request, and remote-effect metadata for every command in the manifest (KIT-GF-024/025).",
+    "Repair post-merge-complete: the caller's CI budget reaches the follow-up wait, and a pending follow-up CI is reported as PENDING without starting a fallback (KIT-GF-050 A).",
+    "Repair admin-refresh-pr in external workspaces: the handoff state is read from the workspace layout, a missing state file is skipped before any branch exists, and a failed fallback returns to main (KIT-GF-050 B).",
+    "Harden Kit temp artifacts to respect TMPDIR (KIT-GF-028).",
+    "Record the verified Zenodo DOI for release 1.0.18."
+  ],
+  "from_tag": "v1.0.18",
+  "kind": "release_prepare_evidence",
+  "release_metadata_anchor_paths": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py"
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-notes-generate",
+        "--version",
+        "1.0.19",
+        "--from-tag",
+        "v1.0.18",
+        "--to-ref",
+        "main",
+        "--include-github-metadata",
+        "--summary-lines-json",
+        "tmp/release-1019-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-notes-generate",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 20330,
+      "stdout_sha256": "c4150c2fce7ca6f0a2d7d0d919eb05912b5962f731efe555cff713dce1e93aa8"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-prep",
+        "--version",
+        "1.0.19",
+        "--date",
+        "2026-10-06",
+        "--summary-line",
+        "Add the governed release run orchestrator `agentic-kit release run` with resumable, signature-bound approval gates (KIT-GF-047).",
+        "--summary-line",
+        "Add the read-only `agentic-kit ci status` verdict for commits and branches without a pull request, and remote-effect metadata for every command in the manifest (KIT-GF-024/025).",
+        "--summary-line",
+        "Repair post-merge-complete: the caller's CI budget reaches the follow-up wait, and a pending follow-up CI is reported as PENDING without starting a fallback (KIT-GF-050 A).",
+        "--summary-line",
+        "Repair admin-refresh-pr in external workspaces: the handoff state is read from the workspace layout, a missing state file is skipped before any branch exists, and a failed fallback returns to main (KIT-GF-050 B).",
+        "--summary-line",
+        "Harden Kit temp artifacts to respect TMPDIR (KIT-GF-028).",
+        "--summary-line",
+        "Record the verified Zenodo DOI for release 1.0.18.",
+        "--summary-lines-from",
+        "tmp/release-1019-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-prep",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 292,
+      "stdout_sha256": "5ce2544c5a72dc6f581ef2f2621f0c4ad0f0ebed2eaab3322a65ea92478b0ea4"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "commands",
+        "sync-entrypoints",
+        "--execute",
+        "--json"
+      ],
+      "name": "commands-sync-entrypoints",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 419,
+      "stdout_sha256": "97d77e721f370da6fdec284e236492cddf144b44880dc500f2d7df8b4b503f5d"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "agentic-kit",
+        "release",
+        "prepare",
+        "--internal-dpa-readiness-ack-refresh"
+      ],
+      "name": "dpa-readiness-ack-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 416,
+      "stdout_sha256": "a7ef29207e44d1afe3da98801dc26f034bd7698f5da68ae48ca129b92e51bdf6"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "chat-switch-complete",
+        "--json"
+      ],
+      "name": "successor-handoff-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 9111,
+      "stdout_sha256": "834180f75657ba3f600d6c93295a59632abf9453647d206556482e109638424d"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "site/scripts/build.py",
+        "--docs-pages-fallback",
+        "--json"
+      ],
+      "name": "docs-pages-fallback-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 4045,
+      "stdout_sha256": "7c92efa8809defe7c668c621288461caa5c8de0171f4df6922ce02018d8e519c"
+    }
+  ],
+  "summary_lines_path": "tmp/release-1019-summary-lines.json",
+  "to_ref": "main",
+  "version": "1.0.19"
+}
