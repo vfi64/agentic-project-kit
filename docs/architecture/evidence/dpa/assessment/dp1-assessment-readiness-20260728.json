@@ -8,7 +8,7 @@
     "production_mutation_performed": false,
     "runtime_behavior_changed": false
   },
-  "command_manifest_ack": "COMMAND_MANIFEST_ACK cfea9fe4a7b5",
+  "command_manifest_ack": "COMMAND_MANIFEST_ACK fb315aa30770",
   "dp2_entry_status": {
     "architecture_staging": "SATISFIED_FOR_ARCHITECTURE_STAGING",
     "first_dp2_target_scope": "SELECTED_WRT_CH001_CH002_CH003_CH004_HANDOFF_SCOPE",
