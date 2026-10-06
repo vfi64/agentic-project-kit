@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `8ccc1223a09ea6ab85dbb1aa84eac78615be1de4` (`8ccc1223`), after `Fix post-merge fallback in external workspaces (KIT-GF-050 B) (#2411)`.
-Last substantive work state is `8ccc1223a09ea6ab85dbb1aa84eac78615be1de4` (`8ccc1223`), after `Fix post-merge fallback in external workspaces (KIT-GF-050 B) (#2411)`.
+Current verified main/admin HEAD is `5d827b19f8abe8abdeea58f94848c80281bb5b42` (`5d827b19`), after `Release 1.0.19 (#2413)`.
+Last substantive work state is `5d827b19f8abe8abdeea58f94848c80281bb5b42` (`5d827b19`), after `Release 1.0.19 (#2413)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

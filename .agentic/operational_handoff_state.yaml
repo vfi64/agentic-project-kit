@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 8ccc1223a09ea6ab85dbb1aa84eac78615be1de4
-  short: 8ccc1223
-  subject: Fix post-merge fallback in external workspaces (KIT-GF-050 B) (#2411)
+  full: 5d827b19f8abe8abdeea58f94848c80281bb5b42
+  short: 5d827b19
+  subject: Release 1.0.19 (#2413)
 last_substantive_work_state:
-  full: 8ccc1223a09ea6ab85dbb1aa84eac78615be1de4
-  short: 8ccc1223
-  subject: Fix post-merge fallback in external workspaces (KIT-GF-050 B) (#2411)
+  full: 5d827b19f8abe8abdeea58f94848c80281bb5b42
+  short: 5d827b19
+  subject: Release 1.0.19 (#2413)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
