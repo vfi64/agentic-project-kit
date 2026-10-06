@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 58364a964fab20d61871932ff6cb708a9c3158e4
-  short: 58364a96
-  subject: Add CI status command (#2407)
+  full: b189fa333b89a03d4ca54a04913084a5e0f44ae1
+  short: b189fa33
+  subject: Fix post-merge follow-up CI wait (KIT-GF-050 A) (#2409)
 last_substantive_work_state:
-  full: 58364a964fab20d61871932ff6cb708a9c3158e4
-  short: 58364a96
-  subject: Add CI status command (#2407)
+  full: b189fa333b89a03d4ca54a04913084a5e0f44ae1
+  short: b189fa33
+  subject: Fix post-merge follow-up CI wait (KIT-GF-050 A) (#2409)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
