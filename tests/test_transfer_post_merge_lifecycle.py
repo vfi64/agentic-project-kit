@@ -608,3 +608,37 @@ def test_gf050a_pending_followup_ci_returns_pending_without_merge(monkeypatch):
     assert result.result_status == "PENDING"
     assert result.refresh_pr == 2099
     assert calls == [("wait", 1800)]
+
+
+def test_gf050b_unrelated_timeout_text_with_fail_is_not_pending(monkeypatch):
+    monkeypatch.setattr(
+        f"{TARGET}.post_merge_check",
+        lambda **_kwargs: _result(
+            "post-merge-check",
+            "POST_MERGE_HANDOFF_REFRESH\nresult=REFRESH_REQUIRED\n",
+        ),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.admin_refresh_pr",
+        lambda _after_pr, **_kwargs: _result("admin-refresh-pr", "existing_pr=2501\n"),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.pr_wait_ci",
+        lambda _pr_number, **_kwargs: _result(
+            "pr-wait-ci",
+            "diagnostic timeout_seconds=30 but readiness=FAIL\n",
+            returncode=1,
+        ),
+    )
+    monkeypatch.setattr(
+        f"{TARGET}.pr_merge_safe",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("FAIL CI must not merge")
+        ),
+    )
+
+    result = post_merge_complete(2499)
+
+    assert result.result_status == "BLOCKED"
+    assert result.lifecycle_state == "ADMIN_REFRESH_CI_BLOCKED"
+    assert result.returncode == 2

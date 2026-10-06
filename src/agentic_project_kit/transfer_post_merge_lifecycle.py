@@ -340,8 +340,7 @@ def post_merge_complete(
         poll_seconds=ci_poll_seconds,
     )
     steps.append(PostMergeLifecycleStep(f"{refresh_plan.step_prefix}-wait-ci", refresh_wait))
-    wait_text = f"{refresh_wait.stdout}\n{refresh_wait.stderr}".upper()
-    if refresh_wait.result_status == "PENDING" or "TIMEOUT" in wait_text:
+    if refresh_wait.result_status == "PENDING":
         return _finish(after_pr=after_pr, result_status="PENDING", returncode=0,
             lifecycle_state=f"{refresh_plan.blocked_state_prefix}_CI_PENDING",
             next_action=f"{refresh_plan.display_name.capitalize()} PR #{refresh_pr} CI is still pending.",

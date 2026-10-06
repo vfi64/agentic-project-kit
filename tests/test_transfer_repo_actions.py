@@ -3143,6 +3143,10 @@ last_substantive_work_state:
 
     monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
     monkeypatch.setattr(
+        "agentic_project_kit.dpa_current_handoff_lifecycle._git",
+        lambda _root, args: full if args == ["rev-parse", "HEAD"] else "main",
+    )
+    monkeypatch.setattr(
         "agentic_project_kit.transfer_repo_actions._agentic_kit_command",
         lambda: "agentic-kit",
     )
@@ -3309,6 +3313,10 @@ last_substantive_work_state:
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
     monkeypatch.setattr("agentic_project_kit.transfer_repo_actions._run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.dpa_current_handoff_lifecycle._git",
+        lambda _root, args: refresh_full if args == ["rev-parse", "HEAD"] else "main",
+    )
     monkeypatch.setattr(
         "agentic_project_kit.transfer_repo_actions._agentic_kit_command",
         lambda: "agentic-kit",
@@ -3491,6 +3499,10 @@ def test_admin_refresh_replaces_existing_operational_refresh_marker(tmp_path: Pa
         return subprocess.CompletedProcess(argv, 0, "", "")
 
     monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.dpa_current_handoff_lifecycle._git",
+        lambda _root, args: "eed934fe54c9d926074a99055ed997c2a91332be" if args == ["rev-parse", "HEAD"] else "main",
+    )
 
     result = transfer_repo_actions._refresh_operational_handoff_docs(1338)
 
@@ -3682,6 +3694,10 @@ def test_transfer_repo_actions_path_contract_snapshot(tmp_path: Path, monkeypatc
         return subprocess.CompletedProcess(argv, 99, "", f"unexpected command: {argv}\n")
 
     monkeypatch.setattr(transfer_repo_actions, "_run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.dpa_current_handoff_lifecycle._git",
+        lambda _root, args: full if args == ["rev-parse", "HEAD"] else "main",
+    )
 
     result = transfer_repo_actions._refresh_operational_handoff_docs(2468)
 
