@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 3c11db91de7f7ce0999bd3cede5a076b3a0f17bc0a13a36a58d6e0cb2a4ba689
 - docs/reference/agentic-kit-commands.json: 48927fb3c8bf97b84e4c7759aad1ddacb036f38ab08768db19f4221eb5bfcfc2
-## Operational documentation refresh state after PR #2409
+## Operational documentation refresh state after PR #2411
 
-Current administrative handoff refresh state is `b189fa33` (`Fix post-merge follow-up CI wait (KIT-GF-050 A) (#2409)`). Continue next only after this post-PR2409 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `8ccc1223` (`Fix post-merge fallback in external workspaces (KIT-GF-050 B) (#2411)`). Continue next only after this post-PR2411 refresh is committed and merged; the next substantive slice must be created from fresh main.

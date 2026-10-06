@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `b189fa333b89a03d4ca54a04913084a5e0f44ae1` (`b189fa33`), after `Fix post-merge follow-up CI wait (KIT-GF-050 A) (#2409)`.
-Last substantive work state is `b189fa333b89a03d4ca54a04913084a5e0f44ae1` (`b189fa33`), after `Fix post-merge follow-up CI wait (KIT-GF-050 A) (#2409)`.
+Current verified main/admin HEAD is `8ccc1223a09ea6ab85dbb1aa84eac78615be1de4` (`8ccc1223`), after `Fix post-merge fallback in external workspaces (KIT-GF-050 B) (#2411)`.
+Last substantive work state is `8ccc1223a09ea6ab85dbb1aa84eac78615be1de4` (`8ccc1223`), after `Fix post-merge fallback in external workspaces (KIT-GF-050 B) (#2411)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
