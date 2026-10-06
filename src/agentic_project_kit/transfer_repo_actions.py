@@ -9,6 +9,7 @@ from pathlib import Path
 import yaml
 
 from agentic_project_kit.chat_entrypoint_contract import ensure_command_reference_in_prompt
+from agentic_project_kit.ci_readiness import TIMEOUT, WAITING
 from agentic_project_kit.cli_executable import default_agentic_kit
 from agentic_project_kit.dpa_current_handoff_lifecycle import (
     DEFAULT_READINESS_PATH,
@@ -1665,7 +1666,28 @@ def pr_wait_ci(
         expected_head_sha,
     ]
     completed = _run(command)
-    return _result("pr-wait-ci", command, completed, "Run transfer pr-status or merge-if-green after CI is green.")
+    result = _result(
+        "pr-wait-ci",
+        command,
+        completed,
+        "Run transfer pr-status or merge-if-green after CI is green.",
+    )
+    outcome = ""
+    for line in completed.stdout.splitlines():
+        if line.startswith("PR readiness outcome:"):
+            outcome = line.partition(":")[2].strip()
+            break
+    if outcome in {TIMEOUT, WAITING}:
+        return RepoActionResult(
+            action=result.action,
+            result_status="PENDING",
+            returncode=result.returncode,
+            command=result.command,
+            stdout=result.stdout,
+            stderr=result.stderr,
+            next_action=result.next_action,
+        )
+    return result
 
 
 def pr_merge_safe(
@@ -2333,10 +2355,21 @@ def _admin_refresh_failure(command, completed, next_action, *, main_branch: str,
 def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionResult:
     ws = load_workspace(Path("."))
     state_path = ws.handoff_state_path()
-    if not state_path.exists():
+    namespace_state = ws.config.handoff_state_file != KitConfig().handoff_state_file
+    if namespace_state and not state_path.exists():
         expected = ws.path_text(state_path)
-        completed = subprocess.CompletedProcess(["admin-refresh-pr", "--after-pr", str(after_pr)], 0, f"SKIP: handoff state file not found: {expected}\n", "")
-        return _result("admin-refresh-pr", completed.args, completed, f"admin_refresh_skipped_missing_handoff_state:{expected}")
+        completed = subprocess.CompletedProcess(
+            ["admin-refresh-pr", "--after-pr", str(after_pr)],
+            0,
+            f"SKIP: handoff state file not found: {expected}\n",
+            "",
+        )
+        return _result(
+            "admin-refresh-pr",
+            completed.args,
+            completed,
+            f"admin_refresh_skipped_missing_handoff_state:{expected}",
+        )
     if _is_refresh_only_pr(after_pr, ws=ws):
         completed = subprocess.CompletedProcess(
             ["admin-refresh-pr", "--after-pr", str(after_pr)],

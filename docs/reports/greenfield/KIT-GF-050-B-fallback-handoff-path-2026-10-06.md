@@ -5,3 +5,4 @@
 - Admin-refresh failure paths clean back to the starting main branch or name the cleanup route.
 - Follow-up CI PENDING classification uses structured result status, not rendered TIMEOUT text.
 - Regression coverage includes namespace state, missing state, fallback cleanup, and unrelated timeout text.
+- `pr_wait_ci` maps structured readiness outcomes TIMEOUT and WAITING to `PENDING`; BLOCKED remains a failure.

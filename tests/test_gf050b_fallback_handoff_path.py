@@ -1,8 +1,6 @@
-from pathlib import Path
 import subprocess
 
 import agentic_project_kit.transfer_repo_actions as tra
-import agentic_project_kit.workspace as workspace_module
 from agentic_project_kit.handoff_state import load_handoff_state
 from agentic_project_kit.workspace import NAMESPACE_DEFAULTS, Workspace
 
@@ -14,13 +12,12 @@ def test_gf050b_namespace_admin_refresh_reads_workspace_state(tmp_path, monkeypa
     state.write_text("schema_version: 1\n")
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(tra, "load_workspace", lambda _p: ws)
-    monkeypatch.setattr(workspace_module, "load_workspace", lambda *_a, **_k: ws)
     monkeypatch.setattr(tra, "_is_refresh_only_pr", lambda *_a, **_k: False)
     monkeypatch.setattr(
         tra,
         "_admin_refresh_pr_unlocked",
         lambda *_a, **_k: (
-            load_handoff_state(),
+            load_handoff_state(ws.handoff_state_path()),
             tra.RepoActionResult("admin-refresh-pr", "PASS", 0, ["x"], "ok\n", "", "next"),
         )[1],
     )
@@ -58,6 +55,29 @@ def test_gf050b_failure_cleanup_returns_to_main(monkeypatch):
     assert ["git", "switch", "main"] in calls
 
 
-def test_gf050b_pending_detection_is_structured():
-    source = Path("src/agentic_project_kit/transfer_post_merge_lifecycle.py").read_text()
-    assert '"TIMEOUT" in wait_text' not in source
+def test_gf050b_pr_wait_ci_timeout_is_pending(monkeypatch):
+    monkeypatch.setattr(tra, "_resolve_pr_head_sha", lambda *_a, **_k: ("a" * 40, None))
+    monkeypatch.setattr(
+        tra,
+        "_run",
+        lambda command, cwd=None: subprocess.CompletedProcess(
+            command, 1, "PR readiness outcome: TIMEOUT\n", ""
+        ),
+    )
+    result = tra.pr_wait_ci(2501)
+    assert result.result_status == "PENDING"
+    assert result.returncode == 1
+
+
+def test_gf050b_pr_wait_ci_blocked_stays_fail(monkeypatch):
+    monkeypatch.setattr(tra, "_resolve_pr_head_sha", lambda *_a, **_k: ("a" * 40, None))
+    monkeypatch.setattr(
+        tra,
+        "_run",
+        lambda command, cwd=None: subprocess.CompletedProcess(
+            command, 1, "PR readiness outcome: BLOCKED\n", ""
+        ),
+    )
+    result = tra.pr_wait_ci(2501)
+    assert result.result_status == "FAIL"
+    assert result.returncode == 1
