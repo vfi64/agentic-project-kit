@@ -590,3 +590,21 @@ def test_post_merge_complete_recovery_steps_satisfy_short_circuit_invariant():
     )
 
     assert violations == []
+
+def test_gf050a_pending_followup_ci_returns_pending_without_merge(monkeypatch):
+    calls = []
+    monkeypatch.setattr(f"{TARGET}.post_merge_check", lambda **_kwargs: _result(
+        "post-merge-check", "STATE=NEEDS_SUCCESSOR_PACKAGE_REFRESH\n", returncode=1,
+        next_action="STATE=NEEDS_SUCCESSOR_PACKAGE_REFRESH"))
+    monkeypatch.setattr(f"{TARGET}.successor_package_refresh_pr",
+        lambda _after_pr, **_kwargs: _result("successor-package-refresh-pr", "existing_pr=2099\n"))
+    def pending(_pr, **kwargs):
+        calls.append(("wait", kwargs["timeout_seconds"]))
+        return RepoActionResult("pr-wait-ci", "PENDING", 2, ["pr-wait-ci"], "TIMEOUT\n", "", "resume")
+    monkeypatch.setattr(f"{TARGET}.pr_wait_ci", pending)
+    monkeypatch.setattr(f"{TARGET}.pr_merge_safe", lambda *_a, **_k: (_ for _ in ()).throw(AssertionError("merge called")))
+    monkeypatch.setattr(f"{TARGET}.admin_refresh_pr", lambda *_a, **_k: (_ for _ in ()).throw(AssertionError("fallback called")))
+    result = post_merge_complete(2001, ci_timeout_seconds=1800)
+    assert result.result_status == "PENDING"
+    assert result.refresh_pr == 2099
+    assert calls == [("wait", 1800)]

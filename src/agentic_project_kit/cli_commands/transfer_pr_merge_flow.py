@@ -389,11 +389,16 @@ def pr_complete_command(
                 str(pr_number),
                 "--main-branch",
                 main_branch,
+                "--ci-timeout-seconds",
+                str(timeout_seconds),
+                "--ci-poll-seconds",
+                str(poll_seconds),
             ],
         ),
     ]
 
     failed_step = None
+    pending_refresh_pr = None
     for name, argv in step_plan:
         if name == "pr-wait-ci":
             update_parent_live_status("waiting_ci", step=name)
@@ -402,6 +407,14 @@ def pr_complete_command(
         else:
             update_parent_live_status("post_merge", step=name)
         step_returncode = run_step(name, argv)
+        if name == "post-merge-complete":
+            try:
+                post_payload = json.loads(str(steps[-1].get("stdout") or "{}"))
+            except json.JSONDecodeError:
+                post_payload = {}
+            if isinstance(post_payload, dict) and post_payload.get("result_status") == "PENDING":
+                pending_refresh_pr = post_payload.get("refresh_pr")
+                break
         if step_returncode != 0:
             if name == "pr-wait-ci" and pr_status_allows_wait_ci_fallback():
                 continue
@@ -421,15 +434,18 @@ def pr_complete_command(
         else:
             failed_step = followup_blocker or f"{remote_settle_recovery_failed_step}_followup_failed"
 
-    result_status = "PASS" if failed_step is None else "BLOCKED"
+    result_status = "PENDING" if pending_refresh_pr is not None else ("PASS" if failed_step is None else "BLOCKED")
     update_parent_live_status(
         "done" if result_status == "PASS" else "blocked",
         result_status=result_status,
         step="pr-complete",
         failed_step=failed_step or "",
     )
-    final_signal = "d" if result_status == "PASS" else "f"
-    if failed_step is None:
+    final_signal = "d" if result_status == "PASS" else ("p" if result_status == "PENDING" else "f")
+    if result_status == "PENDING":
+        next_action = f"Follow-up PR #{pending_refresh_pr} CI is still pending; resume pr-complete later."
+        returncode = 0
+    elif failed_step is None:
         if remote_settle_recovery_required:
             next_action = (
                 "PR is merged and post-merge lifecycle was settled after "
@@ -448,6 +464,7 @@ def pr_complete_command(
         "action": "pr-complete",
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "pr_number": pr_number,
+        "refresh_pr": pending_refresh_pr,
         "expected_head_sha": resolved_head_sha,
         "main_branch": main_branch,
         "merge_method": merge_method,

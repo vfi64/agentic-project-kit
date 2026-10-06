@@ -135,6 +135,15 @@ def test_transfer_pr_complete_orchestrates_wait_merge_sync_ack_and_post_merge(mo
         "123",
         "--main-branch",
         "main",
+
+        "--ci-timeout-seconds",
+
+        "300",
+
+        "--ci-poll-seconds",
+
+        "10",
+
     ]
 
 
@@ -983,3 +992,11 @@ def test_transfer_pr_complete_accepts_post_merge_complete_flag(monkeypatch) -> N
     assert payload["post_merge_complete_requested"] is True
     assert payload["result_status"] == "PASS"
     assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-complete"] for call in calls)
+
+def test_gf050a_pr_complete_forwards_ci_budget_to_post_merge_complete_source():
+    source = Path("src/agentic_project_kit/cli_commands/transfer_pr_merge_flow.py").read_text()
+    block = source[source.index('"post-merge-complete",'):source.index("failed_step = None")]
+    assert '"--ci-timeout-seconds"' in block
+    assert "str(timeout_seconds)" in block
+    assert '"--ci-poll-seconds"' in block
+    assert "str(poll_seconds)" in block
