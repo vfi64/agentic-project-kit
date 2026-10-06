@@ -2318,8 +2318,25 @@ def _is_refresh_only_pr(after_pr: int, *, ws: Workspace | None = None) -> bool:
     )
 
 
+def _admin_refresh_failure(command, completed, next_action, *, main_branch: str, start_point: str) -> RepoActionResult:
+    logs = []
+    for step in (["git", "reset", "--hard", start_point], ["git", "clean", "-fd"], ["git", "switch", main_branch]):
+        cleanup = _run(step)
+        logs.append(f"$ {' '.join(step)}\n{cleanup.stdout}{cleanup.stderr}")
+    status = _run(["git", "status", "--short"])
+    branch = _run(["git", "branch", "--show-current"])
+    clean = status.returncode == 0 and not status.stdout.strip() and branch.stdout.strip() == main_branch
+    suffix = "" if clean else f" Cleanup incomplete; switch with agentic-kit transfer branch-switch {main_branch} and inspect generated changes."
+    merged = subprocess.CompletedProcess(command, completed.returncode, completed.stdout + "\n" + "\n".join(logs), completed.stderr)
+    return _result("admin-refresh-pr", command, merged, next_action + suffix)
+
 def admin_refresh_pr(after_pr: int, *, main_branch: str = "main") -> RepoActionResult:
     ws = load_workspace(Path("."))
+    state_path = ws.handoff_state_path()
+    if not state_path.exists():
+        expected = ws.path_text(state_path)
+        completed = subprocess.CompletedProcess(["admin-refresh-pr", "--after-pr", str(after_pr)], 0, f"SKIP: handoff state file not found: {expected}\n", "")
+        return _result("admin-refresh-pr", completed.args, completed, f"admin_refresh_skipped_missing_handoff_state:{expected}")
     if _is_refresh_only_pr(after_pr, ws=ws):
         completed = subprocess.CompletedProcess(
             ["admin-refresh-pr", "--after-pr", str(after_pr)],
@@ -2435,7 +2452,7 @@ def _admin_refresh_pr_unlocked(
             completed = _run(step)
         transcript.append(f"$ {' '.join(step)}\n{completed.stdout}{completed.stderr}")
         if completed.returncode != 0:
-            return _result("admin-refresh-pr", step, completed, "Inspect admin refresh step failure before continuing.")
+            return _admin_refresh_failure(step, completed, "Inspect admin refresh step failure before continuing.", main_branch=main_branch, start_point=start_point)
 
     final_status = _run(["git", "status", "--short"])
     changed = tuple(line.strip() for line in final_status.stdout.splitlines() if line.strip())
@@ -2453,7 +2470,7 @@ def _admin_refresh_pr_unlocked(
             "Admin refresh must change a non-empty subset of generated administrative handoff refresh paths "
             "and no unexpected paths.\n",
         )
-        return _result("admin-refresh-pr", completed.args, completed, "Inspect unexpected admin refresh diff before committing.")
+        return _admin_refresh_failure(completed.args, completed, "Inspect unexpected admin refresh diff before committing.", main_branch=main_branch, start_point=start_point)
 
     commit_message = f"Refresh handoff state after PR{after_pr}"
     commit_result = commit_paths(
@@ -2472,7 +2489,7 @@ def _admin_refresh_pr_unlocked(
             commit_result.stdout,
             commit_result.stderr,
         )
-        return _result("admin-refresh-pr", commit_result.command, completed, "Inspect admin refresh commit failure before continuing.")
+        return _admin_refresh_failure(commit_result.command, completed, "Inspect admin refresh commit failure before continuing.", main_branch=main_branch, start_point=start_point)
 
     push_result = push_current(required_branch=refresh_branch)
     transcript.append(
@@ -2486,7 +2503,7 @@ def _admin_refresh_pr_unlocked(
             push_result.stdout,
             push_result.stderr,
         )
-        return _result("admin-refresh-pr", push_result.command, completed, "Inspect admin refresh push failure before continuing.")
+        return _admin_refresh_failure(push_result.command, completed, "Inspect admin refresh push failure before continuing.", main_branch=main_branch, start_point=start_point)
 
     pr_body = f"Administrative operational handoff refresh after PR{after_pr}. No product-code changes."
     pr_result = pr_create(
@@ -2506,7 +2523,7 @@ def _admin_refresh_pr_unlocked(
             pr_result.stdout,
             pr_result.stderr,
         )
-        return _result("admin-refresh-pr", pr_result.command, completed, "Inspect admin refresh PR creation failure.")
+        return _admin_refresh_failure(pr_result.command, completed, "Inspect admin refresh PR creation failure.", main_branch=main_branch, start_point=start_point)
 
     completed = subprocess.CompletedProcess(
         ["agentic-kit", "transfer", "admin-refresh-pr", "--after-pr", str(after_pr)],

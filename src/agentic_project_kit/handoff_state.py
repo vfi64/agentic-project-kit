@@ -75,8 +75,12 @@ def _validate_handoff_next_reference_consistency(data: dict[str, Any]) -> list[s
         f"latest_successor_prompt PRs={sorted(prompt_refs)}"
     ]
 
-def load_handoff_state(path: str | Path = DEFAULT_HANDOFF_STATE_PATH) -> dict[str, Any]:
-    state_path = Path(path)
+def load_handoff_state(path: str | Path | None = None) -> dict[str, Any]:
+    if path is None:
+        from agentic_project_kit.workspace import load_workspace
+        state_path = load_workspace(Path("."), suppress_legacy_profile_warning=True).handoff_state_path()
+    else:
+        state_path = Path(path)
     if not state_path.exists():
         raise FileNotFoundError(f"handoff state file not found: {state_path}")
     data = yaml.safe_load(state_path.read_text(encoding="utf-8"))
