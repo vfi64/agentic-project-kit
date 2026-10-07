@@ -385,8 +385,8 @@ def _assert_agentic_argv_options_exist(argv: list[str]) -> None:
         help_command = ["work", command[1], "--help"]
         manifest_command = help_command[:-1]
         arguments = command[2:]
-    elif command[:2] == ["transfer", "sync-main"]:
-        help_command = ["transfer", "sync-main", "--help"]
+    elif command[:1] in (["transfer"], ["rules"]) and len(command) > 1:
+        help_command = [command[0], command[1], "--help"]
         manifest_command = help_command[:-1]
         arguments = command[2:]
     else:

@@ -21,7 +21,7 @@ from agentic_project_kit.workspace import load_workspace
 Runner = Callable[[Sequence[str], Path], subprocess.CompletedProcess[str]]
 
 
-GATE_SEQUENCE = ("B4", "C2", "C3", "D4")
+GATE_SEQUENCE = ("B4", "C2", "C3", "D4", "D2R")
 
 
 @dataclass(frozen=True)
@@ -101,6 +101,8 @@ class ReleaseRun:
         )
 
     def _run_or_gate(self, step_id: str) -> dict[str, Any]:
+        if step_id == "D4" and self._doi_recovery_required():
+            step_id = "D2R"
         if step_id in GATE_SEQUENCE:
             gate = self._gate_details(step_id)
             blockers = list(gate.get("blockers") or [])
@@ -278,7 +280,32 @@ class ReleaseRun:
                 "current_paths": list(current),
                 "next_action": "Rerun release run without --execute to refresh the D4 approval gate.",
             }
-        return self._work_finish("D4", branch=self.doi_branch, paths=list(expected), execute=True, expected_status="PASS")
+        result = self._work_finish("D4", branch=self.doi_branch, paths=list(expected), execute=True, expected_status="PASS")
+        if result["result_status"] == "BLOCKED":
+            self.state["doi_recovery_required"] = True
+            self._save_state()
+        return result
+
+    def _doi_recovery_required(self) -> bool:
+        if self.state.get("doi_recovery_required"):
+            return True
+        # Older runners did not persist failed step status in the state file.
+        path = self.step_dir / "D4.json"
+        if not path.exists():
+            return False
+        previous = _parse_json(path.read_text(encoding="utf-8"))
+        return isinstance(previous, dict) and (
+            previous.get("returncode", 0) != 0
+            or (previous.get("json") or {}).get("result_status") == "BLOCKED"
+        )
+
+    def _step_d2r(self) -> dict[str, Any]:
+        from agentic_project_kit.release_run_recovery import DoiRecovery
+
+        result = DoiRecovery(self).execute(self.state["gates"]["D2R"])
+        if result["result_status"] == "PASS":
+            self._mark_finished("D2R", result)
+        return result
 
     def _step_d5(self) -> dict[str, Any]:
         result = self._command("D5", [self.executable, "release-status", "--version", self.version, "--include-remote", "--json"], expected_status="PASS")
@@ -371,6 +398,10 @@ class ReleaseRun:
         return sorted(dict.fromkeys(paths))
 
     def _gate_details(self, gate_id: str) -> dict[str, Any]:
+        if gate_id == "D2R":
+            from agentic_project_kit.release_run_recovery import DoiRecovery
+
+            return DoiRecovery(self).plan()
         target_commit = self._current_head()
         if gate_id == "B4":
             return {

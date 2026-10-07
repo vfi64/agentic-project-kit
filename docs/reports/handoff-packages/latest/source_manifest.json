@@ -54,7 +54,7 @@
       "path": "SECURITY.md"
     },
     {
-      "bytes": 67399,
+      "bytes": 67468,
       "exists": true,
       "path": "docs/DOCUMENTATION_COVERAGE.yaml",
       "yaml_valid": true
@@ -123,12 +123,12 @@
       "yaml_valid": true
     },
     {
-      "bytes": 186031,
+      "bytes": 186804,
       "exists": true,
       "path": "docs/reference/AGENTIC_KIT_COMMANDS.md"
     },
     {
-      "bytes": 506937,
+      "bytes": 509380,
       "exists": true,
       "path": "docs/reference/agentic-kit-commands.json"
     }

@@ -45,6 +45,9 @@ rules:
   - path: docs/reference/HUMAN_WORKFLOW_COMMANDS.md
     terms:
     - agentic-kit release run
+    - D2R
+    - transfer pr-close-superseded
+    - source-head drift
     - AWAITING_APPROVAL
     - approval_signature
     - package-index workflow

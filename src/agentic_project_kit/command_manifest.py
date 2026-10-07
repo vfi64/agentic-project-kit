@@ -406,6 +406,8 @@ def _dry_run_available(command: dict[str, Any]) -> bool:
 
 def infer_remote_effects(command: dict[str, Any]) -> list[str]:
     qualified = str(command.get("qualified_name") or "")
+    if qualified == "agentic-kit transfer pr-close-superseded":
+        return ["network_read", "pull_request"]
     if qualified == "agentic-kit release run":
         return ["merge", "pull_request", "push", "release_publish"]
     effects: set[str] = set()

@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 1e4512f134d8
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 294d5185ed36
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `258`
+- Command count: `259`
 
 ## Commands
 
@@ -3011,6 +3011,24 @@ Deterministically settle post-merge generated-output refresh state.
 | `merge_state_poll_seconds` | `TyperOption` | --merge-state-poll-seconds | `False` | `5` |  |
 | `refresh_limit` | `TyperOption` | --refresh-limit | `False` | `2` | Maximum generated/admin refresh PRs allowed before blocking. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+
+### `agentic-kit transfer pr-close-superseded`
+
+- Safety: `BOUNDED`
+- Surface: `primitive`
+- When to use: Close an unchanged superseded PR after a replacement merged into the same base.
+- Dry-run available: `True`
+- Remote effects: `network_read`, `pull_request`
+
+Close an unchanged superseded PR after a replacement merged into the same base.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `pr_number` | `TyperArgument` | pr_number | `True` |  |  |
+| `replacement_pr` | `TyperOption` | --replacement-pr | `True` |  |  |
+| `expected_head_sha` | `TyperOption` | --expected-head-sha | `True` |  |  |
+| `execute` | `TyperOption` | --execute | `False` | `False` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit transfer pr-closeout-complete`
 

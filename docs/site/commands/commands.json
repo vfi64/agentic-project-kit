@@ -1,5 +1,5 @@
 {
-  "command_count": 258,
+  "command_count": 259,
   "diagnostic_count": 122,
   "entries": [
     {
@@ -8731,6 +8731,64 @@
     },
     {
       "diagnostic_priority": "not_diagnostic",
+      "dry_run_available": true,
+      "group": "transfer",
+      "help": "Close an unchanged superseded PR after a replacement merged into the same base.",
+      "lifecycle_rank": null,
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
+          "required": true
+        },
+        {
+          "default": null,
+          "help": "",
+          "name": "replacement_pr",
+          "opts": [
+            "--replacement-pr"
+          ],
+          "required": true
+        },
+        {
+          "default": null,
+          "help": "",
+          "name": "expected_head_sha",
+          "opts": [
+            "--expected-head-sha"
+          ],
+          "required": true
+        },
+        {
+          "default": false,
+          "help": "",
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        }
+      ],
+      "qualified_name": "agentic-kit transfer pr-close-superseded",
+      "safety": "BOUNDED",
+      "surface": "primitive",
+      "when_to_use": "Close an unchanged superseded PR after a replacement merged into the same base."
+    },
+    {
+      "diagnostic_priority": "not_diagnostic",
       "dry_run_available": false,
       "group": "transfer",
       "help": "Merge a substantive PR if needed, then finish post-merge handoff closeout.",
@@ -11630,7 +11688,7 @@
     "slice": 1,
     "state": 3,
     "todo": 3,
-    "transfer": 71,
+    "transfer": 72,
     "work": 6,
     "work-order": 10,
     "workflow": 11,
@@ -11640,7 +11698,7 @@
   "guided_count": 33,
   "kind": "site_command_catalog",
   "safety_counts": {
-    "BOUNDED": 169,
+    "BOUNDED": 170,
     "DESTRUCTIVE": 9,
     "READ_ONLY": 80
   },
@@ -11648,6 +11706,6 @@
   "surface_counts": {
     "diagnostic": 122,
     "orchestrator": 33,
-    "primitive": 103
+    "primitive": 104
   }
 }

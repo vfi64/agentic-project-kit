@@ -14264,6 +14264,101 @@
       "when_to_use": "Deterministically settle post-merge generated-output refresh state."
     },
     {
+      "dry_run_available": true,
+      "group": "transfer",
+      "help": "Close an unchanged superseded PR after a replacement merged into the same base.",
+      "name": "pr-close-superseded",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "pr_number",
+          "opts": [
+            "pr_number"
+          ],
+          "param_type": "TyperArgument",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "replacement_pr",
+          "opts": [
+            "--replacement-pr"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_head_sha",
+          "opts": [
+            "--expected-head-sha"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "pr-close-superseded"
+      ],
+      "qualified_name": "agentic-kit transfer pr-close-superseded",
+      "remote_effects": [
+        "network_read",
+        "pull_request"
+      ],
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "surface": "primitive",
+      "task_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Close an unchanged superseded PR after a replacement merged into the same base."
+    },
+    {
       "dry_run_available": false,
       "group": "transfer",
       "help": "Merge a substantive PR if needed, then finish post-merge handoff closeout.",
@@ -19067,7 +19162,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "1e4512f134d8",
+    "manifest_sha": "294d5185ed36",
     "schema_version": 1
   },
   "schema_version": 2,
