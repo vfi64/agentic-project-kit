@@ -17,6 +17,7 @@ from agentic_project_kit.publication_policy import publication_policy_for
 from agentic_project_kit.release_version_sources import WORKSPACE_MANIFEST
 from agentic_project_kit.release import CommandResult
 from agentic_project_kit.release_state import build_release_lifecycle_status
+from agentic_project_kit.workspace_detection import is_agentic_project_kit_development_checkout
 
 
 Runner = Callable[[Sequence[str], Path], tuple[int, str]]
@@ -49,7 +50,7 @@ class ReleasePublishPlan:
 
     @property
     def ok(self) -> bool:
-        return all(check.status == "PASS" for check in self.checks)
+        return all(not _check_blocks(check) for check in self.checks)
 
     @property
     def status(self) -> str:
@@ -61,7 +62,7 @@ class ReleasePublishPlan:
 
     @property
     def blockers(self) -> tuple[ReleasePublishCheck, ...]:
-        return tuple(check for check in self.checks if check.status != "PASS")
+        return tuple(check for check in self.checks if _check_blocks(check))
 
     def as_dict(self) -> dict[str, object]:
         return {
@@ -84,6 +85,10 @@ class ReleasePublishPlan:
 
 
 
+def _check_blocks(check: ReleasePublishCheck) -> bool:
+    return check.status not in {"PASS", "SKIP"}
+
+
 def _annotated_tag_command(tag: str) -> tuple[str, ...]:
     return ("git", "tag", "-a", tag, "-m", f"Release {tag}")
 
@@ -102,6 +107,42 @@ def _release_manifest(root: Path) -> dict[str, object]:
     if not isinstance(release, dict):
         raise RuntimeError(f"{WORKSPACE_MANIFEST}:release: expected mapping")
     return release
+
+
+def _configured_publish_checks(root: Path) -> set[str] | None:
+    release = _release_manifest(root)
+    value = release.get("publish_checks")
+    if value is None:
+        return None
+    if isinstance(value, str):
+        raw = [value]
+    elif isinstance(value, list):
+        raw = [str(item) for item in value]
+    else:
+        raise RuntimeError(f"{WORKSPACE_MANIFEST}:release.publish_checks: expected string or list")
+    normalized = {item.strip().lower().replace("_", "-") for item in raw if item.strip()}
+    if normalized & {"all", "kit", "standard", "standard-audit-suite"}:
+        return {"docs-audit", "command-reference-check"}
+    if normalized & {"none", "skip", "external"}:
+        return set()
+    return normalized
+
+
+def _should_run_publish_check(root: Path, check_name: str) -> bool:
+    configured = _configured_publish_checks(root)
+    if configured is not None:
+        return check_name in configured
+    if is_agentic_project_kit_development_checkout(root):
+        return True
+    if check_name == "docs-audit":
+        return (root / "docs" / "DOCUMENTATION_REGISTRY.yaml").exists()
+    if check_name == "command-reference-check":
+        return (root / "docs" / "reference" / "agentic-kit-commands.json").exists()
+    return False
+
+
+def _skip_publish_check(name: str, detail: str) -> ReleasePublishCheck:
+    return ReleasePublishCheck(name=name, status="SKIP", detail=detail, returncode=0)
 
 
 def _github_release_title_template(root: Path) -> str:
@@ -789,22 +830,38 @@ def evaluate_release_publish_plan(
             )
         )
     else:
-        checks.append(
-            _run_check(
-                name="docs audit",
-                args=(executable, "docs-audit"),
-                root=root,
-                runner=run,
+        if _should_run_publish_check(root, "docs-audit"):
+            checks.append(
+                _run_check(
+                    name="docs audit",
+                    args=(executable, "docs-audit"),
+                    root=root,
+                    runner=run,
+                )
             )
-        )
-        checks.append(
-            _run_check(
-                name="command reference check",
-                args=(executable, "transfer", "command-reference-check"),
-                root=root,
-                runner=run,
+        else:
+            checks.append(
+                _skip_publish_check(
+                    "docs audit",
+                    "skipped outside a workspace that declares the Kit documentation registry",
+                )
             )
-        )
+        if _should_run_publish_check(root, "command-reference-check"):
+            checks.append(
+                _run_check(
+                    name="command reference check",
+                    args=(executable, "transfer", "command-reference-check"),
+                    root=root,
+                    runner=run,
+                )
+            )
+        else:
+            checks.append(
+                _skip_publish_check(
+                    "command reference check",
+                    "skipped outside a workspace that declares the Kit command reference",
+                )
+            )
         try:
             release_title = _github_release_title(root, version=version, tag=tag)
         except RuntimeError as exc:
@@ -882,7 +939,7 @@ def evaluate_release_publish_plan(
         )
 
     live_execute_ready = execute and allow_execute and (execute_capability_present or signature_matches) and all(
-        check.status == "PASS" for check in checks
+        not _check_blocks(check) for check in checks
     )
     if live_execute_ready:
         if private_publication:
@@ -921,7 +978,7 @@ def evaluate_release_publish_plan(
         mode="execute" if execute else "dry-run" if dry_run else "unspecified",
         checks=tuple(checks),
         planned_actions=tuple(planned_actions),
-        execute_enabled=live_execute_ready and all(check.status == "PASS" for check in checks),
+        execute_enabled=live_execute_ready and all(not _check_blocks(check) for check in checks),
         approval_signature=signature,
         approval_subject=subject,
     )
