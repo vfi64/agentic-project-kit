@@ -153,6 +153,8 @@ replacement has merged into the same base and its original head still matches.
 The original branch is preserved. A failed recovery resumes its completed actions
 after a fresh approval; it does not repeat regeneration or a completed commit.
 Dirty starts, source-head drift and unrelated pre-existing recovery branches block.
+If work start synchronizes a newer main, D2R stops before writing and requires
+a fresh approval over the new target commit and regenerated paths.
 
 `agentic-kit transfer pr-close-superseded <pr> --replacement-pr <merged-pr>
 --expected-head-sha <sha> --json` is a dry run by default. Its `--execute` route

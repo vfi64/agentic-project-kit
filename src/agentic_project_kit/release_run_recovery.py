@@ -70,19 +70,20 @@ class DoiRecovery:
             gate["blockers"] = ["recovery-target-head-missing"]
             return gate
         gate["target_commit"] = head["stdout"].strip()
-        if progress:
+        if progress and "write" in gate["finished_actions"]:
             for key in ("paths", "write_scope", "version_doi", "concept_doi"):
                 gate[key] = progress[key]
             gate["replacement_pr"] = progress.get("replacement_pr")
         else:
-            exists = self._command("replacement-exists", ["git", "show-ref", "--verify", "--quiet", f"refs/heads/{self.branch}"], kit=False, status=None)
-            if exists["returncode"] != 1:
-                gate["blockers"] = ["recovery-replacement-branch-already-exists"]
-                return gate
-            remote = self._command("replacement-remote", ["git", "ls-remote", "--heads", "origin", f"refs/heads/{self.branch}"], kit=False, status=None)
-            if remote["result_status"] != "PASS" or remote["stdout"].strip():
-                gate["blockers"] = ["recovery-replacement-remote-not-empty"]
-                return gate
+            if not progress:
+                exists = self._command("replacement-exists", ["git", "show-ref", "--verify", "--quiet", f"refs/heads/{self.branch}"], kit=False, status=None)
+                if exists["returncode"] != 1:
+                    gate["blockers"] = ["recovery-replacement-branch-already-exists"]
+                    return gate
+                remote = self._command("replacement-remote", ["git", "ls-remote", "--heads", "origin", f"refs/heads/{self.branch}"], kit=False, status=None)
+                if remote["result_status"] != "PASS" or remote["stdout"].strip():
+                    gate["blockers"] = ["recovery-replacement-remote-not-empty"]
+                    return gate
             preview = self._command("preview", ["post-release-doi-closeout", "--version", run.version, "--json"])
             if preview["result_status"] != "PASS":
                 gate["blockers"] = ["recovery-closeout-preview-blocked"]
@@ -102,6 +103,9 @@ class DoiRecovery:
         run = self.run
         progress = run.state.setdefault("doi_recovery", {**gate, "finished_actions": []})
         done = progress["finished_actions"]
+        if "write" not in done:
+            for key in ("paths", "write_scope", "version_doi", "concept_doi"):
+                progress[key] = gate[key]
 
         def step(name: str, args: list[str]) -> dict[str, Any] | None:
             if name in done:
@@ -123,6 +127,10 @@ class DoiRecovery:
         result = step("start", ["work", "start", "--branch", self.branch, "--from-ref", "main", "--json"])
         if result:
             return result
+        if "write" not in done:
+            branch = self._command("write-branch", ["git", "branch", "--show-current"], kit=False, status=None)
+            if branch["result_status"] != "PASS" or branch["stdout"].strip() != self.branch or run._current_head() != gate["target_commit"]:
+                return {"step_id": "D2R", "result_status": "BLOCKED", "blockers": ["recovery-target-head-or-branch-drift"], "next_action": f"Run agentic-kit release run --version {run.version} --json for a fresh recovery approval."}
         result = step("write", ["post-release-doi-closeout", "--version", run.version, "--write", "--json"])
         if result:
             return result

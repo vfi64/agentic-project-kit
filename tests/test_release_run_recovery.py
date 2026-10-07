@@ -174,3 +174,22 @@ def test_d2r_recovers_local_doi_branch_without_an_open_pr(tmp_path: Path) -> Non
     result = _run(tmp_path, runner, execute=True, expected_signature=preview["gate"]["approval_signature"])
     assert result["result_status"] == "PASS"
     assert not any("pr-close-superseded" in call for call in runner.calls)
+
+
+def test_d2r_new_main_during_start_requires_fresh_approval_before_write(tmp_path: Path) -> None:
+    _blocked_state(tmp_path)
+    class NewMainRunner(RecoveryRunner):
+        def __call__(self, argv, cwd):
+            result = super().__call__(argv, cwd)
+            if "work" in argv and "start" in argv:
+                self.head = "new-main-head"
+            return result
+    runner = NewMainRunner()
+    preview = _run(tmp_path, runner)
+    blocked = _run(tmp_path, runner, execute=True, expected_signature=preview["gate"]["approval_signature"])
+    assert blocked["blockers"] == ["recovery-target-head-or-branch-drift"]
+    assert not any("--write" in call for call in runner.calls)
+    fresh = _run(tmp_path, runner)
+    assert fresh["gate"]["approval_signature"] != preview["gate"]["approval_signature"]
+    result = _run(tmp_path, runner, execute=True, expected_signature=fresh["gate"]["approval_signature"])
+    assert result["result_status"] == "PASS"

@@ -14,6 +14,8 @@ The signature binds version, source branch/PR/head, replacement branch, current 
 
 A failed D4 that created only a local DOI branch is also recoverable: its branch head replaces the source PR head in the gate, and the close-source action is omitted. The manifest and ACK projections were regenerated through Kit commands; current ACK is `294d5185ed36`.
 
+`test_d2r_new_main_during_start_requires_fresh_approval_before_write` verifies that an upstream advance during work start stops before DOI writes and can resume with a freshly signed plan.
+
 ## External retest and risks
 
 From clean main run `agentic-kit release run --version 1.0.19 --json`, inspect D2R, then execute exactly its signed `next_action`. The owner performs this live recovery; this slice does not run release execution. The replacement PR and its handoff must merge before #2421 closes; final D5 must report `current_verified`. Unexpected dirt and source-head drift block. A crashed subprocess may have completed a remote effect before its result was persisted; existing Kit PR discovery and an already-closed source make retry safe. No tag, package publication or Zenodo publication is part of D2R.
