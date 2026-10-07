@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from pathlib import Path
 import re
+import subprocess
 
 
 ABSOLUTE_PATH_PATTERNS = (
@@ -12,6 +13,8 @@ ABSOLUTE_PATH_PATTERNS = (
     re.compile(r"/var/folders/[^\s`\"')]+"),
     re.compile(r"/mnt/data/[^\s`\"')]+"),
 )
+
+MAX_STORED_REFERENCES = 200
 
 TEXT_SUFFIXES = {
     ".md",
@@ -98,6 +101,8 @@ class AbsolutePathAuditResult:
     root: str
     references: tuple[AbsolutePathReference, ...]
     blockers: tuple[AbsolutePathReference, ...]
+    total_reference_count: int | None = None
+    total_blocker_count: int | None = None
 
     @property
     def ok(self) -> bool:
@@ -117,8 +122,8 @@ class AbsolutePathAuditResult:
             "kind": "absolute_path_portability_audit",
             "root": self.root,
             "status": self.status,
-            "reference_count": len(self.references),
-            "blocker_count": len(self.blockers),
+            "reference_count": self.total_reference_count if self.total_reference_count is not None else len(self.references),
+            "blocker_count": self.total_blocker_count if self.total_blocker_count is not None else len(self.blockers),
             "references": [item.as_dict() for item in self.references],
             "blockers": [item.as_dict() for item in self.blockers],
         }
@@ -128,9 +133,35 @@ def _is_text_file(path: Path) -> bool:
     return path.suffix in TEXT_SUFFIXES
 
 
+def _git_listed_files(root: Path) -> list[Path] | None:
+    completed = subprocess.run(
+        ["git", "-C", root.as_posix(), "ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+        text=True,
+        encoding="utf-8",
+        errors="surrogateescape",
+        capture_output=True,
+        check=False,
+    )
+    if completed.returncode != 0:
+        return None
+    files: list[Path] = []
+    for relative in completed.stdout.split("\0"):
+        if not relative:
+            continue
+        files.append(root / relative)
+    return files
+
+
+def _walked_files(root: Path) -> list[Path]:
+    return [path for path in root.rglob("*") if path.is_file()]
+
+
 def _iter_candidate_files(root: Path) -> list[Path]:
     files: list[Path] = []
-    for path in root.rglob("*"):
+    source_files = _git_listed_files(root)
+    if source_files is None:
+        source_files = _walked_files(root)
+    for path in source_files:
         if not path.is_file():
             continue
         relative = path.relative_to(root).as_posix()
@@ -213,8 +244,10 @@ def audit_absolute_path_portability(root: Path = Path(".")) -> AbsolutePathAudit
     )
     return AbsolutePathAuditResult(
         root=root.as_posix(),
-        references=tuple(references),
-        blockers=blockers,
+        references=tuple(references[:MAX_STORED_REFERENCES]),
+        blockers=tuple(blockers[:MAX_STORED_REFERENCES]),
+        total_reference_count=len(references),
+        total_blocker_count=len(blockers),
     )
 
 
@@ -222,8 +255,8 @@ def render_absolute_path_portability_audit(result: AbsolutePathAuditResult) -> s
     lines = [
         "ABSOLUTE_PATH_PORTABILITY_AUDIT",
         f"STATUS={result.status}",
-        f"REFERENCE_COUNT={len(result.references)}",
-        f"BLOCKER_COUNT={len(result.blockers)}",
+        f"REFERENCE_COUNT={result.total_reference_count if result.total_reference_count is not None else len(result.references)}",
+        f"BLOCKER_COUNT={result.total_blocker_count if result.total_blocker_count is not None else len(result.blockers)}",
     ]
 
     for ref in result.blockers:

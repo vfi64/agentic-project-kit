@@ -27,6 +27,26 @@ def _load_command_reference_names(root: Path) -> set[str]:
             names.add(str(item["qualified_name"]))
     return names
 
+def _git_aware_scan_files(root: Path, scan_root: Path) -> list[Path]:
+    if not scan_root.exists():
+        return []
+    completed = subprocess.run(
+        ["git", "-C", root.as_posix(), "ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", scan_root.relative_to(root).as_posix()],
+        text=True,
+        encoding="utf-8",
+        errors="surrogateescape",
+        capture_output=True,
+        check=False,
+    )
+    if completed.returncode == 0:
+        files: list[Path] = []
+        for relative in completed.stdout.split("\0"):
+            if not relative:
+                continue
+            files.append(root / relative)
+        return sorted(path for path in files if path.is_file())
+    return sorted(path for path in scan_root.rglob("*") if path.is_file())
+
 def _detect_avoidable_low_level_meta_command_sequences(sequence_commands: list[str] | None) -> list[dict[str, object]]:
     if not sequence_commands:
         return []
@@ -350,9 +370,7 @@ def _scan_static_meta_preference_projection_drift(root: Path) -> dict[str, objec
     for scan_root in scanned_roots:
         if not scan_root.exists():
             continue
-        for candidate in scan_root.rglob("*"):
-            if not candidate.is_file():
-                continue
+        for candidate in _git_aware_scan_files(root, scan_root):
             relative_parts = candidate.relative_to(scan_root).parts
             if any(part in {".git", ".venv", "tmp", "__pycache__"} for part in relative_parts):
                 continue
@@ -470,9 +488,7 @@ def _known_bad_pattern_scan(root: Path) -> dict[str, object]:
     for base in search_roots:
         if not base.exists():
             continue
-        for file_path in base.rglob("*"):
-            if not file_path.is_file():
-                continue
+        for file_path in _git_aware_scan_files(root, base):
             if any(part in {".git", ".venv", "tmp", "__pycache__"} for part in file_path.parts):
                 continue
             try:

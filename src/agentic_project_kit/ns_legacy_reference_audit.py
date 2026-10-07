@@ -3,8 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 import re
+import subprocess
 from typing import Iterable
 
+
+MAX_STORED_REFERENCES = 200
 
 LEGACY_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile(r"\./ns\b"),
@@ -85,6 +88,8 @@ class NsLegacyReferenceAuditResult:
     returncode: int
     references: tuple[LegacyReference, ...]
     blockers: tuple[LegacyReference, ...]
+    total_reference_count: int | None = None
+    total_blocker_count: int | None = None
 
     @property
     def ok(self) -> bool:
@@ -94,6 +99,8 @@ class NsLegacyReferenceAuditResult:
         return {
             "status": self.status,
             "returncode": self.returncode,
+            "reference_count": self.total_reference_count if self.total_reference_count is not None else len(self.references),
+            "blocker_count": self.total_blocker_count if self.total_blocker_count is not None else len(self.blockers),
             "references": [reference.as_dict() for reference in self.references],
             "blockers": [reference.as_dict() for reference in self.blockers],
             "ok": self.ok,
@@ -108,8 +115,30 @@ def _is_text_file(path: Path) -> bool:
     return False
 
 
+def _git_listed_files(project_root: Path) -> list[Path] | None:
+    completed = subprocess.run(
+        ["git", "-C", project_root.as_posix(), "ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+        text=True,
+        encoding="utf-8",
+        errors="surrogateescape",
+        capture_output=True,
+        check=False,
+    )
+    if completed.returncode != 0:
+        return None
+    files: list[Path] = []
+    for relative in completed.stdout.split("\0"):
+        if not relative:
+            continue
+        files.append(project_root / relative)
+    return files
+
+
 def iter_candidate_files(project_root: Path) -> Iterable[Path]:
-    for path in sorted(project_root.rglob("*")):
+    source_files = _git_listed_files(project_root)
+    if source_files is None:
+        source_files = [path for path in project_root.rglob("*") if path.is_file()]
+    for path in sorted(source_files):
         if not path.is_file():
             continue
         relative = path.relative_to(project_root).as_posix()
@@ -224,8 +253,10 @@ def audit_ns_legacy_references(project_root: Path | str = ".") -> NsLegacyRefere
     return NsLegacyReferenceAuditResult(
         status="PASS" if not blockers else "BLOCK",
         returncode=0 if not blockers else 1,
-        references=tuple(references),
-        blockers=blockers,
+        references=tuple(references[:MAX_STORED_REFERENCES]),
+        blockers=tuple(blockers[:MAX_STORED_REFERENCES]),
+        total_reference_count=len(references),
+        total_blocker_count=len(blockers),
     )
 
 
@@ -234,8 +265,8 @@ def render_ns_legacy_reference_audit(result: NsLegacyReferenceAuditResult) -> st
         "NS_LEGACY_REFERENCE_AUDIT",
         f"STATUS={result.status}",
         f"RETURNCODE={result.returncode}",
-        f"REFERENCE_COUNT={len(result.references)}",
-        f"BLOCKER_COUNT={len(result.blockers)}",
+        f"REFERENCE_COUNT={result.total_reference_count if result.total_reference_count is not None else len(result.references)}",
+        f"BLOCKER_COUNT={result.total_blocker_count if result.total_blocker_count is not None else len(result.blockers)}",
     ]
     for reference in result.references:
         lines.append(
