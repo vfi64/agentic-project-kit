@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 185d492e9d57a9cf1d05071d4fc75cda7e82597d
-  short: 185d492e
-  subject: Fix external release publish checks (#2419)
+  full: 05f5c47c689a520d4f395af7620e22540e16e0de
+  short: 05f5c47c
+  subject: Fix DOI closeout changelog section (#2422)
 last_substantive_work_state:
-  full: 185d492e9d57a9cf1d05071d4fc75cda7e82597d
-  short: 185d492e
-  subject: Fix external release publish checks (#2419)
+  full: 05f5c47c689a520d4f395af7620e22540e16e0de
+  short: 05f5c47c
+  subject: Fix DOI closeout changelog section (#2422)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
