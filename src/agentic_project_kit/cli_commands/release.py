@@ -9,7 +9,7 @@ from pathlib import Path
 import typer
 from rich.console import Console
 
-from agentic_project_kit.post_release import build_post_release_report, render_post_release_report
+from agentic_project_kit.post_release import build_post_release_report, post_release_report_as_dict, render_post_release_report
 from agentic_project_kit.release_prepare import prepare_release_state
 from agentic_project_kit.release_metadata_authority_gate import (
     evaluate_release_metadata_authority_gate,
@@ -369,12 +369,19 @@ def release_check_command(
 def post_release_check_command(
     project_root: Path = typer.Option(Path("."), "--root"),
     version: str | None = typer.Option(None, "--version", help="Release version without leading v."),
+    json_output: bool = typer.Option(False, "--json", help="Print a machine-readable result."),
 ) -> None:
     """Validate post-release GitHub and Zenodo state without guessing DOI metadata."""
     report = build_post_release_report(project_root.resolve(), version=version)
-    console.print(render_post_release_report(report), markup=False)
-    if not report.ok:
-        raise typer.Exit(code=1)
+    if json_output:
+        payload = post_release_report_as_dict(report)
+        _print_json(payload)
+        if payload["result_status"] == "BLOCKED":
+            raise typer.Exit(code=1)
+    else:
+        console.print(render_post_release_report(report), markup=False)
+        if not report.ok:
+            raise typer.Exit(code=1)
 
 
 def post_release_doi_closeout_command(

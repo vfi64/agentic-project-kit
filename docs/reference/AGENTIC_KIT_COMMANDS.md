@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: fb315aa30770
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 1e4512f134d8
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -1704,6 +1704,7 @@ Validate post-release GitHub and Zenodo state without guessing DOI metadata.
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `version` | `TyperOption` | --version | `False` |  | Release version without leading v. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print a machine-readable result. |
 
 ### `agentic-kit post-release-doi-closeout`
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
+from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
@@ -102,6 +103,17 @@ class ReleaseRun:
     def _run_or_gate(self, step_id: str) -> dict[str, Any]:
         if step_id in GATE_SEQUENCE:
             gate = self._gate_details(step_id)
+            blockers = list(gate.get("blockers") or [])
+            if step_id == "C3" and isinstance(gate.get("workflow"), dict):
+                blockers.extend(gate["workflow"].get("blockers") or [])
+            if blockers:
+                return {
+                    "step_id": step_id,
+                    "result_status": "BLOCKED",
+                    "blockers": blockers,
+                    "gate": gate,
+                    "next_action": "Configure the release-run gate inputs before approving this step.",
+                }
             signature = _approval_signature(gate)
             gate["approval_signature"] = signature
             self.state.setdefault("gates", {})[step_id] = gate
@@ -194,17 +206,34 @@ class ReleaseRun:
                 "next_action": "Record the package-index run id in the state file or inspect the workflow manually before rerunning.",
             }
         workflow = self._package_index_workflow()
+        workflow_blockers = list(workflow.get("blockers") or [])
+        if workflow_blockers:
+            return {
+                "step_id": "C3",
+                "result_status": "BLOCKED",
+                "blockers": workflow_blockers,
+                "workflow": workflow,
+                "next_action": "Configure release.package_index_workflow inputs or make required workflow inputs derivable.",
+            }
         if not dispatch.get("dispatched"):
             argv = ["gh", "workflow", "run", workflow["file"]]
             for value in workflow["inputs"]:
                 if "=" in value:
                     name, raw = value.split("=", 1)
                     argv.extend(["-f", f"{name}={raw}"])
+            dispatch_after = datetime.now(timezone.utc)
+            head_sha = self._current_head()
             dispatch_result = self._command("C3-dispatch", argv)
             if dispatch_result["result_status"] != "PASS":
                 return dispatch_result
-            run_id = self._latest_workflow_run_id(workflow["file"])
-            dispatch = {"dispatched": True, "run_id": run_id, "workflow": workflow}
+            run_id = self._dispatched_workflow_run_id(workflow["file"], dispatch_after=dispatch_after, head_sha=head_sha)
+            dispatch = {
+                "dispatched": True,
+                "run_id": run_id,
+                "workflow": workflow,
+                "dispatch_after_utc": dispatch_after.isoformat(),
+                "head_sha": head_sha,
+            }
             self.state["c3_dispatch"] = dispatch
             self._save_state()
             if not run_id:
@@ -401,11 +430,37 @@ class ReleaseRun:
             args.extend(["--summary-line", str(line)])
         return args
 
-    def _latest_workflow_run_id(self, workflow_file: str) -> str:
-        completed = self.runner(["gh", "run", "list", "--workflow", workflow_file, "--limit", "1", "--json", "databaseId"], self.root)
+    def _dispatched_workflow_run_id(self, workflow_file: str, *, dispatch_after: datetime, head_sha: str) -> str:
+        completed = self.runner(
+            [
+                "gh",
+                "run",
+                "list",
+                "--workflow",
+                workflow_file,
+                "--event",
+                "workflow_dispatch",
+                "--limit",
+                "20",
+                "--json",
+                "databaseId,createdAt,event,headSha",
+            ],
+            self.root,
+        )
         payload = _parse_json(completed.stdout)
-        if isinstance(payload, list) and payload and isinstance(payload[0], dict):
-            return str(payload[0].get("databaseId") or "")
+        if not isinstance(payload, list):
+            return ""
+        for item in payload:
+            if not isinstance(item, dict):
+                continue
+            if str(item.get("event") or "") != "workflow_dispatch":
+                continue
+            if head_sha and str(item.get("headSha") or "") != head_sha:
+                continue
+            created = _parse_github_datetime(str(item.get("createdAt") or ""))
+            if created is None or created < dispatch_after:
+                continue
+            return str(item.get("databaseId") or "")
         return ""
 
     def _package_index_workflow(self) -> dict[str, Any]:
@@ -423,7 +478,10 @@ class ReleaseRun:
             inputs = [str(item) for item in raw_input]
         else:
             inputs = []
-        return {"file": file_name, "inputs": inputs}
+        if not inputs:
+            inputs = _derived_package_index_inputs(publication_policy_for(self.root))
+        blockers = _package_index_workflow_blockers(self.root, file_name, inputs)
+        return {"file": file_name, "inputs": inputs, "blockers": blockers}
 
     def _release_config(self) -> dict[str, Any]:
         path = self.root / ".agentic" / "config.yaml"
@@ -486,6 +544,56 @@ class ReleaseRun:
 
 def run_release(options: ReleaseRunOptions, *, runner: Runner | None = None) -> dict[str, Any]:
     return ReleaseRun(options, runner=runner).run()
+
+
+def _derived_package_index_inputs(policy) -> list[str]:
+    if policy.uses_pypi:
+        return ["publish_target=pypi"]
+    return []
+
+
+def _package_index_workflow_blockers(root: Path, workflow_file: str, inputs: list[str]) -> list[str]:
+    declared = {value.split("=", 1)[0] for value in inputs if "=" in value}
+    workflow_path = root / ".github" / "workflows" / workflow_file
+    if not workflow_path.exists():
+        return []
+    try:
+        loaded = yaml.safe_load(workflow_path.read_text(encoding="utf-8")) or {}
+    except (OSError, yaml.YAMLError):
+        return []
+    if not isinstance(loaded, dict):
+        return []
+    on_section = loaded.get("on", loaded.get(True, {}))
+    if not isinstance(on_section, dict):
+        return []
+    dispatch = on_section.get("workflow_dispatch")
+    if not isinstance(dispatch, dict):
+        return []
+    workflow_inputs = dispatch.get("inputs")
+    if not isinstance(workflow_inputs, dict):
+        return []
+    blockers: list[str] = []
+    for name, spec in workflow_inputs.items():
+        if not isinstance(spec, dict):
+            continue
+        required = bool(spec.get("required"))
+        has_default = spec.get("default") is not None
+        if required and not has_default and str(name) not in declared:
+            blockers.append(f"missing-required-workflow-input:{name}")
+    return blockers
+
+
+def _parse_github_datetime(value: str) -> datetime | None:
+    if not value:
+        return None
+    normalized = value.replace("Z", "+00:00")
+    try:
+        parsed = datetime.fromisoformat(normalized)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
 
 
 def _parse_json(text: str) -> Any:
