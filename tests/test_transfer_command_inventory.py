@@ -47,6 +47,7 @@ EXPECTED_TRANSFER_COMMANDS = (
     "pr-existing-for-branch",
     "pr-create-complete",
     "pr-status",
+    "pr-close-superseded",
     "run-local",
     "state",
     "status",
@@ -131,7 +132,7 @@ def test_transfer_app_command_inventory_stable() -> None:
     command_names = tuple(_fresh_transfer_module_probe()["command_names"])
 
     assert command_names == EXPECTED_TRANSFER_COMMANDS
-    assert len(command_names) == 67
+    assert len(command_names) == 68
 
 
 def test_transfer_module_importable_without_side_effects() -> None:

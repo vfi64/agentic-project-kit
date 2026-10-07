@@ -132,6 +132,7 @@ The command stops with `AWAITING_APPROVAL` at these gates:
 - C2: execute signed `release-publish`.
 - C3: dispatch and watch the configured package-index workflow.
 - D4: execute `work finish` for the DOI closeout branch.
+- D2R: recover a failed D4 on a replacement DOI branch, with a fresh signed approval.
 
 Each gate prints an `approval_signature` over the exact branch, paths, tag,
 target commit, or workflow it will affect. A rerun with `--execute
@@ -139,6 +140,24 @@ target commit, or workflow it will affect. A rerun with `--execute
 the next gate or blocker. A stale signature blocks without running the gated
 remote effect. If the workspace publication policy is `none`, package-index
 publication, Zenodo wait, and DOI closeout are skipped.
+
+After a failed D4, return to clean main through `transfer sync-main`, then run
+`agentic-kit release run --version <version> --json`. This offers D2R, binding the
+source PR and head, replacement branch, current commit, regenerated paths and
+DOI facts. Approve using the exact `next_action` printed by this dry run.
+D2R starts `codex/release-<version>-doi-recovery` from current main, regenerates
+closeout, acknowledges rules immediately before `transfer commit`, pushes, and
+uses `transfer pr-create-complete --post-merge-complete` to merge the replacement
+and handoff. `transfer pr-close-superseded` closes the original PR only after the
+replacement has merged into the same base and its original head still matches.
+The original branch is preserved. A failed recovery resumes its completed actions
+after a fresh approval; it does not repeat regeneration or a completed commit.
+Dirty starts, source-head drift and unrelated pre-existing recovery branches block.
+
+`agentic-kit transfer pr-close-superseded <pr> --replacement-pr <merged-pr>
+--expected-head-sha <sha> --json` is a dry run by default. Its `--execute` route
+changes only the verified source PR's open state and emits one JSON document with
+`--json`; its manifest declares `pull_request` and `network_read` remote effects.
 
 ## Preference and fallback rule
 
