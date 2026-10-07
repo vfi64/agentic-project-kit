@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b0fac3e7a23ee26c0c2bb56a5516457e496e83c6
-  short: b0fac3e7
-  subject: Fix release run package publication checks (#2417)
+  full: 185d492e9d57a9cf1d05071d4fc75cda7e82597d
+  short: 185d492e
+  subject: Fix external release publish checks (#2419)
 last_substantive_work_state:
-  full: b0fac3e7a23ee26c0c2bb56a5516457e496e83c6
-  short: b0fac3e7
-  subject: Fix release run package publication checks (#2417)
+  full: 185d492e9d57a9cf1d05071d4fc75cda7e82597d
+  short: 185d492e
+  subject: Fix external release publish checks (#2419)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
