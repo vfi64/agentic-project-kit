@@ -117,6 +117,49 @@ def test_release_publish_publication_none_plans_private_tag_route(tmp_path: Path
 
 
 
+def test_release_publish_external_workspace_skips_kit_self_hosting_checks(tmp_path: Path) -> None:
+    _write_publication_manifest(tmp_path, "github")
+    seen: list[tuple[str, ...]] = []
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        seen.append(tuple(args))
+        if "release-prep" in args:
+            return 0, json.dumps({"changed_paths": []}) + "\n"
+        return 0, "PASS\n"
+
+    plan = evaluate_release_publish_plan(tmp_path, version="9.9.9", runner=runner)
+
+    assert plan.ok is True
+    skipped = {check.name: check.detail for check in plan.checks if check.status == "SKIP"}
+    assert set(skipped) == {"docs audit", "command reference check"}
+    assert "documentation registry" in skipped["docs audit"]
+    assert "command reference" in skipped["command reference check"]
+    assert not any(args[1:2] == ("docs-audit",) for args in seen)
+    assert not any(args[1:3] == ("transfer", "command-reference-check") for args in seen)
+    assert not any(check.name in skipped for check in plan.blockers)
+
+
+def test_release_publish_external_workspace_with_registry_blocks_failing_docs_audit(tmp_path: Path) -> None:
+    _write_publication_manifest(tmp_path, "github")
+    registry = tmp_path / "docs" / "DOCUMENTATION_REGISTRY.yaml"
+    registry.parent.mkdir(parents=True)
+    registry.write_text("version: 1\n", encoding="utf-8")
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        if "release-prep" in args:
+            return 0, json.dumps({"changed_paths": []}) + "\n"
+        if args[1:2] == ("docs-audit",):
+            return 1, "docs audit failed\n"
+        return 0, "PASS\n"
+
+    plan = evaluate_release_publish_plan(tmp_path, version="9.9.9", runner=runner)
+
+    assert plan.ok is False
+    assert any(check.name == "docs audit" and check.status == "FAIL" for check in plan.blockers)
+    assert any(check.name == "command reference check" and check.status == "SKIP" for check in plan.checks)
+
+
+
 def test_release_publish_signature_authorizes_publication_none_without_marker(tmp_path: Path) -> None:
     _write_publication_manifest(tmp_path, "none")
     _write_external_release_anchors(tmp_path, "9.9.9")
