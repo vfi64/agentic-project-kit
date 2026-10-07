@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 05f5c47c689a520d4f395af7620e22540e16e0de
-  short: 05f5c47c
-  subject: Fix DOI closeout changelog section (#2422)
+  full: 617b2b9d87046229438bbb8d1d16d750bbe451d9
+  short: 617b2b9d
+  subject: Fix blocked DOI closeout recovery (#2424)
 last_substantive_work_state:
-  full: 05f5c47c689a520d4f395af7620e22540e16e0de
-  short: 05f5c47c
-  subject: Fix DOI closeout changelog section (#2422)
+  full: 617b2b9d87046229438bbb8d1d16d750bbe451d9
+  short: 617b2b9d
+  subject: Fix blocked DOI closeout recovery (#2424)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
