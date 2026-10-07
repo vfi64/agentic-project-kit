@@ -322,16 +322,22 @@ def test_sync_main_blocks_when_json_step_reports_block(monkeypatch):
     assert calls[-1] == [agentic_kit, "transfer", "normalize-session", "--json"]
 
 
-def test_command_reference_refresh_runs_generator_and_reports_changed_files(monkeypatch):
-    monkeypatch.setattr(
-        "agentic_project_kit.cli_commands.transfer_context_flow.default_python",
-        lambda root: "./.venv/bin/python",
-    )
+def test_command_reference_refresh_uses_packaged_generator_and_reports_changed_files(monkeypatch):
+    refresh_calls: list[Path] = []
+
+    def fake_refresh(root: Path):
+        refresh_calls.append(root)
+        return {
+            "argv": ["agentic-kit", "commands", "sync-entrypoints", "--execute"],
+            "returncode": 0,
+            "stdout": '{"result_status": "PASS"}\n',
+            "stderr": "",
+            "ok": True,
+        }
 
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
-        if command == ["./.venv/bin/python", "scripts/generate_agentic_kit_command_reference.py"]:
-            return _completed(command, stdout="generated\n")
+        assert command != ["./.venv/bin/python", "scripts/generate_agentic_kit_command_reference.py"]
         if command == ["git", "status", "--short"]:
             return _completed(command, stdout=" M docs/reference/agentic-kit-commands.json\n")
         if command == [
@@ -348,6 +354,10 @@ def test_command_reference_refresh_runs_generator_and_reports_changed_files(monk
             )
         raise AssertionError(f"unexpected command: {command}")
 
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer_context_flow._refresh_command_reference_files",
+        fake_refresh,
+    )
     monkeypatch.setattr(subprocess, "run", fake_run)
 
     result = CliRunner().invoke(app, ["transfer", "command-reference-refresh", "--json"])
@@ -355,10 +365,50 @@ def test_command_reference_refresh_runs_generator_and_reports_changed_files(monk
     assert result.exit_code == 0
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "PASS"
+    assert payload["commands"]["generate"]["argv"] == ["agentic-kit", "commands", "sync-entrypoints", "--execute"]
     assert payload["changed_files"] == [
         "docs/reference/agentic-kit-commands.json",
         "docs/reference/AGENTIC_KIT_COMMANDS.md",
     ]
+    assert refresh_calls == [Path(".").resolve()]
+
+
+def test_refresh_command_reference_files_works_without_source_checkout_script(monkeypatch, tmp_path: Path):
+    from agentic_project_kit.cli_commands.transfer_context_flow import _refresh_command_reference_files
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer_context_flow.build_current_reference",
+        lambda: {
+            "schema_version": 2,
+            "source": "test",
+            "meta": {"manifest_sha": "abc123", "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md"},
+            "commands": [
+                {
+                    "qualified_name": "agentic-kit sample",
+                    "group": "root",
+                    "name": "sample",
+                    "path": ["sample"],
+                    "help": "Sample command.",
+                    "params": [],
+                    "safety": "READ_ONLY",
+                    "surface": "diagnostic",
+                    "task_tags": ["read-only"],
+                    "when_to_use": "Sample command.",
+                    "replaces_raw": [],
+                    "dry_run_available": False,
+                    "remote_effects": ["none"],
+                }
+            ],
+        },
+    )
+
+    result = _refresh_command_reference_files(tmp_path)
+
+    assert result["ok"] is True
+    assert not (tmp_path / "scripts" / "generate_agentic_kit_command_reference.py").exists()
+    assert (tmp_path / "docs/reference/agentic-kit-commands.json").exists()
+    assert (tmp_path / "docs/reference/AGENTIC_KIT_COMMANDS.md").exists()
 
 
 def test_command_reference_check_runs_drift_test(monkeypatch):

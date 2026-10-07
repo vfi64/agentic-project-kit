@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import subprocess
 
 import pytest
 import typer
@@ -160,3 +161,32 @@ def test_classifies_planning_docs_audit_patterns_as_compatibility_implementation
     )
     assert classification == "compatibility_implementation"
     assert "compatibility patterns" in reason
+
+def test_ns_legacy_audit_respects_git_info_exclude(tmp_path: Path) -> None:
+    subprocess.run(["git", "-C", tmp_path.as_posix(), "init"], check=True, capture_output=True)
+    exclude = tmp_path / ".git" / "info" / "exclude"
+    exclude.write_text(exclude.read_text(encoding="utf-8") + "\n/.local/\n", encoding="utf-8")
+    ignored = tmp_path / ".local" / "runtime" / "old.md"
+    ignored.parent.mkdir(parents=True)
+    ignored.write_text("Run ./ns release-prep 0.4.9\n", encoding="utf-8")
+
+    result = audit_ns_legacy_references(tmp_path)
+
+    assert result.ok is True
+    assert result.references == ()
+
+
+def test_ns_legacy_audit_still_blocks_tracked_file_with_git_excludes(tmp_path: Path) -> None:
+    subprocess.run(["git", "-C", tmp_path.as_posix(), "init"], check=True, capture_output=True)
+    exclude = tmp_path / ".git" / "info" / "exclude"
+    exclude.write_text(exclude.read_text(encoding="utf-8") + "\n/.local/\n", encoding="utf-8")
+    tracked = tmp_path / "docs" / "handoff" / "START.md"
+    tracked.parent.mkdir(parents=True)
+    tracked.write_text("Run ./ns release-prep 0.4.9\n", encoding="utf-8")
+    subprocess.run(["git", "-C", tmp_path.as_posix(), "add", "docs/handoff/START.md"], check=True, capture_output=True)
+
+    result = audit_ns_legacy_references(tmp_path)
+
+    assert result.ok is False
+    assert [blocker.path for blocker in result.blockers] == ["docs/handoff/START.md"]
+

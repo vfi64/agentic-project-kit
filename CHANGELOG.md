@@ -1,3 +1,8 @@
+## Unreleased
+
+- Fix packaged command-reference refresh for released-wheel external workspaces (KIT-GF-022).
+- Skip git-ignored folders in legacy-command and absolute-path audits (KIT-GF-054).
+
 ## v1.0.19 - 2026-10-06
 
 - Zenodo DOI verification pending for v1.0.19.

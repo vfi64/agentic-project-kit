@@ -7,6 +7,14 @@ from agentic_project_kit.cli_commands.transfer_context_helpers import *
 from agentic_project_kit.cli_executable import default_agentic_kit, default_python
 from agentic_project_kit.workspace import load_workspace
 
+from agentic_project_kit.command_manifest import (
+    build_current_reference,
+    manifest_sha,
+    package_manifest_source_path,
+    render_json,
+    render_markdown,
+)
+
 
 @transfer_app.command("require-fresh-llm-context")
 def require_fresh_llm_context(
@@ -344,15 +352,49 @@ def sync_main(
     if blockers:
         raise typer.Exit(code=1)
 
+def _refresh_command_reference_files(root: Path) -> dict[str, object]:
+    argv = ["agentic-kit", "commands", "sync-entrypoints", "--execute"]
+    try:
+        data = build_current_reference()
+        manifest = data.get("meta") if isinstance(data.get("meta"), dict) else {}
+        manifest_sha_value = str(manifest.get("manifest_sha") or manifest_sha(data.get("commands") or []))
+        rendered_json = render_json(data)
+        rendered_md = render_markdown(data)
+        workspace = load_workspace(root)
+        json_path = workspace.reference_file("agentic-kit-commands.json")
+        md_path = workspace.reference_file("AGENTIC_KIT_COMMANDS.md")
+        changed: list[str] = []
+        for path, content in ((json_path, rendered_json), (md_path, rendered_md)):
+            if not path.exists() or path.read_text(encoding="utf-8") != content:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(content, encoding="utf-8")
+                changed.append(path.relative_to(root).as_posix())
+        package_path = package_manifest_source_path(root)
+        if package_path.exists() or package_path.parent.exists():
+            if not package_path.exists() or package_path.read_text(encoding="utf-8") != rendered_json:
+                package_path.parent.mkdir(parents=True, exist_ok=True)
+                package_path.write_text(rendered_json, encoding="utf-8")
+                changed.append(package_path.relative_to(root).as_posix())
+        stdout = json.dumps(
+            {
+                "result_status": "PASS",
+                "manifest_sha": manifest_sha_value,
+                "changed_files": changed,
+            },
+            sort_keys=True,
+        ) + "\n"
+        return {"argv": argv, "returncode": 0, "stdout": stdout, "stderr": "", "ok": True}
+    except Exception as exc:  # pragma: no cover - exercised through command failure paths
+        return {"argv": argv, "returncode": 1, "stdout": "", "stderr": str(exc), "ok": False}
+
+
 @transfer_app.command("command-reference-refresh")
 def command_reference_refresh(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
 ) -> None:
     """Regenerate the agentic-kit command reference without committing changes."""
-    python = default_python(Path("."))
-    script_result = _run_transfer_subprocess(
-        [python, "scripts/generate_agentic_kit_command_reference.py"]
-    )
+    root = Path(".").resolve()
+    script_result = _refresh_command_reference_files(root)
     status_result = _run_transfer_subprocess(["git", "status", "--short"])
     diff_result = _run_transfer_subprocess(
         [
