@@ -379,21 +379,43 @@ def _assert_agentic_argv_options_exist(argv: list[str]) -> None:
     command = argv[1:]
     if command[:1] == ["release"] and len(command) > 1:
         help_command = ["release", command[1], "--help"]
+        manifest_command = help_command[:-1]
         arguments = command[2:]
     elif command[:1] == ["work"] and len(command) > 1:
         help_command = ["work", command[1], "--help"]
+        manifest_command = help_command[:-1]
         arguments = command[2:]
     elif command[:2] == ["transfer", "sync-main"]:
         help_command = ["transfer", "sync-main", "--help"]
+        manifest_command = help_command[:-1]
         arguments = command[2:]
     else:
         help_command = [command[0], "--help"]
+        manifest_command = help_command[:-1]
         arguments = command[1:]
     result = CliRunner().invoke(app, help_command)
     assert result.exit_code == 0, help_command
     help_text = result.output
+    manifest_options = _manifest_options_for(manifest_command)
     for argument in arguments:
         if argument.startswith("--"):
             option = argument.split("=", 1)[0]
-            assert option in help_text, f"{option} missing from {' '.join(help_command)}"
+            assert option in help_text or option in manifest_options, f"{option} missing from {' '.join(help_command)}"
 
+
+def _manifest_options_for(command_path: list[str]) -> set[str]:
+    qualified_name = "agentic-kit " + " ".join(command_path)
+    manifest = json.loads(Path("docs/reference/agentic-kit-commands.json").read_text(encoding="utf-8"))
+    for command in manifest.get("commands", []):
+        if not isinstance(command, dict) or command.get("qualified_name") != qualified_name:
+            continue
+        options: set[str] = set()
+        for param in command.get("params", []):
+            if not isinstance(param, dict):
+                continue
+            for field in ("opts", "secondary_opts"):
+                values = param.get(field)
+                if isinstance(values, list):
+                    options.update(str(value) for value in values)
+        return options
+    return set()
