@@ -3,10 +3,10 @@
 ## Current State
 
 Current version: 1.0.19
-Current verified release: 1.0.18.
-Current release tag: v1.0.18.
+Current verified release: 1.0.19.
+Current release tag: v1.0.19.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.23166532`.
+Verified Zenodo version DOI: `10.5281/zenodo.23196055`.
 Current verified main: `185d492e` (`Fix external release publish checks (#2419)`).
 Latest substantive work: PR #2419 (`Fix external release publish checks (#2419)`).
 Latest administrative refresh-only descendant: post-PR2419 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
