@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Insert DOI closeout facts in the matching release section below Unreleased (KIT-GF-058).
 - Skip Kit-only release-publish checks in external workspaces without declared Kit docs systems (KIT-GF-049).
 - Fix release-run package-index dispatch and post-release JSON checks (KIT-GF-055/056).
 - Fix packaged command-reference refresh for released-wheel external workspaces (KIT-GF-022).
