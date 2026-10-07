@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5d827b19f8abe8abdeea58f94848c80281bb5b42
-  short: 5d827b19
-  subject: Release 1.0.19 (#2413)
+  full: fa486e7a4a637540931dc65ac61d04231c4defc0
+  short: fa486e7a
+  subject: Fix packaged reference refresh and ignored audit scans (#2415)
 last_substantive_work_state:
-  full: 5d827b19f8abe8abdeea58f94848c80281bb5b42
-  short: 5d827b19
-  subject: Release 1.0.19 (#2413)
+  full: fa486e7a4a637540931dc65ac61d04231c4defc0
+  short: fa486e7a
+  subject: Fix packaged reference refresh and ignored audit scans (#2415)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
