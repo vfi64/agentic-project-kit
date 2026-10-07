@@ -213,6 +213,28 @@ def read_citation_doi(project_root: Path) -> str | None:
     return match.group(1).strip()
 
 
+def post_release_report_as_dict(report: PostReleaseReport) -> dict[str, Any]:
+    blockers = [
+        {"name": check.name, "status": check.status.value, "detail": check.detail}
+        for check in report.checks
+        if check.status in {PostReleaseStatus.FAIL, PostReleaseStatus.WAITING}
+    ]
+    return {
+        "schema_version": 1,
+        "kind": "post_release_check_result",
+        "version": report.version,
+        "result_status": "PASS" if not blockers else "BLOCKED",
+        "blocker_count": len(blockers),
+        "blockers": blockers,
+        "checks": [
+            {"name": check.name, "status": check.status.value, "detail": check.detail}
+            for check in report.checks
+        ],
+        "registry_summary": report.registry_summary,
+        "ok": not blockers,
+    }
+
+
 def render_post_release_report(report: PostReleaseReport) -> str:
     lines = [f"Post-release check for target v{report.version}", ""]
     for check in report.checks:

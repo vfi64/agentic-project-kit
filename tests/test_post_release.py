@@ -3,6 +3,9 @@ import json
 from collections.abc import Sequence
 
 import yaml
+from typer.testing import CliRunner
+
+from agentic_project_kit.cli import app
 
 from agentic_project_kit.documentation_registry import DOCUMENT_CLASSES, REGISTRY_PATH, REQUIRED_CLASS_RULE_FIELDS
 from agentic_project_kit.post_release import (
@@ -181,6 +184,47 @@ def test_render_post_release_report_shows_waiting_as_non_failing(tmp_path: Path)
     assert "Post-release check for target v1.2.3" in rendered
     assert "[WAITING] Zenodo version DOI" in rendered
     assert "Overall: PASS" in rendered
+
+
+def test_post_release_check_command_json_reports_pass(tmp_path: Path, monkeypatch):
+    _write_project_files(tmp_path, version="1.2.3", doi="10.5281/zenodo.1000")
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(
+        "agentic_project_kit.post_release.run_command",
+        lambda project_root, command: CommandResult(0, "v1.2.3\n", ""),
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.post_release.urlopen_text",
+        _http_getter(_zenodo_payload(version="1.2.3", doi="10.5281/zenodo.1001")),
+    )
+
+    result = CliRunner().invoke(app, ["post-release-check", "--version", "1.2.3", "--json"])
+
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.output)
+    assert payload["result_status"] == "PASS"
+    assert payload["blocker_count"] == 0
+
+
+def test_post_release_check_command_json_blocks_waiting_zenodo(tmp_path: Path, monkeypatch):
+    _write_project_files(tmp_path, version="1.2.3", doi="10.5281/zenodo.1000")
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(
+        "agentic_project_kit.post_release.run_command",
+        lambda project_root, command: CommandResult(0, "v1.2.3\n", ""),
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.post_release.urlopen_text",
+        _http_getter(_zenodo_payload(version="1.2.2", doi="10.5281/zenodo.999")),
+    )
+
+    result = CliRunner().invoke(app, ["post-release-check", "--version", "1.2.3", "--json"])
+
+    assert result.exit_code == 1
+    payload = json.loads(result.output)
+    assert payload["result_status"] == "BLOCKED"
+    assert payload["blocker_count"] == 1
+    assert payload["blockers"][0]["status"] == "WAITING"
 
 
 def _write_project_files(project_root: Path, *, version: str, doi: str | None) -> None:

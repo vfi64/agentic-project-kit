@@ -5191,6 +5191,15 @@
               "--version"
             ],
             "required": false
+          },
+          {
+            "default": false,
+            "help": "Print a machine-readable result.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
           }
         ],
         "qualified_name": "agentic-kit post-release-check",
@@ -11926,13 +11935,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "fb315aa30770",
+    "manifest_sha": "1e4512f134d8",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.19",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.18",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "fb315aa30770",
+    "reproduced_manifest_sha": "1e4512f134d8",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 169,

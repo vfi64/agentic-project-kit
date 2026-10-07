@@ -4916,6 +4916,15 @@
             "--version"
           ],
           "required": false
+        },
+        {
+          "default": false,
+          "help": "Print a machine-readable result.",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
         }
       ],
       "qualified_name": "agentic-kit post-release-check",

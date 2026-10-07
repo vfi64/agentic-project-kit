@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Fix release-run package-index dispatch and post-release JSON checks (KIT-GF-055/056).
 - Fix packaged command-reference refresh for released-wheel external workspaces (KIT-GF-022).
 - Skip git-ignored folders in legacy-command and absolute-path audits (KIT-GF-054).
 
