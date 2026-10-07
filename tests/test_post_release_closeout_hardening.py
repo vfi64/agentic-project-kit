@@ -4,6 +4,7 @@ from collections.abc import Sequence
 import hashlib
 import json
 from pathlib import Path
+import re
 from types import SimpleNamespace
 
 from agentic_project_kit.dpa_current_handoff_lifecycle import (
@@ -12,6 +13,35 @@ from agentic_project_kit.dpa_current_handoff_lifecycle import (
 )
 from agentic_project_kit.post_release_closeout import post_release_doi_closeout
 from agentic_project_kit.release import CommandResult
+
+
+def test_doi_closeout_inserts_facts_in_version_section_below_unreleased(tmp_path: Path) -> None:
+    _write_closeout_files(tmp_path, "1.0.19")
+    unreleased = "## Unreleased\n\n- Fix external release publish checks (KIT-GF-049).\n- Fix release-run dispatch (KIT-GF-055/056).\n\n"
+    history = "## v1.0.18 - 2026-10-05\n\n- Previous release.\n"
+    text = unreleased + "## v1.0.19 - 2026-10-06\n\n- Add release run orchestrator.\n- Zenodo DOI verification pending for v1.0.19.\n\n" + history
+    from agentic_project_kit.post_release_closeout import _metadata_updaters
+
+    update = _metadata_updaters("1.0.19", "10.5281/zenodo.23196055", "10.5281/zenodo.20101359")["CHANGELOG.md"]
+    result = update(text)
+    section = re.search(r"(?ms)^## v1\.0\.19\b.*?(?=^## |\Z)", result).group(0)
+    assert result[: result.index("## v1.0.19")] == unreleased
+    assert result[result.index("## v1.0.18") :] == history
+    assert "10.5281/zenodo.23196055" in section
+    assert "10.5281/zenodo.20101359" in section
+    assert "verification pending" not in section
+    assert update(result) == result
+
+
+def test_doi_fact_outside_version_section_does_not_suppress_closeout() -> None:
+    from agentic_project_kit.post_release_closeout import _metadata_updaters
+
+    update = _metadata_updaters("1.0.19", "10.5281/zenodo.23196055", "10.5281/zenodo.20101359")["CHANGELOG.md"]
+    prefix = "## Unreleased\n\nZenodo v1.0.19 DOI: 10.5281/zenodo.23196055\n\n"
+    result = update(prefix + "## v1.0.19 - 2026-10-06\n\n- Release.\n")
+    assert result.startswith(prefix)
+    assert "10.5281/zenodo.23196055" in result[len(prefix) :]
+    assert update(result) == result
 
 
 def test_post_release_doi_closeout_is_idempotent_after_write(tmp_path: Path) -> None:

@@ -568,17 +568,16 @@ def _metadata_updaters(version: str, doi: str, concept_doi: str) -> dict[str, Ca
 
     def update_changelog(text: str) -> str:
         text = _remove_current_changelog_pending_doi_markers(text, version=version)
-        if f"Zenodo {tag} DOI: {doi}" in text:
+        match = _current_changelog_section_pattern(version).search(text)
+        if not match or f"Zenodo {tag} DOI: {doi}" in match.group(0):
             return text
-        first_next = text.find("\n## v", 1)
         addition = (
             "\n\nPost-release verification complete: GitHub Release exists, "
             f"Zenodo concept DOI `{concept_doi}`, verified {tag} DOI `{doi}`."
             f"\n\nZenodo {tag} DOI: {doi}"
         )
-        if first_next == -1:
-            return text.rstrip() + addition + "\n"
-        return text[:first_next].rstrip() + addition + text[first_next:]
+        block = match.group(0).rstrip() + addition + "\n\n"
+        return text[: match.start()] + block + text[match.end() :]
 
     def update_verified_releases(text: str) -> str:
         line = f"- `{tag}` / `{version}`: Zenodo version DOI `{doi}`; concept DOI `{concept_doi}`."
@@ -657,8 +656,12 @@ def _update_current_release_block(text: str, *, version: str, tag: str, doi: str
     return before + block + after
 
 
+def _current_changelog_section_pattern(version: str) -> re.Pattern[str]:
+    return re.compile(rf"(?ms)^## v{re.escape(version)}(?=\s|$).*?(?=^## |\Z)")
+
+
 def _remove_current_changelog_pending_doi_markers(text: str, *, version: str) -> str:
-    pattern = re.compile(rf"(?ms)^## v{re.escape(version)}\b.*?(?=^## v|\Z)")
+    pattern = _current_changelog_section_pattern(version)
     match = pattern.search(text)
     if not match:
         return text
@@ -672,5 +675,7 @@ def _remove_current_changelog_pending_doi_markers(text: str, *, version: str) ->
             re.IGNORECASE,
         )
     ]
+    if kept_lines == block.splitlines():
+        return text
     new_block = "\n".join(kept_lines).rstrip() + "\n"
     return text[: match.start()] + new_block + text[match.end() :]
