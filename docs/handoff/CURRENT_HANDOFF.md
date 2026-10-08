@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `08d820639316bbec0a1bb960a2ac94cd1da8500b` (`08d82063`), after `Fix command manifest remote effects (#2426)`.
-Last substantive work state is `08d820639316bbec0a1bb960a2ac94cd1da8500b` (`08d82063`), after `Fix command manifest remote effects (#2426)`.
+Current verified main/admin HEAD is `806103981ee3f23756e100bc7a437a9f892ac7e4` (`80610398`), after `Fix work finish metadata and recovery acknowledgement (#2428)`.
+Last substantive work state is `806103981ee3f23756e100bc7a437a9f892ac7e4` (`80610398`), after `Fix work finish metadata and recovery acknowledgement (#2428)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
