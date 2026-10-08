@@ -10563,6 +10563,33 @@
           "required": true
         },
         {
+          "default": "",
+          "help": "Pull request body; mutually exclusive with --body-file.",
+          "name": "body",
+          "opts": [
+            "--body"
+          ],
+          "required": false
+        },
+        {
+          "default": null,
+          "help": "UTF-8 pull request body file.",
+          "name": "body_file",
+          "opts": [
+            "--body-file"
+          ],
+          "required": false
+        },
+        {
+          "default": "",
+          "help": "Release-note category, for example Fixed; validated before any action.",
+          "name": "release_note_category",
+          "opts": [
+            "--release-note-category"
+          ],
+          "required": false
+        },
+        {
           "default": null,
           "help": "Path to include in the commit. Repeatable.",
           "name": "paths",

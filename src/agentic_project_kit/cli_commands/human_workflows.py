@@ -660,6 +660,9 @@ def work_finish_command(
     branch: str = typer.Option(..., "--branch", help="Feature branch to finish."),
     title: str = typer.Option(..., "--title", help="Pull request title."),
     message: str = typer.Option(..., "--message", help="Commit message."),
+    body: str = typer.Option("", "--body", help="Pull request body; mutually exclusive with --body-file."),
+    body_file: Path | None = typer.Option(None, "--body-file", help="UTF-8 pull request body file."),
+    release_note_category: str = typer.Option("", "--release-note-category", help="Release-note category, for example Fixed; validated before any action."),
     paths: list[Path] | None = typer.Option(None, "--path", help="Path to include in the commit. Repeatable."),
     merge_method: str = typer.Option("squash", "--merge-method", help="PR merge method."),
     merge: bool = typer.Option(
@@ -674,6 +677,15 @@ def work_finish_command(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     """Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks."""
+    from agentic_project_kit.work_finish_metadata import prepare_work_finish_body
+
+    try:
+        pr_body = prepare_work_finish_body(title, body=body, body_file=body_file, release_note_category=release_note_category)
+    except (ValueError, OSError, UnicodeError) as exc:
+        payload = _payload("work-finish", [_failed_local_step("pr-metadata", str(exc))])
+        _emit(payload, json_output=json_output)
+        _exit_if_blocked(payload)
+        return
     selected_paths = _paths_with_pending_communication_refresh(paths or [])
     pr_number: int | None = None
     expected_head_sha = ""
@@ -739,7 +751,7 @@ def work_finish_command(
                         "--title",
                         title,
                         "--body",
-                        f"Human workflow finish: {title}",
+                        pr_body,
                         "--base",
                         "main",
                         "--head",
@@ -773,7 +785,7 @@ def work_finish_command(
                         "--title",
                         title,
                         "--body",
-                        _open_pr_closeout_body(title),
+                        pr_body + "\n\n" + _open_pr_closeout_body(title).split("\n\n", 1)[1],
                         "--base",
                         "main",
                         "--head",
@@ -836,6 +848,8 @@ def work_finish_command(
             "branch": branch,
             "paths": [str(path) for path in selected_paths],
             "title": title,
+            "pr_body": pr_body,
+            "release_note_category": release_note_category,
             "completion_mode": completion_mode,
             "merge": merge,
             "pr_number": pr_number,

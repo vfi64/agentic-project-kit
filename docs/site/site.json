@@ -10838,6 +10838,33 @@
             "required": true
           },
           {
+            "default": "",
+            "help": "Pull request body; mutually exclusive with --body-file.",
+            "name": "body",
+            "opts": [
+              "--body"
+            ],
+            "required": false
+          },
+          {
+            "default": null,
+            "help": "UTF-8 pull request body file.",
+            "name": "body_file",
+            "opts": [
+              "--body-file"
+            ],
+            "required": false
+          },
+          {
+            "default": "",
+            "help": "Release-note category, for example Fixed; validated before any action.",
+            "name": "release_note_category",
+            "opts": [
+              "--release-note-category"
+            ],
+            "required": false
+          },
+          {
             "default": null,
             "help": "Path to include in the commit. Repeatable.",
             "name": "paths",
@@ -11993,13 +12020,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "bf2b1a6f40fb",
+    "manifest_sha": "5658f1b24b37",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.19",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.18",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "bf2b1a6f40fb",
+    "reproduced_manifest_sha": "5658f1b24b37",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 170,

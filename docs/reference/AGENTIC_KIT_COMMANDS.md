@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: bf2b1a6f40fb
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 5658f1b24b37
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -3665,6 +3665,9 @@ Finish a human work slice by planning or executing commit, push, PR, merge, and 
 | `branch` | `TyperOption` | --branch | `True` |  | Feature branch to finish. |
 | `title` | `TyperOption` | --title | `True` |  | Pull request title. |
 | `message` | `TyperOption` | --message | `True` |  | Commit message. |
+| `body` | `TyperOption` | --body | `False` | `` | Pull request body; mutually exclusive with --body-file. |
+| `body_file` | `TyperOption` | --body-file | `False` |  | UTF-8 pull request body file. |
+| `release_note_category` | `TyperOption` | --release-note-category | `False` | `` | Release-note category, for example Fixed; validated before any action. |
 | `paths` | `TyperOption` | --path | `False` |  | Path to include in the commit. Repeatable. |
 | `merge_method` | `TyperOption` | --merge-method | `False` | `squash` | PR merge method. |
 | `merge` | `TyperOption` | --merge, --no-merge | `False` | `True` | Run the full PR, merge, and post-merge handoff closeout by default. Use --no-merge only for an explicitly review-only PR. |

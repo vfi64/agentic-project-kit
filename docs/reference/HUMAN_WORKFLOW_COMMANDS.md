@@ -55,12 +55,25 @@ Typical use:
     agentic-kit work finish --branch codex/my-slice --title "My slice" --message "My slice" --path src/file.py --dry-run --json
 
 Use --execute only after reviewing the plan and selected paths.
+Supply `--body` or `--body-file` for the PR description, and
+`--release-note-category Fixed` (or another supported release category) to classify
+the PR deterministically. The category is placed in the first body line as
+`release-note-category: Fixed`, within the release-notes classifier's first 40 lines.
+Both merge and review-only modes carry this metadata. The dry-run JSON includes
+`pr_body`; unreadable files, unsupported or conflicting categories, and simultaneous
+body options return `BLOCKED` before any subprocess or write.
 Use --no-merge only when the intended result is an open review PR with pending
 post-merge handoff markers.
 
 ## agentic-kit work recover
 
 Run safe recovery and status commands after interrupted work.
+Recovery preserves `.agentic/rule_ack/current.json` byte for byte, including
+legacy tracked acknowledgements. It remains local runtime input, excluded from
+commits. A dirty product file is preserved and may keep normalization `BLOCKED`;
+a valid prior acknowledgement still permits a subsequent selected-path commit.
+If acknowledgement is missing or stale, the commit stays blocked and names
+`agentic-kit rules acknowledge` first in `next_action`; `--json` returns only JSON.
 
 Typical use:
 
