@@ -1,0 +1,225 @@
+{
+  "authorized_route": "agentic-kit release-prep",
+  "base_ref": "origin/main",
+  "changed_paths_against_base": [
+    ".agentic/dpa/acceptance/current_handoff_operational_state.json",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/site/claims/claims.json",
+    "docs/site/claims/index.html",
+    "docs/site/commands/commands.json",
+    "docs/site/commands/diagnostics.html",
+    "docs/site/commands/guided.html",
+    "docs/site/commands/index.html",
+    "docs/site/index.html",
+    "docs/site/quickstart/index.html",
+    "docs/site/quickstart/quickstart.json",
+    "docs/site/site.json",
+    "docs/site/workflows/index.html",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py",
+    "src/agentic_project_kit/reference/agentic-kit-commands.json"
+  ],
+  "date": "2026-10-08",
+  "explicit_summary_lines": [
+    "Fix packaged command-reference refresh in external workspaces (KIT-GF-022).",
+    "Fix PR release-note classification through work finish metadata (KIT-GF-048).",
+    "Fix GitHub release checks for external workspaces without Kit documentation systems (KIT-GF-049).",
+    "Fix recovery deleting the local rule acknowledgement required for commits (KIT-GF-053).",
+    "Fix release audits scanning Git-ignored runtime folders (KIT-GF-054).",
+    "Fix package-index publication inputs and dispatched workflow identification (KIT-GF-055).",
+    "Fix post-release-check JSON support used by release run (KIT-GF-056).",
+    "Fix implementation-backed remote-effect declarations in the command manifest (KIT-GF-057).",
+    "Fix DOI closeout facts landing outside the matching release section (KIT-GF-058).",
+    "Fix blocked DOI closeout recovery through a signed resumable Kit gate (KIT-GF-059).",
+    "Record the verified Zenodo DOI for release 1.0.19."
+  ],
+  "from_tag": "v1.0.19",
+  "kind": "release_prepare_evidence",
+  "release_metadata_anchor_paths": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py"
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-notes-generate",
+        "--version",
+        "1.0.20",
+        "--from-tag",
+        "v1.0.19",
+        "--to-ref",
+        "main",
+        "--include-github-metadata",
+        "--summary-lines-json",
+        "tmp/release-1020-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-notes-generate",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 27723,
+      "stdout_sha256": "a699f2c9b18b867183bb7ecb800f3229fd15b90465d0b28c35d46ad47581415c"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-prep",
+        "--version",
+        "1.0.20",
+        "--date",
+        "2026-10-08",
+        "--summary-line",
+        "Fix packaged command-reference refresh in external workspaces (KIT-GF-022).",
+        "--summary-line",
+        "Fix PR release-note classification through work finish metadata (KIT-GF-048).",
+        "--summary-line",
+        "Fix GitHub release checks for external workspaces without Kit documentation systems (KIT-GF-049).",
+        "--summary-line",
+        "Fix recovery deleting the local rule acknowledgement required for commits (KIT-GF-053).",
+        "--summary-line",
+        "Fix release audits scanning Git-ignored runtime folders (KIT-GF-054).",
+        "--summary-line",
+        "Fix package-index publication inputs and dispatched workflow identification (KIT-GF-055).",
+        "--summary-line",
+        "Fix post-release-check JSON support used by release run (KIT-GF-056).",
+        "--summary-line",
+        "Fix implementation-backed remote-effect declarations in the command manifest (KIT-GF-057).",
+        "--summary-line",
+        "Fix DOI closeout facts landing outside the matching release section (KIT-GF-058).",
+        "--summary-line",
+        "Fix blocked DOI closeout recovery through a signed resumable Kit gate (KIT-GF-059).",
+        "--summary-line",
+        "Record the verified Zenodo DOI for release 1.0.19.",
+        "--summary-lines-from",
+        "tmp/release-1020-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-prep",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 292,
+      "stdout_sha256": "71e1c285427f5e8f6f070a5895c7f3809b35d3b54bf9ac1651a7e8a8cd9c726f"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "commands",
+        "sync-entrypoints",
+        "--execute",
+        "--json"
+      ],
+      "name": "commands-sync-entrypoints",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 419,
+      "stdout_sha256": "437b0f9ad448c5bd64ab14803302b633adb1835683d3e77a93382f98a15ee705"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "agentic-kit",
+        "release",
+        "prepare",
+        "--internal-dpa-readiness-ack-refresh"
+      ],
+      "name": "dpa-readiness-ack-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 416,
+      "stdout_sha256": "250418df26f75dbde321dc820d4c824409a22d9c1ddaebd7c70301b62268020e"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "chat-switch-complete",
+        "--json"
+      ],
+      "name": "successor-handoff-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 9111,
+      "stdout_sha256": "7083d02d66d55c8c94a2f5f5d66118cc4c7c2b3f1c1aaae2874a7f182b075f69"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "site/scripts/build.py",
+        "--docs-pages-fallback",
+        "--json"
+      ],
+      "name": "docs-pages-fallback-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 4045,
+      "stdout_sha256": "6deaa272800ce6761849ba56d47f9453219e2555d62a43f1b286a7b50355be8d"
+    }
+  ],
+  "summary_lines_path": "tmp/release-1020-summary-lines.json",
+  "to_ref": "main",
+  "version": "1.0.20"
+}
