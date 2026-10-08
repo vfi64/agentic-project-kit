@@ -1,8 +1,6 @@
 ## Unreleased
-
 - Fixed KIT-GF-048: carry validated PR bodies and release-note categories through work finish.
 - Fixed KIT-GF-053: preserve rule acknowledgements during recovery and name acknowledgement first when commits block.
-
 - Correct implementation-backed remote-effect declarations and guard new remote CLI routes (KIT-GF-057).
 - Add signature-bound recovery for failed DOI closeout PRs with resumable Kit routes (KIT-GF-059).
 - Insert DOI closeout facts in the matching release section below Unreleased (KIT-GF-058).
@@ -10,7 +8,6 @@
 - Fix release-run package-index dispatch and post-release JSON checks (KIT-GF-055/056).
 - Fix packaged command-reference refresh for released-wheel external workspaces (KIT-GF-022).
 - Skip git-ignored folders in legacy-command and absolute-path audits (KIT-GF-054).
-
 ## v1.0.19 - 2026-10-06
 
 - Zenodo DOI verification pending for v1.0.19.
