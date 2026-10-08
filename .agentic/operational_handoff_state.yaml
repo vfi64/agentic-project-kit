@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 806103981ee3f23756e100bc7a437a9f892ac7e4
-  short: 80610398
-  subject: Fix work finish metadata and recovery acknowledgement (#2428)
+  full: 697412f8bedcb3d34324642b85a52ccc4563f5f1
+  short: 697412f8
+  subject: Fix unreleased changelog list formatting (#2430)
 last_substantive_work_state:
-  full: 806103981ee3f23756e100bc7a437a9f892ac7e4
-  short: 80610398
-  subject: Fix work finish metadata and recovery acknowledgement (#2428)
+  full: 697412f8bedcb3d34324642b85a52ccc4563f5f1
+  short: 697412f8
+  subject: Fix unreleased changelog list formatting (#2430)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
