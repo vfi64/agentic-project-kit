@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: bbcd8c2ec2a11157b4c18b3c37b0bd97796374063f879c6d0fe60dca0fbcc882
 - docs/reference/agentic-kit-commands.json: b1edf7970712bd539966aa8baff5a55bc1df9ef90a463bfb671c5e4b121376fe
-## Operational documentation refresh state after PR #2424
+## Operational documentation refresh state after PR #2426
 
-Current administrative handoff refresh state is `617b2b9d` (`Fix blocked DOI closeout recovery (#2424)`). Continue next only after this post-PR2424 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `08d82063` (`Fix command manifest remote effects (#2426)`). Continue next only after this post-PR2426 refresh is committed and merged; the next substantive slice must be created from fresh main.

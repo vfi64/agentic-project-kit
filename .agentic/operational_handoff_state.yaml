@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 617b2b9d87046229438bbb8d1d16d750bbe451d9
-  short: 617b2b9d
-  subject: Fix blocked DOI closeout recovery (#2424)
+  full: 08d820639316bbec0a1bb960a2ac94cd1da8500b
+  short: 08d82063
+  subject: Fix command manifest remote effects (#2426)
 last_substantive_work_state:
-  full: 617b2b9d87046229438bbb8d1d16d750bbe451d9
-  short: 617b2b9d
-  subject: Fix blocked DOI closeout recovery (#2424)
+  full: 08d820639316bbec0a1bb960a2ac94cd1da8500b
+  short: 08d82063
+  subject: Fix command manifest remote effects (#2426)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
