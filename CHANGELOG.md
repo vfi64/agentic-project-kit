@@ -8,6 +8,30 @@
 - Fix release-run package-index dispatch and post-release JSON checks (KIT-GF-055/056).
 - Fix packaged command-reference refresh for released-wheel external workspaces (KIT-GF-022).
 - Skip git-ignored folders in legacy-command and absolute-path audits (KIT-GF-054).
+## v1.0.20 - 2026-10-08
+
+- Zenodo DOI verification pending for v1.0.20.
+- Fix packaged command-reference refresh in external workspaces (KIT-GF-022).
+- Fix PR release-note classification through work finish metadata (KIT-GF-048).
+- Fix GitHub release checks for external workspaces without Kit documentation systems (KIT-GF-049).
+- Fix recovery deleting the local rule acknowledgement required for commits (KIT-GF-053).
+- Fix release audits scanning Git-ignored runtime folders (KIT-GF-054).
+- Fix package-index publication inputs and dispatched workflow identification (KIT-GF-055).
+- Fix post-release-check JSON support used by release run (KIT-GF-056).
+- Fix implementation-backed remote-effect declarations in the command manifest (KIT-GF-057).
+- Fix DOI closeout facts landing outside the matching release section (KIT-GF-058).
+- Fix blocked DOI closeout recovery through a signed resumable Kit gate (KIT-GF-059).
+- Record the verified Zenodo DOI for release 1.0.19.
+- Fix packaged reference refresh and ignored audit scans
+- Fix release run package publication checks
+- Fix external release publish checks
+- Fix DOI closeout changelog section
+- Fix blocked DOI closeout recovery
+- Fix command manifest remote effects
+- Fix work finish metadata and recovery acknowledgement
+- Fix unreleased changelog list formatting
+- Fix DOI closeout for release 1.0.19
+
 ## v1.0.19 - 2026-10-06
 
 - Add the governed release run orchestrator `agentic-kit release run` with resumable, signature-bound approval gates (KIT-GF-047).
