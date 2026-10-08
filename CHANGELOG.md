@@ -10,7 +10,6 @@
 - Skip git-ignored folders in legacy-command and absolute-path audits (KIT-GF-054).
 ## v1.0.19 - 2026-10-06
 
-- Zenodo DOI verification pending for v1.0.19.
 - Add the governed release run orchestrator `agentic-kit release run` with resumable, signature-bound approval gates (KIT-GF-047).
 - Add the read-only `agentic-kit ci status` verdict for commits and branches without a pull request, and remote-effect metadata for every command in the manifest (KIT-GF-024/025).
 - Repair post-merge-complete: the caller's CI budget reaches the follow-up wait, and a pending follow-up CI is reported as PENDING without starting a fallback (KIT-GF-050 A).
@@ -23,6 +22,10 @@
 - Add CI status command
 - Fix post-merge follow-up CI wait (KIT-GF-050 A)
 - Fix post-merge fallback in external workspaces (KIT-GF-050 B)
+
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.19 DOI `10.5281/zenodo.23196055`.
+
+Zenodo v1.0.19 DOI: 10.5281/zenodo.23196055
 
 ## v1.0.18 - 2026-10-05
 
