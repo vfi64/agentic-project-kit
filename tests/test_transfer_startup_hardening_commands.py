@@ -98,7 +98,7 @@ def test_restore_known_volatile_restores_only_known_paths(monkeypatch):
     assert result.exit_code == 0
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "PASS"
-    expected_paths = _known_volatile_transfer_paths(Path("."))
+    expected_paths = [path for path in _known_volatile_transfer_paths(Path(".")) if path != RULE_ACK_CURRENT_PATH]
     assert calls[0] == ["git", "status", "--short", "--untracked-files=all"]
     assert [call[-1] for call in calls[1:-1]] == expected_paths
     assert calls[-1] == ["git", "restore", "--", *expected_paths]
@@ -130,11 +130,11 @@ def test_restore_known_volatile_removes_untracked_outbox_and_restores_tracked_re
     assert payload["ok"] is True
     assert "docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json" in payload["tracked_paths"]
     assert ".agentic/transfer/outbox/last_result.txt" in payload["removed_untracked"]
-    assert RULE_ACK_CURRENT_PATH in payload["removed_untracked"]
+    assert RULE_ACK_CURRENT_PATH not in payload["removed_untracked"]
     assert latest_json.read_text(encoding="utf-8") == '{"state": "old"}\n'
     assert latest_log.read_text(encoding="utf-8") == "old\n"
     assert not outbox.exists()
-    assert not rule_ack.exists()
+    assert rule_ack.read_text(encoding="utf-8") == '{"repo_head": "abc123"}\n'
 
 
 def test_restore_known_volatile_restores_tracked_successor_projections(tmp_path: Path):

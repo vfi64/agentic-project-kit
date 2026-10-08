@@ -1,5 +1,8 @@
 ## Unreleased
 
+- Fixed KIT-GF-048: carry validated PR bodies and release-note categories through work finish.
+- Fixed KIT-GF-053: preserve rule acknowledgements during recovery and name acknowledgement first when commits block.
+
 - Correct implementation-backed remote-effect declarations and guard new remote CLI routes (KIT-GF-057).
 - Add signature-bound recovery for failed DOI closeout PRs with resumable Kit routes (KIT-GF-059).
 - Insert DOI closeout facts in the matching release section below Unreleased (KIT-GF-058).

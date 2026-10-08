@@ -8,6 +8,7 @@ from agentic_project_kit.volatile_paths import (
     SUCCESSOR_HANDOFF_PACKAGE_FILENAMES,
     SUCCESSOR_HANDOFF_PROMPT_FILENAMES,
     is_known_volatile_status_path,
+    is_rule_ack_path,
     status_path_from_short_line,
 )
 from agentic_project_kit.workspace import load_workspace
@@ -373,6 +374,10 @@ def _restore_known_volatile_paths(root: Path | str = ".") -> dict[str, object]:
         )
 
     for relative_path in dict.fromkeys(paths):
+        # Runtime acknowledgement is input to governed actions, not disposable output.
+        # Preserve both ignored/untracked state and legacy tracked acknowledgements.
+        if is_rule_ack_path(relative_path):
+            continue
         check = subprocess.run(
             ["git", "ls-files", "--error-unmatch", relative_path],
             cwd=root_path,

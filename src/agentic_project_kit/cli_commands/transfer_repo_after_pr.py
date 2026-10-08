@@ -148,7 +148,7 @@ def commit_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
-    require_capability("rules_confirmed")
+    require_capability("rules_confirmed", json_output=json_output)
     result = commit_paths(message, list(path), allow_main=allow_main, required_branch=branch)
     _echo_repo_result(result, json_output)
     if result.returncode != 0:

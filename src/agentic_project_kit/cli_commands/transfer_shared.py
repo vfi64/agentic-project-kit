@@ -247,30 +247,34 @@ def _echo_remote_next_user_summary(result) -> None:
     typer.echo(_summary_line("CHAT_REPLY", "g"))
     typer.echo("*" * 37 + " END SUMMARY " + "*" * 37)
 
-def _require_transfer_capability(capability: str) -> None:
+def _require_transfer_capability(capability: str, *, json_output: bool = False) -> None:
     snapshot = build_transfer_state(Path("."))
     if snapshot.capabilities.get(capability, False):
         return
+    next_action = snapshot.next_action
+    if capability == "rules_confirmed" and not snapshot.rule_snapshot.get("fail_closed"):
+        next_action = "agentic-kit rules acknowledge; then retry the transfer action."
     typer.echo(
         json.dumps(
             {
                 "chat_reply": "f",
-                "next_safe_action": snapshot.next_action,
+                "next_safe_action": next_action,
                 "result_status": "BLOCKED",
                 "returncode": 2,
                 "required_capability": capability,
                 "primary_state": snapshot.primary_state,
                 "reasons": snapshot.reasons,
-                "next_action": snapshot.next_action,
+                "next_action": next_action,
                 "rule_acknowledgement": snapshot.rule_acknowledgement,
             },
             indent=2,
             sort_keys=True,
         )
     )
-    typer.echo("FINAL_SIGNAL=f")
-    typer.echo(f"FINAL_NEXT={snapshot.next_action}")
-    typer.echo(f"CHAT_REPLY=f | NEXT={snapshot.next_action}")
+    if not json_output:
+        typer.echo("FINAL_SIGNAL=f")
+        typer.echo(f"FINAL_NEXT={next_action}")
+        typer.echo(f"CHAT_REPLY=f | NEXT={next_action}")
     raise typer.Exit(code=2)
 
 
