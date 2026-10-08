@@ -7,7 +7,6 @@ import inspect
 import textwrap
 from types import ModuleType
 
-import click
 from typer.main import get_command
 
 
@@ -98,12 +97,12 @@ def scan_command_effects(app):
         return result
 
     def walk(command, path):
-        if isinstance(command, click.Group):
+        if hasattr(command, "commands"):
             for name, child in command.commands.items():
                 walk(child, [*path, name])
         elif command.callback:
             observed["agentic-kit " + " ".join(path)] = scan(command.callback, set())
 
     root = get_command(app)
-    walk(root, [] if isinstance(root, click.Group) else [root.name])
+    walk(root, [] if hasattr(root, "commands") else [root.name])
     return observed
