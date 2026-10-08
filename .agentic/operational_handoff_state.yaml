@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 697412f8bedcb3d34324642b85a52ccc4563f5f1
-  short: 697412f8
-  subject: Fix unreleased changelog list formatting (#2430)
+  full: 0fb2438a0ef08d5ad5f154abd31183c04b56cd30
+  short: 0fb2438a
+  subject: Fix DOI closeout for release 1.0.19 (#2432)
 last_substantive_work_state:
-  full: 697412f8bedcb3d34324642b85a52ccc4563f5f1
-  short: 697412f8
-  subject: Fix unreleased changelog list formatting (#2430)
+  full: 0fb2438a0ef08d5ad5f154abd31183c04b56cd30
+  short: 0fb2438a
+  subject: Fix DOI closeout for release 1.0.19 (#2432)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
