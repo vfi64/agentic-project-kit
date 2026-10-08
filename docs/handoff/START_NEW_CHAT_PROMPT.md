@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 857294a50d07de2d6e02b3048126b9a39f563b0164936e30285af054c7cabf88
 - docs/reference/agentic-kit-commands.json: 374952879733f54780e3c0712500e4d102535c67062919af056e346f6007590a
-## Operational documentation refresh state after PR #2426
+## Operational documentation refresh state after PR #2428
 
-Current administrative handoff refresh state is `08d82063` (`Fix command manifest remote effects (#2426)`). Continue next only after this post-PR2426 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `80610398` (`Fix work finish metadata and recovery acknowledgement (#2428)`). Continue next only after this post-PR2428 refresh is committed and merged; the next substantive slice must be created from fresh main.
