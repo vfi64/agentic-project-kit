@@ -40,6 +40,13 @@ The staleness test is the binding guard: if a command is added, removed, renamed
 
 Every generated command-reference entry must carry a non-empty `remote_effects` list. Remote-effect classification is conservative metadata for routing, review, and UI gating; it does not prove that a command will always touch or avoid a remote under every implementation path.
 
+Implementation-backed declarations include effects available through optional flags,
+such as branch creation with a push or branch switching with a pull. Network-only
+queries declare `network_read`; local JSON evaluation and local report writing can
+declare `none`. The static CLI regression follows literal Git/GitHub argv and
+reachable imported helpers and rejects remote implementations declared as `none`.
+Dynamic command construction and arbitrary provider callbacks still require review.
+
 Allowed values are `none`, `network_read`, `fetch`, `push`, `pull_request`, `merge`, `release_publish`, and `delete_remote`. `none` must appear alone. A local-only recovery route such as `agentic-kit work rescue` must stay classified as `none` and must not run fetch, push, pull-request, merge, release, or remote-delete operations.
 
 ## Transfer wrapper command layer

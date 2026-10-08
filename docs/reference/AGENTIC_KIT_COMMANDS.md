@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 294d5185ed36
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: bf2b1a6f40fb
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -227,7 +227,7 @@ Audit source for risky bug/redundancy patterns.
 - Surface: `diagnostic`
 - When to use: Audit STATUS.md current-state claims against handoff, release, and origin/main state.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 Audit STATUS.md current-state claims against handoff, release, and origin/main state.
 
@@ -1223,7 +1223,7 @@ Validate Stable-DPA readiness and the bounded Stable Promotion record.
 - Surface: `primitive`
 - When to use: Observe a WRT-CH-001 admin refresh PR without claiming disposable fixture PASS.
 - Dry-run available: `True`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 Observe a WRT-CH-001 admin refresh PR without claiming disposable fixture PASS.
 
@@ -1290,7 +1290,7 @@ Pass when git status is clean except one expected in-progress log.
 - Surface: `primitive`
 - When to use: Commit an explicit evidence path set and verify the worktree is clean afterwards.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `push`
 
 Commit an explicit evidence path set and verify the worktree is clean afterwards.
 
@@ -1310,7 +1310,7 @@ Commit an explicit evidence path set and verify the worktree is clean afterwards
 - Surface: `primitive`
 - When to use: Append a canonical summary, require strict inspection, then upload the evidence log.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `push`
 
 Append a canonical summary, require strict inspection, then upload the evidence log.
 
@@ -1696,7 +1696,7 @@ Show one local pattern catalog entry by stable ID.
 - Surface: `diagnostic`
 - When to use: Validate post-release GitHub and Zenodo state without guessing DOI metadata.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 Validate post-release GitHub and Zenodo state without guessing DOI metadata.
 
@@ -1712,7 +1712,7 @@ Validate post-release GitHub and Zenodo state without guessing DOI metadata.
 - Surface: `orchestrator`
 - When to use: Record verified DOI metadata after GitHub release and Zenodo publication.
 - Dry-run available: `False`
-- Remote effects: `release_publish`
+- Remote effects: `network_read`
 
 Record verified DOI metadata after GitHub release and Zenodo publication.
 
@@ -1741,7 +1741,7 @@ Record verified DOI metadata after GitHub release and Zenodo publication.
 - Surface: `primitive`
 - When to use: Merge only when PR checks are green, refs match, and merge state is clean.
 - Dry-run available: `True`
-- Remote effects: `none`
+- Remote effects: `delete_remote`, `merge`, `network_read`
 
 Merge only when PR checks are green, refs match, and merge state is clean.
 
@@ -1766,7 +1766,7 @@ Merge only when PR checks are green, refs match, and merge state is clean.
 - Surface: `diagnostic`
 - When to use: Print deterministic PR/CI status and fetch failed logs for red CI.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 Print deterministic PR/CI status and fetch failed logs for red CI.
 
@@ -1783,7 +1783,7 @@ Print deterministic PR/CI status and fetch failed logs for red CI.
 - Surface: `primitive`
 - When to use: Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 
@@ -1813,7 +1813,7 @@ Wait for pull-request CI; guard merge preparation with --expected-head-sha.
 - Surface: `primitive`
 - When to use: Run agentic-kit pr-hygiene.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -1913,7 +1913,7 @@ Run the governed end-to-end release orchestrator with resumable approval gates.
 - Surface: `diagnostic`
 - When to use: Validate release state for a target version.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 Validate release state for a target version.
 
@@ -1946,7 +1946,7 @@ Block manual release metadata anchor edits without release-prep evidence.
 - Surface: `primitive`
 - When to use: Generate deterministic evidence-backed release notes from a local git tag diff.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 Generate deterministic evidence-backed release notes from a local git tag diff.
 
@@ -1970,7 +1970,7 @@ Generate deterministic evidence-backed release notes from a local git tag diff.
 - Surface: `diagnostic`
 - When to use: Print a release preparation checklist for the current project.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 Print a release preparation checklist for the current project.
 
@@ -1985,7 +1985,7 @@ Print a release preparation checklist for the current project.
 - Surface: `primitive`
 - When to use: Validate before-metadata release readiness for a target version.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 Validate before-metadata release readiness for a target version.
 
@@ -2042,7 +2042,7 @@ Plan release publishing without live tag/release side effects.
 - Surface: `diagnostic`
 - When to use: Render the local release lifecycle state without mutating release files.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 Render the local release lifecycle state without mutating release files.
 
@@ -2059,7 +2059,7 @@ Render the local release lifecycle state without mutating release files.
 - Surface: `primitive`
 - When to use: Dry-run remote branch hygiene classification for K3.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 Dry-run remote branch hygiene classification for K3.
 
@@ -2074,7 +2074,7 @@ Dry-run remote branch hygiene classification for K3.
 - Surface: `primitive`
 - When to use: Safely apply exactly one remote branch deletion candidate.
 - Dry-run available: `True`
-- Remote effects: `none`
+- Remote effects: `delete_remote`, `network_read`, `push`
 
 Safely apply exactly one remote branch deletion candidate.
 
@@ -2091,7 +2091,7 @@ Safely apply exactly one remote branch deletion candidate.
 - Surface: `diagnostic`
 - When to use: Write a K3 remote branch hygiene evidence report only with --execute.
 - Dry-run available: `True`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 Write a K3 remote branch hygiene evidence report only with --execute.
 
@@ -2121,7 +2121,7 @@ Write a K3 remote branch hygiene evidence report only with --execute.
 - Surface: `primitive`
 - When to use: Run agentic-kit rn.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `fetch`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2134,7 +2134,7 @@ Write a K3 remote branch hygiene evidence report only with --execute.
 - Surface: `primitive`
 - When to use: Run agentic-kit rnc.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `push`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2341,7 +2341,7 @@ Run the audit suite required by standard project gates.
 - Surface: `diagnostic`
 - When to use: Run agentic-kit state freshness-check.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 _No parameters._
 
@@ -2451,7 +2451,7 @@ Create or recover the administrative handoff refresh PR after a merged PR.
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer branch-create.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `push`
 - Replaces raw: `git switch -c`, `git checkout -b`
 
 | Parameter | Type | Options | Required | Default | Help |
@@ -2467,7 +2467,7 @@ Create or recover the administrative handoff refresh PR after a merged PR.
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer branch-delete.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `delete_remote`, `push`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2482,7 +2482,7 @@ Create or recover the administrative handoff refresh PR after a merged PR.
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer branch-switch.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `fetch`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -2648,7 +2648,7 @@ Report merge/rebase conflict state without resolving anything.
 - Surface: `primitive`
 - When to use: Continue chat/local transfer communication through the safest available wrapper path.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `fetch`, `push`
 
 Continue chat/local transfer communication through the safest available wrapper path.
 
@@ -2944,7 +2944,7 @@ Validate a remote-next transfer order without mutating the repository.
 - Surface: `diagnostic`
 - When to use: Render the current four-slice patch/handoff workflow state.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 Render the current four-slice patch/handoff workflow state.
 
@@ -2996,7 +2996,7 @@ Run the post-merge handoff refresh lifecycle after a merged PR.
 - Surface: `orchestrator`
 - When to use: Deterministically settle post-merge generated-output refresh state.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `fetch`, `merge`, `network_read`, `pull_request`, `push`
 
 Deterministically settle post-merge generated-output refresh state.
 
@@ -3157,7 +3157,7 @@ Create, validate, merge, and optionally close out a PR without manual PR/SHA cop
 - Surface: `diagnostic`
 - When to use: Run agentic-kit transfer pr-status.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3236,7 +3236,7 @@ Write the current diff to the OS temp directory and run the Python protected cha
 - Surface: `primitive`
 - When to use: Run agentic-kit transfer pull-current.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `fetch`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
@@ -3274,7 +3274,7 @@ Write the current diff to the OS temp directory and run the Python protected cha
 - Surface: `primitive`
 - When to use: Rebase the current branch on its upstream with bounded conflict reporting.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `fetch`
 
 Rebase the current branch on its upstream with bounded conflict reporting.
 
@@ -3709,7 +3709,7 @@ Rescue local main work before realigning main to the local base ref.
 - Surface: `orchestrator`
 - When to use: Start a human patch/slice workflow with the safe standard startup sequence.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `fetch`
 
 Start a human patch/slice workflow with the safe standard startup sequence.
 
@@ -3834,7 +3834,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Run agentic-kit work-order upload.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `push`
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|

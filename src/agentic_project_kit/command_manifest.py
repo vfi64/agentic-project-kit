@@ -406,6 +406,45 @@ def _dry_run_available(command: dict[str, Any]) -> bool:
 
 def infer_remote_effects(command: dict[str, Any]) -> list[str]:
     qualified = str(command.get("qualified_name") or "")
+    implementation_effects = {
+        "agentic-kit pr merge-if-green": ["delete_remote", "merge", "network_read"],
+        "agentic-kit remote-branch-hygiene-apply": ["delete_remote", "network_read", "push"],
+        "agentic-kit transfer pull-current": ["fetch"],
+        # These two routes only evaluate JSON or write local evidence files.
+        "agentic-kit pr-closeout": ["none"],
+        "agentic-kit transfer publish-last-report": ["none"],
+        "agentic-kit post-release-doi-closeout": ["network_read"],
+        "agentic-kit audit-status-current-state": ["network_read"],
+        "agentic-kit pr-hygiene": ["network_read"],
+        "agentic-kit release-plan": ["network_read"],
+        "agentic-kit release-preflight": ["network_read"],
+        "agentic-kit release-status": ["network_read"],
+        "agentic-kit release-notes-generate": ["network_read"],
+        "agentic-kit release-check": ["network_read"],
+        "agentic-kit post-release-check": ["network_read"],
+        "agentic-kit rn": ["fetch"],
+        "agentic-kit rnc": ["push"],
+        "agentic-kit remote-branch-hygiene": ["network_read"],
+        "agentic-kit remote-branch-hygiene-report": ["network_read"],
+        "agentic-kit work start": ["fetch"],
+        "agentic-kit dpa wrt-ch001-evidence": ["network_read"],
+        "agentic-kit evidence finalize-log": ["push"],
+        "agentic-kit evidence commit-paths": ["push"],
+        "agentic-kit work-order upload": ["push"],
+        "agentic-kit pr status": ["network_read"],
+        "agentic-kit pr wait-ci": ["network_read"],
+        "agentic-kit state freshness-check": ["network_read"],
+        "agentic-kit transfer continue": ["fetch", "push"],
+        "agentic-kit transfer patch-cycle-status": ["network_read"],
+        "agentic-kit transfer rebase-on-upstream": ["fetch"],
+        "agentic-kit transfer branch-delete": ["delete_remote", "push"],
+        "agentic-kit transfer branch-create": ["push"],
+        "agentic-kit transfer branch-switch": ["fetch"],
+        "agentic-kit transfer pr-status": ["network_read"],
+        "agentic-kit transfer post-merge-settle": ["fetch", "merge", "network_read", "pull_request", "push"],
+    }
+    if qualified in implementation_effects:
+        return implementation_effects[qualified]
     if qualified == "agentic-kit transfer pr-close-superseded":
         return ["network_read", "pull_request"]
     if qualified == "agentic-kit release run":

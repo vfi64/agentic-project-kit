@@ -842,7 +842,7 @@
       ],
       "qualified_name": "agentic-kit audit-status-current-state",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
@@ -5745,7 +5745,7 @@
       ],
       "qualified_name": "agentic-kit dpa wrt-ch001-evidence",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -6037,7 +6037,7 @@
       ],
       "qualified_name": "agentic-kit evidence commit-paths",
       "remote_effects": [
-        "none"
+        "push"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -6397,7 +6397,7 @@
       ],
       "qualified_name": "agentic-kit evidence finalize-log",
       "remote_effects": [
-        "none"
+        "push"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -8024,7 +8024,7 @@
       ],
       "qualified_name": "agentic-kit post-release-check",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -8103,7 +8103,7 @@
       ],
       "qualified_name": "agentic-kit post-release-doi-closeout",
       "remote_effects": [
-        "release_publish"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -8334,7 +8334,9 @@
       ],
       "qualified_name": "agentic-kit pr merge-if-green",
       "remote_effects": [
-        "none"
+        "delete_remote",
+        "merge",
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
@@ -8414,7 +8416,7 @@
       ],
       "qualified_name": "agentic-kit pr status",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
@@ -8508,7 +8510,7 @@
       ],
       "qualified_name": "agentic-kit pr wait-ci",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -8595,7 +8597,7 @@
       ],
       "qualified_name": "agentic-kit pr-hygiene",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -9069,7 +9071,7 @@
       ],
       "qualified_name": "agentic-kit release-check",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -9337,7 +9339,7 @@
       ],
       "qualified_name": "agentic-kit release-notes-generate",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -9387,7 +9389,7 @@
       ],
       "qualified_name": "agentic-kit release-plan",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -9423,7 +9425,7 @@
       ],
       "qualified_name": "agentic-kit release-preflight",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -9745,7 +9747,7 @@
       ],
       "qualified_name": "agentic-kit release-status",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -9795,7 +9797,7 @@
       ],
       "qualified_name": "agentic-kit remote-branch-hygiene",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -9873,7 +9875,9 @@
       ],
       "qualified_name": "agentic-kit remote-branch-hygiene-apply",
       "remote_effects": [
-        "none"
+        "delete_remote",
+        "network_read",
+        "push"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -9951,7 +9955,7 @@
       ],
       "qualified_name": "agentic-kit remote-branch-hygiene-report",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -10051,7 +10055,7 @@
       ],
       "qualified_name": "agentic-kit rn",
       "remote_effects": [
-        "none"
+        "fetch"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -10101,7 +10105,7 @@
       ],
       "qualified_name": "agentic-kit rnc",
       "remote_effects": [
-        "none"
+        "push"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -11104,7 +11108,7 @@
       ],
       "qualified_name": "agentic-kit state freshness-check",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -11578,7 +11582,7 @@
       ],
       "qualified_name": "agentic-kit transfer branch-create",
       "remote_effects": [
-        "none"
+        "push"
       ],
       "replaces_raw": [
         "git switch -c",
@@ -11661,7 +11665,8 @@
       ],
       "qualified_name": "agentic-kit transfer branch-delete",
       "remote_effects": [
-        "none"
+        "delete_remote",
+        "push"
       ],
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
@@ -11727,7 +11732,7 @@
       ],
       "qualified_name": "agentic-kit transfer branch-switch",
       "remote_effects": [
-        "none"
+        "fetch"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -12397,7 +12402,8 @@
       ],
       "qualified_name": "agentic-kit transfer continue",
       "remote_effects": [
-        "none"
+        "fetch",
+        "push"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -13897,7 +13903,7 @@
       ],
       "qualified_name": "agentic-kit transfer patch-cycle-status",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -14252,7 +14258,11 @@
       ],
       "qualified_name": "agentic-kit transfer post-merge-settle",
       "remote_effects": [
-        "none"
+        "fetch",
+        "merge",
+        "network_read",
+        "pull_request",
+        "push"
       ],
       "replaces_raw": [],
       "safety": "DESTRUCTIVE",
@@ -15253,7 +15263,7 @@
       ],
       "qualified_name": "agentic-kit transfer pr-status",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -15600,7 +15610,7 @@
       ],
       "qualified_name": "agentic-kit transfer pull-current",
       "remote_effects": [
-        "none"
+        "fetch"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -15758,7 +15768,7 @@
       ],
       "qualified_name": "agentic-kit transfer rebase-on-upstream",
       "remote_effects": [
-        "none"
+        "fetch"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -17607,7 +17617,7 @@
       ],
       "qualified_name": "agentic-kit work start",
       "remote_effects": [
-        "none"
+        "fetch"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -18096,7 +18106,7 @@
       ],
       "qualified_name": "agentic-kit work-order upload",
       "remote_effects": [
-        "none"
+        "push"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -19162,7 +19172,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "294d5185ed36",
+    "manifest_sha": "bf2b1a6f40fb",
     "schema_version": 1
   },
   "schema_version": 2,
