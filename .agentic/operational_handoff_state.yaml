@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 0fb2438a0ef08d5ad5f154abd31183c04b56cd30
-  short: 0fb2438a
-  subject: Fix DOI closeout for release 1.0.19 (#2432)
+  full: 30fd1a06ba6eb6383f3efb50299d73b18a7af1eb
+  short: 30fd1a06
+  subject: Release 1.0.20 (#2434)
 last_substantive_work_state:
-  full: 0fb2438a0ef08d5ad5f154abd31183c04b56cd30
-  short: 0fb2438a
-  subject: Fix DOI closeout for release 1.0.19 (#2432)
+  full: 30fd1a06ba6eb6383f3efb50299d73b18a7af1eb
+  short: 30fd1a06
+  subject: Release 1.0.20 (#2434)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
