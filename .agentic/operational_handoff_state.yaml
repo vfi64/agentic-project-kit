@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 47181095b2d62c8a61dd10ebf8d2e2ce3f3bad74
-  short: 47181095
-  subject: Fix precise release changelog layout diagnostics (#2440)
+  full: 11be9fdf1eb44eee26ddff73c6ac3a3092245f5d
+  short: 11be9fdf
+  subject: Release 1.0.21 (#2442)
 last_substantive_work_state:
-  full: 47181095b2d62c8a61dd10ebf8d2e2ce3f3bad74
-  short: 47181095
-  subject: Fix precise release changelog layout diagnostics (#2440)
+  full: 11be9fdf1eb44eee26ddff73c6ac3a3092245f5d
+  short: 11be9fdf
+  subject: Release 1.0.21 (#2442)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
