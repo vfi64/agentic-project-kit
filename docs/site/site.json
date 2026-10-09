@@ -5798,6 +5798,24 @@
             "required": false
           },
           {
+            "default": "",
+            "help": "Name or identifier of the human approving the release.",
+            "name": "approved_by",
+            "opts": [
+              "--approved-by"
+            ],
+            "required": false
+          },
+          {
+            "default": "",
+            "help": "Reference to the owner consent, such as a work order or start click.",
+            "name": "consent_source",
+            "opts": [
+              "--consent-source"
+            ],
+            "required": false
+          },
+          {
             "default": false,
             "help": "Print machine-readable JSON.",
             "name": "json_output",
@@ -12020,13 +12038,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "43b81efb137f",
+    "manifest_sha": "e272fbfc980c",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.20",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.20",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "43b81efb137f",
+    "reproduced_manifest_sha": "e272fbfc980c",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 170,

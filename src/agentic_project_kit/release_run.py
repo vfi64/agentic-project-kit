@@ -31,6 +31,8 @@ class ReleaseRunOptions:
     execute: bool = False
     expected_signature: str = ""
     json_output: bool = False
+    approved_by: str = ""
+    consent_source: str = ""
     root: Path = Path(".")
 
 
@@ -57,6 +59,11 @@ class ReleaseRun:
         self._approval_consumed = False
 
     def run(self) -> dict[str, Any]:
+        from agentic_project_kit.release_run_approval import validate_consent
+
+        blockers = validate_consent(self)
+        if blockers:
+            return self._payload({"step_id": "approval-policy", "result_status": "BLOCKED", "blockers": blockers})
         self.state.setdefault("schema_version", 1)
         self.state.setdefault("kind", "release_run_state")
         self.state.setdefault("version", self.version)
@@ -116,21 +123,11 @@ class ReleaseRun:
                     "gate": gate,
                     "next_action": "Configure the release-run gate inputs before approving this step.",
                 }
-            signature = _approval_signature(gate)
-            gate["approval_signature"] = signature
-            self.state.setdefault("gates", {})[step_id] = gate
-            self._save_state()
-            if not self.options.execute or self._approval_consumed:
-                return self._awaiting_approval(step_id, gate)
-            if self.options.expected_signature != signature:
-                return {
-                    "step_id": step_id,
-                    "result_status": "BLOCKED",
-                    "blockers": ["signature-mismatch"],
-                    "gate": gate,
-                    "next_action": self._next_action(step_id, signature),
-                }
-            self._approval_consumed = True
+            from agentic_project_kit.release_run_approval import authorize_gate
+
+            decision = authorize_gate(self, step_id, gate)
+            if decision is not None:
+                return decision
         method = getattr(self, f"_step_{step_id.lower()}")
         return method()
 
@@ -199,53 +196,9 @@ class ReleaseRun:
         )
 
     def _step_c3(self) -> dict[str, Any]:
-        dispatch = dict(self.state.get("c3_dispatch") or {})
-        if dispatch.get("dispatched") and not dispatch.get("run_id"):
-            return {
-                "step_id": "C3",
-                "result_status": "BLOCKED",
-                "blockers": ["package-index-dispatch-run-id-missing"],
-                "next_action": "Record the package-index run id in the state file or inspect the workflow manually before rerunning.",
-            }
-        workflow = self._package_index_workflow()
-        workflow_blockers = list(workflow.get("blockers") or [])
-        if workflow_blockers:
-            return {
-                "step_id": "C3",
-                "result_status": "BLOCKED",
-                "blockers": workflow_blockers,
-                "workflow": workflow,
-                "next_action": "Configure release.package_index_workflow inputs or make required workflow inputs derivable.",
-            }
-        if not dispatch.get("dispatched"):
-            argv = ["gh", "workflow", "run", workflow["file"]]
-            for value in workflow["inputs"]:
-                if "=" in value:
-                    name, raw = value.split("=", 1)
-                    argv.extend(["-f", f"{name}={raw}"])
-            dispatch_after = datetime.now(timezone.utc)
-            head_sha = self._current_head()
-            dispatch_result = self._command("C3-dispatch", argv)
-            if dispatch_result["result_status"] != "PASS":
-                return dispatch_result
-            run_id = self._dispatched_workflow_run_id(workflow["file"], dispatch_after=dispatch_after, head_sha=head_sha)
-            dispatch = {
-                "dispatched": True,
-                "run_id": run_id,
-                "workflow": workflow,
-                "dispatch_after_utc": dispatch_after.isoformat(),
-                "head_sha": head_sha,
-            }
-            self.state["c3_dispatch"] = dispatch
-            self._save_state()
-            if not run_id:
-                return {
-                    "step_id": "C3",
-                    "result_status": "BLOCKED",
-                    "blockers": ["package-index-dispatch-run-id-missing"],
-                    "next_action": "Inspect GitHub Actions and record the workflow run id before rerunning.",
-                }
-        return self._command("C3-watch", ["gh", "run", "watch", str(dispatch["run_id"]), "--exit-status"])
+        from agentic_project_kit.release_run_dispatch import package_index_step
+
+        return package_index_step(self)
 
     def _step_c4(self) -> dict[str, Any]:
         last: dict[str, Any] | None = None
@@ -453,46 +406,15 @@ class ReleaseRun:
         }
 
     def _next_action(self, gate_id: str, signature: str) -> str:
-        return f"agentic-kit release run --version {self.version} --execute --expected-signature {signature} --json"
+        from agentic_project_kit.release_run_approval import approval_next_action
+
+        return approval_next_action(self, signature)
 
     def _summary_args(self) -> list[str]:
         args: list[str] = []
         for line in self.options.summary_lines or tuple(self.state.get("summary_lines") or []):
             args.extend(["--summary-line", str(line)])
         return args
-
-    def _dispatched_workflow_run_id(self, workflow_file: str, *, dispatch_after: datetime, head_sha: str) -> str:
-        completed = self.runner(
-            [
-                "gh",
-                "run",
-                "list",
-                "--workflow",
-                workflow_file,
-                "--event",
-                "workflow_dispatch",
-                "--limit",
-                "20",
-                "--json",
-                "databaseId,createdAt,event,headSha",
-            ],
-            self.root,
-        )
-        payload = _parse_json(completed.stdout)
-        if not isinstance(payload, list):
-            return ""
-        for item in payload:
-            if not isinstance(item, dict):
-                continue
-            if str(item.get("event") or "") != "workflow_dispatch":
-                continue
-            if head_sha and str(item.get("headSha") or "") != head_sha:
-                continue
-            created = _parse_github_datetime(str(item.get("createdAt") or ""))
-            if created is None or created < dispatch_after:
-                continue
-            return str(item.get("databaseId") or "")
-        return ""
 
     def _package_index_workflow(self) -> dict[str, Any]:
         config = self._release_config()
@@ -538,6 +460,12 @@ class ReleaseRun:
         if step_id not in finished:
             finished.append(step_id)
         self.state["finished_steps"] = finished
+        if step_id == "B4" and self.state.get("release_consent"):
+            # Only a successful governed merge+handoff may advance the approved
+            # source commit to the publication target. Later gates cannot repin it.
+            head = self._current_head()
+            self.state["release_consent"]["expected_head"] = head
+            self._append_log({"kind": "release_consent_commit_transition", "step_id": step_id, "target_commit": head})
         self.state.setdefault("step_results", {})[step_id] = _compact_step_result(result)
         self._save_state()
 
@@ -551,6 +479,8 @@ class ReleaseRun:
             "current_step": current.get("step_id", ""),
             "gate": current.get("gate"),
             "blockers": current.get("blockers", []),
+            "approvals": list(self.state.get("approvals") or []),
+            "release_consent": self.state.get("release_consent"),
             "finished_steps": list(self.state.get("finished_steps") or []),
             "state_path": self.state_path.as_posix(),
             "log_path": self.log_path.as_posix(),
@@ -565,7 +495,9 @@ class ReleaseRun:
 
     def _save_state(self) -> None:
         self.state_path.parent.mkdir(parents=True, exist_ok=True)
-        self.state_path.write_text(json.dumps(self.state, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        pending = self.state_path.with_suffix(".json.pending")
+        pending.write_text(json.dumps(self.state, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        pending.replace(self.state_path)
 
     def _append_log(self, payload: dict[str, Any]) -> None:
         self.log_path.parent.mkdir(parents=True, exist_ok=True)

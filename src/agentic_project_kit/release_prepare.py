@@ -464,12 +464,17 @@ _EXTERNAL_LITERAL_VERSION = r'^(__version__\s*=\s*)(["\'])[^"\']+\2'
 
 def _external_changelog(text: str, version: str, date: str, *, summary_lines: Sequence[str],
                         uses_zenodo: bool) -> str:
+    from agentic_project_kit.release_changelog import consume_unreleased
+
     lines = _with_pending_doi_line(version, summary_lines) if uses_zenodo else tuple(summary_lines)
     section = f"## v{version} - {date}\n\n" + "\n".join(f"- {line}" for line in lines) + "\n"
     existing = re.compile(rf"^##\s+\[?v?{re.escape(version)}\]?(?:[ \t][^\n]*)?\n.*?(?=^##\s|\Z)",
                           re.MULTILINE | re.DOTALL)
     if existing.search(text):
         return existing.sub(section.rstrip() + "\n\n", text, count=1)
+    # Consumption belongs to creation of this release, never to subsequent
+    # refreshes: identical future entries must not disappear on a rerun.
+    text = consume_unreleased(text, summary_lines)
     versioned = re.search(r"^##\s+\[?v?\d+\.\d+\.\d+", text, flags=re.MULTILINE)
     if versioned:
         index = versioned.start()
@@ -481,7 +486,7 @@ def _external_changelog(text: str, version: str, date: str, *, summary_lines: Se
         if following:
             index = unreleased.end() + following.start()
             return text[:index] + section + "\n" + text[index:]
-    return text.rstrip("\n") + "\n\n" + section
+    return text.rstrip("\n") + "\n\n" + section + "\n"
 
 
 def _prepare_external_release_state(root: Path, *, version: str, date: str,

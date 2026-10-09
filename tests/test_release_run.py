@@ -64,6 +64,8 @@ class FakeRunner:
         if command[:3] == ["gh", "workflow", "run"]:
             return self._completed(command, "")
         if command[:3] == ["gh", "run", "list"]:
+            if not any(call[:3] == ["gh", "workflow", "run"] for call in self.calls):
+                return self._completed(command, "[]\n")
             return self._completed(
                 command,
                 '[{"databaseId": 12345, "event": "workflow_dispatch", "headSha": "abc123", "createdAt": "2099-01-01T00:00:00Z"}]\n',
@@ -281,7 +283,7 @@ def test_release_run_derives_pypi_dispatch_input_without_config_section(tmp_path
     _finish_through_c3_gate(tmp_path, runner)
 
     dispatch = next(call for call in runner.calls if call[:3] == ["gh", "workflow", "run"])
-    assert dispatch == ["gh", "workflow", "run", "release.yml", "-f", "publish_target=pypi"]
+    assert dispatch == ["gh", "workflow", "run", "release.yml", "--ref", "v1.2.3", "-f", "publish_target=pypi"]
 
 
 def test_release_run_watches_dispatched_workflow_run_not_stale_latest(tmp_path: Path) -> None:
@@ -298,6 +300,8 @@ def test_release_run_watches_dispatched_workflow_run_not_stale_latest(tmp_path: 
             if command[:3] == ["gh", "workflow", "run"]:
                 return self._completed(command, "")
             if command[:3] == ["gh", "run", "list"]:
+                if not any(call[:3] == ["gh", "workflow", "run"] for call in self.calls):
+                    return self._completed(command, "[]\n")
                 return self._completed(
                     command,
                     json.dumps(

@@ -1,4 +1,9 @@
 ## Unreleased
+
+- Fix external release preparation to consume only released Unreleased entries and preserve rerun stability (KIT-GF-060).
+- Add attributed per-gate or upfront release consent with plan and commit drift checks (KIT-GF-061).
+- Fix external publication checks to ignore automatically generated Kit command references (KIT-GF-049 follow-up).
+- Fix package-index dispatch visibility retries and resumable run-ID discovery without redispatch (KIT-GF-055 follow-up).
 - Fixed KIT-GF-048: carry validated PR bodies and release-note categories through work finish.
 - Fixed KIT-GF-053: preserve rule acknowledgements during recovery and name acknowledgement first when commits block.
 - Correct implementation-backed remote-effect declarations and guard new remote CLI routes (KIT-GF-057).

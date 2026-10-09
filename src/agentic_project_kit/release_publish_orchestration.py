@@ -137,7 +137,9 @@ def _should_run_publish_check(root: Path, check_name: str) -> bool:
     if check_name == "docs-audit":
         return (root / "docs" / "DOCUMENTATION_REGISTRY.yaml").exists()
     if check_name == "command-reference-check":
-        return (root / "docs" / "reference" / "agentic-kit-commands.json").exists()
+        # Adopters also receive this generated projection. It does not opt them
+        # into the development checkout's pytest-based reference check.
+        return False
     return False
 
 

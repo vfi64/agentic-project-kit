@@ -706,6 +706,22 @@ After tagging:
     gh release view <tag>
 
 
+## Release consent and external changelog regressions
+
+`release.approval: upfront` binds one attributed consent to the release plan;
+`release.approval: per_gate` preserves individual signed gates. Explicit policies
+require `--approved-by` and `--consent-source`; these are audit attribution,
+not identity authentication. Version, tag, policy, workflow and target-commit
+drift must block; only successful B4 merge and handoff advances the consented
+commit. D2R recovery needs separate approval. State and logs name each consent.
+External release-prep consumes only matching Unreleased entries on creating a
+release, preserves future entries on rerun and passes publish consistency and
+metadata authority checks. C3 must persist dispatch identity before its API call,
+wait with a bound for visibility, reject stale or ambiguous runs, and resume
+without a second dispatch. Regression fixtures live outside the Kit checkout in
+`tests/test_release_changelog_consumption.py` and
+`tests/test_release_consent_dispatch.py`; remote observations are faked.
+
 ## Screen-Control Local Gate
 
 For chat-assisted development without a local coding agent CLI, run the bundled screen-control gate when a full local evidence capture is useful:
