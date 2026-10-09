@@ -1,0 +1,204 @@
+{
+  "authorized_route": "agentic-kit release-prep",
+  "base_ref": "origin/main",
+  "changed_paths_against_base": [
+    ".agentic/dpa/acceptance/current_handoff_operational_state.json",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/site/claims/claims.json",
+    "docs/site/claims/index.html",
+    "docs/site/commands/commands.json",
+    "docs/site/commands/diagnostics.html",
+    "docs/site/commands/guided.html",
+    "docs/site/commands/index.html",
+    "docs/site/index.html",
+    "docs/site/quickstart/index.html",
+    "docs/site/quickstart/quickstart.json",
+    "docs/site/site.json",
+    "docs/site/workflows/index.html",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py",
+    "src/agentic_project_kit/reference/agentic-kit-commands.json"
+  ],
+  "date": "2026-10-09",
+  "explicit_summary_lines": [
+    "Fix Kit release preparation to consume only carried Unreleased entries, preserve unmatched changes and keep reruns stable (KIT-GF-064).",
+    "Fix release-run steps and consent to follow publication targets, require the package workflow and support a configured branch prefix (KIT-GF-065).",
+    "Fix pure JSON stdout for transfer capability blockers and early input/runtime failures without changing exit codes or actions (KIT-GF-023).",
+    "Fix external workspace documentation audits to use declared documents, version anchors, registry classes and lifecycle policy; discover release authority evidence under workspace report paths (KIT-GF-035)."
+  ],
+  "from_tag": "v1.0.21",
+  "kind": "release_prepare_evidence",
+  "release_metadata_anchor_paths": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py"
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-notes-generate",
+        "--version",
+        "1.0.22",
+        "--from-tag",
+        "v1.0.21",
+        "--to-ref",
+        "main",
+        "--include-github-metadata",
+        "--summary-lines-json",
+        "tmp/release-1022-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-notes-generate",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 17699,
+      "stdout_sha256": "75686711535141303c40f07e2aa6d543ef0e47c40bbd23002a9cccd0261a964f"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-prep",
+        "--version",
+        "1.0.22",
+        "--date",
+        "2026-10-09",
+        "--summary-line",
+        "Fix Kit release preparation to consume only carried Unreleased entries, preserve unmatched changes and keep reruns stable (KIT-GF-064).",
+        "--summary-line",
+        "Fix release-run steps and consent to follow publication targets, require the package workflow and support a configured branch prefix (KIT-GF-065).",
+        "--summary-line",
+        "Fix pure JSON stdout for transfer capability blockers and early input/runtime failures without changing exit codes or actions (KIT-GF-023).",
+        "--summary-line",
+        "Fix external workspace documentation audits to use declared documents, version anchors, registry classes and lifecycle policy; discover release authority evidence under workspace report paths (KIT-GF-035).",
+        "--summary-lines-from",
+        "tmp/release-1022-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-prep",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 292,
+      "stdout_sha256": "6aaa868975cdc7f3c13069687369c4bbbc4d9b99a709a1882d0ba187c7d1da89"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "commands",
+        "sync-entrypoints",
+        "--execute",
+        "--json"
+      ],
+      "name": "commands-sync-entrypoints",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 419,
+      "stdout_sha256": "598c4450421e8c71aed274959c2b8e8923fc98ba180336f0d8e01bc2c64e62bf"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "agentic-kit",
+        "release",
+        "prepare",
+        "--internal-dpa-readiness-ack-refresh"
+      ],
+      "name": "dpa-readiness-ack-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 416,
+      "stdout_sha256": "782321dbf912b0f4d88bfcdb260ac13a70419644347faac6c4a3501fe62b0dda"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "chat-switch-complete",
+        "--json"
+      ],
+      "name": "successor-handoff-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 9111,
+      "stdout_sha256": "3455c89431d1d101623f18bd9a0a89c68f579042f2933fe22c8e2180a8dab917"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "site/scripts/build.py",
+        "--docs-pages-fallback",
+        "--json"
+      ],
+      "name": "docs-pages-fallback-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 4045,
+      "stdout_sha256": "38ea90f519376591d585728072e3caa5c7856aa99d309127e18c49e8d7de06f6"
+    }
+  ],
+  "summary_lines_path": "tmp/release-1022-summary-lines.json",
+  "to_ref": "main",
+  "version": "1.0.22"
+}
