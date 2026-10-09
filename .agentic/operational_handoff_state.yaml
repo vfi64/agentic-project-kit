@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 1eb4822f4bedb7da49d785d780f3dd3046570aeb
-  short: 1eb4822f
-  subject: Record DOI for release 1.0.21 (#2444)
+  full: ab45540967669f664f1f9d594c0c3a9e96bfba2e
+  short: ab455409
+  subject: Fix external workspace documentation audits (#2446)
 last_substantive_work_state:
-  full: 1eb4822f4bedb7da49d785d780f3dd3046570aeb
-  short: 1eb4822f
-  subject: Record DOI for release 1.0.21 (#2444)
+  full: ab45540967669f664f1f9d594c0c3a9e96bfba2e
+  short: ab455409
+  subject: Fix external workspace documentation audits (#2446)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
