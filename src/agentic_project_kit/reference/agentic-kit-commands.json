@@ -8993,6 +8993,34 @@
           "secondary_opts": []
         },
         {
+          "default": "",
+          "help": "Name or identifier of the human approving the release.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "approved_by",
+          "opts": [
+            "--approved-by"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Reference to the owner consent, such as a work order or start click.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "consent_source",
+          "opts": [
+            "--consent-source"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
           "default": false,
           "help": "Print machine-readable JSON.",
           "is_flag": true,
@@ -19214,7 +19242,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "43b81efb137f",
+    "manifest_sha": "e272fbfc980c",
     "schema_version": 1
   },
   "schema_version": 2,

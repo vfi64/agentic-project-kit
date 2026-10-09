@@ -1069,6 +1069,8 @@ def release_run_command(
     summary_lines: list[str] | None = typer.Option(None, "--summary-line", help="Release changelog summary line. Repeatable."),
     execute: bool = typer.Option(False, "--execute", help="Execute the next approved release-run gate."),
     expected_signature: str = typer.Option("", "--expected-signature", help="Approval signature for the next release-run gate."),
+    approved_by: str = typer.Option("", "--approved-by", help="Name or identifier of the human approving the release."),
+    consent_source: str = typer.Option("", "--consent-source", help="Reference to the owner consent, such as a work order or start click."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     """Run the governed end-to-end release orchestrator with resumable approval gates."""
@@ -1078,6 +1080,8 @@ def release_run_command(
             summary_lines=tuple(summary_lines or ()),
             execute=execute,
             expected_signature=expected_signature,
+            approved_by=approved_by,
+            consent_source=consent_source,
             json_output=json_output,
             root=Path("."),
         )

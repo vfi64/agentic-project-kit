@@ -119,6 +119,12 @@ report records them as `explicit_summary_lines` (KIT-GF-045).
 Use --write only when readiness checks are clean. A successful write also refreshes command entrypoints and writes
 `docs/reports/release/release-prepare-<version>.json` as release-metadata authority evidence for PR and CI gates.
 
+In external workspaces, creating a release section consumes exactly the matching
+Unreleased bullets carried into that release, keeping the Unreleased heading.
+Unmatched entries and historical sections are preserved. The dry run lists
+CHANGELOG.md without modifying it; refreshing an existing release does not consume
+later entries, even when their text is identical (KIT-GF-060).
+
 ## agentic-kit ci status
 
 Use `agentic-kit ci status --commit <sha> --branch <branch> --json` when a workflow needs the GitHub Actions verdict for a commit or branch without a pull request, such as main after a merge. The command is read-only and returns structured `PASS`, `PENDING`, or `BLOCKED` JSON instead of requiring raw `gh run list` parsing.
@@ -168,6 +174,35 @@ after a fresh approval; it does not repeat regeneration or a completed commit.
 Dirty starts, source-head drift and unrelated pre-existing recovery branches block.
 If work start synchronizes a newer main, D2R stops before writing and requires
 a fresh approval over the new target commit and regenerated paths.
+
+### Declared release consent
+
+Set `release.approval: per_gate` or `release.approval: upfront` in
+`.agentic/config.yaml`. With either explicit policy, execution requires
+`--approved-by <owner>` and `--consent-source <work-order-or-click-reference>`.
+These fields record caller-supplied attribution; they do not authenticate identity.
+The default remains per-gate approval. Legacy callers without a declared policy
+remain compatible, with missing attribution explicitly recorded as unspecified.
+
+With `upfront`, the first B4 preview includes the consented release plan: version,
+tag, preparation and DOI branches, publication policy, summary lines and workflow
+inputs, plus B4's paths and source commit. Execute its signature once with the
+attribution fields. Matching C2, C3 and D4 gates then proceed under that recorded
+consent, including on resume. The only allowed commit transition is the successful
+Kit B4 merge and handoff; its resulting HEAD is recorded as the publication target.
+A changed version, tag, policy, workflow, summary or target commit blocks.
+FAIL/BLOCKED stops the run; D2R recovery always needs a separate signed approval.
+Gate subjects, approver, consent source and commit transition are retained in
+the state, JSON result and append-only release log (KIT-GF-061).
+
+C3 dispatches the workflow against the release tag and records dispatch intent
+before the remote call. It takes a pre-dispatch run inventory, then searches up
+to six times, two seconds apart, for the unique matching workflow_dispatch run,
+head SHA and creation time. The inventory excludes older runs within GitHub's
+one-second timestamp precision. Legacy dispatch states use the strict timestamp.
+Missing or ambiguous identity blocks; a rerun searches the saved dispatch and
+never dispatches it again. Every query is logged. Incomplete legacy identity
+requires inspection, with no automatic redispatch (KIT-GF-055 follow-up).
 
 `agentic-kit transfer pr-close-superseded <pr> --replacement-pr <merged-pr>
 --expected-head-sha <sha> --json` is a dry run by default. Its `--execute` route

@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 43b81efb137f
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: e272fbfc980c
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -1905,6 +1905,8 @@ Run the governed end-to-end release orchestrator with resumable approval gates.
 | `summary_lines` | `TyperOption` | --summary-line | `False` |  | Release changelog summary line. Repeatable. |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Execute the next approved release-run gate. |
 | `expected_signature` | `TyperOption` | --expected-signature | `False` | `` | Approval signature for the next release-run gate. |
+| `approved_by` | `TyperOption` | --approved-by | `False` | `` | Name or identifier of the human approving the release. |
+| `consent_source` | `TyperOption` | --consent-source | `False` | `` | Reference to the owner consent, such as a work order or start click. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit release-check`

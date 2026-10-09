@@ -51,6 +51,10 @@ rules:
     - C2 signed `release-publish --execute`
     - C3 package-index workflow dispatch
     - D4 DOI closeout `work finish --execute`
+    - 'release.approval: upfront'
+    - --approved-by
+    - --consent-source
+    - without a second dispatch
     - workspace temp root
     - "publication: none"
   - path: docs/reference/HUMAN_WORKFLOW_COMMANDS.md
@@ -62,6 +66,12 @@ rules:
     - AWAITING_APPROVAL
     - approval_signature
     - package-index workflow
+    - 'release.approval: per_gate'
+    - 'release.approval: upfront'
+    - --approved-by
+    - --consent-source
+    - KIT-GF-060
+    - never dispatches it again
     - publication policy is `none`
 - id: external-release-ready-doc-audit-coverage
   description: External release readiness must keep Kit self-hosting documentation audits out of external workspaces while preserving strict lifecycle blocking.

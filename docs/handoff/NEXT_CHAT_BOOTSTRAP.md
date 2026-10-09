@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `e6a26d04a9ebb8754146de05b8388a0c2023c266` (`e6a26d04`)
-- Handoff freshness marker: `e6a26d04`
-- Branch at generation: `docs/post-pr2436-handoff-refresh`
+- HEAD: `e4ee48683b1dfeb16e740342260340a578e916d5` (`e4ee4868`)
+- Handoff freshness marker: `e4ee4868`
+- Branch at generation: `codex/gf060-061-release-consent`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -104,7 +104,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 ### RESULT: PASS ###
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 43b81efb137f). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 43b81efb137f. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: e272fbfc980c). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK e272fbfc980c. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -114,5 +114,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 0de6b9b654045216dbc46480596ea7a2d0d39b37895242b54e910576d201b6d3
-- docs/reference/agentic-kit-commands.json: ed234af718591d55403e906c96c46fdffc623060772dbc9ed5921fcd996e7963
+- docs/reference/AGENTIC_KIT_COMMANDS.md: e96287923141a6984c966069f0358646d0d79ee19bbb0aceebc0b3b93d9be7ff
+- docs/reference/agentic-kit-commands.json: 2dc09eb569e9357a67955213373d359fbce627e5a6c2adfdee5ba50ca075d3ba

@@ -119,6 +119,9 @@ def test_release_publish_publication_none_plans_private_tag_route(tmp_path: Path
 
 def test_release_publish_external_workspace_skips_kit_self_hosting_checks(tmp_path: Path) -> None:
     _write_publication_manifest(tmp_path, "github")
+    reference = tmp_path / "docs/reference/agentic-kit-commands.json"
+    reference.parent.mkdir(parents=True)
+    reference.write_text("{}\n", encoding="utf-8")
     seen: list[tuple[str, ...]] = []
 
     def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
@@ -157,6 +160,21 @@ def test_release_publish_external_workspace_with_registry_blocks_failing_docs_au
     assert plan.ok is False
     assert any(check.name == "docs audit" and check.status == "FAIL" for check in plan.blockers)
     assert any(check.name == "command reference check" and check.status == "SKIP" for check in plan.checks)
+
+
+def test_external_explicit_reference_check_still_blocks(tmp_path: Path) -> None:
+    _write_publication_manifest(tmp_path, "github", release_lines="  publish_checks: [command-reference-check]\n")
+
+    def runner(args: Sequence[str], cwd: Path) -> tuple[int, str]:
+        if "release-prep" in args:
+            return 0, json.dumps({"changed_paths": []}) + "\n"
+        if "command-reference-check" in args:
+            return 1, "explicit reference check failed\n"
+        return 0, "PASS\n"
+
+    plan = evaluate_release_publish_plan(tmp_path, version="9.9.9", runner=runner)
+    assert not plan.ok
+    assert any(check.name == "command reference check" for check in plan.blockers)
 
 
 
