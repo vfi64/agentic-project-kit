@@ -2,7 +2,6 @@
 
 ## v1.0.22 - 2026-10-09
 
-- Zenodo DOI verification pending for v1.0.22.
 - Fix Kit release preparation to consume only carried Unreleased entries, preserve unmatched changes and keep reruns stable (KIT-GF-064).
 - Fix release-run steps and consent to follow publication targets, require the package workflow and support a configured branch prefix (KIT-GF-065).
 - Fix pure JSON stdout for transfer capability blockers and early input/runtime failures without changing exit codes or actions (KIT-GF-023).
@@ -12,6 +11,10 @@
 - Fix pure JSON transfer output
 - Fix release publication policy steps
 - Fix Kit release changelog consumption
+
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.22 DOI `10.5281/zenodo.23265257`.
+
+Zenodo v1.0.22 DOI: 10.5281/zenodo.23265257
 
 ## v1.0.21 - 2026-10-09
 
