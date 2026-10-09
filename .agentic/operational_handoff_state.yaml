@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: af9425d5df7a72cd60883ff741a9f3f4ba56316f
-  short: af9425d5
-  subject: Fix confirmed DOI PR conflict recovery (#2459)
+  full: 3acda7b73dd5d21cc7104541636c73ec5953ec42
+  short: 3acda7b7
+  subject: Fix DOI closeout for release 1.0.22 (#2461)
 last_substantive_work_state:
-  full: af9425d5df7a72cd60883ff741a9f3f4ba56316f
-  short: af9425d5
-  subject: Fix confirmed DOI PR conflict recovery (#2459)
+  full: 3acda7b73dd5d21cc7104541636c73ec5953ec42
+  short: 3acda7b7
+  subject: Fix DOI closeout for release 1.0.22 (#2461)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

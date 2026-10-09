@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 6ba4a5c6477f289deec187fe6954dea41ab06dd11865370bdb3bc55e79779d27
 - docs/reference/agentic-kit-commands.json: 0b96e0cfbb04a9a63ec03d2507f02f0ccd755701efff4e2d639b7df040887584
-## Operational documentation refresh state after PR #2459
+## Operational documentation refresh state after PR #2461
 
-Current administrative handoff refresh state is `af9425d5` (`Fix confirmed DOI PR conflict recovery (#2459)`). Continue next only after this post-PR2459 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `3acda7b7` (`Fix DOI closeout for release 1.0.22 (#2461)`). Continue next only after this post-PR2461 refresh is committed and merged; the next substantive slice must be created from fresh main.
