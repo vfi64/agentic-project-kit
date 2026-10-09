@@ -39,9 +39,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2452-handoff-refresh`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- branch: `codex/release-1.0.22`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -421,15 +421,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2452-handoff-refresh",
+    "branch": "codex/release-1.0.22",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "35d45961dc66977443c4d63748a9b3534d5dfddf",
-    "head_matches_origin_main": true,
-    "head_short": "35d45961",
+    "head": "06567abc636ca6ae46bebbadf77ad98d76d56fe5",
+    "head_matches_origin_main": false,
+    "head_short": "06567abc",
     "local_path": "cd /path/to/",
-    "origin_main": "35d45961dc66977443c4d63748a9b3534d5dfddf",
-    "origin_main_short": "35d45961",
-    "worktree_clean": false
+    "origin_main": "0c7890f0c6be246b0b49a5189b9f41a717252f75",
+    "origin_main_short": "0c7890f0",
+    "worktree_clean": true
   }
 }
 ```
@@ -454,7 +454,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` oder dem externen Workspace-State bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: d75e2e2a30bd). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK d75e2e2a30bd. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 28a969c553ed). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 28a969c553ed. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -464,5 +464,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: e5d6018aa3c9561e2cf1957fea67dabfb8782616746a51e35fb1c220c17bca1d
-- docs/reference/agentic-kit-commands.json: d711540a933031afd632c02c17600c64706a793d599b1aa8a5e3c871773e9bf8
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 6ba4a5c6477f289deec187fe6954dea41ab06dd11865370bdb3bc55e79779d27
+- docs/reference/agentic-kit-commands.json: 0b96e0cfbb04a9a63ec03d2507f02f0ccd755701efff4e2d639b7df040887584
