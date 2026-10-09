@@ -722,6 +722,12 @@ without a second dispatch. Regression fixtures live outside the Kit checkout in
 `tests/test_release_changelog_consumption.py` and
 `tests/test_release_consent_dispatch.py`; remote observations are faked.
 
+`tests/test_release_changelog_diagnostics.py` verifies KIT-GF-052 in an external
+workspace: unsupported target-release layouts identify exact lines, preparation
+refuses before any write, multiline summary input blocks, and a single-line
+repaired entry passes publish consistency. Diagnostics are bounded and preserve
+the preparation JSON error instead of reporting only a closing JSON brace.
+
 ## Screen-Control Local Gate
 
 For chat-assisted development without a local coding agent CLI, run the bundled screen-control gate when a full local evidence capture is useful:

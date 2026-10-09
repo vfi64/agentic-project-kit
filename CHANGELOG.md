@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Fix release changelog layout diagnostics to name unsupported lines and stop preparation before losing content (KIT-GF-052).
 - Fix external release preparation to consume only released Unreleased entries and preserve rerun stability (KIT-GF-060).
 - Add attributed per-gate or upfront release consent with plan and commit drift checks (KIT-GF-061).
 - Fix external publication checks to ignore automatically generated Kit command references (KIT-GF-049 follow-up).

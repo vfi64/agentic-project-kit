@@ -1,9 +1,35 @@
-"""Consume only explicitly released entries from an external changelog."""
+"""Lossless changelog consumption and bounded release-layout diagnostics."""
 from __future__ import annotations
 
 from collections import Counter
 from collections.abc import Sequence
 import re
+
+
+def release_layout_problem(text: str, version: str) -> str:
+    section = re.search(rf"^##[ \t]+\[?v?{re.escape(version)}\]?(?:[ \t][^\n]*)?\n(?P<body>.*?)(?=^##[ \t]|\Z)",
+                        text, re.MULTILINE | re.DOTALL)
+    if section is None:
+        return ""
+    lines = section.group("body").splitlines()
+    nonempty = [index for index, line in enumerate(lines) if line.strip()]
+    if not nonempty:
+        return ""
+    offset = text[:section.start("body")].count("\n") + 1
+    issues: list[str] = []
+    for index, line in enumerate(lines):
+        if not line.strip():
+            if nonempty[0] < index < nonempty[-1]:
+                issues.append(f"line {offset + index}: blank separator between list items")
+        elif not line.startswith("- "):
+            kind = "indented continuation or nested list" if line[0].isspace() else "paragraph or unsupported list"
+            issues.append(f"line {offset + index}: {kind}: {line.strip()[:120]}")
+    if not issues:
+        return ""
+    detail = "; ".join(issues[:20])
+    if len(issues) > 20:
+        detail += f"; {len(issues) - 20} further layout issue(s)"
+    return f"CHANGELOG.md v{version}: {detail}. The release section must be one list of one-line bullets."
 
 
 def consume_unreleased(text: str, summary_lines: Sequence[str]) -> str:

@@ -71,6 +71,7 @@ rules:
     - --approved-by
     - --consent-source
     - KIT-GF-060
+    - KIT-GF-052
     - never dispatches it again
     - publication policy is `none`
 - id: external-release-ready-doc-audit-coverage

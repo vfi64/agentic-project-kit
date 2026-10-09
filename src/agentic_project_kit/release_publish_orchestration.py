@@ -326,11 +326,20 @@ def _run_release_prep_consistency_check(
 ) -> ReleasePublishCheck:
     args = _release_prep_dry_run_args(executable, version, root)
     returncode, output = runner(args, root)
+    from agentic_project_kit.release_changelog import release_layout_problem
+
+    changelog = root / "CHANGELOG.md"
+    problem = release_layout_problem(changelog.read_text(encoding="utf-8"), version) if changelog.exists() else ""
     if returncode != 0:
+        try:
+            error_payload = json.loads(output or "{}")
+        except json.JSONDecodeError:
+            error_payload = {}
+        error = error_payload.get("error") if isinstance(error_payload, dict) else None
         return ReleasePublishCheck(
             name="release-prep dry-run",
             status="FAIL",
-            detail=_last_line(output),
+            detail=problem or str(error or _last_line(output)),
             returncode=returncode,
         )
     try:
@@ -354,7 +363,8 @@ def _run_release_prep_consistency_check(
         return ReleasePublishCheck(
             name="release-prep dry-run",
             status="FAIL",
-            detail="release-prep dry-run would change paths: " + ", ".join(str(path) for path in changed_paths),
+            detail="release-prep dry-run would change paths: " + ", ".join(str(path) for path in changed_paths)
+                   + ("; " + problem if "CHANGELOG.md" in changed_paths and problem else ""),
             returncode=1,
         )
     return ReleasePublishCheck(
