@@ -1,33 +1,33 @@
 {
-  "accepted_at": "2026-10-09T06:28:04.229557+00:00",
+  "accepted_at": "2026-10-09T06:36:58.108414+00:00",
   "accepted_gate_result": "pass",
   "accepted_gate_set_id": "dpa-current-handoff-minimal-gate-set-v1",
   "accepted_lifecycle_outcome": "accepted",
-  "branch": "codex/release-1.0.21-doi",
+  "branch": "docs/post-pr2444-handoff-refresh",
   "claims": {
     "generated_outputs_manually_patched": false,
     "kit_conformance_claimed": false,
     "production_mutation_performed": false
   },
-  "contract_id": "DPA-CURRENT-HANDOFF-POST-RELEASE-DOI-CLOSEOUT-v1",
+  "contract_id": "DPA-CURRENT-HANDOFF-OPERATIONAL-STATE-v1",
   "kind": "dpa_acceptance_state",
   "renderer": {
-    "id": "agentic_project_kit.post_release_closeout",
+    "id": "agentic_project_kit.operational_handoff_projection",
     "semantic_version": "1"
   },
   "schema_version": 1,
   "source": {
-    "fingerprint": "76d32a42f0c5f86b723db531939a0ceb9392ec7b1520204a7501c617f0e489ba",
-    "path": "<agentic-kit-post-release-doi-closeout-inputs>"
+    "fingerprint": "4287f2701f9a5a07ae0739f8074da3f40af258b6792333af50bee54845d7f95f",
+    "path": ".agentic/operational_handoff_state.yaml"
   },
   "status": "accepted",
   "target": {
-    "complete_target_fingerprint": "275516beb10c5cfd76277fe84fbb385b83efd96325892ddbe019c67c116a7962",
+    "complete_target_fingerprint": "15a5c6cb7bdc00d008a12eaca392b14df8327f40ef6dca0a812356dccd6e4556",
     "path": "docs/handoff/CURRENT_HANDOFF.md",
-    "payload_fingerprint": "275516beb10c5cfd76277fe84fbb385b83efd96325892ddbe019c67c116a7962",
-    "pre_write_fingerprint": "c78065c2ee44db38f2ce05652ded4ce08e67b2bdd0c30763bbe4cff4e2e89aa8"
+    "payload_fingerprint": "15a5c6cb7bdc00d008a12eaca392b14df8327f40ef6dca0a812356dccd6e4556",
+    "pre_write_fingerprint": "275516beb10c5cfd76277fe84fbb385b83efd96325892ddbe019c67c116a7962"
   },
-  "target_scope": "CURRENT_HANDOFF_POST_RELEASE_DOI_METADATA",
-  "validation_ref": "558722240339df48cbbefe5104b9ea4c0e0b23ab",
-  "writer_id": "WRT-CH-003"
+  "target_scope": "CURRENT_HANDOFF_OPERATIONAL_STATE_BLOCK",
+  "validation_ref": "1eb4822f4bedb7da49d785d780f3dd3046570aeb",
+  "writer_id": "WRT-CH-001"
 }
