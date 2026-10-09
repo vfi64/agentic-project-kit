@@ -1,4 +1,5 @@
 ## Unreleased
+- Fix external workspace documentation audits to use declared documents, version anchors, registry classes and lifecycle policy; discover release authority evidence under workspace report paths (KIT-GF-035).
 
 - Fix release changelog layout diagnostics to name unsupported lines and stop preparation before losing content (KIT-GF-052).
 - Fix external release preparation to consume only released Unreleased entries and preserve rerun stability (KIT-GF-060).

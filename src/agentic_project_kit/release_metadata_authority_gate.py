@@ -216,6 +216,9 @@ def evidence_is_authoritative(
 
 
 def find_default_evidence_paths(project_root: Path) -> list[Path]:
+    from agentic_project_kit.workspace import load_workspace
+
+    workspace = load_workspace(project_root, suppress_legacy_profile_warning=True)
     candidates: list[Path] = []
     for pattern in (
         "tmp/*release-prep*.json",
@@ -225,6 +228,10 @@ def find_default_evidence_paths(project_root: Path) -> list[Path]:
         "docs/reports/**/*.md",
     ):
         candidates.extend(project_root.glob(pattern))
+    for pattern in ("*release-prep*.json", "*release-prep*.log"):
+        candidates.extend(workspace.tmp().glob(pattern))
+    for suffix in ("json", "log", "md"):
+        candidates.extend(workspace.reports_dir().rglob(f"*.{suffix}"))
     return sorted({path for path in candidates if path.is_file()})
 
 

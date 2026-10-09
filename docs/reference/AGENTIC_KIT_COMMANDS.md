@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 6d76959d314e
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: d75e2e2a30bd
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -821,6 +821,7 @@ Run the umbrella documentation-system audit.
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `report_path` | `TyperOption` | --report | `False` |  |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print one JSON audit result. |
 
 ### `agentic-kit docs-registry`
 

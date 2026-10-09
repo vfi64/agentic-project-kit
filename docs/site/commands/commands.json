@@ -1973,6 +1973,15 @@
             "--report"
           ],
           "required": false
+        },
+        {
+          "default": false,
+          "help": "Print one JSON audit result.",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
         }
       ],
       "qualified_name": "agentic-kit docs-audit",
