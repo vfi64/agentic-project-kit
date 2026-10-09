@@ -161,6 +161,9 @@ def _normalize_changelog_summary_lines(summary_lines: Sequence[str]) -> tuple[st
     normalized = tuple(line.strip().removeprefix("-").strip() for line in summary_lines if line.strip())
     if not normalized:
         raise ValueError("Release changelog summary_lines are required; refusing to reuse an old release body")
+    for index, line in enumerate(normalized, start=1):
+        if "\n" in line or "\r" in line:
+            raise ValueError(f"Release summary line {index} contains a newline; use one list of one-line bullets")
     removed_route_refs = [line for line in normalized if "./ns" in line or "ns release-prep" in line]
     if removed_route_refs:
         raise ValueError("Release changelog summary_lines must not reference removed ./ns release routes")
@@ -464,8 +467,11 @@ _EXTERNAL_LITERAL_VERSION = r'^(__version__\s*=\s*)(["\'])[^"\']+\2'
 
 def _external_changelog(text: str, version: str, date: str, *, summary_lines: Sequence[str],
                         uses_zenodo: bool) -> str:
-    from agentic_project_kit.release_changelog import consume_unreleased
+    from agentic_project_kit.release_changelog import consume_unreleased, release_layout_problem
 
+    problem = release_layout_problem(text, version)
+    if problem:
+        raise ValueError(problem)
     lines = _with_pending_doi_line(version, summary_lines) if uses_zenodo else tuple(summary_lines)
     section = f"## v{version} - {date}\n\n" + "\n".join(f"- {line}" for line in lines) + "\n"
     existing = re.compile(rf"^##\s+\[?v?{re.escape(version)}\]?(?:[ \t][^\n]*)?\n.*?(?=^##\s|\Z)",

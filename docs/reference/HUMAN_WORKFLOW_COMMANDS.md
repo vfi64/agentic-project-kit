@@ -125,6 +125,14 @@ Unmatched entries and historical sections are preserved. The dry run lists
 CHANGELOG.md without modifying it; refreshing an existing release does not consume
 later entries, even when their text is identical (KIT-GF-060).
 
+Release summaries must be single-line entries. In external workspaces, an existing
+target release section with indented continuations, paragraphs or blank separators
+between lists blocks preparation before writing. The error names CHANGELOG.md,
+the version, line numbers and bounded excerpts, and requires one list of one-line
+bullets. Release-publish surfaces the same diagnosis and preparation JSON errors
+instead of only naming a changed file (KIT-GF-052). Historical release sections
+and Unreleased entries are outside this target-section validation.
+
 ## agentic-kit ci status
 
 Use `agentic-kit ci status --commit <sha> --branch <branch> --json` when a workflow needs the GitHub Actions verdict for a commit or branch without a pull request, such as main after a merge. The command is read-only and returns structured `PASS`, `PENDING`, or `BLOCKED` JSON instead of requiring raw `gh run list` parsing.
