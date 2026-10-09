@@ -120,12 +120,16 @@ def check_todo_command(project_root: Path = typer.Option(Path("."), "--root")) -
 def docs_audit_command(
     project_root: Annotated[Path, typer.Option("--root")] = Path("."),
     report_path: Annotated[Path | None, typer.Option("--report")] = None,
+    json_output: Annotated[bool, typer.Option("--json", help="Print one JSON audit result.")] = False,
 ) -> None:
     """Run the umbrella documentation-system audit."""
     report = build_documentation_system_audit(project_root.resolve())
     if report_path is not None:
         write_documentation_system_audit_json(report, report_path)
-    console.print(render_documentation_system_audit(report), markup=False)
+    if json_output:
+        typer.echo(json.dumps(report.to_dict(), indent=2, sort_keys=True))
+    else:
+        console.print(render_documentation_system_audit(report), markup=False)
     if not report.ok:
         raise typer.Exit(code=1)
 
@@ -168,7 +172,7 @@ def doc_lifecycle_audit_command(
         return
 
     root = project_root.resolve()
-    report = build_doc_lifecycle_report(root, current_version=current_version)
+    report = build_doc_lifecycle_report(root, current_version=current_version, enforce_strict=strict)
     strict_requested = strict or report.hygiene_mode == "strict"
     strict_findings = (
         build_doc_lifecycle_strict_findings(root, report=report)

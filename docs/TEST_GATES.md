@@ -11,6 +11,12 @@ The repository must not rely on memory, chat history, or informal claims. Releva
 
 ## Gate Matrix
 
+External documentation audit changes require
+`tests/test_external_documentation_audit.py`: manifest-workspace CLI tests for
+required files, declared classes, version anchors, transfer applicability,
+`hygiene.doc_lifecycle` warn/strict/off and pure JSON output. Kit self-hosting
+requirements must remain covered by `tests/test_documentation_system_audit.py`.
+
 | Change type | Required evidence |
 |---|---|
 | Documentation only | git diff, content review, and agentic-kit check-docs |

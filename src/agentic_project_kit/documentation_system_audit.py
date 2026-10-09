@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from pathlib import Path
 import json
 import re
@@ -14,6 +13,10 @@ from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_report
 from agentic_project_kit.doc_mesh import build_doc_mesh_report
 from agentic_project_kit.documentation_registry import build_documentation_registry_summary
 from agentic_project_kit.workspace import KitConfig, Workspace, load_workspace
+from agentic_project_kit.documentation_audit_models import (
+    DocumentationAuditDimension, DocumentationSystemAuditReport,
+)
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 
 
 _LEGACY_WORKSPACE = Workspace(root=Path("."), config=KitConfig())
@@ -64,41 +67,12 @@ MANDATORY_ORDER = _mandatory_order(_LEGACY_WORKSPACE)
 REQUIRED_DOCS = _required_docs(_LEGACY_WORKSPACE)
 
 
-@dataclass(frozen=True)
-class DocumentationAuditDimension:
-    name: str
-    ok: bool
-    findings: tuple[str, ...]
-    warnings: tuple[str, ...] = ()
-    review_only: bool = False
-
-    def to_dict(self) -> dict[str, Any]:
-        return {
-            "name": self.name,
-            "ok": self.ok,
-            "review_only": self.review_only,
-            "findings": list(self.findings),
-            "warnings": list(self.warnings),
-        }
-
-
-@dataclass(frozen=True)
-class DocumentationSystemAuditReport:
-    dimensions: tuple[DocumentationAuditDimension, ...]
-
-    @property
-    def ok(self) -> bool:
-        return all(dimension.ok for dimension in self.dimensions if not dimension.review_only)
-
-    def to_dict(self) -> dict[str, Any]:
-        return {
-            "ok": self.ok,
-            "dimensions": [dimension.to_dict() for dimension in self.dimensions],
-        }
-
-
 def build_documentation_system_audit(project_root: Path) -> DocumentationSystemAuditReport:
     project_root = project_root.resolve()
+    if is_external_manifest_workspace(project_root):
+        from agentic_project_kit.external_documentation_audit import build_external_documentation_audit
+
+        return build_external_documentation_audit(project_root)
     ws = load_workspace(project_root)
     check_doc_errors = tuple(check_docs(project_root))
     mesh_report = build_doc_mesh_report(project_root)

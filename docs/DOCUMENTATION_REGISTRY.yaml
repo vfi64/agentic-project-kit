@@ -1574,3 +1574,6 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Post-v1.0.7 Comm-SCI Cycle 007 Brownfield evidence for App2 provider-settings seam reduction, target PR #16, successor refresh PR #17, 55-to-44 legacy seam count, and current Kit external post-merge lifecycle retest.
+  - path: docs/reports/greenfield/KIT-GF-035-external-documentation-audit-2026-10-09.md
+    class: evidence/log
+    owner: maintainers

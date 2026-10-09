@@ -12,6 +12,15 @@ The meta commands are intentionally conservative:
 - previous release tags are derived from the latest local v* git tag unless explicitly supplied.
 - low-level transfer commands remain available for diagnosis and recovery.
 
+## External documentation audit
+
+Use `agentic-kit docs-audit --json` for a read-only audit of an external manifest
+workspace's declared documents, version anchors, registry and optional handoff
+contracts. `hygiene.doc_lifecycle: warn` keeps lifecycle warnings non-blocking;
+missing declared files and integrity drift still block. Explicit
+`agentic-kit doc-lifecycle-audit --strict --json` enforces lifecycle blockers.
+See `docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md` for applicability.
+
 ## agentic-kit work start
 
 Start a patch, docs, or release-adjacent slice from a clean synchronized base.

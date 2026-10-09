@@ -675,7 +675,13 @@ The command aggregates deterministic findings from `agentic-kit check-docs`, `ag
 ```bash
 agentic-kit docs-audit
 agentic-kit docs-audit --report docs-audit.json
+agentic-kit docs-audit --json
 ```
+
+In external manifest workspaces, the audit checks declared documents, workspace
+version anchors and registered facts. It does not require the Kit's own document
+set. `hygiene.doc_lifecycle: warn` reports lifecycle warnings without blocking;
+`strict` and explicit `doc-lifecycle-audit --strict` retain blockers.
 
 ## Logging and evidence
 

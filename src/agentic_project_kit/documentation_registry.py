@@ -421,6 +421,11 @@ def _markdown_files_under_scope(project_root: Path, scope: DocumentationRegistry
     return sorted(paths)
 
 
+def required_scope_document_paths(project_root: Path, scope: DocumentationRegistryScope) -> list[str]:
+    """Return Markdown paths requiring registration under the declared scope."""
+    return _markdown_files_under_scope(project_root, scope)
+
+
 def build_doc_registry_reconcile_scope_decision_rows(project_root: Path) -> list[dict[str, Any]]:
     """Compatibility alias for the canonical scope-decision row builder."""
     return [dict(row) for row in build_doc_registry_scope_decision_rows(project_root)]

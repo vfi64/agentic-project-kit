@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import date
 from pathlib import Path
 
@@ -24,6 +24,7 @@ from agentic_project_kit.workspace import (
     default_review_budgets,
     load_workspace,
 )
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 
 ALLOWED_STATUS_VALUES = {
     "idea-note",
@@ -169,6 +170,7 @@ def build_doc_lifecycle_report(
     *,
     now: date | None = None,
     current_version: str | None = None,
+    enforce_strict: bool = False,
 ) -> DocLifecycleReport:
     today = now or date.today()
     hygiene_mode, review_budgets = _workspace_lifecycle_hygiene(project_root)
@@ -263,6 +265,10 @@ def build_doc_lifecycle_report(
                     review_budgets=review_budgets,
                 )
             )
+    if (is_external_manifest_workspace(project_root) and hygiene_mode == "warn"
+            and not enforce_strict):
+        findings = [replace(f, severity="WARN") if f.severity in {"FAIL", "BLOCK"} else f
+                    for f in findings]
     return DocLifecycleReport(
         documents=tuple(sorted(documents, key=lambda document: document.path)),
         findings=tuple(findings),
@@ -402,7 +408,10 @@ def _load_registry_summary(project_root: Path) -> dict[str, Any] | None:
 
 
 def _load_documentation_registry_entries_by_path(project_root: Path) -> dict[str, dict[str, Any]]:
-    registry_path = project_root / "docs" / "DOCUMENTATION_REGISTRY.yaml"
+    registry_path = load_workspace(project_root, suppress_legacy_profile_warning=True).doc_registry_path()
+    if not registry_path.exists():
+        # Compatibility for explicit legacy registries adopted before namespace init.
+        registry_path = project_root / "docs" / "DOCUMENTATION_REGISTRY.yaml"
     if not registry_path.exists():
         return {}
     data = yaml.safe_load(registry_path.read_text(encoding="utf-8")) or {}
