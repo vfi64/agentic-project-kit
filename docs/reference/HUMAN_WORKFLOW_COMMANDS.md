@@ -190,7 +190,7 @@ The command stops with `AWAITING_APPROVAL` at these gates:
 - C2: execute signed `release-publish`.
 - C3: dispatch and watch the configured package-index workflow.
 - D4: execute `work finish` for the DOI closeout branch.
-- D2R: recover a failed D4 on a replacement DOI branch, with a fresh signed approval.
+- D2R: resume the original DOI PR after an API read failure, or regenerate a failed closeout on a replacement branch, with a fresh signed approval.
 
 Each gate prints an `approval_signature` over the exact branch, paths, tag,
 target commit, or workflow it will affect. A rerun with `--execute
@@ -201,9 +201,18 @@ publication, Zenodo wait, and DOI closeout are skipped.
 
 After a failed D4, return to clean main through `transfer sync-main`, then run
 `agentic-kit release run --version <version> --json`. This offers D2R, binding the
-source PR and head, replacement branch, current commit, regenerated paths and
-DOI facts. Approve using the exact `next_action` printed by this dry run.
-D2R starts `codex/release-<version>-doi-recovery` from current main, regenerates
+source PR and head, base, version and current commit. Approve using the exact
+`next_action` printed by this dry run. After a recorded `pr-wait-ci` `GH_ERROR`,
+D2R offers `resume-existing`: `transfer pr-complete` checks the original head,
+waits for green CI and completes its post-merge handoff. No replacement is created.
+If that PR merged before an interrupted handoff, a fresh signature binds its merge
+commit, which must be on current main; `transfer post-merge-complete` finishes the
+handoff without another merge. Source PR/head/base drift blocks before completion.
+An unavailable lookup, no matching PR and multiple matching PRs have distinct
+blockers. Original failure evidence remains in the append-only log and D4 result.
+
+Other failures retain replacement recovery, binding regenerated paths and DOI
+facts as well. D2R starts `codex/release-<version>-doi-recovery` from current main, regenerates
 closeout, acknowledges rules immediately before `transfer commit`, pushes, and
 uses `transfer pr-create-complete --post-merge-complete` to merge the replacement
 and handoff. `transfer pr-close-superseded` closes the original PR only after the
@@ -213,6 +222,14 @@ after a fresh approval; it does not repeat regeneration or a completed commit.
 Dirty starts, source-head drift and unrelated pre-existing recovery branches block.
 If work start synchronizes a newer main, D2R stops before writing and requires
 a fresh approval over the new target commit and regenerated paths.
+
+GitHub readiness reads retry only named transient transport failures (502/503/504,
+TLS timeout, connection reset or temporary DNS failure), at most twice within the
+existing wait deadline. Each failed read and retry delay is included in readiness
+output and retained by the calling orchestrator log. Rate limits, authorization
+errors, malformed responses, head drift and red CI stop immediately. Observable
+rate-limit reset information is preserved; no reset time is guessed. Mutations
+are never blindly retried.
 
 ### Declared release consent
 

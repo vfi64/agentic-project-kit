@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import subprocess
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Callable
 
@@ -14,6 +14,7 @@ from agentic_project_kit.github_check_policy import (
     is_successful_check_conclusion,
 )
 from agentic_project_kit.repo_identity import github_cli_env_for_origin
+from agentic_project_kit.github_read_failure import transient_github_read_failure
 
 READY_TO_MERGE = "READY_TO_MERGE"
 ALREADY_MERGED = "ALREADY_MERGED"
@@ -30,6 +31,7 @@ class ReadinessDecision:
     outcome: str
     reasons: tuple[str, ...]
     terminal: bool
+    read_failures: tuple[str, ...] = ()
 
     @property
     def success(self) -> bool:
@@ -203,12 +205,24 @@ def wait_for_pr_readiness(
     sleep: Sleeper = time.sleep,
 ) -> ReadinessDecision:
     start = clock()
+    read_retries = 0
+    failures: list[str] = []
     while True:
         elapsed = int(clock() - start)
+        if elapsed >= timeout_seconds:
+            return ReadinessDecision(TIMEOUT, ("timeout reached while waiting for CI",), True, tuple(failures))
         try:
             snapshot = snapshot_provider()
         except Exception as exc:
-            return ReadinessDecision(GH_ERROR, (str(exc),), True)
+            remaining = timeout_seconds - (clock() - start)
+            if transient_github_read_failure(str(exc)) and read_retries < 2 and remaining > 0:
+                read_retries += 1
+                delay = min(interval_seconds, remaining)
+                failures.append(f"read attempt {read_retries}: {exc}; retry in {delay}s")
+                sleep(delay)
+                continue
+            failures.append(f"read attempt {read_retries + 1}: {exc}; stopped")
+            return ReadinessDecision(GH_ERROR, (str(exc),), True, tuple(failures))
         decision = classify_pr_readiness(
             snapshot,
             expected_head_sha=expected_head_sha,
@@ -217,7 +231,7 @@ def wait_for_pr_readiness(
             expected_checks=expected_checks,
         )
         if decision.terminal:
-            return decision
+            return replace(decision, read_failures=tuple(failures))
         remaining = timeout_seconds - elapsed
         if remaining <= 0:
             return ReadinessDecision(TIMEOUT, ("timeout reached while waiting for CI",), True)
@@ -286,4 +300,5 @@ def render_pr_readiness(decision: ReadinessDecision) -> str:
         f"success={str(decision.success).lower()}",
     ]
     lines.extend(f"- {reason}" for reason in decision.reasons)
+    lines.extend(f"GitHub read: {failure}" for failure in decision.read_failures)
     return "\n".join(lines)

@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fix bounded GitHub readiness read retries, precise lookup diagnostics and signed resumption of the original DOI PR without duplicate publication or replacement.
+
 ## v1.0.22 - 2026-10-09
 
 - Zenodo DOI verification pending for v1.0.22.

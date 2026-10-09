@@ -965,3 +965,16 @@ Required evidence:
 
 A YAML parse failure in CI is a failed workflow gate. It must not be treated as a normal trial-and-error step.
 Supported state freshness gate: `agentic-kit state-freshness-check`.
+
+## Release API failure and original DOI PR resume
+
+GitHub readiness must retain failed-read evidence and retry only named transient
+reads, at most twice within its existing deadline. Quota and authorization errors,
+malformed responses and real CI failures stop without retries. D2R `resume-existing`
+must bind the original DOI PR number, head, base, version and current main to a fresh
+signature after a recorded API read failure. Wrong signatures or subject drift
+block without mutations. Interrupted completion of a merged original must finish
+its handoff through the Kit route, with verified merge ancestry, without a second
+merge or replacement PR. Replacement recovery remains covered separately.
+Deterministic regressions: `tests/test_pr_api_read_retries.py`,
+`tests/test_release_run_api_resume.py`, `tests/test_release_run_recovery.py`.
