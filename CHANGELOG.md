@@ -14,6 +14,19 @@
 - Fix release-run package-index dispatch and post-release JSON checks (KIT-GF-055/056).
 - Fix packaged command-reference refresh for released-wheel external workspaces (KIT-GF-022).
 - Skip git-ignored folders in legacy-command and absolute-path audits (KIT-GF-054).
+## v1.0.21 - 2026-10-09
+
+- Zenodo DOI verification pending for v1.0.21.
+- Fix external GitHub publication checks with generated command references (KIT-GF-049).
+- Fix precise changelog layout diagnostics and reject lossy release preparation (KIT-GF-052).
+- Fix package-index workflow visibility retries and resumable dispatch identification (KIT-GF-055).
+- Fix external release preparation consuming released Unreleased entries (KIT-GF-060).
+- Add attributed release consent with per-gate or upfront approval and drift checks (KIT-GF-061).
+- Validate release regression coverage with 3235 passing tests, Ruff, documentation gates and doctor checks.
+- Record DOI for release 1.0.20
+- Fix release consent, changelog consumption and dispatch recovery
+- Fix precise release changelog layout diagnostics
+
 ## v1.0.20 - 2026-10-08
 
 - Fix packaged command-reference refresh in external workspaces (KIT-GF-022).

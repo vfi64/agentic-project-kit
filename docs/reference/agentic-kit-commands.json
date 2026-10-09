@@ -6914,7 +6914,7 @@
           "secondary_opts": []
         },
         {
-          "default": "1.0.20",
+          "default": "1.0.21",
           "help": "",
           "is_flag": false,
           "metavar": null,
@@ -9592,7 +9592,7 @@
       "name": "release-publish",
       "params": [
         {
-          "default": "1.0.20",
+          "default": "1.0.21",
           "help": "",
           "is_flag": false,
           "metavar": null,
@@ -11081,7 +11081,7 @@
           "secondary_opts": []
         },
         {
-          "default": "1.0.20",
+          "default": "1.0.21",
           "help": "",
           "is_flag": false,
           "metavar": null,
@@ -19242,7 +19242,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "e272fbfc980c",
+    "manifest_sha": "6d76959d314e",
     "schema_version": 1
   },
   "schema_version": 2,
