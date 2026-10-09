@@ -1,6 +1,6 @@
 {
-  "command_count": 259,
-  "diagnostic_count": 122,
+  "command_count": 260,
+  "diagnostic_count": 123,
   "entries": [
     {
       "diagnostic_priority": "reference_lookup",
@@ -5135,6 +5135,55 @@
     },
     {
       "diagnostic_priority": "advanced_diagnostic",
+      "dry_run_available": true,
+      "group": "pr",
+      "help": "Plan or execute a signed rerun; real test failures are refused.",
+      "lifecycle_rank": null,
+      "params": [
+        {
+          "default": null,
+          "help": "PR whose never-started failed jobs may be retried.",
+          "name": "pr_number",
+          "opts": [
+            "--pr"
+          ],
+          "required": true
+        },
+        {
+          "default": false,
+          "help": "Execute only the freshly signed rerun plan.",
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "required": false
+        },
+        {
+          "default": "",
+          "help": "Exact dry-run approval signature.",
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Print one JSON result.",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        }
+      ],
+      "qualified_name": "agentic-kit pr rerun-checks",
+      "safety": "BOUNDED",
+      "surface": "diagnostic",
+      "when_to_use": "Plan or execute a signed rerun; real test failures are refused."
+    },
+    {
+      "diagnostic_priority": "advanced_diagnostic",
       "dry_run_available": false,
       "group": "pr",
       "help": "Print deterministic PR/CI status and fetch failed logs for red CI.",
@@ -8886,6 +8935,15 @@
         },
         {
           "default": false,
+          "help": "Print bounded JSON with a full local evidence file.",
+          "name": "summary",
+          "opts": [
+            "--summary"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
           "help": "Print JSON instead of text.",
           "name": "json_output",
           "opts": [
@@ -8958,6 +9016,15 @@
           "opts": [
             "--interval-seconds",
             "--poll-seconds"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Print a bounded projection; save full step evidence locally.",
+          "name": "summary",
+          "opts": [
+            "--summary"
           ],
           "required": false
         },
@@ -9138,6 +9205,15 @@
           "name": "post_merge_complete",
           "opts": [
             "--post-merge-complete"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Print a bounded projection; save full step evidence locally.",
+          "name": "summary",
+          "opts": [
+            "--summary"
           ],
           "required": false
         },
@@ -11733,7 +11809,7 @@
     "onboarding": 1,
     "pass-already-done": 2,
     "patterns": 2,
-    "pr": 4,
+    "pr": 5,
     "release": 3,
     "root": 53,
     "rule-registry": 3,
@@ -11752,13 +11828,13 @@
   "guided_count": 33,
   "kind": "site_command_catalog",
   "safety_counts": {
-    "BOUNDED": 170,
+    "BOUNDED": 171,
     "DESTRUCTIVE": 9,
     "READ_ONLY": 80
   },
   "schema_version": 1,
   "surface_counts": {
-    "diagnostic": 122,
+    "diagnostic": 123,
     "orchestrator": 33,
     "primitive": 104
   }

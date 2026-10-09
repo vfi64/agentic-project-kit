@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
+from pathlib import Path
 
 import typer
 
@@ -101,6 +103,7 @@ def register_transfer_pr_closeout_complete_command(transfer_app: typer.Typer) ->
             "--merge-state-poll-seconds",
             min=1,
         ),
+        summary: bool = typer.Option(False, "--summary", help="Print bounded JSON with a full local evidence file."),
         json_output: bool = typer.Option(
             False,
             "--json",
@@ -116,9 +119,14 @@ def register_transfer_pr_closeout_complete_command(transfer_app: typer.Typer) ->
             merge_state_timeout_seconds=merge_state_timeout_seconds,
             merge_state_poll_seconds=merge_state_poll_seconds,
         )
+        from agentic_project_kit.pr_orchestration_output import prepare_pr_output
+        payload, rc = prepare_pr_output(result.as_json_data(), root=Path("."), summary=summary)
+        result = replace(result, returncode=rc, result_status=str(payload["result_status"]), next_action=str(payload["next_action"]))
         if json_output:
-            typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
+            typer.echo(json.dumps(payload, separators=(",", ":"), sort_keys=True))
         else:
             typer.echo(render_pr_closeout_complete_result(result))
+            if summary and payload.get("evidence_path"):
+                typer.echo(f"Evidence: {payload['evidence_path']}")
         if result.returncode != 0:
             raise typer.Exit(code=result.returncode)

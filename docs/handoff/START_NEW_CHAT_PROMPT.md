@@ -75,7 +75,7 @@ Wenn der Bootstrap grün ist:
 - Neue Produktarbeit nur aus frischem, sauberem `main` beginnen.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 28a969c553ed). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 28a969c553ed. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: dc9b0fdad017). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK dc9b0fdad017. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -85,8 +85,8 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 6ba4a5c6477f289deec187fe6954dea41ab06dd11865370bdb3bc55e79779d27
-- docs/reference/agentic-kit-commands.json: 0b96e0cfbb04a9a63ec03d2507f02f0ccd755701efff4e2d639b7df040887584
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 9bf536bbe44c77f10293fb39a70eea3888d1d3b6f436c73e7b111a5739daac5e
+- docs/reference/agentic-kit-commands.json: 68ea9e5f7cd85cdd007081d589bae9c8ec58bc47c22ee9669efd13fc957eb9d9
 ## Operational documentation refresh state after PR #2461
 
 Current administrative handoff refresh state is `3acda7b7` (`Fix DOI closeout for release 1.0.22 (#2461)`). Continue next only after this post-PR2461 refresh is committed and merged; the next substantive slice must be created from fresh main.

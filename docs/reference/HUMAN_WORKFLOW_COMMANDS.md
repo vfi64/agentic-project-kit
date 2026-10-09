@@ -279,3 +279,43 @@ The authoritative preference and fallback policy is defined in these repository 
 - `.agentic/transfer/one_command_transfer_protocol.yaml`
 
 This document explains the human-facing commands. It must not duplicate the full policy payload. Local-to-LLM transfer headers, successor handoff contracts, and generated projections should render the current policy dynamically from those rule files.
+
+
+## Failed CI and bounded PR output (KIT-GF-062 / KIT-GF-027)
+
+Use `agentic-kit pr rerun-checks --pr N --json` to inspect a failed current-head
+Actions run. A dry run returns `AWAITING_APPROVAL` with an `approval_signature`
+over repository, PR head, run IDs, attempts and observed failed jobs. Execute with
+`--execute --expected-signature SIG` only after approval. Its manifest effects
+are `network_read` and `workflow_rerun`; it never merges a red PR.
+
+The `AGP_CI_NOT_STARTED_V1` rule classifies a completed failed job as `NOT_RUN`
+when it has no start (including the `0001-` sentinel), or its verified duration
+is at most 3 seconds. A failed executable step always overrides that classification.
+Missing step evidence, malformed timing, a pending run or a real test failure
+blocks the rerun. Paginated current-attempt jobs are all inspected. The route
+rechecks head and attempt immediately before execution and calls only the
+failed-jobs endpoint. GitHub also reruns dependent jobs; this route never requests
+a rerun of all jobs. See the [GitHub endpoint contract](https://docs.github.com/en/rest/actions/workflow-runs#re-run-failed-jobs-from-a-workflow-run). Completed failed runs with
+zero jobs are eligible because no job could have executed; unavailable API data
+is never treated as an empty job set. Other CI providers are outside this route.
+
+Evidence and receipts live under the workspace temp root. They name attempted
+and confirmed run IDs. Intent is saved before each remote request; a lost response
+or repeated signature blocks another dispatch until the recorded attempt is
+diagnosed. A new GitHub attempt requires a fresh plan and approval. Rerunning
+cannot repair exhausted billing/quota; diagnose that cause before approval.
+
+Add `--summary --json` to `transfer pr-create-complete`, `transfer pr-complete`
+or `transfer pr-closeout-complete` for a result below 4 KB, with result, PR,
+next action, limited failed-step details and `evidence_path`. The file preserves
+all original step stdout/stderr. Detailed JSON remains available without
+`--summary`; text summaries also name the evidence file when requested.
+
+CI findings carry `ci_state: FAILED | NOT_RUN | PENDING`,
+`execution_status: COMPLETED` and exit code 0: the command ran and found a domain
+blocker. They retain `result_status: BLOCKED` and never authorize merge or release.
+Execution/API/identity errors retain a nonzero exit code. Consumers must inspect
+`result_status`, not just the process exit code. `NOT_RUN` names the signed rerun
+route as its `next_action`; ordinary red CI names repair, pending CI names wait.
+The workflow and release guards continue to require an explicit PASS.

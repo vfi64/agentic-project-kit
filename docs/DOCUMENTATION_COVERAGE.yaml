@@ -3,6 +3,23 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: ci-failure-recovery-and-summary-coverage
+  description: Signed CI reruns and bounded PR summaries remain visible with fail-closed semantics.
+  documents:
+  - path: docs/reference/HUMAN_WORKFLOW_COMMANDS.md
+    terms:
+    - KIT-GF-062
+    - KIT-GF-027
+    - AGP_CI_NOT_STARTED_V1
+    - workflow_rerun
+    - --summary --json
+    - execution_status
+    - evidence_path
+    - "result_status: BLOCKED"
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_pr_ci_rerun.py
+    - tests/test_pr_orchestration_output.py
 - id: release-run-publication-policy-coverage
   description: Release-run steps and consent follow the declared publication targets and branch prefix.
   documents:

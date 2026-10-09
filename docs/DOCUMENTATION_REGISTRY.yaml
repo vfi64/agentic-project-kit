@@ -1589,3 +1589,9 @@ documents:
   - path: docs/reports/greenfield/RELEASE_API_RESUME_REPAIR_2026-10-09.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-062-signed-ci-rerun-2026-10-09.md
+    class: evidence/log
+    owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-027-bounded-pr-ci-findings-2026-10-09.md
+    class: evidence/log
+    owner: maintainers

@@ -8,6 +8,15 @@ existing lifecycle tests keep text output, exit codes and remote behavior covere
 Status-date: 2026-05-24
 Project: agentic-project-kit
 
+## CI failure recovery gate
+
+`tests/test_pr_ci_rerun.py` covers NOT_RUN evidence, failed-step precedence,
+signed dry-run/execute, stale heads and attempts, pagination, receipt replay and
+ambiguous remote responses. `tests/test_pr_orchestration_output.py` covers
+bounded projections, full evidence, CI finding exit codes and unchanged blocking
+of merge/release when result_status is BLOCKED. An installed wheel is also
+validated in an external manifest workspace without Kit tests or a doc registry.
+
 ## Purpose
 
 This file defines the required evidence before claiming that a change is complete.
