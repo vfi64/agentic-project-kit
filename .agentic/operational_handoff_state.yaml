@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: ab45540967669f664f1f9d594c0c3a9e96bfba2e
-  short: ab455409
-  subject: Fix external workspace documentation audits (#2446)
+  full: 4f2004fbf7b9bdc46106fff6221427c0ecc6b067
+  short: 4f2004fb
+  subject: Fix pure JSON transfer output (#2448)
 last_substantive_work_state:
-  full: ab45540967669f664f1f9d594c0c3a9e96bfba2e
-  short: ab455409
-  subject: Fix external workspace documentation audits (#2446)
+  full: 4f2004fbf7b9bdc46106fff6221427c0ecc6b067
+  short: 4f2004fb
+  subject: Fix pure JSON transfer output (#2448)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
