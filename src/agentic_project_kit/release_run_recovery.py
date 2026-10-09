@@ -64,7 +64,7 @@ class DoiRecovery:
             gate["blockers"] = ["recovery-source-pr-number-missing"]
             return gate
         else:
-            source = self._command("source-head", ["gh", "pr", "view", str(gate["pr_number"]), "--json", "headRefOid,headRefName,baseRefName,state,mergedAt,mergeCommit"], kit=False, status=None)
+            source = self._command("source-head", ["gh", "pr", "view", str(gate["pr_number"]), "--json", "headRefOid,headRefName,baseRefName,state,mergedAt,mergeCommit,mergeable,mergeStateStatus"], kit=False, status=None)
             info = source.get("json") or {}
         if source["result_status"] != "PASS":
             gate["blockers"] = ["recovery-source-head-lookup-unavailable"]
@@ -80,7 +80,16 @@ class DoiRecovery:
             if current_branch != "main":
                 gate["blockers"] = ["resume-requires-clean-main"]
                 return gate
-            return DoiResume(run).plan(gate, info, subject)
+            if gate["pr_number"] != subject["pr_number"] or info["headRefOid"] != subject["source_head"]:
+                gate["blockers"] = ["resume-source-pr-or-head-drift"]
+                return gate
+            if info.get("state") == "OPEN" and info.get("mergeable") == "CONFLICTING" and info.get("mergeStateStatus") == "DIRTY":
+                # New main/handoff changes may make a formerly green original
+                # unmergeable. Regeneration is then a real repair, not a duplicate.
+                gate["mode"] = "regenerate-conflicting-original"
+                gate["reason"] = "original-doi-pr-has-confirmed-content-conflicts"
+            else:
+                return DoiResume(run).plan(gate, info, subject)
         if info.get("state") == "CLOSED" and not progress:
             gate["blockers"] = ["recovery-source-pr-already-closed"]
             return gate
