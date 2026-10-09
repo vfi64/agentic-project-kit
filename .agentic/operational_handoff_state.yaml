@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6618d1d8c2a267291fdd17c0e8149b9b33772380
-  short: 6618d1d8
-  subject: Fix release consent, changelog consumption and dispatch recovery (#2438)
+  full: 47181095b2d62c8a61dd10ebf8d2e2ce3f3bad74
+  short: 47181095
+  subject: Fix precise release changelog layout diagnostics (#2440)
 last_substantive_work_state:
-  full: 6618d1d8c2a267291fdd17c0e8149b9b33772380
-  short: 6618d1d8
-  subject: Fix release consent, changelog consumption and dispatch recovery (#2438)
+  full: 47181095b2d62c8a61dd10ebf8d2e2ce3f3bad74
+  short: 47181095
+  subject: Fix precise release changelog layout diagnostics (#2440)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
