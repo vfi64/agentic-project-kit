@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 11be9fdf1eb44eee26ddff73c6ac3a3092245f5d
-  short: 11be9fdf
-  subject: Release 1.0.21 (#2442)
+  full: 1eb4822f4bedb7da49d785d780f3dd3046570aeb
+  short: 1eb4822f
+  subject: Record DOI for release 1.0.21 (#2444)
 last_substantive_work_state:
-  full: 11be9fdf1eb44eee26ddff73c6ac3a3092245f5d
-  short: 11be9fdf
-  subject: Release 1.0.21 (#2442)
+  full: 1eb4822f4bedb7da49d785d780f3dd3046570aeb
+  short: 1eb4822f
+  subject: Record DOI for release 1.0.21 (#2444)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
