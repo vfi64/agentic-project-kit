@@ -290,11 +290,11 @@
       "branch": "codex/gf064-kit-changelog",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "e952906ae6fd9f563a35dad10900e39332b895a0",
-      "head_matches_origin_main": true,
+      "head": "74ab0ca2bb26a9c0ff17182fdc135d4fefb74df9",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "e952906ae6fd9f563a35dad10900e39332b895a0",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -477,11 +477,11 @@
     "branch": "codex/gf064-kit-changelog",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "e952906ae6fd9f563a35dad10900e39332b895a0",
-    "head_matches_origin_main": true,
+    "head": "74ab0ca2bb26a9c0ff17182fdc135d4fefb74df9",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "e952906ae6fd9f563a35dad10900e39332b895a0",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {
