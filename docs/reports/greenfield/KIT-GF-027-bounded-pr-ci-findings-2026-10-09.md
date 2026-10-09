@@ -52,7 +52,15 @@ The bound DPA readiness ACK was synchronized; its authorization scope is unchang
 The architecture contract remains valid. No release, tag or publication changed.
 
 CI found ANSI-colored help output in three new option assertions. The assertions
-now remove ANSI formatting while checking the same public options. The focused
+now inspect the real Typer command parameters while checking the same public options. The focused
 color-enabled CLI checks passed. During that actual test failure, the new CI
 classifier correctly refused a rerun because the executable Tests step failed;
 the closeout returned a structured FAILED finding and preserved its merge block.
+
+The first portability correction imported Click directly; fresh CI installs
+Typer without that separate package. The final assertions use only the declared
+Typer dependency and its command model. No new dependency or gate exception was added.
+
+Final parallel suite with forced color: 3378 passed. Fresh dependency installation
+also passed eight external-wheel checks and three real command-parameter checks
+with Click absent. Existing pending-refresh text signals remain unchanged.

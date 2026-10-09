@@ -486,7 +486,7 @@ def pr_complete_command(
     payload, output_returncode = prepare_pr_output(payload, root=Path("."), summary=summary)
     next_action = str(payload["next_action"])
     result_status = str(payload["result_status"])
-    final_signal = "d" if result_status == "PASS" else "f"
+    final_signal = "d" if result_status == "PASS" else ("p" if result_status == "PENDING" else "f")
 
     if json_output:
         typer.echo(json.dumps(payload, indent=None if summary else 2, ensure_ascii=False))

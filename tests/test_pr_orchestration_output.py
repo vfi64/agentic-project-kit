@@ -4,8 +4,8 @@ import json
 from pathlib import Path
 
 import pytest
-from click import unstyle
 from typer.testing import CliRunner
+from typer.main import get_command
 
 from agentic_project_kit.cli import app
 from agentic_project_kit.pr_orchestration_output import prepare_pr_output
@@ -66,7 +66,8 @@ def test_nested_ci_finding_propagates_to_outer_create_wrapper(tmp_path):
 def test_summary_cli_option_exists(route):
     result = CliRunner().invoke(app, ["transfer", route, "--help"])
     assert result.exit_code == 0
-    assert "--summary" in unstyle(result.stdout)
+    command = get_command(app).commands["transfer"].commands[route]
+    assert any("--summary" in getattr(param, "opts", []) for param in command.params)
 
 
 def test_closeout_cli_red_ci_rc0_and_summary(monkeypatch, tmp_path):

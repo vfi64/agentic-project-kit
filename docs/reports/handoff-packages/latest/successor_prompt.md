@@ -41,7 +41,7 @@ Critical rule IDs:
 
 - branch: `codex/gf062-027-ci-recovery`
 - head_matches_origin_main: `False`
-- worktree_clean: `True`
+- worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -423,13 +423,13 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/gf062-027-ci-recovery",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "be35f97c51c4b042ad423e96dbb0090dfc70b113",
+    "head": "97b64a3c2d57eca1253d86f026858ae83e05157f",
     "head_matches_origin_main": false,
-    "head_short": "be35f97c",
+    "head_short": "97b64a3c",
     "local_path": "cd /path/to/",
     "origin_main": "7fc774babccfa7c6e7bd8b5848a6411906b159cb",
     "origin_main_short": "7fc774ba",
-    "worktree_clean": true
+    "worktree_clean": false
   }
 }
 ```
