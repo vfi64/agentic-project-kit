@@ -1,6 +1,6 @@
 ## Unreleased
 
-- Fix bounded GitHub readiness read retries, precise lookup diagnostics and signed resumption of the original DOI PR without duplicate publication or replacement.
+- Fix bounded GitHub readiness read retries, precise lookup diagnostics and signed original DOI PR resumption, with regeneration only for confirmed conflicts and no duplicate publication.
 
 ## v1.0.22 - 2026-10-09
 

@@ -211,6 +211,12 @@ handoff without another merge. Source PR/head/base drift blocks before completio
 An unavailable lookup, no matching PR and multiple matching PRs have distinct
 blockers. Original failure evidence remains in the append-only log and D4 result.
 
+A source PR whose original head still matches but GitHub reports both
+`mergeable: CONFLICTING` and `mergeStateStatus: DIRTY` needs regeneration on
+current main. D2R then offers `regenerate-conflicting-original` with a fresh
+signature and an explicit conflict reason. Unknown mergeability never selects
+replacement. Head drift still blocks without regeneration.
+
 Other failures retain replacement recovery, binding regenerated paths and DOI
 facts as well. D2R starts `codex/release-<version>-doi-recovery` from current main, regenerates
 closeout, acknowledges rules immediately before `transfer commit`, pushes, and

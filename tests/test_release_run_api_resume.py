@@ -191,3 +191,59 @@ def test_malformed_lookup_response_blocks_without_traceback(tmp_path):
     runner = MalformedRunner()
     result = _run(tmp_path, runner)
     assert result['blockers'] == ['recovery-source-pr-lookup-invalid-response'] and not _mutations(runner)
+
+
+class ConflictingRunner(ResumeRunner):
+    mergeable = 'CONFLICTING'
+    merge_state = 'DIRTY'
+
+    def __call__(self, argv, cwd):
+        result = super().__call__(argv, cwd)
+        if list(argv[:3]) == ['gh', 'pr', 'view']:
+            info = json.loads(result.stdout)
+            info.update(mergeable=self.mergeable, mergeStateStatus=self.merge_state)
+            result.stdout = json.dumps(info)
+        return result
+
+
+def test_confirmed_conflict_offers_signed_regeneration_and_closes_original_after_replacement(tmp_path):
+    _api_failure(tmp_path)
+    runner = ConflictingRunner()
+    preview = _run(tmp_path, runner)
+    gate = preview['gate']
+    assert preview['result_status'] == 'AWAITING_APPROVAL'
+    assert gate['mode'] == 'regenerate-conflicting-original'
+    assert gate['reason'] == 'original-doi-pr-has-confirmed-content-conflicts'
+    assert gate['pr_number'] == 20 and gate['source_head'] == 'doi-head'
+    assert gate['paths'] == ['CHANGELOG.md'] and not _mutations(runner)
+    result = _run(tmp_path, runner, execute=True, expected_signature=gate['approval_signature'])
+    assert result['result_status'] == 'PASS'
+    mutations = _mutations(runner)
+    assert any('pr-create-complete' in c for c in mutations)
+    assert 'pr-close-superseded' in mutations[-1]
+    assert not any('pr-complete' in c for c in mutations)
+
+
+def test_conflict_regeneration_still_requires_its_exact_signature(tmp_path):
+    _api_failure(tmp_path)
+    runner = ConflictingRunner()
+    preview = _run(tmp_path, runner)
+    result = _run(tmp_path, runner, execute=True, expected_signature='wrong')
+    assert preview['gate']['mode'] == 'regenerate-conflicting-original'
+    assert result['blockers'] == ['signature-mismatch'] and not _mutations(runner)
+
+
+def test_conflicting_original_head_drift_never_regenerates(tmp_path):
+    _api_failure(tmp_path)
+    runner = ConflictingRunner()
+    runner.source_head = 'unapproved-owner-head'
+    result = _run(tmp_path, runner)
+    assert result['blockers'] == ['resume-source-pr-or-head-drift'] and not _mutations(runner)
+
+
+def test_unknown_mergeability_never_selects_replacement(tmp_path):
+    _api_failure(tmp_path)
+    runner = ConflictingRunner()
+    runner.mergeable = runner.merge_state = 'UNKNOWN'
+    result = _run(tmp_path, runner)
+    assert result['gate']['mode'] == 'resume-existing' and not _mutations(runner)

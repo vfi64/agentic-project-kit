@@ -978,3 +978,8 @@ its handoff through the Kit route, with verified merge ancestry, without a secon
 merge or replacement PR. Replacement recovery remains covered separately.
 Deterministic regressions: `tests/test_pr_api_read_retries.py`,
 `tests/test_release_run_api_resume.py`, `tests/test_release_run_recovery.py`.
+
+Confirmed original DOI content conflicts (CONFLICTING plus DIRTY) may select
+signed regeneration; unknown mergeability, lookup outages and source-head drift
+must never select that replacement. Conflict-regeneration tests share
+`tests/test_release_run_api_resume.py` with original-resume regressions.

@@ -60,3 +60,26 @@ adapters and the existing replacement workflow. DCO adds no benefit here:
 existing typed gate/state artifacts already provide deterministic signatures and
 selective step resumption. Published 1.0.22 artifacts remain immutable; this repair
 requires a later release to reach installed consumers.
+
+
+## Confirmed-conflict follow-up
+
+The first patch merged as PR #2457 (`b33e7ca49e4214c32070b54051169d406bb2c936`),
+with Handoff #2458 (`1d9939d336f169e0f8ae57ed4ebe688f5b99d0a6`). Updating main
+also made the older DOI PR #2456 conflict with the fresh generated handoff files.
+An unchanged, formerly green head cannot merge through that real content conflict.
+
+A bounded correction selects the existing regeneration route only when GitHub
+reports both CONFLICTING and DIRTY for the still-matching original PR/head. The
+fresh D2R signature binds the repair paths, DOI facts, original identity and
+current main. Replacement and handoff must merge before the original closes.
+Unknown mergeability and API lookup failures never trigger this replacement.
+Four regressions cover signed conflict regeneration, wrong signature, original
+head drift and unknown mergeability. This is a necessary follow-up to the same
+repair, not a new Greenfield family or a new publication.
+
+Follow-up validation: 3336 full-suite tests PASS (155.56 seconds); 75 focused
+tests PASS both locally and from a freshly built, isolated installed wheel in the
+external workspace. Ruff, check-docs and doctor PASS. The previous installed wheel
+failed the two new conflict-selection assertions; the corrected wheel passes all
+75. Manifest ACK remains `28a969c553ed`.
