@@ -11,6 +11,7 @@ import sys
 from pathlib import Path
 
 import typer
+from agentic_project_kit.cli_error_payload import command_error_payload
 from agentic_project_kit.transfer_safety_context import render_local_to_llm_log_header, render_local_to_llm_log_upload_hint, build_transfer_safety_header
 import yaml
 
@@ -86,15 +87,23 @@ def _run_local_garbage_collector_preflight() -> None:
     if int(result.get("returncode", 0)) != 0:
         raise typer.BadParameter(str(result.get("next_action", "local garbage collector failed")))
 
-def _load_or_exit(path: Path):
+def _load_or_exit(path: Path, *, json_output: bool = False):
     try:
         return load_transfer_order(path)
     except (FileNotFoundError, ValueError) as exc:
-        if isinstance(exc, FileNotFoundError):
+        if json_output:
+            error = FileNotFoundError(f"Transfer order not found: {path}") if isinstance(exc, FileNotFoundError) else exc
+            _echo_command_error("load-transfer-order", error, returncode=1)
+        elif isinstance(exc, FileNotFoundError):
             typer.echo(f"Transfer order not found: {path}")
         else:
             typer.echo(str(exc))
         raise typer.Exit(code=1) from exc
+
+def _echo_command_error(action: str, error: Exception, *, returncode: int,
+                        next_action: str = "Inspect the error and retry the command.") -> None:
+    typer.echo(json.dumps(command_error_payload(action, error, returncode=returncode,
+                                                next_action=next_action), indent=2, sort_keys=True))
 
 def _emit_result(result, json_output: bool) -> None:
     if json_output:

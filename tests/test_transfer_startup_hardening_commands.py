@@ -602,7 +602,7 @@ def test_evidence_pr_complete_orchestrates_finalize_push_pr_sync_and_post_merge(
     monkeypatch.setattr(subprocess, "run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
-        lambda capability: None,
+        lambda capability, **kwargs: None,
     )
 
     result = CliRunner().invoke(
@@ -687,7 +687,7 @@ def test_evidence_pr_complete_switches_or_creates_evidence_branch(monkeypatch):
     monkeypatch.setattr(subprocess, "run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
-        lambda capability: None,
+        lambda capability, **kwargs: None,
     )
 
     result = CliRunner().invoke(
@@ -719,7 +719,7 @@ def test_evidence_pr_complete_refuses_main_branch(monkeypatch):
     monkeypatch.setattr(subprocess, "run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
-        lambda capability: None,
+        lambda capability, **kwargs: None,
     )
 
     result = CliRunner().invoke(
@@ -755,7 +755,7 @@ def test_evidence_pr_complete_blocks_on_finalize_failure(monkeypatch):
     monkeypatch.setattr(subprocess, "run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
-        lambda capability: None,
+        lambda capability, **kwargs: None,
     )
 
     result = CliRunner().invoke(

@@ -671,7 +671,7 @@ def branch_delete_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
-    require_capability("rules_confirmed")
+    require_capability("rules_confirmed", json_output=json_output)
     result = branch_delete(branch, remote=remote, force=force)
     _echo_repo_result(result, json_output)
     if result.returncode != 0:

@@ -18,6 +18,10 @@ def run_and_log(
     try:
         result = run_and_log_transfer_command(command, label=label, cwd=Path("."))
     except ValueError as exc:
+        if json_output:
+            _echo_command_error("run-and-log", exc, returncode=2,
+                                next_action="Provide a command after run-and-log.")
+            raise typer.Exit(code=2) from exc
         typer.echo(str(exc))
         typer.echo("FINAL_SIGNAL=f")
         typer.echo("FINAL_NEXT=Provide a command after run-and-log.")
@@ -46,7 +50,10 @@ def closeout(
     try:
         result = closeout_transfer(Path("."), remove_transfer_dir=not no_remove_transfer_dir)
     except RuntimeError as exc:
-        typer.echo(str(exc))
+        if json_output:
+            _echo_command_error("closeout", exc, returncode=1)
+        else:
+            typer.echo(str(exc))
         raise typer.Exit(code=1) from exc
 
     if json_output:
@@ -103,7 +110,10 @@ def remote_next(
     try:
         result = run_remote_next_transfer(Path("."), branch)
     except (RuntimeError, ValueError, FileNotFoundError) as exc:
-        typer.echo(str(exc))
+        if json_output:
+            _echo_command_error("remote-next", exc, returncode=1)
+        else:
+            typer.echo(str(exc))
         raise typer.Exit(code=1) from exc
 
     if json_output:

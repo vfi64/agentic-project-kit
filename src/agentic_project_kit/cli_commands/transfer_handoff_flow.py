@@ -465,7 +465,10 @@ def show_last_report(
         read_report = _public_transfer_attr("read_latest_transfer_report", read_latest_transfer_report)
         report_text = read_report(Path("."))
     except FileNotFoundError as exc:
-        typer.echo(str(exc))
+        if json_output:
+            _echo_command_error("latest-report", exc, returncode=1)
+        else:
+            typer.echo(str(exc))
         raise typer.Exit(code=1) from exc
 
     typer.echo(report_text if json_output else _render_latest_transfer_report_summary(report_text))
@@ -564,6 +567,10 @@ def run_sequence_and_log(
     try:
         result = run_and_log_transfer_sequence(commands, label=label, cwd=Path("."))
     except ValueError as exc:
+        if json_output:
+            _echo_command_error("run-sequence-and-log", exc, returncode=2,
+                                next_action="Provide at least one non-empty --step command.")
+            raise typer.Exit(code=2) from exc
         typer.echo(str(exc))
         typer.echo("TRANSFER_REPORT_WRITTEN=f")
         typer.echo("TRANSFER_REPORT_PATH=")

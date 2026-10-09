@@ -1,5 +1,10 @@
 # Test Gates
 
+KIT-GF-023 JSON stdout is covered by `tests/test_transfer_json_contract.py`:
+external-workspace capability blockers and early failures must parse unchanged
+with `json.loads(stdout)`. The caller inventory guards JSON-mode propagation;
+existing lifecycle tests keep text output, exit codes and remote behavior covered.
+
 Status-date: 2026-05-24
 Project: agentic-project-kit
 

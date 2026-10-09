@@ -91,7 +91,7 @@ def evidence_pr_complete_command(
     from typing import Any
 
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
-    require_capability("rules_confirmed")
+    require_capability("rules_confirmed", json_output=json_output)
 
     agentic_kit = "./.venv/bin/agentic-kit"
     steps: list[dict[str, Any]] = []

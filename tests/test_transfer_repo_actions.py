@@ -1331,7 +1331,7 @@ def test_transfer_pr_merge_safe_cli_allows_omitted_expected_head_sha(monkeypatch
 
     calls = []
 
-    def fake_require(capability):
+    def fake_require(capability, **kwargs):
         calls.append(("capability", capability))
 
     def fake_pr_merge_safe(
