@@ -16,7 +16,6 @@
 - Skip git-ignored folders in legacy-command and absolute-path audits (KIT-GF-054).
 ## v1.0.21 - 2026-10-09
 
-- Zenodo DOI verification pending for v1.0.21.
 - Fix external GitHub publication checks with generated command references (KIT-GF-049).
 - Fix precise changelog layout diagnostics and reject lossy release preparation (KIT-GF-052).
 - Fix package-index workflow visibility retries and resumable dispatch identification (KIT-GF-055).
@@ -26,6 +25,10 @@
 - Record DOI for release 1.0.20
 - Fix release consent, changelog consumption and dispatch recovery
 - Fix precise release changelog layout diagnostics
+
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.21 DOI `10.5281/zenodo.23256016`.
+
+Zenodo v1.0.21 DOI: 10.5281/zenodo.23256016
 
 ## v1.0.20 - 2026-10-08
 
