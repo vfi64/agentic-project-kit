@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9dba959df3ca10f8db9694e5f31f388c7ae3aced
-  short: 9dba959d
-  subject: Fix release publication policy steps (#2450)
+  full: 35d45961dc66977443c4d63748a9b3534d5dfddf
+  short: 35d45961
+  subject: Fix Kit release changelog consumption (#2452)
 last_substantive_work_state:
-  full: 9dba959df3ca10f8db9694e5f31f388c7ae3aced
-  short: 9dba959d
-  subject: Fix release publication policy steps (#2450)
+  full: 35d45961dc66977443c4d63748a9b3534d5dfddf
+  short: 35d45961
+  subject: Fix Kit release changelog consumption (#2452)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
