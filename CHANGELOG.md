@@ -1,21 +1,9 @@
 ## Unreleased
+- Fix Kit release preparation to consume only carried Unreleased entries, preserve unmatched changes and keep reruns stable (KIT-GF-064).
 - Fix release-run steps and consent to follow publication targets, require the package workflow and support a configured branch prefix (KIT-GF-065).
 - Fix pure JSON stdout for transfer capability blockers and early input/runtime failures without changing exit codes or actions (KIT-GF-023).
 - Fix external workspace documentation audits to use declared documents, version anchors, registry classes and lifecycle policy; discover release authority evidence under workspace report paths (KIT-GF-035).
-- Fix release changelog layout diagnostics to name unsupported lines and stop preparation before losing content (KIT-GF-052).
-- Fix external release preparation to consume only released Unreleased entries and preserve rerun stability (KIT-GF-060).
-- Add attributed per-gate or upfront release consent with plan and commit drift checks (KIT-GF-061).
-- Fix external publication checks to ignore automatically generated Kit command references (KIT-GF-049 follow-up).
-- Fix package-index dispatch visibility retries and resumable run-ID discovery without redispatch (KIT-GF-055 follow-up).
-- Fixed KIT-GF-048: carry validated PR bodies and release-note categories through work finish.
-- Fixed KIT-GF-053: preserve rule acknowledgements during recovery and name acknowledgement first when commits block.
-- Correct implementation-backed remote-effect declarations and guard new remote CLI routes (KIT-GF-057).
-- Add signature-bound recovery for failed DOI closeout PRs with resumable Kit routes (KIT-GF-059).
-- Insert DOI closeout facts in the matching release section below Unreleased (KIT-GF-058).
-- Skip Kit-only release-publish checks in external workspaces without declared Kit docs systems (KIT-GF-049).
-- Fix release-run package-index dispatch and post-release JSON checks (KIT-GF-055/056).
-- Fix packaged command-reference refresh for released-wheel external workspaces (KIT-GF-022).
-- Skip git-ignored folders in legacy-command and absolute-path audits (KIT-GF-054).
+
 ## v1.0.21 - 2026-10-09
 
 - Fix external GitHub publication checks with generated command references (KIT-GF-049).
