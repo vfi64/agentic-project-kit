@@ -177,6 +177,8 @@ def _with_pending_doi_line(version: str, summary_lines: Sequence[str]) -> tuple[
 
 
 def _update_changelog(text: str, version: str, date: str, *, summary_lines: Sequence[str]) -> str:
+    from agentic_project_kit.release_changelog import consume_unreleased
+
     existing = re.compile(
         rf"^##\s+v{re.escape(version)}\s+-\s+\d{{4}}-\d{{2}}-\d{{2}}.*?(?=^##\s+v|\Z)",
         re.MULTILINE | re.DOTALL,
@@ -185,6 +187,9 @@ def _update_changelog(text: str, version: str, date: str, *, summary_lines: Sequ
     if existing.search(text):
         return existing.sub(section.rstrip() + "\n\n", text, count=1)
 
+    # Consume only when creating the release, as for external workspaces.
+    # A rerun must preserve identical entries added for a later release.
+    text = consume_unreleased(text, summary_lines)
     first_release = re.search(r"^##\s+v\d+\.\d+\.\d+", text, flags=re.MULTILINE)
     if not first_release:
         raise ValueError("CHANGELOG.md has no versioned release section anchor")

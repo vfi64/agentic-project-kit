@@ -138,11 +138,11 @@ report records them as `explicit_summary_lines` (KIT-GF-045).
 Use --write only when readiness checks are clean. A successful write also refreshes command entrypoints and writes
 `docs/reports/release/release-prepare-<version>.json` as release-metadata authority evidence for PR and CI gates.
 
-In external workspaces, creating a release section consumes exactly the matching
+In the Kit repository and external workspaces, creating a release section consumes exactly the matching
 Unreleased bullets carried into that release, keeping the Unreleased heading.
 Unmatched entries and historical sections are preserved. The dry run lists
 CHANGELOG.md without modifying it; refreshing an existing release does not consume
-later entries, even when their text is identical (KIT-GF-060).
+later entries, even when their text is identical (KIT-GF-060, KIT-GF-064).
 
 Release summaries must be single-line entries. In external workspaces, an existing
 target release section with indented continuations, paragraphs or blank separators
