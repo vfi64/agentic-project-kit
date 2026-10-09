@@ -38,7 +38,7 @@ def admin_refresh_pr_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
-    require_capability("rules_confirmed")
+    require_capability("rules_confirmed", json_output=json_output)
     result = admin_refresh_pr(after_pr, main_branch=main_branch)
     _echo_repo_result(result, json_output)
     if result.returncode != 0:
@@ -52,7 +52,7 @@ def branch_create_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
-    require_capability("rules_confirmed")
+    require_capability("rules_confirmed", json_output=json_output)
     result = branch_create(branch, start_point=start_point, push=push)
     _echo_repo_result(result, json_output)
     if result.returncode != 0:
@@ -125,7 +125,7 @@ def branch_switch_command(
     )
     if not external_preflight(branch=branch, json_output=json_output):
         require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
-        require_capability("rules_confirmed")
+        require_capability("rules_confirmed", json_output=json_output)
     result = branch_switch(branch, pull=pull)
     _echo_repo_result(result, json_output)
     if result.returncode != 0:
@@ -164,7 +164,7 @@ def push_current_command(
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
 ) -> None:
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
-    require_capability("rules_confirmed")
+    require_capability("rules_confirmed", json_output=json_output)
     result = push_current(required_branch=branch)
     _echo_repo_result(result, json_output)
     if result.returncode != 0:

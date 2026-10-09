@@ -1,6 +1,6 @@
 ## Unreleased
+- Fix pure JSON stdout for transfer capability blockers and early input/runtime failures without changing exit codes or actions (KIT-GF-023).
 - Fix external workspace documentation audits to use declared documents, version anchors, registry classes and lifecycle policy; discover release authority evidence under workspace report paths (KIT-GF-035).
-
 - Fix release changelog layout diagnostics to name unsupported lines and stop preparation before losing content (KIT-GF-052).
 - Fix external release preparation to consume only released Unreleased entries and preserve rerun stability (KIT-GF-060).
 - Add attributed per-gate or upfront release consent with plan and commit drift checks (KIT-GF-061).

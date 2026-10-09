@@ -315,7 +315,7 @@ def test_transfer_pr_create_complete_orchestrates_create_and_complete(monkeypatc
     monkeypatch.setattr(subprocess, "run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
-        lambda capability: None,
+        lambda capability, **kwargs: None,
     )
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
@@ -388,7 +388,7 @@ def test_transfer_pr_create_complete_passes_base_branch_to_inner_pr_complete(mon
     monkeypatch.setattr(subprocess, "run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
-        lambda capability: None,
+        lambda capability, **kwargs: None,
     )
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
@@ -455,7 +455,7 @@ def test_transfer_pr_create_complete_writes_final_live_status(monkeypatch, tmp_p
     monkeypatch.setattr(subprocess, "run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
-        lambda capability: None,
+        lambda capability, **kwargs: None,
     )
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
@@ -506,7 +506,7 @@ def test_transfer_pr_create_complete_writes_blocked_live_status(monkeypatch, tmp
     monkeypatch.setattr(subprocess, "run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
-        lambda capability: None,
+        lambda capability, **kwargs: None,
     )
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
@@ -563,7 +563,7 @@ def test_transfer_pr_create_complete_passes_live_status_context_to_pr_complete(m
     monkeypatch.setattr(subprocess, "run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
-        lambda capability: None,
+        lambda capability, **kwargs: None,
     )
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
@@ -682,7 +682,7 @@ def test_transfer_pr_create_complete_uses_existing_pr_when_create_fails(monkeypa
     monkeypatch.setattr(subprocess, "run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
-        lambda capability: None,
+        lambda capability, **kwargs: None,
     )
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
@@ -760,7 +760,7 @@ def test_transfer_pr_create_complete_post_merge_complete_does_not_repeat_inner_c
     monkeypatch.setattr(subprocess, "run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
-        lambda capability: None,
+        lambda capability, **kwargs: None,
     )
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
@@ -877,7 +877,7 @@ def test_transfer_pr_create_resolves_head_current_before_pr_create(monkeypatch) 
     monkeypatch.setattr(subprocess, "run", fake_run)
     monkeypatch.setattr(transfer_module, "pr_create", fake_pr_create)
     monkeypatch.setattr(transfer_module, "_echo_repo_result", lambda result, json_output: None)
-    monkeypatch.setattr(transfer_module, "_require_transfer_capability", lambda capability: None)
+    monkeypatch.setattr(transfer_module, "_require_transfer_capability", lambda capability, **kwargs: None)
 
     result = CliRunner().invoke(
         app,
@@ -926,7 +926,7 @@ def test_transfer_pr_create_complete_reports_done_when_head_has_no_base_diff(mon
     monkeypatch.setattr(subprocess, "run", fake_run)
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
-        lambda capability: None,
+        lambda capability, **kwargs: None,
     )
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",

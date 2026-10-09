@@ -1577,3 +1577,6 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-035-external-documentation-audit-2026-10-09.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-023-pure-json-stdout-2026-10-09.md
+    class: evidence/log
+    owner: maintainers

@@ -93,7 +93,7 @@ def pr_merge_safe_command(
     external_merge_preflight_passed = external_preflight(json_output=json_output)
     if not external_merge_preflight_passed:
         require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
-        require_capability("rules_confirmed")
+        require_capability("rules_confirmed", json_output=json_output)
     merge_safe = _public_transfer_attr("pr_merge_safe", pr_merge_safe)
     result = merge_safe(
         pr_number,

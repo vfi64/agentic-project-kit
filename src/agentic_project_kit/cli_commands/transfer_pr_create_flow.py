@@ -225,7 +225,7 @@ def pr_create_command(
             typer.echo(json.dumps(payload, indent=2, sort_keys=True) if json_output else "PR_CREATE_BLOCKED\nreason=current_branch_missing")
             raise typer.Exit(code=2)
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
-    require_capability("rules_confirmed")
+    require_capability("rules_confirmed", json_output=json_output)
     bind_github_cli_env_for_origin(Path("."))
     diff_status = detect_branch_no_content_diff(Path("."), base=base, head=resolved_head)
     if diff_status.no_content_diff:
@@ -445,7 +445,7 @@ def pr_create_complete_command(
     from datetime import datetime, timezone
 
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
-    require_capability("rules_confirmed")
+    require_capability("rules_confirmed", json_output=json_output)
 
     agentic_kit = default_agentic_kit(Path("."))
     bind_github_cli_env_for_origin(Path("."))

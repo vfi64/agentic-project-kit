@@ -12,6 +12,16 @@ The meta commands are intentionally conservative:
 - previous release tags are derived from the latest local v* git tag unless explicitly supplied.
 - low-level transfer commands remain available for diagnosis and recovery.
 
+## JSON output contract (KIT-GF-023)
+
+With `--json`, stdout contains exactly one JSON document, including transfer
+capability blockers and early runtime/input errors. Consumers can use
+`json.loads(stdout)` directly; terminal markers such as `FINAL_SIGNAL` and
+`FINAL_NEXT` are confined to text mode or represented inside JSON string fields.
+Pre-result errors include `result_status`, `returncode`, `error` and `next_action`.
+The existing exit codes and remote actions are unchanged. Malformed CLI syntax
+continues to use the CLI framework's stderr diagnostics.
+
 ## External documentation audit
 
 Use `agentic-kit docs-audit --json` for a read-only audit of an external manifest

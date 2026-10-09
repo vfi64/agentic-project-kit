@@ -14,7 +14,10 @@ def run_local(
     try:
         result = run_local_transfer(Path("."), path)
     except (FileNotFoundError, ValueError) as exc:
-        typer.echo(str(exc))
+        if json_output:
+            _echo_command_error("run-local", exc, returncode=1)
+        else:
+            typer.echo(str(exc))
         raise typer.Exit(code=1) from exc
 
     if json_output:
@@ -65,7 +68,7 @@ def status(
             typer.echo(f"primary_state={snapshot.primary_state}")
             typer.echo(f"next_action={snapshot.next_action}")
         return
-    order = _load_or_exit(path)
+    order = _load_or_exit(path, json_output=json_output)
     result = inspect_transfer_order(order, Path("."))
     _emit_result(result, json_output)
     if result.returncode != 0:
@@ -76,7 +79,7 @@ def inspect(
     path: Path = typer.Option(DEFAULT_INBOX, "--path", help="Transfer order path."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
-    order = _load_or_exit(path)
+    order = _load_or_exit(path, json_output=json_output)
     result = inspect_transfer_order(order, Path("."))
     _emit_result(result, json_output)
     if result.returncode != 0:
@@ -107,12 +110,12 @@ def apply(
         warning_text = render_instruction_lint_result(lint_result)
 
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
-    require_capability("run_next_command")
+    require_capability("run_next_command", json_output=json_output)
     if warning_text:
         warning_path = load_workspace(Path(".")).tmp_file("instruction-lint-warnings.log")
         warning_path.parent.mkdir(parents=True, exist_ok=True)
         warning_path.write_text(warning_text, encoding="utf-8")
-    order = _load_or_exit(path)
+    order = _load_or_exit(path, json_output=json_output)
     result = apply_transfer_order(order, Path("."))
     _emit_result(result, json_output)
     if result.returncode != 0:
@@ -134,6 +137,9 @@ def publish_last_report(
     try:
         result = publish_latest_transfer_report(Path("."), label=label)
     except (FileNotFoundError, ValueError) as exc:
+        if json_output:
+            _echo_command_error("publish-last-report", exc, returncode=1)
+            raise typer.Exit(code=1) from exc
         typer.echo(str(exc))
         typer.echo("TRANSFER_UPLOAD=missing")
         typer.echo("REMOTE_REPORT=")
