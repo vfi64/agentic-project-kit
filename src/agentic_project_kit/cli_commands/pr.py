@@ -118,7 +118,20 @@ def wait_ci(
         interval_seconds=interval_seconds,
         expected_checks=tuple(expected_check),
     )
-    typer.echo(render_pr_readiness(result))
+    report = render_pr_readiness(result)
+    if result.outcome == "BLOCKED" and any(reason.startswith("check failed:") for reason in result.reasons):
+        from agentic_project_kit.pr_ci_rerun import rerun_checks
+
+        try:
+            diagnosis = rerun_checks(Path("."), pr_number)
+        except (OSError, ValueError, RuntimeError):
+            diagnosis = {"result_status": "BLOCKED"}
+        plan = diagnosis.get("plan", {})
+        not_run = (diagnosis.get("result_status") == "AWAITING_APPROVAL"
+                   and (not expected_head_sha or plan.get("head_sha") == expected_head_sha))
+        report += "\nCI state: " + ("NOT_RUN" if not_run else "FAILED")
+        report += f"\nNext: agentic-kit pr rerun-checks --pr {pr_number} --json" if not_run else "\nNext: repair failed CI and resume closeout"
+    typer.echo(report)
     if not result.success:
         raise typer.Exit(code=2 if result.outcome == WAITING else 1)
 
@@ -131,3 +144,26 @@ def register_pr_closeout_alias(app: typer.Typer) -> None:
         typer.echo(render_pr_closeout(result))
         if result.outcome == BLOCKED:
             raise typer.Exit(code=1)
+
+
+@pr_app.command("rerun-checks")
+def rerun_checks_command(
+    pr_number: int = typer.Option(..., "--pr", min=1, help="PR whose never-started failed jobs may be retried."),
+    execute: bool = typer.Option(False, "--execute", help="Execute only the freshly signed rerun plan."),
+    expected_signature: str = typer.Option("", "--expected-signature", help="Exact dry-run approval signature."),
+    json_output: bool = typer.Option(False, "--json", help="Print one JSON result."),
+) -> None:
+    """Plan or execute a signed rerun; real test failures are refused."""
+    from agentic_project_kit.pr_ci_rerun import rerun_checks
+
+    try:
+        result = rerun_checks(Path("."), pr_number, execute=execute, expected_signature=expected_signature)
+    except (OSError, ValueError, RuntimeError) as exc:
+        result = {"result_status": "BLOCKED", "blocker": str(exc), "evidence_path": "",
+                  "next_action": "Repair local configuration or evidence storage before retrying."}
+    if json_output:
+        typer.echo(json.dumps(result, indent=2, sort_keys=True))
+    else:
+        typer.echo(f"PR_RERUN_CHECKS {result['result_status']}\n{result['next_action']}\nEvidence: {result['evidence_path']}")
+    if result["result_status"] == "BLOCKED":
+        raise typer.Exit(2)

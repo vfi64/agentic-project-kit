@@ -127,6 +127,7 @@ def pr_complete_command(
         min=1,
         help="CI polling interval.",
     ),
+    summary: bool = typer.Option(False, "--summary", help="Print a bounded projection; save full step evidence locally."),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
     skip_llm_context_gate: bool = typer.Option(
         False,
@@ -481,8 +482,14 @@ def pr_complete_command(
         "next_action": next_action,
     }
 
+    from agentic_project_kit.pr_orchestration_output import prepare_pr_output
+    payload, output_returncode = prepare_pr_output(payload, root=Path("."), summary=summary)
+    next_action = str(payload["next_action"])
+    result_status = str(payload["result_status"])
+    final_signal = "d" if result_status == "PASS" else ("p" if result_status == "PENDING" else "f")
+
     if json_output:
-        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+        typer.echo(json.dumps(payload, indent=None if summary else 2, ensure_ascii=False))
     else:
         typer.echo("*" * 36 + " START SUMMARY " + "*" * 36)
         typer.echo("TRANSFER_PR_COMPLETE")
@@ -499,8 +506,11 @@ def pr_complete_command(
         typer.echo(_summary_line("CHAT_REPLY", f"{final_signal} | NEXT={next_action}"))
         typer.echo("*" * 35 + " END SUMMARY " + "*" * 36)
 
-    if returncode != 0:
-        raise typer.Exit(code=returncode)
+    if summary and not json_output and payload.get("evidence_path"):
+        typer.echo(f"Evidence: {payload['evidence_path']}")
+
+    if output_returncode != 0:
+        raise typer.Exit(code=output_returncode)
 
 
 __all__ = [name for name in globals() if not name.startswith("__")]

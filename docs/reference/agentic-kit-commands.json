@@ -8362,6 +8362,87 @@
       "when_to_use": "Merge only when PR checks are green, refs match, and merge state is clean."
     },
     {
+      "dry_run_available": true,
+      "group": "pr",
+      "help": "Plan or execute a signed rerun; real test failures are refused.",
+      "name": "rerun-checks",
+      "params": [
+        {
+          "default": null,
+          "help": "PR whose never-started failed jobs may be retried.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "pr_number",
+          "opts": [
+            "--pr"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Execute only the freshly signed rerun plan.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Exact dry-run approval signature.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print one JSON result.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "pr",
+        "rerun-checks"
+      ],
+      "qualified_name": "agentic-kit pr rerun-checks",
+      "remote_effects": [
+        "network_read",
+        "workflow_rerun"
+      ],
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "surface": "diagnostic",
+      "task_tags": [
+        "bounded",
+        "pr"
+      ],
+      "when_to_use": "Plan or execute a signed rerun; real test failures are refused."
+    },
+    {
       "dry_run_available": false,
       "group": "pr",
       "help": "Print deterministic PR/CI status and fetch failed logs for red CI.",
@@ -14517,6 +14598,20 @@
         },
         {
           "default": false,
+          "help": "Print bounded JSON with a full local evidence file.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "summary",
+          "opts": [
+            "--summary"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
           "help": "Print JSON instead of text.",
           "is_flag": true,
           "metavar": null,
@@ -14646,6 +14741,20 @@
           "opts": [
             "--interval-seconds",
             "--poll-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print a bounded projection; save full step evidence locally.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "summary",
+          "opts": [
+            "--summary"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -14936,6 +15045,20 @@
           "name": "post_merge_complete",
           "opts": [
             "--post-merge-complete"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print a bounded projection; save full step evidence locally.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "summary",
+          "opts": [
+            "--summary"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -19256,7 +19379,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "28a969c553ed",
+    "manifest_sha": "dc9b0fdad017",
     "schema_version": 1
   },
   "schema_version": 2,

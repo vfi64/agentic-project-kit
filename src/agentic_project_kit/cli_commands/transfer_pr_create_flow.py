@@ -417,6 +417,7 @@ def pr_create_complete_command(
         "--post-merge-complete",
         help="After pr-complete, run visible post-merge closeout using the concrete PR number.",
     ),
+    summary: bool = typer.Option(False, "--summary", help="Print a bounded projection; save full step evidence locally."),
     json_output: bool = typer.Option(False, "--json", help="Print JSON instead of text."),
     skip_llm_context_gate: bool = typer.Option(
         False,
@@ -626,6 +627,14 @@ def pr_create_complete_command(
                 steps=steps,
             )
             update_live_status("done", result_status="PASS", step="already-done-no-content-diff")
+            if summary:
+                from agentic_project_kit.pr_orchestration_output import prepare_pr_output
+                payload, rc = prepare_pr_output(payload, root=Path("."), summary=True)
+                typer.echo(json.dumps(payload, ensure_ascii=False) if json_output else
+                           f"{payload['result_status']}: {payload['next_action']}\nEvidence: {payload.get('evidence_path', '')}")
+                if rc:
+                    raise typer.Exit(rc)
+                return
             if json_output:
                 typer.echo(json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True))
             else:
@@ -811,8 +820,14 @@ def pr_create_complete_command(
         "steps": steps,
     }
 
+    from agentic_project_kit.pr_orchestration_output import prepare_pr_output
+    payload, output_returncode = prepare_pr_output(payload, root=Path("."), summary=summary)
+    next_action = str(payload["next_action"])
+    result_status = str(payload["result_status"])
+    final_signal = "d" if result_status == "PASS" else "f"
+
     if json_output:
-        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
+        typer.echo(json.dumps(payload, indent=None if summary else 2, ensure_ascii=False))
     else:
         _echo_transfer_payload_summary(
             title="TRANSFER_PR_CREATE_COMPLETE",
@@ -828,8 +843,11 @@ def pr_create_complete_command(
             },
         )
 
-    if blockers:
-        raise typer.Exit(code=2)
+    if summary and not json_output and payload.get("evidence_path"):
+        typer.echo(f"Evidence: {payload['evidence_path']}")
+
+    if output_returncode:
+        raise typer.Exit(code=output_returncode)
 
 @transfer_app.command("pr-status")
 def pr_status_command(

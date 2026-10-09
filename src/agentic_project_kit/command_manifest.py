@@ -18,7 +18,7 @@ PACKAGE_JSON_RESOURCE = "agentic-kit-commands.json"
 PACKAGE_JSON_PATH = Path("src/agentic_project_kit/reference") / PACKAGE_JSON_RESOURCE
 SAFETY_VALUES = {"READ_ONLY", "BOUNDED", "DESTRUCTIVE"}
 SURFACE_VALUES = {"orchestrator", "diagnostic", "primitive"}
-REMOTE_EFFECT_VALUES = {"none", "network_read", "fetch", "push", "pull_request", "merge", "release_publish", "delete_remote"}
+REMOTE_EFFECT_VALUES = {"none", "network_read", "fetch", "push", "pull_request", "merge", "release_publish", "delete_remote", "workflow_rerun"}
 
 RAW_REPLACEMENTS: dict[str, tuple[str, ...]] = {
     "agentic-kit transfer push-current": ("git push",),
@@ -433,6 +433,7 @@ def infer_remote_effects(command: dict[str, Any]) -> list[str]:
         "agentic-kit work-order upload": ["push"],
         "agentic-kit pr status": ["network_read"],
         "agentic-kit pr wait-ci": ["network_read"],
+        "agentic-kit pr rerun-checks": ["network_read", "workflow_rerun"],
         "agentic-kit state freshness-check": ["network_read"],
         "agentic-kit transfer continue": ["fetch", "push"],
         "agentic-kit transfer patch-cycle-status": ["network_read"],

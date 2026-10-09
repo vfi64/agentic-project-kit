@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 28a969c553ed
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: dc9b0fdad017
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `259`
+- Command count: `260`
 
 ## Commands
 
@@ -1761,6 +1761,23 @@ Merge only when PR checks are green, refs match, and merge state is clean.
 | `merge_state_timeout_seconds` | `TyperOption` | --merge-state-timeout-seconds | `False` | `60` | Pre-merge GitHub merge-state wait timeout. |
 | `merge_state_poll_seconds` | `TyperOption` | --merge-state-poll-seconds | `False` | `5` | Pre-merge GitHub merge-state polling interval. |
 
+### `agentic-kit pr rerun-checks`
+
+- Safety: `BOUNDED`
+- Surface: `diagnostic`
+- When to use: Plan or execute a signed rerun; real test failures are refused.
+- Dry-run available: `True`
+- Remote effects: `network_read`, `workflow_rerun`
+
+Plan or execute a signed rerun; real test failures are refused.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `pr_number` | `TyperOption` | --pr | `True` |  | PR whose never-started failed jobs may be retried. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Execute only the freshly signed rerun plan. |
+| `expected_signature` | `TyperOption` | --expected-signature | `False` | `` | Exact dry-run approval signature. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print one JSON result. |
+
 ### `agentic-kit pr status`
 
 - Safety: `READ_ONLY`
@@ -3053,6 +3070,7 @@ Merge a substantive PR if needed, then finish post-merge handoff closeout.
 | `poll_seconds` | `TyperOption` | --poll-seconds | `False` | `10` | CI polling interval for the substantive PR and refresh PR. |
 | `merge_state_timeout_seconds` | `TyperOption` | --merge-state-timeout-seconds | `False` | `60` |  |
 | `merge_state_poll_seconds` | `TyperOption` | --merge-state-poll-seconds | `False` | `5` |  |
+| `summary` | `TyperOption` | --summary | `False` | `False` | Print bounded JSON with a full local evidence file. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 
 ### `agentic-kit transfer pr-complete`
@@ -3073,6 +3091,7 @@ Wait for CI, safely merge an existing PR, and synchronize main.
 | `merge_method` | `TyperOption` | --merge-method | `False` | `squash` | GitHub merge method. |
 | `timeout_seconds` | `TyperOption` | --timeout-seconds | `False` | `300` | Maximum CI wait time. |
 | `poll_seconds` | `TyperOption` | --interval-seconds, --poll-seconds | `False` | `10` | CI polling interval. |
+| `summary` | `TyperOption` | --summary | `False` | `False` | Print a bounded projection; save full step evidence locally. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 | `skip_llm_context_gate` | `TyperOption` | --skip-llm-context-gate | `False` | `False` | Recovery-only: run PR completion without requiring fresh generated LLM context. |
 | `post_merge_complete` | `TyperOption` | --post-merge-complete | `False` | `False` | Accepted compatibility flag: pr-complete already runs post-merge-complete after a successful merge. |
@@ -3115,6 +3134,7 @@ Create, validate, merge, and optionally close out a PR without manual PR/SHA cop
 | `timeout_seconds` | `TyperOption` | --timeout-seconds | `False` | `300` | Maximum CI wait time. |
 | `poll_seconds` | `TyperOption` | --interval-seconds, --poll-seconds | `False` | `10` | CI polling interval. |
 | `post_merge_complete` | `TyperOption` | --post-merge-complete | `False` | `False` | After pr-complete, run visible post-merge closeout using the concrete PR number. |
+| `summary` | `TyperOption` | --summary | `False` | `False` | Print a bounded projection; save full step evidence locally. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 | `skip_llm_context_gate` | `TyperOption` | --skip-llm-context-gate | `False` | `False` | Recovery-only: run PR create/complete without requiring fresh generated LLM context. |
 

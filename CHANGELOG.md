@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Add signed reruns for never-started failed PR checks with current-head guards and durable receipts (KIT-GF-062).
+- Fix PR orchestration with bounded summary output, full file evidence and structured CI findings distinct from execution errors (KIT-GF-027).
 - Fix bounded GitHub readiness read retries, precise lookup diagnostics and signed original DOI PR resumption, with regeneration only for confirmed conflicts and no duplicate publication.
 
 ## v1.0.22 - 2026-10-09

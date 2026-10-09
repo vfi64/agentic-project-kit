@@ -47,7 +47,7 @@ declare `none`. The static CLI regression follows literal Git/GitHub argv and
 reachable imported helpers and rejects remote implementations declared as `none`.
 Dynamic command construction and arbitrary provider callbacks still require review.
 
-Allowed values are `none`, `network_read`, `fetch`, `push`, `pull_request`, `merge`, `release_publish`, and `delete_remote`. `none` must appear alone. A local-only recovery route such as `agentic-kit work rescue` must stay classified as `none` and must not run fetch, push, pull-request, merge, release, or remote-delete operations.
+Allowed values are `none`, `network_read`, `fetch`, `push`, `pull_request`, `merge`, `release_publish`, `delete_remote`, and `workflow_rerun`. `workflow_rerun` declares the signed rerun of failed GitHub Actions jobs; it is a remote mutation, not a read-only CI query. `none` must appear alone. A local-only recovery route such as `agentic-kit work rescue` must stay classified as `none` and must not run fetch, push, pull-request, merge, release, or remote-delete operations.
 
 ## Transfer wrapper command layer
 
