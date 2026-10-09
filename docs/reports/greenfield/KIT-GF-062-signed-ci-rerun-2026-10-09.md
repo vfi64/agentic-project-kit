@@ -51,3 +51,9 @@ full raw evidence and bounded output; it did not rerun production CI.
 Ruff, check-docs and doctor passed (76 existing report-only lifecycle warnings).
 The bound DPA readiness ACK was synchronized; its authorization scope is unchanged.
 The architecture contract remains valid. No release, tag or publication changed.
+
+CI found ANSI-colored help output in three new option assertions. The assertions
+now remove ANSI formatting while checking the same public options. The focused
+color-enabled CLI checks passed. During that actual test failure, the new CI
+classifier correctly refused a rerun because the executable Tests step failed;
+the closeout returned a structured FAILED finding and preserved its merge block.
