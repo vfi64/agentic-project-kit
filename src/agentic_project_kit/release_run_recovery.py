@@ -21,6 +21,9 @@ class DoiRecovery:
 
     def plan(self) -> dict[str, Any]:
         run = self.run
+        from agentic_project_kit.release_run_resume import DoiResume, original_doi_subject
+
+        subject = original_doi_subject(run)
         progress = run.state.get("doi_recovery") or {}
         gate: dict[str, Any] = {
             "kind": "release_run_gate", "gate_id": "D2R", "version": run.version,
@@ -41,11 +44,19 @@ class DoiRecovery:
             gate["blockers"] = ["recovery-dirty-after-commit"]
             return gate
         lookup = self._command("source-pr", ["transfer", "pr-existing-for-branch", "--head", run.doi_branch, "--state", "all", "--json"])
+        if not isinstance(lookup.get("json"), dict):
+            gate["blockers"] = ["recovery-source-pr-lookup-invalid-response"]
+            return gate
         missing_pr = lookup["returncode"] == 2 and (lookup.get("json") or {}).get("result_status") == "MISS"
         if lookup["result_status"] != "PASS" and not missing_pr:
-            gate["blockers"] = ["recovery-source-pr-not-unique"]
+            payload = lookup.get("json") or {}
+            gate["blockers"] = ["recovery-source-pr-not-unique" if "multiple_existing_prs_found" in payload.get("blockers", []) else "recovery-source-pr-lookup-unavailable"]
+            gate["lookup_diagnostics"] = {"returncode": lookup["returncode"], "result": payload, "stderr": lookup["stderr"]}
             return gate
         gate["pr_number"] = (lookup["json"] or {}).get("pr_number")
+        if missing_pr and subject:
+            gate["blockers"] = ["resume-source-pr-not-found"]
+            return gate
         if missing_pr:
             source = self._command("source-branch", ["git", "rev-parse", "--verify", f"refs/heads/{run.doi_branch}"], kit=False, status=None)
             info = {"headRefOid": source["stdout"].strip(), "headRefName": run.doi_branch, "baseRefName": "main", "state": "OPEN"}
@@ -53,11 +64,23 @@ class DoiRecovery:
             gate["blockers"] = ["recovery-source-pr-number-missing"]
             return gate
         else:
-            source = self._command("source-head", ["gh", "pr", "view", str(gate["pr_number"]), "--json", "headRefOid,headRefName,baseRefName,state"], kit=False, status=None)
+            source = self._command("source-head", ["gh", "pr", "view", str(gate["pr_number"]), "--json", "headRefOid,headRefName,baseRefName,state,mergedAt,mergeCommit"], kit=False, status=None)
             info = source.get("json") or {}
-        if source["result_status"] != "PASS" or info.get("headRefName") != run.doi_branch or info.get("baseRefName") != "main" or info.get("state") not in {"OPEN", "CLOSED"} or not info.get("headRefOid"):
+        if source["result_status"] != "PASS":
+            gate["blockers"] = ["recovery-source-head-lookup-unavailable"]
+            gate["lookup_diagnostics"] = {"returncode": source["returncode"], "stderr": source["stderr"]}
+            return gate
+        if not isinstance(info, dict):
+            gate["blockers"] = ["recovery-source-head-invalid-response"]
+            return gate
+        if info.get("headRefName") != run.doi_branch or info.get("baseRefName") != "main" or info.get("state") not in ({"OPEN", "CLOSED", "MERGED"} if subject else {"OPEN", "CLOSED"}) or not info.get("headRefOid"):
             gate["blockers"] = ["recovery-source-pr-invalid"]
             return gate
+        if subject:
+            if current_branch != "main":
+                gate["blockers"] = ["resume-requires-clean-main"]
+                return gate
+            return DoiResume(run).plan(gate, info, subject)
         if info.get("state") == "CLOSED" and not progress:
             gate["blockers"] = ["recovery-source-pr-already-closed"]
             return gate
@@ -101,6 +124,10 @@ class DoiRecovery:
 
     def execute(self, gate: dict[str, Any]) -> dict[str, Any]:
         run = self.run
+        if gate.get("mode") == "resume-existing":
+            from agentic_project_kit.release_run_resume import DoiResume
+
+            return DoiResume(run).execute(gate)
         progress = run.state.setdefault("doi_recovery", {**gate, "finished_actions": []})
         done = progress["finished_actions"]
         if "write" not in done:

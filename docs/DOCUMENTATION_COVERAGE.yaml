@@ -103,6 +103,10 @@ rules:
     terms:
     - agentic-kit release run
     - D2R
+    - resume-existing
+    - transfer post-merge-complete
+    - unavailable lookup
+    - Mutations
     - transfer pr-close-superseded
     - source-head drift
     - AWAITING_APPROVAL
