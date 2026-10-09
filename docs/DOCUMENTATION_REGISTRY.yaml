@@ -1580,3 +1580,6 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-023-pure-json-stdout-2026-10-09.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-065-release-publication-policy-2026-10-09.md
+    class: evidence/log
+    owner: maintainers

@@ -38,6 +38,9 @@ def _workspace(root: Path, *, publication: str = "github+pypi+zenodo", package_i
         )
     lines.append("")
     (root / ".agentic/config.yaml").write_text("\n".join(lines), encoding="utf-8")
+    workflow = root / ".github/workflows/release.yml"
+    workflow.parent.mkdir(parents=True, exist_ok=True)
+    workflow.write_text("on:\n  workflow_dispatch:\n    inputs:\n      publish_target:\n        default: pypi\n")
 
 
 def _state_path(root: Path, version: str = "1.2.3") -> Path:
@@ -333,11 +336,11 @@ def test_release_run_watches_dispatched_workflow_run_not_stale_latest(tmp_path: 
 
 
 def test_release_run_blocks_when_required_workflow_input_cannot_be_derived(tmp_path: Path) -> None:
-    _workspace(tmp_path, publication="github", package_index_workflow=False)
+    _workspace(tmp_path, publication="github+pypi", package_index_workflow=False)
     workflow = tmp_path / ".github" / "workflows" / "release.yml"
-    workflow.parent.mkdir(parents=True)
+    workflow.parent.mkdir(parents=True, exist_ok=True)
     workflow.write_text(
-        "on:\n  workflow_dispatch:\n    inputs:\n      publish_target:\n        required: true\n",
+        "on:\n  workflow_dispatch:\n    inputs:\n      repository:\n        required: true\n",
         encoding="utf-8",
     )
     path = _state_path(tmp_path)
@@ -358,7 +361,7 @@ def test_release_run_blocks_when_required_workflow_input_cannot_be_derived(tmp_p
 
     assert result["result_status"] == "BLOCKED"
     assert result["current_step"] == "C3"
-    assert result["blockers"] == ["missing-required-workflow-input:publish_target"]
+    assert result["blockers"] == ["missing-required-workflow-input:repository"]
 
 
 def _finish_through_c3_gate(tmp_path: Path, runner: FakeRunner) -> None:

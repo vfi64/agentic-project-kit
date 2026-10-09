@@ -19,11 +19,16 @@ def approval_mode(run: ReleaseRun) -> str:
 def release_plan(run: ReleaseRun) -> dict[str, Any]:
     from agentic_project_kit.publication_policy import publication_policy_for
 
-    return {"version": run.version, "tag": run.tag,
-            "branch": run.branch, "doi_branch": run.doi_branch,
+    plan = {"version": run.version, "tag": run.tag,
+            "branch": run.branch,
             "publication_policy": publication_policy_for(run.root).value,
-            "workflow": run._package_index_workflow(),
+            "steps": list(run.sequence),
             "summary_lines": list(run.options.summary_lines or run.state.get("summary_lines") or [])}
+    if "C3" in run.sequence:
+        plan["workflow"] = run._package_index_workflow()
+    if "D4" in run.sequence:
+        plan["doi_branch"] = run.doi_branch
+    return plan
 
 
 def validate_consent(run: ReleaseRun) -> list[str]:
@@ -32,6 +37,10 @@ def validate_consent(run: ReleaseRun) -> list[str]:
         return ["invalid-release-approval-policy"]
     if run.state.get("version", run.version) != run.version:
         return ["release-state-version-mismatch"]
+    if run.state.get("publication_policy", run.policy.value) != run.policy.value:
+        return ["release-state-publication-policy-drift"]
+    if run.state.get("release_branch", run.branch) != run.branch:
+        return ["release-state-branch-drift"]
     consent = run.state.get("release_consent")
     if consent and (mode != "upfront" or consent.get("plan") != release_plan(run)):
         return ["release-consent-plan-drift"]
