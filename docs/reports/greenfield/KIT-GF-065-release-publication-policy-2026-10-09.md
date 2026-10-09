@@ -43,3 +43,8 @@ CLI options and remote-effect declarations are unchanged. Manifest ACK remains
 existing upfront plan, including older plans without an explicit step sequence,
 require renewed review rather than silently extending consent. Full publication
 retains its previous step order. This slice creates no release or tag.
+
+Closeout evidence: the initial branch-start command blocked before switching;
+the signed Kit work-rescue route preserved the reviewed changes on
+`codex/gf065-release-policy` and realigned main to its unchanged base before PR
+publication. No direct main commit or raw branch mutation was used.
