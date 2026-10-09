@@ -40,8 +40,8 @@ Critical rule IDs:
 ## Current continuation state
 
 - branch: `codex/gf035-external-docs-audit`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -423,13 +423,13 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/gf035-external-docs-audit",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "c637872f4209002b59416cf61ad040adf5ef28c3",
-    "head_matches_origin_main": true,
-    "head_short": "c637872f",
+    "head": "53484c5daec3ef58324d5ce7fbad097ea29ca2f4",
+    "head_matches_origin_main": false,
+    "head_short": "53484c5d",
     "local_path": "cd /path/to/",
     "origin_main": "c637872f4209002b59416cf61ad040adf5ef28c3",
     "origin_main_short": "c637872f",
-    "worktree_clean": false
+    "worktree_clean": true
   }
 }
 ```
