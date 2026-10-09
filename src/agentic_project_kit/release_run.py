@@ -15,6 +15,7 @@ import yaml
 
 from agentic_project_kit.cli_executable import default_agentic_kit
 from agentic_project_kit.publication_policy import publication_policy_for
+from agentic_project_kit.release_run_policy import release_branch_plan, release_step_sequence
 from agentic_project_kit.workspace import load_workspace
 
 
@@ -47,9 +48,10 @@ class ReleaseRun:
         self.runner = runner or default_runner
         self.version = options.version.removeprefix("v")
         self.tag = f"v{self.version}"
-        self.branch = f"codex/release-{self.version}"
-        self.doi_branch = f"codex/release-{self.version}-doi"
         workspace = load_workspace(self.root, suppress_legacy_profile_warning=True)
+        self.policy = publication_policy_for(self.root)
+        self.sequence = release_step_sequence(self.policy)
+        self.branch, self.doi_branch, self._plan_blockers = release_branch_plan(self.version, self._release_config())
         safe_version = re.sub(r"[^A-Za-z0-9_.-]+", "-", self.version)
         self.state_path = workspace.tmp_file(f"release-run-{safe_version}.json")
         self.log_path = workspace.tmp_file(f"release-run-{safe_version}.log")
@@ -61,7 +63,7 @@ class ReleaseRun:
     def run(self) -> dict[str, Any]:
         from agentic_project_kit.release_run_approval import validate_consent
 
-        blockers = validate_consent(self)
+        blockers = [*self._plan_blockers, *validate_consent(self)]
         if blockers:
             return self._payload({"step_id": "approval-policy", "result_status": "BLOCKED", "blockers": blockers})
         self.state.setdefault("schema_version", 1)
@@ -72,11 +74,10 @@ class ReleaseRun:
         self.state.setdefault("step_results", {})
         self.state.setdefault("gates", {})
         self.state.setdefault("publication_policy", publication_policy_for(self.root).value)
+        self.state.setdefault("release_branch", self.branch)
         self._save_state()
 
-        policy = publication_policy_for(self.root)
-        sequence = self._step_sequence(private_publication=not policy.publishes_anywhere)
-        for step_id in sequence:
+        for step_id in self.sequence:
             if self._is_finished(step_id):
                 continue
             result = self._run_or_gate(step_id)
@@ -85,29 +86,10 @@ class ReleaseRun:
             self._mark_finished(step_id, result)
         return self._payload({"step_id": "complete", "result_status": "PASS", "next_action": "Release run completed."})
 
-    def _step_sequence(self, *, private_publication: bool) -> tuple[str, ...]:
-        if private_publication:
-            return ("A1", "A2", "A3", "B1", "B2", "B3", "B4", "C1", "C2")
-        return (
-            "A1",
-            "A2",
-            "A3",
-            "B1",
-            "B2",
-            "B3",
-            "B4",
-            "C1",
-            "C2",
-            "C3",
-            "C4",
-            "D1",
-            "D2",
-            "D3",
-            "D4",
-            "D5",
-        )
-
     def _run_or_gate(self, step_id: str) -> dict[str, Any]:
+        if step_id not in self.sequence and not (step_id == "D2R" and "D4" in self.sequence):
+            return {"step_id": step_id, "result_status": "BLOCKED",
+                    "blockers": ["step-not-declared-by-publication-policy"]}
         if step_id == "D4" and self._doi_recovery_required():
             step_id = "D2R"
         if step_id in GATE_SEQUENCE:
@@ -202,11 +184,13 @@ class ReleaseRun:
 
     def _step_c4(self) -> dict[str, Any]:
         last: dict[str, Any] | None = None
-        for _ in range(3):
+        attempts = 3 if self.policy.uses_zenodo else 1
+        for attempt in range(attempts):
             last = self._command("C4", [self.executable, "post-release-check", "--version", self.version, "--json"], expected_status="PASS")
             if last["result_status"] == "PASS":
                 return last
-            time.sleep(1)
+            if attempt + 1 < attempts:
+                time.sleep(1)
         return last or {"step_id": "C4", "result_status": "BLOCKED", "blockers": ["post-release-check-not-run"]}
 
     def _step_d1(self) -> dict[str, Any]:
@@ -362,6 +346,7 @@ class ReleaseRun:
                 "gate_id": gate_id,
                 "version": self.version,
                 "action": "execute work finish for release metadata branch",
+                "tag": self.tag,
                 "branch": self.branch,
                 "paths": list(self.state.get("b_paths") or []),
                 "target_commit": target_commit,
@@ -391,6 +376,7 @@ class ReleaseRun:
             "gate_id": gate_id,
             "version": self.version,
             "action": "execute work finish for DOI closeout branch",
+            "tag": self.tag,
             "branch": self.doi_branch,
             "paths": list(self.state.get("d_paths") or []),
             "target_commit": target_commit,
@@ -519,7 +505,7 @@ def _package_index_workflow_blockers(root: Path, workflow_file: str, inputs: lis
     declared = {value.split("=", 1)[0] for value in inputs if "=" in value}
     workflow_path = root / ".github" / "workflows" / workflow_file
     if not workflow_path.exists():
-        return []
+        return [f"package-index-workflow-missing:{workflow_file}"]
     try:
         loaded = yaml.safe_load(workflow_path.read_text(encoding="utf-8")) or {}
     except (OSError, yaml.YAMLError):

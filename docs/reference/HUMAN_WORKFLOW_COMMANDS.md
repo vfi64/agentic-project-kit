@@ -172,6 +172,18 @@ The command records state and subprocess logs under the workspace temp root, for
 example `.agentic/tmp/release-run-<version>.json` and `.agentic/tmp/release-run-<version>.log`.
 Reruns resume at the first unfinished step.
 
+The declared publication policy selects the steps (KIT-GF-065): `none` ends at
+C2; `github` adds C4; `github+pypi` also adds C3; `github+pypi+zenodo` also adds
+D1–D5. Only those steps can be offered or covered by upfront consent. A C3
+workflow file must exist before its gate can be approved. Github-only C4 does
+one post-release check without a Zenodo wait.
+
+Set `release.branch_prefix: release/` to use `release/<version>` and
+`release/<version>-doi`. The unset default remains `codex/release-<version>`.
+Prefixes must be safe relative branch prefixes ending in `/` or `-`.
+Resuming after a publication-policy or branch-prefix change blocks before actions;
+existing upfront consent also binds the applicable step sequence.
+
 The command stops with `AWAITING_APPROVAL` at these gates:
 
 - B4: execute `work finish` for the release metadata branch.
