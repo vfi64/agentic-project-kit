@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3acda7b73dd5d21cc7104541636c73ec5953ec42
-  short: 3acda7b7
-  subject: Fix DOI closeout for release 1.0.22 (#2461)
+  full: c44ec0b08484bc3d7de43d39663a20dbd947bdc9
+  short: c44ec0b0
+  subject: Fix signed CI recovery and compact PR findings (#2463)
 last_substantive_work_state:
-  full: 3acda7b73dd5d21cc7104541636c73ec5953ec42
-  short: 3acda7b7
-  subject: Fix DOI closeout for release 1.0.22 (#2461)
+  full: c44ec0b08484bc3d7de43d39663a20dbd947bdc9
+  short: c44ec0b0
+  subject: Fix signed CI recovery and compact PR findings (#2463)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
