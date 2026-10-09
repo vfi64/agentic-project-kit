@@ -140,3 +140,20 @@ def test_unicode_failure_details_are_byte_bounded(tmp_path):
     assert rc == 2
     assert len(json.dumps(out, ensure_ascii=False).encode()) < 4096
     assert json.loads(Path(out["evidence_path"]).read_text())["steps"] == payload["steps"]
+
+
+def test_closeout_cli_unicode_failure_output_stays_under_4k(monkeypatch, tmp_path):
+    from agentic_project_kit.pr_closeout_complete import PrCloseoutCompleteResult, PrCloseoutStep
+
+    monkeypatch.chdir(tmp_path)
+    raw = "PR readiness outcome: BLOCKED\n- check failed: test\nCI state: FAILED\n" + "🚀" * 4000
+    steps = tuple(PrCloseoutStep("pr-wait-ci", "FAIL", 1, "inspect", raw, "錯" * 4000) for _ in range(2))
+    result = PrCloseoutCompleteResult(12, "BLOCKED", 2, "PR_CI_BLOCKED", "inspect", False, steps=steps)
+    monkeypatch.setattr("agentic_project_kit.cli_commands.transfer_pr_closeout_complete.pr_closeout_complete",
+                        lambda *a, **kw: result)
+    response = CliRunner().invoke(app, ["transfer", "pr-closeout-complete", "--after-pr", "12", "--summary", "--json"])
+    assert response.exit_code == 0
+    assert len(response.stdout.encode()) < 4096
+    payload = json.loads(response.stdout)
+    assert payload["ci_state"] == "FAILED"
+    assert json.loads(Path(payload["evidence_path"]).read_text())["steps"][0]["stdout"] == raw

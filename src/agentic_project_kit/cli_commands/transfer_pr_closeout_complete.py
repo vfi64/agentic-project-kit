@@ -123,7 +123,7 @@ def register_transfer_pr_closeout_complete_command(transfer_app: typer.Typer) ->
         payload, rc = prepare_pr_output(result.as_json_data(), root=Path("."), summary=summary)
         result = replace(result, returncode=rc, result_status=str(payload["result_status"]), next_action=str(payload["next_action"]))
         if json_output:
-            typer.echo(json.dumps(payload, separators=(",", ":"), sort_keys=True))
+            typer.echo(json.dumps(payload, separators=(",", ":"), ensure_ascii=False, sort_keys=True))
         else:
             typer.echo(render_pr_closeout_complete_result(result))
             if summary and payload.get("evidence_path"):

@@ -43,7 +43,7 @@ framework would add no useful validation beyond these explicit states.
 ## Validation evidence
 
 Manifest ACK: `COMMAND_MANIFEST_ACK dc9b0fdad017`.
-Full suite: 3378 tests passed. 103 targeted tests passed. Eight installed-wheel checks passed in a newly
+Final full suite: 3379 tests passed. 104 targeted tests passed. Eight installed-wheel checks passed in a newly
 initialized external manifest workspace with generated command references,
 no Kit tests and no documentation registry. Package provenance resolved through
 site-packages. The fixture exercised signed CLI execution, refusal, replay,
@@ -65,3 +65,9 @@ Typer dependency and its command model. No new dependency or gate exception was 
 Final parallel suite with forced color: 3378 passed. Fresh dependency installation
 also passed eight external-wheel checks and three real command-parameter checks
 with Click absent. Existing pending-refresh text signals remain unchanged.
+
+The installed-wheel CLI Unicode boundary regression reproduced a >4 KB escaped
+JSON result before the correction. UTF-8 serialization now produces 2388 bytes
+for that failure fixture while preserving the full raw log. The final suite
+passed 3379 tests; the previous ANSI/Click contract failures were green remotely
+before this last bounded-output correction.
