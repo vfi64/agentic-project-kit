@@ -37,7 +37,7 @@ branch first, and normal work finish handles the resulting patch.
 `tests/test_kit_update.py` covers signatures, immutable artifacts, CI provenance,
 partial failures, concurrent edits, target-runtime gates, idempotent fresh plans,
 CLI JSON and manifest contracts. Discovery is independently covered by
-`tests/test_kit_installation.py`. Together 81 focused tests passed.
+`tests/test_kit_installation.py`. Together 85 focused tests passed.
 
 Eight real installed-wheel checks passed in a separate initialized manifest
 workspace containing generated command references, no Kit tests and no Kit doc
@@ -74,7 +74,7 @@ and test gates document and enforce the new public maintenance surface.
 
 ## Final local gates
 
-3460 full-suite tests passed; Ruff, check-docs and doctor passed. Doctor retains
+3464 full-suite tests passed; Ruff, check-docs and doctor passed. Doctor retains
 76 existing report-only lifecycle findings. The initial full run encountered old
 ACK projections before regeneration; all 19 related authority/readiness tests
 and the final complete run passed after synchronization. The bound DPA ACK was
@@ -82,3 +82,8 @@ refreshed without changing its authorization scope. Manifest and generated
 entrypoints/site use `COMMAND_MANIFEST_ACK a3c2547eb39e`. Pip configuration files
 are disabled during resolution and installation, so unsigned system/venv settings
 cannot add an extra index or alter installation scope.
+
+The final pin-parser review added regressions refusing pins that appear only in
+inline comments, shell expressions or another argument. The correction stayed
+on the same PR before merge; the full suite and all eight external checks passed
+again with the corrected package.

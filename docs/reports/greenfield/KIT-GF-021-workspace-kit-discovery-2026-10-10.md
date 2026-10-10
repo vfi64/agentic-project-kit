@@ -33,7 +33,7 @@ existing external CI runners that intentionally use a different runtime scope.
 `tests/test_kit_installation.py` covers local-first ordering, explicitly declared
 venvs, absent PATH/script, timeouts, malformed metadata, mismatched interpreters,
 system environments and source-outside-environment rejection. The update tests
-exercise actual selection through the public route; 81 combined focused tests
+exercise actual selection through the public route; 85 combined focused tests
 passed. Earlier installed-wheel discovery smoke checks also covered an absent
 console script and an explicitly declared dedicated environment.
 
@@ -55,7 +55,7 @@ model suffices without an additional DCO layer.
 
 ## Final local gates
 
-3460 full-suite tests, Ruff, check-docs and doctor passed. The canonical generated
+3464 full-suite tests, Ruff, check-docs and doctor passed. The canonical generated
 handoff and bound DPA readiness record use `COMMAND_MANIFEST_ACK a3c2547eb39e`.
 Doctor's 76 existing lifecycle findings remain report-only. No release action
 was performed; the fix awaits a future release and Cockpit's independent retest.

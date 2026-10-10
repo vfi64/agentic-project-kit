@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import shlex
 
 from agentic_project_kit.workspace_init import MANAGED_CI_HEADER
 
@@ -25,7 +26,17 @@ def plan_ci_pins(source: bytes, workflow: bytes, version: str) -> dict[str, byte
         raise ValueError("ambiguous_ci_pin: require exactly one stable, exact Kit version pin")
     # Pin must be in an executable pip install line, not a comment or prose.
     line = next(line for line in source.splitlines() if b"agentic-project-kit" in line)
-    if not re.match(rb"\s*-\s*run:\s*python(?:3)?\s+-m\s+pip\s+install\s+", line):
+    match = re.fullmatch(rb"\s*-\s*run:\s*python(?:3)?\s+-m\s+pip\s+install\s+(.+)", line)
+    if not match:
         raise ValueError("unsupported_ci_pin: require a python -m pip install run step")
+    arguments = shlex.split(match[1].decode("utf-8"), comments=True)
+    current_pin = b"agentic-project-kit==" + _EXACT_PIN.findall(source)[0]
+    if current_pin.decode("ascii") not in arguments or any(
+        any(operator in argument for operator in (";", "|", "&", "`", "$", ">", "<"))
+        for argument in arguments
+    ):
+        raise ValueError(
+            "unsupported_ci_pin: require a literal pip requirement without shell operators"
+        )
     desired = _EXACT_PIN.sub(b"agentic-project-kit==" + version.encode("ascii"), source)
     return {CI_TEMPLATE_PATH: desired, CI_INJECTION_TARGET: header + desired}

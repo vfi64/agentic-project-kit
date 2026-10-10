@@ -433,6 +433,21 @@ def test_ambiguous_or_unmanaged_ci_is_refused(source, workflow):
 
 
 @pytest.mark.parametrize(
+    "arguments",
+    [
+        b"other-package # agentic-project-kit==1.0.18",
+        b"other-package; echo agentic-project-kit==1.0.18",
+        b'"$(echo agentic-project-kit==1.0.18)"',
+        b'"other-package agentic-project-kit==1.0.18"',
+    ],
+)
+def test_pin_in_comment_shell_expression_or_another_argument_is_refused(arguments):
+    source = b"jobs:\n  steps:\n    - run: python -m pip install " + arguments + b"\n"
+    with pytest.raises(ValueError):
+        plan_ci_pins(source, MANAGED_CI_HEADER.encode() + b"\n" + source, "1.0.19")
+
+
+@pytest.mark.parametrize(
     "value",
     [
         {"unknown": 1},
