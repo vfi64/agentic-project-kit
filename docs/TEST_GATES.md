@@ -1015,3 +1015,15 @@ then add a product path, change the branch and make the diff unavailable: each
 must take the full lane. Execute the rendered classifier shell with failed
 fetch/diff reads and assert the light lane retains `agentic-kit check`.
 Verify target-version managed CI adoption and customized-pair preservation.
+
+
+### External Safe Merge Context Gate (KIT-GF-017)
+
+`tests/test_transfer_llm_context_gate.py` exercises missing context carriers in a
+manifest workspace through the real freshness gate and external preflight.
+Do not stub either gate in that regression. Substantive dirt must still block.
+`tools/retest_gf017_external.py` repeats the installed-wheel CLI with local GitHub
+transport doubles: a green CLEAN exact-head PR merges, red CI and head drift
+refuse, and a dirty product file blocks. Post-merge main CI verification stays
+enabled. The fixture contains generated command references and no Kit tests or
+Kit documentation registry; it never changes a live remote PR.
