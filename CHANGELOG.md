@@ -2,7 +2,6 @@
 
 ## v1.0.23 - 2026-10-10
 
-- Zenodo DOI verification pending for v1.0.23.
 - Verify automatic context-carrier recovery for external safe merges with released Kit 1.0.21 and add regressions preserving CI, head and worktree guards (KIT-GF-017).
 - Fix consumer refresh PR CI with manifest-derived state paths, conservative full-suite fallback and protected target-version managed CI adoption (KIT-GF-063).
 - Add signed workspace Kit updates with verified release wheels, preserved CI customization, target-version entrypoints and check/doctor validation (KIT-GF-051).
@@ -17,6 +16,10 @@
 - Add signed workspace Kit updates
 - Fix consumer workspace refresh CI
 - Fix external safe-merge context regression coverage
+
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.23 DOI `10.5281/zenodo.23276222`.
+
+Zenodo v1.0.23 DOI: 10.5281/zenodo.23276222
 
 ## v1.0.22 - 2026-10-09
 
