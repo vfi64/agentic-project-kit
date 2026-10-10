@@ -1,0 +1,213 @@
+{
+  "authorized_route": "agentic-kit release-prep",
+  "base_ref": "origin/main",
+  "changed_paths_against_base": [
+    ".agentic/dpa/acceptance/current_handoff_operational_state.json",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/site/claims/claims.json",
+    "docs/site/claims/index.html",
+    "docs/site/commands/commands.json",
+    "docs/site/commands/diagnostics.html",
+    "docs/site/commands/guided.html",
+    "docs/site/commands/index.html",
+    "docs/site/index.html",
+    "docs/site/quickstart/index.html",
+    "docs/site/quickstart/quickstart.json",
+    "docs/site/site.json",
+    "docs/site/workflows/index.html",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py",
+    "src/agentic_project_kit/reference/agentic-kit-commands.json"
+  ],
+  "date": "2026-10-10",
+  "explicit_summary_lines": [
+    "Verify automatic context-carrier recovery for external safe merges with released Kit 1.0.21 and add regressions preserving CI, head and worktree guards (KIT-GF-017).",
+    "Fix consumer refresh PR CI with manifest-derived state paths, conservative full-suite fallback and protected target-version managed CI adoption (KIT-GF-063).",
+    "Add signed workspace Kit updates with verified release wheels, preserved CI customization, target-version entrypoints and check/doctor validation (KIT-GF-051).",
+    "Fix workspace-owned Kit discovery without global PATH assumptions and expose shared installation diagnostics (KIT-GF-021).",
+    "Add signed reruns for never-started failed PR checks with current-head guards and durable receipts (KIT-GF-062).",
+    "Fix PR orchestration with bounded summary output, full file evidence and structured CI findings distinct from execution errors (KIT-GF-027).",
+    "Fix bounded GitHub readiness read retries, precise lookup diagnostics and signed original DOI PR resumption, with regeneration only for confirmed conflicts and no duplicate publication."
+  ],
+  "from_tag": "v1.0.22",
+  "kind": "release_prepare_evidence",
+  "release_metadata_anchor_paths": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py"
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-notes-generate",
+        "--version",
+        "1.0.23",
+        "--from-tag",
+        "v1.0.22",
+        "--to-ref",
+        "main",
+        "--include-github-metadata",
+        "--summary-lines-json",
+        "tmp/release-1023-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-notes-generate",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 25646,
+      "stdout_sha256": "8a1df1f1c073bf83eee8dfd7c96dc6b5293e80b199af4e4d0dab4be9442b7e3f"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-prep",
+        "--version",
+        "1.0.23",
+        "--date",
+        "2026-10-10",
+        "--summary-line",
+        "Verify automatic context-carrier recovery for external safe merges with released Kit 1.0.21 and add regressions preserving CI, head and worktree guards (KIT-GF-017).",
+        "--summary-line",
+        "Fix consumer refresh PR CI with manifest-derived state paths, conservative full-suite fallback and protected target-version managed CI adoption (KIT-GF-063).",
+        "--summary-line",
+        "Add signed workspace Kit updates with verified release wheels, preserved CI customization, target-version entrypoints and check/doctor validation (KIT-GF-051).",
+        "--summary-line",
+        "Fix workspace-owned Kit discovery without global PATH assumptions and expose shared installation diagnostics (KIT-GF-021).",
+        "--summary-line",
+        "Add signed reruns for never-started failed PR checks with current-head guards and durable receipts (KIT-GF-062).",
+        "--summary-line",
+        "Fix PR orchestration with bounded summary output, full file evidence and structured CI findings distinct from execution errors (KIT-GF-027).",
+        "--summary-line",
+        "Fix bounded GitHub readiness read retries, precise lookup diagnostics and signed original DOI PR resumption, with regeneration only for confirmed conflicts and no duplicate publication.",
+        "--summary-lines-from",
+        "tmp/release-1023-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-prep",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 292,
+      "stdout_sha256": "afff1e60fb5b06b80f38417c5b92cf505b8e735f2f6df44264d2e2d23bd3c38f"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "commands",
+        "sync-entrypoints",
+        "--execute",
+        "--json"
+      ],
+      "name": "commands-sync-entrypoints",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 419,
+      "stdout_sha256": "3c0c2035e54dd3e8c2ffe71d75f6706059a119e9415eec834c999ce1d77881e2"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "agentic-kit",
+        "release",
+        "prepare",
+        "--internal-dpa-readiness-ack-refresh"
+      ],
+      "name": "dpa-readiness-ack-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 416,
+      "stdout_sha256": "247278f71486ddf91da9d874aadb26c255f3b1868b150739c2d8118801be283a"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "chat-switch-complete",
+        "--json"
+      ],
+      "name": "successor-handoff-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 9111,
+      "stdout_sha256": "71e5b7ebd6d32705d975614401dda59edbcd0fae867480159cc26ca55703990d"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "site/scripts/build.py",
+        "--docs-pages-fallback",
+        "--json"
+      ],
+      "name": "docs-pages-fallback-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 4063,
+      "stdout_sha256": "6b7b7194ada666e2d4717cb23beb2b17fe76d878244447f83f585aaec7d655e3"
+    }
+  ],
+  "summary_lines_path": "tmp/release-1023-summary-lines.json",
+  "to_ref": "main",
+  "version": "1.0.23"
+}
