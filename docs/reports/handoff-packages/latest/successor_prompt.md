@@ -40,8 +40,8 @@ Critical rule IDs:
 ## Current continuation state
 
 - branch: `codex/gf051-021-kit-update`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -423,13 +423,13 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/gf051-021-kit-update",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "696e2908872d77d88d0cabd45184667778eb81c5",
-    "head_matches_origin_main": true,
-    "head_short": "696e2908",
+    "head": "328a3b0c56316f368f3f102bd5c0449255d9572b",
+    "head_matches_origin_main": false,
+    "head_short": "328a3b0c",
     "local_path": "cd /path/to/",
     "origin_main": "696e2908872d77d88d0cabd45184667778eb81c5",
     "origin_main_short": "696e2908",
-    "worktree_clean": false
+    "worktree_clean": true
   }
 }
 ```
