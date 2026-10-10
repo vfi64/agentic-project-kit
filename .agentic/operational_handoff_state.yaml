@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 487d60c8073fb6094e967a1006251a017fe9c3d0
-  short: 487d60c8
-  subject: Add signed workspace Kit updates (#2465)
+  full: e016a0c7d20d3b0e4ddd68e4cbcd0080f3108220
+  short: e016a0c7
+  subject: Fix consumer workspace refresh CI (#2467)
 last_substantive_work_state:
-  full: 487d60c8073fb6094e967a1006251a017fe9c3d0
-  short: 487d60c8
-  subject: Add signed workspace Kit updates (#2465)
+  full: e016a0c7d20d3b0e4ddd68e4cbcd0080f3108220
+  short: e016a0c7
+  subject: Fix consumer workspace refresh CI (#2467)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
