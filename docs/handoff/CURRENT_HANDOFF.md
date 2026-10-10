@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `e016a0c7d20d3b0e4ddd68e4cbcd0080f3108220` (`e016a0c7`), after `Fix consumer workspace refresh CI (#2467)`.
-Last substantive work state is `e016a0c7d20d3b0e4ddd68e4cbcd0080f3108220` (`e016a0c7`), after `Fix consumer workspace refresh CI (#2467)`.
+Current verified main/admin HEAD is `5563dee6676edaf58b9cd19cfff13c7e43c0331e` (`5563dee6`), after `Fix external safe-merge context regression coverage (#2469)`.
+Last substantive work state is `5563dee6676edaf58b9cd19cfff13c7e43c0331e` (`5563dee6`), after `Fix external safe-merge context regression coverage (#2469)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
