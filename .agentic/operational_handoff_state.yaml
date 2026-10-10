@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c44ec0b08484bc3d7de43d39663a20dbd947bdc9
-  short: c44ec0b0
-  subject: Fix signed CI recovery and compact PR findings (#2463)
+  full: 487d60c8073fb6094e967a1006251a017fe9c3d0
+  short: 487d60c8
+  subject: Add signed workspace Kit updates (#2465)
 last_substantive_work_state:
-  full: c44ec0b08484bc3d7de43d39663a20dbd947bdc9
-  short: c44ec0b0
-  subject: Fix signed CI recovery and compact PR findings (#2463)
+  full: 487d60c8073fb6094e967a1006251a017fe9c3d0
+  short: 487d60c8
+  subject: Add signed workspace Kit updates (#2465)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
