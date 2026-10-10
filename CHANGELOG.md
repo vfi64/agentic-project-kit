@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Verify automatic context-carrier recovery for external safe merges with released Kit 1.0.21 and add regressions preserving CI, head and worktree guards (KIT-GF-017).
 - Fix consumer refresh PR CI with manifest-derived state paths, conservative full-suite fallback and protected target-version managed CI adoption (KIT-GF-063).
 - Add signed workspace Kit updates with verified release wheels, preserved CI customization, target-version entrypoints and check/doctor validation (KIT-GF-051).
 - Fix workspace-owned Kit discovery without global PATH assumptions and expose shared installation diagnostics (KIT-GF-021).

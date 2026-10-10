@@ -481,3 +481,43 @@ def test_require_fresh_llm_context_strict_still_blocks_on_carrier_staleness(monk
     assert result.exit_code == 2
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "BLOCKED"
+
+
+def test_pr_merge_safe_external_missing_carriers_auto_refreshes_without_bypass(tmp_path, monkeypatch):
+    """GF-017: exercise the real context gate and clean external preflight."""
+    from agentic_project_kit.transfer_repo_actions import RepoActionResult
+
+    _init_git_repo(tmp_path)
+    _write_external_workspace_manifest(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    synced = CliRunner().invoke(app, ["commands", "sync-entrypoints", "--execute", "--json"])
+    assert synced.exit_code == 0, synced.output
+    _commit_all(tmp_path, "Adopt external workspace and command reference")
+    assert not (tmp_path / "docs/DOCUMENTATION_REGISTRY.yaml").exists()
+    assert not (tmp_path / "tests").exists()
+    calls = []
+
+    def remote_merge(pr_number, **kwargs):
+        calls.append((pr_number, kwargs))
+        return RepoActionResult(action="pr-merge-safe", command=["fixture-remote-merge"],
+                                returncode=0, stdout="merged fixture\n", stderr="",
+                                result_status="PASS", next_action="done")
+
+    # Only the remote integration boundary is doubled, not freshness or preflight.
+    monkeypatch.setattr("agentic_project_kit.cli_commands.transfer.pr_merge_safe", remote_merge)
+    outbox = tmp_path / ".agentic/transfer/outbox/last_result.txt"
+    latest = tmp_path / ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json"
+    for path in (outbox, latest):
+        path.unlink(missing_ok=True)
+    result = CliRunner().invoke(app, ["transfer", "pr-merge-safe", "42", "--expected-head-sha", "a" * 40, "--json"])
+    assert result.exit_code == 0, result.output
+    assert json.loads(result.stdout)["result_status"] == "PASS"
+    assert calls[0][0] == 42
+    assert calls[0][1]["expected_head_sha"] == "a" * 40
+    assert not outbox.exists() and not latest.exists()  # Volatile preflight cleanup.
+
+    (tmp_path / "product.py").write_text("print('dirty')\n")
+    result = CliRunner().invoke(app, ["transfer", "pr-merge-safe", "42", "--json"])
+    assert result.exit_code == 2
+    assert "external_dirty_worktree" in json.loads(result.stdout)["reasons"]
+    assert len(calls) == 1

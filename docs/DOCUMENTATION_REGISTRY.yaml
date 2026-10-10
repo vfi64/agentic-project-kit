@@ -1604,3 +1604,6 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-063-workspace-refresh-ci-2026-10-10.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-017-released-external-merge-retest-2026-10-10.md
+    class: evidence/log
+    owner: maintainers

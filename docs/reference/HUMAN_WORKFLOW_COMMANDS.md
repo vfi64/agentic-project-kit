@@ -389,3 +389,18 @@ diffs run the full audit suite. Adopt the template through `workspace ci-update`
 or signed `kit update`. Customized CI keeps its existing topology: its owner
 must explicitly wire in the installed policy module and retain the required
 check in the light lane. See `docs/governance/CI_RUNTIME_POLICY_CONTRACT.md`.
+
+
+## External safe merge context (KIT-GF-017)
+
+The regular `agentic-kit transfer pr-merge-safe` route refreshes missing or stale
+LLM-context carriers before its preflight. In a manifest workspace it uses the
+workspace's own handoff-report location and restores known volatile files before
+checking for substantive dirt. External operating layers do not acquire the
+Kit repository's self-hosting rules. Expected-head matching, green PR checks,
+mergeability and post-merge main CI remain required. The recovery-only context
+bypass is unnecessary for normal operation.
+
+The released 1.0.21 behavior passed the GF-017 installed-wheel fixture. Keep the
+context refresh and external clean-worktree preflight together when changing this
+flow; see `tools/retest_gf017_external.py` and the GF-017 report.
