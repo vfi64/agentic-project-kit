@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5563dee6676edaf58b9cd19cfff13c7e43c0331e
-  short: 5563dee6
-  subject: Fix external safe-merge context regression coverage (#2469)
+  full: 1b69c558741aa0c918ef1930d1ebcd554f0ae8ae
+  short: 1b69c558
+  subject: Release 1.0.23 (#2471)
 last_substantive_work_state:
-  full: 5563dee6676edaf58b9cd19cfff13c7e43c0331e
-  short: 5563dee6
-  subject: Fix external safe-merge context regression coverage (#2469)
+  full: 1b69c558741aa0c918ef1930d1ebcd554f0ae8ae
+  short: 1b69c558
+  subject: Release 1.0.23 (#2471)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

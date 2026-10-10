@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `5563dee6676edaf58b9cd19cfff13c7e43c0331e` (`5563dee6`), after `Fix external safe-merge context regression coverage (#2469)`.
-Last substantive work state is `5563dee6676edaf58b9cd19cfff13c7e43c0331e` (`5563dee6`), after `Fix external safe-merge context regression coverage (#2469)`.
+Current verified main/admin HEAD is `1b69c558741aa0c918ef1930d1ebcd554f0ae8ae` (`1b69c558`), after `Release 1.0.23 (#2471)`.
+Last substantive work state is `1b69c558741aa0c918ef1930d1ebcd554f0ae8ae` (`1b69c558`), after `Release 1.0.23 (#2471)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
