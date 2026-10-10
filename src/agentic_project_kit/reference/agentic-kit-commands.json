@@ -7515,6 +7515,152 @@
     },
     {
       "dry_run_available": false,
+      "group": "kit",
+      "help": "Verify the workspace-owned Kit interpreter and installation without global PATH guesses.",
+      "name": "status",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Workspace root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit one JSON document.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "kit",
+        "status"
+      ],
+      "qualified_name": "agentic-kit kit status",
+      "remote_effects": [
+        "none"
+      ],
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "surface": "diagnostic",
+      "task_tags": [
+        "kit",
+        "read-only"
+      ],
+      "when_to_use": "Verify the workspace-owned Kit interpreter and installation without global PATH guesses."
+    },
+    {
+      "dry_run_available": true,
+      "group": "kit",
+      "help": "Plan a released Kit update; signed execution installs locally, updates CI pins and checks the workspace.",
+      "name": "update",
+      "params": [
+        {
+          "default": null,
+          "help": "Exact released stable Kit version (X.Y.Z).",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "External workspace on a work branch.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Execute the exactly signed update plan.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Approval signature from the current dry run.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Emit one JSON document.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "kit",
+        "update"
+      ],
+      "qualified_name": "agentic-kit kit update",
+      "remote_effects": [
+        "network_read"
+      ],
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "surface": "orchestrator",
+      "task_tags": [
+        "bounded",
+        "kit"
+      ],
+      "when_to_use": "Plan a released Kit update; signed execution installs locally, updates CI pins and checks the workspace."
+    },
+    {
+      "dry_run_available": false,
       "group": "onboarding",
       "help": "Measure onboarding guidance against the command manifest and workspace detection.",
       "name": "measure",
@@ -19379,7 +19525,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "dc9b0fdad017",
+    "manifest_sha": "a3c2547eb39e",
     "schema_version": 1
   },
   "schema_version": 2,

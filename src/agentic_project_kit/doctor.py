@@ -85,6 +85,7 @@ def build_doctor_report(project_root: Path) -> DoctorReport:
     ]
     if external_manifest_workspace:
         checks.append(_external_command_manifest_resource_check(root))
+        checks.append(_workspace_installation_check(root))
     checks.extend(
         [
             _project_contract_check(root, contract_data, external_manifest_workspace=external_manifest_workspace),
@@ -97,6 +98,20 @@ def build_doctor_report(project_root: Path) -> DoctorReport:
         ]
     )
     return DoctorReport(project_root=root, checks=checks)
+
+
+def _workspace_installation_check(root: Path) -> DoctorCheck:
+    from agentic_project_kit.kit_installation import installation_status
+
+    try:
+        status = installation_status(root)
+    except (OSError, ValueError, RuntimeError) as exc:
+        return DoctorCheck("workspace Kit installation", DoctorStatus.WARN, f"discovery blocked: {exc}; inspect kit status")
+    if status["status"] == "FOUND":
+        installation = status["installation"]
+        return DoctorCheck("workspace Kit installation", DoctorStatus.PASS, f"{installation['version']} in {installation['candidate']['python']}")
+    reasons = ", ".join(item["reason"] for item in status["observations"])
+    return DoctorCheck("workspace Kit installation", DoctorStatus.WARN, f"workspace-owned installation unverified ({reasons}); inspect agentic-kit kit status --json")
 
 
 def render_doctor_report(report: DoctorReport) -> str:

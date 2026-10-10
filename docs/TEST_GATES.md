@@ -1,5 +1,17 @@
 # Test Gates
 
+## Workspace Kit adoption gate
+
+`tests/test_kit_installation.py` verifies workspace-owned discovery without global
+PATH, isolated metadata probes, interpreter provenance and distinct missing versus
+unverified diagnostics. `tests/test_kit_update.py` verifies signatures, artifact
+hashes, byte-preserving customized CI pins, target entrypoint projection, partial
+failure evidence and refusal of concurrent edits. Zero-exit non-PASS results
+must still block. A separate installed-wheel workspace must upgrade an actual
+older released Kit, keep installed version equal to both pins, and pass check
+and doctor with the target runtime. Its generated references must exist while
+Kit tests and the Kit documentation registry remain absent (KIT-GF-051/021).
+
 KIT-GF-023 JSON stdout is covered by `tests/test_transfer_json_contract.py`:
 external-workspace capability blockers and early failures must parse unchanged
 with `json.loads(stdout)`. The caller inventory guards JSON-mode propagation;

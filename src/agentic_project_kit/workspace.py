@@ -10,6 +10,8 @@ import warnings
 
 import yaml
 
+from agentic_project_kit.kit_update_config import KitUpdateConfig, parse_kit_update_config
+
 
 SUPPORTED_MANIFEST_SCHEMA_VERSION = 2
 WORKSPACE_MANIFEST_FIX_HINT = "run `agentic-kit workspace upgrade`, or fix the manifest"
@@ -48,6 +50,7 @@ ALLOWED_TOP_LEVEL_KEYS = frozenset(
         "release",
         "paths",
         "gates",
+        "kit",
     }
 )
 
@@ -185,6 +188,7 @@ class Workspace:
     gates_extra: tuple[str, ...] = ()
     gates_skip: tuple[str, ...] = ()
     manifest_schema_version: int = 0
+    kit: KitUpdateConfig = field(default_factory=KitUpdateConfig)
 
     def _path(self, relative: str | Path) -> Path:
         return self.root / Path(relative)
@@ -442,6 +446,10 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
     )
     config = _apply_path_overrides(config, manifest.get("paths"), location)
     gates_extra, gates_skip = _parse_gates(manifest.get("gates"), location)
+    try:
+        kit = parse_kit_update_config(manifest.get("kit"))
+    except ValueError as exc:
+        raise RuntimeError(_manifest_error(f"{location}:kit", str(exc))) from exc
     return Workspace(
         root=root,
         config=config,
@@ -456,6 +464,7 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
         gates_extra=gates_extra,
         gates_skip=gates_skip,
         manifest_schema_version=schema_version,
+        kit=kit,
     )
 
 

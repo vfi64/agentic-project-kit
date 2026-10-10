@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Add signed workspace Kit updates with verified release wheels, preserved CI customization, target-version entrypoints and check/doctor validation (KIT-GF-051).
+- Fix workspace-owned Kit discovery without global PATH assumptions and expose shared installation diagnostics (KIT-GF-021).
 - Add signed reruns for never-started failed PR checks with current-head guards and durable receipts (KIT-GF-062).
 - Fix PR orchestration with bounded summary output, full file evidence and structured CI findings distinct from execution errors (KIT-GF-027).
 - Fix bounded GitHub readiness read retries, precise lookup diagnostics and signed original DOI PR resumption, with regeneration only for confirmed conflicts and no duplicate publication.

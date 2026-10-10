@@ -23,6 +23,7 @@ from agentic_project_kit.cli_commands.gui import gui_app
 from agentic_project_kit.cli_commands.handoff import handoff_app
 from agentic_project_kit.cli_commands.human_workflows import release_flow_app, work_app
 from agentic_project_kit.cli_commands.init import register_init_command
+from agentic_project_kit.cli_commands.kit import kit_app
 from agentic_project_kit.cli_commands.instruction import instruction_app
 from agentic_project_kit.cli_commands.onboarding import onboarding_app
 from agentic_project_kit.cli_commands.pass_already_done import app as pass_already_done_app
@@ -106,6 +107,7 @@ register_transfer_post_merge_settle_command(transfer_app)
 register_transfer_pr_closeout_complete_command(transfer_app)
 register_removed_ns_commands(transfer_app)
 app.add_typer(work_app, name="work")
+app.add_typer(kit_app, name="kit")
 app.add_typer(release_flow_app, name="release")
 app.add_typer(workflow_app, name="workflow")
 app.add_typer(workflow_guard_app, name="workflow-guard")
