@@ -183,7 +183,11 @@ def test_init_ci_template_yaml_matches_cli_inventory(tmp_path: Path) -> None:
     template = tmp_path / ".agentic/ci/agentic-gate.yaml"
     data = yaml.safe_load(template.read_text(encoding="utf-8"))
     gate_command = "agentic-kit standard-gates-audit-suite"
-    assert data == {
+    steps = data["jobs"]["agentic-gate"]["steps"]
+    # Check the stable setup separately; runtime-policy steps have executable
+    # positive/negative integration coverage in test_workspace_ci_policy.py.
+    setup = {**data, "jobs": {"agentic-gate": {**data["jobs"]["agentic-gate"], "steps": steps[:5]}}}
+    assert setup == {
         "name": "Agentic Gate",
         "on": {
             "pull_request": None,
@@ -210,7 +214,6 @@ def test_init_ci_template_yaml_matches_cli_inventory(tmp_path: Path) -> None:
                     },
                     {"run": "python -m pip install --upgrade pip"},
                     {"run": f"python -m pip install agentic-project-kit=={PACKAGE_VERSION}"},
-                    {"run": gate_command},
                 ],
             }
         },
@@ -467,9 +470,10 @@ def test_workspace_ci_update_blocks_modified_managed_injected_workflow(tmp_path:
     target = tmp_path / ".github/workflows/agentic-gate.yaml"
     original = target.read_text(encoding="utf-8")
     customized = original.replace(
-        "      - run: agentic-kit standard-gates-audit-suite\n",
-        "      - run: pytest\n      - run: agentic-kit standard-gates-audit-suite\n",
+        "        run: agentic-kit standard-gates-audit-suite\n",
+        "        run: pytest\n",
     )
+    assert customized != original
     target.write_text(customized, encoding="utf-8")
 
     result = CliRunner().invoke(

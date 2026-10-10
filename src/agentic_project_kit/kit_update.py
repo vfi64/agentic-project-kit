@@ -25,6 +25,11 @@ from agentic_project_kit.workspace_init import CI_TEMPLATE_PATH, CI_INJECTION_TA
 from agentic_project_kit.workspace_lock import acquire_workspace_lock
 
 
+_CI_PREVIEW = """import json, sys
+from agentic_project_kit.workspace_ci_update import is_kit_written_ci_template, managed_ci_template_text
+print(json.dumps({"kit_written": is_kit_written_ci_template(json.loads(sys.argv[1])), "template": managed_ci_template_text()}))"""
+
+
 _INVENTORY = """import importlib.metadata as m, json, sys
 print(json.dumps({"python": sys.version, "packages": sorted((d.metadata["Name"], d.version) for d in m.distributions())}))"""
 
@@ -135,6 +140,17 @@ def build_update_plan(
     if not tmp.resolve().is_relative_to(root):
         raise UpdateBlocked("workspace_tmp_must_be_local")
     target = prepare(tmp, Path(python), ws.kit.index_url, version, run)
+    ci_preview = json_command(
+        run, [str(target.python), "-I", "-c", _CI_PREVIEW,
+              json.dumps((root / CI_TEMPLATE_PATH).read_text(encoding="utf-8"))],
+    )
+    if type(ci_preview.get("kit_written")) is not bool or not isinstance(ci_preview.get("template"), str):
+        raise UpdateBlocked("invalid_target_ci_preview")
+    if ci_preview["kit_written"]:
+        desired = plan_ci_pins(
+            (root / CI_TEMPLATE_PATH).read_bytes(), (root / CI_INJECTION_TARGET).read_bytes(), version,
+            target_template=ci_preview["template"],
+        )
     preview = [str(target.python), "-I", "-m", "agentic_project_kit.cli"]
     sync = _require_pass(
         json_command(

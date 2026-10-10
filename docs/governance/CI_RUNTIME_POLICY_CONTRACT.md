@@ -147,3 +147,43 @@ read-path discovery are not yet proven.
 Replacing refresh PRs requires a later architecture slice with deterministic
 successor read-path discovery validation for those three properties and
 terminal-report retention as a separate evidence policy decision.
+
+
+## Consumer Workspace Refresh CI (KIT-GF-063)
+
+Consumer workspaces have a separate `workspace-refresh` classifier in the installed
+CI policy module. The Kit's existing self-hosted classifier and required `test`
+job remain unchanged. Consumer managed CI keeps its required `agentic-gate` job.
+Only a pull-request event on a complete `docs/post-prN-handoff-refresh` or
+`codex/post-prN-successor-package-refresh` refresh branch (either prefix with
+either suffix) may select `ADMIN_REFRESH_LIGHT`.
+
+The workspace manifest resolves the hidden operating-layer state tree (normally
+`.agentic/state/**`), status and exact handoff projection/package paths. Outside
+the reserved state tree only these exact generated paths are allowed; their
+adjacent project files are excluded. Configuration, CI workflows, rule sources,
+symlinks and paths outside the workspace cannot qualify. A manifest change
+always selects `FULL_CI`, so a PR cannot expand its own allowlist. Missing or
+invalid manifests, unknown branches/events, empty or ambiguous diffs and unsafe
+path overrides select `FULL_CI`.
+
+The generated workflow fetches the exact PR base/head SHAs and consumes a
+NUL-delimited diff with renames represented as delete/add paths. Fetch/diff
+failure clears the input and selects the full suite. Branch data enters the
+shell through environment variables. The light lane runs
+`agentic-kit check --root . --json`; the full lane runs the existing
+`agentic-kit standard-gates-audit-suite`. Neither lane skips the required job.
+This optimization omits product tests only when the complete diff contains
+exclusively the declared Kit-owned administrative state.
+
+`workspace ci-update` adopts the new managed template under GF-042's registered
+template hash and exact source/workflow matching rules. Signed `kit update`
+previews the selected target runtime's template, refreshes a matching Kit-written
+pair and binds the resulting bytes in its approval signature. A customized pair
+keeps its layout and changes only its exact Kit pin. Custom multi-job CI, such
+as Cockpit's, requires explicit owner integration of this classifier and a light
+lane that still runs check; Kit never replaces that topology automatically.
+
+Regression enforcement lives in `tests/test_workspace_ci_policy.py`,
+`tests/test_workspace_init.py` and `tests/test_kit_update.py`, including executed
+rendered shell scripts, failed endpoint reads and target-runtime adoption.

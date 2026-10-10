@@ -408,40 +408,9 @@ remain discoverable but should not drive active project state.
 
 
 def _ci_template() -> str:
-    return f"""name: Agentic Gate
+    from agentic_project_kit.workspace_ci_template import render_workspace_ci
 
-"on":
-  pull_request:
-  push:
-    branches:
-      - main
-
-permissions:
-  contents: read
-
-concurrency:
-  group: agentic-gate-${{{{ github.event.pull_request.number || github.ref }}}}
-  cancel-in-progress: true
-
-jobs:
-  agentic-gate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: "pip"
-      - uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{{{ runner.os }}}}-ms-playwright-${{{{ hashFiles('**/pyproject.toml', '**/package-lock.json') }}}}
-          restore-keys: |
-            ${{{{ runner.os }}}}-ms-playwright-
-      - run: python -m pip install --upgrade pip
-      - run: python -m pip install agentic-project-kit=={PACKAGE_VERSION}
-      - run: agentic-kit standard-gates-audit-suite
-"""
+    return render_workspace_ci(PACKAGE_VERSION)
 
 
 def _pre_commit_template() -> str:

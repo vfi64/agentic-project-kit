@@ -1574,6 +1574,10 @@ rules:
     - exactly-one receipt
     - append-only enforcement
     - successor read-path discovery
+    - Consumer Workspace Refresh CI
+    - workspace-refresh
+    - KIT-GF-063
+    - NUL-delimited diff
   - path: docs/TEST_GATES.md
     terms:
     - CI Runtime Policy Gate

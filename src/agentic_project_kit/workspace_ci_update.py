@@ -23,6 +23,7 @@ WorkspaceCiUpdateStatus = Literal["PASS", "BLOCKED"]
 # _ci_template() changes, add the new hash here; a test enforces it.
 KIT_WRITTEN_CI_TEMPLATE_SHA256 = frozenset(
     {
+        "8d76b740b79f8699ee74fb63ede170c12cb551c58bba19ffe52c23b307b5cbef",  # KIT-GF-063 workspace refresh classifier
         "0e9b4e1099765d73383c47765b5c1187c2aa693dc78f6e00b5a42a3d42c30450",  # b877ef35 (#1742)
         "80bc57915aad145766e054e0a2b639cb1d4ebeda52e3366c44df62f05f92f10f",  # 0afa9726 (#1841)
         "055d91884eabda12ac724d01de1cdad8ff1ff5ea43204ff346e251f76ea076a0",  # 665cbc76 (#1994)

@@ -556,6 +556,13 @@ def main(argv: list[str] | None = None) -> int:
     admin.add_argument("--validation-status", default="")
     admin.add_argument("--output", default="")
 
+    workspace_refresh = subparsers.add_parser("workspace-refresh")
+    workspace_refresh.add_argument("--root", default=".")
+    workspace_refresh.add_argument("--changed-paths-file", required=True)
+    workspace_refresh.add_argument("--branch", default="")
+    workspace_refresh.add_argument("--event-name", default="")
+    workspace_refresh.add_argument("--output", default="")
+
     pages = subparsers.add_parser("pages")
     pages.add_argument("--changed-paths-file", required=True)
     pages.add_argument("--event-name", required=True)
@@ -588,6 +595,13 @@ def main(argv: list[str] | None = None) -> int:
             source_pr=args.source_pr,
             validation_status=args.validation_status,
         ).as_dict()
+    elif args.command == "workspace-refresh":
+        from agentic_project_kit.workspace_ci_policy import evaluate_workspace_refresh
+
+        payload = evaluate_workspace_refresh(
+            Path(args.root), Path(args.changed_paths_file),
+            branch=args.branch, event_name=args.event_name,
+        )
     elif args.command == "pages":
         payload = classify_pages_build(
             read_changed_paths(Path(args.changed_paths_file)),
