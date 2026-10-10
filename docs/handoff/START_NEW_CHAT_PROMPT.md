@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 7141e93ab9f910906c2208cd64f7d0769a3454804caa38ea63eb610322635424
 - docs/reference/agentic-kit-commands.json: 9be5a1e901bcfb3c3f805af4f58e93d860ea4a283b599a41128215ba8f2e26b9
-## Operational documentation refresh state after PR #2463
+## Operational documentation refresh state after PR #2465
 
-Current administrative handoff refresh state is `c44ec0b0` (`Fix signed CI recovery and compact PR findings (#2463)`). Continue next only after this post-PR2463 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `487d60c8` (`Add signed workspace Kit updates (#2465)`). Continue next only after this post-PR2465 refresh is committed and merged; the next substantive slice must be created from fresh main.

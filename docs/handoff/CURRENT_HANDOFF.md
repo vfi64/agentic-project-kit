@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `c44ec0b08484bc3d7de43d39663a20dbd947bdc9` (`c44ec0b0`), after `Fix signed CI recovery and compact PR findings (#2463)`.
-Last substantive work state is `c44ec0b08484bc3d7de43d39663a20dbd947bdc9` (`c44ec0b0`), after `Fix signed CI recovery and compact PR findings (#2463)`.
+Current verified main/admin HEAD is `487d60c8073fb6094e967a1006251a017fe9c3d0` (`487d60c8`), after `Add signed workspace Kit updates (#2465)`.
+Last substantive work state is `487d60c8073fb6094e967a1006251a017fe9c3d0` (`487d60c8`), after `Add signed workspace Kit updates (#2465)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
