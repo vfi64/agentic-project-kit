@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e016a0c7d20d3b0e4ddd68e4cbcd0080f3108220
-  short: e016a0c7
-  subject: Fix consumer workspace refresh CI (#2467)
+  full: 5563dee6676edaf58b9cd19cfff13c7e43c0331e
+  short: 5563dee6
+  subject: Fix external safe-merge context regression coverage (#2469)
 last_substantive_work_state:
-  full: e016a0c7d20d3b0e4ddd68e4cbcd0080f3108220
-  short: e016a0c7
-  subject: Fix consumer workspace refresh CI (#2467)
+  full: 5563dee6676edaf58b9cd19cfff13c7e43c0331e
+  short: 5563dee6
+  subject: Fix external safe-merge context regression coverage (#2469)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
