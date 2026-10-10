@@ -11,7 +11,9 @@ from agentic_project_kit.workspace_init import MANAGED_CI_HEADER
 _EXACT_PIN = re.compile(rb"agentic-project-kit==([0-9]+\.[0-9]+\.[0-9]+)(?![\w.+!*-])")
 
 
-def plan_ci_pins(source: bytes, workflow: bytes, version: str) -> dict[str, bytes]:
+def plan_ci_pins(
+    source: bytes, workflow: bytes, version: str, *, target_template: str | None = None,
+) -> dict[str, bytes]:
     from agentic_project_kit.workspace_init import CI_TEMPLATE_PATH, CI_INJECTION_TARGET
 
     if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", version):
@@ -39,4 +41,12 @@ def plan_ci_pins(source: bytes, workflow: bytes, version: str) -> dict[str, byte
             "unsupported_ci_pin: require a literal pip requirement without shell operators"
         )
     desired = _EXACT_PIN.sub(b"agentic-project-kit==" + version.encode("ascii"), source)
+    if target_template is not None:
+        # The target runtime recognized the old template's normalized hash. Its
+        # replacement is part of the signed desired-file hashes, never inferred
+        # from the controller's (possibly older) version.
+        candidate = target_template.encode("utf-8")
+        if _EXACT_PIN.findall(candidate) != [version.encode("ascii")]:
+            raise ValueError("invalid_target_template_pin")
+        desired = candidate
     return {CI_TEMPLATE_PATH: desired, CI_INJECTION_TARGET: header + desired}

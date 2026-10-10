@@ -59,9 +59,11 @@ inventory, exact target wheel hashes, index, file hashes, target manifest ACK
 and ordered actions. Main/master, downgrades, unavailable/yanked versions,
 source-only packages, ambiguous pins, independently modified workflows and stale
 signatures block. A matching managed source/workflow pair may contain custom
-CI; only its single exact pip-install pin is changed in each file, preserving
-all other bytes. The full `workspace ci-update` template replacement policy
-remains strict.
+CI; its single exact pip-install pin is changed in each file, preserving all
+other custom bytes. An unchanged Kit-written pair instead adopts the selected
+target version's full managed template, with the resulting file hashes included
+in the approval signature. The `workspace ci-update` replacement policy remains
+strict (KIT-GF-042).
 
 Optional `.agentic/config.yaml` configuration:
 
@@ -375,3 +377,15 @@ Execution/API/identity errors retain a nonzero exit code. Consumers must inspect
 `result_status`, not just the process exit code. `NOT_RUN` names the signed rerun
 route as its `next_action`; ordinary red CI names repair, pending CI names wait.
 The workflow and release guards continue to require an explicit PASS.
+
+
+## Consumer refresh CI (KIT-GF-063)
+
+Managed workspace CI now classifies refresh PRs using manifest-derived state
+and handoff paths. Only matching refresh branches with a complete, nonempty
+administrative diff use `ADMIN_REFRESH_LIGHT`; the light lane still runs
+`agentic-kit check`. Product, configuration or workflow changes and uncertain
+diffs run the full audit suite. Adopt the template through `workspace ci-update`
+or signed `kit update`. Customized CI keeps its existing topology: its owner
+must explicitly wire in the installed policy module and retain the required
+check in the light lane. See `docs/governance/CI_RUNTIME_POLICY_CONTRACT.md`.

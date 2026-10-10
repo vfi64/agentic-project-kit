@@ -1601,3 +1601,6 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-021-workspace-kit-discovery-2026-10-10.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-063-workspace-refresh-ci-2026-10-10.md
+    class: evidence/log
+    owner: maintainers

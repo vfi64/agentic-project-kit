@@ -1004,3 +1004,14 @@ Confirmed original DOI content conflicts (CONFLICTING plus DIRTY) may select
 signed regeneration; unknown mergeability, lookup outages and source-head drift
 must never select that replacement. Conflict-regeneration tests share
 `tests/test_release_run_api_resume.py` with original-resume regressions.
+
+
+### Consumer Refresh CI Gate (KIT-GF-063)
+
+Run `tests/test_workspace_ci_policy.py`, `tests/test_workspace_init.py` and
+`tests/test_kit_update.py` when the consumer classifier or template changes.
+Exercise a matching refresh diff in an installed-wheel external workspace,
+then add a product path, change the branch and make the diff unavailable: each
+must take the full lane. Execute the rendered classifier shell with failed
+fetch/diff reads and assert the light lane retains `agentic-kit check`.
+Verify target-version managed CI adoption and customized-pair preservation.

@@ -107,6 +107,12 @@ class Fixture:
             text = str(self.root)
         elif argv[:3] == ["git", "rev-parse", "HEAD"]:
             text = self.head
+        elif "-c" in argv and "managed_ci_template_text" in argv[3]:
+            from agentic_project_kit.workspace_ci_update import is_kit_written_ci_template
+            from agentic_project_kit.workspace_ci_template import render_workspace_ci
+
+            data = {"kit_written": is_kit_written_ci_template(json.loads(argv[4])),
+                    "template": render_workspace_ci("1.0.19")}
         elif "packages" in argv[-1] and "-c" in argv:
             data = {"python": "Python 3.13", "packages": [["agentic-project-kit", self.version]]}
         elif "sync-entrypoints" in argv:
@@ -548,3 +554,24 @@ def test_subprocess_log_preserves_intent_and_result(tmp_path):
     assert records[1]["rc"] == 0
     assert records[1]["stdout"] == "evidence\n"
     assert records[1]["duration"] >= 0
+
+
+def test_target_runtime_upgrades_registered_managed_template(workspace):
+    from agentic_project_kit.workspace_ci_template import render_workspace_ci
+
+    source = (Path(__file__).parent / "fixtures/workspace_ci_1_0_22.yaml").read_bytes()
+    (workspace.root / CI_TEMPLATE_PATH).write_bytes(source)
+    (workspace.root / CI_INJECTION_TARGET).write_bytes(MANAGED_CI_HEADER.encode() + b"\n" + source)
+    plan = workspace.update()
+    assert plan["result_status"] == "AWAITING_APPROVAL"
+    assert (workspace.root / CI_TEMPLATE_PATH).read_bytes() == source
+    result = workspace.update(execute=True, expected_signature=plan["approval_signature"])
+    assert result["result_status"] == "PASS"
+    assert (workspace.root / CI_TEMPLATE_PATH).read_text() == render_workspace_ci("1.0.19")
+    assert "workspace-refresh" in (workspace.root / CI_INJECTION_TARGET).read_text()
+
+
+def test_ci_template_replacement_is_bound_to_target_version():
+    with pytest.raises(ValueError, match="invalid_target_template_pin"):
+        plan_ci_pins(SOURCE, MANAGED_CI_HEADER.encode() + b"\n" + SOURCE, "1.0.19",
+                     target_template=SOURCE.decode())
