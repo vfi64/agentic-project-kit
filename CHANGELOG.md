@@ -1,5 +1,8 @@
 ## Unreleased
 
+## v1.0.23 - 2026-10-10
+
+- Zenodo DOI verification pending for v1.0.23.
 - Verify automatic context-carrier recovery for external safe merges with released Kit 1.0.21 and add regressions preserving CI, head and worktree guards (KIT-GF-017).
 - Fix consumer refresh PR CI with manifest-derived state paths, conservative full-suite fallback and protected target-version managed CI adoption (KIT-GF-063).
 - Add signed workspace Kit updates with verified release wheels, preserved CI customization, target-version entrypoints and check/doctor validation (KIT-GF-051).
@@ -7,6 +10,13 @@
 - Add signed reruns for never-started failed PR checks with current-head guards and durable receipts (KIT-GF-062).
 - Fix PR orchestration with bounded summary output, full file evidence and structured CI findings distinct from execution errors (KIT-GF-027).
 - Fix bounded GitHub readiness read retries, precise lookup diagnostics and signed original DOI PR resumption, with regeneration only for confirmed conflicts and no duplicate publication.
+- Fix release API failure recovery and original DOI PR resume
+- Fix confirmed DOI PR conflict recovery
+- Fix DOI closeout for release 1.0.22
+- Fix signed CI recovery and compact PR findings
+- Add signed workspace Kit updates
+- Fix consumer workspace refresh CI
+- Fix external safe-merge context regression coverage
 
 ## v1.0.22 - 2026-10-09
 

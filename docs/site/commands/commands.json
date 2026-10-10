@@ -4266,7 +4266,7 @@
           "required": false
         },
         {
-          "default": "1.0.22",
+          "default": "1.0.23",
           "help": "",
           "name": "version",
           "opts": [
@@ -6040,7 +6040,7 @@
       "lifecycle_rank": 73,
       "params": [
         {
-          "default": "1.0.22",
+          "default": "1.0.23",
           "help": "",
           "name": "version",
           "opts": [
@@ -6956,7 +6956,7 @@
           "required": false
         },
         {
-          "default": "1.0.22",
+          "default": "1.0.23",
           "help": "",
           "name": "version",
           "opts": [
