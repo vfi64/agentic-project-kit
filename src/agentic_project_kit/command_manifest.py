@@ -302,6 +302,7 @@ def infer_surface(command: dict[str, Any]) -> str:
     leaf = _leaf(command)
 
     orchestrator_commands = {
+        "agentic-kit kit update",
         "agentic-kit artifact-gc",
         "agentic-kit chat session-start",
         "agentic-kit docs lifecycle sweep",
@@ -407,6 +408,7 @@ def _dry_run_available(command: dict[str, Any]) -> bool:
 def infer_remote_effects(command: dict[str, Any]) -> list[str]:
     qualified = str(command.get("qualified_name") or "")
     implementation_effects = {
+        "agentic-kit kit update": ["network_read"],
         "agentic-kit pr merge-if-green": ["delete_remote", "merge", "network_read"],
         "agentic-kit remote-branch-hygiene-apply": ["delete_remote", "network_read", "push"],
         "agentic-kit transfer pull-current": ["fetch"],

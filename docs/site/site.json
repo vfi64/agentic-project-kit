@@ -222,7 +222,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "commands=260",
+            "detail": "commands=262",
             "evidence_type": "generated-artifact",
             "status": "verified"
           }
@@ -274,8 +274,8 @@
     }
   },
   "command_catalog": {
-    "command_count": 260,
-    "diagnostic_count": 123,
+    "command_count": 262,
+    "diagnostic_count": 124,
     "entries": [
       {
         "diagnostic_priority": "reference_lookup",
@@ -4887,6 +4887,95 @@
         "safety": "READ_ONLY",
         "surface": "diagnostic",
         "when_to_use": "Lint instruction text against the current command manifest."
+      },
+      {
+        "diagnostic_priority": "advanced_diagnostic",
+        "dry_run_available": false,
+        "group": "kit",
+        "help": "Verify the workspace-owned Kit interpreter and installation without global PATH guesses.",
+        "lifecycle_rank": null,
+        "params": [
+          {
+            "default": "PosixPath('.')",
+            "help": "Workspace root.",
+            "name": "root",
+            "opts": [
+              "--root"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Emit one JSON document.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          }
+        ],
+        "qualified_name": "agentic-kit kit status",
+        "safety": "READ_ONLY",
+        "surface": "diagnostic",
+        "when_to_use": "Verify the workspace-owned Kit interpreter and installation without global PATH guesses."
+      },
+      {
+        "diagnostic_priority": "not_diagnostic",
+        "dry_run_available": true,
+        "group": "kit",
+        "help": "Plan a released Kit update; signed execution installs locally, updates CI pins and checks the workspace.",
+        "lifecycle_rank": null,
+        "params": [
+          {
+            "default": null,
+            "help": "Exact released stable Kit version (X.Y.Z).",
+            "name": "version",
+            "opts": [
+              "--version"
+            ],
+            "required": true
+          },
+          {
+            "default": "PosixPath('.')",
+            "help": "External workspace on a work branch.",
+            "name": "root",
+            "opts": [
+              "--root"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Execute the exactly signed update plan.",
+            "name": "execute",
+            "opts": [
+              "--execute"
+            ],
+            "required": false
+          },
+          {
+            "default": "",
+            "help": "Approval signature from the current dry run.",
+            "name": "expected_signature",
+            "opts": [
+              "--expected-signature"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Emit one JSON document.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          }
+        ],
+        "qualified_name": "agentic-kit kit update",
+        "safety": "BOUNDED",
+        "surface": "orchestrator",
+        "when_to_use": "Plan a released Kit update; signed execution installs locally, updates CI pins and checks the workspace."
       },
       {
         "diagnostic_priority": "advanced_diagnostic",
@@ -12081,6 +12170,7 @@
       "gui": 1,
       "handoff": 5,
       "instruction": 1,
+      "kit": 2,
       "onboarding": 1,
       "pass-already-done": 2,
       "patterns": 2,
@@ -12100,45 +12190,45 @@
       "workflow-guard": 2,
       "workspace": 6
     },
-    "guided_count": 33,
+    "guided_count": 34,
     "kind": "site_command_catalog",
     "safety_counts": {
-      "BOUNDED": 171,
+      "BOUNDED": 172,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 80
+      "READ_ONLY": 81
     },
     "schema_version": 1,
     "surface_counts": {
-      "diagnostic": 123,
-      "orchestrator": 33,
+      "diagnostic": 124,
+      "orchestrator": 34,
       "primitive": 104
     }
   },
   "kind": "agentic_project_kit_generated_site",
   "metadata": {
     "build_commit": "docs-pages-fallback",
-    "command_count": 260,
-    "command_group_count": 36,
+    "command_count": 262,
+    "command_group_count": 37,
     "concept_doi": "10.5281/zenodo.20101359",
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "dc9b0fdad017",
+    "manifest_sha": "a3c2547eb39e",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.22",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.22",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "dc9b0fdad017",
+    "reproduced_manifest_sha": "a3c2547eb39e",
     "requires_python": ">=3.10",
     "safety_counts": {
-      "BOUNDED": 171,
+      "BOUNDED": 172,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 80
+      "READ_ONLY": 81
     },
     "surface_counts": {
-      "diagnostic": 123,
-      "orchestrator": 33,
+      "diagnostic": 124,
+      "orchestrator": 34,
       "primitive": 104
     },
     "version_doi": "10.5281/zenodo.23265257"

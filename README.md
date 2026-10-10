@@ -234,6 +234,8 @@ Use the deterministic successor handoff package before switching chats or contin
 agentic-kit transfer chat-switch-complete --render-prompt
 ```
 
+For an existing external manifest workspace, `agentic-kit kit status --json` detects its own Kit environment without relying on global PATH. On a work branch, `agentic-kit kit update --version X.Y.Z --json` plans adoption of an exact released version. Its signed execution updates that environment, preserves customized CI while raising both managed pins, synchronizes the target version's command entrypoints and runs check/doctor. See [workspace Kit maintenance](docs/reference/HUMAN_WORKFLOW_COMMANDS.md#workspace-kit-maintenance-kit-gf-051021) for approval, configuration and recovery details.
+
 For local development in this repository, run it through the project environment:
 
 ```bash

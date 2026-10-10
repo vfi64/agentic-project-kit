@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: dc9b0fdad017
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: a3c2547eb39e
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `260`
+- Command count: `262`
 
 ## Commands
 
@@ -1584,6 +1584,39 @@ Lint instruction text against the current command manifest.
 | `strict_unknown` | `TyperOption` | --strict-unknown | `False` | `False` | Treat unknown raw git/gh commands as blocking. |
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit kit status`
+
+- Safety: `READ_ONLY`
+- Surface: `diagnostic`
+- When to use: Verify the workspace-owned Kit interpreter and installation without global PATH guesses.
+- Dry-run available: `False`
+- Remote effects: `none`
+
+Verify the workspace-owned Kit interpreter and installation without global PATH guesses.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Workspace root. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit one JSON document. |
+
+### `agentic-kit kit update`
+
+- Safety: `BOUNDED`
+- Surface: `orchestrator`
+- When to use: Plan a released Kit update; signed execution installs locally, updates CI pins and checks the workspace.
+- Dry-run available: `True`
+- Remote effects: `network_read`
+
+Plan a released Kit update; signed execution installs locally, updates CI pins and checks the workspace.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `version` | `TyperOption` | --version | `True` |  | Exact released stable Kit version (X.Y.Z). |
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | External workspace on a work branch. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Execute the exactly signed update plan. |
+| `expected_signature` | `TyperOption` | --expected-signature | `False` | `` | Approval signature from the current dry run. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Emit one JSON document. |
 
 ### `agentic-kit onboarding measure`
 

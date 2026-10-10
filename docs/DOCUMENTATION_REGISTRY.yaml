@@ -1595,3 +1595,9 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-027-bounded-pr-ci-findings-2026-10-09.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-051-signed-workspace-kit-update-2026-10-10.md
+    class: evidence/log
+    owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-021-workspace-kit-discovery-2026-10-10.md
+    class: evidence/log
+    owner: maintainers
