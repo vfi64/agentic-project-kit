@@ -12236,15 +12236,15 @@
   "roadmap_projection": {
     "roadmap_counts": {
       "blocked": 1,
-      "done": 18,
+      "done": 19,
       "next": 1,
-      "planned": 5
+      "planned": 4
     },
     "status": "active",
     "strategy_counts": {
       "active": 5
     },
-    "updated_after_pr": "2097",
+    "updated_after_pr": "2473",
     "updated_after_pr_current_main_claimed": false,
     "updated_after_pr_semantics": "strategic_direction_refresh"
   },

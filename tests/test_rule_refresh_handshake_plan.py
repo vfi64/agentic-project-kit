@@ -33,7 +33,9 @@ def test_archived_rule_refresh_plan_registers_phase_zero_transfer_coverage() -> 
 def test_pre_gui_hardening_tasks_records_planning_target_guard() -> None:
     text = PRE_GUI.read_text(encoding="utf-8")
 
-    assert "Authoritative target for pre-GUI hardening planning" in text
+    assert "Status: archived" in text
+    assert "Superseded-by: docs/planning/PROJECT_DIRECTION.yaml" in text
+    assert "Historical target at drafting (superseded by Project Direction)" in text
     assert "WORKFLOW_REDUCTION_FOCUS.md is superseded" in text
     assert "If the resolver cannot determine a non-superseded target" in text
 

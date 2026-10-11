@@ -22,3 +22,20 @@ Do not add new free-form planning Markdown under `docs/planning/` for active
 strategy, roadmap, plan, or idea work. Add structured entries to
 `PROJECT_DIRECTION.yaml` instead, or use a temporary/historical document only
 when a later cleanup path is explicit.
+
+The latest bounded planning review is recorded in
+`PROJECT_DIRECTION.yaml` under `meta.planning_reconciliation`, including its
+exact checkout baseline, evidence limits and remaining priorities. Historical
+Q2 instructions are retained in `MASTER_IMPLEMENTATION_Q.md` as superseded
+reference material.
+
+Completed goals remain in the canonical YAML, either with `status: done` in
+their original section or in `done`. Stable IDs, acceptance and evidence retain
+their context and dependencies. The review recommends against an additional
+manually maintained completion list; historical specifications, evidence files
+and Git history already preserve the detail.
+
+The imported PAA v0.3 proposal is integrated under `proof-assurance-assessment`
+in the canonical YAML. Its complete review input is retained as a historical
+reference; phase decisions and current scope belong to the YAML. The separate
+`dpa-current-evidence-continuity` item records the current DPA evidence blocker.

@@ -1,19 +1,85 @@
 schema_version: 1
 meta:
   master_plan: docs/planning/MASTER_IMPLEMENTATION_Q.md
-  master_sequence: 'Q2 rest: CM3 -> CM4 -> LC/ID/K3 -> P5b/P5d/P5c-PLAN/P6 -> LC3/TH1 -> L'
+  master_sequence: Historical Q2 sequence closed; current work follows canonical Direction items.
   master_plan_anchor_pr: 1807
-  planning_note: Master Implementation Q2 supersedes earlier rest-work ordering after PR1806; P4b and P5a are completed prerequisites, not active Q2 rest-work slices.
+  planning_note: Master Q2 is historical_superseded; the post-v1.0.4 A/B program and narrower
+    open Direction items govern current work. P5c execution and architecture changes remain
+    maintainer-gated.
   owner: maintainers
   status: active
-  updated_after_pr: 2097
+  updated_after_pr: 2473
   updated_after_pr_semantics: strategic_direction_refresh
   updated_after_pr_current_main_claimed: false
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/2097
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/2473
+  planning_reconciliation:
+    date: '2026-10-11'
+    baseline_ref: e4029264ff7f3a598191f5952f62852d5ab36964
+    package_version: 1.0.23
+    verification_scope: Local checkout and source/test contracts plus fresh read-only GitHub
+      API verification of both main refs, all 89 published Kit releases and the external Cockpit
+      ledger; no target mutation or new operational retest.
+    reviewed_sections:
+    - strategy
+    - roadmap
+    - plans
+    - ideas
+    - done
+    - discarded
+    auxiliary_planning_sources:
+    - .agentic/todo.yaml
+    - .agentic/rule_direct_test_plan.yaml
+    - docs/architecture/P5C_PHYSICAL_MIGRATION_PLAN.md
+    - docs/architecture/dpa/probes/DP1_PROBE_BACKLOG.md
+    - docs/archive/
+    completed_goal_storage: Keep stable IDs, status, acceptance and evidence in this authority,
+      including done items retained in roadmap/plans. Do not duplicate them in a manually maintained
+      completion file. Historical specifications and bounded evidence remain linked references;
+      Git preserves earlier states.
+    remaining_priorities:
+    - Reverify Comm-SCI Cycle 008 target state before continuing Brownfield; Cycle 007 with
+      44 seams is the last committed completed-cycle baseline, not a current remote claim.
+    - Keep B2 blocked until explicit Brownfield completion acceptance; keep B3 Stage 1 report-only
+      and Stage 2 maintainer-gated.
+    - Numbered GF families are Kit-side closed by 1.0.23; synchronize/retest the external ledger
+      separately. Keep the unnumbered RULE-REGISTRY-BOOTSTRAP finding under explicit applicability/adoption
+      review.
+    - Clear or explicitly defer lifecycle backlog and review remaining governance registrations
+      before strict lifecycle adoption.
+    - Reconcile partial implementations before starting registry, retention, onboarding or GUI
+      follow-up; do not rebuild existing commands.
+    - Keep P5c execution, AGF/ROS adoption beyond the already shipped DPA scope, destructive
+      cleanup and the 2.0 migration behind their existing maintainer gates.
+    evidence:
+    - docs/STATUS.md
+    - docs/reports/handoff-packages/latest/validation_report.json
+    - docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.json
+    - docs/reports/release/post-release-doi-closeout-1.0.23.json
+    - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+    - CHANGELOG.md
+    - docs/reports/greenfield/KIT-GF-011-successor-final-head-identity-2026-10-04.md
+    - docs/reports/greenfield/KIT-GF-017-released-external-merge-retest-2026-10-10.md
+    known_evidence_debt: Some historical completed items retain generic PR evidence strings.
+      They are not new completion proof; do not invent missing PR identities. Completed implementation
+      can legitimately own an active maintained contract, so closed-item source-header audit
+      findings require contextual review.
+    release_review:
+      release_count: 89
+      oldest: v0.2.0
+      newest: v1.0.23
+      report: docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+      source: https://api.github.com/repos/vfi64/agentic-project-kit/releases?per_page=100
+      source_policy: Review published release notes together with later closeout evidence, current
+        source and tests; a release containing a planning note is not proof that the planned
+        feature shipped.
+      external_ledger_ref: c31eb2dc3dcea2cd9f8b86ae6a9fdc60adad2577
+      external_ledger_sync_version: 1.0.21
+      external_ledger_status_authority: Cockpit owns VERIFIED_FIXED; Kit release closure does
+        not mutate that external status.
 strategy:
 - id: governed-operating-model
   status: active
@@ -1053,9 +1119,24 @@ roadmap:
       path, safety class, failure behavior, evidence output, and regression coverage.
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
+  implementation_status: partially_implemented
+  recent_completed_items:
+  - ci-status-diagnostic
+  - signed-external-kit-update
+  evidence:
+  - 'PR #2383'
+  - 'PR #2385'
+  - 'PR #2409'
+  - 'PR #2411'
+  - 'PR #2465'
+  - 'PR #2467'
+  - 'PR #2469'
+  remaining_work:
+  - Retain explicit external and mixed-refresh acceptance boundaries; implemented wrappers and
+    signed updates do not prove every workflow-kernel acceptance criterion.
 - id: release-and-doi-governance
   phase: pre-GUI
-  status: planned
+  status: done
   title: Keep release metadata, publish, and DOI closeout behind authoritative commands
   depends_on:
   - pre-gui-hardening-line
@@ -1065,6 +1146,16 @@ roadmap:
   - Legacy shell shortcut plans are either completed, superseded, or deleted in cleanup.
   source_files:
   - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
+  completed_in_release: 1.0.23
+  evidence:
+  - CHANGELOG.md
+  - docs/reports/release/post-release-doi-closeout-1.0.23.json
+  - tests/test_release_run.py
+  - tests/test_release_run_recovery.py
+  - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+  ongoing_maintenance_item: release-command-authority
+  reconciliation_note: The finite roadmap delivery is implemented and released; ongoing regression
+    hardening remains active under release-command-authority.
 - id: gui-gatekeeper-workbench
   phase: GUI
   status: planned
@@ -1079,6 +1170,16 @@ roadmap:
   source_files:
   - docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
   - docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md
+  implementation_status: implemented_baseline_with_residual_acceptance_review
+  evidence:
+  - CHANGELOG.md
+  - src/agentic_project_kit/gui_cockpit.py
+  - tests/test_gui_cockpit.py
+  - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+  reconciliation_note: 'The GUI exists: bounded MVP in 0.4.0, gatekeeper integration in 0.4.5,
+    progressive-disclosure cockpit in 0.4.12, project selection in 0.4.13 and release-button
+    foundation in 1.0.16. Keep this item only for residual acceptance review; do not rebuild
+    the historical full-layout specification.'
 - id: documentation-artifact-governance-os
   phase: governance
   status: planned
@@ -1093,6 +1194,17 @@ roadmap:
   source_files:
   - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
   - docs/archive/RULE_REGISTRY_IMPROVEMENT_PLAN.md
+  implementation_status: implemented_baseline_with_residual_acceptance_review
+  evidence:
+  - CHANGELOG.md
+  - src/agentic_project_kit/documentation_registry.py
+  - src/agentic_project_kit/doc_lifecycle.py
+  - src/agentic_project_kit/communication_artifact_gc.py
+  - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+  reconciliation_note: Registry and artifact consumers shipped in 0.4.2, retention in the 0.4.11
+    line, explicit scope and full lifecycle commands in 0.4.13, and governed DPA import/lifecycle
+    stages in 0.5.0. Remaining strict lifecycle and governance backfill work have their own
+    open items.
 plans:
 - id: master-implementation-q
   status: done
@@ -1417,6 +1529,11 @@ plans:
   - release ready blocks due REVIEW_DUE_RELEASE lifecycle findings for the requested version.
 - id: lifecycle-backlog-clearance
   status: active
+  last_review:
+    date: '2026-10-11'
+    package_version: 1.0.23
+    doctor_report_only_findings: 76
+    disposition: Still open; successful release and doctor gates do not prove strict lifecycle clearance.
   title: Clear current documentation lifecycle backlog before suite-level strict mode
   depends_on:
   - doc-lifecycle-strict-adoption
@@ -1536,7 +1653,7 @@ plans:
 - id: strict-scope-suite-adoption
   status: done
   title: Decide whether strict documentation scope belongs in the standard gate suite
-  completed_by_pr: pending-pr-strict-scope-suite-adoption
+  completed_by_pr: 1746
   depends_on:
   - governance-doc-backfill
   acceptance:
@@ -1550,6 +1667,7 @@ plans:
   source_files:
   - docs/DOC_REGISTRY_SCOPE.yaml
   - docs/governance/DOC_REGISTRY_SCOPE_DECISION.md
+  merge_commit: 481008954587859e4125f0708d3bb86298b8dfa7
 - id: planning-ideas-residual-cleanup
   status: planned
   title: Resolve remaining planning and idea residual documents
@@ -2003,6 +2121,21 @@ plans:
   - Legacy release shortcut notes are retired in the cleanup slice.
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
+  implementation_status: implemented_ongoing_hardening
+  recent_completed_items:
+  - resumable-release-run-orchestrator
+  evidence:
+  - 'PR #2405'
+  - 'PR #2438'
+  - 'PR #2457'
+  - 'PR #2461'
+  - 'PR #2473'
+  - src/agentic_project_kit/release_run.py
+  - tests/test_release_run.py
+  - tests/test_release_run_recovery.py
+  remaining_work:
+  - Maintain release/DOI regression coverage; the 1.0.23 release closeout is complete, but this
+    durable governance obligation is not retired by a successful release.
 - id: rule-registry-hardening
   status: active
   title: Preserve active rule identity, source validation, and refresh handshakes
@@ -2084,7 +2217,7 @@ plans:
   - docs/governance/RULE_SOURCE_VALIDATOR_JSON_CONTRACT.md
   - docs/archive/RULE_REFRESH_HANDSHAKE_PLAN.md
 - id: portability-and-ns-closeout
-  status: planned
+  status: done
   title: Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit
     commands
   depends_on:
@@ -2268,6 +2401,22 @@ plans:
     - combine screen or TTY work with unrelated shell cleanup
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
+  completed_by_pr: 1422
+  merge_commit: 94d62a9b
+  completed_in_release: 0.4.9
+  disposition: implemented_with_explicit_historical_import_shim
+  evidence:
+  - CHANGELOG.md
+  - 'PR #1422'
+  - src/agentic_project_kit/entrypoint_slice_runner.py
+  - src/agentic_project_kit/ns_slice_runner.py
+  - tests/test_ns_legacy_reference_audit.py
+  - tests/test_ns_interpreter_and_no_exec_guard.py
+  - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+  reconciliation_note: The preserved slice_plan and classification_matrix are historical migration
+    records, not still-running feature branches. No tracked shell script, ns or ns-menu entrypoint
+    remains. ns_slice_runner is an explicit backward-compatible import shim over entrypoint_slice_runner;
+    historical tests preserve safety coverage.
 - id: gui-workbench-plan
   status: planned
   title: Implement the GUI gatekeeper/workbench as a view over governed action specs
@@ -2281,6 +2430,16 @@ plans:
   source_files:
   - docs/reference/GUI_GATEKEEPER_IMPLEMENTATION_INVENTORY.md
   - docs/archive/TKINTER_WORKBENCH_GUI_PLAN.md
+  implementation_status: implemented_baseline_with_residual_acceptance_review
+  evidence:
+  - CHANGELOG.md
+  - src/agentic_project_kit/gui_cockpit.py
+  - tests/test_gui_cockpit.py
+  - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+  reconciliation_note: 'The GUI exists: bounded MVP in 0.4.0, gatekeeper integration in 0.4.5,
+    progressive-disclosure cockpit in 0.4.12, project selection in 0.4.13 and release-button
+    foundation in 1.0.16. Keep this item only for residual acceptance review; do not rebuild
+    the historical full-layout specification.'
 - id: docs-centralize-and-remove-command
   status: planned
   title: Build governed docs centralize-and-remove command before K3
@@ -2888,15 +3047,21 @@ plans:
       - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
       - docs/reports/POST_V1_0_8_COMMAND_FOR_WARNING_HYGIENE_20260905.md
     - id: B1-KIT-011
-      status: implemented_local_retest_improved_not_closed
-      goal: Reduce mixed handoff/status/report refresh loops so one real external
-        work PR does not require multiple visible administrative PRs.
+      status: released_package_retest_pass
+      goal: Reduce mixed handoff/status/report refresh loops so one real external work PR does
+        not require multiple visible administrative PRs.
       evidence:
       - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md
       - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_004_RESULTS_20260826.md
       - docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md
       - docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md
       - docs/reports/POST_V1_0_8_SUCCESSOR_PROJECTION_VOLATILE_BOUNDARY_20260905.md
+      - docs/reports/greenfield/KIT-GF-011-successor-final-head-identity-2026-10-04.md
+      - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+      completed_in_release: 1.0.16
+      reconciliation_note: Cockpit confirms GF-011 VERIFIED_FIXED by disposable-clone PyPI 1.0.16
+        retest; this closes the recorded self-staling finding, not the independent B2 optimization
+        program.
     - id: B1-KIT-012
       status: released_package_retest_pass
       goal: Make external pr-merge-safe return a terminal PASS result after it
@@ -2950,10 +3115,10 @@ plans:
         Rule-Ack runtime state locally ignored in older external workspaces.
       evidence: docs/reports/POST_V1_0_8_B1_COMM_SCI_CYCLE_008_START_WORKFLOW_REPAIR_20260902.md
     - id: B1-KIT-GF-LEDGER
-      status: active
-      goal: Integrate the AGP Cockpit Greenfield KIT-GF finding ledger into the
-        existing B1 external-workspace plan without treating the external report
-        as implementation authority or creating a second failure database.
+      status: kit_side_numbered_families_closed_external_confirmation_separate
+      goal: Integrate the AGP Cockpit Greenfield KIT-GF finding ledger into the existing B1
+        external-workspace plan without treating the external report as implementation authority
+        or creating a second failure database.
       evidence:
       - docs/reports/POST_V1_0_8_AGP_COCKPIT_GREENFIELD_ADJUDICATION_20260904.md
       - docs/reports/POST_V1_0_8_AGP_COCKPIT_GREENFIELD_ADJUDICATION_20260904.json
@@ -2965,20 +3130,41 @@ plans:
       - docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
       - docs/reports/POST_V1_0_12_GREENFIELD_PROVENANCE_RETEST_20260915.md
       - docs/reports/POST_V1_0_12_GREENFIELD_PROVENANCE_RETEST_20260915.json
+      - docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.md
+      - docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.json
+      - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+      - docs/reports/greenfield/KIT-GF-011-successor-final-head-identity-2026-10-04.md
+      - docs/reports/greenfield/KIT-GF-017-released-external-merge-retest-2026-10-10.md
+      - docs/reports/release/release-prepare-1.0.23.json
       accepted_lesson:
         id: KIT-GF-LESSON-001
         status: accepted_as_method
-        summary: Baseline first, bounded inventory, source/call-path mapping,
-          contextual adjudication, explicit negative outcomes, smallest justified
-          mutation, focused regression, then broader gates.
+        summary: Baseline first, bounded inventory, source/call-path mapping, contextual adjudication,
+          explicit negative outcomes, smallest justified mutation, focused regression, then
+          broader gates.
       acceptance:
-      - Every KIT-GF finding is adjudicated against current main before further
-        product mutation.
+      - Every KIT-GF finding is adjudicated against current main before further product mutation.
       - Existing B1 items remain authoritative where they already cover a finding.
-      - Open findings stay ordered by external first-cycle risk, not by the stale
-        release request from the imported handoff.
-      - Future release work starts from the current repository version, tag, PyPI
-        state, gates, and maintainer release boundary.
+      - Open findings stay ordered by external first-cycle risk, not by the stale release request
+        from the imported handoff.
+      - Future release work starts from the current repository version, tag, PyPI state, gates,
+        and maintainer release boundary.
+      current_adjudication:
+        numbered_family_scope: KIT-GF-001 through KIT-GF-018 and KIT-GF-021 through KIT-GF-065
+          (63 existing numbered families; no invented 019/020).
+        kit_status: closed_by_release_1.0.23
+        KIT-GF-009: closed_released_package_external_first_cycle
+        KIT-GF-011: closed_in_1.0.16_and_cockpit_VERIFIED_FIXED
+        KIT-GF-017: closed_in_kit_released_1.0.21_fixture_retest_recorded_before_1.0.23; cockpit_live_confirmation_pending
+        external_confirmation: External ledger status is not rewritten here. Its kit_repo_sync
+          still names 1.0.21 and older per-family Kit snapshots; it is not current Kit planning
+          authority.
+        unnumbered_exception: KIT-GF-RULE-REGISTRY-BOOTSTRAP remains CONFIRMED in the external
+          ledger; see external-rule-registry-bootstrap-adjudication.
+        historical_boundary_notes: Earlier B1-KIT-023 through B1-KIT-026 and B1-KIT-011 notes
+          describe slice-time evidence. Current numbered-family closure supersedes their missing
+          GF-009/GF-011/GF-017 evidence statements; broader Brownfield completion and B2 approvals
+          remain separate.
     - id: B1-KIT-020
       status: implemented_local_retest_pass
       goal: Route natural slice-closeout and post-merge-handoff command-for
@@ -3072,7 +3258,8 @@ plans:
         retests. KIT-GF-017 remains open until a published package is available
         and the context-carrier retest passes.
     - id: B1-KIT-026
-      status: implemented_pending_release_retest
+      status: released_package_fixture_retest_pass
+      completed_in_release: 1.0.23
       goal: Treat generated projects as external operating workspaces for
         installed-package LLM context validation, and fail closed when an
         existing remote release tag does not point to the current release
@@ -3080,14 +3267,16 @@ plans:
       evidence:
       - docs/reports/POST_V1_0_12_RELEASED_PACKAGE_CONTEXT_RETEST_20260916.md
       - docs/reports/POST_V1_0_12_RELEASED_PACKAGE_CONTEXT_RETEST_20260916.json
+      - docs/reports/greenfield/KIT-GF-017-released-external-merge-retest-2026-10-10.md
       tests:
       - tests/test_llm_execution_context.py
       - tests/test_transfer_llm_context_gate.py
       - tests/test_release_publish_orchestration.py
-      boundary: The 1.0.12 released-package retest records the pre-fix blocker.
-        KIT-GF-017 is promoted only after the published 1.0.13 package passes
-        the refreshed generated-project context-carrier flow. KIT-GF-009 and
-        KIT-GF-011 still require their separate external first-cycle evidence.
+      boundary: The 1.0.12 report records the historical pre-fix blocker. The
+        later released-1.0.21 external fixture retest closes KIT-GF-017 on the
+        Kit side and is carried by release 1.0.23. Live Cockpit confirmation
+        remains Cockpit-owned. KIT-GF-009 and KIT-GF-011 have separate later
+        closure evidence in B1-KIT-GF-LEDGER; this does not close Brownfield/B2.
     - id: B1-TARGET-001
       status: recorded_target_friction
       goal: Decide in the target repository whether App2 tests that rewrite
@@ -3484,8 +3673,8 @@ plans:
 - id: mechanize-doc-registry-scope-reconcile
   status: planned
   title: Mechanize documentation registry scope reconciliation
-  summary: Add a dry-run-first doc-registry reconcile command for scope files, registry
-    entries, stale decision projections, and portable foreign-repo adoption.
+  summary: Complete remaining registry reconciliation coverage around the existing dry-run/execute
+    command; do not introduce a duplicate command.
   rationale: K2b exposed existing renderer/test logic for documentation registry scope
     decisions, but no exposed agentic-kit command wraps refresh, stale-projection
     detection, registry consistency, coverage, and diagnostics as a deterministic
@@ -3509,6 +3698,17 @@ plans:
   - tests/test_documentation_registry.py
   introduced_by_pr: 1750
   introduced_by_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1750
+  implementation_status: partially_implemented
+  evidence:
+  - 'PR #1752'
+  - 'PR #1762'
+  - src/agentic_project_kit/documentation_registry.py
+  - tests/test_documentation_registry.py
+  - tests/test_docs_lifecycle_reconcile_cli.py
+  remaining_work:
+  - Verify the full acceptance boundary for coverage-file consistency and portable foreign-repository
+    adoption; the implemented execute path refreshes the deterministic scope-decision projection,
+    not every registry/scope artifact as one transaction.
 - id: mechanize-failure-mode-review-automation
   status: planned
   title: Mechanize failure-mode review automation
@@ -3531,6 +3731,13 @@ plans:
   introduced_by_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1750
 - id: mechanize-pre-gui-hardening-readiness
   status: planned
+  implementation_status: partially_implemented
+  evidence:
+  - CHANGELOG.md
+  - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+  remaining_work:
+  - Audit residual planning-target resolution and superseded-target write guards;
+    reuse existing release status, live PR status, handoff refresh and GUI readiness commands.
   title: Mechanize pre-GUI hardening readiness
   summary: Carry remaining pre-GUI hardening priorities into deterministic Project
     Direction items and future CLI/cockpit readiness surfaces.
@@ -3538,8 +3745,8 @@ plans:
     should be expressed as commands, gates, status reports, or cockpit metadata before
     GUI expansion.
   scope:
-  - Preserve release final verification, wrapper live status, admin refresh status,
-    publish readiness, and GUI gatekeeper readiness as future work.
+  - Verify the shipped release final verification, wrapper live status, admin refresh
+    status, publish readiness and GUI readiness against residual acceptance before adding new tooling.
   - Keep GUI actions routed through existing agentic-kit command and cockpit layers.
   - Keep planning-target resolution and superseded planning write blocking as future
     deterministic guard work.
@@ -3564,13 +3771,13 @@ plans:
     validation.
   scope:
   - Keep accepted architecture as the normative source.
-  - Track public website, installation guide, repository onboarding guide, troubleshooting,
-    glossary, and private/public boundary docs as future work.
-  - Preserve external-repo validation and workspace evidence generation as future
-    deterministic evidence work.
+  - Review residual gaps beyond the shipped public website, installation and repository
+    onboarding guides, troubleshooting, glossary and private/public boundary documentation.
+  - Preserve the shipped external-repo validation evidence; evaluate remaining workspace
+    evidence-helper and independent-user acceptance gaps separately.
   - Treat `agentic-kit dpa repo-adoption-assessment` as the implemented initial
-    DPA intake gate; website, repository onboarding guide, troubleshooting and
-    first real external adoption evidence remain separate work.
+    DPA intake gate; completed website, onboarding, troubleshooting and external
+    evidence are recorded by the related completed items rather than repeated as future work.
   - Ensure future docs do not claim operating-layer maturity before implemented and
     tested phases.
   evidence:
@@ -3588,6 +3795,17 @@ plans:
   - docs/planning/PROJECT_DIRECTION.yaml
   introduced_by_pr: 1750
   introduced_by_pr_url: https://github.com/vfi64/agentic-project-kit/pull/1750
+  implementation_status: partially_implemented
+  remaining_work:
+  - Installation, onboarding, website and external-repository evidence are already delivered
+    by the completed v1-0, public-installation-and-update-readiness and measured-agent-onboarding
+    items. Audit residual evidence-helper and independent-user gaps before claiming full completion
+    or implementing more onboarding surfaces.
+  related_completed_items:
+  - v1-0-milestone
+  - public-installation-and-update-readiness
+  - measured-agent-onboarding
+  - neutral-external-repo-evidence
 - id: reports-retention-policy
   title: Mechanize report and evidence retention policy
   status: planned
@@ -3607,6 +3825,18 @@ plans:
   - Archive, reports, examples, required files, and handoff-package evidence keep
     explicit exemptions where needed.
   - No retention gate depends on wall-clock time as a hard FAIL condition.
+  implementation_status: partially_implemented
+  evidence:
+  - 'PR #1490'
+  - 'PR #1492'
+  - 'PR #1494'
+  - 'PR #1496'
+  - src/agentic_project_kit/communication_artifact_gc.py
+  - tests/test_report_retention_gc.py
+  remaining_work:
+  - Review current implementation against all acceptance criteria, especially protected-diff
+    guarding and exemptions, before closing the item. Dry-run report candidate listing and bounded
+    cleanup already exist.
 - id: agf-dpa-adoption-tracker
   status: blocked
   title: Track AGF/DPA Package-G adoption evaluation without implementation claims
@@ -3641,6 +3871,8 @@ plans:
   - https://github.com/vfi64/agentic-project-kit-dpa-lab/pull/10
   - https://github.com/vfi64/agentic-project-kit/pull/1867
   - https://github.com/vfi64/agentic-project-kit/pull/1865
+  - CHANGELOG.md
+  - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
   acceptance:
   - The Kit records an explicit adopt, adapt, already-equivalent, superseded, not-applicable,
     defer or reject disposition for every applicable AGF requirement before adoption.
@@ -3654,6 +3886,272 @@ plans:
     and Maintainer adjudication pass.
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
+  reconciliation_note: This historical Package-G/AGF/ROS evaluation block is not a claim that
+    all DPA work is unimplemented. Release 0.5.0 shipped the governed DPA import, selected-writer
+    routing, readiness and DP5 stable scope; 1.0.0 and completed DPA assessment/intake items
+    add external operating-layer evidence. Any further AGF/ROS or Package-G adoption still requires
+    its original adjudication.
+- id: external-rule-registry-bootstrap-adjudication
+  status: planned
+  title: Adjudicate external rule-registry bootstrap and gate applicability
+  depends_on:
+  - rule-registry-hardening
+  intent: Review the separately named CONFIRMED external finding against current workspace generation
+    and gate applicability before selecting a bounded repair; do not fabricate mechanism inventories
+    or copy Kit self-hosting registrations into an external project.
+  evidence:
+  - https://github.com/vfi64/agp-Cockpit/blob/c31eb2dc3dcea2cd9f8b86ae6a9fdc60adad2577/docs/validation/AGENTIC_KIT_GREENFIELD_FINDINGS.json
+  - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+  acceptance:
+  - An external fixture proves either a deterministic project-owned bootstrap/adoption route
+    or an explicit supported not-applicable gate result.
+  - Any repair preserves rule semantics and external operating-layer boundaries; no manual invented
+    inventory is accepted as evidence.
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - src/agentic_project_kit/rule_registry_validator.py
+  - src/agentic_project_kit/workspace_init.py
+  - src/agentic_project_kit/standard_gates_audit_suite.py
+- id: dpa-current-evidence-continuity
+  status: planned
+  title: Restore verifiable DPA evidence continuity for current strict and stable checks
+  rationale: Current targeted checks block on missing historical adjudication evidence despite
+    recorded historical stable promotion.
+  missing_evidence: docs/reports/terminal/transfer_handoff_reports/20260801T140555Z-a8d48509-post-merge-complete-after-pr1962.json
+  recovery_candidate:
+    location: Original report found in the maintainer's primary local Kit checkout; not yet durably restored.
+    sha256: ef9648081d55de37c55794d3b3ad9692b8587c36ad0fe9c11737f1eabe5108d9
+    bytes: 17755
+    artifact_type: post_merge_complete_transfer_report
+    boundary: Review provenance and private/runtime content before durable retention; presence alone is not adjudication acceptance.
+  boundary: Recover authentic evidence or prepare a governed dependency correction; never fabricate
+    receipts or weaken gates. A new exact-ref record must not overwrite historical results.
+  acceptance:
+  - Authentic evidence dependency is available durably or explicitly replaced through reviewed
+    adjudication.
+  - Fresh DP5 strict and stable-readiness checks pass for the investigated revision before claiming
+    current DPA conformance.
+  source_files:
+  - docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json
+  - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+- id: proof-assurance-assessment
+  status: planned
+  title: 'PAA — Proof Assurance Assessment: investigation and development plan for trustworthy
+    software evidence'
+  owner: maintainers
+  decision_status: review_required
+  source_version: '0.3'
+  integrated_at: '2026-10-11'
+  rationale: Assess an optional profile-bound verification domain within existing Kit authority.
+    Prevent unsupported correctness claims; establish usefulness and implementation reuse before
+    development.
+  authorization:
+    integration: User requested planning integration; no PAA implementation authorized.
+    P0: Proposed read-only next phase; not executed by importing this draft.
+    P1_P6: Separate explicit human decisions required; no automatic phase transition.
+  architecture_boundary:
+  - Kit remains the only process authority; Cockpit displays/transports evidence without authorizing
+    proof validity.
+  - Humans accept property meaning; LLM output is advisory; tools establish only scoped technical
+    results.
+  - This is a candidate domain, not an adopted architecture change. Recheck architecture contract
+    and documentation coverage before implementation.
+  claim_levels:
+  - 'A: formal model properties'
+  - 'B: actual implementation properties'
+  - 'C: empirical or formal model-code conformance'
+  proposed_results:
+  - PROVEN
+  - BOUNDED_VERIFIED
+  - TESTED
+  - COUNTEREXAMPLE
+  - UNKNOWN
+  - NOT_APPLICABLE
+  - STALE
+  claim_boundary: Model proof does not prove Python implementation correctness. Tool name, exit
+    code, human risk acceptance or LLM agreement cannot upgrade evidence strength. No universal
+    correctness guarantee.
+  phases:
+  - id: P0
+    title: Read-only implementation inventory and feasibility assessment
+    decision_status: proposed
+    deliverables:
+    - Revision-bound source and test inventory covering DPA, evidence, gates, profiles, policies,
+      tool execution, drift and handoffs.
+    - REUSE / EXTEND / NEW / UNDECIDED / NOT_APPLICABLE matrix with code symbols, tests, behavior
+      and uncertainty.
+    - Compare Safe-Merge, Publication Policy and Gate state machine using documented weighted
+      criteria; prepare tool comparison without installing tools.
+    - Updated risks, effort, open questions and a justified P1/PoC recommendation; no repository
+      mutation or network effects.
+    exit_decision: 'Human decision: ACCEPT / ACCEPT_WITH_CHANGES / REWORK / STOP; explicitly
+      decide whether P1 may begin.'
+  - id: P1
+    title: Property and evidence contract
+    decision_status: not_authorized
+    deliverables:
+    - Separate model, implementation and model-code claims; define human property acceptance
+      and formal_tool / human / llm_advisory authority.
+    - Define evidence schema, proof strength, execution result, validity, human acceptance and
+      gate decision as distinct concepts.
+    - Specify dependency manifests, STALE triggers, trust assumptions, negative cases and independent
+      review.
+    exit_decision: Approve an unambiguous claim contract and exact PoC scope before P2.
+  - id: P2
+    title: Isolated formal proof of concept
+    decision_status: not_authorized
+    deliverables:
+    - One selected protocol, one or two invariants, explicit assumptions and identified tool
+      configuration.
+    - Reproducible positive model result and counterexample from an intentionally faulty model;
+      document model limits.
+    exit_decision: Human acceptance of reproducibility and bounded model claim before P3.
+  - id: P3
+    title: Bounded model-code bridge
+    decision_status: not_authorized
+    deliverables:
+    - Map model states/actions to actual Python decisions; compare selected transitions and
+      include a negative implementation test.
+    - Report uncovered states/effects and economics; classify empirical conformance as TESTED
+      or justified BOUNDED_VERIFIED.
+    exit_decision: Relevant implementation connection within approved bounds, otherwise REWORK
+      / STOP.
+  - id: P4
+    title: Optional Kit integration
+    decision_status: not_authorized
+    deliverables:
+    - Reuse proven extension points; integrate minimal adapter, obligations, evidence normalization,
+      revision binding and invalidation.
+    - Strict internal claim validation, initially advisory merge/release output, documentation
+      and regression evidence.
+    exit_decision: No governance bypass or unjustified proof label; new mandatory gates require
+      separate human approval.
+  - id: P5
+    title: Independent validation
+    decision_status: not_authorized
+    deliverables:
+    - Review manipulated, stale and contradictory evidence, timeouts, limits, counterexamples
+      and LLM authority boundaries.
+    - Independent reviews, Kit regression, risk register and maintenance-cost decision.
+    exit_decision: 'Human decision: ACCEPT / ACCEPT_WITH_CHANGES / REWORK / STOP.'
+  - id: P6
+    title: Optional generalization
+    decision_status: not_authorized
+    deliverables:
+    - 'Only after P5 acceptance: additional profiles/adapters, stronger implementation or refinement
+      evidence and external reference project.'
+    exit_decision: Demonstrate reuse in at least one independent repository; no inherited external
+      conformance claim.
+  p0_evidence_fields:
+  - repository
+  - exact_revision
+  - path
+  - symbol_or_configuration
+  - relevant_test
+  - observed_or_documented_behavior
+  - reuse_classification
+  - remaining_uncertainty
+  p0_execution_boundary:
+  - Read-only source/test investigation; no branches, commits, PRs, implementation, configuration
+    or gate changes.
+  - No new tool installations, network or other external effects without separate authorization.
+  - Results only in already authorized temporary/external evidence paths; proposed report filenames
+    are not repository-write permission.
+  poc_candidates:
+  - Safe-Merge prerequisites
+  - Publication Policy
+  - Gate state machine
+  candidate_weights_percent:
+    safety: 20
+    requirement_precision: 20
+    implementation_proximity: 20
+    model_manageability: 15
+    existing_tests: 10
+    counterexamples: 10
+    maintenance: 5
+  tool_weights_percent:
+    claim_strength: 30
+    implementation_proximity: 25
+    integration_effort: 20
+    reproducibility_counterexamples: 15
+    runtime_maintenance: 10
+  tool_selection: Undecided. Compare TLA+/TLC, suitable Apalache, model-based/property-based
+    testing, symbolic execution and deductive verification; Dafny, CBMC and Lean 4 remain later/profile-specific
+    candidates.
+  p3_proposed_limits:
+    invariants_max: 2
+    python_decision_functions_max: 3
+    transition_classes_max: 8
+    protocols: 1
+    exclusions:
+    - whole GitHub lifecycle
+    - browser/Cockpit end-to-end verification
+    - additional principal formal checker without new approval
+  invalidation_contract_to_define:
+  - Property/model/assumption changes invalidate dependent evidence.
+  - Relevant code/dependency/configuration/tool changes trigger validity review; independence
+    must be demonstrated.
+  - Hash or manifest identity contradictions reject evidence; conservative invalidation is acceptable.
+  - STALE is evidence validity, not a counterexample; timeout/UNKNOWN never imply PROVEN.
+  effort_estimate:
+    unit: effective development hours with AI assistance; unmeasured planning assumptions
+    P0:
+    - 16
+    - 30
+    P1:
+    - 12
+    - 24
+    P2:
+    - 30
+    - 60
+    P3:
+    - 40
+    - 80
+    P4:
+    - 35
+    - 75
+    P5:
+    - 37
+    - 70
+    total_P0_P5:
+    - 170
+    - 339
+    P6: excluded
+  economic_reviews_after:
+  - P0
+  - P3
+  - P5
+  risks:
+  - Incorrect property or model abstraction
+  - Insufficient model-code connection
+  - State-space explosion and tool trust
+  - Stale/contradictory evidence and overstated proof claims
+  - Duplicated Kit mechanisms or competing authority
+  - Integration and ongoing model-maintenance costs
+  dpa_dependency: Methodological inspiration only; technical reuse must be proven. Current strict/stable
+    checks are blocked by missing historical evidence; do not inherit a current DPA PASS from
+    the recorded promotion.
+  stop_conditions:
+  - Authority bypass, unsupported positive claim, irreproducible evidence, scope overrun or
+    imprecise property.
+  - New human decision for protocol/tool changes, scope expansion, mandatory gates, external
+    execution rights or material architectural/cost changes.
+  acceptance:
+  - P0 is revision-bound and read-only with substantiated source/test findings, reuse matrix,
+    candidate/tool comparisons, risks and updated effort.
+  - P1-P6 remain unstarted until their explicit decisions; human property acceptance and evidence
+    authority remain separate.
+  - Any later MVP meets all 25 acceptance criteria in the preserved v0.3 input, with reproducible
+    positive/negative cases, invalidation and bounded claims.
+  rule_hardening: 'Planning-only review exception: no new executable policy is activated. Reviewers
+    inspect scope, phase decisions and claim limits; tests preserve these boundaries. Any implemented
+    governance rule needs deterministic enforcement in its own slice.'
+  source_files:
+  - docs/archive/planning/PAA_V03_REVIEW_INPUT_20261011.md
+  - docs/architecture/ARCHITECTURE_CONTRACT.md
+  - docs/architecture/dpa/README.md
+  - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+  source_sha256: 29a4a8aeeb47726d3822ee9394c05774815a7c3d37bb3387a5ec79903a3a924c
 ideas:
 - id: project-direction-gui-panel
   status: accepted
@@ -3938,10 +4436,10 @@ ideas:
   - docs/planning/PROJECT_DIRECTION.yaml
 - id: pattern-advisor
   status: candidate
-  title: Pattern Advisor
-  rationale: A small advisory pattern catalog or CLI may later help choose between
-    documented governance patterns, but it must stay bounded and never replace deterministic
-    gates.
+  title: Pattern Advisor expansion beyond the shipped read-only catalog
+  rationale: The read-only catalog is shipped. Further advisory selection, capture
+    or lifecycle support remains a candidate and must stay bounded without replacing
+    deterministic gates.
   decision_needed: true
   decision_status: architecture research track
   binding_policy: not implemented as binding architecture
@@ -4024,6 +4522,14 @@ ideas:
     - fully absorbed into implemented docs, tests, and ADRs
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
+  implementation_status: read_only_catalog_delivered_expansion_candidate
+  evidence:
+  - https://github.com/vfi64/agentic-project-kit/releases/tag/v0.3.12
+  - src/agentic_project_kit/patterns.py
+  - tests/test_patterns.py
+  reconciliation_note: The read-only list/show MVP was delivered in 0.3.12. The preserved later_mvp
+    proposal is historical; automatic suggestions, candidate capture and promotion/deprecation
+    remain candidates, not delivered functionality.
 - id: comm-sci-first-external-adoption
   status: candidate
   title: Comm-SCI-Control-private as first external adoption candidate
@@ -4059,6 +4565,47 @@ ideas:
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
 done:
+- id: resumable-release-run-orchestrator
+  status: done
+  title: Deliver signed, resumable release orchestration
+  completed_by_pr: 2405
+  merge_commit: 1f0b069d
+  acceptance:
+  - Approval gates and persistent step state are implemented; later release recovery fixes remain
+    part of ongoing release hardening.
+  evidence:
+  - 'PR #2405'
+  - src/agentic_project_kit/release_run.py
+  - tests/test_release_run.py
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+- id: ci-status-diagnostic
+  status: done
+  title: Deliver bounded CI status diagnostics
+  completed_by_pr: 2407
+  merge_commit: 58364a96
+  acceptance:
+  - Read-only CI status reports commit/branch state and structured failed-check findings.
+  evidence:
+  - 'PR #2407'
+  - src/agentic_project_kit/ci_status.py
+  - tests/test_ci_status.py
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+- id: signed-external-kit-update
+  status: done
+  title: Deliver signed Kit updates for external workspaces
+  completed_by_pr: 2465
+  merge_commit: 487d60c8
+  acceptance:
+  - 'Signed plan validation, artifact integrity, managed CI pins and partial-failure evidence
+    are implemented; PR #2467 and PR #2469 add consumer CI and safe-merge regression fixes.'
+  evidence:
+  - 'PR #2465'
+  - src/agentic_project_kit/kit_update.py
+  - tests/test_kit_update.py
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
 - id: p1-workspace-resolver-line
   status: done
   title: Workspace resolver foundation and top path-literal migrations

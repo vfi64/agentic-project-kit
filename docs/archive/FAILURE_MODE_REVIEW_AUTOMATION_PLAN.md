@@ -6,7 +6,8 @@ Moved-from: docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
 Superseded-by: docs/planning/PROJECT_DIRECTION.yaml
 Archive note: Open implementation work is carried by Project Direction items; this file is retained as historical plan evidence.
 
-Status: proposed
+Status: archived
+Lifecycle note: Historical planning snapshot; active work is governed by docs/planning/PROJECT_DIRECTION.yaml, not by the priorities or commands preserved below.
 Decision status: proposed for phased implementation
 Owner: release/evidence kernel
 Scope: agentic workflow safety, pre-slice review, post-merge closeout

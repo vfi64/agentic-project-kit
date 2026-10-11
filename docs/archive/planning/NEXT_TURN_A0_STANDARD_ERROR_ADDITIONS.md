@@ -1,7 +1,9 @@
 # Next-Turn A0 Standard Error Additions
 
 Status-date: 2026-05-25
-Status: active
+Status: archived
+Superseded-by: docs/planning/PROJECT_DIRECTION.yaml
+Lifecycle note: Historical planning snapshot; active work is governed by docs/planning/PROJECT_DIRECTION.yaml, not by the priorities or commands preserved below.
 Decision status: accepted
 Review policy: Review together with `docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md` before Slice A1.
 

@@ -3,9 +3,11 @@
 Document class: historical archive
 Status-date: 2026-07-08
 Archived-from: docs/planning/COMMAND_SAFETY_HARDENING_PLAN.md
-Superseded-by: docs/governance/COMMAND_SAFETY_POLICY.md and docs/planning/PROJECT_DIRECTION.yaml
+Superseded-by: docs/governance/COMMAND_SAFETY_POLICY.md
+Remaining-work-authority: docs/planning/PROJECT_DIRECTION.yaml
 
-Status: active
+Status: superseded
+Lifecycle note: Historical specification; the successor policy and canonical Direction retain active rules and remaining work.
 Decision status: accepted
 Review policy: Review before GUI work, release orchestration work, or any change to transfer, remote-next, post-merge, PR, evidence, or release command behavior.
 Project: agentic-project-kit

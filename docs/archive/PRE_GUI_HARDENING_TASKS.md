@@ -5,13 +5,14 @@ Status-date: 2026-07-08
 Moved-from: docs/archive/PRE_GUI_HARDENING_TASKS.md
 Superseded-by: docs/planning/PROJECT_DIRECTION.yaml
 Archive note: Pre-GUI hardening priorities now belong in Project Direction; this file is retained as historical plan evidence.
-Status: active
+Status: archived
+Lifecycle note: Historical planning snapshot; active work is governed by docs/planning/PROJECT_DIRECTION.yaml, not by the priorities or commands preserved below.
 Decision status: accepted
 Review policy: update when pre-GUI hardening priorities, command contracts, or canonical planning targets change.
 
 This planning file collects the post-v0.4.11 hardening tasks that should be completed before GUI expansion.
 
-Authoritative target for pre-GUI hardening planning: `docs/archive/PRE_GUI_HARDENING_TASKS.md`.
+Historical target at drafting (superseded by Project Direction): `docs/archive/PRE_GUI_HARDENING_TASKS.md`.
 
 Do not add new pre-GUI planning content to superseded planning documents such as `docs/archive/WORKFLOW_REDUCTION_FOCUS.md`.
 

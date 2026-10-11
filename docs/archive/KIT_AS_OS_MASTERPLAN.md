@@ -6,7 +6,8 @@ Moved-from: docs/archive/KIT_AS_OS_MASTERPLAN.md
 Superseded-by: docs/architecture/KIT_AS_OS_ARCHITECTURE.md
 Archive note: This plan is not discarded. Its normative architecture content has been centralized in docs/architecture/KIT_AS_OS_ARCHITECTURE.md, and residual follow-up work is tracked in docs/planning/PROJECT_DIRECTION.yaml. This file is retained as historical source and planning evidence.
 
-Status: active
+Status: archived
+Lifecycle note: Historical specification; active architecture and residual planning use the successor sources named above.
 Decision status: accepted
 Review policy: required
 Scope: planning authority for turning `agentic-project-kit` into an operating layer for arbitrary GitHub repositories.  

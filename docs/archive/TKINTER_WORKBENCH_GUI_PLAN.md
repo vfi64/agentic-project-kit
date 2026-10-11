@@ -6,7 +6,8 @@ Archived-from: docs/planning/TKINTER_WORKBENCH_GUI_PLAN.md
 Superseded-by: docs/planning/PROJECT_DIRECTION.yaml
 Note: implemented differently (progressive-disclosure cockpit).
 
-Status: proposed
+Status: superseded
+Lifecycle note: Historical planning snapshot; active work is governed by docs/planning/PROJECT_DIRECTION.yaml, not by the priorities or commands preserved below.
 Decision status: proposed as the highest-priority implementation track after current closeout evidence is recorded
 Owner: workflow/gui kernel
 Scope: full Tkinter workbench, button catalog, dispatch integration, no-copy evidence, and staged functionality enablement

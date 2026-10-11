@@ -3,9 +3,11 @@
 Document class: historical archive
 Status-date: 2026-07-08
 Archived-from: docs/planning/RULE_REFRESH_HANDSHAKE_PLAN.md
-Superseded-by: docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md and docs/planning/PROJECT_DIRECTION.yaml
+Superseded-by: docs/governance/RULE_REFRESH_HANDSHAKE_CONTRACT.md
+Remaining-work-authority: docs/planning/PROJECT_DIRECTION.yaml
 
-Status: active
+Status: superseded
+Lifecycle note: Historical planning snapshot; active work is governed by docs/planning/PROJECT_DIRECTION.yaml, not by the priorities or commands preserved below.
 Decision status: accepted
 Review policy: Review before Phase 0 closeout, before adding rule-snapshot schema implementation, before adding the deterministic transfer outbox header builder, and before expanding GUI write actions.
 Project: agentic-project-kit
