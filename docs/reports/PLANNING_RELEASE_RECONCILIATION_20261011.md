@@ -157,6 +157,27 @@ Some old done records still contain generic PR strings. This review corrects the
 
 ## Validation
 
+Superseding DPA continuity repair (2026-10-11): the original local report was
+reviewed against PR #1962 / `3fd8bcc8dfe89965b98a783954f36609836bd094`
+and predecessor package `0fdc3415ca3eea96265d15f91254bf104c1bfe6c` in Git history.
+A bounded retained extract now lives at
+`docs/architecture/evidence/dpa/retained/POST_PR1962_HANDOFF_CLOSEOUT_20260801.json`.
+Its original SHA256 is
+`ef9648081d55de37c55794d3b3ad9692b8587c36ad0fe9c11737f1eabe5108d9`.
+Only unrelated carrier/LLM context was omitted and the executable path normalized;
+the historical lifecycle result and stdout were preserved. Five references in
+the adjudication record now point to that durable extract. Historical decisions,
+validation refs and gate logic were not changed. Working-tree revalidation over
+base `4329de6f6178d7abe9bc263b7e8ce70c01ec5e7c` reports strict PASS with
+zero blockers/warnings and VALID_DPA_STABLE_PROMOTION_RECORD with zero findings.
+This supersedes the blocked working-tree assessment below; it establishes the
+existing bounded Kit DPA scope, not universal or foreign-repository conformance.
+The original hash documents provenance, not independent cryptographic authenticity.
+Repair validation: 3521 tests passed (510 warnings) in 159.90 seconds; the final
+three retained-evidence tests also pass separately. Ruff, check-docs, docs-audit,
+Direction validation and doctor pass. The repaired dependency is covered by a
+negative missing-evidence test; no validator or gate was weakened.
+
 Planning follow-up: the user-supplied PAA v0.3 discussion draft was integrated
 as `proof-assurance-assessment`, with P0 proposed and P1-P6 not authorized.
 Its complete unaltered German source is registered as a historical archive at

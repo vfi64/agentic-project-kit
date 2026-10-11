@@ -3913,17 +3913,18 @@ plans:
   - src/agentic_project_kit/workspace_init.py
   - src/agentic_project_kit/standard_gates_audit_suite.py
 - id: dpa-current-evidence-continuity
-  status: planned
+  status: done
   title: Restore verifiable DPA evidence continuity for current strict and stable checks
   rationale: Current targeted checks block on missing historical adjudication evidence despite
     recorded historical stable promotion.
   missing_evidence: docs/reports/terminal/transfer_handoff_reports/20260801T140555Z-a8d48509-post-merge-complete-after-pr1962.json
   recovery_candidate:
-    location: Original report found in the maintainer's primary local Kit checkout; not yet durably restored.
+    location: Original local report reviewed; bounded extract durably retained under DPA evidence.
     sha256: ef9648081d55de37c55794d3b3ad9692b8587c36ad0fe9c11737f1eabe5108d9
     bytes: 17755
     artifact_type: post_merge_complete_transfer_report
-    boundary: Review provenance and private/runtime content before durable retention; presence alone is not adjudication acceptance.
+    boundary: Historical lifecycle result preserved; unrelated context omitted and machine-local
+      executable path normalized. Original hash is provenance, not a cryptographic attestation.
   boundary: Recover authentic evidence or prepare a governed dependency correction; never fabricate
     receipts or weaken gates. A new exact-ref record must not overwrite historical results.
   acceptance:
@@ -3934,6 +3935,13 @@ plans:
   source_files:
   - docs/architecture/evidence/dpa/assessment/DP3_DP4_ADJUDICATION_RECORD_20260801.json
   - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+  - docs/architecture/evidence/dpa/retained/POST_PR1962_HANDOFF_CLOSEOUT_20260801.json
+  - tests/test_dpa_retained_evidence.py
+  completed_at: '2026-10-11'
+  retained_evidence: docs/architecture/evidence/dpa/retained/POST_PR1962_HANDOFF_CLOSEOUT_20260801.json
+  completion: Five evidence references repaired without changing historical decisions, refs
+    or gates. Fresh working-tree strict gate PASS (zero blockers/warnings), stable promotion
+    VALID, with positive and missing-dependency regression tests.
 - id: proof-assurance-assessment
   status: planned
   title: 'PAA — Proof Assurance Assessment: investigation and development plan for trustworthy
@@ -4128,9 +4136,9 @@ plans:
   - Stale/contradictory evidence and overstated proof claims
   - Duplicated Kit mechanisms or competing authority
   - Integration and ongoing model-maintenance costs
-  dpa_dependency: Methodological inspiration only; technical reuse must be proven. Current strict/stable
-    checks are blocked by missing historical evidence; do not inherit a current DPA PASS from
-    the recorded promotion.
+  dpa_dependency: Methodological inspiration only; technical reuse must be proven. The missing
+    historical dependency was durably retained and current bounded strict/stable checks pass;
+    this does not establish PAA reuse or external-repository conformance.
   stop_conditions:
   - Authority bypass, unsupported positive claim, irreproducible evidence, scope overrun or
     imprecise property.
