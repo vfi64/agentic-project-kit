@@ -1,13 +1,20 @@
 # Master Implementation Q2 — Restumsetzung
 
-Status: active
-Status-date: 2026-07-11
+Status: superseded
+Status-date: 2026-10-11
 Decision status: accepted
-Review policy: review_after:release:>=0.4.13
+Review policy: historical reference; current work is tracked in Project Direction
+Superseded-by: docs/planning/PROJECT_DIRECTION.yaml
+Lifecycle note: Historical Q2 specification retained; the canonical Direction records supersede its work ordering.
 Supersedes: previous Master Implementation Q ordering after PR #1806
 Repository: vfi64/agentic-project-kit
 
-This document is the central planning anchor for Master Implementation Q2.
+This document preserves the historical planning anchor for Master Implementation Q2.
+The canonical Direction item `master-implementation-q` was closed as
+`historical_superseded` by the A0 reconciliation after v1.0.4. The sequences,
+startup instructions and maintainer gates below describe that historical work
+order; they must not be replayed as the current work queue. Current acceptance,
+remaining work and authorization boundaries live in `PROJECT_DIRECTION.yaml`.
 The Q2 update adopts the maintainer-supplied `CODEX_AUFTRAG_Q2_VERBESSERT.md`
 input as the current rest-implementation order after verifying the repository state.
 Historical appendices in this file remain useful baseline detail. Where they

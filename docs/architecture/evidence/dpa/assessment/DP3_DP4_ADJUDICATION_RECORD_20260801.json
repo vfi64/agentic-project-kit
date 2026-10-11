@@ -132,7 +132,7 @@
           "status": "SATISFIED_FOR_CURRENT_KIT_REF",
           "evidence": [
             "docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json",
-            "docs/reports/terminal/transfer_handoff_reports/20260801T140555Z-a8d48509-post-merge-complete-after-pr1962.json"
+            "docs/architecture/evidence/dpa/retained/POST_PR1962_HANDOFF_CLOSEOUT_20260801.json"
           ],
           "rationale": "The generated package is updated through transfer commands and post-merge refresh lifecycle evidence; manual durable target-byte patches remain disallowed."
         },
@@ -140,7 +140,7 @@
           "status": "SATISFIED_FOR_CURRENT_KIT_REF",
           "evidence": [
             "docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json",
-            "docs/reports/terminal/transfer_handoff_reports/20260801T140555Z-a8d48509-post-merge-complete-after-pr1962.json"
+            "docs/architecture/evidence/dpa/retained/POST_PR1962_HANDOFF_CLOSEOUT_20260801.json"
           ],
           "rationale": "No migration of generated outputs is selected. Rollback is source-command contract preservation plus regeneration from canonical source/state after post-merge refresh."
         },
@@ -252,7 +252,7 @@
           "status": "SATISFIED_FOR_CURRENT_KIT_REF",
           "evidence": [
             "docs/architecture/evidence/dpa/assessment/DP2_MAINTAINER_ASSESSMENT_RECORD_20260728.json",
-            "docs/reports/terminal/transfer_handoff_reports/20260801T140555Z-a8d48509-post-merge-complete-after-pr1962.json"
+            "docs/architecture/evidence/dpa/retained/POST_PR1962_HANDOFF_CLOSEOUT_20260801.json"
           ],
           "rationale": "Existing transfer wrappers serialize branch, PR, merge and post-merge handoff refresh state for the bounded CURRENT_HANDOFF target scope."
         },
@@ -333,7 +333,7 @@
         "dpa_600": {
           "status": "SATISFIED_FOR_CURRENT_KIT_REF",
           "evidence": [
-            "docs/reports/terminal/transfer_handoff_reports/20260801T140555Z-a8d48509-post-merge-complete-after-pr1962.json"
+            "docs/architecture/evidence/dpa/retained/POST_PR1962_HANDOFF_CLOSEOUT_20260801.json"
           ],
           "rationale": "The only command-updated STATUS.md path in this slice is administrative refresh status, guarded by transfer branch/PR/merge wrappers."
         },
@@ -417,7 +417,7 @@
           "status": "SATISFIED_FOR_CURRENT_KIT_REF",
           "evidence": [
             "docs/architecture/evidence/dpa/probes/fixture-evidence-9cd4a7fc-wrt-ch006-20260729/results.json",
-            "docs/reports/terminal/transfer_handoff_reports/20260801T140555Z-a8d48509-post-merge-complete-after-pr1962.json"
+            "docs/architecture/evidence/dpa/retained/POST_PR1962_HANDOFF_CLOSEOUT_20260801.json"
           ],
           "rationale": "Successor projections are written through transfer command contracts and post-merge closeout wrappers."
         },

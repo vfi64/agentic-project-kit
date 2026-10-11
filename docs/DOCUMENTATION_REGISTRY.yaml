@@ -161,6 +161,9 @@ documents:
   - path: docs/planning/MASTER_IMPLEMENTATION_Q.md
     class: planning
     owner: maintainers
+    status: superseded
+    superseded_by: docs/planning/PROJECT_DIRECTION.yaml
+    notes: Historical Q2 work order; current work is governed by canonical Direction items.
   - path: docs/architecture/PLANNER_KIT_EXECUTOR_CONTRACT.md
     class: architecture
     status: active
@@ -1605,5 +1608,14 @@ documents:
     class: evidence/log
     owner: maintainers
   - path: docs/reports/greenfield/KIT-GF-017-released-external-merge-retest-2026-10-10.md
+    class: evidence/log
+    owner: maintainers
+  - path: docs/archive/planning/PAA_V03_REVIEW_INPUT_20261011.md
+    class: historical archive
+    owner: maintainers
+    status: archived
+    superseded_by: docs/planning/PROJECT_DIRECTION.yaml
+    summary: Preserved German PAA v0.3 review input; embedded instructions do not authorize execution.
+  - path: docs/architecture/evidence/dpa/retained/POST_PR1962_HANDOFF_CLOSEOUT_20260801.json
     class: evidence/log
     owner: maintainers

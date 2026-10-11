@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "artifact_type": "retained_post_merge_complete_evidence",
+  "retained_on": "2026-10-11",
+  "original_run_id": "20260801T140555Z-a8d48509",
+  "original_artifact_type": "post_merge_complete_transfer_report",
+  "original_report_path": "docs/reports/terminal/transfer_handoff_reports/20260801T140555Z-a8d48509-post-merge-complete-after-pr1962.json",
+  "original_report_sha256": "ef9648081d55de37c55794d3b3ad9692b8587c36ad0fe9c11737f1eabe5108d9",
+  "original_report_bytes": 17755,
+  "validation_ref": "3fd8bcc8dfe89965b98a783954f36609836bd094",
+  "predecessor_package_ref": "0fdc3415ca3eea96265d15f91254bf104c1bfe6c",
+  "provenance": "Recovered from the original report in the maintainer primary local Kit checkout; PR subjects and exact refs verified against repository history.",
+  "retention_transform": {
+    "retained": "Original post_merge_complete object and run identity.",
+    "normalized": "Only steps[0].result.command[0]: machine-local virtualenv executable path replaced with agentic-kit.",
+    "omitted": "LLM instruction context, redundant carrier/upload paths and chat projections; no lifecycle result or stdout changed.",
+    "claim_boundary": "Historical command-result evidence, not a new execution, cryptographic signature or independent proof of semantic correctness."
+  },
+  "post_merge_complete": {
+    "after_pr": 1962,
+    "lifecycle_state": "NOOP",
+    "next_action": "Post-merge lifecycle is complete; continue with the next planned slice.",
+    "refresh_loop_detected": false,
+    "refresh_pr": null,
+    "result_status": "PASS",
+    "returncode": 0,
+    "steps": [
+      {
+        "name": "initial-post-merge-check",
+        "result": {
+          "action": "post-merge-check",
+          "command": [
+            "agentic-kit",
+            "handoff",
+            "post-merge-refresh-status"
+          ],
+          "next_action": "STATE=READY\nNEXT=none",
+          "result_status": "PASS",
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "POST_MERGE_HANDOFF_REFRESH\ncurrent_head=3fd8bcc8\nfreshness_warning_present=False\nrefresh_required=False\nlatest_successor_prompt=docs/reports/terminal/post-pr1961-successor-chat-handoff.md\nresult=NOOP\nnext_safe_action=continue_without_post_merge_handoff_refresh\n\nsuccessor_package_head_status=refresh_only_descendant\nsuccessor_package_generated_head=0fdc3415ca3eea96265d15f91254bf104c1bfe6c\nsuccessor_package_current_head=3fd8bcc8dfe89965b98a783954f36609836bd094"
+        }
+      }
+    ]
+  }
+}

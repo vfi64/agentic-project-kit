@@ -5,7 +5,8 @@ Status-date: 2026-07-08
 Archived-from: docs/planning/RULE_REGISTRY_IMPROVEMENT_PLAN.md
 Superseded-by: docs/planning/PROJECT_DIRECTION.yaml
 
-Status: active
+Status: superseded
+Lifecycle note: Historical planning snapshot; active work is governed by docs/planning/PROJECT_DIRECTION.yaml, not by the priorities or commands preserved below.
 Decision status: accepted
 Review policy: Review after each documentation-registry foundation milestone and before introducing external policy engines.
 Project: agentic-project-kit

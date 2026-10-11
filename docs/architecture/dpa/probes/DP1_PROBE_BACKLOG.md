@@ -9,6 +9,18 @@ DPA-ADR-021
 
 ## 1. Purpose
 
+Current planning clarification (2026-10-11): this imported DP1 backlog preserves
+the July preparation snapshot. It is not the current Kit implementation queue.
+Release 0.5.0 subsequently delivered the governed DPA scope and stable promotion;
+the recorded readiness evidence is
+`docs/architecture/evidence/dpa/assessment/stable-readiness-7b6ea807-post-promotion-20260801/results.json`.
+That evidence marks PROBE-002, PROBE-003, PROBE-004 and Renderer scope satisfied
+for its recorded Kit ref. Historical pending statements below must be read
+against those later scope-specific records. They neither reopen completed work
+nor prove all future probes or foreign-repository conformance. Current work is
+tracked in `docs/planning/PROJECT_DIRECTION.yaml`; new execution requires fresh
+exact-ref validation and the existing authorization boundaries.
+
 This backlog records the Probe families that remain to be executed against the
 actual `vfi64/agentic-project-kit` repository before DPA implementation,
 controlled import, stable promotion or production conformance can be claimed.

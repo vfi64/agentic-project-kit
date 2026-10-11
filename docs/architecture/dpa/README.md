@@ -372,6 +372,15 @@ they do not override the current `DP2_AUTHORIZED` Assessment record.
 
 ## Generated-output and command-updated boundary
 
+The DP3/DP4 adjudication's historical PR #1962 closeout dependency is retained
+at `docs/architecture/evidence/dpa/retained/POST_PR1962_HANDOFF_CLOSEOUT_20260801.json`.
+This reviewed extract preserves the historical command result and exact refs,
+records the original report hash and removes unrelated runtime context and
+the machine-local executable path. It replaces five references to an ignored
+scratch report; the adjudication decisions and historical validation ref are
+unchanged. `tests/test_dpa_retained_evidence.py` checks current strict/stable
+readiness and verifies that a missing dependency still blocks adjudication.
+
 The generated or command-updated Kit outputs boundary keeps those files owned by
 their source, generator or command contract. DPA import work must not manually
 patch generated or command-updated Kit outputs to make target bytes match the
