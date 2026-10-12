@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 4853e2c7c6990af74700418e67dce4cf3cd945bb90cbe5cd093faeee05d21857
 - docs/reference/agentic-kit-commands.json: 2a35072977672427fdbd4acc2536b56fff969eaf3c148244d54037fc63666093
-## Operational documentation refresh state after PR #2475
+## Operational documentation refresh state after PR #2477
 
-Current administrative handoff refresh state is `07048942` (`docs: reconcile release planning, integrate PAA and restore DPA evidence (#2475)`). Continue next only after this post-PR2475 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `b253a045` (`Explain Kit purpose, architecture and bounded practice evidence on website (#2477)`). Continue next only after this post-PR2477 refresh is committed and merged; the next substantive slice must be created from fresh main.
