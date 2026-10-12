@@ -39,7 +39,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2473-handoff-refresh`
+- branch: `docs/post-pr2475-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -190,15 +190,6 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "release-and-doi-governance",
-      "status": "planned",
-      "summary": "Keep release metadata, publish, and DOI closeout behind authoritative commands for pre-GUI"
-    },
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
       "id": "gui-gatekeeper-workbench",
       "status": "planned",
       "summary": "Build the local gatekeeper/workbench GUI over deterministic actions for GUI"
@@ -307,15 +298,6 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "portability-and-ns-closeout",
-      "status": "planned",
-      "summary": "Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands"
-    },
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
       "id": "gui-workbench-plan",
       "status": "planned",
       "summary": "Implement the GUI gatekeeper/workbench as a view over governed action specs"
@@ -409,6 +391,24 @@ Wenn der Bootstrap grün ist:
       "id": "agf-dpa-adoption-tracker",
       "status": "blocked",
       "summary": "Track AGF/DPA Package-G adoption evaluation without implementation claims"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "external-rule-registry-bootstrap-adjudication",
+      "status": "planned",
+      "summary": "Adjudicate external rule-registry bootstrap and gate applicability"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "proof-assurance-assessment",
+      "status": "planned",
+      "summary": "PAA — Proof Assurance Assessment: investigation and development plan for trustworthy software evidence"
     }
   ],
   "recent_lessons": [
@@ -421,14 +421,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2473-handoff-refresh",
+    "branch": "docs/post-pr2475-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "3269672d5aa4797cfc203699128981ba16644f5c",
+    "head": "07048942c942c0c3959df7fd01b0a736f89eb479",
     "head_matches_origin_main": true,
-    "head_short": "3269672d",
+    "head_short": "07048942",
     "local_path": "cd /path/to/",
-    "origin_main": "3269672d5aa4797cfc203699128981ba16644f5c",
-    "origin_main_short": "3269672d",
+    "origin_main": "07048942c942c0c3959df7fd01b0a736f89eb479",
+    "origin_main_short": "07048942",
     "worktree_clean": false
   }
 }

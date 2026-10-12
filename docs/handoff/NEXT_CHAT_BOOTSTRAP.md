@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `3269672d5aa4797cfc203699128981ba16644f5c` (`3269672d`)
-- Handoff freshness marker: `3269672d`
-- Branch at generation: `docs/post-pr2473-handoff-refresh`
+- HEAD: `07048942c942c0c3959df7fd01b0a736f89eb479` (`07048942`)
+- Handoff freshness marker: `07048942`
+- Branch at generation: `docs/post-pr2475-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -75,7 +75,6 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 - `v2-0-legacy-profile-removal` (planned): Remove the implicit legacy profile in 2.0.0 for unphased
 - `pre-gui-hardening-line` (next): Finish wrapper, evidence, rule-refresh, and closeout hardening before GUI expansion for pre-GUI
 - `workflow-kernel-and-transfer-hardening` (planned): Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI
-- `release-and-doi-governance` (planned): Keep release metadata, publish, and DOI closeout behind authoritative commands for pre-GUI
 - `gui-gatekeeper-workbench` (planned): Build the local gatekeeper/workbench GUI over deterministic actions for GUI
 - `documentation-artifact-governance-os` (planned): Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance
 - `lifecycle-backlog-clearance` (active): Clear current documentation lifecycle backlog before suite-level strict mode
@@ -88,7 +87,6 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 - `next-turn-workflow-kernel` (active): Move recurring next-step execution from chat discipline into a deterministic local workflow kernel
 - `release-command-authority` (active): Keep release preparation, publishing, and DOI closeout under explicit command authority
 - `rule-registry-hardening` (active): Preserve active rule identity, source validation, and refresh handshakes
-- `portability-and-ns-closeout` (planned): Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands
 - `gui-workbench-plan` (planned): Implement the GUI gatekeeper/workbench as a view over governed action specs
 - `docs-centralize-and-remove-command` (planned): Build governed docs centralize-and-remove command before K3
 - `standard-error-hardening-backlog` (active): Standard-error hardening backlog and legacy ns command coverage map
@@ -100,6 +98,8 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 - `mechanize-operating-layer-public-onboarding-evidence` (planned): Mechanize operating-layer public onboarding and evidence
 - `reports-retention-policy` (planned): Mechanize report and evidence retention policy
 - `agf-dpa-adoption-tracker` (blocked): Track AGF/DPA Package-G adoption evaluation without implementation claims
+- `external-rule-registry-bootstrap-adjudication` (planned): Adjudicate external rule-registry bootstrap and gate applicability
+- `proof-assurance-assessment` (planned): PAA — Proof Assurance Assessment: investigation and development plan for trustworthy software evidence
 
 ### RESULT: PASS ###
 
