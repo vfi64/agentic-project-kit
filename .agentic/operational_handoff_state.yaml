@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3269672d5aa4797cfc203699128981ba16644f5c
-  short: 3269672d
-  subject: Record DOI for release 1.0.23 (#2473)
+  full: 07048942c942c0c3959df7fd01b0a736f89eb479
+  short: 07048942
+  subject: 'docs: reconcile release planning, integrate PAA and restore DPA evidence (#2475)'
 last_substantive_work_state:
-  full: 3269672d5aa4797cfc203699128981ba16644f5c
-  short: 3269672d
-  subject: Record DOI for release 1.0.23 (#2473)
+  full: 07048942c942c0c3959df7fd01b0a736f89eb479
+  short: 07048942
+  subject: 'docs: reconcile release planning, integrate PAA and restore DPA evidence (#2475)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

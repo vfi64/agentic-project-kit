@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-10T07:43:25.480770+00:00",
+  "generated_at_utc": "2026-10-12T10:10:29.334534+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,14 +57,14 @@
     "package_version": "1.0.23"
   },
   "repo": {
-    "branch": "docs/post-pr2473-handoff-refresh",
+    "branch": "docs/post-pr2475-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "3269672d5aa4797cfc203699128981ba16644f5c",
+    "head": "07048942c942c0c3959df7fd01b0a736f89eb479",
     "head_matches_origin_main": true,
-    "head_short": "3269672d",
+    "head_short": "07048942",
     "local_path": "cd /path/to/",
-    "origin_main": "3269672d5aa4797cfc203699128981ba16644f5c",
-    "origin_main_short": "3269672d",
+    "origin_main": "07048942c942c0c3959df7fd01b0a736f89eb479",
+    "origin_main_short": "07048942",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -105,15 +105,6 @@
         "id": "workflow-kernel-and-transfer-hardening",
         "status": "planned",
         "summary": "Harden next-turn, transfer, branch, PR, evidence, and remote state-machine workflows for pre-GUI"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "release-and-doi-governance",
-        "status": "planned",
-        "summary": "Keep release metadata, publish, and DOI closeout behind authoritative commands for pre-GUI"
       },
       {
         "files": [
@@ -228,15 +219,6 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "portability-and-ns-closeout",
-        "status": "planned",
-        "summary": "Finish replacing legacy ns adapter dependencies with Python-backed agentic-kit commands"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
         "id": "gui-workbench-plan",
         "status": "planned",
         "summary": "Implement the GUI gatekeeper/workbench as a view over governed action specs"
@@ -330,6 +312,24 @@
         "id": "agf-dpa-adoption-tracker",
         "status": "blocked",
         "summary": "Track AGF/DPA Package-G adoption evaluation without implementation claims"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "external-rule-registry-bootstrap-adjudication",
+        "status": "planned",
+        "summary": "Adjudicate external rule-registry bootstrap and gate applicability"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "proof-assurance-assessment",
+        "status": "planned",
+        "summary": "PAA — Proof Assurance Assessment: investigation and development plan for trustworthy software evidence"
       }
     ],
     "recent_lessons": [
