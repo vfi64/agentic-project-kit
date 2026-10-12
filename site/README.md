@@ -128,3 +128,24 @@ S4f workflow projection adds `workflows/index.html` and
   `docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json`; the current
   status is `B1_EVALUABLE`, and general Brownfield portability is explicitly not
   claimed from one familiar private repository.
+
+## Explanation and public evidence
+
+`agentic_project_kit.site_explanation` generates `understand/index.html` and
+`understand/evidence.json`. Audience, architecture, benefits, limits and local
+controller boundaries are curated explanations of existing contracts. Current
+release bullets come from the matching CHANGELOG section. Brownfield observation
+counts come from canonical planning records with existing public reports; the
+historical B1 threshold window remains separately labelled. Greenfield evidence
+retains its tested package, date and scope; missing or invalid evidence is
+`unverified`, never a fresh PASS. PAA remains planning, not an implemented engine.
+
+Only selected public fields are projected; private repository identities, raw
+reports and local runtime paths are not copied. `tool_comparison.yaml` contains
+dated official-source descriptions, not automatic external product monitoring,
+rankings or measured superiority claims. Invalid comparison URLs/dates block the
+build. Builds require no network access for those descriptions.
+
+`tests/test_site_explanation.py` checks derivation, evidence degradation, release
+isolation, escaping and publication boundaries. `static/kit-architecture.svg`
+shows Kit responsibilities; `static/runtime-map.svg` describes the site build.

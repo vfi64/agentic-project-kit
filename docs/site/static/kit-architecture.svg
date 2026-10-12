@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="420" viewBox="0 0 1000 420" role="img" aria-labelledby="title desc">
+  <title id="title">Kit governance and execution responsibilities</title>
+  <desc id="desc">Human intent flows through a replaceable executor into Kit contracts and checks. Integrations execute authorized actions and return evidence to repository state and handoffs.</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 8 4 0 8" fill="none" stroke="#0f766e" stroke-width="1.5"/></marker></defs>
+  <rect width="1000" height="420" rx="18" fill="#edf3f1"/>
+  <g fill="#fff" stroke="#c8d3dc" stroke-width="2">
+    <rect x="24" y="70" width="205" height="140" rx="12"/><rect x="270" y="70" width="205" height="140" rx="12"/>
+    <rect x="516" y="35" width="215" height="210" rx="12"/><rect x="772" y="70" width="205" height="140" rx="12"/>
+    <rect x="270" y="295" width="461" height="95" rx="12"/>
+  </g>
+  <g font-family="system-ui,sans-serif" fill="#17202a" text-anchor="middle">
+    <g font-size="21" font-weight="700"><text x="126" y="111">Human</text><text x="372" y="111">Executor</text><text x="624" y="80">Kit</text><text x="874" y="111">Integrations</text><text x="500" y="332">Repository state and evidence</text></g>
+    <g font-size="16"><text x="126" y="147">Intent and requirements</text><text x="126" y="176">Approvals and review</text>
+      <text x="372" y="147">Assistant / local agent</text><text x="372" y="176">Optional controller</text>
+      <text x="624" y="119">Contracts and profiles</text><text x="624" y="150">Manifest and guards</text><text x="624" y="181">Core workflow modules</text><text x="624" y="212">CLI / GUI / transfer</text>
+      <text x="874" y="147">Git · GitHub · CI</text><text x="874" y="176">Release services</text><text x="500" y="364">Source identities · reports · successor handoffs</text>
+    </g>
+  </g>
+  <g stroke="#0f766e" stroke-width="2" fill="none" marker-end="url(#arrow)"><path d="M229 140H265"/><path d="M475 140H511"/><path d="M731 140H767"/><path d="M874 210V343H737"/><path d="M270 343H126V216"/></g>
+</svg>

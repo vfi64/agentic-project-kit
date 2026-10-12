@@ -64,7 +64,7 @@ def test_pages_workflow_builds_site_and_deploys_actions_artifact() -> None:
     }
     assert 'pip install -e ".[dev]"' in "\n".join(build_runs)
     assert "python site/scripts/build.py --output site/dist --json" in build_runs
-    assert "python -m pytest tests/test_site_generator.py tests/test_site_claims.py -q" in build_runs
+    assert "python -m pytest tests/test_site_generator.py tests/test_site_claims.py tests/test_site_explanation.py -q" in build_runs
     assert "actions/configure-pages@v5" in build_uses
     assert any(
         step.get("uses") == "actions/configure-pages@v5"

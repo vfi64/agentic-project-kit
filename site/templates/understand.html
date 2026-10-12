@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Who the Agentic Project Kit serves, how its governance works, its evidence and its limits.">
+    <title>Understand the Kit — ${product_name}</title>
+    <link rel="stylesheet" href="../static/site.css">
+  </head>
+  <body>
+    <main class="page">
+      <nav class="topnav" aria-label="Site">
+        <a href="../index.html">Overview</a><a href="index.html" aria-current="page">Understand the Kit</a>
+        <a href="../quickstart/index.html">Quickstart</a><a href="../workflows/index.html">Workflows</a>
+        <a href="../commands/guided.html">Guided commands</a><a href="../claims/index.html">Claims</a>
+      </nav>
+      <header class="explanation-hero">
+        <p class="eyebrow">Purpose, mechanism, evidence</p>
+        <h1>Keep AI-assisted work accountable to the repository.</h1>
+        <p class="lede">The Kit keeps project context and work results in the repository, then checks defined workflow rules around your chosen AI assistant. You still own the requirements and the decisions.</p>
+        <p>Current package: <strong>${package_version}</strong>. The facts below are generated from this checkout; dated observations retain their original scope.</p>
+        <nav class="section-nav" aria-label="On this page">
+          <a href="#audience">Who it serves</a><a href="#benefits">Benefits and costs</a><a href="#architecture">Architecture</a>
+          <a href="#controllers">Local controllers</a><a href="#evidence">Practice and evidence</a><a href="#comparison">Tool comparison</a>
+        </nav>
+      </header>
+
+      <section class="panel" aria-labelledby="plain-language-title">
+        <h2 id="plain-language-title">What that means in everyday work</h2>
+        <p>A contract names the permitted action and its conditions. A gate is an executable check of those conditions. Evidence records the observed result and its scope. A handoff gives a later session the current repository context and next step.</p>
+        <p>For example, you can discuss a fix in an ordinary browser chat, run the bounded local workflow, review its recorded checks and continue in another chat from the generated successor package. The assistant does not need direct shell access: File Transfer and Copy and Paste are supported paths, alongside Agent Direct and the experimental GUI.</p>
+        <p>Executable checks add something beyond a prompt or documentation template: they can report a block, check a specific revision or verify required evidence. They do not validate every requirement semantically. A test count, choice of Python library, release DOI or community size alone does not establish engineering quality or deployment suitability.</p>
+        <p><a href="../workflows/index.html">Interaction paths and their requirements</a> · <a href="../claims/index.html">Inspect the evidence bindings</a></p>
+      </section>
+
+      <section id="audience" class="section-grid" aria-label="Audience and fit">
+        <article class="panel"><p class="eyebrow">Good fit</p><h2>Maintainers of continuing projects</h2>
+          <p>Solo maintainers and small teams using AI across multiple sessions, models or executors, especially where documentation, review, release decisions and project history must remain inspectable.</p>
+          <p>Git-backed software and documentation repositories are the architectural target. Python is a reference profile, not a promise that every language or repository type has equally mature support.</p>
+        </article>
+        <article class="panel"><p class="eyebrow">Consider the overhead</p><h2>Start with a bounded adoption</h2>
+          <p>The Kit expects Git knowledge, explicit contracts and a maintainer willing to inspect evidence. For a disposable experiment, the state files and closeout steps may cost more than they help.</p>
+          <p>It does not supply the coding model, replace your IDE, decide whether requirements are correct or guarantee a safe change merely because checks are green.</p>
+        </article>
+      </section>
+
+      <section id="benefits" aria-labelledby="benefit-title">
+        <p class="eyebrow">What the mechanisms are intended to improve</p><h2 id="benefit-title">Benefits with explicit tradeoffs</h2>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Benefits and tradeoffs">
+          <table><thead><tr><th>Need</th><th>Kit mechanism</th><th>Practical benefit</th><th>Cost or limit</th></tr></thead><tbody>
+            <tr><td>Continue after a chat switch</td><td>Repository state and generated successor packages</td><td>Recover inspectable context without relying solely on chat memory.</td><td>State and projections must stay current; stale evidence can block.</td></tr>
+            <tr><td>Review a bounded action</td><td>Command manifest, safety metadata and guarded workflows</td><td>Make the requested action and its effects easier to inspect.</td><td>Guards cover defined rules; they cannot detect every semantic error.</td></tr>
+            <tr><td>Close PRs and releases consistently</td><td>Expected-head checks, CI readiness and release consent</td><td>Keep identity, approvals and evidence associated with the operation.</td><td>GitHub state, network availability and configured CI remain dependencies.</td></tr>
+            <tr><td>Change executor</td><td>Versioned contracts, evidence and transport boundaries</td><td>Keep project context outside a particular assistant.</td><td>Executor integrations need their own validation and permissions.</td></tr>
+          </tbody></table>
+        </div>
+        <p>These are mechanism-based benefits, not measured claims of faster development, zero drift, fewer defects or lower total cost. The Kit workflow does not require an LLM API; your chosen assistant, hosting and CI can still incur costs.</p>
+        <p><a href="${repository_url}/blob/main/docs/architecture/ARCHITECTURE_CONTRACT.md">Architecture contract</a> · <a href="${repository_url}/blob/main/docs/WORKFLOW_OUTPUT_CYCLE.md">Workflow state and evidence contract</a></p>
+      </section>
+
+      <section id="architecture" aria-labelledby="architecture-title">
+        <p class="eyebrow">Governance and execution are separate responsibilities</p><h2 id="architecture-title">How the Kit works</h2>
+        <figure class="architecture-map"><img src="../static/kit-architecture.svg" alt="A human defines intent and approves decisions. A replaceable executor proposes and runs bounded actions through Kit contracts and checks. Git, CI and release services provide execution results. Evidence returns to repository state and successor handoffs.">
+          <figcaption>On narrow screens, scroll the diagram horizontally. Logical responsibilities. A guard validates defined contracts; it does not prove general software correctness.</figcaption></figure>
+        <ol class="workflow-steps">
+          <li><strong>Define intent.</strong> The maintainer owns requirements, risk acceptance and authorization.</li>
+          <li><strong>Inspect repository truth.</strong> The executor reads the project contract, architecture, current state and canonical handoff.</li>
+          <li><strong>Choose a bounded action.</strong> Manifest-backed commands and profiles expose checks, available operations and effects.</li>
+          <li><strong>Validate and execute.</strong> Focused Python modules implement the rules; CLI and GUI surfaces call the same governed operations. Git and CI remain separate systems.</li>
+          <li><strong>Record and hand off.</strong> Reports, source identities and generated successor packages preserve what happened and what remains open.</li>
+        </ol>
+        <div class="section-grid">
+          <article class="panel"><h3>Authority and state</h3><p>Repository contracts, profiles, policy packs and canonical state define the process. Doctor and related gates check configured contracts and known drift. The command manifest feeds CLI discovery, GUI grouping and public command views.</p></article>
+          <article class="panel"><h3>Adapters and integrations</h3><p>CLI, GUI and transfer routes are interfaces. Focused core modules implement governed behavior; adapters connect Git, GitHub, CI and release services. Toolchain-specific behavior belongs in profiles or adapters.</p></article>
+          <article class="panel"><h3>Documentation and assurance</h3><p>Documentation governance and bounded DPA checks address document authority, freshness and evidence. They do not establish arbitrary foreign-repository conformance or formal correctness of the product. PAA appears below as planning status, not a shipped proof engine.</p></article>
+        </div>
+      </section>
+
+      <section id="controllers" class="band" aria-labelledby="controller-title">
+        <div><p class="eyebrow">Public interface, private implementation possible</p><h2 id="controller-title">Working with a local controller</h2>
+          <p>A local controller can present work orders, transport a bounded request to an assistant, invoke allowed Kit commands and return their structured results. It can be private; the public Kit does not require publication of that controller's source.</p>
+          <p>The controller must preserve the command contract, action identity, approval boundaries, exit code and structured verdict. A failed or ambiguous result must remain visible. It must not invent a successful receipt, bypass a Kit block or become a competing governance authority.</p>
+          <p>File Transfer, Copy and Paste, Agent Direct and the experimental Kit GUI are the public interaction paths. A separate private controller is an integration example, not an additional public Kit product or a claim of universal plug-and-play compatibility.</p>
+        </div>
+        <article class="panel"><h3>A bounded interaction</h3><ol>
+          <li>Human selects a task and its permissions.</li><li>Controller sends repository context and a bounded request.</li>
+          <li>Assistant proposes a change or next action.</li><li>Kit validates the applicable command and repository state.</li>
+          <li>Authorized execution produces evidence; blocked or failed states stop the flow.</li><li>Controller displays the result and the next permitted step.</li>
+        </ol><p><a href="../workflows/index.html">Choose an interaction path</a> · <a href="${repository_url}/blob/main/docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md">Work-order contract</a></p></article>
+      </section>
+
+      <section id="evidence" aria-labelledby="evidence-title"><p class="eyebrow">Observed results and their limits</p><h2 id="evidence-title">How use changed the Kit</h2>
+        <p>Self-hosting exercises the Kit's own repository workflow. Greenfield tests probe first adoption and first-cycle closeout. Brownfield work probes an existing project's constraints. Each can expose different defects; none alone establishes general reliability.</p>
+        <p>The current release notes below show repairs informed by external use, including context recovery, installation discovery and consumer CI where recorded. Test fixtures exercise defined scenarios; a mocked remote response is not a live remote retest. A DOI identifies a versioned release, not a quality certification.</p>
+        <div class="section-grid evidence-grid">${evidence_cards}</div>
+        <p>Read the sources for exact revisions, test methods and unresolved limits. Private targets are represented by public Kit reports; their source code and independent replication are not promised. No numerical maturity score or comparative benchmark is claimed.</p>
+      </section>
+
+      <section id="comparison" aria-labelledby="comparison-title"><p class="eyebrow">Complementary roles and actual overlap</p><h2 id="comparison-title">Where other tools fit</h2>
+        <p>This is a dated orientation from official documentation, not a feature-completeness audit or benchmark. Products evolve; external descriptions do not update themselves from this repository. Sources and review dates remain visible, and the build makes no external network requests.</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Tool roles and sources"><table>
+          <thead><tr><th>Tool</th><th>Category</th><th>Documented focus</th><th>Relationship to the Kit</th><th>Source and review date</th></tr></thead><tbody>${comparison_rows}</tbody>
+        </table></div>
+        <p>The Kit's emphasis is a repository-owned operating contract across sessions and lifecycle steps. Agents supply coding assistance; hooks and CI run configured checks; specification tools structure intent. Select and combine tools for your requirements. We have no evidence that the Kit is categorically superior in safety, speed, drift or cost.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="limits-title"><h2 id="limits-title">What remains your responsibility</h2>
+        <p>Review requirements and changes, protect credentials, configure meaningful tests, authorize effects and maintain integration permissions. Fail-closed behavior can stop a workflow when evidence is missing; it is a diagnostic boundary, not an assurance that every permitted action is correct.</p>
+        <p>Adoption and controller UX remain work in progress. Additional files, review steps and handoff commits are real operational costs. There is no API-cost or CI-savings benchmark here, no universal multi-agent autonomy claim and no formal verification of arbitrary software.</p>
+        <p><a href="../quickstart/index.html">Try a bounded first adoption</a> · <a href="../claims/index.html">Inspect machine-checked claim bindings</a></p>
+      </section>
+    </main>
+  </body>
+</html>

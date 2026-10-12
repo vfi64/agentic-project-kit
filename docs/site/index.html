@@ -3,13 +3,15 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Agentic Execution Runtime</title>
+    <meta name="description" content="Agentic Project Kit keeps context, rules, checks and handoffs in your repository for AI-assisted development — from browser chats to local coding agents. Explore benefits, architecture, evidence and limits.">
+    <title>Agentic Execution Runtime — Agentic Project Kit</title>
     <link rel="stylesheet" href="static/site.css">
   </head>
   <body>
     <main class="page">
       <nav class="topnav" aria-label="Site">
         <a href="index.html">Overview</a>
+        <a href="understand/index.html">Understand the Kit</a>
         <a href="quickstart/index.html">Quickstart</a>
         <a href="workflows/index.html">Workflows</a>
         <a href="commands/guided.html">Guided</a>
@@ -20,11 +22,13 @@
 
       <section class="overview" aria-labelledby="site-title">
         <div>
-          <p class="eyebrow">Generated repository projection</p>
+          <p class="eyebrow">Repository-owned governance for AI-assisted work</p>
           <h1 id="site-title">Agentic Execution Runtime</h1>
-          <p class="lede">Formerly Agentic Project Kit. A local runtime for keeping long AI-assisted repository work grounded in contracts, gates, evidence and handoffs.</p>
+          <p class="lede">Formerly Agentic Project Kit. Keep project context, rules and work results in your repository when developing with an AI assistant — including an ordinary browser chat.</p>
+          <p>For maintainers who want inspectable context and controlled lifecycle steps. You provide the coding assistant and own the requirements and approvals.</p>
           <div class="hero-actions" aria-label="Primary generated views">
             <a href="quickstart/index.html">Quickstart</a>
+            <a href="understand/index.html">Benefits, architecture and limits</a>
             <a href="workflows/index.html">Choose workflow</a>
             <a href="https://github.com/vfi64/agentic-project-kit">Repository</a>
             <a href="commands/guided.html">Guided commands</a>
@@ -32,9 +36,17 @@
           </div>
         </div>
         <figure class="system-map">
-          <img src="static/runtime-map.svg" alt="Repository sources flow into the deterministic site generator and then into public projections.">
-          <figcaption>Generated from repository state at build time.</figcaption>
+          <img src="static/kit-architecture.svg" alt="Human intent flows through a replaceable executor, Kit contracts and checks, integrations, and durable repository evidence.">
+          <figcaption>Kit responsibilities: bounded operations and inspectable evidence. <a href="understand/index.html#architecture">Explore the architecture</a>.</figcaption>
         </figure>
+      </section>
+
+      <section class="panel" aria-labelledby="everyday-title">
+        <p class="eyebrow">An everyday use case</p><h2 id="everyday-title">Continue tomorrow without rebuilding the project context</h2>
+        <p>You discuss a change in a browser chat. The Kit prepares repository context and a bounded next step. You run the local workflow; it records check results and the remaining work. When you change chats or assistants, a generated handoff carries the repository state forward.</p>
+        <p>You can also use a local coding agent or controller. An autonomous multi-agent framework, paid agent platform or LLM API is not a prerequisite. Git, a local Kit installation and the permissions required by your chosen workflow still matter.</p>
+        <p>The useful result is an inspectable work process: what was requested, what ran, what passed or failed, and what is next. Checks enforce defined rules; the maintainer still reviews whether the change solves the right problem.</p>
+        <a href="workflows/index.html">See the four interaction paths</a>
       </section>
 
       <section class="metrics" aria-label="Repository facts">
@@ -63,7 +75,7 @@
           <strong>B1_EVALUABLE</strong>
         </article>
         <article>
-          <span>B1 cycles</span>
+          <span>B1 threshold-window cycles</span>
           <strong>5</strong>
         </article>
       </section>
@@ -77,8 +89,14 @@
         </div>
         <article class="panel">
           <p class="eyebrow">Brownfield evidence</p>
-          <p>Five real maintenance cycles in one familiar private Brownfield repository are now consolidated as <code>B1_EVALUABLE</code>. This is stronger evidence than self-hosting, but it does not establish general Brownfield portability.</p>
+          <p>The historical B1 threshold window consolidates 5 maintenance cycles as <code>B1_EVALUABLE</code>. Later observations appear in the generated evidence below. One familiar private repository does not establish general Brownfield portability.</p>
         </article>
+      </section>
+
+      <section class="section-grid" aria-label="Audience, benefits and limits">
+        <article class="panel"><p class="eyebrow">Who it serves</p><h2>Maintainers of continuing projects</h2><p>Solo maintainers and small teams working with AI on Git-backed software or documentation, particularly across long sessions, reviews and releases. Python is a reference profile; equal maturity across all toolchains is not claimed.</p></article>
+        <article class="panel"><p class="eyebrow">Why use it</p><h2>Durable context and bounded actions</h2><p>Repository state replaces dependence on chat memory. Manifest-backed workflows expose effects, checks and evidence. Generated handoffs make the next session inspectable.</p><p><a href="understand/index.html#benefits">Mechanisms and tradeoffs</a></p></article>
+        <article class="panel"><p class="eyebrow">What it costs</p><h2>Explicit process takes work</h2><p>Adoption requires Git knowledge, maintained contracts, useful tests and review. More state files and closeout steps are real overhead. Green gates do not prove correct requirements or defect-free software.</p><p><a href="understand/index.html#limits-title">Read the limits</a></p></article>
       </section>
 
       <section class="metrics" aria-label="Repository facts continued">
@@ -125,7 +143,8 @@
         <div>
           <p class="eyebrow">Architecture</p>
           <h2 id="architecture-title">Runtime Structure</h2>
-          <p>The public site is a projection, not a new authority. Package metadata, release state, command surfaces, safety metadata and claim status are derived from repository sources during the build.</p>
+          <p>The Kit separates human decisions, replaceable executors, repository contracts, deterministic checks and external integrations. CLI, GUI and transport surfaces use governed core operations. A private local controller can transport and execute bounded work while the Kit owns its process contracts.</p>
+          <p><a href="understand/index.html#architecture">Architecture and control flow</a> · <a href="understand/index.html#controllers">Local controller integration</a></p>
         </div>
         <dl class="compact-details">
           <div>
@@ -145,6 +164,15 @@
             <dd><code>docs-pages-fallback</code></dd>
           </div>
         </dl>
+      </section>
+
+      <section aria-labelledby="practice-title"><p class="eyebrow">Evidence from actual use</p><h2 id="practice-title">Self-hosting, Greenfield and Brownfield</h2>
+        <p>Using the Kit on itself exercises its own workflow. External adoption and maintenance tests exposed additional boundary defects and informed later repairs. Historical retests, recorded maintenance and current release notes are different evidence classes.</p>
+        <div class="section-grid evidence-grid"><article class="panel"><h3>Greenfield: installed release</h3><p class="evidence-fact">agentic-project-kit==1.0.13 · 2026-09-16 · recorded_pass</p><p>Historical released-package first-cycle work/PR/CI/merge/handoff retest in a private external repository; not a retest of every later release.</p><p><a href="https://github.com/vfi64/agentic-project-kit/blob/main/docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.json">Read the repository source</a></p></article>
+<article class="panel"><h3>Brownfield: recorded maintenance</h3><p class="evidence-fact">7 merged observations · latest: B1-COMM-SCI-20260831-007 · legacy seam count: 55 -&gt; 44</p><p>Recorded maintenance observations in one familiar private repository; not an independent benchmark or general portability proof.</p><p><a href="https://github.com/vfi64/agentic-project-kit/blob/main/docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md">Read the repository source</a></p></article>
+<article class="panel"><p class="eyebrow">Release notes, not a new retest</p><h3>What changed in 1.0.23</h3><p>Source status: recorded. Shipped changes recorded in the current release section.</p><ul><li>Verify automatic context-carrier recovery for external safe merges with released Kit 1.0.21 and add regressions preserving CI, head and worktree guards (KIT-GF-017).</li><li>Fix consumer refresh PR CI with manifest-derived state paths, conservative full-suite fallback and protected target-version managed CI adoption (KIT-GF-063).</li><li>Add signed workspace Kit updates with verified release wheels, preserved CI customization, target-version entrypoints and check/doctor validation (KIT-GF-051).</li><li>Fix workspace-owned Kit discovery without global PATH assumptions and expose shared installation diagnostics (KIT-GF-021).</li><li>Add signed reruns for never-started failed PR checks with current-head guards and durable receipts (KIT-GF-062).</li><li>Fix PR orchestration with bounded summary output, full file evidence and structured CI findings distinct from execution errors (KIT-GF-027).</li><li>Fix bounded GitHub readiness read retries, precise lookup diagnostics and signed original DOI PR resumption, with regeneration only for confirmed conflicts and no duplicate publication.</li><li>Fix release API failure recovery and original DOI PR resume</li></ul><p><a href="https://github.com/vfi64/agentic-project-kit/blob/main/CHANGELOG.md">Read the repository source</a></p></article>
+<article class="panel"><h3>Formal assurance: planning boundary</h3><p class="evidence-fact">PAA: planned · review: review_required · P0: proposed</p><p>PAA is shown from the canonical plan. A planning status is not an implemented verification capability or a proof of software correctness.</p><p><a href="https://github.com/vfi64/agentic-project-kit/blob/main/docs/planning/PROJECT_DIRECTION.yaml">Read the repository source</a></p></article></div>
+        <p><a href="understand/index.html#evidence">Methods and generalization limits</a> · <a href="understand/index.html#comparison">Comparison with open-source and commercial tools</a></p>
       </section>
 
       <section class="command-links" aria-label="Command views">
@@ -207,7 +235,7 @@
         <article>
           <h3>Verified now</h3>
           <ul class="summary-list">
-          <li><code>b1-brownfield-evaluable</code><span>Five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary.</span></li>
+          <li><code>b1-brownfield-evaluable</code><span>In the historical B1 threshold window, five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary.</span></li>
           <li><code>cli-entry-point</code><span>The package provides the agentic-kit command-line interface.</span></li>
           <li><code>command-manifest-synchronization</code><span>The public command catalog is generated from the current command manifest and checked for synchronization.</span></li>
           <li><code>generated-command-catalog</code><span>The website command catalog is generated from the Kit&#x27;s current command manifest.</span></li>
@@ -241,7 +269,7 @@
             <li><span>Remote target-CI validation is not claimed when the target repository reports no checks; remote adoption PR mechanics are separate from target-owned CI evidence.</span></li>
             <li><span>Post-fix PyPI validation is not claimed until a later package is published and installed again from PyPI.</span></li>
             <li><span>Full GUI parity with every CLI command is not claimed.</span></li>
-            <li><span>General Brownfield portability is not claimed from one familiar private repository and five cycles.</span></li>
+            <li><span>General Brownfield portability is not claimed from observations in one familiar private repository.</span></li>
             <li><span>Live GitHub Pages publication depends on either GitHub Actions Pages deployment or the generated docs-source fallback being current.</span></li>
           </ul>
         </article>

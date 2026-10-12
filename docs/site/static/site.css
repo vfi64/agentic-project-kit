@@ -12,6 +12,23 @@
   --risk: #b42318;
 }
 
+.explanation-hero { padding: 20px 0 32px; border-bottom: 1px solid var(--line); }
+.section-nav { display: flex; flex-wrap: wrap; gap: 12px 20px; }
+.section-nav a { color: var(--accent); }
+section[id] { scroll-margin-top: 24px; margin-top: 36px; }
+.architecture-map { margin: 24px 0; }
+.architecture-map img { display: block; width: 100%; height: auto; }
+.architecture-map figcaption { color: var(--muted); margin-top: 10px; }
+.evidence-fact { color: var(--accent); font-weight: 600; overflow-wrap: anywhere; }
+.evidence-grid ul { padding-left: 20px; }
+.evidence-grid li { margin-bottom: 8px; }
+.table-scroll { overflow-x: auto; margin: 24px 0; }
+.table-scroll table { min-width: 680px; width: 100%; border-collapse: collapse; }
+.table-scroll th, .table-scroll td { padding: 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.table-scroll th { background: var(--soft); }
+.table-scroll:focus-visible, a:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
+@media (max-width: 680px) { .architecture-map { overflow-x: auto; } .architecture-map img { min-width: 680px; } }
+
 * {
   box-sizing: border-box;
 }

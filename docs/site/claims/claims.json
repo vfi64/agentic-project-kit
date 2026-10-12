@@ -255,7 +255,7 @@
       "planned": false,
       "required": true,
       "status": "verified",
-      "text": "Five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary."
+      "text": "In the historical B1 threshold window, five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary."
     }
   ],
   "kind": "site_claim_evaluation_report",
