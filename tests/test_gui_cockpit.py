@@ -502,7 +502,7 @@ def test_bridge_uses_project_root_cwd(monkeypatch, tmp_path: Path) -> None:
     result = harness._agentic_command("workflow", "state", "--json")
 
     assert result.returncode == 0
-    assert calls == [{"command": ["agentic-kit", "workflow", "state", "--json"], "cwd": tmp_path}]
+    assert calls == [{"command": [sys.executable, "-m", "agentic_project_kit.cli", "workflow", "state", "--json"], "cwd": tmp_path}]
     assert harness.busy[-1] == ("Done", False)
 
 

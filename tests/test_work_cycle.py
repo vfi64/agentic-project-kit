@@ -257,3 +257,12 @@ def test_build_work_finish_args_merge_is_explicit_default() -> None:
     assert "--no-merge" not in default_args
     assert "--merge" not in review_only_args
     assert "--no-merge" in review_only_args
+
+
+def test_expected_feature_changes_allow_check_without_ignoring_other_blockers():
+    from agentic_project_kit.work_cycle import work_cycle_has_blockers
+    assert not work_cycle_has_blockers('BLOCKED', 'working tree is dirty', on_feature_branch=True)
+    assert work_cycle_has_blockers('BLOCKED', 'working tree is dirty', on_feature_branch=False)
+    assert work_cycle_has_blockers('BLOCKED', 'working tree is dirty; stale rules', on_feature_branch=True)
+    assert work_cycle_has_blockers('WAIT_FOR_D2', 'working tree is dirty', on_feature_branch=True)
+    assert work_cycle_has_blockers('FAILED', 'working tree is dirty', on_feature_branch=True)

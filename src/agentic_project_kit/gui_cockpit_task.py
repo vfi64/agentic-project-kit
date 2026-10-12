@@ -8,6 +8,7 @@ from typing import Any
 from agentic_project_kit.gui_activity_log import ActivityEntry
 from agentic_project_kit.gui_cockpit_common import THEME
 from agentic_project_kit.gui_open_folder import open_folder_in_file_manager
+from agentic_project_kit.gui_services import completed_gui_status, invoke_gui_service, run_gui_command
 from agentic_project_kit.gui_task_editor import (
     CANONICAL_TRANSFER_INBOX_PATH,
     CANONICAL_TRANSFER_OUTBOX_PATH,
@@ -68,9 +69,11 @@ class CockpitTaskMixin:
             font=THEME.small_font,
         ).pack(side=tk.RIGHT)
 
+        editor_frame = tk.Frame(task_frame, bg=THEME.color_panel_bg)
+        editor_frame.pack(fill=tk.X, pady=(9, 9))
         self.task_text = tk.Text(
-            task_frame,
-            height=THEME.task_text_height,
+            editor_frame,
+            height=getattr(self, "task_editor_height", THEME.task_text_height),
             wrap=tk.WORD,
             font=THEME.body_font,
             relief=tk.GROOVE,
@@ -78,7 +81,10 @@ class CockpitTaskMixin:
             padx=9,
             pady=7,
         )
-        self.task_text.pack(fill=tk.X, expand=False, pady=(9, 9))
+        self.task_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        task_scrollbar = ttk.Scrollbar(editor_frame, orient=tk.VERTICAL, command=self.task_text.yview)
+        self.task_text.configure(yscrollcommand=task_scrollbar.set)
+        task_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.task_text.bind("<KeyRelease>", self.refresh_task_editor_buttons)
         task_button_row = tk.Frame(task_frame, bg=THEME.color_panel_bg)
         task_button_row.pack(fill=tk.X)
@@ -521,16 +527,7 @@ class CockpitTaskMixin:
             output.see("end")
 
     def _completed_status(self, completed: subprocess.CompletedProcess[str]) -> str:
-        if completed.stdout:
-            try:
-                payload = json.loads(completed.stdout)
-            except ValueError:
-                payload = None
-            if isinstance(payload, dict):
-                raw_status = payload.get("result_status", payload.get("STATE", payload.get("state")))
-                if raw_status is not None:
-                    return str(raw_status)
-        return "PASS" if completed.returncode == 0 else "ERROR"
+        return completed_gui_status(completed)
 
     def clear_activity_log(self) -> None:
         self.activity_log.clear()
@@ -629,21 +626,15 @@ class CockpitTaskMixin:
             self.task_status_var.set("Ready to publish the GUI task carrier.")
 
     def _agentic_command(self, *parts: str) -> subprocess.CompletedProcess[str]:
-        executable = self.project_root / ".venv" / "bin" / "agentic-kit"
-        command = [str(executable) if executable.exists() else "agentic-kit", *parts]
         label = "agentic-kit " + " ".join(parts[:3])
         self._set_busy(f"Running: {label}", running=True)
         try:
-            completed = subprocess.run(
-                command,
-                cwd=self.project_root,
-                text=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                check=False,
+            project_root = self.project_root
+            completed = invoke_gui_service(
+                self, lambda: run_gui_command(project_root, parts), label=label,
             )
-        except OSError as exc:
-            completed = subprocess.CompletedProcess(command, 127, "", str(exc))
+        except (OSError, RuntimeError) as exc:
+            completed = subprocess.CompletedProcess(list(parts), 127, "", str(exc))
         self._set_busy("Done" if completed.returncode == 0 else "Blocked", running=False)
         return completed
 
@@ -687,7 +678,7 @@ class CockpitTaskMixin:
             )
             self.refresh_task_editor_buttons()
             return
-        tmp_path = self.project_root / "tmp" / "gui-task-editor-current-task.md"
+        tmp_path = load_workspace(self.project_root).tmp() / "gui-task-editor-current-task.md"
         tmp_path.parent.mkdir(parents=True, exist_ok=True)
         tmp_path.write_text(body + "\n", encoding="utf-8")
         completed = self._agentic_command(

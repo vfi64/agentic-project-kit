@@ -127,6 +127,16 @@ BLOCKER_EXPLANATIONS: dict[str, str] = {
     "patch-cycle-status": "The patch-cycle state needs diagnosis.",
 }
 
+def work_cycle_has_blockers(state: str, reason: str, *, on_feature_branch: bool) -> bool:
+    """Expected feature edits permit Check; workflow/rule failures still recover.
+
+    This selects controls only. Check and Finish retain their backend gates.
+    """
+    if state == "BLOCKED" and on_feature_branch and reason.strip() == "working tree is dirty":
+        return False
+    return state in {"BLOCKED", "FAILED", "WAIT_FOR_D2"}
+
+
 def derive_work_phase(
     *,
     repo_clean: bool,

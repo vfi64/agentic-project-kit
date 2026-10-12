@@ -4160,6 +4160,29 @@ plans:
   - docs/architecture/dpa/README.md
   - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
   source_sha256: 29a4a8aeeb47726d3822ee9394c05774815a7c3d37bb3387a5ec79903a3a924c
+- id: guided-gui-alternative
+  status: active
+  title: Validate an optional guided Kit GUI over shared guarded actions
+  phase: GUI
+  source_files:
+  - docs/reference/GUIDED_GUI.md
+  - docs/architecture/ADR_GUIDED_GUI_FRONTEND.md
+  implementation_status: implemented_experimental_frontend_pending_operational_acceptance
+  acceptance:
+  - Keep the existing GUI entry point and reuse Kit action handlers and safety checks.
+  - Cover all nine communication/access combinations and project-context separation.
+  - Validate real-window behavior on the initial desktop and retain explicit platform limits.
+  - Collect operational acceptance before selecting a new default or removing the original GUI.
+  evidence:
+  - src/agentic_project_kit/gui_guided.py
+  - src/agentic_project_kit/gui_services.py
+  - tests/test_gui_guided.py
+  - tests/test_gui_service_bridge.py
+  remaining_work:
+  - Sustained real-project usability and workflow acceptance.
+  - Dedicated Windows/Linux packaging, keyboard and visual checks.
+  scope_boundary: Presentation and shared execution adapters only; no private controller source, browser
+    transport, or autonomous task runtime adoption.
 ideas:
 - id: project-direction-gui-panel
   status: accepted

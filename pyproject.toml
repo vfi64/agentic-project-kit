@@ -53,6 +53,7 @@ exclude = [
 [project.scripts]
 agentic-kit = "agentic_project_kit.cli:app"
 agentic-kit-gui = "agentic_project_kit.gui_cockpit:main"
+agentic-kit-gui-guided = "agentic_project_kit.gui_guided:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -1,5 +1,8 @@
 ## Unreleased
 
+- Add an optional guided Kit GUI with task-oriented tabs, shared guarded actions, persistent activity output and background execution feedback; preserve the original GUI.
+- Harden GUI command discovery and result handling, preserve task drafts across view changes and keep task/approval context separate when switching projects.
+
 ## v1.0.23 - 2026-10-10
 
 - Verify automatic context-carrier recovery for external safe merges with released Kit 1.0.21 and add regressions preserving CI, head and worktree guards (KIT-GF-017).

@@ -6,6 +6,8 @@ from typing import Any
 
 from agentic_project_kit.gui_cockpit_common import HEADER_TEXT, THEME
 from agentic_project_kit.gui_tk_widgets import attach_tooltip
+from agentic_project_kit.gui_services import completed_gui_status
+from agentic_project_kit.gui_state_signature import repository_preview_signature
 from agentic_project_kit.work_cycle import (
     ChangedPath,
     build_work_cycle_views,
@@ -14,6 +16,7 @@ from agentic_project_kit.work_cycle import (
     derive_work_phase,
     humanize_work_result,
     slugify_work_title,
+    work_cycle_has_blockers,
 )
 
 
@@ -248,12 +251,15 @@ class CockpitHeaderMixin:
         return changed_paths_from_status(self._git_status_short())
 
     def _work_cycle_signature(self) -> str:
-        return f"{self.current_branch()}::{self._git_status_short()}"
+        return repository_preview_signature(self.project_root)
 
     def current_work_phase(self) -> str:
         branch = self.current_branch()
         changed_paths = self._changed_paths()
-        has_blockers = self.basic_view.traffic_light_state in {"BLOCKED", "FAILED", "WAIT_FOR_D2"}
+        has_blockers = work_cycle_has_blockers(
+            self.basic_view.traffic_light_state, self.basic_view.reason,
+            on_feature_branch=branch not in {"", "unknown", "main", "master"},
+        )
         return derive_work_phase(
             repo_clean=not changed_paths,
             on_feature_branch=branch not in {"", "unknown", "main", "master"},
@@ -284,10 +290,12 @@ class CockpitHeaderMixin:
             except ValueError:
                 payload = None
         if payload is None:
-            self.log_result(label, "PASS" if completed.returncode == 0 else "ERROR", output)
+            self.log_result(label, "ERROR", output or "Missing structured Kit result.")
             self._disable_confirm_publish()
             self._disable_confirm_discard()
             return None
+        if completed.returncode != 0:
+            payload = {**payload, "result_status": completed_gui_status(completed)}
         message = humanize_work_result(payload)
         lines = [
             "",
@@ -299,12 +307,12 @@ class CockpitHeaderMixin:
             lines.extend(f"- {blocker}" for blocker in message.blockers_human)
         lines.extend(["", f"Next: {message.suggested_next}", ""])
         self.log_result(label, str(payload.get("result_status", "")), "\n".join(lines))
-        if allow_confirm_from_preview and message.allow_confirm_publish:
+        if completed.returncode == 0 and allow_confirm_from_preview and message.allow_confirm_publish:
             self.pending_finish_preview = payload
             if self.work_finish_confirm_button is not None:
                 self.work_finish_confirm_button.configure(state="normal")
             self._disable_confirm_discard()
-        elif allow_confirm_discard_from_preview and message.allow_confirm_discard:
+        elif completed.returncode == 0 and allow_confirm_discard_from_preview and message.allow_confirm_discard:
             self.pending_discard_preview = payload
             if self.work_discard_confirm_button is not None:
                 self.work_discard_confirm_button.configure(state="normal")
@@ -372,7 +380,7 @@ class CockpitHeaderMixin:
         completed = self._agentic_command("work", "check", "--profile", "code", "--json")
         payload = self._write_work_command_result(completed, label="Check")
         self.work_cycle_last_check_passed = bool(
-            payload and str(payload.get("result_status", "")).upper() == "PASS"
+            completed.returncode == 0 and payload and str(payload.get("result_status", "")).upper() == "PASS"
         )
         self.work_cycle_last_check_signature = signature if self.work_cycle_last_check_passed else ""
 
@@ -420,12 +428,17 @@ class CockpitHeaderMixin:
         args = self._current_finish_args(execute=False)
         if args is None:
             return
+        signature = self._work_cycle_signature()
         completed = self._agentic_command(*args)
         payload = self._write_work_command_result(completed, label="Finish & publish", allow_confirm_from_preview=True)
+        if signature != self._work_cycle_signature():
+            self._disable_confirm_publish()
+            self.log_result("Finish & publish", "BLOCKED", "Repository state changed during the preview. Run it again.")
+            return
         if payload and self.pending_finish_preview is not None:
             self.pending_finish_preview = {
                 "payload": payload,
-                "signature": self._work_cycle_signature(),
+                "signature": signature,
                 "args": args,
             }
 
@@ -459,16 +472,21 @@ class CockpitHeaderMixin:
 
     def preview_discard_changes(self) -> None:
         self.log_action("Discard all changes")
+        signature = self._work_cycle_signature()
         completed = self._agentic_command("work", "discard-changes", "--json")
         payload = self._write_work_command_result(
             completed,
             label="Discard all changes",
             allow_confirm_discard_from_preview=True,
         )
+        if signature != self._work_cycle_signature():
+            self._disable_confirm_discard()
+            self.log_result("Discard all changes", "BLOCKED", "Repository state changed during the preview. Run it again.")
+            return
         if payload and self.pending_discard_preview is not None:
             self.pending_discard_preview = {
                 "payload": payload,
-                "signature": self._work_cycle_signature(),
+                "signature": signature,
                 "discard_signature": str(payload.get("signature", "")),
             }
 

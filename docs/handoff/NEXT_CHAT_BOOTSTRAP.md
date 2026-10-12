@@ -6,10 +6,10 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `b253a04578ad4d8d9afb406303ce7b429422d64b` (`b253a045`)
-- Handoff freshness marker: `b253a045`
-- Branch at generation: `docs/post-pr2477-handoff-refresh`
-- Worktree clean at generation: `False`
+- HEAD: `8f62a7ff368a30504a9de64814309d64ff2936e4` (`8f62a7ff`)
+- Handoff freshness marker: `8f62a7ff`
+- Branch at generation: `codex/guided-kit-gui`
+- Worktree clean at generation: `True`
 
 ## Successor handoff package
 
@@ -100,6 +100,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 - `agf-dpa-adoption-tracker` (blocked): Track AGF/DPA Package-G adoption evaluation without implementation claims
 - `external-rule-registry-bootstrap-adjudication` (planned): Adjudicate external rule-registry bootstrap and gate applicability
 - `proof-assurance-assessment` (planned): PAA — Proof Assurance Assessment: investigation and development plan for trustworthy software evidence
+- `guided-gui-alternative` (active): Validate an optional guided Kit GUI over shared guarded actions for GUI
 
 ### RESULT: PASS ###
 

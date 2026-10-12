@@ -1037,3 +1037,10 @@ release notes and PAA planning. Tool comparisons require dated official HTTPS
 sources; editorial accuracy remains review-only because local checks cannot
 establish current external product semantics. Reviewers inspect the linked
 source and scope, never infer a benchmark from a documentation link.
+
+
+## Guided GUI Alternative Gate
+
+`tests/test_gui_guided.py`, `tests/test_gui_services.py`, `tests/test_gui_service_bridge.py` and `tests/test_gui_state_signature.py` cover the optional frontend, all nine communication/access combinations, shared guarded handlers, task-draft preservation and project separation, interpreter discovery without PATH, invalid JSON and failed process results, serial background operations, main-thread Tk event handling and restoration after failures. Preview identity must detect same-path content edits, staging, HEAD and untracked-file changes; changes during previews block confirmation. Existing cockpit, Basic, release and work-cycle tests remain regression gates.
+
+Real-window smoke remains opt-in through `AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE=1`; visual evidence must be recorded separately from deterministic test success. No test should publish, merge, discard project files or initialize a selected real repository merely to validate layout. Windows/Linux visual and packaging acceptance remains open.

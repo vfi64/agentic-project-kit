@@ -26,6 +26,7 @@ from agentic_project_kit.gui_release_flow import (
     release_ready_args,
 )
 from agentic_project_kit.gui_tk_widgets import attach_tooltip, traffic_light_fill
+from agentic_project_kit.gui_services import completed_gui_status, invoke_gui_service, run_gui_action_command
 from agentic_project_kit.gui_tkinter_shell import run_basic_cockpit_button
 
 
@@ -41,16 +42,7 @@ class CockpitActionsMixin:
         self.write_output("\n" + body + "\n")
 
     def _completed_result_status(self, completed: Any) -> str:
-        if completed.stdout:
-            try:
-                payload = json.loads(completed.stdout)
-            except ValueError:
-                payload = None
-            if isinstance(payload, dict):
-                raw_status = payload.get("result_status", payload.get("STATE", payload.get("state")))
-                if raw_status is not None:
-                    return str(raw_status)
-        return "PASS" if getattr(completed, "returncode", 1) == 0 else "ERROR"
+        return completed_gui_status(completed)
 
     def _build_next_step_panel(self, parent: Any) -> None:
         import tkinter as tk
@@ -484,6 +476,8 @@ class CockpitActionsMixin:
             self._log_gui_result("Create release", self._completed_result_status(completed), output)
             self._disable_confirm_release()
             return None
+        if completed.returncode != 0:
+            payload = {**payload, "result_status": self._completed_result_status(completed)}
         message = humanize_release_result(payload, preview=preview)
         lines = ["", message.headline, message.detail]
         if message.blockers:
@@ -491,7 +485,7 @@ class CockpitActionsMixin:
             lines.extend(f"- {blocker}" for blocker in message.blockers)
         lines.append("")
         self._log_gui_result("Create release", str(payload.get("result_status", "")), "\n".join(lines))
-        if preview and message.allow_confirm:
+        if preview and completed.returncode == 0 and message.allow_confirm:
             version = str(payload.get("version", "")).strip()
             self.pending_release_preview = {
                 "version": version,
@@ -514,8 +508,12 @@ class CockpitActionsMixin:
             )
             self._disable_confirm_release()
             return
+        signature = self._release_state_signature(version)
         completed = self._agentic_command(*release_ready_args(version))
         self._write_release_result(completed, preview=True)
+        if signature != self._release_state_signature(version):
+            self._disable_confirm_release()
+            self._log_gui_result("Create release", "BLOCKED", "Repository state changed during readiness checks. Run the preview again.")
 
     def confirm_create_release(self) -> None:
         self._log_gui_action("Confirm create release")
@@ -678,7 +676,12 @@ class CockpitActionsMixin:
     def run_basic_action(self, command_id: str) -> None:
         self._log_gui_action(f"Run {command_id}")
         self._log_gui_result("Run basic action", "INFO", f"Running basic action: {command_id}...")
-        self._log_gui_result("Run basic action", None, run_basic_cockpit_button(command_id, project_root=self.project_root))
+        project_root = self.project_root
+        result = invoke_gui_service(
+            self, lambda: run_basic_cockpit_button(command_id, project_root=project_root),
+            label=f"Run {command_id}",
+        )
+        self._log_gui_result("Run basic action", None, result)
 
     def run_selected_read_only(self) -> None:
         self._log_gui_action("Run read-only")
@@ -691,5 +694,10 @@ class CockpitActionsMixin:
             self._log_gui_result("Run read-only", "BLOCKED", format_action_details(action))
             return
         self._log_gui_result("Run read-only", "INFO", f"Running read-only action: {action_id}...")
-        result = run_cockpit_action(action_id, self.project_root, allow_bounded=False)
-        self._log_gui_result("Run read-only", "PASS" if result.allowed and result.executed else "BLOCKED", format_action_result(result))
+        project_root = self.project_root
+        result = invoke_gui_service(
+            self, lambda: run_cockpit_action(action_id, project_root, allow_bounded=False, executor=run_gui_action_command),
+            label=f"Run {action_id}",
+        )
+        status = "BLOCKED" if not result.allowed or not result.executed else "PASS" if result.returncode == 0 else "ERROR"
+        self._log_gui_result("Run read-only", status, format_action_result(result))

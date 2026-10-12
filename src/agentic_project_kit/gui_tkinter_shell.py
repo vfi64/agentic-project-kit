@@ -40,6 +40,7 @@ from agentic_project_kit.gui_tk_widgets import (
     traffic_light_fill,
 )
 from agentic_project_kit.gui_viewmodel import build_basic_cockpit_view_model
+from agentic_project_kit.gui_services import run_gui_command
 from agentic_project_kit.gui_window_guard import (
     check_window_launch_ready,
     render_window_guard_result,
@@ -545,6 +546,21 @@ def run_basic_cockpit_button(
             executed=False,
             returncode=2,
             message="No bounded Basic cockpit runner is registered for this button.",
+        )
+    if Path(project_root).resolve() != Path.cwd().resolve():
+        # Manual legacy runners use cwd. Never run them against a different
+        # project, nor change process-global cwd while a worker is active.
+        definition = get_gui_button(button.command_id)
+        if not button.wrapper_command or definition is None or definition.requires_parameters:
+            return _catalog_action_result(
+                button.command_id, button.safety_class, allowed=False, executed=False,
+                returncode=2, message="No parameter-free project-aware wrapper is available.",
+            )
+        completed = run_gui_command(Path(project_root), button.wrapper_command[1:])
+        return _catalog_action_result(
+            button.command_id, button.safety_class, allowed=True, executed=True,
+            returncode=completed.returncode, message="Executed the registered project-aware Kit wrapper.",
+            output=completed.stdout or completed.stderr,
         )
     return run_manual_gui_catalog_action(button.command_id)
 
