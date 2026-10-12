@@ -39,9 +39,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2477-handoff-refresh`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- branch: `codex/guided-kit-gui`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -409,6 +409,15 @@ Wenn der Bootstrap grün ist:
       "id": "proof-assurance-assessment",
       "status": "planned",
       "summary": "PAA — Proof Assurance Assessment: investigation and development plan for trustworthy software evidence"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "guided-gui-alternative",
+      "status": "active",
+      "summary": "Validate an optional guided Kit GUI over shared guarded actions for GUI"
     }
   ],
   "recent_lessons": [
@@ -421,15 +430,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2477-handoff-refresh",
+    "branch": "codex/guided-kit-gui",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "b253a04578ad4d8d9afb406303ce7b429422d64b",
-    "head_matches_origin_main": true,
-    "head_short": "b253a045",
+    "head": "61ec0bd5316f220f3091a61efe819b169c619643",
+    "head_matches_origin_main": false,
+    "head_short": "61ec0bd5",
     "local_path": "cd /path/to/",
-    "origin_main": "b253a04578ad4d8d9afb406303ce7b429422d64b",
-    "origin_main_short": "b253a045",
-    "worktree_clean": false
+    "origin_main": "50822d1f866388ab5b53c3040a1b1c4cbf76ba03",
+    "origin_main_short": "50822d1f",
+    "worktree_clean": true
   }
 }
 ```
