@@ -7,7 +7,11 @@ from tests.test_gui_cockpit import _init_git_repo
 
 
 def git(root, *args):
-    return subprocess.run(['git', *args], cwd=root, check=True, capture_output=True, text=True).stdout
+    return subprocess.run(
+        ['git', '-c', 'user.name=GUI fixture', '-c', 'user.email=gui-fixture@example.invalid',
+         '-c', 'commit.gpgsign=false', *args],
+        cwd=root, check=True, capture_output=True, text=True,
+    ).stdout
 
 
 def test_signature_catches_same_path_edits_staging_and_head_changes(tmp_path):
