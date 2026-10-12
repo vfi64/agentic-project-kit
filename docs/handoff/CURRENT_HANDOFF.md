@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `b253a04578ad4d8d9afb406303ce7b429422d64b` (`b253a045`), after `Explain Kit purpose, architecture and bounded practice evidence on website (#2477)`.
-Last substantive work state is `b253a04578ad4d8d9afb406303ce7b429422d64b` (`b253a045`), after `Explain Kit purpose, architecture and bounded practice evidence on website (#2477)`.
+Current verified main/admin HEAD is `20598a97388e6b0083ffafda8eb664ea3eba62ce` (`20598a97`), after `Add optional guided Kit GUI over shared guarded workflows (#2479)`.
+Last substantive work state is `20598a97388e6b0083ffafda8eb664ea3eba62ce` (`20598a97`), after `Add optional guided Kit GUI over shared guarded workflows (#2479)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
