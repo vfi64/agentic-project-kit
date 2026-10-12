@@ -74,7 +74,6 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
         gatekeeper_status: GuiGatekeeperStatus | None = None,
     ) -> None:
         import tkinter as tk
-        from tkinter import ttk
 
         self.root = root
         self.project_root = (project_root or Path(".")).resolve()
@@ -103,8 +102,18 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
         self.project_status_var = tk.StringVar(value=self._project_status_text())
         self.release_version_var = tk.StringVar(value="")
 
+        self._build_shell()
+        self._build_sidebar(self.sidebar)
+        self._build_main_content()
+        self.write_output(format_basic_cockpit_summary(self.basic_view) + "\n")
+
+    def _build_shell(self) -> None:
+        """Presentation seam for optional frontends sharing the guarded handlers."""
+        import tkinter as tk
+        from tkinter import ttk
+
         shell = tk.Frame(
-            root,
+            self.root,
             bg=THEME.color_shell_bg,
             highlightbackground=THEME.color_border,
             highlightthickness=1,
@@ -154,11 +163,6 @@ class CockpitGui(CockpitHeaderMixin, CockpitSidebarMixin, CockpitActionsMixin, C
             lambda event: main_canvas.itemconfigure(main_window, width=event.width),
         )
         self.main_area = main_area
-
-        self._build_sidebar(sidebar)
-        self._build_main_content()
-
-        self.write_output(format_basic_cockpit_summary(self.basic_view) + "\n")
 
     def _reload_project_view_state(
         self,

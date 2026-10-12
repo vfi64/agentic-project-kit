@@ -2109,3 +2109,33 @@ rules:
     terms:
     - Understand the Kit
     - dated
+- id: guided-gui-alternative-coverage
+  description: The optional guided desktop frontend remains discoverable with shared safety boundaries
+    and explicit experimental acceptance.
+  documents:
+  - path: README.md
+    terms:
+    - agentic-kit-gui-guided --root PATH
+    - docs/reference/GUIDED_GUI.md
+    - optional Guided GUI
+  - path: docs/reference/GUIDED_GUI.md
+    terms:
+    - Standard tasks
+    - Kit tools
+    - background thread
+    - no global PATH lookup
+    - experimental alternative frontend
+    - preview
+    - confirmation
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_gui_guided.py
+    - tests/test_gui_services.py
+    - tests/test_gui_service_bridge.py
+    - nine communication/access combinations
+  - path: docs/architecture/ADR_GUIDED_GUI_FRONTEND.md
+    terms:
+    - shell-construction seam
+    - private transport
+    - DCO
+    - monolith

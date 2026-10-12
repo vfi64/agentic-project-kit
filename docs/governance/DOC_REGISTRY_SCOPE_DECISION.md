@@ -15,14 +15,14 @@ Decision outcome: active registry scope is declared in `docs/DOC_REGISTRY_SCOPE.
 | docs path | md files | registered | unregistered | proposed: required / exempt / undecided |
 |---|---:|---:|---:|---|
 | docs/ | 4 | 4 | 0 |  |
-| docs/architecture/ | 125 | 125 | 0 |  |
+| docs/architecture/ | 126 | 126 | 0 |  |
 | docs/archive/ | 18 | 18 | 0 |  |
 | docs/examples/ | 1 | 0 | 1 |  |
 | docs/governance/ | 28 | 28 | 0 |  |
 | docs/guides/ | 1 | 1 | 0 |  |
 | docs/handoff/ | 4 | 4 | 0 |  |
 | docs/planning/ | 2 | 2 | 0 |  |
-| docs/reference/ | 7 | 7 | 0 |  |
+| docs/reference/ | 8 | 8 | 0 |  |
 | docs/releases/ | 1 | 1 | 0 |  |
 | docs/reports/ | 191 | 25 | 166 |  |
 | docs/workflow/ | 11 | 11 | 0 |  |

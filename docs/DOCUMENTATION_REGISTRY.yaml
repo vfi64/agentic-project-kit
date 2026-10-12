@@ -1619,3 +1619,15 @@ documents:
   - path: docs/architecture/evidence/dpa/retained/POST_PR1962_HANDOFF_CLOSEOUT_20260801.json
     class: evidence/log
     owner: maintainers
+  - path: docs/reference/GUIDED_GUI.md
+    class: user-facing description
+    owner: maintainers
+    status: active
+    review_after: direction:guided-gui-alternative
+    notes: Usage, function coverage and boundaries for the optional guided Kit GUI.
+  - path: docs/architecture/ADR_GUIDED_GUI_FRONTEND.md
+    class: architecture
+    owner: maintainers
+    status: active
+    review_after: direction:guided-gui-alternative
+    notes: Decision to compose a second optional frontend over shared Kit authority and guarded actions.

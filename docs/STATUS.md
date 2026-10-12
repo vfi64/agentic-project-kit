@@ -15,9 +15,9 @@ Latest Brownfield external evidence: Cycle 007 report
 records Comm-SCI App2 provider-settings seam reduction from `55` to `44`,
 target PR #16, target successor refresh PR #17, final target head
 `ea21b3a3`, and post-merge-settle `READY`.
-Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
+Current governed slice: optional Guided GUI on `codex/guided-kit-gui`; implementation and initial macOS/Tk validation are complete, pending governed PR closeout. Operational and Windows/Linux acceptance remain open in `docs/planning/PROJECT_DIRECTION.yaml#guided-gui-alternative`.
 Post-merge handoff status: PASS/NOOP after PR #2477 administrative refresh.
-Next safe step: continue from fresh main with the next planned governed slice.
+Next safe step: complete the Guided GUI PR and generated handoff closeout, then collect operational acceptance before changing the default GUI.
 
 ## Historical State Snapshots
 
