@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `07048942c942c0c3959df7fd01b0a736f89eb479` (`07048942`), after `docs: reconcile release planning, integrate PAA and restore DPA evidence (#2475)`.
-Last substantive work state is `07048942c942c0c3959df7fd01b0a736f89eb479` (`07048942`), after `docs: reconcile release planning, integrate PAA and restore DPA evidence (#2475)`.
+Current verified main/admin HEAD is `b253a04578ad4d8d9afb406303ce7b429422d64b` (`b253a045`), after `Explain Kit purpose, architecture and bounded practice evidence on website (#2477)`.
+Last substantive work state is `b253a04578ad4d8d9afb406303ce7b429422d64b` (`b253a045`), after `Explain Kit purpose, architecture and bounded practice evidence on website (#2477)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
