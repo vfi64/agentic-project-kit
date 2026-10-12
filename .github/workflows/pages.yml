@@ -142,7 +142,7 @@ jobs:
         run: python site/scripts/build.py --output site/dist --json
 
       - name: Site tests
-        run: python -m pytest tests/test_site_generator.py tests/test_site_claims.py -q
+        run: python -m pytest tests/test_site_generator.py tests/test_site_claims.py tests/test_site_explanation.py -q
 
       - uses: actions/configure-pages@v5
         if: needs.pages-state.outputs.deploy-ready == 'true'

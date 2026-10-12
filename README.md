@@ -488,6 +488,10 @@ Surface classification does not by itself change command safety, compatibility, 
 
 ## Generated website foundation
 
+The generated Understand the Kit page explains audience, architecture, local
+controllers and bounded practice evidence. External tool comparisons are dated,
+sourced editorial snapshots; current Kit facts derive from repository sources.
+
 `site/scripts/build.py` uses `agentic_project_kit.site_generator` for ignored
 `site/dist/`: package version, Python requirement, command
 count, `meta.manifest_sha`, `manifest_sha(commands)`, and build commit. The

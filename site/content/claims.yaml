@@ -129,7 +129,7 @@ claims:
       assertion: manifest-command-coverage
 
   - id: b1-brownfield-evaluable
-    text: Five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary.
+    text: In the historical B1 threshold window, five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary.
     required: true
     evidence:
       - type: file-contains
@@ -140,4 +140,4 @@ claims:
         contains: "B1 is not a proof of general Brownfield portability."
       - type: file-contains
         path: site/templates/workflows.html
-        contains: "Five real maintenance cycles provide evidence beyond self-hosting"
+        contains: "The historical B1 threshold window provides evidence beyond self-hosting"

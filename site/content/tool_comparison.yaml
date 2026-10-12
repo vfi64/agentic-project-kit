@@ -1,0 +1,26 @@
+schema_version: 1
+tools:
+  - name: GitHub Spec Kit
+    category: Open-source specification/process toolkit
+    focus: Structured specifications, planning, implementation and convergence; extensible processes for coding agents.
+    relationship: Overlaps in structured context and process guidance. Compare the concrete workflow and extension set you need; no blanket claim of absent governance.
+    source: https://github.github.com/spec-kit/
+    reviewed_on: '2026-10-12'
+  - name: pre-commit
+    category: Open-source hook framework
+    focus: Installs and runs configured multi-language Git hooks.
+    relationship: Useful alongside Kit gates. Hook execution and the Kit's repository-state, handoff and release contracts address different layers.
+    source: https://pre-commit.com/
+    reviewed_on: '2026-10-12'
+  - name: Cursor
+    category: Commercial coding-agent product
+    focus: Agent tool execution with documented run modes, approvals and sandboxing controls.
+    relationship: Overlaps in execution safety. A coding executor can use Kit commands; no measured productivity, safety or cost ranking is claimed.
+    source: https://cursor.com/docs/agent/security/run-modes
+    reviewed_on: '2026-10-12'
+  - name: GitHub Copilot
+    category: Commercial coding-agent product
+    focus: Coding assistance and agent workflows, including a cloud agent that can create branches, write code and open pull requests.
+    relationship: Overlaps in development and PR workflows. Kit contracts can be an additional repository layer; compatibility with every product mode is not claimed.
+    source: https://docs.github.com/en/copilot/responsible-use/agents
+    reviewed_on: '2026-10-12'

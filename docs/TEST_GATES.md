@@ -1027,3 +1027,13 @@ transport doubles: a green CLEAN exact-head PR merges, red CI and head drift
 refuse, and a dirty product file blocks. Post-merge main CI verification stays
 enabled. The fixture contains generated command references and no Kit tests or
 Kit documentation registry; it never changes a live remote PR.
+
+### Website explanation projection
+
+`tests/test_site_explanation.py` verifies current release isolation, canonical
+Brownfield observations, missing-evidence degradation and selected-field public
+output. The Understand the Kit page separates historical Greenfield results,
+release notes and PAA planning. Tool comparisons require dated official HTTPS
+sources; editorial accuracy remains review-only because local checks cannot
+establish current external product semantics. Reviewers inspect the linked
+source and scope, never infer a benchmark from a documentation link.

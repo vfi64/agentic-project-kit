@@ -2092,3 +2092,20 @@ rules:
   - path: docs/reference/agentic-kit-commands.json
     terms:
     - chat-switch-complete
+
+- id: website-explanation-evidence-boundaries
+  description: Public explanation distinguishes current facts, historical evidence and editorial comparisons.
+  documents:
+  - path: site/README.md
+    terms:
+    - understand/evidence.json
+    - unverified
+    - tool_comparison.yaml
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_site_explanation.py
+    - review-only
+  - path: README.md
+    terms:
+    - Understand the Kit
+    - dated

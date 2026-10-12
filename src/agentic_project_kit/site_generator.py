@@ -16,6 +16,7 @@ import yaml
 from agentic_project_kit.command_manifest import SAFETY_VALUES, SURFACE_VALUES, load_manifest, manifest_sha
 from agentic_project_kit.gui_command_projection import diagnostic_priority_for_command
 from agentic_project_kit.site_claims import ClaimEvaluationReport, evaluate_site_claims
+from agentic_project_kit.site_explanation import collect_explanation, render_evidence_cards, render_explanation
 
 
 PRODUCT_NAME = "Agentic Execution Runtime"
@@ -174,6 +175,7 @@ class SiteFoundationReport:
     workflow_projection: dict[str, object]
     claim_report: ClaimEvaluationReport
     blockers: tuple[str, ...]
+    explanation_projection: dict[str, object] | None = None
 
     @property
     def ok(self) -> bool:
@@ -201,6 +203,7 @@ class SiteFoundationReport:
             "roadmap_projection": self.roadmap_projection.as_dict(),
             "workflow_projection": self.workflow_projection,
             "claim_report": self.claim_report.as_dict(),
+            "explanation_projection": self.explanation_projection,
             "blockers": list(self.blockers),
             "blocker_count": len(self.blockers),
         }
@@ -322,6 +325,12 @@ def collect_site_foundation_metadata(
     workflow_projection = _build_workflow_projection(root, command_catalog)
     claim_report = evaluate_site_claims(root, command_catalog=command_catalog)
     blockers.extend(claim_report.blockers)
+    explanation = None
+    if (root / "site/templates/understand.html").is_file():
+        try:
+            explanation = collect_explanation(root, version=package_version)
+        except ValueError as exc:
+            blockers.append(f"explanation content invalid: {exc}")
     concept_doi = status_projection.concept_doi or _citation_value(root, "doi")
     version_doi = status_projection.version_doi
     release_tag = status_projection.current_release_tag
@@ -358,6 +367,7 @@ def collect_site_foundation_metadata(
         workflow_projection=workflow_projection,
         claim_report=claim_report,
         blockers=tuple(blockers),
+        explanation_projection=explanation,
     )
 
 
@@ -411,12 +421,24 @@ def build_site(
             "roadmap_projection": report.roadmap_projection.as_dict(),
             "workflow_projection": workflow_projection,
             "claim_report": report.claim_report.as_dict(),
+            "explanation_projection": report.explanation_projection,
         },
         indent=2,
         sort_keys=True,
     )
     (output / "index.html").write_text(index_html, encoding="utf-8")
     (output / "site.json").write_text(site_json + "\n", encoding="utf-8")
+    if report.explanation_projection is not None:
+        explanation_output = output / "understand"
+        explanation_output.mkdir()
+        (explanation_output / "index.html").write_text(
+            render_explanation(root, report.explanation_projection,
+                               repository_url=metadata.repository_url,
+                               product_name=metadata.product_name,
+                               version=metadata.package_version), encoding="utf-8")
+        (explanation_output / "evidence.json").write_text(
+            json.dumps(report.explanation_projection, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8")
     (output / "commands" / "commands.json").write_text(
         json.dumps(command_catalog.as_dict(), indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
@@ -651,6 +673,10 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
         ),
         "brownfield_status": escape(
             _projection_value(report.workflow_projection, "brownfield.status", "not recorded")
+        ),
+        "practice_evidence_cards": (
+            render_evidence_cards(report.explanation_projection, repository_url=metadata.repository_url)
+            if report.explanation_projection is not None else ""
         ),
     }
     return template.safe_substitute(values).rstrip() + "\n"

@@ -7,7 +7,17 @@
     "src/agentic_project_kit/site_claims.py",
     "src/agentic_project_kit/command_manifest.py",
     "docs/reference/agentic-kit-commands.json",
-    "docs/reference/AGENTIC_KIT_COMMANDS.md"
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "src/agentic_project_kit/site_explanation.py",
+    "docs/planning/PROJECT_DIRECTION.yaml",
+    "docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.json",
+    "docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_001_RESULTS_20260824.md",
+    "docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md",
+    "docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_003_RESULTS_20260825.md",
+    "docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_004_RESULTS_20260826.md",
+    "docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md",
+    "docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md",
+    "docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md"
   ],
   "release_state_paths": [
     "pyproject.toml",
@@ -26,6 +36,7 @@
     "tests/test_site_generator.py",
     "tests/test_site_claims.py",
     "tests/test_site_fallback_staleness.py",
-    "tests/test_ci_runtime_policy.py"
+    "tests/test_ci_runtime_policy.py",
+    "tests/test_site_explanation.py"
   ]
 }
