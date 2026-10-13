@@ -1008,6 +1008,22 @@ Expected: PASS without missing literal executable; independent gates remain enfo
 
 Expected result fields: `{"result_status": "PASS", "stderr": "no FileNotFoundError"}`.
 
+## KIT-GF-069
+
+Kit state: CLOSED; fixed_in: 1.0.25.
+Evidence: docs/reports/greenfield/KIT-GF-069-release-publish-verdict-2026-10-13.md
+
+Preconditions: Installed Kit 1.0.25; synchronized command reference; clean release workspace; genuine owner consent; actual next consumer release (Cockpit 0.2.6).
+
+```text
+agentic-kit release-publish --version {version} --dry-run --json
+agentic-kit release run --version {version} --approved-by {owner} --consent-source {consent} --json
+```
+
+Expected: Publish PASS with external SKIP checks; C1 PASS; normal C2 gate or recorded upfront B4 consent; failing check remains blocking.
+
+Expected result fields: `{"blocker_count": 0, "status": "PASS"}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

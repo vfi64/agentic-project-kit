@@ -571,16 +571,9 @@ def _status_matches(payload: Any, expected: str) -> bool:
 
 
 def _release_publish_ok(payload: Any) -> bool:
-    if not isinstance(payload, dict):
-        return False
-    if payload.get("status") != "PASS":
-        return False
-    if int(payload.get("blocker_count") or 0) != 0:
-        return False
-    checks = payload.get("checks")
-    if isinstance(checks, list):
-        return all(isinstance(check, dict) and check.get("status") == "PASS" for check in checks)
-    return True
+    from agentic_project_kit.release_publish_orchestration import release_publish_payload_ok
+
+    return release_publish_payload_ok(payload)
 
 
 def _approval_signature(subject: dict[str, Any]) -> str:

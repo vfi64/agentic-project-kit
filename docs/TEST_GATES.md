@@ -1087,3 +1087,10 @@ source and scope, never infer a benchmark from a documentation link.
 `tests/test_gui_guided.py`, `tests/test_gui_services.py`, `tests/test_gui_service_bridge.py` and `tests/test_gui_state_signature.py` cover the optional frontend, all nine communication/access combinations, shared guarded handlers, task-draft preservation and project separation, interpreter discovery without PATH, invalid JSON and failed process results, serial background operations, main-thread Tk event handling and restoration after failures. Preview identity must detect same-path content edits, staging, HEAD and untracked-file changes; changes during previews block confirmation. Existing cockpit, Basic, release and work-cycle tests remain regression gates.
 
 Real-window smoke remains opt-in through `AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE=1`; visual evidence must be recorded separately from deterministic test success. No test should publish, merge, discard project files or initialize a selected real repository merely to validate layout. Windows/Linux visual and packaging acceptance remains open.
+
+## Release publish verdict consistency (KIT-GF-069)
+
+The release runner consumes the publish orchestration status and blocker count;
+check applicability is decided once by the publish core. Tests cover external
+SKIP, blocking check verdicts, malformed summaries and installed-wheel C1 resume
+through C2 while preserving the attributed B4 approval.

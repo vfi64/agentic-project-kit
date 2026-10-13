@@ -85,6 +85,20 @@ class ReleasePublishPlan:
 
 
 
+def release_publish_payload_ok(payload: object) -> bool:
+    """Consume the orchestration verdict without reclassifying its checks.
+
+    Applicability (including SKIP) belongs to _check_blocks and the plan.
+    Missing or malformed summaries fail closed at the runner boundary.
+    """
+    return (
+        isinstance(payload, dict)
+        and payload.get("status") == "PASS"
+        and type(payload.get("blocker_count")) is int
+        and payload["blocker_count"] == 0
+    )
+
+
 def _check_blocks(check: ReleasePublishCheck) -> bool:
     return check.status not in {"PASS", "SKIP"}
 

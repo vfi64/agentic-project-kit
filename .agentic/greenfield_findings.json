@@ -2344,6 +2344,38 @@
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-067-owned-kit-subprocess-resolution-2026-10-13.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "consent": "Actual consent source, shell-quoted as one argument.",
+          "owner": "Authorized maintainer identity.",
+          "version": "Actual next consumer release."
+        },
+        "commands": [
+          "agentic-kit release-publish --version {version} --dry-run --json",
+          "agentic-kit release run --version {version} --approved-by {owner} --consent-source {consent} --json"
+        ],
+        "expected": [
+          "Publish PASS with external SKIP checks; C1 PASS; normal C2 gate or recorded upfront B4 consent; failing check remains blocking."
+        ],
+        "expected_result_fields": {
+          "blocker_count": 0,
+          "status": "PASS"
+        },
+        "preconditions": [
+          "Installed Kit 1.0.25; synchronized command reference; clean release workspace; genuine owner consent; actual next consumer release (Cockpit 0.2.6)."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Installed-wheel resume regression PASS; live consumer retest remains independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.25",
+      "id": "KIT-GF-069",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-069-release-publish-verdict-2026-10-13.md"
     }
   ],
   "kind": "external_findings_catalog",
