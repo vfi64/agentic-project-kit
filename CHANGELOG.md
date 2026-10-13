@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Honor the publish orchestration verdict in release-run C1/C2, including external SKIP checks and C1 resume with recorded B4 consent (KIT-GF-069).
+
 - Resolve workspace-owned or running Kit executables consistently in release, transfer, handoff and GUI adapters, preserving owned-only DPA probes (KIT-GF-067).
 
 - Expose the conservative workspace refresh classifier to custom CI while always retaining Kit checks and full fallback for unknown input (KIT-GF-063).
