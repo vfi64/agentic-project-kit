@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e0b9d68539d7bfd2cfd67d5ad2c7eed43afd4d06
-  short: e0b9d685
-  subject: Resolve owned Kit executables across diagnostics and adapters (KIT-GF-067) (#2493)
+  full: d68a7afdfe4e41c5a680ada72d4598972f54d443
+  short: d68a7afd
+  subject: Honor authoritative publish verdict and resume C1 (KIT-GF-069) (#2495)
 last_substantive_work_state:
-  full: e0b9d68539d7bfd2cfd67d5ad2c7eed43afd4d06
-  short: e0b9d685
-  subject: Resolve owned Kit executables across diagnostics and adapters (KIT-GF-067) (#2493)
+  full: d68a7afdfe4e41c5a680ada72d4598972f54d443
+  short: d68a7afd
+  subject: Honor authoritative publish verdict and resume C1 (KIT-GF-069) (#2495)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

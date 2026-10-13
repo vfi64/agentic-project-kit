@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: b69248baad92e4a8461ba92785af613a1f60af2f6cbff5b1b7945c9e1241640b
 - docs/reference/agentic-kit-commands.json: b3cd9d6e1259dd2b3be58dfdc8b232affa7011802b5bd277fe3de5cfdf53bcb5
-## Operational documentation refresh state after PR #2493
+## Operational documentation refresh state after PR #2495
 
-Current administrative handoff refresh state is `e0b9d685` (`Resolve owned Kit executables across diagnostics and adapters (KIT-GF-067) (#2493)`). Continue next only after this post-PR2493 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `d68a7afd` (`Honor authoritative publish verdict and resume C1 (KIT-GF-069) (#2495)`). Continue next only after this post-PR2495 refresh is committed and merged; the next substantive slice must be created from fresh main.

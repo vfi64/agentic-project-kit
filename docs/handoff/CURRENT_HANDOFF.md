@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `e0b9d68539d7bfd2cfd67d5ad2c7eed43afd4d06` (`e0b9d685`), after `Resolve owned Kit executables across diagnostics and adapters (KIT-GF-067) (#2493)`.
-Last substantive work state is `e0b9d68539d7bfd2cfd67d5ad2c7eed43afd4d06` (`e0b9d685`), after `Resolve owned Kit executables across diagnostics and adapters (KIT-GF-067) (#2493)`.
+Current verified main/admin HEAD is `d68a7afdfe4e41c5a680ada72d4598972f54d443` (`d68a7afd`), after `Honor authoritative publish verdict and resume C1 (KIT-GF-069) (#2495)`.
+Last substantive work state is `d68a7afdfe4e41c5a680ada72d4598972f54d443` (`d68a7afd`), after `Honor authoritative publish verdict and resume C1 (KIT-GF-069) (#2495)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
