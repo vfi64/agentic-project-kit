@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `8977dc6fbdc40c93fb036f1f0c990d86aedb09db` (`8977dc6f`), after `Release 1.0.24 (#2481)`.
-Last substantive work state is `8977dc6fbdc40c93fb036f1f0c990d86aedb09db` (`8977dc6f`), after `Release 1.0.24 (#2481)`.
+Current verified main/admin HEAD is `16b35fdf307ae0f7bed1d07f25a301820313c89a` (`16b35fdf`), after `Record DOI for release 1.0.24 (#2483)`.
+Last substantive work state is `16b35fdf307ae0f7bed1d07f25a301820313c89a` (`16b35fdf`), after `Record DOI for release 1.0.24 (#2483)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
