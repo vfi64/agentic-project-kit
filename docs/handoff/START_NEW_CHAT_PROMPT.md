@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 017020daa98c95af9cde9cee2caa8cb7df3f767a152fe2704c19abae4245cadc
 - docs/reference/agentic-kit-commands.json: df3786e1048ff76b1c46d333a2725aaa1ed37e9209135229fd60db927da94163
-## Operational documentation refresh state after PR #2487
+## Operational documentation refresh state after PR #2489
 
-Current administrative handoff refresh state is `03e1fd92` (`Export external finding status and archive completed release evidence (KIT-GF-066) (#2487)`). Continue next only after this post-PR2487 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `77c9fa8c` (`Retest external lifecycle, handoff and governed execution (KIT-GF-001/003/005/013/016) (#2489)`). Continue next only after this post-PR2489 refresh is committed and merged; the next substantive slice must be created from fresh main.
