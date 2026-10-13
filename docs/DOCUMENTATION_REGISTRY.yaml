@@ -1670,3 +1670,6 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-068-declared-external-evidence-2026-10-13.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/release/release-run-1.0.25.json
+    class: evidence/log
+    owner: maintainers
