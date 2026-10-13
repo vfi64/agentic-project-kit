@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 9a7d85b527d8
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 9633a3a680ad
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `265`
+- Command count: `266`
 
 ## Commands
 
@@ -367,6 +367,25 @@ Render the session-start refresher and full inline command list.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+
+### `agentic-kit ci runtime-plan`
+
+- Safety: `BOUNDED`
+- Surface: `diagnostic`
+- When to use: Classify a custom CI diff; unknown input always requests full tests.
+- Dry-run available: `False`
+- Remote effects: `none`
+
+Classify a custom CI diff; unknown input always requests full tests.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `base` | `TyperOption` | --base | `True` |  |  |
+| `head` | `TyperOption` | --head | `True` |  |  |
+| `branch` | `TyperOption` | --branch | `False` | `` |  |
+| `event_name` | `TyperOption` | --event-name | `False` | `` |  |
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit ci status`
 

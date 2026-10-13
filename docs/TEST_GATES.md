@@ -1,5 +1,11 @@
 # Test Gates
 
+## Custom CI runtime plan
+
+`tests/test_ci_runtime_plan.py` checks installed-wheel classification and the
+documented custom-CI fragment: refresh-only light, conservative full fallback,
+unconditional Kit checks and guarded pytest/Playwright jobs.
+
 ## External lifecycle and governed execution adjudication
 
 `tests/test_greenfield_adjudication.py` retests KIT-GF-001/003/005/013/016

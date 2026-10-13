@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import typer
 
@@ -9,12 +10,34 @@ from agentic_project_kit.ci_status import read_ci_status, render_ci_status, resu
 ci_app = typer.Typer(help="Read GitHub Actions CI status for branches and commits.")
 
 
+@ci_app.command("runtime-plan")
+def runtime_plan_command(
+    base: str = typer.Option(..., "--base"),
+    head: str = typer.Option(..., "--head"),
+    branch: str = typer.Option("", "--branch"),
+    event_name: str = typer.Option("", "--event-name"),
+    root: Path = typer.Option(Path("."), "--root"),
+    json_output: bool = typer.Option(False, "--json"),
+):
+    """Classify a custom CI diff; unknown input always requests full tests."""
+    from agentic_project_kit.ci_runtime_plan import runtime_plan
+
+    result = runtime_plan(root, base, head, branch=branch, event_name=event_name)
+    typer.echo(
+        json.dumps(result, indent=2, sort_keys=True)
+        if json_output
+        else result["mode"] + ": " + result["reason"]
+    )
+
+
 @ci_app.command("status")
 def status(
     commit: str = typer.Option("", "--commit", help="Commit SHA to inspect."),
     branch: str = typer.Option("", "--branch", help="Branch name to inspect."),
     limit: int = typer.Option(20, min=1, help="Maximum workflow runs to read."),
-    json_output: bool = typer.Option(False, "--json", help="Print JSON instead of the text report."),
+    json_output: bool = typer.Option(
+        False, "--json", help="Print JSON instead of the text report."
+    ),
 ) -> None:
     """Report the CI verdict for a commit or branch without requiring a pull request."""
     try:

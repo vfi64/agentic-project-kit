@@ -932,18 +932,18 @@ Expected result fields: `{"assertions": ["Only eligible failed checks rerun; sig
 
 ## KIT-GF-063
 
-Kit state: PARTIAL; fixed_in: 1.0.23.
-Evidence: docs/reports/greenfield/KIT-GF-063-workspace-refresh-ci-2026-10-10.md
+Kit state: CLOSED; fixed_in: 1.0.25.
+Evidence: docs/reports/greenfield/KIT-GF-063-custom-ci-runtime-plan-2026-10-13.md
 
-Preconditions: Kit-managed CI refresh branch changing only manifest-derived state paths; custom-CI applicability remains PARTIAL until Slice D. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+Preconditions: Installed wheel, synchronized reference, custom CI; matching refresh branch and local base/head commits.
 
 ```text
-agentic-kit check --json
+agentic-kit ci runtime-plan --base {base_sha} --head {head_sha} --branch {branch} --event-name pull_request --json
 ```
 
-Expected: Managed template selects light and always checks Kit contracts; heavy jobs remain full for non-state paths.
+Expected: mode=light only for manifest-derived refresh paths; non-refresh or unknown input mode=full; check always runs.
 
-Expected result fields: `{"assertions": ["Managed template selects light and always checks Kit contracts; heavy jobs remain full for non-state paths."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+Expected result fields: `{"assertions": ["mode=light only for manifest-derived refresh paths; non-refresh or unknown input mode=full; check always runs."], "mode": ["light", "full"], "mutation": "none"}`.
 
 ## KIT-GF-064
 
