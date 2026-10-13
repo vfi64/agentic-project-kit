@@ -12263,7 +12263,6 @@
     },
     "release": {
       "notes": [
-        "Zenodo DOI verification pending for v1.0.24.",
         "Add an optional guided Kit GUI with task-oriented tabs, shared guarded actions, persistent activity output and background execution feedback; preserve the original GUI.",
         "Harden GUI command discovery and result handling, preserve task drafts across view changes and keep task/approval context separate when switching projects.",
         "Explain Kit purpose, target audience, architecture and bounded practice evidence through generated website pages; keep Guided GUI operational and Windows/Linux acceptance open.",
@@ -12291,7 +12290,7 @@
     "package_name": "agentic-project-kit",
     "package_version": "1.0.24",
     "product_name": "Agentic Execution Runtime",
-    "release_tag": "v1.0.23",
+    "release_tag": "v1.0.24",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
     "reproduced_manifest_sha": "bf05db61066e",
     "requires_python": ">=3.10",
@@ -12305,7 +12304,7 @@
       "orchestrator": 34,
       "primitive": 104
     },
-    "version_doi": "10.5281/zenodo.23276222"
+    "version_doi": "10.5281/zenodo.23336642"
   },
   "roadmap_projection": {
     "roadmap_counts": {
@@ -12325,13 +12324,13 @@
   "schema_version": 1,
   "status_projection": {
     "concept_doi": "10.5281/zenodo.20101359",
-    "current_release_tag": "v1.0.23",
+    "current_release_tag": "v1.0.24",
     "current_verified_main": "See docs/STATUS.md",
-    "current_verified_release": "1.0.23",
+    "current_verified_release": "1.0.24",
     "current_version": "1.0.24",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
-    "version_doi": "10.5281/zenodo.23276222"
+    "version_doi": "10.5281/zenodo.23336642"
   },
   "workflow_projection": {
     "boundaries": [

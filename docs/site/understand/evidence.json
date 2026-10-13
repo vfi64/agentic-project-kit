@@ -57,7 +57,6 @@
   },
   "release": {
     "notes": [
-      "Zenodo DOI verification pending for v1.0.24.",
       "Add an optional guided Kit GUI with task-oriented tabs, shared guarded actions, persistent activity output and background execution feedback; preserve the original GUI.",
       "Harden GUI command discovery and result handling, preserve task drafts across view changes and keep task/approval context separate when switching projects.",
       "Explain Kit purpose, target audience, architecture and bounded practice evidence through generated website pages; keep Guided GUI operational and Windows/Linux acceptance open.",
