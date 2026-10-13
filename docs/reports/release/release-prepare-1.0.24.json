@@ -1,0 +1,203 @@
+{
+  "authorized_route": "agentic-kit release-prep",
+  "base_ref": "origin/main",
+  "changed_paths_against_base": [
+    ".agentic/dpa/acceptance/current_handoff_operational_state.json",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/site/claims/claims.json",
+    "docs/site/claims/index.html",
+    "docs/site/commands/commands.json",
+    "docs/site/commands/diagnostics.html",
+    "docs/site/commands/guided.html",
+    "docs/site/commands/index.html",
+    "docs/site/index.html",
+    "docs/site/quickstart/index.html",
+    "docs/site/quickstart/quickstart.json",
+    "docs/site/site.json",
+    "docs/site/understand/evidence.json",
+    "docs/site/understand/index.html",
+    "docs/site/workflows/index.html",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py",
+    "src/agentic_project_kit/reference/agentic-kit-commands.json"
+  ],
+  "date": "2026-10-13",
+  "explicit_summary_lines": [
+    "Add an optional guided Kit GUI with task-oriented tabs, shared guarded actions, persistent activity output and background execution feedback; preserve the original GUI.",
+    "Harden GUI command discovery and result handling, preserve task drafts across view changes and keep task/approval context separate when switching projects.",
+    "Explain Kit purpose, target audience, architecture and bounded practice evidence through generated website pages; keep Guided GUI operational and Windows/Linux acceptance open."
+  ],
+  "from_tag": "v1.0.23",
+  "kind": "release_prepare_evidence",
+  "release_metadata_anchor_paths": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py"
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-notes-generate",
+        "--version",
+        "1.0.24",
+        "--from-tag",
+        "v1.0.23",
+        "--to-ref",
+        "main",
+        "--include-github-metadata",
+        "--summary-lines-json",
+        "tmp/release-1024-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-notes-generate",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 16805,
+      "stdout_sha256": "59d5adafbb99e95a4bd8b5958ff152124c9a97c183f1307f14415b1f83687c4a"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-prep",
+        "--version",
+        "1.0.24",
+        "--date",
+        "2026-10-13",
+        "--summary-line",
+        "Add an optional guided Kit GUI with task-oriented tabs, shared guarded actions, persistent activity output and background execution feedback; preserve the original GUI.",
+        "--summary-line",
+        "Harden GUI command discovery and result handling, preserve task drafts across view changes and keep task/approval context separate when switching projects.",
+        "--summary-line",
+        "Explain Kit purpose, target audience, architecture and bounded practice evidence through generated website pages; keep Guided GUI operational and Windows/Linux acceptance open.",
+        "--summary-lines-from",
+        "tmp/release-1024-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-prep",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 292,
+      "stdout_sha256": "6bfafc6978ddc8c60d6426e9bf6fc7fe5bf29ab8e2874f05a493831c27388ed3"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "commands",
+        "sync-entrypoints",
+        "--execute",
+        "--json"
+      ],
+      "name": "commands-sync-entrypoints",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 419,
+      "stdout_sha256": "e19b3875cf908b748d69b841e7f97427bb64e6e4c466d48fbdc6bf81b833a456"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "agentic-kit",
+        "release",
+        "prepare",
+        "--internal-dpa-readiness-ack-refresh"
+      ],
+      "name": "dpa-readiness-ack-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 416,
+      "stdout_sha256": "a2de7c3179398ee92b3a21a757db761b55b3c8ae33370c2dedcd5e23255034d6"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "chat-switch-complete",
+        "--json"
+      ],
+      "name": "successor-handoff-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 9405,
+      "stdout_sha256": "eae4615c14abbb01ebf39e8b95c32677ff0129d935b493eeeed0d59a8e425e2b"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "site/scripts/build.py",
+        "--docs-pages-fallback",
+        "--json"
+      ],
+      "name": "docs-pages-fallback-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 4276,
+      "stdout_sha256": "4f56e6dc3a9b70e7183096fc97f1e1ef6dae2ae05ff760a0856496849600316b"
+    }
+  ],
+  "summary_lines_path": "tmp/release-1024-summary-lines.json",
+  "to_ref": "main",
+  "version": "1.0.24"
+}

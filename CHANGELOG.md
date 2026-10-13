@@ -1,7 +1,15 @@
 ## Unreleased
 
+## v1.0.24 - 2026-10-13
+
+- Zenodo DOI verification pending for v1.0.24.
 - Add an optional guided Kit GUI with task-oriented tabs, shared guarded actions, persistent activity output and background execution feedback; preserve the original GUI.
 - Harden GUI command discovery and result handling, preserve task drafts across view changes and keep task/approval context separate when switching projects.
+- Explain Kit purpose, target audience, architecture and bounded practice evidence through generated website pages; keep Guided GUI operational and Windows/Linux acceptance open.
+- Record DOI for release 1.0.23
+- docs: reconcile release planning, integrate PAA and restore DPA evidence
+- Explain Kit purpose, architecture and bounded practice evidence on website
+- Add optional guided Kit GUI over shared guarded workflows
 
 ## v1.0.23 - 2026-10-10
 
