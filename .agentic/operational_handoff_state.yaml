@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: db1a9680f987cd58c70c209cad7c5cf918fb69d8
-  short: db1a9680
-  subject: Declare external evidence contexts for legacy audit (KIT-GF-068) (#2497)
+  full: 7e80373572ea932bd4965f93f663894c33eb8874
+  short: 7e803735
+  subject: Release 1.0.25 (#2499)
 last_substantive_work_state:
-  full: db1a9680f987cd58c70c209cad7c5cf918fb69d8
-  short: db1a9680
-  subject: Declare external evidence contexts for legacy audit (KIT-GF-068) (#2497)
+  full: 7e80373572ea932bd4965f93f663894c33eb8874
+  short: 7e803735
+  subject: Release 1.0.25 (#2499)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
