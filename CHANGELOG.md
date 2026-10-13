@@ -20,7 +20,6 @@
 
 ## v1.0.25 - 2026-10-13
 
-- Zenodo DOI verification pending for v1.0.25.
 - Bootstrap external rule inventories with signed writes and applicability diagnostics (KIT-GF-RULE-REGISTRY-BOOTSTRAP).
 - Export schema-versioned external findings and archive signed completed release evidence through Kit workflows (KIT-GF-066).
 - Retest external workspace initialization, canonical handoff, first work start, repair escalation and contract-first execution with installed-wheel regression tests (KIT-GF-001, KIT-GF-003, KIT-GF-005, KIT-GF-013, KIT-GF-016).
@@ -36,6 +35,10 @@
 - Resolve owned Kit executables across diagnostics and adapters (KIT-GF-067)
 - Honor authoritative publish verdict and resume C1 (KIT-GF-069)
 - Declare external evidence contexts for legacy audit (KIT-GF-068)
+
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.0.25 DOI `10.5281/zenodo.23346451`.
+
+Zenodo v1.0.25 DOI: 10.5281/zenodo.23346451
 
 ## v1.0.24 - 2026-10-13
 
