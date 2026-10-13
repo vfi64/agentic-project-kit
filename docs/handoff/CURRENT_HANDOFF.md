@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `6eb9f6e8250704ccb2c8a190cfe229a8df904550` (`6eb9f6e8`), after `Add signed external rule-registry bootstrap (KIT-GF-RULE-REGISTRY-BOOTSTRAP) (#2485)`.
-Last substantive work state is `6eb9f6e8250704ccb2c8a190cfe229a8df904550` (`6eb9f6e8`), after `Add signed external rule-registry bootstrap (KIT-GF-RULE-REGISTRY-BOOTSTRAP) (#2485)`.
+Current verified main/admin HEAD is `03e1fd921856b091d1c7222e6afaa3004ef2d34e` (`03e1fd92`), after `Export external finding status and archive completed release evidence (KIT-GF-066) (#2487)`.
+Last substantive work state is `03e1fd921856b091d1c7222e6afaa3004ef2d34e` (`03e1fd92`), after `Export external finding status and archive completed release evidence (KIT-GF-066) (#2487)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
