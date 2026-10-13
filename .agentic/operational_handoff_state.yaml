@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6eb9f6e8250704ccb2c8a190cfe229a8df904550
-  short: 6eb9f6e8
-  subject: Add signed external rule-registry bootstrap (KIT-GF-RULE-REGISTRY-BOOTSTRAP) (#2485)
+  full: 03e1fd921856b091d1c7222e6afaa3004ef2d34e
+  short: 03e1fd92
+  subject: Export external finding status and archive completed release evidence (KIT-GF-066) (#2487)
 last_substantive_work_state:
-  full: 6eb9f6e8250704ccb2c8a190cfe229a8df904550
-  short: 6eb9f6e8
-  subject: Add signed external rule-registry bootstrap (KIT-GF-RULE-REGISTRY-BOOTSTRAP) (#2485)
+  full: 03e1fd921856b091d1c7222e6afaa3004ef2d34e
+  short: 03e1fd92
+  subject: Export external finding status and archive completed release evidence (KIT-GF-066) (#2487)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

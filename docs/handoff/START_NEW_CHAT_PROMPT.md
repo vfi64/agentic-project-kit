@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 131624468ebb075a34e72e4ceba7e36baa7384b12ea26e76f0f4bbe0022efa76
 - docs/reference/agentic-kit-commands.json: a478422490129438153f79063c6f526f2d5d0be511d03d05f23e310f00f5e87b
-## Operational documentation refresh state after PR #2485
+## Operational documentation refresh state after PR #2487
 
-Current administrative handoff refresh state is `6eb9f6e8` (`Add signed external rule-registry bootstrap (KIT-GF-RULE-REGISTRY-BOOTSTRAP) (#2485)`). Continue next only after this post-PR2485 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `03e1fd92` (`Export external finding status and archive completed release evidence (KIT-GF-066) (#2487)`). Continue next only after this post-PR2487 refresh is committed and merged; the next substantive slice must be created from fresh main.
