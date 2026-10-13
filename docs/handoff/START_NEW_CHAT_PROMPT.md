@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 84f0464ff0fd74c5bcd627cf0f4ec60d59d55fd2094f9bd5a747164236c69e41
 - docs/reference/agentic-kit-commands.json: f8adf1bf80bb53ed13d0477950504c7406003982a5c17d2401e5084ff7b9ad1e
-## Operational documentation refresh state after PR #2497
+## Operational documentation refresh state after PR #2499
 
-Current administrative handoff refresh state is `db1a9680` (`Declare external evidence contexts for legacy audit (KIT-GF-068) (#2497)`). Continue next only after this post-PR2497 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `7e803735` (`Release 1.0.25 (#2499)`). Continue next only after this post-PR2499 refresh is committed and merged; the next substantive slice must be created from fresh main.
