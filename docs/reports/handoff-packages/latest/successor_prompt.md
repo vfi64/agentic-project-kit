@@ -40,8 +40,8 @@ Critical rule IDs:
 ## Current continuation state
 
 - branch: `codex/package5-c-external-adjudication`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -432,13 +432,13 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/package5-c-external-adjudication",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "c44ec3d59a1dd6f04d15709cce3f373f8c43a95e",
-    "head_matches_origin_main": true,
-    "head_short": "c44ec3d5",
+    "head": "6d8f646cfdad0c47ea374ade79ebe6c3a67fb2cc",
+    "head_matches_origin_main": false,
+    "head_short": "6d8f646c",
     "local_path": "cd /path/to/",
     "origin_main": "c44ec3d59a1dd6f04d15709cce3f373f8c43a95e",
     "origin_main_short": "c44ec3d5",
-    "worktree_clean": false
+    "worktree_clean": true
   }
 }
 ```
