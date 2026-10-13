@@ -39,7 +39,7 @@ def test_invalid_catalog_rejected(change):
     if change == "state":
         f["kit_state"] = "VERIFIED_FIXED"
     if change == "missing":
-        data["findings"].pop()
+        data["findings"] = [item for item in data["findings"] if item["id"] != "KIT-GF-001"]
     if change == "duplicate":
         data["findings"].append(copy.deepcopy(f))
     if change == "report":

@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-13T15:01:33.953337+00:00",
+  "generated_at_utc": "2026-10-13T15:31:44.636623+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -41,15 +41,15 @@
     ],
     "required_startup_commands": [
       "cd /path/to/",
-      "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile",
-      "./.venv/bin/agentic-kit rules acknowledge",
-      "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile",
+      "agentic-kit transfer normalize-session --repair-known-volatile",
+      "agentic-kit rules acknowledge",
+      "agentic-kit transfer normalize-session --repair-known-volatile",
       "git branch --show-current",
       "git status -sb",
       "git status --short",
-      "./.venv/bin/agentic-kit transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output",
-      "./.venv/bin/agentic-kit transfer post-merge-check",
-      "./.venv/bin/agentic-kit transfer repo-status"
+      "agentic-kit transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output",
+      "agentic-kit transfer post-merge-check",
+      "agentic-kit transfer repo-status"
     ],
     "source": "repository files and command references"
   },
@@ -57,14 +57,14 @@
     "package_version": "1.0.24"
   },
   "repo": {
-    "branch": "docs/post-pr2491-handoff-refresh",
+    "branch": "codex/package5-e-kit-resolution",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "6e1be66bd11d6d4801e7fb254dd22db92417af9f",
+    "head": "d2acbc13d940c3141cadb6eedd0d7ac1309947d0",
     "head_matches_origin_main": true,
-    "head_short": "6e1be66b",
+    "head_short": "d2acbc13",
     "local_path": "cd /path/to/",
-    "origin_main": "6e1be66bd11d6d4801e7fb254dd22db92417af9f",
-    "origin_main_short": "6e1be66b",
+    "origin_main": "d2acbc13d940c3141cadb6eedd0d7ac1309947d0",
+    "origin_main_short": "d2acbc13",
     "worktree_clean": false
   },
   "schema_version": 1,

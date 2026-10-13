@@ -991,6 +991,23 @@ Expected: schema_version=1; all families with retests; release evidence link exp
 
 Expected result fields: `{"assertions": ["schema_version=1; all families with retests; release evidence link explicitly may await later publication."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
+## KIT-GF-067
+
+Kit state: CLOSED; fixed_in: 1.0.25.
+Evidence: docs/reports/greenfield/KIT-GF-067-owned-kit-subprocess-resolution-2026-10-13.md
+
+Preconditions: Disposable installed-wheel external workspace, synchronized command reference, valid release metadata, tracking main, prior tag and current context; declare kit.interpreter outside .venv.
+
+```text
+agentic-kit kit status --json
+agentic-kit transfer standard-error-scan --before-release --version {version} --json
+agentic-kit release ready --version {version} --json
+```
+
+Expected: PASS without missing literal executable; independent gates remain enforced.
+
+Expected result fields: `{"result_status": "PASS", "stderr": "no FileNotFoundError"}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

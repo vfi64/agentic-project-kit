@@ -2,14 +2,22 @@ from __future__ import annotations
 
 import subprocess
 from types import SimpleNamespace
+import pytest
 
 from agentic_project_kit.pr_closeout_complete import pr_closeout_complete
 from agentic_project_kit.transfer_repo_actions import RepoActionResult
 
 
+@pytest.fixture(autouse=True)
+def canonical_kit(monkeypatch):
+    monkeypatch.setattr(
+        "agentic_project_kit.pr_closeout_complete.default_agentic_kit", lambda root: "fixture-kit"
+    )
+
+
 def test_pr_closeout_complete_resumes_when_pr_already_merged(monkeypatch) -> None:
     def fake_run(command, *, cwd=None):
-        if command == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"]:
+        if command == ["fixture-kit", "transfer", "restore-known-volatile", "--json"]:
             return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}', "")
         if command == ["git", "status", "--porcelain"]:
             return subprocess.CompletedProcess(command, 0, "", "")
@@ -77,7 +85,7 @@ def test_pr_closeout_complete_uses_gh_supported_pr_fields(monkeypatch) -> None:
 
     def fake_run(command, *, cwd=None):
         captured_commands.append(command)
-        if command == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"]:
+        if command == ["fixture-kit", "transfer", "restore-known-volatile", "--json"]:
             return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}', "")
         if command == ["git", "status", "--porcelain"]:
             return subprocess.CompletedProcess(command, 0, "", "")
@@ -134,7 +142,7 @@ def test_pr_closeout_complete_restores_known_volatile_before_dirty_preflight(mon
 
     def fake_run(command, *, cwd=None):
         calls.append(command)
-        if command == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"]:
+        if command == ["fixture-kit", "transfer", "restore-known-volatile", "--json"]:
             return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}', "")
         if command == ["git", "status", "--porcelain"]:
             return subprocess.CompletedProcess(
@@ -152,6 +160,6 @@ def test_pr_closeout_complete_restores_known_volatile_before_dirty_preflight(mon
     assert result.result_status == "BLOCKED"
     assert result.lifecycle_state == "DIRTY_WORKTREE"
     assert calls[:2] == [
-        ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"],
+        ["fixture-kit", "transfer", "restore-known-volatile", "--json"],
         ["git", "status", "--porcelain"],
     ]

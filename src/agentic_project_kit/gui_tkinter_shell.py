@@ -4,7 +4,6 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 import json
 from pathlib import Path
-import shutil
 import subprocess
 from types import SimpleNamespace
 
@@ -708,17 +707,8 @@ def _run_status_refresh() -> tuple[int, str]:
 
 def _agentic_kit_command(*args: str, project_root: Path | str | None = None) -> list[str]:
     root = Path(project_root) if project_root is not None else Path.cwd()
-    candidates = (
-        root / ".venv" / "bin" / "agentic-kit",
-        root / ".venv" / "Scripts" / "agentic-kit.exe",
-    )
-    for candidate in candidates:
-        if candidate.exists():
-            return [str(candidate), *args]
-    found = shutil.which("agentic-kit")
-    if found:
-        return [found, *args]
-    return ["agentic-kit", *args]
+    from agentic_project_kit.cli_executable import default_agentic_kit
+    return [default_agentic_kit(root), *args]
 
 
 def run_kit_command(*args: str, project_root: Path | str = ".") -> tuple[int, str]:

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.cli_executable import default_agentic_kit
+
 import json
 import subprocess
 from dataclasses import asdict, dataclass, field
@@ -172,7 +174,7 @@ def pr_closeout_complete(
     steps: list[PrCloseoutStep] = []
 
     restore = _run_command(
-        ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"]
+        [default_agentic_kit(Path.cwd()), "transfer", "restore-known-volatile", "--json"]
     )
     steps.append(
         _completed_step(

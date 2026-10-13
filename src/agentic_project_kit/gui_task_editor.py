@@ -30,8 +30,8 @@ from agentic_project_kit.gui_transfer_contract import (
 )
 REMOTE_STATUS_COMMAND_ARGS = ("transfer", "patch-cycle-status", "--json")
 FILE_TRANSFER_CONTINUE_COMMAND_ARGS = ("transfer", "continue", "--json")
-POSIX_AGENTIC_KIT = "./.venv/bin/agentic-kit"
-WINDOWS_AGENTIC_KIT = r".venv\Scripts\agentic-kit.exe"
+POSIX_AGENTIC_KIT = "agentic-kit"
+WINDOWS_AGENTIC_KIT = "agentic-kit"
 REMOTE_STATUS_COMMAND = (POSIX_AGENTIC_KIT, *REMOTE_STATUS_COMMAND_ARGS)
 TRANSFER_CONTINUE_COMMAND = (POSIX_AGENTIC_KIT, *FILE_TRANSFER_CONTINUE_COMMAND_ARGS)
 COMMUNICATION_MODE_ALIASES = {
@@ -548,7 +548,7 @@ def submit_user_task(
         "actions": [
             {
                 "type": "run_command",
-                "command": ["./.venv/bin/agentic-kit", "transfer", "state", "--json"],
+                "command": ["agentic-kit", "transfer", "state", "--json"],
             }
         ],
         "user_task": {
@@ -829,6 +829,9 @@ def build_terminal_launch_plan(
     root = Path(project_root).resolve()
     detected = platform_name or platform.system()
     command = _terminal_script_command_for_platform(detected, communication_mode)
+    if command and detected == platform.system():
+        from agentic_project_kit.cli_executable import default_agentic_kit
+        command = (default_agentic_kit(root), *command[1:])
     script_path = _terminal_script_path(root, detected, communication_mode)
     script_path.parent.mkdir(parents=True, exist_ok=True)
     script_path.write_text(

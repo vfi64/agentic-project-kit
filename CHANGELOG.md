@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Resolve workspace-owned or running Kit executables consistently in release, transfer, handoff and GUI adapters, preserving owned-only DPA probes (KIT-GF-067).
+
 - Expose the conservative workspace refresh classifier to custom CI while always retaining Kit checks and full fallback for unknown input (KIT-GF-063).
 
 - Verify external lifecycle bootstrap without manual metadata repair (KIT-GF-001).

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.cli_executable import default_agentic_kit
+
 import subprocess
 from pathlib import Path
 
@@ -149,7 +151,7 @@ def test_smoke_workflow_next_dirty_returns_state_next_command(monkeypatch, tmp_p
 
     assert data["state"] == "DIRTY_WORKTREE"
     assert data["returncode"] == 2
-    assert data["command"] == ["./.venv/bin/agentic-kit", "transfer", "repo-status", "--full"]
+    assert data["command"] == [default_agentic_kit(Path.cwd()), "transfer", "repo-status", "--full"]
     assert data["next"] == "Inspect or normalize the dirty worktree before continuing."
 
 
@@ -184,5 +186,5 @@ def test_smoke_workflow_next_transfer_ready_returns_state_next_command(monkeypat
 
     assert data["state"] == "TRANSFER_READY"
     assert data["returncode"] == 0
-    assert data["command"] == ["./.venv/bin/agentic-kit", "transfer", "remote-next"]
+    assert data["command"] == [default_agentic_kit(Path.cwd()), "transfer", "remote-next"]
     assert data["next"] == "Run the queued command."

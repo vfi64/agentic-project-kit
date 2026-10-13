@@ -102,9 +102,9 @@ def test_llm_execution_context_encodes_pr_handoff_lifecycle_order(tmp_path: Path
     assert lifecycle["do_not_use_stale_prompt_text_as_handoff_source"] is True
     assert any("post-merge-settle --after-pr" in item for item in lifecycle["post_merge_requires_concrete_number"])
     assert lifecycle["fresh_llm_context_before_pr"] == [
-        "./.venv/bin/agentic-kit transfer prepare-successor-handoff --render-prompt",
-        "./.venv/bin/agentic-kit transfer publish-last-report",
-        "./.venv/bin/agentic-kit transfer require-fresh-llm-context --json",
+        "agentic-kit transfer prepare-successor-handoff --render-prompt",
+        "agentic-kit transfer publish-last-report",
+        "agentic-kit transfer require-fresh-llm-context --json",
     ]
 
 

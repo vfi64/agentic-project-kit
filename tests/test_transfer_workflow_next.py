@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from agentic_project_kit import transfer_workflow_next
+from agentic_project_kit.cli_executable import default_agentic_kit
 
 
 class FakeTransferState:
@@ -31,7 +32,7 @@ def test_workflow_next_blocks_dirty_worktree(monkeypatch, tmp_path):
 
     assert result.returncode == 2
     assert result.state == "DIRTY_WORKTREE"
-    assert result.command == ("./.venv/bin/agentic-kit", "transfer", "repo-status", "--full")
+    assert result.command == (default_agentic_kit(tmp_path), "transfer", "repo-status", "--full")
 
 
 def test_workflow_next_continues_feature_branch(monkeypatch, tmp_path):
@@ -52,7 +53,7 @@ def test_workflow_next_continues_feature_branch(monkeypatch, tmp_path):
 
     assert result.returncode == 0
     assert result.state == "ON_FEATURE_BRANCH"
-    assert result.command == ("./.venv/bin/agentic-kit", "transfer", "continue", "feature/example")
+    assert result.command == (default_agentic_kit(tmp_path), "transfer", "continue", "feature/example")
 
 
 def test_workflow_next_reports_transfer_ready(monkeypatch, tmp_path):
@@ -86,7 +87,7 @@ def test_workflow_next_reports_transfer_ready(monkeypatch, tmp_path):
 
     assert result.returncode == 0
     assert result.state == "TRANSFER_READY"
-    assert result.command == ("./.venv/bin/agentic-kit", "transfer", "remote-next")
+    assert result.command == (default_agentic_kit(tmp_path), "transfer", "remote-next")
     assert data["state"] == "TRANSFER_READY"
     assert data["next"] == "Run the queued command."
 

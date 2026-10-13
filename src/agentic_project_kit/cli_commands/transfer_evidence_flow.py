@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.cli_executable import default_agentic_kit
+
 # ruff: noqa: F403,F405
 
 from agentic_project_kit.cli_commands.transfer_shared import *
@@ -15,7 +17,7 @@ def evidence_inspect_latest(
 ) -> None:
     """Inspect the latest evidence log with the required-summary contract."""
     inspect_result = _run_transfer_subprocess(
-        ["./.venv/bin/agentic-kit", "evidence", "inspect", "--require-summary"]
+        [default_agentic_kit(Path.cwd()), "evidence", "inspect", "--require-summary"]
     )
     result_status = "PASS" if inspect_result["ok"] else "FAIL"
     final_signal = "d" if inspect_result["ok"] else "f"
@@ -93,7 +95,7 @@ def evidence_pr_complete_command(
     require_capability = _public_transfer_attr("_require_transfer_capability", _require_transfer_capability)
     require_capability("rules_confirmed", json_output=json_output)
 
-    agentic_kit = "./.venv/bin/agentic-kit"
+    agentic_kit = default_agentic_kit(Path.cwd())
     steps: list[dict[str, Any]] = []
     blockers: list[str] = []
 
@@ -310,7 +312,7 @@ def evidence_finalize_current_transfer(
         remote_log = workspace.terminal_report_file(f"{stamp}-{slugify(slice_name)}.log")
 
     argv = [
-        "./.venv/bin/agentic-kit",
+        default_agentic_kit(Path.cwd()),
         "evidence",
         "finalize-log",
         "--run-log",

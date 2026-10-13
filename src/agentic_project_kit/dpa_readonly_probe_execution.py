@@ -329,6 +329,12 @@ def _commands_for_case(case_id: str) -> tuple[tuple[tuple[str, ...], ...], str |
 
 def _run_command(root: Path, argv: tuple[str, ...], timeout_seconds: int) -> CommandExecution:
     try:
+        if argv and argv[0] == '.venv/bin/agentic-kit':
+            from agentic_project_kit.cli_executable import owned_agentic_kit
+            executable = owned_agentic_kit(root, allow_declared=False)
+            if not executable:
+                raise FileNotFoundError('workspace-owned Kit executable unavailable')
+            argv = (executable, *argv[1:])
         completed = subprocess.run(
             list(argv),
             cwd=root,

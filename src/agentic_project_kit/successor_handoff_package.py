@@ -96,20 +96,20 @@ def _long_term_sources(ws: Workspace) -> tuple[str, ...]:
 LONG_TERM_SOURCES: tuple[str, ...] = _long_term_sources(_LEGACY_WORKSPACE)
 
 STARTUP_COMMAND_TAIL: tuple[str, ...] = (
-    "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile",
-    "./.venv/bin/agentic-kit rules acknowledge",
-    "./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile",
+    "agentic-kit transfer normalize-session --repair-known-volatile",
+    "agentic-kit rules acknowledge",
+    "agentic-kit transfer normalize-session --repair-known-volatile",
     "git branch --show-current",
     "git status -sb",
     "git status --short",
-    "./.venv/bin/agentic-kit transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output",
-    "./.venv/bin/agentic-kit transfer post-merge-check",
-    "./.venv/bin/agentic-kit transfer repo-status",
+    "agentic-kit transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output",
+    "agentic-kit transfer post-merge-check",
+    "agentic-kit transfer repo-status",
 )
 
 
 def _agentic_kit_command(ws: Workspace) -> str:
-    return "agentic-kit" if _is_external_workspace(ws) else "./.venv/bin/agentic-kit"
+    return "agentic-kit"
 
 
 def _startup_command_tail(ws: Workspace) -> tuple[str, ...]:

@@ -1,5 +1,13 @@
 # Test Gates
 
+## Shared Kit executable discovery
+
+`tests/test_external_kit_resolution.py` runs real installed-wheel environments
+inside and outside .venv. `tests/test_cli_executable_resolution.py` checks shared
+owned/running precedence, owned-only DPA refusal and portable command projections.
+Resolver fixtures control independent context/publication observations; they do
+not claim a live release or native Windows GUI acceptance.
+
 ## Custom CI runtime plan
 
 `tests/test_ci_runtime_plan.py` checks installed-wheel classification and the

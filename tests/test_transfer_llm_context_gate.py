@@ -145,12 +145,18 @@ def test_transfer_continue_blocks_without_fresh_llm_context(tmp_path, monkeypatc
 
 
 def test_transfer_continue_skip_llm_context_gate_reaches_continue_wrapper(tmp_path, monkeypatch):
+    calls = []
+    def continue_wrapper(root, branch):
+        calls.append((root, branch))
+        return {"returncode": 0, "result_status": "PASS"}
+    monkeypatch.setattr("agentic_project_kit.cli_commands.transfer.run_transfer_continue", continue_wrapper)
     _copy_context_sources(tmp_path)
     monkeypatch.chdir(tmp_path)
 
     result = CliRunner().invoke(app, ["transfer", "continue", "--skip-llm-context-gate", "--json"])
 
-    assert result.exit_code != 2
+    assert result.exit_code == 0
+    assert calls == [(Path("."), None)]
     assert "TRANSFER_REQUIRE_FRESH_LLM_CONTEXT" not in result.stdout
 
 def test_pr_complete_refreshes_missing_llm_context_before_lifecycle(tmp_path, monkeypatch):

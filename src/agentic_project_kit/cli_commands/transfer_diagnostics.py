@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.cli_executable import default_agentic_kit
+
 # ruff: noqa: F403,F405
 
 from agentic_project_kit.cli_commands.transfer_shared import *
@@ -449,9 +451,10 @@ def _run_standard_error_scan_step(
     argv: list[str],
     *,
     allowed_returncodes: set[int] | None = None,
+    cwd: Path | None = None,
 ) -> dict[str, object]:
     allowed = allowed_returncodes or {0}
-    completed = subprocess.run(argv, text=True, capture_output=True)
+    completed = subprocess.run(argv, cwd=cwd, text=True, capture_output=True)
     ok = completed.returncode in allowed
     return {
         "name": name,
@@ -576,12 +579,13 @@ def standard_error_scan_command(
 ) -> None:
     """Run a bounded scan for known workflow standard errors before patch/transfer/release work."""
     project_root = root.resolve()
+    kit_executable = default_agentic_kit(project_root)
     release_date = date or date_cls.today().isoformat()
     effective_from_tag = from_tag or _latest_release_tag()
     steps: list[dict[str, object]] = []
 
     def step(name: str, argv: list[str], *, allowed_returncodes: set[int] | None = None) -> None:
-        steps.append(_run_standard_error_scan_step(name, argv, allowed_returncodes=allowed_returncodes))
+        steps.append(_run_standard_error_scan_step(name, argv, allowed_returncodes=allowed_returncodes, cwd=project_root))
 
     # KIT-GF-032 slice B: in an external workspace the Kit's self-hosting checks
     # (its own test files, its DOI/handoff currency audit, its planning-document
@@ -607,8 +611,8 @@ def standard_error_scan_command(
         })
 
     if before_release:
-        step("post-merge-check", ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"])
-    step("repo-status", ["./.venv/bin/agentic-kit", "transfer", "repo-status"])
+        step("post-merge-check", [kit_executable, "transfer", "post-merge-check"])
+    step("repo-status", [kit_executable, "transfer", "repo-status"])
 
     release_tests = [
         "tests/test_release_prepare_command.py",
@@ -617,7 +621,7 @@ def standard_error_scan_command(
         "tests/test_agentic_kit_command_reference_is_current.py",
     ]
     command_check = [
-        "./.venv/bin/agentic-kit",
+        kit_executable,
         "transfer",
         "command-composition-check",
         "--json",
@@ -636,8 +640,8 @@ def standard_error_scan_command(
     ]:
         command_check.extend(["--command", command])
     step("command-composition-check", command_check)
-    self_hosting_step("command-reference-check", ["./.venv/bin/agentic-kit", "transfer", "command-reference-check", "--json"])
-    step("patch-cycle-status", ["./.venv/bin/agentic-kit", "transfer", "patch-cycle-status", "--include-ci", "--json"], allowed_returncodes={0, 2})
+    self_hosting_step("command-reference-check", [kit_executable, "transfer", "command-reference-check", "--json"])
+    step("patch-cycle-status", [kit_executable, "transfer", "patch-cycle-status", "--include-ci", "--json"], allowed_returncodes={0, 2})
 
     if before_release:
         if not version:
@@ -666,11 +670,11 @@ def standard_error_scan_command(
             )
         # The workspace temp root: tmp/ in the Kit, .agentic/tmp in external workspaces (KIT-GF-032).
         summary_lines_path = load_workspace(project_root).tmp_file(f"release-{version.replace('.', '')}-summary-lines.json")
-        step("release-status", ["./.venv/bin/agentic-kit", "release-status", "--include-remote", "--json"], allowed_returncodes={0, 2})
+        step("release-status", [kit_executable, "release-status", "--include-remote", "--json"], allowed_returncodes={0, 2})
         step(
             "release-notes-generate",
             [
-                "./.venv/bin/agentic-kit",
+                kit_executable,
                 "release-notes-generate",
                 "--version",
                 version,
@@ -687,7 +691,7 @@ def standard_error_scan_command(
         step(
             "release-prep-dry-run",
             [
-                "./.venv/bin/agentic-kit",
+                kit_executable,
                 "release-prep",
                 "--version",
                 version,
@@ -703,13 +707,13 @@ def standard_error_scan_command(
 
     step(
         "fresh-context-strict",
-        ["./.venv/bin/agentic-kit", "transfer", "require-fresh-llm-context", "--json"],
+        [kit_executable, "transfer", "require-fresh-llm-context", "--json"],
         allowed_returncodes={0, 2},
     )
     step(
         "fresh-context-clean-post-merge-allowance",
         [
-            "./.venv/bin/agentic-kit",
+            kit_executable,
             "transfer",
             "require-fresh-llm-context",
             "--allow-clean-post-merge-carrier-staleness",
@@ -717,12 +721,12 @@ def standard_error_scan_command(
         ],
         allowed_returncodes={0} if before_release else {0, 2},
     )
-    self_hosting_step("docs-audit", ["./.venv/bin/agentic-kit", "docs-audit"])
-    self_hosting_step("audit-doc-currency", ["./.venv/bin/agentic-kit", "audit-doc-currency"])
-    self_hosting_step("audit-planning-docs-consolidation", ["./.venv/bin/agentic-kit", "audit-planning-docs-consolidation"])
-    step("audit-ns-legacy-references", ["./.venv/bin/agentic-kit", "audit-ns-legacy-references"])
-    step("audit-program-redundancy", ["./.venv/bin/agentic-kit", "audit-program-redundancy"])
-    step("standard-gates-audit-suite", ["./.venv/bin/agentic-kit", "standard-gates-audit-suite"])
+    self_hosting_step("docs-audit", [kit_executable, "docs-audit"])
+    self_hosting_step("audit-doc-currency", [kit_executable, "audit-doc-currency"])
+    self_hosting_step("audit-planning-docs-consolidation", [kit_executable, "audit-planning-docs-consolidation"])
+    step("audit-ns-legacy-references", [kit_executable, "audit-ns-legacy-references"])
+    step("audit-program-redundancy", [kit_executable, "audit-program-redundancy"])
+    step("standard-gates-audit-suite", [kit_executable, "standard-gates-audit-suite"])
 
     pattern_scan = _known_bad_pattern_scan(project_root)
     llm_work_order_contract_scan = _scan_llm_work_order_contract(project_root)

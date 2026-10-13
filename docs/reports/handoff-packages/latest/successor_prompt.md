@@ -39,7 +39,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2491-handoff-refresh`
+- branch: `codex/package5-e-kit-resolution`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -84,15 +84,15 @@ Arbeite nicht aus Chat-Erinnerung. Quelle der Wahrheit ist der aktuelle Remote-S
 
 ```bash
 cd /path/to/
-./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile
-./.venv/bin/agentic-kit rules acknowledge
-./.venv/bin/agentic-kit transfer normalize-session --repair-known-volatile
+agentic-kit transfer normalize-session --repair-known-volatile
+agentic-kit rules acknowledge
+agentic-kit transfer normalize-session --repair-known-volatile
 git branch --show-current
 git status -sb
 git status --short
-./.venv/bin/agentic-kit transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output
-./.venv/bin/agentic-kit transfer post-merge-check
-./.venv/bin/agentic-kit transfer repo-status
+agentic-kit transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output
+agentic-kit transfer post-merge-check
+agentic-kit transfer repo-status
 ```
 
 ## Zuerst lesen
@@ -430,14 +430,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2491-handoff-refresh",
+    "branch": "codex/package5-e-kit-resolution",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "6e1be66bd11d6d4801e7fb254dd22db92417af9f",
+    "head": "d2acbc13d940c3141cadb6eedd0d7ac1309947d0",
     "head_matches_origin_main": true,
-    "head_short": "6e1be66b",
+    "head_short": "d2acbc13",
     "local_path": "cd /path/to/",
-    "origin_main": "6e1be66bd11d6d4801e7fb254dd22db92417af9f",
-    "origin_main_short": "6e1be66b",
+    "origin_main": "d2acbc13d940c3141cadb6eedd0d7ac1309947d0",
+    "origin_main_short": "d2acbc13",
     "worktree_clean": false
   }
 }

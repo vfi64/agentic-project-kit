@@ -137,15 +137,15 @@ def build_llm_execution_context(root: str | Path = ".") -> dict[str, Any]:
             "feature_branch_pre_pr_gate": "agentic-kit transfer repo-status",
             "forbidden_feature_branch_pre_pr_gate": "agentic-kit transfer post-merge-check",
             "fresh_llm_context_before_pr": [
-                "./.venv/bin/agentic-kit transfer prepare-successor-handoff --render-prompt",
-                "./.venv/bin/agentic-kit transfer publish-last-report",
-                "./.venv/bin/agentic-kit transfer require-fresh-llm-context --json",
+                "agentic-kit transfer prepare-successor-handoff --render-prompt",
+                "agentic-kit transfer publish-last-report",
+                "agentic-kit transfer require-fresh-llm-context --json",
             ],
             "post_merge_checks_belong_to_main": True,
             "post_merge_check_after_merge_only": True,
             "do_not_use_stale_prompt_text_as_handoff_source": True,
             "new_pr_single_command": [
-                "./.venv/bin/agentic-kit",
+                "agentic-kit",
                 "transfer",
                 "pr-create-complete",
                 "--post-merge-complete",
@@ -157,7 +157,7 @@ def build_llm_execution_context(root: str | Path = ".") -> dict[str, Any]:
                 "squash",
             ],
             "existing_pr_requires_concrete_number": [
-                "./.venv/bin/agentic-kit",
+                "agentic-kit",
                 "transfer",
                 "pr-complete",
                 "use-the-concrete-pr-number-from-wrapper-output",
@@ -167,9 +167,9 @@ def build_llm_execution_context(root: str | Path = ".") -> dict[str, Any]:
                 "squash",
             ],
             "post_merge_requires_concrete_number": [
-                "./.venv/bin/agentic-kit transfer sync-main",
-                "./.venv/bin/agentic-kit transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output",
-                "./.venv/bin/agentic-kit transfer repo-status",
+                "agentic-kit transfer sync-main",
+                "agentic-kit transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output",
+                "agentic-kit transfer repo-status",
             ],
             "shell_placeholder_policy": {
                 "no_angle_bracket_placeholders_in_executable_blocks": True,

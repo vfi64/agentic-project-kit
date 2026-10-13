@@ -31,7 +31,7 @@ Before leaving a chat, run the deterministic successor handoff package command:
 
 ```bash
 cd /path/to/
-./.venv/bin/agentic-kit transfer chat-switch-complete --render-prompt
+agentic-kit transfer chat-switch-complete --render-prompt
 ```
 
 The command must generate the package files, update the three canonical chat-switch prompt files, validate that no stale or accumulative markers remain, and print the copy/paste successor prompt.

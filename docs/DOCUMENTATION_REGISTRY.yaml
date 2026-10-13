@@ -1661,3 +1661,6 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-063-custom-ci-runtime-plan-2026-10-13.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-067-owned-kit-subprocess-resolution-2026-10-13.md
+    class: evidence/log
+    owner: maintainers
