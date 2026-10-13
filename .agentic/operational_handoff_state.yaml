@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 77c9fa8c522e0d071cbcfe385b6b81f19fae0246
-  short: 77c9fa8c
-  subject: Retest external lifecycle, handoff and governed execution (KIT-GF-001/003/005/013/016) (#2489)
+  full: 6e1be66bd11d6d4801e7fb254dd22db92417af9f
+  short: 6e1be66b
+  subject: Expose conservative runtime plans for custom CI (KIT-GF-063) (#2491)
 last_substantive_work_state:
-  full: 77c9fa8c522e0d071cbcfe385b6b81f19fae0246
-  short: 77c9fa8c
-  subject: Retest external lifecycle, handoff and governed execution (KIT-GF-001/003/005/013/016) (#2489)
+  full: 6e1be66bd11d6d4801e7fb254dd22db92417af9f
+  short: 6e1be66b
+  subject: Expose conservative runtime plans for custom CI (KIT-GF-063) (#2491)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

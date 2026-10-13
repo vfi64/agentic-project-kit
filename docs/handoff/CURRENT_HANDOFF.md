@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `77c9fa8c522e0d071cbcfe385b6b81f19fae0246` (`77c9fa8c`), after `Retest external lifecycle, handoff and governed execution (KIT-GF-001/003/005/013/016) (#2489)`.
-Last substantive work state is `77c9fa8c522e0d071cbcfe385b6b81f19fae0246` (`77c9fa8c`), after `Retest external lifecycle, handoff and governed execution (KIT-GF-001/003/005/013/016) (#2489)`.
+Current verified main/admin HEAD is `6e1be66bd11d6d4801e7fb254dd22db92417af9f` (`6e1be66b`), after `Expose conservative runtime plans for custom CI (KIT-GF-063) (#2491)`.
+Last substantive work state is `6e1be66bd11d6d4801e7fb254dd22db92417af9f` (`6e1be66b`), after `Expose conservative runtime plans for custom CI (KIT-GF-063) (#2491)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: b69248baad92e4a8461ba92785af613a1f60af2f6cbff5b1b7945c9e1241640b
 - docs/reference/agentic-kit-commands.json: b3cd9d6e1259dd2b3be58dfdc8b232affa7011802b5bd277fe3de5cfdf53bcb5
-## Operational documentation refresh state after PR #2489
+## Operational documentation refresh state after PR #2491
 
-Current administrative handoff refresh state is `77c9fa8c` (`Retest external lifecycle, handoff and governed execution (KIT-GF-001/003/005/013/016) (#2489)`). Continue next only after this post-PR2489 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `6e1be66b` (`Expose conservative runtime plans for custom CI (KIT-GF-063) (#2491)`). Continue next only after this post-PR2491 refresh is committed and merged; the next substantive slice must be created from fresh main.
