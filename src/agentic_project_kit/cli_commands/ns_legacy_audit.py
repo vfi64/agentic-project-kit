@@ -16,7 +16,15 @@ def audit_ns_legacy_references_command(
     json_output: bool = typer.Option(False, "--json"),
 ) -> None:
     """Audit remaining legacy ./ns/ns-menu/ns_release references."""
-    result = audit_ns_legacy_references(root.resolve())
+    try:
+        result = audit_ns_legacy_references(root.resolve())
+    except RuntimeError as exc:
+        if json_output:
+            typer.echo(json.dumps({"status": "BLOCK", "returncode": 2,
+                                   "blocker_count": 1, "configuration_errors": [str(exc)]}))
+        else:
+            typer.echo(f"NS_LEGACY_REFERENCE_AUDIT\nSTATUS=BLOCK\nCONFIGURATION_ERROR={exc}")
+        raise typer.Exit(code=2) from exc
     if json_output:
         typer.echo(json.dumps(result.as_dict(), indent=2, sort_keys=True))
     else:

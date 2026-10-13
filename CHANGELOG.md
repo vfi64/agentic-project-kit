@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Allow explicit external evidence-path declarations in the legacy-reference audit while preserving active-script blockers and undeclared behavior (KIT-GF-068).
+
 - Honor the publish orchestration verdict in release-run C1/C2, including external SKIP checks and C1 resume with recorded B4 consent (KIT-GF-069).
 
 - Resolve workspace-owned or running Kit executables consistently in release, transfer, handoff and GUI adapters, preserving owned-only DPA probes (KIT-GF-067).
