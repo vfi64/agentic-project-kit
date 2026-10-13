@@ -1,10 +1,10 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 60,
+    "CLOSED": 64,
     "NOT_APPLICABLE": 0,
     "OPEN": 0,
-    "PARTIAL": 5
+    "PARTIAL": 1
   },
   "findings": [
     {
@@ -16,31 +16,34 @@
           "agentic-kit doctor"
         ],
         "expected": [
-          "Init either yields deterministic remediation, or check and doctor pass without manual metadata repair."
+          "process.returncode=0",
+          "check.status=PASS",
+          "doctor stdout contains Overall: PASS"
         ],
         "expected_result_fields": {
           "assertions": [
-            "Init either yields deterministic remediation, or check and doctor pass without manual metadata repair."
-          ],
-          "process.returncode": 0,
-          "stdout.json_document_count": "text/JSON according to command manifest"
+            "process.returncode=0",
+            "check.status=PASS",
+            "doctor stdout contains Overall: PASS"
+          ]
         },
         "preconditions": [
-          "Fresh repository with planning Markdown lacking lifecycle headers.",
-          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
-          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+          "Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
+        "verification": "Candidate installed-wheel external fixture passed; consumer VERIFIED_FIXED remains independent. Also passed with a wheel built from immutable v1.0.24.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "",
+      "fixed_in": "1.0.24",
       "id": "KIT-GF-001",
-      "kit_state": "PARTIAL",
+      "kit_state": "CLOSED",
+      "prior_reports": [
+        "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      ],
       "prs": [
         2293
       ],
-      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      "report": "docs/reports/greenfield/KIT-GF-001-lifecycle-bootstrap-retest-2026-10-13.md"
     },
     {
       "external_retest": {
@@ -80,35 +83,40 @@
         "bindings": {},
         "commands": [
           "agentic-kit handoff check",
+          "agentic-kit handoff show",
+          "agentic-kit handoff prompt",
           "agentic-kit transfer post-merge-check --json",
           "agentic-kit work recover --json"
         ],
         "expected": [
-          "Single authoritative handoff path; legitimate empty state; no traceback."
+          "process.returncode=0 for virgin handoff readers",
+          "stdout contains NO_PREVIOUS_HANDOFF and canonical namespace path",
+          "explicit missing target/predecessor loss exits 1"
         ],
         "expected_result_fields": {
           "assertions": [
-            "Single authoritative handoff path; legitimate empty state; no traceback."
-          ],
-          "process.returncode": 0,
-          "stdout.json_document_count": "text/JSON according to command manifest"
+            "process.returncode=0 for virgin handoff readers",
+            "stdout contains NO_PREVIOUS_HANDOFF and canonical namespace path",
+            "explicit missing target/predecessor loss exits 1"
+          ]
         },
         "preconditions": [
-          "Fresh workspace without previous handoff or merge.",
-          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
-          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+          "Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
+        "verification": "Candidate installed-wheel external fixture passed; consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "",
+      "fixed_in": "1.0.25",
       "id": "KIT-GF-003",
-      "kit_state": "PARTIAL",
+      "kit_state": "CLOSED",
+      "prior_reports": [
+        "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      ],
       "prs": [
         2293
       ],
-      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      "report": "docs/reports/greenfield/KIT-GF-003-canonical-handoff-applicability-2026-10-13.md"
     },
     {
       "external_retest": {
@@ -150,31 +158,33 @@
           "agentic-kit work start --branch codex/gf005-retest --from-ref main --json"
         ],
         "expected": [
-          "result_status=PASS; virgin-workspace post-merge check is NOOP."
+          "result_status=PASS",
+          "post-merge-check step stdout says not applicable"
         ],
         "expected_result_fields": {
           "assertions": [
-            "result_status=PASS; virgin-workspace post-merge check is NOOP."
-          ],
-          "process.returncode": 0,
-          "stdout.json_document_count": 1
+            "result_status=PASS",
+            "post-merge-check step stdout says not applicable"
+          ]
         },
         "preconditions": [
-          "Clean initialized external Git repository on main; generated files already committed; no prior merge.",
-          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
-          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+          "Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry.",
+          "Clean main tracks origin/main; local bare origin contains the initial committed workspace; no previous merge or successor package."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
+        "verification": "Candidate installed-wheel external fixture passed; consumer VERIFIED_FIXED remains independent. Also passed with a wheel built from immutable v1.0.24.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "",
+      "fixed_in": "1.0.24",
       "id": "KIT-GF-005",
-      "kit_state": "PARTIAL",
+      "kit_state": "CLOSED",
+      "prior_reports": [
+        "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      ],
       "prs": [
         2293
       ],
-      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      "report": "docs/reports/greenfield/KIT-GF-005-first-work-start-retest-2026-10-13.md"
     },
     {
       "external_retest": {
@@ -422,34 +432,38 @@
       "external_retest": {
         "bindings": {},
         "commands": [
-          "agentic-kit transfer patch-cycle-status --include-ci --json"
+          "agentic-kit audit-patch-failure-discipline --include-tmp --json"
         ],
         "expected": [
-          "Systemic/root-cause review escalation appears at the documented recurrence threshold; Slice C adjudicates external coverage."
+          "one failure: next_mutation_allowed=true",
+          "two failures: status=FAIL, next_mutation_allowed=false, process.returncode=1",
+          "later diagnosis: status=PASS, next_mutation_allowed=true"
         ],
         "expected_result_fields": {
           "assertions": [
-            "Systemic/root-cause review escalation appears at the documented recurrence threshold; Slice C adjudicates external coverage."
-          ],
-          "process.returncode": 0,
-          "stdout.json_document_count": 1
+            "one failure: next_mutation_allowed=true",
+            "two failures: status=FAIL, next_mutation_allowed=false, process.returncode=1",
+            "later diagnosis: status=PASS, next_mutation_allowed=true"
+          ]
         },
         "preconditions": [
-          "Recorded repeated local repair events in the same external patch cycle.",
-          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
-          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+          "Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry.",
+          "In workspace tmp_root, create slice1-a-20260101-000001.log containing block not found, then slice1-b-20260101-000002.log containing function not found; retain distinct observed mtime_ns order. After the blocked result add slice1-diagnose-20260101-000003.log containing RESULT=PATCH_FAILURE_DIAGNOSIS_DONE with later mtime_ns."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
+        "verification": "Candidate installed-wheel external fixture passed; consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "1.0.9",
+      "fixed_in": "1.0.25",
       "id": "KIT-GF-013",
       "kit_state": "CLOSED",
+      "prior_reports": [
+        "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      ],
       "prs": [
         2293
       ],
-      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      "report": "docs/reports/greenfield/KIT-GF-013-workspace-repair-escalation-2026-10-13.md"
     },
     {
       "external_retest": {
@@ -519,36 +533,45 @@
     },
     {
       "external_retest": {
-        "bindings": {},
+        "bindings": {
+          "intent_path": "Path of the declared intent below."
+        },
         "commands": [
-          "agentic-kit work check --profile code --json"
+          "agentic-kit executor plan {intent_path} --root . --json",
+          "agentic-kit executor run {intent_path} --root . --json",
+          "agentic-kit executor run {intent_path} --root . --execute --json"
         ],
         "expected": [
-          "Contract-first applicability is adjudicated; generic check alone is not proof of guided execution."
+          "plan.result_status=PASS",
+          "dry-run.executed=false",
+          "execute.result_status=PASS, executed=true",
+          "unknown command plan is not PASS"
         ],
         "expected_result_fields": {
           "assertions": [
-            "Contract-first applicability is adjudicated; generic check alone is not proof of guided execution."
-          ],
-          "process.returncode": 0,
-          "stdout.json_document_count": 1
+            "plan.result_status=PASS",
+            "dry-run.executed=false",
+            "execute.result_status=PASS, executed=true",
+            "unknown command plan is not PASS"
+          ]
         },
         "preconditions": [
-          "External workspace with a declared guided execution contract; Slice C must establish exact supported contract route.",
-          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
-          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+          "Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
+        "verification": "Candidate installed-wheel external fixture passed; consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest"
       },
       "fixed_in": "1.0.13",
       "id": "KIT-GF-016",
-      "kit_state": "PARTIAL",
+      "kit_state": "CLOSED",
+      "prior_reports": [
+        "docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json"
+      ],
       "prs": [
         2325
       ],
-      "report": "docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json"
+      "report": "docs/reports/greenfield/KIT-GF-016-contract-first-executor-retest-2026-10-13.md"
     },
     {
       "external_retest": {
@@ -2296,5 +2319,5 @@
   ],
   "kind": "external_findings_status",
   "schema_version": 1,
-  "source_sha256": "29228719e510907d7c28593eb31ec8dc7f78e933598e8d0adfc9f4ae3ee6f8c4"
+  "source_sha256": "985d531ae844b8ff8db5cca8c34bb7d159c619ea67a4f64922d7b32d1f815306"
 }

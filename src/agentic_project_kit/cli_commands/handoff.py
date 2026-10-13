@@ -8,6 +8,7 @@ from typing import Annotated, Any
 import typer
 
 from agentic_project_kit.documentation_registry import build_documentation_registry_summary
+from agentic_project_kit.handoff_applicability import handoff_applicability
 from agentic_project_kit.handoff_freshness import (
     assess_handoff_prompt_freshness,
     render_freshness_guard,
@@ -27,15 +28,32 @@ from agentic_project_kit.post_merge_handoff_refresh import evaluate_post_merge_h
 handoff_app = typer.Typer(help="Read-only persistent handoff state commands.")
 
 
+def _read_applicable_handoff(path: str, *, allow_empty: bool = True):
+    import yaml
+    try:
+        applicability = handoff_applicability(Path.cwd(), path)
+        if applicability['state'] == 'NO_PREVIOUS_HANDOFF' and allow_empty:
+            typer.echo('NO_PREVIOUS_HANDOFF path=' + applicability['path'])
+            return None, applicability['path']
+        return load_handoff_state(applicability['path']), applicability['path']
+    except (OSError, ValueError, RuntimeError, yaml.YAMLError) as exc:
+        typer.echo('[FAIL] ' + str(exc))
+        raise typer.Exit(1)
+
+
 @handoff_app.command("show")
-def show(path: str = ".agentic/handoff_state.yaml") -> None:
-    data = load_handoff_state(path)
+def show(path: str = "") -> None:
+    data, path = _read_applicable_handoff(path)
+    if data is None:
+        return
     typer.echo(summarize_handoff_state(data))
 
 
 @handoff_app.command("check")
-def check(path: str = ".agentic/handoff_state.yaml") -> None:
-    data = load_handoff_state(path)
+def check(path: str = "") -> None:
+    data, path = _read_applicable_handoff(path)
+    if data is None:
+        return
     errors = validate_handoff_state(data)
     if errors:
         for error in errors:
@@ -49,7 +67,7 @@ def check(path: str = ".agentic/handoff_state.yaml") -> None:
 
 @handoff_app.command("prompt")
 def prompt(
-    path: str = ".agentic/handoff_state.yaml",
+    path: str = "",
     intended_output: Annotated[
         str | None,
         typer.Option(
@@ -58,7 +76,9 @@ def prompt(
         ),
     ] = None,
 ) -> None:
-    data = load_handoff_state(path)
+    data, path = _read_applicable_handoff(path)
+    if data is None:
+        return
     errors = validate_handoff_state(data)
     if errors:
         for error in errors:
@@ -80,10 +100,10 @@ def prompt(
 
 @handoff_app.command("refresh")
 def refresh(
-    path: Annotated[str, typer.Argument()] = ".agentic/handoff_state.yaml",
+    path: Annotated[str, typer.Argument()] = "",
     write: bool = typer.Option(False, "--write", help="Write refreshed safe_state to YAML."),
 ) -> None:
-    data = load_handoff_state(path)
+    data, path = _read_applicable_handoff(path, allow_empty=False)
     git_state = current_git_safe_state()
     refreshed = refresh_handoff_safe_state(
         data,

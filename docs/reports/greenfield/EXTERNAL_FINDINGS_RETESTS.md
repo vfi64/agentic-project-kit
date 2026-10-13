@@ -12,10 +12,10 @@ Consumer VERIFIED_FIXED requires its own retained results. Publishing evidence c
 
 ## KIT-GF-001
 
-Kit state: PARTIAL; fixed_in: not established.
-Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+Kit state: CLOSED; fixed_in: 1.0.24.
+Evidence: docs/reports/greenfield/KIT-GF-001-lifecycle-bootstrap-retest-2026-10-13.md
 
-Preconditions: Fresh repository with planning Markdown lacking lifecycle headers. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+Preconditions: Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry.
 
 ```text
 agentic-kit workspace init --root . --execute --json
@@ -23,9 +23,9 @@ agentic-kit check --json
 agentic-kit doctor
 ```
 
-Expected: Init either yields deterministic remediation, or check and doctor pass without manual metadata repair.
+Expected: process.returncode=0 check.status=PASS doctor stdout contains Overall: PASS
 
-Expected result fields: `{"assertions": ["Init either yields deterministic remediation, or check and doctor pass without manual metadata repair."], "process.returncode": 0, "stdout.json_document_count": "text/JSON according to command manifest"}`.
+Expected result fields: `{"assertions": ["process.returncode=0", "check.status=PASS", "doctor stdout contains Overall: PASS"]}`.
 
 ## KIT-GF-002
 
@@ -44,20 +44,22 @@ Expected result fields: `{"assertions": ["PASS; no Kit self-hosting paths requir
 
 ## KIT-GF-003
 
-Kit state: PARTIAL; fixed_in: not established.
-Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+Kit state: CLOSED; fixed_in: 1.0.25.
+Evidence: docs/reports/greenfield/KIT-GF-003-canonical-handoff-applicability-2026-10-13.md
 
-Preconditions: Fresh workspace without previous handoff or merge. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+Preconditions: Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry.
 
 ```text
 agentic-kit handoff check
+agentic-kit handoff show
+agentic-kit handoff prompt
 agentic-kit transfer post-merge-check --json
 agentic-kit work recover --json
 ```
 
-Expected: Single authoritative handoff path; legitimate empty state; no traceback.
+Expected: process.returncode=0 for virgin handoff readers stdout contains NO_PREVIOUS_HANDOFF and canonical namespace path explicit missing target/predecessor loss exits 1
 
-Expected result fields: `{"assertions": ["Single authoritative handoff path; legitimate empty state; no traceback."], "process.returncode": 0, "stdout.json_document_count": "text/JSON according to command manifest"}`.
+Expected result fields: `{"assertions": ["process.returncode=0 for virgin handoff readers", "stdout contains NO_PREVIOUS_HANDOFF and canonical namespace path", "explicit missing target/predecessor loss exits 1"]}`.
 
 ## KIT-GF-004
 
@@ -76,18 +78,18 @@ Expected result fields: `{"assertions": ["PASS without full-contract Kit constit
 
 ## KIT-GF-005
 
-Kit state: PARTIAL; fixed_in: not established.
-Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+Kit state: CLOSED; fixed_in: 1.0.24.
+Evidence: docs/reports/greenfield/KIT-GF-005-first-work-start-retest-2026-10-13.md
 
-Preconditions: Clean initialized external Git repository on main; generated files already committed; no prior merge. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+Preconditions: Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry. Clean main tracks origin/main; local bare origin contains the initial committed workspace; no previous merge or successor package.
 
 ```text
 agentic-kit work start --branch codex/gf005-retest --from-ref main --json
 ```
 
-Expected: result_status=PASS; virgin-workspace post-merge check is NOOP.
+Expected: result_status=PASS post-merge-check step stdout says not applicable
 
-Expected result fields: `{"assertions": ["result_status=PASS; virgin-workspace post-merge check is NOOP."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+Expected result fields: `{"assertions": ["result_status=PASS", "post-merge-check step stdout says not applicable"]}`.
 
 ## KIT-GF-006
 
@@ -199,18 +201,18 @@ Expected result fields: `{"assertions": ["Plan=PLANNED; execution completes with
 
 ## KIT-GF-013
 
-Kit state: CLOSED; fixed_in: 1.0.9.
-Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+Kit state: CLOSED; fixed_in: 1.0.25.
+Evidence: docs/reports/greenfield/KIT-GF-013-workspace-repair-escalation-2026-10-13.md
 
-Preconditions: Recorded repeated local repair events in the same external patch cycle. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+Preconditions: Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry. In workspace tmp_root, create slice1-a-20260101-000001.log containing block not found, then slice1-b-20260101-000002.log containing function not found; retain distinct observed mtime_ns order. After the blocked result add slice1-diagnose-20260101-000003.log containing RESULT=PATCH_FAILURE_DIAGNOSIS_DONE with later mtime_ns.
 
 ```text
-agentic-kit transfer patch-cycle-status --include-ci --json
+agentic-kit audit-patch-failure-discipline --include-tmp --json
 ```
 
-Expected: Systemic/root-cause review escalation appears at the documented recurrence threshold; Slice C adjudicates external coverage.
+Expected: one failure: next_mutation_allowed=true two failures: status=FAIL, next_mutation_allowed=false, process.returncode=1 later diagnosis: status=PASS, next_mutation_allowed=true
 
-Expected result fields: `{"assertions": ["Systemic/root-cause review escalation appears at the documented recurrence threshold; Slice C adjudicates external coverage."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+Expected result fields: `{"assertions": ["one failure: next_mutation_allowed=true", "two failures: status=FAIL, next_mutation_allowed=false, process.returncode=1", "later diagnosis: status=PASS, next_mutation_allowed=true"]}`.
 
 ## KIT-GF-014
 
@@ -244,18 +246,20 @@ Expected result fields: `{"assertions": ["Contradictions are reported; aligned r
 
 ## KIT-GF-016
 
-Kit state: PARTIAL; fixed_in: 1.0.13.
-Evidence: docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json
+Kit state: CLOSED; fixed_in: 1.0.13.
+Evidence: docs/reports/greenfield/KIT-GF-016-contract-first-executor-retest-2026-10-13.md
 
-Preconditions: External workspace with a declared guided execution contract; Slice C must establish exact supported contract route. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+Preconditions: Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry.
 
 ```text
-agentic-kit work check --profile code --json
+agentic-kit executor plan {intent_path} --root . --json
+agentic-kit executor run {intent_path} --root . --json
+agentic-kit executor run {intent_path} --root . --execute --json
 ```
 
-Expected: Contract-first applicability is adjudicated; generic check alone is not proof of guided execution.
+Expected: plan.result_status=PASS dry-run.executed=false execute.result_status=PASS, executed=true unknown command plan is not PASS
 
-Expected result fields: `{"assertions": ["Contract-first applicability is adjudicated; generic check alone is not proof of guided execution."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+Expected result fields: `{"assertions": ["plan.result_status=PASS", "dry-run.executed=false", "execute.result_status=PASS, executed=true", "unknown command plan is not PASS"]}`.
 
 ## KIT-GF-017
 

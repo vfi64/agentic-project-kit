@@ -1,5 +1,13 @@
 # Test Gates
 
+## External lifecycle and governed execution adjudication
+
+`tests/test_greenfield_adjudication.py` retests KIT-GF-001/003/005/013/016
+through installed wheels, including v1.0.24 controls for init and first work start.
+The handoff applicability resolver distinguishes NO_PREVIOUS_HANDOFF from lost
+predecessor evidence. Repair diagnosis uses workspace tmp and command-run paths.
+Planner-Kit-Executor execution is tested after its explicit manifest-backed plan.
+
 ## External finding and release evidence gate
 
 `tests/test_greenfield_status.py` checks deterministic external-findings-status.json,
