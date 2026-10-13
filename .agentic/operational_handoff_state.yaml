@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6e1be66bd11d6d4801e7fb254dd22db92417af9f
-  short: 6e1be66b
-  subject: Expose conservative runtime plans for custom CI (KIT-GF-063) (#2491)
+  full: e0b9d68539d7bfd2cfd67d5ad2c7eed43afd4d06
+  short: e0b9d685
+  subject: Resolve owned Kit executables across diagnostics and adapters (KIT-GF-067) (#2493)
 last_substantive_work_state:
-  full: 6e1be66bd11d6d4801e7fb254dd22db92417af9f
-  short: 6e1be66b
-  subject: Expose conservative runtime plans for custom CI (KIT-GF-063) (#2491)
+  full: e0b9d68539d7bfd2cfd67d5ad2c7eed43afd4d06
+  short: e0b9d685
+  subject: Resolve owned Kit executables across diagnostics and adapters (KIT-GF-067) (#2493)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
