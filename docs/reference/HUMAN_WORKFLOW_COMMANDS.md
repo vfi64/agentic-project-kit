@@ -404,3 +404,57 @@ bypass is unnecessary for normal operation.
 The released 1.0.21 behavior passed the GF-017 installed-wheel fixture. Keep the
 context refresh and external clean-worktree preflight together when changing this
 flow; see `tools/retest_gf017_external.py` and the GF-017 report.
+
+
+## Custom CI runtime-plan integration (KIT-GF-063)
+
+Use `agentic-kit ci runtime-plan --base <sha> --head <sha> --json` with explicit
+branch/event metadata or GitHub event environment. Unknown input is full.
+The fragment below requires requirements-kit.txt pinned to a Kit release
+containing this route (planned 1.0.25). Merge it into your existing workflow;
+retain your existing Python/Node installation, checkout and test setup in the
+heavy jobs. The check job is unconditional. always() ensures a failed classifier
+with no output runs heavy jobs rather than skipping them.
+
+```yaml
+jobs:
+  classify:
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.plan.outputs.mode }}
+    steps:
+      - uses: actions/checkout@v6
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.13'}
+      - run: python -m pip install -r requirements-kit.txt
+      - id: plan
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.sha }}
+          BRANCH: ${{ github.head_ref }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          agentic-kit ci runtime-plan --base "$BASE" --head "$HEAD" --branch "$BRANCH" --event-name "$EVENT" --json > runtime-plan.json
+          python -c 'import json,os; p=json.load(open("runtime-plan.json")); f=open(os.environ["GITHUB_OUTPUT"],"a"); print("mode="+p["mode"],file=f)'
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.13'}
+      - run: python -m pip install -r requirements-kit.txt
+      - run: agentic-kit check
+  pytest:
+    needs: classify
+    if: always() && needs.classify.outputs.mode != 'light'
+    runs-on: ubuntu-latest
+    steps:
+      - run: python -m pytest -q
+  playwright:
+    needs: classify
+    if: always() && needs.classify.outputs.mode != 'light'
+    runs-on: ubuntu-latest
+    steps:
+      - run: npx playwright test
+```

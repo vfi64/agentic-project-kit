@@ -2175,36 +2175,41 @@
     },
     {
       "external_retest": {
-        "bindings": {},
+        "bindings": {
+          "base_sha": "Actual disposable PR base_sha",
+          "branch": "Actual disposable PR branch",
+          "head_sha": "Actual disposable PR head_sha"
+        },
         "commands": [
-          "agentic-kit check --json"
+          "agentic-kit ci runtime-plan --base {base_sha} --head {head_sha} --branch {branch} --event-name pull_request --json"
         ],
         "expected": [
-          "Managed template selects light and always checks Kit contracts; heavy jobs remain full for non-state paths."
+          "mode=light only for manifest-derived refresh paths; non-refresh or unknown input mode=full; check always runs."
         ],
         "expected_result_fields": {
           "assertions": [
-            "Managed template selects light and always checks Kit contracts; heavy jobs remain full for non-state paths."
+            "mode=light only for manifest-derived refresh paths; non-refresh or unknown input mode=full; check always runs."
           ],
-          "process.returncode": 0,
-          "stdout.json_document_count": 1
+          "mode": [
+            "light",
+            "full"
+          ],
+          "mutation": "none"
         },
         "preconditions": [
-          "Kit-managed CI refresh branch changing only manifest-derived state paths; custom-CI applicability remains PARTIAL until Slice D.",
-          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
-          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+          "Installed wheel, synchronized reference, custom CI; matching refresh branch and local base/head commits."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
+        "verification": "Installed-wheel custom-CI fixture PASS; consumer VERIFIED_FIXED independent.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "1.0.23",
+      "fixed_in": "1.0.25",
       "id": "KIT-GF-063",
-      "kit_state": "PARTIAL",
+      "kit_state": "CLOSED",
       "prs": [
         2467
       ],
-      "report": "docs/reports/greenfield/KIT-GF-063-workspace-refresh-ci-2026-10-10.md"
+      "report": "docs/reports/greenfield/KIT-GF-063-custom-ci-runtime-plan-2026-10-13.md"
     },
     {
       "external_retest": {

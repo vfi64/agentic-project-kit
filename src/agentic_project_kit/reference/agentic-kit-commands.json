@@ -1329,6 +1329,114 @@
     {
       "dry_run_available": false,
       "group": "ci",
+      "help": "Classify a custom CI diff; unknown input always requests full tests.",
+      "name": "runtime-plan",
+      "params": [
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "base",
+          "opts": [
+            "--base"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "head",
+          "opts": [
+            "--head"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "--branch"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "event_name",
+          "opts": [
+            "--event-name"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "ci",
+        "runtime-plan"
+      ],
+      "qualified_name": "agentic-kit ci runtime-plan",
+      "remote_effects": [
+        "none"
+      ],
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "surface": "diagnostic",
+      "task_tags": [
+        "bounded",
+        "ci"
+      ],
+      "when_to_use": "Classify a custom CI diff; unknown input always requests full tests."
+    },
+    {
+      "dry_run_available": false,
+      "group": "ci",
       "help": "Report the CI verdict for a commit or branch without requiring a pull request.",
       "name": "status",
       "params": [
@@ -19780,7 +19888,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "9a7d85b527d8",
+    "manifest_sha": "9633a3a680ad",
     "schema_version": 1
   },
   "schema_version": 2,

@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Expose the conservative workspace refresh classifier to custom CI while always retaining Kit checks and full fallback for unknown input (KIT-GF-063).
+
 - Verify external lifecycle bootstrap without manual metadata repair (KIT-GF-001).
 - Resolve one canonical workspace handoff authority and classify legitimate no-previous-handoff state without tracebacks (KIT-GF-003).
 - Verify a fresh external workspace starts its first work branch without predecessor-state blockers (KIT-GF-005).

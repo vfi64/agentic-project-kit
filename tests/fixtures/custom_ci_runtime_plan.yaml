@@ -1,0 +1,40 @@
+jobs:
+  classify:
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.plan.outputs.mode }}
+    steps:
+      - uses: actions/checkout@v6
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.13'}
+      - run: python -m pip install -r requirements-kit.txt
+      - id: plan
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.sha }}
+          BRANCH: ${{ github.head_ref }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          agentic-kit ci runtime-plan --base "$BASE" --head "$HEAD" --branch "$BRANCH" --event-name "$EVENT" --json > runtime-plan.json
+          python -c 'import json,os; p=json.load(open("runtime-plan.json")); f=open(os.environ["GITHUB_OUTPUT"],"a"); print("mode="+p["mode"],file=f)'
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.13'}
+      - run: python -m pip install -r requirements-kit.txt
+      - run: agentic-kit check
+  pytest:
+    needs: classify
+    if: always() && needs.classify.outputs.mode != 'light'
+    runs-on: ubuntu-latest
+    steps:
+      - run: python -m pytest -q
+  playwright:
+    needs: classify
+    if: always() && needs.classify.outputs.mode != 'light'
+    runs-on: ubuntu-latest
+    steps:
+      - run: npx playwright test

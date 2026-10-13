@@ -1658,3 +1658,6 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-003-canonical-handoff-applicability-2026-10-13.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-063-custom-ci-runtime-plan-2026-10-13.md
+    class: evidence/log
+    owner: maintainers
