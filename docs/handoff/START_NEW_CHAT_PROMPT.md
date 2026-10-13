@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: cd0836073390297e69cb3cf2df914ef5657782a637792ad66a250d178c2f2464
 - docs/reference/agentic-kit-commands.json: 53a56ab191ae44a93d5d2747ef8c31cd388df6f51565c016213d5cd1973e2e17
-## Operational documentation refresh state after PR #2479
+## Operational documentation refresh state after PR #2481
 
-Current administrative handoff refresh state is `20598a97` (`Add optional guided Kit GUI over shared guarded workflows (#2479)`). Continue next only after this post-PR2479 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `8977dc6f` (`Release 1.0.24 (#2481)`). Continue next only after this post-PR2481 refresh is committed and merged; the next substantive slice must be created from fresh main.
