@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 03e1fd921856b091d1c7222e6afaa3004ef2d34e
-  short: 03e1fd92
-  subject: Export external finding status and archive completed release evidence (KIT-GF-066) (#2487)
+  full: 77c9fa8c522e0d071cbcfe385b6b81f19fae0246
+  short: 77c9fa8c
+  subject: Retest external lifecycle, handoff and governed execution (KIT-GF-001/003/005/013/016) (#2489)
 last_substantive_work_state:
-  full: 03e1fd921856b091d1c7222e6afaa3004ef2d34e
-  short: 03e1fd92
-  subject: Export external finding status and archive completed release evidence (KIT-GF-066) (#2487)
+  full: 77c9fa8c522e0d071cbcfe385b6b81f19fae0246
+  short: 77c9fa8c
+  subject: Retest external lifecycle, handoff and governed execution (KIT-GF-001/003/005/013/016) (#2489)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
