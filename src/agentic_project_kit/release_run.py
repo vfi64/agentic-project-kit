@@ -84,6 +84,9 @@ class ReleaseRun:
             if result["result_status"] != "PASS":
                 return self._payload(result)
             self._mark_finished(step_id, result)
+        if self._release_config().get("evidence_archive") is True:
+            from agentic_project_kit.release_run_evidence import archive_completed_run
+            return self._payload(archive_completed_run(self))
         return self._payload({"step_id": "complete", "result_status": "PASS", "next_action": "Release run completed."})
 
     def _run_or_gate(self, step_id: str) -> dict[str, Any]:

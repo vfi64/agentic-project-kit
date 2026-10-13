@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 8694ff3e27ef
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 64e1fd0929d3
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `263`
+- Command count: `265`
 
 ## Commands
 
@@ -1449,6 +1449,38 @@ Create and push a GitHub repository for an initialized project.
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+
+### `agentic-kit greenfield export`
+
+- Safety: `BOUNDED`
+- Surface: `primitive`
+- When to use: Plan or sign the Kit maintainer's deterministic local status projections.
+- Dry-run available: `True`
+- Remote effects: `none`
+
+Plan or sign the Kit maintainer's deterministic local status projections.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `execute` | `TyperOption` | --execute | `False` | `False` |  |
+| `expected_signature` | `TyperOption` | --expected-signature | `False` | `` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
+### `agentic-kit greenfield status`
+
+- Safety: `READ_ONLY`
+- Surface: `diagnostic`
+- When to use: Read the installed Kit's public adjudications; never change a consumer ledger.
+- Dry-run available: `False`
+- Remote effects: `none`
+
+Read the installed Kit's public adjudications; never change a consumer ledger.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `finding_id` | `TyperOption` | --id | `False` | `` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit gui initial-llm-prompt`
 

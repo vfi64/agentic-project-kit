@@ -3,6 +3,8 @@ project:
   name: agentic-project-kit
   type: python
 profile: python-default
+release:
+  evidence_archive: true
 paths:
   tmp_root: tmp
   status_file: docs/STATUS.md

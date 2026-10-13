@@ -10,6 +10,15 @@ Current version: 1.0.24
 
 Generated website: <https://vfi64.github.io/agentic-project-kit/>.
 
+External finding adjudications and exact retest contracts are available with
+`agentic-kit greenfield status --json`. The generated
+`docs/reports/greenfield/external-findings-status.json` distinguishes Kit fixes
+from consumer VERIFIED_FIXED. Maintainers regenerate it through a signed
+`agentic-kit greenfield export` plan. Opt-in `release.evidence_archive: true`
+adds the separately signed final E1 archive gate to release run, after publishing
+and DOI checks pass; committed evidence contains bounded step results and gate
+attribution. See `docs/reports/greenfield/KIT-GF-066-machine-readable-evidence-2026-10-13.md`.
+
 ## Why this exists
 
 AI-assisted development works best when context is explicit, current, and machine-checkable. Otherwise, agents drift into stale handoffs, unclear branch rules, missing test evidence, and unstructured logs.

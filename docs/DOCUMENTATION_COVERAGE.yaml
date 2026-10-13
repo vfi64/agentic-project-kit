@@ -3,6 +3,24 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: external-findings-status-and-release-archive
+  description: Kit adjudication, executable retests and separately signed release evidence stay visible.
+  documents:
+  - path: README.md
+    terms:
+    - agentic-kit greenfield status --json
+    - release.evidence_archive
+    - E1
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_greenfield_status.py
+    - tests/test_release_run_evidence.py
+  - path: docs/reports/greenfield/KIT-GF-066-machine-readable-evidence-2026-10-13.md
+    terms:
+    - VERIFIED_FIXED
+    - E1
+    - signature
+    - pending
 - id: external-safe-merge-context-coverage
   description: External merges refresh context without weakening CI or worktree guards.
   documents:

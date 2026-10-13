@@ -6856,6 +6856,138 @@
       "when_to_use": "Run agentic-kit governance check."
     },
     {
+      "dry_run_available": true,
+      "group": "greenfield",
+      "help": "Plan or sign the Kit maintainer's deterministic local status projections.",
+      "name": "export",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "greenfield",
+        "export"
+      ],
+      "qualified_name": "agentic-kit greenfield export",
+      "remote_effects": [
+        "none"
+      ],
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "surface": "primitive",
+      "task_tags": [
+        "bounded",
+        "greenfield"
+      ],
+      "when_to_use": "Plan or sign the Kit maintainer's deterministic local status projections."
+    },
+    {
+      "dry_run_available": false,
+      "group": "greenfield",
+      "help": "Read the installed Kit's public adjudications; never change a consumer ledger.",
+      "name": "status",
+      "params": [
+        {
+          "default": "",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "finding_id",
+          "opts": [
+            "--id"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "greenfield",
+        "status"
+      ],
+      "qualified_name": "agentic-kit greenfield status",
+      "remote_effects": [
+        "none"
+      ],
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "surface": "diagnostic",
+      "task_tags": [
+        "greenfield",
+        "read-only"
+      ],
+      "when_to_use": "Read the installed Kit's public adjudications; never change a consumer ledger."
+    },
+    {
       "dry_run_available": false,
       "group": "gui",
       "help": "",
@@ -19648,7 +19780,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "8694ff3e27ef",
+    "manifest_sha": "64e1fd0929d3",
     "schema_version": 1
   },
   "schema_version": 2,
