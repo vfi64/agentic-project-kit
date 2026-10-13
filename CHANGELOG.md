@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Add deterministic external finding status and retest contracts plus a separately signed completed-release evidence archive with governed PR and handoff closeout (KIT-GF-066).
+
 - Add deterministic external rule-registry applicability and signed evidence-derived bootstrap without Kit-repository tests or invented project-rule semantics (KIT-GF-RULE-REGISTRY-BOOTSTRAP).
 
 ## v1.0.24 - 2026-10-13

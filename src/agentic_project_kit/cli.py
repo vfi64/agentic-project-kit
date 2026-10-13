@@ -19,6 +19,7 @@ from agentic_project_kit.cli_commands.evidence import app as evidence_app
 from agentic_project_kit.cli_commands.executor import executor_app
 from agentic_project_kit.cli_commands.github import register_github_commands
 from agentic_project_kit.cli_commands.governance import governance_app
+from agentic_project_kit.cli_commands.greenfield import greenfield_app
 from agentic_project_kit.cli_commands.gui import gui_app
 from agentic_project_kit.cli_commands.handoff import handoff_app
 from agentic_project_kit.cli_commands.human_workflows import release_flow_app, work_app
@@ -107,6 +108,7 @@ register_transfer_post_merge_settle_command(transfer_app)
 register_transfer_pr_closeout_complete_command(transfer_app)
 register_removed_ns_commands(transfer_app)
 app.add_typer(work_app, name="work")
+app.add_typer(greenfield_app, name="greenfield")
 app.add_typer(kit_app, name="kit")
 app.add_typer(release_flow_app, name="release")
 app.add_typer(workflow_app, name="workflow")

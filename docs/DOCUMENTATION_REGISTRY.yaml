@@ -1634,3 +1634,12 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-RULE-REGISTRY-BOOTSTRAP-external-inventory-2026-10-13.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-066-machine-readable-evidence-2026-10-13.md
+    class: evidence/log
+    owner: maintainers
+  - path: docs/reports/greenfield/external-findings-status.json
+    class: evidence/log
+    owner: maintainers
+  - path: docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md
+    class: evidence/log
+    owner: maintainers

@@ -408,6 +408,8 @@ def _dry_run_available(command: dict[str, Any]) -> bool:
 def infer_remote_effects(command: dict[str, Any]) -> list[str]:
     qualified = str(command.get("qualified_name") or "")
     implementation_effects = {
+        "agentic-kit greenfield status": ["none"],
+        "agentic-kit greenfield export": ["none"],
         "agentic-kit rule-registry bootstrap": ["none"],
         "agentic-kit kit update": ["network_read"],
         "agentic-kit pr merge-if-green": ["delete_remote", "merge", "network_read"],

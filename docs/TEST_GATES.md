@@ -1,5 +1,13 @@
 # Test Gates
 
+## External finding and release evidence gate
+
+`tests/test_greenfield_status.py` checks deterministic external-findings-status.json,
+schema and report coverage, signed export and installed-wheel external reads.
+`tests/test_release_run_evidence.py` checks the separately signed E1 archive gate,
+actual completed step projection, incomplete-state rejection and evidence preservation.
+Consumer VERIFIED_FIXED is never inferred from these Kit adjudications.
+
 ## Workspace Kit adoption gate
 
 `tests/test_kit_installation.py` verifies workspace-owned discovery without global

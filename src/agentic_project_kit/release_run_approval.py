@@ -28,6 +28,8 @@ def release_plan(run: ReleaseRun) -> dict[str, Any]:
         plan["workflow"] = run._package_index_workflow()
     if "D4" in run.sequence:
         plan["doi_branch"] = run.doi_branch
+    if run._release_config().get("evidence_archive") is True:
+        plan["evidence_archive"] = "E1: separately signed completed-run archive"
     return plan
 
 
@@ -61,7 +63,7 @@ def authorize_gate(run: ReleaseRun, step_id: str, gate: dict[str, Any]) -> dict[
     gate["approval_signature"] = _approval_signature(gate)
     run.state.setdefault("gates", {})[step_id] = gate
     run._save_state()
-    if mode == "upfront" and consent and step_id != "D2R":
+    if mode == "upfront" and consent and step_id not in {"D2R", "E1"}:
         if (run.options.execute and not run._approval_consumed and run.options.expected_signature
                 and run.options.expected_signature not in {gate["approval_signature"], consent["signature"]}):
             return {"step_id": step_id, "result_status": "BLOCKED", "blockers": ["signature-mismatch"], "gate": gate}

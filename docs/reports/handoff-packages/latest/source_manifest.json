@@ -44,7 +44,7 @@
       "path": "AGENTS.md"
     },
     {
-      "bytes": 52682,
+      "bytes": 53301,
       "exists": true,
       "path": "README.md"
     },
@@ -54,16 +54,16 @@
       "path": "SECURITY.md"
     },
     {
-      "bytes": 73230,
+      "bytes": 73788,
       "exists": true,
       "path": "docs/DOCUMENTATION_COVERAGE.yaml",
       "yaml_valid": true
     },
     {
-      "bytes": 94844,
+      "bytes": 95197,
       "exists": true,
       "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-      "registry_document_count": 333,
+      "registry_document_count": 336,
       "yaml_valid": true
     },
     {
@@ -72,7 +72,7 @@
       "path": "docs/STATUS.md"
     },
     {
-      "bytes": 77547,
+      "bytes": 78002,
       "exists": true,
       "path": "docs/TEST_GATES.md"
     },
@@ -82,7 +82,7 @@
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
     {
-      "bytes": 7343,
+      "bytes": 7345,
       "exists": true,
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
@@ -123,12 +123,12 @@
       "yaml_valid": true
     },
     {
-      "bytes": 191457,
+      "bytes": 192648,
       "exists": true,
       "path": "docs/reference/AGENTIC_KIT_COMMANDS.md"
     },
     {
-      "bytes": 522479,
+      "bytes": 525827,
       "exists": true,
       "path": "docs/reference/agentic-kit-commands.json"
     }

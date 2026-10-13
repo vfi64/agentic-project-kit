@@ -1,6 +1,6 @@
 {
-  "command_count": 263,
-  "diagnostic_count": 124,
+  "command_count": 265,
+  "diagnostic_count": 125,
   "entries": [
     {
       "diagnostic_priority": "reference_lookup",
@@ -4217,6 +4217,86 @@
       "safety": "READ_ONLY",
       "surface": "diagnostic",
       "when_to_use": "Run agentic-kit governance check."
+    },
+    {
+      "diagnostic_priority": "not_diagnostic",
+      "dry_run_available": true,
+      "group": "greenfield",
+      "help": "Plan or sign the Kit maintainer's deterministic local status projections.",
+      "lifecycle_rank": null,
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "",
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "required": false
+        },
+        {
+          "default": "",
+          "help": "",
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        }
+      ],
+      "qualified_name": "agentic-kit greenfield export",
+      "safety": "BOUNDED",
+      "surface": "primitive",
+      "when_to_use": "Plan or sign the Kit maintainer's deterministic local status projections."
+    },
+    {
+      "diagnostic_priority": "advanced_diagnostic",
+      "dry_run_available": false,
+      "group": "greenfield",
+      "help": "Read the installed Kit's public adjudications; never change a consumer ledger.",
+      "lifecycle_rank": null,
+      "params": [
+        {
+          "default": "",
+          "help": "",
+          "name": "finding_id",
+          "opts": [
+            "--id"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        }
+      ],
+      "qualified_name": "agentic-kit greenfield status",
+      "safety": "READ_ONLY",
+      "surface": "diagnostic",
+      "when_to_use": "Read the installed Kit's public adjudications; never change a consumer ledger."
     },
     {
       "diagnostic_priority": "not_diagnostic",
@@ -11969,6 +12049,7 @@
     "evidence": 8,
     "executor": 2,
     "governance": 1,
+    "greenfield": 2,
     "gui": 1,
     "handoff": 5,
     "instruction": 1,
@@ -11995,14 +12076,14 @@
   "guided_count": 34,
   "kind": "site_command_catalog",
   "safety_counts": {
-    "BOUNDED": 173,
+    "BOUNDED": 174,
     "DESTRUCTIVE": 9,
-    "READ_ONLY": 81
+    "READ_ONLY": 82
   },
   "schema_version": 1,
   "surface_counts": {
-    "diagnostic": 124,
+    "diagnostic": 125,
     "orchestrator": 34,
-    "primitive": 105
+    "primitive": 106
   }
 }

@@ -1,0 +1,1009 @@
+---
+artifact_type: evidence
+status: active
+review_policy: historical_evidence
+---
+
+# External finding retest contracts
+
+Generated from .agentic/greenfield_findings.json by the signed greenfield export route.
+These are executable templates, not successful test evidence. Substitute bindings as single argv tokens.
+Consumer VERIFIED_FIXED requires its own retained results. Publishing evidence can be absent pending a release.
+
+## KIT-GF-001
+
+Kit state: PARTIAL; fixed_in: not established.
+Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Preconditions: Fresh repository with planning Markdown lacking lifecycle headers. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit workspace init --root . --execute --json
+agentic-kit check --json
+agentic-kit doctor
+```
+
+Expected: Init either yields deterministic remediation, or check and doctor pass without manual metadata repair.
+
+Expected result fields: `{"assertions": ["Init either yields deterministic remediation, or check and doctor pass without manual metadata repair."], "process.returncode": 0, "stdout.json_document_count": "text/JSON according to command manifest"}`.
+
+## KIT-GF-002
+
+Kit state: CLOSED; fixed_in: 1.0.9.
+Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Preconditions: Initialized external workspace with native test configuration; no Kit tests/registry. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit slice gate --kind planning-doc --root .
+```
+
+Expected: PASS; no Kit self-hosting paths required.
+
+Expected result fields: `{"assertions": ["PASS; no Kit self-hosting paths required."], "process.returncode": 0, "stdout.json_document_count": "text/JSON according to command manifest"}`.
+
+## KIT-GF-003
+
+Kit state: PARTIAL; fixed_in: not established.
+Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Preconditions: Fresh workspace without previous handoff or merge. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit handoff check
+agentic-kit transfer post-merge-check --json
+agentic-kit work recover --json
+```
+
+Expected: Single authoritative handoff path; legitimate empty state; no traceback.
+
+Expected result fields: `{"assertions": ["Single authoritative handoff path; legitimate empty state; no traceback."], "process.returncode": 0, "stdout.json_document_count": "text/JSON according to command manifest"}`.
+
+## KIT-GF-004
+
+Kit state: CLOSED; fixed_in: 1.0.9.
+Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Preconditions: External-manifest workspace recognized by doctor. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit governance check --root .
+```
+
+Expected: PASS without full-contract Kit constitution requirements.
+
+Expected result fields: `{"assertions": ["PASS without full-contract Kit constitution requirements."], "process.returncode": 0, "stdout.json_document_count": "text/JSON according to command manifest"}`.
+
+## KIT-GF-005
+
+Kit state: PARTIAL; fixed_in: not established.
+Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Preconditions: Clean initialized external Git repository on main; generated files already committed; no prior merge. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit work start --branch codex/gf005-retest --from-ref main --json
+```
+
+Expected: result_status=PASS; virgin-workspace post-merge check is NOOP.
+
+Expected result fields: `{"assertions": ["result_status=PASS; virgin-workspace post-merge check is NOOP."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-006
+
+Kit state: CLOSED; fixed_in: 1.0.9.
+Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Preconditions: Initialized workspace with empty transfer inbox. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit transfer status --json
+```
+
+Expected: No file exception; deterministic empty state.
+
+Expected result fields: `{"assertions": ["No file exception; deterministic empty state."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-007
+
+Kit state: CLOSED; fixed_in: 1.0.13.
+Evidence: docs/reports/POST_V1_0_12_GREENFIELD_PROVENANCE_RETEST_20260915.json
+
+Preconditions: Initialized external workspace; retain generated provenance. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit workspace adopt --root . --json
+```
+
+Expected: Generated Kit files are recognized, not reclassified as new manual surfaces.
+
+Expected result fields: `{"assertions": ["Generated Kit files are recognized, not reclassified as new manual surfaces."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-008
+
+Kit state: CLOSED; fixed_in: 1.0.9.
+Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Preconditions: Fresh disposable repository. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit workspace init --root . --inject-ci --execute --json
+agentic-kit check --json
+```
+
+Expected: Injected workflow calls installed Kit check; no self-host-only gates.
+
+Expected result fields: `{"assertions": ["Injected workflow calls installed Kit check; no self-host-only gates."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-009
+
+Kit state: CLOSED; fixed_in: 1.0.13.
+Evidence: docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.json
+
+Preconditions: Disposable hosted external repository with green required CI and first unpushed work branch; remote effects authorized. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --release-note-category Fixed --execute --json
+```
+
+Expected: One PR, green merge and handoff; no self-generated dirt blocker.
+
+Expected result fields: `{"assertions": ["One PR, green merge and handoff; no self-generated dirt blocker."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-010
+
+Kit state: CLOSED; fixed_in: 1.0.9.
+Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Preconditions: Disposable external work branch with one reviewed change. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit rules acknowledge --json
+agentic-kit transfer commit --path {changed_path} --message gf010-retest --json
+```
+
+Expected: Acknowledgement remains valid for the authorized Kit-owned commit.
+
+Expected result fields: `{"assertions": ["Acknowledgement remains valid for the authorized Kit-owned commit."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-011
+
+Kit state: CLOSED; fixed_in: 1.0.16.
+Evidence: docs/reports/greenfield/KIT-GF-011-successor-final-head-identity-2026-10-04.md
+
+Preconditions: After governed merge and administrative handoff refresh. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit transfer post-merge-check --json
+```
+
+Expected: successor_package_head_status=refresh_only_descendant; current final HEAD is reported without another refresh loop.
+
+Expected result fields: `{"assertions": ["successor_package_head_status=refresh_only_descendant; current final HEAD is reported without another refresh loop."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-012
+
+Kit state: CLOSED; fixed_in: 1.0.9.
+Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Preconditions: Disposable remote external work branch; green CI; unchanged reviewed inputs between plan and execution. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --dry-run --json
+agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --release-note-category Fixed --execute --json
+```
+
+Expected: Plan=PLANNED; execution completes without self-generated blocker.
+
+Expected result fields: `{"assertions": ["Plan=PLANNED; execution completes without self-generated blocker."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-013
+
+Kit state: CLOSED; fixed_in: 1.0.9.
+Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Preconditions: Recorded repeated local repair events in the same external patch cycle. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit transfer patch-cycle-status --include-ci --json
+```
+
+Expected: Systemic/root-cause review escalation appears at the documented recurrence threshold; Slice C adjudicates external coverage.
+
+Expected result fields: `{"assertions": ["Systemic/root-cause review escalation appears at the documented recurrence threshold; Slice C adjudicates external coverage."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-014
+
+Kit state: CLOSED; fixed_in: 1.0.13.
+Evidence: docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json
+
+Preconditions: External continuation authority with deliberate stale or contradictory state. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit governance check --root .
+```
+
+Expected: Deterministic authority-drift finding; clean control passes.
+
+Expected result fields: `{"assertions": ["Deterministic authority-drift finding; clean control passes."], "process.returncode": 0, "stdout.json_document_count": "text/JSON according to command manifest"}`.
+
+## KIT-GF-015
+
+Kit state: CLOSED; fixed_in: 1.0.13.
+Evidence: docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json
+
+Preconditions: Registered project documents with deliberately contradictory canonical facts and intact control fixture. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit check --json
+```
+
+Expected: Contradictions are reported; aligned registered facts pass.
+
+Expected result fields: `{"assertions": ["Contradictions are reported; aligned registered facts pass."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-016
+
+Kit state: PARTIAL; fixed_in: 1.0.13.
+Evidence: docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json
+
+Preconditions: External workspace with a declared guided execution contract; Slice C must establish exact supported contract route. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit work check --profile code --json
+```
+
+Expected: Contract-first applicability is adjudicated; generic check alone is not proof of guided execution.
+
+Expected result fields: `{"assertions": ["Contract-first applicability is adjudicated; generic check alone is not proof of guided execution."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-017
+
+Kit state: CLOSED; fixed_in: 1.0.23.
+Evidence: docs/reports/greenfield/KIT-GF-017-released-external-merge-retest-2026-10-10.md
+
+Preconditions: Disposable external repo; clean context; green PR; remote merge authorized; no Kit source/registry. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit transfer pr-merge-safe {pr} --json
+```
+
+Expected: Safe merge recovers canonical external context carrier without Kit-only files.
+
+Expected result fields: `{"assertions": ["Safe merge recovers canonical external context carrier without Kit-only files."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-018
+
+Kit state: CLOSED; fixed_in: 1.0.10.
+Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Preconditions: Merged PR; named work branch already absent remotely; local current branch is main. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit transfer delete-merged-work-branch {branch} --json
+```
+
+Expected: PASS/idempotent no-op; both requested refs absent.
+
+Expected result fields: `{"assertions": ["PASS/idempotent no-op; both requested refs absent."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-021
+
+Kit state: CLOSED; fixed_in: 1.0.23.
+Evidence: docs/reports/greenfield/KIT-GF-021-workspace-kit-discovery-2026-10-10.md
+
+Preconditions: Installed wheel in workspace-owned interpreter; global PATH excludes agentic-kit. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit kit status --json
+```
+
+Expected: Installed Kit is found; missing CLI is not falsely reported.
+
+Expected result fields: `{"assertions": ["Installed Kit is found; missing CLI is not falsely reported."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-022
+
+Kit state: CLOSED; fixed_in: 1.0.20.
+Evidence: docs/reports/greenfield/KIT-GF-022-packaged-command-reference-refresh-2026-10-07.md
+
+Preconditions: Stale workspace command reference; installed wheel; no Kit sources. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit transfer command-reference-refresh --json
+agentic-kit transfer command-reference-check --json
+```
+
+Expected: Refresh and check PASS; packaged reference matches installed declarations.
+
+Expected result fields: `{"assertions": ["Refresh and check PASS; packaged reference matches installed declarations."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-023
+
+Kit state: CLOSED; fixed_in: 1.0.22.
+Evidence: docs/reports/greenfield/KIT-GF-023-pure-json-stdout-2026-10-09.md
+
+Preconditions: External workspace with deprecated manifest/config warning reproduction. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit transfer repo-status --json
+agentic-kit transfer command-reference-check --json
+```
+
+Expected: Each stdout parses as exactly one JSON document; warnings use stderr.
+
+Expected result fields: `{"assertions": ["Each stdout parses as exactly one JSON document; warnings use stderr."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-024
+
+Kit state: CLOSED; fixed_in: 1.0.19.
+Evidence: docs/reports/greenfield/KIT-GF-024-025-ci-status-manifest-effects-2026-10-05.md
+
+Preconditions: Hosted external repository with Actions run for supplied commit. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit ci status --commit {sha} --branch {branch} --json
+```
+
+Expected: JSON verdict and bounded run/check details without requiring a PR.
+
+Expected result fields: `{"assertions": ["JSON verdict and bounded run/check details without requiring a PR."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-025
+
+Kit state: CLOSED; fixed_in: 1.0.19.
+Evidence: docs/reports/greenfield/KIT-GF-024-025-ci-status-manifest-effects-2026-10-05.md
+
+Preconditions: Synchronized installed-wheel command manifest. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit audit-command-manifest --json
+```
+
+Expected: PASS; every command declares valid remote_effects.
+
+Expected result fields: `{"assertions": ["PASS; every command declares valid remote_effects."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-026
+
+Kit state: CLOSED; fixed_in: 1.0.16.
+Evidence: docs/reports/greenfield/KIT-GF-026-managed-ci-template-2026-10-04.md
+
+Preconditions: Unmodified old Kit-managed CI source and injected projection. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit workspace ci-update --root . --json
+```
+
+Expected: Plan names update paths; template pins Kit, limits push to main, has concurrency/browser cache.
+
+Expected result fields: `{"assertions": ["Plan names update paths; template pins Kit, limits push to main, has concurrency/browser cache."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-027
+
+Kit state: CLOSED; fixed_in: 1.0.23.
+Evidence: docs/reports/greenfield/KIT-GF-027-bounded-pr-ci-findings-2026-10-09.md
+
+Preconditions: External PR whose CI executed and failed; bounded output mode. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit pr status {pr} --json
+```
+
+Expected: Execution succeeds with a failed CI verdict; execution errors remain distinct.
+
+Expected result fields: `{"assertions": ["Execution succeeds with a failed CI verdict; execution errors remain distinct."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-028
+
+Kit state: CLOSED; fixed_in: 1.0.19.
+Evidence: docs/reports/greenfield/KIT-GF-028-tempdir-artifacts-2026-10-05.md
+
+Preconditions: External fixture; OS temp root is redirected to a disposable directory. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit artifact-gc --tmp-logs --json
+```
+
+Expected: Artifacts resolve via OS/workspace temp policy; no fixed shared temp paths.
+
+Expected result fields: `{"assertions": ["Artifacts resolve via OS/workspace temp policy; no fixed shared temp paths."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-029
+
+Kit state: CLOSED; fixed_in: 1.0.14.
+Evidence: docs/reports/greenfield/KIT-GF-029-publication-none-2026-10-03.md
+
+Preconditions: publication: none; prepared release; no public publication configured. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release-publish --version {version} --dry-run --json
+```
+
+Expected: Private tag plan; no GitHub/PyPI/Zenodo publication steps.
+
+Expected result fields: `{"assertions": ["Private tag plan; no GitHub/PyPI/Zenodo publication steps."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-030
+
+Kit state: CLOSED; fixed_in: 1.0.17.
+Evidence: docs/reports/greenfield/KIT-GF-030-031-pr-lifecycle-2026-10-05.md
+
+Preconditions: Branch already squash merged in disposable remote repo. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit transfer pr-create-complete --head {branch} --title gf030-retest --json
+```
+
+Expected: Reuses merged PR evidence; does not create a second PR.
+
+Expected result fields: `{"assertions": ["Reuses merged PR evidence; does not create a second PR."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-031
+
+Kit state: CLOSED; fixed_in: 1.0.17.
+Evidence: docs/reports/greenfield/KIT-GF-030-031-pr-lifecycle-2026-10-05.md
+
+Preconditions: Green external PR with valid context; merge authorized. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit transfer pr-complete {pr} --json
+```
+
+Expected: Merge and post-merge closeout complete without unsupported flag or mid-lifecycle context blocker.
+
+Expected result fields: `{"assertions": ["Merge and post-merge closeout complete without unsupported flag or mid-lifecycle context blocker."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-032
+
+Kit state: CLOSED; fixed_in: 1.0.15.
+Evidence: docs/reports/greenfield/KIT-GF-032-external-release-ready-2026-10-03.md
+
+Preconditions: Prepared external release fixture; native package/version anchors and sufficient changelog categories. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release ready --version {version} --json
+```
+
+Expected: No Kit repository package/document assumptions; explicit applicable blockers only.
+
+Expected result fields: `{"assertions": ["No Kit repository package/document assumptions; explicit applicable blockers only."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-033
+
+Kit state: CLOSED; fixed_in: 1.0.14.
+Evidence: docs/reports/greenfield/KIT-GF-033-work-rescue-2026-10-02.md
+
+Preconditions: Disposable external main containing local changes/commits; local origin/main exists. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit work rescue --json
+agentic-kit work rescue --execute --expected-signature {signature} --json
+```
+
+Expected: Signed rescue preserves work on rescue branch and realigns main.
+
+Expected result fields: `{"assertions": ["Signed rescue preserves work on rescue branch and realigns main."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-034
+
+Kit state: CLOSED; fixed_in: 1.0.16.
+Evidence: docs/reports/greenfield/KIT-GF-034-036-release-closeout-quality-2026-10-04.md
+
+Preconditions: Publishing fixture with verified DOI; optional docs-pages build script. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit post-release-doi-closeout --version {version} --write --json
+```
+
+Expected: DOI update and applicable site projection consistent; no stale fallback.
+
+Expected result fields: `{"assertions": ["DOI update and applicable site projection consistent; no stale fallback."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-035
+
+Kit state: CLOSED; fixed_in: 1.0.22.
+Evidence: docs/reports/greenfield/KIT-GF-035-external-documentation-audit-2026-10-09.md
+
+Preconditions: External docs with doc_lifecycle=warn; no Kit doc registry/constitution. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit docs-audit --json
+```
+
+Expected: No Kit-required document-set blockers; explicit adopted contracts remain enforced.
+
+Expected result fields: `{"assertions": ["No Kit-required document-set blockers; explicit adopted contracts remain enforced."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-036
+
+Kit state: CLOSED; fixed_in: 1.0.16.
+Evidence: docs/reports/greenfield/KIT-GF-034-036-release-closeout-quality-2026-10-04.md
+
+Preconditions: Disposable prepared release repository; one-category notes. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release-prep --version {version} --summary-line "Fix the finish prompt" --dry-run --json
+```
+
+Expected: Quality rejection occurs before writes; sufficient-category control passes.
+
+Expected result fields: `{"assertions": ["Quality rejection occurs before writes; sufficient-category control passes."], "process.returncode": 2, "stdout.json_document_count": 1}`.
+
+## KIT-GF-037
+
+Kit state: CLOSED; fixed_in: 1.0.16.
+Evidence: docs/reports/greenfield/KIT-GF-037-038-release-button-foundation-2026-10-04.md
+
+Preconditions: External release config declares a project-specific version anchor. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release-prep --version {version} --dry-run --json
+```
+
+Expected: Declared extra anchor included in deterministic version update plan.
+
+Expected result fields: `{"assertions": ["Declared extra anchor included in deterministic version update plan."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-038
+
+Kit state: CLOSED; fixed_in: 1.0.16.
+Evidence: docs/reports/greenfield/KIT-GF-037-038-release-button-foundation-2026-10-04.md
+
+Preconditions: Prepared external publication with no ENABLE_LIVE_PUBLISH marker. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release-publish --version {version} --dry-run --json
+```
+
+Expected: Returns signature-bound plan; no marker needed; no effects before approval.
+
+Expected result fields: `{"assertions": ["Returns signature-bound plan; no marker needed; no effects before approval."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-039
+
+Kit state: CLOSED; fixed_in: 1.0.17.
+Evidence: docs/reports/greenfield/KIT-GF-039-communication-refresh-branch-publish-2026-10-04.md
+
+Preconditions: Work branch carries refreshed communication capsule. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit transfer communication-context-status --json
+agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --release-note-category Fixed --dry-run --json
+```
+
+Expected: Work branch can publish its own carrier; stale context still blocks unrelated routes.
+
+Expected result fields: `{"assertions": ["Work branch can publish its own carrier; stale context still blocks unrelated routes."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-040
+
+Kit state: CLOSED; fixed_in: 1.0.17.
+Evidence: docs/reports/greenfield/KIT-GF-040-041-work-finish-pr-flow-2026-10-04.md
+
+Preconditions: Already committed external branch with existing PR and green CI; authorized closeout. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --release-note-category Fixed --execute --json
+```
+
+Expected: Uses existing PR, publishes missing head when safe, completes lifecycle.
+
+Expected result fields: `{"assertions": ["Uses existing PR, publishes missing head when safe, completes lifecycle."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-041
+
+Kit state: CLOSED; fixed_in: 1.0.17.
+Evidence: docs/reports/greenfield/KIT-GF-040-041-work-finish-pr-flow-2026-10-04.md
+
+Preconditions: External work branch with bounded reviewed changes. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --dry-run --json
+```
+
+Expected: result_status=PLANNED, not completed PASS; no remote mutation.
+
+Expected result fields: `{"assertions": ["result_status=PLANNED, not completed PASS; no remote mutation."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-042
+
+Kit state: CLOSED; fixed_in: 1.0.18.
+Evidence: docs/reports/greenfield/KIT-GF-042-ci-update-customized-source-2026-10-05.md
+
+Preconditions: Customized source CI and matching custom injected workflow; record byte hashes. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit workspace ci-update --root . --execute --json
+```
+
+Expected: BLOCKED modified_managed_ci_template/workflow; bytes unchanged.
+
+Expected result fields: `{"assertions": ["BLOCKED modified_managed_ci_template/workflow; bytes unchanged."], "process.returncode": 2, "stdout.json_document_count": 1}`.
+
+## KIT-GF-043
+
+Kit state: CLOSED; fixed_in: 1.0.17.
+Evidence: docs/reports/greenfield/KIT-GF-043-044-release-publish-doc-lifecycle-2026-10-05.md
+
+Preconditions: publication: github with prepared release. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release-publish --version {version} --dry-run --json
+```
+
+Expected: Plan uses annotated tag and configured release title; live verification requires owner consent.
+
+Expected result fields: `{"assertions": ["Plan uses annotated tag and configured release title; live verification requires owner consent."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-044
+
+Kit state: CLOSED; fixed_in: 1.0.17.
+Evidence: docs/reports/greenfield/KIT-GF-043-044-release-publish-doc-lifecycle-2026-10-05.md
+
+Preconditions: Explicit adopted lifecycle contract; document has labels only in body rather than header. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit docs-audit --json
+```
+
+Expected: Header violation detected; valid lifecycle header control passes.
+
+Expected result fields: `{"assertions": ["Header violation detected; valid lifecycle header control passes."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-045
+
+Kit state: CLOSED; fixed_in: 1.0.17.
+Evidence: docs/reports/greenfield/KIT-GF-045-release-summary-line-passthrough-2026-10-05.md
+
+Preconditions: External release fixture whose derived notes cover insufficient categories. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release ready --version {version} --summary-line "Regression tests and successor handoff preserve evidence" --json
+```
+
+Expected: Explicit summary reaches quality validation; unrelated diagnostics preserved.
+
+Expected result fields: `{"assertions": ["Explicit summary reaches quality validation; unrelated diagnostics preserved."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-046
+
+Kit state: CLOSED; fixed_in: 1.0.18.
+Evidence: docs/reports/greenfield/KIT-GF-046-work-finish-handoff-rule-ack-2026-10-05.md
+
+Preconditions: External branch changes manifest/rule sources; green CI; authorized lifecycle. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --release-note-category Fixed --execute --json
+```
+
+Expected: Kit refreshes acknowledgement immediately before its handoff commit.
+
+Expected result fields: `{"assertions": ["Kit refreshes acknowledgement immediately before its handoff commit."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-047
+
+Kit state: CLOSED; fixed_in: 1.0.19.
+Evidence: docs/reports/greenfield/KIT-GF-047-release-run-orchestrator-2026-10-05.md
+
+Preconditions: Disposable prepared release workspace; publication explicitly declared; no execute consent supplied. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release run --version {version} --approved-by {owner} --consent-source {consent} --json
+```
+
+Expected: Stops at the first signable gate; state is resumable and no publication occurs.
+
+Expected result fields: `{"assertions": ["Stops at the first signable gate; state is resumable and no publication occurs."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-048
+
+Kit state: CLOSED; fixed_in: 1.0.20.
+Evidence: docs/reports/greenfield/KIT-GF-048-work-finish-pr-metadata-2026-10-07.md
+
+Preconditions: External branch with reviewed PR metadata/category; metadata available for note generation. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --release-note-category Fixed --dry-run --json
+agentic-kit release-notes-generate --version {version} --from-tag {from_tag} --json
+```
+
+Expected: Category is preserved in PR body and generated release notes.
+
+Expected result fields: `{"assertions": ["Category is preserved in PR body and generated release notes."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-049
+
+Kit state: CLOSED; fixed_in: 1.0.21.
+Evidence: docs/reports/greenfield/KIT-GF-049-generated-reference-followup-2026-10-09.md
+
+Preconditions: External publication github; synchronized command reference; no Kit documentation registry. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release-publish --version {version} --dry-run --json
+```
+
+Expected: Kit self-host documentation checks skipped; adopted project contracts still checked.
+
+Expected result fields: `{"assertions": ["Kit self-host documentation checks skipped; adopted project contracts still checked."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-050
+
+Kit state: CLOSED; fixed_in: 1.0.19.
+Evidence: docs/reports/greenfield/KIT-GF-050-B-fallback-handoff-path-2026-10-06.md
+
+Preconditions: Disposable external merged PR; slow main CI and valid external handoff resolver; remote refresh authorized. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit transfer post-merge-complete --after-pr {pr} --json
+```
+
+Expected: Configured bounded wait respected; fallback uses external state path without exception.
+
+Expected result fields: `{"assertions": ["Configured bounded wait respected; fallback uses external state path without exception."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-051
+
+Kit state: CLOSED; fixed_in: 1.0.23.
+Evidence: docs/reports/greenfield/KIT-GF-051-signed-workspace-kit-update-2026-10-10.md
+
+Preconditions: Disposable workspace-owned environment with old Kit and known managed CI pins; package source reachable. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit kit update --version {kit_version} --json
+agentic-kit kit update --version {kit_version} --execute --expected-signature {signature} --json
+```
+
+Expected: Signed update synchronizes installed version, references and managed pins; custom files preserved.
+
+Expected result fields: `{"assertions": ["Signed update synchronizes installed version, references and managed pins; custom files preserved."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-052
+
+Kit state: CLOSED; fixed_in: 1.0.21.
+Evidence: docs/reports/greenfield/KIT-GF-052-changelog-layout-diagnostics-2026-10-09.md
+
+Preconditions: Prepared target changelog section containing deliberately wrapped bullet. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release-publish --version {version} --dry-run --json
+```
+
+Expected: BLOCKED with exact layout diagnosis and remediation; correctly formatted control passes.
+
+Expected result fields: `{"assertions": ["BLOCKED with exact layout diagnosis and remediation; correctly formatted control passes."], "process.returncode": 2, "stdout.json_document_count": 1}`.
+
+## KIT-GF-053
+
+Kit state: CLOSED; fixed_in: 1.0.20.
+Evidence: docs/reports/greenfield/KIT-GF-053-recover-rule-ack-2026-10-07.md
+
+Preconditions: Valid external rule acknowledgement; retain its pre-run bytes. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit rules acknowledge --json
+agentic-kit work recover --json
+```
+
+Expected: Read/recovery route preserves acknowledgement and still rejects stale snapshots.
+
+Expected result fields: `{"assertions": ["Read/recovery route preserves acknowledgement and still rejects stale snapshots."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-054
+
+Kit state: CLOSED; fixed_in: 1.0.20.
+Evidence: docs/reports/greenfield/KIT-GF-054-gitignored-audit-scan-2026-10-07.md
+
+Preconditions: Ignored directory contains a deliberately problematic/large fixture; tracked sources remain healthy. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit audit-ns-legacy-references --json
+agentic-kit audit-program-redundancy --json
+```
+
+Expected: Ignored trees excluded; active tracked violation remains visible.
+
+Expected result fields: `{"assertions": ["Ignored trees excluded; active tracked violation remains visible."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-055
+
+Kit state: CLOSED; fixed_in: 1.0.20.
+Evidence: docs/reports/greenfield/KIT-GF-055-dispatch-resume-followup-2026-10-09.md
+
+Preconditions: Kit publishing release; PyPI/Zenodo unavailable in consumer; inspect committed Kit evidence instead of publishing Cockpit. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release run --version {version} --approved-by {owner} --consent-source {consent} --json
+```
+
+Expected: C3 PASS with explicit publish_target=pypi and exact dispatched run attribution.
+
+Expected result fields: `{"assertions": ["C3 PASS with explicit publish_target=pypi and exact dispatched run attribution."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-056
+
+Kit state: CLOSED; fixed_in: 1.0.20.
+Evidence: docs/reports/greenfield/KIT-GF-055-056-release-run-c3-c4-2026-10-07.md
+
+Preconditions: Kit publishing release evidence; consumer need not publish. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit post-release-check --version {version} --json
+```
+
+Expected: C4 PASS; command accepts JSON and returns one parseable result.
+
+Expected result fields: `{"assertions": ["C4 PASS; command accepts JSON and returns one parseable result."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-057
+
+Kit state: CLOSED; fixed_in: 1.0.20.
+Evidence: docs/reports/greenfield/KIT-GF-057-manifest-remote-effects-2026-10-07.md
+
+Preconditions: Synchronized external command reference. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit audit-command-manifest --json
+```
+
+Expected: Remote effects match declared side effects including network reads and merges.
+
+Expected result fields: `{"assertions": ["Remote effects match declared side effects including network reads and merges."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-058
+
+Kit state: CLOSED; fixed_in: 1.0.20.
+Evidence: docs/reports/greenfield/KIT-GF-058-doi-changelog-section-2026-10-07.md
+
+Preconditions: Kit publishing release evidence; target version has Unreleased above it. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit post-release-doi-closeout --version {version} --json
+```
+
+Expected: D2 PASS; DOI facts occur inside the target version section.
+
+Expected result fields: `{"assertions": ["D2 PASS; DOI facts occur inside the target version section."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-059
+
+Kit state: CLOSED; fixed_in: 1.0.20.
+Evidence: docs/reports/greenfield/KIT-GF-059-doi-closeout-recovery-2026-10-07.md
+
+Preconditions: Kit publishing evidence; separate recovery fixture with failed DOI PR is required to prove D2R, never induce a production failure. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release run --version {version} --json
+```
+
+Expected: D4/D5 PASS proves ordinary closeout; D2R recovery is claimed only if observed in the evidence.
+
+Expected result fields: `{"assertions": ["D4/D5 PASS proves ordinary closeout; D2R recovery is claimed only if observed in the evidence."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-060
+
+Kit state: CLOSED; fixed_in: 1.0.21.
+Evidence: docs/reports/greenfield/KIT-GF-060-consume-unreleased-2026-10-09.md
+
+Preconditions: Unreleased entries exactly selected into target version. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release-prep --version {version} --dry-run --json
+```
+
+Expected: Plan consumes selected entries once; unrelated Unreleased entries remain.
+
+Expected result fields: `{"assertions": ["Plan consumes selected entries once; unrelated Unreleased entries remain."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-061
+
+Kit state: CLOSED; fixed_in: 1.0.21.
+Evidence: docs/reports/greenfield/KIT-GF-061-release-consent-2026-10-09.md
+
+Preconditions: Disposable declared per_gate or upfront publication policy; inspect first gate without execute. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release run --version {version} --approved-by {owner} --consent-source {consent} --json
+```
+
+Expected: Gate binds version/tag/target; approved execution must retain attribution and reject drift.
+
+Expected result fields: `{"assertions": ["Gate binds version/tag/target; approved execution must retain attribution and reject drift."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-062
+
+Kit state: CLOSED; fixed_in: 1.0.23.
+Evidence: docs/reports/greenfield/KIT-GF-062-signed-ci-rerun-2026-10-09.md
+
+Preconditions: Disposable PR with failed never-started checks; owner authorizes one rerun. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit pr rerun-checks --pr {pr} --json
+agentic-kit pr rerun-checks --pr {pr} --execute --expected-signature {signature} --json
+```
+
+Expected: Only eligible failed checks rerun; signature drift and ineligible run reject.
+
+Expected result fields: `{"assertions": ["Only eligible failed checks rerun; signature drift and ineligible run reject."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-063
+
+Kit state: PARTIAL; fixed_in: 1.0.23.
+Evidence: docs/reports/greenfield/KIT-GF-063-workspace-refresh-ci-2026-10-10.md
+
+Preconditions: Kit-managed CI refresh branch changing only manifest-derived state paths; custom-CI applicability remains PARTIAL until Slice D. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit check --json
+```
+
+Expected: Managed template selects light and always checks Kit contracts; heavy jobs remain full for non-state paths.
+
+Expected result fields: `{"assertions": ["Managed template selects light and always checks Kit contracts; heavy jobs remain full for non-state paths."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-064
+
+Kit state: CLOSED; fixed_in: 1.0.22.
+Evidence: docs/reports/greenfield/KIT-GF-064-kit-changelog-consumption-2026-10-09.md
+
+Preconditions: Kit release fixture with already selected historical Unreleased entries. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release-prep --version {version} --dry-run --json
+```
+
+Expected: Released entries consumed; historical release sections unchanged.
+
+Expected result fields: `{"assertions": ["Released entries consumed; historical release sections unchanged."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-065
+
+Kit state: CLOSED; fixed_in: 1.0.22.
+Evidence: docs/reports/greenfield/KIT-GF-065-release-publication-policy-2026-10-09.md
+
+Preconditions: External publication: github and release.branch_prefix: release/. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release run --version {version} --json
+```
+
+Expected: Plan omits C3 and DOI D steps, preserving GitHub-only boundary.
+
+Expected result fields: `{"assertions": ["Plan omits C3 and DOI D steps, preserving GitHub-only boundary."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-066
+
+Kit state: CLOSED; fixed_in: 1.0.25.
+Evidence: docs/reports/greenfield/KIT-GF-066-machine-readable-evidence-2026-10-13.md
+
+Preconditions: Installed wheel; no Kit source, tests or documentation registry. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit greenfield status --json
+agentic-kit greenfield status --id KIT-GF-055 --json
+```
+
+Expected: schema_version=1; all families with retests; release evidence link explicitly may await later publication.
+
+Expected result fields: `{"assertions": ["schema_version=1; all families with retests; release evidence link explicitly may await later publication."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
+## KIT-GF-RULE-REGISTRY-BOOTSTRAP
+
+Kit state: CLOSED; fixed_in: 1.0.25.
+Evidence: docs/reports/greenfield/KIT-GF-RULE-REGISTRY-BOOTSTRAP-external-inventory-2026-10-13.md
+
+Preconditions: Initialized external fixture with synchronized references; no inventory. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit rule-registry check --json
+agentic-kit rule-registry report --json
+agentic-kit rule-registry bootstrap --json
+agentic-kit rule-registry bootstrap --execute --expected-signature {signature} --json
+agentic-kit rule-registry check --json
+agentic-kit rule-registry report --json
+```
+
+Expected: Before NOT_APPLICABLE; plan PLANNED; signed write and check/report PASS; repeated write idempotent; unproved entry BLOCKED.
+
+Expected result fields: `{"assertions": ["Before NOT_APPLICABLE; plan PLANNED; signed write and check/report PASS; repeated write idempotent; unproved entry BLOCKED."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+

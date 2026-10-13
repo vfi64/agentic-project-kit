@@ -1,0 +1,2300 @@
+{
+  "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
+  "counts": {
+    "CLOSED": 60,
+    "NOT_APPLICABLE": 0,
+    "OPEN": 0,
+    "PARTIAL": 5
+  },
+  "findings": [
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit workspace init --root . --execute --json",
+          "agentic-kit check --json",
+          "agentic-kit doctor"
+        ],
+        "expected": [
+          "Init either yields deterministic remediation, or check and doctor pass without manual metadata repair."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Init either yields deterministic remediation, or check and doctor pass without manual metadata repair."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": "text/JSON according to command manifest"
+        },
+        "preconditions": [
+          "Fresh repository with planning Markdown lacking lifecycle headers.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "",
+      "id": "KIT-GF-001",
+      "kit_state": "PARTIAL",
+      "prs": [
+        2293
+      ],
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit slice gate --kind planning-doc --root ."
+        ],
+        "expected": [
+          "PASS; no Kit self-hosting paths required."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "PASS; no Kit self-hosting paths required."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": "text/JSON according to command manifest"
+        },
+        "preconditions": [
+          "Initialized external workspace with native test configuration; no Kit tests/registry.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.9",
+      "id": "KIT-GF-002",
+      "kit_state": "CLOSED",
+      "prs": [
+        2293
+      ],
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit handoff check",
+          "agentic-kit transfer post-merge-check --json",
+          "agentic-kit work recover --json"
+        ],
+        "expected": [
+          "Single authoritative handoff path; legitimate empty state; no traceback."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Single authoritative handoff path; legitimate empty state; no traceback."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": "text/JSON according to command manifest"
+        },
+        "preconditions": [
+          "Fresh workspace without previous handoff or merge.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "",
+      "id": "KIT-GF-003",
+      "kit_state": "PARTIAL",
+      "prs": [
+        2293
+      ],
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit governance check --root ."
+        ],
+        "expected": [
+          "PASS without full-contract Kit constitution requirements."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "PASS without full-contract Kit constitution requirements."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": "text/JSON according to command manifest"
+        },
+        "preconditions": [
+          "External-manifest workspace recognized by doctor.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.9",
+      "id": "KIT-GF-004",
+      "kit_state": "CLOSED",
+      "prs": [
+        2293
+      ],
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit work start --branch codex/gf005-retest --from-ref main --json"
+        ],
+        "expected": [
+          "result_status=PASS; virgin-workspace post-merge check is NOOP."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "result_status=PASS; virgin-workspace post-merge check is NOOP."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Clean initialized external Git repository on main; generated files already committed; no prior merge.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "",
+      "id": "KIT-GF-005",
+      "kit_state": "PARTIAL",
+      "prs": [
+        2293
+      ],
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit transfer status --json"
+        ],
+        "expected": [
+          "No file exception; deterministic empty state."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "No file exception; deterministic empty state."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Initialized workspace with empty transfer inbox.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.9",
+      "id": "KIT-GF-006",
+      "kit_state": "CLOSED",
+      "prs": [
+        2293
+      ],
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit workspace adopt --root . --json"
+        ],
+        "expected": [
+          "Generated Kit files are recognized, not reclassified as new manual surfaces."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Generated Kit files are recognized, not reclassified as new manual surfaces."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Initialized external workspace; retain generated provenance.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.13",
+      "id": "KIT-GF-007",
+      "kit_state": "CLOSED",
+      "prs": [
+        2323
+      ],
+      "report": "docs/reports/POST_V1_0_12_GREENFIELD_PROVENANCE_RETEST_20260915.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit workspace init --root . --inject-ci --execute --json",
+          "agentic-kit check --json"
+        ],
+        "expected": [
+          "Injected workflow calls installed Kit check; no self-host-only gates."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Injected workflow calls installed Kit check; no self-host-only gates."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Fresh disposable repository.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.9",
+      "id": "KIT-GF-008",
+      "kit_state": "CLOSED",
+      "prs": [
+        2293
+      ],
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "branch": "Supply the actual branch of the disposable authorized workspace; one argv token.",
+          "changed_path": "Supply the actual changed_path of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --release-note-category Fixed --execute --json"
+        ],
+        "expected": [
+          "One PR, green merge and handoff; no self-generated dirt blocker."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "One PR, green merge and handoff; no self-generated dirt blocker."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Disposable hosted external repository with green required CI and first unpushed work branch; remote effects authorized.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.13",
+      "id": "KIT-GF-009",
+      "kit_state": "CLOSED",
+      "prs": [
+        2335
+      ],
+      "report": "docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "changed_path": "Supply the actual changed_path of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit rules acknowledge --json",
+          "agentic-kit transfer commit --path {changed_path} --message gf010-retest --json"
+        ],
+        "expected": [
+          "Acknowledgement remains valid for the authorized Kit-owned commit."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Acknowledgement remains valid for the authorized Kit-owned commit."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Disposable external work branch with one reviewed change.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.9",
+      "id": "KIT-GF-010",
+      "kit_state": "CLOSED",
+      "prs": [
+        2293
+      ],
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit transfer post-merge-check --json"
+        ],
+        "expected": [
+          "successor_package_head_status=refresh_only_descendant; current final HEAD is reported without another refresh loop."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "successor_package_head_status=refresh_only_descendant; current final HEAD is reported without another refresh loop."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "After governed merge and administrative handoff refresh.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.16",
+      "id": "KIT-GF-011",
+      "kit_state": "CLOSED",
+      "prs": [
+        2372
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-011-successor-final-head-identity-2026-10-04.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "branch": "Supply the actual branch of the disposable authorized workspace; one argv token.",
+          "changed_path": "Supply the actual changed_path of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --dry-run --json",
+          "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --release-note-category Fixed --execute --json"
+        ],
+        "expected": [
+          "Plan=PLANNED; execution completes without self-generated blocker."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Plan=PLANNED; execution completes without self-generated blocker."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Disposable remote external work branch; green CI; unchanged reviewed inputs between plan and execution.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.9",
+      "id": "KIT-GF-012",
+      "kit_state": "CLOSED",
+      "prs": [
+        2293
+      ],
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit transfer patch-cycle-status --include-ci --json"
+        ],
+        "expected": [
+          "Systemic/root-cause review escalation appears at the documented recurrence threshold; Slice C adjudicates external coverage."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Systemic/root-cause review escalation appears at the documented recurrence threshold; Slice C adjudicates external coverage."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Recorded repeated local repair events in the same external patch cycle.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.9",
+      "id": "KIT-GF-013",
+      "kit_state": "CLOSED",
+      "prs": [
+        2293
+      ],
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit governance check --root ."
+        ],
+        "expected": [
+          "Deterministic authority-drift finding; clean control passes."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Deterministic authority-drift finding; clean control passes."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": "text/JSON according to command manifest"
+        },
+        "preconditions": [
+          "External continuation authority with deliberate stale or contradictory state.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.13",
+      "id": "KIT-GF-014",
+      "kit_state": "CLOSED",
+      "prs": [
+        2325
+      ],
+      "report": "docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit check --json"
+        ],
+        "expected": [
+          "Contradictions are reported; aligned registered facts pass."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Contradictions are reported; aligned registered facts pass."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Registered project documents with deliberately contradictory canonical facts and intact control fixture.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.13",
+      "id": "KIT-GF-015",
+      "kit_state": "CLOSED",
+      "prs": [
+        2325
+      ],
+      "report": "docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit work check --profile code --json"
+        ],
+        "expected": [
+          "Contract-first applicability is adjudicated; generic check alone is not proof of guided execution."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Contract-first applicability is adjudicated; generic check alone is not proof of guided execution."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "External workspace with a declared guided execution contract; Slice C must establish exact supported contract route.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.13",
+      "id": "KIT-GF-016",
+      "kit_state": "PARTIAL",
+      "prs": [
+        2325
+      ],
+      "report": "docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "pr": "Supply the actual pr of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit transfer pr-merge-safe {pr} --json"
+        ],
+        "expected": [
+          "Safe merge recovers canonical external context carrier without Kit-only files."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Safe merge recovers canonical external context carrier without Kit-only files."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Disposable external repo; clean context; green PR; remote merge authorized; no Kit source/registry.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.23",
+      "id": "KIT-GF-017",
+      "kit_state": "CLOSED",
+      "prs": [
+        2469
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-017-released-external-merge-retest-2026-10-10.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "branch": "Supply the actual branch of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit transfer delete-merged-work-branch {branch} --json"
+        ],
+        "expected": [
+          "PASS/idempotent no-op; both requested refs absent."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "PASS/idempotent no-op; both requested refs absent."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Merged PR; named work branch already absent remotely; local current branch is main.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.10",
+      "id": "KIT-GF-018",
+      "kit_state": "CLOSED",
+      "prs": [
+        2293
+      ],
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit kit status --json"
+        ],
+        "expected": [
+          "Installed Kit is found; missing CLI is not falsely reported."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Installed Kit is found; missing CLI is not falsely reported."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Installed wheel in workspace-owned interpreter; global PATH excludes agentic-kit.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.23",
+      "id": "KIT-GF-021",
+      "kit_state": "CLOSED",
+      "prs": [
+        2465
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-021-workspace-kit-discovery-2026-10-10.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit transfer command-reference-refresh --json",
+          "agentic-kit transfer command-reference-check --json"
+        ],
+        "expected": [
+          "Refresh and check PASS; packaged reference matches installed declarations."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Refresh and check PASS; packaged reference matches installed declarations."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Stale workspace command reference; installed wheel; no Kit sources.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.20",
+      "id": "KIT-GF-022",
+      "kit_state": "CLOSED",
+      "prs": [
+        2415
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-022-packaged-command-reference-refresh-2026-10-07.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit transfer repo-status --json",
+          "agentic-kit transfer command-reference-check --json"
+        ],
+        "expected": [
+          "Each stdout parses as exactly one JSON document; warnings use stderr."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Each stdout parses as exactly one JSON document; warnings use stderr."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "External workspace with deprecated manifest/config warning reproduction.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.22",
+      "id": "KIT-GF-023",
+      "kit_state": "CLOSED",
+      "prs": [
+        2448
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-023-pure-json-stdout-2026-10-09.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "branch": "Supply the actual branch of the disposable authorized workspace; one argv token.",
+          "sha": "Supply the actual sha of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit ci status --commit {sha} --branch {branch} --json"
+        ],
+        "expected": [
+          "JSON verdict and bounded run/check details without requiring a PR."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "JSON verdict and bounded run/check details without requiring a PR."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Hosted external repository with Actions run for supplied commit.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.19",
+      "id": "KIT-GF-024",
+      "kit_state": "CLOSED",
+      "prs": [
+        2407
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-024-025-ci-status-manifest-effects-2026-10-05.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit audit-command-manifest --json"
+        ],
+        "expected": [
+          "PASS; every command declares valid remote_effects."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "PASS; every command declares valid remote_effects."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Synchronized installed-wheel command manifest.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.19",
+      "id": "KIT-GF-025",
+      "kit_state": "CLOSED",
+      "prs": [
+        2407
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-024-025-ci-status-manifest-effects-2026-10-05.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit workspace ci-update --root . --json"
+        ],
+        "expected": [
+          "Plan names update paths; template pins Kit, limits push to main, has concurrency/browser cache."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Plan names update paths; template pins Kit, limits push to main, has concurrency/browser cache."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Unmodified old Kit-managed CI source and injected projection.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.16",
+      "id": "KIT-GF-026",
+      "kit_state": "CLOSED",
+      "prs": [
+        2366
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-026-managed-ci-template-2026-10-04.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "pr": "Supply the actual pr of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit pr status {pr} --json"
+        ],
+        "expected": [
+          "Execution succeeds with a failed CI verdict; execution errors remain distinct."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Execution succeeds with a failed CI verdict; execution errors remain distinct."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "External PR whose CI executed and failed; bounded output mode.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.23",
+      "id": "KIT-GF-027",
+      "kit_state": "CLOSED",
+      "prs": [
+        2463
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-027-bounded-pr-ci-findings-2026-10-09.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit artifact-gc --tmp-logs --json"
+        ],
+        "expected": [
+          "Artifacts resolve via OS/workspace temp policy; no fixed shared temp paths."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Artifacts resolve via OS/workspace temp policy; no fixed shared temp paths."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "External fixture; OS temp root is redirected to a disposable directory.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.19",
+      "id": "KIT-GF-028",
+      "kit_state": "CLOSED",
+      "prs": [
+        2403
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-028-tempdir-artifacts-2026-10-05.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release-publish --version {version} --dry-run --json"
+        ],
+        "expected": [
+          "Private tag plan; no GitHub/PyPI/Zenodo publication steps."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Private tag plan; no GitHub/PyPI/Zenodo publication steps."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "publication: none; prepared release; no public publication configured.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.14",
+      "id": "KIT-GF-029",
+      "kit_state": "CLOSED",
+      "prs": [
+        2342
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-029-publication-none-2026-10-03.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "branch": "Supply the actual branch of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit transfer pr-create-complete --head {branch} --title gf030-retest --json"
+        ],
+        "expected": [
+          "Reuses merged PR evidence; does not create a second PR."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Reuses merged PR evidence; does not create a second PR."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Branch already squash merged in disposable remote repo.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.17",
+      "id": "KIT-GF-030",
+      "kit_state": "CLOSED",
+      "prs": [
+        2385
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-030-031-pr-lifecycle-2026-10-05.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "pr": "Supply the actual pr of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit transfer pr-complete {pr} --json"
+        ],
+        "expected": [
+          "Merge and post-merge closeout complete without unsupported flag or mid-lifecycle context blocker."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Merge and post-merge closeout complete without unsupported flag or mid-lifecycle context blocker."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Green external PR with valid context; merge authorized.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.17",
+      "id": "KIT-GF-031",
+      "kit_state": "CLOSED",
+      "prs": [
+        2385
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-030-031-pr-lifecycle-2026-10-05.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release ready --version {version} --json"
+        ],
+        "expected": [
+          "No Kit repository package/document assumptions; explicit applicable blockers only."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "No Kit repository package/document assumptions; explicit applicable blockers only."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Prepared external release fixture; native package/version anchors and sufficient changelog categories.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.15",
+      "id": "KIT-GF-032",
+      "kit_state": "CLOSED",
+      "prs": [
+        2358
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-032-external-release-ready-2026-10-03.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit work rescue --json",
+          "agentic-kit work rescue --execute --expected-signature {signature} --json"
+        ],
+        "expected": [
+          "Signed rescue preserves work on rescue branch and realigns main."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Signed rescue preserves work on rescue branch and realigns main."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Disposable external main containing local changes/commits; local origin/main exists.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.14",
+      "id": "KIT-GF-033",
+      "kit_state": "CLOSED",
+      "prs": [
+        2340
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-033-work-rescue-2026-10-02.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit post-release-doi-closeout --version {version} --write --json"
+        ],
+        "expected": [
+          "DOI update and applicable site projection consistent; no stale fallback."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "DOI update and applicable site projection consistent; no stale fallback."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Publishing fixture with verified DOI; optional docs-pages build script.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.16",
+      "id": "KIT-GF-034",
+      "kit_state": "CLOSED",
+      "prs": [
+        2370
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-034-036-release-closeout-quality-2026-10-04.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit docs-audit --json"
+        ],
+        "expected": [
+          "No Kit-required document-set blockers; explicit adopted contracts remain enforced."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "No Kit-required document-set blockers; explicit adopted contracts remain enforced."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "External docs with doc_lifecycle=warn; no Kit doc registry/constitution.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.22",
+      "id": "KIT-GF-035",
+      "kit_state": "CLOSED",
+      "prs": [
+        2446
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-035-external-documentation-audit-2026-10-09.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release-prep --version {version} --summary-line \"Fix the finish prompt\" --dry-run --json"
+        ],
+        "expected": [
+          "Quality rejection occurs before writes; sufficient-category control passes."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Quality rejection occurs before writes; sufficient-category control passes."
+          ],
+          "process.returncode": 2,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Disposable prepared release repository; one-category notes.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.16",
+      "id": "KIT-GF-036",
+      "kit_state": "CLOSED",
+      "prs": [
+        2370
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-034-036-release-closeout-quality-2026-10-04.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release-prep --version {version} --dry-run --json"
+        ],
+        "expected": [
+          "Declared extra anchor included in deterministic version update plan."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Declared extra anchor included in deterministic version update plan."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "External release config declares a project-specific version anchor.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.16",
+      "id": "KIT-GF-037",
+      "kit_state": "CLOSED",
+      "prs": [
+        2368
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-037-038-release-button-foundation-2026-10-04.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release-publish --version {version} --dry-run --json"
+        ],
+        "expected": [
+          "Returns signature-bound plan; no marker needed; no effects before approval."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Returns signature-bound plan; no marker needed; no effects before approval."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Prepared external publication with no ENABLE_LIVE_PUBLISH marker.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.16",
+      "id": "KIT-GF-038",
+      "kit_state": "CLOSED",
+      "prs": [
+        2368
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-037-038-release-button-foundation-2026-10-04.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "branch": "Supply the actual branch of the disposable authorized workspace; one argv token.",
+          "changed_path": "Supply the actual changed_path of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit transfer communication-context-status --json",
+          "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --release-note-category Fixed --dry-run --json"
+        ],
+        "expected": [
+          "Work branch can publish its own carrier; stale context still blocks unrelated routes."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Work branch can publish its own carrier; stale context still blocks unrelated routes."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Work branch carries refreshed communication capsule.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.17",
+      "id": "KIT-GF-039",
+      "kit_state": "CLOSED",
+      "prs": [
+        2383
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-039-communication-refresh-branch-publish-2026-10-04.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "branch": "Supply the actual branch of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --release-note-category Fixed --execute --json"
+        ],
+        "expected": [
+          "Uses existing PR, publishes missing head when safe, completes lifecycle."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Uses existing PR, publishes missing head when safe, completes lifecycle."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Already committed external branch with existing PR and green CI; authorized closeout.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.17",
+      "id": "KIT-GF-040",
+      "kit_state": "CLOSED",
+      "prs": [
+        2379
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-040-041-work-finish-pr-flow-2026-10-04.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "branch": "Supply the actual branch of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --dry-run --json"
+        ],
+        "expected": [
+          "result_status=PLANNED, not completed PASS; no remote mutation."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "result_status=PLANNED, not completed PASS; no remote mutation."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "External work branch with bounded reviewed changes.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.17",
+      "id": "KIT-GF-041",
+      "kit_state": "CLOSED",
+      "prs": [
+        2379
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-040-041-work-finish-pr-flow-2026-10-04.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit workspace ci-update --root . --execute --json"
+        ],
+        "expected": [
+          "BLOCKED modified_managed_ci_template/workflow; bytes unchanged."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "BLOCKED modified_managed_ci_template/workflow; bytes unchanged."
+          ],
+          "process.returncode": 2,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Customized source CI and matching custom injected workflow; record byte hashes.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.18",
+      "id": "KIT-GF-042",
+      "kit_state": "CLOSED",
+      "prs": [
+        2395
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-042-ci-update-customized-source-2026-10-05.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release-publish --version {version} --dry-run --json"
+        ],
+        "expected": [
+          "Plan uses annotated tag and configured release title; live verification requires owner consent."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Plan uses annotated tag and configured release title; live verification requires owner consent."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "publication: github with prepared release.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.17",
+      "id": "KIT-GF-043",
+      "kit_state": "CLOSED",
+      "prs": [
+        2387
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-043-044-release-publish-doc-lifecycle-2026-10-05.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit docs-audit --json"
+        ],
+        "expected": [
+          "Header violation detected; valid lifecycle header control passes."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Header violation detected; valid lifecycle header control passes."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Explicit adopted lifecycle contract; document has labels only in body rather than header.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.17",
+      "id": "KIT-GF-044",
+      "kit_state": "CLOSED",
+      "prs": [
+        2387
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-043-044-release-publish-doc-lifecycle-2026-10-05.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release ready --version {version} --summary-line \"Regression tests and successor handoff preserve evidence\" --json"
+        ],
+        "expected": [
+          "Explicit summary reaches quality validation; unrelated diagnostics preserved."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Explicit summary reaches quality validation; unrelated diagnostics preserved."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "External release fixture whose derived notes cover insufficient categories.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.17",
+      "id": "KIT-GF-045",
+      "kit_state": "CLOSED",
+      "prs": [
+        2389
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-045-release-summary-line-passthrough-2026-10-05.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "branch": "Supply the actual branch of the disposable authorized workspace; one argv token.",
+          "changed_path": "Supply the actual changed_path of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --release-note-category Fixed --execute --json"
+        ],
+        "expected": [
+          "Kit refreshes acknowledgement immediately before its handoff commit."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Kit refreshes acknowledgement immediately before its handoff commit."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "External branch changes manifest/rule sources; green CI; authorized lifecycle.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.18",
+      "id": "KIT-GF-046",
+      "kit_state": "CLOSED",
+      "prs": [
+        2397
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-046-work-finish-handoff-rule-ack-2026-10-05.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "consent": "Supply the actual consent of the disposable authorized workspace; one argv token.",
+          "owner": "Supply the actual owner of the disposable authorized workspace; one argv token.",
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release run --version {version} --approved-by {owner} --consent-source {consent} --json"
+        ],
+        "expected": [
+          "Stops at the first signable gate; state is resumable and no publication occurs."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Stops at the first signable gate; state is resumable and no publication occurs."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Disposable prepared release workspace; publication explicitly declared; no execute consent supplied.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.19",
+      "id": "KIT-GF-047",
+      "kit_state": "CLOSED",
+      "prs": [
+        2405
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-047-release-run-orchestrator-2026-10-05.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "branch": "Supply the actual branch of the disposable authorized workspace; one argv token.",
+          "from_tag": "Supply the actual from_tag of the disposable authorized workspace; one argv token.",
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --release-note-category Fixed --dry-run --json",
+          "agentic-kit release-notes-generate --version {version} --from-tag {from_tag} --json"
+        ],
+        "expected": [
+          "Category is preserved in PR body and generated release notes."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Category is preserved in PR body and generated release notes."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "External branch with reviewed PR metadata/category; metadata available for note generation.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.20",
+      "id": "KIT-GF-048",
+      "kit_state": "CLOSED",
+      "prs": [
+        2428
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-048-work-finish-pr-metadata-2026-10-07.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release-publish --version {version} --dry-run --json"
+        ],
+        "expected": [
+          "Kit self-host documentation checks skipped; adopted project contracts still checked."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Kit self-host documentation checks skipped; adopted project contracts still checked."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "External publication github; synchronized command reference; no Kit documentation registry.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.21",
+      "id": "KIT-GF-049",
+      "kit_state": "CLOSED",
+      "prs": [
+        2438
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-049-generated-reference-followup-2026-10-09.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "pr": "Supply the actual pr of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit transfer post-merge-complete --after-pr {pr} --json"
+        ],
+        "expected": [
+          "Configured bounded wait respected; fallback uses external state path without exception."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Configured bounded wait respected; fallback uses external state path without exception."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Disposable external merged PR; slow main CI and valid external handoff resolver; remote refresh authorized.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.19",
+      "id": "KIT-GF-050",
+      "kit_state": "CLOSED",
+      "prs": [
+        2411
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-050-B-fallback-handoff-path-2026-10-06.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "kit_version": "Supply the actual kit_version of the disposable authorized workspace; one argv token.",
+          "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit kit update --version {kit_version} --json",
+          "agentic-kit kit update --version {kit_version} --execute --expected-signature {signature} --json"
+        ],
+        "expected": [
+          "Signed update synchronizes installed version, references and managed pins; custom files preserved."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Signed update synchronizes installed version, references and managed pins; custom files preserved."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Disposable workspace-owned environment with old Kit and known managed CI pins; package source reachable.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.23",
+      "id": "KIT-GF-051",
+      "kit_state": "CLOSED",
+      "prs": [
+        2465
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-051-signed-workspace-kit-update-2026-10-10.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release-publish --version {version} --dry-run --json"
+        ],
+        "expected": [
+          "BLOCKED with exact layout diagnosis and remediation; correctly formatted control passes."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "BLOCKED with exact layout diagnosis and remediation; correctly formatted control passes."
+          ],
+          "process.returncode": 2,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Prepared target changelog section containing deliberately wrapped bullet.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.21",
+      "id": "KIT-GF-052",
+      "kit_state": "CLOSED",
+      "prs": [
+        2440
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-052-changelog-layout-diagnostics-2026-10-09.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit rules acknowledge --json",
+          "agentic-kit work recover --json"
+        ],
+        "expected": [
+          "Read/recovery route preserves acknowledgement and still rejects stale snapshots."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Read/recovery route preserves acknowledgement and still rejects stale snapshots."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Valid external rule acknowledgement; retain its pre-run bytes.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.20",
+      "id": "KIT-GF-053",
+      "kit_state": "CLOSED",
+      "prs": [
+        2428
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-053-recover-rule-ack-2026-10-07.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit audit-ns-legacy-references --json",
+          "agentic-kit audit-program-redundancy --json"
+        ],
+        "expected": [
+          "Ignored trees excluded; active tracked violation remains visible."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Ignored trees excluded; active tracked violation remains visible."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Ignored directory contains a deliberately problematic/large fixture; tracked sources remain healthy.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.20",
+      "id": "KIT-GF-054",
+      "kit_state": "CLOSED",
+      "prs": [
+        2415
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-054-gitignored-audit-scan-2026-10-07.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "consent": "Supply the actual consent of the disposable authorized workspace; one argv token.",
+          "owner": "Supply the actual owner of the disposable authorized workspace; one argv token.",
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release run --version {version} --approved-by {owner} --consent-source {consent} --json"
+        ],
+        "expected": [
+          "C3 PASS with explicit publish_target=pypi and exact dispatched run attribution."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "C3 PASS with explicit publish_target=pypi and exact dispatched run attribution."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Kit publishing release; PyPI/Zenodo unavailable in consumer; inspect committed Kit evidence instead of publishing Cockpit.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "kit_release"
+      },
+      "fixed_in": "1.0.20",
+      "id": "KIT-GF-055",
+      "kit_release_evidence": {
+        "availability": "pending release; absence is not PASS",
+        "path": "docs/reports/release/release-run-1.0.25.json",
+        "steps": [
+          "C3"
+        ]
+      },
+      "kit_state": "CLOSED",
+      "prs": [
+        2438
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-055-dispatch-resume-followup-2026-10-09.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit post-release-check --version {version} --json"
+        ],
+        "expected": [
+          "C4 PASS; command accepts JSON and returns one parseable result."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "C4 PASS; command accepts JSON and returns one parseable result."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Kit publishing release evidence; consumer need not publish.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "kit_release"
+      },
+      "fixed_in": "1.0.20",
+      "id": "KIT-GF-056",
+      "kit_release_evidence": {
+        "availability": "pending release; absence is not PASS",
+        "path": "docs/reports/release/release-run-1.0.25.json",
+        "steps": [
+          "C4"
+        ]
+      },
+      "kit_state": "CLOSED",
+      "prs": [
+        2417
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-055-056-release-run-c3-c4-2026-10-07.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit audit-command-manifest --json"
+        ],
+        "expected": [
+          "Remote effects match declared side effects including network reads and merges."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Remote effects match declared side effects including network reads and merges."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Synchronized external command reference.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.20",
+      "id": "KIT-GF-057",
+      "kit_state": "CLOSED",
+      "prs": [
+        2426
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-057-manifest-remote-effects-2026-10-07.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit post-release-doi-closeout --version {version} --json"
+        ],
+        "expected": [
+          "D2 PASS; DOI facts occur inside the target version section."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "D2 PASS; DOI facts occur inside the target version section."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Kit publishing release evidence; target version has Unreleased above it.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "kit_release"
+      },
+      "fixed_in": "1.0.20",
+      "id": "KIT-GF-058",
+      "kit_release_evidence": {
+        "availability": "pending release; absence is not PASS",
+        "path": "docs/reports/release/release-run-1.0.25.json",
+        "steps": [
+          "D2"
+        ]
+      },
+      "kit_state": "CLOSED",
+      "prs": [
+        2422
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-058-doi-changelog-section-2026-10-07.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release run --version {version} --json"
+        ],
+        "expected": [
+          "D4/D5 PASS proves ordinary closeout; D2R recovery is claimed only if observed in the evidence."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "D4/D5 PASS proves ordinary closeout; D2R recovery is claimed only if observed in the evidence."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Kit publishing evidence; separate recovery fixture with failed DOI PR is required to prove D2R, never induce a production failure.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "kit_release"
+      },
+      "fixed_in": "1.0.20",
+      "id": "KIT-GF-059",
+      "kit_release_evidence": {
+        "availability": "pending release; absence is not PASS",
+        "path": "docs/reports/release/release-run-1.0.25.json",
+        "steps": [
+          "D4",
+          "D5"
+        ]
+      },
+      "kit_state": "CLOSED",
+      "prs": [
+        2424
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-059-doi-closeout-recovery-2026-10-07.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release-prep --version {version} --dry-run --json"
+        ],
+        "expected": [
+          "Plan consumes selected entries once; unrelated Unreleased entries remain."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Plan consumes selected entries once; unrelated Unreleased entries remain."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Unreleased entries exactly selected into target version.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.21",
+      "id": "KIT-GF-060",
+      "kit_state": "CLOSED",
+      "prs": [
+        2438
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-060-consume-unreleased-2026-10-09.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "consent": "Supply the actual consent of the disposable authorized workspace; one argv token.",
+          "owner": "Supply the actual owner of the disposable authorized workspace; one argv token.",
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release run --version {version} --approved-by {owner} --consent-source {consent} --json"
+        ],
+        "expected": [
+          "Gate binds version/tag/target; approved execution must retain attribution and reject drift."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Gate binds version/tag/target; approved execution must retain attribution and reject drift."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Disposable declared per_gate or upfront publication policy; inspect first gate without execute.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.21",
+      "id": "KIT-GF-061",
+      "kit_state": "CLOSED",
+      "prs": [
+        2438
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-061-release-consent-2026-10-09.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "pr": "Supply the actual pr of the disposable authorized workspace; one argv token.",
+          "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit pr rerun-checks --pr {pr} --json",
+          "agentic-kit pr rerun-checks --pr {pr} --execute --expected-signature {signature} --json"
+        ],
+        "expected": [
+          "Only eligible failed checks rerun; signature drift and ineligible run reject."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Only eligible failed checks rerun; signature drift and ineligible run reject."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Disposable PR with failed never-started checks; owner authorizes one rerun.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.23",
+      "id": "KIT-GF-062",
+      "kit_state": "CLOSED",
+      "prs": [
+        2463
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-062-signed-ci-rerun-2026-10-09.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit check --json"
+        ],
+        "expected": [
+          "Managed template selects light and always checks Kit contracts; heavy jobs remain full for non-state paths."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Managed template selects light and always checks Kit contracts; heavy jobs remain full for non-state paths."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Kit-managed CI refresh branch changing only manifest-derived state paths; custom-CI applicability remains PARTIAL until Slice D.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.23",
+      "id": "KIT-GF-063",
+      "kit_state": "PARTIAL",
+      "prs": [
+        2467
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-063-workspace-refresh-ci-2026-10-10.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release-prep --version {version} --dry-run --json"
+        ],
+        "expected": [
+          "Released entries consumed; historical release sections unchanged."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Released entries consumed; historical release sections unchanged."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Kit release fixture with already selected historical Unreleased entries.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.22",
+      "id": "KIT-GF-064",
+      "kit_state": "CLOSED",
+      "prs": [
+        2452
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-064-kit-changelog-consumption-2026-10-09.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Supply the actual version of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release run --version {version} --json"
+        ],
+        "expected": [
+          "Plan omits C3 and DOI D steps, preserving GitHub-only boundary."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Plan omits C3 and DOI D steps, preserving GitHub-only boundary."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "External publication: github and release.branch_prefix: release/.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.22",
+      "id": "KIT-GF-065",
+      "kit_state": "CLOSED",
+      "prs": [
+        2450
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-065-release-publication-policy-2026-10-09.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit greenfield status --json",
+          "agentic-kit greenfield status --id KIT-GF-055 --json"
+        ],
+        "expected": [
+          "schema_version=1; all families with retests; release evidence link explicitly may await later publication."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "schema_version=1; all families with retests; release evidence link explicitly may await later publication."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Installed wheel; no Kit source, tests or documentation registry.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.25",
+      "id": "KIT-GF-066",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "No unambiguous Kit PR number in the committed report introduction; do not infer consumer PRs.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-066-machine-readable-evidence-2026-10-13.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit rule-registry check --json",
+          "agentic-kit rule-registry report --json",
+          "agentic-kit rule-registry bootstrap --json",
+          "agentic-kit rule-registry bootstrap --execute --expected-signature {signature} --json",
+          "agentic-kit rule-registry check --json",
+          "agentic-kit rule-registry report --json"
+        ],
+        "expected": [
+          "Before NOT_APPLICABLE; plan PLANNED; signed write and check/report PASS; repeated write idempotent; unproved entry BLOCKED."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Before NOT_APPLICABLE; plan PLANNED; signed write and check/report PASS; repeated write idempotent; unproved entry BLOCKED."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Initialized external fixture with synchronized references; no inventory.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.25",
+      "id": "KIT-GF-RULE-REGISTRY-BOOTSTRAP",
+      "kit_state": "CLOSED",
+      "prs": [
+        2485
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-RULE-REGISTRY-BOOTSTRAP-external-inventory-2026-10-13.md"
+    }
+  ],
+  "kind": "external_findings_status",
+  "schema_version": 1,
+  "source_sha256": "29228719e510907d7c28593eb31ec8dc7f78e933598e8d0adfc9f4ae3ee6f8c4"
+}
