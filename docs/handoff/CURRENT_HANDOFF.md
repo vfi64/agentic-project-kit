@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `20598a97388e6b0083ffafda8eb664ea3eba62ce` (`20598a97`), after `Add optional guided Kit GUI over shared guarded workflows (#2479)`.
-Last substantive work state is `20598a97388e6b0083ffafda8eb664ea3eba62ce` (`20598a97`), after `Add optional guided Kit GUI over shared guarded workflows (#2479)`.
+Current verified main/admin HEAD is `8977dc6fbdc40c93fb036f1f0c990d86aedb09db` (`8977dc6f`), after `Release 1.0.24 (#2481)`.
+Last substantive work state is `8977dc6fbdc40c93fb036f1f0c990d86aedb09db` (`8977dc6f`), after `Release 1.0.24 (#2481)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

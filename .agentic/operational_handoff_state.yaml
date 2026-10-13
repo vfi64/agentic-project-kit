@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 20598a97388e6b0083ffafda8eb664ea3eba62ce
-  short: 20598a97
-  subject: Add optional guided Kit GUI over shared guarded workflows (#2479)
+  full: 8977dc6fbdc40c93fb036f1f0c990d86aedb09db
+  short: 8977dc6f
+  subject: Release 1.0.24 (#2481)
 last_substantive_work_state:
-  full: 20598a97388e6b0083ffafda8eb664ea3eba62ce
-  short: 20598a97
-  subject: Add optional guided Kit GUI over shared guarded workflows (#2479)
+  full: 8977dc6fbdc40c93fb036f1f0c990d86aedb09db
+  short: 8977dc6f
+  subject: Release 1.0.24 (#2481)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
