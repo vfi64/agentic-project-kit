@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.cli_executable import default_agentic_kit
+
 import json
 import subprocess
 from pathlib import Path
@@ -454,7 +456,7 @@ def test_evidence_inspect_latest_requires_summary(monkeypatch):
     assert result.exit_code == 0
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "PASS"
-    assert calls == [["./.venv/bin/agentic-kit", "evidence", "inspect", "--require-summary"]]
+    assert calls == [[default_agentic_kit(Path.cwd()), "evidence", "inspect", "--require-summary"]]
 
 
 def test_evidence_finalize_current_transfer_builds_finalize_log_command(monkeypatch):
@@ -494,7 +496,7 @@ def test_evidence_finalize_current_transfer_builds_finalize_log_command(monkeypa
     assert payload["result_status"] == "PASS"
     assert calls == [
         [
-            "./.venv/bin/agentic-kit",
+            default_agentic_kit(Path.cwd()),
             "evidence",
             "finalize-log",
             "--run-log",
@@ -558,7 +560,7 @@ def test_sync_main_json_output_keeps_steps(monkeypatch):
 def test_remote_work_start_default_output_is_concise(monkeypatch):
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
-        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "branch-create"]:
+        if command[:3] == [default_agentic_kit(Path.cwd()), "transfer", "branch-create"]:
             return _completed(command, stdout='{"result_status":"PASS"}\n')
         return _completed(command, stdout="ok\n")
 
@@ -576,7 +578,7 @@ def test_remote_work_start_default_output_is_concise(monkeypatch):
 def test_remote_work_start_json_output_keeps_steps(monkeypatch):
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
-        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "branch-create"]:
+        if command[:3] == [default_agentic_kit(Path.cwd()), "transfer", "branch-create"]:
             return _completed(command, stdout='{"result_status":"PASS"}\n')
         return _completed(command, stdout="ok\n")
 
@@ -631,7 +633,7 @@ def test_evidence_pr_complete_orchestrates_finalize_push_pr_sync_and_post_merge(
     assert payload["result_status"] == "PASS"
     assert payload["action"] == "evidence-pr-complete"
     assert [
-        "./.venv/bin/agentic-kit",
+        default_agentic_kit(Path.cwd()),
         "transfer",
         "evidence-finalize-current-transfer",
         "--slice",
@@ -659,11 +661,11 @@ def test_evidence_pr_complete_orchestrates_finalize_push_pr_sync_and_post_merge(
         "--remote-log",
         "docs/reports/terminal/demo-evidence.log",
     ] in calls
-    assert ["./.venv/bin/agentic-kit", "transfer", "evidence-inspect-latest"] in calls
-    assert ["./.venv/bin/agentic-kit", "transfer", "push-current", "--branch", "evidence/demo"] in calls
-    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"] for call in calls)
-    assert ["./.venv/bin/agentic-kit", "transfer", "sync-main"] in calls
-    assert ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] in calls
+    assert [default_agentic_kit(Path.cwd()), "transfer", "evidence-inspect-latest"] in calls
+    assert [default_agentic_kit(Path.cwd()), "transfer", "push-current", "--branch", "evidence/demo"] in calls
+    assert any(call[:3] == [default_agentic_kit(Path.cwd()), "transfer", "pr-create-complete"] for call in calls)
+    assert [default_agentic_kit(Path.cwd()), "transfer", "sync-main"] in calls
+    assert [default_agentic_kit(Path.cwd()), "transfer", "post-merge-check"] in calls
 
 
 def test_evidence_pr_complete_switches_or_creates_evidence_branch(monkeypatch):
@@ -677,7 +679,7 @@ def test_evidence_pr_complete_switches_or_creates_evidence_branch(monkeypatch):
         calls.append(command)
         if command == ["git", "branch", "--show-current"]:
             return _completed(command, stdout="feature/source\n")
-        if command == ["./.venv/bin/agentic-kit", "transfer", "branch-switch", "evidence/demo"]:
+        if command == [default_agentic_kit(Path.cwd()), "transfer", "branch-switch", "evidence/demo"]:
             switch_attempts += 1
             if switch_attempts == 1:
                 return _completed(command, returncode=1, stderr="missing branch\n")
@@ -705,8 +707,8 @@ def test_evidence_pr_complete_switches_or_creates_evidence_branch(monkeypatch):
     )
 
     assert result.exit_code == 0
-    assert ["./.venv/bin/agentic-kit", "transfer", "branch-create", "evidence/demo"] in calls
-    assert ["./.venv/bin/agentic-kit", "transfer", "branch-switch", "evidence/demo"] in calls
+    assert [default_agentic_kit(Path.cwd()), "transfer", "branch-create", "evidence/demo"] in calls
+    assert [default_agentic_kit(Path.cwd()), "transfer", "branch-switch", "evidence/demo"] in calls
 
 
 def test_evidence_pr_complete_refuses_main_branch(monkeypatch):
@@ -748,7 +750,7 @@ def test_evidence_pr_complete_blocks_on_finalize_failure(monkeypatch):
         calls.append(command)
         if command == ["git", "branch", "--show-current"]:
             return _completed(command, stdout="evidence/demo\n")
-        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "evidence-finalize-current-transfer"]:
+        if command[:3] == [default_agentic_kit(Path.cwd()), "transfer", "evidence-finalize-current-transfer"]:
             return _completed(command, returncode=1, stderr="finalize failed\n")
         return _completed(command, stdout="ok\n")
 
@@ -774,7 +776,7 @@ def test_evidence_pr_complete_blocks_on_finalize_failure(monkeypatch):
 
     assert result.exit_code == 2
     assert "evidence-finalize-current-transfer_failed" in result.stdout
-    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"] for call in calls)
+    assert not any(call[:3] == [default_agentic_kit(Path.cwd()), "transfer", "pr-create-complete"] for call in calls)
 
 def test_transfer_pr_existing_for_branch_finds_single_pr(monkeypatch):
     calls: list[list[str]] = []
@@ -1002,7 +1004,7 @@ def test_standard_error_scan_reports_pass_when_guard_steps_pass(monkeypatch, tmp
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
         calls.append(command)
-        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "require-fresh-llm-context"] and "--allow-clean-post-merge-carrier-staleness" not in command:
+        if command[:3] == [default_agentic_kit(Path.cwd()), "transfer", "require-fresh-llm-context"] and "--allow-clean-post-merge-carrier-staleness" not in command:
             return _completed(command, stdout='{"result_status": "BLOCKED"}\n', returncode=2)
         return _completed(command, stdout='{"result_status": "PASS"}\n')
 
@@ -1023,7 +1025,7 @@ def test_standard_error_scan_reports_pass_when_guard_steps_pass(monkeypatch, tmp
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "WARN"
     assert "strict_fresh_context_blocked_but_clean_post_merge_allowance_passed" in payload["warnings"]
-    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "command-composition-check"] for call in calls)
+    assert any(call[:3] == [default_agentic_kit(Path.cwd()), "transfer", "command-composition-check"] for call in calls)
 
 
 def test_standard_error_scan_blocks_failed_required_step(monkeypatch, tmp_path: Path):
@@ -1037,7 +1039,7 @@ def test_standard_error_scan_blocks_failed_required_step(monkeypatch, tmp_path: 
 
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
-        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "repo-status"]:
+        if command[:3] == [default_agentic_kit(Path.cwd()), "transfer", "repo-status"]:
             return _completed(command, stdout="dirty\n", returncode=1)
         return _completed(command, stdout='{"result_status": "PASS"}\n')
 
@@ -1076,7 +1078,7 @@ def test_standard_error_scan_ignores_historical_planning_docs(monkeypatch, tmp_p
 
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
-        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "require-fresh-llm-context"] and "--allow-clean-post-merge-carrier-staleness" not in command:
+        if command[:3] == [default_agentic_kit(Path.cwd()), "transfer", "require-fresh-llm-context"] and "--allow-clean-post-merge-carrier-staleness" not in command:
             return _completed(command, stdout='{"result_status": "BLOCKED"}\n', returncode=2)
         return _completed(command, stdout='{"result_status": "PASS"}\n')
 
@@ -1112,7 +1114,7 @@ def test_standard_error_scan_without_before_release_does_not_require_post_merge_
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
         calls.append(command)
-        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "require-fresh-llm-context"]:
+        if command[:3] == [default_agentic_kit(Path.cwd()), "transfer", "require-fresh-llm-context"]:
             return _completed(command, stdout='{"result_status": "BLOCKED"}\n', returncode=2)
         return _completed(command, stdout='{"result_status": "PASS"}\n')
 
@@ -1133,7 +1135,7 @@ def test_standard_error_scan_without_before_release_does_not_require_post_merge_
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "WARN"
     assert "fresh_context_stale_in_feature_branch_diagnostic" in payload["warnings"]
-    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] for call in calls)
+    assert not any(call[:3] == [default_agentic_kit(Path.cwd()), "transfer", "post-merge-check"] for call in calls)
 
 
 def test_standard_error_scan_before_release_requires_post_merge_check(monkeypatch, tmp_path: Path):
@@ -1171,7 +1173,7 @@ def test_standard_error_scan_before_release_requires_post_merge_check(monkeypatc
     )
 
     assert result.exit_code == 0, result.output
-    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] for call in calls)
+    assert any(call[:3] == [default_agentic_kit(Path.cwd()), "transfer", "post-merge-check"] for call in calls)
 
 
 def test_standard_error_scan_passes_explicit_summary_lines_to_release_prep(tmp_path: Path, monkeypatch):
@@ -1213,7 +1215,7 @@ def test_standard_error_scan_passes_explicit_summary_lines_to_release_prep(tmp_p
     )
 
     assert result.exit_code == 0, result.output
-    prep_call = next(call for call in calls if call[:2] == ["./.venv/bin/agentic-kit", "release-prep"])
+    prep_call = next(call for call in calls if call[:2] == [default_agentic_kit(Path.cwd()), "release-prep"])
     index = prep_call.index("--summary-line")
     assert prep_call[index + 1] == "Guard modified managed CI workflows"
     assert "--summary-lines-from" in prep_call

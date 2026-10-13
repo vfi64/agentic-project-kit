@@ -271,7 +271,7 @@ def test_submit_user_task_writes_canonical_transfer_inbox(tmp_path) -> None:
     assert payload["reply_contract"]["mode_map"]["b"]["response_order_contract"] == active_reply
     assert payload["local_execution"]["standard_command"] == list(TRANSFER_CONTINUE_COMMAND)
     assert payload["actions"][0]["command"] == [
-        "./.venv/bin/agentic-kit",
+        "agentic-kit",
         "transfer",
         "state",
         "--json",
@@ -628,7 +628,8 @@ def test_communication_reply_contracts_define_modes_and_execution_command() -> N
     assert standard_command_for_communication_mode("a") == REMOTE_STATUS_COMMAND
 
 
-def test_terminal_launch_plan_is_os_specific_and_uses_standard_transfer_command(tmp_path) -> None:
+def test_terminal_launch_plan_is_os_specific_and_uses_standard_transfer_command(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr('agentic_project_kit.cli_executable.default_agentic_kit', lambda root: 'agentic-kit')
     darwin = build_terminal_launch_plan(tmp_path, communication_mode="file_transfer", platform_name="Darwin")
     windows = build_terminal_launch_plan(tmp_path, communication_mode="file_transfer", platform_name="Windows")
     remote = build_terminal_launch_plan(tmp_path, communication_mode="remote", platform_name="Darwin")

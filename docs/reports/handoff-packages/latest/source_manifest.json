@@ -54,16 +54,16 @@
       "path": "SECURITY.md"
     },
     {
-      "bytes": 74411,
+      "bytes": 74847,
       "exists": true,
       "path": "docs/DOCUMENTATION_COVERAGE.yaml",
       "yaml_valid": true
     },
     {
-      "bytes": 95998,
+      "bytes": 96136,
       "exists": true,
       "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-      "registry_document_count": 342,
+      "registry_document_count": 343,
       "yaml_valid": true
     },
     {
@@ -72,7 +72,7 @@
       "path": "docs/STATUS.md"
     },
     {
-      "bytes": 79006,
+      "bytes": 79426,
       "exists": true,
       "path": "docs/TEST_GATES.md"
     },
@@ -82,7 +82,7 @@
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
     {
-      "bytes": 7338,
+      "bytes": 7344,
       "exists": true,
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
@@ -92,7 +92,7 @@
       "path": "docs/handoff/START_NEW_CHAT_PROMPT.md"
     },
     {
-      "bytes": 2355,
+      "bytes": 2343,
       "exists": true,
       "path": "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
     },

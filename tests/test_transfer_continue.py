@@ -3,10 +3,17 @@ from __future__ import annotations
 import subprocess
 from typing import Any
 from pathlib import Path
+import pytest
 
 from agentic_project_kit import handoff_freshness
-
 from agentic_project_kit import transfer_continue
+
+
+@pytest.fixture(autouse=True)
+def canonical_kit(monkeypatch):
+    monkeypatch.setattr(
+        "agentic_project_kit.transfer_continue.default_agentic_kit", lambda root: "fixture-kit"
+    )
 
 
 def test_transfer_continue_fetches_origin_before_inferring_active_order(monkeypatch) -> None:
@@ -32,14 +39,16 @@ def test_transfer_continue_fetches_origin_before_inferring_active_order(monkeypa
 
     monkeypatch.setattr(transfer_continue, "_run", fake_run)
     monkeypatch.setattr(transfer_continue, "_current_order_is_active", lambda root: False)
-    monkeypatch.setattr(transfer_continue, "_active_order_branches", lambda root: ["gui-transfer-tasks"])
+    monkeypatch.setattr(
+        transfer_continue, "_active_order_branches", lambda root: ["gui-transfer-tasks"]
+    )
     monkeypatch.setattr(transfer_continue, "run_remote_next_transfer", fake_remote_next)
 
     result = transfer_continue.run_transfer_continue(".")
 
     assert result["result_status"] == "PASS"
     assert result["inferred_branch"] == "gui-transfer-tasks"
-    assert calls[0] == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"]
+    assert calls[0] == ["fixture-kit", "transfer", "restore-known-volatile", "--json"]
     assert calls[1] == ["git", "fetch", "origin"]
     assert result["steps"][1]["name"] == "fetch-origin-before-active-order-inference"
 
@@ -97,7 +106,11 @@ def test_transfer_continue_blocks_before_mutation_when_handoff_authority_is_stal
     monkeypatch.setattr(handoff_freshness, "_git_short_head", lambda root: "def5678")
     monkeypatch.setattr(handoff_freshness, "_git_head_subject", lambda root: "product change")
     monkeypatch.setattr(handoff_freshness, "_git_head_message", lambda root: "product change")
-    monkeypatch.setattr(transfer_continue, "_run", lambda *args: (_ for _ in ()).throw(AssertionError("mutation started")))
+    monkeypatch.setattr(
+        transfer_continue,
+        "_run",
+        lambda *args: (_ for _ in ()).throw(AssertionError("mutation started")),
+    )
 
     result = transfer_continue.run_transfer_continue(tmp_path)
 
@@ -110,14 +123,21 @@ def test_transfer_continue_blocks_before_mutation_when_handoff_authority_is_stal
 def test_transfer_continue_allows_missing_handoff_state_for_external_workspace(
     tmp_path: Path, monkeypatch
 ) -> None:
-    monkeypatch.setattr(transfer_continue, "_run", lambda argv, root: subprocess.CompletedProcess(argv, 0, "", ""))
+    monkeypatch.setattr(
+        transfer_continue, "_run", lambda argv, root: subprocess.CompletedProcess(argv, 0, "", "")
+    )
     monkeypatch.setattr(transfer_continue, "_current_order_is_active", lambda root: False)
     monkeypatch.setattr(transfer_continue, "_active_order_branches", lambda root: ["external-work"])
 
     def fake_remote_next(root, branch):
         class Result:
             def as_json_data(self) -> dict[str, Any]:
-                return {"returncode": 0, "local_run": {"returncode": 0}, "post_report_actions": {"pushed": True}, "reasons": []}
+                return {
+                    "returncode": 0,
+                    "local_run": {"returncode": 0},
+                    "post_report_actions": {"pushed": True},
+                    "reasons": [],
+                }
 
         return Result()
 

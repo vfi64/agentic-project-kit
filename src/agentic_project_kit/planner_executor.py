@@ -612,10 +612,8 @@ def _load_manifest_or_current(root: Path) -> dict[str, object]:
 def _resolve_local_agentic_command(argv: tuple[str, ...], root: Path) -> tuple[str, ...]:
     if not argv or argv[0] != "agentic-kit":
         return argv
-    local = root / ".venv" / "bin" / "agentic-kit"
-    if local.exists():
-        return (str(local), *argv[1:])
-    return argv
+    from agentic_project_kit.cli_executable import default_agentic_kit
+    return (default_agentic_kit(root), *argv[1:])
 
 
 def _safe_evidence_path(value: str) -> bool:

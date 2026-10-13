@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.cli_executable import default_agentic_kit
+
 import json
 import subprocess
 from dataclasses import dataclass, field
@@ -289,7 +291,7 @@ def _rule_ack_snapshot(project_root: Path, *, repo_head: str) -> RuleAckSnapshot
 
 
 def _refresh_rule_ack(root: Path) -> _CommandResult:
-    result = _command(["./.venv/bin/agentic-kit", "rules", "acknowledge"], root)
+    result = _command([default_agentic_kit(root), "rules", "acknowledge"], root)
     if result.returncode == 127:
         return _command(["agentic-kit", "rules", "acknowledge"], root)
     return result

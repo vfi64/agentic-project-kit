@@ -2313,6 +2313,37 @@
       "pr_reference_note": "No unambiguous Kit PR number in the committed report introduction; do not infer consumer PRs.",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-066-machine-readable-evidence-2026-10-13.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "Actual next version of the disposable external workspace."
+        },
+        "commands": [
+          "agentic-kit kit status --json",
+          "agentic-kit transfer standard-error-scan --before-release --version {version} --json",
+          "agentic-kit release ready --version {version} --json"
+        ],
+        "expected": [
+          "PASS without missing literal executable; independent gates remain enforced."
+        ],
+        "expected_result_fields": {
+          "result_status": "PASS",
+          "stderr": "no FileNotFoundError"
+        },
+        "preconditions": [
+          "Disposable installed-wheel external workspace, synchronized command reference, valid release metadata, tracking main, prior tag and current context; declare kit.interpreter outside .venv."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Resolver boundary fixtures PASS; live consumer retest remains independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.25",
+      "id": "KIT-GF-067",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-067-owned-kit-subprocess-resolution-2026-10-13.md"
     }
   ],
   "kind": "external_findings_catalog",

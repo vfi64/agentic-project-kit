@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.cli_executable import default_agentic_kit
+
 import json
 import subprocess
 import sys
@@ -2067,7 +2069,7 @@ def test_pr_merge_safe_blocks_dirty_worktree_before_merge(monkeypatch):
             }
             return subprocess.CompletedProcess(command, 0, json.dumps(payload), "")
         if command == [
-            "./.venv/bin/agentic-kit",
+            default_agentic_kit(Path.cwd()),
             "transfer",
             "normalize-session",
             "--repair-known-volatile",
@@ -2349,7 +2351,7 @@ def test_transfer_rebase_on_upstream_rebases_current_branch(monkeypatch):
             return subprocess.CompletedProcess(command, 0, "fetched\n", "")
         if command == ["git", "rebase", "origin/feature/demo"]:
             return subprocess.CompletedProcess(command, 0, "rebased\n", "")
-        if command == ["./.venv/bin/agentic-kit", "transfer", "conflict-status", "--json"]:
+        if command == [default_agentic_kit(Path.cwd()), "transfer", "conflict-status", "--json"]:
             return subprocess.CompletedProcess(command, 0, '{"conflict_present": false}\n', "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
@@ -2372,7 +2374,7 @@ def test_transfer_rebase_on_upstream_blocks_on_main(monkeypatch):
         command = list(argv)
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "main\n", "")
-        if command == ["./.venv/bin/agentic-kit", "transfer", "conflict-status", "--json"]:
+        if command == [default_agentic_kit(Path.cwd()), "transfer", "conflict-status", "--json"]:
             return subprocess.CompletedProcess(command, 0, '{"conflict_present": false}\n', "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
@@ -2396,7 +2398,7 @@ def test_transfer_rebase_on_upstream_reports_conflict(monkeypatch):
             return subprocess.CompletedProcess(command, 0, "fetched\n", "")
         if command == ["git", "rebase", "origin/feature/demo"]:
             return subprocess.CompletedProcess(command, 1, "", "conflict\n")
-        if command == ["./.venv/bin/agentic-kit", "transfer", "conflict-status", "--json"]:
+        if command == [default_agentic_kit(Path.cwd()), "transfer", "conflict-status", "--json"]:
             return subprocess.CompletedProcess(command, 2, '{"conflict_present": true, "unmerged_files": ["demo.txt"]}\n', "")
         return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
 
@@ -2761,7 +2763,7 @@ def test_pr_merge_safe_still_blocks_when_volatile_repair_fails(monkeypatch):
             }
             return subprocess.CompletedProcess(command, 0, json.dumps(payload), "")
         if command == [
-            "./.venv/bin/agentic-kit",
+            default_agentic_kit(Path.cwd()),
             "transfer",
             "normalize-session",
             "--repair-known-volatile",
@@ -2926,25 +2928,25 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_ad
     calls = []
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.transfer_pr_merge_flow.default_agentic_kit",
-        lambda root: "./.venv/bin/agentic-kit",
+        lambda root: default_agentic_kit(Path.cwd()),
     )
 
     def fake_run(command, text=True, capture_output=True, timeout=None):
         calls.append(command)
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
-        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-wait-ci"]:
+        if command[:3] == [default_agentic_kit(Path.cwd()), "transfer", "pr-wait-ci"]:
             return subprocess.CompletedProcess(command, 0, "", "")
-        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-merge-safe"]:
+        if command[:3] == [default_agentic_kit(Path.cwd()), "transfer", "pr-merge-safe"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "switch", "main"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "pull", "--ff-only", "origin", "main"]:
             return subprocess.CompletedProcess(command, 0, "", "")
-        if command == ["./.venv/bin/agentic-kit", "rules", "acknowledge"]:
+        if command == [default_agentic_kit(Path.cwd()), "rules", "acknowledge"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == [
-            "./.venv/bin/agentic-kit",
+            default_agentic_kit(Path.cwd()),
             "transfer",
             "post-merge-complete",
             "--after-pr",
@@ -2960,9 +2962,9 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_ad
                 '{"state":"MERGED","mergedAt":"2026-06-18T08:00:00Z","mergeCommit":{"oid":"abc"}}\n',
                 "",
             )
-        if command == ["./.venv/bin/agentic-kit", "transfer", "sync-main", "--main-branch", "main"]:
+        if command == [default_agentic_kit(Path.cwd()), "transfer", "sync-main", "--main-branch", "main"]:
             return subprocess.CompletedProcess(command, 0, "synced\n", "")
-        if command == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check", "--main-branch", "main"]:
+        if command == [default_agentic_kit(Path.cwd()), "transfer", "post-merge-check", "--main-branch", "main"]:
             prior_checks = sum(1 for item in calls if item == command)
             if prior_checks == 1:
                 return subprocess.CompletedProcess(
@@ -2973,7 +2975,7 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_ad
                 )
             return subprocess.CompletedProcess(command, 0, "TRANSFER_POST_MERGE_CHECK\nSTATE=PASS\n", "")
         if command == [
-            "./.venv/bin/agentic-kit",
+            default_agentic_kit(Path.cwd()),
             "transfer",
             "admin-refresh-pr",
             "--after-pr",
@@ -2991,7 +2993,7 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_ad
         if command == ["gh", "pr", "view", "456", "--json", "headRefOid", "--jq", ".headRefOid"]:
             return subprocess.CompletedProcess(command, 0, "b" * 40 + "\n", "")
         if command == [
-            "./.venv/bin/agentic-kit",
+            default_agentic_kit(Path.cwd()),
             "transfer",
             "pr-complete",
             "456",

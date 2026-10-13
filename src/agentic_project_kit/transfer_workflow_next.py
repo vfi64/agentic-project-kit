@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.cli_executable import default_agentic_kit
+
 import json
 import subprocess
 from dataclasses import dataclass, field
@@ -73,7 +75,7 @@ def run_workflow_next(project_root: Path = Path(".")) -> WorkflowNextResult:
         return WorkflowNextResult(
             state="DIRTY_WORKTREE",
             next_action="Inspect or normalize the dirty worktree before continuing.",
-            command=("./.venv/bin/agentic-kit", "transfer", "repo-status", "--full"),
+            command=(default_agentic_kit(root), "transfer", "repo-status", "--full"),
             returncode=2,
             reasons=("dirty_worktree",),
             repo=repo,
@@ -83,7 +85,7 @@ def run_workflow_next(project_root: Path = Path(".")) -> WorkflowNextResult:
         return WorkflowNextResult(
             state="ON_FEATURE_BRANCH",
             next_action="Continue or complete the active branch workflow before returning to main.",
-            command=("./.venv/bin/agentic-kit", "transfer", "continue", repo["branch"]),
+            command=(default_agentic_kit(root), "transfer", "continue", repo["branch"]),
             reasons=("feature_branch_active",),
             repo=repo,
         )
@@ -92,7 +94,7 @@ def run_workflow_next(project_root: Path = Path(".")) -> WorkflowNextResult:
         return WorkflowNextResult(
             state="MAIN_NOT_SYNCED",
             next_action="Fast-forward local main from origin/main before deciding the next workflow step.",
-            command=("./.venv/bin/agentic-kit", "transfer", "sync-main"),
+            command=(default_agentic_kit(root), "transfer", "sync-main"),
             returncode=2,
             reasons=("main_not_synced",),
             repo=repo,
@@ -104,7 +106,7 @@ def run_workflow_next(project_root: Path = Path(".")) -> WorkflowNextResult:
         return WorkflowNextResult(
             state="TRANSFER_STATE_UNREADABLE",
             next_action="Inspect transfer state diagnostics before continuing.",
-            command=("./.venv/bin/agentic-kit", "transfer", "repo-status", "--full"),
+            command=(default_agentic_kit(root), "transfer", "repo-status", "--full"),
             returncode=2,
             reasons=("transfer_state_unreadable", type(exc).__name__),
             repo=repo,
@@ -118,7 +120,7 @@ def run_workflow_next(project_root: Path = Path(".")) -> WorkflowNextResult:
         return WorkflowNextResult(
             state="TRANSFER_READY",
             next_action=next_action or "Run the queued transfer command.",
-            command=("./.venv/bin/agentic-kit", "transfer", "remote-next"),
+            command=(default_agentic_kit(root), "transfer", "remote-next"),
             reasons=("transfer_ready",),
             repo=repo,
             transfer_state=transfer_state,
@@ -128,7 +130,7 @@ def run_workflow_next(project_root: Path = Path(".")) -> WorkflowNextResult:
         return WorkflowNextResult(
             state=primary_state,
             next_action=next_action or "Inspect transfer state before continuing.",
-            command=("./.venv/bin/agentic-kit", "transfer", "repo-status", "--full"),
+            command=(default_agentic_kit(root), "transfer", "repo-status", "--full"),
             returncode=2,
             reasons=tuple(str(reason) for reason in transfer_state.get("reasons", ())),
             repo=repo,

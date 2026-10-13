@@ -3,9 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 import os
-import shutil
 import subprocess
-import sys
 from typing import Callable
 
 from agentic_project_kit.access_levels import ACCESS_LEVEL_ORDER, DEFAULT_ACCESS_LEVEL, AccessLevel
@@ -499,24 +497,8 @@ def _resolve_command(command: tuple[str, ...], root: Path) -> list[str]:
     if first != "agentic-kit":
         return list(command)
 
-    candidates: list[Path] = [
-        root / ".venv" / "bin" / "agentic-kit",
-        root / ".venv" / "Scripts" / "agentic-kit.exe",
-    ]
-    if sys.executable:
-        executable = Path(sys.executable)
-        candidates.append(executable.with_name("agentic-kit"))
-    for candidate in candidates:
-        if candidate.exists():
-            return [str(candidate), *rest]
-
-    found = shutil.which("agentic-kit")
-    if found:
-        return [found, *rest]
-
-    # Keep the original command. _run_command catches FileNotFoundError and
-    # returns a structured failure instead of leaking a Tkinter callback traceback.
-    return list(command)
+    from agentic_project_kit.cli_executable import default_agentic_kit
+    return [default_agentic_kit(root), *rest]
 
 
 def _completed_process_for_missing_command(
@@ -531,8 +513,8 @@ def _completed_process_for_missing_command(
         (
             "Command executable not found: "
             + missing
-            + ". Start the GUI from the project virtual environment or keep "
-            + ".venv/bin/agentic-kit available for cockpit actions."
+            + ". Start the GUI from the selected Kit environment or declare "
+            + "a workspace-owned kit.interpreter for cockpit actions."
         ),
     )
 

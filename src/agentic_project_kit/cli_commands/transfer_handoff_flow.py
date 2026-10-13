@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.cli_executable import default_agentic_kit
+
 # ruff: noqa: F403,F405
 
 from agentic_project_kit.cli_commands.transfer_shared import *
@@ -355,40 +357,40 @@ def remote_work_start(
 
     if not blockers:
         restore_volatile("restore-before-start")
-        run_step("rules-acknowledge-before-start", ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
+        run_step("rules-acknowledge-before-start", [default_agentic_kit(Path.cwd()), "rules", "acknowledge"])
         restore_volatile("restore-after-ack")
 
-        run_step("switch-main", ["./.venv/bin/agentic-kit", "transfer", "branch-switch", main_branch])
+        run_step("switch-main", [default_agentic_kit(Path.cwd()), "transfer", "branch-switch", main_branch])
         restore_volatile("restore-after-switch-main")
 
-        run_step("pull-main", ["./.venv/bin/agentic-kit", "transfer", "pull-current"])
+        run_step("pull-main", [default_agentic_kit(Path.cwd()), "transfer", "pull-current"])
         restore_volatile("restore-after-pull-main")
 
-        run_step("rules-acknowledge-main", ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
+        run_step("rules-acknowledge-main", [default_agentic_kit(Path.cwd()), "rules", "acknowledge"])
         restore_volatile("restore-after-main-ack")
 
-        run_step("normalize-main", ["./.venv/bin/agentic-kit", "transfer", "normalize-session", "--repair-known-volatile"])
+        run_step("normalize-main", [default_agentic_kit(Path.cwd()), "transfer", "normalize-session", "--repair-known-volatile"])
         restore_volatile("restore-after-normalize-main")
 
-        create = run_step("branch-create", ["./.venv/bin/agentic-kit", "transfer", "branch-create", branch], allow_fail=True)
+        create = run_step("branch-create", [default_agentic_kit(Path.cwd()), "transfer", "branch-create", branch], allow_fail=True)
         restore_volatile("restore-after-branch-create")
 
         create_text = create["stdout"] + create["stderr"]
         if create["ok"]:
-            run_step("branch-switch-created", ["./.venv/bin/agentic-kit", "transfer", "branch-switch", branch])
+            run_step("branch-switch-created", [default_agentic_kit(Path.cwd()), "transfer", "branch-switch", branch])
         elif "already exists" in create_text:
-            run_step("branch-switch-existing", ["./.venv/bin/agentic-kit", "transfer", "branch-switch", branch])
+            run_step("branch-switch-existing", [default_agentic_kit(Path.cwd()), "transfer", "branch-switch", branch])
         else:
             blockers.append("branch_create_failed")
 
         restore_volatile("restore-after-work-branch-switch")
-        run_step("rules-acknowledge-work-branch", ["./.venv/bin/agentic-kit", "rules", "acknowledge"])
+        run_step("rules-acknowledge-work-branch", [default_agentic_kit(Path.cwd()), "rules", "acknowledge"])
         restore_volatile("restore-after-work-branch-ack")
 
-        run_step("push-current", ["./.venv/bin/agentic-kit", "transfer", "push-current"])
+        run_step("push-current", [default_agentic_kit(Path.cwd()), "transfer", "push-current"])
         restore_volatile("restore-after-push")
 
-        run_step("repo-status", ["./.venv/bin/agentic-kit", "transfer", "repo-status"])
+        run_step("repo-status", [default_agentic_kit(Path.cwd()), "transfer", "repo-status"])
 
     blockers = list(dict.fromkeys(blockers))
     result_status = "PASS" if not blockers else "BLOCK"

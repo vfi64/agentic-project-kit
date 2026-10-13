@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.cli_executable import default_agentic_kit
+
 # ruff: noqa: F403,F405
 
 from agentic_project_kit.cli_commands.transfer_shared import *
@@ -112,7 +114,7 @@ def rebase_on_upstream_command(
 
     conflict_status_result = run_step(
         "conflict-status",
-        ["./.venv/bin/agentic-kit", "transfer", "conflict-status", "--json"],
+        [default_agentic_kit(Path.cwd()), "transfer", "conflict-status", "--json"],
     )
     conflict_payload: dict[str, Any] = {}
     try:

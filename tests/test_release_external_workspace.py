@@ -4,6 +4,8 @@ retest of `release ready --version 0.1.1`)."""
 
 from __future__ import annotations
 
+from agentic_project_kit.cli_executable import default_agentic_kit
+
 from collections.abc import Sequence
 import json
 from pathlib import Path
@@ -224,7 +226,7 @@ def test_standard_error_scan_skips_kit_self_hosting_checks_in_external_workspace
         or call[1:2] in (["docs-audit"], ["audit-doc-currency"])
         for call in calls
     )
-    composition = next(call for call in calls if call[:3] == ["./.venv/bin/agentic-kit", "transfer",
+    composition = next(call for call in calls if call[:3] == [default_agentic_kit(Path.cwd()), "transfer",
                                                               "command-composition-check"])
     assert "--test-path" not in composition                     # the Kit's own release tests do not exist here
 

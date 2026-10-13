@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.cli_executable import default_agentic_kit
+
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -116,10 +118,10 @@ def run_transfer_continue(root: Path | str = ".", branch: str | None = None) -> 
             "chat_reply": "f",
         }
 
-    restore = _run(["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"], root_path)
+    restore = _run([default_agentic_kit(root_path), "transfer", "restore-known-volatile", "--json"], root_path)
     steps.append({
         "name": "restore-known-volatile",
-        "argv": ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile", "--json"],
+        "argv": [default_agentic_kit(root_path), "transfer", "restore-known-volatile", "--json"],
         "returncode": restore.returncode,
         "stdout": restore.stdout,
         "stderr": restore.stderr,
