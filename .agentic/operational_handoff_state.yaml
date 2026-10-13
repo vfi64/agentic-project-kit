@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d68a7afdfe4e41c5a680ada72d4598972f54d443
-  short: d68a7afd
-  subject: Honor authoritative publish verdict and resume C1 (KIT-GF-069) (#2495)
+  full: db1a9680f987cd58c70c209cad7c5cf918fb69d8
+  short: db1a9680
+  subject: Declare external evidence contexts for legacy audit (KIT-GF-068) (#2497)
 last_substantive_work_state:
-  full: d68a7afdfe4e41c5a680ada72d4598972f54d443
-  short: d68a7afd
-  subject: Honor authoritative publish verdict and resume C1 (KIT-GF-069) (#2495)
+  full: db1a9680f987cd58c70c209cad7c5cf918fb69d8
+  short: db1a9680
+  subject: Declare external evidence contexts for legacy audit (KIT-GF-068) (#2497)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `d68a7afdfe4e41c5a680ada72d4598972f54d443` (`d68a7afd`), after `Honor authoritative publish verdict and resume C1 (KIT-GF-069) (#2495)`.
-Last substantive work state is `d68a7afdfe4e41c5a680ada72d4598972f54d443` (`d68a7afd`), after `Honor authoritative publish verdict and resume C1 (KIT-GF-069) (#2495)`.
+Current verified main/admin HEAD is `db1a9680f987cd58c70c209cad7c5cf918fb69d8` (`db1a9680`), after `Declare external evidence contexts for legacy audit (KIT-GF-068) (#2497)`.
+Last substantive work state is `db1a9680f987cd58c70c209cad7c5cf918fb69d8` (`db1a9680`), after `Declare external evidence contexts for legacy audit (KIT-GF-068) (#2497)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
