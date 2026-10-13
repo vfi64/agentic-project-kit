@@ -545,6 +545,15 @@ Do not add normative rules that exist only as prose without a matching test, gat
 
 ## Rule Registry Gate
 
+External applicability and signed bootstrap are covered by
+`tests/test_external_rule_registry.py`: installed-wheel fixtures contain their
+synchronized command reference, no Kit tests and no Kit documentation registry.
+Check/report return NOT_APPLICABLE before bootstrap and PASS after a signed
+write. Stale signatures, missing evidence and unproved hand edits block or
+produce explicit exclusions. Customized CI remains untouched. This projection
+asserts installed-source/surface evidence, never project-rule semantics or local
+test coverage. Self-hosting registry regression gates remain unchanged.
+
 `agentic-kit rule-registry check` validates the governed rule mechanism registry.
 `agentic-kit rule-registry report --json` exposes direct coverage and follow-up
 state for review. Reviewed additive rule entries must use

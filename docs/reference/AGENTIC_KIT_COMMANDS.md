@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: bf05db61066e
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 8694ff3e27ef
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `262`
+- Command count: `263`
 
 ## Commands
 
@@ -2194,6 +2194,23 @@ Write a K3 remote branch hygiene evidence report only with --execute.
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `no_push` | `TyperOption` | --no-push | `False` | `False` | Commit locally without pushing. |
 
+### `agentic-kit rule-registry bootstrap`
+
+- Safety: `BOUNDED`
+- Surface: `primitive`
+- When to use: Plan or sign a local evidence-derived external Kit inventory write.
+- Dry-run available: `True`
+- Remote effects: `none`
+
+Plan or sign a local evidence-derived external Kit inventory write.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `execute` | `TyperOption` | --execute | `False` | `False` |  |
+| `expected_signature` | `TyperOption` | --expected-signature | `False` | `` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
 ### `agentic-kit rule-registry check`
 
 - Safety: `READ_ONLY`
@@ -2202,7 +2219,10 @@ Write a K3 remote branch hygiene evidence report only with --execute.
 - Dry-run available: `False`
 - Remote effects: `none`
 
-_No parameters._
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit rule-registry register`
 
@@ -2242,6 +2262,7 @@ Add one reviewed rule mechanism with direct evidence coverage.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 | `fail_on_followups` | `TyperOption` | --fail-on-followups | `False` | `False` | Exit non-zero when follow-up items remain, even if validation passes. |
 

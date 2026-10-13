@@ -17,20 +17,32 @@ from agentic_project_kit.rule_registry_validator import (
     render_rule_registry_findings,
     validate_rule_registry,
 )
+from agentic_project_kit.external_rule_registry import bootstrap_inventory, check_external_inventory
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 
 rule_registry_app = typer.Typer(help="Validate governed rule registry artifacts.")
 
 
 @rule_registry_app.command("check")
-def rule_registry_check() -> None:
-    findings = validate_rule_registry()
-    typer.echo(render_rule_registry_findings(findings))
+def rule_registry_check(
+    root: Path = typer.Option(Path("."), "--root"),
+    json_output: bool = typer.Option(False, "--json"),
+) -> None:
+    if is_external_manifest_workspace(root):
+        result = check_external_inventory(root)
+        typer.echo(json.dumps(result, indent=2, sort_keys=True) if json_output else f"Rule registry: {result['result_status']}\n{result['reason']}\nNext: {result['next_action']}")
+        if result["result_status"] == "BLOCKED":
+            raise typer.Exit(1)
+        return
+    findings = validate_rule_registry(root)
+    typer.echo(json.dumps({"result_status": "BLOCKED" if findings else "PASS", "findings": [vars(f) for f in findings]}, sort_keys=True) if json_output else render_rule_registry_findings(findings))
     if findings:
         raise typer.Exit(1)
 
 
 @rule_registry_app.command("report")
 def rule_registry_report(
+    root: Path = typer.Option(Path("."), "--root"),
     json_output: bool = typer.Option(False, "--json", help="Emit machine-readable JSON."),
     fail_on_followups: bool = typer.Option(
         False,
@@ -38,7 +50,7 @@ def rule_registry_report(
         help="Exit non-zero when follow-up items remain, even if validation passes.",
     ),
 ) -> None:
-    report = build_rule_registry_report()
+    report = build_rule_registry_report(root)
     if json_output:
         typer.echo(json.dumps(report, indent=2, sort_keys=True))
     else:
@@ -47,6 +59,20 @@ def rule_registry_report(
     if summary.get("validation_finding_count", 0):
         raise typer.Exit(1)
     if fail_on_followups and summary.get("followup_count", 0):
+        raise typer.Exit(1)
+
+
+@rule_registry_app.command("bootstrap")
+def rule_registry_bootstrap(
+    root: Path = typer.Option(Path("."), "--root"),
+    execute: bool = typer.Option(False, "--execute"),
+    expected_signature: str = typer.Option("", "--expected-signature"),
+    json_output: bool = typer.Option(False, "--json"),
+) -> None:
+    """Plan or sign a local evidence-derived external Kit inventory write."""
+    result = bootstrap_inventory(root, execute=execute, expected_signature=expected_signature)
+    typer.echo(json.dumps(result, indent=2, sort_keys=True) if json_output else f"Rule registry bootstrap: {result['result_status']}\n{result.get('approval_signature', result.get('reason', ''))}")
+    if result["result_status"] == "BLOCKED":
         raise typer.Exit(1)
 
 

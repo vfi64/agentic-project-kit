@@ -522,6 +522,15 @@ def _validate_migration_completeness(
 
 def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
     base = Path(root)
+    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+    if is_external_manifest_workspace(base):
+        from agentic_project_kit.external_rule_registry import check_external_inventory
+        result = check_external_inventory(base)
+        return [RuleRegistryFinding(str(INVENTORY_PATH), result["reason"])] if result["result_status"] == "BLOCKED" else []
+    return _validate_legacy_registry(base)
+
+
+def _validate_legacy_registry(base: Path) -> list[RuleRegistryFinding]:
     inventory_path = base / INVENTORY_PATH
     migrations_path = base / MIGRATIONS_PATH
     coverage_path = base / COVERAGE_PATH
@@ -531,10 +540,14 @@ def validate_rule_registry(root: Path | str = ".") -> list[RuleRegistryFinding]:
         inventory = _load_yaml(inventory_path)
     except Exception as exc:
         return [RuleRegistryFinding(str(INVENTORY_PATH), f"cannot load inventory: {exc}")]
+    if not isinstance(inventory, dict):
+        return [RuleRegistryFinding(str(INVENTORY_PATH), "inventory must be a mapping")]
     try:
         migrations = _load_yaml(migrations_path)
     except Exception as exc:
         return [RuleRegistryFinding(str(MIGRATIONS_PATH), f"cannot load migrations: {exc}")]
+    if not isinstance(migrations, dict):
+        return [RuleRegistryFinding(str(MIGRATIONS_PATH), "migrations must be a mapping")]
     coverage_by_mechanism = _load_test_coverage_metadata(base, findings)
     if inventory.get("schema_version") != 1:
         findings.append(RuleRegistryFinding(str(INVENTORY_PATH), "schema_version must be 1"))

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import yaml
+from agentic_project_kit.external_rule_registry import bootstrap_route
 
 from agentic_project_kit import __version__ as PACKAGE_VERSION
 from agentic_project_kit.volatile_paths import RULE_ACK_DIRECTORY_PATH
@@ -88,6 +89,7 @@ class WorkspaceInitPlan:
             "injection_targets": list(self.injection_targets),
             "dpa_repo_adoption_assessment": self.dpa_repo_adoption.as_dict(),
             "privacy_boundary": self.privacy_boundary,
+            "rule_registry_next_action": bootstrap_route(self.root),
             "final_signal": "d",
         }
 
@@ -211,6 +213,7 @@ def render_workspace_init_plan(plan: WorkspaceInitPlan, *, written: bool = False
         f"PROJECT_NAME={plan.project.name}",
         f"PROJECT_TYPE={plan.project.type}",
         f"PROFILE={plan.project.profile}",
+        "Rule registry next: " + bootstrap_route(plan.root),
         "",
         "Workspace tree:",
     ]

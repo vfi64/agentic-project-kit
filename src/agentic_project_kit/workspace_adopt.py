@@ -8,6 +8,7 @@ import tomllib
 from typing import Any
 
 import yaml
+from agentic_project_kit.external_rule_registry import bootstrap_route
 
 from agentic_project_kit.documentation_registry import (
     build_doc_registry_scope_decision_rows,
@@ -163,6 +164,7 @@ class WorkspaceAdoptReport:
             "dpa_repo_adoption_assessment": self.dpa_repo_adoption.as_dict(),
             "init_tree": list(self.init_tree),
             "privacy_boundary": self.privacy_boundary,
+            "rule_registry_next_action": bootstrap_route(self.root),
             "final_signal": "d",
         }
 
@@ -199,6 +201,7 @@ def render_workspace_adopt_report(report: WorkspaceAdoptReport) -> str:
         f"PROJECT_NAME={report.project.name}",
         f"PROJECT_TYPE={report.project.type}",
         f"PROFILE={report.project.profile}",
+        "Rule registry next: " + bootstrap_route(report.root),
         f"AGENTIC_STATUS={report.agentic.status}",
         f"AGENTIC_MESSAGE={report.agentic.message}",
     ]

@@ -1631,3 +1631,6 @@ documents:
     status: active
     review_after: direction:guided-gui-alternative
     notes: Decision to compose a second optional frontend over shared Kit authority and guarded actions.
+  - path: docs/reports/greenfield/KIT-GF-RULE-REGISTRY-BOOTSTRAP-external-inventory-2026-10-13.md
+    class: evidence/log
+    owner: maintainers
