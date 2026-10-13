@@ -52,7 +52,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "project.version=1.0.24",
+            "detail": "project.version=1.0.25",
             "evidence_type": "pyproject-value",
             "status": "verified"
           }
@@ -4688,7 +4688,7 @@
             "required": false
           },
           {
-            "default": "1.0.24",
+            "default": "1.0.25",
             "help": "",
             "name": "version",
             "opts": [
@@ -6462,7 +6462,7 @@
         "lifecycle_rank": 73,
         "params": [
           {
-            "default": "1.0.24",
+            "default": "1.0.25",
             "help": "",
             "name": "version",
             "opts": [
@@ -7455,7 +7455,7 @@
             "required": false
           },
           {
-            "default": "1.0.24",
+            "default": "1.0.25",
             "help": "",
             "name": "version",
             "opts": [
@@ -12488,17 +12488,18 @@
     },
     "release": {
       "notes": [
-        "Add an optional guided Kit GUI with task-oriented tabs, shared guarded actions, persistent activity output and background execution feedback; preserve the original GUI.",
-        "Harden GUI command discovery and result handling, preserve task drafts across view changes and keep task/approval context separate when switching projects.",
-        "Explain Kit purpose, target audience, architecture and bounded practice evidence through generated website pages; keep Guided GUI operational and Windows/Linux acceptance open.",
-        "Record DOI for release 1.0.23",
-        "docs: reconcile release planning, integrate PAA and restore DPA evidence",
-        "Explain Kit purpose, architecture and bounded practice evidence on website",
-        "Add optional guided Kit GUI over shared guarded workflows"
+        "Zenodo DOI verification pending for v1.0.25.",
+        "Bootstrap external rule inventories with signed writes and applicability diagnostics (KIT-GF-RULE-REGISTRY-BOOTSTRAP).",
+        "Export schema-versioned external findings and archive signed completed release evidence through Kit workflows (KIT-GF-066).",
+        "Retest external workspace initialization, canonical handoff, first work start, repair escalation and contract-first execution with installed-wheel regression tests (KIT-GF-001, KIT-GF-003, KIT-GF-005, KIT-GF-013, KIT-GF-016).",
+        "Expose conservative runtime plans for custom CI and document tested refresh-only light jobs (KIT-GF-063).",
+        "Resolve workspace-owned Kit executables across release, transfer, GUI and successor handoff adapters with external regression tests (KIT-GF-067).",
+        "Honor authoritative publish verdicts including external SKIP checks and resume C1 with recorded B4 consent (KIT-GF-069).",
+        "Declare external legacy-audit evidence paths and verify undeclared compatibility against released-wheel tests (KIT-GF-068)."
       ],
       "source": "CHANGELOG.md",
       "status": "recorded",
-      "version": "1.0.24"
+      "version": "1.0.25"
     },
     "schema_version": 1
   },
@@ -12511,13 +12512,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "9633a3a680ad",
+    "manifest_sha": "d1604f13011e",
     "package_name": "agentic-project-kit",
-    "package_version": "1.0.24",
+    "package_version": "1.0.25",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.24",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "9633a3a680ad",
+    "reproduced_manifest_sha": "d1604f13011e",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 175,
@@ -12552,7 +12553,7 @@
     "current_release_tag": "v1.0.24",
     "current_verified_main": "See docs/STATUS.md",
     "current_verified_release": "1.0.24",
-    "current_version": "1.0.24",
+    "current_version": "1.0.25",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
     "version_doi": "10.5281/zenodo.23336642"

@@ -18,6 +18,25 @@
 
 - Add deterministic external rule-registry applicability and signed evidence-derived bootstrap without Kit-repository tests or invented project-rule semantics (KIT-GF-RULE-REGISTRY-BOOTSTRAP).
 
+## v1.0.25 - 2026-10-13
+
+- Zenodo DOI verification pending for v1.0.25.
+- Bootstrap external rule inventories with signed writes and applicability diagnostics (KIT-GF-RULE-REGISTRY-BOOTSTRAP).
+- Export schema-versioned external findings and archive signed completed release evidence through Kit workflows (KIT-GF-066).
+- Retest external workspace initialization, canonical handoff, first work start, repair escalation and contract-first execution with installed-wheel regression tests (KIT-GF-001, KIT-GF-003, KIT-GF-005, KIT-GF-013, KIT-GF-016).
+- Expose conservative runtime plans for custom CI and document tested refresh-only light jobs (KIT-GF-063).
+- Resolve workspace-owned Kit executables across release, transfer, GUI and successor handoff adapters with external regression tests (KIT-GF-067).
+- Honor authoritative publish verdicts including external SKIP checks and resume C1 with recorded B4 consent (KIT-GF-069).
+- Declare external legacy-audit evidence paths and verify undeclared compatibility against released-wheel tests (KIT-GF-068).
+- Record DOI for release 1.0.24
+- Add signed external rule-registry bootstrap (KIT-GF-RULE-REGISTRY-BOOTSTRAP)
+- Export external finding status and archive completed release evidence (KIT-GF-066)
+- Retest external lifecycle, handoff and governed execution (KIT-GF-001/003/005/013/016)
+- Expose conservative runtime plans for custom CI (KIT-GF-063)
+- Resolve owned Kit executables across diagnostics and adapters (KIT-GF-067)
+- Honor authoritative publish verdict and resume C1 (KIT-GF-069)
+- Declare external evidence contexts for legacy audit (KIT-GF-068)
+
 ## v1.0.24 - 2026-10-13
 
 - Add an optional guided Kit GUI with task-oriented tabs, shared guarded actions, persistent activity output and background execution feedback; preserve the original GUI.

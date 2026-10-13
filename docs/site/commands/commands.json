@@ -4413,7 +4413,7 @@
           "required": false
         },
         {
-          "default": "1.0.24",
+          "default": "1.0.25",
           "help": "",
           "name": "version",
           "opts": [
@@ -6187,7 +6187,7 @@
       "lifecycle_rank": 73,
       "params": [
         {
-          "default": "1.0.24",
+          "default": "1.0.25",
           "help": "",
           "name": "version",
           "opts": [
@@ -7180,7 +7180,7 @@
           "required": false
         },
         {
-          "default": "1.0.24",
+          "default": "1.0.25",
           "help": "",
           "name": "version",
           "opts": [
