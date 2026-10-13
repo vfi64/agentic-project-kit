@@ -6,6 +6,10 @@ import re
 import subprocess
 from typing import Iterable
 
+from agentic_project_kit.ns_legacy_audit_config import is_declared_evidence
+from agentic_project_kit.workspace import load_workspace
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+
 
 MAX_STORED_REFERENCES = 200
 
@@ -195,7 +199,11 @@ def _compatibility_implementation_context(relative_path: str) -> bool:
     }
 
 
-def classify_legacy_reference(relative_path: str, line: str) -> tuple[str, str]:
+def classify_legacy_reference(
+    relative_path: str, line: str, *, evidence_paths: tuple[str, ...] = ()
+) -> tuple[str, str]:
+    if is_declared_evidence(relative_path, evidence_paths):
+        return "declared_evidence", "path matches an explicitly declared external evidence context"
     stripped = line.strip()
     if _compatibility_implementation_context(relative_path):
         return "compatibility_implementation", "legacy tokens are implementation/classifier compatibility patterns"
@@ -224,6 +232,11 @@ def classify_legacy_reference(relative_path: str, line: str) -> tuple[str, str]:
 def audit_ns_legacy_references(project_root: Path | str = ".") -> NsLegacyReferenceAuditResult:
     root = Path(project_root).resolve()
     references: list[LegacyReference] = []
+    evidence_paths = (
+        load_workspace(root, suppress_legacy_profile_warning=True).ns_legacy_evidence_paths
+        if is_external_manifest_workspace(root)
+        else ()
+    )
 
     for path in iter_candidate_files(root):
         relative = path.relative_to(root).as_posix()
@@ -234,7 +247,7 @@ def audit_ns_legacy_references(project_root: Path | str = ".") -> NsLegacyRefere
         for index, line in enumerate(lines, start=1):
             if not _has_legacy_reference(line):
                 continue
-            classification, reason = classify_legacy_reference(relative, line)
+            classification, reason = classify_legacy_reference(relative, line, evidence_paths=evidence_paths)
             references.append(
                 LegacyReference(
                     path=relative,

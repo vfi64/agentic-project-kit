@@ -1008,6 +1008,21 @@ Expected: PASS without missing literal executable; independent gates remain enfo
 
 Expected result fields: `{"result_status": "PASS", "stderr": "no FileNotFoundError"}`.
 
+## KIT-GF-068
+
+Kit state: CLOSED; fixed_in: 1.0.25.
+Evidence: docs/reports/greenfield/KIT-GF-068-declared-external-evidence-2026-10-13.md
+
+Preconditions: Installed wheel and synchronized command reference; disposable clone; exact ledger path declared under audit.ns_legacy.evidence_paths; no Kit tests or documentation registry.
+
+```text
+agentic-kit audit-ns-legacy-references --root . --json
+```
+
+Expected: Declared ledger quotes PASS independently of wording; active script outside declared paths BLOCK; undeclared behavior unchanged from 1.0.24.
+
+Expected result fields: `{"blocker_count": 0, "references[].classification": "declared_evidence for matching ledger references", "status": "PASS"}`.
+
 ## KIT-GF-069
 
 Kit state: CLOSED; fixed_in: 1.0.25.

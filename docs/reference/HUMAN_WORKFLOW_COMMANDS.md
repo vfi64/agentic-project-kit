@@ -31,6 +31,27 @@ missing declared files and integrity drift still block. Explicit
 `agentic-kit doc-lifecycle-audit --strict --json` enforces lifecycle blockers.
 See `docs/governance/DOCUMENTATION_SYSTEM_AUDIT_CONTRACT.md` for applicability.
 
+## External legacy-reference evidence contexts (KIT-GF-068)
+
+For a findings ledger that quotes removed launcher commands, declare its exact
+root-relative POSIX path in `.agentic/config.yaml`:
+
+```yaml
+audit:
+  ns_legacy:
+    evidence_paths:
+      - docs/validation/AGENTIC_KIT_GREENFIELD_FINDINGS.json
+```
+
+`agentic-kit audit-ns-legacy-references --root . --json` treats matching files as
+`declared_evidence`. The declaration applies only to external manifest workspaces;
+the Kit checkout retains its own context lists. Without it, behavior is unchanged.
+Patterns use case-sensitive `fnmatchcase` over the whole relative path, including
+its slash characters. Prefer exact paths: a broad glob also trusts active-looking
+text inside any matched file. Keep executable scripts outside evidence paths;
+active legacy instructions there still block. Unknown keys, invalid path forms
+and invalid field types block with exit 2 and a configuration diagnostic.
+
 ## Workspace Kit maintenance (KIT-GF-051/021)
 
 `agentic-kit kit status --root PATH --json` inspects the workspace `.venv` first,

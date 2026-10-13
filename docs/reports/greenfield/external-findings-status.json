@@ -1,7 +1,7 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 67,
+    "CLOSED": 68,
     "NOT_APPLICABLE": 0,
     "OPEN": 0,
     "PARTIAL": 0
@@ -41,7 +41,8 @@
         "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
       ],
       "prs": [
-        2293
+        2293,
+        2489
       ],
       "report": "docs/reports/greenfield/KIT-GF-001-lifecycle-bootstrap-retest-2026-10-13.md"
     },
@@ -114,7 +115,8 @@
         "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
       ],
       "prs": [
-        2293
+        2293,
+        2489
       ],
       "report": "docs/reports/greenfield/KIT-GF-003-canonical-handoff-applicability-2026-10-13.md"
     },
@@ -182,7 +184,8 @@
         "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
       ],
       "prs": [
-        2293
+        2293,
+        2489
       ],
       "report": "docs/reports/greenfield/KIT-GF-005-first-work-start-retest-2026-10-13.md"
     },
@@ -461,7 +464,8 @@
         "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
       ],
       "prs": [
-        2293
+        2293,
+        2489
       ],
       "report": "docs/reports/greenfield/KIT-GF-013-workspace-repair-escalation-2026-10-13.md"
     },
@@ -569,7 +573,8 @@
         "docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json"
       ],
       "prs": [
-        2325
+        2325,
+        2489
       ],
       "report": "docs/reports/greenfield/KIT-GF-016-contract-first-executor-retest-2026-10-13.md"
     },
@@ -2174,7 +2179,8 @@
       "id": "KIT-GF-063",
       "kit_state": "CLOSED",
       "prs": [
-        2467
+        2467,
+        2491
       ],
       "report": "docs/reports/greenfield/KIT-GF-063-custom-ci-runtime-plan-2026-10-13.md"
     },
@@ -2277,8 +2283,9 @@
       "fixed_in": "1.0.25",
       "id": "KIT-GF-066",
       "kit_state": "CLOSED",
-      "pr_reference_note": "No unambiguous Kit PR number in the committed report introduction; do not infer consumer PRs.",
-      "prs": [],
+      "prs": [
+        2487
+      ],
       "report": "docs/reports/greenfield/KIT-GF-066-machine-readable-evidence-2026-10-13.md"
     },
     {
@@ -2308,9 +2315,38 @@
       "fixed_in": "1.0.25",
       "id": "KIT-GF-067",
       "kit_state": "CLOSED",
+      "prs": [
+        2493
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-067-owned-kit-subprocess-resolution-2026-10-13.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit audit-ns-legacy-references --root . --json"
+        ],
+        "expected": [
+          "Declared ledger quotes PASS independently of wording; active script outside declared paths BLOCK; undeclared behavior unchanged from 1.0.24."
+        ],
+        "expected_result_fields": {
+          "blocker_count": 0,
+          "references[].classification": "declared_evidence for matching ledger references",
+          "status": "PASS"
+        },
+        "preconditions": [
+          "Installed wheel and synchronized command reference; disposable clone; exact ledger path declared under audit.ns_legacy.evidence_paths; no Kit tests or documentation registry."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Installed-wheel positive/negative and released-wheel comparison PASS; live consumer retest remains independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.25",
+      "id": "KIT-GF-068",
+      "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-067-owned-kit-subprocess-resolution-2026-10-13.md"
+      "report": "docs/reports/greenfield/KIT-GF-068-declared-external-evidence-2026-10-13.md"
     },
     {
       "external_retest": {
@@ -2340,8 +2376,9 @@
       "fixed_in": "1.0.25",
       "id": "KIT-GF-069",
       "kit_state": "CLOSED",
-      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
-      "prs": [],
+      "prs": [
+        2495
+      ],
       "report": "docs/reports/greenfield/KIT-GF-069-release-publish-verdict-2026-10-13.md"
     },
     {
@@ -2387,5 +2424,5 @@
   ],
   "kind": "external_findings_status",
   "schema_version": 1,
-  "source_sha256": "845a2e6d1ec040b3b609c066a691819166b446d38637d19518b13e450cb53196"
+  "source_sha256": "d0066578610914f1c5f9c501685bc9859c74e0c7574db4216746640ecb8d81f4"
 }

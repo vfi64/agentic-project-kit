@@ -11,6 +11,7 @@ import warnings
 import yaml
 
 from agentic_project_kit.kit_update_config import KitUpdateConfig, parse_kit_update_config
+from agentic_project_kit.ns_legacy_audit_config import parse_evidence_paths
 
 
 SUPPORTED_MANIFEST_SCHEMA_VERSION = 2
@@ -51,6 +52,7 @@ ALLOWED_TOP_LEVEL_KEYS = frozenset(
         "paths",
         "gates",
         "kit",
+        "audit",
     }
 )
 
@@ -189,6 +191,7 @@ class Workspace:
     gates_skip: tuple[str, ...] = ()
     manifest_schema_version: int = 0
     kit: KitUpdateConfig = field(default_factory=KitUpdateConfig)
+    ns_legacy_evidence_paths: tuple[str, ...] = ()
 
     def _path(self, relative: str | Path) -> Path:
         return self.root / Path(relative)
@@ -450,6 +453,10 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
         kit = parse_kit_update_config(manifest.get("kit"))
     except ValueError as exc:
         raise RuntimeError(_manifest_error(f"{location}:kit", str(exc))) from exc
+    try:
+        evidence_paths = parse_evidence_paths(manifest.get("audit"))
+    except ValueError as exc:
+        raise RuntimeError(_manifest_error(location, str(exc))) from exc
     return Workspace(
         root=root,
         config=config,
@@ -465,6 +472,7 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
         gates_skip=gates_skip,
         manifest_schema_version=schema_version,
         kit=kit,
+        ns_legacy_evidence_paths=evidence_paths,
     )
 
 

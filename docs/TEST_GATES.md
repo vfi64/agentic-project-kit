@@ -1094,3 +1094,10 @@ The release runner consumes the publish orchestration status and blocker count;
 check applicability is decided once by the publish core. Tests cover external
 SKIP, blocking check verdicts, malformed summaries and installed-wheel C1 resume
 through C2 while preserving the attributed B4 approval.
+
+## External legacy-reference evidence contexts (KIT-GF-068)
+
+tests/test_ns_legacy_external_evidence.py covers installed-wheel declared ledger
+quotes, blocking active scripts, malformed configuration, exact undeclared output
+compatibility with released 1.0.24, and unchanged Kit checkout context lists.
+The audit applies explicit path globs without new content heuristics.

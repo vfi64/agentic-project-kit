@@ -1667,3 +1667,6 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-069-release-publish-verdict-2026-10-13.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-068-declared-external-evidence-2026-10-13.md
+    class: evidence/log
+    owner: maintainers
