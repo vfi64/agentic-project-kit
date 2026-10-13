@@ -15,7 +15,11 @@ def fixture(tmp_path, installed_kit, request):
         source = tmp_path / "released-source"
         source.mkdir()
         archive = tmp_path / "release.tar"
-        subprocess.run(["git", "archive", "v1.0.24", "-o", str(archive)], check=True)
+        commit = subprocess.check_output(
+            ["git", "rev-parse", "v1.0.24^{commit}"], text=True
+        ).strip()
+        assert commit == "3ba42bacb3be96d0a344087b8464bd21f12b9de7"
+        subprocess.run(["git", "archive", commit, "-o", str(archive)], check=True)
         with tarfile.open(archive) as data:
             data.extractall(source, filter="data")
         subprocess.run(

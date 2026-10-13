@@ -299,11 +299,11 @@
       "branch": "codex/package5-c-external-adjudication",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "6d8f646cfdad0c47ea374ade79ebe6c3a67fb2cc",
+      "head": "8f7b550427014582f2619d1db71726619bc1a222",
       "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "c44ec3d59a1dd6f04d15709cce3f373f8c43a95e",
-      "worktree_clean": true
+      "worktree_clean": false
     },
     "scope": "current-continuation-state"
   },
@@ -486,11 +486,11 @@
     "branch": "codex/package5-c-external-adjudication",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "6d8f646cfdad0c47ea374ade79ebe6c3a67fb2cc",
+    "head": "8f7b550427014582f2619d1db71726619bc1a222",
     "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "c44ec3d59a1dd6f04d15709cce3f373f8c43a95e",
-    "worktree_clean": true
+    "worktree_clean": false
   },
   "rules": [
     {

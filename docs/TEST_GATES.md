@@ -4,6 +4,10 @@
 
 `tests/test_greenfield_adjudication.py` retests KIT-GF-001/003/005/013/016
 through installed wheels, including v1.0.24 controls for init and first work start.
+Those historical controls require the local v1.0.24 tag at commit
+`3ba42bacb3be96d0a344087b8464bd21f12b9de7`. CI explicitly fetches only that tag
+before full/shadow pytest, verifies its peeled commit, and keeps refresh-light
+runs shallow. Tests never fetch a missing baseline or silently skip it.
 The handoff applicability resolver distinguishes NO_PREVIOUS_HANDOFF from lost
 predecessor evidence. Repair diagnosis uses workspace tmp and command-run paths.
 Planner-Kit-Executor execution is tested after its explicit manifest-backed plan.
