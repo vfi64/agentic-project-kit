@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `16b35fdf307ae0f7bed1d07f25a301820313c89a` (`16b35fdf`), after `Record DOI for release 1.0.24 (#2483)`.
-Last substantive work state is `16b35fdf307ae0f7bed1d07f25a301820313c89a` (`16b35fdf`), after `Record DOI for release 1.0.24 (#2483)`.
+Current verified main/admin HEAD is `6eb9f6e8250704ccb2c8a190cfe229a8df904550` (`6eb9f6e8`), after `Add signed external rule-registry bootstrap (KIT-GF-RULE-REGISTRY-BOOTSTRAP) (#2485)`.
+Last substantive work state is `6eb9f6e8250704ccb2c8a190cfe229a8df904550` (`6eb9f6e8`), after `Add signed external rule-registry bootstrap (KIT-GF-RULE-REGISTRY-BOOTSTRAP) (#2485)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

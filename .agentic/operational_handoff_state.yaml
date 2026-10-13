@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 16b35fdf307ae0f7bed1d07f25a301820313c89a
-  short: 16b35fdf
-  subject: Record DOI for release 1.0.24 (#2483)
+  full: 6eb9f6e8250704ccb2c8a190cfe229a8df904550
+  short: 6eb9f6e8
+  subject: Add signed external rule-registry bootstrap (KIT-GF-RULE-REGISTRY-BOOTSTRAP) (#2485)
 last_substantive_work_state:
-  full: 16b35fdf307ae0f7bed1d07f25a301820313c89a
-  short: 16b35fdf
-  subject: Record DOI for release 1.0.24 (#2483)
+  full: 6eb9f6e8250704ccb2c8a190cfe229a8df904550
+  short: 6eb9f6e8
+  subject: Add signed external rule-registry bootstrap (KIT-GF-RULE-REGISTRY-BOOTSTRAP) (#2485)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
