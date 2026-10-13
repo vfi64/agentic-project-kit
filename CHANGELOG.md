@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Add deterministic external rule-registry applicability and signed evidence-derived bootstrap without Kit-repository tests or invented project-rule semantics (KIT-GF-RULE-REGISTRY-BOOTSTRAP).
+
 ## v1.0.24 - 2026-10-13
 
 - Add an optional guided Kit GUI with task-oriented tabs, shared guarded actions, persistent activity output and background execution feedback; preserve the original GUI.

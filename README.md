@@ -567,6 +567,12 @@ agentic-kit patterns show bounded-workflow-evidence
 
 ## Local Cockpit Foundation
 
+External workspace rule inventory: `agentic-kit rule-registry bootstrap --json`
+plans a deterministic, evidence-derived Kit mechanism projection. Execute only
+with its `approval_signature`; missing inventories report NOT_APPLICABLE with
+the exact route. This does not register project rules or claim local test coverage.
+See [external inventory repair and retest](docs/reports/greenfield/KIT-GF-RULE-REGISTRY-BOOTSTRAP-external-inventory-2026-10-13.md).
+
 The local cockpit foundation exposes a conservative control surface for local project operation. Use `agentic-kit cockpit`, `agentic-kit actions`, `agentic-kit cockpit status`, `agentic-kit cockpit actions`, and `agentic-kit cockpit run <action-id>` to inspect state, read the structured action inventory, and execute registered read-only actions. For `agentic-kit` actions, inventory output includes `manifest_surface` and `gui_layer` from the command manifest: Primary layer, Diagnostics layer, and Expert / Low-level layer. It also includes `gui_diagnostic_priority`, `claim_evidence`, and `safety_review` so GUI and website views can show Guided Diagnostics common blockers before specialized audits and avoid prose-only readiness or release claims.
 
 The action inventory classifies by category, safety, and Access level. Access level is a Tkinter cockpit visibility convenience, not permission. Execution allows `read_only` by default, blocks `bounded` without an allow path, and blocks general `destructive` actions. The experimental `agentic-kit-gui` entry point starts a local Tkinter cockpit skeleton and may guide `agentic-kit release ready` before confirmed `agentic-kit release prepare`; its release controls must not publish releases, push tags, or run remote cleanup. The work-cycle controls invoke the existing Kit finish workflow only after a passing preview and explicit publish confirmation; that workflow can commit, create a PR and merge through the configured guards. The GUI button catalog is a Bedienprojektion, not a second taxonomy: `agentic-kit` wrappers must resolve to generated command-reference entries with valid `surface`, and stale wrappers fail tests. The bounded Upload Result Log button uses `agentic-kit work-order upload`.

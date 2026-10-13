@@ -247,6 +247,8 @@ def register_rule_registry_entry(
         }
 
     inventory = _load_yaml(root / INVENTORY_PATH)
+    if inventory.get("kind") == "external_kit_rule_mechanism_inventory":
+        return {**base_payload, "code": "FAIL_KIT_MANAGED_PROJECTION", "findings": ["This installed-Kit projection does not infer project registration semantics. Maintain project rule capsules separately."]}
     coverage = _load_yaml(root / COVERAGE_PATH)
     mechanisms = inventory.get("mechanisms")
     coverage_entries = coverage.get("coverage")

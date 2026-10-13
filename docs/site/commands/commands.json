@@ -1,5 +1,5 @@
 {
-  "command_count": 262,
+  "command_count": 263,
   "diagnostic_count": 124,
   "entries": [
     {
@@ -6380,12 +6380,80 @@
       "when_to_use": "Run agentic-kit rnc."
     },
     {
+      "diagnostic_priority": "not_diagnostic",
+      "dry_run_available": true,
+      "group": "rule-registry",
+      "help": "Plan or sign a local evidence-derived external Kit inventory write.",
+      "lifecycle_rank": null,
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "",
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "required": false
+        },
+        {
+          "default": "",
+          "help": "",
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        }
+      ],
+      "qualified_name": "agentic-kit rule-registry bootstrap",
+      "safety": "BOUNDED",
+      "surface": "primitive",
+      "when_to_use": "Plan or sign a local evidence-derived external Kit inventory write."
+    },
+    {
       "diagnostic_priority": "advanced_diagnostic",
       "dry_run_available": false,
       "group": "rule-registry",
       "help": "",
       "lifecycle_rank": null,
-      "params": [],
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        }
+      ],
       "qualified_name": "agentic-kit rule-registry check",
       "safety": "READ_ONLY",
       "surface": "diagnostic",
@@ -6546,6 +6614,15 @@
       "help": "",
       "lifecycle_rank": null,
       "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "required": false
+        },
         {
           "default": false,
           "help": "Emit machine-readable JSON.",
@@ -11902,7 +11979,7 @@
     "pr": 5,
     "release": 3,
     "root": 53,
-    "rule-registry": 3,
+    "rule-registry": 4,
     "rules": 7,
     "scaffold": 1,
     "slice": 1,
@@ -11918,7 +11995,7 @@
   "guided_count": 34,
   "kind": "site_command_catalog",
   "safety_counts": {
-    "BOUNDED": 172,
+    "BOUNDED": 173,
     "DESTRUCTIVE": 9,
     "READ_ONLY": 81
   },
@@ -11926,6 +12003,6 @@
   "surface_counts": {
     "diagnostic": 124,
     "orchestrator": 34,
-    "primitive": 104
+    "primitive": 105
   }
 }

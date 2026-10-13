@@ -2139,3 +2139,23 @@ rules:
     - private transport
     - DCO
     - monolith
+- id: external-rule-registry-bootstrap
+  description: External inventory applicability and signed local evidence projection remain public and
+    tested.
+  documents:
+  - path: README.md
+    terms:
+    - rule-registry bootstrap
+    - NOT_APPLICABLE
+    - approval_signature
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_external_rule_registry.py
+    - installed-wheel
+    - Self-hosting registry
+  - path: docs/reports/greenfield/KIT-GF-RULE-REGISTRY-BOOTSTRAP-external-inventory-2026-10-13.md
+    terms:
+    - NOT_APPLICABLE
+    - BLOCKED
+    - signature
+    - External VERIFIED_FIXED

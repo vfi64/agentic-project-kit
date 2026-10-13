@@ -60,9 +60,21 @@ def _followup_for_row(row: dict[str, Any]) -> dict[str, Any] | None:
 
 def build_rule_registry_report(root: Path | str = ".") -> dict[str, Any]:
     base = Path(root)
-    inventory = _load_yaml(base / INVENTORY_PATH)
+    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+    if is_external_manifest_workspace(base):
+        from agentic_project_kit.external_rule_registry import check_external_inventory
+        external_result = check_external_inventory(base)
+        if external_result.get("reason") != "hand-reviewed-registry":
+            return external_result
+    try:
+        inventory = _load_yaml(base / INVENTORY_PATH)
+    except (OSError, ValueError, yaml.YAMLError) as exc:
+        return {"schema_version": 1, "status": "fail", "result_status": "BLOCKED", "reason": str(exc), "summary": {"validation_finding_count": 1, "followup_count": 0}}
     coverage_path = base / COVERAGE_PATH
-    coverage_data = _load_yaml(coverage_path) if coverage_path.exists() else {}
+    try:
+        coverage_data = _load_yaml(coverage_path) if coverage_path.exists() else {}
+    except (OSError, ValueError, yaml.YAMLError) as exc:
+        return {"schema_version": 1, "status": "fail", "result_status": "BLOCKED", "reason": str(exc), "summary": {"validation_finding_count": 1, "followup_count": 0}}
 
     coverage_by_mechanism = {
         str(entry.get("mechanism_id", "")): entry

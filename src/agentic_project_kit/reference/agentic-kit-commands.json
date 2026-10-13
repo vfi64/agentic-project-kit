@@ -10385,11 +10385,120 @@
       "when_to_use": "Run agentic-kit rnc."
     },
     {
+      "dry_run_available": true,
+      "group": "rule-registry",
+      "help": "Plan or sign a local evidence-derived external Kit inventory write.",
+      "name": "bootstrap",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "rule-registry",
+        "bootstrap"
+      ],
+      "qualified_name": "agentic-kit rule-registry bootstrap",
+      "remote_effects": [
+        "none"
+      ],
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "surface": "primitive",
+      "task_tags": [
+        "bounded",
+        "rule-registry"
+      ],
+      "when_to_use": "Plan or sign a local evidence-derived external Kit inventory write."
+    },
+    {
       "dry_run_available": false,
       "group": "rule-registry",
       "help": "",
       "name": "check",
-      "params": [],
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
       "path": [
         "rule-registry",
         "check"
@@ -10647,6 +10756,20 @@
       "help": "",
       "name": "report",
       "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
         {
           "default": false,
           "help": "Emit machine-readable JSON.",
@@ -19525,7 +19648,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "bf05db61066e",
+    "manifest_sha": "8694ff3e27ef",
     "schema_version": 1
   },
   "schema_version": 2,

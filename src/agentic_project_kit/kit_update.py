@@ -6,6 +6,7 @@ from dataclasses import dataclass
 import hashlib
 import json
 from pathlib import Path
+from agentic_project_kit.external_rule_registry import bootstrap_route
 import re
 import shlex
 import uuid
@@ -377,7 +378,7 @@ def run_kit_update(
             result.update(
                 result_status="PASS",
                 installed_version=version,
-                next_action="Finish the changed files through the normal Kit work lifecycle.",
+                next_action=f"Run {bootstrap_route(root)}, then finish changed files through the normal Kit work lifecycle.",
             )
     except (UpdateBlocked, OSError, ValueError, RuntimeError) as exc:
         result.update(
