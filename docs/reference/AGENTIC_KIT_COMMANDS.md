@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 64e1fd0929d3
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 9a7d85b527d8
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -1521,7 +1521,7 @@ Run the pre-GUI readiness gate.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `path` | `TyperOption` | --path | `False` | `.agentic/handoff_state.yaml` |  |
+| `path` | `TyperOption` | --path | `False` | `` |  |
 
 ### `agentic-kit handoff post-merge-refresh-status`
 
@@ -1543,7 +1543,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `path` | `TyperOption` | --path | `False` | `.agentic/handoff_state.yaml` |  |
+| `path` | `TyperOption` | --path | `False` | `` |  |
 | `intended_output` | `TyperOption` | --intended-output | `False` |  | Prompt path that this render will write after generation. |
 
 ### `agentic-kit handoff refresh`
@@ -1556,7 +1556,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `path` | `TyperArgument` | path | `False` | `.agentic/handoff_state.yaml` |  |
+| `path` | `TyperArgument` | path | `False` | `` |  |
 | `write` | `TyperOption` | --write | `False` | `False` | Write refreshed safe_state to YAML. |
 
 ### `agentic-kit handoff show`
@@ -1569,7 +1569,7 @@ _No parameters._
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `path` | `TyperOption` | --path | `False` | `.agentic/handoff_state.yaml` |  |
+| `path` | `TyperOption` | --path | `False` | `` |  |
 
 ### `agentic-kit init`
 

@@ -175,6 +175,12 @@ jobs:
         if: steps.runtime-policy.outputs.gate-mode == 'full'
         run: ruff check .
 
+      - name: Fetch pinned historical wheel fixture
+        if: steps.runtime-policy.outputs.gate-mode == 'full'
+        run: |
+          git fetch --no-tags --depth=1 origin refs/tags/v1.0.24:refs/tags/v1.0.24
+          test "$(git rev-parse 'v1.0.24^{commit}')" = "3ba42bacb3be96d0a344087b8464bd21f12b9de7"
+
       - name: Tests
         if: steps.runtime-policy.outputs.gate-mode == 'full'
         run: python -m pytest -q -n 4 --durations=20
@@ -284,6 +290,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
+
+      - name: Fetch pinned historical wheel fixture
+        run: |
+          git fetch --no-tags --depth=1 origin refs/tags/v1.0.24:refs/tags/v1.0.24
+          test "$(git rev-parse 'v1.0.24^{commit}')" = "3ba42bacb3be96d0a344087b8464bd21f12b9de7"
 
       - name: Pytest parallel shadow
         shell: bash

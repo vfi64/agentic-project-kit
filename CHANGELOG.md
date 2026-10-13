@@ -1,5 +1,11 @@
 ## Unreleased
 
+- Verify external lifecycle bootstrap without manual metadata repair (KIT-GF-001).
+- Resolve one canonical workspace handoff authority and classify legitimate no-previous-handoff state without tracebacks (KIT-GF-003).
+- Verify a fresh external workspace starts its first work branch without predecessor-state blockers (KIT-GF-005).
+- Discover external workspace repair evidence through workspace paths and enforce repeated-failure diagnosis (KIT-GF-013).
+- Verify contract-first Planner-Kit-Executor planning and actual read-only execution in an installed-wheel external workspace (KIT-GF-016).
+
 - Add deterministic external finding status and retest contracts plus a separately signed completed-release evidence archive with governed PR and handoff closeout (KIT-GF-066).
 
 - Add deterministic external rule-registry applicability and signed evidence-derived bootstrap without Kit-repository tests or invented project-rule semantics (KIT-GF-RULE-REGISTRY-BOOTSTRAP).

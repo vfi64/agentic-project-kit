@@ -59,13 +59,15 @@ def test_workflow_guard_skips_self_hosting_rule_checks_for_external_manifest_wor
     manifest.parent.mkdir(parents=True)
     manifest.write_text(
         """
-schema_version: 2
+kit_schema_version: 2
 project:
   name: external-target
   type: python
-profiles: []
-transfer:
-  mode: repo
+profile: python-default
+hygiene:
+  doc_lifecycle: warn
+  review_budgets:
+    governance: 180
 """.lstrip(),
         encoding="utf-8",
     )

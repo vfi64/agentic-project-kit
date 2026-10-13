@@ -4652,7 +4652,7 @@
         "lifecycle_rank": null,
         "params": [
           {
-            "default": ".agentic/handoff_state.yaml",
+            "default": "",
             "help": "",
             "name": "path",
             "opts": [
@@ -4686,7 +4686,7 @@
         "lifecycle_rank": null,
         "params": [
           {
-            "default": ".agentic/handoff_state.yaml",
+            "default": "",
             "help": "",
             "name": "path",
             "opts": [
@@ -4717,7 +4717,7 @@
         "lifecycle_rank": null,
         "params": [
           {
-            "default": ".agentic/handoff_state.yaml",
+            "default": "",
             "help": "",
             "name": "path",
             "opts": [
@@ -4748,7 +4748,7 @@
         "lifecycle_rank": null,
         "params": [
           {
-            "default": ".agentic/handoff_state.yaml",
+            "default": "",
             "help": "",
             "name": "path",
             "opts": [
@@ -12444,13 +12444,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "64e1fd0929d3",
+    "manifest_sha": "9a7d85b527d8",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.24",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.24",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "64e1fd0929d3",
+    "reproduced_manifest_sha": "9a7d85b527d8",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 174,

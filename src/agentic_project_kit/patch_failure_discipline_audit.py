@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from pathlib import Path
 import re
+from agentic_project_kit.workspace import load_workspace
 
 
 PATCH_FAILURE_PATTERNS: tuple[str, ...] = (
@@ -113,12 +114,21 @@ def _group_for_path(path: Path, root: Path) -> str:
 
 
 def _discover_logs(root: Path, *, include_tmp: bool) -> tuple[Path, ...]:
-    globs = list(DEFAULT_SCAN_GLOBS)
+    workspace = load_workspace(root, suppress_legacy_profile_warning=True)
+    globs = [
+        (workspace.command_run_file(""), "*.md"),
+        (workspace.command_run_file(""), "*.txt"),
+        (workspace.command_run_file(""), "*.json"),
+    ]
     if include_tmp:
-        globs.extend(TMP_SCAN_GLOBS)
+        globs += [
+            (workspace.tmp(), "*.log"),
+            (workspace.tmp(), "*.txt"),
+            (workspace.tmp(), "*.json"),
+        ]
     paths: list[Path] = []
-    for pattern in globs:
-        for path in root.glob(pattern):
+    for folder, pattern in globs:
+        for path in folder.rglob(pattern):
             if path.is_file() and path not in paths:
                 paths.append(path)
     return tuple(sorted(paths))
@@ -206,7 +216,9 @@ def audit_patch_failure_discipline(
     for path in _discover_logs(root, include_tmp=include_tmp):
         signals.extend(_signals_for_file(path, root))
 
-    signal_tuple = tuple(sorted(signals, key=lambda item: (item.group, item.mtime_ns, item.path, item.kind)))
+    signal_tuple = tuple(
+        sorted(signals, key=lambda item: (item.group, item.mtime_ns, item.path, item.kind))
+    )
     return PatchFailureDisciplineResult(
         root=root.as_posix(),
         signals=signal_tuple,

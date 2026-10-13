@@ -7110,7 +7110,7 @@
       "name": "check",
       "params": [
         {
-          "default": ".agentic/handoff_state.yaml",
+          "default": "",
           "help": "",
           "is_flag": false,
           "metavar": null,
@@ -7171,7 +7171,7 @@
       "name": "prompt",
       "params": [
         {
-          "default": ".agentic/handoff_state.yaml",
+          "default": "",
           "help": "",
           "is_flag": false,
           "metavar": null,
@@ -7223,7 +7223,7 @@
       "name": "refresh",
       "params": [
         {
-          "default": ".agentic/handoff_state.yaml",
+          "default": "",
           "help": "",
           "is_flag": false,
           "metavar": null,
@@ -7275,7 +7275,7 @@
       "name": "show",
       "params": [
         {
-          "default": ".agentic/handoff_state.yaml",
+          "default": "",
           "help": "",
           "is_flag": false,
           "metavar": null,
@@ -19780,7 +19780,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "64e1fd0929d3",
+    "manifest_sha": "9a7d85b527d8",
     "schema_version": 1
   },
   "schema_version": 2,

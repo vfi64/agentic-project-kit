@@ -1643,3 +1643,18 @@ documents:
   - path: docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-005-first-work-start-retest-2026-10-13.md
+    class: evidence/log
+    owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-001-lifecycle-bootstrap-retest-2026-10-13.md
+    class: evidence/log
+    owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-013-workspace-repair-escalation-2026-10-13.md
+    class: evidence/log
+    owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-016-contract-first-executor-retest-2026-10-13.md
+    class: evidence/log
+    owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-003-canonical-handoff-applicability-2026-10-13.md
+    class: evidence/log
+    owner: maintainers
