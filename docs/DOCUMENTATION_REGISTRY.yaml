@@ -1673,3 +1673,11 @@ documents:
   - path: docs/reports/release/release-run-1.0.25.json
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/COMMAND_USAGE_AUDIT_20261015.md
+    class: evidence/log
+    owner: maintainers
+    notes: Static, test-trace, offline-simulation, and repository-history audit of which commands the 34 orchestrators actually use, with findings and follow-up proposals for decomplexification.
+  - path: docs/reports/COMMAND_USAGE_AUDIT_20261015.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable appendix for the 2026-10-15 Command Usage Audit, including per-command usage per source, tiers, simulation results, and commit-signature statistics.
