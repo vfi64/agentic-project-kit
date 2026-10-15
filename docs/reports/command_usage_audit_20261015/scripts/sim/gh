@@ -1,0 +1,267 @@
+#!/usr/bin/env python3
+"""Minimal fake GitHub CLI for offline Kit simulation.
+
+State lives in $FAKE_GH_DB (JSON). The remote is a local bare repo ($FAKE_GH_ORIGIN).
+Supports: auth status, repo view, pr create/view/list/status/checks/merge/close/ready,
+run list/view/watch/rerun, workflow run, release view/list, api (minimal).
+Every call is appended to $FAKE_GH_LOG.
+"""
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import time
+from datetime import datetime, timezone
+
+DB = os.environ["FAKE_GH_DB"]
+ORIGIN = os.environ["FAKE_GH_ORIGIN"]
+LOG = os.environ.get("FAKE_GH_LOG")
+REPO = os.environ.get("FAKE_GH_REPO", "sim/kit-sim")
+argv = sys.argv[1:]
+if LOG:
+    with open(LOG, "a") as fh:
+        fh.write(json.dumps({"t": time.time(), "argv": argv, "parent": os.environ.get("KIT_TRACE_PARENT", "")}) + "\n")
+
+
+def load():
+    try:
+        return json.load(open(DB))
+    except Exception:
+        return {"next": 1, "prs": {}}
+
+
+def save(d):
+    json.dump(d, open(DB, "w"), indent=1)
+
+
+def now():
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def opt(name, default=None):
+    if name in argv:
+        i = argv.index(name)
+        return argv[i + 1] if i + 1 < len(argv) else default
+    for a in argv:
+        if a.startswith(name + "="):
+            return a.split("=", 1)[1]
+    return default
+
+
+def git(*a, cwd=None):
+    return subprocess.run(["git", *a], cwd=cwd, capture_output=True, text=True)
+
+
+def rev(ref):
+    r = git("--git-dir", ORIGIN, "rev-parse", ref)
+    return r.stdout.strip() if r.returncode == 0 else ""
+
+
+def emit(obj):
+    fields = opt("--json")
+    if fields and isinstance(obj, dict):
+        obj = {k: obj.get(k) for k in fields.split(",")}
+    elif fields and isinstance(obj, list):
+        obj = [{k: o.get(k) for k in fields.split(",")} for o in obj]
+    text = json.dumps(obj)
+    jq = opt("--jq") or opt("-q")
+    if jq:
+        r = subprocess.run(["jq", "-r", jq], input=text, capture_output=True, text=True)
+        sys.stdout.write(r.stdout)
+        sys.exit(r.returncode)
+    print(text)
+
+
+def pr_public(p):
+    p = dict(p)
+    if p["state"] == "OPEN":
+        p["headRefOid"] = rev("refs/heads/" + p["headRefName"]) or p.get("headRefOid", "")
+    p["statusCheckRollup"] = [{"__typename": "CheckRun", "name": "ci", "status": "COMPLETED", "conclusion": "SUCCESS",
+                               "workflowName": "CI"}]
+    p.setdefault("mergeable", "MERGEABLE")
+    p["mergeStateStatus"] = "CLEAN" if p["state"] == "OPEN" else "UNKNOWN"
+    p["isDraft"] = False
+    p["url"] = f"https://github.com/{REPO}/pull/{p['number']}"
+    p["labels"] = []
+    p["author"] = {"login": "sim"}
+    p["mergeCommit"] = {"oid": p["mergeCommitOid"]} if p.get("mergeCommitOid") else None
+    return p
+
+
+def find_pr(d, ident):
+    if ident is None:
+        branch = git("branch", "--show-current").stdout.strip()
+        ident = branch
+    if str(ident).lstrip("#").isdigit():
+        return d["prs"].get(str(ident).lstrip("#"))
+    cands = [p for p in d["prs"].values() if p["headRefName"] == ident]
+    return cands[-1] if cands else None
+
+
+def positional(after):
+    rest = argv[after:]
+    skip = False
+    for a in rest:
+        if skip:
+            skip = False
+            continue
+        if a.startswith("-"):
+            skip = "=" not in a and a not in ("--squash", "--merge", "--rebase", "--delete-branch", "--auto", "--admin", "--exit-status", "--draft", "--fill", "--web", "--failed", "--log-failed", "--watch", "--required", "-d")
+            continue
+        return a
+    return None
+
+
+d = load()
+cmd = argv[:2]
+if argv[:2] == ["auth", "status"]:
+    print("Logged in to github.com as sim (fake)", file=sys.stderr)
+    sys.exit(0)
+if argv[:2] == ["repo", "view"]:
+    emit({"nameWithOwner": REPO, "name": REPO.split("/")[1], "visibility": "PRIVATE", "isPrivate": True,
+          "defaultBranchRef": {"name": "main"}, "url": f"https://github.com/{REPO}"})
+    sys.exit(0)
+if argv[0] == "pr":
+    sub = argv[1] if len(argv) > 1 else ""
+    if sub == "create":
+        head = opt("--head") or git("branch", "--show-current").stdout.strip()
+        base = opt("--base", "main")
+        if not rev("refs/heads/" + head):
+            print(f"pull request create failed: head branch {head} not pushed", file=sys.stderr)
+            sys.exit(1)
+        for p in d["prs"].values():
+            if p["headRefName"] == head and p["state"] == "OPEN":
+                print(f"a pull request for branch \"{head}\" already exists:\nhttps://github.com/{REPO}/pull/{p['number']}", file=sys.stderr)
+                sys.exit(1)
+        n = d["next"]
+        d["next"] += 1
+        d["prs"][str(n)] = {"number": n, "title": opt("--title", head), "body": opt("--body", ""), "state": "OPEN",
+                            "headRefName": head, "baseRefName": base, "headRefOid": rev("refs/heads/" + head),
+                            "mergedAt": None, "createdAt": now()}
+        save(d)
+        print(f"https://github.com/{REPO}/pull/{n}")
+        sys.exit(0)
+    if sub in ("view", "checks", "merge", "close", "ready", "edit", "comment"):
+        p = find_pr(d, positional(2))
+        if p is None:
+            print("no pull requests found", file=sys.stderr)
+            sys.exit(1)
+        if sub == "view":
+            emit(pr_public(p))
+            sys.exit(0)
+        if sub == "checks":
+            if opt("--json"):
+                emit([{"name": "ci", "state": "SUCCESS", "bucket": "pass", "workflow": "CI", "link": ""}])
+            else:
+                print("ci\tpass\t1m\thttps://example.invalid")
+            sys.exit(0)
+        if sub == "merge":
+            if p["state"] != "OPEN":
+                print("pull request is not open", file=sys.stderr)
+                sys.exit(1)
+            expected = opt("--match-head-commit")
+            head_oid = rev("refs/heads/" + p["headRefName"])
+            if expected and expected != head_oid:
+                print("head commit mismatch", file=sys.stderr)
+                sys.exit(1)
+            with tempfile.TemporaryDirectory() as tmp:
+                git("clone", "-q", ORIGIN, tmp)
+                git("checkout", "-q", p["baseRefName"], cwd=tmp)
+                r = git("merge", "--squash", "origin/" + p["headRefName"], cwd=tmp)
+                if r.returncode != 0:
+                    print(r.stderr, file=sys.stderr)
+                    sys.exit(1)
+                git("commit", "-q", "--allow-empty", "-m", f"{p['title']} (#{p['number']})", cwd=tmp)
+                r = git("push", "-q", "origin", p["baseRefName"], cwd=tmp)
+                if r.returncode != 0:
+                    print(r.stderr, file=sys.stderr)
+                    sys.exit(1)
+                p["mergeCommitOid"] = git("rev-parse", "HEAD", cwd=tmp).stdout.strip()
+            p["state"] = "MERGED"
+            p["mergedAt"] = now()
+            if "--delete-branch" in argv or "-d" in argv:
+                git("--git-dir", ORIGIN, "update-ref", "-d", "refs/heads/" + p["headRefName"])
+                # real gh: when the merged head is checked out locally, switch to base, pull, delete local branch
+                if git("branch", "--show-current").stdout.strip() == p["headRefName"]:
+                    git("checkout", "-q", p["baseRefName"])
+                    git("pull", "-q", "--ff-only")
+                git("branch", "-D", p["headRefName"])
+            save(d)
+            print(f"Squashed and merged pull request #{p['number']}")
+            sys.exit(0)
+        if sub == "close":
+            p["state"] = "CLOSED"
+            save(d)
+            sys.exit(0)
+        sys.exit(0)
+    if sub == "list":
+        st = (opt("--state", "open") or "open").upper()
+        head = opt("--head")
+        out = [pr_public(p) for p in d["prs"].values()
+               if (st == "ALL" or p["state"] == st) and (head is None or p["headRefName"] == head)]
+        emit(out)
+        sys.exit(0)
+    if sub == "status":
+        emit({"currentBranch": None, "createdBy": [], "needsReview": []})
+        sys.exit(0)
+if argv[0] == "run":
+    sub = argv[1] if len(argv) > 1 else ""
+    run = {"databaseId": 1000 + d["next"], "createdAt": now(), "event": "push", "headSha": rev("refs/heads/main"),
+           "status": "completed", "conclusion": "success", "name": "CI", "workflowName": "CI", "headBranch": "main",
+           "url": f"https://github.com/{REPO}/actions/runs/1"}
+    runs = d.get("runs", [])
+    if sub == "list":
+        if opt("--event") == "workflow_dispatch" or (opt("--workflow") and runs):
+            emit([r for r in runs if (opt("--workflow") in (None, r["workflow"])) and opt("--event") in (None, r["event"])])
+        else:
+            emit([run])
+    elif sub == "view":
+        if opt("--json"):
+            emit(run)
+        else:
+            print("completed success CI")
+    elif sub in ("watch", "rerun"):
+        print("Run CI completed with success")
+    sys.exit(0)
+if argv[0] == "workflow":
+    if argv[1:2] == ["run"]:
+        wf = argv[2]
+        ref = opt("--ref", "main")
+        sha = rev("refs/tags/" + ref + "^{commit}") or rev("refs/heads/" + ref)
+        time.sleep(1.1)
+        d.setdefault("runs", []).append({"databaseId": 5000 + len(d.get("runs", [])), "createdAt": now(), "event": "workflow_dispatch",
+                                         "headSha": sha, "workflow": wf, "status": "completed", "conclusion": "success"})
+        save(d)
+    print("Created workflow_dispatch event (fake)")
+    sys.exit(0)
+if argv[0] == "release":
+    rel = d.setdefault("releases", {})
+    sub = argv[1] if len(argv) > 1 else ""
+    tag = positional(2)
+    if sub == "create":
+        target = opt("--target", "main")
+        oid = rev("refs/tags/" + tag) or rev("refs/heads/" + target) or target
+        if not rev("refs/tags/" + tag):
+            git("--git-dir", ORIGIN, "update-ref", "refs/tags/" + tag, oid)
+        rel[tag] = {"tagName": tag, "name": opt("--title", tag), "isDraft": False, "isPrerelease": False,
+                    "publishedAt": now(), "targetCommitish": oid, "url": f"https://github.com/{REPO}/releases/tag/{tag}",
+                    "body": opt("--notes", "")}
+        save(d)
+        print(rel[tag]["url"])
+        sys.exit(0)
+    if sub == "list":
+        emit(list(rel.values()))
+        sys.exit(0)
+    if sub == "view" and tag in rel:
+        emit(rel[tag])
+        sys.exit(0)
+    if sub in ("edit", "upload"):
+        sys.exit(0)
+    print("release not found", file=sys.stderr)
+    sys.exit(1)
+if argv[0] == "api":
+    print("{}")
+    sys.exit(0)
+print(f"fake gh: unsupported {argv}", file=sys.stderr)
+sys.exit(1)
