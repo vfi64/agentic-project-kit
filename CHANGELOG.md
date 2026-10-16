@@ -1,5 +1,9 @@
 ## Unreleased
 
+- Derive the handoff-state release block from post-release DOI closeout evidence during the administrative handoff refresh, so successor chat handoffs no longer report version 0.4.13 (self-hosting audit HD-08).
+
+- Print the text summary of `agentic-kit release run` without `--json` instead of raising `KeyError: 'returncode'` on blocked or awaiting runs (command usage audit F1).
+
 - Allow explicit external evidence-path declarations in the legacy-reference audit while preserving active-script blockers and undeclared behavior (KIT-GF-068).
 
 - Honor the publish orchestration verdict in release-run C1/C2, including external SKIP checks and C1 resume with recorded B4 consent (KIT-GF-069).

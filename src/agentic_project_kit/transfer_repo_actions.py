@@ -16,6 +16,7 @@ from agentic_project_kit.dpa_current_handoff_lifecycle import (
     evaluate_current_handoff_lifecycle,
     render_current_handoff_lifecycle_result,
 )
+from agentic_project_kit.handoff_release_facts import sync_release_section
 from agentic_project_kit.safe_push import SafePushResult
 from agentic_project_kit.safe_push import safe_push
 from agentic_project_kit.transfer_operation_monitor import MonitorDecision
@@ -2135,6 +2136,7 @@ def _refresh_operational_handoff_docs(after_pr: int, *, ws: Workspace | None = N
                     updated,
                 )
                 updated = re.sub(r"main at [0-9a-f]{7,40}", f"main at {short}", updated)
+                updated = sync_release_section(updated, Path("."))
             if file_path == workspace.operational_handoff_state_path():
                 updated = _replace_yaml_mapping_section(
                     updated,

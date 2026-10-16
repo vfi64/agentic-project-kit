@@ -199,3 +199,33 @@ def test_uncertain_dispatch_response_never_causes_a_second_dispatch(tmp_path):
     resumed = ReleaseRun(ReleaseRunOptions(version="1.2.3", root=tmp_path), runner=runner)
     assert resumed._step_c3()["result_status"] == "PASS"
     assert sum(c[:3] == ["gh", "workflow", "run"] for c in runner.calls) == 1
+
+
+def test_release_run_cli_text_output_for_blocked_run_does_not_crash(monkeypatch):
+    """F1 regression: without --json a BLOCKED run used to raise KeyError: 'returncode'."""
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+    from agentic_project_kit.cli_commands import human_workflows
+
+    monkeypatch.setattr(human_workflows, "run_release",
+                        lambda options: {"result_status": "BLOCKED", "blockers": ["release-ready"], "next_action": "Fix A2."})
+    result = CliRunner().invoke(app, ["release", "run", "--version", "1.2.3"])
+    assert result.exit_code == 2
+    assert result.exception is None or isinstance(result.exception, SystemExit)
+    assert "STATE=BLOCKED" in result.output
+    assert "RETURNCODE=2" in result.output
+    assert "BLOCKERS=release-ready" in result.output
+    assert "NEXT=Fix A2." in result.output
+
+
+def test_release_run_cli_text_output_for_awaiting_approval(monkeypatch):
+    from typer.testing import CliRunner
+    from agentic_project_kit.cli import app
+    from agentic_project_kit.cli_commands import human_workflows
+
+    monkeypatch.setattr(human_workflows, "run_release",
+                        lambda options: {"result_status": "AWAITING_APPROVAL", "next_action": "approve B4"})
+    result = CliRunner().invoke(app, ["release", "run", "--version", "1.2.3"])
+    assert result.exit_code == 0
+    assert "STATE=AWAITING_APPROVAL" in result.output
+    assert "RETURNCODE=0" in result.output
