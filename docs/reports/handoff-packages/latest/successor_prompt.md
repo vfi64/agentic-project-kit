@@ -39,8 +39,8 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `feat/local-invocation-ledger-20261016`
-- head_matches_origin_main: `False`
+- branch: `docs/post-pr2524-handoff-refresh`
+- head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
@@ -439,14 +439,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "feat/local-invocation-ledger-20261016",
+    "branch": "docs/post-pr2524-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "ef8a7f66df5fe6d45b6becd32bd3f7799d98d4c3",
-    "head_matches_origin_main": false,
-    "head_short": "ef8a7f66",
+    "head": "4cea8419b85b7a7a6395d2c1956b660e0413131d",
+    "head_matches_origin_main": true,
+    "head_short": "4cea8419",
     "local_path": "cd /path/to/",
-    "origin_main": "2662db925bff135ee2b142145e2bb9d836bab303",
-    "origin_main_short": "2662db92",
+    "origin_main": "4cea8419b85b7a7a6395d2c1956b660e0413131d",
+    "origin_main_short": "4cea8419",
     "worktree_clean": false
   }
 }

@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 165b5fe5cc5aeb2c0d7cc75255cc4c265883bf98fd1a66cbd9b9af32fa836516
 - docs/reference/agentic-kit-commands.json: 6f7765a8565f731468127be89532a26034987191e335e2aee2747648a85427f8
-## Operational documentation refresh state after PR #2522
+## Operational documentation refresh state after PR #2524
 
-Current administrative handoff refresh state is `0902ccf9` (`Retire the unrestricted work-order lanes (#2522)`). Continue next only after this post-PR2522 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `4cea8419` (`Add a local invocation ledger for Kit commands (#2524)`). Continue next only after this post-PR2524 refresh is committed and merged; the next substantive slice must be created from fresh main.
