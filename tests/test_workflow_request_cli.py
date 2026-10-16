@@ -443,20 +443,63 @@ def test_workflow_run_named_item_does_not_replace_current_work_during_bounded_st
     assert calls[0][2]["AGENTIC_WORKFLOW_FILE"].endswith("tmp/agent-evidence/run-pattern-advisor-readonly-catalog-mvp.yaml")
     assert current_work.read_text(encoding="utf-8") == original
 
+def _branch_delete_result(branch: str, *, remote: bool, ok: bool):
+    from agentic_project_kit.transfer_repo_actions import RepoActionResult
+
+    command = ["git", "push", "origin", "--delete", branch] if remote else ["git", "branch", "-D", branch]
+    return RepoActionResult(
+        action="branch-delete",
+        result_status="PASS" if ok else "FAIL",
+        returncode=0 if ok else 1,
+        command=command,
+        stdout="",
+        stderr="" if ok else "remote delete failed",
+        next_action="",
+    )
+
+
 def test_cleanup_stale_temp_branches_fails_on_remote_delete_error(tmp_path: Path, monkeypatch) -> None:
     import agentic_project_kit.cli_commands.workflow as workflow_module
 
     _write_workflow_files(tmp_path, workflow_state="IDLE", request_state="READY")
     monkeypatch.setattr(workflow_module, "_is_git_repository", lambda root: True)
-    monkeypatch.setattr(workflow_module, "_local_temp_branches", lambda root: [])
+    monkeypatch.setattr(workflow_module, "_local_temp_branches", lambda root: ["temp/workflow-evidence-x"])
     monkeypatch.setattr(workflow_module, "_remote_temp_branches", lambda root: ["temp/workflow-evidence-x"])
+    calls: list[tuple[str, bool]] = []
 
-    def fake_run_git(root: Path, args: list[str]):
-        return subprocess.CompletedProcess(["git", *args], 1, "", "remote delete failed")
+    def fake_branch_delete(root: Path, branch: str, *, remote: bool):
+        calls.append((branch, remote))
+        return _branch_delete_result(branch, remote=remote, ok=not remote)
 
-    monkeypatch.setattr(workflow_module, "_run_git", fake_run_git)
+    monkeypatch.setattr(workflow_module, "_kit_branch_delete", fake_branch_delete)
 
     result = runner.invoke(app, ["workflow", "cleanup", "--root", str(tmp_path)])
 
     assert result.exit_code != 0
     assert "remote delete failed" in result.output
+    assert calls == [("temp/workflow-evidence-x", False), ("temp/workflow-evidence-x", True)]
+
+
+def test_cleanup_stale_temp_branches_leaves_remote_only_branches_of_other_checkouts(
+    tmp_path: Path, monkeypatch
+) -> None:
+    import agentic_project_kit.cli_commands.workflow as workflow_module
+
+    _write_workflow_files(tmp_path, workflow_state="IDLE", request_state="READY")
+    monkeypatch.setattr(workflow_module, "_is_git_repository", lambda root: True)
+    monkeypatch.setattr(workflow_module, "_local_temp_branches", lambda root: [])
+    monkeypatch.setattr(workflow_module, "_remote_temp_branches", lambda root: ["temp/workflow-evidence-other"])
+    calls: list[tuple[str, bool]] = []
+
+    def fake_branch_delete(root: Path, branch: str, *, remote: bool):
+        calls.append((branch, remote))
+        return _branch_delete_result(branch, remote=remote, ok=True)
+
+    monkeypatch.setattr(workflow_module, "_kit_branch_delete", fake_branch_delete)
+
+    result = runner.invoke(app, ["workflow", "cleanup", "--root", str(tmp_path)])
+
+    assert result.exit_code == 0
+    assert calls == []
+    assert "Left remote workflow evidence branch not created by this checkout: temp/workflow-evidence-other" in result.output
+    assert "No cleanup action available for current state." in result.output
