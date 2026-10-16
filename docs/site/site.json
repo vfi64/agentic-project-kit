@@ -222,7 +222,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "commands=266",
+            "detail": "commands=267",
             "evidence_type": "generated-artifact",
             "status": "verified"
           }
@@ -274,8 +274,8 @@
     }
   },
   "command_catalog": {
-    "command_count": 266,
-    "diagnostic_count": 126,
+    "command_count": 267,
+    "diagnostic_count": 127,
     "entries": [
       {
         "diagnostic_priority": "reference_lookup",
@@ -1890,6 +1890,33 @@
             "name": "owner",
             "opts": [
               "--owner"
+            ],
+            "required": false
+          },
+          {
+            "default": "",
+            "help": "Optional registry status: active, superseded or archived.",
+            "name": "status",
+            "opts": [
+              "--status"
+            ],
+            "required": false
+          },
+          {
+            "default": "",
+            "help": "Optional review policy: required.",
+            "name": "review_policy",
+            "opts": [
+              "--review-policy"
+            ],
+            "required": false
+          },
+          {
+            "default": "",
+            "help": "Optional one-line summary.",
+            "name": "summary",
+            "opts": [
+              "--summary"
             ],
             "required": false
           },
@@ -5123,6 +5150,46 @@
         "safety": "BOUNDED",
         "surface": "orchestrator",
         "when_to_use": "Plan a released Kit update; signed execution installs locally, updates CI pins and checks the workspace."
+      },
+      {
+        "diagnostic_priority": "advanced_diagnostic",
+        "dry_run_available": false,
+        "group": "ledger",
+        "help": "Summarise the local invocation ledger: counts, nesting, failures and work cycles (read-only).",
+        "lifecycle_rank": null,
+        "params": [
+          {
+            "default": "PosixPath('.')",
+            "help": "Repository root or a path inside it.",
+            "name": "root",
+            "opts": [
+              "--root"
+            ],
+            "required": false
+          },
+          {
+            "default": 0,
+            "help": "Only records of the last N days; 0 reads all.",
+            "name": "days",
+            "opts": [
+              "--days"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Print machine-readable JSON.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          }
+        ],
+        "qualified_name": "agentic-kit ledger report",
+        "safety": "READ_ONLY",
+        "surface": "diagnostic",
+        "when_to_use": "Summarise the local invocation ledger: counts, nesting, failures and work cycles (read-only)."
       },
       {
         "diagnostic_priority": "advanced_diagnostic",
@@ -12468,6 +12535,7 @@
       "handoff": 5,
       "instruction": 1,
       "kit": 2,
+      "ledger": 1,
       "onboarding": 1,
       "pass-already-done": 2,
       "patterns": 2,
@@ -12492,11 +12560,11 @@
     "safety_counts": {
       "BOUNDED": 175,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 82
+      "READ_ONLY": 83
     },
     "schema_version": 1,
     "surface_counts": {
-      "diagnostic": 126,
+      "diagnostic": 127,
       "orchestrator": 34,
       "primitive": 106
     }
@@ -12578,27 +12646,27 @@
   "kind": "agentic_project_kit_generated_site",
   "metadata": {
     "build_commit": "docs-pages-fallback",
-    "command_count": 266,
-    "command_group_count": 38,
+    "command_count": 267,
+    "command_group_count": 39,
     "concept_doi": "10.5281/zenodo.20101359",
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "2adf44031fbf",
+    "manifest_sha": "232091ac7240",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.25",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.25",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "2adf44031fbf",
+    "reproduced_manifest_sha": "232091ac7240",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 175,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 82
+      "READ_ONLY": 83
     },
     "surface_counts": {
-      "diagnostic": 126,
+      "diagnostic": 127,
       "orchestrator": 34,
       "primitive": 106
     },

@@ -728,12 +728,22 @@ def check_documentation_registry(project_root: Path) -> list[str]:
     )
 
 
+# Values that registered entries already use; `register` accepts them so a new document
+# never needs a hand edit of the registry (for example docs/workflow runbooks, which must be
+# registered as active operational/automation documents).
+REGISTER_STATUS_VALUES = frozenset({"active", "superseded", "archived"})
+REGISTER_REVIEW_POLICY_VALUES = frozenset({"required"})
+
+
 def register_documentation_registry_entry(
     project_root: Path,
     *,
     document_path: str,
     document_class: str,
     owner: str = "maintainers",
+    status: str = "",
+    review_policy: str = "",
+    summary: str = "",
 ) -> dict[str, Any]:
     normalized_path = document_path.strip().lstrip("./")
     normalized_class = document_class.strip()
@@ -758,6 +768,23 @@ def register_documentation_registry_entry(
             "result_status": "FAIL",
             "code": "FAIL_INVALID_REGISTRY",
             "findings": existing_findings,
+        }
+
+    normalized_status = status.strip()
+    if normalized_status and normalized_status not in REGISTER_STATUS_VALUES:
+        return {
+            **base_payload,
+            "result_status": "FAIL",
+            "code": "FAIL_UNKNOWN_STATUS",
+            "allowed_statuses": sorted(REGISTER_STATUS_VALUES),
+        }
+    normalized_review_policy = review_policy.strip()
+    if normalized_review_policy and normalized_review_policy not in REGISTER_REVIEW_POLICY_VALUES:
+        return {
+            **base_payload,
+            "result_status": "FAIL",
+            "code": "FAIL_UNKNOWN_REVIEW_POLICY",
+            "allowed_review_policies": sorted(REGISTER_REVIEW_POLICY_VALUES),
         }
 
     allowed_classes = set(DOCUMENT_CLASSES)
@@ -799,13 +826,18 @@ def register_documentation_registry_entry(
 
     candidate_registry = dict(registry)
     candidate_documents = list(documents)
-    candidate_documents.append(
-        {
-            "path": normalized_path,
-            "class": normalized_class,
-            "owner": normalized_owner,
-        }
-    )
+    entry: dict[str, Any] = {
+        "path": normalized_path,
+        "class": normalized_class,
+        "owner": normalized_owner,
+    }
+    if normalized_status:
+        entry["status"] = normalized_status
+    if normalized_review_policy:
+        entry["review_policy"] = normalized_review_policy
+    if summary.strip():
+        entry["summary"] = " ".join(summary.split())
+    candidate_documents.append(entry)
     candidate_registry["documents"] = candidate_documents
     candidate_findings = documentation_registry_findings_for_data(
         project_root,
@@ -839,6 +871,7 @@ def register_documentation_registry_entry(
         path=normalized_path,
         document_class=normalized_class,
         owner=normalized_owner,
+        extra={key: value for key, value in entry.items() if key not in {"path", "class", "owner"}},
     )
     scope_decision_written = False
     try:
@@ -888,6 +921,7 @@ def append_documentation_registry_entry_text(
     path: str,
     document_class: str,
     owner: str,
+    extra: dict[str, str] | None = None,
 ) -> str:
     """Append one document entry without reserializing the full YAML registry."""
     if "\ndocuments:\n" not in f"\n{registry_text}":
@@ -907,6 +941,7 @@ def append_documentation_registry_entry_text(
             "path": path,
             "class": document_class,
             "owner": owner,
+            **(extra or {}),
         },
         sort_keys=False,
         allow_unicode=True,

@@ -1704,3 +1704,10 @@ documents:
   - path: docs/reports/WORK_ORDER_TRUST_BOUNDARY_REVIEW_20261016.md
     class: evidence/log
     owner: maintainers
+  - path: docs/workflow/INVOCATION_LEDGER.md
+    class: operational/automation
+    owner: maintainers
+    status: active
+    review_policy: required
+    summary: 'Local invocation ledger of Kit commands: recorded fields, scope, retention
+      and the read-only ledger report.'

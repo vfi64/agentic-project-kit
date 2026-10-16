@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Add a local invocation ledger: every `agentic-kit` process start (and in-process calls an orchestrator reports) is recorded with command name, timing, return code, Kit version, branch and call-tree ids, never arguments, in the git-ignored `.agentic/tmp/invocation-ledger/`; on in the Kit repository, opt-in elsewhere, bounded retention, and a ledger failure never changes a command's result. `agentic-kit ledger report` summarises it read-only. `agentic-kit doc-registry register` gains `--status`, `--review-policy` and `--summary`, so new runbooks are registered without hand edits.
+
 - Retire the unrestricted work-order lanes: `work-order run --execute`, the next-turn.py fixed slot (`next_turn_runner`, GUI work-order run) and the `current.sh` agent command slot no longer execute code; they report `BLOCKED_RETIRED_LANE` and point to typed work orders, transfer orders and the planner executor (WOTB-04, WOTB-09). The commands are removed after a deprecation window.
 
 - Bind the freshness anchor of a transfer order to the commit it was written on: a full 40-character hash equal to `HEAD` for an uncommitted order or to the parent of the commit that last changed it, checked again after switch and pull on every `transfer remote-next` path including `transfer continue`, so the order that runs is the order that was validated (WOTB-07, WOTB-08). Orders with short anchors, or changed after anchoring, now stop as stale.

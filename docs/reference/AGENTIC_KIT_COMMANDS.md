@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 2adf44031fbf
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 232091ac7240
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `266`
+- Command count: `267`
 
 ## Commands
 
@@ -689,6 +689,9 @@ Add one reviewed document entry to the documentation registry.
 | `document_path` | `TyperOption` | --path | `True` |  | Repository-relative document path. |
 | `document_class` | `TyperOption` | --class | `True` |  | Allowed documentation registry class. |
 | `owner` | `TyperOption` | --owner | `False` | `maintainers` | Document owner recorded in the registry. |
+| `status` | `TyperOption` | --status | `False` | `` | Optional registry status: active, superseded or archived. |
+| `review_policy` | `TyperOption` | --review-policy | `False` | `` | Optional review policy: required. |
+| `summary` | `TyperOption` | --summary | `False` | `` | Optional one-line summary. |
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Project root. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
@@ -1668,6 +1671,22 @@ Plan a released Kit update; signed execution installs locally, updates CI pins a
 | `execute` | `TyperOption` | --execute | `False` | `False` | Execute the exactly signed update plan. |
 | `expected_signature` | `TyperOption` | --expected-signature | `False` | `` | Approval signature from the current dry run. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit one JSON document. |
+
+### `agentic-kit ledger report`
+
+- Safety: `READ_ONLY`
+- Surface: `diagnostic`
+- When to use: Summarise the local invocation ledger: counts, nesting, failures and work cycles (read-only).
+- Dry-run available: `False`
+- Remote effects: `none`
+
+Summarise the local invocation ledger: counts, nesting, failures and work cycles (read-only).
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root or a path inside it. |
+| `days` | `TyperOption` | --days | `False` | `0` | Only records of the last N days; 0 reads all. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit onboarding measure`
 

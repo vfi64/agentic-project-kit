@@ -2159,7 +2159,7 @@ plans:
       ledger; all four are done (2026-10-16), so local-invocation-ledger is next.
   - id: local-invocation-ledger
     order: 3
-    status: next
+    status: done
     kind: implementation
     scope: Local, opt-in-for-foreign-repositories record of Kit command invocations
       plus one read-only report diagnostic.
@@ -2175,9 +2175,16 @@ plans:
       calls and internal Kit actions stay distinguishable.
     - The root invocation ID and work branch make per-work-cycle denominators possible;
       drift classification remains a separate step.
+    evidence:
+    - src/agentic_project_kit/invocation_ledger.py
+    - docs/workflow/INVOCATION_LEDGER.md
+    - tests/test_invocation_ledger.py
+    first_observation: The first recorded doctor run in the Kit repository started
+      20 nested Kit processes, including release-publish; this is input for step 4
+      and for decomplexification, not a finding yet.
   - id: drift-and-repeated-failure-checks
     order: 4
-    status: planned
+    status: next
     kind: diagnostic_extension
     scope: Known drift classes as checks in the existing audit suite, and detection
       of repeated BLOCKED/FAIL fingerprints with finding drafts.
