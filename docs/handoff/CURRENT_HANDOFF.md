@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `4cea8419b85b7a7a6395d2c1956b660e0413131d` (`4cea8419`), after `Add a local invocation ledger for Kit commands (#2524)`.
-Last substantive work state is `4cea8419b85b7a7a6395d2c1956b660e0413131d` (`4cea8419`), after `Add a local invocation ledger for Kit commands (#2524)`.
+Current verified main/admin HEAD is `4c0b5dcbb352577dbf67f2203c82ea8f3fc72832` (`4c0b5dcb`), after `Measure known drift classes and detect repeated failures (#2526)`.
+Last substantive work state is `4c0b5dcbb352577dbf67f2203c82ea8f3fc72832` (`4c0b5dcb`), after `Measure known drift classes and detect repeated failures (#2526)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

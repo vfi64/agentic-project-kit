@@ -39,8 +39,8 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `feat/drift-and-repeated-failure-signals-20261016`
-- head_matches_origin_main: `False`
+- branch: `docs/post-pr2526-handoff-refresh`
+- head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
@@ -439,14 +439,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "feat/drift-and-repeated-failure-signals-20261016",
+    "branch": "docs/post-pr2526-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "d666111e1e72ad4683e5462b266a49c74bfb389b",
-    "head_matches_origin_main": false,
-    "head_short": "d666111e",
+    "head": "4c0b5dcbb352577dbf67f2203c82ea8f3fc72832",
+    "head_matches_origin_main": true,
+    "head_short": "4c0b5dcb",
     "local_path": "cd /path/to/",
-    "origin_main": "6bf1d61c9a74d2dce891d639484c2d443c2192db",
-    "origin_main_short": "6bf1d61c",
+    "origin_main": "4c0b5dcbb352577dbf67f2203c82ea8f3fc72832",
+    "origin_main_short": "4c0b5dcb",
     "worktree_clean": false
   }
 }
