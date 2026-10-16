@@ -1701,3 +1701,6 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Provenance, revisions and SHA-256 hashes of inputs and files of the self-hosting archive.
+  - path: docs/reports/WORK_ORDER_TRUST_BOUNDARY_REVIEW_20261016.md
+    class: evidence/log
+    owner: maintainers
