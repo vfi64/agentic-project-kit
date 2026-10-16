@@ -39,8 +39,8 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `fix/retire-unrestricted-order-lanes-20261016`
-- head_matches_origin_main: `False`
+- branch: `docs/post-pr2522-handoff-refresh`
+- head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
@@ -439,14 +439,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "fix/retire-unrestricted-order-lanes-20261016",
+    "branch": "docs/post-pr2522-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "ecb41c33ce075a8c2a25fd042773261a68479dc5",
-    "head_matches_origin_main": false,
-    "head_short": "ecb41c33",
+    "head": "0902ccf9427e6d080de189cbe9f35245c6126b59",
+    "head_matches_origin_main": true,
+    "head_short": "0902ccf9",
     "local_path": "cd /path/to/",
-    "origin_main": "b8d1f27a60eb2f77c0b5b325f0bc935c9347bce6",
-    "origin_main_short": "b8d1f27a",
+    "origin_main": "0902ccf9427e6d080de189cbe9f35245c6126b59",
+    "origin_main_short": "0902ccf9",
     "worktree_clean": false
   }
 }
