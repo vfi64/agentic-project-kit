@@ -7,6 +7,8 @@ from typing import Any
 
 import yaml
 
+from agentic_project_kit.order_paths import confined_repo_path, lexical_repo_path
+
 
 WORK_ORDERS_DIR = Path(".agentic/work_orders")
 CONSTITUTIONAL_GATES = ("pytest", "ruff check", "check-docs", "doctor")
@@ -54,9 +56,7 @@ def parse_work_order(data: dict[str, Any], path: Path | None = None) -> WorkOrde
     for fragment in FORBIDDEN_COMMAND_FRAGMENTS:
         if fragment in command:
             raise ValueError(f"work order command must not contain forbidden fragment: {fragment}")
-    log_path = str(data["log_path"])
-    if not log_path.startswith("docs/reports/terminal/"):
-        raise ValueError("work order log_path must be under docs/reports/terminal/")
+    log_path = lexical_repo_path(str(data["log_path"]), field_name="work order log_path", prefix="docs/reports/terminal/")
     return WorkOrder(
         work_order_id=str(data["id"]),
         title=str(data["title"]),
@@ -154,7 +154,7 @@ def check_work_orders(project_root: Path = Path(".")) -> list[str]:
 
 
 def _write_log(order: WorkOrder, project_root: Path, body: str) -> None:
-    log_file = project_root / order.log_path
+    log_file = confined_repo_path(project_root, order.log_path, field_name="work order log_path")
     log_file.parent.mkdir(parents=True, exist_ok=True)
     log_file.write_text(body, encoding="utf-8")
 

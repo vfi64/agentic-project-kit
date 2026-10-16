@@ -95,7 +95,12 @@ def _active_order_branches(root: Path) -> list[str]:
     return found
 
 
-def run_transfer_continue(root: Path | str = ".", branch: str | None = None) -> dict[str, Any]:
+def run_transfer_continue(
+    root: Path | str = ".",
+    branch: str | None = None,
+    *,
+    allow_unlisted: bool = False,
+) -> dict[str, Any]:
     root_path = Path(root)
     steps: list[dict[str, Any]] = []
 
@@ -173,7 +178,7 @@ def run_transfer_continue(root: Path | str = ".", branch: str | None = None) -> 
                 "chat_reply": "f",
             }
 
-    result = run_remote_next_transfer(root_path, inferred_branch)
+    result = run_remote_next_transfer(root_path, inferred_branch, allow_unlisted=allow_unlisted)
     payload = result.as_json_data()
     actions = payload.get("post_report_actions") if isinstance(payload, dict) else {}
     if not isinstance(actions, dict):

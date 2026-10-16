@@ -37,7 +37,7 @@ def test_remote_next_syncs_main_then_runs_typed_next(tmp_path, monkeypatch):
     )
 
     monkeypatch.setattr("agentic_project_kit.remote_next._run_git", fake_git)
-    monkeypatch.setattr("agentic_project_kit.remote_next.run_typed_next", lambda root: typed)
+    monkeypatch.setattr("agentic_project_kit.remote_next.run_typed_next", lambda root, **kwargs: typed)
 
     result = run_remote_next(tmp_path)
 
@@ -102,7 +102,7 @@ def test_remote_next_renders_expected_closeout_paths():
 def test_remote_next_cli_is_registered(monkeypatch):
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.remote_next.run_remote_next",
-        lambda root: SimpleNamespace(sync_status="synced", returncode=0, message="ok", typed_next=None),
+        lambda root, **kwargs: SimpleNamespace(sync_status="synced", returncode=0, message="ok", typed_next=None),
     )
 
     result = CliRunner().invoke(app, ["remote-next"])

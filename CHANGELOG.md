@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Confine every path named by a work order to the repository, refusing `..` segments and symlinks (WOTB-03, WOTB-06), and take command authority for typed and transfer orders from the command manifest: READ_ONLY Kit commands and read-only git/gh queries run, BOUNDED Kit commands, BOUNDED cockpit actions and unlisted commands need the new local `--allow-unlisted` flag, and DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters are refused however they are wrapped (WOTB-01, WOTB-02, WOTB-05). Orders that ran BOUNDED or non-Kit commands now stop with a refusal that names the flag.
+
 - Route the remote pushes, branch switches, pulls and branch deletions of the `workflow` helpers through the Kit's governed primitives; refuse evidence uploads that would carry staged changes or unpublished commits, keep remote-only evidence branches of other checkouts, and reject option-like branch names in work orders (command usage audit F4).
 
 - Derive the handoff-state release block from post-release DOI closeout evidence during the administrative handoff refresh, so successor chat handoffs no longer report version 0.4.13 (self-hosting audit HD-08).

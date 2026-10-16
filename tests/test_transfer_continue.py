@@ -24,7 +24,7 @@ def test_transfer_continue_fetches_origin_before_inferring_active_order(monkeypa
         calls.append(argv)
         return subprocess.CompletedProcess(argv, 0, "", "")
 
-    def fake_remote_next(root, branch):
+    def fake_remote_next(root, branch, **kwargs):
         class Result:
             def as_json_data(self) -> dict[str, Any]:
                 return {
@@ -129,7 +129,7 @@ def test_transfer_continue_allows_missing_handoff_state_for_external_workspace(
     monkeypatch.setattr(transfer_continue, "_current_order_is_active", lambda root: False)
     monkeypatch.setattr(transfer_continue, "_active_order_branches", lambda root: ["external-work"])
 
-    def fake_remote_next(root, branch):
+    def fake_remote_next(root, branch, **kwargs):
         class Result:
             def as_json_data(self) -> dict[str, Any]:
                 return {

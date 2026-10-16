@@ -146,7 +146,7 @@ def test_transfer_continue_blocks_without_fresh_llm_context(tmp_path, monkeypatc
 
 def test_transfer_continue_skip_llm_context_gate_reaches_continue_wrapper(tmp_path, monkeypatch):
     calls = []
-    def continue_wrapper(root, branch):
+    def continue_wrapper(root, branch, **kwargs):
         calls.append((root, branch))
         return {"returncode": 0, "result_status": "PASS"}
     monkeypatch.setattr("agentic_project_kit.cli_commands.transfer.run_transfer_continue", continue_wrapper)

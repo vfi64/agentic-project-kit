@@ -22,8 +22,9 @@ def register_remote_next_command(app: typer.Typer) -> None:
     def remote_next_command(
         project_root: Annotated[Path, typer.Option("--root")] = Path("."),
         json_output: Annotated[bool, typer.Option("--json", help="Print machine-readable JSON result.")] = False,
+        allow_unlisted: Annotated[bool, typer.Option("--allow-unlisted", help="Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.")] = False,
     ) -> None:
-        result = run_remote_next(project_root)
+        result = run_remote_next(project_root, allow_unlisted=allow_unlisted)
         if json_output:
             typer.echo(json.dumps(remote_next_result_as_json_data(result), indent=2, sort_keys=True))
         else:
@@ -35,8 +36,9 @@ def register_remote_next_command(app: typer.Typer) -> None:
     def rn_command(
         project_root: Annotated[Path, typer.Option("--root")] = Path("."),
         json_output: Annotated[bool, typer.Option("--json", help="Print machine-readable JSON result.")] = False,
+        allow_unlisted: Annotated[bool, typer.Option("--allow-unlisted", help="Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.")] = False,
     ) -> None:
-        result = run_remote_next(project_root)
+        result = run_remote_next(project_root, allow_unlisted=allow_unlisted)
         if json_output:
             typer.echo(json.dumps(remote_next_result_as_json_data(result), indent=2, sort_keys=True))
         else:

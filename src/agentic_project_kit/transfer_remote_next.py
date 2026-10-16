@@ -909,7 +909,12 @@ def _blocked_result(root: Path, exc: Exception, *, branch: str | None = None) ->
     )
 
 
-def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> TransferRemoteNextRun:
+def run_remote_next_transfer(
+    project_root: Path,
+    branch: str | None = None,
+    *,
+    allow_unlisted: bool = False,
+) -> TransferRemoteNextRun:
     root = project_root.resolve()
     try:
         cleanup = _recover_owned_report_artifacts(root)
@@ -943,7 +948,7 @@ def run_remote_next_transfer(project_root: Path, branch: str | None = None) -> T
         preflight["safe_push_target"] = publish_target_guard
         if ack_refresh is not None:
             preflight["rule_ack_refresh_before_transfer"] = ack_refresh
-        local_run = run_local_transfer(root)
+        local_run = run_local_transfer(root, allow_unlisted=allow_unlisted)
         head = _run(["git", "rev-parse", "--short", "HEAD"], root)
         result = TransferRemoteNextRun(
             branch=safe_branch,

@@ -73,7 +73,7 @@ def test_rnc_cli_uses_exit_2_for_no_closeout(tmp_path: Path) -> None:
 def test_rn_and_rnc_cli_are_registered(monkeypatch, tmp_path: Path) -> None:
     monkeypatch.setattr(
         "agentic_project_kit.cli_commands.remote_next.run_remote_next",
-        lambda root: type("R", (), {"sync_status": "synced", "returncode": 0, "message": "ok", "typed_next": None})(),
+        lambda root, **kwargs: type("R", (), {"sync_status": "synced", "returncode": 0, "message": "ok", "typed_next": None})(),
     )
     rn = CliRunner().invoke(app, ["rn"])
     assert rn.exit_code == 0, rn.output

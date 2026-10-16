@@ -81,13 +81,14 @@ def continue_transfer_command(
         "--skip-llm-context-gate",
         help="Recovery-only: continue without requiring fresh generated LLM context.",
     ),
+    allow_unlisted: bool = typer.Option(False, "--allow-unlisted", help="Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused."),
 ) -> None:
     """Continue chat/local transfer communication through the safest available wrapper path."""
     if not skip_llm_context_gate:
         ensure = _public_transfer_attr("_ensure_fresh_llm_context_or_exit", _ensure_fresh_llm_context_or_exit)
         ensure(max_age_minutes=60, json_output=json_output)
     run_continue = _public_transfer_attr("run_transfer_continue", run_transfer_continue)
-    result = run_continue(Path("."), branch)
+    result = run_continue(Path("."), branch, allow_unlisted=allow_unlisted)
     if json_output:
         typer.echo(json.dumps(result, indent=2, sort_keys=True))
     else:
@@ -106,9 +107,10 @@ def remote_next(
         help="Optional remote transfer branch. If omitted, read branch from the transfer order.",
     ),
     json_output: bool = typer.Option(False, "--json/--no-json", help="Print machine-readable JSON."),
+    allow_unlisted: bool = typer.Option(False, "--allow-unlisted", help="Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused."),
 ) -> None:
     try:
-        result = run_remote_next_transfer(Path("."), branch)
+        result = run_remote_next_transfer(Path("."), branch, allow_unlisted=allow_unlisted)
     except (RuntimeError, ValueError, FileNotFoundError) as exc:
         if json_output:
             _echo_command_error("remote-next", exc, returncode=1)

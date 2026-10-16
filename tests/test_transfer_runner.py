@@ -286,10 +286,11 @@ def test_existing_inspect_path_remains_read_only_for_lint_blockable_order(
 
 
 def test_apply_transfer_order_runs_bounded_command_and_writes_report(tmp_path):
-    order_path = _write_command_order(tmp_path, ["git", "init"])
+    # Commands outside the manifest need the local --allow-unlisted flag (WOTB-01/-05).
+    order_path = _write_command_order(tmp_path, ["touch", "marker.txt"])
     order = load_transfer_order(order_path)
 
-    result = apply_transfer_order(order, tmp_path)
+    result = apply_transfer_order(order, tmp_path, allow_unlisted=True)
 
     assert result.result_status == RESULT_PASS
     assert result.returncode == 0
@@ -299,10 +300,10 @@ def test_apply_transfer_order_runs_bounded_command_and_writes_report(tmp_path):
 
 
 def test_apply_transfer_order_stops_on_failed_command_and_writes_report(tmp_path):
-    order_path = _write_command_order(tmp_path, ["git", "not-a-command"])
+    order_path = _write_command_order(tmp_path, ["false"])
     order = load_transfer_order(order_path)
 
-    result = apply_transfer_order(order, tmp_path)
+    result = apply_transfer_order(order, tmp_path, allow_unlisted=True)
 
     assert result.result_status == RESULT_FAIL
     assert result.returncode != 0

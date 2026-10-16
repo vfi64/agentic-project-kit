@@ -10,9 +10,10 @@ from agentic_project_kit.workspace import load_workspace
 def run_local(
     path: Path = typer.Option(DEFAULT_INBOX, "--path", help="Transfer order path."),
     json_output: bool = typer.Option(True, "--json/--no-json", help="Print machine-readable JSON."),
+    allow_unlisted: bool = typer.Option(False, "--allow-unlisted", help="Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused."),
 ) -> None:
     try:
-        result = run_local_transfer(Path("."), path)
+        result = run_local_transfer(Path("."), path, allow_unlisted=allow_unlisted)
     except (FileNotFoundError, ValueError) as exc:
         if json_output:
             _echo_command_error("run-local", exc, returncode=1)
@@ -89,6 +90,7 @@ def inspect(
 def apply(
     path: Path = typer.Option(DEFAULT_INBOX, "--path", help="Transfer order path."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+    allow_unlisted: bool = typer.Option(False, "--allow-unlisted", help="Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused."),
 ) -> None:
 
     from agentic_project_kit.instruction_lint import lint_transfer_instruction
@@ -116,7 +118,7 @@ def apply(
         warning_path.parent.mkdir(parents=True, exist_ok=True)
         warning_path.write_text(warning_text, encoding="utf-8")
     order = _load_or_exit(path, json_output=json_output)
-    result = apply_transfer_order(order, Path("."))
+    result = apply_transfer_order(order, Path("."), allow_unlisted=allow_unlisted)
     _emit_result(result, json_output)
     if result.returncode != 0:
         raise typer.Exit(code=result.returncode)

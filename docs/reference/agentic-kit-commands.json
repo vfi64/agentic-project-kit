@@ -10507,6 +10507,20 @@
           "param_type": "TyperOption",
           "required": false,
           "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -10553,6 +10567,20 @@
           "name": "json_output",
           "opts": [
             "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -12126,6 +12154,20 @@
           "param_type": "TyperOption",
           "required": false,
           "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -13022,6 +13064,20 @@
           "name": "skip_llm_context_gate",
           "opts": [
             "--skip-llm-context-gate"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -16527,6 +16583,20 @@
           "secondary_opts": [
             "--no-json"
           ]
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -16977,6 +17047,20 @@
           "secondary_opts": [
             "--no-json"
           ]
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -18588,6 +18672,20 @@
           "param_type": "TyperOption",
           "required": false,
           "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -18702,6 +18800,20 @@
           "name": "json_output",
           "opts": [
             "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -19898,7 +20010,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "0e86475bdbb3",
+    "manifest_sha": "de29c190c90f",
     "schema_version": 1
   },
   "schema_version": 2,

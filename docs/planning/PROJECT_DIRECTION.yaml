@@ -2129,20 +2129,29 @@ plans:
     follow_up_hardening:
     - id: order-path-confinement
       gaps: [WOTB-03, WOTB-06]
-      status: next
-    - id: order-freshness-binding
-      gaps: [WOTB-07, WOTB-08]
-      status: planned
-      decision_needed: Anchor semantics, because a committed order cannot name its
-        own commit.
+      status: done
+      evidence: src/agentic_project_kit/order_paths.py
     - id: order-command-authority-from-manifest
       gaps: [WOTB-01, WOTB-02, WOTB-05]
-      status: planned
-    - id: unrestricted-order-lanes-documentation-or-retirement
+      status: done
+      evidence: src/agentic_project_kit/order_command_authority.py
+      result: Orders run READ_ONLY Kit commands and read-only git/gh queries; BOUNDED
+        Kit commands, BOUNDED cockpit actions and commands outside the manifest need
+        the local --allow-unlisted flag; DESTRUCTIVE Kit commands, raw git/gh mutations
+        and interpreters are always refused.
+    - id: order-freshness-binding
+      gaps: [WOTB-07, WOTB-08]
+      status: next
+      decision: The anchor names the HEAD the order was written on (owner 2026-10-16).
+        The Kit checks that the commit that last changed the order file has exactly
+        this parent, requires the full 40-character hash, and runs the check on every
+        path including an explicit or inferred branch, after switch and pull.
+    - id: unrestricted-order-lanes-retirement
       gaps: [WOTB-04, WOTB-09]
       status: planned
-      decision_needed: Document as unrestricted or retire; no recorded use outside
-        tests.
+      decision: Retire with a deprecation window (owner 2026-10-16). work-order run,
+        the next-turn.py lane and current.sh report BLOCKED with a pointer to the
+        replacement, removal follows later.
     sequencing: Per ordering_rule the hardening slices come before the invocation
       ledger unless the owner re-orders them.
   - id: local-invocation-ledger

@@ -9,6 +9,8 @@ from typing import Any, Callable
 import yaml
 
 from agentic_project_kit.cockpit import action_result_as_json_data, run_cockpit_action
+from agentic_project_kit.order_command_authority import classify_order_command, order_manifest
+from agentic_project_kit.order_paths import confined_repo_path, lexical_repo_path
 
 RESULT_PASS = "PASS"
 RESULT_FAIL = "FAIL"
@@ -74,9 +76,11 @@ def parse_typed_work_order(data: dict[str, Any]) -> TypedWorkOrder:
     if not isinstance(steps_data, list) or not steps_data:
         raise ValueError("typed work order requires at least one step")
     steps = tuple(_parse_step(step) for step in steps_data)
-    log_path = _require_string(data, "log_path")
-    if not log_path.startswith("docs/reports/terminal/"):
-        raise ValueError("typed work order log_path must be under docs/reports/terminal/")
+    log_path = lexical_repo_path(
+        _require_string(data, "log_path"),
+        field_name="typed work order log_path",
+        prefix="docs/reports/terminal/",
+    )
     return TypedWorkOrder(
         work_order_id=_require_string(data, "id"),
         title=_require_string(data, "title"),
@@ -116,7 +120,7 @@ def typed_work_order_result_as_json_data(result: TypedWorkOrderResult) -> dict[s
     }
 
 def _write_result_log(order: TypedWorkOrder, project_root: Path, result: TypedWorkOrderResult) -> None:
-    path = project_root / order.log_path
+    path = confined_repo_path(project_root, order.log_path, field_name="typed work order log_path")
     path.parent.mkdir(parents=True, exist_ok=True)
     data = typed_work_order_result_as_json_data(result)
     lines = [
@@ -133,11 +137,48 @@ def _write_result_log(order: TypedWorkOrder, project_root: Path, result: TypedWo
     ]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
-def run_typed_work_order(order: TypedWorkOrder, project_root: Path = Path("."), runner: CommandRunner | None = None) -> TypedWorkOrderResult:
+def _command_authority_refusals(order: TypedWorkOrder, root: Path, *, allow_unlisted: bool) -> list[str]:
+    command_steps = [step for step in order.steps if step.kind == STEP_COMMAND_ARGV]
+    if not command_steps:
+        return []
+    manifest = order_manifest(root)
+    refusals: list[str] = []
+    for step in command_steps:
+        decision = classify_order_command(step.argv, manifest, allow_unlisted=allow_unlisted)
+        if not decision.allowed:
+            refusals.append(f"{step.label}: {decision.reason}")
+    return refusals
+
+
+def run_typed_work_order(
+    order: TypedWorkOrder,
+    project_root: Path = Path("."),
+    runner: CommandRunner | None = None,
+    *,
+    allow_unlisted: bool = False,
+) -> TypedWorkOrderResult:
+    """Run a typed order; its commands need manifest authority or the local --allow-unlisted flag.
+
+    The order's own ``safety`` and ``allow_bounded`` fields do not grant anything: BOUNDED cockpit
+    actions run only when the order asks for them and the maintainer passed ``--allow-unlisted``.
+    """
     root = project_root.resolve()
     dirty_state = _git_dirty_state(root)
     if order.block_dirty_worktree and dirty_state == "dirty":
         result = TypedWorkOrderResult(order.work_order_id, RESULT_PENDING, 96, order.safety, dirty_state, order.log_path, message="Dirty worktree blocks typed work order execution.")
+        _write_result_log(order, root, result)
+        return result
+    refusals = _command_authority_refusals(order, root, allow_unlisted=allow_unlisted)
+    if refusals:
+        result = TypedWorkOrderResult(
+            order.work_order_id,
+            RESULT_FAIL,
+            2,
+            order.safety,
+            dirty_state,
+            order.log_path,
+            message="Work-order command authority refused the typed order; no step ran. " + "; ".join(refusals),
+        )
         _write_result_log(order, root, result)
         return result
     command_runner = runner if runner is not None else _default_runner
@@ -152,7 +193,7 @@ def run_typed_work_order(order: TypedWorkOrder, project_root: Path = Path("."), 
                 return result
         elif step.kind == STEP_COCKPIT_ACTION:
             assert step.action_id is not None
-            action_result = run_cockpit_action(step.action_id, root, allow_bounded=step.allow_bounded)
+            action_result = run_cockpit_action(step.action_id, root, allow_bounded=step.allow_bounded and allow_unlisted)
             action_data = action_result_as_json_data(action_result)
             step_results.append({"kind": step.kind, "label": step.label, "action_result": action_data})
             if action_result.result_status != RESULT_PASS:

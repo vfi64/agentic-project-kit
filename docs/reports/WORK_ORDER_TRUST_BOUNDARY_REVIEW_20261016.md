@@ -80,6 +80,17 @@ Each line is a proposed finding with its own slice and regression test (the test
    - `work-order run` (bash) and the `next-turn.py`/`current.sh` lanes execute arbitrary code by design. Their validators must be documented as format checks.
    - The command usage audit (2026-10-15) shows no recorded use outside tests for `work-order run`, `typed-next`, `typed-run` or `remote-next`. That makes these lanes decomplexification candidates rather than hardening targets.
 
+## Status after the first hardening slice (2026-10-16)
+
+- **Closed:** WOTB-01, -02, -03, -05 and -06, by `order_paths.py` and `order_command_authority.py`. Their tests no longer carry xfail.
+  - Typed `command_argv` and transfer `run_command` run READ_ONLY Kit commands and read-only `git`/`gh` queries.
+  - BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest need the local `--allow-unlisted` flag on `transfer continue`, `transfer remote-next`, `transfer apply`, `transfer run-local`, `remote-next`/`rn`, `work-order typed-next` and `work-order typed-run`.
+  - DESTRUCTIVE Kit commands, raw `git`/`gh` mutations and interpreters are refused even with the flag.
+  - The refusal happens before any action of the order runs.
+- **Decided, open:**
+  - WOTB-07/-08: the anchor names the HEAD the order was written on, and the Kit checks the parent of the commit that last changed the order.
+  - WOTB-04/-09: the unrestricted lanes are retired with a deprecation window.
+
 ## Limits
 
 - Probes ran against functions and against `run_remote_next_transfer` with git and reporting helpers replaced by fakes; no order ran against a live remote.

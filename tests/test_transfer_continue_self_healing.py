@@ -36,7 +36,7 @@ def test_transfer_continue_refreshes_missing_llm_context_before_running(monkeypa
         calls.append("refresh")
         return {"result_status": "PASS"}
 
-    def fake_continue(root, branch):
+    def fake_continue(root, branch, **kwargs):
         calls.append("continue")
         return {"returncode": 0, "result_status": "PASS", "next_action": "done"}
 
