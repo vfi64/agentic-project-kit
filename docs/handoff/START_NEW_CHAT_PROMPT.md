@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 84f0464ff0fd74c5bcd627cf0f4ec60d59d55fd2094f9bd5a747164236c69e41
 - docs/reference/agentic-kit-commands.json: f8adf1bf80bb53ed13d0477950504c7406003982a5c17d2401e5084ff7b9ad1e
-## Operational documentation refresh state after PR #2510
+## Operational documentation refresh state after PR #2512
 
-Current administrative handoff refresh state is `b48b181a` (`Sync handoff release block from release evidence; fix release run text output (#2510)`). Continue next only after this post-PR2510 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `0a03aec3` (`Plan Kit control-effectiveness measurement (#2512)`). Continue next only after this post-PR2512 refresh is committed and merged; the next substantive slice must be created from fresh main.
