@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4dfc90794802ce692f5e75580a276c6eac88b1fe
-  short: 4dfc9079
-  subject: Review the work-order trust boundary with negative tests (#2516)
+  full: 027775880bb0a4d672aca1f9c20e82f638788e4d
+  short: 02777588
+  subject: Confine work-order paths and take command authority from the manifest (#2518)
 last_substantive_work_state:
-  full: 4dfc90794802ce692f5e75580a276c6eac88b1fe
-  short: 4dfc9079
-  subject: Review the work-order trust boundary with negative tests (#2516)
+  full: 027775880bb0a4d672aca1f9c20e82f638788e4d
+  short: 02777588
+  subject: Confine work-order paths and take command authority from the manifest (#2518)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
