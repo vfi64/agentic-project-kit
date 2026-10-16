@@ -23,9 +23,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+from agentic_project_kit.retired_order_lanes import RETIRED_OUTCOME, RETIRED_RETURNCODE, retired_lane_message
 from agentic_project_kit.safe_push import safe_push
 
-from agentic_project_kit import terminal_logging
 from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
 
@@ -364,34 +364,12 @@ def agent_run(extra_upload_paths: list[Path] | None = None) -> int:
     print(f"TITLE={command.title}")
     print(f"SAFETY_CLASS={command.safety_class}")
 
-    exit_code = terminal_logging.run_logged(command.command_id, ["sh", CURRENT_SCRIPT.as_posix()])
-    log_path = terminal_logging.read_latest_pointer()
-    fail_marker = logged_script_has_fail_result_marker(log_path)
-    outcome = OUTCOME_PASS_EXECUTED if exit_code == 0 and not fail_marker else OUTCOME_FAIL_COMMAND
-    if fail_marker and exit_code == 0:
-        exit_code = 1
-
-    report = write_report(command, outcome, exit_code, log_path)
-    append_executed(command, outcome, exit_code)
-
-    upload_paths = [report, _latest_command_run_pointer(), EXECUTED_JSONL, *extra_upload_paths]
-    if log_path is not None:
-        upload_paths.append(log_path)
-    upload_paths.append(terminal_logging.LATEST_POINTER)
-
-    pushed = stage_commit_push(
-        upload_paths,
-        f"Record agent command run {command.command_id}",
-        required_branch=command.expected_branch or "",
-    )
-    if pushed != 0:
-        print(OUTCOME_FAIL_UPLOAD)
-        return pushed
-
-    print(outcome)
-    return 0 if outcome == OUTCOME_PASS_EXECUTED else exit_code or 1
-
-
+    # WOTB-09: current.sh ran an arbitrary shell script; the lane is retired.
+    message = retired_lane_message("agent-command-script")
+    print(RETIRED_OUTCOME)
+    print(message)
+    write_report(command, RETIRED_OUTCOME, RETIRED_RETURNCODE, None, message)
+    return RETIRED_RETURNCODE
 
 
 def print_agent_next_footer(outcome: str, reply: str, reason: str = "") -> None:

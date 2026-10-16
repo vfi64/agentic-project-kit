@@ -146,53 +146,47 @@ def test_work_order_run_dry_run_does_not_create_log():
     assert result.exit_code == 1
 
 
-def test_work_order_execute_wrong_branch_writes_fail_log(tmp_path, monkeypatch):
+def test_work_order_execute_is_retired_and_writes_fail_log(tmp_path, monkeypatch):
+    # WOTB-04: shell work orders ran arbitrary bash; --execute now refuses and records why.
     monkeypatch.chdir(tmp_path)
     subprocess_dir = tmp_path / ".git"
     subprocess_dir.mkdir()
     directory = tmp_path / ".agentic" / "work_orders"
     directory.mkdir(parents=True)
     (directory / "demo.yaml").write_text(
-        "id: demo\ntitle: Demo\nsafety: read_only\nexpected_branch: feature/demo\ncommand: pytest && ruff check . && check-docs && doctor\nlog_path: docs/reports/terminal/demo.log\npostconditions:\n  - pytest passes\n  - ruff passes\n  - check-docs passes\n  - doctor passes\n  - log exists\n  - no false PASS\nexpected_outputs:\n  - docs/reports/terminal/demo.log\n",
+        "id: demo\ntitle: Demo\nsafety: read_only\nexpected_branch: feature/demo\ncommand: pytest && ruff check . && check-docs && doctor && touch EXECUTED\nlog_path: docs/reports/terminal/demo.log\npostconditions:\n  - pytest passes\n  - ruff passes\n  - check-docs passes\n  - doctor passes\n  - log exists\n  - no false PASS\nexpected_outputs:\n  - docs/reports/terminal/demo.log\n",
         encoding="utf-8",
     )
     result = CliRunner().invoke(app, ["work-order", "run", "demo", "--execute"])
-    assert result.exit_code != 0
-    log_file = tmp_path / "docs/reports/terminal/demo.log"
-    assert log_file.exists()
-    log_text = log_file.read_text(encoding="utf-8")
-    assert "Branch assertion failed" in log_text
+    assert result.exit_code == 2
+    assert "BLOCKED_RETIRED_LANE" in result.output
+    log_text = (tmp_path / "docs/reports/terminal/demo.log").read_text(encoding="utf-8")
+    assert "BLOCKED_RETIRED_LANE" in log_text
     assert "### RESULT: FAIL ###" in log_text
     assert "### RESULT: PASS ###" not in log_text
+    assert not (tmp_path / "EXECUTED").exists()
 
 
-def test_work_order_run_blocks_when_governance_fails(tmp_path, monkeypatch):
+def test_run_work_order_runs_no_shell_even_when_all_checks_pass(tmp_path, monkeypatch):
     from agentic_project_kit import work_orders
 
     order = work_orders.WorkOrder(
-        work_order_id="blocked-governance",
-        title="Blocked governance",
+        work_order_id="retired",
+        title="Retired",
         safety="read_only",
         expected_branch="feature/test-branch",
         command="pytest && ruff check . && agentic-kit check-docs && agentic-kit doctor",
-        log_path="docs/reports/terminal/blocked_governance.log",
-        postconditions=(
-            "pytest passes",
-            "ruff passes",
-            "check-docs passes",
-            "doctor passes",
-            "log exists",
-            "no false pass",
-        ),
-        expected_outputs=("docs/reports/terminal/blocked_governance.log",),
+        log_path="docs/reports/terminal/retired.log",
+        postconditions=("pytest passes", "ruff passes", "check-docs passes", "doctor passes", "log exists", "no false pass"),
+        expected_outputs=("docs/reports/terminal/retired.log",),
     )
-    monkeypatch.setattr(work_orders, "current_git_branch", lambda project_root=tmp_path: "feature/test-branch")
-    import agentic_project_kit.governance as governance
 
-    monkeypatch.setattr(governance, "governance_check", lambda: ["constitution broken"])
+    def fail_if_run(*args, **kwargs):
+        raise AssertionError("a retired lane must not start a shell")
+
+    monkeypatch.setattr(work_orders.subprocess, "run", fail_if_run)
     code = work_orders.run_work_order(order, tmp_path)
-    assert code == 98
-    log_text = (tmp_path / order.log_path).read_text(encoding="utf-8")
-    assert "governance: constitution broken" in log_text
-    assert "### RESULT: FAIL ###" in log_text
+    assert code == 2
+    assert "BLOCKED_RETIRED_LANE" in (tmp_path / order.log_path).read_text(encoding="utf-8")
+
 

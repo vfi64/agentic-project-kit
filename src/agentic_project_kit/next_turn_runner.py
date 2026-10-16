@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import subprocess
-import sys
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -11,6 +9,7 @@ import os
 
 from agentic_project_kit.next_turn_evidence import commit_and_push_evidence, publish_and_stage_evidence, render_finalize_result
 from agentic_project_kit.next_turn_slot import FIXED_SLOT_SCRIPT, FIXED_SLOT_YAML
+from agentic_project_kit.retired_order_lanes import RETIRED_OUTCOME, RETIRED_RETURNCODE, retired_lane_message
 from agentic_project_kit.work_order_validator import default_local_result_log_path
 from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
@@ -84,21 +83,13 @@ def run_fixed_slot(root: Path | str = ".") -> NextTurnRunResult:
         command_report.write_text(json.dumps(asdict(result), indent=2, sort_keys=True) + "\n", encoding="utf-8")
         return result
 
-    completed = subprocess.run(
-        [sys.executable, str(script_path)],
-        cwd=root_path,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-    output = (completed.stdout or "") + (completed.stderr or "")
-    terminal_log.write_text(output, encoding="utf-8")
-
-    outcome = "PASS_EXECUTED" if completed.returncode == 0 else "FAIL_EXECUTED"
+    # WOTB-09: the fixed slot ran an arbitrary Python script; the lane is retired.
+    message = retired_lane_message("next-turn-script")
+    terminal_log.write_text("NEXT_TURN_RUNNER\noutcome=" + RETIRED_OUTCOME + "\n" + message + "\n### RESULT: FAIL ###\n", encoding="utf-8")
     result = NextTurnRunResult(
         command_id=command_id,
-        outcome=outcome,
-        exit_code=completed.returncode,
+        outcome=RETIRED_OUTCOME,
+        exit_code=RETIRED_RETURNCODE,
         script_path=str(FIXED_SLOT_SCRIPT),
         yaml_path=str(FIXED_SLOT_YAML),
         terminal_log=str(terminal_log),
@@ -106,9 +97,6 @@ def run_fixed_slot(root: Path | str = ".") -> NextTurnRunResult:
         timestamp_utc=datetime.now(timezone.utc).isoformat(),
     )
     command_report.write_text(json.dumps(asdict(result), indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    if outcome == "PASS_EXECUTED":
-        yaml_path.unlink(missing_ok=True)
-        script_path.unlink(missing_ok=True)
     return result
 
 
@@ -152,6 +140,8 @@ def main() -> int:
     if args.publish_evidence:
         run_id = args.run_id or result.command_id
         print(publish_run_evidence(result, run_id=run_id, push=not args.no_push))
+    if result.outcome == RETIRED_OUTCOME:
+        return result.exit_code
     return 0 if result.outcome == "PASS_EXECUTED" else 1
 
 

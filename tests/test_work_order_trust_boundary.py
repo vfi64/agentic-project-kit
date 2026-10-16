@@ -151,8 +151,8 @@ def test_work_order_log_path_rejects_parent_segments() -> None:
         )
 
 
-@_gap("WOTB-04", "constitutional gates are substring checks; naming them satisfies the contract")
-def test_work_order_contract_requires_gates_to_run_not_only_to_be_named() -> None:
+def test_work_order_with_only_named_gates_runs_nothing(tmp_path: Path) -> None:
+    # WOTB-04: the gate contract stays a substring check, so the shell lane is retired instead.
     order = wo.parse_work_order(
         {
             "id": "probe",
@@ -166,7 +166,8 @@ def test_work_order_contract_requires_gates_to_run_not_only_to_be_named() -> Non
         }
     )
 
-    assert wo.check_work_order(order) != []
+    assert wo.run_work_order(order, tmp_path) == 2
+    assert not (tmp_path / "EXECUTED").exists()
 
 
 # --- transfer orders (`transfer remote-next`, `transfer apply`, `transfer run-local`) ----------
@@ -328,8 +329,10 @@ def test_transfer_remote_next_with_branch_still_checks_order_freshness(
 # --- fixed-slot Python work orders (next-turn.py, GUI work-order run) ---------------------------
 
 
-@_gap("WOTB-09", "the next-turn.py validator is a text denylist over an arbitrary Python script")
-def test_next_turn_script_validator_rejects_obfuscated_git_push() -> None:
+def test_next_turn_script_passing_the_validator_is_not_executed(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    # WOTB-09: the validator stays a format check, so the Python lane is retired instead.
+    from agentic_project_kit.work_order_runner import run_validated_work_order
+
     script = "\n".join(
         [
             "# agentic-project-kit work order",
@@ -337,12 +340,23 @@ def test_next_turn_script_validator_rejects_obfuscated_git_push() -> None:
             "# ### RESULT:",
             "# Terminal bleibt offen. Kein exit am Blockende.",
             "# agentic-kit status",
-            "import subprocess",
-            'subprocess.run(["git", "push", "--force", "origin", "main"])',
+            "from pathlib import Path",
+            'Path("EXECUTED").write_text("x")',
         ]
     )
+    assert validate_work_order_text(script).ok is True
+    monkeypatch.chdir(tmp_path)
+    work_order = tmp_path / "next-turn.py"
+    work_order.write_text(script, encoding="utf-8")
 
-    assert validate_work_order_text(script).ok is False
+    result = run_validated_work_order(
+        work_order_path=work_order,
+        local_log_path=tmp_path / "local.log",
+        remote_log_path=tmp_path / "remote.log",
+    )
+
+    assert (result.executed, result.returncode) == (False, 2)
+    assert not (tmp_path / "EXECUTED").exists()
 
 
 # --- checks that hold today -----------------------------------------------------------------------

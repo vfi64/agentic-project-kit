@@ -27,44 +27,22 @@ def test_run_fixed_slot_reports_missing_slot(tmp_path, monkeypatch):
     assert not (tmp_path / "docs/reports/terminal/next-turn-latest.log").exists()
 
 
-def test_run_fixed_slot_executes_placeholder(tmp_path, monkeypatch):
+def test_run_fixed_slot_is_retired_and_runs_nothing(tmp_path, monkeypatch):
+    # WOTB-09: the fixed slot ran an arbitrary Python script; it now refuses and keeps the slot.
     terminal, report_path = _redirect_latest_paths(tmp_path, monkeypatch)
     write_fixed_slot(tmp_path, command_id="abc")
+    script = tmp_path / ".agentic/commands/inbox/next-turn.py"
+    script.write_text("from pathlib import Path\nPath('EXECUTED').write_text('x')\n", encoding="utf-8")
     result = run_fixed_slot(tmp_path)
-    assert result.outcome == "PASS_EXECUTED"
-    assert result.exit_code == 0
+    assert result.outcome == "BLOCKED_RETIRED_LANE"
+    assert result.exit_code == 2
     report = json.loads(report_path.read_text(encoding="utf-8"))
     assert report["command_id"] == "abc"
-    assert report["outcome"] == "PASS_EXECUTED"
-    assert "NEXT_TURN_FIXED_SLOT_PLACEHOLDER" in terminal.read_text(encoding="utf-8")
-    assert not (tmp_path / "docs/reports/terminal/next-turn-latest.log").exists()
-
-
-
-def test_run_fixed_slot_removes_slot_after_success(tmp_path, monkeypatch):
-    terminal, report = _redirect_latest_paths(tmp_path, monkeypatch)
-    write_fixed_slot(tmp_path, command_id="cleanup")
-    result = run_fixed_slot(tmp_path)
-    assert result.outcome == "PASS_EXECUTED"
-    assert not (tmp_path / ".agentic/commands/inbox/next-turn.yaml").exists()
-    assert not (tmp_path / ".agentic/commands/inbox/next-turn.py").exists()
-    assert terminal.exists()
-    assert report.exists()
-    assert not (tmp_path / "docs/reports/terminal/next-turn-latest.log").exists()
-
-
-
-def test_run_fixed_slot_keeps_slot_after_failure(tmp_path, monkeypatch):
-    _redirect_latest_paths(tmp_path, monkeypatch)
-    write_fixed_slot(tmp_path, command_id="fail")
-    script = tmp_path / ".agentic/commands/inbox/next-turn.py"
-    script.write_text("raise SystemExit(7)\n", encoding="utf-8")
-    result = run_fixed_slot(tmp_path)
-    assert result.outcome == "FAIL_EXECUTED"
-    assert result.exit_code == 7
+    assert report["outcome"] == "BLOCKED_RETIRED_LANE"
+    assert "typed work order" in terminal.read_text(encoding="utf-8")
+    assert not (tmp_path / "EXECUTED").exists()
+    assert script.exists()
     assert (tmp_path / ".agentic/commands/inbox/next-turn.yaml").exists()
-    assert (tmp_path / ".agentic/commands/inbox/next-turn.py").exists()
-
 
 
 def test_work_result_from_outcome():
@@ -98,7 +76,8 @@ def test_next_turn_run_publish_evidence_no_push_cli(tmp_path):
         capture_output=True,
         check=False,
     )
-    assert completed.returncode == 0
+    assert completed.returncode == 2
+    assert "outcome=BLOCKED_RETIRED_LANE" in completed.stdout
     assert "NEXT_TURN_EVIDENCE_FINALIZE_RESULT" in completed.stdout
     assert "committed=true" in completed.stdout
     assert "pushed=false" in completed.stdout

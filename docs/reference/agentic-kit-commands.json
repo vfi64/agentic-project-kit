@@ -18543,7 +18543,7 @@
     {
       "dry_run_available": true,
       "group": "work-order",
-      "help": "",
+      "help": "Show a shell work order; executing it is retired (WOTB-04).",
       "name": "run",
       "params": [
         {
@@ -18562,7 +18562,7 @@
         },
         {
           "default": false,
-          "help": "Actually run the work order. Omit for dry-run.",
+          "help": "Retired (WOTB-04): refuses with BLOCKED_RETIRED_LANE instead of running bash. Omit for dry-run.",
           "is_flag": true,
           "metavar": null,
           "multiple": false,
@@ -18590,7 +18590,7 @@
         "bounded",
         "work-order"
       ],
-      "when_to_use": "Run agentic-kit work-order run."
+      "when_to_use": "Show a shell work order; executing it is retired (WOTB-04)."
     },
     {
       "dry_run_available": false,
@@ -20010,7 +20010,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "de29c190c90f",
+    "manifest_sha": "2adf44031fbf",
     "schema_version": 1
   },
   "schema_version": 2,

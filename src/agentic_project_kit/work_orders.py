@@ -8,6 +8,7 @@ from typing import Any
 import yaml
 
 from agentic_project_kit.order_paths import confined_repo_path, lexical_repo_path
+from agentic_project_kit.retired_order_lanes import RETIRED_RETURNCODE, retired_lane_message
 
 
 WORK_ORDERS_DIR = Path(".agentic/work_orders")
@@ -160,51 +161,26 @@ def _write_log(order: WorkOrder, project_root: Path, body: str) -> None:
 
 
 def run_work_order(order: WorkOrder, project_root: Path = Path(".")) -> int:
-    branch = current_git_branch(project_root)
-    from agentic_project_kit.governance import governance_check
+    """Refuse to run a shell work order; the lane is retired (WOTB-04).
 
-    governance_errors = governance_check()
-    contract_errors = [f"governance: {error}" for error in governance_errors]
-    contract_errors.extend(check_work_order(order))
-    header = [
-        f"Work order: {order.work_order_id}",
-        f"Title: {order.title}",
-        f"Safety: {order.safety}",
-        f"Expected branch: {order.expected_branch}",
-        f"Actual branch: {branch}",
-        "",
-        "### COMMAND ###",
-        order.command,
-        "",
-    ]
-    if branch != order.expected_branch:
-        body = "\n".join(header) + "\nBranch assertion failed.\n"
-        body += "### RESULT: FAIL ###\nReturn code: 97\nTerminal bleibt offen. Kein exit am Blockende.\n"
-        _write_log(order, project_root, body)
-        return 97
-    if contract_errors:
-        body = "\n".join(header) + "\n### CONTRACT ERRORS ###\n"
-        body += "\n".join(f"- {error}" for error in contract_errors)
-        body += "\n### RESULT: FAIL ###\nReturn code: 98\nTerminal bleibt offen. Kein exit am Blockende.\n"
-        _write_log(order, project_root, body)
-        return 98
-    # Work orders intentionally use shell syntax; run it through an explicit shell
-    # executable instead of implicit shell mode so argument boundaries stay visible.
-    result = subprocess.run(
-        ["bash", "-lc", order.command],
-        cwd=project_root,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        check=False,
+    Shell work orders ran arbitrary ``bash -lc`` and their gate contract was a substring check.
+    The log records the refusal so an earlier caller sees why nothing ran.
+    """
+    message = retired_lane_message("work-order-run")
+    body = "\n".join(
+        [
+            f"Work order: {order.work_order_id}",
+            f"Title: {order.title}",
+            f"Safety: {order.safety}",
+            "",
+            message,
+            "### RESULT: FAIL ###",
+            f"Return code: {RETIRED_RETURNCODE}",
+            "",
+        ]
     )
-    status = "PASS" if result.returncode == 0 else "FAIL"
-    body = "\n".join(header) + "\n### OUTPUT ###\n" + result.stdout
-    body += f"\n### RESULT: {status} ###\n"
-    body += f"Return code: {result.returncode}\n"
-    body += "Terminal bleibt offen. Kein exit am Blockende.\n"
     _write_log(order, project_root, body)
-    return result.returncode
+    return RETIRED_RETURNCODE
 
 TEMPLATE_DIR = Path(".agentic/work_order_templates")
 

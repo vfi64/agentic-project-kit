@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: de29c190c90f
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 2adf44031fbf
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -3895,14 +3895,16 @@ _No parameters._
 
 - Safety: `BOUNDED`
 - Surface: `primitive`
-- When to use: Run agentic-kit work-order run.
+- When to use: Show a shell work order; executing it is retired (WOTB-04).
 - Dry-run available: `True`
 - Remote effects: `none`
+
+Show a shell work order; executing it is retired (WOTB-04).
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `work_order_id` | `TyperArgument` | work_order_id | `True` |  |  |
-| `execute` | `TyperOption` | --execute | `False` | `False` | Actually run the work order. Omit for dry-run. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Retired (WOTB-04): refuses with BLOCKED_RETIRED_LANE instead of running bash. Omit for dry-run. |
 
 ### `agentic-kit work-order show`
 

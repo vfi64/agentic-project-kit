@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-import subprocess
-import sys
 from dataclasses import dataclass
 from pathlib import Path
 
+from agentic_project_kit.retired_order_lanes import RETIRED_RETURNCODE, retired_lane_message
 from agentic_project_kit.work_order_validator import (
     WORK_ORDER_PATH,
     default_local_result_log_path,
@@ -64,44 +63,28 @@ def run_validated_work_order(
             message="work order validation failed; execution blocked; remote log not written",
         )
 
-    completed = subprocess.run(
-        [sys.executable, str(work_order_path)],
-        cwd=Path.cwd(),
-        text=True,
-        capture_output=True,
-        check=False,
-    )
+    # WOTB-09: the validator is a format check over an arbitrary Python script; the lane is retired.
+    message = retired_lane_message("next-turn-script")
     body = chr(10).join(
         [
             "WORK_ORDER_RUN",
             "repo_root=" + str(Path.cwd().resolve()),
             "path=" + str(work_order_path),
             "validation_ok=true",
-            "executed=true",
-            "returncode=" + str(completed.returncode),
-            "local_log=" + str(local_log_path),
-            "remote_log=" + str(remote_log_path),
-            "stdout_begin",
-            completed.stdout.rstrip(),
-            "stdout_end",
-            "stderr_begin",
-            completed.stderr.rstrip(),
-            "stderr_end",
-            "### RESULT: PASS ###" if completed.returncode == 0 else "### RESULT: FAIL ###",
+            "executed=false",
+            "returncode=" + str(RETIRED_RETURNCODE),
+            message,
+            "### RESULT: FAIL ###",
         ]
     )
     local_log_path.write_text(body + chr(10), encoding="utf-8")
     return WorkOrderRunResult(
         validation_ok=True,
-        executed=True,
-        returncode=completed.returncode,
+        executed=False,
+        returncode=RETIRED_RETURNCODE,
         local_log=local_log_path,
         remote_log=remote_log_path,
-        message=(
-            "work order executed; remote log pending explicit upload"
-            if completed.returncode == 0
-            else "work order executed with failure; remote log pending explicit upload"
-        ),
+        message=message,
     )
 
 
