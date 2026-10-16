@@ -1,0 +1,100 @@
+{
+ "schema_version": 1,
+ "kind": "self_hosting_archive_source_manifest",
+ "issue": "https://github.com/vfi64/agentic-project-kit/issues/2505",
+ "generated_at": "2026-10-16T08:38:15Z",
+ "kit": {
+  "repository": "vfi64/agentic-project-kit",
+  "analysis_base": "ef78a255b22346fd5a583b8978da605542f4dabd",
+  "kit_version": "1.0.25",
+  "command_manifest_sha": "d1604f13011e",
+  "measurement_main": "3f5ab2c7ddd11ab348a3a5e3ca1ed0fa761c292a",
+  "external_findings_status": {
+   "path": "docs/reports/greenfield/external-findings-status.json",
+   "ref": "ef78a255",
+   "blob": "e7f8d493e98c8a576dca5392c51ba14afeed6d35"
+  }
+ },
+ "private_sources": {
+  "P01": {
+   "description": "AGP Cockpit communication protocol (Mission-/Task-Grenze, Start-Click-Approval, Authority-Split)",
+   "repository": "vfi64/agp-cockpit (private)",
+   "commit": "4442809469bac25bd75d422d4e49507090069eb2",
+   "path": "docs/planning/COMMUNICATION_PROTOCOL.md"
+  },
+  "P02": {
+   "description": "AGP Cockpit Greenfield ledger",
+   "repository": "vfi64/agp-cockpit (private)",
+   "commit": "926e1f7030d9c9b04c86b0643b3f455a95150b96",
+   "path": "docs/validation/AGENTIC_KIT_GREENFIELD_FINDINGS.json",
+   "blob": "c2528e9cc0d5f34feef90d674f05c108032fc290",
+   "families": 72,
+   "observations": 102,
+   "head_check": {
+    "commit": "447c48d91247e898c406f4adba537c766be3ca7a",
+    "date": "2026-10-16",
+    "blob": "c2528e9cc0d5f34feef90d674f05c108032fc290",
+    "result": "unchanged"
+   }
+  },
+  "Comm-SCI": {
+   "repository": "vfi64/Comm-SCI-Control-private (private)",
+   "note": "historical March/April sources C01–C13 cited by file and commit only"
+  }
+ },
+ "input_artifacts": [
+  {
+   "name": "Agentic_Project_Kit_Historie_Selfhosting_Drift_2026-10-15.zip",
+   "sha256": "e39fd346811d326070f82dc89b3503ae55d1d17f1dd9e9cdd573bac02b15b03b",
+   "expected_sha256_from_issue": "e39fd346811d326070f82dc89b3503ae55d1d17f1dd9e9cdd573bac02b15b03b",
+   "members": {
+    "Agentic_Project_Kit_Historie_Selfhosting_Drift_Ergaenzung_2026-10-15.docx": "462e8017bab02f0de68331621fef711e155bedf34ed3f4504bfeb9190dc1cfbe",
+    "Agentic_Project_Kit_Historie_Selfhosting_Drift_Ergaenzung_2026-10-15.pdf": "236f0b9b7be56860c7ca8c24da5c5281a7fda0050fdec0c1b7b8efaf75f8c1c2",
+    "Agentic_Project_Kit_Historie_Selfhosting_Drift_MANIFEST_2026-10-15.json": "502bec6ff4d132c1c2615273e4fa7d6cddccef012cbbc3e29c449bd224b43b3e",
+    "README.txt": "9c44c0430b631c5a39f5252075e0253d29d4cda080e4b797cf4839d9612dcf66"
+   }
+  },
+  {
+   "name": "Drift_Qualitaetsaudit_2026-10-15_Paket.zip",
+   "sha256": "d4260409b67b423235c279f28cd2fdf179ebf217d0054d7c896f0552eb879ee1",
+   "expected_sha256_from_issue": "d4260409b67b423235c279f28cd2fdf179ebf217d0054d7c896f0552eb879ee1",
+   "members": {
+    "Drift_Audit_Ereignisregister_2026-10-15.csv": "b50fbcc1f9e93babd8b7e70540cc4925279e2deda2a56e3a6e0a157468368b77",
+    "Drift_Qualitaetsaudit_Kennzahlen_2026-10-15.json": "d135baf5ba22d795fbcf48622f14eb125f0e605aa0ebc561d3ed550f68bd5460",
+    "Drift_und_Qualitaetsaudit_Kit_2026-10-15.docx": "e11298f4651592826cdbae2379c25ab295daaab2f7245e5090514c27026b78f0",
+    "Drift_und_Qualitaetsaudit_Kit_2026-10-15.pdf": "1e544929610158bb68ef6578848a7dc88ae151501a0314caeb226dcd40a05717",
+    "README.txt": "02e476c37ff6d3ea4f8aff698739757abf5d6f9c9b2756a628d823035af24561",
+    "drift_quality_reproduce.py": "b22332a5c216c4c265b8583a9d49bfde7c77da75166b86728ee52aa77ccbce5a"
+   }
+  },
+  {
+   "name": "AGP_Berichte_und_Belege_Sicherung_2026-10-15.zip",
+   "expected_sha256_from_issue": "c0c5f97bbb2096e9d935e543bc28c24d00b65f2c5292e5c9557f668da8b658d1",
+   "status": "NOT_VERIFIED",
+   "note": "issue attachment; not retrievable from the archiving session and not provided; nothing from it was used beyond what the two verified packages contain"
+  }
+ ],
+ "processing": {
+  "historical_development": "DOCX converted with pandoc 3.1.3 to GitHub-flavoured Markdown; redactions R1–R5 applied by script; 8 of 10 body figures copied, 2 replaced",
+  "finding_join": "reproduce_drift_audit.py join on Q01 and P02",
+  "pr_classification": "reproduce_drift_audit.py prs, window 2026-10-01..2026-10-15, cutoff 2026-10-15T19:00:41Z, GitHub REST on 2026-10-16",
+  "refresh_chains": "reproduce_drift_audit.py chains on main 3f5ab2c (first-parent history)"
+ },
+ "archive_files": {
+  "DRIFT_EVENTS_20261015.csv": "8c3fc66d2df9d2e60029da38aed9973baf500dc5c707d0d49782be884f0119c1",
+  "DRIFT_METRICS_20261015.json": "9d7709488057f9a2b992abab151b96b3b7b7f9286fc55eb0faa7f93e175eaae7",
+  "DRIFT_QUALITY_AUDIT_20261015.md": "28caa4dd0dec8ec4aa3cdaebeef3fb6a621bf921a0f1ce7727e9d2941d19d70c",
+  "FINDING_ID_JOIN_20261015.csv": "7fb6bac3e33c60215acef9eb6a3618822295aeeeaa55a5a4df1ea051cba3ec22",
+  "HISTORICAL_DEVELOPMENT_20261015.md": "a408d87e132e999bdb48518167718b152dfc59ee9f2a250a289c6f5529f2dfe9",
+  "README.md": "5ac535d6deab868aeb551a22d7a28cb1c17198d3417299e326f12e67aa65d4bc",
+  "reproduce_drift_audit.py": "ea6c25607ed23ec55f55e99ccf0a83361aef9c44dea4fefc15a05941c72f2b57",
+  "figures/historical_development_fig01.png": "7e2bdd079cdc0a450e2da35b76c8da6cdf832e3a2734d1463f2b78af776140ca",
+  "figures/historical_development_fig02.png": "2dc48bdc83a0c60b5244fdad0b9fcf2344d50f4f70bd8dd9b8dd7235f57fbf76",
+  "figures/historical_development_fig03.png": "c67a03ca239510fc10709b3ea2705b4e38b975e0e4ff8561bad977488e333ea2",
+  "figures/historical_development_fig04.png": "765fdcc8c2d200a6a0988713c8aed0e019a0966e448677b910d777dad5d06183",
+  "figures/historical_development_fig05.png": "c78d085d2d4c1856c38ff582527231bdfb1cf22efae51e76259a30269b25f1c0",
+  "figures/historical_development_fig06.png": "e36c6f9c5f0ff3d443bdab0bd5c4291bd1c73e636f2d0eabdd8ceae44ba0149e",
+  "figures/historical_development_fig07.png": "4eb77b793c686703a7db8b8ffb94a484543f9ddec1bf1e0471b8fc7f0cfdcfda",
+  "figures/historical_development_fig08.png": "d41f01da4e60144e2b653c234e510651b7012546359a4bc602d2cf3d2182948a"
+ }
+}
