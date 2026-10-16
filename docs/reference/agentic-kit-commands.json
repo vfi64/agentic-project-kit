@@ -2642,6 +2642,48 @@
           "secondary_opts": []
         },
         {
+          "default": "",
+          "help": "Optional registry status: active, superseded or archived.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "status",
+          "opts": [
+            "--status"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Optional review policy: required.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "review_policy",
+          "opts": [
+            "--review-policy"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Optional one-line summary.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "summary",
+          "opts": [
+            "--summary"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
           "default": "PosixPath('.')",
           "help": "Project root.",
           "is_flag": false,
@@ -7898,6 +7940,72 @@
         "kit"
       ],
       "when_to_use": "Plan a released Kit update; signed execution installs locally, updates CI pins and checks the workspace."
+    },
+    {
+      "dry_run_available": false,
+      "group": "ledger",
+      "help": "Summarise the local invocation ledger: counts, nesting, failures and work cycles (read-only).",
+      "name": "report",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root or a path inside it.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": 0,
+          "help": "Only records of the last N days; 0 reads all.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "days",
+          "opts": [
+            "--days"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "ledger",
+        "report"
+      ],
+      "qualified_name": "agentic-kit ledger report",
+      "remote_effects": [
+        "none"
+      ],
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "surface": "diagnostic",
+      "task_tags": [
+        "ledger",
+        "read-only"
+      ],
+      "when_to_use": "Summarise the local invocation ledger: counts, nesting, failures and work cycles (read-only)."
     },
     {
       "dry_run_available": false,
@@ -20010,7 +20118,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "2adf44031fbf",
+    "manifest_sha": "232091ac7240",
     "schema_version": 1
   },
   "schema_version": 2,

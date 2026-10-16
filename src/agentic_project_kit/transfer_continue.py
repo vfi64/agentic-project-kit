@@ -12,6 +12,7 @@ from agentic_project_kit.handoff_freshness import assess_continuation_authority
 from agentic_project_kit.handoff_state import load_handoff_state
 from agentic_project_kit.transfer_runner import DEFAULT_INBOX
 from agentic_project_kit.transfer_remote_next import EXECUTABLE_TRANSFER_ORDER_KIND
+from agentic_project_kit.invocation_ledger import internal_call
 from agentic_project_kit.transfer_remote_next import run_remote_next_transfer
 from agentic_project_kit.workspace import load_workspace
 
@@ -178,7 +179,8 @@ def run_transfer_continue(
                 "chat_reply": "f",
             }
 
-    result = run_remote_next_transfer(root_path, inferred_branch, allow_unlisted=allow_unlisted)
+    with internal_call("agentic-kit transfer remote-next"):
+        result = run_remote_next_transfer(root_path, inferred_branch, allow_unlisted=allow_unlisted)
     payload = result.as_json_data()
     actions = payload.get("post_report_actions") if isinstance(payload, dict) else {}
     if not isinstance(actions, dict):

@@ -1,4 +1,3 @@
-import typer
 
 from agentic_project_kit.cli_commands.actions import actions_app
 from agentic_project_kit.cli_commands.boot import boot_app
@@ -25,6 +24,7 @@ from agentic_project_kit.cli_commands.handoff import handoff_app
 from agentic_project_kit.cli_commands.human_workflows import release_flow_app, work_app
 from agentic_project_kit.cli_commands.init import register_init_command
 from agentic_project_kit.cli_commands.kit import kit_app
+from agentic_project_kit.cli_commands.ledger import kit_root_app
 from agentic_project_kit.cli_commands.instruction import instruction_app
 from agentic_project_kit.cli_commands.onboarding import onboarding_app
 from agentic_project_kit.cli_commands.pass_already_done import app as pass_already_done_app
@@ -71,7 +71,7 @@ from agentic_project_kit.cli_commands.artifact_gc import artifact_gc_command
 from agentic_project_kit.cli_commands.project_direction import project_direction_command
 from agentic_project_kit.cli_commands.mutation_lock_audit import register_mutation_lock_audit_command
 from agentic_project_kit.patch_artifact_preflight import register_patch_preflight_command
-app = typer.Typer(help="Generate and check agentic GitHub project skeletons.")
+app = kit_root_app(help="Generate and check agentic GitHub project skeletons.")
 register_version_callback(app)
 app.command("project-direction")(project_direction_command)
 app.command("artifact-gc")(artifact_gc_command)

@@ -21,6 +21,9 @@ def doc_registry_register(
     document_path: Annotated[str, typer.Option("--path", help="Repository-relative document path.")],
     document_class: Annotated[str, typer.Option("--class", help="Allowed documentation registry class.")],
     owner: Annotated[str, typer.Option("--owner", help="Document owner recorded in the registry.")] = "maintainers",
+    status: Annotated[str, typer.Option("--status", help="Optional registry status: active, superseded or archived.")] = "",
+    review_policy: Annotated[str, typer.Option("--review-policy", help="Optional review policy: required.")] = "",
+    summary: Annotated[str, typer.Option("--summary", help="Optional one-line summary.")] = "",
     project_root: Annotated[Path, typer.Option("--root", help="Project root.")] = Path("."),
     json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
 ) -> None:
@@ -30,6 +33,9 @@ def doc_registry_register(
         document_path=document_path,
         document_class=document_class,
         owner=owner,
+        status=status,
+        review_policy=review_policy,
+        summary=summary,
     )
     if json_output:
         typer.echo(json.dumps(result, indent=2, sort_keys=True))
