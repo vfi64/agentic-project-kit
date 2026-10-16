@@ -236,14 +236,12 @@ def test_transfer_write_text_file_does_not_write_through_symlinked_directory(tmp
     assert not (outside / "planted.txt").exists()
 
 
-@_gap("WOTB-07", "the freshness anchor matches any one-character prefix of HEAD")
 def test_transfer_freshness_anchor_requires_a_meaningful_prefix() -> None:
     head = "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678"
 
     assert not trn._head_matches("a", short_head=head[:7], full_head=head)
 
 
-@_gap("WOTB-08", "remote-next validates one order revision and executes the one present after switch/pull")
 def test_transfer_remote_next_executes_the_order_it_validated(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -294,7 +292,6 @@ def test_transfer_remote_next_executes_the_order_it_validated(
     assert executed in ([], ["validated-order"]), f"executed {executed}, result {result.result_status}"
 
 
-@_gap("WOTB-08", "with an explicit or inferred branch (transfer continue) the freshness guard is skipped")
 def test_transfer_remote_next_with_branch_still_checks_order_freshness(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -583,3 +580,62 @@ def test_transfer_report_path_does_not_write_through_a_symlink(tmp_path: Path) -
         _apply(root, [{"type": "run_command", "command": ["touch", "EXECUTED"]}])
 
     assert list(outside.iterdir()) == []
+
+
+# --- freshness binding after the WOTB-07/-08 hardening ---------------------------------------------
+
+
+def _commit_all(root: Path, message: str) -> str:
+    subprocess.run(["git", "add", "-A"], cwd=root, check=True)
+    subprocess.run(
+        ["git", "-c", "user.email=kit@example.invalid", "-c", "user.name=Kit Test", "commit", "-q", "--allow-empty", "-m", message],
+        cwd=root,
+        check=True,
+    )
+    return subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, check=True, text=True, capture_output=True).stdout.strip()
+
+
+def test_order_anchor_binds_a_committed_order_to_the_commit_it_was_written_on(tmp_path: Path) -> None:
+    from agentic_project_kit.order_freshness import check_order_anchor
+
+    root = _git_repo(tmp_path / "repo")
+    written_on = _commit_all(root, "base")
+    inbox = root / tr.DEFAULT_INBOX
+    inbox.parent.mkdir(parents=True)
+    inbox.write_text(yaml.safe_dump({"id": "order", "expected_current_head": written_on}), encoding="utf-8")
+
+    uncommitted = check_order_anchor(root, inbox, {"expected_current_head": written_on})
+    assert (uncommitted.ok, uncommitted.basis) == (True, "uncommitted_order_on_head")
+
+    _commit_all(root, "add order")
+    _commit_all(root, "later unrelated commit")
+    committed = check_order_anchor(root, inbox, {"expected_current_head": written_on})
+    assert (committed.ok, committed.basis) == (True, "order_commit_parent")
+
+
+def test_order_anchor_refuses_an_order_changed_after_it_was_anchored(tmp_path: Path) -> None:
+    from agentic_project_kit.order_freshness import check_order_anchor
+
+    root = _git_repo(tmp_path / "repo")
+    written_on = _commit_all(root, "base")
+    inbox = root / tr.DEFAULT_INBOX
+    inbox.parent.mkdir(parents=True)
+    inbox.write_text(yaml.safe_dump({"id": "order", "expected_current_head": written_on}), encoding="utf-8")
+    _commit_all(root, "add order")
+    inbox.write_text(yaml.safe_dump({"id": "replaced", "expected_current_head": written_on}), encoding="utf-8")
+    _commit_all(root, "replace order, keep the old anchor")
+
+    result = check_order_anchor(root, inbox, {"expected_current_head": written_on})
+
+    assert result.ok is False
+    assert result.reason == "stale_transfer_order_head_mismatch"
+
+
+@pytest.mark.parametrize("anchor", ["", "a", "a1b2c3d", "A" * 40, "g" * 40])
+def test_order_anchor_requires_a_full_lowercase_commit_hash(tmp_path: Path, anchor: str) -> None:
+    from agentic_project_kit.order_freshness import check_order_anchor
+
+    root = _git_repo(tmp_path / "repo")
+    _commit_all(root, "base")
+
+    assert check_order_anchor(root, root / tr.DEFAULT_INBOX, {"expected_current_head": anchor}).ok is False

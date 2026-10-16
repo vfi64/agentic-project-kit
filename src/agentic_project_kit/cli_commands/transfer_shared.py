@@ -197,6 +197,9 @@ def _echo_remote_next_user_summary(result) -> None:
             "stale_transfer_order_branch_mismatch",
             "stale_order_missing_freshness_anchor",
             "stale_transfer_order_head_mismatch",
+            "freshness_anchor_not_full_commit_hash",
+            "freshness_anchor_unverifiable",
+            "transfer_order_branch_mismatch",
         )
     ):
         primary_state = "STALE_ORDER"

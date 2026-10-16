@@ -51,6 +51,12 @@ llm_to_local_transfer_policy:
   - LLM-to-local transfer payloads must be written as Python source files with the
     .py.txt suffix.
   - The Python payload must remain syntactically compilable before local execution.
+  - A transfer order names the HEAD it was written on in expected_current_head as the
+    full 40-character hash and is committed directly on top of that commit; changing
+    the order later needs a new anchor (WOTB-07, WOTB-08).
+  - Transfer and typed orders run only READ_ONLY agentic-kit commands and read-only
+    git/gh queries unless the maintainer passes --allow-unlisted locally; raw git/gh
+    mutations, interpreters and DESTRUCTIVE agentic-kit commands are always refused.
   - Do not put raw gh, GitHub API, or direct GitHub shell commands into LLM-to-local
     payloads or user copy/paste blocks.
   - GitHub, PR, merge, evidence, release, and transfer operations should be invoked

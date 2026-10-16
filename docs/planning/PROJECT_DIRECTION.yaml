@@ -2141,14 +2141,15 @@ plans:
         and interpreters are always refused.
     - id: order-freshness-binding
       gaps: [WOTB-07, WOTB-08]
-      status: next
+      status: done
+      evidence: src/agentic_project_kit/order_freshness.py
       decision: The anchor names the HEAD the order was written on (owner 2026-10-16).
         The Kit checks that the commit that last changed the order file has exactly
         this parent, requires the full 40-character hash, and runs the check on every
         path including an explicit or inferred branch, after switch and pull.
     - id: unrestricted-order-lanes-retirement
       gaps: [WOTB-04, WOTB-09]
-      status: planned
+      status: next
       decision: Retire with a deprecation window (owner 2026-10-16). work-order run,
         the next-turn.py lane and current.sh report BLOCKED with a pointer to the
         replacement, removal follows later.

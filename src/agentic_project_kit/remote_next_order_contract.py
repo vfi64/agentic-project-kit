@@ -15,6 +15,7 @@ from agentic_project_kit.instruction_lint import (
     lint_instruction_text,
     strip_command_manifest_ack_header,
 )
+from agentic_project_kit.order_freshness import check_order_anchor
 from agentic_project_kit.safe_push import SafePushResult, safe_push, validate_branch_name
 from agentic_project_kit.transfer_remote_next import EXECUTABLE_TRANSFER_ORDER_KIND
 from agentic_project_kit.transfer_runner import (
@@ -98,14 +99,6 @@ def _slug(value: str) -> str:
     while "--" in text:
         text = text.replace("--", "-")
     return text or "remote-next"
-
-
-def _head_matches(expected: str, *, full_head: str) -> bool:
-    value = expected.strip()
-    short_head = full_head[:7]
-    return bool(value) and (
-        short_head.startswith(value) or full_head.startswith(value) or value.startswith(short_head)
-    )
 
 
 def _safe_push_preflight(root: Path, branch: str) -> SafePushResult:
@@ -319,11 +312,12 @@ def validate_remote_next_order(
     elif expected_branch != current_branch:
         blockers.append(f"expected_current_branch_mismatch:{expected_branch}!={current_branch}")
 
-    full_head = _current_full_head(root_path)
-    expected_head = str(data.get("expected_current_head") or data.get("expected_head") or data.get("created_for_head") or "").strip()
-    if not expected_head:
+    anchor_check = check_order_anchor(root_path, order_path, data)
+    if anchor_check.reason == "stale_order_missing_freshness_anchor":
         blockers.append("missing_expected_current_head")
-    elif not _head_matches(expected_head, full_head=full_head):
+    elif anchor_check.reason == "freshness_anchor_not_full_commit_hash":
+        blockers.append("expected_current_head_not_full_commit_hash")
+    elif not anchor_check.ok:
         blockers.append("expected_current_head_mismatch")
 
     try:

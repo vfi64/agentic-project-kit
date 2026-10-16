@@ -112,7 +112,7 @@ def test_remote_next_blocks_head_mismatch_before_apply(tmp_path, monkeypatch):
             "id": "stale-order",
             "status": "active",
             "branch": "main",
-            "expected_current_head": "deadbee",
+            "expected_current_head": "dead" * 10,
         },
     )
 
@@ -121,6 +121,29 @@ def test_remote_next_blocks_head_mismatch_before_apply(tmp_path, monkeypatch):
     assert result.returncode == 2
     assert result.result_status == "BLOCKED"
     assert "stale_transfer_order_head_mismatch" in result.reasons
+    assert result.local_run.apply is None
+
+
+def test_remote_next_refuses_short_freshness_anchor_before_apply(tmp_path, monkeypatch):
+    # WOTB-07: a prefix of HEAD, however long, is not a freshness anchor.
+    _init_repo(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    _write_order(
+        tmp_path,
+        {
+            "schema_version": 1,
+            "kind": "llm_to_local_transfer_order",
+            "id": "short-anchor",
+            "status": "active",
+            "branch": "main",
+            "expected_current_head": _head(tmp_path),
+        },
+    )
+
+    result = run_remote_next_transfer(tmp_path)
+
+    assert result.result_status == "BLOCKED"
+    assert "freshness_anchor_not_full_commit_hash" in result.reasons
     assert result.local_run.apply is None
 
 
