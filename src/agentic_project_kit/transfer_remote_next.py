@@ -10,6 +10,7 @@ from typing import Any
 
 import yaml
 
+from agentic_project_kit.order_freshness import check_order_anchor
 from agentic_project_kit.safe_push import SafePushResult
 from agentic_project_kit.safe_push import safe_push
 from agentic_project_kit.safe_push import validate_branch_name
@@ -154,6 +155,9 @@ def _remote_next_primary_state(result_status: str, reasons: tuple[str, ...]) -> 
             "stale_transfer_order_branch_mismatch",
             "stale_order_missing_freshness_anchor",
             "stale_transfer_order_head_mismatch",
+            "freshness_anchor_not_full_commit_hash",
+            "freshness_anchor_unverifiable",
+            "transfer_order_branch_mismatch",
         )
     ):
         return "STALE_ORDER"
@@ -174,6 +178,9 @@ def _remote_next_next_action(reasons: tuple[str, ...]) -> str:
             "stale_transfer_order_branch_mismatch",
             "stale_order_missing_freshness_anchor",
             "stale_transfer_order_head_mismatch",
+            "freshness_anchor_not_full_commit_hash",
+            "freshness_anchor_unverifiable",
+            "transfer_order_branch_mismatch",
         )
     ):
         return "Supersede the stale remote-next transfer order with a fresh head-anchored order."
@@ -267,10 +274,9 @@ def _full_head(project_root: Path) -> str:
 
 
 def _head_matches(expected: str, *, short_head: str, full_head: str) -> bool:
+    """Only a full 40-character hash identifies a commit; prefixes are refused (WOTB-07)."""
     value = expected.strip()
-    if not value:
-        return True
-    return short_head.startswith(value) or full_head.startswith(value) or value.startswith(short_head)
+    return len(value) == 40 and value == full_head
 
 
 def _rule_ack_snapshot(project_root: Path, *, repo_head: str) -> RuleAckSnapshot:
@@ -472,14 +478,6 @@ def _order_identity(data: dict[str, Any]) -> dict[str, object]:
     }
 
 
-def _freshness_anchor(data: dict[str, Any]) -> str:
-    for key in ("expected_current_head", "expected_head", "created_for_head"):
-        value = data.get(key)
-        if isinstance(value, str) and value.strip():
-            return value.strip()
-    return ""
-
-
 def _block_inactive_transfer_order_before_branch_resolution(root: Path, *, branch: str | None = None) -> None:
     data = _read_transfer_order_data(root / DEFAULT_INBOX)
     status = str(data.get("status") or "active").strip().lower()
@@ -487,7 +485,19 @@ def _block_inactive_transfer_order_before_branch_resolution(root: Path, *, branc
         _ensure_transfer_order_is_fresh(root, branch=branch)
 
 
-def _ensure_transfer_order_is_fresh(root: Path, *, branch: str | None = None) -> dict[str, object]:
+def _ensure_transfer_order_is_fresh(
+    root: Path,
+    *,
+    branch: str | None = None,
+    check_expected_branch: bool = True,
+    require_order_branch: str = "",
+) -> dict[str, object]:
+    """Validate status, kind, branch and freshness anchor of the order in the current checkout.
+
+    ``transfer remote-next`` calls this again after switching to and pulling the order branch,
+    with ``require_order_branch`` set, so the order that runs is the order that was checked
+    (WOTB-08).
+    """
     data = _read_transfer_order_data(root / DEFAULT_INBOX)
     snapshot = _git_snapshot(root)
     full_head = _full_head(root)
@@ -538,26 +548,39 @@ def _ensure_transfer_order_is_fresh(root: Path, *, branch: str | None = None) ->
             branch=branch,
             preflight=preflight,
         )
+    order_branch = str(data.get("branch") or "").strip()
+    if require_order_branch and order_branch and order_branch != require_order_branch:
+        raise RemoteNextBlocked(
+            "remote-next transfer order names a different branch than the one it runs on",
+            reasons=("transfer_order_branch_mismatch",),
+            branch=branch,
+            preflight=preflight,
+        )
     expected_branch = data.get("expected_current_branch")
-    if isinstance(expected_branch, str) and expected_branch.strip() and expected_branch.strip() != snapshot.current_branch:
+    if (
+        check_expected_branch
+        and isinstance(expected_branch, str)
+        and expected_branch.strip()
+        and expected_branch.strip() != snapshot.current_branch
+    ):
         raise RemoteNextBlocked(
             "remote-next transfer order expected a different current branch",
             reasons=("stale_transfer_order_branch_mismatch",),
             branch=branch,
             preflight=preflight,
         )
-    anchor = _freshness_anchor(data)
-    if not anchor:
+    anchor_check = check_order_anchor(root, root / DEFAULT_INBOX, data)
+    preflight["transfer_order_guard"]["anchor_expected"] = anchor_check.expected
+    preflight["transfer_order_guard"]["anchor_basis"] = anchor_check.basis
+    if not anchor_check.ok:
+        messages = {
+            "stale_order_missing_freshness_anchor": "remote-next transfer order is missing a freshness head anchor",
+            "freshness_anchor_not_full_commit_hash": "remote-next transfer order freshness anchor must be a full 40-character commit hash",
+            "stale_transfer_order_head_mismatch": "remote-next transfer order freshness anchor does not match the commit the order was written on",
+        }
         raise RemoteNextBlocked(
-            "remote-next transfer order is missing a freshness head anchor",
-            reasons=("stale_order_missing_freshness_anchor",),
-            branch=branch,
-            preflight=preflight,
-        )
-    if not _head_matches(anchor, short_head=snapshot.head, full_head=full_head):
-        raise RemoteNextBlocked(
-            "remote-next transfer order freshness anchor does not match current HEAD",
-            reasons=("stale_transfer_order_head_mismatch",),
+            messages.get(anchor_check.reason, f"remote-next transfer order freshness anchor cannot be verified: {anchor_check.reason}"),
+            reasons=(anchor_check.reason.split(":", 1)[0],),
             branch=branch,
             preflight=preflight,
         )
@@ -936,6 +959,13 @@ def run_remote_next_transfer(
         _run(["git", "switch", safe_branch], root)
         _run(["git", "pull", "--ff-only", "origin", safe_branch], root)
         head = _run(["git", "rev-parse", "--short", "HEAD"], root)
+        # Validate the order revision that will actually run, on every path (WOTB-08).
+        order_guard_after_sync = _ensure_transfer_order_is_fresh(
+            root,
+            branch=safe_branch,
+            check_expected_branch=False,
+            require_order_branch=safe_branch,
+        )
         ack_before = _rule_ack_snapshot(root, repo_head=head)
         ack_refresh: dict[str, object] | None = None
         if not ack_before.confirmed:
@@ -945,6 +975,7 @@ def run_remote_next_transfer(
         preflight["owned_report_artifact_recovery"] = cleanup
         preflight["order_sync"] = order_sync
         preflight["transfer_order_guard"] = order_guard
+        preflight["transfer_order_guard_after_sync"] = order_guard_after_sync
         preflight["safe_push_target"] = publish_target_guard
         if ack_refresh is not None:
             preflight["rule_ack_refresh_before_transfer"] = ack_refresh
