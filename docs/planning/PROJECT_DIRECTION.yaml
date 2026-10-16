@@ -2184,7 +2184,7 @@ plans:
       and for decomplexification, not a finding yet.
   - id: drift-and-repeated-failure-checks
     order: 4
-    status: next
+    status: done
     kind: diagnostic_extension
     scope: Known drift classes as checks in the existing audit suite, and detection
       of repeated BLOCKED/FAIL fingerprints with finding drafts.
@@ -2198,9 +2198,21 @@ plans:
       within the work order''s limits and only up to a green PR; architecture changes
       and merges need explicit human approval.'
     - Existing failure evidence is never overwritten.
+    evidence:
+    - src/agentic_project_kit/drift_signals.py
+    - src/agentic_project_kit/invocation_ledger.py
+    - tests/test_drift_signals.py
+    result: audit-drift-signals measures release projection, refresh chains (1 of
+      109 product merges had chains of two or more over the last 220 first-parent
+      commits) and Kit/consumer status (16 of 68 shared findings CLOSED in the Kit,
+      OPEN in the consumer); ledger report detects repeated failures and writes
+      local finding drafts that are never overwritten.
+    deviation: The drift signals are a separate report-only diagnostic, not part
+      of the standard gates audit suite run by doctor, because doctor already starts
+      about 20 Kit processes; adding them to the suite is an owner decision.
   - id: gate-and-context-benchmark
     order: 5
-    status: planned
+    status: next
     kind: offline_experiment
     scope: Two-part benchmark of the Kit's controls.
     acceptance:

@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Add `agentic-kit audit-drift-signals`, a report-only measurement of release-projection drift, refresh chains after product merges and Kit/consumer finding status, each with its denominator; `agentic-kit ledger report` now lists repeated failures by fingerprint and `--write-finding-drafts` writes local drafts that are never overwritten; the test suite no longer writes to the invocation ledger.
+
 - Add a local invocation ledger: every `agentic-kit` process start (and in-process calls an orchestrator reports) is recorded with command name, timing, return code, Kit version, branch and call-tree ids, never arguments, in the git-ignored `.agentic/tmp/invocation-ledger/`; on in the Kit repository, opt-in elsewhere, bounded retention, and a ledger failure never changes a command's result. `agentic-kit ledger report` summarises it read-only. `agentic-kit doc-registry register` gains `--status`, `--review-policy` and `--summary`, so new runbooks are registered without hand edits.
 
 - Retire the unrestricted work-order lanes: `work-order run --execute`, the next-turn.py fixed slot (`next_turn_runner`, GUI work-order run) and the `current.sh` agent command slot no longer execute code; they report `BLOCKED_RETIRED_LANE` and point to typed work orders, transfer orders and the planner executor (WOTB-04, WOTB-09). The commands are removed after a deprecation window.
