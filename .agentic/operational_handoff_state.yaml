@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: cf057da5a7cdb85f381b4639a8a1c39316654b1a
-  short: cf057da5
-  subject: Add command usage audit (#2506)
+  full: 31608ff5393d3cc861117a150e1ab5b0eda95758
+  short: 31608ff5
+  subject: Archive self-hosting history and drift audit (#2508)
 last_substantive_work_state:
-  full: cf057da5a7cdb85f381b4639a8a1c39316654b1a
-  short: cf057da5
-  subject: Add command usage audit (#2506)
+  full: 31608ff5393d3cc861117a150e1ab5b0eda95758
+  short: 31608ff5
+  subject: Archive self-hosting history and drift audit (#2508)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
