@@ -2109,7 +2109,7 @@ plans:
       in the regression test and remain a layering question for decomplexification.
   - id: ai-work-order-trust-boundary-review
     order: 2
-    status: next
+    status: done
     kind: read_only_security_review
     scope: Trust boundary where AI-generated work orders reach local Kit commands
       (work-order validation, instruction lint, command allow-lists, path and argument
@@ -2119,6 +2119,32 @@ plans:
       gaps, each gap with a proposed finding.
     - Negative tests with crafted work orders cover every confirmed gap before any
       hardening slice is merged.
+    evidence:
+    - docs/reports/WORK_ORDER_TRUST_BOUNDARY_REVIEW_20261016.md
+    - tests/test_work_order_trust_boundary.py
+    result: Nine confirmed gaps WOTB-01 to WOTB-09, each pinned by a strict-xfail test.
+      High are arbitrary typed argv under a READ_ONLY label (WOTB-01), symlink escape
+      of write_text_file (WOTB-06) and the freshness guard skipped on the transfer
+      continue path or bypassed by re-reading the order after switch and pull (WOTB-08).
+    follow_up_hardening:
+    - id: order-path-confinement
+      gaps: [WOTB-03, WOTB-06]
+      status: next
+    - id: order-freshness-binding
+      gaps: [WOTB-07, WOTB-08]
+      status: planned
+      decision_needed: Anchor semantics, because a committed order cannot name its
+        own commit.
+    - id: order-command-authority-from-manifest
+      gaps: [WOTB-01, WOTB-02, WOTB-05]
+      status: planned
+    - id: unrestricted-order-lanes-documentation-or-retirement
+      gaps: [WOTB-04, WOTB-09]
+      status: planned
+      decision_needed: Document as unrestricted or retire; no recorded use outside
+        tests.
+    sequencing: Per ordering_rule the hardening slices come before the invocation
+      ledger unless the owner re-orders them.
   - id: local-invocation-ledger
     order: 3
     status: planned
