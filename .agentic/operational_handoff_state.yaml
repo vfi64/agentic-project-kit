@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 027775880bb0a4d672aca1f9c20e82f638788e4d
-  short: 02777588
-  subject: Confine work-order paths and take command authority from the manifest (#2518)
+  full: 0ba2bd83fac963c13b6858a638ece3424f96c0bc
+  short: 0ba2bd83
+  subject: Bind transfer order freshness to the commit the order was written on (#2520)
 last_substantive_work_state:
-  full: 027775880bb0a4d672aca1f9c20e82f638788e4d
-  short: 02777588
-  subject: Confine work-order paths and take command authority from the manifest (#2518)
+  full: 0ba2bd83fac963c13b6858a638ece3424f96c0bc
+  short: 0ba2bd83
+  subject: Bind transfer order freshness to the commit the order was written on (#2520)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

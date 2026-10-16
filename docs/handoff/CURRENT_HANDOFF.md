@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `027775880bb0a4d672aca1f9c20e82f638788e4d` (`02777588`), after `Confine work-order paths and take command authority from the manifest (#2518)`.
-Last substantive work state is `027775880bb0a4d672aca1f9c20e82f638788e4d` (`02777588`), after `Confine work-order paths and take command authority from the manifest (#2518)`.
+Current verified main/admin HEAD is `0ba2bd83fac963c13b6858a638ece3424f96c0bc` (`0ba2bd83`), after `Bind transfer order freshness to the commit the order was written on (#2520)`.
+Last substantive work state is `0ba2bd83fac963c13b6858a638ece3424f96c0bc` (`0ba2bd83`), after `Bind transfer order freshness to the commit the order was written on (#2520)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
