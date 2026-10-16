@@ -477,6 +477,70 @@
     {
       "dry_run_available": false,
       "group": "root",
+      "help": "Measure known drift classes, each with its denominator (report-only, never blocks).",
+      "name": "audit-drift-signals",
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "project_root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Consumer findings ledger (JSON) for the Kit/consumer status signal.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "consumer_ledger",
+          "opts": [
+            "--consumer-ledger"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "audit-drift-signals"
+      ],
+      "qualified_name": "agentic-kit audit-drift-signals",
+      "remote_effects": [
+        "none"
+      ],
+      "replaces_raw": [],
+      "safety": "READ_ONLY",
+      "surface": "diagnostic",
+      "task_tags": [
+        "read-only"
+      ],
+      "when_to_use": "Measure known drift classes, each with its denominator (report-only, never blocks)."
+    },
+    {
+      "dry_run_available": false,
+      "group": "root",
       "help": "Audit mutating entrypoints for workspace mutation-lock coverage.",
       "name": "audit-mutation-lock-coverage",
       "params": [
@@ -7944,7 +8008,7 @@
     {
       "dry_run_available": false,
       "group": "ledger",
-      "help": "Summarise the local invocation ledger: counts, nesting, failures and work cycles (read-only).",
+      "help": "Summarise the local invocation ledger: counts, nesting, failures, work cycles and repeated failures.",
       "name": "report",
       "params": [
         {
@@ -7988,6 +8052,20 @@
           "param_type": "TyperOption",
           "required": false,
           "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Write a local finding draft per new repeated-failure fingerprint; existing drafts are kept.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "write_finding_drafts_flag",
+          "opts": [
+            "--write-finding-drafts"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -8005,7 +8083,7 @@
         "ledger",
         "read-only"
       ],
-      "when_to_use": "Summarise the local invocation ledger: counts, nesting, failures and work cycles (read-only)."
+      "when_to_use": "Summarise the local invocation ledger: counts, nesting, failures, work cycles and repeated failures."
     },
     {
       "dry_run_available": false,
@@ -20118,7 +20196,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "232091ac7240",
+    "manifest_sha": "bf14239a2ea5",
     "schema_version": 1
   },
   "schema_version": 2,

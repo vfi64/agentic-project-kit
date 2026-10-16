@@ -1,8 +1,13 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import pytest
+
+# Kit processes started by tests must not land in the developer's invocation ledger; the
+# ledger tests enable it explicitly where they need it.
+os.environ["AGENTIC_KIT_INVOCATION_LEDGER"] = "0"
 
 from tests.marker_routing import marker_names_for_file
 

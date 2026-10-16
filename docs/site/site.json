@@ -222,7 +222,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "commands=267",
+            "detail": "commands=268",
             "evidence_type": "generated-artifact",
             "status": "verified"
           }
@@ -274,8 +274,8 @@
     }
   },
   "command_catalog": {
-    "command_count": 267,
-    "diagnostic_count": 127,
+    "command_count": 268,
+    "diagnostic_count": 128,
     "entries": [
       {
         "diagnostic_priority": "reference_lookup",
@@ -568,6 +568,46 @@
         "safety": "READ_ONLY",
         "surface": "diagnostic",
         "when_to_use": "Report registered documents without incoming repository references."
+      },
+      {
+        "diagnostic_priority": "specialized_audit",
+        "dry_run_available": false,
+        "group": "root",
+        "help": "Measure known drift classes, each with its denominator (report-only, never blocks).",
+        "lifecycle_rank": null,
+        "params": [
+          {
+            "default": "PosixPath('.')",
+            "help": "Repository root.",
+            "name": "project_root",
+            "opts": [
+              "--root"
+            ],
+            "required": false
+          },
+          {
+            "default": null,
+            "help": "Consumer findings ledger (JSON) for the Kit/consumer status signal.",
+            "name": "consumer_ledger",
+            "opts": [
+              "--consumer-ledger"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Print machine-readable JSON.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          }
+        ],
+        "qualified_name": "agentic-kit audit-drift-signals",
+        "safety": "READ_ONLY",
+        "surface": "diagnostic",
+        "when_to_use": "Measure known drift classes, each with its denominator (report-only, never blocks)."
       },
       {
         "diagnostic_priority": "specialized_audit",
@@ -5155,7 +5195,7 @@
         "diagnostic_priority": "advanced_diagnostic",
         "dry_run_available": false,
         "group": "ledger",
-        "help": "Summarise the local invocation ledger: counts, nesting, failures and work cycles (read-only).",
+        "help": "Summarise the local invocation ledger: counts, nesting, failures, work cycles and repeated failures.",
         "lifecycle_rank": null,
         "params": [
           {
@@ -5184,12 +5224,21 @@
               "--json"
             ],
             "required": false
+          },
+          {
+            "default": false,
+            "help": "Write a local finding draft per new repeated-failure fingerprint; existing drafts are kept.",
+            "name": "write_finding_drafts_flag",
+            "opts": [
+              "--write-finding-drafts"
+            ],
+            "required": false
           }
         ],
         "qualified_name": "agentic-kit ledger report",
         "safety": "READ_ONLY",
         "surface": "diagnostic",
-        "when_to_use": "Summarise the local invocation ledger: counts, nesting, failures and work cycles (read-only)."
+        "when_to_use": "Summarise the local invocation ledger: counts, nesting, failures, work cycles and repeated failures."
       },
       {
         "diagnostic_priority": "advanced_diagnostic",
@@ -12541,7 +12590,7 @@
       "patterns": 2,
       "pr": 5,
       "release": 3,
-      "root": 53,
+      "root": 54,
       "rule-registry": 4,
       "rules": 7,
       "scaffold": 1,
@@ -12560,11 +12609,11 @@
     "safety_counts": {
       "BOUNDED": 175,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 83
+      "READ_ONLY": 84
     },
     "schema_version": 1,
     "surface_counts": {
-      "diagnostic": 127,
+      "diagnostic": 128,
       "orchestrator": 34,
       "primitive": 106
     }
@@ -12646,27 +12695,27 @@
   "kind": "agentic_project_kit_generated_site",
   "metadata": {
     "build_commit": "docs-pages-fallback",
-    "command_count": 267,
+    "command_count": 268,
     "command_group_count": 39,
     "concept_doi": "10.5281/zenodo.20101359",
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "232091ac7240",
+    "manifest_sha": "bf14239a2ea5",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.25",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.25",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "232091ac7240",
+    "reproduced_manifest_sha": "bf14239a2ea5",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 175,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 83
+      "READ_ONLY": 84
     },
     "surface_counts": {
-      "diagnostic": 127,
+      "diagnostic": 128,
       "orchestrator": 34,
       "primitive": 106
     },

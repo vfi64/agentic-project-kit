@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 232091ac7240
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: bf14239a2ea5
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `267`
+- Command count: `268`
 
 ## Commands
 
@@ -129,6 +129,22 @@ Report registered documents without incoming repository references.
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `report_path` | `TyperOption` | --report | `False` |  |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
+
+### `agentic-kit audit-drift-signals`
+
+- Safety: `READ_ONLY`
+- Surface: `diagnostic`
+- When to use: Measure known drift classes, each with its denominator (report-only, never blocks).
+- Dry-run available: `False`
+- Remote effects: `none`
+
+Measure known drift classes, each with its denominator (report-only, never blocks).
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `consumer_ledger` | `TyperOption` | --consumer-ledger | `False` |  | Consumer findings ledger (JSON) for the Kit/consumer status signal. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit audit-mutation-lock-coverage`
 
@@ -1676,17 +1692,18 @@ Plan a released Kit update; signed execution installs locally, updates CI pins a
 
 - Safety: `READ_ONLY`
 - Surface: `diagnostic`
-- When to use: Summarise the local invocation ledger: counts, nesting, failures and work cycles (read-only).
+- When to use: Summarise the local invocation ledger: counts, nesting, failures, work cycles and repeated failures.
 - Dry-run available: `False`
 - Remote effects: `none`
 
-Summarise the local invocation ledger: counts, nesting, failures and work cycles (read-only).
+Summarise the local invocation ledger: counts, nesting, failures, work cycles and repeated failures.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root or a path inside it. |
 | `days` | `TyperOption` | --days | `False` | `0` | Only records of the last N days; 0 reads all. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `write_finding_drafts_flag` | `TyperOption` | --write-finding-drafts | `False` | `False` | Write a local finding draft per new repeated-failure fingerprint; existing drafts are kept. |
 
 ### `agentic-kit onboarding measure`
 

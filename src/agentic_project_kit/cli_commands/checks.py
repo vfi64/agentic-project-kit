@@ -55,6 +55,21 @@ from agentic_project_kit.doctor import build_doctor_report, render_doctor_report
 console = Console()
 
 
+def audit_drift_signals_command(
+    project_root: Annotated[Path, typer.Option("--root", help="Repository root.")] = Path("."),
+    consumer_ledger: Annotated[
+        Path | None,
+        typer.Option("--consumer-ledger", help="Consumer findings ledger (JSON) for the Kit/consumer status signal."),
+    ] = None,
+    json_output: Annotated[bool, typer.Option("--json", help="Print machine-readable JSON.")] = False,
+) -> None:
+    """Measure known drift classes, each with its denominator (report-only, never blocks)."""
+    from agentic_project_kit.drift_signals import drift_signals, render_drift_signals
+
+    report = drift_signals(project_root.resolve(), consumer_ledger=consumer_ledger)
+    typer.echo(json.dumps(report, indent=2, sort_keys=True) if json_output else render_drift_signals(report))
+
+
 def register_check_commands(app: typer.Typer) -> None:
     app.command("check")(check_command)
     app.command("check-docs")(check_docs_command)
@@ -66,6 +81,7 @@ def register_check_commands(app: typer.Typer) -> None:
     app.command("audit-doc-orphans")(audit_doc_orphans_command)
     app.command("doc-mesh-repair")(doc_mesh_repair_command)
     app.command("doctor")(doctor_command)
+    app.command("audit-drift-signals")(audit_drift_signals_command)
 
 
 def check_command(

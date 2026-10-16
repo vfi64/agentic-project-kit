@@ -351,6 +351,85 @@ def read_records(root: Path, *, since_days: int | None = None) -> list[dict[str,
     return records
 
 
+REPEATED_FAILURE_THRESHOLD = 3
+FINDING_DRAFT_DIR = "finding-drafts"
+
+
+def repeated_failures(records: list[dict[str, Any]], *, threshold: int = REPEATED_FAILURE_THRESHOLD) -> list[dict[str, Any]]:
+    """Runs of the same failing command on the same branch with no success in between.
+
+    Fingerprint: command, return code and branch. Only outer and nested ``cli`` invocations count;
+    a success of the same command on the same branch ends the run.
+    """
+    runs: dict[tuple[str, str], dict[str, Any]] = {}
+    signals: dict[str, dict[str, Any]] = {}
+    for record in sorted(records, key=lambda item: str(item.get("started_at") or "")):
+        if record.get("kind") != "cli":
+            continue
+        key = (str(record.get("command") or ""), str(record.get("branch") or ""))
+        returncode = int(record.get("returncode") or 0)
+        if returncode == 0:
+            runs.pop(key, None)
+            continue
+        run = runs.get(key)
+        if run is None or run["returncode"] != returncode:
+            run = {"command": key[0], "branch": key[1], "returncode": returncode, "count": 0,
+                   "first_seen": record.get("started_at"), "root_ids": []}
+            runs[key] = run
+        run["count"] += 1
+        run["last_seen"] = record.get("started_at")
+        root_id = str(record.get("root_id") or "")
+        if root_id and root_id not in run["root_ids"]:
+            run["root_ids"].append(root_id)
+        if run["count"] >= threshold:
+            fingerprint = uuid.uuid5(uuid.NAMESPACE_URL, f"{key[0]}|{returncode}|{key[1]}").hex[:12]
+            signals[fingerprint] = {"fingerprint": fingerprint, **{k: v for k, v in run.items() if k != "root_ids"},
+                                    "work_cycles": len(run["root_ids"])}
+    return sorted(signals.values(), key=lambda item: (-item["count"], item["command"]))
+
+
+def write_finding_drafts(root: Path, signals: list[dict[str, Any]]) -> list[str]:
+    """Write one local finding draft per new fingerprint; an existing draft is never overwritten."""
+    directory = root / LEDGER_DIR / FINDING_DRAFT_DIR
+    written: list[str] = []
+    for signal in signals:
+        path = directory / f"{signal['fingerprint']}.md"
+        if path.exists():
+            continue
+        directory.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            "\n".join(
+                [
+                    f"# Finding draft {signal['fingerprint']}: repeated failure of {signal['command']}",
+                    "",
+                    "Status: draft, generated from the local invocation ledger; not a filed finding.",
+                    "",
+                    "## Evidence",
+                    "",
+                    f"- Command: `{signal['command']}`",
+                    f"- Return code: {signal['returncode']}",
+                    f"- Branch: `{signal['branch']}`",
+                    f"- Consecutive failures without a success: {signal['count']}",
+                    f"- Work cycles (root invocations): {signal['work_cycles']}",
+                    f"- First seen: {signal['first_seen']}; last seen: {signal['last_seen']}",
+                    "",
+                    "## Open questions for the diagnosis",
+                    "",
+                    "- Is the failure a Kit defect, a precondition the caller missed, or expected fail-closed behaviour?",
+                    "- Which command output or evidence report shows the BLOCKED reason?",
+                    "- Does an existing finding already cover it?",
+                    "",
+                    "Repairs follow the plan's graded rule: a patch only on a work branch and only up to a",
+                    "green PR; architecture changes and merges need explicit human approval.",
+                    "",
+                ]
+            ),
+            encoding="utf-8",
+        )
+        written.append(path.relative_to(root).as_posix())
+    return written
+
+
 def ledger_report(root: Path, *, since_days: int | None = None) -> dict[str, Any]:
     records = read_records(root, since_days=since_days)
     commands: dict[str, dict[str, Any]] = {}
@@ -394,6 +473,7 @@ def ledger_report(root: Path, *, since_days: int | None = None) -> dict[str, Any
             "max": per_root[-1] if per_root else 0,
         },
         "commands": rows,
+        "repeated_failures": repeated_failures(records),
     }
 
 
@@ -409,6 +489,11 @@ def render_ledger_report(report: dict[str, Any]) -> str:
         f"INVOCATIONS_PER_ROOT_MEDIAN={report['invocations_per_root']['median']}",
         f"INVOCATIONS_PER_ROOT_MAX={report['invocations_per_root']['max']}",
     ]
+    for signal in report.get("repeated_failures", []):
+        lines.append(
+            "REPEATED_FAILURE={fingerprint}|{command}|returncode={returncode}|branch={branch}"
+            "|count={count}|work_cycles={work_cycles}".format(**signal)
+        )
     for row in report["commands"]:
         lines.append(
             "COMMAND={command}|total={total}|outer={outer}|nested={nested}|internal={internal}"

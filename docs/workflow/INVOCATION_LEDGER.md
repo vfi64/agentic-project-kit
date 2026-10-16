@@ -41,7 +41,26 @@ No arguments, file contents, environment values or credentials are recorded.
 
 It also shows the number of root invocations and the invocations per root, which give a denominator per work cycle. Drift classification is a separate plan step.
 
+## Repeated failures and finding drafts
+
+The report lists repeated failures: the same command failing on the same branch with the same return code at least three times in a row. A success of that command on that branch ends the run. The fingerprint is a hash of command, return code and branch.
+
+`agentic-kit ledger report --write-finding-drafts` writes one local draft per new fingerprint to `.agentic/tmp/invocation-ledger/finding-drafts/`. An existing draft is never overwritten, so a human's edits survive. A draft records evidence and open questions. It is not a filed finding, and repairs follow the plan's graded rule: a patch only on a work branch and only up to a green PR, while merges and architecture changes need human approval.
+
+## Drift signals
+
+`agentic-kit audit-drift-signals [--consumer-ledger PATH] [--json]` measures the three drift classes of the self-hosting audit. Each signal comes with its denominator:
+
+| Signal | Measures | Denominator |
+|---|---|---|
+| `release_projection` | handoff `release` block against the release evidence (HD-08 class) | release block keys backed by evidence |
+| `refresh_chains` | two or more refresh-only commits after a product merge | product merges in the history window |
+| `consumer_status` | Kit `CLOSED` versus consumer `OPEN` | Kit findings present in the consumer ledger, passed by path |
+
+The command is report-only and always exits 0. It reports no general drift rate.
+
 ## Limits
 
-- Commands driven through `CliRunner` in tests bypass the entry point and are not recorded.
+- Commands driven through `CliRunner` in tests bypass the entry point and are not recorded. The test suite sets `AGENTIC_KIT_INVOCATION_LEDGER=0`, so Kit subprocesses started by tests do not either.
+- A fingerprint carries no BLOCKED reason; the draft points to the command output for it.
 - In-process composition is recorded only where an orchestrator reports it with `invocation_ledger.internal_call`. So far that is `transfer continue` → `transfer remote-next`.
