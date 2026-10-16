@@ -91,7 +91,11 @@ Each line is a proposed finding with its own slice and regression test (the test
   - The anchor must be a full 40-character hash. It must equal `HEAD` for an uncommitted order, and otherwise the first parent of the commit that last changed the order file.
   - `transfer remote-next` checks status, kind, branch and anchor again after switch and pull, on every path including an explicit or inferred branch (`transfer continue`). The order that runs is therefore the order that was checked.
   - `transfer order-validate` uses the same binding.
-- **Decided, open:** WOTB-04/-09: the unrestricted lanes are retired with a deprecation window.
+- **Closed in the third slice:** WOTB-04 and -09, by retiring the unrestricted lanes (`retired_order_lanes.py`).
+  - `work-order run --execute`, the next-turn.py fixed slot (`next_turn_runner`, GUI work-order run) and `current.sh` (`agent_command_runner`) no longer execute anything.
+  - They report `BLOCKED_RETIRED_LANE`, keep their evidence and point to typed work orders, transfer orders and the planner executor.
+  - The validators stay as format checks. The commands are removed after the deprecation window.
+- No confirmed gap of this review is open; every former strict-xfail test now asserts the safe behaviour.
 
 ## Limits
 

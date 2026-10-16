@@ -939,7 +939,7 @@ Fixed-slot work-order execution must write the active result first to `/tmp/agen
 
 ## Latest command-run pointer
 
-`tests/test_agent_command_runner.py` verifies that command reports update `docs/reports/command_runs/LATEST_COMMAND_RUN.txt` and that `agent_run` includes that pointer in the uploaded evidence paths. This backs the no-copy `d`/`f` handoff contract.
+`tests/test_agent_command_runner.py` verifies that command reports update `docs/reports/command_runs/LATEST_COMMAND_RUN.txt`. Since the `current.sh` lane is retired (WOTB-09), it also verifies that `agent_run` refuses with `BLOCKED_RETIRED_LANE`, runs no script and commits or pushes nothing.
 
 ## Visible agent-next result footer
 

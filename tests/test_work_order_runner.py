@@ -26,7 +26,8 @@ def test_run_validated_work_order_blocks_missing_file(tmp_path, monkeypatch):
     assert not (tmp_path / "remote.log").exists()
 
 
-def test_run_validated_work_order_executes_and_writes_local_log_only(tmp_path, monkeypatch):
+def test_run_validated_work_order_is_retired_and_runs_nothing(tmp_path, monkeypatch):
+    # WOTB-09: the validator is a format check; a validator-passing script no longer runs.
     monkeypatch.chdir(tmp_path)
     work_order = tmp_path / ".agentic/commands/inbox/next-turn.py"
     work_order.parent.mkdir(parents=True)
@@ -39,13 +40,12 @@ def test_run_validated_work_order_executes_and_writes_local_log_only(tmp_path, m
     )
 
     rendered = render_work_order_run_result(result)
-    local_log = (tmp_path / "next-turn-latest-local.log").read_text(
-        encoding="utf-8"
-    )
+    local_log = (tmp_path / "next-turn-latest-local.log").read_text(encoding="utf-8")
 
     assert result.validation_ok is True
-    assert result.executed is True
-    assert result.returncode == 0
+    assert result.executed is False
+    assert result.returncode == 2
     assert "WORK_ORDER_RUN_RESULT" in rendered
-    assert "hello from work order" in local_log
+    assert "BLOCKED_RETIRED_LANE" in local_log
+    assert "hello from work order" not in local_log
     assert not (tmp_path / "docs/reports/terminal/next-turn-latest.log").exists()

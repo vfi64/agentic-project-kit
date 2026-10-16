@@ -11582,7 +11582,7 @@
         "diagnostic_priority": "not_diagnostic",
         "dry_run_available": true,
         "group": "work-order",
-        "help": "",
+        "help": "Show a shell work order; executing it is retired (WOTB-04).",
         "lifecycle_rank": null,
         "params": [
           {
@@ -11596,7 +11596,7 @@
           },
           {
             "default": false,
-            "help": "Actually run the work order. Omit for dry-run.",
+            "help": "Retired (WOTB-04): refuses with BLOCKED_RETIRED_LANE instead of running bash. Omit for dry-run.",
             "name": "execute",
             "opts": [
               "--execute"
@@ -11607,7 +11607,7 @@
         "qualified_name": "agentic-kit work-order run",
         "safety": "BOUNDED",
         "surface": "primitive",
-        "when_to_use": "Run agentic-kit work-order run."
+        "when_to_use": "Show a shell work order; executing it is retired (WOTB-04)."
       },
       {
         "diagnostic_priority": "reference_lookup",
@@ -12584,13 +12584,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "de29c190c90f",
+    "manifest_sha": "2adf44031fbf",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.25",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.25",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "de29c190c90f",
+    "reproduced_manifest_sha": "2adf44031fbf",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 175,

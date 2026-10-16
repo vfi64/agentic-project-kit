@@ -76,25 +76,21 @@ def test_current_branch_falls_back_outside_git_repo(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     assert acr.current_branch() == "unknown"
 
-def test_agent_run_executes_and_records_report(tmp_path, monkeypatch):
+def test_agent_run_is_retired_and_runs_or_pushes_nothing(tmp_path, monkeypatch):
+    # WOTB-09: current.sh ran an arbitrary shell script; agent_run now refuses before running it.
     monkeypatch.chdir(tmp_path)
     write_command(tmp_path)
-    log_path = Path("docs/reports/terminal/cmd-1.log")
-    log_path.parent.mkdir(parents=True)
-    log_path.write_text("log" + chr(10), encoding="utf-8")
-    monkeypatch.setattr(acr.terminal_logging, "run_logged", lambda name, command: 0)
-    monkeypatch.setattr(acr.terminal_logging, "read_latest_pointer", lambda: log_path)
-    pushed_paths = []
-    def fake_stage_commit_push(paths, message, **kwargs):
-        pushed_paths.extend(path.as_posix() for path in paths)
-        assert "cmd-1" in message
-        return 0
-    monkeypatch.setattr(acr, "stage_commit_push", fake_stage_commit_push)
-    assert acr.agent_run() == 0
-    assert acr.EXECUTED_JSONL.exists()
-    assert acr.report_path("cmd-1").exists()
-    assert "docs/reports/command_runs/cmd-1.md" in pushed_paths
-    assert "docs/reports/terminal/cmd-1.log" in pushed_paths
+    acr.CURRENT_SCRIPT.write_text("touch EXECUTED" + chr(10), encoding="utf-8")
+
+    def fail_if_pushed(paths, message, **kwargs):
+        raise AssertionError("a retired lane must not commit or push")
+
+    monkeypatch.setattr(acr, "stage_commit_push", fail_if_pushed)
+    assert acr.agent_run() == 2
+    assert not Path("EXECUTED").exists()
+    assert not acr.EXECUTED_JSONL.exists()
+    report = acr.report_path("cmd-1").read_text(encoding="utf-8")
+    assert "BLOCKED_RETIRED_LANE" in report
 
 
 def test_pending_inbox_command_pair_requires_exactly_one_pair(tmp_path, monkeypatch):
@@ -156,23 +152,6 @@ def test_main_dispatches_next_to_agent_next(monkeypatch):
     assert called == ["next"]
 
 
-def test_agent_run_includes_extra_upload_paths(tmp_path, monkeypatch):
-    monkeypatch.chdir(tmp_path)
-    write_command(tmp_path, command_id="cmd-extra")
-    extra = Path(".agentic/commands/inbox/cmd-extra.yaml")
-    log_path = Path("docs/reports/terminal/cmd-extra.log")
-    log_path.parent.mkdir(parents=True)
-    log_path.write_text("log" + chr(10), encoding="utf-8")
-    monkeypatch.setattr(acr.terminal_logging, "run_logged", lambda name, command: 0)
-    monkeypatch.setattr(acr.terminal_logging, "read_latest_pointer", lambda: log_path)
-    pushed_paths = []
-    def fake_stage_commit_push(paths, message, **kwargs):
-        pushed_paths.extend(path.as_posix() for path in paths)
-        return 0
-    monkeypatch.setattr(acr, "stage_commit_push", fake_stage_commit_push)
-    assert acr.agent_run(extra_upload_paths=[extra]) == 0
-    assert ".agentic/commands/inbox/cmd-extra.yaml" in pushed_paths
-
 def test_agent_next_postconditions_detect_current_files(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     acr.CURRENT_YAML.parent.mkdir(parents=True)
@@ -208,23 +187,6 @@ def test_write_report_updates_latest_command_run_pointer(tmp_path, monkeypatch):
     report = acr.write_report(command, acr.OUTCOME_PASS_EXECUTED, 0, Path("docs/reports/terminal/cmd-pointer.log"))
     assert acr.LATEST_COMMAND_RUN_POINTER.exists()
     assert acr.LATEST_COMMAND_RUN_POINTER.read_text(encoding="utf-8").strip() == report.as_posix()
-
-
-def test_agent_run_uploads_latest_command_run_pointer(tmp_path, monkeypatch):
-    monkeypatch.chdir(tmp_path)
-    write_command(tmp_path, command_id="cmd-upload-pointer")
-    log_path = Path("docs/reports/terminal/cmd-upload-pointer.log")
-    log_path.parent.mkdir(parents=True)
-    log_path.write_text("log\n", encoding="utf-8")
-    monkeypatch.setattr(acr.terminal_logging, "run_logged", lambda name, command: 0)
-    monkeypatch.setattr(acr.terminal_logging, "read_latest_pointer", lambda: log_path)
-    pushed_paths = []
-    def fake_stage_commit_push(paths, message, **kwargs):
-        pushed_paths.extend(path.as_posix() for path in paths)
-        return 0
-    monkeypatch.setattr(acr, "stage_commit_push", fake_stage_commit_push)
-    assert acr.agent_run() == 0
-    assert "docs/reports/command_runs/LATEST_COMMAND_RUN.txt" in pushed_paths
 
 
 def test_agent_next_no_command_prints_visible_footer(tmp_path, monkeypatch, capsys):

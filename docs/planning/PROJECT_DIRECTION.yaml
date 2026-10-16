@@ -2149,15 +2149,17 @@ plans:
         path including an explicit or inferred branch, after switch and pull.
     - id: unrestricted-order-lanes-retirement
       gaps: [WOTB-04, WOTB-09]
-      status: next
+      status: done
+      evidence: src/agentic_project_kit/retired_order_lanes.py
+      follow_up: Remove the retired commands and modules after the deprecation window.
       decision: Retire with a deprecation window (owner 2026-10-16). work-order run,
         the next-turn.py lane and current.sh report BLOCKED with a pointer to the
         replacement, removal follows later.
-    sequencing: Per ordering_rule the hardening slices come before the invocation
-      ledger unless the owner re-orders them.
+    sequencing: Per ordering_rule the hardening slices came before the invocation
+      ledger; all four are done (2026-10-16), so local-invocation-ledger is next.
   - id: local-invocation-ledger
     order: 3
-    status: planned
+    status: next
     kind: implementation
     scope: Local, opt-in-for-foreign-repositories record of Kit command invocations
       plus one read-only report diagnostic.

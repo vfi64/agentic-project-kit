@@ -5,6 +5,8 @@ from pathlib import Path
 
 import typer
 
+from agentic_project_kit.retired_order_lanes import retired_lane_message
+
 from agentic_project_kit.typed_work_order_queue import (
     inspect_typed_work_order_queue,
     render_typed_work_order_queue_status,
@@ -61,7 +63,8 @@ def check_command() -> None:
 
 
 @work_orders_app.command("run")
-def run_command(work_order_id: str, execute: bool = typer.Option(False, "--execute", help="Actually run the work order. Omit for dry-run.")) -> None:
+def run_command(work_order_id: str, execute: bool = typer.Option(False, "--execute", help="Retired (WOTB-04): refuses with BLOCKED_RETIRED_LANE instead of running bash. Omit for dry-run.")) -> None:
+    """Show a shell work order; executing it is retired (WOTB-04)."""
     try:
         order = load_work_order(work_order_id)
     except (FileNotFoundError, ValueError) as exc:
@@ -69,9 +72,10 @@ def run_command(work_order_id: str, execute: bool = typer.Option(False, "--execu
         raise typer.Exit(code=1) from exc
     typer.echo(render_work_order(order))
     if not execute:
-        typer.echo("Dry run only. Re-run with --execute to run the command.")
+        typer.echo("Dry run only. Executing shell work orders is retired: " + retired_lane_message("work-order-run"))
         return
     result_code = run_work_order(order)
+    typer.echo(retired_lane_message("work-order-run"))
     typer.echo(f"Work order log written: {order.log_path}")
     if result_code != 0:
         raise typer.Exit(code=result_code)

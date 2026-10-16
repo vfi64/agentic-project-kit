@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Retire the unrestricted work-order lanes: `work-order run --execute`, the next-turn.py fixed slot (`next_turn_runner`, GUI work-order run) and the `current.sh` agent command slot no longer execute code; they report `BLOCKED_RETIRED_LANE` and point to typed work orders, transfer orders and the planner executor (WOTB-04, WOTB-09). The commands are removed after a deprecation window.
+
 - Bind the freshness anchor of a transfer order to the commit it was written on: a full 40-character hash equal to `HEAD` for an uncommitted order or to the parent of the commit that last changed it, checked again after switch and pull on every `transfer remote-next` path including `transfer continue`, so the order that runs is the order that was validated (WOTB-07, WOTB-08). Orders with short anchors, or changed after anchoring, now stop as stale.
 
 - Confine every path named by a work order to the repository, refusing `..` segments and symlinks (WOTB-03, WOTB-06), and take command authority for typed and transfer orders from the command manifest: READ_ONLY Kit commands and read-only git/gh queries run, BOUNDED Kit commands, BOUNDED cockpit actions and unlisted commands need the new local `--allow-unlisted` flag, and DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters are refused however they are wrapped (WOTB-01, WOTB-02, WOTB-05). Orders that ran BOUNDED or non-Kit commands now stop with a refusal that names the flag.

@@ -1,3 +1,9 @@
+"""Format check for the retired next-turn.py work-order slot.
+
+This is a text denylist over an arbitrary Python script and not a safety boundary (WOTB-09).
+The slot no longer executes; see ``retired_order_lanes``.
+"""
+
 from __future__ import annotations
 
 import ast

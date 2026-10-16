@@ -31,6 +31,8 @@ This plan intentionally prioritizes enforcement over additional prose rules. Rep
 
 ## Canonical Fixed Slot
 
+> **Retired (WOTB-09, 2026-10-16):** the fixed slot no longer executes `next-turn.py`. `next_turn_runner` and the GUI work-order run report `BLOCKED_RETIRED_LANE`, because `work_order_validator` is a format check over an arbitrary Python script and not a safety boundary. The slot description below stays for the deprecation window. Typed work orders and transfer orders are the governed replacements.
+
 There is exactly one canonical next work-order slot:
 
 - `.agentic/commands/inbox/next-turn.yaml`

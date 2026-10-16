@@ -4,6 +4,8 @@ Superseded-by: n/a
 
 # Repo Command Runner
 
+> **Retired (WOTB-09, 2026-10-16):** `agent_run` no longer executes `current.sh`. It reports `BLOCKED_RETIRED_LANE`, writes the command report and commits or pushes nothing, because the slot ran an arbitrary shell script. The description below documents the former behaviour for the deprecation window. Use a typed work order or a transfer order instead; see `docs/reports/WORK_ORDER_TRUST_BOUNDARY_REVIEW_20261016.md`.
+
 `./ns agent-run` is the intended no-copy handoff path for local agent work.
 
 Instead of pasting terminal blocks into the shell, the repository stores the current command in:

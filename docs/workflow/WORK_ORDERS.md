@@ -7,6 +7,8 @@ Superseded-by: n/a
 Status: active
 Decision status: accepted
 
+> **Retired (WOTB-04, 2026-10-16):** `agentic-kit work-order run <id> --execute` no longer runs the stored bash command. It refuses with `BLOCKED_RETIRED_LANE` and writes the refusal to the log path, because the contract checks were text checks over arbitrary shell. Use a typed work order (`agentic-kit work-order typed-run` / `typed-next`) or a transfer order (`agentic-kit transfer continue`); their commands need manifest authority or the local `--allow-unlisted` flag. See `docs/reports/WORK_ORDER_TRUST_BOUNDARY_REVIEW_20261016.md`.
+
 ## Purpose
 
 Repo-backed work orders move long implementation instructions out of chat copy-and-paste blocks and into versioned repository artifacts.
@@ -18,7 +20,7 @@ The MVP is intentionally small:
 - `agentic-kit work-order show <id>` displays the selected work order.
 - `agentic-kit work-order check` validates the deterministic work-order contract.
 - `agentic-kit work-order run <id>` is dry-run by default.
-- `agentic-kit work-order run <id> --execute` runs the stored command only after branch and contract checks.
+- `agentic-kit work-order run <id> --execute` is retired and refuses with `BLOCKED_RETIRED_LANE` (see above).
 
 ## Safety Boundary
 
