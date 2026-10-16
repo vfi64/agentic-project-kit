@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 0a03aec36cb53266ef17a13b8b0ca4b067390258
-  short: 0a03aec3
-  subject: Plan Kit control-effectiveness measurement (#2512)
+  full: 0b667eb33ab851e435b622fa7e7b5de99edc63fe
+  short: 0b667eb3
+  subject: Route workflow helper git mutations through Kit primitives (F4) (#2514)
 last_substantive_work_state:
-  full: 0a03aec36cb53266ef17a13b8b0ca4b067390258
-  short: 0a03aec3
-  subject: Plan Kit control-effectiveness measurement (#2512)
+  full: 0b667eb33ab851e435b622fa7e7b5de99edc63fe
+  short: 0b667eb3
+  subject: Route workflow helper git mutations through Kit primitives (F4) (#2514)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `0a03aec36cb53266ef17a13b8b0ca4b067390258` (`0a03aec3`), after `Plan Kit control-effectiveness measurement (#2512)`.
-Last substantive work state is `0a03aec36cb53266ef17a13b8b0ca4b067390258` (`0a03aec3`), after `Plan Kit control-effectiveness measurement (#2512)`.
+Current verified main/admin HEAD is `0b667eb33ab851e435b622fa7e7b5de99edc63fe` (`0b667eb3`), after `Route workflow helper git mutations through Kit primitives (F4) (#2514)`.
+Last substantive work state is `0b667eb33ab851e435b622fa7e7b5de99edc63fe` (`0b667eb3`), after `Route workflow helper git mutations through Kit primitives (F4) (#2514)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
