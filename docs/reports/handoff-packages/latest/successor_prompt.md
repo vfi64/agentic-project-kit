@@ -39,9 +39,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2510-handoff-refresh`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- branch: `docs/kit-effectiveness-plan-20261016`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -262,6 +262,15 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
+      "id": "kit-control-effectiveness-measurement",
+      "status": "planned",
+      "summary": "Measure the effectiveness and cost of the Kit's own control mechanisms"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
       "id": "optional-structural-evidence-provider-evaluation",
       "status": "planned",
       "summary": "Evaluate optional structural evidence providers for impact-aware context"
@@ -430,15 +439,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2510-handoff-refresh",
+    "branch": "docs/kit-effectiveness-plan-20261016",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "b48b181acd8ba3d2d28162dde5c808bbb3a39785",
-    "head_matches_origin_main": true,
-    "head_short": "b48b181a",
+    "head": "7a490289e71fbbd909b6e902d8df4147569a0082",
+    "head_matches_origin_main": false,
+    "head_short": "7a490289",
     "local_path": "cd /path/to/",
-    "origin_main": "b48b181acd8ba3d2d28162dde5c808bbb3a39785",
-    "origin_main_short": "b48b181a",
-    "worktree_clean": false
+    "origin_main": "04aaed4fe552c4d1b486244ec6909008858198eb",
+    "origin_main_short": "04aaed4f",
+    "worktree_clean": true
   }
 }
 ```

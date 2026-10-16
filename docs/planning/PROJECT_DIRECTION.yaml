@@ -8,14 +8,14 @@ meta:
     maintainer-gated.
   owner: maintainers
   status: active
-  updated_after_pr: 2473
+  updated_after_pr: 2511
   updated_after_pr_semantics: strategic_direction_refresh
   updated_after_pr_current_main_claimed: false
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/2473
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/2511
   planning_reconciliation:
     date: '2026-10-11'
     baseline_ref: e4029264ff7f3a598191f5952f62852d5ab36964
@@ -2057,6 +2057,124 @@ plans:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/reports/handoff-packages/latest/execution_contract.json
   - docs/reports/handoff-packages/latest/successor_context.yaml
+- id: kit-control-effectiveness-measurement
+  status: planned
+  title: Measure the effectiveness and cost of the Kit's own control mechanisms
+  decision_status: accepted_by_owner
+  integrated_at: '2026-10-16'
+  rationale: The Kit enforces correct agent behaviour through many commands, gates
+    and projections, but cannot yet show which of them are used, which prevent drift
+    and what they cost. The October 2026 audits found 25 of 266 public commands with
+    no execution evidence, no persistent invocation record, a documented direct-Git
+    bypass (F4), a stale secondary handoff projection (HD-08, fixed by PR 2510) and
+    administrative refresh PRs at 50 % of October PRs and 22 % of PR-head CI time.
+    The next step is measurement before further rules or command removal, extending
+    existing mechanisms instead of adding a new planning or research system.
+  related_items:
+  - decomplexification-audit-roadmap
+  - context-budgeted-handoff-projections
+  - proof-assurance-assessment
+  - next-turn-workflow-kernel
+  ordering_rule: Security-relevant authority findings come before measurement; each
+    step is its own reviewable slice with regression tests, and later steps may be
+    re-ordered only by an explicit owner decision.
+  steps:
+  - id: f4-direct-git-mutation-bypass
+    order: 1
+    status: next
+    kind: security_fix
+    scope: tools/next-step.py (reached through workflow go) and cli_commands/workflow.py
+      call git switch/add/commit/push/pull/branch -D/push --delete directly instead
+      of the Kit's governed mutation primitives.
+    acceptance:
+    - Reachable states and existing guards are documented before the change, so the
+      slice states whether an unauthorised mutation was practically possible.
+    - Every listed mutation runs through a Kit primitive or fails closed with a Kit
+      BLOCKED result; temp-prefix cleanup keeps its prefix guard.
+    - A regression test fails when tools/ or src/agentic_project_kit/cli_commands/
+      gain a direct git mutation outside an explicit, reviewed allow-list.
+  - id: ai-work-order-trust-boundary-review
+    order: 2
+    status: planned
+    kind: read_only_security_review
+    scope: Trust boundary where AI-generated work orders reach local Kit commands
+      (work-order validation, instruction lint, command allow-lists, path and argument
+      handling).
+    acceptance:
+    - The review is read-only and produces a report of the enforced checks and the
+      gaps, each gap with a proposed finding.
+    - Negative tests with crafted work orders cover every confirmed gap before any
+      hardening slice is merged.
+  - id: local-invocation-ledger
+    order: 3
+    status: planned
+    kind: implementation
+    scope: Local, opt-in-for-foreign-repositories record of Kit command invocations
+      plus one read-only report diagnostic.
+    acceptance:
+    - Records carry only canonical command name, start time, duration, return code,
+      Kit version, parent chain, work branch and a root invocation ID.
+    - No arguments, file contents, environment values or credentials are recorded.
+    - The ledger is git-ignored, never committed, has bounded retention and is enabled
+      in repositories other than the Kit only by explicit opt-in.
+    - A logging failure never fails a command and never changes its return code;
+      a test proves this.
+    - Orchestrators report in-process sub-command calls explicitly, so outer user
+      calls and internal Kit actions stay distinguishable.
+    - The root invocation ID and work branch make per-work-cycle denominators possible;
+      drift classification remains a separate step.
+  - id: drift-and-repeated-failure-checks
+    order: 4
+    status: planned
+    kind: diagnostic_extension
+    scope: Known drift classes as checks in the existing audit suite, and detection
+      of repeated BLOCKED/FAIL fingerprints with finding drafts.
+    acceptance:
+    - 'Drift checks extend existing audits: projection versus source (HD-08 class),
+      Kit versus consumer finding status, and refresh chains of two or more after
+      a product change.'
+    - No general drift rate is reported without a defined denominator.
+    - 'Failure handling is graded: detection, classification, evidence capture and
+      finding drafts are automatic; a repair patch is prepared only on a work branch
+      within the work order''s limits and only up to a green PR; architecture changes
+      and merges need explicit human approval.'
+    - Existing failure evidence is never overwritten.
+  - id: gate-and-context-benchmark
+    order: 5
+    status: planned
+    kind: offline_experiment
+    scope: Two-part benchmark of the Kit's controls.
+    acceptance:
+    - 'Part 1: deterministic gate tests with fault injection in the offline sandbox,
+      eight to ten targeted fault scenarios, no repetitions needed.'
+    - 'Part 2, later: current context versus task-specific context (with
+      context-budgeted-handoff-projections) using a real LLM, with repetitions to
+      expose random effects.'
+    - A comparison without the Kit is deferred and is not part of this plan.
+  out_of_scope:
+  - An automatic narrative history (see discarded automatic-narrative-history-maintenance);
+    at most an on-demand, uncommitted technical timeline from Git, releases and existing
+    evidence.
+  - Reconciling the 16 finding families that are CLOSED in the Kit and OPEN in the
+    external consumer ledger; that runs separately in the existing consumer reconciliation,
+    whose status authority stays with the consumer.
+  - Any new status authority, planning system or command-removal decision.
+  success_metrics:
+  - Real invocation counts replace the static and simulated usage estimates of the
+    October 2026 audit for decomplexification decisions.
+  - The cost of administrative refresh PRs is measured per work cycle before any
+    change to the refresh mechanism is proposed.
+  - No gate becomes weaker or advisory-only as a result of a measurement.
+  evidence:
+  - docs/reports/COMMAND_USAGE_AUDIT_20261015.md
+  - docs/reports/COMMAND_USAGE_AUDIT_20261015.json
+  - docs/reports/self-hosting/DRIFT_QUALITY_AUDIT_20261015.md
+  - docs/reports/self-hosting/HISTORICAL_DEVELOPMENT_20261015.md
+  - docs/reports/self-hosting/DRIFT_METRICS_20261015.json
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/reports/COMMAND_USAGE_AUDIT_20261015.md
+  - docs/reports/self-hosting/DRIFT_QUALITY_AUDIT_20261015.md
 - id: optional-structural-evidence-provider-evaluation
   status: planned
   title: Evaluate optional structural evidence providers for impact-aware context
@@ -4972,3 +5090,14 @@ discarded:
   source_files:
   - docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md
   - docs/archive/COMMAND_SAFETY_HARDENING_PLAN.md
+- id: automatic-narrative-history-maintenance
+  status: discarded
+  title: Automatic maintenance of a narrative project history
+  reason: Git, releases and the archived self-hosting evidence are the history authority;
+    the narrative history contains assessments and connections that cannot be derived
+    from commits, and an automatically written narrative would become a second, unverified
+    authority. An on-demand, uncommitted technical timeline remains allowed.
+  discarded_at: '2026-10-16'
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - docs/reports/self-hosting/HISTORICAL_DEVELOPMENT_20261015.md

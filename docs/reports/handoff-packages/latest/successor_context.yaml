@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-16T14:18:15.225817+00:00",
+  "generated_at_utc": "2026-10-16T15:01:38.491468+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,15 +57,15 @@
     "package_version": "1.0.25"
   },
   "repo": {
-    "branch": "docs/post-pr2510-handoff-refresh",
+    "branch": "docs/kit-effectiveness-plan-20261016",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "b48b181acd8ba3d2d28162dde5c808bbb3a39785",
-    "head_matches_origin_main": true,
-    "head_short": "b48b181a",
+    "head": "7a490289e71fbbd909b6e902d8df4147569a0082",
+    "head_matches_origin_main": false,
+    "head_short": "7a490289",
     "local_path": "cd /path/to/",
-    "origin_main": "b48b181acd8ba3d2d28162dde5c808bbb3a39785",
-    "origin_main_short": "b48b181a",
-    "worktree_clean": false
+    "origin_main": "04aaed4fe552c4d1b486244ec6909008858198eb",
+    "origin_main_short": "04aaed4f",
+    "worktree_clean": true
   },
   "schema_version": 1,
   "short_term_memory": {
@@ -177,6 +177,15 @@
         "id": "context-budgeted-handoff-projections",
         "status": "planned",
         "summary": "Reduce agent token consumption through deterministic context projections"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "kit-control-effectiveness-measurement",
+        "status": "planned",
+        "summary": "Measure the effectiveness and cost of the Kit's own control mechanisms"
       },
       {
         "files": [
