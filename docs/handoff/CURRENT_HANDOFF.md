@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `4c0b5dcbb352577dbf67f2203c82ea8f3fc72832` (`4c0b5dcb`), after `Measure known drift classes and detect repeated failures (#2526)`.
-Last substantive work state is `4c0b5dcbb352577dbf67f2203c82ea8f3fc72832` (`4c0b5dcb`), after `Measure known drift classes and detect repeated failures (#2526)`.
+Current verified main/admin HEAD is `9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7` (`9dd637eb`), after `Add an offline gate benchmark and fix ACK-headed transfer orders (#2528)`.
+Last substantive work state is `9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7` (`9dd637eb`), after `Add an offline gate benchmark and fix ACK-headed transfer orders (#2528)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4c0b5dcbb352577dbf67f2203c82ea8f3fc72832
-  short: 4c0b5dcb
-  subject: Measure known drift classes and detect repeated failures (#2526)
+  full: 9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7
+  short: 9dd637eb
+  subject: Add an offline gate benchmark and fix ACK-headed transfer orders (#2528)
 last_substantive_work_state:
-  full: 4c0b5dcbb352577dbf67f2203c82ea8f3fc72832
-  short: 4c0b5dcb
-  subject: Measure known drift classes and detect repeated failures (#2526)
+  full: 9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7
+  short: 9dd637eb
+  subject: Add an offline gate benchmark and fix ACK-headed transfer orders (#2528)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
