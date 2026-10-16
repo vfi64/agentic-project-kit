@@ -1086,6 +1086,16 @@ def release_run_command(
             root=Path("."),
         )
     )
-    _emit(payload, json_output=json_output)
-    if payload["result_status"] == "BLOCKED":
+    blocked = payload["result_status"] == "BLOCKED"
+    if json_output:
+        _emit(payload, json_output=True)
+    else:
+        # The release-run payload carries no returncode/blockers keys of its own; the text
+        # summary derives them from the exit contract below instead of raising KeyError.
+        _emit(
+            {**payload, "returncode": 2 if blocked else 0, "blockers": payload.get("blockers") or [],
+             "next_action": payload.get("next_action", "")},
+            json_output=False,
+        )
+    if blocked:
         raise typer.Exit(code=2)
