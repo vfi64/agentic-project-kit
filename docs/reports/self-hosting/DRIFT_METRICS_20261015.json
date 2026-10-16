@@ -1,0 +1,210 @@
+{
+ "schema_version": 1,
+ "kind": "self_hosting_drift_quality_metrics",
+ "audit_date": "2026-10-15",
+ "measurement_date": "2026-10-16",
+ "status": "historical evidence; descriptive; no causal or counterfactual claim",
+ "definitions": {
+  "ADMIN_REFRESH_ONLY": "PR whose changed files are all generated handoff/status/evidence carriers (path list in reproduce_drift_audit.py: ADMIN)",
+  "REPAIR_OF_REFRESH_DEFECT": "PR touching src/ or tests/ whose title names refresh/handoff/successor/settle/post-merge/freshness (heuristic)",
+  "PRODUCT_PLUS_HANDOFF": "PR with generated carriers plus other files",
+  "OTHER": "PR without generated carriers",
+  "UNKNOWN": "PR without file list",
+  "refresh_chain": "per product commit on main: directly following refresh-only commits before the next non-refresh commit",
+  "ci_minutes_wallclock": "sum of (updated_at - run_started_at) of GitHub Actions runs on the PR head SHA; not billed minutes",
+  "verified_elapsed_calendar_days": "first date in consumer verified_by minus consumer first_observed; calendar days, not working time"
+ },
+ "finding_join": {
+  "kit_ref": "ef78a255",
+  "kit_blob": "e7f8d493e98c8a576dca5392c51ba14afeed6d35",
+  "consumer_ref": "926e1f7030d9c9b04c86b0643b3f455a95150b96",
+  "consumer_blob": "c2528e9cc0d5f34feef90d674f05c108032fc290",
+  "consumer_head_check": {
+   "ref": "447c48d91247e898c406f4adba537c766be3ca7a",
+   "blob": "c2528e9cc0d5f34feef90d674f05c108032fc290",
+   "note": "ledger unchanged at consumer HEAD on 2026-10-16"
+  },
+  "kit_findings": 68,
+  "consumer_families": 72,
+  "consumer_observations": 102,
+  "cross_status_counts": {
+   "ABSENT -> OPEN": 4,
+   "CLOSED -> FIXED": 28,
+   "CLOSED -> OPEN": 16,
+   "CLOSED -> VERIFIED_FIXED": 24
+  },
+  "closed_to_open_with_kit_fixture_pass": [
+   "KIT-GF-001",
+   "KIT-GF-003",
+   "KIT-GF-005",
+   "KIT-GF-013",
+   "KIT-GF-016"
+  ],
+  "verified_fixed_with_both_dates": 22,
+  "verified_elapsed_days_median": 1.0,
+  "verified_elapsed_days_mean": 3.09,
+  "verified_elapsed_days_distribution": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   3,
+   4,
+   4,
+   5,
+   5,
+   7,
+   31
+  ]
+ },
+ "pr_overhead_oct_01_15": {
+  "window": [
+   "2026-10-01",
+   "2026-10-15"
+  ],
+  "cutoff": "2026-10-15T19:00:41Z",
+  "total": 166,
+  "title_matches": 83,
+  "by_class": {
+   "ADMIN_REFRESH_ONLY": {
+    "prs": 83,
+    "merged": 82,
+    "ci_runs": 83,
+    "ci_minutes_wallclock": 62.9,
+    "median_ci_seconds_per_pr": 44
+   },
+   "OTHER": {
+    "prs": 10,
+    "merged": 10,
+    "ci_runs": 10,
+    "ci_minutes_wallclock": 22.4,
+    "median_ci_seconds_per_pr": 139.5
+   },
+   "PRODUCT_PLUS_HANDOFF": {
+    "prs": 65,
+    "merged": 63,
+    "ci_runs": 67,
+    "ci_minutes_wallclock": 168.5,
+    "median_ci_seconds_per_pr": 152
+   },
+   "REPAIR_OF_REFRESH_DEFECT": {
+    "prs": 8,
+    "merged": 8,
+    "ci_runs": 8,
+    "ci_minutes_wallclock": 28.9,
+    "median_ci_seconds_per_pr": 142.5
+   }
+  },
+  "title_matches_by_class": {
+   "ADMIN_REFRESH_ONLY": 83
+  },
+  "windows": {
+   "2026-10-01..2026-10-05": {
+    "prs": 70,
+    "title_matches": 36,
+    "admin_refresh_only": 36
+   },
+   "2026-10-06..2026-10-10": {
+    "prs": 66,
+    "title_matches": 32,
+    "admin_refresh_only": 32
+   },
+   "2026-10-11..2026-10-15": {
+    "prs": 30,
+    "title_matches": 15,
+    "admin_refresh_only": 15
+   }
+  },
+  "ci_minutes_wallclock_total": 282.7,
+  "admin_refresh_only_share_of_prs": 0.5,
+  "admin_refresh_only_share_of_ci_wallclock": 0.222,
+  "note": "reproduces the issue's title analysis (83/166) and shows that all 83 title matches are ADMIN_REFRESH_ONLY by diff"
+ },
+ "refresh_chains_main": {
+  "main_ref": "3f5ab2c",
+  "definition": "per product commit on main: directly following refresh-only commits before the next non-refresh commit; chain_3plus means three or more",
+  "months": {
+   "2026-05": {
+    "product_commits": 867,
+    "chain_0": 820,
+    "chain_1": 47,
+    "chain_2": 0,
+    "chain_3plus": 0,
+    "share_chain_ge2": 0.0
+   },
+   "2026-06": {
+    "product_commits": 324,
+    "chain_0": 39,
+    "chain_1": 278,
+    "chain_2": 6,
+    "chain_3plus": 1,
+    "share_chain_ge2": 0.022
+   },
+   "2026-07": {
+    "product_commits": 138,
+    "chain_0": 4,
+    "chain_1": 123,
+    "chain_2": 9,
+    "chain_3plus": 2,
+    "share_chain_ge2": 0.08
+   },
+   "2026-08": {
+    "product_commits": 139,
+    "chain_0": 7,
+    "chain_1": 122,
+    "chain_2": 8,
+    "chain_3plus": 2,
+    "share_chain_ge2": 0.072
+   },
+   "2026-09": {
+    "product_commits": 40,
+    "chain_0": 1,
+    "chain_1": 39,
+    "chain_2": 0,
+    "chain_3plus": 0,
+    "share_chain_ge2": 0.0
+   },
+   "2026-10": {
+    "product_commits": 82,
+    "chain_0": 0,
+    "chain_1": 81,
+    "chain_2": 1,
+    "chain_3plus": 0,
+    "share_chain_ge2": 0.012
+   }
+  },
+  "note": "chains of 2 or more indicate an extra refresh round after one product change; May predates the refresh mechanism"
+ },
+ "commit_share_admin_refresh": {
+  "since_2026_09_01": {
+   "commits": 242,
+   "admin_refresh": 120
+  },
+  "since_2026_08_01": {
+   "commits": 533,
+   "admin_refresh": 257
+  },
+  "source": "docs/reports/COMMAND_USAGE_AUDIT_20261015.json (commit_signatures)"
+ },
+ "quality_proxies": {
+  "revert_commits_on_main_may_oct": 0,
+  "note": "no revert commits on main; fix-like PR titles are not a defect rate and are not reported as code quality"
+ },
+ "not_measurable": [
+  "persistent drift rate per completed work cycle (no complete cycle denominator, no invocation ledger)",
+  "stale_escaped / stale_blocked / unnecessary_refresh per handoff attempt (no run receipts for most of the history)",
+  "recovery time, tokens and human interventions per recovered case (no timestamps or budgets recorded)",
+  "net productivity or code-quality effect of the Kit (no comparison group; A/B/C experiment not run)"
+ ]
+}

@@ -1681,3 +1681,23 @@ documents:
     class: evidence/log
     owner: maintainers
     notes: Machine-readable appendix for the 2026-10-15 Command Usage Audit, including per-command usage per source, tiers, simulation results, and commit-signature statistics.
+  - path: docs/reports/self-hosting/README.md
+    class: evidence/log
+    owner: maintainers
+    notes: Index, scope, statement classes and redaction record of the self-hosting archive (issue #2505).
+  - path: docs/reports/self-hosting/HISTORICAL_DEVELOPMENT_20261015.md
+    class: evidence/log
+    owner: maintainers
+    notes: Redacted Markdown text authority of the 2026-10-15 historical report on Kit history, self-hosting and drift control.
+  - path: docs/reports/self-hosting/DRIFT_QUALITY_AUDIT_20261015.md
+    class: evidence/log
+    owner: maintainers
+    notes: Drift and quality audit with refresh-chain, PR-overhead and finding-join measurements; descriptive, no causal claim.
+  - path: docs/reports/self-hosting/DRIFT_METRICS_20261015.json
+    class: evidence/log
+    owner: maintainers
+    notes: Machine-readable definitions, denominators and results of the 2026-10-15 drift and quality audit.
+  - path: docs/reports/self-hosting/SOURCE_MANIFEST.json
+    class: evidence/log
+    owner: maintainers
+    notes: Provenance, revisions and SHA-256 hashes of inputs and files of the self-hosting archive.
