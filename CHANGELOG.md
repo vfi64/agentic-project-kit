@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fix `transfer remote-next` and `transfer continue` crashing with a ScannerError on every transfer order that starts with the required `COMMAND_MANIFEST_ACK` line, so no order could complete remote-next; found by the new offline gate benchmark (`docs/reports/gate_benchmark_20261016/`), which detects 11 of 11 injected faults on `main` against 5 of 10 on 1.0.25.
+
 - Add `agentic-kit audit-drift-signals`, a report-only measurement of release-projection drift, refresh chains after product merges and Kit/consumer finding status, each with its denominator; `agentic-kit ledger report` now lists repeated failures by fingerprint and `--write-finding-drafts` writes local drafts that are never overwritten; the test suite no longer writes to the invocation ledger.
 
 - Add a local invocation ledger: every `agentic-kit` process start (and in-process calls an orchestrator reports) is recorded with command name, timing, return code, Kit version, branch and call-tree ids, never arguments, in the git-ignored `.agentic/tmp/invocation-ledger/`; on in the Kit repository, opt-in elsewhere, bounded retention, and a ledger failure never changes a command's result. `agentic-kit ledger report` summarises it read-only. `agentic-kit doc-registry register` gains `--status`, `--review-policy` and `--summary`, so new runbooks are registered without hand edits.

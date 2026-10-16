@@ -1,0 +1,256 @@
+{
+  "schema_version": 1,
+  "kind": "gate_benchmark_part1",
+  "sandbox_ref": "v1.0.25",
+  "sandbox_head": "4e784b6a751ccdddf6cbc7636c6ad4b3b65326bd",
+  "kit_under_test": "agentic-kit 1.0.25",
+  "scenario_count": 11,
+  "detected_count": 5,
+  "detection_share": 0.4545,
+  "control_false_positive_count": 3,
+  "skipped_count": 1,
+  "gate_seconds_total": 7.75,
+  "results": [
+    {
+      "id": "S01",
+      "fault_class": "stale command authority",
+      "description": "transfer order with a stale COMMAND_MANIFEST_ACK",
+      "gate": "agentic-kit transfer apply",
+      "control_returncode": 0,
+      "control_quiet": true,
+      "control_seconds": 1.99,
+      "fault_returncode": 2,
+      "fault_marker": "ACK",
+      "fault_marker_seen": true,
+      "fault_seconds": 0.58,
+      "detected": true,
+      "fault_output_tail": [
+        "",
+        "REJECTION_BLOCK",
+        "INSTRUCTION_LINT_REJECTION",
+        "manifest_sha=d1604f13011e",
+        "checked_path=.agentic/transfer/inbox/current.yaml",
+        "line=1 rule=ACK message=REJECTED: missing/stale COMMAND_MANIFEST_ACK - read docs/reference/agentic-kit-commands.json (sha d1604f13011e) first"
+      ],
+      "control_output_tail": []
+    },
+    {
+      "id": "S02",
+      "fault_class": "raw git bypass",
+      "description": "transfer run_command `env git push --force origin main`",
+      "gate": "agentic-kit transfer apply",
+      "control_returncode": 0,
+      "control_quiet": true,
+      "control_seconds": 1.78,
+      "fault_returncode": 0,
+      "fault_marker": "raw git must go through the Kit wrappers",
+      "fault_marker_seen": false,
+      "fault_seconds": 1.04,
+      "detected": false,
+      "fault_output_tail": [
+        "transfer_id=benchmark-order",
+        "result_status=PASS",
+        "returncode=0",
+        "report_path=docs/reports/command_runs/benchmark-order.md",
+        "message=Transfer order applied."
+      ],
+      "control_output_tail": []
+    },
+    {
+      "id": "S03",
+      "fault_class": "path escape",
+      "description": "write_text_file payload is a symlink to a file outside the repository",
+      "gate": "agentic-kit transfer apply",
+      "control_returncode": 0,
+      "control_quiet": true,
+      "control_seconds": 1.0,
+      "fault_returncode": 0,
+      "fault_marker": "symlink",
+      "fault_marker_seen": false,
+      "fault_seconds": 1.11,
+      "detected": false,
+      "fault_output_tail": [
+        "transfer_id=benchmark-order",
+        "result_status=PASS",
+        "returncode=0",
+        "report_path=docs/reports/command_runs/benchmark-order.md",
+        "message=Transfer order applied."
+      ],
+      "control_output_tail": []
+    },
+    {
+      "id": "S04",
+      "fault_class": "stale order",
+      "description": "transfer order with a 7-character freshness anchor",
+      "gate": "agentic-kit transfer remote-next benchmark/order --json",
+      "control_returncode": 1,
+      "control_quiet": false,
+      "control_seconds": 0.84,
+      "fault_returncode": 1,
+      "fault_marker": "freshness_anchor_not_full_commit_hash",
+      "fault_marker_seen": false,
+      "fault_seconds": 0.92,
+      "detected": false,
+      "fault_output_tail": [
+        "\u2502    580                                                                       \u2502",
+        "\u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256f",
+        "ScannerError: mapping values are not allowed here",
+        "  in \"<unicode string>\", line 2, column 15:",
+        "    schema_version: 1",
+        "                  ^"
+      ],
+      "control_output_tail": [
+        "\u2502    580                                                                       \u2502",
+        "\u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256f",
+        "ScannerError: mapping values are not allowed here",
+        "  in \"<unicode string>\", line 2, column 15:",
+        "    schema_version: 1",
+        "                  ^"
+      ]
+    },
+    {
+      "id": "S05",
+      "fault_class": "order self-authorisation",
+      "description": "typed order runs a command outside the manifest without --allow-unlisted",
+      "gate": "agentic-kit work-order typed-run tmp/benchmark-typed.yaml --execute --json",
+      "control_returncode": 0,
+      "control_quiet": true,
+      "control_seconds": 1.59,
+      "fault_returncode": 0,
+      "fault_marker": "--allow-unlisted",
+      "fault_marker_seen": false,
+      "fault_seconds": 0.56,
+      "detected": false,
+      "fault_output_tail": [
+        "      \"stdout\": \"\"",
+        "    }",
+        "  ],",
+        "  \"terminal_log\": \"docs/reports/terminal/benchmark-typed.log\",",
+        "  \"work_order_id\": \"benchmark-typed\"",
+        "}"
+      ],
+      "control_output_tail": []
+    },
+    {
+      "id": "S06",
+      "fault_class": "projection drift",
+      "description": "handoff release block says 0.4.13 (HD-08 class)",
+      "detected": false,
+      "control_quiet": false,
+      "skipped": "fault cannot be injected at this ref: release.current_version not found",
+      "fault_seconds": 0
+    },
+    {
+      "id": "S07",
+      "fault_class": "stale entrypoint",
+      "description": "AGENTS.md carries a stale command-manifest ACK",
+      "gate": "agentic-kit audit-command-authority",
+      "control_returncode": 0,
+      "control_quiet": true,
+      "control_seconds": 0.61,
+      "fault_returncode": 2,
+      "fault_marker": "COMMAND_AUTHORITY_TERM_MISSING",
+      "fault_marker_seen": true,
+      "fault_seconds": 0.57,
+      "detected": true,
+      "fault_output_tail": [
+        "STATUS=BLOCK",
+        "MANIFEST_SHA=d1604f13011e",
+        "FINDING_COUNT=2",
+        "BLOCKER_COUNT=2",
+        "FINDING=BLOCK|COMMAND_AUTHORITY_TERM_MISSING|AGENTS.md|required command authority term is missing: MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: d1604f13011e). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK d1604f13011e. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.",
+        "FINDING=BLOCK|COMMAND_AUTHORITY_TERM_MISSING|AGENTS.md|required command authority term is missing: COMMAND_MANIFEST_ACK d1604f13011e"
+      ],
+      "control_output_tail": []
+    },
+    {
+      "id": "S08",
+      "fault_class": "invalid planning state",
+      "description": "a plan item with an unknown status",
+      "gate": "agentic-kit direction validate",
+      "control_returncode": 0,
+      "control_quiet": true,
+      "control_seconds": 0.94,
+      "fault_returncode": 1,
+      "fault_marker": "invalid-status",
+      "fault_marker_seen": true,
+      "fault_seconds": 0.97,
+      "detected": true,
+      "fault_output_tail": [
+        "PROJECT_DIRECTION_VALIDATE",
+        "STATUS=FAIL",
+        "FINDING_COUNT=1",
+        "FINDING=invalid-status|docs/planning/PROJECT_DIRECTION.yaml|roadmap[18].status must be one of blocked, discarded, done, next, planned"
+      ],
+      "control_output_tail": []
+    },
+    {
+      "id": "S09",
+      "fault_class": "unregistered document",
+      "description": "new runbook under docs/workflow/ without registry entry",
+      "gate": "agentic-kit doc-registry check-unregistered --strict-scope",
+      "control_returncode": 0,
+      "control_quiet": true,
+      "control_seconds": 0.94,
+      "fault_returncode": 1,
+      "fault_marker": "BENCHMARK_UNREGISTERED.md",
+      "fault_marker_seen": true,
+      "fault_seconds": 0.78,
+      "detected": true,
+      "fault_output_tail": [
+        "CANDIDATES=1",
+        "- docs/workflow/BENCHMARK_UNREGISTERED.md",
+        "STRICT_SCOPE=True",
+        "EXEMPTED=167",
+        "SCOPE_VIOLATIONS=1",
+        "SCOPE-VIOLATION docs/workflow/BENCHMARK_UNREGISTERED.md"
+      ],
+      "control_output_tail": []
+    },
+    {
+      "id": "S10",
+      "fault_class": "direct git mutation",
+      "description": "a direct `git push` added to tools/next-step.py",
+      "gate": "python -m pytest -q -p no:cacheprovider tests/test_workflow_git_mutation_authority.py",
+      "control_returncode": 4,
+      "control_quiet": false,
+      "control_seconds": 0.19,
+      "fault_returncode": 4,
+      "fault_marker": "Route these git mutations through Kit primitives",
+      "fault_marker_seen": false,
+      "fault_seconds": 0.18,
+      "detected": false,
+      "fault_output_tail": [
+        "no tests ran in 0.00s",
+        "ERROR: file or directory not found: tests/test_workflow_git_mutation_authority.py"
+      ],
+      "control_output_tail": [
+        "no tests ran in 0.00s",
+        "ERROR: file or directory not found: tests/test_workflow_git_mutation_authority.py"
+      ]
+    },
+    {
+      "id": "S11",
+      "fault_class": "commit on main",
+      "description": "`transfer commit` of a change while on main",
+      "gate": "agentic-kit transfer commit --message benchmark --path BENCHMARK_CHANGE.txt",
+      "control_returncode": 0,
+      "control_quiet": true,
+      "control_seconds": 1.01,
+      "fault_returncode": 2,
+      "fault_marker": "Refusing to commit directly on main",
+      "fault_marker_seen": true,
+      "fault_seconds": 1.04,
+      "detected": true,
+      "fault_output_tail": [
+        "STDERR",
+        "- LINE:                 Refusing to commit directly on main. Use a branch or pass --allow-main explicitly.",
+        "",
+        "NEXT:                   Create a feature/admin branch before committing.",
+        "CHAT_REPLY:             f | NEXT=Create a feature/admin branch before committing.",
+        "********************************* END SUMMARY **********************************"
+      ],
+      "control_output_tail": []
+    }
+  ]
+}

@@ -1711,3 +1711,8 @@ documents:
     review_policy: required
     summary: 'Local invocation ledger of Kit commands: recorded fields, scope, retention
       and the read-only ledger report.'
+  - path: docs/reports/gate_benchmark_20261016/GATE_BENCHMARK_PART1_20261016.md
+    class: evidence/log
+    owner: maintainers
+    summary: 'Gate benchmark part 1: eleven fault-injection scenarios in an offline sandbox,
+      Kit main against 1.0.25.'

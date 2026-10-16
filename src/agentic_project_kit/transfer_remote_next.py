@@ -10,6 +10,7 @@ from typing import Any
 
 import yaml
 
+from agentic_project_kit.instruction_lint import strip_command_manifest_ack_header
 from agentic_project_kit.order_freshness import check_order_anchor
 from agentic_project_kit.safe_push import SafePushResult
 from agentic_project_kit.safe_push import safe_push
@@ -306,8 +307,8 @@ def _refresh_rule_ack(root: Path) -> _CommandResult:
 def _current_transfer_report_path(root: Path) -> str:
     workspace = load_workspace(root)
     try:
-        data = yaml.safe_load((root / DEFAULT_INBOX).read_text(encoding="utf-8")) or {}
-    except FileNotFoundError:
+        data = yaml.safe_load(strip_command_manifest_ack_header((root / DEFAULT_INBOX).read_text(encoding="utf-8"))) or {}
+    except (FileNotFoundError, yaml.YAMLError):
         return ""
     if not isinstance(data, dict):
         return ""
@@ -455,10 +456,15 @@ def _ensure_safe_publish_target(root: Path, *, branch: str) -> dict[str, object]
 
 
 def _read_transfer_order_data(path: Path) -> dict[str, Any]:
+    # Orders carry the COMMAND_MANIFEST_ACK line first (the instruction lint requires it at
+    # apply time); the YAML starts after it. Reading it raw made every ACK-headed order fail
+    # here with a ScannerError (gate benchmark S04, 2026-10-16).
     try:
-        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        data = yaml.safe_load(strip_command_manifest_ack_header(path.read_text(encoding="utf-8"))) or {}
     except FileNotFoundError as exc:
         raise FileNotFoundError(f"transfer order not found: {path}") from exc
+    except yaml.YAMLError as exc:
+        raise ValueError(f"transfer order is not valid YAML: {path}: {type(exc).__name__}") from exc
     if not isinstance(data, dict):
         raise ValueError(f"transfer order must be a mapping: {path}")
     return data

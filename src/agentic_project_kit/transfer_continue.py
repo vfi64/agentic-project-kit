@@ -10,6 +10,7 @@ import yaml
 
 from agentic_project_kit.handoff_freshness import assess_continuation_authority
 from agentic_project_kit.handoff_state import load_handoff_state
+from agentic_project_kit.instruction_lint import strip_command_manifest_ack_header
 from agentic_project_kit.transfer_runner import DEFAULT_INBOX
 from agentic_project_kit.transfer_remote_next import EXECUTABLE_TRANSFER_ORDER_KIND
 from agentic_project_kit.invocation_ledger import internal_call
@@ -25,7 +26,10 @@ def _read_order_from_ref(root: Path, ref: str) -> dict[str, Any] | None:
     completed = _run(["git", "show", f"{ref}:{DEFAULT_INBOX.as_posix()}"], root)
     if completed.returncode != 0:
         return None
-    loaded = yaml.safe_load(completed.stdout) or {}
+    try:
+        loaded = yaml.safe_load(strip_command_manifest_ack_header(completed.stdout)) or {}
+    except yaml.YAMLError:
+        return None
     if not isinstance(loaded, dict):
         return None
     return loaded
@@ -54,7 +58,10 @@ def _current_order_is_active(root: Path) -> bool:
     path = root / DEFAULT_INBOX
     if not path.exists():
         return False
-    loaded = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    try:
+        loaded = yaml.safe_load(strip_command_manifest_ack_header(path.read_text(encoding="utf-8"))) or {}
+    except yaml.YAMLError:
+        return False
     return _is_active_order(loaded if isinstance(loaded, dict) else None)
 
 

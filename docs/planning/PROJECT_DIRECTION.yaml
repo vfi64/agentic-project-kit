@@ -2212,7 +2212,7 @@ plans:
       about 20 Kit processes; adding them to the suite is an owner decision.
   - id: gate-and-context-benchmark
     order: 5
-    status: next
+    status: active
     kind: offline_experiment
     scope: Two-part benchmark of the Kit's controls.
     acceptance:
@@ -2222,6 +2222,17 @@ plans:
       context-budgeted-handoff-projections) using a real LLM, with repetitions to
       expose random effects.'
     - A comparison without the Kit is deferred and is not part of this plan.
+    part1_status: done
+    part1_evidence:
+    - docs/reports/gate_benchmark_20261016/GATE_BENCHMARK_PART1_20261016.md
+    - docs/reports/gate_benchmark_20261016/GATE_BENCHMARK_PART1_RESULTS.json
+    - docs/reports/gate_benchmark_20261016/GATE_BENCHMARK_PART1_BASELINE_1.0.25.json
+    part1_result: Kit main detected 11 of 11 injected faults with no false positive on
+      the clean control; Kit 1.0.25 detected 5 of 10 injectable ones, and in three
+      the fault actually ran. The benchmark found that transfer remote-next could
+      not complete any ACK-headed order (ScannerError), fixed in the same slice.
+    part2_status: planned
+    part2_needs: an owner decision on the LLM, the task set and the token budget.
   out_of_scope:
   - An automatic narrative history (see discarded automatic-narrative-history-maintenance);
     at most an on-demand, uncommitted technical timeline from Git, releases and existing
