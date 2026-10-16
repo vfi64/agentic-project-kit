@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 1300ca933b65895c6e18cdb409755954498ca937a924d46210215ac1c09e9e2b
 - docs/reference/agentic-kit-commands.json: 45ec63f3974ad04b15de56068513a27749b625f3ff5a452911535103ebf4c49e
-## Operational documentation refresh state after PR #2520
+## Operational documentation refresh state after PR #2522
 
-Current administrative handoff refresh state is `0ba2bd83` (`Bind transfer order freshness to the commit the order was written on (#2520)`). Continue next only after this post-PR2520 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `0902ccf9` (`Retire the unrestricted work-order lanes (#2522)`). Continue next only after this post-PR2522 refresh is committed and merged; the next substantive slice must be created from fresh main.

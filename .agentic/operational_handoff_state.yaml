@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 0ba2bd83fac963c13b6858a638ece3424f96c0bc
-  short: 0ba2bd83
-  subject: Bind transfer order freshness to the commit the order was written on (#2520)
+  full: 0902ccf9427e6d080de189cbe9f35245c6126b59
+  short: 0902ccf9
+  subject: Retire the unrestricted work-order lanes (#2522)
 last_substantive_work_state:
-  full: 0ba2bd83fac963c13b6858a638ece3424f96c0bc
-  short: 0ba2bd83
-  subject: Bind transfer order freshness to the commit the order was written on (#2520)
+  full: 0902ccf9427e6d080de189cbe9f35245c6126b59
+  short: 0902ccf9
+  subject: Retire the unrestricted work-order lanes (#2522)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
