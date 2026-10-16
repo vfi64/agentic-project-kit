@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-16T16:57:38.832258+00:00",
+  "generated_at_utc": "2026-10-16T17:03:53.716381+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,15 +57,15 @@
     "package_version": "1.0.25"
   },
   "repo": {
-    "branch": "docs/work-order-trust-boundary-review-20261016",
+    "branch": "docs/post-pr2516-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "cfd5f7632da0191243f832818edd45af21d77cd2",
-    "head_matches_origin_main": false,
-    "head_short": "cfd5f763",
+    "head": "4dfc90794802ce692f5e75580a276c6eac88b1fe",
+    "head_matches_origin_main": true,
+    "head_short": "4dfc9079",
     "local_path": "cd /path/to/",
-    "origin_main": "42f1a67e31fdcff633604e9832af23f257e1010f",
-    "origin_main_short": "42f1a67e",
-    "worktree_clean": true
+    "origin_main": "4dfc90794802ce692f5e75580a276c6eac88b1fe",
+    "origin_main_short": "4dfc9079",
+    "worktree_clean": false
   },
   "schema_version": 1,
   "short_term_memory": {
