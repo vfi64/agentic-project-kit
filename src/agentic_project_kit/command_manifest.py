@@ -449,6 +449,14 @@ def infer_remote_effects(command: dict[str, Any]) -> list[str]:
         "agentic-kit transfer branch-switch": ["fetch"],
         "agentic-kit transfer pr-status": ["network_read"],
         "agentic-kit transfer post-merge-settle": ["fetch", "merge", "network_read", "pull_request", "push"],
+        # tools/next-step.py publishes and removes temporary workflow evidence branches
+        # through transfer_repo_actions; the subprocess hides this from the static scan.
+        "agentic-kit workflow go": ["fetch", "network_read", "push"],
+        "agentic-kit workflow run": ["fetch", "network_read", "push"],
+        "agentic-kit workflow upload": ["network_read", "push"],
+        "agentic-kit workflow upload-output": ["network_read", "push"],
+        "agentic-kit workflow fail-report": ["network_read", "push"],
+        "agentic-kit workflow cleanup": ["delete_remote", "fetch", "network_read", "push"],
     }
     if qualified in implementation_effects:
         return implementation_effects[qualified]

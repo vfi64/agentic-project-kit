@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Route the remote pushes, branch switches, pulls and branch deletions of the `workflow` helpers through the Kit's governed primitives; refuse evidence uploads that would carry staged changes or unpublished commits, keep remote-only evidence branches of other checkouts, and reject option-like branch names in work orders (command usage audit F4).
+
 - Derive the handoff-state release block from post-release DOI closeout evidence during the administrative handoff refresh, so successor chat handoffs no longer report version 0.4.13 (self-hosting audit HD-08).
 
 - Print the text summary of `agentic-kit release run` without `--json` instead of raising `KeyError: 'returncode'` on blocked or awaiting runs (command usage audit F1).

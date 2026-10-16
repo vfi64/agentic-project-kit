@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: d1604f13011e
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 0e86475bdbb3
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -3982,7 +3982,7 @@ _No parameters._
 - Surface: `primitive`
 - When to use: Cleanup completed or stale temporary workflow evidence branches.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `delete_remote`, `fetch`, `network_read`, `push`
 
 Cleanup completed or stale temporary workflow evidence branches.
 
@@ -3996,7 +3996,7 @@ Cleanup completed or stale temporary workflow evidence branches.
 - Surface: `diagnostic`
 - When to use: Upload preserved FAILED workflow evidence without cleanup or retry.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`, `push`
 
 Upload preserved FAILED workflow evidence without cleanup or retry.
 
@@ -4010,7 +4010,7 @@ Upload preserved FAILED workflow evidence without cleanup or retry.
 - Surface: `orchestrator`
 - When to use: Request the configured workflow and run one bounded step.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `fetch`, `network_read`, `push`
 
 Request the configured workflow and run one bounded step.
 
@@ -4052,7 +4052,7 @@ Request the configured declarative workflow without running it.
 - Surface: `primitive`
 - When to use: Run the current workflow, or set a stored workflow item and run it.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `fetch`, `network_read`, `push`
 
 Run the current workflow, or set a stored workflow item and run it.
 
@@ -4111,7 +4111,7 @@ Print the current workflow state and bounded evidence pointers.
 - Surface: `primitive`
 - When to use: Alias for upload-output.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`, `push`
 
 Alias for upload-output.
 
@@ -4125,7 +4125,7 @@ Alias for upload-output.
 - Surface: `primitive`
 - When to use: Alias for upload-output.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`, `push`
 
 Alias for upload-output.
 

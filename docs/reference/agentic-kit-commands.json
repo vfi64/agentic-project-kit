@@ -18860,7 +18860,10 @@
       ],
       "qualified_name": "agentic-kit workflow cleanup",
       "remote_effects": [
-        "none"
+        "delete_remote",
+        "fetch",
+        "network_read",
+        "push"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -18898,7 +18901,8 @@
       ],
       "qualified_name": "agentic-kit workflow fail-report",
       "remote_effects": [
-        "none"
+        "network_read",
+        "push"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -18937,7 +18941,9 @@
       ],
       "qualified_name": "agentic-kit workflow go",
       "remote_effects": [
-        "none"
+        "fetch",
+        "network_read",
+        "push"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -19065,7 +19071,9 @@
       ],
       "qualified_name": "agentic-kit workflow run",
       "remote_effects": [
-        "none"
+        "fetch",
+        "network_read",
+        "push"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -19245,7 +19253,8 @@
       ],
       "qualified_name": "agentic-kit workflow upload",
       "remote_effects": [
-        "none"
+        "network_read",
+        "push"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -19283,7 +19292,8 @@
       ],
       "qualified_name": "agentic-kit workflow upload-output",
       "remote_effects": [
-        "none"
+        "network_read",
+        "push"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -19888,7 +19898,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "d1604f13011e",
+    "manifest_sha": "0e86475bdbb3",
     "schema_version": 1
   },
   "schema_version": 2,

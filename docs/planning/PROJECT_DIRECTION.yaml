@@ -2081,7 +2081,7 @@ plans:
   steps:
   - id: f4-direct-git-mutation-bypass
     order: 1
-    status: next
+    status: done
     kind: security_fix
     scope: tools/next-step.py (reached through workflow go) and cli_commands/workflow.py
       call git switch/add/commit/push/pull/branch -D/push --delete directly instead
@@ -2093,9 +2093,23 @@ plans:
       BLOCKED result; temp-prefix cleanup keeps its prefix guard.
     - A regression test fails when tools/ or src/agentic_project_kit/cli_commands/
       gain a direct git mutation outside an explicit, reviewed allow-list.
+    evidence:
+    - tests/test_workflow_git_mutation_authority.py
+    result: No path pushed to or reset main. Fixed gaps were a commit of the whole
+      index, publication of unpushed commits through the evidence branch, missing
+      workspace lock and remote preflight, deletion of other checkouts' remote evidence
+      branches, and option injection through work-order branch names (git switch -Cmain).
+    follow_up_findings:
+    - The Kit commit primitive (transfer_repo_actions.commit_paths) also commits
+      everything already staged, not only the given paths.
+    - tools/NEXT_TRANSFER_TASK.py still contains git reset --hard and pushes; it is
+      unreachable from Kit commands and belongs to the ns-legacy workflow-shell-helper
+      slice.
+    - Direct git mutations inside other cli_commands implementations are allow-listed
+      in the regression test and remain a layering question for decomplexification.
   - id: ai-work-order-trust-boundary-review
     order: 2
-    status: planned
+    status: next
     kind: read_only_security_review
     scope: Trust boundary where AI-generated work orders reach local Kit commands
       (work-order validation, instruction lint, command allow-lists, path and argument

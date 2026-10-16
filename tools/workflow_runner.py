@@ -54,12 +54,12 @@ def _step_command(step: Any, workflow: dict[str, Any]) -> list[str]:
         if step == "git_fetch":
             return ["git", "fetch", "origin"]
         if step == "git_switch_main":
-            return ["git", "switch", str(workflow.get("base_branch", "main"))]
+            return ["git", "switch", "--", _safe_branch(workflow.get("base_branch", "main"), "base_branch")]
         if step == "git_switch_work_branch":
             branch = workflow.get("work_branch")
             if not isinstance(branch, str) or not branch:
                 raise WorkflowFailure("git_switch_work_branch requires work_branch")
-            return ["git", "switch", branch]
+            return ["git", "switch", "--", _safe_branch(branch, "work_branch")]
         if step == "git_pull_ff_only":
             return ["git", "pull", "--ff-only"]
         if step == "pytest":
@@ -80,6 +80,24 @@ def _step_command(step: Any, workflow: dict[str, Any]) -> list[str]:
             fields = _required_str_list(config, "fields")
             return ["gh", "pr", "view", str(number), "--json", ",".join(fields)]
     raise WorkflowFailure(f"Unsupported workflow step shape: {step!r}")
+
+
+_BRANCH_CHARS = frozenset("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._/-")
+
+
+def _safe_branch(value: Any, key: str) -> str:
+    """Reject work-order branch values that git could read as an option or a non-local ref."""
+    branch = value.strip() if isinstance(value, str) else ""
+    if (
+        not branch
+        or branch.startswith("-")
+        or ".." in branch
+        or branch.endswith(".lock")
+        or branch.startswith(("refs/", "origin/"))
+        or any(char not in _BRANCH_CHARS for char in branch)
+    ):
+        raise WorkflowFailure(f"Unsafe {key} in workflow request: {value!r}")
+    return branch
 
 
 def _required_int(config: Any, key: str) -> int:

@@ -3,11 +3,14 @@ from __future__ import annotations
 import os
 import subprocess
 import sys
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
 
 
 import typer
 
+from agentic_project_kit.transfer_repo_actions import RepoActionResult, branch_delete
 from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
 workflow_app = typer.Typer(help="Run and inspect bounded local workflow handoff states.")
@@ -269,6 +272,34 @@ def _remote_temp_branches(root: Path) -> list[str]:
     return branches
 
 
+@contextmanager
+def _in_directory(root: Path) -> Iterator[None]:
+    previous = Path.cwd()
+    os.chdir(root.resolve())
+    try:
+        yield
+    finally:
+        os.chdir(previous)
+
+
+def _kit_branch_delete(root: Path, branch: str, *, remote: bool) -> RepoActionResult:
+    """Delete one workflow evidence branch through the Kit's governed branch-delete primitive.
+
+    The primitive works on the current directory, so it runs inside the project root.
+    """
+    with _in_directory(root):
+        if remote:
+            return branch_delete(branch, remote=True)
+        return branch_delete(branch, force=True)
+
+
+def _recorded_evidence_branch(root: Path) -> str | None:
+    branch_file = _rooted(BRANCH_FILE, root)
+    if not branch_file.exists():
+        return None
+    return _safe_temp_branch(branch_file.read_text(encoding="utf-8"))
+
+
 def _cleanup_stale_temp_branches(root: Path) -> int:
     if not _is_git_repository(root):
         return 0
@@ -277,21 +308,35 @@ def _cleanup_stale_temp_branches(root: Path) -> int:
     branches = sorted(set(local_branches + remote_branches))
     if not branches:
         return 0
+    # Only remote evidence branches this checkout created (a local branch of the same name or
+    # the recorded upload) are deleted; remote-only ones may belong to another checkout.
+    owned_remote = set(local_branches)
+    recorded = _recorded_evidence_branch(root)
+    if recorded is not None:
+        owned_remote.add(recorded)
+    cleaned = 0
     for branch in branches:
         safe_branch = _safe_temp_branch(branch)
         if safe_branch is None:
             raise typer.BadParameter(f"refusing unsafe workflow evidence branch cleanup target: {branch}")
         if safe_branch in local_branches:
-            local_delete = _run_git(root, ["branch", "-D", safe_branch])
-            if local_delete.returncode != 0:
+            local_delete = _kit_branch_delete(root, safe_branch, remote=False)
+            if local_delete.result_status != "PASS":
                 raise typer.BadParameter(local_delete.stderr.strip() or f"failed to delete local branch: {safe_branch}")
             typer.echo(f"Deleted local stale workflow evidence branch: {safe_branch}")
         if safe_branch in remote_branches:
-            remote_delete = _run_git(root, ["push", "origin", "--delete", safe_branch])
-            if remote_delete.returncode != 0:
+            if safe_branch not in owned_remote:
+                typer.echo(
+                    f"Left remote workflow evidence branch not created by this checkout: {safe_branch}; "
+                    f"after review delete it deliberately with agentic-kit transfer branch-delete {safe_branch} --remote."
+                )
+                continue
+            remote_delete = _kit_branch_delete(root, safe_branch, remote=True)
+            if remote_delete.result_status != "PASS":
                 raise typer.BadParameter(remote_delete.stderr.strip() or f"failed to delete remote branch: {safe_branch}")
             typer.echo(f"Deleted remote stale workflow evidence branch: {safe_branch}")
-    return len(branches)
+        cleaned += 1
+    return cleaned
 
 
 @workflow_app.command("request")
