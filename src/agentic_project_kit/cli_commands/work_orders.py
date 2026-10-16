@@ -82,8 +82,9 @@ def run_command(work_order_id: str, execute: bool = typer.Option(False, "--execu
 @work_orders_app.command("typed-next")
 def typed_next_command(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON result."),
+    allow_unlisted: bool = typer.Option(False, "--allow-unlisted", help="Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused."),
 ) -> None:
-    result = run_typed_next(Path("."))
+    result = run_typed_next(Path("."), allow_unlisted=allow_unlisted)
     data = typed_next_result_as_json_data(result)
     if json_output:
         typer.echo(json.dumps(data, indent=2, sort_keys=True))
@@ -120,6 +121,7 @@ def typed_run_command(
     work_order_path: Path,
     execute: bool = typer.Option(False, "--execute", help="Actually run the typed work order. Omit for dry-run."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON result."),
+    allow_unlisted: bool = typer.Option(False, "--allow-unlisted", help="Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused."),
 ) -> None:
     try:
         order = load_typed_work_order(work_order_path)
@@ -132,7 +134,7 @@ def typed_run_command(
         typer.echo(f"Steps: {len(order.steps)}")
         typer.echo("Dry run only. Re-run with --execute to run the typed work order.")
         return
-    result = run_typed_work_order(order, Path("."))
+    result = run_typed_work_order(order, Path("."), allow_unlisted=allow_unlisted)
     data = typed_work_order_result_as_json_data(result)
     if json_output:
         typer.echo(json.dumps(data, indent=2, sort_keys=True))

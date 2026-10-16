@@ -6457,6 +6457,15 @@
             "--json"
           ],
           "required": false
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
+          ],
+          "required": false
         }
       ],
       "qualified_name": "agentic-kit remote-next",
@@ -6486,6 +6495,15 @@
           "name": "json_output",
           "opts": [
             "--json"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
           ],
           "required": false
         }
@@ -7442,6 +7460,15 @@
             "--json"
           ],
           "required": false
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
+          ],
+          "required": false
         }
       ],
       "qualified_name": "agentic-kit transfer apply",
@@ -7974,6 +8001,15 @@
           "name": "skip_llm_context_gate",
           "opts": [
             "--skip-llm-context-gate"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
           ],
           "required": false
         }
@@ -10104,6 +10140,15 @@
             "--json"
           ],
           "required": false
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
+          ],
+          "required": false
         }
       ],
       "qualified_name": "agentic-kit transfer remote-next",
@@ -10369,6 +10414,15 @@
           "name": "json_output",
           "opts": [
             "--json"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
           ],
           "required": false
         }
@@ -11329,6 +11383,15 @@
             "--json"
           ],
           "required": false
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
+          ],
+          "required": false
         }
       ],
       "qualified_name": "agentic-kit work-order typed-next",
@@ -11398,6 +11461,15 @@
           "name": "json_output",
           "opts": [
             "--json"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused.",
+          "name": "allow_unlisted",
+          "opts": [
+            "--allow-unlisted"
           ],
           "required": false
         }

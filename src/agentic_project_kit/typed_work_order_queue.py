@@ -106,6 +106,8 @@ def run_typed_next(
     project_root: Path = Path("."),
     inbox_path: Path = DEFAULT_TYPED_WORK_ORDER_INBOX,
     executed_dir: Path = DEFAULT_TYPED_WORK_ORDER_EXECUTED,
+    *,
+    allow_unlisted: bool = False,
 ) -> TypedNextResult:
     root = project_root.resolve()
     status = inspect_typed_work_order_queue(root / inbox_path)
@@ -138,7 +140,7 @@ def run_typed_next(
             expected_closeout_paths=_expected_closeout_paths(source_rel, target_rel),
         )
     order = load_typed_work_order(source)
-    result = run_typed_work_order(order, root)
+    result = run_typed_work_order(order, root, allow_unlisted=allow_unlisted)
     if result.result_status == RESULT_PASS:
         target_dir.mkdir(parents=True, exist_ok=True)
         shutil.move(str(source), str(target))

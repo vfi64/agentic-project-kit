@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `4dfc90794802ce692f5e75580a276c6eac88b1fe` (`4dfc9079`)
-- Handoff freshness marker: `4dfc9079`
-- Branch at generation: `docs/post-pr2516-handoff-refresh`
+- HEAD: `a8ac74ce3688d1ed8859d6e30982d7f700bd288b` (`a8ac74ce`)
+- Handoff freshness marker: `a8ac74ce`
+- Branch at generation: `fix/order-paths-and-command-authority-20261016`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -106,7 +106,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 ### RESULT: PASS ###
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 0e86475bdbb3). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 0e86475bdbb3. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: de29c190c90f). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK de29c190c90f. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -116,5 +116,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 9743463a706f2c2abbae3ce49ba4d60126f1cd36dc304f357b7c5a03d26dc0aa
-- docs/reference/agentic-kit-commands.json: dccfb2f249eb4e72fc6efbd1958d73890258cd76c632e7dd30cfc80ccd03c50f
+- docs/reference/AGENTIC_KIT_COMMANDS.md: f90b639ef6f1c965f0c8cc6b8574880db1c5bfa298847e03147145cd0a36b60e
+- docs/reference/agentic-kit-commands.json: 869bdae0dd917481085b2ba6c48c16f873574951616ad60289358b5ee4ac8e5f

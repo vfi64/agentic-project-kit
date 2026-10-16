@@ -1,10 +1,11 @@
 """Negative tests for the trust boundary where LLM-written work orders reach local execution.
 
 Review: docs/reports/WORK_ORDER_TRUST_BOUNDARY_REVIEW_20261016.md (plan step
-ai-work-order-trust-boundary-review). Each strict xfail asserts the safe behaviour for one
-confirmed gap (WOTB-xx). A hardening slice that closes a gap makes its test pass, and strict
-xfail then fails until the marker is removed, so a gap cannot be closed silently or reopened
-unnoticed. The unmarked tests pin checks that already hold.
+ai-work-order-trust-boundary-review). Each test asserts the safe behaviour for one confirmed
+gap (WOTB-xx). Gaps that are still open carry a strict xfail; a hardening slice that closes a gap
+makes its test pass, and strict xfail then fails until the marker is removed, so a gap cannot be
+closed silently or reopened unnoticed. WOTB-01, -02, -03, -05 and -06 are closed
+(order_paths, order_command_authority); the unmarked tests at the end pin checks that hold.
 """
 
 from __future__ import annotations
@@ -43,7 +44,7 @@ def _transfer_order_text(order: dict[str, object]) -> str:
 
 
 def _transfer_run_command_reaches_execution(argv: list[str]) -> bool:
-    """True when both the parser and the instruction lint used by `transfer apply` let argv run."""
+    """True when parser, instruction lint and command authority of `transfer apply` let argv run."""
     try:
         tr._parse_command({"command": argv})
     except ValueError:
@@ -62,13 +63,17 @@ def _transfer_run_command_reaches_execution(argv: list[str]) -> bool:
         strict_unknown=False,
         include_structured_commands=True,
     )
-    return lint.returncode != 2
+    if lint.returncode == 2:
+        return False
+    # Authority is checked at apply time; the local flag does not unlock raw git/gh or interpreters.
+    from agentic_project_kit.order_command_authority import classify_order_command
+
+    return classify_order_command(tuple(argv), load_manifest(REPO_ROOT), allow_unlisted=True).allowed
 
 
 # --- typed work orders (`work-order typed-next`, `typed-run`, `remote-next`) -------------------
 
 
-@_gap("WOTB-01", "typed command_argv runs any argv; the declared safety is not enforced")
 def test_typed_work_order_does_not_run_arbitrary_argv_under_read_only_safety(tmp_path: Path) -> None:
     root = _git_repo(tmp_path / "repo")
     order = twr.parse_typed_work_order(
@@ -87,7 +92,6 @@ def test_typed_work_order_does_not_run_arbitrary_argv_under_read_only_safety(tmp
     assert not (root / "EXECUTED").exists()
 
 
-@_gap("WOTB-02", "a typed order authorises its own BOUNDED cockpit actions with allow_bounded")
 def test_typed_work_order_cannot_self_authorize_bounded_cockpit_actions(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -117,7 +121,6 @@ def test_typed_work_order_cannot_self_authorize_bounded_cockpit_actions(
     assert granted == [False]
 
 
-@_gap("WOTB-03", "typed log_path accepts parent segments and writes outside the repository")
 def test_typed_work_order_log_path_rejects_parent_segments() -> None:
     with pytest.raises(ValueError):
         twr.parse_typed_work_order(
@@ -134,7 +137,6 @@ def test_typed_work_order_log_path_rejects_parent_segments() -> None:
 # --- shell work orders (`work-order run --execute`) ---------------------------------------------
 
 
-@_gap("WOTB-03", "work-order log_path accepts parent segments and writes outside the repository")
 def test_work_order_log_path_rejects_parent_segments() -> None:
     with pytest.raises(ValueError):
         wo.parse_work_order(
@@ -182,7 +184,6 @@ def test_work_order_contract_requires_gates_to_run_not_only_to_be_named() -> Non
         [".venv/bin/python", "-c", "print(1)"],
     ],
 )
-@_gap("WOTB-05", "run_command blocks git push and python only by literal argv[0]/prefix")
 def test_transfer_run_command_rejects_wrapped_raw_git_and_interpreters(argv: list[str]) -> None:
     assert not _transfer_run_command_reaches_execution(argv)
 
@@ -215,7 +216,6 @@ def _apply(root: Path, actions: list[dict[str, object]]) -> tr.TransferResult:
     return tr.apply_transfer_order(order, root)
 
 
-@_gap("WOTB-06", "write_text_file reads its payload through a symlink that leaves the repository")
 def test_transfer_write_text_file_does_not_read_payload_through_symlink(tmp_path: Path) -> None:
     root, outside = _transfer_root(tmp_path)
     (outside / "secret.txt").write_text("SECRET\n", encoding="utf-8")
@@ -226,7 +226,6 @@ def test_transfer_write_text_file_does_not_read_payload_through_symlink(tmp_path
     assert not (root / "docs" / "leak.txt").exists()
 
 
-@_gap("WOTB-06", "write_text_file writes through a symlinked directory outside the repository")
 def test_transfer_write_text_file_does_not_write_through_symlinked_directory(tmp_path: Path) -> None:
     root, outside = _transfer_root(tmp_path)
     (root / "payload.txt").write_text("planted\n", encoding="utf-8")
@@ -435,3 +434,152 @@ def test_planner_executor_runs_only_read_only_manifest_commands(tmp_path: Path) 
 
     assert ran == []
     assert result.result_status != "PASS"
+
+
+# --- command authority after the WOTB-01/-02/-05 hardening -----------------------------------------
+
+
+def _typed(argv: list[str]) -> twr.TypedWorkOrder:
+    return twr.parse_typed_work_order(
+        {
+            "id": "probe",
+            "title": "probe",
+            "safety": "READ_ONLY",
+            "log_path": "docs/reports/terminal/probe.log",
+            "block_dirty_worktree": False,
+            "steps": [{"kind": "command_argv", "argv": argv}],
+        }
+    )
+
+
+def test_typed_work_order_runs_unlisted_commands_only_with_the_local_flag(tmp_path: Path) -> None:
+    root = _git_repo(tmp_path / "repo")
+
+    refused = twr.run_typed_work_order(_typed(["touch", "EXECUTED"]), root)
+    assert refused.result_status == "FAIL"
+    assert "--allow-unlisted" in refused.message
+    assert not (root / "EXECUTED").exists()
+
+    allowed = twr.run_typed_work_order(_typed(["touch", "EXECUTED"]), root, allow_unlisted=True)
+    assert allowed.result_status == "PASS"
+    assert (root / "EXECUTED").exists()
+
+
+def test_typed_work_order_still_runs_read_only_git_queries_without_the_flag(tmp_path: Path) -> None:
+    root = _git_repo(tmp_path / "repo")
+
+    result = twr.run_typed_work_order(_typed(["git", "branch", "--show-current"]), root)
+
+    assert result.result_status == "PASS"
+
+
+def test_typed_work_order_grants_bounded_cockpit_actions_only_with_the_local_flag(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = _git_repo(tmp_path / "repo")
+    granted: list[bool] = []
+
+    def fake_run_cockpit_action(action_id: str, project_root: Path, *, allow_bounded: bool = False):
+        granted.append(allow_bounded)
+        return SimpleNamespace(result_status="PASS", returncode=0)
+
+    monkeypatch.setattr(twr, "run_cockpit_action", fake_run_cockpit_action)
+    monkeypatch.setattr(twr, "action_result_as_json_data", lambda result: {})
+    order = twr.parse_typed_work_order(
+        {
+            "id": "probe",
+            "title": "probe",
+            "safety": "BOUNDED",
+            "log_path": "docs/reports/terminal/probe.log",
+            "block_dirty_worktree": False,
+            "steps": [{"kind": "cockpit_action", "action_id": "dialog.rnc", "allow_bounded": True}],
+        }
+    )
+
+    twr.run_typed_work_order(order, root, allow_unlisted=True)
+
+    assert granted == [True]
+
+
+@pytest.mark.parametrize(
+    "argv,allow_unlisted,expected",
+    [
+        (["agentic-kit", "doctor"], False, True),
+        ([".venv/bin/agentic-kit", "handoff", "check"], False, True),
+        (["agentic-kit", "rules", "acknowledge"], False, False),
+        (["agentic-kit", "rules", "acknowledge"], True, True),
+        (["touch", "x"], False, False),
+        (["touch", "x"], True, True),
+        (["git", "push", "origin", "main"], True, False),
+        (["env", "git", "status"], True, False),
+        (["git", "diff", "--output=/tmp/x"], True, False),
+        (["python3.12", "-c", "print(1)"], True, False),
+        (["gh", "pr", "view", "1"], False, True),
+        (["env", "gh", "pr", "merge", "1"], True, False),
+    ],
+)
+def test_order_command_authority_classification(argv: list[str], allow_unlisted: bool, expected: bool) -> None:
+    from agentic_project_kit.order_command_authority import classify_order_command
+
+    decision = classify_order_command(tuple(argv), load_manifest(REPO_ROOT), allow_unlisted=allow_unlisted)
+
+    assert decision.allowed is expected, decision.reason
+
+
+def test_order_command_authority_never_allows_destructive_kit_commands() -> None:
+    from agentic_project_kit.order_command_authority import classify_order_command
+
+    manifest = load_manifest(REPO_ROOT)
+    destructive = [c for c in manifest["commands"] if c.get("safety") == "DESTRUCTIVE"]
+    assert destructive
+    for command in destructive:
+        argv = ("agentic-kit", *command["path"])
+        assert not classify_order_command(argv, manifest, allow_unlisted=True).allowed, command["qualified_name"]
+
+
+def test_transfer_apply_refuses_bounded_commands_without_the_flag_before_any_action(tmp_path: Path) -> None:
+    root, _ = _transfer_root(tmp_path)
+    (root / "payload.txt").write_text("written\n", encoding="utf-8")
+    actions = [
+        {"type": "write_text_file", "target_path": "docs/out.txt", "payload_path": "payload.txt"},
+        {"type": "run_command", "command": ["touch", "EXECUTED"]},
+    ]
+
+    result = _apply(root, actions)
+
+    assert result.result_status == "FAIL"
+    assert "--allow-unlisted" in result.message
+    assert not (root / "docs" / "out.txt").exists()
+    assert not (root / "EXECUTED").exists()
+
+
+def test_transfer_apply_runs_unlisted_commands_with_the_flag(tmp_path: Path) -> None:
+    root, _ = _transfer_root(tmp_path)
+    order_data = {
+        "id": "probe",
+        "title": "probe",
+        "safety": "BOUNDED",
+        "report_path": "docs/reports/command_runs/probe.md",
+        "actions": [{"type": "run_command", "command": ["touch", "EXECUTED"]}],
+    }
+    order = replace(
+        tr.parse_transfer_order(order_data),
+        raw_text=_transfer_order_text(order_data),
+        checked_path="current.yaml",
+    )
+
+    result = tr.apply_transfer_order(order, root, allow_unlisted=True)
+
+    assert result.result_status == "PASS"
+    assert (root / "EXECUTED").exists()
+
+
+def test_transfer_report_path_does_not_write_through_a_symlink(tmp_path: Path) -> None:
+    root, outside = _transfer_root(tmp_path)
+    (root / "docs" / "reports").mkdir(parents=True)
+    (root / "docs" / "reports" / "command_runs").symlink_to(outside, target_is_directory=True)
+
+    with pytest.raises(ValueError, match="symlink"):
+        _apply(root, [{"type": "run_command", "command": ["touch", "EXECUTED"]}])
+
+    assert list(outside.iterdir()) == []

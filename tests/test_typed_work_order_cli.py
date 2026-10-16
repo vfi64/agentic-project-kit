@@ -20,10 +20,10 @@ def write_typed_order(path: Path, log_path: str = "docs/reports/terminal/typed-c
                 "block_dirty_worktree: false",
                 "steps:",
                 "  - kind: command_argv",
-                "    label: python version",
+                "    label: echo",
                 "    argv:",
-                "      - python3",
-                "      - --version",
+                "      - echo",
+                "      - ok",
                 "",
             ]
         ),
@@ -46,7 +46,7 @@ def test_work_order_typed_run_execute_json_writes_log(tmp_path: Path, monkeypatc
     monkeypatch.chdir(tmp_path)
     order_path = tmp_path / "typed.yaml"
     write_typed_order(order_path)
-    result = runner.invoke(app, ["work-order", "typed-run", str(order_path), "--execute", "--json"])
+    result = runner.invoke(app, ["work-order", "typed-run", str(order_path), "--execute", "--json", "--allow-unlisted"])
     assert result.exit_code == 0, result.output
     data = json.loads(result.output)
     assert data["schema_version"] == 1

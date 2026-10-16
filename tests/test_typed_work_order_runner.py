@@ -58,7 +58,7 @@ def test_parse_typed_work_order_rejects_shell_string_shape() -> None:
 
 def test_run_typed_work_order_pass_writes_machine_readable_log(tmp_path: Path) -> None:
     order = make_order()
-    result = run_typed_work_order(order, tmp_path, runner=lambda argv, root: CompletedOk())
+    result = run_typed_work_order(order, tmp_path, runner=lambda argv, root: CompletedOk(), allow_unlisted=True)
     assert result.result_status == RESULT_PASS
     data = typed_work_order_result_as_json_data(result)
     assert data["schema_version"] == 1
@@ -71,7 +71,7 @@ def test_run_typed_work_order_pass_writes_machine_readable_log(tmp_path: Path) -
 
 def test_run_typed_work_order_fail_stops_on_failed_step(tmp_path: Path) -> None:
     order = make_order()
-    result = run_typed_work_order(order, tmp_path, runner=lambda argv, root: CompletedFail())
+    result = run_typed_work_order(order, tmp_path, runner=lambda argv, root: CompletedFail(), allow_unlisted=True)
     assert result.result_status == RESULT_FAIL
     assert result.returncode == 7
     assert "Step failed" in result.message
@@ -81,7 +81,7 @@ def test_run_typed_work_order_fail_stops_on_failed_step(tmp_path: Path) -> None:
 def test_run_typed_work_order_blocks_dirty_worktree(tmp_path: Path) -> None:
     order = TypedWorkOrder("dirty-demo", "Dirty Demo", "read_only", "docs/reports/terminal/dirty.log", (TypedWorkOrderStep(kind="command_argv", label="echo", argv=("echo", "ok")),), True)
     (tmp_path / ".git").mkdir()
-    result = run_typed_work_order(order, tmp_path, runner=lambda argv, root: CompletedOk())
+    result = run_typed_work_order(order, tmp_path, runner=lambda argv, root: CompletedOk(), allow_unlisted=True)
     assert result.result_status in {RESULT_PENDING, RESULT_PASS}
     assert (tmp_path / order.log_path).exists()
 
@@ -112,7 +112,7 @@ def test_run_typed_next_reports_expected_closeout_paths_on_pass(tmp_path: Path) 
     )
     (tmp_path / ".git").mkdir()
 
-    result = run_typed_next(tmp_path)
+    result = run_typed_next(tmp_path, allow_unlisted=True)
     data = typed_next_result_as_json_data(result)
 
     assert result.result_status == RESULT_PASS

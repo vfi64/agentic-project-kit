@@ -42,7 +42,10 @@ class TransferLocalRun:
 
 
 def run_local_transfer(
-    project_root: Path = Path("."), path: Path = DEFAULT_INBOX
+    project_root: Path = Path("."),
+    path: Path = DEFAULT_INBOX,
+    *,
+    allow_unlisted: bool = False,
 ) -> TransferLocalRun:
     root = project_root.resolve()
     order = load_transfer_order(path)
@@ -71,7 +74,7 @@ def run_local_transfer(
         )
 
     if inspect_result.returncode == 0:
-        apply_result = apply_transfer_order(order, root)
+        apply_result = apply_transfer_order(order, root, allow_unlisted=allow_unlisted)
         apply_data = transfer_result_as_json_data(apply_result)
         result_status = apply_result.result_status
         returncode = apply_result.returncode

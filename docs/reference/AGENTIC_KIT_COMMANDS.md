@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 0e86475bdbb3
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: de29c190c90f
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -2218,6 +2218,7 @@ Write a K3 remote branch hygiene evidence report only with --execute.
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON result. |
+| `allow_unlisted` | `TyperOption` | --allow-unlisted | `False` | `False` | Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused. |
 
 ### `agentic-kit rn`
 
@@ -2231,6 +2232,7 @@ Write a K3 remote branch hygiene evidence report only with --execute.
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON result. |
+| `allow_unlisted` | `TyperOption` | --allow-unlisted | `False` | `False` | Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused. |
 
 ### `agentic-kit rnc`
 
@@ -2569,6 +2571,7 @@ Create or recover the administrative handoff refresh PR after a merged PR.
 |---|---:|---|---:|---|---|
 | `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/current.yaml')` | Transfer order path. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+| `allow_unlisted` | `TyperOption` | --allow-unlisted | `False` | `False` | Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused. |
 
 ### `agentic-kit transfer branch-create`
 
@@ -2782,6 +2785,7 @@ Continue chat/local transfer communication through the safest available wrapper 
 | `branch` | `TyperArgument` | branch | `False` |  | Optional target branch. If omitted, infer a single active transfer order. |
 | `json_output` | `TyperOption` | --json, --no-json | `False` | `False` | Print machine-readable JSON. |
 | `skip_llm_context_gate` | `TyperOption` | --skip-llm-context-gate | `False` | `False` | Recovery-only: continue without requiring fresh generated LLM context. |
+| `allow_unlisted` | `TyperOption` | --allow-unlisted | `False` | `False` | Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused. |
 
 ### `agentic-kit transfer delete-merged-work-branch`
 
@@ -3440,6 +3444,7 @@ Run the next repo-backed transfer order for local or remote work handoff.
 |---|---:|---|---:|---|---|
 | `branch` | `TyperArgument` | branch | `False` |  | Optional remote transfer branch. If omitted, read branch from the transfer order. |
 | `json_output` | `TyperOption` | --json, --no-json | `False` | `False` | Print machine-readable JSON. |
+| `allow_unlisted` | `TyperOption` | --allow-unlisted | `False` | `False` | Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused. |
 
 ### `agentic-kit transfer remote-work-start`
 
@@ -3552,6 +3557,7 @@ Restore the canonical known volatile transfer files.
 |---|---:|---|---:|---|---|
 | `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/current.yaml')` | Transfer order path. |
 | `json_output` | `TyperOption` | --json, --no-json | `False` | `True` | Print machine-readable JSON. |
+| `allow_unlisted` | `TyperOption` | --allow-unlisted | `False` | `False` | Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused. |
 
 ### `agentic-kit transfer run-sequence-and-log`
 
@@ -3931,6 +3937,7 @@ _No parameters._
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON result. |
+| `allow_unlisted` | `TyperOption` | --allow-unlisted | `False` | `False` | Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused. |
 
 ### `agentic-kit work-order typed-queue-status`
 
@@ -3958,6 +3965,7 @@ _No parameters._
 | `work_order_path` | `TyperArgument` | work_order_path | `True` |  |  |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Actually run the typed work order. Omit for dry-run. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON result. |
+| `allow_unlisted` | `TyperOption` | --allow-unlisted | `False` | `False` | Allow work-order commands beyond READ_ONLY Kit commands and read-only git/gh queries: BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters stay refused. |
 
 ### `agentic-kit work-order upload`
 

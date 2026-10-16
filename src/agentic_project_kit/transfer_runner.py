@@ -15,6 +15,8 @@ from agentic_project_kit.instruction_lint import (
     lint_instruction_text,
     strip_command_manifest_ack_header,
 )
+from agentic_project_kit.order_command_authority import classify_order_command, order_manifest
+from agentic_project_kit.order_paths import confined_repo_path
 from agentic_project_kit.workspace import load_workspace
 
 DEFAULT_INBOX = Path(".agentic/transfer/inbox/current.yaml")
@@ -178,8 +180,19 @@ def inspect_transfer_order(order: TransferOrder, project_root: Path = Path("."))
                 {"type": action.kind, "command": list(action.command), "would_run": True}
             )
             continue
-        payload = root / action.payload_path
-        target = root / action.target_path
+        try:
+            payload = confined_repo_path(root, action.payload_path, field_name="payload_path")
+            target = confined_repo_path(root, action.target_path, field_name="target_path")
+        except ValueError as exc:
+            return TransferResult(
+                order.transfer_id,
+                RESULT_FAIL,
+                2,
+                order.safety,
+                order.report_path,
+                message=str(exc),
+                action_results=tuple(action_results),
+            )
         if not payload.exists():
             return TransferResult(
                 order.transfer_id,
@@ -222,7 +235,7 @@ def inspect_transfer_order(order: TransferOrder, project_root: Path = Path("."))
 
 
 def _write_report(project_root: Path, result: TransferResult) -> None:
-    path = project_root / result.report_path
+    path = confined_repo_path(project_root, result.report_path, field_name="report_path")
     path.parent.mkdir(parents=True, exist_ok=True)
     data = transfer_result_as_json_data(result)
     lines = [
@@ -263,7 +276,24 @@ def _run_command_action(root: Path, action: TransferAction) -> dict[str, Any]:
     }
 
 
-def apply_transfer_order(order: TransferOrder, project_root: Path = Path(".")) -> TransferResult:
+def _command_authority_refusals(order: TransferOrder, root: Path, *, allow_unlisted: bool) -> list[str]:
+    manifest = order_manifest(root)
+    refusals: list[str] = []
+    for action in order.actions:
+        if action.kind != ACTION_RUN_COMMAND:
+            continue
+        decision = classify_order_command(action.command, manifest, allow_unlisted=allow_unlisted)
+        if not decision.allowed:
+            refusals.append(decision.reason)
+    return refusals
+
+
+def apply_transfer_order(
+    order: TransferOrder,
+    project_root: Path = Path("."),
+    *,
+    allow_unlisted: bool = False,
+) -> TransferResult:
     root = project_root.resolve()
     if order.raw_text is None:
         result = TransferResult(
@@ -304,6 +334,20 @@ def apply_transfer_order(order: TransferOrder, project_root: Path = Path(".")) -
     if inspected.result_status == RESULT_FAIL:
         _write_report(root, inspected)
         return inspected
+    refusals = _command_authority_refusals(order, root, allow_unlisted=allow_unlisted)
+    if refusals:
+        result = TransferResult(
+            order.transfer_id,
+            RESULT_FAIL,
+            2,
+            order.safety,
+            order.report_path,
+            message="Work-order command authority refused transfer apply; no action ran.\n"
+            + "\n".join(refusals),
+            instruction_lint=lint_result,
+        )
+        _write_report(root, result)
+        return result
     action_results: list[dict[str, Any]] = []
     result_status = RESULT_PASS
     returncode = 0
@@ -318,8 +362,8 @@ def apply_transfer_order(order: TransferOrder, project_root: Path = Path(".")) -
                 message = "Transfer command action failed."
                 break
             continue
-        payload_path = root / action.payload_path
-        target_path = root / action.target_path
+        payload_path = confined_repo_path(root, action.payload_path, field_name="payload_path")
+        target_path = confined_repo_path(root, action.target_path, field_name="target_path")
         target_path.parent.mkdir(parents=True, exist_ok=True)
         text = payload_path.read_text(encoding="utf-8")
         target_path.write_text(text, encoding="utf-8")

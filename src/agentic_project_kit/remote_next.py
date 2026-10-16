@@ -49,12 +49,12 @@ def _sync_main(project_root: Path) -> tuple[bool, str]:
     return True, "main synced"
 
 
-def run_remote_next(project_root: Path = Path(".")) -> RemoteNextResult:
+def run_remote_next(project_root: Path = Path("."), *, allow_unlisted: bool = False) -> RemoteNextResult:
     root = project_root.resolve()
     ok, message = _sync_main(root)
     if not ok:
         return RemoteNextResult(STATUS_SYNC_FAIL, 2, message)
-    typed_result = run_typed_next(root)
+    typed_result = run_typed_next(root, allow_unlisted=allow_unlisted)
     return RemoteNextResult("synced", typed_result.returncode, typed_result.message, typed_result)
 
 
