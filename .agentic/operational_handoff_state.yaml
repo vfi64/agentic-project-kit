@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b48b181acd8ba3d2d28162dde5c808bbb3a39785
-  short: b48b181a
-  subject: Sync handoff release block from release evidence; fix release run text output (#2510)
+  full: 0a03aec36cb53266ef17a13b8b0ca4b067390258
+  short: 0a03aec3
+  subject: Plan Kit control-effectiveness measurement (#2512)
 last_substantive_work_state:
-  full: b48b181acd8ba3d2d28162dde5c808bbb3a39785
-  short: b48b181a
-  subject: Sync handoff release block from release evidence; fix release run text output (#2510)
+  full: 0a03aec36cb53266ef17a13b8b0ca4b067390258
+  short: 0a03aec3
+  subject: Plan Kit control-effectiveness measurement (#2512)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
