@@ -41,7 +41,7 @@ Critical rule IDs:
 
 - branch: `fix/f4-workflow-git-authority-20261016`
 - head_matches_origin_main: `False`
-- worktree_clean: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -441,13 +441,13 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "fix/f4-workflow-git-authority-20261016",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "3bdbfb4563c6de4144ca6b3ac2858565e13c0dc0",
+    "head": "619a11b31a6ebd6e715791362330adbcb2de1345",
     "head_matches_origin_main": false,
-    "head_short": "3bdbfb45",
+    "head_short": "619a11b3",
     "local_path": "cd /path/to/",
     "origin_main": "748ff571f8e5625d944cb64c07c525027deb32fb",
     "origin_main_short": "748ff571",
-    "worktree_clean": false
+    "worktree_clean": true
   }
 }
 ```
