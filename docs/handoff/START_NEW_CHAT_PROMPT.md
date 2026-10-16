@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: f90b639ef6f1c965f0c8cc6b8574880db1c5bfa298847e03147145cd0a36b60e
 - docs/reference/agentic-kit-commands.json: 869bdae0dd917481085b2ba6c48c16f873574951616ad60289358b5ee4ac8e5f
-## Operational documentation refresh state after PR #2518
+## Operational documentation refresh state after PR #2520
 
-Current administrative handoff refresh state is `02777588` (`Confine work-order paths and take command authority from the manifest (#2518)`). Continue next only after this post-PR2518 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `0ba2bd83` (`Bind transfer order freshness to the commit the order was written on (#2520)`). Continue next only after this post-PR2520 refresh is committed and merged; the next substantive slice must be created from fresh main.
