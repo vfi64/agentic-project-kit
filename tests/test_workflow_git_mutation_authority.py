@@ -206,6 +206,14 @@ def _git(cwd: Path, *args: str) -> str:
 
 @pytest.fixture
 def evidence_repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    # CI runners have no global git identity; the helper's own evidence commit needs one.
+    for key, value in {
+        "GIT_AUTHOR_NAME": "Kit Test",
+        "GIT_AUTHOR_EMAIL": "kit@example.invalid",
+        "GIT_COMMITTER_NAME": "Kit Test",
+        "GIT_COMMITTER_EMAIL": "kit@example.invalid",
+    }.items():
+        monkeypatch.setenv(key, value)
     origin = tmp_path / "origin.git"
     repo = tmp_path / "repo"
     subprocess.run(["git", "init", "-q", "--bare", "-b", "main", str(origin)], check=True)
