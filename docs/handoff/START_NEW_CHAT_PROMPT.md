@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 9743463a706f2c2abbae3ce49ba4d60126f1cd36dc304f357b7c5a03d26dc0aa
 - docs/reference/agentic-kit-commands.json: dccfb2f249eb4e72fc6efbd1958d73890258cd76c632e7dd30cfc80ccd03c50f
-## Operational documentation refresh state after PR #2514
+## Operational documentation refresh state after PR #2516
 
-Current administrative handoff refresh state is `0b667eb3` (`Route workflow helper git mutations through Kit primitives (F4) (#2514)`). Continue next only after this post-PR2514 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `4dfc9079` (`Review the work-order trust boundary with negative tests (#2516)`). Continue next only after this post-PR2516 refresh is committed and merged; the next substantive slice must be created from fresh main.
