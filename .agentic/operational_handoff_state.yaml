@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 90f6524ccddd2e1a51d0fe5b17d04061b8fe1bc7
-  short: 90f6524c
-  subject: Release 1.1.0 (#2538)
+  full: c940d66e365bd5335394207d46164d2e3e8d3ae9
+  short: c940d66e
+  subject: Test the release-projection drift signal on fixtures (#2541)
 last_substantive_work_state:
-  full: 90f6524ccddd2e1a51d0fe5b17d04061b8fe1bc7
-  short: 90f6524c
-  subject: Release 1.1.0 (#2538)
+  full: c940d66e365bd5335394207d46164d2e3e8d3ae9
+  short: c940d66e
+  subject: Test the release-projection drift signal on fixtures (#2541)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

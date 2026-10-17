@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 1b6ff8e6dd18b039602d65b7a637a4d4a31c09ceae7e2912c58eda24ea2b4f5b
 - docs/reference/agentic-kit-commands.json: b1e1799cbc0e056e103a9a961e04ec85d55886254bc5e5ab4395a2ec14e10a74
-## Operational documentation refresh state after PR #2538
+## Operational documentation refresh state after PR #2541
 
-Current administrative handoff refresh state is `90f6524c` (`Release 1.1.0 (#2538)`). Continue next only after this post-PR2538 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `c940d66e` (`Test the release-projection drift signal on fixtures (#2541)`). Continue next only after this post-PR2541 refresh is committed and merged; the next substantive slice must be created from fresh main.
