@@ -39,7 +39,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2528-handoff-refresh`
+- branch: `docs/post-pr2530-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -271,6 +271,24 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
+      "id": "website-evidence-and-command-navigation",
+      "status": "planned",
+      "summary": "Improve the public website with gated quickstart, evidence and governed command navigation"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "independent-held-out-gate-validation",
+      "status": "planned",
+      "summary": "Test known Kit gate claims against independently developed held-out faults"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
       "id": "optional-structural-evidence-provider-evaluation",
       "status": "planned",
       "summary": "Evaluate optional structural evidence providers for impact-aware context"
@@ -439,14 +457,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2528-handoff-refresh",
+    "branch": "docs/post-pr2530-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7",
+    "head": "598eb8fecb176d6914dd5b0031c938b339f1bb5a",
     "head_matches_origin_main": true,
-    "head_short": "9dd637eb",
+    "head_short": "598eb8fe",
     "local_path": "cd /path/to/",
-    "origin_main": "9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7",
-    "origin_main_short": "9dd637eb",
+    "origin_main": "598eb8fecb176d6914dd5b0031c938b339f1bb5a",
+    "origin_main_short": "598eb8fe",
     "worktree_clean": false
   }
 }

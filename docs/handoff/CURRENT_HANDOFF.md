@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7` (`9dd637eb`), after `Add an offline gate benchmark and fix ACK-headed transfer orders (#2528)`.
-Last substantive work state is `9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7` (`9dd637eb`), after `Add an offline gate benchmark and fix ACK-headed transfer orders (#2528)`.
+Current verified main/admin HEAD is `598eb8fecb176d6914dd5b0031c938b339f1bb5a` (`598eb8fe`), after `docs: Plan website quickstart, shared task navigation and held-out gate review (#2530)`.
+Last substantive work state is `598eb8fecb176d6914dd5b0031c938b339f1bb5a` (`598eb8fe`), after `docs: Plan website quickstart, shared task navigation and held-out gate review (#2530)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
