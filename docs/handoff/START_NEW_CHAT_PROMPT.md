@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: d4158b36ba2650219780747758ca4c281433bcc7dab3ea1733b69c0d9b01cb61
 - docs/reference/agentic-kit-commands.json: a99e6eb2d327d46084140fdf73b2b868a0f798b80ccd3287120daabcccd1e575
-## Operational documentation refresh state after PR #2530
+## Operational documentation refresh state after PR #2532
 
-Current administrative handoff refresh state is `598eb8fe` (`docs: Plan website quickstart, shared task navigation and held-out gate review (#2530)`). Continue next only after this post-PR2530 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `c6e03133` (`Measure the context baseline and prepare the context benchmark (#2532)`). Continue next only after this post-PR2532 refresh is committed and merged; the next substantive slice must be created from fresh main.

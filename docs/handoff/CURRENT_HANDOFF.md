@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `598eb8fecb176d6914dd5b0031c938b339f1bb5a` (`598eb8fe`), after `docs: Plan website quickstart, shared task navigation and held-out gate review (#2530)`.
-Last substantive work state is `598eb8fecb176d6914dd5b0031c938b339f1bb5a` (`598eb8fe`), after `docs: Plan website quickstart, shared task navigation and held-out gate review (#2530)`.
+Current verified main/admin HEAD is `c6e03133d0449bab8011e5a42f0110ef8b8bebfc` (`c6e03133`), after `Measure the context baseline and prepare the context benchmark (#2532)`.
+Last substantive work state is `c6e03133d0449bab8011e5a42f0110ef8b8bebfc` (`c6e03133`), after `Measure the context baseline and prepare the context benchmark (#2532)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
