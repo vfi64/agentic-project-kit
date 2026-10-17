@@ -2257,6 +2257,195 @@ plans:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/reports/COMMAND_USAGE_AUDIT_20261015.md
   - docs/reports/self-hosting/DRIFT_QUALITY_AUDIT_20261015.md
+- id: website-evidence-and-command-navigation
+  status: planned
+  title: Improve the public website with gated quickstart, evidence and governed command navigation
+  decision_status: accepted_by_owner
+  integrated_at: '2026-10-17'
+  depends_on:
+  - p1-planning-consolidation
+  related_items:
+  - decomplexification-audit-roadmap
+  - context-budgeted-handoff-projections
+  - kit-control-effectiveness-measurement
+  - independent-held-out-gate-validation
+  rationale: >-
+    The site presents a large command surface as filtered tables. It needs a short
+    verifiable start path and bounded safety evidence without freezing commands
+    that decomplexification may consolidate. At 83977b75 there are 268 commands
+    including 34 orchestrators; all orchestrators have structural task_tags but
+    only two have additional task-specific tags, and the site generator does not
+    currently project task_tags. Decomplexification has no fixed completion date.
+  authority_boundaries:
+  - docs/planning/PROJECT_DIRECTION.yaml stays the only active planning authority.
+  - Extend the existing site_generator and command manifest rather than creating
+    a second documentation, classification or preferred-command authority.
+  - The decomplexification program owns task-to-preferred-command mapping for
+    agents and humans; the site consumes that same validated mapping.
+  - Human navigation improvements do not establish agent-side token reduction.
+    Preserve separate context-budget experiments and command-surface reviews.
+  - Keep the complete searchable command reference available during changes;
+    this plan authorizes no CLI removal, renaming or weakening of governance.
+  - Exclude private consumer internals, personal background and unredacted figures.
+  sequencing:
+  - W0 first; W2 next; W1-P0 may run in parallel with both.
+  - D1 belongs to decomplexification, not website-only metadata management.
+  - Full W1 navigation and W3 broad detail pages wait for D1 in their scope.
+  - W4 is independent but lower priority than quickstart and measured evidence.
+  steps:
+  - id: w0-home-and-quickstart
+    status: planned
+    priority: first_website_slice
+    acceptance:
+    - Explain purpose, bounded workflow and three to five preferred Kit commands.
+    - Check selected quickstart commands against decomplexification candidates.
+    - Resolve each referenced command against the canonical manifest; a missing
+      or renamed command must fail website generation, not silently degrade.
+    - Exercise the actual quickstart sequence in an isolated fixture-repository
+      smoke test and assert state and gate outcomes, not mere command existence.
+    - Label published v1.0.25 behavior separately from unshipped main behavior;
+      a main-only example must name its exact tested commit and availability.
+    - Present one real prevented fault only with a bounded evidence reference,
+      and keep the full generated command reference discoverable.
+  - id: w2-evidence-page
+    status: planned
+    priority: after_w0
+    acceptance:
+    - Explain WOTB-01 through WOTB-09, their scoped mitigations, the offline
+      fault-injection comparison and outstanding evidence boundaries.
+    - Bind each verified or tested public claim to a source artifact and exact
+      revision; without that evidence do not label the claim verified.
+    - Distinguish release from development branch. Show 5/10 against 11/11 with
+      their differing denominators and no claim of general security percentages.
+    - State explicitly that fixes were informed by known test scenarios;
+      generalization needs held-out independent review, not a reused test suite.
+    - Reuse existing site claims and explanation projections where possible.
+  - id: w1-p0-task-tag-inventory
+    status: planned
+    priority: parallel_with_w0_w2
+    acceptance:
+    - Report for all current orchestrators presence of any tags, structural
+      group/safety tags, meaningful task tags, ambiguities and unmapped commands.
+    - Record initial evidence as 34/34 tagged but only 2/34 with extra task
+      tags at 83977b75; do not equate structural tags with semantic coverage.
+    - Show unassigned commands explicitly; do not hide or infer missing mappings.
+    - Feed findings into decomplexification and the existing agent context plan.
+  - id: d1-shared-task-command-selection
+    status: planned
+    owner_plan: decomplexification-audit-roadmap
+    acceptance:
+    - Define preferred task-to-command routes once within the existing command
+      authority for both human website and model-facing command selection.
+    - Existing task_tags and command_for are inputs, not proof that preference,
+      authorization, workflow state or usage significance is established.
+    - Consider invocation ledger, dependency graph, safety role, compatibility,
+      deprecation and context cost; do not remove commands based on counts alone.
+    - Retain ACK, mutation and evidence gates and evaluate agent context costs
+      independently of website readability.
+  - id: w1-task-navigation
+    status: planned
+    depends_on_step: d1-shared-task-command-selection
+    acceptance:
+    - Render tasks, command groups and preferred orchestrators from the shared,
+      tested authority, with diagnostics and primitives discoverable on demand.
+    - Show unmapped commands as unassigned; retain filters and full reference.
+    - Validate internal links, mobile layout, accessibility and projection
+      freshness; never maintain a separate manual website taxonomy.
+  - id: w3-command-detail-pages
+    status: planned
+    depends_on_step: d1-shared-task-command-selection
+    acceptance:
+    - Start with quickstart and preferred orchestrator commands; defer detailed
+      primitive pages unless use and decomplexification decisions justify them.
+    - Derive descriptions, options, safety and conditions from authoritative
+      metadata; runnable examples must pass fixture or integration tests.
+    - Display call relationships only when trace or static code evidence supports
+      them. Otherwise omit the claim instead of guessing.
+  - id: w4-history-and-architecture
+    status: planned
+    priority: lower
+    acceptance:
+    - Reuse selected cleared figures and bounded historical statements from
+      the existing self-hosting archive with source links, not a second history.
+    - Separate Git/CI facts, author testimony, reconstruction and normative rules.
+    - Present Kit-as-OS only as an architecture metaphor, not kernel isolation.
+    - Keep private consumer details and personal context outside the public site.
+  outcomes:
+  - The quickstart is executable in a fixture and fails closed on stale command IDs.
+  - Each verified web claim has a revision-bound evidence reference.
+  - Task mapping is singular for humans and agents, with visible unassigned entries.
+  - Website usability and agent context consumption are evaluated separately.
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  - src/agentic_project_kit/site_generator.py
+  - src/agentic_project_kit/command_manifest.py
+  - src/agentic_project_kit/command_selector.py
+  evidence:
+  - docs/reports/COMMAND_USAGE_AUDIT_20261015.md
+  - docs/reports/WORK_ORDER_TRUST_BOUNDARY_REVIEW_20261016.md
+  - docs/reports/gate_benchmark_20261016/GATE_BENCHMARK_PART1_20261016.md
+  - docs/reports/self-hosting/HISTORICAL_DEVELOPMENT_20261015.md
+- id: independent-held-out-gate-validation
+  status: planned
+  title: Test known Kit gate claims against independently developed held-out faults
+  decision_status: accepted_by_owner
+  integrated_at: '2026-10-17'
+  related_items:
+  - kit-control-effectiveness-measurement
+  - website-evidence-and-command-navigation
+  rationale: >-
+    The existing 11/11 offline benchmark targets known faults and is partly
+    fix-informed. Independently developed unseen scenarios can challenge its
+    generalization and methodology without implying universal security.
+  sequencing:
+  - Recruit reviewer and define protocol in parallel with W0; no unseen
+    scenarios or independent result exist at plan acceptance.
+  - Freeze the tested Kit revision before scenarios are revealed; do not make
+    implementation adjustments before the first recorded run.
+  steps:
+  - id: h0-independent-reviewer-and-protocol
+    status: planned
+    acceptance:
+    - Recruit an independent reviewer who did not implement the evaluated fixes;
+      document independence, scenario secrecy and possible conflicts.
+    - Record the full immutable Kit commit SHA and predefine eligible fault
+      classes, outcome categories, exclusions and the existing harness interface.
+    - Prefer reuse of the offline sandbox; do not create a new test framework
+      without evidence the existing one is insufficient.
+  - id: h1-sealed-scenario-commitment
+    status: planned
+    acceptance:
+    - Reviewer prepares new cases outside the Kit repository without disclosing
+      the plaintext to implementers before the frozen first run.
+    - Commit SHA-256 over a specified immutable byte representation combined
+      with a random secret nonce; commit the digest, algorithm, scope and date,
+      not the scenario contents or nonce until reveal.
+    - A hash proves post-commit integrity, not reviewer independence or that
+      the cases were unknown to the authors; document both separately.
+  - id: h2-frozen-first-run
+    status: planned
+    acceptance:
+    - Reveal data and nonce, verify the original commitment, and test the frozen
+      Kit ref before editing code, gates, scenarios or harness behavior.
+    - Report blocks, harmful effects, clean-control false positives, untestable
+      cases and harness failures separately with exact denominators and logs.
+    - Preserve a first-run evidence snapshot before any fix or follow-up retest.
+  - id: h3-independent-method-review
+    status: planned
+    acceptance:
+    - Assess construct validity, novelty, representativeness, independence,
+      fairness and limitations of held-out comparisons explicitly.
+    - Publish only scoped claims tied to reviewer identity/provenance, evidence
+      and immutable code ref; no general safety percentage or certification.
+    - Disclose scenario content publicly only after review for sensitive data.
+  exclusions:
+  - Does not replace the separate real-LLM context comparison, automatic
+    repair gates, architectural approval, or human-owned merge decisions.
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  evidence:
+  - docs/reports/gate_benchmark_20261016/GATE_BENCHMARK_PART1_20261016.md
+  - docs/reports/WORK_ORDER_TRUST_BOUNDARY_REVIEW_20261016.md
 - id: optional-structural-evidence-provider-evaluation
   status: planned
   title: Evaluate optional structural evidence providers for impact-aware context
