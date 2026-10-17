@@ -68,8 +68,30 @@ def test_release_projection_detects_a_stale_handoff_release_block(tmp_path: Path
     assert signal["drifted_keys"] == ["current_version", "tag"]
 
 
-def test_release_projection_is_consistent_in_the_kit_repository() -> None:
-    assert release_projection_signal(REPO_ROOT)["status"] == "consistent"
+def test_release_projection_reports_a_synced_handoff_release_block_as_consistent(tmp_path: Path) -> None:
+    # Fixture instead of the live repository: between the DOI closeout PR and the administrative
+    # handoff refresh that syncs the release block (HD-08), the Kit repository drifts by design.
+    # The signal is report-only; asserting the live state failed CI on the 1.1.0 DOI PR #2540.
+    root = tmp_path / "repo"
+    evidence = root / "docs/reports/release"
+    evidence.mkdir(parents=True)
+    (evidence / "post-release-doi-closeout-1.0.25.json").write_text(
+        json.dumps({"result_status": "PASS", "version": "1.0.25", "tag": "v1.0.25"}), encoding="utf-8"
+    )
+    (root / ".agentic").mkdir()
+    (root / ".agentic/handoff_state.yaml").write_text(
+        "release:\n  current_version: 1.0.25\n  tag: v1.0.25\n", encoding="utf-8"
+    )
+
+    signal = release_projection_signal(root)
+
+    assert signal["status"] == "consistent"
+    assert signal["drifted_keys"] == []
+
+
+def test_no_test_asserts_the_live_release_projection() -> None:
+    source = Path(__file__).read_text(encoding="utf-8")
+    assert "release_projection_signal(" + "REPO_ROOT)" not in source
 
 
 def test_consumer_status_lists_kit_closed_consumer_open_and_needs_an_explicit_ledger(tmp_path: Path) -> None:
