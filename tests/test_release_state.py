@@ -246,3 +246,37 @@ def test_release_process_state_analysis_report_contract() -> None:
     assert report["kind"] == "release_process_state_analysis"
     assert report["state_matrix"]
     assert report["minimal_status_command"] == "agentic-kit release-status --json"
+
+
+def _scripted(responses: dict[str, CommandResult]):
+    calls: list[list[str]] = []
+
+    def runner(_root, argv):
+        calls.append(list(argv))
+        return responses.get(argv[1], CommandResult(127, "", "unexpected command"))
+
+    return runner, calls
+
+
+def test_graphql_failure_of_release_view_falls_back_to_rest_and_finds_the_release(tmp_path) -> None:
+    from agentic_project_kit.release_state import _github_release_lookup
+
+    runner, calls = _scripted({
+        "release": CommandResult(1, "", 'non-200 OK status code: 403 Forbidden body: "GitHub GraphQL is not available"'),
+        "api": CommandResult(0, "v1.1.0\n", ""),
+    })
+
+    assert _github_release_lookup(tmp_path, "v1.1.0", runner) == (True, True)
+    assert calls[1] == ["gh", "api", "repos/{owner}/{repo}/releases/tags/v1.1.0", "--jq", ".tag_name"]
+
+
+def test_release_lookup_reports_missing_only_on_a_not_found_answer(tmp_path) -> None:
+    from agentic_project_kit.release_state import _github_release_lookup
+
+    missing, _ = _scripted({"release": CommandResult(1, "", "release not found")})
+    rest_missing, _ = _scripted({"release": CommandResult(1, "", "HTTP 403"), "api": CommandResult(1, "", "gh: Not Found (HTTP 404)")})
+    unknown, _ = _scripted({"release": CommandResult(1, "", "HTTP 403"), "api": CommandResult(1, "", "HTTP 502")})
+
+    assert _github_release_lookup(tmp_path, "v1.1.0", missing) == (False, False)
+    assert _github_release_lookup(tmp_path, "v1.1.0", rest_missing) == (False, False)
+    assert _github_release_lookup(tmp_path, "v1.1.0", unknown) == (None, None)
