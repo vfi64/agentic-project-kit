@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Stop `release-status --include-remote` from reporting a published GitHub release as missing: `gh` exits 1 for every error, so only a not-found answer now counts as missing, and a failed `gh release view` (for example a refused GraphQL call) falls back to the REST release endpoint; this blocked release-run step D5 for 1.1.0.
+
 - Test the release-projection drift signal on fixtures instead of the live repository: between a DOI closeout PR and the administrative handoff refresh the release block drifts by design, and the live assertion failed CI on the 1.1.0 DOI PR.
 
 ## v1.1.0 - 2026-10-17

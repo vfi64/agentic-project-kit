@@ -300,6 +300,31 @@ def _tag_exists(project_root: Path, version: str, runner: ReleaseStateRunner) ->
     return result.returncode == 0
 
 
+def _looks_missing(result: CommandResult) -> bool:
+    output = f"{result.stdout}\n{result.stderr}".lower()
+    return result.returncode == 1 and any(fragment in output for fragment in ("not found", "http 404"))
+
+
+def _github_release_lookup(project_root: Path, tag: str, runner: ReleaseStateRunner) -> tuple[bool | None, bool | None]:
+    """Return (exists, tag matches); (None, None) when GitHub could not answer.
+
+    `gh` exits 1 for every error, so rc=1 alone is not "no release": a GraphQL or auth
+    failure must stay inconclusive (1.1.0 release-run D5 reported a published release as
+    missing). A failed `gh release view` falls back to the REST endpoint for the tag.
+    """
+    view = runner(project_root, ["gh", "release", "view", tag, "--json", "tagName"])
+    if view.returncode == 0:
+        return True, tag in view.stdout
+    if _looks_missing(view):
+        return False, False
+    rest = runner(project_root, ["gh", "api", f"repos/{{owner}}/{{repo}}/releases/tags/{tag}", "--jq", ".tag_name"])
+    if rest.returncode == 0:
+        return True, rest.stdout.strip() == tag
+    if _looks_missing(rest):
+        return False, False
+    return None, None
+
+
 def _remote_release_status(
     project_root: Path,
     *,
@@ -342,14 +367,8 @@ def _remote_release_status(
     else:
         warnings.append("remote_tag_check_inconclusive")
 
-    github_release = runner(project_root, ["gh", "release", "view", tag, "--json", "tagName"])
-    if github_release.returncode == 0:
-        github_release_exists = True
-        github_release_tag_matches = tag in github_release.stdout
-    elif github_release.returncode == 1:
-        github_release_exists = False
-        github_release_tag_matches = False
-    else:
+    github_release_exists, github_release_tag_matches = _github_release_lookup(project_root, tag, runner)
+    if github_release_exists is None:
         warnings.append("github_release_check_inconclusive")
 
     if concept_doi:
