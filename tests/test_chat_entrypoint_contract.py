@@ -261,3 +261,44 @@ def test_sync_entrypoints_repairs_stale_manifest_sha_and_agents_block(tmp_path: 
     )
     assert idempotent.exit_code == 0, idempotent.output
     assert json.loads(idempotent.output)["changed"] is False
+
+
+def test_sync_entrypoints_refreshes_only_dpa_ack_with_preview_and_idempotency(tmp_path: Path) -> None:
+    from agentic_project_kit.dpa_readiness import DEFAULT_READINESS_PATH
+
+    record = tmp_path / DEFAULT_READINESS_PATH
+    record.parent.mkdir(parents=True)
+    original = {
+        "command_manifest_ack": "COMMAND_MANIFEST_ACK stale",
+        "status": "DP2_AUTHORIZED",
+        "maintainer_approval": {"approved": True, "scope": "unchanged fixture scope"},
+    }
+    record.write_text(json.dumps(original, indent=2) + "\n")
+    before = record.read_bytes()
+    args = ["commands", "sync-entrypoints", "--root", str(tmp_path), "--json"]
+
+    preview = CliRunner().invoke(app, args)
+    assert preview.exit_code == 0, preview.output
+    assert DEFAULT_READINESS_PATH.as_posix() in json.loads(preview.output)["changed_paths"]
+    assert record.read_bytes() == before
+
+    written = CliRunner().invoke(app, [*args, "--execute"])
+    assert written.exit_code == 0, written.output
+    expected = {**original, "command_manifest_ack": command_manifest_ack_line(load_manifest(tmp_path))}
+    assert json.loads(record.read_text()) == expected
+    assert DEFAULT_READINESS_PATH.as_posix() in json.loads(written.output)["changed_paths"]
+
+    again = CliRunner().invoke(app, args)
+    assert again.exit_code == 0, again.output
+    assert json.loads(again.output)["changed"] is False
+
+
+def test_sync_entrypoints_does_not_create_dpa_readiness_evidence(tmp_path: Path) -> None:
+    from agentic_project_kit.dpa_readiness import DEFAULT_READINESS_PATH
+
+    result = CliRunner().invoke(
+        app, ["commands", "sync-entrypoints", "--root", str(tmp_path), "--execute", "--json"]
+    )
+    assert result.exit_code == 0, result.output
+    assert not (tmp_path / DEFAULT_READINESS_PATH).exists()
+    assert DEFAULT_READINESS_PATH.as_posix() not in json.loads(result.output)["changed_paths"]

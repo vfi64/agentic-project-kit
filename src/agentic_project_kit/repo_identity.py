@@ -76,10 +76,12 @@ def _git_config_candidates(root: Path) -> tuple[Path, ...]:
 
 
 def _origin_url_from_git_config(root: Path) -> str | None:
-    parser = configparser.ConfigParser()
     for candidate in _git_config_candidates(root):
         if not candidate.exists():
             continue
+        # Git permits repeated keys (for example remote.origin.fetch) and stores
+        # literal values rather than ConfigParser interpolation expressions.
+        parser = configparser.ConfigParser(strict=False, interpolation=None)
         try:
             parser.read(candidate, encoding="utf-8")
         except configparser.Error:

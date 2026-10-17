@@ -1,0 +1,210 @@
+Kit workflow hardening: rebase, Git config, DPA manifest ACK
+Branch: fix/rebase-config-and-entrypoint-ack-20261017
+Base commit: 17ec5417dee7acbbe90b59494e5ae410a4ee6794
+Validation applies to the following pre-commit file snapshots; final-head CI follows publication.
+No manual changes to release metadata or generated handoff files.
+
+sha256 9b40dc201050b5ca08186851236d9b30fdf8bbf877d9eed9091b2a9c4ee6cfe0  src/agentic_project_kit/transfer_rebase.py
+sha256 9536496aec0e24b63c27f96f0fd4e43fc016373058e3c42d2370d230138b917a  src/agentic_project_kit/cli_commands/transfer_repo_pre_pr.py
+sha256 66b01f47fec05a6b791a60816e65b4334edc6096c8b73d965849292478b680ec  src/agentic_project_kit/repo_identity.py
+sha256 80bee6010540b6f5112f0d6b8407bdf7f7fc238f24768040b7675777ff0785d6  src/agentic_project_kit/chat_entrypoint_contract.py
+sha256 fac094b10c6df532f8a535b3b4387877d9bbe94118329793eeed502e2e006bd3  src/agentic_project_kit/dpa_command_manifest_ack.py
+sha256 a089294f00d67f19bd8b6b737fcaf66719e76a8f0a7df69a4448cac248d4359b  src/agentic_project_kit/release_prepare.py
+sha256 4f0d9c931509ccc2cba581b41bed0da72a1de2dda69a567deb45a592a56aa13a  tests/test_transfer_rebase_status.py
+sha256 ce85529fab74aaa4a85be4fd1dcb538bd1dfea05030b2f91597344363ebce8d4  tests/test_repo_identity.py
+sha256 db481a8ba2631f0a79f057d7d69a18649f1ca98007d2e8d8b816ec5b3d19431e  tests/test_chat_entrypoint_contract.py
+sha256 0ef5e4c35a6031dbf60c9384a2a9320b179468ebf20fe4f487ed6333aeabcc67  tests/test_workflow_git_mutation_authority.py
+sha256 73a95afccb68a6ae0023617a3d405f7dcd6254e68f036d6f6e19b43910623bf7  docs/TEST_GATES.md
+
+Expected-negative reproduction before repairs: exit_code=1
+FAILED tests/test_repo_identity.py::test_origin_identity_accepts_multiple_fetch_values_without_subprocess[False]
+FAILED tests/test_repo_identity.py::test_origin_identity_accepts_multiple_fetch_values_without_subprocess[True]
+FAILED tests/test_transfer_rebase_status.py::test_rebase_reports_real_git_conflict_and_preserves_in_progress_state
+FAILED tests/test_transfer_rebase_status.py::test_rebase_blocks_when_conflict_observation_is_unavailable[0-not-json]
+FAILED tests/test_transfer_rebase_status.py::test_rebase_blocks_when_conflict_observation_is_unavailable[0-{}]
+FAILED tests/test_transfer_rebase_status.py::test_rebase_blocks_when_conflict_observation_is_unavailable[1-{"repo":{"conflict_present":false}}]
+FAILED tests/test_chat_entrypoint_contract.py::test_sync_entrypoints_refreshes_only_dpa_ack_with_preview_and_idempotency
+7 failed in 4.55s
+All three reported defects were reproduced; this expected-negative run is not a repaired-gate PASS.
+
+Focused repaired suite: exit_code=0
+........................................................................ [ 31%]
+........................................................................ [ 63%]
+........................................................................ [ 95%]
+...........                                                              [100%]
+=============================== warnings summary ===============================
+tests/test_chat_entrypoint_contract.py: 2 warnings
+tests/test_release_prepare_command.py: 12 warnings
+tests/test_transfer_repo_actions.py: 31 warnings
+tests/test_successor_handoff_package.py: 10 warnings
+tests/test_command_manifest.py: 10 warnings
+tests/test_command_remote_effect_implementations.py: 6 warnings
+  /workspace/agentic-project-kit/src/agentic_project_kit/workspace.py:416: LegacyProfileDeprecationWarning: agentic-kit implicit legacy profile is deprecated for manifest-less workspaces and will be removed in 2.0.0; run `agentic-kit workspace init --root PATH` or set AGENTIC_KIT_SUPPRESS_LEGACY_PROFILE_WARNING=1 to suppress this warning.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+227 passed, 71 warnings in 27.27s
+
+Initial full suite: PYTHONDONTWRITEBYTECODE=1 python -m pytest -q -n 4 --durations=20; exit_code=1
+173.42s call     tests/test_external_kit_resolution.py::test_installed_external_release_diagnostics_resolve_owned_kit[False]
+115.58s call     tests/test_external_kit_resolution.py::test_installed_external_release_diagnostics_resolve_owned_kit[True]
+60.48s call     tests/test_v040_gui_tkinter_shell.py::test_doctor_manual_gui_runner_executes_readonly_action
+48.94s call     tests/test_doctor.py::test_doctor_report_keeps_root_readme_required_for_selfhosting_checkout
+24.07s call     tests/test_greenfield_adjudication.py::test_gf005_first_work_start[candidate]
+19.57s call     tests/test_greenfield_adjudication.py::test_gf005_first_work_start[released-1.0.24]
+17.25s setup    tests/test_ci_runtime_plan.py::test_installed_custom_ci_runtime_plan[unknown-full]
+16.22s call     tests/test_external_rule_registry.py::test_installed_bootstrap_check_report_idempotency_and_tamper[False]
+15.43s call     tests/test_external_rule_registry.py::test_installed_bootstrap_check_report_idempotency_and_tamper[True]
+14.74s call     tests/test_ns_legacy_external_evidence.py::test_installed_external_declared_ledger_and_active_script
+13.63s call     tests/test_greenfield_adjudication.py::test_gf003_fresh_canonical_handoff_and_missing_predecessor
+13.45s setup    tests/test_ci_runtime_plan.py::test_installed_custom_ci_runtime_plan[event-full]
+12.02s setup    tests/test_ci_runtime_plan.py::test_installed_custom_ci_runtime_plan[manifest-full]
+10.35s call     tests/test_context_benchmark_harness.py::test_prompts_differ_only_in_the_context_condition
+10.27s setup    tests/test_ns_legacy_external_evidence.py::test_undeclared_external_output_matches_released_contract[released-1.0.24]
+10.15s call     tests/test_site_fallback_staleness.py::test_docs_pages_fallback_projection_is_fresh
+10.02s setup    tests/test_ci_runtime_plan.py::test_installed_custom_ci_runtime_plan[refresh-light]
+9.38s setup    tests/test_ci_runtime_plan.py::test_installed_custom_ci_runtime_plan[product-full]
+9.03s call     tests/test_context_budget.py::test_context_report_cli_json
+8.56s setup    tests/test_release_run_publish_verdict.py::test_installed_external_resume_c1_to_c2_keeps_b4_consent
+=========================== short test summary info ============================
+FAILED tests/test_workflow_git_mutation_authority.py::test_direct_git_mutations_in_tools_and_cli_commands_are_reviewed
+1 failed, 3780 passed, 542 warnings in 482.29s (0:08:02)
+The single failing test required removal of a stale CLI mutation-inventory entry after extraction. The same reviewed rebase signature and scan coverage now follow the primitive into transfer_rebase.py; no authority check was disabled.
+
+Post-correction affected-suite retest: exit_code=0
+........................................................................ [ 29%]
+........................................................................ [ 58%]
+........................................................................ [ 88%]
+.............................                                            [100%]
+=============================== warnings summary ===============================
+tests/test_chat_entrypoint_contract.py: 2 warnings
+tests/test_release_prepare_command.py: 12 warnings
+tests/test_transfer_repo_actions.py: 31 warnings
+tests/test_successor_handoff_package.py: 10 warnings
+tests/test_command_manifest.py: 10 warnings
+tests/test_command_remote_effect_implementations.py: 6 warnings
+  /workspace/agentic-project-kit/src/agentic_project_kit/workspace.py:416: LegacyProfileDeprecationWarning: agentic-kit implicit legacy profile is deprecated for manifest-less workspaces and will be removed in 2.0.0; run `agentic-kit workspace init --root PATH` or set AGENTIC_KIT_SUPPRESS_LEGACY_PROFILE_WARNING=1 to suppress this warning.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+245 passed, 71 warnings in 35.80s
+The complete final tree must pass GitHub CI before Kit merge. This record does not claim a second full local run.
+
+Ruff: exit_code=0
+All checks passed!
+
+Kit work check --profile code: exit_code=0
+{
+  "result_status": "PASS",
+  "steps": [
+    {
+      "name": "repo-status",
+      "returncode": 0,
+      "ok": true
+    },
+    {
+      "name": "command-reference-check",
+      "returncode": 0,
+      "ok": true
+    },
+    {
+      "name": "ruff",
+      "returncode": 0,
+      "ok": true
+    },
+    {
+      "name": "pytest-core",
+      "returncode": 0,
+      "ok": true
+    }
+  ]
+}
+
+agentic-kit check-docs: exit_code=0
+Agentic project check passed
+
+agentic-kit doctor: exit_code=0
+Agentic project doctor report for /workspace/agentic-project-kit
+
+[PASS] pyproject.toml: present
+[PASS] README.md: present
+[PASS] sentinel.yaml: present
+[PASS] .github/workflows/ci.yml: present
+[PASS] workspace manifest: agentic-project-kit; type: python; profile: 
+python-default; transfer: repo
+[PASS] workspace schema: manifest schema v2 is current
+[PASS] project contract: agentic-project-kit; profiles: generic-git-repo, 
+markdown-docs, python-cli, git-github, release-managed; policy packs: 
+solo-maintainer, agentic-development, release-managed, documentation-governed
+[PASS] policy pack checks: active: solo-maintainer, agentic-development, 
+release-managed, documentation-governed
+[PASS] documentation gates: passed
+[WARN] document lifecycle audit: 76 report-only finding(s)
+[PASS] todo gates: passed
+[PASS] standard audit suite: passed
+[PASS] version drift: project state matches version 1.0.25
+
+Overall: PASS
+
+Superseded branch cleanup: exit_code=0
+{
+  "action": "branch-delete",
+  "command": [
+    "git",
+    "push",
+    "origin",
+    "--delete",
+    "feat/context-budget-and-benchmark-harness-20261016"
+  ],
+  "next_action": "Inspect local and remote branch state.",
+  "result_status": "PASS",
+  "returncode": 0,
+  "stderr": "To https://github.com/vfi64/agentic-project-kit.git\n - [deleted]           feat/context-budget-and-benchmark-harness-20261016\n",
+  "stdout": ""
+}
+Verified retired head: 2e1a10940c2194741f1841fb197f4a8b9fe9c048.
+Implementation, tests, command references and technical documentation matched main. Remaining differences were later main planning additions, generated handoff/status artifacts and regenerated context baseline/self-test evidence.
+
+FINAL STATE
+Targeted repairs and local Kit gates passed after inventory correction. Complete final-tree CI remains required before the authorized Kit merge.
+================================================================
+SUMMARY COMM-00011 | 2026-10-17 15:40:07 +0000
+
+SLICE
+  NAME: kit-workflow-hardening
+  SCOPE: Three workflow repairs with regressions and superseded branch cleanup
+  BRANCH: fix/rebase-config-and-entrypoint-ack-20261017
+
+EXECUTION
+  ORIGIN: remote
+  STATE_MODE: remote
+  MODE_CHECK: not_run
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PENDING
+  EVIDENCE: PARTIAL
+  OVERALL: PENDING
+
+REMOTE
+  REMOTE_EVIDENCE: PARTIAL
+  PR: NONE
+  HEAD_SHA: 17ec5417dee7acbbe90b59494e5ae410a4ee6794
+  CI: final-head CI pending
+  MERGE: not_done
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/kit-workflow-hardening-20261017.log
+  terminal_log_remote: NONE
+  terminal_log_local: docs/reports/terminal/kit-workflow-hardening-20261017.log
+  command_report: NONE
+
+INTERPRETATION
+  Affected tests and local Kit gates pass; full final-tree CI is required before merge.
+
+NEXT
+  SAFE_STEP: Complete the authorized slice with Kit work finish and verify the post-merge handoff.
+  CHAT_REPLY: w
+
+### RESULT: PENDING ###
+================================================================

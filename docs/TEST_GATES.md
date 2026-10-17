@@ -712,6 +712,21 @@ Run `agentic-kit direction validate` when changing `docs/planning/PROJECT_DIRECT
 
 ## Command Authority Gate
 
+Transfer diagnostics and command-entrypoint repair have bounded regression gates:
+
+- `tests/test_transfer_rebase_status.py` exercises an actual conflicting Git rebase.
+  `rebase-on-upstream` must consume the nested `conflict-status` observation,
+  report active conflicts, and preserve the in-progress state for manual resolution
+  or abort. Missing, malformed, or failed observations must block with conflict
+  state `unknown`, never a claim that no conflict exists.
+- `tests/test_repo_identity.py` checks repeated Git configuration keys such as
+  multiple origin fetch refspecs. Valid config must retain origin identity without
+  rewriting the configuration or requiring a subprocess fallback.
+- `tests/test_chat_entrypoint_contract.py` checks that `commands sync-entrypoints`
+  synchronizes an existing DPA readiness record's `command_manifest_ack` with the
+  projected manifest, including dry-run reporting and idempotency. It must preserve
+  authorization and other evidence fields and must not create missing DPA records.
+
 `agentic-kit audit-command-authority` verifies that persistent agent-facing start and handoff surfaces carry the current `COMMAND_MANIFEST_ACK`, point to `docs/reference/agentic-kit-commands.json` and `docs/reference/AGENTIC_KIT_COMMANDS.md`, require `agentic-kit command-for`, require the most specific available Kit workflow command, reject mapped raw `git`/`gh` commands through instruction lint, and preserve `must_not_reconstruct_commands_from_memory`.
 
 Command manifest surface classes must remain a role/disclosure contract, not a compatibility or deprecation contract. Valid values are `orchestrator`, `diagnostic`, and `primitive`; every command must have exactly one valid value. Surface classification is intent-oriented, not derived from command safety or implementation shape. Surface classification does not change command safety, compatibility, or deprecation status, `diagnostic` must not be inferred from `READ_ONLY`, and primitive does not mean unstable.

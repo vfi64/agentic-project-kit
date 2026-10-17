@@ -224,6 +224,8 @@ def sync_entrypoint_files(
     markdown: str,
     execute: bool = False,
 ) -> dict[str, Any]:
+    from agentic_project_kit.dpa_command_manifest_ack import refresh_dpa_readiness_command_manifest_ack
+
     repo_root = Path(root)
     reference_targets: dict[str, str] = {
         COMMAND_REFERENCE_JSON: json.dumps(manifest, indent=2, sort_keys=True) + "\n",
@@ -254,6 +256,11 @@ def sync_entrypoint_files(
             if execute:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(desired, encoding="utf-8")
+
+    readiness = refresh_dpa_readiness_command_manifest_ack(
+        repo_root, dry_run=not execute, manifest=manifest,
+    )
+    changed_paths.extend(readiness["changed_paths"])
 
     return {
         "schema_version": 1,
