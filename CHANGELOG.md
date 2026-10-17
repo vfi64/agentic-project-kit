@@ -1,28 +1,38 @@
 ## Unreleased
 
+## v1.1.0 - 2026-10-17
+
+- Zenodo DOI verification pending for v1.1.0.
 - Upgrade note for 1.0.x: transfer and typed work orders that run BOUNDED Kit commands, BOUNDED cockpit actions or unlisted commands now need the local `--allow-unlisted` flag; DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters are refused in every order; transfer orders need a full 40-character `expected_current_head` bound to the commit they were written on; `work-order run --execute`, the next-turn.py slot and the `current.sh` slot report `BLOCKED_RETIRED_LANE`. Orders that ran under 1.0.25 can therefore stop and must be rewritten.
-
 - Report a real conflict from `transfer rebase-on-upstream` instead of `CONFLICT: no`, keep the in-progress rebase as evidence and block when the conflict state cannot be observed; read `.git/config` with repeated keys such as several `remote.origin.fetch` lines; let `commands sync-entrypoints --execute` refresh the DPA readiness command-manifest ACK, so a manifest change no longer needs a separate release-prepare step.
-
 - Add `agentic-kit context report`, which measures the files a successor is told to read (about 210,000 estimated tokens, 135,000 of them the command manifest), and `agentic-kit context render --profile slice|planning|release|handoff`, which renders a deterministic task packet of about 3,600 estimated tokens from the same authorities: current ACK, every execution-contract rule, manifest excerpts of the profile's commands, gates, open plan items and a checksummed path list for everything left out. Add the part 2 context benchmark harness with five tasks, deterministic success and ledger method checks, a no-LLM self-test, and its preregistration (`docs/reports/context_budget_20261016/`); the LLM runs await an owner decision.
-
 - Fix `transfer remote-next` and `transfer continue` crashing with a ScannerError on every transfer order that starts with the required `COMMAND_MANIFEST_ACK` line, so no order could complete remote-next; found by the new offline gate benchmark (`docs/reports/gate_benchmark_20261016/`), which detects 11 of 11 injected faults on `main` against 5 of 10 on 1.0.25.
-
 - Add `agentic-kit audit-drift-signals`, a report-only measurement of release-projection drift, refresh chains after product merges and Kit/consumer finding status, each with its denominator; `agentic-kit ledger report` now lists repeated failures by fingerprint and `--write-finding-drafts` writes local drafts that are never overwritten; the test suite no longer writes to the invocation ledger.
-
 - Add a local invocation ledger: every `agentic-kit` process start (and in-process calls an orchestrator reports) is recorded with command name, timing, return code, Kit version, branch and call-tree ids, never arguments, in the git-ignored `.agentic/tmp/invocation-ledger/`; on in the Kit repository, opt-in elsewhere, bounded retention, and a ledger failure never changes a command's result. `agentic-kit ledger report` summarises it read-only. `agentic-kit doc-registry register` gains `--status`, `--review-policy` and `--summary`, so new runbooks are registered without hand edits.
-
 - Retire the unrestricted work-order lanes: `work-order run --execute`, the next-turn.py fixed slot (`next_turn_runner`, GUI work-order run) and the `current.sh` agent command slot no longer execute code; they report `BLOCKED_RETIRED_LANE` and point to typed work orders, transfer orders and the planner executor (WOTB-04, WOTB-09). The commands are removed after a deprecation window.
-
 - Bind the freshness anchor of a transfer order to the commit it was written on: a full 40-character hash equal to `HEAD` for an uncommitted order or to the parent of the commit that last changed it, checked again after switch and pull on every `transfer remote-next` path including `transfer continue`, so the order that runs is the order that was validated (WOTB-07, WOTB-08). Orders with short anchors, or changed after anchoring, now stop as stale.
-
 - Confine every path named by a work order to the repository, refusing `..` segments and symlinks (WOTB-03, WOTB-06), and take command authority for typed and transfer orders from the command manifest: READ_ONLY Kit commands and read-only git/gh queries run, BOUNDED Kit commands, BOUNDED cockpit actions and unlisted commands need the new local `--allow-unlisted` flag, and DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters are refused however they are wrapped (WOTB-01, WOTB-02, WOTB-05). Orders that ran BOUNDED or non-Kit commands now stop with a refusal that names the flag.
-
 - Route the remote pushes, branch switches, pulls and branch deletions of the `workflow` helpers through the Kit's governed primitives; refuse evidence uploads that would carry staged changes or unpublished commits, keep remote-only evidence branches of other checkouts, and reject option-like branch names in work orders (command usage audit F4).
-
 - Derive the handoff-state release block from post-release DOI closeout evidence during the administrative handoff refresh, so successor chat handoffs no longer report version 0.4.13 (self-hosting audit HD-08).
-
 - Print the text summary of `agentic-kit release run` without `--json` instead of raising `KeyError: 'returncode'` on blocked or awaiting runs (command usage audit F1).
+- Record DOI for release 1.0.25
+- Archive release 1.0.25 evidence
+- Add command usage audit
+- Archive self-hosting history and drift audit
+- Sync handoff release block from release evidence; fix release run text output
+- Plan Kit control-effectiveness measurement
+- Route workflow helper git mutations through Kit primitives (F4)
+- Review the work-order trust boundary with negative tests
+- Confine work-order paths and take command authority from the manifest
+- Bind transfer order freshness to the commit the order was written on
+- Retire the unrestricted work-order lanes
+- Add a local invocation ledger for Kit commands
+- Measure known drift classes and detect repeated failures
+- Add an offline gate benchmark and fix ACK-headed transfer orders
+- docs: Plan website quickstart, shared task navigation and held-out gate review
+- Measure the context baseline and prepare the context benchmark
+- Fix rebase conflict reports, repeated Git config keys and DPA ACK sync
+- Prepare the changelog for release 1.1.0
 
 ## v1.0.25 - 2026-10-13
 
