@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7d42d9301f39341dff64f9c7dfccb2a3fc6c587b
-  short: 7d42d930
-  subject: Keep a failed GitHub release lookup inconclusive in release-status (#2545)
+  full: 36be42bdc83e349b94c1e9951d00eab9dee68acb
+  short: 36be42bd
+  subject: Archive release 1.1.0 evidence (#2547)
 last_substantive_work_state:
-  full: 7d42d9301f39341dff64f9c7dfccb2a3fc6c587b
-  short: 7d42d930
-  subject: Keep a failed GitHub release lookup inconclusive in release-status (#2545)
+  full: 36be42bdc83e349b94c1e9951d00eab9dee68acb
+  short: 36be42bd
+  subject: Archive release 1.1.0 evidence (#2547)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
