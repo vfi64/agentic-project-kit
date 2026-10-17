@@ -1,5 +1,9 @@
 ## Unreleased
 
+- Upgrade note for 1.0.x: transfer and typed work orders that run BOUNDED Kit commands, BOUNDED cockpit actions or unlisted commands now need the local `--allow-unlisted` flag; DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters are refused in every order; transfer orders need a full 40-character `expected_current_head` bound to the commit they were written on; `work-order run --execute`, the next-turn.py slot and the `current.sh` slot report `BLOCKED_RETIRED_LANE`. Orders that ran under 1.0.25 can therefore stop and must be rewritten.
+
+- Report a real conflict from `transfer rebase-on-upstream` instead of `CONFLICT: no`, keep the in-progress rebase as evidence and block when the conflict state cannot be observed; read `.git/config` with repeated keys such as several `remote.origin.fetch` lines; let `commands sync-entrypoints --execute` refresh the DPA readiness command-manifest ACK, so a manifest change no longer needs a separate release-prepare step.
+
 - Add `agentic-kit context report`, which measures the files a successor is told to read (about 210,000 estimated tokens, 135,000 of them the command manifest), and `agentic-kit context render --profile slice|planning|release|handoff`, which renders a deterministic task packet of about 3,600 estimated tokens from the same authorities: current ACK, every execution-contract rule, manifest excerpts of the profile's commands, gates, open plan items and a checksummed path list for everything left out. Add the part 2 context benchmark harness with five tasks, deterministic success and ledger method checks, a no-LLM self-test, and its preregistration (`docs/reports/context_budget_20261016/`); the LLM runs await an owner decision.
 
 - Fix `transfer remote-next` and `transfer continue` crashing with a ScannerError on every transfer order that starts with the required `COMMAND_MANIFEST_ACK` line, so no order could complete remote-next; found by the new offline gate benchmark (`docs/reports/gate_benchmark_20261016/`), which detects 11 of 11 injected faults on `main` against 5 of 10 on 1.0.25.
@@ -19,24 +23,6 @@
 - Derive the handoff-state release block from post-release DOI closeout evidence during the administrative handoff refresh, so successor chat handoffs no longer report version 0.4.13 (self-hosting audit HD-08).
 
 - Print the text summary of `agentic-kit release run` without `--json` instead of raising `KeyError: 'returncode'` on blocked or awaiting runs (command usage audit F1).
-
-- Allow explicit external evidence-path declarations in the legacy-reference audit while preserving active-script blockers and undeclared behavior (KIT-GF-068).
-
-- Honor the publish orchestration verdict in release-run C1/C2, including external SKIP checks and C1 resume with recorded B4 consent (KIT-GF-069).
-
-- Resolve workspace-owned or running Kit executables consistently in release, transfer, handoff and GUI adapters, preserving owned-only DPA probes (KIT-GF-067).
-
-- Expose the conservative workspace refresh classifier to custom CI while always retaining Kit checks and full fallback for unknown input (KIT-GF-063).
-
-- Verify external lifecycle bootstrap without manual metadata repair (KIT-GF-001).
-- Resolve one canonical workspace handoff authority and classify legitimate no-previous-handoff state without tracebacks (KIT-GF-003).
-- Verify a fresh external workspace starts its first work branch without predecessor-state blockers (KIT-GF-005).
-- Discover external workspace repair evidence through workspace paths and enforce repeated-failure diagnosis (KIT-GF-013).
-- Verify contract-first Planner-Kit-Executor planning and actual read-only execution in an installed-wheel external workspace (KIT-GF-016).
-
-- Add deterministic external finding status and retest contracts plus a separately signed completed-release evidence archive with governed PR and handoff closeout (KIT-GF-066).
-
-- Add deterministic external rule-registry applicability and signed evidence-derived bootstrap without Kit-repository tests or invented project-rule semantics (KIT-GF-RULE-REGISTRY-BOOTSTRAP).
 
 ## v1.0.25 - 2026-10-13
 
