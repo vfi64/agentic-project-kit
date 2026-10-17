@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f5c1099e49dc17982d5e638204257e79c25bbae9
-  short: f5c1099e
-  subject: Fix DOI closeout for release 1.1.0 (#2543)
+  full: 7d42d9301f39341dff64f9c7dfccb2a3fc6c587b
+  short: 7d42d930
+  subject: Keep a failed GitHub release lookup inconclusive in release-status (#2545)
 last_substantive_work_state:
-  full: f5c1099e49dc17982d5e638204257e79c25bbae9
-  short: f5c1099e
-  subject: Fix DOI closeout for release 1.1.0 (#2543)
+  full: 7d42d9301f39341dff64f9c7dfccb2a3fc6c587b
+  short: 7d42d930
+  subject: Keep a failed GitHub release lookup inconclusive in release-status (#2545)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

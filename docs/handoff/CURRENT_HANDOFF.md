@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `f5c1099e49dc17982d5e638204257e79c25bbae9` (`f5c1099e`), after `Fix DOI closeout for release 1.1.0 (#2543)`.
-Last substantive work state is `f5c1099e49dc17982d5e638204257e79c25bbae9` (`f5c1099e`), after `Fix DOI closeout for release 1.1.0 (#2543)`.
+Current verified main/admin HEAD is `7d42d9301f39341dff64f9c7dfccb2a3fc6c587b` (`7d42d930`), after `Keep a failed GitHub release lookup inconclusive in release-status (#2545)`.
+Last substantive work state is `7d42d9301f39341dff64f9c7dfccb2a3fc6c587b` (`7d42d930`), after `Keep a failed GitHub release lookup inconclusive in release-status (#2545)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
