@@ -1,0 +1,667 @@
+PR #2530 cloud Kit validation
+Tested revision: cf13ecf2c63cd9e9a36fd6ccbce5ed8e79ee19e6
+Branch: docs/website-evidence-command-navigation-plan-20261017
+Python: 3.12.14
+Scope: planning only; no implementation of the newly planned work.
+The maintainer authorized closeout and merge in the active chat.
+
+$ Structured comparison against PR base 83977b75
+{
+  "new_plan_ids": [
+    "independent-held-out-gate-validation",
+    "website-evidence-and-command-navigation"
+  ],
+  "removed_plan_ids": [],
+  "modified_existing_plans": [],
+  "modified_other_sections": []
+}
+
+exit_code=0
+
+$ agentic-kit direction validate --strict-planning-files --json
+{
+  "finding_count": 0,
+  "findings": [],
+  "kind": "project_direction_validation",
+  "path": "docs/planning/PROJECT_DIRECTION.yaml",
+  "schema_version": 1,
+  "status": "PASS"
+}
+
+exit_code=0
+
+$ agentic-kit direction audit-drift --json
+{
+  "kind": "project_direction_drift_audit",
+  "missing_source_file_count": 0,
+  "missing_source_files": [],
+  "record_count": 9,
+  "records": [
+    {
+      "classification": "SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE",
+      "in_source_files": true,
+      "item_id": "measured-agent-onboarding",
+      "item_status": "done",
+      "path": "docs/ONBOARDING.md",
+      "recommendation": "retire_source_header_or_reopen_direction_item",
+      "reference_count": 12
+    },
+    {
+      "classification": "SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE",
+      "in_source_files": true,
+      "item_id": "planner-kit-executor-hermes-integration",
+      "item_status": "done",
+      "path": "docs/architecture/PLANNER_KIT_EXECUTOR_CONTRACT.md",
+      "recommendation": "retire_source_header_or_reopen_direction_item",
+      "reference_count": 6
+    },
+    {
+      "classification": "SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE",
+      "in_source_files": true,
+      "item_id": "deterministic-ci-runtime-optimization",
+      "item_status": "done",
+      "path": "docs/governance/CI_RUNTIME_POLICY_CONTRACT.md",
+      "recommendation": "retire_source_header_or_reopen_direction_item",
+      "reference_count": 5
+    },
+    {
+      "classification": "SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE",
+      "in_source_files": true,
+      "item_id": "long-chat-terminal-blocks-as-normal-workflow",
+      "item_status": "discarded",
+      "path": "docs/governance/WORK_ORDER_WORKFLOW_CONTRACT.md",
+      "recommendation": "retire_source_header_or_reopen_direction_item",
+      "reference_count": 15
+    },
+    {
+      "classification": "SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE",
+      "in_source_files": true,
+      "item_id": "neutral-external-repo-evidence",
+      "item_status": "done",
+      "path": "docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md",
+      "recommendation": "retire_source_header_or_reopen_direction_item",
+      "reference_count": 12
+    },
+    {
+      "classification": "listed_source",
+      "in_source_files": true,
+      "path": "docs/planning/MASTER_IMPLEMENTATION_Q.md",
+      "recommendation": "migrate_or_retain_until_slice_cleanup",
+      "reference_count": 10
+    },
+    {
+      "classification": "canonical_direction",
+      "in_source_files": false,
+      "path": "docs/planning/PROJECT_DIRECTION.md",
+      "recommendation": "keep",
+      "reference_count": 24
+    },
+    {
+      "classification": "SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE",
+      "in_source_files": true,
+      "item_id": "scattered-markdown-planning-authority",
+      "item_status": "discarded",
+      "path": "docs/planning/PROJECT_DIRECTION.md",
+      "recommendation": "retire_source_header_or_reopen_direction_item",
+      "reference_count": 24
+    },
+    {
+      "classification": "canonical_direction",
+      "in_source_files": false,
+      "path": "docs/planning/PROJECT_DIRECTION.yaml",
+      "recommendation": "keep",
+      "reference_count": 498
+    }
+  ],
+  "root": "/workspace/agentic-project-kit",
+  "schema_version": 1,
+  "status": "PASS"
+}
+
+exit_code=0
+
+$ ruff check .
+All checks passed!
+
+exit_code=0
+
+$ PYTHONDONTWRITEBYTECODE=1 python -m pytest -q tests/test_external_kit_resolution.py
+..                                                                       [100%]
+2 passed in 329.26s (0:05:29)
+
+exit_code=0
+
+$ PYTHONDONTWRITEBYTECODE=1 python -m pytest -q -n 4 --durations=20
+bringing up nodes...
+bringing up nodes...
+
+........................................................................ [  1%]
+........................................................................ [  3%]
+........................................................................ [  5%]
+........................................................................ [  7%]
+........................................................................ [  9%]
+........................................................................ [ 11%]
+........................................................................ [ 13%]
+........................................................................ [ 15%]
+........................................................................ [ 17%]
+........................................................................ [ 19%]
+........................................................................ [ 21%]
+........................................................................ [ 23%]
+........................................................................ [ 24%]
+........................................................................ [ 26%]
+........................................................................ [ 28%]
+........................................................................ [ 30%]
+........................................................................ [ 32%]
+........................................................................ [ 34%]
+........................................................................ [ 36%]
+........................................................................ [ 38%]
+........................................................................ [ 40%]
+........................................................................ [ 42%]
+........................................................................ [ 44%]
+........................................................................ [ 46%]
+........................................................................ [ 47%]
+........................................................................ [ 49%]
+........................................................................ [ 51%]
+........................................................................ [ 53%]
+........................................................................ [ 55%]
+........................................................................ [ 57%]
+........................................................................ [ 59%]
+........................................................................ [ 61%]
+........................................................................ [ 63%]
+........................................................................ [ 65%]
+........................................................................ [ 67%]
+........................................................................ [ 69%]
+........................................................................ [ 70%]
+........................................................................ [ 72%]
+........................................................................ [ 74%]
+........................................................................ [ 76%]
+........................................................................ [ 78%]
+........................................................................ [ 80%]
+........................................................................ [ 82%]
+........................................................................ [ 84%]
+........................................................................ [ 86%]
+........................................................................ [ 88%]
+........................................................................ [ 90%]
+........................................................................ [ 92%]
+........................................................................ [ 93%]
+........................................................................ [ 95%]
+........................................................................ [ 97%]
+........................................................................ [ 99%]
+...........                                                              [100%]
+=============================== warnings summary ===============================
+tests/test_agent_command_runner.py: 11 warnings
+tests/test_chat_boot.py: 8 warnings
+tests/test_command_manifest.py: 10 warnings
+tests/test_evidence_inspector.py: 1 warning
+tests/test_evidence_state_contract.py: 6 warnings
+tests/test_chat_entrypoint_contract.py: 1 warning
+tests/test_chat_switch_closeout.py: 11 warnings
+tests/test_command_remote_effect_implementations.py: 6 warnings
+tests/test_command_taxonomy.py: 2 warnings
+tests/test_communication_artifact_gc.py: 2 warnings
+tests/test_communication_rule_context.py: 11 warnings
+tests/test_doc_lifecycle.py: 4 warnings
+tests/test_external_documentation_audit.py: 1 warning
+tests/test_doc_lifecycle_sweep.py: 6 warnings
+tests/test_human_workflows.py: 3 warnings
+tests/test_kit_release_changelog_consumption.py: 2 warnings
+tests/test_llm_execution_context.py: 2 warnings
+tests/test_local_command_stack.py: 2 warnings
+tests/test_local_garbage_collector.py: 12 warnings
+tests/test_documentation_system_audit.py: 2 warnings
+tests/test_cli.py: 1 warning
+tests/test_cm3c_transfer_apply_lint_gate.py: 7 warnings
+tests/test_dpa_current_handoff_lifecycle.py: 13 warnings
+tests/test_gui_cockpit.py: 2 warnings
+tests/test_gui_guided.py: 9 warnings
+tests/test_pr_orchestration_output.py: 1 warning
+tests/test_post_release.py: 3 warnings
+tests/test_post_release_closeout_hardening.py: 10 warnings
+tests/test_post_release_doi_closeout_atomicity.py: 5 warnings
+tests/test_onboarding_measurement.py: 1 warning
+tests/test_project_direction.py: 4 warnings
+tests/test_release_prepare_command.py: 12 warnings
+tests/test_planner_executor.py: 3 warnings
+tests/test_remote_next_order_contract.py: 6 warnings
+tests/test_rule_refresh.py: 4 warnings
+tests/test_release_command_authority.py: 1 warning
+tests/test_rule_snapshot_cli.py: 1 warning
+tests/test_release_external_ready_carriers_notes.py: 1 warning
+tests/test_site_generator.py: 8 warnings
+tests/test_state_freshness.py: 2 warnings
+tests/test_th1_negative_path_hardening.py: 6 warnings
+tests/test_todo.py: 1 warning
+tests/test_transfer_cli.py: 9 warnings
+tests/test_successor_handoff_package.py: 10 warnings
+tests/test_transfer_closeout.py: 6 warnings
+tests/test_site_claims.py: 9 warnings
+tests/test_transfer_llm_context_gate.py: 19 warnings
+tests/test_transfer_pr_complete_command_contract.py: 2 warnings
+tests/test_transfer_remote_next.py: 30 warnings
+tests/test_transfer_repo_actions.py: 31 warnings
+tests/test_transfer_local_runner.py: 11 warnings
+tests/test_transfer_normalize_session_contract.py: 1 warning
+tests/test_terminal_logging.py: 7 warnings
+tests/test_transfer_runner.py: 9 warnings
+tests/test_transfer_order_ack_header.py: 1 warning
+tests/test_transfer_post_merge_complete_command.py: 21 warnings
+tests/test_transfer_safety_context.py: 2 warnings
+tests/test_transfer_startup_hardening_commands.py: 4 warnings
+tests/test_transfer_state.py: 29 warnings
+tests/test_transfer_uplink.py: 51 warnings
+tests/test_transfer_remote_next_stale_order_guard.py: 40 warnings
+tests/test_typed_work_order_runner.py: 4 warnings
+tests/test_typed_work_order_cli.py: 1 warning
+tests/test_work_order_trust_boundary.py: 12 warnings
+tests/test_work_order_uploader.py: 6 warnings
+tests/test_workflow_request_cli.py: 12 warnings
+tests/test_wrapper_live_status.py: 2 warnings
+tests/test_v040_gui_tkinter_shell.py: 1 warning
+tests/test_gui_task_editor.py: 6 warnings
+tests/test_handoff_release_facts.py: 1 warning
+  /workspace/agentic-project-kit/src/agentic_project_kit/workspace.py:416: LegacyProfileDeprecationWarning: agentic-kit implicit legacy profile is deprecated for manifest-less workspaces and will be removed in 2.0.0; run `agentic-kit workspace init --root PATH` or set AGENTIC_KIT_SUPPRESS_LEGACY_PROFILE_WARNING=1 to suppress this warning.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 20 durations =============================
+179.24s call     tests/test_external_kit_resolution.py::test_installed_external_release_diagnostics_resolve_owned_kit[False]
+133.99s call     tests/test_external_kit_resolution.py::test_installed_external_release_diagnostics_resolve_owned_kit[True]
+61.68s call     tests/test_v040_gui_tkinter_shell.py::test_doctor_manual_gui_runner_executes_readonly_action
+49.18s call     tests/test_doctor.py::test_doctor_report_keeps_root_readme_required_for_selfhosting_checkout
+24.70s call     tests/test_ns_legacy_external_evidence.py::test_installed_external_declared_ledger_and_active_script
+24.55s call     tests/test_greenfield_adjudication.py::test_gf005_first_work_start[candidate]
+20.43s call     tests/test_greenfield_adjudication.py::test_gf005_first_work_start[released-1.0.24]
+17.56s call     tests/test_external_rule_registry.py::test_installed_bootstrap_check_report_idempotency_and_tamper[False]
+15.30s setup    tests/test_ns_legacy_external_evidence.py::test_undeclared_external_output_matches_released_contract[released-1.0.24]
+15.11s call     tests/test_greenfield_adjudication.py::test_gf003_fresh_canonical_handoff_and_missing_predecessor
+13.86s call     tests/test_external_rule_registry.py::test_installed_bootstrap_check_report_idempotency_and_tamper[True]
+13.71s call     tests/test_site_fallback_staleness.py::test_docs_pages_fallback_projection_is_fresh
+12.63s setup    tests/test_ci_runtime_plan.py::test_installed_custom_ci_runtime_plan[product-full]
+12.45s setup    tests/test_release_run_publish_verdict.py::test_installed_external_resume_c1_to_c2_keeps_b4_consent
+11.02s setup    tests/test_ci_runtime_plan.py::test_installed_custom_ci_runtime_plan[event-full]
+10.08s setup    tests/test_ci_runtime_plan.py::test_installed_custom_ci_runtime_plan[unknown-full]
+9.59s setup    tests/test_ns_legacy_external_evidence.py::test_installed_external_declared_ledger_and_active_script
+9.28s call     tests/test_project_direction.py::test_direction_audit_drift_cli_json
+9.23s call     tests/test_documentation_system_audit.py::test_documentation_system_audit_checks_status_handoff_closeout_sync
+9.04s setup    tests/test_ci_runtime_plan.py::test_installed_custom_ci_runtime_plan[refresh-light]
+3755 passed, 541 warnings in 515.49s (0:08:35)
+
+exit_code=0
+
+$ agentic-kit slice gate --kind planning-doc
+SLICE_GATE_RESULT
+kind=planning-doc
+helper_local_pass_is_slice_pass=false
+dirty_state=CLEAN
+dirty_files=0
+gate=targeted-tests status=PASS exit_code=0 command=/workspace/agentic-project-kit/.venv/bin/python -m pytest -q tests/test_slice_gate.py tests/test_documentation_system_audit.py
+gate=handoff-check status=PASS exit_code=0 command=/workspace/agentic-project-kit/.venv/bin/python -m agentic_project_kit.cli handoff check
+gate=check-docs status=PASS exit_code=0 command=/workspace/agentic-project-kit/.venv/bin/python -m agentic_project_kit.cli check-docs
+gate=docs-audit status=PASS exit_code=0 command=/workspace/agentic-project-kit/.venv/bin/python -m agentic_project_kit.cli docs-audit
+gate=doctor status=PASS exit_code=0 command=/workspace/agentic-project-kit/.venv/bin/python -m agentic_project_kit.cli doctor
+governance_gates_result=PASS
+slice_result=PASS
+merge_pr_ready=YES
+next_safe_action=continue_to_pr_checks_without_claiming_merge_ready
+chat_reply=d
+
+exit_code=0
+
+$ python site/scripts/build.py --output tmp/pr2530/site-build --json
+{
+  "blocker_count": 0,
+  "blockers": [],
+  "claim_report": {
+    "blockers": [],
+    "claim_count": 14,
+    "kind": "site_claim_evaluation_report",
+    "required_counts": {
+      "optional": 6,
+      "required": 8
+    },
+    "schema_blockers": [],
+    "schema_version": 1,
+    "status": "PASS",
+    "status_counts": {
+      "planned": 0,
+      "unverified": 0,
+      "verified": 14
+    }
+  },
+  "command_catalog": {
+    "command_count": 268,
+    "diagnostic_count": 128,
+    "group_counts": {
+      "actions": 2,
+      "boot": 5,
+      "chat": 2,
+      "ci": 2,
+      "cockpit": 5,
+      "commands": 2,
+      "dev": 1,
+      "direction": 3,
+      "doc-registry": 3,
+      "docs": 1,
+      "docs lifecycle": 7,
+      "dpa": 19,
+      "evidence": 8,
+      "executor": 2,
+      "governance": 1,
+      "greenfield": 2,
+      "gui": 1,
+      "handoff": 5,
+      "instruction": 1,
+      "kit": 2,
+      "ledger": 1,
+      "onboarding": 1,
+      "pass-already-done": 2,
+      "patterns": 2,
+      "pr": 5,
+      "release": 3,
+      "root": 54,
+      "rule-registry": 4,
+      "rules": 7,
+      "scaffold": 1,
+      "slice": 1,
+      "state": 3,
+      "todo": 3,
+      "transfer": 72,
+      "work": 6,
+      "work-order": 10,
+      "workflow": 11,
+      "workflow-guard": 2,
+      "workspace": 6
+    },
+    "guided_count": 34,
+    "kind": "site_command_catalog",
+    "safety_counts": {
+      "BOUNDED": 175,
+      "DESTRUCTIVE": 9,
+      "READ_ONLY": 84
+    },
+    "schema_version": 1,
+    "surface_counts": {
+      "diagnostic": 128,
+      "orchestrator": 34,
+      "primitive": 106
+    }
+  },
+  "file_count": 17,
+  "files": [
+    "claims/claims.json",
+    "claims/index.html",
+    "commands/commands.json",
+    "commands/diagnostics.html",
+    "commands/guided.html",
+    "commands/index.html",
+    "index.html",
+    "quickstart/index.html",
+    "quickstart/quickstart.json",
+    "site.json",
+    "static/kit-architecture.svg",
+    "static/runtime-map.svg",
+    "static/site.css",
+    "understand/evidence.json",
+    "understand/index.html",
+    "workflows/index.html",
+    "workflows/workflows.json"
+  ],
+  "kind": "agentic_project_kit_generated_site",
+  "metadata": {
+    "build_commit": "cf13ecf2c63cd9e9a36fd6ccbce5ed8e79ee19e6",
+    "command_count": 268,
+    "command_group_count": 39,
+    "concept_doi": "10.5281/zenodo.20101359",
+    "current_verified_main": "9dd637eb",
+    "former_product_name": "Agentic Project Kit",
+    "manifest_identity_verified": true,
+    "manifest_sha": "bf14239a2ea5",
+    "package_name": "agentic-project-kit",
+    "package_version": "1.0.25",
+    "product_name": "Agentic Execution Runtime",
+    "release_tag": "v1.0.25",
+    "repository_url": "https://github.com/vfi64/agentic-project-kit",
+    "reproduced_manifest_sha": "bf14239a2ea5",
+    "requires_python": ">=3.10",
+    "safety_counts": {
+      "BOUNDED": 175,
+      "DESTRUCTIVE": 9,
+      "READ_ONLY": 84
+    },
+    "surface_counts": {
+      "diagnostic": 128,
+      "orchestrator": 34,
+      "primitive": 106
+    },
+    "version_doi": "10.5281/zenodo.23346451"
+  },
+  "output_dir": "/workspace/agentic-project-kit/tmp/pr2530/site-build",
+  "schema_version": 1,
+  "status": "PASS"
+}
+
+exit_code=0
+
+$ python site/scripts/build.py --docs-pages-fallback --json
+{
+  "blocker_count": 0,
+  "blockers": [],
+  "docs_root": "/workspace/agentic-project-kit/docs",
+  "file_count": 19,
+  "files": [
+    ".nojekyll",
+    "index.html",
+    "site/claims/claims.json",
+    "site/claims/index.html",
+    "site/commands/commands.json",
+    "site/commands/diagnostics.html",
+    "site/commands/guided.html",
+    "site/commands/index.html",
+    "site/index.html",
+    "site/quickstart/index.html",
+    "site/quickstart/quickstart.json",
+    "site/site.json",
+    "site/static/kit-architecture.svg",
+    "site/static/runtime-map.svg",
+    "site/static/site.css",
+    "site/understand/evidence.json",
+    "site/understand/index.html",
+    "site/workflows/index.html",
+    "site/workflows/workflows.json"
+  ],
+  "kind": "agentic_project_kit_docs_pages_fallback",
+  "schema_version": 1,
+  "site_build": {
+    "blocker_count": 0,
+    "blockers": [],
+    "claim_report": {
+      "blockers": [],
+      "claim_count": 14,
+      "kind": "site_claim_evaluation_report",
+      "required_counts": {
+        "optional": 6,
+        "required": 8
+      },
+      "schema_blockers": [],
+      "schema_version": 1,
+      "status": "PASS",
+      "status_counts": {
+        "planned": 0,
+        "unverified": 0,
+        "verified": 14
+      }
+    },
+    "command_catalog": {
+      "command_count": 268,
+      "diagnostic_count": 128,
+      "group_counts": {
+        "actions": 2,
+        "boot": 5,
+        "chat": 2,
+        "ci": 2,
+        "cockpit": 5,
+        "commands": 2,
+        "dev": 1,
+        "direction": 3,
+        "doc-registry": 3,
+        "docs": 1,
+        "docs lifecycle": 7,
+        "dpa": 19,
+        "evidence": 8,
+        "executor": 2,
+        "governance": 1,
+        "greenfield": 2,
+        "gui": 1,
+        "handoff": 5,
+        "instruction": 1,
+        "kit": 2,
+        "ledger": 1,
+        "onboarding": 1,
+        "pass-already-done": 2,
+        "patterns": 2,
+        "pr": 5,
+        "release": 3,
+        "root": 54,
+        "rule-registry": 4,
+        "rules": 7,
+        "scaffold": 1,
+        "slice": 1,
+        "state": 3,
+        "todo": 3,
+        "transfer": 72,
+        "work": 6,
+        "work-order": 10,
+        "workflow": 11,
+        "workflow-guard": 2,
+        "workspace": 6
+      },
+      "guided_count": 34,
+      "kind": "site_command_catalog",
+      "safety_counts": {
+        "BOUNDED": 175,
+        "DESTRUCTIVE": 9,
+        "READ_ONLY": 84
+      },
+      "schema_version": 1,
+      "surface_counts": {
+        "diagnostic": 128,
+        "orchestrator": 34,
+        "primitive": 106
+      }
+    },
+    "file_count": 17,
+    "files": [
+      "claims/claims.json",
+      "claims/index.html",
+      "commands/commands.json",
+      "commands/diagnostics.html",
+      "commands/guided.html",
+      "commands/index.html",
+      "index.html",
+      "quickstart/index.html",
+      "quickstart/quickstart.json",
+      "site.json",
+      "static/kit-architecture.svg",
+      "static/runtime-map.svg",
+      "static/site.css",
+      "understand/evidence.json",
+      "understand/index.html",
+      "workflows/index.html",
+      "workflows/workflows.json"
+    ],
+    "kind": "agentic_project_kit_generated_site",
+    "metadata": {
+      "build_commit": "docs-pages-fallback",
+      "command_count": 268,
+      "command_group_count": 39,
+      "concept_doi": "10.5281/zenodo.20101359",
+      "current_verified_main": "See docs/STATUS.md",
+      "former_product_name": "Agentic Project Kit",
+      "manifest_identity_verified": true,
+      "manifest_sha": "bf14239a2ea5",
+      "package_name": "agentic-project-kit",
+      "package_version": "1.0.25",
+      "product_name": "Agentic Execution Runtime",
+      "release_tag": "v1.0.25",
+      "repository_url": "https://github.com/vfi64/agentic-project-kit",
+      "reproduced_manifest_sha": "bf14239a2ea5",
+      "requires_python": ">=3.10",
+      "safety_counts": {
+        "BOUNDED": 175,
+        "DESTRUCTIVE": 9,
+        "READ_ONLY": 84
+      },
+      "surface_counts": {
+        "diagnostic": 128,
+        "orchestrator": 34,
+        "primitive": 106
+      },
+      "version_doi": "10.5281/zenodo.23346451"
+    },
+    "output_dir": "/workspace/agentic-project-kit/docs/site",
+    "schema_version": 1,
+    "status": "PASS"
+  },
+  "site_subdir": "site",
+  "status": "PASS"
+}
+
+exit_code=0
+
+Initial cloud test run (bytecode writing enabled): exit_code=1.
+1 failed, 3754 passed: test_installed_external_release_diagnostics_resolve_owned_kit[True].
+The fixture tracks its local .venv. Lazy Python bytecode creation leaves new runtime cache files untracked, and the required sync-main correctly refuses that dirty fixture.
+Fixture diagnostic git status --short:
+Observed in the cloud command transcript before pytest removed the temporary fixture:
+?? .agentic/state/handoff/transfer_handoff_reports/
+?? .agentic/transfer/outbox/
+?? .venv/lib/python3.12/site-packages/agentic_project_kit/__pycache__/release_changelog.cpython-312.pyc
+?? .venv/lib/python3.12/site-packages/agentic_project_kit/reference/__pycache__/
+The final full run and the focused retest disable bytecode writing in the cloud process only; no test, product, or governance changes were made to bypass this failure.
+
+The docs-pages fallback is unchanged after regeneration.
+Direction audit PASS includes pre-existing SOURCE_OF_CLOSED_ITEM_STILL_ACTIVE advisory records; no missing source files.
+FINAL STATE
+Required pre-merge checks passed on the tested revision.
+PR remains unmerged at report finalization; final-head CI and guarded Kit closeout follow this evidence commit.
+================================================================
+SUMMARY COMM-00010 | 2026-10-17 11:57:21 +0000
+
+SLICE
+  NAME: pr2530-cloud-kit-gates
+  SCOPE: Validate planning and documentation in cloud; prepare guarded PR closeout
+  BRANCH: docs/website-evidence-command-navigation-plan-20261017
+
+EXECUTION
+  ORIGIN: remote
+  STATE_MODE: remote
+  MODE_CHECK: not_run
+  SWITCH_HINT: ./ns mode-write local|remote && ./ns mode-check local|remote
+
+RESULT
+  WORK: PASS
+  EVIDENCE: PARTIAL
+  OVERALL: PENDING
+
+REMOTE
+  REMOTE_EVIDENCE: PARTIAL
+  PR: #2530 open
+  HEAD_SHA: cf13ecf2c63cd9e9a36fd6ccbce5ed8e79ee19e6
+  CI: pass on original PR head; final-head CI pending
+  MERGE: not_done
+
+EVIDENCE FILES
+  terminal_log: docs/reports/terminal/pr2530-cloud-kit-gates.log
+  terminal_log_remote: NONE
+  terminal_log_local: docs/reports/terminal/pr2530-cloud-kit-gates.log
+  command_report: NONE
+
+INTERPRETATION
+  Pre-merge checks passed; this complete log is prepared for commit and push.
+
+NEXT
+  SAFE_STEP: Commit and push bounded evidence, verify final-head CI, then run the authorized guarded Kit closeout.
+  CHAT_REPLY: w
+
+### RESULT: PENDING ###
+================================================================
