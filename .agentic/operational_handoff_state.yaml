@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 36be42bdc83e349b94c1e9951d00eab9dee68acb
-  short: 36be42bd
-  subject: Archive release 1.1.0 evidence (#2547)
+  full: 924847aa16f7a915c5a9431b8caadea17c0bb10f
+  short: 924847aa
+  subject: Harden release run, curate the release changelog and classify PRs (#2549)
 last_substantive_work_state:
-  full: 36be42bdc83e349b94c1e9951d00eab9dee68acb
-  short: 36be42bd
-  subject: Archive release 1.1.0 evidence (#2547)
+  full: 924847aa16f7a915c5a9431b8caadea17c0bb10f
+  short: 924847aa
+  subject: Harden release run, curate the release changelog and classify PRs (#2549)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
