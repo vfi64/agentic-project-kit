@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c940d66e365bd5335394207d46164d2e3e8d3ae9
-  short: c940d66e
-  subject: Test the release-projection drift signal on fixtures (#2541)
+  full: f5c1099e49dc17982d5e638204257e79c25bbae9
+  short: f5c1099e
+  subject: Fix DOI closeout for release 1.1.0 (#2543)
 last_substantive_work_state:
-  full: c940d66e365bd5335394207d46164d2e3e8d3ae9
-  short: c940d66e
-  subject: Test the release-projection drift signal on fixtures (#2541)
+  full: f5c1099e49dc17982d5e638204257e79c25bbae9
+  short: f5c1099e
+  subject: Fix DOI closeout for release 1.1.0 (#2543)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
