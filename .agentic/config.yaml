@@ -5,6 +5,7 @@ project:
 profile: python-default
 release:
   evidence_archive: true
+  changelog_summary: curated
 paths:
   tmp_root: tmp
   status_file: docs/STATUS.md

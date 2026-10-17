@@ -18,6 +18,12 @@ from consumer VERIFIED_FIXED. Maintainers regenerate it through a signed
 adds the separately signed final E1 archive gate to release run, after publishing
 and DOI checks pass; committed evidence contains bounded step results and gate
 attribution. See `docs/reports/greenfield/KIT-GF-066-machine-readable-evidence-2026-10-13.md`.
+`release.changelog_summary: curated` writes only the curated summary lines into a
+release's CHANGELOG section (by default the Unreleased entries, which must all be
+covered) instead of combining them with the generated PR-title list. Release run
+reports C3 as `WAITING` while the package-index run waits for an environment
+approval in GitHub, settles C3 from the finished run, and resumes an unchanged,
+already approved gate without asking again.
 
 ## Why this exists
 

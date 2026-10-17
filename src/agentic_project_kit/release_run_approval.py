@@ -49,6 +49,16 @@ def validate_consent(run: ReleaseRun) -> list[str]:
     return []
 
 
+def _identical_prior_approval(run: ReleaseRun, step_id: str, signature: str) -> bool:
+    if step_id in (run.state.get("finished_steps") or []):
+        return False
+    return any(
+        isinstance(item, dict) and item.get("step_id") == step_id
+        and isinstance(item.get("gate"), dict) and item["gate"].get("approval_signature") == signature
+        for item in run.state.get("approvals") or []
+    )
+
+
 def authorize_gate(run: ReleaseRun, step_id: str, gate: dict[str, Any]) -> dict[str, Any] | None:
     from agentic_project_kit.release_run import _approval_signature
 
@@ -82,6 +92,14 @@ def authorize_gate(run: ReleaseRun, step_id: str, gate: dict[str, Any]) -> dict[
                     "next_action": "Review the changed release subject; existing consent cannot authorize it."}
         record = {**consent["identity"], "consent_signature": consent["signature"]}
     else:
+        if _identical_prior_approval(run, step_id, gate["approval_signature"]):
+            # The step stopped after its approval (for example C3 while the package-index run waited
+            # for an environment approval). Consent bound to this exact subject stays valid; a changed
+            # gate has a different signature and asks again. 1.1.0 needed C3 approved twice. Reuse is
+            # not a new approval, so it neither consumes this process's approval nor adds evidence.
+            run._append_log({"kind": "release_gate_approval_reused", "step_id": step_id,
+                             "signature": gate["approval_signature"]})
+            return None
         if not run.options.execute or run._approval_consumed:
             return run._awaiting_approval(step_id, gate)
         if run.options.expected_signature != gate["approval_signature"]:

@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 4f13f5454f93
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: a6ee797254ff
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -3313,6 +3313,7 @@ Create, validate, merge, and optionally close out a PR without manual PR/SHA cop
 | `summary` | `TyperOption` | --summary | `False` | `False` | Print a bounded projection; save full step evidence locally. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print JSON instead of text. |
 | `skip_llm_context_gate` | `TyperOption` | --skip-llm-context-gate | `False` | `False` | Recovery-only: run PR create/complete without requiring fresh generated LLM context. |
+| `release_note_category` | `TyperOption` | --release-note-category | `False` | `` | Release-note category written into the PR body, for example Fixed; validated before any action. |
 
 ### `agentic-kit transfer pr-existing-for-branch`
 

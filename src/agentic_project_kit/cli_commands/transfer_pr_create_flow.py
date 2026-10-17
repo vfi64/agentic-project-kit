@@ -424,10 +424,24 @@ def pr_create_complete_command(
         "--skip-llm-context-gate",
         help="Recovery-only: run PR create/complete without requiring fresh generated LLM context.",
     ),
+    release_note_category: str = typer.Option(
+        "",
+        "--release-note-category",
+        help="Release-note category written into the PR body, for example Fixed; validated before any action.",
+    ),
 ) -> None:
     mutation_lock_contract = "workspace_mutation_lock"
     _ = mutation_lock_contract
     """Create a PR and complete it without requiring manual PR-number or SHA copying."""
+    if release_note_category:
+        # A PR without a category blocks release-notes generation later (1.1.0: PR 2532).
+        from agentic_project_kit.work_finish_metadata import prepare_work_finish_body
+
+        try:
+            body = prepare_work_finish_body(title, body=body, release_note_category=release_note_category)
+        except ValueError as exc:
+            typer.echo(f"BLOCKED: {exc}", err=True)
+            raise typer.Exit(code=2) from exc
     if not skip_llm_context_gate:
         _auto_preflight_pr_create_complete(root=Path("."))
         require_fresh = _public_transfer_attr("_require_fresh_llm_context_or_exit", _require_fresh_llm_context_or_exit)
