@@ -4,7 +4,6 @@
 
 ## v1.1.0 - 2026-10-17
 
-- Zenodo DOI verification pending for v1.1.0.
 - Upgrade note for 1.0.x: transfer and typed work orders that run BOUNDED Kit commands, BOUNDED cockpit actions or unlisted commands now need the local `--allow-unlisted` flag; DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters are refused in every order; transfer orders need a full 40-character `expected_current_head` bound to the commit they were written on; `work-order run --execute`, the next-turn.py slot and the `current.sh` slot report `BLOCKED_RETIRED_LANE`. Orders that ran under 1.0.25 can therefore stop and must be rewritten.
 - Report a real conflict from `transfer rebase-on-upstream` instead of `CONFLICT: no`, keep the in-progress rebase as evidence and block when the conflict state cannot be observed; read `.git/config` with repeated keys such as several `remote.origin.fetch` lines; let `commands sync-entrypoints --execute` refresh the DPA readiness command-manifest ACK, so a manifest change no longer needs a separate release-prepare step.
 - Add `agentic-kit context report`, which measures the files a successor is told to read (about 210,000 estimated tokens, 135,000 of them the command manifest), and `agentic-kit context render --profile slice|planning|release|handoff`, which renders a deterministic task packet of about 3,600 estimated tokens from the same authorities: current ACK, every execution-contract rule, manifest excerpts of the profile's commands, gates, open plan items and a checksummed path list for everything left out. Add the part 2 context benchmark harness with five tasks, deterministic success and ledger method checks, a no-LLM self-test, and its preregistration (`docs/reports/context_budget_20261016/`); the LLM runs await an owner decision.
@@ -35,6 +34,10 @@
 - Measure the context baseline and prepare the context benchmark
 - Fix rebase conflict reports, repeated Git config keys and DPA ACK sync
 - Prepare the changelog for release 1.1.0
+
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.1.0 DOI `10.5281/zenodo.23440577`.
+
+Zenodo v1.1.0 DOI: 10.5281/zenodo.23440577
 
 ## v1.0.25 - 2026-10-13
 

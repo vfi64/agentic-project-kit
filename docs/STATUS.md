@@ -3,10 +3,10 @@
 ## Current State
 
 Current version: 1.1.0
-Current verified release: 1.0.25.
-Current release tag: v1.0.25.
+Current verified release: 1.1.0.
+Current release tag: v1.1.0.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.23346451`.
+Verified Zenodo version DOI: `10.5281/zenodo.23440577`.
 Current verified main: `c940d66e` (`Test the release-projection drift signal on fixtures (#2541)`).
 Latest substantive work: PR #2541 (`Test the release-projection drift signal on fixtures (#2541)`).
 Latest administrative refresh-only descendant: post-PR2541 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
