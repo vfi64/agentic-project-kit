@@ -17,6 +17,8 @@ import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SCANNED_ROOTS = (REPO_ROOT / "tools", REPO_ROOT / "src" / "agentic_project_kit" / "cli_commands")
+# Keep the extracted Kit primitive under the same review that covered its CLI implementation.
+SCANNED_FILES = (REPO_ROOT / "src/agentic_project_kit/transfer_rebase.py",)
 
 MUTATING_VERBS = frozenset(
     {
@@ -94,10 +96,13 @@ ALLOWED_DIRECT_GIT_MUTATIONS: dict[str, dict[str, str]] = {
         "pull --ff-only origin": "existing Kit command implementation; outside F4",
     },
     "src/agentic_project_kit/cli_commands/transfer_repo_pre_pr.py": {
-        "rebase": "existing Kit command implementation; outside F4",
         "add": "existing Kit command implementation; outside F4",
         "branch": "existing guarded Kit branch cleanup (merged-PR check); outside F4",
         "push origin --delete": "existing guarded Kit branch cleanup (merged-PR check); outside F4",
+    },
+    "src/agentic_project_kit/transfer_rebase.py": {
+        "rebase": "existing Kit rebase primitive extracted from transfer_repo_pre_pr; "
+        "main/expected-branch guards are preserved and conflict observations fail closed",
     },
 }
 
@@ -150,11 +155,11 @@ def _direct_git_mutations(path: Path) -> set[str]:
 
 def test_direct_git_mutations_in_tools_and_cli_commands_are_reviewed() -> None:
     actual: dict[str, set[str]] = {}
-    for root in SCANNED_ROOTS:
-        for path in sorted(root.rglob("*.py")):
-            mutations = _direct_git_mutations(path)
-            if mutations:
-                actual[path.relative_to(REPO_ROOT).as_posix()] = mutations
+    paths = [path for root in SCANNED_ROOTS for path in sorted(root.rglob("*.py"))]
+    for path in [*paths, *SCANNED_FILES]:
+        mutations = _direct_git_mutations(path)
+        if mutations:
+            actual[path.relative_to(REPO_ROOT).as_posix()] = mutations
 
     unreviewed = {
         path: sorted(mutations - set(ALLOWED_DIRECT_GIT_MUTATIONS.get(path, {})))

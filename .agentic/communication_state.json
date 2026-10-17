@@ -1,8 +1,8 @@
 {
-  "last_branch": "docs/website-evidence-command-navigation-plan-20261017",
+  "last_branch": "fix/rebase-config-and-entrypoint-ack-20261017",
   "last_origin": "remote",
-  "last_slice": "pr2530-cloud-kit-gates",
-  "last_summary_id": 10,
+  "last_slice": "kit-workflow-hardening",
+  "last_summary_id": 11,
   "schema_version": 1,
-  "updated_at": "2026-10-17T11:57:21+00:00"
+  "updated_at": "2026-10-17T15:40:07+00:00"
 }

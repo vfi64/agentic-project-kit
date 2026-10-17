@@ -7,10 +7,8 @@ import json
 from pathlib import Path
 import re
 
-from agentic_project_kit.command_manifest import load_manifest
 from agentic_project_kit.dpa_current_handoff_lifecycle import evaluate_current_handoff_text_lifecycle
 from agentic_project_kit.dpa_readiness import DEFAULT_READINESS_PATH
-from agentic_project_kit.instruction_lint import command_manifest_ack_line
 from agentic_project_kit.workspace import load_workspace
 
 
@@ -242,47 +240,11 @@ def refresh_dpa_readiness_command_manifest_ack(
     dry_run: bool = False,
 ) -> dict[str, object]:
     """Keep the DPA readiness ACK aligned with the synchronized command manifest."""
-    root = Path(project_root).resolve()
-    path = root / DEFAULT_READINESS_PATH
-    relative = DPA_READINESS_ACK_RELATIVE_PATH
-    if not path.exists():
-        return {
-            "ok": True,
-            "status": "SKIPPED",
-            "reason": "readiness-record-missing",
-            "path": relative,
-            "changed": False,
-            "changed_paths": [],
-            "dry_run": dry_run,
-        }
+    from agentic_project_kit.dpa_command_manifest_ack import (
+        refresh_dpa_readiness_command_manifest_ack as refresh,
+    )
 
-    data = json.loads(path.read_text(encoding="utf-8"))
-    expected_ack = command_manifest_ack_line(load_manifest(root))
-    old_ack = data.get("command_manifest_ack")
-    if old_ack == expected_ack:
-        return {
-            "ok": True,
-            "status": "CURRENT",
-            "path": relative,
-            "changed": False,
-            "changed_paths": [],
-            "command_manifest_ack": expected_ack,
-            "dry_run": dry_run,
-        }
-
-    data["command_manifest_ack"] = expected_ack
-    if not dry_run:
-        path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
-    return {
-        "ok": True,
-        "status": "UPDATED",
-        "path": relative,
-        "changed": True,
-        "changed_paths": [relative],
-        "old_command_manifest_ack": old_ack,
-        "command_manifest_ack": expected_ack,
-        "dry_run": dry_run,
-    }
+    return refresh(project_root, dry_run=dry_run)
 
 
 def _evaluate_release_prep_current_handoff_lifecycle(
