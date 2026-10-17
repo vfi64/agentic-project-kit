@@ -17,9 +17,12 @@ ledger_app = typer.Typer(help="Read the local invocation ledger of Kit commands.
 
 
 def kit_root_app(**kwargs: object) -> typer.Typer:
-    """Root ``agentic-kit`` app: records process starts and carries the ``ledger`` group."""
+    """Root ``agentic-kit`` app: records process starts and carries the ``ledger`` and ``context`` groups."""
+    from agentic_project_kit.cli_commands.context_budget import context_app
+
     root = ledger_typer_class()(**kwargs)
     root.add_typer(ledger_app, name="ledger")
+    root.add_typer(context_app, name="context")
     return root
 
 

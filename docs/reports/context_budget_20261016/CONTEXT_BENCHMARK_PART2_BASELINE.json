@@ -1,0 +1,167 @@
+{
+  "baseline_successor_required_reads": {
+    "bytes": 840554,
+    "estimated_tokens": 210131,
+    "file_count": 9,
+    "files": [
+      {
+        "bytes": 541870,
+        "characters": 541870,
+        "estimated_tokens": 135468,
+        "exists": true,
+        "path": "docs/reference/agentic-kit-commands.json",
+        "sha256_12": "a99e6eb2d327"
+      },
+      {
+        "bytes": 199413,
+        "characters": 199411,
+        "estimated_tokens": 49853,
+        "exists": true,
+        "path": "docs/reference/AGENTIC_KIT_COMMANDS.md",
+        "sha256_12": "d4158b36ba26"
+      },
+      {
+        "bytes": 33062,
+        "characters": 33058,
+        "estimated_tokens": 8265,
+        "exists": true,
+        "path": "docs/reports/handoff-packages/latest/execution_contract.json",
+        "sha256_12": "8733416bd654"
+      },
+      {
+        "bytes": 20645,
+        "characters": 20645,
+        "estimated_tokens": 5162,
+        "exists": true,
+        "path": "AGENTS.md",
+        "sha256_12": "155fe825d751"
+      },
+      {
+        "bytes": 20138,
+        "characters": 20115,
+        "estimated_tokens": 5029,
+        "exists": true,
+        "path": "docs/reports/handoff-packages/latest/successor_prompt.md",
+        "sha256_12": "7d7c7ffb1775"
+      },
+      {
+        "bytes": 14525,
+        "characters": 14523,
+        "estimated_tokens": 3631,
+        "exists": true,
+        "path": "docs/reports/handoff-packages/latest/successor_context.yaml",
+        "sha256_12": "093d58d58f2e"
+      },
+      {
+        "bytes": 7742,
+        "characters": 7731,
+        "estimated_tokens": 1933,
+        "exists": true,
+        "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        "sha256_12": "e2b89f8eca0a"
+      },
+      {
+        "bytes": 2944,
+        "characters": 2944,
+        "estimated_tokens": 736,
+        "exists": true,
+        "path": "docs/reports/handoff-packages/latest/source_manifest.json",
+        "sha256_12": "c1706413e0f3"
+      },
+      {
+        "bytes": 215,
+        "characters": 215,
+        "estimated_tokens": 54,
+        "exists": true,
+        "path": "docs/reports/handoff-packages/latest/validation_report.json",
+        "sha256_12": "768bf296d23d"
+      }
+    ],
+    "missing": [],
+    "sources": {
+      "AGENTS.md": "source_manifest.json and START_NEW_CHAT_PROMPT.md required_terms",
+      "docs/handoff/NEXT_CHAT_BOOTSTRAP.md": "START_NEW_CHAT_PROMPT.md: canonical_bootstrap",
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "successor_prompt.md: read before composing agentic-kit commands",
+      "docs/reference/agentic-kit-commands.json": "AGENTS.md / successor_prompt.md: MANDATORY FIRST READ",
+      "docs/reports/handoff-packages/latest/execution_contract.json": "successor_prompt.md: Read first",
+      "docs/reports/handoff-packages/latest/source_manifest.json": "successor_prompt.md: Read first",
+      "docs/reports/handoff-packages/latest/successor_context.yaml": "successor_prompt.md: Read first",
+      "docs/reports/handoff-packages/latest/successor_prompt.md": "START_NEW_CHAT_PROMPT.md: copy into the successor chat",
+      "docs/reports/handoff-packages/latest/validation_report.json": "successor_prompt.md: Read first"
+    }
+  },
+  "estimator": "ceil(characters / 4)",
+  "kind": "context_budget_report",
+  "packets": {
+    "handoff": {
+      "characters": 13710,
+      "estimated_tokens": 3428,
+      "share_of_baseline": 0.0163
+    },
+    "planning": {
+      "characters": 14492,
+      "estimated_tokens": 3623,
+      "share_of_baseline": 0.0172
+    },
+    "release": {
+      "characters": 14514,
+      "estimated_tokens": 3629,
+      "share_of_baseline": 0.0173
+    },
+    "slice": {
+      "characters": 14756,
+      "estimated_tokens": 3689,
+      "share_of_baseline": 0.0176
+    }
+  },
+  "result_status": "PASS",
+  "schema_version": 1,
+  "source_manifest_long_term_truth": {
+    "bytes": 1525171,
+    "estimated_tokens": 381292,
+    "file_count": 24,
+    "largest": [
+      {
+        "bytes": 541870,
+        "characters": 541870,
+        "estimated_tokens": 135468,
+        "exists": true,
+        "path": "docs/reference/agentic-kit-commands.json",
+        "sha256_12": "a99e6eb2d327"
+      },
+      {
+        "bytes": 271574,
+        "characters": 271572,
+        "estimated_tokens": 67893,
+        "exists": true,
+        "path": "docs/planning/PROJECT_DIRECTION.yaml",
+        "sha256_12": "96e15f7c55e1"
+      },
+      {
+        "bytes": 199413,
+        "characters": 199411,
+        "estimated_tokens": 49853,
+        "exists": true,
+        "path": "docs/reference/AGENTIC_KIT_COMMANDS.md",
+        "sha256_12": "d4158b36ba26"
+      },
+      {
+        "bytes": 99127,
+        "characters": 99127,
+        "estimated_tokens": 24782,
+        "exists": true,
+        "path": "docs/DOCUMENTATION_REGISTRY.yaml",
+        "sha256_12": "cd122f7174de"
+      },
+      {
+        "bytes": 80192,
+        "characters": 80190,
+        "estimated_tokens": 20048,
+        "exists": true,
+        "path": "docs/TEST_GATES.md",
+        "sha256_12": "ea53164d7722"
+      }
+    ],
+    "missing": []
+  }
+}

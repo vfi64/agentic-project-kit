@@ -2053,10 +2053,20 @@ plans:
   - Required evidence discoverability remains intact through paths, checksums, and
     validation reports.
   - No existing gate becomes advisory-only merely to reduce prompt size.
+  progress: 'Baseline and four profiles done 2026-10-16: agentic-kit context report
+    measures the successor required reads (about 210,000 estimated tokens) and
+    agentic-kit context render renders deterministic slice, planning, release and
+    handoff packets (about 3,600 each) from the same authorities. Open: Greenfield
+    and Brownfield profiles, and evidence from the context benchmark (plan step
+    gate-and-context-benchmark, part 2) that the packets suffice.'
+  evidence:
+  - docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_PART2_20261016.md
+  - docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_PART2_BASELINE.json
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
   - docs/reports/handoff-packages/latest/execution_contract.json
   - docs/reports/handoff-packages/latest/successor_context.yaml
+  - src/agentic_project_kit/context_budget.py
 - id: kit-control-effectiveness-measurement
   status: planned
   title: Measure the effectiveness and cost of the Kit's own control mechanisms
@@ -2231,8 +2241,18 @@ plans:
       the clean control; Kit 1.0.25 detected 5 of 10 injectable ones, and in three
       the fault actually ran. The benchmark found that transfer remote-next could
       not complete any ACK-headed order (ScannerError), fixed in the same slice.
-    part2_status: planned
-    part2_needs: an owner decision on the LLM, the task set and the token budget.
+    part2_status: prepared
+    part2_evidence:
+    - docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_PART2_20261016.md
+    - docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_PART2_BASELINE.json
+    - docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_PART2_SELF_TEST.json
+    part2_result: Baseline measured (successor required reads about 210,000 estimated
+      tokens, the command manifest alone about 135,000; task packets about 3,600, about
+      1.7 percent). Harness with five tasks, deterministic success and ledger method
+      checks; self-test 5 of 5 valid, and raw-git and hand-edit shortcuts fail the
+      method check. Hypotheses, pilot, main run and stopping rules are preregistered.
+    part2_needs: an owner decision on the agent (headless API agent with usage report
+      recommended), the token budget and five or eight tasks; then pilot and main run.
   out_of_scope:
   - An automatic narrative history (see discarded automatic-narrative-history-maintenance);
     at most an on-demand, uncommitted technical timeline from Git, releases and existing

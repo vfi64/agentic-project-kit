@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: bf14239a2ea5
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 8c79745610b0
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `268`
+- Command count: `270`
 
 ## Commands
 
@@ -544,6 +544,37 @@ Synchronize command reference files and command-manifest entrypoint headers.
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write synchronized entrypoint files. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
+
+### `agentic-kit context render`
+
+- Safety: `BOUNDED`
+- Surface: `diagnostic`
+- When to use: Render a deterministic task-specific context packet from repository authorities.
+- Dry-run available: `False`
+- Remote effects: `none`
+
+Render a deterministic task-specific context packet from repository authorities.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `profile` | `TyperOption` | --profile | `True` |  | Task profile: handoff, planning, release, slice. |
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
+| `write` | `TyperOption` | --write | `False` | `False` | Also write the packet to .agentic/tmp/context/<profile>.md (git-ignored). |
+
+### `agentic-kit context report`
+
+- Safety: `READ_ONLY`
+- Surface: `diagnostic`
+- When to use: Measure the successor's required reads (baseline) and each task packet, read-only.
+- Dry-run available: `False`
+- Remote effects: `none`
+
+Measure the successor's required reads (baseline) and each task packet, read-only.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit dev local-feature-gate`
