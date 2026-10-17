@@ -40,8 +40,8 @@ Critical rule IDs:
 ## Current continuation state
 
 - branch: `feat/context-budget-and-benchmark-harness-20261017`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -459,13 +459,13 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "feat/context-budget-and-benchmark-harness-20261017",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "317ce89c07a11c681b806e7a0f98e688ea65fc13",
-    "head_matches_origin_main": true,
-    "head_short": "317ce89c",
+    "head": "7dceb3a64a66866030ef44ccb11ffd1f64b52430",
+    "head_matches_origin_main": false,
+    "head_short": "7dceb3a6",
     "local_path": "cd /path/to/",
     "origin_main": "317ce89c07a11c681b806e7a0f98e688ea65fc13",
     "origin_main_short": "317ce89c",
-    "worktree_clean": false
+    "worktree_clean": true
   }
 }
 ```

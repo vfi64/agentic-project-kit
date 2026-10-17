@@ -326,11 +326,11 @@
       "branch": "feat/context-budget-and-benchmark-harness-20261017",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "317ce89c07a11c681b806e7a0f98e688ea65fc13",
-      "head_matches_origin_main": true,
+      "head": "7dceb3a64a66866030ef44ccb11ffd1f64b52430",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "317ce89c07a11c681b806e7a0f98e688ea65fc13",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -513,11 +513,11 @@
     "branch": "feat/context-budget-and-benchmark-harness-20261017",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "317ce89c07a11c681b806e7a0f98e688ea65fc13",
-    "head_matches_origin_main": true,
+    "head": "7dceb3a64a66866030ef44ccb11ffd1f64b52430",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "317ce89c07a11c681b806e7a0f98e688ea65fc13",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {
