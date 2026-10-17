@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4f407c80db4820578847d3bd56cdaf10cf4b3c27
-  short: 4f407c80
-  subject: Fix rebase conflict reports, repeated Git config keys and DPA ACK sync (#2534)
+  full: 7aae57747fafa9f28db82191b951590a3d918bb4
+  short: 7aae5774
+  subject: Prepare the changelog for release 1.1.0 (#2536)
 last_substantive_work_state:
-  full: 4f407c80db4820578847d3bd56cdaf10cf4b3c27
-  short: 4f407c80
-  subject: Fix rebase conflict reports, repeated Git config keys and DPA ACK sync (#2534)
+  full: 7aae57747fafa9f28db82191b951590a3d918bb4
+  short: 7aae5774
+  subject: Prepare the changelog for release 1.1.0 (#2536)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

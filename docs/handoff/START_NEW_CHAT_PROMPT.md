@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: d4158b36ba2650219780747758ca4c281433bcc7dab3ea1733b69c0d9b01cb61
 - docs/reference/agentic-kit-commands.json: a99e6eb2d327d46084140fdf73b2b868a0f798b80ccd3287120daabcccd1e575
-## Operational documentation refresh state after PR #2534
+## Operational documentation refresh state after PR #2536
 
-Current administrative handoff refresh state is `4f407c80` (`Fix rebase conflict reports, repeated Git config keys and DPA ACK sync (#2534)`). Continue next only after this post-PR2534 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `7aae5774` (`Prepare the changelog for release 1.1.0 (#2536)`). Continue next only after this post-PR2536 refresh is committed and merged; the next substantive slice must be created from fresh main.
