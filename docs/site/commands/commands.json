@@ -1,6 +1,6 @@
 {
-  "command_count": 268,
-  "diagnostic_count": 128,
+  "command_count": 270,
+  "diagnostic_count": 130,
   "entries": [
     {
       "diagnostic_priority": "reference_lookup",
@@ -1263,6 +1263,77 @@
       "safety": "BOUNDED",
       "surface": "primitive",
       "when_to_use": "Synchronize command reference files and command-manifest entrypoint headers."
+    },
+    {
+      "diagnostic_priority": "advanced_diagnostic",
+      "dry_run_available": false,
+      "group": "context",
+      "help": "Render a deterministic task-specific context packet from repository authorities.",
+      "lifecycle_rank": null,
+      "params": [
+        {
+          "default": null,
+          "help": "Task profile: handoff, planning, release, slice.",
+          "name": "profile",
+          "opts": [
+            "--profile"
+          ],
+          "required": true
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Also write the packet to .agentic/tmp/context/<profile>.md (git-ignored).",
+          "name": "write",
+          "opts": [
+            "--write"
+          ],
+          "required": false
+        }
+      ],
+      "qualified_name": "agentic-kit context render",
+      "safety": "BOUNDED",
+      "surface": "diagnostic",
+      "when_to_use": "Render a deterministic task-specific context packet from repository authorities."
+    },
+    {
+      "diagnostic_priority": "advanced_diagnostic",
+      "dry_run_available": false,
+      "group": "context",
+      "help": "Measure the successor's required reads (baseline) and each task packet, read-only.",
+      "lifecycle_rank": null,
+      "params": [
+        {
+          "default": "PosixPath('.')",
+          "help": "Repository root.",
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        }
+      ],
+      "qualified_name": "agentic-kit context report",
+      "safety": "READ_ONLY",
+      "surface": "diagnostic",
+      "when_to_use": "Measure the successor's required reads (baseline) and each task packet, read-only."
     },
     {
       "diagnostic_priority": "not_diagnostic",
@@ -12295,6 +12366,7 @@
     "ci": 2,
     "cockpit": 5,
     "commands": 2,
+    "context": 2,
     "dev": 1,
     "direction": 3,
     "doc-registry": 3,
@@ -12332,13 +12404,13 @@
   "guided_count": 34,
   "kind": "site_command_catalog",
   "safety_counts": {
-    "BOUNDED": 175,
+    "BOUNDED": 176,
     "DESTRUCTIVE": 9,
-    "READ_ONLY": 84
+    "READ_ONLY": 85
   },
   "schema_version": 1,
   "surface_counts": {
-    "diagnostic": 128,
+    "diagnostic": 130,
     "orchestrator": 34,
     "primitive": 106
   }

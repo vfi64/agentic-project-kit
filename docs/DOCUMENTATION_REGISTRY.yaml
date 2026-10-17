@@ -1716,3 +1716,8 @@ documents:
     owner: maintainers
     summary: 'Gate benchmark part 1: eleven fault-injection scenarios in an offline sandbox,
       Kit main against 1.0.25.'
+  - path: docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_PART2_20261016.md
+    class: evidence/log
+    owner: maintainers
+    summary: 'Context benchmark part 2: measured successor context baseline, task packets,
+      harness with self-test, and preregistration of the LLM runs.'

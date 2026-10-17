@@ -222,7 +222,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "commands=268",
+            "detail": "commands=270",
             "evidence_type": "generated-artifact",
             "status": "verified"
           }
@@ -274,8 +274,8 @@
     }
   },
   "command_catalog": {
-    "command_count": 268,
-    "diagnostic_count": 128,
+    "command_count": 270,
+    "diagnostic_count": 130,
     "entries": [
       {
         "diagnostic_priority": "reference_lookup",
@@ -1538,6 +1538,77 @@
         "safety": "BOUNDED",
         "surface": "primitive",
         "when_to_use": "Synchronize command reference files and command-manifest entrypoint headers."
+      },
+      {
+        "diagnostic_priority": "advanced_diagnostic",
+        "dry_run_available": false,
+        "group": "context",
+        "help": "Render a deterministic task-specific context packet from repository authorities.",
+        "lifecycle_rank": null,
+        "params": [
+          {
+            "default": null,
+            "help": "Task profile: handoff, planning, release, slice.",
+            "name": "profile",
+            "opts": [
+              "--profile"
+            ],
+            "required": true
+          },
+          {
+            "default": "PosixPath('.')",
+            "help": "Repository root.",
+            "name": "root",
+            "opts": [
+              "--root"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Also write the packet to .agentic/tmp/context/<profile>.md (git-ignored).",
+            "name": "write",
+            "opts": [
+              "--write"
+            ],
+            "required": false
+          }
+        ],
+        "qualified_name": "agentic-kit context render",
+        "safety": "BOUNDED",
+        "surface": "diagnostic",
+        "when_to_use": "Render a deterministic task-specific context packet from repository authorities."
+      },
+      {
+        "diagnostic_priority": "advanced_diagnostic",
+        "dry_run_available": false,
+        "group": "context",
+        "help": "Measure the successor's required reads (baseline) and each task packet, read-only.",
+        "lifecycle_rank": null,
+        "params": [
+          {
+            "default": "PosixPath('.')",
+            "help": "Repository root.",
+            "name": "root",
+            "opts": [
+              "--root"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Print machine-readable JSON.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          }
+        ],
+        "qualified_name": "agentic-kit context report",
+        "safety": "READ_ONLY",
+        "surface": "diagnostic",
+        "when_to_use": "Measure the successor's required reads (baseline) and each task packet, read-only."
       },
       {
         "diagnostic_priority": "not_diagnostic",
@@ -12570,6 +12641,7 @@
       "ci": 2,
       "cockpit": 5,
       "commands": 2,
+      "context": 2,
       "dev": 1,
       "direction": 3,
       "doc-registry": 3,
@@ -12607,13 +12679,13 @@
     "guided_count": 34,
     "kind": "site_command_catalog",
     "safety_counts": {
-      "BOUNDED": 175,
+      "BOUNDED": 176,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 84
+      "READ_ONLY": 85
     },
     "schema_version": 1,
     "surface_counts": {
-      "diagnostic": 128,
+      "diagnostic": 130,
       "orchestrator": 34,
       "primitive": 106
     }
@@ -12695,27 +12767,27 @@
   "kind": "agentic_project_kit_generated_site",
   "metadata": {
     "build_commit": "docs-pages-fallback",
-    "command_count": 268,
-    "command_group_count": 39,
+    "command_count": 270,
+    "command_group_count": 40,
     "concept_doi": "10.5281/zenodo.20101359",
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "bf14239a2ea5",
+    "manifest_sha": "8c79745610b0",
     "package_name": "agentic-project-kit",
     "package_version": "1.0.25",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.0.25",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "bf14239a2ea5",
+    "reproduced_manifest_sha": "8c79745610b0",
     "requires_python": ">=3.10",
     "safety_counts": {
-      "BOUNDED": 175,
+      "BOUNDED": 176,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 84
+      "READ_ONLY": 85
     },
     "surface_counts": {
-      "diagnostic": 128,
+      "diagnostic": 130,
       "orchestrator": 34,
       "primitive": 106
     },

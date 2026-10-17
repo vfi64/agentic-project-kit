@@ -39,7 +39,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2530-handoff-refresh`
+- branch: `feat/context-budget-and-benchmark-harness-20261017`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -457,14 +457,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2530-handoff-refresh",
+    "branch": "feat/context-budget-and-benchmark-harness-20261017",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "598eb8fecb176d6914dd5b0031c938b339f1bb5a",
+    "head": "317ce89c07a11c681b806e7a0f98e688ea65fc13",
     "head_matches_origin_main": true,
-    "head_short": "598eb8fe",
+    "head_short": "317ce89c",
     "local_path": "cd /path/to/",
-    "origin_main": "598eb8fecb176d6914dd5b0031c938b339f1bb5a",
-    "origin_main_short": "598eb8fe",
+    "origin_main": "317ce89c07a11c681b806e7a0f98e688ea65fc13",
+    "origin_main_short": "317ce89c",
     "worktree_clean": false
   }
 }
@@ -490,7 +490,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` oder dem externen Workspace-State bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: bf14239a2ea5). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK bf14239a2ea5. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 8c79745610b0). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 8c79745610b0. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -500,5 +500,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: e251000fa8db0fb58fd877ac4c9baa64d13269ad2fe820730edb6dbcca7045cd
-- docs/reference/agentic-kit-commands.json: 529f13482107d82935459b97949aabf24bff90262bf6bbfe9cb55dcf4d5accfe
+- docs/reference/AGENTIC_KIT_COMMANDS.md: d4158b36ba2650219780747758ca4c281433bcc7dab3ea1733b69c0d9b01cb61
+- docs/reference/agentic-kit-commands.json: a99e6eb2d327d46084140fdf73b2b868a0f798b80ccd3287120daabcccd1e575

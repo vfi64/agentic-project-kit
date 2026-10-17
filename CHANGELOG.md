@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Add `agentic-kit context report`, which measures the files a successor is told to read (about 210,000 estimated tokens, 135,000 of them the command manifest), and `agentic-kit context render --profile slice|planning|release|handoff`, which renders a deterministic task packet of about 3,600 estimated tokens from the same authorities: current ACK, every execution-contract rule, manifest excerpts of the profile's commands, gates, open plan items and a checksummed path list for everything left out. Add the part 2 context benchmark harness with five tasks, deterministic success and ledger method checks, a no-LLM self-test, and its preregistration (`docs/reports/context_budget_20261016/`); the LLM runs await an owner decision.
+
 - Fix `transfer remote-next` and `transfer continue` crashing with a ScannerError on every transfer order that starts with the required `COMMAND_MANIFEST_ACK` line, so no order could complete remote-next; found by the new offline gate benchmark (`docs/reports/gate_benchmark_20261016/`), which detects 11 of 11 injected faults on `main` against 5 of 10 on 1.0.25.
 
 - Add `agentic-kit audit-drift-signals`, a report-only measurement of release-projection drift, refresh chains after product merges and Kit/consumer finding status, each with its denominator; `agentic-kit ledger report` now lists repeated failures by fingerprint and `--write-finding-drafts` writes local drafts that are never overwritten; the test suite no longer writes to the invocation ledger.
