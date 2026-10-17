@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7
-  short: 9dd637eb
-  subject: Add an offline gate benchmark and fix ACK-headed transfer orders (#2528)
+  full: 598eb8fecb176d6914dd5b0031c938b339f1bb5a
+  short: 598eb8fe
+  subject: 'docs: Plan website quickstart, shared task navigation and held-out gate review (#2530)'
 last_substantive_work_state:
-  full: 9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7
-  short: 9dd637eb
-  subject: Add an offline gate benchmark and fix ACK-headed transfer orders (#2528)
+  full: 598eb8fecb176d6914dd5b0031c938b339f1bb5a
+  short: 598eb8fe
+  subject: 'docs: Plan website quickstart, shared task navigation and held-out gate review (#2530)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

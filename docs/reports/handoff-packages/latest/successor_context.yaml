@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-16T19:58:43.418872+00:00",
+  "generated_at_utc": "2026-10-17T12:04:43.412134+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,14 +57,14 @@
     "package_version": "1.0.25"
   },
   "repo": {
-    "branch": "docs/post-pr2528-handoff-refresh",
+    "branch": "docs/post-pr2530-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7",
+    "head": "598eb8fecb176d6914dd5b0031c938b339f1bb5a",
     "head_matches_origin_main": true,
-    "head_short": "9dd637eb",
+    "head_short": "598eb8fe",
     "local_path": "cd /path/to/",
-    "origin_main": "9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7",
-    "origin_main_short": "9dd637eb",
+    "origin_main": "598eb8fecb176d6914dd5b0031c938b339f1bb5a",
+    "origin_main_short": "598eb8fe",
     "worktree_clean": false
   },
   "schema_version": 1,
@@ -186,6 +186,24 @@
         "id": "kit-control-effectiveness-measurement",
         "status": "planned",
         "summary": "Measure the effectiveness and cost of the Kit's own control mechanisms"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "website-evidence-and-command-navigation",
+        "status": "planned",
+        "summary": "Improve the public website with gated quickstart, evidence and governed command navigation"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
+        "id": "independent-held-out-gate-validation",
+        "status": "planned",
+        "summary": "Test known Kit gate claims against independently developed held-out faults"
       },
       {
         "files": [

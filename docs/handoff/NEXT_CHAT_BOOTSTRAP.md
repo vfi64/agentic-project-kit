@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7` (`9dd637eb`)
-- Handoff freshness marker: `9dd637eb`
-- Branch at generation: `docs/post-pr2528-handoff-refresh`
+- HEAD: `598eb8fecb176d6914dd5b0031c938b339f1bb5a` (`598eb8fe`)
+- Handoff freshness marker: `598eb8fe`
+- Branch at generation: `docs/post-pr2530-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -84,6 +84,8 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 - `decomplexification-audit-roadmap` (planned): Reduce command-surface complexity through compatibility-preserving facades
 - `context-budgeted-handoff-projections` (planned): Reduce agent token consumption through deterministic context projections
 - `kit-control-effectiveness-measurement` (planned): Measure the effectiveness and cost of the Kit's own control mechanisms
+- `website-evidence-and-command-navigation` (planned): Improve the public website with gated quickstart, evidence and governed command navigation
+- `independent-held-out-gate-validation` (planned): Test known Kit gate claims against independently developed held-out faults
 - `optional-structural-evidence-provider-evaluation` (planned): Evaluate optional structural evidence providers for impact-aware context
 - `next-turn-workflow-kernel` (active): Move recurring next-step execution from chat discipline into a deterministic local workflow kernel
 - `release-command-authority` (active): Keep release preparation, publishing, and DOI closeout under explicit command authority

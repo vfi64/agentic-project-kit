@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: e251000fa8db0fb58fd877ac4c9baa64d13269ad2fe820730edb6dbcca7045cd
 - docs/reference/agentic-kit-commands.json: 529f13482107d82935459b97949aabf24bff90262bf6bbfe9cb55dcf4d5accfe
-## Operational documentation refresh state after PR #2528
+## Operational documentation refresh state after PR #2530
 
-Current administrative handoff refresh state is `9dd637eb` (`Add an offline gate benchmark and fix ACK-headed transfer orders (#2528)`). Continue next only after this post-PR2528 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `598eb8fe` (`docs: Plan website quickstart, shared task navigation and held-out gate review (#2530)`). Continue next only after this post-PR2530 refresh is committed and merged; the next substantive slice must be created from fresh main.
