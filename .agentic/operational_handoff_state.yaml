@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c6e03133d0449bab8011e5a42f0110ef8b8bebfc
-  short: c6e03133
-  subject: Measure the context baseline and prepare the context benchmark (#2532)
+  full: 4f407c80db4820578847d3bd56cdaf10cf4b3c27
+  short: 4f407c80
+  subject: Fix rebase conflict reports, repeated Git config keys and DPA ACK sync (#2534)
 last_substantive_work_state:
-  full: c6e03133d0449bab8011e5a42f0110ef8b8bebfc
-  short: c6e03133
-  subject: Measure the context baseline and prepare the context benchmark (#2532)
+  full: 4f407c80db4820578847d3bd56cdaf10cf4b3c27
+  short: 4f407c80
+  subject: Fix rebase conflict reports, repeated Git config keys and DPA ACK sync (#2534)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
