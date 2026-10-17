@@ -1721,3 +1721,6 @@ documents:
     owner: maintainers
     summary: 'Context benchmark part 2: measured successor context baseline, task packets,
       harness with self-test, and preregistration of the LLM runs.'
+  - path: docs/reports/release/release-run-1.1.0.json
+    class: evidence/log
+    owner: maintainers

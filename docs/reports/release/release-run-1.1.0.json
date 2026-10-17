@@ -1,0 +1,183 @@
+{
+  "approvals": [
+    {
+      "approved_by": "vfi64",
+      "consent_source": "owner go 2026-10-17 20:06 CEST in Claude chat: release 1.1.0 on main 39db749, all gates",
+      "result_status": "AUTHORIZED",
+      "signature": "0a15a06bd04ea9cba221b3df",
+      "step_id": "B4",
+      "tag": "v1.1.0",
+      "target_commit": "39db74967afe10e088bd711ba3e89c3a1b41886a",
+      "version": "1.1.0"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "owner go 2026-10-17 20:06 CEST in Claude chat: release 1.1.0 on main 39db749, all gates",
+      "result_status": "AUTHORIZED",
+      "signature": "535e32112665593708550435",
+      "step_id": "C2",
+      "tag": "v1.1.0",
+      "target_commit": "07bb0700f1a268d933cf46c6d1b3d0b6d9f6f661",
+      "version": "1.1.0"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "owner go 2026-10-17 20:06 CEST in Claude chat: release 1.1.0 on main 39db749, all gates",
+      "result_status": "AUTHORIZED",
+      "signature": "78d333dcd2b7ef31d86af3bd",
+      "step_id": "C3",
+      "tag": "v1.1.0",
+      "target_commit": "07bb0700f1a268d933cf46c6d1b3d0b6d9f6f661",
+      "version": "1.1.0"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "owner go 2026-10-17 20:06 CEST in Claude chat: release 1.1.0 on main 39db749, all gates",
+      "result_status": "AUTHORIZED",
+      "signature": "78d333dcd2b7ef31d86af3bd",
+      "step_id": "C3",
+      "tag": "v1.1.0",
+      "target_commit": "07bb0700f1a268d933cf46c6d1b3d0b6d9f6f661",
+      "version": "1.1.0"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "owner go 2026-10-17 20:06 CEST in Claude chat: release 1.1.0 on main 39db749, all gates",
+      "result_status": "AUTHORIZED",
+      "signature": "16cf2406b098efaae09b5680",
+      "step_id": "D4",
+      "tag": "v1.1.0",
+      "target_commit": "07bb0700f1a268d933cf46c6d1b3d0b6d9f6f661",
+      "version": "1.1.0"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "owner go 2026-10-17 20:06 CEST in Claude chat: release 1.1.0 on main 39db749, all gates",
+      "result_status": "AUTHORIZED",
+      "signature": "4facc163bbfab5a840304e5e",
+      "step_id": "D2R",
+      "tag": null,
+      "target_commit": "62b69a2728db3aace14c9102ad24d59fcbe8c95a",
+      "version": "1.1.0"
+    }
+  ],
+  "archive_boundary": "Snapshot of completed release steps; archive merge is verified from Git/PR evidence.",
+  "artifact_type": "evidence",
+  "finished_steps": [
+    "A1",
+    "A2",
+    "A3",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5"
+  ],
+  "kind": "release_run_evidence",
+  "package_index_dispatch": {
+    "dispatched": true,
+    "head_sha": "07bb0700f1a268d933cf46c6d1b3d0b6d9f6f661",
+    "run_id": "39058241995"
+  },
+  "package_index_workflow": {
+    "file": "release.yml",
+    "publish_target_pypi": true
+  },
+  "publication_policy": "github+pypi+zenodo",
+  "publication_target": "07bb0700f1a268d933cf46c6d1b3d0b6d9f6f661",
+  "review_policy": "historical_evidence",
+  "schema_version": 1,
+  "status": "active",
+  "steps": {
+    "A1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "A2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "A3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": null
+    },
+    "D5": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    }
+  },
+  "tag": "v1.1.0",
+  "version": "1.1.0"
+}
