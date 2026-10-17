@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "context_benchmark_self_test",
-  "sandbox_head": "268bfff333cd549529e585c0d637c684c29e9ad1",
+  "sandbox_head": "5f5274d6689ae65780a25a278736050591e9ca75",
   "task_count": 5,
   "valid_count": 5,
   "results": [
@@ -9,10 +9,10 @@
       "task": "T1",
       "title": "invalid planning status",
       "fails_before_fix": true,
-      "before_detail": "branch=bench/work commits_on_start=0 tracked_dirty=False direction_valid=False items=105/105",
+      "before_detail": "branch=bench/work commits_on_start=0 tracked_dirty=False direction_valid=False items=107/107",
       "reference_error": "",
       "success": true,
-      "success_detail": "branch=bench/work commits_on_start=1 tracked_dirty=False direction_valid=True items=105/105",
+      "success_detail": "branch=bench/work commits_on_start=1 tracked_dirty=False direction_valid=True items=107/107",
       "method_ok": true,
       "method_rule": "transfer commit",
       "kit_invocations": 4,
