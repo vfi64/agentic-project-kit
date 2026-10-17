@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 598eb8fecb176d6914dd5b0031c938b339f1bb5a
-  short: 598eb8fe
-  subject: 'docs: Plan website quickstart, shared task navigation and held-out gate review (#2530)'
+  full: c6e03133d0449bab8011e5a42f0110ef8b8bebfc
+  short: c6e03133
+  subject: Measure the context baseline and prepare the context benchmark (#2532)
 last_substantive_work_state:
-  full: 598eb8fecb176d6914dd5b0031c938b339f1bb5a
-  short: 598eb8fe
-  subject: 'docs: Plan website quickstart, shared task navigation and held-out gate review (#2530)'
+  full: c6e03133d0449bab8011e5a42f0110ef8b8bebfc
+  short: c6e03133
+  subject: Measure the context baseline and prepare the context benchmark (#2532)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
