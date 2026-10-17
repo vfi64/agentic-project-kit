@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Test the release-projection drift signal on fixtures instead of the live repository: between a DOI closeout PR and the administrative handoff refresh the release block drifts by design, and the live assertion failed CI on the 1.1.0 DOI PR.
+
 ## v1.1.0 - 2026-10-17
 
 - Zenodo DOI verification pending for v1.1.0.
