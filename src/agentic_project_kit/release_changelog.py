@@ -55,3 +55,39 @@ def consume_unreleased(text: str, summary_lines: Sequence[str]) -> str:
     if not updated.strip():
         updated = "\n"
     return text[:section.start("body")] + updated + text[section.end("body"):]
+
+
+def _bullets(body: str) -> list[str]:
+    entries = re.findall(r"^[-*][ \t]+([^\n]*(?:\n[ \t]+[^\n]+)*)", body, re.MULTILINE)
+    return [" ".join(entry.split()) for entry in entries if entry.strip()]
+
+
+def unreleased_bullets(text: str) -> list[str]:
+    section = re.search(r"^##[ \t]+\[?Unreleased\]?[ \t]*\n(?P<body>.*?)(?=^##[ \t]|\Z)",
+                        text, re.MULTILINE | re.DOTALL | re.IGNORECASE)
+    return _bullets(section.group("body")) if section else []
+
+
+def curated_summary_lines(text: str, version: str, explicit: Sequence[str]) -> list[str]:
+    """Summary lines for `release.changelog_summary: curated`.
+
+    The release section carries the curated lines only, never the generated PR-title list next
+    to them (1.1.0 listed every change twice). Without explicit lines the Unreleased bullets are
+    the summary, and on a rerun the existing section is kept. Every Unreleased bullet must be part
+    of the summary; otherwise it would stay behind and be announced again with the next release.
+    """
+    lines = [" ".join(line.strip().removeprefix("-").split()) for line in explicit if line.strip()]
+    pending = unreleased_bullets(text)
+    if not lines:
+        lines = pending
+    if not lines:
+        section = re.search(rf"^##[ \t]+\[?v?{re.escape(version)}\]?(?:[ \t][^\n]*)?\n(?P<body>.*?)(?=^##[ \t]|\Z)",
+                            text, re.MULTILINE | re.DOTALL)
+        lines = [line for line in _bullets(section.group("body")) if not line.startswith("Zenodo DOI verification pending")] if section else []
+    left = [entry for entry in pending if entry not in lines]
+    if left:
+        raise ValueError("curated changelog: Unreleased entries missing from the release summary: "
+                         + "; ".join(entry[:80] for entry in left))
+    if not lines:
+        raise ValueError("curated changelog: no summary lines and no Unreleased entries")
+    return lines

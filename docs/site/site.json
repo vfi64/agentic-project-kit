@@ -10045,6 +10045,15 @@
               "--skip-llm-context-gate"
             ],
             "required": false
+          },
+          {
+            "default": "",
+            "help": "Release-note category written into the PR body, for example Fixed; validated before any action.",
+            "name": "release_note_category",
+            "opts": [
+              "--release-note-category"
+            ],
+            "required": false
           }
         ],
         "qualified_name": "agentic-kit transfer pr-create-complete",
@@ -12773,13 +12782,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "4f13f5454f93",
+    "manifest_sha": "a6ee797254ff",
     "package_name": "agentic-project-kit",
     "package_version": "1.1.0",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.1.0",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "4f13f5454f93",
+    "reproduced_manifest_sha": "a6ee797254ff",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 176,

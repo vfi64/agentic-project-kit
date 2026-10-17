@@ -15960,6 +15960,20 @@
           "param_type": "TyperOption",
           "required": false,
           "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Release-note category written into the PR body, for example Fixed; validated before any action.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "release_note_category",
+          "opts": [
+            "--release-note-category"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -20314,7 +20328,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "4f13f5454f93",
+    "manifest_sha": "a6ee797254ff",
     "schema_version": 1
   },
   "schema_version": 2,
