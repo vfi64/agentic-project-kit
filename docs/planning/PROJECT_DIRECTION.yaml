@@ -5004,6 +5004,75 @@ ideas:
   decision_needed: true
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
+- id: governed-recursive-harness-learning
+  status: candidate
+  title: Governed recursive harness learning (Harness2-inspired)
+  rationale: >-
+    Research whether evidence-backed, recursive optimization of agent prompts,
+    skills, tool choices and non-privileged orchestration strategies can reduce
+    recurring failures and context drift across Kit-governed tasks without
+    transferring policy, gate, merge or release authority to an LLM.
+  decision_needed: true
+  decision_status: deferred_long_term_research
+  binding_policy: non-binding idea; no implementation, new commands or automatic adoption approved
+  preserved_information:
+    origin:
+      identified_on: '2026-10-19'
+      project: Harness2 - Recursive Agent Harnessing for an Open World
+      upstream_repository: https://github.com/google-research/harness2
+      paper: https://arxiv.org/abs/2610.14224
+      mechanism: Task-level Propose-Probe-Compose paired with a persistent learning layer.
+      evidence_boundary: Upstream benchmark gains are not evidence of Kit performance.
+    potential_kit_fit:
+    - Build on existing contracts, canonical command authority, deterministic gates,
+      evidence and handoff infrastructure rather than a parallel orchestration stack.
+    - Learn from bounded, attributable failures and retests across Kit, Greenfield and
+      Brownfield workflows; preserve separate Kit and external-consumer status authorities.
+    - Evaluate a versioned experience library with provenance, applicability,
+      confidence, conflicts, expiry and explicit human review.
+    - Consider optional local-model adapters without making Ollama, MLX or a single
+      agent executor a required Kit dependency.
+    immutable_governance_boundary:
+    - An optimizer may propose harness changes, but must not edit or waive binding
+      policies, command authority, approvals, tests, gates or evidence requirements.
+    - Never allow an optimizing agent to certify its own outcome; independent
+      deterministic checks and human-owned acceptance remain authoritative.
+    - Experiments must run in isolated workspaces with network mutations, push,
+      merge, release, credentials and production side effects disabled by default.
+    - Preserve failure evidence and allow rollback; reject performance gains that
+      come from weakened safeguards or hidden scope changes.
+    research_sequence:
+    - 'R0: Inventory the existing Kit mechanisms and upstream approach; specify
+      a narrow hypothesis, supported harness surfaces and explicit threat model.
+      Read-only work only; do not start a new subsystem.'
+    - 'R1: Prototype offline on historical, de-identified and reproducible Kit
+      failure fixtures with baseline and controlled variants; no live repository
+      mutation and no independent PR or release action.'
+    - 'R2: Run held-out task and regression comparisons, assess generalization,
+      false improvements, cost, latency, safety violations and experience-library
+      provenance; document negative findings as well as gains.'
+    - 'R3: Present evidence and trade-offs for a maintainer GO/NO-GO decision.
+      Only after approval prepare an ADR, architecture/coverage changes and
+      small reversible implementation slices with normal Kit gates.'
+    minimum_acceptance:
+    - Demonstrate repeatable improvement versus an unchanged baseline on
+      previously unseen tasks, not just on the proposal-generation examples.
+    - Show zero bypass of mandatory gates and approvals; test adversarial or
+      misleading self-evaluation and stale/conflicting experiences.
+    - Preserve exact fixture, model, harness revision, metric definition,
+      statistical uncertainty and reproducible execution evidence.
+    - Quantify operating cost and maintenance complexity against simpler
+      alternatives such as targeted tests, prompts or existing Pattern Advisor.
+    scheduling_boundary: >-
+      Long-term candidate without target release or delivery commitment.
+      Does not block the current decomplexification, website revision,
+      Greenfield/Brownfield adjudication or other approved work.
+    promotion_trigger: >-
+      Revisit only when command/decomplexification boundaries are stable,
+      an isolated R1 prototype is feasible and a maintainer authorizes R0/R1
+      as a separately gated research slice.
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
 done:
 - id: resumable-release-run-orchestrator
   status: done
