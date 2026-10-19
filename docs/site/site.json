@@ -12758,7 +12758,6 @@
     },
     "release": {
       "notes": [
-        "Zenodo DOI verification pending for v1.1.1.",
         "Harden release run after 1.1.0: report C3 as WAITING with the pending environment while the package-index run waits for a deployment approval, settle C3 from the finished workflow run instead of a gh run watch that gave up, and resume an unchanged, already approved gate without asking again (a changed gate still asks).",
         "Add release.changelog_summary: curated: a release's CHANGELOG section carries the curated summary lines only (by default the Unreleased entries, which must all be covered) instead of also listing every PR title; the Kit repository uses it.",
         "Add --release-note-category to transfer pr-create-complete, so PRs created through it are classified for release notes like those of work finish.",
@@ -12784,7 +12783,7 @@
     "package_name": "agentic-project-kit",
     "package_version": "1.1.1",
     "product_name": "Agentic Execution Runtime",
-    "release_tag": "v1.1.0",
+    "release_tag": "v1.1.1",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
     "reproduced_manifest_sha": "5a8184255246",
     "requires_python": ">=3.10",
@@ -12798,7 +12797,7 @@
       "orchestrator": 34,
       "primitive": 106
     },
-    "version_doi": "10.5281/zenodo.23440577"
+    "version_doi": "10.5281/zenodo.23481104"
   },
   "roadmap_projection": {
     "roadmap_counts": {
@@ -12818,13 +12817,13 @@
   "schema_version": 1,
   "status_projection": {
     "concept_doi": "10.5281/zenodo.20101359",
-    "current_release_tag": "v1.1.0",
+    "current_release_tag": "v1.1.1",
     "current_verified_main": "See docs/STATUS.md",
-    "current_verified_release": "1.1.0",
+    "current_verified_release": "1.1.1",
     "current_version": "1.1.1",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
-    "version_doi": "10.5281/zenodo.23440577"
+    "version_doi": "10.5281/zenodo.23481104"
   },
   "workflow_projection": {
     "boundaries": [
