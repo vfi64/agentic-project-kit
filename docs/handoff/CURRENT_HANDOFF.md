@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `3e8dc27c1b717173fe9107ba3f3af99057a785a8` (`3e8dc27c`), after `Write command transfer orders, publish order results and accept transfer .gitkeep carriers (#2561)`.
-Last substantive work state is `3e8dc27c1b717173fe9107ba3f3af99057a785a8` (`3e8dc27c`), after `Write command transfer orders, publish order results and accept transfer .gitkeep carriers (#2561)`.
+Current verified main/admin HEAD is `b93f5ca5298515ab1c6742042a5a6a27a6b80422` (`b93f5ca5`), after `Release 1.1.2 (#2563)`.
+Last substantive work state is `b93f5ca5298515ab1c6742042a5a6a27a6b80422` (`b93f5ca5`), after `Release 1.1.2 (#2563)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

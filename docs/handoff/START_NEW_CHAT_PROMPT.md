@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 5ad07ae816b755fc7e363b60fb3491f7f78cf7e22ee8c737cbf0e1b2af006bd7
 - docs/reference/agentic-kit-commands.json: 970d08dd0b2dc819c3000f72c8d3016d4b89cbde910211b602d44754a8628487
-## Operational documentation refresh state after PR #2561
+## Operational documentation refresh state after PR #2563
 
-Current administrative handoff refresh state is `3e8dc27c` (`Write command transfer orders, publish order results and accept transfer .gitkeep carriers (#2561)`). Continue next only after this post-PR2561 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `b93f5ca5` (`Release 1.1.2 (#2563)`). Continue next only after this post-PR2563 refresh is committed and merged; the next substantive slice must be created from fresh main.
