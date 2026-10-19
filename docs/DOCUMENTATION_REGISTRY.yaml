@@ -1724,3 +1724,6 @@ documents:
   - path: docs/reports/release/release-run-1.1.0.json
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/release/release-run-1.1.1.json
+    class: evidence/log
+    owner: maintainers
