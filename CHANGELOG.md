@@ -1,5 +1,9 @@
 ## Unreleased
 
+- Accept a consumer's light-path checks as SKIPPED only on a light pull request: a workspace names them under `gates.light_path_skipped_checks` in `.agentic/config.yaml`, and `pr wait-ci`, PR status, merge-if-green and post-merge settlement accept them when the Kit re-derives the `ci runtime-plan` classification of the pull request as light; on a full pull request, or when nothing is declared, a skipped check still blocks (KIT-GF-073).
+- Let `kit update` maintain every Kit pin of the managed CI file, so a separate classify job beside the gate job is updated too; all pins must name the same exact version on their own `pip install` line (KIT-GF-071).
+- Scope the external rule-mechanism inventory's surface evidence to the lines carrying its anchor instead of whole files, so unrelated edits of `.agentic/config.yaml` or the rules README keep `rule-registry check` PASS (inventory schema 2; a schema 1 inventory is refreshed by bootstrap), and let a signed `kit update` re-derive a Kit-derived inventory with the updated Kit; a hand-reviewed inventory is never touched (KIT-GF-072).
+
 ## v1.1.1 - 2026-10-19
 
 - Harden release run after 1.1.0: report C3 as `WAITING` with the pending environment while the package-index run waits for a deployment approval, settle C3 from the finished workflow run instead of a `gh run watch` that gave up, and resume an unchanged, already approved gate without asking again (a changed gate still asks).

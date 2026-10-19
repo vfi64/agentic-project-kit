@@ -73,7 +73,13 @@ def _failed_run_diagnostic(item: dict[str, Any], *, name: str, conclusion: str) 
     )
 
 
-def classify_pr_status(payload: dict[str, Any], *, pr: str = "") -> PrStatusDecision:
+def classify_pr_status(
+    payload: dict[str, Any], *, pr: str = "", light_path_skipped: frozenset[str] | None = None
+) -> PrStatusDecision:
+    if light_path_skipped is None:
+        from agentic_project_kit.ci_light_skip import light_path_skip_allowance_for_pr
+
+        light_path_skipped = light_path_skip_allowance_for_pr(payload)
     state = str(payload.get("state") or "UNKNOWN")
     checks = payload.get("statusCheckRollup") or []
     successful: list[str] = []
@@ -103,7 +109,8 @@ def classify_pr_status(payload: dict[str, Any], *, pr: str = "") -> PrStatusDeci
                 pending.append(name)
             elif is_successful_check_conclusion(conclusion):
                 successful.append(name)
-            elif is_optional_skipped_check(name, status=status, conclusion=conclusion):
+            elif is_optional_skipped_check(name, status=status, conclusion=conclusion,
+                                           allowed=light_path_skipped):
                 skipped_optional.append(name)
             elif is_failed_check_conclusion(conclusion):
                 failed.append(name)

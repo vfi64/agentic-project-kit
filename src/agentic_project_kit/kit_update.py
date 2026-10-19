@@ -6,10 +6,12 @@ from dataclasses import dataclass
 import hashlib
 import json
 from pathlib import Path
-from agentic_project_kit.external_rule_registry import bootstrap_route
+from agentic_project_kit.external_rule_registry import INVENTORY, KIND as INVENTORY_KIND, bootstrap_route
 import re
 import shlex
 import uuid
+
+import yaml
 
 from agentic_project_kit.kit_installation import discover_kit_installation
 from agentic_project_kit.kit_update_artifacts import PreparedTarget, prepare_target, sha256_file
@@ -114,7 +116,8 @@ def build_update_plan(
         "docs/handoff/START_NEW_CHAT_PROMPT.md",
     }
     paths = sorted(
-        {CI_TEMPLATE_PATH, CI_INJECTION_TARGET, ".agentic/config.yaml", ".venv/pyvenv.cfg"}
+        {CI_TEMPLATE_PATH, CI_INJECTION_TARGET, ".agentic/config.yaml", ".venv/pyvenv.cfg",
+         INVENTORY.as_posix()}
         | allowed
     )
     before = {path: _file_state(root, path) for path in paths}
@@ -196,6 +199,10 @@ def build_update_plan(
             for item in artifacts
         )
     )
+    # KIT-GF-072: a Kit-derived rule-mechanism inventory records the installed Kit version and
+    # source hashes, so it is re-derived by the updated Kit after the signed update. Its content
+    # is derived from the verified release; a hand-reviewed inventory is never touched.
+    refresh_inventory = _kit_derived_inventory(root)
     payload = {
         "schema_version": 1,
         "root": str(root),
@@ -218,9 +225,51 @@ def build_update_plan(
             "sync_entrypoints",
             "check",
             "doctor",
+            *(["refresh_rule_inventory"] if refresh_inventory else []),
         ],
+        "derived_paths": [INVENTORY.as_posix()] if refresh_inventory else [],
     }
     return UpdatePlan(payload, target, desired, before)
+
+
+def _kit_derived_inventory(root: Path) -> bool:
+    path = root / INVENTORY
+    if not path.is_file() or path.is_symlink():
+        return False
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError):
+        return False
+    return isinstance(data, dict) and data.get("kind") == INVENTORY_KIND
+
+
+def _refresh_rule_inventory(run, argv: list[str], root: Path) -> list[str]:
+    try:
+        return _refresh_rule_inventory_steps(run, argv, root)
+    except UpdateBlocked as exc:
+        # The Kit is installed and pinned; only the derived inventory is stale. Name the route.
+        raise UpdateBlocked(f"rule_inventory_refresh_blocked: {exc}; run {bootstrap_route(root)}") from exc
+
+
+def _refresh_rule_inventory_steps(run, argv: list[str], root: Path) -> list[str]:
+    base = [*argv, "rule-registry", "bootstrap", "--root", str(root)]
+    planned = json_command(run, [*base, "--json"])
+    status = planned.get("result_status")
+    if status == "PLANNED":
+        signature_value = planned.get("approval_signature")
+        if not isinstance(signature_value, str) or not signature_value:
+            raise UpdateBlocked("rule_inventory_refresh_unsigned")
+        _require_pass(
+            json_command(run, [*base, "--execute", "--expected-signature", signature_value, "--json"]),
+            "rule_inventory_refresh",
+        )
+    elif status != "PASS":
+        raise UpdateBlocked("rule_inventory_refresh_blocked")
+    _require_pass(
+        json_command(run, [*argv, "rule-registry", "check", "--root", str(root), "--json"]),
+        "rule_inventory_check",
+    )
+    return [INVENTORY.as_posix()] if status == "PLANNED" else []
 
 
 def _write(path: Path, data: dict) -> None:
@@ -375,11 +424,16 @@ def run_kit_update(
                 (root / path).read_bytes() != content for path, content in plan.desired_pins.items()
             ):
                 raise UpdateBlocked("ci_pin_verification_failed")
-            result.update(
-                result_status="PASS",
-                installed_version=version,
-                next_action=f"Run {bootstrap_route(root)}, then finish changed files through the normal Kit work lifecycle.",
-            )
+        # Outside the update lock: bootstrap takes the workspace lock itself and re-verifies its
+        # own evidence before writing.
+        next_action = "Finish changed files through the normal Kit work lifecycle."
+        if "refresh_rule_inventory" in plan.payload["actions"]:
+            refreshed = _refresh_rule_inventory(run, argv, root)
+            result["changed_paths"] = sorted({*result["changed_paths"], *refreshed})
+            record("rule_inventory")
+        elif not (root / INVENTORY).exists():
+            next_action = f"Optionally run {bootstrap_route(root)}; then finish changed files through the normal Kit work lifecycle."
+        result.update(result_status="PASS", installed_version=version, next_action=next_action)
     except (UpdateBlocked, OSError, ValueError, RuntimeError) as exc:
         result.update(
             result_status="BLOCKED",

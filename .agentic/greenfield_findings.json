@@ -2413,6 +2413,94 @@
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-068-declared-external-evidence-2026-10-13.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "A released stable Kit version newer than the installed one; one argv token."
+        },
+        "commands": [
+          "agentic-kit kit update --version {version} --json"
+        ],
+        "expected": [
+          "A managed CI file with identical exact Kit pins in a classify and a check job plans both pins; mixed versions or a pin outside a pip install line stay BLOCKED."
+        ],
+        "expected_result_fields": {
+          "plan.actions": "contains update_ci_pins",
+          "result_status": "AWAITING_APPROVAL"
+        },
+        "preconditions": [
+          "Installed wheel and synchronized command reference; disposable external Git workspace; no Kit tests or documentation registry.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Installed-wheel or unit positive/negative cases PASS; live consumer retest remains independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.1.2",
+      "id": "KIT-GF-071",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit rule-registry bootstrap --json",
+          "agentic-kit rule-registry check --json"
+        ],
+        "expected": [
+          "After a signed bootstrap, an unrelated comment in .agentic/config.yaml keeps check PASS; editing the kit_schema_version line makes it BLOCKED; a signed kit update re-derives a Kit-derived inventory."
+        ],
+        "expected_result_fields": {
+          "result_status": "PASS"
+        },
+        "preconditions": [
+          "Installed wheel and synchronized command reference; disposable external Git workspace; no Kit tests or documentation registry.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Installed-wheel or unit positive/negative cases PASS; live consumer retest remains independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.1.2",
+      "id": "KIT-GF-072",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "head_sha": "Its full 40-character head SHA; one argv token.",
+          "pr": "The refresh pull request number; one argv token."
+        },
+        "commands": [
+          "agentic-kit pr wait-ci {pr} --expected-head-sha {head_sha}"
+        ],
+        "expected": [
+          "With gates.light_path_skipped_checks declared, a light refresh PR whose heavy jobs are SKIPPED is READY_TO_MERGE; a skipped job on a full classification still blocks."
+        ],
+        "expected_result_fields": {
+          "PR readiness outcome": "READY_TO_MERGE"
+        },
+        "preconditions": [
+          "Installed wheel and synchronized command reference; disposable external Git workspace; no Kit tests or documentation registry.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Installed-wheel or unit positive/negative cases PASS; live consumer retest remains independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.1.2",
+      "id": "KIT-GF-073",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md"
     }
   ],
   "kind": "external_findings_catalog",

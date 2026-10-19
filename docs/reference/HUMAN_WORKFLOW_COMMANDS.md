@@ -479,3 +479,21 @@ jobs:
     steps:
       - run: npx playwright test
 ```
+
+The heavy jobs of this fragment report SKIPPED on a light pull request. Declare
+their check names so the Kit's readiness routes (`pr wait-ci`, PR status,
+merge-if-green, post-merge settlement) accept them (KIT-GF-073):
+
+```yaml
+gates:
+  light_path_skipped_checks: [pytest, playwright]
+```
+
+A declared check counts as an accepted skip only when the Kit re-derives the
+pull request as light from local Git objects (`ci runtime-plan` over
+merge-base..head with the PR's head branch). On a full pull request, with
+missing commits or with nothing declared, a skipped check still blocks; a
+declared check that fails stays red. In the managed CI file, the classify job
+may install the Kit with its own exact `python -m pip install
+"agentic-project-kit==X.Y.Z"` line instead of requirements-kit.txt: `kit update`
+keeps every identical pin of that file current (KIT-GF-071).

@@ -71,7 +71,12 @@ def classify_pr_readiness(
     elapsed_seconds: int = 0,
     timeout_seconds: int = 2700,
     expected_checks: tuple[str, ...] = (),
+    light_path_skipped: frozenset[str] | None = None,
 ) -> ReadinessDecision:
+    if light_path_skipped is None:
+        from agentic_project_kit.ci_light_skip import light_path_skip_allowance_for_pr
+
+        light_path_skipped = light_path_skip_allowance_for_pr(snapshot)
     if elapsed_seconds >= timeout_seconds:
         return ReadinessDecision(
             TIMEOUT,
@@ -103,6 +108,7 @@ def classify_pr_readiness(
             check["name"],
             status=check["status"],
             conclusion=check["conclusion"],
+            allowed=light_path_skipped,
         )
     ]
 
@@ -251,7 +257,7 @@ def gh_pr_snapshot_provider(pr_number: int) -> SnapshotProvider:
                 "view",
                 str(pr_number),
                 "--json",
-                "state,headRefOid,headRefName,mergeStateStatus,mergeable,statusCheckRollup",
+                "state,baseRefOid,headRefOid,headRefName,mergeStateStatus,mergeable,statusCheckRollup",
             ],
             check=False,
             capture_output=True,

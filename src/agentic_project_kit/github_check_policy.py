@@ -35,9 +35,11 @@ def is_optional_skipped_check(
     *,
     status: str,
     conclusion: str,
+    allowed: frozenset[str] = frozenset(),
 ) -> bool:
+    """`allowed` holds a workspace's light-path checks, already bound to a light PR (KIT-GF-073)."""
     return (
         status == "COMPLETED"
         and conclusion == "SKIPPED"
-        and name in OPTIONAL_SKIPPED_CHECK_NAMES
+        and (name in OPTIONAL_SKIPPED_CHECK_NAMES or name in allowed)
     )

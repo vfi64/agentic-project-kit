@@ -45,6 +45,9 @@ class Fixture:
         self.on_preflight = None
         self.on_install = None
         self.identity_count = 0
+        self.bootstrap_status = "PLANNED"
+        self.bootstrap_execute_status = "PASS"
+        self.registry_check_status = "PASS"
         for name, content in {
             ".agentic/config.yaml": b"kit_schema_version: 2\nproject: {name: external, type: generic}\nhygiene: {doc_lifecycle: 'off'}\n",
             CI_TEMPLATE_PATH: SOURCE,
@@ -127,6 +130,18 @@ class Fixture:
                     target = self.root / path
                     target.parent.mkdir(parents=True, exist_ok=True)
                     target.write_text("updated by target interpreter\n")
+        elif "rule-registry" in argv and "bootstrap" in argv:
+            if "--execute" in argv:
+                assert argv[argv.index("--expected-signature") + 1] == "b" * 64
+                data = {"result_status": self.bootstrap_execute_status, "written": True}
+                (self.root / ".agentic/rule_mechanism_inventory.yaml").write_text(
+                    "kind: external_kit_rule_mechanism_inventory\nkit_version: 1.0.19\n")
+            else:
+                data = {"result_status": self.bootstrap_status, "approval_signature": "b" * 64}
+            rc = int(data["result_status"] == "BLOCKED")  # the real CLI exits 1 when BLOCKED
+        elif "rule-registry" in argv and "check" in argv:
+            data = {"result_status": self.registry_check_status}
+            rc = int(data["result_status"] == "BLOCKED")
         elif "pip" in argv and "install" in argv:
             rc = self.install_rc
             if not rc:
@@ -417,12 +432,41 @@ def test_pin_plan_preserves_custom_bytes_and_line_endings(ending):
     assert desired[CI_INJECTION_TARGET] == workflow.replace(b"1.0.18", b"1.0.19")
 
 
+TWO_JOBS = (
+    b"jobs:\n  classify:\n    steps:\n      - run: python -m pip install \"agentic-project-kit==1.0.18\"\n"
+    b"      - run: agentic-kit ci runtime-plan --json\n"
+    b"  check:\n    steps:\n      - run: python -m pip install \"agentic-project-kit==1.0.18\"\n"
+    b"      - run: agentic-kit check\n"
+)
+
+
+def test_every_identical_pin_of_a_classify_and_a_check_job_is_updated():
+    """KIT-GF-071: a separate classify job beside the gate job no longer blocks kit update."""
+    workflow = MANAGED_CI_HEADER.encode() + b"\n" + TWO_JOBS
+    desired = plan_ci_pins(TWO_JOBS, workflow, "1.0.19")
+    assert desired[CI_TEMPLATE_PATH] == TWO_JOBS.replace(b"1.0.18", b"1.0.19")
+    assert desired[CI_INJECTION_TARGET] == workflow.replace(b"1.0.18", b"1.0.19")
+    assert desired[CI_TEMPLATE_PATH].count(b"agentic-project-kit==1.0.19") == 2
+
+
 @pytest.mark.parametrize(
     "source,workflow",
     [
         (SOURCE, b"unmanaged\n" + SOURCE),
         (SOURCE, MANAGED_CI_HEADER.encode() + b"\n" + SOURCE + b"# changed workflow\n"),
-        (SOURCE + SOURCE, MANAGED_CI_HEADER.encode() + b"\n" + SOURCE + SOURCE),
+        (
+            SOURCE + SOURCE.replace(b"1.0.18", b"1.0.17"),
+            MANAGED_CI_HEADER.encode() + b"\n" + SOURCE + SOURCE.replace(b"1.0.18", b"1.0.17"),
+        ),
+        (
+            SOURCE + b"      - run: python -m pip install agentic-project-kit==1.0.18 agentic-project-kit==1.0.18\n",
+            MANAGED_CI_HEADER.encode() + b"\n" + SOURCE
+            + b"      - run: python -m pip install agentic-project-kit==1.0.18 agentic-project-kit==1.0.18\n",
+        ),
+        (
+            SOURCE + b"      - run: echo agentic-project-kit==1.0.18\n",
+            MANAGED_CI_HEADER.encode() + b"\n" + SOURCE + b"      - run: echo agentic-project-kit==1.0.18\n",
+        ),
         (
             SOURCE.replace(b"==1.0.18", b">=1.0.18"),
             MANAGED_CI_HEADER.encode() + b"\n" + SOURCE.replace(b"==1.0.18", b">=1.0.18"),
@@ -575,3 +619,51 @@ def test_ci_template_replacement_is_bound_to_target_version():
     with pytest.raises(ValueError, match="invalid_target_template_pin"):
         plan_ci_pins(SOURCE, MANAGED_CI_HEADER.encode() + b"\n" + SOURCE, "1.0.19",
                      target_template=SOURCE.decode())
+
+
+def _inventory(workspace, kind="external_kit_rule_mechanism_inventory"):
+    path = workspace.root / ".agentic/rule_mechanism_inventory.yaml"
+    path.write_text(f"kind: {kind}\nkit_version: 1.0.18\n")
+    return path
+
+
+def test_signed_update_refreshes_a_kit_derived_rule_inventory(workspace):
+    """KIT-GF-072: every Kit update left the derived inventory stale until a separate bootstrap."""
+    inventory = _inventory(workspace)
+    plan = workspace.update()
+    assert "refresh_rule_inventory" in plan["plan"]["actions"]
+    assert plan["plan"]["derived_paths"] == [".agentic/rule_mechanism_inventory.yaml"]
+    assert plan["plan"]["files_before"][".agentic/rule_mechanism_inventory.yaml"]
+    result = workspace.update(execute=True, expected_signature=plan["approval_signature"])
+    assert result["result_status"] == "PASS", result
+    assert result["completed_steps"][-1] == "rule_inventory"
+    assert ".agentic/rule_mechanism_inventory.yaml" in result["changed_paths"]
+    assert "kit_version: 1.0.19" in inventory.read_text()
+    calls = [argv for argv in workspace.calls if "rule-registry" in argv]
+    assert [("--execute" in argv, argv[argv.index("rule-registry") + 1]) for argv in calls] == [
+        (False, "bootstrap"), (True, "bootstrap"), (False, "check")]
+    assert all(argv[0] == workspace.calls[-1][0] for argv in calls)
+
+
+def test_hand_reviewed_or_absent_inventory_is_never_written_by_update(workspace):
+    plan = workspace.update()
+    assert "refresh_rule_inventory" not in plan["plan"]["actions"]
+    inventory = _inventory(workspace, kind="hand_reviewed_registry")
+    plan = workspace.update()
+    assert "refresh_rule_inventory" not in plan["plan"]["actions"]
+    result = workspace.update(execute=True, expected_signature=plan["approval_signature"])
+    assert result["result_status"] == "PASS"
+    assert not any("rule-registry" in argv for argv in workspace.calls)
+    assert "hand_reviewed_registry" in inventory.read_text()
+
+
+@pytest.mark.parametrize("field,value", [("bootstrap_status", "BLOCKED"), ("registry_check_status", "BLOCKED")])
+def test_a_blocked_inventory_refresh_blocks_the_update_result(workspace, field, value):
+    _inventory(workspace)
+    setattr(workspace, field, value)
+    plan = workspace.update()
+    result = workspace.update(execute=True, expected_signature=plan["approval_signature"])
+    assert result["result_status"] == "BLOCKED"
+    assert result["blocker"].startswith("rule_inventory_refresh_blocked")
+    assert "rule-registry bootstrap" in result["blocker"]
+    assert "doctor" in result["completed_steps"]
