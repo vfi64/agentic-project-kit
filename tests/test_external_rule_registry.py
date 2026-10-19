@@ -86,7 +86,8 @@ def test_installed_bootstrap_signature_binds_evidence_and_preserves_manual_inven
     root, cli = external
     plan = cli("rule-registry", "bootstrap", "--json")
     rules = root / ".agentic/rules/README.md"
-    rules.write_text(rules.read_text() + "\nChanged surface\n")
+    # The evidence is the anchor line (KIT-GF-072); changing it invalidates the signed plan.
+    rules.write_text(rules.read_text().replace("Workspace Rules", "Workspace Rules (changed)", 1))
     assert cli("rule-registry", "bootstrap", "--execute", "--expected-signature", plan["approval_signature"], "--json", ok=False)["result_status"] == "BLOCKED"
     assert not (root / ".agentic/rule_mechanism_inventory.yaml").exists()
     inventory = root / ".agentic/rule_mechanism_inventory.yaml"
@@ -116,3 +117,37 @@ def test_existing_reviewed_external_registry_keeps_legacy_validation(tmp_path):
     assert validate_rule_registry(tmp_path) == []
     assert build_rule_registry_report(tmp_path)["status"] == "pass"
     assert bootstrap_inventory(tmp_path)["result_status"] == "BLOCKED"
+
+
+def test_unrelated_surface_edits_keep_the_inventory_current_but_anchor_edits_do_not(external):
+    """KIT-GF-072: whole-file hashes made every unrelated config edit block rule-registry check."""
+    root, cli = external
+    plan = cli("rule-registry", "bootstrap", "--json")
+    cli("rule-registry", "bootstrap", "--execute", "--expected-signature", plan["approval_signature"], "--json")
+    config = root / ".agentic/config.yaml"
+    rules = root / ".agentic/rules/README.md"
+    config.write_text(config.read_text() + "# an unrelated owner comment\n")
+    rules.write_text(rules.read_text() + "\nAn unrelated project rule paragraph.\n")
+    assert cli("rule-registry", "check", "--json")["result_status"] == "PASS"
+    config.write_text(config.read_text().replace("kit_schema_version: 2", "kit_schema_version: 2  # pinned", 1))
+    assert cli("rule-registry", "check", "--json", ok=False)["result_status"] == "BLOCKED"
+
+
+def test_a_schema_1_whole_file_inventory_is_refreshed_by_bootstrap(external):
+    root, cli = external
+    plan = cli("rule-registry", "bootstrap", "--json")
+    cli("rule-registry", "bootstrap", "--execute", "--expected-signature", plan["approval_signature"], "--json")
+    inventory = root / ".agentic/rule_mechanism_inventory.yaml"
+    from agentic_project_kit.external_rule_registry import _canonical, _hash
+    data = yaml.safe_load(inventory.read_text())
+    data.pop("projection_sha256")
+    data["schema_version"] = 1
+    for mechanism in data["mechanisms"]:
+        mechanism["surface"] = {**{k: v for k, v in mechanism["surface"].items() if k != "anchor_sha256"},
+                                "sha256": "0" * 64}
+    inventory.write_text(yaml.safe_dump({**data, "projection_sha256": _hash(_canonical(data))}, sort_keys=False))
+    assert cli("rule-registry", "check", "--json", ok=False)["result_status"] == "BLOCKED"
+    plan = cli("rule-registry", "bootstrap", "--json")
+    assert plan["result_status"] == "PLANNED"
+    assert cli("rule-registry", "bootstrap", "--execute", "--expected-signature", plan["approval_signature"], "--json")["written"]
+    assert cli("rule-registry", "check", "--json")["result_status"] == "PASS"

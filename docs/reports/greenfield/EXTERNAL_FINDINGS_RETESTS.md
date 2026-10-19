@@ -1039,6 +1039,52 @@ Expected: Publish PASS with external SKIP checks; C1 PASS; normal C2 gate or rec
 
 Expected result fields: `{"blocker_count": 0, "status": "PASS"}`.
 
+## KIT-GF-071
+
+Kit state: CLOSED; fixed_in: 1.1.2.
+Evidence: docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md
+
+Preconditions: Installed wheel and synchronized command reference; disposable external Git workspace; no Kit tests or documentation registry. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit kit update --version {version} --json
+```
+
+Expected: A managed CI file with identical exact Kit pins in a classify and a check job plans both pins; mixed versions or a pin outside a pip install line stay BLOCKED.
+
+Expected result fields: `{"plan.actions": "contains update_ci_pins", "result_status": "AWAITING_APPROVAL"}`.
+
+## KIT-GF-072
+
+Kit state: CLOSED; fixed_in: 1.1.2.
+Evidence: docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md
+
+Preconditions: Installed wheel and synchronized command reference; disposable external Git workspace; no Kit tests or documentation registry. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit rule-registry bootstrap --json
+agentic-kit rule-registry check --json
+```
+
+Expected: After a signed bootstrap, an unrelated comment in .agentic/config.yaml keeps check PASS; editing the kit_schema_version line makes it BLOCKED; a signed kit update re-derives a Kit-derived inventory.
+
+Expected result fields: `{"result_status": "PASS"}`.
+
+## KIT-GF-073
+
+Kit state: CLOSED; fixed_in: 1.1.2.
+Evidence: docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md
+
+Preconditions: Installed wheel and synchronized command reference; disposable external Git workspace; no Kit tests or documentation registry. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit pr wait-ci {pr} --expected-head-sha {head_sha}
+```
+
+Expected: With gates.light_path_skipped_checks declared, a light refresh PR whose heavy jobs are SKIPPED is READY_TO_MERGE; a skipped job on a full classification still blocks.
+
+Expected result fields: `{"PR readiness outcome": "READY_TO_MERGE"}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

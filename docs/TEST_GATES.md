@@ -1103,6 +1103,15 @@ source and scope, never infer a benchmark from a documentation link.
 
 Real-window smoke remains opt-in through `AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE=1`; visual evidence must be recorded separately from deterministic test success. No test should publish, merge, discard project files or initialize a selected real repository merely to validate layout. Windows/Linux visual and packaging acceptance remains open.
 
+## Consumer CI pins, light-path skips and inventory evidence (KIT-GF-071, KIT-GF-072, KIT-GF-073)
+
+tests/test_light_path_skipped_checks.py runs the installed wheel in an external
+Git workspace: declared `gates.light_path_skipped_checks` pass only on a light
+pull request, while full classification, other branches, missing declarations
+and failed checks keep blocking. tests/test_kit_update.py covers identical Kit
+pins in several jobs and the signed refresh of a Kit-derived rule inventory;
+tests/test_external_rule_registry.py covers anchor-scoped surface evidence.
+
 ## Release publish verdict consistency (KIT-GF-069)
 
 The release runner consumes the publish orchestration status and blocker count;

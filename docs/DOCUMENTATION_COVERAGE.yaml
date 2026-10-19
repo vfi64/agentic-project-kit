@@ -15,6 +15,21 @@ rules:
     terms:
     - tests/test_ns_legacy_external_evidence.py
     - KIT-GF-068
+- id: consumer-ci-light-path-and-inventory-evidence
+  description: Light-path skips, multi-pin kit update and anchor-scoped inventory evidence stay documented.
+  documents:
+  - path: docs/reference/HUMAN_WORKFLOW_COMMANDS.md
+    terms:
+    - light_path_skipped_checks
+    - KIT-GF-071
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_light_path_skipped_checks.py
+    - KIT-GF-072
+  - path: docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md
+    terms:
+    - anchor_sha256
+    - refresh_rule_inventory
 - id: release-publish-verdict-consistency
   description: Release runner delegates check applicability and verdict to publish orchestration
   documents:

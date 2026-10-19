@@ -24,22 +24,30 @@ def plan_ci_pins(
         raise ValueError(
             "managed_ci_pair_mismatch: workflow must equal its managed header plus source"
         )
-    if source.count(b"agentic-project-kit") != 1 or len(_EXACT_PIN.findall(source)) != 1:
-        raise ValueError("ambiguous_ci_pin: require exactly one stable, exact Kit version pin")
-    # Pin must be in an executable pip install line, not a comment or prose.
-    line = next(line for line in source.splitlines() if b"agentic-project-kit" in line)
-    match = re.fullmatch(rb"\s*-\s*run:\s*python(?:3)?\s+-m\s+pip\s+install\s+(.+)", line)
-    if not match:
-        raise ValueError("unsupported_ci_pin: require a python -m pip install run step")
-    arguments = shlex.split(match[1].decode("utf-8"), comments=True)
-    current_pin = b"agentic-project-kit==" + _EXACT_PIN.findall(source)[0]
-    if current_pin.decode("ascii") not in arguments or any(
-        any(operator in argument for operator in (";", "|", "&", "`", "$", ">", "<"))
-        for argument in arguments
-    ):
+    # Several jobs may install the Kit (KIT-GF-071: a separate classify job beside the gate job).
+    # Every occurrence must be the same stable exact pin, alone on an executable pip install line.
+    pins = _EXACT_PIN.findall(source)
+    lines = [line for line in source.splitlines() if b"agentic-project-kit" in line]
+    if not pins or source.count(b"agentic-project-kit") != len(pins) or len(set(pins)) != 1:
         raise ValueError(
-            "unsupported_ci_pin: require a literal pip requirement without shell operators"
+            "ambiguous_ci_pin: require stable, exact Kit version pins that all name one version"
         )
+    current_pin = (b"agentic-project-kit==" + pins[0]).decode("ascii")
+    for line in lines:
+        if line.count(b"agentic-project-kit") != 1:
+            raise ValueError("ambiguous_ci_pin: require one Kit pin per install line")
+        # Pin must be in an executable pip install line, not a comment or prose.
+        match = re.fullmatch(rb"\s*-\s*run:\s*python(?:3)?\s+-m\s+pip\s+install\s+(.+)", line)
+        if not match:
+            raise ValueError("unsupported_ci_pin: require a python -m pip install run step")
+        arguments = shlex.split(match[1].decode("utf-8"), comments=True)
+        if current_pin not in arguments or any(
+            any(operator in argument for operator in (";", "|", "&", "`", "$", ">", "<"))
+            for argument in arguments
+        ):
+            raise ValueError(
+                "unsupported_ci_pin: require a literal pip requirement without shell operators"
+            )
     desired = _EXACT_PIN.sub(b"agentic-project-kit==" + version.encode("ascii"), source)
     if target_template is not None:
         # The target runtime recognized the old template's normalized hash. Its

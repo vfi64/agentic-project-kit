@@ -189,6 +189,7 @@ class Workspace:
     hygiene_review_budgets: Mapping[str, int] = field(default_factory=default_review_budgets)
     gates_extra: tuple[str, ...] = ()
     gates_skip: tuple[str, ...] = ()
+    gates_light_path_skipped_checks: tuple[str, ...] = ()
     manifest_schema_version: int = 0
     kit: KitUpdateConfig = field(default_factory=KitUpdateConfig)
     ns_legacy_evidence_paths: tuple[str, ...] = ()
@@ -449,6 +450,7 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
     )
     config = _apply_path_overrides(config, manifest.get("paths"), location)
     gates_extra, gates_skip = _parse_gates(manifest.get("gates"), location)
+    light_path_skipped = _parse_light_path_skipped_checks(manifest.get("gates"), location)
     try:
         kit = parse_kit_update_config(manifest.get("kit"))
     except ValueError as exc:
@@ -470,6 +472,7 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
         hygiene_review_budgets=hygiene_review_budgets,
         gates_extra=gates_extra,
         gates_skip=gates_skip,
+        gates_light_path_skipped_checks=light_path_skipped,
         manifest_schema_version=schema_version,
         kit=kit,
         ns_legacy_evidence_paths=evidence_paths,
@@ -687,6 +690,17 @@ def _parse_gates(gates: object, location: str) -> tuple[tuple[str, ...], tuple[s
         _parse_string_list(gates.get("extra", []), f"{location}:gates.extra"),
         _parse_string_list(gates.get("skip", []), f"{location}:gates.skip"),
     )
+
+
+def _parse_light_path_skipped_checks(gates: object, location: str) -> tuple[str, ...]:
+    """CI checks a light refresh PR may report SKIPPED (KIT-GF-073); empty or duplicate names are refused."""
+    if not isinstance(gates, dict) or "light_path_skipped_checks" not in gates:
+        return ()
+    where = f"{location}:gates.light_path_skipped_checks"
+    names = _parse_string_list(gates["light_path_skipped_checks"], where)
+    if any(not name.strip() or name != name.strip() for name in names) or len(set(names)) != len(names):
+        raise RuntimeError(_manifest_error(where, "expected unique, non-empty check names"))
+    return names
 
 
 def _parse_string_list(value: object, location: str) -> tuple[str, ...]:

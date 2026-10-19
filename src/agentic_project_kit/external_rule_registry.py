@@ -26,6 +26,8 @@ from agentic_project_kit.workspace_lock import acquire_workspace_lock
 INVENTORY = Path(".agentic/rule_mechanism_inventory.yaml")
 KIND = "external_kit_rule_mechanism_inventory"
 ROUTE = "agentic-kit rule-registry bootstrap --root . --json"
+# 2: surface evidence is anchor-scoped (KIT-GF-072); a schema 1 inventory is re-bootstrapped.
+SCHEMA_VERSION = 2
 # Explicit shipped mechanisms, not an inference from arbitrary rule prose.
 CATALOG = (
     ("workspace-contract", "workspace.py", "load_workspace", ".agentic/config.yaml", "kit_schema_version"),
@@ -36,6 +38,13 @@ CATALOG = (
 
 def _hash(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def _anchor_hash(path: Path, anchor: str) -> str:
+    # KIT-GF-072: direct evidence covers the lines carrying the declared anchor, not the whole
+    # file, so unrelated edits of .agentic/config.yaml or the rules README keep the check PASS.
+    lines = [line for line in path.read_text(encoding="utf-8").splitlines() if anchor in line]
+    return _hash("\n".join(lines).encode())
 
 
 def _canonical(data: Any) -> bytes:
@@ -76,10 +85,10 @@ def derive_inventory(root: Path) -> dict[str, Any]:
         mechanisms.append({
             "id": identifier, "status": "active", "evidence_scope": "installed-kit-source-and-workspace-surface",
             "source": {"package": "agentic_project_kit", "module": module, "symbol": symbol, "sha256": _hash(source)},
-            "surface": {"path": surface, "required_anchor": anchor, "sha256": _hash(path.read_bytes())},
+            "surface": {"path": surface, "required_anchor": anchor, "anchor_sha256": _anchor_hash(path, anchor)},
         })
     excluded.append({"id": "project-rule-capsules", "reason": "no-project-registration-semantics-inferred-from-prose-or-empty-registry"})
-    payload = {"schema_version": 1, "kind": KIND, "kit_version": __version__, "mechanisms": mechanisms, "excluded": excluded}
+    payload = {"schema_version": SCHEMA_VERSION, "kind": KIND, "kit_version": __version__, "mechanisms": mechanisms, "excluded": excluded}
     return {**payload, "projection_sha256": _hash(_canonical(payload))}
 
 
