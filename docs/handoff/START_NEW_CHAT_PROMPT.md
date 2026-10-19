@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: af84cfc8696d9c91483b7a5d456b381e3105b9cdab66078f7cb4a1f1c479e5e1
 - docs/reference/agentic-kit-commands.json: cf5e3a8abb965f9dc1ca0deef1775ccc8f815c2c4d6aa4cc2c54c0b1265c25e4
-## Operational documentation refresh state after PR #2557
+## Operational documentation refresh state after PR #2559
 
-Current administrative handoff refresh state is `d3f8445b` (`Archive release 1.1.1 evidence (#2557)`). Continue next only after this post-PR2557 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `0ba5097c` (`Accept declared light-path skips, update every Kit CI pin and scope inventory evidence to anchors (#2559)`). Continue next only after this post-PR2559 refresh is committed and merged; the next substantive slice must be created from fresh main.

@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `d3f8445b4b987da679242af1010c9dc250062881` (`d3f8445b`), after `Archive release 1.1.1 evidence (#2557)`.
-Last substantive work state is `d3f8445b4b987da679242af1010c9dc250062881` (`d3f8445b`), after `Archive release 1.1.1 evidence (#2557)`.
+Current verified main/admin HEAD is `0ba5097c4b676f40287338f760d5a947762a4404` (`0ba5097c`), after `Accept declared light-path skips, update every Kit CI pin and scope inventory evidence to anchors (#2559)`.
+Last substantive work state is `0ba5097c4b676f40287338f760d5a947762a4404` (`0ba5097c`), after `Accept declared light-path skips, update every Kit CI pin and scope inventory evidence to anchors (#2559)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

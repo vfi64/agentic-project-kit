@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d3f8445b4b987da679242af1010c9dc250062881
-  short: d3f8445b
-  subject: Archive release 1.1.1 evidence (#2557)
+  full: 0ba5097c4b676f40287338f760d5a947762a4404
+  short: 0ba5097c
+  subject: Accept declared light-path skips, update every Kit CI pin and scope inventory evidence to anchors (#2559)
 last_substantive_work_state:
-  full: d3f8445b4b987da679242af1010c9dc250062881
-  short: d3f8445b
-  subject: Archive release 1.1.1 evidence (#2557)
+  full: 0ba5097c4b676f40287338f760d5a947762a4404
+  short: 0ba5097c
+  subject: Accept declared light-path skips, update every Kit CI pin and scope inventory evidence to anchors (#2559)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
