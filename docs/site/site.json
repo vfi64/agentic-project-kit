@@ -12767,7 +12767,6 @@
     },
     "release": {
       "notes": [
-        "Zenodo DOI verification pending for v1.1.2.",
         "Let transfer order-create write command orders: --run-command '<argv>' is checked against the command manifest when the order is created, flags commands that need the local --allow-unlisted, refuses commands no flag could allow, and an order's agentic-kit commands run with the workspace's own Kit instead of whatever PATH finds (KIT-GF-074).",
         "Publish what a transfer order produced: after the order ran, transfer remote-next commits the files its write actions wrote, its command-run report and LATEST_COMMAND_RUN.txt together with its report, so the checkout ends clean on the transfer branch; changes the order did not declare are never published and turn the result BLOCKED (KIT-GF-075).",
         "Stop counting the .gitkeep carriers that workspace init writes into the transfer inbox and outbox as obsolete transfer files, which blocked every transfer remote-next of a freshly initialized workspace (KIT-GF-076).",
@@ -12794,7 +12793,7 @@
     "package_name": "agentic-project-kit",
     "package_version": "1.1.2",
     "product_name": "Agentic Execution Runtime",
-    "release_tag": "v1.1.1",
+    "release_tag": "v1.1.2",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
     "reproduced_manifest_sha": "390ff4b84aa2",
     "requires_python": ">=3.10",
@@ -12808,7 +12807,7 @@
       "orchestrator": 34,
       "primitive": 106
     },
-    "version_doi": "10.5281/zenodo.23481104"
+    "version_doi": "10.5281/zenodo.23484996"
   },
   "roadmap_projection": {
     "roadmap_counts": {
@@ -12828,13 +12827,13 @@
   "schema_version": 1,
   "status_projection": {
     "concept_doi": "10.5281/zenodo.20101359",
-    "current_release_tag": "v1.1.1",
+    "current_release_tag": "v1.1.2",
     "current_verified_main": "See docs/STATUS.md",
-    "current_verified_release": "1.1.1",
+    "current_verified_release": "1.1.2",
     "current_version": "1.1.2",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
-    "version_doi": "10.5281/zenodo.23481104"
+    "version_doi": "10.5281/zenodo.23484996"
   },
   "workflow_projection": {
     "boundaries": [
