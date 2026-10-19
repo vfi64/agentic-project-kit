@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 5a8184255246
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 5b3affa83a42
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -3109,6 +3109,7 @@ Generate a head-anchored executable remote-next transfer order.
 |---|---:|---|---:|---|---|
 | `branch` | `TyperOption` | --branch | `True` |  | Safe remote-next transfer branch. |
 | `write_actions` | `TyperOption` | --write-action | `False` | `[]` | Write action in target_path=payload_path form. Repeatable. |
+| `run_commands` | `TyperOption` | --run-command | `False` | `[]` | Command action, one shell-quoted argv such as 'agentic-kit check --json'. Checked against the command manifest; repeatable. |
 | `path` | `TyperOption` | --path | `False` | `PosixPath('.agentic/transfer/inbox/current.yaml')` | Transfer order path. |
 | `order_id` | `TyperOption` | --id | `False` | `` | Transfer order id. Defaults to branch and HEAD. |
 | `title` | `TyperOption` | --title | `False` | `` | Transfer order title. |

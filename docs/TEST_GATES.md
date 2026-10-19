@@ -1103,6 +1103,15 @@ source and scope, never infer a benchmark from a documentation link.
 
 Real-window smoke remains opt-in through `AGENTIC_KIT_ALLOW_TK_WINDOW_SMOKE=1`; visual evidence must be recorded separately from deterministic test success. No test should publish, merge, discard project files or initialize a selected real repository merely to validate layout. Windows/Linux visual and packaging acceptance remains open.
 
+## Transfer command orders and published order results (KIT-GF-074, KIT-GF-075, KIT-GF-076)
+
+tests/test_transfer_order_products_and_commands.py runs the installed wheel in an
+external workspace with a bare origin: order-create writes command orders with
+their command authority and refuses unallowable commands; remote-next publishes
+the written targets, the order report and the LATEST pointer and ends clean,
+while undeclared changes block unpublished; `.gitkeep` transfer carriers no
+longer conflict.
+
 ## Consumer CI pins, light-path skips and inventory evidence (KIT-GF-071, KIT-GF-072, KIT-GF-073)
 
 tests/test_light_path_skipped_checks.py runs the installed wheel in an external

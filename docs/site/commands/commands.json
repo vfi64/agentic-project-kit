@@ -8955,6 +8955,15 @@
           "required": false
         },
         {
+          "default": [],
+          "help": "Command action, one shell-quoted argv such as 'agentic-kit check --json'. Checked against the command manifest; repeatable.",
+          "name": "run_commands",
+          "opts": [
+            "--run-command"
+          ],
+          "required": false
+        },
+        {
           "default": "PosixPath('.agentic/transfer/inbox/current.yaml')",
           "help": "Transfer order path.",
           "name": "path",

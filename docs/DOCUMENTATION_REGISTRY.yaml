@@ -1730,3 +1730,6 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md
+    class: evidence/log
+    owner: maintainers
