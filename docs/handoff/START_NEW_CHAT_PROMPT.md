@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 1df4eeb08022713b173d56efc44946d79a74bbd7ff087afe8fe9f172cf90dc3a
 - docs/reference/agentic-kit-commands.json: 3365ce0105c9dae22cba78453f06b5c2a77e012eed9bb9214f2e307270da6842
-## Operational documentation refresh state after PR #2549
+## Operational documentation refresh state after PR #2551
 
-Current administrative handoff refresh state is `924847aa` (`Harden release run, curate the release changelog and classify PRs (#2549)`). Continue next only after this post-PR2549 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `f52760c2` (`docs(planning): record governed recursive harness learning candidate (#2551)`). Continue next only after this post-PR2551 refresh is committed and merged; the next substantive slice must be created from fresh main.

@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 924847aa16f7a915c5a9431b8caadea17c0bb10f
-  short: 924847aa
-  subject: Harden release run, curate the release changelog and classify PRs (#2549)
+  full: f52760c2f543434a1a82de3884e7bf174cdf7d99
+  short: f52760c2
+  subject: 'docs(planning): record governed recursive harness learning candidate (#2551)'
 last_substantive_work_state:
-  full: 924847aa16f7a915c5a9431b8caadea17c0bb10f
-  short: 924847aa
-  subject: Harden release run, curate the release changelog and classify PRs (#2549)
+  full: f52760c2f543434a1a82de3884e7bf174cdf7d99
+  short: f52760c2
+  subject: 'docs(planning): record governed recursive harness learning candidate (#2551)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
