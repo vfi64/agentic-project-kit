@@ -1,5 +1,8 @@
 ## Unreleased
 
+## v1.1.2 - 2026-10-19
+
+- Zenodo DOI verification pending for v1.1.2.
 - Let `transfer order-create` write command orders: `--run-command '<argv>'` is checked against the command manifest when the order is created, flags commands that need the local `--allow-unlisted`, refuses commands no flag could allow, and an order's `agentic-kit` commands run with the workspace's own Kit instead of whatever PATH finds (KIT-GF-074).
 - Publish what a transfer order produced: after the order ran, `transfer remote-next` commits the files its write actions wrote, its command-run report and `LATEST_COMMAND_RUN.txt` together with its report, so the checkout ends clean on the transfer branch; changes the order did not declare are never published and turn the result BLOCKED (KIT-GF-075).
 - Stop counting the `.gitkeep` carriers that `workspace init` writes into the transfer inbox and outbox as obsolete transfer files, which blocked every `transfer remote-next` of a freshly initialized workspace (KIT-GF-076).

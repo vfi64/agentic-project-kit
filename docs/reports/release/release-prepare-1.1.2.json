@@ -1,0 +1,212 @@
+{
+  "authorized_route": "agentic-kit release-prep",
+  "base_ref": "origin/main",
+  "changed_paths_against_base": [
+    ".agentic/dpa/acceptance/current_handoff_operational_state.json",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/site/claims/claims.json",
+    "docs/site/claims/index.html",
+    "docs/site/commands/commands.json",
+    "docs/site/commands/diagnostics.html",
+    "docs/site/commands/guided.html",
+    "docs/site/commands/index.html",
+    "docs/site/index.html",
+    "docs/site/quickstart/index.html",
+    "docs/site/quickstart/quickstart.json",
+    "docs/site/site.json",
+    "docs/site/understand/evidence.json",
+    "docs/site/understand/index.html",
+    "docs/site/workflows/index.html",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py",
+    "src/agentic_project_kit/reference/agentic-kit-commands.json"
+  ],
+  "date": "2026-10-19",
+  "explicit_summary_lines": [
+    "Let `transfer order-create` write command orders: `--run-command '<argv>'` is checked against the command manifest when the order is created, flags commands that need the local `--allow-unlisted`, refuses commands no flag could allow, and an order's `agentic-kit` commands run with the workspace's own Kit instead of whatever PATH finds (KIT-GF-074).",
+    "Publish what a transfer order produced: after the order ran, `transfer remote-next` commits the files its write actions wrote, its command-run report and `LATEST_COMMAND_RUN.txt` together with its report, so the checkout ends clean on the transfer branch; changes the order did not declare are never published and turn the result BLOCKED (KIT-GF-075).",
+    "Stop counting the `.gitkeep` carriers that `workspace init` writes into the transfer inbox and outbox as obsolete transfer files, which blocked every `transfer remote-next` of a freshly initialized workspace (KIT-GF-076).",
+    "Accept a consumer's light-path checks as SKIPPED only on a light pull request: a workspace names them under `gates.light_path_skipped_checks` in `.agentic/config.yaml`, and `pr wait-ci`, PR status, merge-if-green and post-merge settlement accept them when the Kit re-derives the `ci runtime-plan` classification of the pull request as light; on a full pull request, or when nothing is declared, a skipped check still blocks (KIT-GF-073).",
+    "Let `kit update` maintain every Kit pin of the managed CI file, so a separate classify job beside the gate job is updated too; all pins must name the same exact version on their own `pip install` line (KIT-GF-071).",
+    "Scope the external rule-mechanism inventory's surface evidence to the lines carrying its anchor instead of whole files, so unrelated edits of `.agentic/config.yaml` or the rules README keep `rule-registry check` PASS (inventory schema 2; a schema 1 inventory is refreshed by bootstrap), and let a signed `kit update` re-derive a Kit-derived inventory with the updated Kit; a hand-reviewed inventory is never touched (KIT-GF-072)."
+  ],
+  "from_tag": "v1.1.1",
+  "kind": "release_prepare_evidence",
+  "release_metadata_anchor_paths": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py"
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-notes-generate",
+        "--version",
+        "1.1.2",
+        "--from-tag",
+        "v1.1.1",
+        "--to-ref",
+        "main",
+        "--include-github-metadata",
+        "--summary-lines-json",
+        "tmp/release-112-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-notes-generate",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 13990,
+      "stdout_sha256": "0a15de0d64d94c3468fb5e0dda03a08b67a049f1077e22774ea972dcd202809a"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-prep",
+        "--version",
+        "1.1.2",
+        "--date",
+        "2026-10-19",
+        "--summary-line",
+        "Let `transfer order-create` write command orders: `--run-command '<argv>'` is checked against the command manifest when the order is created, flags commands that need the local `--allow-unlisted`, refuses commands no flag could allow, and an order's `agentic-kit` commands run with the workspace's own Kit instead of whatever PATH finds (KIT-GF-074).",
+        "--summary-line",
+        "Publish what a transfer order produced: after the order ran, `transfer remote-next` commits the files its write actions wrote, its command-run report and `LATEST_COMMAND_RUN.txt` together with its report, so the checkout ends clean on the transfer branch; changes the order did not declare are never published and turn the result BLOCKED (KIT-GF-075).",
+        "--summary-line",
+        "Stop counting the `.gitkeep` carriers that `workspace init` writes into the transfer inbox and outbox as obsolete transfer files, which blocked every `transfer remote-next` of a freshly initialized workspace (KIT-GF-076).",
+        "--summary-line",
+        "Accept a consumer's light-path checks as SKIPPED only on a light pull request: a workspace names them under `gates.light_path_skipped_checks` in `.agentic/config.yaml`, and `pr wait-ci`, PR status, merge-if-green and post-merge settlement accept them when the Kit re-derives the `ci runtime-plan` classification of the pull request as light; on a full pull request, or when nothing is declared, a skipped check still blocks (KIT-GF-073).",
+        "--summary-line",
+        "Let `kit update` maintain every Kit pin of the managed CI file, so a separate classify job beside the gate job is updated too; all pins must name the same exact version on their own `pip install` line (KIT-GF-071).",
+        "--summary-line",
+        "Scope the external rule-mechanism inventory's surface evidence to the lines carrying its anchor instead of whole files, so unrelated edits of `.agentic/config.yaml` or the rules README keep `rule-registry check` PASS (inventory schema 2; a schema 1 inventory is refreshed by bootstrap), and let a signed `kit update` re-derive a Kit-derived inventory with the updated Kit; a hand-reviewed inventory is never touched (KIT-GF-072).",
+        "--summary-lines-from",
+        "tmp/release-112-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-prep",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 291,
+      "stdout_sha256": "33e156a84925c1bb80989f9aa6dd7314a747a56d416a63d7affe9cd08c369a21"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "commands",
+        "sync-entrypoints",
+        "--execute",
+        "--json"
+      ],
+      "name": "commands-sync-entrypoints",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 507,
+      "stdout_sha256": "0e58f1a78cd9bd77f2ede77942a9b348a475bc9d1722bd06616d62a9b6a134d5"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "agentic-kit",
+        "release",
+        "prepare",
+        "--internal-dpa-readiness-ack-refresh"
+      ],
+      "name": "dpa-readiness-ack-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 260,
+      "stdout_sha256": "434032c2fef2f17f12db4d91a9a8cba5f86969365726f43ba7b50f1f997a249a"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "chat-switch-complete",
+        "--json"
+      ],
+      "name": "successor-handoff-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 10330,
+      "stdout_sha256": "dba457f11b5932d500d24e96955d66a6a53d516f99259dc03125439b0d97fc2f"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "site/scripts/build.py",
+        "--docs-pages-fallback",
+        "--json"
+      ],
+      "name": "docs-pages-fallback-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 4342,
+      "stdout_sha256": "abd64fd690e979b7f6564872a98b0d76c914da732b3a05bd10be9225e4bd0b00"
+    }
+  ],
+  "summary_lines_path": "tmp/release-112-summary-lines.json",
+  "to_ref": "main",
+  "version": "1.1.2"
+}
