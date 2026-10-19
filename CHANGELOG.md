@@ -1,13 +1,12 @@
 ## Unreleased
 
+## v1.1.1 - 2026-10-19
+
+- Zenodo DOI verification pending for v1.1.1.
 - Harden release run after 1.1.0: report C3 as `WAITING` with the pending environment while the package-index run waits for a deployment approval, settle C3 from the finished workflow run instead of a `gh run watch` that gave up, and resume an unchanged, already approved gate without asking again (a changed gate still asks).
-
 - Add `release.changelog_summary: curated`: a release's CHANGELOG section carries the curated summary lines only (by default the Unreleased entries, which must all be covered) instead of also listing every PR title; the Kit repository uses it.
-
 - Add `--release-note-category` to `transfer pr-create-complete`, so PRs created through it are classified for release notes like those of `work finish`.
-
 - Stop `release-status --include-remote` from reporting a published GitHub release as missing: `gh` exits 1 for every error, so only a not-found answer now counts as missing, and a failed `gh release view` (for example a refused GraphQL call) falls back to the REST release endpoint; this blocked release-run step D5 for 1.1.0.
-
 - Test the release-projection drift signal on fixtures instead of the live repository: between a DOI closeout PR and the administrative handoff refresh the release block drifts by design, and the live assertion failed CI on the 1.1.0 DOI PR.
 
 ## v1.1.0 - 2026-10-17
