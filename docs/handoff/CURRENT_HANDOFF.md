@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `f52760c2f543434a1a82de3884e7bf174cdf7d99` (`f52760c2`), after `docs(planning): record governed recursive harness learning candidate (#2551)`.
-Last substantive work state is `f52760c2f543434a1a82de3884e7bf174cdf7d99` (`f52760c2`), after `docs(planning): record governed recursive harness learning candidate (#2551)`.
+Current verified main/admin HEAD is `a8eed872d25ef73a763567f9c8f11a7f9e159ed7` (`a8eed872`), after `Release 1.1.1 (#2553)`.
+Last substantive work state is `a8eed872d25ef73a763567f9c8f11a7f9e159ed7` (`a8eed872`), after `Release 1.1.1 (#2553)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
