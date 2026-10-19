@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 0ba5097c4b676f40287338f760d5a947762a4404
-  short: 0ba5097c
-  subject: Accept declared light-path skips, update every Kit CI pin and scope inventory evidence to anchors (#2559)
+  full: 3e8dc27c1b717173fe9107ba3f3af99057a785a8
+  short: 3e8dc27c
+  subject: Write command transfer orders, publish order results and accept transfer .gitkeep carriers (#2561)
 last_substantive_work_state:
-  full: 0ba5097c4b676f40287338f760d5a947762a4404
-  short: 0ba5097c
-  subject: Accept declared light-path skips, update every Kit CI pin and scope inventory evidence to anchors (#2559)
+  full: 3e8dc27c1b717173fe9107ba3f3af99057a785a8
+  short: 3e8dc27c
+  subject: Write command transfer orders, publish order results and accept transfer .gitkeep carriers (#2561)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
