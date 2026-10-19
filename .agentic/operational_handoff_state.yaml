@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3e8dc27c1b717173fe9107ba3f3af99057a785a8
-  short: 3e8dc27c
-  subject: Write command transfer orders, publish order results and accept transfer .gitkeep carriers (#2561)
+  full: b93f5ca5298515ab1c6742042a5a6a27a6b80422
+  short: b93f5ca5
+  subject: Release 1.1.2 (#2563)
 last_substantive_work_state:
-  full: 3e8dc27c1b717173fe9107ba3f3af99057a785a8
-  short: 3e8dc27c
-  subject: Write command transfer orders, publish order results and accept transfer .gitkeep carriers (#2561)
+  full: b93f5ca5298515ab1c6742042a5a6a27a6b80422
+  short: b93f5ca5
+  subject: Release 1.1.2 (#2563)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
