@@ -1733,3 +1733,6 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/release/release-run-1.1.2.json
+    class: evidence/log
+    owner: maintainers
