@@ -43,6 +43,7 @@ class RemoteNextOrderResult:
     safe_push_target: dict[str, Any] | None = None
     transfer_inspect: dict[str, Any] | None = None
     instruction_lint: dict[str, Any] | None = None
+    command_authority: tuple[dict[str, Any], ...] = ()
 
     @property
     def ok(self) -> bool:
@@ -129,6 +130,39 @@ def _parse_write_action(root: Path, spec: str) -> dict[str, Any]:
     }
 
 
+def _parse_run_command(root: Path, spec: str) -> tuple[dict[str, Any], dict[str, Any]]:
+    """A run_command action and its command authority (KIT-GF-074).
+
+    The argv passes the runner's own parser and the order command authority. A command that
+    no local flag can allow (DESTRUCTIVE Kit commands, raw git/gh mutations, interpreters,
+    unknown agentic-kit commands) is refused here, so an unexecutable order is never written.
+    """
+    import shlex
+
+    from agentic_project_kit.order_command_authority import ALLOW_UNLISTED_FLAG, classify_order_command, order_manifest
+    from agentic_project_kit.transfer_runner import ACTION_RUN_COMMAND, _parse_action
+
+    try:
+        argv = shlex.split(spec, comments=False, posix=True)
+    except ValueError as exc:
+        raise ValueError(f"--run-command is not one shell-quoted argv: {exc}") from exc
+    action = {"type": ACTION_RUN_COMMAND, "command": argv}
+    parsed = _parse_action(action)
+    manifest = order_manifest(root)
+    plain = classify_order_command(parsed.command, manifest, allow_unlisted=False)
+    flagged = plain if plain.allowed else classify_order_command(parsed.command, manifest, allow_unlisted=True)
+    if not flagged.allowed:
+        raise ValueError(f"run_command refused: {flagged.reason}")
+    authority = {
+        "command": list(parsed.command),
+        "safety": flagged.safety,
+        "authority": flagged.authority,
+        "requires_allow_unlisted": not plain.allowed,
+        "reason": plain.reason if plain.allowed else f"needs {ALLOW_UNLISTED_FLAG}: {plain.reason}",
+    }
+    return action, authority
+
+
 def render_remote_next_order_text(root: Path, order: dict[str, Any]) -> str:
     ack = command_manifest_ack_line(load_manifest(root))
     return ack + "\n" + yaml.safe_dump(order, sort_keys=False)
@@ -138,7 +172,8 @@ def create_remote_next_order(
     root: Path | str = Path("."),
     *,
     branch: str,
-    write_actions: tuple[str, ...],
+    write_actions: tuple[str, ...] = (),
+    run_commands: tuple[str, ...] = (),
     path: Path = DEFAULT_INBOX,
     order_id: str = "",
     title: str = "",
@@ -160,8 +195,8 @@ def create_remote_next_order(
     if safe_target is not None and not safe_target.ok:
         blockers.extend(safe_target.reasons)
 
-    if not write_actions:
-        blockers.append("at_least_one_write_action_required")
+    if not write_actions and not run_commands:
+        blockers.append("at_least_one_action_required")
 
     actions: list[dict[str, Any]] = []
     for spec in write_actions:
@@ -169,6 +204,15 @@ def create_remote_next_order(
             actions.append(_parse_write_action(root_path, spec))
         except ValueError as exc:
             blockers.append(str(exc))
+    command_authority: list[dict[str, Any]] = []
+    for spec in run_commands:
+        try:
+            action, authority = _parse_run_command(root_path, spec)
+        except ValueError as exc:
+            blockers.append(str(exc))
+            continue
+        actions.append(action)
+        command_authority.append(authority)
 
     normalized_status = status.strip().lower()
     if normalized_status not in ACTIVE_REMOTE_NEXT_STATUSES:
@@ -218,25 +262,30 @@ def create_remote_next_order(
             blockers=tuple(blockers),
             preview_text=preview,
             safe_push_target=safe_target.as_json_data() if safe_target else None,
+            command_authority=tuple(command_authority),
         )
 
     if execute:
         target_path.parent.mkdir(parents=True, exist_ok=True)
         target_path.write_text(preview, encoding="utf-8")
+    flagged = [" ".join(item["command"]) for item in command_authority if item["requires_allow_unlisted"]]
 
     return RemoteNextOrderResult(
         "PASS",
         0,
         str(path),
         (
-            "Run agentic-kit transfer order-validate before agentic-kit transfer remote-next."
+            "Run agentic-kit transfer order-validate before agentic-kit transfer remote-next"
+            + (" --allow-unlisted (the order runs BOUNDED or unlisted commands)." if flagged else ".")
             if execute
             else "Review preview, then rerun with --execute to write the transfer order."
         ),
         order=order,
+        warnings=tuple(f"requires_allow_unlisted:{command}" for command in flagged),
         written=execute,
         preview_text=preview,
         safe_push_target=safe_target.as_json_data() if safe_target else None,
+        command_authority=tuple(command_authority),
     )
 
 

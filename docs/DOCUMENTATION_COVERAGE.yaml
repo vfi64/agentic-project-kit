@@ -15,6 +15,21 @@ rules:
     terms:
     - tests/test_ns_legacy_external_evidence.py
     - KIT-GF-068
+- id: transfer-command-orders-and-published-results
+  description: Command orders from order-create and the published results of remote-next stay documented.
+  documents:
+  - path: docs/reference/HUMAN_WORKFLOW_COMMANDS.md
+    terms:
+    - --run-command
+    - unexpected_worktree_changes_after_transfer
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_transfer_order_products_and_commands.py
+    - KIT-GF-075
+  - path: docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md
+    terms:
+    - requires_allow_unlisted
+    - .gitkeep
 - id: consumer-ci-light-path-and-inventory-evidence
   description: Light-path skips, multi-pin kit update and anchor-scoped inventory evidence stay documented.
   documents:

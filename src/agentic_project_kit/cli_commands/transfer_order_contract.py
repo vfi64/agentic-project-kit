@@ -23,6 +23,12 @@ def remote_next_order_create_command(
         "--write-action",
         help="Write action in target_path=payload_path form. Repeatable.",
     ),
+    run_commands: list[str] = typer.Option(
+        [],
+        "--run-command",
+        help="Command action, one shell-quoted argv such as 'agentic-kit check --json'. "
+        "Checked against the command manifest; repeatable.",
+    ),
     path: Path = typer.Option(DEFAULT_INBOX, "--path", help="Transfer order path."),
     order_id: str = typer.Option("", "--id", help="Transfer order id. Defaults to branch and HEAD."),
     title: str = typer.Option("", "--title", help="Transfer order title."),
@@ -42,6 +48,7 @@ def remote_next_order_create_command(
         Path("."),
         branch=branch,
         write_actions=tuple(write_actions),
+        run_commands=tuple(run_commands),
         path=path,
         order_id=order_id,
         title=title,

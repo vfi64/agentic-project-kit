@@ -258,15 +258,39 @@ def _write_report(project_root: Path, result: TransferResult) -> None:
     latest.write_text(result.report_path + "\n", encoding="utf-8")
 
 
+def _resolved_argv(root: Path, command: tuple[str, ...]) -> list[str]:
+    """Run an order's Kit command with the workspace's own Kit, not whatever PATH finds.
+
+    KIT-GF-074: without this, `agentic-kit ...` in an order failed with FileNotFoundError
+    wherever the Kit's venv is not on PATH (and was reported as a missing transfer order).
+    """
+    import shutil
+    import sys
+
+    from agentic_project_kit.cli_executable import default_agentic_kit
+    from agentic_project_kit.order_command_authority import AGENTIC_KIT_EXECUTABLES
+
+    if command[0].removeprefix("./") not in AGENTIC_KIT_EXECUTABLES:
+        return list(command)
+    executable = default_agentic_kit(root)
+    if executable == "agentic-kit" and shutil.which(executable) is None:
+        return [sys.executable, "-m", "agentic_project_kit.cli", *command[1:]]
+    return [executable, *command[1:]]
+
+
 def _run_command_action(root: Path, action: TransferAction) -> dict[str, Any]:
-    completed = subprocess.run(
-        list(action.command),
-        cwd=root,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-    )
+    try:
+        completed = subprocess.run(
+            _resolved_argv(root, action.command),
+            cwd=root,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+    except OSError as exc:
+        return {"type": action.kind, "command": list(action.command), "returncode": 127,
+                "stdout": "", "stderr": f"command could not be started: {exc}"}
     return {
         "type": action.kind,
         "command": list(action.command),

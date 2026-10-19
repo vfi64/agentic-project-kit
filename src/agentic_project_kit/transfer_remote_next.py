@@ -718,13 +718,21 @@ def _write_report_payloads(root: Path, data: dict[str, object]) -> None:
     )
 
 
-def _attempt_report_commit_ack_push(root: Path, *, branch: str | None, paths: tuple[str, ...]) -> dict[str, object]:
+def _attempt_report_commit_ack_push(
+    root: Path,
+    *,
+    branch: str | None,
+    paths: tuple[str, ...],
+    products: dict[str, tuple[str, ...]] | None = None,
+) -> dict[str, object]:
+    products = products or {"targets": (), "owned": ()}
     steps: list[dict[str, object]] = []
     actions: dict[str, object] = {
         "schema_version": 1,
         "attempted": True,
         "branch": branch,
         "paths": list(paths),
+        "order_products": {key: list(value) for key, value in products.items()},
         "steps": steps,
         "committed": False,
         "rule_ack_refreshed_after_commit": False,
@@ -743,16 +751,29 @@ def _attempt_report_commit_ack_push(root: Path, *, branch: str | None, paths: tu
         actions["final_head"] = _command(["git", "rev-parse", "--short", "HEAD"], root).stdout
         actions["final_status_short"] = _command(["git", "status", "--porcelain=v1"], root).stdout
         return actions
-    add = _command(["git", "add", "-f", *paths], root)
+    add = _command(["git", "add", "-f", *paths, *products["owned"]], root)
     steps.append({"name": "git_add_force_report_paths", **add.as_json_data()})
     if add.returncode != 0:
         actions["blocked_reason"] = "git_add_failed"
         return actions
+    if products["targets"]:
+        # KIT-GF-075: the files the order wrote are the transfer's result; publish them with the
+        # report so the checkout ends clean and the result reaches the branch.
+        add_targets = _command(["git", "add", "--", *products["targets"]], root)
+        steps.append({"name": "git_add_order_write_targets", **add_targets.as_json_data()})
+        if add_targets.returncode != 0:
+            actions["blocked_reason"] = "git_add_failed"
+            return actions
     staged = _command(["git", "diff", "--cached", "--quiet"], root)
     if staged.returncode == 0:
         actions["skipped_reason"] = "no_report_changes_to_commit"
     else:
-        commit = _command(["git", "commit", "-m", "Publish remote-next transfer report"], root)
+        message = (
+            "Publish remote-next transfer report and order results"
+            if products["targets"] or products["owned"]
+            else "Publish remote-next transfer report"
+        )
+        commit = _command(["git", "commit", "-m", message], root)
         steps.append({"name": "git_commit_report_paths", **commit.as_json_data()})
         if commit.returncode != 0:
             actions["blocked_reason"] = "git_commit_failed"
@@ -831,7 +852,61 @@ def _attempt_final_report_projection_commit_push(
     return actions
 
 
-def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> TransferRemoteNextRun:
+def _dirty_paths_all(root: Path) -> tuple[str, ...]:
+    """Every changed or untracked path, one per file (``-uall -z``, no rename folding)."""
+    # Not _command: it strips stdout, which would cut the status column of the first entry.
+    raw = subprocess.run(["git", "status", "--porcelain=v1", "-uall", "-z", "--no-renames"], cwd=root,
+                         text=True, capture_output=True, check=False)
+    if raw.returncode != 0:
+        raise RemoteNextBlocked(
+            "worktree state after the transfer order cannot be read",
+            reasons=("worktree_state_unreadable_after_transfer",),
+        )
+    entries = [entry for entry in raw.stdout.split("\0") if entry]
+    return tuple(dict.fromkeys(entry[3:] for entry in entries if len(entry) > 3))
+
+
+def _order_products(root: Path, local_run: TransferLocalRun) -> dict[str, tuple[str, ...]]:
+    """Paths the executed order produced (KIT-GF-075), split by how they are added.
+
+    ``targets``: files its write actions wrote; ``owned``: the order's command-run report and the
+    LATEST_COMMAND_RUN pointer the runner writes. Nothing else is ever published as a product.
+    """
+    workspace = load_workspace(root)
+    apply = local_run.apply or {}
+    targets = []
+    for item in apply.get("action_results") or []:
+        if isinstance(item, dict) and item.get("type") == "write_text_file" and item.get("written") is True:
+            target = str(item.get("target_path") or "")
+            if target and (root / target).is_file() and not _git_ignored(root, target):
+                targets.append(target)
+    owned = []
+    report = str(apply.get("report_path") or "")
+    # The runner confines an order's report_path to docs/reports/command_runs/ before it writes.
+    if report.startswith("docs/reports/command_runs/") and ".." not in Path(report).parts and (root / report).is_file():
+        owned.append(report)
+    pointer = workspace.path_text(workspace.latest_command_run_pointer())
+    if apply and (root / pointer).is_file():
+        owned.append(pointer)
+    return {"targets": tuple(dict.fromkeys(targets)), "owned": tuple(dict.fromkeys(owned))}
+
+
+def _git_ignored(root: Path, path: str) -> bool:
+    return _command(["git", "check-ignore", "-q", "--", path], root).returncode == 0
+
+
+def _foreign_changes_after_transfer(root: Path, products: dict[str, tuple[str, ...]]) -> tuple[str, ...]:
+    workspace = load_workspace(root)
+    allowed = {*products["targets"], *products["owned"], *_report_paths(workspace)}
+    return tuple(path for path in _dirty_paths_all(root) if path not in allowed)
+
+
+def _write_remote_next_report(
+    root: Path,
+    result: TransferRemoteNextRun,
+    *,
+    products: dict[str, tuple[str, ...]] | None = None,
+) -> TransferRemoteNextRun:
     workspace = load_workspace(root)
     latest_report = workspace.path_text(_remote_next_latest_json(workspace))
     latest_published_report = workspace.path_text(_published_latest_json(workspace))
@@ -847,7 +922,7 @@ def _write_remote_next_report(root: Path, result: TransferRemoteNextRun) -> Tran
         }
     )
     _write_report_payloads(root, provisional_data)
-    post_report_actions = _attempt_report_commit_ack_push(root, branch=result.branch, paths=paths)
+    post_report_actions = _attempt_report_commit_ack_push(root, branch=result.branch, paths=paths, products=products)
 
     final_result = TransferRemoteNextRun(
         branch=result.branch,
@@ -987,18 +1062,34 @@ def run_remote_next_transfer(
             preflight["rule_ack_refresh_before_transfer"] = ack_refresh
         local_run = run_local_transfer(root, allow_unlisted=allow_unlisted)
         head = _run(["git", "rev-parse", "--short", "HEAD"], root)
+        products = _order_products(root, local_run)
+        foreign = _foreign_changes_after_transfer(root, products)
+        preflight["order_products"] = {key: list(value) for key, value in products.items()}
+        result_status, returncode, next_action = local_run.result_status, local_run.returncode, local_run.next_action
+        reasons: tuple[str, ...] = ()
+        blocked_message = ""
+        if foreign:
+            # Only what the order itself produced is published; anything else stays unpublished
+            # and turns the run BLOCKED instead of PASS (KIT-GF-075).
+            preflight["unexpected_worktree_changes"] = list(foreign)
+            result_status, returncode = "BLOCKED", 2
+            reasons = ("unexpected_worktree_changes_after_transfer",)
+            blocked_message = "the transfer order left changes it did not declare: " + ", ".join(foreign)
+            next_action = "Inspect the undeclared worktree changes; only the order's own results were published."
         result = TransferRemoteNextRun(
             branch=safe_branch,
             local_run=local_run,
             head=head,
-            result_status=local_run.result_status,
-            returncode=local_run.returncode,
-            next_action=local_run.next_action,
+            result_status=result_status,
+            returncode=returncode,
+            next_action=next_action,
             report_path="",
             published_report_path="",
+            reasons=reasons,
             preflight=preflight,
             rule_ack=_rule_ack_snapshot(root, repo_head=head),
+            blocked_message=blocked_message,
         )
-        return _write_remote_next_report(root, result)
+        return _write_remote_next_report(root, result, products=products)
     except (RuntimeError, ValueError, FileNotFoundError) as exc:
         return _blocked_result(root, exc, branch=branch)

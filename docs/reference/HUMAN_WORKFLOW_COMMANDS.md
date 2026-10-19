@@ -497,3 +497,26 @@ declared check that fails stays red. In the managed CI file, the classify job
 may install the Kit with its own exact `python -m pip install
 "agentic-project-kit==X.Y.Z"` line instead of requirements-kit.txt: `kit update`
 keeps every identical pin of that file current (KIT-GF-071).
+
+
+## Transfer orders with commands and published results (KIT-GF-074, KIT-GF-075, KIT-GF-076)
+
+`agentic-kit transfer order-create` writes command actions as well as file
+writes: `--run-command 'agentic-kit check --json'` (repeatable, one
+shell-quoted argv each). Each command is checked against the command manifest
+when the order is created. READ_ONLY Kit commands and read-only git/gh queries
+need nothing; BOUNDED Kit commands and unlisted programs are written with a
+`requires_allow_unlisted` warning, because `transfer remote-next` runs them only
+with the local `--allow-unlisted` flag; DESTRUCTIVE Kit commands, raw git/gh
+mutations, interpreters and unknown Kit commands are refused and no order is
+written. An order's `agentic-kit` commands run with the workspace's own Kit.
+
+After the order ran, `transfer remote-next` commits its results together with
+its report: the files its write actions wrote, its command-run report and
+`LATEST_COMMAND_RUN.txt`. The checkout then stays clean on the transfer branch,
+which can be finished as a pull request. Any other change the order left behind
+is never published and turns the result BLOCKED
+(`unexpected_worktree_changes_after_transfer`). The `.gitkeep` carriers that
+`workspace init` writes into the transfer inbox and outbox no longer block
+remote-next.
+

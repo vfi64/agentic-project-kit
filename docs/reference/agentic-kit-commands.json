@@ -14631,6 +14631,20 @@
           "secondary_opts": []
         },
         {
+          "default": [],
+          "help": "Command action, one shell-quoted argv such as 'agentic-kit check --json'. Checked against the command manifest; repeatable.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": true,
+          "name": "run_commands",
+          "opts": [
+            "--run-command"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
           "default": "PosixPath('.agentic/transfer/inbox/current.yaml')",
           "help": "Transfer order path.",
           "is_flag": false,
@@ -20328,7 +20342,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "5a8184255246",
+    "manifest_sha": "5b3affa83a42",
     "schema_version": 1
   },
   "schema_version": 2,

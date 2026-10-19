@@ -149,15 +149,17 @@ def _build_transfer_file_state(
     current_command_meta = _read_key_value_metadata(current_command)
     last_result_meta = _read_key_value_metadata(last_result)
 
+    # KIT-GF-076: `workspace init` and `workspace adopt` write `.gitkeep` carriers into the inbox;
+    # counting them as obsolete transfer files blocked every remote-next of a new workspace.
     unexpected_inbox_files = [
         str(path.relative_to(project_root))
         for path in inbox_files
-        if path.name not in {"current.yaml", "next_command.py.txt"}
+        if path.name not in {"current.yaml", "next_command.py.txt", ".gitkeep"}
     ]
     unexpected_outbox_files = [
         str(path.relative_to(project_root))
         for path in outbox_files
-        if path.name != "last_result.txt"
+        if path.name not in {"last_result.txt", ".gitkeep"}
     ]
 
     command_id = str(current_command_meta.get("command_id") or current_command_meta.get("id") or "")

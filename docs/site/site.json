@@ -9230,6 +9230,15 @@
             "required": false
           },
           {
+            "default": [],
+            "help": "Command action, one shell-quoted argv such as 'agentic-kit check --json'. Checked against the command manifest; repeatable.",
+            "name": "run_commands",
+            "opts": [
+              "--run-command"
+            ],
+            "required": false
+          },
+          {
             "default": "PosixPath('.agentic/transfer/inbox/current.yaml')",
             "help": "Transfer order path.",
             "name": "path",
@@ -12779,13 +12788,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "5a8184255246",
+    "manifest_sha": "5b3affa83a42",
     "package_name": "agentic-project-kit",
     "package_version": "1.1.1",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.1.1",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "5a8184255246",
+    "reproduced_manifest_sha": "5b3affa83a42",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 176,

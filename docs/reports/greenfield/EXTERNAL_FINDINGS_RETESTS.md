@@ -1085,6 +1085,51 @@ Expected: With gates.light_path_skipped_checks declared, a light refresh PR whos
 
 Expected result fields: `{"PR readiness outcome": "READY_TO_MERGE"}`.
 
+## KIT-GF-074
+
+Kit state: CLOSED; fixed_in: 1.1.2.
+Evidence: docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md
+
+Preconditions: Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit transfer order-create --branch {branch} --run-command 'agentic-kit check --json' --json
+```
+
+Expected: The order carries one run_command action and command_authority requires_allow_unlisted=false; a raw git push or DESTRUCTIVE Kit command is BLOCKED and writes no order.
+
+Expected result fields: `{"command_authority[0].requires_allow_unlisted": false, "result_status": "PASS"}`.
+
+## KIT-GF-075
+
+Kit state: CLOSED; fixed_in: 1.1.2.
+Evidence: docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md
+
+Preconditions: Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit transfer remote-next {branch} --json
+```
+
+Expected: After PASS the checkout is clean on the transfer branch and the written target, the order report and LATEST_COMMAND_RUN.txt are on the origin branch; an undeclared change is BLOCKED and unpublished.
+
+Expected result fields: `{"git status --porcelain": "", "result_status": "PASS"}`.
+
+## KIT-GF-076
+
+Kit state: CLOSED; fixed_in: 1.1.2.
+Evidence: docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md
+
+Preconditions: Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit transfer remote-next {branch} --json
+```
+
+Expected: In a freshly initialized workspace with .agentic/transfer/inbox/.gitkeep the order runs instead of stopping with run_next_command false.
+
+Expected result fields: `{"result_status": "PASS"}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

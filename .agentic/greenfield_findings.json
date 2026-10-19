@@ -2501,6 +2501,95 @@
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "branch": "A disposable transfer branch name; one argv token."
+        },
+        "commands": [
+          "agentic-kit transfer order-create --branch {branch} --run-command 'agentic-kit check --json' --json"
+        ],
+        "expected": [
+          "The order carries one run_command action and command_authority requires_allow_unlisted=false; a raw git push or DESTRUCTIVE Kit command is BLOCKED and writes no order."
+        ],
+        "expected_result_fields": {
+          "command_authority[0].requires_allow_unlisted": false,
+          "result_status": "PASS"
+        },
+        "preconditions": [
+          "Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Installed-wheel positive/negative cases PASS; live consumer retest remains independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.1.2",
+      "id": "KIT-GF-074",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "branch": "A disposable transfer branch name; one argv token."
+        },
+        "commands": [
+          "agentic-kit transfer remote-next {branch} --json"
+        ],
+        "expected": [
+          "After PASS the checkout is clean on the transfer branch and the written target, the order report and LATEST_COMMAND_RUN.txt are on the origin branch; an undeclared change is BLOCKED and unpublished."
+        ],
+        "expected_result_fields": {
+          "git status --porcelain": "",
+          "result_status": "PASS"
+        },
+        "preconditions": [
+          "Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Installed-wheel positive/negative cases PASS; live consumer retest remains independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.1.2",
+      "id": "KIT-GF-075",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "branch": "A disposable transfer branch name; one argv token."
+        },
+        "commands": [
+          "agentic-kit transfer remote-next {branch} --json"
+        ],
+        "expected": [
+          "In a freshly initialized workspace with .agentic/transfer/inbox/.gitkeep the order runs instead of stopping with run_next_command false."
+        ],
+        "expected_result_fields": {
+          "result_status": "PASS"
+        },
+        "preconditions": [
+          "Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Installed-wheel positive/negative cases PASS; live consumer retest remains independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.1.2",
+      "id": "KIT-GF-076",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md"
     }
   ],
   "kind": "external_findings_catalog",
