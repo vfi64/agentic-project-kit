@@ -1,5 +1,8 @@
 ## Unreleased
 
+## v1.1.4 - 2026-10-20
+
+- Zenodo DOI verification pending for v1.1.4.
 - Run the Kit's own CI suite in three deterministic shards: a test runs in shard `sha256(nodeid) % 3` with four xdist workers and work stealing, and the required `test` job passes only when the shards together ran exactly the full collection without failures (`python -m agentic_project_kit.ci_test_shards check`); the gate mode is classified once in a `classify` job, shards never report as skipped, and the extracted test wheel is built once per test process instead of once per module.
 - Wait long enough for CI in releases: `work finish --ci-timeout-seconds` (default 900 instead of a fixed 300) and the release run passes the wait to every work finish, a DOI step that stopped on a CI timeout resumes its unchanged DOI pull request instead of regenerating it, and the evidence archive step completes its own open archive pull request when the evidence is byte-identical (KIT-GF-078).
 
