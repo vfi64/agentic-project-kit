@@ -326,11 +326,11 @@
       "branch": "codex/release-1.1.4",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "a64265f1c1c9e54fbc175b9bc1541cf45dc38c2c",
-      "head_matches_origin_main": true,
+      "head": "e3456fc07705ee8edf5c4fc08f04449394bbcb3e",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "a64265f1c1c9e54fbc175b9bc1541cf45dc38c2c",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -513,11 +513,11 @@
     "branch": "codex/release-1.1.4",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "a64265f1c1c9e54fbc175b9bc1541cf45dc38c2c",
-    "head_matches_origin_main": true,
+    "head": "e3456fc07705ee8edf5c4fc08f04449394bbcb3e",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "a64265f1c1c9e54fbc175b9bc1541cf45dc38c2c",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {
