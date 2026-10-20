@@ -1,0 +1,203 @@
+{
+  "authorized_route": "agentic-kit release-prep",
+  "base_ref": "origin/main",
+  "changed_paths_against_base": [
+    ".agentic/dpa/acceptance/current_handoff_operational_state.json",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/site/claims/claims.json",
+    "docs/site/claims/index.html",
+    "docs/site/commands/commands.json",
+    "docs/site/commands/diagnostics.html",
+    "docs/site/commands/guided.html",
+    "docs/site/commands/index.html",
+    "docs/site/index.html",
+    "docs/site/quickstart/index.html",
+    "docs/site/quickstart/quickstart.json",
+    "docs/site/site.json",
+    "docs/site/understand/evidence.json",
+    "docs/site/understand/index.html",
+    "docs/site/workflows/index.html",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py",
+    "src/agentic_project_kit/reference/agentic-kit-commands.json"
+  ],
+  "date": "2026-10-20",
+  "explicit_summary_lines": [
+    "Wait for required checks that start late and let a blocked release finish its own release PR: `gates.required_checks` names checks `pr wait-ci` must see before readiness passes, so a required job that starts after other jobs is awaited instead of missed (the Kit declares `test`, KIT-GF-079); after a blocked B4 the release run completes its own open release PR when the branch holds exactly the release commits on an unchanged main (KIT-GF-080).",
+    "Run the Kit's own CI suite in three deterministic shards: a test runs in shard `sha256(nodeid) % 3` with four xdist workers and work stealing, and the required `test` job passes only when the shards together ran exactly the full collection without failures (`python -m agentic_project_kit.ci_test_shards check`); the gate mode is classified once in a `classify` job, shards never report as skipped, and the extracted test wheel is built once per test process instead of once per module.",
+    "Wait long enough for CI in releases: `work finish --ci-timeout-seconds` (default 900 instead of a fixed 300) and the release run passes the wait to every work finish, a DOI step that stopped on a CI timeout resumes its unchanged DOI pull request instead of regenerating it, and the evidence archive step completes its own open archive pull request when the evidence is byte-identical (KIT-GF-078)."
+  ],
+  "from_tag": "v1.1.3",
+  "kind": "release_prepare_evidence",
+  "release_metadata_anchor_paths": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py"
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-notes-generate",
+        "--version",
+        "1.1.4",
+        "--from-tag",
+        "v1.1.3",
+        "--to-ref",
+        "main",
+        "--include-github-metadata",
+        "--summary-lines-json",
+        "tmp/release-114-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-notes-generate",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 18306,
+      "stdout_sha256": "66b922205434310f1599ee431b5cd63ba003feac4ec581c6efd9a27dcd2b1ff6"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-prep",
+        "--version",
+        "1.1.4",
+        "--date",
+        "2026-10-20",
+        "--summary-line",
+        "Wait for required checks that start late and let a blocked release finish its own release PR: `gates.required_checks` names checks `pr wait-ci` must see before readiness passes, so a required job that starts after other jobs is awaited instead of missed (the Kit declares `test`, KIT-GF-079); after a blocked B4 the release run completes its own open release PR when the branch holds exactly the release commits on an unchanged main (KIT-GF-080).",
+        "--summary-line",
+        "Run the Kit's own CI suite in three deterministic shards: a test runs in shard `sha256(nodeid) % 3` with four xdist workers and work stealing, and the required `test` job passes only when the shards together ran exactly the full collection without failures (`python -m agentic_project_kit.ci_test_shards check`); the gate mode is classified once in a `classify` job, shards never report as skipped, and the extracted test wheel is built once per test process instead of once per module.",
+        "--summary-line",
+        "Wait long enough for CI in releases: `work finish --ci-timeout-seconds` (default 900 instead of a fixed 300) and the release run passes the wait to every work finish, a DOI step that stopped on a CI timeout resumes its unchanged DOI pull request instead of regenerating it, and the evidence archive step completes its own open archive pull request when the evidence is byte-identical (KIT-GF-078).",
+        "--summary-lines-from",
+        "tmp/release-114-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-prep",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 291,
+      "stdout_sha256": "7a01d902ef2f1130b782cc4b781080ab4a2b1e7f3217541ce77d4ee9cfbac735"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "commands",
+        "sync-entrypoints",
+        "--execute",
+        "--json"
+      ],
+      "name": "commands-sync-entrypoints",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 507,
+      "stdout_sha256": "a256ffe64a5ee9dea6e11eb127b5e246c94978f3bc580098a023fcd1882490f4"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "agentic-kit",
+        "release",
+        "prepare",
+        "--internal-dpa-readiness-ack-refresh"
+      ],
+      "name": "dpa-readiness-ack-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 260,
+      "stdout_sha256": "92d7330c830e0b0c7acfb893dcc425f77432b131c367393a207f3216ab2a2563"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "chat-switch-complete",
+        "--json"
+      ],
+      "name": "successor-handoff-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 10330,
+      "stdout_sha256": "dcf92135b738f29214530e2198859703863b39c47d9fad8c129e411aa542a0f5"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "site/scripts/build.py",
+        "--docs-pages-fallback",
+        "--json"
+      ],
+      "name": "docs-pages-fallback-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 4342,
+      "stdout_sha256": "b449a79c757519e65f47cd2f863328f4e87d5f053c8783b8d03102ea828ec6be"
+    }
+  ],
+  "summary_lines_path": "tmp/release-114-summary-lines.json",
+  "to_ref": "main",
+  "version": "1.1.4"
+}

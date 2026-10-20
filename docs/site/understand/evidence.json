@@ -57,12 +57,14 @@
   },
   "release": {
     "notes": [
-      "Make external retests executable: every catalog retest gets an execution class derived from the installed command manifest (local, owner_remote, kit_release), retest commands must name declared routes and options, and a local retest may carry a machine contract (a fixture the Kit builds, agentic-kit/git steps and exact expectations). agentic-kit greenfield retest --id <id> | --all runs the contracts with the installed Kit in a temporary workspace and reports PASS or FAIL per finding; a retest without a contract or one that needs GitHub or a release is reported as not verified, so the run is INCOMPLETE (exit 3), never PASS. Contracts exist for eight findings so far, and every retest must now name an existing route (KIT-GF-070, partial).",
-      "Declare the push of transfer remote-next and transfer remote-work-start in the command manifest; both declared only fetch although they publish to the transfer or work branch (KIT-GF-077)."
+      "Zenodo DOI verification pending for v1.1.4.",
+      "Wait for required checks that start late and let a blocked release finish its own release PR: gates.required_checks names checks pr wait-ci must see before readiness passes, so a required job that starts after other jobs is awaited instead of missed (the Kit declares test, KIT-GF-079); after a blocked B4 the release run completes its own open release PR when the branch holds exactly the release commits on an unchanged main (KIT-GF-080).",
+      "Run the Kit's own CI suite in three deterministic shards: a test runs in shard sha256(nodeid) % 3 with four xdist workers and work stealing, and the required test job passes only when the shards together ran exactly the full collection without failures (python -m agentic_project_kit.ci_test_shards check); the gate mode is classified once in a classify job, shards never report as skipped, and the extracted test wheel is built once per test process instead of once per module.",
+      "Wait long enough for CI in releases: work finish --ci-timeout-seconds (default 900 instead of a fixed 300) and the release run passes the wait to every work finish, a DOI step that stopped on a CI timeout resumes its unchanged DOI pull request instead of regenerating it, and the evidence archive step completes its own open archive pull request when the evidence is byte-identical (KIT-GF-078)."
     ],
     "source": "CHANGELOG.md",
     "status": "recorded",
-    "version": "1.1.3"
+    "version": "1.1.4"
   },
   "schema_version": 1
 }
