@@ -190,6 +190,7 @@ class Workspace:
     gates_extra: tuple[str, ...] = ()
     gates_skip: tuple[str, ...] = ()
     gates_light_path_skipped_checks: tuple[str, ...] = ()
+    gates_required_checks: tuple[str, ...] = ()
     manifest_schema_version: int = 0
     kit: KitUpdateConfig = field(default_factory=KitUpdateConfig)
     ns_legacy_evidence_paths: tuple[str, ...] = ()
@@ -451,6 +452,7 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
     config = _apply_path_overrides(config, manifest.get("paths"), location)
     gates_extra, gates_skip = _parse_gates(manifest.get("gates"), location)
     light_path_skipped = _parse_light_path_skipped_checks(manifest.get("gates"), location)
+    required_checks = _parse_check_names(manifest.get("gates"), "required_checks", location)
     try:
         kit = parse_kit_update_config(manifest.get("kit"))
     except ValueError as exc:
@@ -473,6 +475,7 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
         gates_extra=gates_extra,
         gates_skip=gates_skip,
         gates_light_path_skipped_checks=light_path_skipped,
+        gates_required_checks=required_checks,
         manifest_schema_version=schema_version,
         kit=kit,
         ns_legacy_evidence_paths=evidence_paths,
@@ -694,10 +697,20 @@ def _parse_gates(gates: object, location: str) -> tuple[tuple[str, ...], tuple[s
 
 def _parse_light_path_skipped_checks(gates: object, location: str) -> tuple[str, ...]:
     """CI checks a light refresh PR may report SKIPPED (KIT-GF-073); empty or duplicate names are refused."""
-    if not isinstance(gates, dict) or "light_path_skipped_checks" not in gates:
+    return _parse_check_names(gates, "light_path_skipped_checks", location)
+
+
+def _parse_check_names(gates: object, key: str, location: str) -> tuple[str, ...]:
+    """A list of unique, non-empty CI check names under ``gates.<key>``.
+
+    ``required_checks`` (KIT-GF-079) names checks that must be present before `pr wait-ci`
+    reports readiness: a check GitHub creates only after other jobs (``needs:``) is otherwise
+    simply absent while every visible check is already green.
+    """
+    if not isinstance(gates, dict) or key not in gates:
         return ()
-    where = f"{location}:gates.light_path_skipped_checks"
-    names = _parse_string_list(gates["light_path_skipped_checks"], where)
+    where = f"{location}:gates.{key}"
+    names = _parse_string_list(gates[key], where)
     if any(not name.strip() or name != name.strip() for name in names) or len(set(names)) != len(names):
         raise RuntimeError(_manifest_error(where, "expected unique, non-empty check names"))
     return names

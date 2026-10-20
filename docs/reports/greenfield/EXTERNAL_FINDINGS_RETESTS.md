@@ -1330,6 +1330,40 @@ Expected: B4, D4 and E1 wait up to 900 s for CI (work finish --ci-timeout-second
 
 Expected result fields: `{"assertions": ["release run PASS with finished_steps containing D4 and no D2R; evidence archive merged by E1"]}`.
 
+## KIT-GF-079
+
+Kit state: CLOSED; fixed_in: 1.1.4.
+Evidence: docs/reports/greenfield/KIT-GF-079-080-required-checks-and-b4-resume-2026-10-20.md
+
+Execution class: owner_remote (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
+Preconditions: A workspace with gates.required_checks naming a check that starts after other jobs (needs:). Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit pr wait-ci {pr}
+```
+
+Expected: While a declared required check does not exist yet, readiness is WAITING with 'expected check missing: <name>'; it is READY_TO_MERGE only after that check passed.
+
+Expected result fields: `{"assertions": ["PR readiness outcome stays WAITING until the declared check exists and passed"]}`.
+
+## KIT-GF-080
+
+Kit state: CLOSED; fixed_in: 1.1.4.
+Evidence: docs/reports/greenfield/KIT-GF-079-080-required-checks-and-b4-resume-2026-10-20.md
+
+Execution class: kit_release (effects: merge, pull_request, push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
+Preconditions: Kit release run of the next version; observe only, never induce a failure. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release run --version {version} --json
+```
+
+Expected: After a blocked B4 with an open release PR holding exactly the B4 commits on an unmoved main, the B4 gate is resume-existing-release-pr and completes that PR; otherwise it blocks without a remote effect.
+
+Expected result fields: `{"assertions": ["B4 gate mode resume-existing-release-pr; B4 finished through pr-complete"]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

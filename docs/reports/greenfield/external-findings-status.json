@@ -1,15 +1,15 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 76,
+    "CLOSED": 78,
     "NOT_APPLICABLE": 0,
     "OPEN": 0,
     "PARTIAL": 1
   },
   "execution_classes": {
-    "kit_release": 5,
+    "kit_release": 6,
     "local": 42,
-    "owner_remote": 30
+    "owner_remote": 31
   },
   "findings": [
     {
@@ -3619,6 +3619,79 @@
     {
       "external_retest": {
         "bindings": {
+          "pr": "A pull request of a workspace that declares gates.required_checks; one argv token."
+        },
+        "commands": [
+          "agentic-kit pr wait-ci {pr}"
+        ],
+        "execution_class": "owner_remote",
+        "expected": [
+          "While a declared required check does not exist yet, readiness is WAITING with 'expected check missing: <name>'; it is READY_TO_MERGE only after that check passed."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "PR readiness outcome stays WAITING until the declared check exists and passed"
+          ]
+        },
+        "preconditions": [
+          "A workspace with gates.required_checks naming a check that starts after other jobs (needs:).",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "network_read"
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Regression tests PASS (tests/test_release_b4_resume_and_required_checks.py); the next Kit PR and release run are the live retest.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.1.4",
+      "id": "KIT-GF-079",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-079-080-required-checks-and-b4-resume-2026-10-20.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "The next Kit release version; one argv token."
+        },
+        "commands": [
+          "agentic-kit release run --version {version} --json"
+        ],
+        "execution_class": "kit_release",
+        "expected": [
+          "After a blocked B4 with an open release PR holding exactly the B4 commits on an unmoved main, the B4 gate is resume-existing-release-pr and completes that PR; otherwise it blocks without a remote effect."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "B4 gate mode resume-existing-release-pr; B4 finished through pr-complete"
+          ]
+        },
+        "preconditions": [
+          "Kit release run of the next version; observe only, never induce a failure.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push",
+          "release_publish"
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Regression tests PASS (tests/test_release_b4_resume_and_required_checks.py); observed only if a release run blocks at B4 again.",
+        "workspace_kind": "kit_release"
+      },
+      "fixed_in": "1.1.4",
+      "id": "KIT-GF-080",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-079-080-required-checks-and-b4-resume-2026-10-20.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
         "commands": [
@@ -3664,5 +3737,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 8,
   "schema_version": 1,
-  "source_sha256": "d55f6e57244ed8ee97c31d8ebc5bf85c2d62c1ab6755ef66b46943b644562961"
+  "source_sha256": "42dc70b86f54747a3083ff8dbf7e83396ebb70175e248f358032ccc50fd9cc3e"
 }

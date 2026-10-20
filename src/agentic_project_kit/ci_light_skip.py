@@ -31,6 +31,19 @@ def declared_light_path_skipped_checks(root: Path) -> tuple[str, ...]:
         return ()
 
 
+def declared_required_checks(root: Path) -> tuple[str, ...]:
+    """KIT-GF-079: checks `gates.required_checks` names; readiness waits until each exists.
+
+    Unreadable or invalid configuration yields nothing, so readiness keeps its earlier rules.
+    """
+    from agentic_project_kit.workspace import load_workspace
+
+    try:
+        return load_workspace(root.resolve(), suppress_legacy_profile_warning=True).gates_required_checks
+    except (OSError, RuntimeError, ValueError):
+        return ()
+
+
 def light_path_skip_allowance(root: Path, *, base: str, head: str, branch: str) -> frozenset[str]:
     """Return the declared names when base..head of this PR is classified light, else nothing."""
     names = declared_light_path_skipped_checks(root)

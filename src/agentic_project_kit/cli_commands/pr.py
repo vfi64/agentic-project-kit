@@ -111,12 +111,17 @@ def wait_ci(
     ),
 ) -> None:
     """Wait for pull-request CI; guard merge preparation with --expected-head-sha."""
+    from agentic_project_kit.ci_light_skip import declared_required_checks
+
+    # KIT-GF-079: a required check that GitHub creates only after other jobs finish (needs:) is
+    # absent, not pending, while every visible check is green; the declared names must be present.
+    expected = tuple(dict.fromkeys((*expected_check, *declared_required_checks(Path(".")))))
     result = wait_for_pr_readiness(
         gh_pr_snapshot_provider(pr_number),
         expected_head_sha=expected_head_sha,
         timeout_seconds=timeout_seconds,
         interval_seconds=interval_seconds,
-        expected_checks=tuple(expected_check),
+        expected_checks=expected,
     )
     report = render_pr_readiness(result)
     if result.outcome == "BLOCKED" and any(reason.startswith("check failed:") for reason in result.reasons):
