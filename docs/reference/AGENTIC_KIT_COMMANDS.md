@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: a1cd3498df74
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 6f5b8aaa37fb
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -3891,6 +3891,7 @@ Finish a human work slice by planning or executing commit, push, PR, merge, and 
 | `merge_method` | `TyperOption` | --merge-method | `False` | `squash` | PR merge method. |
 | `merge` | `TyperOption` | --merge, --no-merge | `False` | `True` | Run the full PR, merge, and post-merge handoff closeout by default. Use --no-merge only for an explicitly review-only PR. |
 | `dry_run` | `TyperOption` | --dry-run, --execute | `False` | `True` | Plan by default. Use --execute to commit, push, and publish. |
+| `ci_timeout_seconds` | `TyperOption` | --ci-timeout-seconds | `False` | `900` | Maximum wait for the pull request's CI (KIT-GF-078: the Kit's own full CI takes more than 300 s). |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 
 ### `agentic-kit work recover`

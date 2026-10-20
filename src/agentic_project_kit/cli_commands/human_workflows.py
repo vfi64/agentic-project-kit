@@ -655,6 +655,11 @@ def work_check_command(
     _exit_if_blocked(payload)
 
 
+# KIT-GF-078 (release 1.1.3): a fixed 300 s CI wait timed out D4 and E1 of the Kit's own release run
+# while its full CI took 5 to 5.5 minutes; waiting longer only waits while checks are pending.
+WORK_FINISH_CI_TIMEOUT_SECONDS = 900
+
+
 @work_app.command("finish")
 def work_finish_command(
     branch: str = typer.Option(..., "--branch", help="Feature branch to finish."),
@@ -674,6 +679,12 @@ def work_finish_command(
         ),
     ),
     dry_run: bool = typer.Option(True, "--dry-run/--execute", help="Plan by default. Use --execute to commit, push, and publish."),
+    ci_timeout_seconds: int = typer.Option(
+        WORK_FINISH_CI_TIMEOUT_SECONDS,
+        "--ci-timeout-seconds",
+        min=60,
+        help="Maximum wait for the pull request's CI (KIT-GF-078: the Kit's own full CI takes more than 300 s).",
+    ),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     """Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks."""
@@ -761,7 +772,7 @@ def work_finish_command(
                         "--post-merge-complete",
                         "--skip-llm-context-gate",
                         "--timeout-seconds",
-                        "300",
+                        str(ci_timeout_seconds),
                         "--interval-seconds",
                         "10",
                         "--json",
@@ -810,7 +821,7 @@ def work_finish_command(
                                     "--expected-head-sha",
                                     expected_head_sha,
                                     "--timeout-seconds",
-                                    "300",
+                                    str(ci_timeout_seconds),
                                     "--interval-seconds",
                                     "10",
                                     "--json",

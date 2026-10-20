@@ -27,8 +27,13 @@ def original_doi_subject(run: ReleaseRun) -> dict[str, Any] | None:
         if depth > 24 or not isinstance(node, dict):
             continue
         # Legacy pr-complete embeds the failed readiness result as text. GH_ERROR
-        # denotes a read failure; real red CI and TIMEOUT do not select this path.
-        if node.get("failed_step") == "pr-wait-ci" and "GH_ERROR" in json.dumps(node):
+        # denotes a read failure; TIMEOUT (KIT-GF-078, release 1.1.3: work finish waited 300 s
+        # while CI was still pending) leaves an unchanged PR whose exact-head CI the resume
+        # waits for again. Real red CI does not select this path; it keeps the replacement.
+        dumped = json.dumps(node)
+        if node.get("failed_step") == "pr-wait-ci" and (
+            "GH_ERROR" in dumped or "PR readiness outcome: TIMEOUT" in dumped
+        ):
             number, head = node.get("pr_number"), node.get("expected_head_sha")
             if isinstance(number, int) and number > 0 and isinstance(head, str) and head:
                 return {"pr_number": number, "source_head": head}
