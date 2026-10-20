@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: ffc68cd471d62aec2ecc0a461af3d619b06487065be204ed20e680321ea45ac1
 - docs/reference/agentic-kit-commands.json: 96f126ae66fda67fd60bde0c2dafa6c5af171d7d47e005e2c8603d8f38ddf4d7
-## Operational documentation refresh state after PR #2578
+## Operational documentation refresh state after PR #2580
 
-Current administrative handoff refresh state is `b4757ff4` (`Wait long enough for CI in release runs and resume stopped DOI and archive PRs (KIT-GF-078) (#2578)`). Continue next only after this post-PR2578 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `7b16380a` (`Run the Kit CI suite in three deterministic shards with work stealing (#2580)`). Continue next only after this post-PR2580 refresh is committed and merged; the next substantive slice must be created from fresh main.
