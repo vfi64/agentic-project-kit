@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b4757ff49f4f3093081985d14942b250af24d7e4
-  short: b4757ff4
-  subject: Wait long enough for CI in release runs and resume stopped DOI and archive PRs (KIT-GF-078) (#2578)
+  full: 7b16380a4b8f7cc771ec9be206f9230f69ad805a
+  short: 7b16380a
+  subject: Run the Kit CI suite in three deterministic shards with work stealing (#2580)
 last_substantive_work_state:
-  full: b4757ff49f4f3093081985d14942b250af24d7e4
-  short: b4757ff4
-  subject: Wait long enough for CI in release runs and resume stopped DOI and archive PRs (KIT-GF-078) (#2578)
+  full: 7b16380a4b8f7cc771ec9be206f9230f69ad805a
+  short: 7b16380a
+  subject: Run the Kit CI suite in three deterministic shards with work stealing (#2580)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
