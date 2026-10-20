@@ -10,8 +10,16 @@ import pytest
 import yaml
 
 
+_INSTALLED_KIT: dict[str, Path] = {}
+
+
 @pytest.fixture(scope="module")
 def installed_kit(tmp_path_factory):
+    # Built once per test process (each xdist worker builds its own) and shared by every module
+    # that imports this fixture: the wheel of this source tree does not change during a run, and
+    # every user only reads or copies the extracted tree.
+    if "target" in _INSTALLED_KIT:
+        return _INSTALLED_KIT["target"]
     from hatchling.build import build_wheel
     root = Path(__file__).resolve().parents[1]
     dist = tmp_path_factory.mktemp("registry-wheel")
@@ -24,6 +32,7 @@ def installed_kit(tmp_path_factory):
     target = dist / "installed"
     with zipfile.ZipFile(wheel) as archive:
         archive.extractall(target)
+    _INSTALLED_KIT["target"] = target
     return target
 
 

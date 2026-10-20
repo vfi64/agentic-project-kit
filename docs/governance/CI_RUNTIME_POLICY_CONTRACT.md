@@ -9,9 +9,12 @@ full-suite fallback.
 
 ## Required Check Boundary
 
-The branch-protection-visible `CI` workflow keeps the required `test` job. Gate
-selection happens inside that job so a skipped optional job cannot stand in for
-success.
+The branch-protection-visible `CI` workflow keeps the required `test` job. The
+gate mode is computed once by the deterministic classifier in the `classify` job
+and handed to `test` and the shard jobs as a job output; `test` is the only
+verdict and fails closed when `classify` or any shard did not succeed, so a
+skipped optional job cannot stand in for success. Shard jobs never skip: outside
+`FULL_CI` they succeed without work.
 
 PR readiness and merge wrappers may ignore completed `SKIPPED` checks only when
 the exact check name is listed in the optional diagnostic allowlist; currently
@@ -54,6 +57,24 @@ CI critical path once xdist parity is established.
 `pytest-parallel-shadow` remains available only as a manual `workflow_dispatch` diagnostic job.
 It is not run for ordinary PR, main-push, or admin-refresh cycles, because the
 required `test` job now carries the parallel full-suite gate directly.
+
+## CI4 Deterministic Pytest Shards
+
+`FULL_CI` runs the exact pytest suite in three parallel `test-shard` jobs, each
+with four xdist workers and work stealing:
+
+```bash
+python -m pytest -q -n 4 --dist worksteal --durations=20 --shard-index <i> --shard-count 3 --junitxml <report>
+```
+
+A test belongs to shard `sha256(nodeid) % 3` (`agentic_project_kit.ci_test_shards`,
+options in `tests/conftest.py`), so the split depends only on the collected test
+set. The required `test` job collects the full suite itself and accepts the shards
+only when `python -m agentic_project_kit.ci_test_shards check` passes: every shard
+collected exactly the tests the rule assigns to it, together they equal the full
+collection, and each JUnit report ran all of them with no failure or error. This is
+an execution-mechanics change like CI2, not a narrower selection; a missing, partial
+or reshuffled shard fails the gate. The local serial and `-n 4` commands stay valid.
 
 ## CI3 Main-Push Tree Proof
 

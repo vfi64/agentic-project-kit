@@ -28,6 +28,9 @@ def _step_by_uses(steps: list[dict[str, object]], uses: str) -> dict[str, object
     raise AssertionError(f"missing uses step: {uses}")
 
 
+FULL = "needs.classify.outputs.gate-mode == 'full'"
+
+
 def test_ci_required_job_keeps_full_gate_as_default() -> None:
     data = yaml.safe_load(CI_WORKFLOW.read_text(encoding="utf-8"))
 
@@ -38,10 +41,11 @@ def test_ci_required_job_keeps_full_gate_as_default() -> None:
         "contents": "read",
         "pull-requests": "read",
     }
-    test_job = data["jobs"]["test"]
-    assert "if" not in test_job
+    classify = data["jobs"]["classify"]
+    assert "if" not in classify and "needs" not in classify
+    assert classify["outputs"] == {"gate-mode": "${{ steps.runtime-policy.outputs.gate-mode }}"}
 
-    steps = test_job["steps"]
+    steps = classify["steps"]
     runs = "\n".join(_run_steps(steps))
     classify_step = _step_by_name(steps, "Classify CI runtime policy")
     checkout_step = steps[0]
@@ -66,11 +70,42 @@ def test_ci_required_job_keeps_full_gate_as_default() -> None:
     assert '--pr-checks-passed "$PR_CHECKS_PASSED"' in runs
     assert '"admin-refresh-light"' in str(classify_step["run"])
     assert '"tree-proof"' in str(classify_step["run"])
-    assert _step_by_name(steps, "Install package")["if"] != "false"
-    assert _step_by_name(steps, "Ruff")["if"] == "steps.runtime-policy.outputs.gate-mode == 'full'"
-    assert _step_by_name(steps, "Tests")["if"] == "steps.runtime-policy.outputs.gate-mode == 'full'"
-    assert _step_by_name(steps, "Tests")["run"] == "python -m pytest -q -n 4 --durations=20"
-    assert _step_by_name(steps, "CLI smoke")["if"] == "steps.runtime-policy.outputs.gate-mode == 'full'"
+    keep = _step_by_name(steps, "Keep the runtime policy for the required test job")
+    assert keep["with"]["name"] == "ci-runtime-policy" and keep["with"]["if-no-files-found"] == "error"
+
+    test_job = data["jobs"]["test"]
+    assert test_job["needs"] == ["classify", "test-shard"]
+    assert test_job["if"] == "${{ !cancelled() }}"
+    test_steps = test_job["steps"]
+    upstream = _step_by_name(test_steps, "Upstream jobs succeeded")
+    assert test_steps[0] is upstream
+    assert upstream["env"] == {"CLASSIFY_RESULT": "${{ needs.classify.result }}",
+                               "SHARD_RESULT": "${{ needs.test-shard.result }}"}
+    assert 'test "$CLASSIFY_RESULT" = success' in upstream["run"] and 'test "$SHARD_RESULT" = success' in upstream["run"]
+    assert _step_by_name(test_steps, "Runtime policy from the classify job")["with"]["name"] == "ci-runtime-policy"
+    assert _step_by_name(test_steps, "Install package")["if"] == "needs.classify.outputs.gate-mode != 'tree-proof'"
+    assert _step_by_name(test_steps, "Ruff")["if"] == FULL
+    assert _step_by_name(test_steps, "Tests")["if"] == FULL
+    assert _step_by_name(test_steps, "Tests")["run"] == (
+        'python -m agentic_project_kit.ci_test_shards check --full "$RUNNER_TEMP/collected-full.txt" '
+        '--shards-dir "$RUNNER_TEMP/shards" --count 3'
+    )
+    assert "--write-collected" in _step_by_name(test_steps, "Collect the full suite")["run"]
+    assert _step_by_name(test_steps, "CLI smoke")["if"] == FULL
+
+
+def test_the_suite_runs_in_deterministic_shards_that_always_report() -> None:
+    data = yaml.safe_load(CI_WORKFLOW.read_text(encoding="utf-8"))
+    shard = data["jobs"]["test-shard"]
+    assert shard["needs"] == "classify" and "if" not in shard   # never a skipped check
+    assert shard["strategy"] == {"fail-fast": False, "matrix": {"shard": [0, 1, 2]}}
+    steps = shard["steps"]
+    assert steps[0]["if"] == "needs.classify.outputs.gate-mode != 'full'"
+    assert all(step["if"] == FULL for step in steps[1:])
+    run = str(_step_by_name(steps, "Tests (shard)")["run"])
+    assert "--collect-only --shard-index ${{ matrix.shard }} --shard-count 3 --write-collected" in run
+    assert "python -m pytest -q -n 4 --dist worksteal --durations=20 --shard-index ${{ matrix.shard }} --shard-count 3 --junitxml" in run
+    assert _step_by_name(steps, "Keep the shard report")["with"]["if-no-files-found"] == "error"
 
 
 def test_admin_refresh_light_gate_runs_only_handoff_registry_and_docs_checks() -> None:
@@ -79,12 +114,14 @@ def test_admin_refresh_light_gate_runs_only_handoff_registry_and_docs_checks() -
     admin_step = _step_by_name(steps, "Admin refresh light gate")
     run = str(admin_step["run"])
 
-    assert admin_step["if"] == "steps.runtime-policy.outputs.gate-mode == 'admin-refresh-light'"
+    assert admin_step["if"] == "needs.classify.outputs.gate-mode == 'admin-refresh-light'"
     assert admin_step["env"]["EVENT_NAME"] == "${{ github.event_name }}"
     assert admin_step["env"]["BEFORE_SHA"] == "${{ github.event.before }}"
     assert admin_step["env"]["CURRENT_SHA"] == "${{ github.sha }}"
     assert admin_step["env"]["PR_BASE_SHA"] == "${{ github.event.pull_request.base.sha }}"
     assert admin_step["env"]["PR_HEAD_SHA"] == "${{ github.event.pull_request.head.sha }}"
+    assert admin_step["env"]["PR_NUMBER"] == "${{ github.event.pull_request.number }}"
+    assert 'git fetch --no-tags --depth=1 origin "$PR_BASE_SHA" "$PR_HEAD_SHA"' in run
     assert "POLICY_MUTATION=" in run
     assert "agentic-kit handoff check" in run
     assert "validate_successor_package()" in run
@@ -116,7 +153,7 @@ def test_main_push_tree_proof_lane_is_inside_required_test_job() -> None:
     steps = data["jobs"]["test"]["steps"]
     tree_proof = _step_by_name(steps, "Main push tree proof gate")
 
-    assert tree_proof["if"] == "steps.runtime-policy.outputs.gate-mode == 'tree-proof'"
+    assert tree_proof["if"] == "needs.classify.outputs.gate-mode == 'tree-proof'"
     assert "main-push-policy.json" in str(tree_proof["run"])
     assert "TREE_PROOF" in str(tree_proof["run"])
 
@@ -129,7 +166,6 @@ def test_parallel_pytest_is_required_and_shadow_is_manual_diagnostic_only() -> N
     assert shadow["if"] == "github.event_name == 'workflow_dispatch'"
     assert shadow["continue-on-error"] is True
     assert shadow["timeout-minutes"] == 20
-    assert "needs" not in data["jobs"]["test"]
     assert "needs" not in shadow
     shadow_run = "\n".join(_run_steps(shadow["steps"]))
     assert _step_by_uses(shadow["steps"], "actions/setup-python@v6")["with"] == {

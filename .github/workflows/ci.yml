@@ -20,9 +20,11 @@ permissions:
   pull-requests: read
 
 jobs:
-  test:
+  classify:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
+    outputs:
+      gate-mode: ${{ steps.runtime-policy.outputs.gate-mode }}
 
     steps:
       - uses: actions/checkout@v6
@@ -165,34 +167,151 @@ jobs:
               output.write(f"gate-mode={gate_mode}\n")
           PY
 
+      - name: Keep the runtime policy for the required test job
+        uses: actions/upload-artifact@v7
+        with:
+          name: ci-runtime-policy
+          path: |
+            ${{ runner.temp }}/admin-refresh-policy.json
+            ${{ runner.temp }}/main-push-policy.json
+            ${{ runner.temp }}/changed-paths.txt
+          if-no-files-found: error
+          retention-days: 5
+
+  test-shard:
+    # Deterministic pytest shards (agentic_project_kit.ci_test_shards); the required test job
+    # accepts them only when together they ran the whole collected suite. In a light or
+    # tree-proof gate a shard succeeds without work, so no check is ever reported as skipped.
+    needs: classify
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2]
+
+    steps:
+      - name: Shard not needed in this gate mode
+        if: needs.classify.outputs.gate-mode != 'full'
+        run: |
+          echo "gate mode ${{ needs.classify.outputs.gate-mode }} - this shard has nothing to run"
+
+      - uses: actions/checkout@v6
+        if: needs.classify.outputs.gate-mode == 'full'
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v6
+        if: needs.classify.outputs.gate-mode == 'full'
+        with:
+          python-version: "3.13"
+          cache: "pip"
+          cache-dependency-path: pyproject.toml
+
       - name: Install package
-        if: steps.runtime-policy.outputs.gate-mode != 'tree-proof'
+        if: needs.classify.outputs.gate-mode == 'full'
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Fetch pinned historical wheel fixture
+        if: needs.classify.outputs.gate-mode == 'full'
+        run: |
+          git fetch --no-tags --depth=1 origin refs/tags/v1.0.24:refs/tags/v1.0.24
+          test "$(git rev-parse 'v1.0.24^{commit}')" = "3ba42bacb3be96d0a344087b8464bd21f12b9de7"
+
+      - name: Tests (shard)
+        if: needs.classify.outputs.gate-mode == 'full'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/test-shard-${{ matrix.shard }}"
+          python -m pytest -q --collect-only --shard-index ${{ matrix.shard }} --shard-count 3 --write-collected "$RUNNER_TEMP/test-shard-${{ matrix.shard }}/collected.txt" > /dev/null
+          python -m pytest -q -n 4 --dist worksteal --durations=20 --shard-index ${{ matrix.shard }} --shard-count 3 --junitxml "$RUNNER_TEMP/test-shard-${{ matrix.shard }}/junit.xml"
+
+      - name: Keep the shard report
+        if: needs.classify.outputs.gate-mode == 'full'
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-shard-${{ matrix.shard }}
+          path: ${{ runner.temp }}/test-shard-${{ matrix.shard }}
+          if-no-files-found: error
+          retention-days: 5
+
+  test:
+    # The required check: the classification, the light and tree-proof gates and the verdict on
+    # the shards stay in this one job, whose name the Kit's PR proofs require.
+    needs: [classify, test-shard]
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Upstream jobs succeeded
+        shell: bash
+        env:
+          CLASSIFY_RESULT: ${{ needs.classify.result }}
+          SHARD_RESULT: ${{ needs.test-shard.result }}
+        run: |
+          set -euo pipefail
+          test "$CLASSIFY_RESULT" = success || { echo "classify: $CLASSIFY_RESULT" >&2; exit 1; }
+          test "$SHARD_RESULT" = success || { echo "test-shard: $SHARD_RESULT" >&2; exit 1; }
+
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
+          cache-dependency-path: pyproject.toml
+
+      - name: Runtime policy from the classify job
+        uses: actions/download-artifact@v7
+        with:
+          name: ci-runtime-policy
+          path: ${{ runner.temp }}
+
+      - name: Install package
+        if: needs.classify.outputs.gate-mode != 'tree-proof'
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
 
       - name: Ruff
-        if: steps.runtime-policy.outputs.gate-mode == 'full'
+        if: needs.classify.outputs.gate-mode == 'full'
         run: ruff check .
 
       - name: Fetch pinned historical wheel fixture
-        if: steps.runtime-policy.outputs.gate-mode == 'full'
+        if: needs.classify.outputs.gate-mode == 'full'
         run: |
           git fetch --no-tags --depth=1 origin refs/tags/v1.0.24:refs/tags/v1.0.24
           test "$(git rev-parse 'v1.0.24^{commit}')" = "3ba42bacb3be96d0a344087b8464bd21f12b9de7"
 
+      - name: Collect the full suite
+        if: needs.classify.outputs.gate-mode == 'full'
+        run: python -m pytest -q --collect-only --write-collected "$RUNNER_TEMP/collected-full.txt" > /dev/null
+
+      - name: Fetch the shard reports
+        if: needs.classify.outputs.gate-mode == 'full'
+        uses: actions/download-artifact@v7
+        with:
+          pattern: test-shard-*
+          path: ${{ runner.temp }}/shards
+
       - name: Tests
-        if: steps.runtime-policy.outputs.gate-mode == 'full'
-        run: python -m pytest -q -n 4 --durations=20
+        if: needs.classify.outputs.gate-mode == 'full'
+        run: python -m agentic_project_kit.ci_test_shards check --full "$RUNNER_TEMP/collected-full.txt" --shards-dir "$RUNNER_TEMP/shards" --count 3
 
       - name: CLI smoke
-        if: steps.runtime-policy.outputs.gate-mode == 'full'
+        if: needs.classify.outputs.gate-mode == 'full'
         run: |
           agentic-kit --help
           agentic-kit todo --help
 
       - name: Admin refresh light gate
-        if: steps.runtime-policy.outputs.gate-mode == 'admin-refresh-light'
+        if: needs.classify.outputs.gate-mode == 'admin-refresh-light'
         shell: bash
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -201,8 +320,17 @@ jobs:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           set -euo pipefail
+          # The diff endpoints live in the classify job's clone; fetch them here (fail closed below).
+          if [ "$EVENT_NAME" = "pull_request" ] && [ -n "$PR_BASE_SHA" ] && [ -n "$PR_HEAD_SHA" ]; then
+            git fetch --no-tags --depth=1 origin "$PR_BASE_SHA" "$PR_HEAD_SHA" \
+              || git fetch --no-tags --depth=1 origin "+refs/pull/${PR_NUMBER}/head:refs/remotes/pull/${PR_NUMBER}/head" "$PR_BASE_SHA" \
+              || true
+          elif [ "$EVENT_NAME" = "push" ] && [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            git fetch --no-tags --depth=1 origin "$BEFORE_SHA" || true
+          fi
           POLICY_MUTATION="$(python - <<'PY'
           import json
           import os
@@ -256,7 +384,7 @@ jobs:
           python -m pytest -q tests/test_successor_handoff_package.py tests/test_chat_entrypoint_contract.py tests/test_documentation_registry.py tests/test_docs_lifecycle_apply_cli.py tests/test_docs_lifecycle_reconcile_cli.py tests/test_ci_runtime_policy.py
 
       - name: Main push tree proof gate
-        if: steps.runtime-policy.outputs.gate-mode == 'tree-proof'
+        if: needs.classify.outputs.gate-mode == 'tree-proof'
         shell: bash
         run: |
           set -euo pipefail
