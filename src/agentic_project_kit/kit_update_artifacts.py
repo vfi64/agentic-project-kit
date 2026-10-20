@@ -8,6 +8,8 @@ import json
 from pathlib import Path
 import re
 import tempfile
+import time
+from urllib.error import HTTPError
 from urllib.parse import unquote, urlsplit
 from urllib.request import HTTPRedirectHandler, build_opener
 
@@ -16,6 +18,12 @@ from agentic_project_kit.kit_update_runtime import UpdateBlocked, checked
 
 
 MAX_WHEEL_BYTES = 64 * 1024 * 1024
+# KIT-GF-082 (an external workspace's update to 1.1.4, 2026-10-20): the 1.1.4 wheel took 29.7 s on macOS
+# against a 30 s socket timeout, one attempt, and the blocker dropped the cause. A transient network
+# error now gets two more attempts; every attempt is logged (file name, never the URL) and the
+# blocker names the file and the error.
+DOWNLOAD_TIMEOUT_SECONDS = 60
+DOWNLOAD_BACKOFF_SECONDS = (2, 5)
 
 
 @dataclass(frozen=True)
@@ -88,23 +96,50 @@ class _ValidatedRedirect(HTTPRedirectHandler):
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
-def _download(artifact: dict, path: Path) -> None:
+def _fetch(artifact: dict, path: Path) -> int:
     # URLs themselves are not copied to user-facing output or subprocess logs.
     # HTTPS redirects retain the same credential-free URL policy.
-    try:
-        with (
-            build_opener(_ValidatedRedirect()).open(artifact["url"], timeout=30) as response,
-            path.open("wb") as stream,
-        ):
-            validate_download_url(response.url)
-            size = 0
-            while chunk := response.read(1024 * 1024):
-                size += len(chunk)
-                if size > MAX_WHEEL_BYTES:
-                    raise UpdateBlocked("release_artifact_too_large")
-                stream.write(chunk)
-    except (OSError, ValueError) as exc:
-        raise UpdateBlocked("release_artifact_download_failed") from exc
+    with (
+        build_opener(_ValidatedRedirect()).open(artifact["url"], timeout=DOWNLOAD_TIMEOUT_SECONDS) as response,
+        path.open("wb") as stream,
+    ):
+        validate_download_url(response.url)
+        size = 0
+        while chunk := response.read(1024 * 1024):
+            size += len(chunk)
+            if size > MAX_WHEEL_BYTES:
+                raise UpdateBlocked("release_artifact_too_large")
+            stream.write(chunk)
+    return size
+
+
+def _retryable(exc: Exception) -> bool:
+    if isinstance(exc, HTTPError):
+        return exc.code == 429 or exc.code >= 500
+    return isinstance(exc, OSError)   # timeouts, resets, DNS; a ValueError is a URL policy refusal
+
+
+def _download(artifact: dict, path: Path, *, log=None, sleep=time.sleep) -> None:
+    log = log or (lambda event: None)
+    attempts = len(DOWNLOAD_BACKOFF_SECONDS) + 1
+    for attempt in range(1, attempts + 1):
+        started = time.monotonic()
+        try:
+            size = _fetch(artifact, path)
+        except (OSError, ValueError) as exc:
+            detail = str(exc).replace(artifact["url"], "<url>")[:300]
+            log({"event": "DOWNLOAD", "file": artifact["filename"], "attempt": attempt, "result": "ERROR",
+                 "error": type(exc).__name__, "detail": detail, "duration": time.monotonic() - started})
+            if attempt == attempts or not _retryable(exc):
+                raise UpdateBlocked(
+                    f"release_artifact_download_failed: {artifact['filename']}: {type(exc).__name__}: {detail}"
+                    f" (attempt {attempt} of {attempts}); inspect update log"
+                ) from exc
+            sleep(DOWNLOAD_BACKOFF_SECONDS[attempt - 1])
+            continue
+        log({"event": "DOWNLOAD", "file": artifact["filename"], "attempt": attempt, "result": "OK",
+             "bytes": size, "duration": time.monotonic() - started})
+        break
     if sha256_file(path) != artifact["sha256"]:
         raise UpdateBlocked("release_artifact_hash_mismatch")
 
@@ -142,7 +177,7 @@ def prepare_target(tmp: Path, python: Path, index_url: str, version: str, run) -
     wheels = []
     for artifact in artifacts:
         wheel = stage / artifact["filename"]
-        _download(artifact, wheel)
+        _download(artifact, wheel, log=getattr(run, "_append", None))
         wheels.append(wheel)
     preview = stage / "preview"
     checked(run, [str(python), "-I", "-m", "venv", str(preview)])

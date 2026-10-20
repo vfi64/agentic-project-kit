@@ -1364,6 +1364,40 @@ Expected: After a blocked B4 with an open release PR holding exactly the B4 comm
 
 Expected result fields: `{"assertions": ["B4 gate mode resume-existing-release-pr; B4 finished through pr-complete"]}`.
 
+## KIT-GF-081
+
+Kit state: CLOSED; fixed_in: 1.1.5.
+Evidence: docs/reports/greenfield/KIT-GF-081-082-release-abandon-and-download-cause-2026-10-20.md
+
+Execution class: owner_remote (effects: delete_remote, network_read, push); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
+Preconditions: Only after the owner decided to give up a stopped release run; observe only, never stop a release to test this. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release abandon --version {version} --json
+```
+
+Expected: The plan names the release branch, its open PR and the archive directory and changes nothing; it blocks while a tag, a GitHub Release, an approval after B4 or a merged release PR exists. The signed execute deletes the branch, checks that the PR is closed unmerged and archives the run state, so the next release run starts fresh.
+
+Expected result fields: `{"gate.kind": "release_run_abandon_gate", "result_status": "AWAITING_APPROVAL"}`.
+
+## KIT-GF-082
+
+Kit state: CLOSED; fixed_in: 1.1.5.
+Evidence: docs/reports/greenfield/KIT-GF-081-082-release-abandon-and-download-cause-2026-10-20.md
+
+Execution class: owner_remote (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
+Preconditions: A workspace with a Kit installation in its .venv; the plan downloads into the workspace tmp root and installs nothing. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit kit update --root . --version {version} --json
+```
+
+Expected: Every wheel download is logged as a DOWNLOAD event with file name, attempt and result (never the URL); a transient network error is retried twice; a final failure names the file, the error type and the attempt in the blocker.
+
+Expected result fields: `{"assertions": ["update log holds one DOWNLOAD event per wheel; a download blocker names file and error"]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

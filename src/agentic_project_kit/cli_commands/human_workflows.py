@@ -1110,3 +1110,26 @@ def release_run_command(
         )
     if blocked:
         raise typer.Exit(code=2)
+
+
+@release_flow_app.command("abandon")
+def release_abandon_command(
+    version: str = typer.Option(..., "--version", help="Version of the stopped release run to abandon."),
+    execute: bool = typer.Option(False, "--execute", help="Execute the signed abandon plan."),
+    expected_signature: str = typer.Option("", "--expected-signature", help="Approval signature of the abandon plan."),
+    approved_by: str = typer.Option("", "--approved-by", help="Name or identifier of the owner who decided to abandon."),
+    consent_source: str = typer.Option("", "--consent-source", help="Reference to the owner's decision."),
+    json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
+) -> None:
+    """Abandon a stopped, unpublished release run: delete its release branch and archive the run state."""
+    from agentic_project_kit.release_run_abandon import abandon_release
+
+    payload = abandon_release(
+        ReleaseRunOptions(version=version, execute=execute, expected_signature=expected_signature,
+                          approved_by=approved_by, consent_source=consent_source, json_output=json_output,
+                          root=Path("."))
+    )
+    blocked = payload["result_status"] == "BLOCKED"
+    _emit({**payload, "returncode": 2 if blocked else 0}, json_output=json_output)
+    if blocked:
+        raise typer.Exit(code=2)

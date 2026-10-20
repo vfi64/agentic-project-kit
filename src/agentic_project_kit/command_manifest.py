@@ -38,6 +38,7 @@ RAW_REPLACEMENTS: dict[str, tuple[str, ...]] = {
     "agentic-kit transfer delete-merged-work-branch": ("git push --delete", "git branch -D"),
     "agentic-kit release ready": ("git tag", "gh release create"),
     "agentic-kit release run": ("release lifecycle", "publish release", "package index publish"),
+    "agentic-kit release abandon": ("abandon release run", "delete release branch"),
     "agentic-kit work finish": (
         "close completed slice",
         "closeout completed slice",
@@ -73,6 +74,7 @@ LIFECYCLE_RANKS: dict[str, int] = {
     "agentic-kit release ready": 70,
     "agentic-kit release prepare": 71,
     "agentic-kit release run": 71,
+    "agentic-kit release abandon": 71,
     "agentic-kit release-prep": 72,
     "agentic-kit release-publish": 73,
     "agentic-kit post-release-doi-closeout": 74,
@@ -235,6 +237,7 @@ def infer_safety(command: dict[str, Any]) -> str:
         return "READ_ONLY"
 
     destructive_terms = (
+        "release abandon",
         "delete",
         "merge",
         "publish",
@@ -315,6 +318,7 @@ def infer_surface(command: dict[str, Any]) -> str:
         "agentic-kit release prepare",
         "agentic-kit release ready",
         "agentic-kit release run",
+        "agentic-kit release abandon",
         "agentic-kit release-prep",
         "agentic-kit release-publish",
         "agentic-kit transfer admin-refresh-pr",
@@ -452,6 +456,8 @@ def infer_remote_effects(command: dict[str, Any]) -> list[str]:
         "agentic-kit transfer patch-cycle-status": ["network_read"],
         "agentic-kit transfer rebase-on-upstream": ["fetch"],
         "agentic-kit transfer branch-delete": ["delete_remote", "push"],
+        # KIT-GF-081: deletes the release branch through transfer branch-delete, reads tags, releases and PRs.
+        "agentic-kit release abandon": ["delete_remote", "network_read", "push"],
         "agentic-kit transfer branch-create": ["push"],
         "agentic-kit transfer branch-switch": ["fetch"],
         "agentic-kit transfer pr-status": ["network_read"],

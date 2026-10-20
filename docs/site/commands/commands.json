@@ -1,5 +1,5 @@
 {
-  "command_count": 271,
+  "command_count": 272,
   "diagnostic_count": 131,
   "entries": [
     {
@@ -5856,6 +5856,73 @@
       "safety": "BOUNDED",
       "surface": "primitive",
       "when_to_use": "Render project direction sections from the YAML source."
+    },
+    {
+      "diagnostic_priority": "not_diagnostic",
+      "dry_run_available": true,
+      "group": "release",
+      "help": "Abandon a stopped, unpublished release run: delete its release branch and archive the run state.",
+      "lifecycle_rank": 71,
+      "params": [
+        {
+          "default": null,
+          "help": "Version of the stopped release run to abandon.",
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "required": true
+        },
+        {
+          "default": false,
+          "help": "Execute the signed abandon plan.",
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "required": false
+        },
+        {
+          "default": "",
+          "help": "Approval signature of the abandon plan.",
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "required": false
+        },
+        {
+          "default": "",
+          "help": "Name or identifier of the owner who decided to abandon.",
+          "name": "approved_by",
+          "opts": [
+            "--approved-by"
+          ],
+          "required": false
+        },
+        {
+          "default": "",
+          "help": "Reference to the owner's decision.",
+          "name": "consent_source",
+          "opts": [
+            "--consent-source"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        }
+      ],
+      "qualified_name": "agentic-kit release abandon",
+      "safety": "DESTRUCTIVE",
+      "surface": "orchestrator",
+      "when_to_use": "Abandon a stopped, unpublished release run: delete its release branch and archive the run state."
     },
     {
       "diagnostic_priority": "not_diagnostic",
@@ -12453,7 +12520,7 @@
     "pass-already-done": 2,
     "patterns": 2,
     "pr": 5,
-    "release": 3,
+    "release": 4,
     "root": 54,
     "rule-registry": 4,
     "rules": 7,
@@ -12468,17 +12535,17 @@
     "workflow-guard": 2,
     "workspace": 6
   },
-  "guided_count": 34,
+  "guided_count": 35,
   "kind": "site_command_catalog",
   "safety_counts": {
     "BOUNDED": 176,
-    "DESTRUCTIVE": 9,
+    "DESTRUCTIVE": 10,
     "READ_ONLY": 86
   },
   "schema_version": 1,
   "surface_counts": {
     "diagnostic": 131,
-    "orchestrator": 34,
+    "orchestrator": 35,
     "primitive": 106
   }
 }
