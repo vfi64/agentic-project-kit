@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: e0052a613e7b3ba91eddba87f8029d67e1a91f8cd2fc7d9b42ffedb5a6803861
 - docs/reference/agentic-kit-commands.json: 5c890e5a5a5d52e39e3b43151b7fd4433cc2803b847d2157696371de576dc748
-## Operational documentation refresh state after PR #2583
+## Operational documentation refresh state after PR #2585
 
-Current administrative handoff refresh state is `786186ac` (`Wait for late required checks and let a blocked B4 finish its own release PR (KIT-GF-079, KIT-GF-080) (#2583)`). Continue next only after this post-PR2583 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `ff78ca8c` (`Release 1.1.4 (#2585)`). Continue next only after this post-PR2585 refresh is committed and merged; the next substantive slice must be created from fresh main.
