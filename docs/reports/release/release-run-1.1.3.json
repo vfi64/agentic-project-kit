@@ -1,0 +1,173 @@
+{
+  "approvals": [
+    {
+      "approved_by": "vfi64",
+      "consent_source": "owner go 2026-10-20 14:23 CEST in Claude chat: release 1.1.3 on main 374dd0c, all gates",
+      "result_status": "AUTHORIZED",
+      "signature": "2aadb6615d721072d69f0111",
+      "step_id": "B4",
+      "tag": "v1.1.3",
+      "target_commit": "374dd0cdacbe56116d7b50551f072af58ca6f16f",
+      "version": "1.1.3"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "owner go 2026-10-20 14:23 CEST in Claude chat: release 1.1.3 on main 374dd0c, all gates",
+      "result_status": "AUTHORIZED",
+      "signature": "048868a8e31148dc2413a252",
+      "step_id": "C2",
+      "tag": "v1.1.3",
+      "target_commit": "9626d068b6c4fb530945caeca41fcf7c9b66a3bc",
+      "version": "1.1.3"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "owner go 2026-10-20 14:23 CEST in Claude chat: release 1.1.3 on main 374dd0c, all gates",
+      "result_status": "AUTHORIZED",
+      "signature": "a1b3b574d33effbf403c6dcf",
+      "step_id": "C3",
+      "tag": "v1.1.3",
+      "target_commit": "9626d068b6c4fb530945caeca41fcf7c9b66a3bc",
+      "version": "1.1.3"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "owner go 2026-10-20 14:23 CEST in Claude chat: release 1.1.3 on main 374dd0c, all gates",
+      "result_status": "AUTHORIZED",
+      "signature": "1b2da6b478fc0947e6ac2770",
+      "step_id": "D4",
+      "tag": "v1.1.3",
+      "target_commit": "9626d068b6c4fb530945caeca41fcf7c9b66a3bc",
+      "version": "1.1.3"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "owner go 2026-10-20 14:23 CEST in Claude chat: release 1.1.3 on main 374dd0c, all gates; D2R approved by the owner 2026-10-20 after D4 blocked on DOI PR #2573",
+      "result_status": "AUTHORIZED",
+      "signature": "ce12fc83cd99dc92b70db1cb",
+      "step_id": "D2R",
+      "tag": null,
+      "target_commit": "9626d068b6c4fb530945caeca41fcf7c9b66a3bc",
+      "version": "1.1.3"
+    }
+  ],
+  "archive_boundary": "Snapshot of completed release steps; archive merge is verified from Git/PR evidence.",
+  "artifact_type": "evidence",
+  "finished_steps": [
+    "A1",
+    "A2",
+    "A3",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5"
+  ],
+  "kind": "release_run_evidence",
+  "package_index_dispatch": {
+    "dispatched": true,
+    "head_sha": "9626d068b6c4fb530945caeca41fcf7c9b66a3bc",
+    "run_id": "39426323279"
+  },
+  "package_index_workflow": {
+    "file": "release.yml",
+    "publish_target_pypi": true
+  },
+  "publication_policy": "github+pypi+zenodo",
+  "publication_target": "9626d068b6c4fb530945caeca41fcf7c9b66a3bc",
+  "review_policy": "historical_evidence",
+  "schema_version": 1,
+  "status": "active",
+  "steps": {
+    "A1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "A2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "A3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": null
+    },
+    "D5": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    }
+  },
+  "tag": "v1.1.3",
+  "version": "1.1.3"
+}
