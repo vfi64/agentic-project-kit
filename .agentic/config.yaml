@@ -27,3 +27,7 @@ hygiene:
     governance: 180
     reference: 365
     workflow: 270
+gates:
+  # KIT-GF-079: `pr wait-ci` waits until these checks exist; `test` starts only after the shards.
+  required_checks:
+    - test

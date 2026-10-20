@@ -1745,3 +1745,6 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-078-release-ci-wait-2026-10-20.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-079-080-required-checks-and-b4-resume-2026-10-20.md
+    class: evidence/log
+    owner: maintainers

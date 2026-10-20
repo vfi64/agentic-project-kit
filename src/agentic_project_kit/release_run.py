@@ -141,6 +141,11 @@ class ReleaseRun:
         return self._work_finish("B3", branch=self.branch, paths=paths, execute=False, expected_status="PLANNED")
 
     def _step_b4(self) -> dict[str, Any]:
+        from agentic_project_kit.release_run_b4_resume import RESUME_MODE, complete
+
+        gate = (self.state.get("gates") or {}).get("B4") or {}
+        if gate.get("mode") == RESUME_MODE:
+            return complete(self, gate)
         expected = tuple(self.state.get("b_paths") or [])
         current = tuple(self._changed_paths())
         if current != expected:
@@ -348,7 +353,9 @@ class ReleaseRun:
             return DoiRecovery(self).plan()
         target_commit = self._current_head()
         if gate_id == "B4":
-            return {
+            from agentic_project_kit.release_run_b4_resume import plan as resume_plan
+
+            gate = {
                 "kind": "release_run_gate",
                 "gate_id": gate_id,
                 "version": self.version,
@@ -358,6 +365,8 @@ class ReleaseRun:
                 "paths": list(self.state.get("b_paths") or []),
                 "target_commit": target_commit,
             }
+            gate.update(resume_plan(self))   # KIT-GF-080: the release's own open release PR
+            return gate
         if gate_id == "C2":
             return {
                 "kind": "release_run_gate",
