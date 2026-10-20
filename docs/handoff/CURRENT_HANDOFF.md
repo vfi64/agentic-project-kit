@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `964e5093deca4f126477f7a8062061ba1960cea9` (`964e5093`), after `Archive release 1.1.2 evidence (#2567)`.
-Last substantive work state is `964e5093deca4f126477f7a8062061ba1960cea9` (`964e5093`), after `Archive release 1.1.2 evidence (#2567)`.
+Current verified main/admin HEAD is `c187f6b1df6f8aa0a1922e78a3ed42ab63b70b0c` (`c187f6b1`), after `Make external retests executable and declare the remote-next push (KIT-GF-070, KIT-GF-077) (#2569)`.
+Last substantive work state is `c187f6b1df6f8aa0a1922e78a3ed42ab63b70b0c` (`c187f6b1`), after `Make external retests executable and declare the remote-next push (KIT-GF-070, KIT-GF-077) (#2569)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
