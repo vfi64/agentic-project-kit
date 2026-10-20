@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 964e5093deca4f126477f7a8062061ba1960cea9
-  short: 964e5093
-  subject: Archive release 1.1.2 evidence (#2567)
+  full: c187f6b1df6f8aa0a1922e78a3ed42ab63b70b0c
+  short: c187f6b1
+  subject: Make external retests executable and declare the remote-next push (KIT-GF-070, KIT-GF-077) (#2569)
 last_substantive_work_state:
-  full: 964e5093deca4f126477f7a8062061ba1960cea9
-  short: 964e5093
-  subject: Archive release 1.1.2 evidence (#2567)
+  full: c187f6b1df6f8aa0a1922e78a3ed42ab63b70b0c
+  short: c187f6b1
+  subject: Make external retests executable and declare the remote-next push (KIT-GF-070, KIT-GF-077) (#2569)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

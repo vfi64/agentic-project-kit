@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 964e5093
-  commit_subject: Archive release 1.1.2 evidence (#2567)
+  commit: c187f6b1
+  commit_subject: Make external retests executable and declare the remote-next push (KIT-GF-070, KIT-GF-077) (#2569)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -433,7 +433,7 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr2567-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr2569-successor-chat-handoff.md
   first_instruction: 'Review PR #1436 and the refreshed successor handoff package
     for the release command authority planning slice. After merge, start from fresh
     main and use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice
@@ -444,6 +444,6 @@ next_step:
     main and use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice
     before DOI, legacy-doc, absolute-path, or GUI work.'
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr2567-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr2569-successor-chat-handoff.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers

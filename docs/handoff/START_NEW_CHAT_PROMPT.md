@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 1974504b9ba58c15f54683ee6677acda0f8f6f35c9356ae3564ed1a62da0324c
 - docs/reference/agentic-kit-commands.json: 0d3f1ce9d69ab0c7f361127f8db6f8cf53321aeb9ce7f5a18efd97a4dcd0e895
-## Operational documentation refresh state after PR #2567
+## Operational documentation refresh state after PR #2569
 
-Current administrative handoff refresh state is `964e5093` (`Archive release 1.1.2 evidence (#2567)`). Continue next only after this post-PR2567 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `c187f6b1` (`Make external retests executable and declare the remote-next push (KIT-GF-070, KIT-GF-077) (#2569)`). Continue next only after this post-PR2569 refresh is committed and merged; the next substantive slice must be created from fresh main.

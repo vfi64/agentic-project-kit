@@ -7,16 +7,16 @@ Current verified release: 1.1.2.
 Current release tag: v1.1.2.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.23484996`.
-Current verified main: `964e5093` (`Archive release 1.1.2 evidence (#2567)`).
-Latest substantive work: PR #2567 (`Archive release 1.1.2 evidence (#2567)`).
-Latest administrative refresh-only descendant: post-PR2567 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
+Current verified main: `c187f6b1` (`Make external retests executable and declare the remote-next push (KIT-GF-070, KIT-GF-077) (#2569)`).
+Latest substantive work: PR #2569 (`Make external retests executable and declare the remote-next push (KIT-GF-070, KIT-GF-077) (#2569)`).
+Latest administrative refresh-only descendant: post-PR2569 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
 Latest Brownfield external evidence: Cycle 007 report
 `docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md`
 records Comm-SCI App2 provider-settings seam reduction from `55` to `44`,
 target PR #16, target successor refresh PR #17, final target head
 `ea21b3a3`, and post-merge-settle `READY`.
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2567 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2569 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -422,6 +422,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2567
+## Operational documentation refresh state after PR #2569
 
-Current administrative handoff refresh state is `964e5093` (`Archive release 1.1.2 evidence (#2567)`). Continue next only after this post-PR2567 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `c187f6b1` (`Make external retests executable and declare the remote-next push (KIT-GF-070, KIT-GF-077) (#2569)`). Continue next only after this post-PR2569 refresh is committed and merged; the next substantive slice must be created from fresh main.
