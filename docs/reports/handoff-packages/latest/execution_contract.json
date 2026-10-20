@@ -323,13 +323,13 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2578-handoff-refresh",
+      "branch": "feat/ci-shards-worksteal",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "b4757ff49f4f3093081985d14942b250af24d7e4",
+      "head": "3e89a6d8dbee74990006294cc2b80ec6c3aee8c1",
       "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "b4757ff49f4f3093081985d14942b250af24d7e4",
+      "origin_main": "3e89a6d8dbee74990006294cc2b80ec6c3aee8c1",
       "worktree_clean": false
     },
     "scope": "current-continuation-state"
@@ -510,13 +510,13 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2578-handoff-refresh",
+    "branch": "feat/ci-shards-worksteal",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "b4757ff49f4f3093081985d14942b250af24d7e4",
+    "head": "3e89a6d8dbee74990006294cc2b80ec6c3aee8c1",
     "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "b4757ff49f4f3093081985d14942b250af24d7e4",
+    "origin_main": "3e89a6d8dbee74990006294cc2b80ec6c3aee8c1",
     "worktree_clean": false
   },
   "rules": [

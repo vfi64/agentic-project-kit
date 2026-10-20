@@ -128,8 +128,9 @@ their defaults and turn unrelated repository-wide style findings into gate failu
 
 `docs/governance/CI_RUNTIME_POLICY_CONTRACT.md` is the source-of-truth for
 deterministic CI runtime optimization. The `CI` workflow keeps `test` as the
-branch-protection-visible required job, and any optimized lane must be selected
-inside that job by a deterministic classifier.
+branch-protection-visible required job and its only verdict; the deterministic
+classifier runs once in the `classify` job, and `test` fails closed unless
+`classify` and every shard succeeded.
 
 The default lane is complete full-suite fallback. Missing, invalid, ambiguous,
 or unsafe inputs must select full CI. Runtime policy changes require:
@@ -139,13 +140,16 @@ or unsafe inputs must select full CI. Runtime policy changes require:
     python -m pytest -q -n 4 --durations=20
     ruff check .
 
-The normal `FULL_CI` lane runs the complete pytest suite in the required `test`
-job with a fixed four-worker xdist command:
+The normal `FULL_CI` lane runs the complete pytest suite in three deterministic
+shards (`sha256(nodeid) % 3`), each with four xdist workers and work stealing:
 
-    python -m pytest -q -n 4 --durations=20
+    python -m pytest -q -n 4 --dist worksteal --durations=20 --shard-index <i> --shard-count 3 --junitxml <report>
 
-This preserves the test set and changes only execution mechanics after repeated
-shadow evidence showed serial/parallel PASS parity. The serial command remains
+The required `test` job collects the full suite and passes only when
+`python -m agentic_project_kit.ci_test_shards check` proves that the shards ran
+exactly that collection without failures. This preserves the test set and changes
+only execution mechanics, as the four-worker command did after repeated shadow
+evidence showed serial/parallel PASS parity. The serial command remains
 part of local completion and release evidence, but it is not the CI critical
 path for ordinary PRs after promotion. `pytest-parallel-shadow` remains a
 manual `workflow_dispatch` diagnostic job rather than running on every PR,
