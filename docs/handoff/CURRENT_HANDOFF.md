@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `786186acde596357b01aebf8b759f5167e612a98` (`786186ac`), after `Wait for late required checks and let a blocked B4 finish its own release PR (KIT-GF-079, KIT-GF-080) (#2583)`.
-Last substantive work state is `786186acde596357b01aebf8b759f5167e612a98` (`786186ac`), after `Wait for late required checks and let a blocked B4 finish its own release PR (KIT-GF-079, KIT-GF-080) (#2583)`.
+Current verified main/admin HEAD is `ff78ca8c121c4267cd7a96e81ea42059a9dd44c9` (`ff78ca8c`), after `Release 1.1.4 (#2585)`.
+Last substantive work state is `ff78ca8c121c4267cd7a96e81ea42059a9dd44c9` (`ff78ca8c`), after `Release 1.1.4 (#2585)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
