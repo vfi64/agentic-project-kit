@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `7b16380a4b8f7cc771ec9be206f9230f69ad805a` (`7b16380a`), after `Run the Kit CI suite in three deterministic shards with work stealing (#2580)`.
-Last substantive work state is `7b16380a4b8f7cc771ec9be206f9230f69ad805a` (`7b16380a`), after `Run the Kit CI suite in three deterministic shards with work stealing (#2580)`.
+Current verified main/admin HEAD is `786186acde596357b01aebf8b759f5167e612a98` (`786186ac`), after `Wait for late required checks and let a blocked B4 finish its own release PR (KIT-GF-079, KIT-GF-080) (#2583)`.
+Last substantive work state is `786186acde596357b01aebf8b759f5167e612a98` (`786186ac`), after `Wait for late required checks and let a blocked B4 finish its own release PR (KIT-GF-079, KIT-GF-080) (#2583)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
