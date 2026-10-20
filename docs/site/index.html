@@ -56,7 +56,7 @@
         </article>
         <article>
           <span>Version</span>
-          <strong>1.1.2</strong>
+          <strong>1.1.3</strong>
         </article>
         <article>
           <span>Python</span>
@@ -114,7 +114,7 @@
         </article>
         <article>
           <span>Manifest</span>
-          <strong>832a4aac7cb2</strong>
+          <strong>a1cd3498df74</strong>
         </article>
       </section>
 
@@ -149,11 +149,11 @@
         <dl class="compact-details">
           <div>
             <dt>Manifest identity</dt>
-            <dd><code>832a4aac7cb2</code></dd>
+            <dd><code>a1cd3498df74</code></dd>
           </div>
           <div>
             <dt>Reproduced manifest</dt>
-            <dd><code>832a4aac7cb2</code></dd>
+            <dd><code>a1cd3498df74</code></dd>
           </div>
           <div>
             <dt>Identity verified</dt>
@@ -170,7 +170,7 @@
         <p>Using the Kit on itself exercises its own workflow. External adoption and maintenance tests exposed additional boundary defects and informed later repairs. Historical retests, recorded maintenance and current release notes are different evidence classes.</p>
         <div class="section-grid evidence-grid"><article class="panel"><h3>Greenfield: installed release</h3><p class="evidence-fact">agentic-project-kit==1.0.13 · 2026-09-16 · recorded_pass</p><p>Historical released-package first-cycle work/PR/CI/merge/handoff retest in a private external repository; not a retest of every later release.</p><p><a href="https://github.com/vfi64/agentic-project-kit/blob/main/docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.json">Read the repository source</a></p></article>
 <article class="panel"><h3>Brownfield: recorded maintenance</h3><p class="evidence-fact">7 merged observations · latest: B1-COMM-SCI-20260831-007 · legacy seam count: 55 -&gt; 44</p><p>Recorded maintenance observations in one familiar private repository; not an independent benchmark or general portability proof.</p><p><a href="https://github.com/vfi64/agentic-project-kit/blob/main/docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md">Read the repository source</a></p></article>
-<article class="panel"><p class="eyebrow">Release notes, not a new retest</p><h3>What changed in 1.1.2</h3><p>Source status: recorded. Shipped changes recorded in the current release section.</p><ul><li>Let transfer order-create write command orders: --run-command &#x27;&lt;argv&gt;&#x27; is checked against the command manifest when the order is created, flags commands that need the local --allow-unlisted, refuses commands no flag could allow, and an order&#x27;s agentic-kit commands run with the workspace&#x27;s own Kit instead of whatever PATH finds (KIT-GF-074).</li><li>Publish what a transfer order produced: after the order ran, transfer remote-next commits the files its write actions wrote, its command-run report and LATEST_COMMAND_RUN.txt together with its report, so the checkout ends clean on the transfer branch; changes the order did not declare are never published and turn the result BLOCKED (KIT-GF-075).</li><li>Stop counting the .gitkeep carriers that workspace init writes into the transfer inbox and outbox as obsolete transfer files, which blocked every transfer remote-next of a freshly initialized workspace (KIT-GF-076).</li><li>Accept a consumer&#x27;s light-path checks as SKIPPED only on a light pull request: a workspace names them under gates.light_path_skipped_checks in .agentic/config.yaml, and pr wait-ci, PR status, merge-if-green and post-merge settlement accept them when the Kit re-derives the ci runtime-plan classification of the pull request as light; on a full pull request, or when nothing is declared, a skipped check still blocks (KIT-GF-073).</li><li>Let kit update maintain every Kit pin of the managed CI file, so a separate classify job beside the gate job is updated too; all pins must name the same exact version on their own pip install line (KIT-GF-071).</li><li>Scope the external rule-mechanism inventory&#x27;s surface evidence to the lines carrying its anchor instead of whole files, so unrelated edits of .agentic/config.yaml or the rules README keep rule-registry check PASS (inventory schema 2; a schema 1 inventory is refreshed by bootstrap), and let a signed kit update re-derive a Kit-derived inventory with the updated Kit; a hand-reviewed inventory is never touched (KIT-GF-072).</li></ul><p><a href="https://github.com/vfi64/agentic-project-kit/blob/main/CHANGELOG.md">Read the repository source</a></p></article>
+<article class="panel"><p class="eyebrow">Release notes, not a new retest</p><h3>What changed in 1.1.3</h3><p>Source status: recorded. Shipped changes recorded in the current release section.</p><ul><li>Zenodo DOI verification pending for v1.1.3.</li><li>Make external retests executable: every catalog retest gets an execution class derived from the installed command manifest (local, owner_remote, kit_release), retest commands must name declared routes and options, and a local retest may carry a machine contract (a fixture the Kit builds, agentic-kit/git steps and exact expectations). agentic-kit greenfield retest --id &lt;id&gt; | --all runs the contracts with the installed Kit in a temporary workspace and reports PASS or FAIL per finding; a retest without a contract or one that needs GitHub or a release is reported as not verified, so the run is INCOMPLETE (exit 3), never PASS. Contracts exist for eight findings so far, and every retest must now name an existing route (KIT-GF-070, partial).</li><li>Declare the push of transfer remote-next and transfer remote-work-start in the command manifest; both declared only fetch although they publish to the transfer or work branch (KIT-GF-077).</li></ul><p><a href="https://github.com/vfi64/agentic-project-kit/blob/main/CHANGELOG.md">Read the repository source</a></p></article>
 <article class="panel"><h3>Formal assurance: planning boundary</h3><p class="evidence-fact">PAA: planned · review: review_required · P0: proposed</p><p>PAA is shown from the canonical plan. A planning status is not an implemented verification capability or a proof of software correctness.</p><p><a href="https://github.com/vfi64/agentic-project-kit/blob/main/docs/planning/PROJECT_DIRECTION.yaml">Read the repository source</a></p></article></div>
         <p><a href="understand/index.html#evidence">Methods and generalization limits</a> · <a href="understand/index.html#comparison">Comparison with open-source and commercial tools</a></p>
       </section>

@@ -1,0 +1,200 @@
+{
+  "authorized_route": "agentic-kit release-prep",
+  "base_ref": "origin/main",
+  "changed_paths_against_base": [
+    ".agentic/dpa/acceptance/current_handoff_operational_state.json",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/site/claims/claims.json",
+    "docs/site/claims/index.html",
+    "docs/site/commands/commands.json",
+    "docs/site/commands/diagnostics.html",
+    "docs/site/commands/guided.html",
+    "docs/site/commands/index.html",
+    "docs/site/index.html",
+    "docs/site/quickstart/index.html",
+    "docs/site/quickstart/quickstart.json",
+    "docs/site/site.json",
+    "docs/site/understand/evidence.json",
+    "docs/site/understand/index.html",
+    "docs/site/workflows/index.html",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py",
+    "src/agentic_project_kit/reference/agentic-kit-commands.json"
+  ],
+  "date": "2026-10-20",
+  "explicit_summary_lines": [
+    "Make external retests executable: every catalog retest gets an execution class derived from the installed command manifest (`local`, `owner_remote`, `kit_release`), retest commands must name declared routes and options, and a local retest may carry a machine contract (a fixture the Kit builds, `agentic-kit`/`git` steps and exact expectations). `agentic-kit greenfield retest --id <id> | --all` runs the contracts with the installed Kit in a temporary workspace and reports PASS or FAIL per finding; a retest without a contract or one that needs GitHub or a release is reported as not verified, so the run is INCOMPLETE (exit 3), never PASS. Contracts exist for eight findings so far, and every retest must now name an existing route (KIT-GF-070, partial).",
+    "Declare the push of `transfer remote-next` and `transfer remote-work-start` in the command manifest; both declared only `fetch` although they publish to the transfer or work branch (KIT-GF-077)."
+  ],
+  "from_tag": "v1.1.2",
+  "kind": "release_prepare_evidence",
+  "release_metadata_anchor_paths": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py"
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-notes-generate",
+        "--version",
+        "1.1.3",
+        "--from-tag",
+        "v1.1.2",
+        "--to-ref",
+        "main",
+        "--include-github-metadata",
+        "--summary-lines-json",
+        "tmp/release-113-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-notes-generate",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 10217,
+      "stdout_sha256": "746ef46d777d934ddbf96c56565648addceda35ab19d3d1ea3a18efad077936b"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-prep",
+        "--version",
+        "1.1.3",
+        "--date",
+        "2026-10-20",
+        "--summary-line",
+        "Make external retests executable: every catalog retest gets an execution class derived from the installed command manifest (`local`, `owner_remote`, `kit_release`), retest commands must name declared routes and options, and a local retest may carry a machine contract (a fixture the Kit builds, `agentic-kit`/`git` steps and exact expectations). `agentic-kit greenfield retest --id <id> | --all` runs the contracts with the installed Kit in a temporary workspace and reports PASS or FAIL per finding; a retest without a contract or one that needs GitHub or a release is reported as not verified, so the run is INCOMPLETE (exit 3), never PASS. Contracts exist for eight findings so far, and every retest must now name an existing route (KIT-GF-070, partial).",
+        "--summary-line",
+        "Declare the push of `transfer remote-next` and `transfer remote-work-start` in the command manifest; both declared only `fetch` although they publish to the transfer or work branch (KIT-GF-077).",
+        "--summary-lines-from",
+        "tmp/release-113-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-prep",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 291,
+      "stdout_sha256": "c6195cf940c83ed1f2307ed562897269709eea00266cebc23935af0b165b25ab"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "commands",
+        "sync-entrypoints",
+        "--execute",
+        "--json"
+      ],
+      "name": "commands-sync-entrypoints",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 507,
+      "stdout_sha256": "eb8e7ca380e079e9e4a53602baf5c21eec3b157918a7b2a9d5df41a68905e7ee"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "agentic-kit",
+        "release",
+        "prepare",
+        "--internal-dpa-readiness-ack-refresh"
+      ],
+      "name": "dpa-readiness-ack-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 260,
+      "stdout_sha256": "524562c4c4ea4e71f8163ab884e73ab334bf162d2dc7a5396675732eca35788f"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "chat-switch-complete",
+        "--json"
+      ],
+      "name": "successor-handoff-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 10330,
+      "stdout_sha256": "5fd3b141a5293e86694ef52808c054e740c211e7a581c7bd6081f941a8c4c1f3"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "site/scripts/build.py",
+        "--docs-pages-fallback",
+        "--json"
+      ],
+      "name": "docs-pages-fallback-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 4342,
+      "stdout_sha256": "26722310269710115400f2521227610451e058556881281310ee838e494444d5"
+    }
+  ],
+  "summary_lines_path": "tmp/release-113-summary-lines.json",
+  "to_ref": "main",
+  "version": "1.1.3"
+}
