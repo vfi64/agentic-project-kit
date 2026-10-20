@@ -222,7 +222,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "commands=270",
+            "detail": "commands=271",
             "evidence_type": "generated-artifact",
             "status": "verified"
           }
@@ -274,8 +274,8 @@
     }
   },
   "command_catalog": {
-    "command_count": 270,
-    "diagnostic_count": 130,
+    "command_count": 271,
+    "diagnostic_count": 131,
     "entries": [
       {
         "diagnostic_priority": "reference_lookup",
@@ -4746,6 +4746,46 @@
         "safety": "BOUNDED",
         "surface": "primitive",
         "when_to_use": "Plan or sign the Kit maintainer's deterministic local status projections."
+      },
+      {
+        "diagnostic_priority": "advanced_diagnostic",
+        "dry_run_available": false,
+        "group": "greenfield",
+        "help": "Run the installed Kit's machine retests in a temporary workspace; never touch this workspace.",
+        "lifecycle_rank": null,
+        "params": [
+          {
+            "default": [],
+            "help": "Finding id; repeatable.",
+            "name": "finding_ids",
+            "opts": [
+              "--id"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Retest every finding of the installed Kit.",
+            "name": "run_all",
+            "opts": [
+              "--all"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          }
+        ],
+        "qualified_name": "agentic-kit greenfield retest",
+        "safety": "READ_ONLY",
+        "surface": "diagnostic",
+        "when_to_use": "Run the installed Kit's machine retests in a temporary workspace; never touch this workspace."
       },
       {
         "diagnostic_priority": "advanced_diagnostic",
@@ -12669,7 +12709,7 @@
       "evidence": 8,
       "executor": 2,
       "governance": 1,
-      "greenfield": 2,
+      "greenfield": 3,
       "gui": 1,
       "handoff": 5,
       "instruction": 1,
@@ -12699,11 +12739,11 @@
     "safety_counts": {
       "BOUNDED": 176,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 85
+      "READ_ONLY": 86
     },
     "schema_version": 1,
     "surface_counts": {
-      "diagnostic": 130,
+      "diagnostic": 131,
       "orchestrator": 34,
       "primitive": 106
     }
@@ -12783,27 +12823,27 @@
   "kind": "agentic_project_kit_generated_site",
   "metadata": {
     "build_commit": "docs-pages-fallback",
-    "command_count": 270,
+    "command_count": 271,
     "command_group_count": 40,
     "concept_doi": "10.5281/zenodo.20101359",
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "390ff4b84aa2",
+    "manifest_sha": "832a4aac7cb2",
     "package_name": "agentic-project-kit",
     "package_version": "1.1.2",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.1.2",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "390ff4b84aa2",
+    "reproduced_manifest_sha": "832a4aac7cb2",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 176,
       "DESTRUCTIVE": 9,
-      "READ_ONLY": 85
+      "READ_ONLY": 86
     },
     "surface_counts": {
-      "diagnostic": 130,
+      "diagnostic": 131,
       "orchestrator": 34,
       "primitive": 106
     },

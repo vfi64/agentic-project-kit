@@ -5,6 +5,7 @@ from importlib.resources import files
 import hashlib
 import json
 from pathlib import Path
+from agentic_project_kit.greenfield_retest import EXECUTION_CLASSES, execution_class, validate_machine
 from agentic_project_kit.workspace import KitConfig
 
 CATALOG = Path(".agentic/greenfield_findings.json")
@@ -13,7 +14,7 @@ EXPORT = PUBLIC_REPORTS / "greenfield" / "external-findings-status.json"
 PACKAGED = Path("src/agentic_project_kit/reference/external-findings-status.json")
 RETEST_REPORT = PUBLIC_REPORTS / "greenfield" / "EXTERNAL_FINDINGS_RETESTS.md"
 STATES = {"OPEN", "PARTIAL", "CLOSED", "NOT_APPLICABLE"}
-FAMILIES = {f"KIT-GF-{n:03}" for n in (*range(1, 19), *range(21, 67))} | {
+FAMILIES = {f"KIT-GF-{n:03}" for n in (*range(1, 19), *range(21, 78))} | {
     "KIT-GF-RULE-REGISTRY-BOOTSTRAP"
 }
 
@@ -60,6 +61,12 @@ def validate(data: dict, root: Path | None = None) -> None:
         for command in r["commands"]:
             if not isinstance(command, str) or not command.startswith("agentic-kit "):
                 raise ValueError("retests must name Kit routes")
+        # KIT-GF-070: every retest names a route of the installed Kit; its execution class is
+        # derived from the manifest's declared effects and a machine contract is validated.
+        derived, effects = execution_class(r)
+        if r.get("execution_class", derived) != derived or r.get("remote_effects", effects) != effects:
+            raise ValueError(f"{f['id']}: execution class differs from the command manifest")
+        validate_machine(f["id"], r)
         if f["id"] in {"KIT-GF-055", "KIT-GF-056", "KIT-GF-058", "KIT-GF-059"}:
             if (
                 f.get("kit_release_evidence", {}).get("path")
@@ -71,13 +78,21 @@ def validate(data: dict, root: Path | None = None) -> None:
 def build(root: Path) -> dict:
     source = json.loads((root / CATALOG).read_text())
     validate(source, root)
-    records = sorted(source["findings"], key=lambda f: f["id"])
+    records = []
+    for finding in sorted(source["findings"], key=lambda f: f["id"]):
+        derived, effects = execution_class(finding["external_retest"])
+        retest = {**finding["external_retest"], "execution_class": derived, "remote_effects": effects}
+        records.append({**finding, "external_retest": retest})
     return {
         "schema_version": 1,
         "kind": "external_findings_status",
         "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
         "source_sha256": hashlib.sha256(encoded(source)).hexdigest(),
         "counts": {s: sum(f["kit_state"] == s for f in records) for s in sorted(STATES)},
+        "execution_classes": {
+            c: sum(f["external_retest"]["execution_class"] == c for f in records) for c in EXECUTION_CLASSES
+        },
+        "machine_contracts": sum("machine" in f["external_retest"] for f in records),
         "findings": records,
     }
 
@@ -167,6 +182,8 @@ def render_retests(data: dict) -> str:
         "",
         "Generated from .agentic/greenfield_findings.json by the signed greenfield export route.",
         "These are executable templates, not successful test evidence. Substitute bindings as single argv tokens.",
+        "The execution class is derived from the installed Kit's command manifest. A local retest with a",
+        "machine contract runs with `agentic-kit greenfield retest --id <id> --json` in a temporary workspace.",
         "Consumer VERIFIED_FIXED requires its own retained results. Publishing evidence can be absent pending a release.",
         "",
     ]
@@ -177,6 +194,14 @@ def render_retests(data: dict) -> str:
             "",
             f"Kit state: {f['kit_state']}; fixed_in: {f['fixed_in'] or 'not established'}.",
             f"Evidence: {f['report']}",
+            "",
+            f"Execution class: {r['execution_class']} (effects: {', '.join(r['remote_effects'])}); "
+            + (
+                f"machine contract: {r['machine']['covers']}"
+                if "machine" in r
+                else "no machine contract; `greenfield retest` reports "
+                + ("NO_MACHINE_CONTRACT." if r["execution_class"] == "local" else "NOT_RUN_LOCALLY.")
+            ),
             "",
             "Preconditions: " + " ".join(r["preconditions"]),
             "",

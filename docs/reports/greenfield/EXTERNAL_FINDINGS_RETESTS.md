@@ -8,12 +8,16 @@ review_policy: historical_evidence
 
 Generated from .agentic/greenfield_findings.json by the signed greenfield export route.
 These are executable templates, not successful test evidence. Substitute bindings as single argv tokens.
+The execution class is derived from the installed Kit's command manifest. A local retest with a
+machine contract runs with `agentic-kit greenfield retest --id <id> --json` in a temporary workspace.
 Consumer VERIFIED_FIXED requires its own retained results. Publishing evidence can be absent pending a release.
 
 ## KIT-GF-001
 
 Kit state: CLOSED; fixed_in: 1.0.24.
 Evidence: docs/reports/greenfield/KIT-GF-001-lifecycle-bootstrap-retest-2026-10-13.md
+
+Execution class: local (effects: none); machine contract: workspace init, command reference sync, check PASS and doctor Overall: PASS in a fresh external repository
 
 Preconditions: Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry.
 
@@ -32,6 +36,8 @@ Expected result fields: `{"assertions": ["process.returncode=0", "check.status=P
 Kit state: CLOSED; fixed_in: 1.0.9.
 Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: Initialized external workspace with native test configuration; no Kit tests/registry. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -46,6 +52,8 @@ Expected result fields: `{"assertions": ["PASS; no Kit self-hosting paths requir
 
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-003-canonical-handoff-applicability-2026-10-13.md
+
+Execution class: owner_remote (effects: network_read, none); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry.
 
@@ -66,6 +74,8 @@ Expected result fields: `{"assertions": ["process.returncode=0 for virgin handof
 Kit state: CLOSED; fixed_in: 1.0.9.
 Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: External-manifest workspace recognized by doctor. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -80,6 +90,8 @@ Expected result fields: `{"assertions": ["PASS without full-contract Kit constit
 
 Kit state: CLOSED; fixed_in: 1.0.24.
 Evidence: docs/reports/greenfield/KIT-GF-005-first-work-start-retest-2026-10-13.md
+
+Execution class: local (effects: fetch); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry. Clean main tracks origin/main; local bare origin contains the initial committed workspace; no previous merge or successor package.
 
@@ -96,6 +108,8 @@ Expected result fields: `{"assertions": ["result_status=PASS", "post-merge-check
 Kit state: CLOSED; fixed_in: 1.0.9.
 Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: Initialized workspace with empty transfer inbox. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -111,6 +125,8 @@ Expected result fields: `{"assertions": ["No file exception; deterministic empty
 Kit state: CLOSED; fixed_in: 1.0.13.
 Evidence: docs/reports/POST_V1_0_12_GREENFIELD_PROVENANCE_RETEST_20260915.json
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: Initialized external workspace; retain generated provenance. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -125,6 +141,8 @@ Expected result fields: `{"assertions": ["Generated Kit files are recognized, no
 
 Kit state: CLOSED; fixed_in: 1.0.9.
 Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: Fresh disposable repository. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -142,6 +160,8 @@ Expected result fields: `{"assertions": ["Injected workflow calls installed Kit 
 Kit state: CLOSED; fixed_in: 1.0.13.
 Evidence: docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.json
 
+Execution class: owner_remote (effects: merge, pull_request, push); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Disposable hosted external repository with green required CI and first unpushed work branch; remote effects authorized. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -156,6 +176,8 @@ Expected result fields: `{"assertions": ["One PR, green merge and handoff; no se
 
 Kit state: CLOSED; fixed_in: 1.0.9.
 Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: Disposable external work branch with one reviewed change. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -173,6 +195,8 @@ Expected result fields: `{"assertions": ["Acknowledgement remains valid for the 
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-011-successor-final-head-identity-2026-10-04.md
 
+Execution class: owner_remote (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: After governed merge and administrative handoff refresh. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -187,6 +211,8 @@ Expected result fields: `{"assertions": ["successor_package_head_status=refresh_
 
 Kit state: CLOSED; fixed_in: 1.0.9.
 Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Execution class: owner_remote (effects: merge, pull_request, push); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: Disposable remote external work branch; green CI; unchanged reviewed inputs between plan and execution. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -204,6 +230,8 @@ Expected result fields: `{"assertions": ["Plan=PLANNED; execution completes with
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-013-workspace-repair-escalation-2026-10-13.md
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry. In workspace tmp_root, create slice1-a-20260101-000001.log containing block not found, then slice1-b-20260101-000002.log containing function not found; retain distinct observed mtime_ns order. After the blocked result add slice1-diagnose-20260101-000003.log containing RESULT=PATCH_FAILURE_DIAGNOSIS_DONE with later mtime_ns.
 
 ```text
@@ -218,6 +246,8 @@ Expected result fields: `{"assertions": ["one failure: next_mutation_allowed=tru
 
 Kit state: CLOSED; fixed_in: 1.0.13.
 Evidence: docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: External continuation authority with deliberate stale or contradictory state. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -234,6 +264,8 @@ Expected result fields: `{"assertions": ["Deterministic authority-drift finding;
 Kit state: CLOSED; fixed_in: 1.0.13.
 Evidence: docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: Registered project documents with deliberately contradictory canonical facts and intact control fixture. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -248,6 +280,8 @@ Expected result fields: `{"assertions": ["Contradictions are reported; aligned r
 
 Kit state: CLOSED; fixed_in: 1.0.13.
 Evidence: docs/reports/greenfield/KIT-GF-016-contract-first-executor-retest-2026-10-13.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry.
 
@@ -266,6 +300,8 @@ Expected result fields: `{"assertions": ["plan.result_status=PASS", "dry-run.exe
 Kit state: CLOSED; fixed_in: 1.0.23.
 Evidence: docs/reports/greenfield/KIT-GF-017-released-external-merge-retest-2026-10-10.md
 
+Execution class: owner_remote (effects: merge); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Disposable external repo; clean context; green PR; remote merge authorized; no Kit source/registry. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -280,6 +316,8 @@ Expected result fields: `{"assertions": ["Safe merge recovers canonical external
 
 Kit state: CLOSED; fixed_in: 1.0.10.
 Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
+
+Execution class: owner_remote (effects: delete_remote); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: Merged PR; named work branch already absent remotely; local current branch is main. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -296,6 +334,8 @@ Expected result fields: `{"assertions": ["PASS/idempotent no-op; both requested 
 Kit state: CLOSED; fixed_in: 1.0.23.
 Evidence: docs/reports/greenfield/KIT-GF-021-workspace-kit-discovery-2026-10-10.md
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: Installed wheel in workspace-owned interpreter; global PATH excludes agentic-kit. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -310,6 +350,8 @@ Expected result fields: `{"assertions": ["Installed Kit is found; missing CLI is
 
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-022-packaged-command-reference-refresh-2026-10-07.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: Stale workspace command reference; installed wheel; no Kit sources. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -327,6 +369,8 @@ Expected result fields: `{"assertions": ["Refresh and check PASS; packaged refer
 Kit state: CLOSED; fixed_in: 1.0.22.
 Evidence: docs/reports/greenfield/KIT-GF-023-pure-json-stdout-2026-10-09.md
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: External workspace with deprecated manifest/config warning reproduction. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -343,6 +387,8 @@ Expected result fields: `{"assertions": ["Each stdout parses as exactly one JSON
 Kit state: CLOSED; fixed_in: 1.0.19.
 Evidence: docs/reports/greenfield/KIT-GF-024-025-ci-status-manifest-effects-2026-10-05.md
 
+Execution class: owner_remote (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Hosted external repository with Actions run for supplied commit. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -357,6 +403,8 @@ Expected result fields: `{"assertions": ["JSON verdict and bounded run/check det
 
 Kit state: CLOSED; fixed_in: 1.0.19.
 Evidence: docs/reports/greenfield/KIT-GF-024-025-ci-status-manifest-effects-2026-10-05.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: Synchronized installed-wheel command manifest. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -373,6 +421,8 @@ Expected result fields: `{"assertions": ["PASS; every command declares valid rem
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-026-managed-ci-template-2026-10-04.md
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: Unmodified old Kit-managed CI source and injected projection. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -387,6 +437,8 @@ Expected result fields: `{"assertions": ["Plan names update paths; template pins
 
 Kit state: CLOSED; fixed_in: 1.0.23.
 Evidence: docs/reports/greenfield/KIT-GF-027-bounded-pr-ci-findings-2026-10-09.md
+
+Execution class: owner_remote (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: External PR whose CI executed and failed; bounded output mode. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -403,6 +455,8 @@ Expected result fields: `{"assertions": ["Execution succeeds with a failed CI ve
 Kit state: CLOSED; fixed_in: 1.0.19.
 Evidence: docs/reports/greenfield/KIT-GF-028-tempdir-artifacts-2026-10-05.md
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: External fixture; OS temp root is redirected to a disposable directory. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -417,6 +471,8 @@ Expected result fields: `{"assertions": ["Artifacts resolve via OS/workspace tem
 
 Kit state: CLOSED; fixed_in: 1.0.14.
 Evidence: docs/reports/greenfield/KIT-GF-029-publication-none-2026-10-03.md
+
+Execution class: owner_remote (effects: release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: publication: none; prepared release; no public publication configured. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -433,6 +489,8 @@ Expected result fields: `{"assertions": ["Private tag plan; no GitHub/PyPI/Zenod
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-030-031-pr-lifecycle-2026-10-05.md
 
+Execution class: owner_remote (effects: pull_request, push); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Branch already squash merged in disposable remote repo. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -447,6 +505,8 @@ Expected result fields: `{"assertions": ["Reuses merged PR evidence; does not cr
 
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-030-031-pr-lifecycle-2026-10-05.md
+
+Execution class: owner_remote (effects: merge, push); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: Green external PR with valid context; merge authorized. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -463,6 +523,8 @@ Expected result fields: `{"assertions": ["Merge and post-merge closeout complete
 Kit state: CLOSED; fixed_in: 1.0.15.
 Evidence: docs/reports/greenfield/KIT-GF-032-external-release-ready-2026-10-03.md
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: Prepared external release fixture; native package/version anchors and sufficient changelog categories. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -477,6 +539,8 @@ Expected result fields: `{"assertions": ["No Kit repository package/document ass
 
 Kit state: CLOSED; fixed_in: 1.0.14.
 Evidence: docs/reports/greenfield/KIT-GF-033-work-rescue-2026-10-02.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: Disposable external main containing local changes/commits; local origin/main exists. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -494,6 +558,8 @@ Expected result fields: `{"assertions": ["Signed rescue preserves work on rescue
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-034-036-release-closeout-quality-2026-10-04.md
 
+Execution class: owner_remote (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Publishing fixture with verified DOI; optional docs-pages build script. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -508,6 +574,8 @@ Expected result fields: `{"assertions": ["DOI update and applicable site project
 
 Kit state: CLOSED; fixed_in: 1.0.22.
 Evidence: docs/reports/greenfield/KIT-GF-035-external-documentation-audit-2026-10-09.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: External docs with doc_lifecycle=warn; no Kit doc registry/constitution. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -524,6 +592,8 @@ Expected result fields: `{"assertions": ["No Kit-required document-set blockers;
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-034-036-release-closeout-quality-2026-10-04.md
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: Disposable prepared release repository; one-category notes. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -538,6 +608,8 @@ Expected result fields: `{"assertions": ["Quality rejection occurs before writes
 
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-037-038-release-button-foundation-2026-10-04.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: External release config declares a project-specific version anchor. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -554,6 +626,8 @@ Expected result fields: `{"assertions": ["Declared extra anchor included in dete
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-037-038-release-button-foundation-2026-10-04.md
 
+Execution class: owner_remote (effects: release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Prepared external publication with no ENABLE_LIVE_PUBLISH marker. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -569,10 +643,12 @@ Expected result fields: `{"assertions": ["Returns signature-bound plan; no marke
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-039-communication-refresh-branch-publish-2026-10-04.md
 
+Execution class: owner_remote (effects: merge, none, pull_request, push); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Work branch carries refreshed communication capsule. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
-agentic-kit transfer communication-context-status --json
+agentic-kit rules require-current-communication-context --json
 agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --release-note-category Fixed --dry-run --json
 ```
 
@@ -584,6 +660,8 @@ Expected result fields: `{"assertions": ["Work branch can publish its own carrie
 
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-040-041-work-finish-pr-flow-2026-10-04.md
+
+Execution class: owner_remote (effects: merge, pull_request, push); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: Already committed external branch with existing PR and green CI; authorized closeout. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -600,6 +678,8 @@ Expected result fields: `{"assertions": ["Uses existing PR, publishes missing he
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-040-041-work-finish-pr-flow-2026-10-04.md
 
+Execution class: owner_remote (effects: merge, pull_request, push); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: External work branch with bounded reviewed changes. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -614,6 +694,8 @@ Expected result fields: `{"assertions": ["result_status=PLANNED, not completed P
 
 Kit state: CLOSED; fixed_in: 1.0.18.
 Evidence: docs/reports/greenfield/KIT-GF-042-ci-update-customized-source-2026-10-05.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: Customized source CI and matching custom injected workflow; record byte hashes. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -630,6 +712,8 @@ Expected result fields: `{"assertions": ["BLOCKED modified_managed_ci_template/w
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-043-044-release-publish-doc-lifecycle-2026-10-05.md
 
+Execution class: owner_remote (effects: release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: publication: github with prepared release. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -644,6 +728,8 @@ Expected result fields: `{"assertions": ["Plan uses annotated tag and configured
 
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-043-044-release-publish-doc-lifecycle-2026-10-05.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: Explicit adopted lifecycle contract; document has labels only in body rather than header. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -660,6 +746,8 @@ Expected result fields: `{"assertions": ["Header violation detected; valid lifec
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-045-release-summary-line-passthrough-2026-10-05.md
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: External release fixture whose derived notes cover insufficient categories. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -674,6 +762,8 @@ Expected result fields: `{"assertions": ["Explicit summary reaches quality valid
 
 Kit state: CLOSED; fixed_in: 1.0.18.
 Evidence: docs/reports/greenfield/KIT-GF-046-work-finish-handoff-rule-ack-2026-10-05.md
+
+Execution class: owner_remote (effects: merge, pull_request, push); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: External branch changes manifest/rule sources; green CI; authorized lifecycle. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -690,6 +780,8 @@ Expected result fields: `{"assertions": ["Kit refreshes acknowledgement immediat
 Kit state: CLOSED; fixed_in: 1.0.19.
 Evidence: docs/reports/greenfield/KIT-GF-047-release-run-orchestrator-2026-10-05.md
 
+Execution class: owner_remote (effects: merge, pull_request, push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Disposable prepared release workspace; publication explicitly declared; no execute consent supplied. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -704,6 +796,8 @@ Expected result fields: `{"assertions": ["Stops at the first signable gate; stat
 
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-048-work-finish-pr-metadata-2026-10-07.md
+
+Execution class: owner_remote (effects: merge, network_read, pull_request, push); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: External branch with reviewed PR metadata/category; metadata available for note generation. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -721,6 +815,8 @@ Expected result fields: `{"assertions": ["Category is preserved in PR body and g
 Kit state: CLOSED; fixed_in: 1.0.21.
 Evidence: docs/reports/greenfield/KIT-GF-049-generated-reference-followup-2026-10-09.md
 
+Execution class: owner_remote (effects: release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: External publication github; synchronized command reference; no Kit documentation registry. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -736,6 +832,8 @@ Expected result fields: `{"assertions": ["Kit self-host documentation checks ski
 Kit state: CLOSED; fixed_in: 1.0.19.
 Evidence: docs/reports/greenfield/KIT-GF-050-B-fallback-handoff-path-2026-10-06.md
 
+Execution class: owner_remote (effects: merge); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Disposable external merged PR; slow main CI and valid external handoff resolver; remote refresh authorized. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -750,6 +848,8 @@ Expected result fields: `{"assertions": ["Configured bounded wait respected; fal
 
 Kit state: CLOSED; fixed_in: 1.0.23.
 Evidence: docs/reports/greenfield/KIT-GF-051-signed-workspace-kit-update-2026-10-10.md
+
+Execution class: owner_remote (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: Disposable workspace-owned environment with old Kit and known managed CI pins; package source reachable. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -767,6 +867,8 @@ Expected result fields: `{"assertions": ["Signed update synchronizes installed v
 Kit state: CLOSED; fixed_in: 1.0.21.
 Evidence: docs/reports/greenfield/KIT-GF-052-changelog-layout-diagnostics-2026-10-09.md
 
+Execution class: owner_remote (effects: release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Prepared target changelog section containing deliberately wrapped bullet. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -781,6 +883,8 @@ Expected result fields: `{"assertions": ["BLOCKED with exact layout diagnosis an
 
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-053-recover-rule-ack-2026-10-07.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: Valid external rule acknowledgement; retain its pre-run bytes. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -798,6 +902,8 @@ Expected result fields: `{"assertions": ["Read/recovery route preserves acknowle
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-054-gitignored-audit-scan-2026-10-07.md
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: Ignored directory contains a deliberately problematic/large fixture; tracked sources remain healthy. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -814,6 +920,8 @@ Expected result fields: `{"assertions": ["Ignored trees excluded; active tracked
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-055-dispatch-resume-followup-2026-10-09.md
 
+Execution class: kit_release (effects: merge, pull_request, push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Kit publishing release; PyPI/Zenodo unavailable in consumer; inspect committed Kit evidence instead of publishing Cockpit. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -828,6 +936,8 @@ Expected result fields: `{"assertions": ["C3 PASS with explicit publish_target=p
 
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-055-056-release-run-c3-c4-2026-10-07.md
+
+Execution class: kit_release (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: Kit publishing release evidence; consumer need not publish. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -844,6 +954,8 @@ Expected result fields: `{"assertions": ["C4 PASS; command accepts JSON and retu
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-057-manifest-remote-effects-2026-10-07.md
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: Synchronized external command reference. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -858,6 +970,8 @@ Expected result fields: `{"assertions": ["Remote effects match declared side eff
 
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-058-doi-changelog-section-2026-10-07.md
+
+Execution class: kit_release (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: Kit publishing release evidence; target version has Unreleased above it. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -874,6 +988,8 @@ Expected result fields: `{"assertions": ["D2 PASS; DOI facts occur inside the ta
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-059-doi-closeout-recovery-2026-10-07.md
 
+Execution class: kit_release (effects: merge, pull_request, push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Kit publishing evidence; separate recovery fixture with failed DOI PR is required to prove D2R, never induce a production failure. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -888,6 +1004,8 @@ Expected result fields: `{"assertions": ["D4/D5 PASS proves ordinary closeout; D
 
 Kit state: CLOSED; fixed_in: 1.0.21.
 Evidence: docs/reports/greenfield/KIT-GF-060-consume-unreleased-2026-10-09.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: Unreleased entries exactly selected into target version. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -904,6 +1022,8 @@ Expected result fields: `{"assertions": ["Plan consumes selected entries once; u
 Kit state: CLOSED; fixed_in: 1.0.21.
 Evidence: docs/reports/greenfield/KIT-GF-061-release-consent-2026-10-09.md
 
+Execution class: owner_remote (effects: merge, pull_request, push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Disposable declared per_gate or upfront publication policy; inspect first gate without execute. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -918,6 +1038,8 @@ Expected result fields: `{"assertions": ["Gate binds version/tag/target; approve
 
 Kit state: CLOSED; fixed_in: 1.0.23.
 Evidence: docs/reports/greenfield/KIT-GF-062-signed-ci-rerun-2026-10-09.md
+
+Execution class: owner_remote (effects: network_read, workflow_rerun); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: Disposable PR with failed never-started checks; owner authorizes one rerun. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -935,6 +1057,8 @@ Expected result fields: `{"assertions": ["Only eligible failed checks rerun; sig
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-063-custom-ci-runtime-plan-2026-10-13.md
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: Installed wheel, synchronized reference, custom CI; matching refresh branch and local base/head commits.
 
 ```text
@@ -949,6 +1073,8 @@ Expected result fields: `{"assertions": ["mode=light only for manifest-derived r
 
 Kit state: CLOSED; fixed_in: 1.0.22.
 Evidence: docs/reports/greenfield/KIT-GF-064-kit-changelog-consumption-2026-10-09.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: Kit release fixture with already selected historical Unreleased entries. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -965,6 +1091,8 @@ Expected result fields: `{"assertions": ["Released entries consumed; historical 
 Kit state: CLOSED; fixed_in: 1.0.22.
 Evidence: docs/reports/greenfield/KIT-GF-065-release-publication-policy-2026-10-09.md
 
+Execution class: owner_remote (effects: merge, pull_request, push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: External publication: github and release.branch_prefix: release/. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -979,6 +1107,8 @@ Expected result fields: `{"assertions": ["Plan omits C3 and DOI D steps, preserv
 
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-066-machine-readable-evidence-2026-10-13.md
+
+Execution class: local (effects: none); machine contract: machine-readable status of every family and the release evidence link of KIT-GF-055
 
 Preconditions: Installed wheel; no Kit source, tests or documentation registry. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -995,6 +1125,8 @@ Expected result fields: `{"assertions": ["schema_version=1; all families with re
 
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-067-owned-kit-subprocess-resolution-2026-10-13.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: Disposable installed-wheel external workspace, synchronized command reference, valid release metadata, tracking main, prior tag and current context; declare kit.interpreter outside .venv.
 
@@ -1013,6 +1145,8 @@ Expected result fields: `{"result_status": "PASS", "stderr": "no FileNotFoundErr
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-068-declared-external-evidence-2026-10-13.md
 
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
 Preconditions: Installed wheel and synchronized command reference; disposable clone; exact ledger path declared under audit.ns_legacy.evidence_paths; no Kit tests or documentation registry.
 
 ```text
@@ -1028,6 +1162,8 @@ Expected result fields: `{"blocker_count": 0, "references[].classification": "de
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-069-release-publish-verdict-2026-10-13.md
 
+Execution class: owner_remote (effects: merge, pull_request, push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Installed Kit 1.0.25; synchronized command reference; clean release workspace; genuine owner consent; actual next consumer release (Cockpit 0.2.6).
 
 ```text
@@ -1039,10 +1175,30 @@ Expected: Publish PASS with external SKIP checks; C1 PASS; normal C2 gate or rec
 
 Expected result fields: `{"blocker_count": 0, "status": "PASS"}`.
 
+## KIT-GF-070
+
+Kit state: PARTIAL; fixed_in: not established.
+Evidence: docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md
+
+Execution class: local (effects: none); machine contract: a local contract runs to PASS, a local retest without a contract and a remote retest are reported as not verified
+
+Preconditions: Installed wheel; no Kit source, tests or documentation registry. `agentic-kit greenfield retest` builds the fixture in a temporary directory; nothing is read from or written to the consumer workspace.
+
+```text
+agentic-kit greenfield retest --id KIT-GF-066 --json
+agentic-kit greenfield retest --id KIT-GF-002 --id KIT-GF-073 --json
+```
+
+Expected: A local retest with a machine contract returns PASS; a local retest without one returns NO_MACHINE_CONTRACT and a remote one NOT_RUN_LOCALLY, so the run is INCOMPLETE (exit 3), never PASS.
+
+Expected result fields: `{"result_status": "PASS", "results[0].result": "PASS"}`.
+
 ## KIT-GF-071
 
 Kit state: CLOSED; fixed_in: 1.1.2.
 Evidence: docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md
+
+Execution class: owner_remote (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: Installed wheel and synchronized command reference; disposable external Git workspace; no Kit tests or documentation registry. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -1058,6 +1214,8 @@ Expected result fields: `{"plan.actions": "contains update_ci_pins", "result_sta
 
 Kit state: CLOSED; fixed_in: 1.1.2.
 Evidence: docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md
+
+Execution class: local (effects: none); machine contract: after a signed bootstrap an unrelated config comment keeps check PASS and an edited kit_schema_version line blocks; the kit update re-derivation needs a release download and is not covered
 
 Preconditions: Installed wheel and synchronized command reference; disposable external Git workspace; no Kit tests or documentation registry. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -1075,6 +1233,8 @@ Expected result fields: `{"result_status": "PASS"}`.
 Kit state: CLOSED; fixed_in: 1.1.2.
 Evidence: docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md
 
+Execution class: owner_remote (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
 Preconditions: Installed wheel and synchronized command reference; disposable external Git workspace; no Kit tests or documentation registry. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -1089,6 +1249,8 @@ Expected result fields: `{"PR readiness outcome": "READY_TO_MERGE"}`.
 
 Kit state: CLOSED; fixed_in: 1.1.2.
 Evidence: docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md
+
+Execution class: local (effects: none); machine contract: order-create writes a run_command order with requires_allow_unlisted false and refuses a raw git push without writing an order
 
 Preconditions: Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -1105,6 +1267,8 @@ Expected result fields: `{"command_authority[0].requires_allow_unlisted": false,
 Kit state: CLOSED; fixed_in: 1.1.2.
 Evidence: docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md
 
+Execution class: local (effects: fetch, push); machine contract: after remote-next PASS the checkout is clean and the written file and the order report are on the origin branch; the blocked undeclared change needs an injected fault and is covered by the Kit's own tests
+
 Preconditions: Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -1120,6 +1284,8 @@ Expected result fields: `{"git status --porcelain": "", "result_status": "PASS"}
 Kit state: CLOSED; fixed_in: 1.1.2.
 Evidence: docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md
 
+Execution class: local (effects: fetch, push); machine contract: a freshly initialized workspace with the inbox .gitkeep runs a command order through remote-next to PASS
+
 Preconditions: Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
@@ -1130,10 +1296,29 @@ Expected: In a freshly initialized workspace with .agentic/transfer/inbox/.gitke
 
 Expected result fields: `{"result_status": "PASS"}`.
 
+## KIT-GF-077
+
+Kit state: CLOSED; fixed_in: 1.1.3.
+Evidence: docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md
+
+Execution class: local (effects: none); machine contract: the installed manifest declares push for transfer remote-next, visible in the derived effects of its retest
+
+Preconditions: Installed wheel; no Kit source, tests or documentation registry. `agentic-kit greenfield retest` builds the fixture in a temporary directory; nothing is read from or written to the consumer workspace.
+
+```text
+agentic-kit greenfield status --id KIT-GF-075 --json
+```
+
+Expected: The manifest declares fetch and push for transfer remote-next (and transfer remote-work-start); the derived effects of the KIT-GF-075 retest show both.
+
+Expected result fields: `{"findings[0].external_retest.remote_effects": ["fetch", "push"]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-RULE-REGISTRY-BOOTSTRAP-external-inventory-2026-10-13.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
 
 Preconditions: Initialized external fixture with synchronized references; no inventory. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 

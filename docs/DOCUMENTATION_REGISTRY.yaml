@@ -1736,3 +1736,6 @@ documents:
   - path: docs/reports/release/release-run-1.1.2.json
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md
+    class: evidence/log
+    owner: maintainers

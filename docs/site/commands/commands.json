@@ -1,6 +1,6 @@
 {
-  "command_count": 270,
-  "diagnostic_count": 130,
+  "command_count": 271,
+  "diagnostic_count": 131,
   "entries": [
     {
       "diagnostic_priority": "reference_lookup",
@@ -4471,6 +4471,46 @@
       "safety": "BOUNDED",
       "surface": "primitive",
       "when_to_use": "Plan or sign the Kit maintainer's deterministic local status projections."
+    },
+    {
+      "diagnostic_priority": "advanced_diagnostic",
+      "dry_run_available": false,
+      "group": "greenfield",
+      "help": "Run the installed Kit's machine retests in a temporary workspace; never touch this workspace.",
+      "lifecycle_rank": null,
+      "params": [
+        {
+          "default": [],
+          "help": "Finding id; repeatable.",
+          "name": "finding_ids",
+          "opts": [
+            "--id"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Retest every finding of the installed Kit.",
+          "name": "run_all",
+          "opts": [
+            "--all"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        }
+      ],
+      "qualified_name": "agentic-kit greenfield retest",
+      "safety": "READ_ONLY",
+      "surface": "diagnostic",
+      "when_to_use": "Run the installed Kit's machine retests in a temporary workspace; never touch this workspace."
     },
     {
       "diagnostic_priority": "advanced_diagnostic",
@@ -12394,7 +12434,7 @@
     "evidence": 8,
     "executor": 2,
     "governance": 1,
-    "greenfield": 2,
+    "greenfield": 3,
     "gui": 1,
     "handoff": 5,
     "instruction": 1,
@@ -12424,11 +12464,11 @@
   "safety_counts": {
     "BOUNDED": 176,
     "DESTRUCTIVE": 9,
-    "READ_ONLY": 85
+    "READ_ONLY": 86
   },
   "schema_version": 1,
   "surface_counts": {
-    "diagnostic": 130,
+    "diagnostic": 131,
     "orchestrator": 34,
     "primitive": 106
   }
