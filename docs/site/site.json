@@ -12816,7 +12816,6 @@
     },
     "release": {
       "notes": [
-        "Zenodo DOI verification pending for v1.1.4.",
         "Wait for required checks that start late and let a blocked release finish its own release PR: gates.required_checks names checks pr wait-ci must see before readiness passes, so a required job that starts after other jobs is awaited instead of missed (the Kit declares test, KIT-GF-079); after a blocked B4 the release run completes its own open release PR when the branch holds exactly the release commits on an unchanged main (KIT-GF-080).",
         "Run the Kit's own CI suite in three deterministic shards: a test runs in shard sha256(nodeid) % 3 with four xdist workers and work stealing, and the required test job passes only when the shards together ran exactly the full collection without failures (python -m agentic_project_kit.ci_test_shards check); the gate mode is classified once in a classify job, shards never report as skipped, and the extracted test wheel is built once per test process instead of once per module.",
         "Wait long enough for CI in releases: work finish --ci-timeout-seconds (default 900 instead of a fixed 300) and the release run passes the wait to every work finish, a DOI step that stopped on a CI timeout resumes its unchanged DOI pull request instead of regenerating it, and the evidence archive step completes its own open archive pull request when the evidence is byte-identical (KIT-GF-078)."
@@ -12840,7 +12839,7 @@
     "package_name": "agentic-project-kit",
     "package_version": "1.1.4",
     "product_name": "Agentic Execution Runtime",
-    "release_tag": "v1.1.3",
+    "release_tag": "v1.1.4",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
     "reproduced_manifest_sha": "e2563df60239",
     "requires_python": ">=3.10",
@@ -12854,7 +12853,7 @@
       "orchestrator": 34,
       "primitive": 106
     },
-    "version_doi": "10.5281/zenodo.23499779"
+    "version_doi": "10.5281/zenodo.23505873"
   },
   "roadmap_projection": {
     "roadmap_counts": {
@@ -12874,13 +12873,13 @@
   "schema_version": 1,
   "status_projection": {
     "concept_doi": "10.5281/zenodo.20101359",
-    "current_release_tag": "v1.1.3",
+    "current_release_tag": "v1.1.4",
     "current_verified_main": "See docs/STATUS.md",
-    "current_verified_release": "1.1.3",
+    "current_verified_release": "1.1.4",
     "current_version": "1.1.4",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
-    "version_doi": "10.5281/zenodo.23499779"
+    "version_doi": "10.5281/zenodo.23505873"
   },
   "workflow_projection": {
     "boundaries": [
