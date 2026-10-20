@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 7b16380a4b8f7cc771ec9be206f9230f69ad805a
-  short: 7b16380a
-  subject: Run the Kit CI suite in three deterministic shards with work stealing (#2580)
+  full: 786186acde596357b01aebf8b759f5167e612a98
+  short: 786186ac
+  subject: Wait for late required checks and let a blocked B4 finish its own release PR (KIT-GF-079, KIT-GF-080) (#2583)
 last_substantive_work_state:
-  full: 7b16380a4b8f7cc771ec9be206f9230f69ad805a
-  short: 7b16380a
-  subject: Run the Kit CI suite in three deterministic shards with work stealing (#2580)
+  full: 786186acde596357b01aebf8b759f5167e612a98
+  short: 786186ac
+  subject: Wait for late required checks and let a blocked B4 finish its own release PR (KIT-GF-079, KIT-GF-080) (#2583)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
