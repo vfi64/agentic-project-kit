@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 390ff4b84aa2
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 832a4aac7cb2
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `2`
 - Source: `generated_from_typer_click_registry`
-- Command count: `270`
+- Command count: `271`
 
 ## Commands
 
@@ -1534,6 +1534,22 @@ Plan or sign the Kit maintainer's deterministic local status projections.
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `execute` | `TyperOption` | --execute | `False` | `False` |  |
 | `expected_signature` | `TyperOption` | --expected-signature | `False` | `` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` |  |
+
+### `agentic-kit greenfield retest`
+
+- Safety: `READ_ONLY`
+- Surface: `diagnostic`
+- When to use: Run the installed Kit's machine retests in a temporary workspace; never touch this workspace.
+- Dry-run available: `False`
+- Remote effects: `none`
+
+Run the installed Kit's machine retests in a temporary workspace; never touch this workspace.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `finding_ids` | `TyperOption` | --id | `False` | `[]` | Finding id; repeatable. |
+| `run_all` | `TyperOption` | --all | `False` | `False` | Retest every finding of the installed Kit. |
 | `json_output` | `TyperOption` | --json | `False` | `False` |  |
 
 ### `agentic-kit greenfield status`
@@ -3505,7 +3521,7 @@ Refresh outbox and latest handoff report with fresh generated LLM context.
 - Surface: `orchestrator`
 - When to use: Run the next repo-backed transfer order for local or remote work handoff.
 - Dry-run available: `False`
-- Remote effects: `fetch`
+- Remote effects: `fetch`, `push`
 
 Run the next repo-backed transfer order for local or remote work handoff.
 
@@ -3521,7 +3537,7 @@ Run the next repo-backed transfer order for local or remote work handoff.
 - Surface: `orchestrator`
 - When to use: Prepare a remote work branch with freshness, status, and transfer safety checks.
 - Dry-run available: `False`
-- Remote effects: `fetch`
+- Remote effects: `fetch`, `push`
 
 Prepare a remote work branch with freshness, status, and transfer safety checks.
 

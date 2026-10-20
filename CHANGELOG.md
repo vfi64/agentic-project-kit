@@ -1,5 +1,8 @@
 ## Unreleased
 
+- Make external retests executable: every catalog retest gets an execution class derived from the installed command manifest (`local`, `owner_remote`, `kit_release`), retest commands must name declared routes and options, and a local retest may carry a machine contract (a fixture the Kit builds, `agentic-kit`/`git` steps and exact expectations). `agentic-kit greenfield retest --id <id> | --all` runs the contracts with the installed Kit in a temporary workspace and reports PASS or FAIL per finding; a retest without a contract or one that needs GitHub or a release is reported as not verified, so the run is INCOMPLETE (exit 3), never PASS. Contracts exist for eight findings so far, and every retest must now name an existing route (KIT-GF-070, partial).
+- Declare the push of `transfer remote-next` and `transfer remote-work-start` in the command manifest; both declared only `fetch` although they publish to the transfer or work branch (KIT-GF-077).
+
 ## v1.1.2 - 2026-10-19
 
 - Let `transfer order-create` write command orders: `--run-command '<argv>'` is checked against the command manifest when the order is created, flags commands that need the local `--allow-unlisted`, refuses commands no flag could allow, and an order's `agentic-kit` commands run with the workspace's own Kit instead of whatever PATH finds (KIT-GF-074).

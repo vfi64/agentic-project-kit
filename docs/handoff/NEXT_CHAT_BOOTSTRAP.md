@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `964e5093deca4f126477f7a8062061ba1960cea9` (`964e5093`)
-- Handoff freshness marker: `964e5093`
-- Branch at generation: `docs/post-pr2567-handoff-refresh`
+- HEAD: `795df1a2e743d5b83d29ab5650719e94d3030b51` (`795df1a2`)
+- Handoff freshness marker: `795df1a2`
+- Branch at generation: `feat/kit-gf070-executable-retests`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -108,7 +108,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 ### RESULT: PASS ###
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 390ff4b84aa2). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 390ff4b84aa2. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 832a4aac7cb2). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 832a4aac7cb2. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -118,5 +118,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 5ad07ae816b755fc7e363b60fb3491f7f78cf7e22ee8c737cbf0e1b2af006bd7
-- docs/reference/agentic-kit-commands.json: 970d08dd0b2dc819c3000f72c8d3016d4b89cbde910211b602d44754a8628487
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 1974504b9ba58c15f54683ee6677acda0f8f6f35c9356ae3564ed1a62da0324c
+- docs/reference/agentic-kit-commands.json: 0d3f1ce9d69ab0c7f361127f8db6f8cf53321aeb9ce7f5a18efd97a4dcd0e895

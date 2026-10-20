@@ -1,10 +1,15 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 74,
+    "CLOSED": 75,
     "NOT_APPLICABLE": 0,
     "OPEN": 0,
-    "PARTIAL": 0
+    "PARTIAL": 1
+  },
+  "execution_classes": {
+    "kit_release": 4,
+    "local": 42,
+    "owner_remote": 30
   },
   "findings": [
     {
@@ -15,6 +20,7 @@
           "agentic-kit check --json",
           "agentic-kit doctor"
         ],
+        "execution_class": "local",
         "expected": [
           "process.returncode=0",
           "check.status=PASS",
@@ -27,8 +33,69 @@
             "doctor stdout contains Overall: PASS"
           ]
         },
+        "machine": {
+          "covers": "workspace init, command reference sync, check PASS and doctor Overall: PASS in a fresh external repository",
+          "fixture": "git_repository",
+          "steps": [
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--root",
+                ".",
+                "--name",
+                "external",
+                "--execute",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "commands",
+                "sync-entrypoints",
+                "--execute",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "error_count": 0,
+                  "status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "check",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_contains": "Overall: PASS"
+              },
+              "run": [
+                "agentic-kit",
+                "doctor"
+              ]
+            }
+          ]
+        },
         "preconditions": [
           "Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Candidate installed-wheel external fixture passed; consumer VERIFIED_FIXED remains independent. Also passed with a wheel built from immutable v1.0.24.",
@@ -52,6 +119,7 @@
         "commands": [
           "agentic-kit slice gate --kind planning-doc --root ."
         ],
+        "execution_class": "local",
         "expected": [
           "PASS; no Kit self-hosting paths required."
         ],
@@ -66,6 +134,9 @@
           "Initialized external workspace with native test configuration; no Kit tests/registry.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -89,6 +160,7 @@
           "agentic-kit transfer post-merge-check --json",
           "agentic-kit work recover --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "process.returncode=0 for virgin handoff readers",
           "stdout contains NO_PREVIOUS_HANDOFF and canonical namespace path",
@@ -103,6 +175,10 @@
         },
         "preconditions": [
           "Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry."
+        ],
+        "remote_effects": [
+          "network_read",
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Candidate installed-wheel external fixture passed; consumer VERIFIED_FIXED remains independent.",
@@ -126,6 +202,7 @@
         "commands": [
           "agentic-kit governance check --root ."
         ],
+        "execution_class": "local",
         "expected": [
           "PASS without full-contract Kit constitution requirements."
         ],
@@ -140,6 +217,9 @@
           "External-manifest workspace recognized by doctor.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -159,6 +239,7 @@
         "commands": [
           "agentic-kit work start --branch codex/gf005-retest --from-ref main --json"
         ],
+        "execution_class": "local",
         "expected": [
           "result_status=PASS",
           "post-merge-check step stdout says not applicable"
@@ -172,6 +253,9 @@
         "preconditions": [
           "Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry.",
           "Clean main tracks origin/main; local bare origin contains the initial committed workspace; no previous merge or successor package."
+        ],
+        "remote_effects": [
+          "fetch"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Candidate installed-wheel external fixture passed; consumer VERIFIED_FIXED remains independent. Also passed with a wheel built from immutable v1.0.24.",
@@ -195,6 +279,7 @@
         "commands": [
           "agentic-kit transfer status --json"
         ],
+        "execution_class": "local",
         "expected": [
           "No file exception; deterministic empty state."
         ],
@@ -209,6 +294,9 @@
           "Initialized workspace with empty transfer inbox.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -228,6 +316,7 @@
         "commands": [
           "agentic-kit workspace adopt --root . --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Generated Kit files are recognized, not reclassified as new manual surfaces."
         ],
@@ -242,6 +331,9 @@
           "Initialized external workspace; retain generated provenance.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -262,6 +354,7 @@
           "agentic-kit workspace init --root . --inject-ci --execute --json",
           "agentic-kit check --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Injected workflow calls installed Kit check; no self-host-only gates."
         ],
@@ -276,6 +369,9 @@
           "Fresh disposable repository.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -298,6 +394,7 @@
         "commands": [
           "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --release-note-category Fixed --execute --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "One PR, green merge and handoff; no self-generated dirt blocker."
         ],
@@ -312,6 +409,11 @@
           "Disposable hosted external repository with green required CI and first unpushed work branch; remote effects authorized.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -334,6 +436,7 @@
           "agentic-kit rules acknowledge --json",
           "agentic-kit transfer commit --path {changed_path} --message gf010-retest --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Acknowledgement remains valid for the authorized Kit-owned commit."
         ],
@@ -348,6 +451,9 @@
           "Disposable external work branch with one reviewed change.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -367,6 +473,7 @@
         "commands": [
           "agentic-kit transfer post-merge-check --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "successor_package_head_status=refresh_only_descendant; current final HEAD is reported without another refresh loop."
         ],
@@ -381,6 +488,9 @@
           "After governed merge and administrative handoff refresh.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "network_read"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -404,6 +514,7 @@
           "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --dry-run --json",
           "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --release-note-category Fixed --execute --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Plan=PLANNED; execution completes without self-generated blocker."
         ],
@@ -418,6 +529,11 @@
           "Disposable remote external work branch; green CI; unchanged reviewed inputs between plan and execution.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -437,6 +553,7 @@
         "commands": [
           "agentic-kit audit-patch-failure-discipline --include-tmp --json"
         ],
+        "execution_class": "local",
         "expected": [
           "one failure: next_mutation_allowed=true",
           "two failures: status=FAIL, next_mutation_allowed=false, process.returncode=1",
@@ -452,6 +569,9 @@
         "preconditions": [
           "Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry.",
           "In workspace tmp_root, create slice1-a-20260101-000001.log containing block not found, then slice1-b-20260101-000002.log containing function not found; retain distinct observed mtime_ns order. After the blocked result add slice1-diagnose-20260101-000003.log containing RESULT=PATCH_FAILURE_DIAGNOSIS_DONE with later mtime_ns."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Candidate installed-wheel external fixture passed; consumer VERIFIED_FIXED remains independent.",
@@ -475,6 +595,7 @@
         "commands": [
           "agentic-kit governance check --root ."
         ],
+        "execution_class": "local",
         "expected": [
           "Deterministic authority-drift finding; clean control passes."
         ],
@@ -489,6 +610,9 @@
           "External continuation authority with deliberate stale or contradictory state.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -508,6 +632,7 @@
         "commands": [
           "agentic-kit check --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Contradictions are reported; aligned registered facts pass."
         ],
@@ -522,6 +647,9 @@
           "Registered project documents with deliberately contradictory canonical facts and intact control fixture.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -545,6 +673,7 @@
           "agentic-kit executor run {intent_path} --root . --json",
           "agentic-kit executor run {intent_path} --root . --execute --json"
         ],
+        "execution_class": "local",
         "expected": [
           "plan.result_status=PASS",
           "dry-run.executed=false",
@@ -561,6 +690,9 @@
         },
         "preconditions": [
           "Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Candidate installed-wheel external fixture passed; consumer VERIFIED_FIXED remains independent.",
@@ -586,6 +718,7 @@
         "commands": [
           "agentic-kit transfer pr-merge-safe {pr} --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Safe merge recovers canonical external context carrier without Kit-only files."
         ],
@@ -600,6 +733,9 @@
           "Disposable external repo; clean context; green PR; remote merge authorized; no Kit source/registry.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -621,6 +757,7 @@
         "commands": [
           "agentic-kit transfer delete-merged-work-branch {branch} --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "PASS/idempotent no-op; both requested refs absent."
         ],
@@ -635,6 +772,9 @@
           "Merged PR; named work branch already absent remotely; local current branch is main.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "delete_remote"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -654,6 +794,7 @@
         "commands": [
           "agentic-kit kit status --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Installed Kit is found; missing CLI is not falsely reported."
         ],
@@ -668,6 +809,9 @@
           "Installed wheel in workspace-owned interpreter; global PATH excludes agentic-kit.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -688,6 +832,7 @@
           "agentic-kit transfer command-reference-refresh --json",
           "agentic-kit transfer command-reference-check --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Refresh and check PASS; packaged reference matches installed declarations."
         ],
@@ -702,6 +847,9 @@
           "Stale workspace command reference; installed wheel; no Kit sources.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -722,6 +870,7 @@
           "agentic-kit transfer repo-status --json",
           "agentic-kit transfer command-reference-check --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Each stdout parses as exactly one JSON document; warnings use stderr."
         ],
@@ -736,6 +885,9 @@
           "External workspace with deprecated manifest/config warning reproduction.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -758,6 +910,7 @@
         "commands": [
           "agentic-kit ci status --commit {sha} --branch {branch} --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "JSON verdict and bounded run/check details without requiring a PR."
         ],
@@ -772,6 +925,9 @@
           "Hosted external repository with Actions run for supplied commit.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "network_read"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -791,6 +947,7 @@
         "commands": [
           "agentic-kit audit-command-manifest --json"
         ],
+        "execution_class": "local",
         "expected": [
           "PASS; every command declares valid remote_effects."
         ],
@@ -805,6 +962,9 @@
           "Synchronized installed-wheel command manifest.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -824,6 +984,7 @@
         "commands": [
           "agentic-kit workspace ci-update --root . --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Plan names update paths; template pins Kit, limits push to main, has concurrency/browser cache."
         ],
@@ -838,6 +999,9 @@
           "Unmodified old Kit-managed CI source and injected projection.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -859,6 +1023,7 @@
         "commands": [
           "agentic-kit pr status {pr} --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Execution succeeds with a failed CI verdict; execution errors remain distinct."
         ],
@@ -873,6 +1038,9 @@
           "External PR whose CI executed and failed; bounded output mode.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "network_read"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -892,6 +1060,7 @@
         "commands": [
           "agentic-kit artifact-gc --tmp-logs --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Artifacts resolve via OS/workspace temp policy; no fixed shared temp paths."
         ],
@@ -906,6 +1075,9 @@
           "External fixture; OS temp root is redirected to a disposable directory.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -927,6 +1099,7 @@
         "commands": [
           "agentic-kit release-publish --version {version} --dry-run --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Private tag plan; no GitHub/PyPI/Zenodo publication steps."
         ],
@@ -941,6 +1114,9 @@
           "publication: none; prepared release; no public publication configured.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "release_publish"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -962,6 +1138,7 @@
         "commands": [
           "agentic-kit transfer pr-create-complete --head {branch} --title gf030-retest --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Reuses merged PR evidence; does not create a second PR."
         ],
@@ -976,6 +1153,10 @@
           "Branch already squash merged in disposable remote repo.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "pull_request",
+          "push"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -997,6 +1178,7 @@
         "commands": [
           "agentic-kit transfer pr-complete {pr} --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Merge and post-merge closeout complete without unsupported flag or mid-lifecycle context blocker."
         ],
@@ -1011,6 +1193,10 @@
           "Green external PR with valid context; merge authorized.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge",
+          "push"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1032,6 +1218,7 @@
         "commands": [
           "agentic-kit release ready --version {version} --json"
         ],
+        "execution_class": "local",
         "expected": [
           "No Kit repository package/document assumptions; explicit applicable blockers only."
         ],
@@ -1046,6 +1233,9 @@
           "Prepared external release fixture; native package/version anchors and sufficient changelog categories.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1068,6 +1258,7 @@
           "agentic-kit work rescue --json",
           "agentic-kit work rescue --execute --expected-signature {signature} --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Signed rescue preserves work on rescue branch and realigns main."
         ],
@@ -1082,6 +1273,9 @@
           "Disposable external main containing local changes/commits; local origin/main exists.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1103,6 +1297,7 @@
         "commands": [
           "agentic-kit post-release-doi-closeout --version {version} --write --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "DOI update and applicable site projection consistent; no stale fallback."
         ],
@@ -1117,6 +1312,9 @@
           "Publishing fixture with verified DOI; optional docs-pages build script.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "network_read"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1136,6 +1334,7 @@
         "commands": [
           "agentic-kit docs-audit --json"
         ],
+        "execution_class": "local",
         "expected": [
           "No Kit-required document-set blockers; explicit adopted contracts remain enforced."
         ],
@@ -1150,6 +1349,9 @@
           "External docs with doc_lifecycle=warn; no Kit doc registry/constitution.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1171,6 +1373,7 @@
         "commands": [
           "agentic-kit release-prep --version {version} --summary-line \"Fix the finish prompt\" --dry-run --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Quality rejection occurs before writes; sufficient-category control passes."
         ],
@@ -1185,6 +1388,9 @@
           "Disposable prepared release repository; one-category notes.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1206,6 +1412,7 @@
         "commands": [
           "agentic-kit release-prep --version {version} --dry-run --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Declared extra anchor included in deterministic version update plan."
         ],
@@ -1220,6 +1427,9 @@
           "External release config declares a project-specific version anchor.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1241,6 +1451,7 @@
         "commands": [
           "agentic-kit release-publish --version {version} --dry-run --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Returns signature-bound plan; no marker needed; no effects before approval."
         ],
@@ -1255,6 +1466,9 @@
           "Prepared external publication with no ENABLE_LIVE_PUBLISH marker.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "release_publish"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1275,9 +1489,10 @@
           "changed_path": "Supply the actual changed_path of the disposable authorized workspace; one argv token."
         },
         "commands": [
-          "agentic-kit transfer communication-context-status --json",
+          "agentic-kit rules require-current-communication-context --json",
           "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --release-note-category Fixed --dry-run --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Work branch can publish its own carrier; stale context still blocks unrelated routes."
         ],
@@ -1292,6 +1507,12 @@
           "Work branch carries refreshed communication capsule.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge",
+          "none",
+          "pull_request",
+          "push"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1313,6 +1534,7 @@
         "commands": [
           "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --release-note-category Fixed --execute --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Uses existing PR, publishes missing head when safe, completes lifecycle."
         ],
@@ -1327,6 +1549,11 @@
           "Already committed external branch with existing PR and green CI; authorized closeout.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1348,6 +1575,7 @@
         "commands": [
           "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --dry-run --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "result_status=PLANNED, not completed PASS; no remote mutation."
         ],
@@ -1362,6 +1590,11 @@
           "External work branch with bounded reviewed changes.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1381,6 +1614,7 @@
         "commands": [
           "agentic-kit workspace ci-update --root . --execute --json"
         ],
+        "execution_class": "local",
         "expected": [
           "BLOCKED modified_managed_ci_template/workflow; bytes unchanged."
         ],
@@ -1395,6 +1629,9 @@
           "Customized source CI and matching custom injected workflow; record byte hashes.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1416,6 +1653,7 @@
         "commands": [
           "agentic-kit release-publish --version {version} --dry-run --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Plan uses annotated tag and configured release title; live verification requires owner consent."
         ],
@@ -1430,6 +1668,9 @@
           "publication: github with prepared release.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "release_publish"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1449,6 +1690,7 @@
         "commands": [
           "agentic-kit docs-audit --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Header violation detected; valid lifecycle header control passes."
         ],
@@ -1463,6 +1705,9 @@
           "Explicit adopted lifecycle contract; document has labels only in body rather than header.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1484,6 +1729,7 @@
         "commands": [
           "agentic-kit release ready --version {version} --summary-line \"Regression tests and successor handoff preserve evidence\" --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Explicit summary reaches quality validation; unrelated diagnostics preserved."
         ],
@@ -1498,6 +1744,9 @@
           "External release fixture whose derived notes cover insufficient categories.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1520,6 +1769,7 @@
         "commands": [
           "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --release-note-category Fixed --execute --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Kit refreshes acknowledgement immediately before its handoff commit."
         ],
@@ -1534,6 +1784,11 @@
           "External branch changes manifest/rule sources; green CI; authorized lifecycle.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1557,6 +1812,7 @@
         "commands": [
           "agentic-kit release run --version {version} --approved-by {owner} --consent-source {consent} --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Stops at the first signable gate; state is resumable and no publication occurs."
         ],
@@ -1571,6 +1827,12 @@
           "Disposable prepared release workspace; publication explicitly declared; no execute consent supplied.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push",
+          "release_publish"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1595,6 +1857,7 @@
           "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --release-note-category Fixed --dry-run --json",
           "agentic-kit release-notes-generate --version {version} --from-tag {from_tag} --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Category is preserved in PR body and generated release notes."
         ],
@@ -1609,6 +1872,12 @@
           "External branch with reviewed PR metadata/category; metadata available for note generation.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge",
+          "network_read",
+          "pull_request",
+          "push"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1630,6 +1899,7 @@
         "commands": [
           "agentic-kit release-publish --version {version} --dry-run --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Kit self-host documentation checks skipped; adopted project contracts still checked."
         ],
@@ -1644,6 +1914,9 @@
           "External publication github; synchronized command reference; no Kit documentation registry.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "release_publish"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1665,6 +1938,7 @@
         "commands": [
           "agentic-kit transfer post-merge-complete --after-pr {pr} --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Configured bounded wait respected; fallback uses external state path without exception."
         ],
@@ -1679,6 +1953,9 @@
           "Disposable external merged PR; slow main CI and valid external handoff resolver; remote refresh authorized.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1702,6 +1979,7 @@
           "agentic-kit kit update --version {kit_version} --json",
           "agentic-kit kit update --version {kit_version} --execute --expected-signature {signature} --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Signed update synchronizes installed version, references and managed pins; custom files preserved."
         ],
@@ -1716,6 +1994,9 @@
           "Disposable workspace-owned environment with old Kit and known managed CI pins; package source reachable.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "network_read"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1737,6 +2018,7 @@
         "commands": [
           "agentic-kit release-publish --version {version} --dry-run --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "BLOCKED with exact layout diagnosis and remediation; correctly formatted control passes."
         ],
@@ -1751,6 +2033,9 @@
           "Prepared target changelog section containing deliberately wrapped bullet.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "release_publish"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1771,6 +2056,7 @@
           "agentic-kit rules acknowledge --json",
           "agentic-kit work recover --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Read/recovery route preserves acknowledgement and still rejects stale snapshots."
         ],
@@ -1785,6 +2071,9 @@
           "Valid external rule acknowledgement; retain its pre-run bytes.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1805,6 +2094,7 @@
           "agentic-kit audit-ns-legacy-references --json",
           "agentic-kit audit-program-redundancy --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Ignored trees excluded; active tracked violation remains visible."
         ],
@@ -1819,6 +2109,9 @@
           "Ignored directory contains a deliberately problematic/large fixture; tracked sources remain healthy.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1842,6 +2135,7 @@
         "commands": [
           "agentic-kit release run --version {version} --approved-by {owner} --consent-source {consent} --json"
         ],
+        "execution_class": "kit_release",
         "expected": [
           "C3 PASS with explicit publish_target=pypi and exact dispatched run attribution."
         ],
@@ -1856,6 +2150,12 @@
           "Kit publishing release; PyPI/Zenodo unavailable in consumer; inspect committed Kit evidence instead of publishing Cockpit.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push",
+          "release_publish"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1884,6 +2184,7 @@
         "commands": [
           "agentic-kit post-release-check --version {version} --json"
         ],
+        "execution_class": "kit_release",
         "expected": [
           "C4 PASS; command accepts JSON and returns one parseable result."
         ],
@@ -1898,6 +2199,9 @@
           "Kit publishing release evidence; consumer need not publish.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "network_read"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1924,6 +2228,7 @@
         "commands": [
           "agentic-kit audit-command-manifest --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Remote effects match declared side effects including network reads and merges."
         ],
@@ -1938,6 +2243,9 @@
           "Synchronized external command reference.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -1959,6 +2267,7 @@
         "commands": [
           "agentic-kit post-release-doi-closeout --version {version} --json"
         ],
+        "execution_class": "kit_release",
         "expected": [
           "D2 PASS; DOI facts occur inside the target version section."
         ],
@@ -1973,6 +2282,9 @@
           "Kit publishing release evidence; target version has Unreleased above it.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "network_read"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -2001,6 +2313,7 @@
         "commands": [
           "agentic-kit release run --version {version} --json"
         ],
+        "execution_class": "kit_release",
         "expected": [
           "D4/D5 PASS proves ordinary closeout; D2R recovery is claimed only if observed in the evidence."
         ],
@@ -2015,6 +2328,12 @@
           "Kit publishing evidence; separate recovery fixture with failed DOI PR is required to prove D2R, never induce a production failure.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push",
+          "release_publish"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -2044,6 +2363,7 @@
         "commands": [
           "agentic-kit release-prep --version {version} --dry-run --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Plan consumes selected entries once; unrelated Unreleased entries remain."
         ],
@@ -2058,6 +2378,9 @@
           "Unreleased entries exactly selected into target version.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -2081,6 +2404,7 @@
         "commands": [
           "agentic-kit release run --version {version} --approved-by {owner} --consent-source {consent} --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Gate binds version/tag/target; approved execution must retain attribution and reject drift."
         ],
@@ -2095,6 +2419,12 @@
           "Disposable declared per_gate or upfront publication policy; inspect first gate without execute.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push",
+          "release_publish"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -2118,6 +2448,7 @@
           "agentic-kit pr rerun-checks --pr {pr} --json",
           "agentic-kit pr rerun-checks --pr {pr} --execute --expected-signature {signature} --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Only eligible failed checks rerun; signature drift and ineligible run reject."
         ],
@@ -2132,6 +2463,10 @@
           "Disposable PR with failed never-started checks; owner authorizes one rerun.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "network_read",
+          "workflow_rerun"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -2155,6 +2490,7 @@
         "commands": [
           "agentic-kit ci runtime-plan --base {base_sha} --head {head_sha} --branch {branch} --event-name pull_request --json"
         ],
+        "execution_class": "local",
         "expected": [
           "mode=light only for manifest-derived refresh paths; non-refresh or unknown input mode=full; check always runs."
         ],
@@ -2170,6 +2506,9 @@
         },
         "preconditions": [
           "Installed wheel, synchronized reference, custom CI; matching refresh branch and local base/head commits."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Installed-wheel custom-CI fixture PASS; consumer VERIFIED_FIXED independent.",
@@ -2192,6 +2531,7 @@
         "commands": [
           "agentic-kit release-prep --version {version} --dry-run --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Released entries consumed; historical release sections unchanged."
         ],
@@ -2206,6 +2546,9 @@
           "Kit release fixture with already selected historical Unreleased entries.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -2227,6 +2570,7 @@
         "commands": [
           "agentic-kit release run --version {version} --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Plan omits C3 and DOI D steps, preserving GitHub-only boundary."
         ],
@@ -2241,6 +2585,12 @@
           "External publication: github and release.branch_prefix: release/.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push",
+          "release_publish"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -2261,6 +2611,7 @@
           "agentic-kit greenfield status --json",
           "agentic-kit greenfield status --id KIT-GF-055 --json"
         ],
+        "execution_class": "local",
         "expected": [
           "schema_version=1; all families with retests; release evidence link explicitly may await later publication."
         ],
@@ -2271,10 +2622,51 @@
           "process.returncode": 0,
           "stdout.json_document_count": 1
         },
+        "machine": {
+          "covers": "machine-readable status of every family and the release evidence link of KIT-GF-055",
+          "fixture": "git_repository",
+          "steps": [
+            {
+              "expect": {
+                "json": {
+                  "kind": "external_findings_status",
+                  "schema_version": 1
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "status",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "findings[0].id": "KIT-GF-055",
+                  "findings[0].kit_release_evidence.path": "docs/reports/release/release-run-1.0.25.json"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "status",
+                "--id",
+                "KIT-GF-055",
+                "--json"
+              ]
+            }
+          ]
+        },
         "preconditions": [
           "Installed wheel; no Kit source, tests or documentation registry.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
@@ -2298,6 +2690,7 @@
           "agentic-kit transfer standard-error-scan --before-release --version {version} --json",
           "agentic-kit release ready --version {version} --json"
         ],
+        "execution_class": "local",
         "expected": [
           "PASS without missing literal executable; independent gates remain enforced."
         ],
@@ -2307,6 +2700,9 @@
         },
         "preconditions": [
           "Disposable installed-wheel external workspace, synchronized command reference, valid release metadata, tracking main, prior tag and current context; declare kit.interpreter outside .venv."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Resolver boundary fixtures PASS; live consumer retest remains independent.",
@@ -2326,6 +2722,7 @@
         "commands": [
           "agentic-kit audit-ns-legacy-references --root . --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Declared ledger quotes PASS independently of wording; active script outside declared paths BLOCK; undeclared behavior unchanged from 1.0.24."
         ],
@@ -2336,6 +2733,9 @@
         },
         "preconditions": [
           "Installed wheel and synchronized command reference; disposable clone; exact ledger path declared under audit.ns_legacy.evidence_paths; no Kit tests or documentation registry."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Installed-wheel positive/negative and released-wheel comparison PASS; live consumer retest remains independent.",
@@ -2359,6 +2759,7 @@
           "agentic-kit release-publish --version {version} --dry-run --json",
           "agentic-kit release run --version {version} --approved-by {owner} --consent-source {consent} --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "Publish PASS with external SKIP checks; C1 PASS; normal C2 gate or recorded upfront B4 consent; failing check remains blocking."
         ],
@@ -2368,6 +2769,12 @@
         },
         "preconditions": [
           "Installed Kit 1.0.25; synchronized command reference; clean release workspace; genuine owner consent; actual next consumer release (Cockpit 0.2.6)."
+        ],
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push",
+          "release_publish"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Installed-wheel resume regression PASS; live consumer retest remains independent.",
@@ -2383,12 +2790,103 @@
     },
     {
       "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit greenfield retest --id KIT-GF-066 --json",
+          "agentic-kit greenfield retest --id KIT-GF-002 --id KIT-GF-073 --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "A local retest with a machine contract returns PASS; a local retest without one returns NO_MACHINE_CONTRACT and a remote one NOT_RUN_LOCALLY, so the run is INCOMPLETE (exit 3), never PASS."
+        ],
+        "expected_result_fields": {
+          "result_status": "PASS",
+          "results[0].result": "PASS"
+        },
+        "machine": {
+          "covers": "a local contract runs to PASS, a local retest without a contract and a remote retest are reported as not verified",
+          "fixture": "git_repository",
+          "steps": [
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS",
+                  "results[0].result": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "retest",
+                "--id",
+                "KIT-GF-066",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "INCOMPLETE",
+                  "results[0].result": "NO_MACHINE_CONTRACT",
+                  "results[1].result": "NOT_RUN_LOCALLY"
+                },
+                "returncode": 3
+              },
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "retest",
+                "--id",
+                "KIT-GF-002",
+                "--id",
+                "KIT-GF-073",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "BLOCKED"
+                },
+                "returncode": 2
+              },
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "retest",
+                "--json"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Installed wheel; no Kit source, tests or documentation registry.",
+          "`agentic-kit greenfield retest` builds the fixture in a temporary directory; nothing is read from or written to the consumer workspace."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "PARTIAL: the runner, the execution classes and eight machine contracts exist; the remaining local retests still need contracts.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "",
+      "id": "KIT-GF-070",
+      "kit_state": "PARTIAL",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md"
+    },
+    {
+      "external_retest": {
         "bindings": {
           "version": "A released stable Kit version newer than the installed one; one argv token."
         },
         "commands": [
           "agentic-kit kit update --version {version} --json"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "A managed CI file with identical exact Kit pins in a classify and a check job plans both pins; mixed versions or a pin outside a pip install line stay BLOCKED."
         ],
@@ -2399,6 +2897,9 @@
         "preconditions": [
           "Installed wheel and synchronized command reference; disposable external Git workspace; no Kit tests or documentation registry.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "network_read"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Installed-wheel or unit positive/negative cases PASS; live consumer retest remains independent.",
@@ -2418,15 +2919,111 @@
           "agentic-kit rule-registry bootstrap --json",
           "agentic-kit rule-registry check --json"
         ],
+        "execution_class": "local",
         "expected": [
           "After a signed bootstrap, an unrelated comment in .agentic/config.yaml keeps check PASS; editing the kit_schema_version line makes it BLOCKED; a signed kit update re-derives a Kit-derived inventory."
         ],
         "expected_result_fields": {
           "result_status": "PASS"
         },
+        "machine": {
+          "covers": "after a signed bootstrap an unrelated config comment keeps check PASS and an edited kit_schema_version line blocks; the kit update re-derivation needs a release download and is not covered",
+          "fixture": "external_manifest",
+          "steps": [
+            {
+              "capture": {
+                "signature": "approval_signature"
+              },
+              "expect": {
+                "json": {
+                  "result_status": "PLANNED"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "bootstrap",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "bootstrap",
+                "--execute",
+                "--expected-signature",
+                "{signature}",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "check",
+                "--json"
+              ]
+            },
+            {
+              "append": {
+                "path": ".agentic/config.yaml",
+                "text": "# an unrelated owner comment\n"
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "check",
+                "--json"
+              ]
+            },
+            {
+              "replace": {
+                "new": "kit_schema_version: 2  # pinned\n",
+                "old": "kit_schema_version: 2\n",
+                "path": ".agentic/config.yaml"
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "BLOCKED"
+                },
+                "returncode_nonzero": true
+              },
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "check",
+                "--json"
+              ]
+            }
+          ]
+        },
         "preconditions": [
           "Installed wheel and synchronized command reference; disposable external Git workspace; no Kit tests or documentation registry.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Installed-wheel or unit positive/negative cases PASS; live consumer retest remains independent.",
@@ -2448,6 +3045,7 @@
         "commands": [
           "agentic-kit pr wait-ci {pr} --expected-head-sha {head_sha}"
         ],
+        "execution_class": "owner_remote",
         "expected": [
           "With gates.light_path_skipped_checks declared, a light refresh PR whose heavy jobs are SKIPPED is READY_TO_MERGE; a skipped job on a full classification still blocks."
         ],
@@ -2457,6 +3055,9 @@
         "preconditions": [
           "Installed wheel and synchronized command reference; disposable external Git workspace; no Kit tests or documentation registry.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "network_read"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Installed-wheel or unit positive/negative cases PASS; live consumer retest remains independent.",
@@ -2477,6 +3078,7 @@
         "commands": [
           "agentic-kit transfer order-create --branch {branch} --run-command 'agentic-kit check --json' --json"
         ],
+        "execution_class": "local",
         "expected": [
           "The order carries one run_command action and command_authority requires_allow_unlisted=false; a raw git push or DESTRUCTIVE Kit command is BLOCKED and writes no order."
         ],
@@ -2484,9 +3086,87 @@
           "command_authority[0].requires_allow_unlisted": false,
           "result_status": "PASS"
         },
+        "machine": {
+          "covers": "order-create writes a run_command order with requires_allow_unlisted false and refuses a raw git push without writing an order",
+          "fixture": "external_manifest",
+          "origin": true,
+          "steps": [
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "switch",
+                "-c",
+                "transfer/retest-074"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "BLOCKED"
+                },
+                "returncode_nonzero": true
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "order-create",
+                "--branch",
+                "transfer/retest-074",
+                "--run-command",
+                "git push origin main",
+                "--execute",
+                "--json"
+              ]
+            },
+            {
+              "assert": {
+                "absent": [
+                  ".agentic/transfer/inbox/current.yaml"
+                ]
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "command_authority[0].requires_allow_unlisted": false,
+                  "order.actions[0].command": [
+                    "agentic-kit",
+                    "check",
+                    "--json"
+                  ]
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "order-create",
+                "--branch",
+                "transfer/retest-074",
+                "--run-command",
+                "agentic-kit check --json",
+                "--execute",
+                "--json"
+              ]
+            },
+            {
+              "assert": {
+                "exists": [
+                  ".agentic/transfer/inbox/current.yaml"
+                ]
+              }
+            }
+          ]
+        },
         "preconditions": [
           "Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Installed-wheel positive/negative cases PASS; live consumer retest remains independent.",
@@ -2507,6 +3187,7 @@
         "commands": [
           "agentic-kit transfer remote-next {branch} --json"
         ],
+        "execution_class": "local",
         "expected": [
           "After PASS the checkout is clean on the transfer branch and the written target, the order report and LATEST_COMMAND_RUN.txt are on the origin branch; an undeclared change is BLOCKED and unpublished."
         ],
@@ -2514,9 +3195,172 @@
           "git status --porcelain": "",
           "result_status": "PASS"
         },
+        "machine": {
+          "covers": "after remote-next PASS the checkout is clean and the written file and the order report are on the origin branch; the blocked undeclared change needs an injected fault and is covered by the Kit's own tests",
+          "fixture": "external_manifest",
+          "origin": true,
+          "steps": [
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "switch",
+                "-c",
+                "transfer/retest-075"
+              ]
+            },
+            {
+              "write": {
+                "path": "docs/probe.payload.txt",
+                "text": "transferred content\n"
+              }
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "add",
+                "docs/probe.payload.txt"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "commit",
+                "-m",
+                "payload"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "order-create",
+                "--branch",
+                "transfer/retest-075",
+                "--write-action",
+                "docs/probe.txt=docs/probe.payload.txt",
+                "--execute",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "add",
+                ".agentic/transfer/inbox/current.yaml"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "commit",
+                "-m",
+                "order"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "push",
+                "-u",
+                "origin",
+                "transfer/retest-075"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "switch",
+                "main"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "remote-next",
+                "transfer/retest-075",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": ""
+              },
+              "run": [
+                "git",
+                "status",
+                "--porcelain=v1",
+                "-uall"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": "transferred content"
+              },
+              "run": [
+                "git",
+                "-C",
+                "{origin}",
+                "show",
+                "transfer/retest-075:docs/probe.txt"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_contains": "docs/reports/command_runs/remote-next-"
+              },
+              "run": [
+                "git",
+                "-C",
+                "{origin}",
+                "ls-tree",
+                "-r",
+                "--name-only",
+                "transfer/retest-075"
+              ]
+            }
+          ]
+        },
         "preconditions": [
           "Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "fetch",
+          "push"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Installed-wheel positive/negative cases PASS; live consumer retest remains independent.",
@@ -2537,15 +3381,131 @@
         "commands": [
           "agentic-kit transfer remote-next {branch} --json"
         ],
+        "execution_class": "local",
         "expected": [
           "In a freshly initialized workspace with .agentic/transfer/inbox/.gitkeep the order runs instead of stopping with run_next_command false."
         ],
         "expected_result_fields": {
           "result_status": "PASS"
         },
+        "machine": {
+          "covers": "a freshly initialized workspace with the inbox .gitkeep runs a command order through remote-next to PASS",
+          "fixture": "external_manifest",
+          "origin": true,
+          "steps": [
+            {
+              "assert": {
+                "exists": [
+                  ".agentic/transfer/inbox/.gitkeep"
+                ]
+              }
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "switch",
+                "-c",
+                "transfer/retest-076"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "order-create",
+                "--branch",
+                "transfer/retest-076",
+                "--run-command",
+                "agentic-kit check --json",
+                "--execute",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "add",
+                ".agentic/transfer/inbox/current.yaml"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "commit",
+                "-m",
+                "order"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "push",
+                "-u",
+                "origin",
+                "transfer/retest-076"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "switch",
+                "main"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "remote-next",
+                "transfer/retest-076",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": ""
+              },
+              "run": [
+                "git",
+                "status",
+                "--porcelain=v1",
+                "-uall"
+              ]
+            }
+          ]
+        },
         "preconditions": [
           "Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "remote_effects": [
+          "fetch",
+          "push"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "Installed-wheel positive/negative cases PASS; live consumer retest remains independent.",
@@ -2560,6 +3520,66 @@
     },
     {
       "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit greenfield status --id KIT-GF-075 --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "The manifest declares fetch and push for transfer remote-next (and transfer remote-work-start); the derived effects of the KIT-GF-075 retest show both."
+        ],
+        "expected_result_fields": {
+          "findings[0].external_retest.remote_effects": [
+            "fetch",
+            "push"
+          ]
+        },
+        "machine": {
+          "covers": "the installed manifest declares push for transfer remote-next, visible in the derived effects of its retest",
+          "fixture": "git_repository",
+          "steps": [
+            {
+              "expect": {
+                "json": {
+                  "findings[0].external_retest.execution_class": "local",
+                  "findings[0].external_retest.remote_effects": [
+                    "fetch",
+                    "push"
+                  ]
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "status",
+                "--id",
+                "KIT-GF-075",
+                "--json"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Installed wheel; no Kit source, tests or documentation registry.",
+          "`agentic-kit greenfield retest` builds the fixture in a temporary directory; nothing is read from or written to the consumer workspace."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Installed-wheel machine contract PASS; live consumer retest remains independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.1.3",
+      "id": "KIT-GF-077",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md"
+    },
+    {
+      "external_retest": {
         "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
@@ -2571,6 +3591,7 @@
           "agentic-kit rule-registry check --json",
           "agentic-kit rule-registry report --json"
         ],
+        "execution_class": "local",
         "expected": [
           "Before NOT_APPLICABLE; plan PLANNED; signed write and check/report PASS; repeated write idempotent; unproved entry BLOCKED."
         ],
@@ -2586,6 +3607,9 @@
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
+        "remote_effects": [
+          "none"
+        ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
         "verification": "required; this contract is not a successful external test result",
         "workspace_kind": "external_manifest"
@@ -2600,6 +3624,7 @@
     }
   ],
   "kind": "external_findings_status",
+  "machine_contracts": 8,
   "schema_version": 1,
-  "source_sha256": "dd77a3366d3d72a66612db57dc6a708f2c4f7378a3cc8b3a17f7f2175da7a03a"
+  "source_sha256": "651a346e1f5245f018795e1358a91a98449ca287f491286af9698bd183e131d3"
 }

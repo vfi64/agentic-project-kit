@@ -20,6 +20,64 @@
             "doctor stdout contains Overall: PASS"
           ]
         },
+        "machine": {
+          "covers": "workspace init, command reference sync, check PASS and doctor Overall: PASS in a fresh external repository",
+          "fixture": "git_repository",
+          "steps": [
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--root",
+                ".",
+                "--name",
+                "external",
+                "--execute",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "commands",
+                "sync-entrypoints",
+                "--execute",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "error_count": 0,
+                  "status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "check",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_contains": "Overall: PASS"
+              },
+              "run": [
+                "agentic-kit",
+                "doctor"
+              ]
+            }
+          ]
+        },
         "preconditions": [
           "Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry."
         ],
@@ -640,46 +698,6 @@
         2293
       ],
       "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
-    },
-    {
-      "external_retest": {
-        "bindings": {
-          "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
-        },
-        "commands": [
-          "agentic-kit rule-registry check --json",
-          "agentic-kit rule-registry report --json",
-          "agentic-kit rule-registry bootstrap --json",
-          "agentic-kit rule-registry bootstrap --execute --expected-signature {signature} --json",
-          "agentic-kit rule-registry check --json",
-          "agentic-kit rule-registry report --json"
-        ],
-        "expected": [
-          "Before NOT_APPLICABLE; plan PLANNED; signed write and check/report PASS; repeated write idempotent; unproved entry BLOCKED."
-        ],
-        "expected_result_fields": {
-          "assertions": [
-            "Before NOT_APPLICABLE; plan PLANNED; signed write and check/report PASS; repeated write idempotent; unproved entry BLOCKED."
-          ],
-          "process.returncode": 0,
-          "stdout.json_document_count": 1
-        },
-        "preconditions": [
-          "Initialized external fixture with synchronized references; no inventory.",
-          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
-          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
-        ],
-        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
-      },
-      "fixed_in": "1.0.25",
-      "id": "KIT-GF-RULE-REGISTRY-BOOTSTRAP",
-      "kit_state": "CLOSED",
-      "prs": [
-        2485
-      ],
-      "report": "docs/reports/greenfield/KIT-GF-RULE-REGISTRY-BOOTSTRAP-external-inventory-2026-10-13.md"
     },
     {
       "external_retest": {
@@ -1308,7 +1326,7 @@
           "changed_path": "Supply the actual changed_path of the disposable authorized workspace; one argv token."
         },
         "commands": [
-          "agentic-kit transfer communication-context-status --json",
+          "agentic-kit rules require-current-communication-context --json",
           "agentic-kit work finish --branch {branch} --title external-finding-retest --message external-finding-retest --path {changed_path} --release-note-category Fixed --dry-run --json"
         ],
         "expected": [
@@ -2304,6 +2322,44 @@
           "process.returncode": 0,
           "stdout.json_document_count": 1
         },
+        "machine": {
+          "covers": "machine-readable status of every family and the release evidence link of KIT-GF-055",
+          "fixture": "git_repository",
+          "steps": [
+            {
+              "expect": {
+                "json": {
+                  "kind": "external_findings_status",
+                  "schema_version": 1
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "status",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "findings[0].id": "KIT-GF-055",
+                  "findings[0].kit_release_evidence.path": "docs/reports/release/release-run-1.0.25.json"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "status",
+                "--id",
+                "KIT-GF-055",
+                "--json"
+              ]
+            }
+          ]
+        },
         "preconditions": [
           "Installed wheel; no Kit source, tests or documentation registry.",
           "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
@@ -2355,6 +2411,34 @@
     },
     {
       "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit audit-ns-legacy-references --root . --json"
+        ],
+        "expected": [
+          "Declared ledger quotes PASS independently of wording; active script outside declared paths BLOCK; undeclared behavior unchanged from 1.0.24."
+        ],
+        "expected_result_fields": {
+          "blocker_count": 0,
+          "references[].classification": "declared_evidence for matching ledger references",
+          "status": "PASS"
+        },
+        "preconditions": [
+          "Installed wheel and synchronized command reference; disposable clone; exact ledger path declared under audit.ns_legacy.evidence_paths; no Kit tests or documentation registry."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Installed-wheel positive/negative and released-wheel comparison PASS; live consumer retest remains independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.25",
+      "id": "KIT-GF-068",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-068-declared-external-evidence-2026-10-13.md"
+    },
+    {
+      "external_retest": {
         "bindings": {
           "consent": "Actual consent source, shell-quoted as one argument.",
           "owner": "Authorized maintainer identity.",
@@ -2390,29 +2474,87 @@
       "external_retest": {
         "bindings": {},
         "commands": [
-          "agentic-kit audit-ns-legacy-references --root . --json"
+          "agentic-kit greenfield retest --id KIT-GF-066 --json",
+          "agentic-kit greenfield retest --id KIT-GF-002 --id KIT-GF-073 --json"
         ],
         "expected": [
-          "Declared ledger quotes PASS independently of wording; active script outside declared paths BLOCK; undeclared behavior unchanged from 1.0.24."
+          "A local retest with a machine contract returns PASS; a local retest without one returns NO_MACHINE_CONTRACT and a remote one NOT_RUN_LOCALLY, so the run is INCOMPLETE (exit 3), never PASS."
         ],
         "expected_result_fields": {
-          "blocker_count": 0,
-          "references[].classification": "declared_evidence for matching ledger references",
-          "status": "PASS"
+          "result_status": "PASS",
+          "results[0].result": "PASS"
+        },
+        "machine": {
+          "covers": "a local contract runs to PASS, a local retest without a contract and a remote retest are reported as not verified",
+          "fixture": "git_repository",
+          "steps": [
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS",
+                  "results[0].result": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "retest",
+                "--id",
+                "KIT-GF-066",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "INCOMPLETE",
+                  "results[0].result": "NO_MACHINE_CONTRACT",
+                  "results[1].result": "NOT_RUN_LOCALLY"
+                },
+                "returncode": 3
+              },
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "retest",
+                "--id",
+                "KIT-GF-002",
+                "--id",
+                "KIT-GF-073",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "BLOCKED"
+                },
+                "returncode": 2
+              },
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "retest",
+                "--json"
+              ]
+            }
+          ]
         },
         "preconditions": [
-          "Installed wheel and synchronized command reference; disposable clone; exact ledger path declared under audit.ns_legacy.evidence_paths; no Kit tests or documentation registry."
+          "Installed wheel; no Kit source, tests or documentation registry.",
+          "`agentic-kit greenfield retest` builds the fixture in a temporary directory; nothing is read from or written to the consumer workspace."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "Installed-wheel positive/negative and released-wheel comparison PASS; live consumer retest remains independent.",
+        "verification": "PARTIAL: the runner, the execution classes and eight machine contracts exist; the remaining local retests still need contracts.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "1.0.25",
-      "id": "KIT-GF-068",
-      "kit_state": "CLOSED",
+      "fixed_in": "",
+      "id": "KIT-GF-070",
+      "kit_state": "PARTIAL",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-068-declared-external-evidence-2026-10-13.md"
+      "report": "docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md"
     },
     {
       "external_retest": {
@@ -2456,6 +2598,98 @@
         ],
         "expected_result_fields": {
           "result_status": "PASS"
+        },
+        "machine": {
+          "covers": "after a signed bootstrap an unrelated config comment keeps check PASS and an edited kit_schema_version line blocks; the kit update re-derivation needs a release download and is not covered",
+          "fixture": "external_manifest",
+          "steps": [
+            {
+              "capture": {
+                "signature": "approval_signature"
+              },
+              "expect": {
+                "json": {
+                  "result_status": "PLANNED"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "bootstrap",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "bootstrap",
+                "--execute",
+                "--expected-signature",
+                "{signature}",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "check",
+                "--json"
+              ]
+            },
+            {
+              "append": {
+                "path": ".agentic/config.yaml",
+                "text": "# an unrelated owner comment\n"
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "check",
+                "--json"
+              ]
+            },
+            {
+              "replace": {
+                "new": "kit_schema_version: 2  # pinned\n",
+                "old": "kit_schema_version: 2\n",
+                "path": ".agentic/config.yaml"
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "BLOCKED"
+                },
+                "returncode_nonzero": true
+              },
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "check",
+                "--json"
+              ]
+            }
+          ]
         },
         "preconditions": [
           "Installed wheel and synchronized command reference; disposable external Git workspace; no Kit tests or documentation registry.",
@@ -2517,6 +2751,81 @@
           "command_authority[0].requires_allow_unlisted": false,
           "result_status": "PASS"
         },
+        "machine": {
+          "covers": "order-create writes a run_command order with requires_allow_unlisted false and refuses a raw git push without writing an order",
+          "fixture": "external_manifest",
+          "origin": true,
+          "steps": [
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "switch",
+                "-c",
+                "transfer/retest-074"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "BLOCKED"
+                },
+                "returncode_nonzero": true
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "order-create",
+                "--branch",
+                "transfer/retest-074",
+                "--run-command",
+                "git push origin main",
+                "--execute",
+                "--json"
+              ]
+            },
+            {
+              "assert": {
+                "absent": [
+                  ".agentic/transfer/inbox/current.yaml"
+                ]
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "command_authority[0].requires_allow_unlisted": false,
+                  "order.actions[0].command": [
+                    "agentic-kit",
+                    "check",
+                    "--json"
+                  ]
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "order-create",
+                "--branch",
+                "transfer/retest-074",
+                "--run-command",
+                "agentic-kit check --json",
+                "--execute",
+                "--json"
+              ]
+            },
+            {
+              "assert": {
+                "exists": [
+                  ".agentic/transfer/inbox/current.yaml"
+                ]
+              }
+            }
+          ]
+        },
         "preconditions": [
           "Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
@@ -2547,6 +2856,165 @@
           "git status --porcelain": "",
           "result_status": "PASS"
         },
+        "machine": {
+          "covers": "after remote-next PASS the checkout is clean and the written file and the order report are on the origin branch; the blocked undeclared change needs an injected fault and is covered by the Kit's own tests",
+          "fixture": "external_manifest",
+          "origin": true,
+          "steps": [
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "switch",
+                "-c",
+                "transfer/retest-075"
+              ]
+            },
+            {
+              "write": {
+                "path": "docs/probe.payload.txt",
+                "text": "transferred content\n"
+              }
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "add",
+                "docs/probe.payload.txt"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "commit",
+                "-m",
+                "payload"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "order-create",
+                "--branch",
+                "transfer/retest-075",
+                "--write-action",
+                "docs/probe.txt=docs/probe.payload.txt",
+                "--execute",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "add",
+                ".agentic/transfer/inbox/current.yaml"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "commit",
+                "-m",
+                "order"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "push",
+                "-u",
+                "origin",
+                "transfer/retest-075"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "switch",
+                "main"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "remote-next",
+                "transfer/retest-075",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": ""
+              },
+              "run": [
+                "git",
+                "status",
+                "--porcelain=v1",
+                "-uall"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": "transferred content"
+              },
+              "run": [
+                "git",
+                "-C",
+                "{origin}",
+                "show",
+                "transfer/retest-075:docs/probe.txt"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_contains": "docs/reports/command_runs/remote-next-"
+              },
+              "run": [
+                "git",
+                "-C",
+                "{origin}",
+                "ls-tree",
+                "-r",
+                "--name-only",
+                "transfer/retest-075"
+              ]
+            }
+          ]
+        },
         "preconditions": [
           "Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
@@ -2576,6 +3044,117 @@
         "expected_result_fields": {
           "result_status": "PASS"
         },
+        "machine": {
+          "covers": "a freshly initialized workspace with the inbox .gitkeep runs a command order through remote-next to PASS",
+          "fixture": "external_manifest",
+          "origin": true,
+          "steps": [
+            {
+              "assert": {
+                "exists": [
+                  ".agentic/transfer/inbox/.gitkeep"
+                ]
+              }
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "switch",
+                "-c",
+                "transfer/retest-076"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "order-create",
+                "--branch",
+                "transfer/retest-076",
+                "--run-command",
+                "agentic-kit check --json",
+                "--execute",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "add",
+                ".agentic/transfer/inbox/current.yaml"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "commit",
+                "-m",
+                "order"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "push",
+                "-u",
+                "origin",
+                "transfer/retest-076"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "switch",
+                "main"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "remote-next",
+                "transfer/retest-076",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": ""
+              },
+              "run": [
+                "git",
+                "status",
+                "--porcelain=v1",
+                "-uall"
+              ]
+            }
+          ]
+        },
         "preconditions": [
           "Installed wheel and synchronized command reference; disposable external Git workspace with a bare origin; no Kit tests or documentation registry.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
@@ -2590,6 +3169,102 @@
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit greenfield status --id KIT-GF-075 --json"
+        ],
+        "expected": [
+          "The manifest declares fetch and push for transfer remote-next (and transfer remote-work-start); the derived effects of the KIT-GF-075 retest show both."
+        ],
+        "expected_result_fields": {
+          "findings[0].external_retest.remote_effects": [
+            "fetch",
+            "push"
+          ]
+        },
+        "machine": {
+          "covers": "the installed manifest declares push for transfer remote-next, visible in the derived effects of its retest",
+          "fixture": "git_repository",
+          "steps": [
+            {
+              "expect": {
+                "json": {
+                  "findings[0].external_retest.execution_class": "local",
+                  "findings[0].external_retest.remote_effects": [
+                    "fetch",
+                    "push"
+                  ]
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "status",
+                "--id",
+                "KIT-GF-075",
+                "--json"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Installed wheel; no Kit source, tests or documentation registry.",
+          "`agentic-kit greenfield retest` builds the fixture in a temporary directory; nothing is read from or written to the consumer workspace."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Installed-wheel machine contract PASS; live consumer retest remains independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.1.3",
+      "id": "KIT-GF-077",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit rule-registry check --json",
+          "agentic-kit rule-registry report --json",
+          "agentic-kit rule-registry bootstrap --json",
+          "agentic-kit rule-registry bootstrap --execute --expected-signature {signature} --json",
+          "agentic-kit rule-registry check --json",
+          "agentic-kit rule-registry report --json"
+        ],
+        "expected": [
+          "Before NOT_APPLICABLE; plan PLANNED; signed write and check/report PASS; repeated write idempotent; unproved entry BLOCKED."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Before NOT_APPLICABLE; plan PLANNED; signed write and check/report PASS; repeated write idempotent; unproved entry BLOCKED."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "preconditions": [
+          "Initialized external fixture with synchronized references; no inventory.",
+          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "required; this contract is not a successful external test result",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.0.25",
+      "id": "KIT-GF-RULE-REGISTRY-BOOTSTRAP",
+      "kit_state": "CLOSED",
+      "prs": [
+        2485
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-RULE-REGISTRY-BOOTSTRAP-external-inventory-2026-10-13.md"
     }
   ],
   "kind": "external_findings_catalog",

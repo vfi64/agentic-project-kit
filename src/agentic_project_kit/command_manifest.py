@@ -228,6 +228,8 @@ def infer_safety(command: dict[str, Any]) -> str:
         "agentic-kit handoff post-merge-refresh-status",
         "agentic-kit transfer post-merge-check",
         "agentic-kit workspace adopt",
+        # Reads the installed Kit's catalog; everything it runs lives in a temporary directory.
+        "agentic-kit greenfield retest",
     }
     if qualified in exact_read_only_commands:
         return "READ_ONLY"
@@ -411,6 +413,11 @@ def infer_remote_effects(command: dict[str, Any]) -> list[str]:
         "agentic-kit ci runtime-plan": ["none"],
         "agentic-kit greenfield status": ["none"],
         "agentic-kit greenfield export": ["none"],
+        # Runs machine retests in a temporary directory; its git pushes reach only a local bare origin there.
+        "agentic-kit greenfield retest": ["none"],
+        # KIT-GF-077: both publish to the transfer or work branch with a push.
+        "agentic-kit transfer remote-next": ["fetch", "push"],
+        "agentic-kit transfer remote-work-start": ["fetch", "push"],
         "agentic-kit rule-registry bootstrap": ["none"],
         "agentic-kit kit update": ["network_read"],
         "agentic-kit pr merge-if-green": ["delete_remote", "merge", "network_read"],
