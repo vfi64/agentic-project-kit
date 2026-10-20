@@ -95,6 +95,12 @@ def archive_completed_run(run: "ReleaseRun") -> dict:
         gate = archive_gate(run)
     except ValueError as exc:
         return {"step_id": "E1", "result_status": "BLOCKED", "blockers": [str(exc)]}
+    previous = run.state.get("evidence_archive", {})
+    if previous.get("started") and previous.get("result_status") == "BLOCKED":
+        existing_pr = _existing_archive_pr(run, gate)
+        if existing_pr.get("blockers"):
+            return {"step_id": "E1", "result_status": "BLOCKED", **existing_pr}
+        gate.update(existing_pr)
     existing = run.root / gate["paths"][0]
     if existing.exists() and existing.read_bytes() != encoded(
         snapshot_without_archive_approval(run)
@@ -114,6 +120,8 @@ def archive_completed_run(run: "ReleaseRun") -> dict:
     path = gate["paths"][0]
     if hashlib.sha256(content).hexdigest() != gate["evidence_sha256"]:
         return {"step_id": "E1", "result_status": "BLOCKED", "blockers": ["archive-content-drift"]}
+    if gate.get("mode") == RESUME_MODE:
+        return _complete_existing_archive_pr(run, gate, progress)
     if not progress.get("started"):
         result = run._command(
             "E1-start",
@@ -173,8 +181,68 @@ def archive_completed_run(run: "ReleaseRun") -> dict:
     ]
     for p in paths:
         argv += ["--path", p]
+    from agentic_project_kit.release_run import RELEASE_CI_TIMEOUT_SECONDS
+
+    argv += ["--ci-timeout-seconds", str(RELEASE_CI_TIMEOUT_SECONDS)]
     result = run._command("E1", [*argv, "--execute", "--json"], expected_status="PASS")
     progress.update({"result_status": result["result_status"], "path": path})
+    run._save_state()
+    return result
+
+
+RESUME_MODE = "resume-existing-archive"
+
+
+def _existing_archive_pr(run: "ReleaseRun", gate: dict) -> dict:
+    """KIT-GF-078: an archive PR left open by a work finish that stopped waiting for CI.
+
+    Selected only when the earlier E1 attempt is BLOCKED, exactly one open PR from the archive
+    branch targets main, and its head carries byte-identical evidence. No open PR means the
+    ordinary archive path runs again; anything else blocks without a remote effect.
+    """
+    lookup = run._command(
+        "E1-resume-lookup",
+        [run.executable, "transfer", "pr-existing-for-branch", "--head", gate["branch"], "--state", "open", "--json"],
+    )
+    payload = lookup.get("json")
+    if not isinstance(payload, dict):
+        return {"blockers": ["archive-resume-lookup-invalid-response"]}
+    if lookup["returncode"] == 2 and payload.get("result_status") == "MISS":
+        return {}
+    number = payload.get("pr_number")
+    if lookup["result_status"] != "PASS" or not isinstance(number, int) or number < 1:
+        return {"blockers": ["archive-resume-lookup-unavailable"]}
+    view = run._command(
+        "E1-resume-view",
+        ["gh", "pr", "view", str(number), "--json", "headRefOid,headRefName,baseRefName,state"],
+    )
+    info = view.get("json")
+    if view["result_status"] != "PASS" or not isinstance(info, dict):
+        return {"blockers": ["archive-resume-pr-view-unavailable"]}
+    head = str(info.get("headRefOid") or "")
+    if info.get("state") != "OPEN" or info.get("baseRefName") != "main" or info.get("headRefName") != gate["branch"] or not head:
+        return {"blockers": ["archive-resume-pr-invalid"]}
+    shown = run._command("E1-resume-content", ["git", "show", f"{head}:{gate['paths'][0]}"])
+    if shown["result_status"] != "PASS":
+        return {"blockers": ["archive-resume-head-not-available"]}
+    if hashlib.sha256(shown["stdout"].encode("utf-8")).hexdigest() != gate["evidence_sha256"]:
+        return {"blockers": ["archive-resume-pr-evidence-differs"]}
+    return {"mode": RESUME_MODE, "pr_number": number, "source_head": head,
+            "action": "complete the existing archive PR with exact-head CI checks and post-merge handoff"}
+
+
+def _complete_existing_archive_pr(run: "ReleaseRun", gate: dict, progress: dict) -> dict:
+    from agentic_project_kit.release_run import RELEASE_CI_TIMEOUT_SECONDS
+
+    result = run._command(
+        "E1-resume-complete",   # keeps E1.json, the evidence of the stopped attempt
+        [run.executable, "transfer", "pr-complete", str(gate["pr_number"]), "--expected-head-sha", gate["source_head"],
+         "--timeout-seconds", str(RELEASE_CI_TIMEOUT_SECONDS), "--interval-seconds", "30",
+         "--post-merge-complete", "--json"],
+        expected_status="PASS",
+    )
+    progress.update({"result_status": result["result_status"], "path": gate["paths"][0],
+                     "resumed_pr": gate["pr_number"]})
     run._save_state()
     return result
 

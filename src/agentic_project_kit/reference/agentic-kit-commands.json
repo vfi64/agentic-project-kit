@@ -18566,6 +18566,20 @@
           ]
         },
         {
+          "default": 900,
+          "help": "Maximum wait for the pull request's CI (KIT-GF-078: the Kit's own full CI takes more than 300 s).",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "ci_timeout_seconds",
+          "opts": [
+            "--ci-timeout-seconds"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
           "default": false,
           "help": "Print machine-readable JSON.",
           "is_flag": true,
@@ -20410,7 +20424,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "a1cd3498df74",
+    "manifest_sha": "6f5b8aaa37fb",
     "schema_version": 1
   },
   "schema_version": 2,

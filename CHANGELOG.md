@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Wait long enough for CI in releases: `work finish --ci-timeout-seconds` (default 900 instead of a fixed 300) and the release run passes the wait to every work finish, a DOI step that stopped on a CI timeout resumes its unchanged DOI pull request instead of regenerating it, and the evidence archive step completes its own open archive pull request when the evidence is byte-identical (KIT-GF-078).
+
 ## v1.1.3 - 2026-10-20
 
 - Make external retests executable: every catalog retest gets an execution class derived from the installed command manifest (`local`, `owner_remote`, `kit_release`), retest commands must name declared routes and options, and a local retest may carry a machine contract (a fixture the Kit builds, `agentic-kit`/`git` steps and exact expectations). `agentic-kit greenfield retest --id <id> | --all` runs the contracts with the installed Kit in a temporary workspace and reports PASS or FAIL per finding; a retest without a contract or one that needs GitHub or a release is reported as not verified, so the run is INCOMPLETE (exit 3), never PASS. Contracts exist for eight findings so far, and every retest must now name an existing route (KIT-GF-070, partial).

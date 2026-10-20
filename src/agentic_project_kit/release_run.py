@@ -23,6 +23,9 @@ Runner = Callable[[Sequence[str], Path], subprocess.CompletedProcess[str]]
 
 
 GATE_SEQUENCE = ("B4", "C2", "C3", "D4", "D2R")
+# KIT-GF-078: every work finish of a release run (B4, D4, E1) waits this long for CI; 300 s timed out
+# D4 and E1 of release 1.1.3 while the full CI took 5 to 5.5 minutes.
+RELEASE_CI_TIMEOUT_SECONDS = 900
 
 
 @dataclass(frozen=True)
@@ -273,6 +276,7 @@ class ReleaseRun:
         ]
         for path in paths:
             argv.extend(["--path", path])
+        argv.extend(["--ci-timeout-seconds", str(RELEASE_CI_TIMEOUT_SECONDS)])
         argv.extend(["--execute" if execute else "--dry-run", "--json"])
         return self._command(step_id, argv, expected_status=expected_status)
 

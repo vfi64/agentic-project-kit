@@ -1313,6 +1313,23 @@ Expected: The manifest declares fetch and push for transfer remote-next (and tra
 
 Expected result fields: `{"findings[0].external_retest.remote_effects": ["fetch", "push"]}`.
 
+## KIT-GF-078
+
+Kit state: CLOSED; fixed_in: 1.1.4.
+Evidence: docs/reports/greenfield/KIT-GF-078-release-ci-wait-2026-10-20.md
+
+Execution class: kit_release (effects: merge, pull_request, push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
+Preconditions: Kit release run of the next version; observe only, never induce a CI delay. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+
+```text
+agentic-kit release run --version {version} --json
+```
+
+Expected: B4, D4 and E1 wait up to 900 s for CI (work finish --ci-timeout-seconds 900); no D2R and no hand-written pr-complete is needed while the full CI stays under 15 minutes.
+
+Expected result fields: `{"assertions": ["release run PASS with finished_steps containing D4 and no D2R; evidence archive merged by E1"]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.
