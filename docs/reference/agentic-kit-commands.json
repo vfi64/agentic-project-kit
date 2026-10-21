@@ -9546,6 +9546,120 @@
     {
       "dry_run_available": true,
       "group": "release",
+      "help": "Abandon a stopped, unpublished release run: delete its release branch and archive the run state.",
+      "lifecycle_rank": 71,
+      "name": "abandon",
+      "params": [
+        {
+          "default": null,
+          "help": "Version of the stopped release run to abandon.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "version",
+          "opts": [
+            "--version"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Execute the signed abandon plan.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Approval signature of the abandon plan.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Name or identifier of the owner who decided to abandon.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "approved_by",
+          "opts": [
+            "--approved-by"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Reference to the owner's decision.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "consent_source",
+          "opts": [
+            "--consent-source"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print machine-readable JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "release",
+        "abandon"
+      ],
+      "qualified_name": "agentic-kit release abandon",
+      "remote_effects": [
+        "delete_remote",
+        "network_read",
+        "push"
+      ],
+      "replaces_raw": [
+        "abandon release run",
+        "delete release branch"
+      ],
+      "safety": "DESTRUCTIVE",
+      "surface": "orchestrator",
+      "task_tags": [
+        "destructive",
+        "release"
+      ],
+      "when_to_use": "Abandon a stopped, unpublished release run: delete its release branch and archive the run state."
+    },
+    {
+      "dry_run_available": true,
+      "group": "release",
       "help": "Generate release summary evidence and run release-prep safely.",
       "lifecycle_rank": 71,
       "name": "prepare",
@@ -20424,7 +20538,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "e2563df60239",
+    "manifest_sha": "70ef024ffbc1",
     "schema_version": 1
   },
   "schema_version": 2,

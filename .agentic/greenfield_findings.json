@@ -3322,6 +3322,67 @@
     {
       "external_retest": {
         "bindings": {
+          "version": "Version of a stopped, unpublished release run of the workspace; one argv token."
+        },
+        "commands": [
+          "agentic-kit release abandon --version {version} --json"
+        ],
+        "expected": [
+          "The plan names the release branch, its open PR and the archive directory and changes nothing; it blocks while a tag, a GitHub Release, an approval after B4 or a merged release PR exists. The signed execute deletes the branch, checks that the PR is closed unmerged and archives the run state, so the next release run starts fresh."
+        ],
+        "expected_result_fields": {
+          "result_status": "AWAITING_APPROVAL",
+          "gate.kind": "release_run_abandon_gate"
+        },
+        "preconditions": [
+          "Only after the owner decided to give up a stopped release run; observe only, never stop a release to test this.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Regression tests PASS (tests/test_release_abandon.py); the next abandoned release run is the live retest.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.1.5",
+      "id": "KIT-GF-081",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-081-082-release-abandon-and-download-cause-2026-10-20.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "version": "The Kit version to update to; one argv token."
+        },
+        "commands": [
+          "agentic-kit kit update --root . --version {version} --json"
+        ],
+        "expected": [
+          "Every wheel download is logged as a DOWNLOAD event with file name, attempt and result (never the URL); a transient network error is retried twice; a final failure names the file, the error type and the attempt in the blocker."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "update log holds one DOWNLOAD event per wheel; a download blocker names file and error"
+          ]
+        },
+        "preconditions": [
+          "A workspace with a Kit installation in its .venv; the plan downloads into the workspace tmp root and installs nothing.",
+          "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Regression tests PASS (tests/test_kit_update_download.py); the next kit update plan shows the DOWNLOAD events.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.1.5",
+      "id": "KIT-GF-082",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-081-082-release-abandon-and-download-cause-2026-10-20.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
         "commands": [

@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Give up a stopped release run through the Kit: `release abandon --version <v>` plans, then with the plan's signature and an attributed consent deletes the release branch through `transfer branch-delete` (closing its unmerged PR), checks that the PR is closed, and archives the run state under `<tmp>/release-run-archive/`; it refuses while a tag, a GitHub Release, an approved publication gate or a merged release PR exists (KIT-GF-081). A failed wheel download in `kit update` is retried twice, every attempt is logged, and the blocker names the file and the error (KIT-GF-082).
+
 ## v1.1.4 - 2026-10-20
 
 - Wait for required checks that start late and let a blocked release finish its own release PR: `gates.required_checks` names checks `pr wait-ci` must see before readiness passes, so a required job that starts after other jobs is awaited instead of missed (the Kit declares `test`, KIT-GF-079); after a blocked B4 the release run completes its own open release PR when the branch holds exactly the release commits on an unchanged main (KIT-GF-080).
