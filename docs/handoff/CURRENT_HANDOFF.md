@@ -15,7 +15,7 @@ PR #1246 refreshed operational handoff after PR #1245.
 PR #1245 is an administrative handoff/evidence refresh after PR #1244.
 
 A successor chat must treat operational documentation freshness as part of handoff freshness: STATUS, CURRENT_HANDOFF, START_NEW_CHAT_PROMPT, NEXT_CHAT_BOOTSTRAP, and the active roadmap must mention current safe/admin markers before they are used as authoritative orientation.
-Continue with the next governed DPA DP2 slice from fresh main after post-merge closeout reports NOOP. Preserve the WRT-CH-001 generated-block boundary and do not manually patch generated successor handoff projections.
+Follow meta.planning_reconciliation.owner_order in docs/planning/PROJECT_DIRECTION.yaml (owner 2026-10-21): next is external-retest-machine-contracts step c1, machine contracts for the local findings without one (KIT-GF-070), from fresh main after post-merge closeout reports NOOP. Do not manually patch generated successor handoff projections.
 
 <!-- agentic:generated operational-handoff-state end -->
 

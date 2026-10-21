@@ -39,7 +39,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2591-handoff-refresh`
+- branch: `docs/planning-reconciliation-20261021`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -445,6 +445,15 @@ Wenn der Bootstrap grün ist:
       "id": "guided-gui-alternative",
       "status": "active",
       "summary": "Validate an optional guided Kit GUI over shared guarded actions for GUI"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "external-retest-machine-contracts",
+      "status": "active",
+      "summary": "Give every local finding retest a machine contract and resync the external ledger"
     }
   ],
   "recent_lessons": [
@@ -457,14 +466,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2591-handoff-refresh",
+    "branch": "docs/planning-reconciliation-20261021",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "cc4efdf1b5093b1cf8614f80ac329ed31de8b307",
+    "head": "ffbbd19445225ae22a6444f10c2c12523d09acec",
     "head_matches_origin_main": true,
-    "head_short": "cc4efdf1",
+    "head_short": "ffbbd194",
     "local_path": "cd /path/to/",
-    "origin_main": "cc4efdf1b5093b1cf8614f80ac329ed31de8b307",
-    "origin_main_short": "cc4efdf1",
+    "origin_main": "ffbbd19445225ae22a6444f10c2c12523d09acec",
+    "origin_main_short": "ffbbd194",
     "worktree_clean": false
   }
 }

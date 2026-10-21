@@ -25,6 +25,8 @@ freshness_policy:
     markers before they are used as authoritative orientation.
 next_safe_substantive_slice:
   text: >-
-    Continue with the next governed DPA DP2 slice from fresh main after
-    post-merge closeout reports NOOP. Preserve the WRT-CH-001 generated-block
-    boundary and do not manually patch generated successor handoff projections.
+    Follow meta.planning_reconciliation.owner_order in
+    docs/planning/PROJECT_DIRECTION.yaml (owner 2026-10-21): next is
+    external-retest-machine-contracts step c1, machine contracts for the local
+    findings without one (KIT-GF-070), from fresh main after post-merge closeout
+    reports NOOP. Do not manually patch generated successor handoff projections.
