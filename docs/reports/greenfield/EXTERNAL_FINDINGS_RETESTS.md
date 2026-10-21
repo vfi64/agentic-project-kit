@@ -421,7 +421,7 @@ Expected result fields: `{"assertions": ["PASS; every command declares valid rem
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-026-managed-ci-template-2026-10-04.md
 
-Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+Execution class: local (effects: none); machine contract: workspace ci-update plans the refresh of an unmodified older Kit-managed template and its injected workflow; the written template pins the running Kit, runs on push to main only, cancels superseded runs and caches the browser
 
 Preconditions: Unmodified old Kit-managed CI source and injected projection. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -592,7 +592,7 @@ Expected result fields: `{"assertions": ["No Kit-required document-set blockers;
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-034-036-release-closeout-quality-2026-10-04.md
 
-Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+Execution class: local (effects: none); machine contract: release-prep checks the projected CHANGELOG section with the release-quality gate before any write: a one-category summary is rejected (exit 2) and leaves the worktree clean; a summary covering three categories passes
 
 Preconditions: Disposable prepared release repository; one-category notes. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -609,7 +609,7 @@ Expected result fields: `{"assertions": ["Quality rejection occurs before writes
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-037-038-release-button-foundation-2026-10-04.md
 
-Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+Execution class: local (effects: none); machine contract: a project-specific version anchor declared under release.version_anchors is part of the deterministic release-prep plan and is written with the version
 
 Preconditions: External release config declares a project-specific version anchor. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -695,7 +695,7 @@ Expected result fields: `{"assertions": ["result_status=PLANNED, not completed P
 Kit state: CLOSED; fixed_in: 1.0.18.
 Evidence: docs/reports/greenfield/KIT-GF-042-ci-update-customized-source-2026-10-05.md
 
-Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+Execution class: local (effects: none); machine contract: workspace ci-update refuses a source template and workflow that were customized identically (dry run and execute exit 2, both blockers named) and leaves both files byte for byte unchanged
 
 Preconditions: Customized source CI and matching custom injected workflow; record byte hashes. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -1005,7 +1005,7 @@ Expected result fields: `{"assertions": ["D4/D5 PASS proves ordinary closeout; D
 Kit state: CLOSED; fixed_in: 1.0.21.
 Evidence: docs/reports/greenfield/KIT-GF-060-consume-unreleased-2026-10-09.md
 
-Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+Execution class: local (effects: none); machine contract: release-prep moves exactly the Unreleased entry named by the summary into the new version section, once; an unrelated Unreleased entry stays under Unreleased and the earlier release section is unchanged
 
 Preconditions: Unreleased entries exactly selected into target version. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -1057,7 +1057,7 @@ Expected result fields: `{"assertions": ["Only eligible failed checks rerun; sig
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-063-custom-ci-runtime-plan-2026-10-13.md
 
-Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+Execution class: local (effects: none); machine contract: ci runtime-plan returns mode light only for a refresh branch that changes only manifest-derived refresh paths; a product change on that branch, the same change on a work branch and an unknown base are full; it never mutates
 
 Preconditions: Installed wheel, synchronized reference, custom CI; matching refresh branch and local base/head commits.
 
@@ -1074,9 +1074,9 @@ Expected result fields: `{"assertions": ["mode=light only for manifest-derived r
 Kit state: CLOSED; fixed_in: 1.0.22.
 Evidence: docs/reports/greenfield/KIT-GF-064-kit-changelog-consumption-2026-10-09.md
 
-Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+Execution class: kit_release (effects: none); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
-Preconditions: Kit release fixture with already selected historical Unreleased entries. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
+Preconditions: The repaired path is the Kit's own self-hosted release preparation; an external workspace runs the external GF-060 path instead (see KIT-GF-060), so the retest is a Kit release run. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
 agentic-kit release-prep --version {version} --dry-run --json

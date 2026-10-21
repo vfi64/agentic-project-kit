@@ -1534,8 +1534,143 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "workspace ci-update plans the refresh of an unmodified older Kit-managed template and its injected workflow; the written template pins the running Kit, runs on push to main only, cancels superseded runs and caches the browser",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--root",
+                ".",
+                "--name",
+                "external",
+                "--inject-ci",
+                "--execute",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "replace": {
+                "path": ".agentic/ci/agentic-gate.yaml",
+                "old": "agentic-project-kit=={kit_version}",
+                "new": "agentic-project-kit==1.0.16"
+              }
+            },
+            {
+              "replace": {
+                "path": ".github/workflows/agentic-gate.yaml",
+                "old": "agentic-project-kit=={kit_version}",
+                "new": "agentic-project-kit==1.0.16"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "ci-update",
+                "--root",
+                ".",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "written": false,
+                  "changed_paths": [
+                    ".agentic/ci/agentic-gate.yaml",
+                    ".github/workflows/agentic-gate.yaml"
+                  ]
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "ci-update",
+                "--root",
+                ".",
+                "--execute",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-c",
+                "-e",
+                "agentic-project-kit=={kit_version}",
+                "--",
+                ".agentic/ci/agentic-gate.yaml"
+              ],
+              "expect": {
+                "stdout_equals": ".agentic/ci/agentic-gate.yaml:1"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-q",
+                "-e",
+                "concurrency:",
+                "--",
+                ".github/workflows/agentic-gate.yaml"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-q",
+                "-e",
+                "ms-playwright",
+                "--",
+                ".github/workflows/agentic-gate.yaml"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-A2",
+                "-e",
+                "push:",
+                "--",
+                ".github/workflows/agentic-gate.yaml"
+              ],
+              "expect": {
+                "stdout_contains": "- main"
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.16",
       "id": "KIT-GF-026",
@@ -2054,8 +2189,112 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "release-prep checks the projected CHANGELOG section with the release-quality gate before any write: a one-category summary is rejected (exit 2) and leaves the worktree clean; a summary covering three categories passes",
+          "steps": [
+            {
+              "write": {
+                "path": ".agentic/config.yaml",
+                "text": "kit_schema_version: 2\nprofile: generic\npublication: none\nhygiene:\n  doc_lifecycle: warn\n  review_budgets:\n    governance: 180\n    reference: 365\n    workflow: 270\n"
+              }
+            },
+            {
+              "write": {
+                "path": "pyproject.toml",
+                "text": "[project]\nname = \"external-product\"\nversion = \"1.0.0\"\n"
+              }
+            },
+            {
+              "write": {
+                "path": "CHANGELOG.md",
+                "text": "# Changelog\n\n## Unreleased\n\n- Add a read-only export command and cover it with regression tests\n\n## v1.0.0 - 2026-10-02\n\n- Record the import command, add a bounded read-only guard and cover it with regression tests\n"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "add",
+                "-A"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "commit",
+                "-qm",
+                "release fixture"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "release-prep",
+                "--version",
+                "1.1.0",
+                "--summary-line",
+                "Fix the finish prompt",
+                "--dry-run",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 2,
+                "json": {
+                  "ok": false
+                },
+                "stdout_contains": "lacks enough release-quality categories"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "status",
+                "--porcelain"
+              ],
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": ""
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "release-prep",
+                "--version",
+                "1.1.0",
+                "--summary-line",
+                "Add a read-only export command and cover it with regression tests",
+                "--dry-run",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "ok": true,
+                  "dry_run": true
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "status",
+                "--porcelain"
+              ],
+              "expect": {
+                "stdout_equals": ""
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.16",
       "id": "KIT-GF-036",
@@ -2089,8 +2328,113 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "a project-specific version anchor declared under release.version_anchors is part of the deterministic release-prep plan and is written with the version",
+          "steps": [
+            {
+              "write": {
+                "path": "src/product/version.py",
+                "text": "VERSION = \"1.0.0\"\n"
+              }
+            },
+            {
+              "write": {
+                "path": ".agentic/config.yaml",
+                "text": "kit_schema_version: 2\nprofile: generic\npublication: none\nhygiene:\n  doc_lifecycle: warn\n  review_budgets:\n    governance: 180\n    reference: 365\n    workflow: 270\nrelease:\n  version_anchors:\n    - kind: source_constant\n      path: src/product/version.py\n      name: VERSION\n      label: VERSION\n"
+              }
+            },
+            {
+              "write": {
+                "path": "pyproject.toml",
+                "text": "[project]\nname = \"external-product\"\nversion = \"1.0.0\"\n"
+              }
+            },
+            {
+              "write": {
+                "path": "CHANGELOG.md",
+                "text": "# Changelog\n\n## Unreleased\n\n- Add a read-only export command and cover it with regression tests\n\n## v1.0.0 - 2026-10-02\n\n- Record the import command, add a bounded read-only guard and cover it with regression tests\n"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "add",
+                "-A"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "commit",
+                "-qm",
+                "release fixture"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "release-prep",
+                "--version",
+                "1.1.0",
+                "--summary-line",
+                "Add a read-only export command and cover it with regression tests",
+                "--dry-run",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "ok": true
+                },
+                "json_contains": {
+                  "changed_paths": "src/product/version.py"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "release-prep",
+                "--version",
+                "1.1.0",
+                "--summary-line",
+                "Add a read-only export command and cover it with regression tests",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "ok": true,
+                  "dry_run": false
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-h",
+                "-e",
+                "VERSION",
+                "--",
+                "src/product/version.py"
+              ],
+              "expect": {
+                "stdout_equals": "VERSION = \"1.1.0\""
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.16",
       "id": "KIT-GF-037",
@@ -2264,8 +2608,125 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "workspace ci-update refuses a source template and workflow that were customized identically (dry run and execute exit 2, both blockers named) and leaves both files byte for byte unchanged",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--root",
+                ".",
+                "--name",
+                "external",
+                "--inject-ci",
+                "--execute",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "replace": {
+                "path": ".agentic/ci/agentic-gate.yaml",
+                "old": "agentic-project-kit=={kit_version}",
+                "new": "agentic-project-kit==1.0.16"
+              }
+            },
+            {
+              "append": {
+                "path": ".agentic/ci/agentic-gate.yaml",
+                "text": "      - run: python -m pytest -q\n"
+              }
+            },
+            {
+              "replace": {
+                "path": ".github/workflows/agentic-gate.yaml",
+                "old": "agentic-project-kit=={kit_version}",
+                "new": "agentic-project-kit==1.0.16"
+              }
+            },
+            {
+              "append": {
+                "path": ".github/workflows/agentic-gate.yaml",
+                "text": "      - run: python -m pytest -q\n"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "add",
+                "-A"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "commit",
+                "-qm",
+                "customized CI"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "ci-update",
+                "--root",
+                ".",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 2,
+                "json": {
+                  "result_status": "BLOCKED",
+                  "changed_paths": [],
+                  "blockers[0].reason": "modified_managed_ci_template",
+                  "blockers[1].reason": "modified_managed_ci_workflow"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "ci-update",
+                "--root",
+                ".",
+                "--execute",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 2,
+                "json": {
+                  "result_status": "BLOCKED",
+                  "changed_paths": []
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "status",
+                "--porcelain"
+              ],
+              "expect": {
+                "stdout_equals": ""
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.18",
       "id": "KIT-GF-042",
@@ -3185,8 +3646,117 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "release-prep moves exactly the Unreleased entry named by the summary into the new version section, once; an unrelated Unreleased entry stays under Unreleased and the earlier release section is unchanged",
+          "steps": [
+            {
+              "write": {
+                "path": ".agentic/config.yaml",
+                "text": "kit_schema_version: 2\nprofile: generic\npublication: none\nhygiene:\n  doc_lifecycle: warn\n  review_budgets:\n    governance: 180\n    reference: 365\n    workflow: 270\n"
+              }
+            },
+            {
+              "write": {
+                "path": "pyproject.toml",
+                "text": "[project]\nname = \"external-product\"\nversion = \"1.0.0\"\n"
+              }
+            },
+            {
+              "write": {
+                "path": "CHANGELOG.md",
+                "text": "# Changelog\n\n## Unreleased\n\n- Add a read-only export command and cover it with regression tests\n- Unrelated entry that stays for a later release\n\n## v1.0.0 - 2026-10-02\n\n- Record the import command, add a bounded read-only guard and cover it with regression tests\n"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "add",
+                "-A"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "commit",
+                "-qm",
+                "release fixture"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "release-prep",
+                "--version",
+                "1.1.0",
+                "--date",
+                "2026-11-01",
+                "--summary-line",
+                "Add a read-only export command and cover it with regression tests",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "ok": true
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-n",
+                "-e",
+                "Unrelated entry",
+                "--",
+                "CHANGELOG.md"
+              ],
+              "expect": {
+                "stdout_equals": "CHANGELOG.md:5:- Unrelated entry that stays for a later release"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-n",
+                "-e",
+                "read-only export command",
+                "--",
+                "CHANGELOG.md"
+              ],
+              "expect": {
+                "stdout_equals": "CHANGELOG.md:9:- Add a read-only export command and cover it with regression tests"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-n",
+                "-e",
+                "## v",
+                "--",
+                "CHANGELOG.md"
+              ],
+              "expect": {
+                "stdout_equals": "CHANGELOG.md:7:## v1.1.0 - 2026-11-01\nCHANGELOG.md:11:## v1.0.0 - 2026-10-02"
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.21",
       "id": "KIT-GF-060",
@@ -3297,8 +3867,181 @@
           "Installed wheel, synchronized reference, custom CI; matching refresh branch and local base/head commits."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "Installed-wheel custom-CI fixture PASS; consumer VERIFIED_FIXED independent.",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "ci runtime-plan returns mode light only for a refresh branch that changes only manifest-derived refresh paths; a product change on that branch, the same change on a work branch and an unknown base are full; it never mutates",
+          "steps": [
+            {
+              "run": [
+                "git",
+                "switch",
+                "-c",
+                "docs/post-pr42-handoff-refresh"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "write": {
+                "path": ".agentic/state/status.md",
+                "text": "Refreshed state\n"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "add",
+                "-A"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "commit",
+                "-qm",
+                "fixture refresh"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "ci",
+                "runtime-plan",
+                "--base",
+                "main",
+                "--head",
+                "HEAD",
+                "--branch",
+                "docs/post-pr42-handoff-refresh",
+                "--event-name",
+                "pull_request",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "mode": "light",
+                  "mutation": "none",
+                  "policy.changed_paths": [
+                    ".agentic/state/status.md"
+                  ]
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "ci",
+                "runtime-plan",
+                "--base",
+                "main",
+                "--head",
+                "HEAD",
+                "--branch",
+                "feat/product-work",
+                "--event-name",
+                "pull_request",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "mode": "full"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "ci",
+                "runtime-plan",
+                "--base",
+                "no-such-ref",
+                "--head",
+                "HEAD",
+                "--branch",
+                "docs/post-pr42-handoff-refresh",
+                "--event-name",
+                "pull_request",
+                "--json"
+              ],
+              "expect": {
+                "json": {
+                  "mode": "full"
+                }
+              }
+            },
+            {
+              "write": {
+                "path": "product.py",
+                "text": "changed = True\n"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "add",
+                "-A"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "commit",
+                "-qm",
+                "product change"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "ci",
+                "runtime-plan",
+                "--base",
+                "main",
+                "--head",
+                "HEAD",
+                "--branch",
+                "docs/post-pr42-handoff-refresh",
+                "--event-name",
+                "pull_request",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "mode": "full",
+                  "mutation": "none"
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "status",
+                "--porcelain"
+              ],
+              "expect": {
+                "stdout_equals": ""
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.25",
       "id": "KIT-GF-063",
@@ -3328,13 +4071,12 @@
           "stdout.json_document_count": 1
         },
         "preconditions": [
-          "Kit release fixture with already selected historical Unreleased entries.",
-          "Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted.",
+          "The repaired path is the Kit's own self-hosted release preparation; an external workspace runs the external GF-060 path instead (see KIT-GF-060), so the retest is a Kit release run.",
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Reclassified 2026-10-21 from local to kit_release: an external fixture cannot reach the self-hosted path. Observed in the Kit's releases 1.1.3 and 1.1.4: release preparation left Unreleased empty and earlier sections unchanged.",
+        "workspace_kind": "kit_release"
       },
       "fixed_in": "1.0.22",
       "id": "KIT-GF-064",

@@ -28,8 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PILOT = ["KIT-GF-001", "KIT-GF-066", "KIT-GF-070", "KIT-GF-072", "KIT-GF-074", "KIT-GF-075", "KIT-GF-076", "KIT-GF-077"]
 # external-retest-machine-contracts c1 (2026-10-21): local retests still without a machine contract.
 # The set may only shrink; a new local finding needs its contract in the same slice.
-LOCAL_WITHOUT_CONTRACT = {f"KIT-GF-{n}" for n in ("014", "015", "021", "026", "032", "036", "037", "042", "045",
-                                                   "060", "063", "064", "067")}
+LOCAL_WITHOUT_CONTRACT = {f"KIT-GF-{n}" for n in ("014", "015", "021", "032", "045", "067")}
 
 
 def _catalog():
