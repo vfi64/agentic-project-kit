@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: c44f0feed67f09a792f002da88888e6f42cfe396f23fb50c0088d82d5ad03fe1
 - docs/reference/agentic-kit-commands.json: d59b09cfb941ebfabdeb709dd773b9ab0c3496ac88ebdad20db66b9ff0bcd840
-## Operational documentation refresh state after PR #2591
+## Operational documentation refresh state after PR #2593
 
-Current administrative handoff refresh state is `cc4efdf1` (`Abandon a stopped release run through the Kit; name the cause of a failed wheel download (#2591)`). Continue next only after this post-PR2591 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `a90c026d` (`Reconcile the planning with Kit 1.1.4 and record the owner's order (#2593)`). Continue next only after this post-PR2593 refresh is committed and merged; the next substantive slice must be created from fresh main.

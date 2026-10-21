@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `cc4efdf1b5093b1cf8614f80ac329ed31de8b307` (`cc4efdf1`), after `Abandon a stopped release run through the Kit; name the cause of a failed wheel download (#2591)`.
-Last substantive work state is `cc4efdf1b5093b1cf8614f80ac329ed31de8b307` (`cc4efdf1`), after `Abandon a stopped release run through the Kit; name the cause of a failed wheel download (#2591)`.
+Current verified main/admin HEAD is `a90c026d6c1e46cc10808e2cae3993839b70a7f0` (`a90c026d`), after `Reconcile the planning with Kit 1.1.4 and record the owner's order (#2593)`.
+Last substantive work state is `a90c026d6c1e46cc10808e2cae3993839b70a7f0` (`a90c026d`), after `Reconcile the planning with Kit 1.1.4 and record the owner's order (#2593)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
