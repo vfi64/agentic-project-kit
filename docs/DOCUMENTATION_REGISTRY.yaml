@@ -1757,3 +1757,6 @@ documents:
   - path: docs/reports/PLANNING_RECONCILIATION_20261021.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-070-083-084-machine-contracts-c1a-2026-10-21.md
+    class: evidence/log
+    owner: maintainers

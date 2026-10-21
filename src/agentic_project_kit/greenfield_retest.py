@@ -40,6 +40,9 @@ EXPECT_KEYS = frozenset(
 RESULTS = ("PASS", "FAIL", "NO_MACHINE_CONTRACT", "NOT_RUN_LOCALLY")
 STEP_TIMEOUT_SECONDS = 600
 _PLACEHOLDER = re.compile(r"\{([a-z_][a-z0-9_]*)\}")
+# Built-in variables every contract may use: the interpreter of the installed Kit that runs the
+# retest (for kit.interpreter, KIT-GF-021/067) and, with ``origin: true``, the local bare origin.
+BUILTIN_VARIABLES = ("kit_python",)
 _PATH_TOKEN = re.compile(r"([^.\[\]]+)|\[(\d+)\]")
 
 
@@ -125,7 +128,7 @@ def validate_machine(finding_id: str, retest: dict[str, Any], routes=None) -> No
     steps = machine.get("steps")
     if not isinstance(steps, list) or not steps:
         raise ValueError(f"{finding_id}: a machine contract needs steps")
-    known = {"origin"} if machine.get("origin") else set()
+    known = {*BUILTIN_VARIABLES, *(("origin",) if machine.get("origin") else ())}
     ran_retest_route = False
     for step in steps:
         if not isinstance(step, dict) or len(set(step) & set(STEP_KINDS)) != 1:
@@ -159,7 +162,7 @@ def validate_machine(finding_id: str, retest: dict[str, Any], routes=None) -> No
             if not isinstance(capture, dict):
                 raise ValueError(f"{finding_id}: capture maps names to JSON paths")
             for name in capture:
-                if not re.fullmatch(r"[a-z_][a-z0-9_]*", name) or name == "origin":
+                if not re.fullmatch(r"[a-z_][a-z0-9_]*", name) or name in {"origin", *BUILTIN_VARIABLES}:
                     raise ValueError(f"{finding_id}: invalid capture name {name!r}")
             known |= set(capture)
         elif "assert" in step:
@@ -220,6 +223,11 @@ def _environment(home: Path) -> dict[str, str]:
     )
     env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
     env.update({"GIT_CONFIG_GLOBAL": str(config), "GIT_CONFIG_NOSYSTEM": "1", "GIT_TERMINAL_PROMPT": "0"})
+    # The OS temp root is the run's own directory, so a contract never sees or touches other
+    # programs' temporary files (KIT-GF-028).
+    temp = home / "os-tmp"
+    temp.mkdir(exist_ok=True)
+    env.update({"TMPDIR": str(temp), "TMP": str(temp), "TEMP": str(temp)})
     return env
 
 
@@ -277,7 +285,7 @@ def _check(expect: dict[str, Any], completed: subprocess.CompletedProcess) -> li
 def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str]) -> tuple[Path, dict[str, str], list[str]]:
     root = base / "workspace"
     root.mkdir()
-    variables: dict[str, str] = {}
+    variables: dict[str, str] = {"kit_python": sys.executable}
     setup = [["git", "init", "-b", "main"]]
     if machine["fixture"] == "external_manifest":
         setup += [

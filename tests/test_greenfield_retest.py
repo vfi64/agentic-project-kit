@@ -26,6 +26,10 @@ from test_external_rule_registry import installed_kit as installed_kit
 
 ROOT = Path(__file__).resolve().parents[1]
 PILOT = ["KIT-GF-001", "KIT-GF-066", "KIT-GF-070", "KIT-GF-072", "KIT-GF-074", "KIT-GF-075", "KIT-GF-076", "KIT-GF-077"]
+# external-retest-machine-contracts c1 (2026-10-21): local retests still without a machine contract.
+# The set may only shrink; a new local finding needs its contract in the same slice.
+LOCAL_WITHOUT_CONTRACT = {f"KIT-GF-{n}" for n in ("014", "015", "021", "026", "032", "036", "037", "042", "045",
+                                                   "060", "063", "064", "067")}
 
 
 def _catalog():
@@ -45,6 +49,24 @@ def _retest(installed_kit, cwd, *args):
 
 # --- the installed wheel ------------------------------------------------------------------------
 
+def _contract_ids():
+    return sorted(f["id"] for f in _catalog()["findings"] if "machine" in f["external_retest"])
+
+
+@pytest.mark.parametrize("finding_id", _contract_ids())
+def test_every_machine_contract_passes_with_the_installed_wheel(installed_kit, tmp_path, finding_id):
+    rc, result = _retest(installed_kit, tmp_path, "--id", finding_id, "--json")
+    record, = result["results"]
+    assert rc == 0 and record["result"] == "PASS", (record.get("failures"), record.get("steps", [])[-1:])
+    assert record["covers"] and record["steps"]
+
+
+def test_only_the_named_local_retests_lack_a_contract():
+    records = {f["id"]: f["external_retest"] for f in build(ROOT)["findings"]}
+    missing = {i for i, r in records.items() if r["execution_class"] == "local" and "machine" not in r}
+    assert missing == LOCAL_WITHOUT_CONTRACT
+
+
 def test_every_pilot_contract_passes_with_the_installed_wheel_and_leaves_the_cwd_alone(installed_kit, tmp_path):
     cwd = tmp_path / "consumer"
     cwd.mkdir()
@@ -57,7 +79,7 @@ def test_every_pilot_contract_passes_with_the_installed_wheel_and_leaves_the_cwd
 
 
 def test_unproved_retests_are_incomplete_never_pass(installed_kit, tmp_path):
-    rc, result = _retest(installed_kit, tmp_path, "--id", "KIT-GF-002", "--id", "KIT-GF-073", "--id", "KIT-GF-055", "--json")
+    rc, result = _retest(installed_kit, tmp_path, "--id", "KIT-GF-014", "--id", "KIT-GF-073", "--id", "KIT-GF-055", "--json")
     assert rc == 3 and result["result_status"] == "INCOMPLETE"
     assert [r["result"] for r in result["results"]] == ["NO_MACHINE_CONTRACT", "NOT_RUN_LOCALLY", "NOT_RUN_LOCALLY"]
     assert [r["execution_class"] for r in result["results"]] == ["local", "owner_remote", "kit_release"]
@@ -84,6 +106,25 @@ def test_a_missing_replace_text_fails_instead_of_passing_silently():
     machine = {"fixture": "external_manifest", "covers": "x", "steps": [
         {"replace": {"path": ".agentic/config.yaml", "old": "no such line", "new": "y"}}]}
     assert run_machine(machine)["result"] == "FAIL"
+
+
+def test_the_runner_isolates_the_os_temp_root_and_names_the_kit_interpreter(tmp_path):
+    # KIT-GF-028 and KIT-GF-021: a contract never sees other programs' temp files and may declare
+    # the interpreter of the Kit that runs it.
+    from agentic_project_kit.greenfield_retest import _environment
+
+    env = _environment(tmp_path)
+    assert env["TMPDIR"] == str(tmp_path / "os-tmp") and (tmp_path / "os-tmp").is_dir()
+    machine = {"fixture": "git_repository", "covers": "x", "steps": [
+        {"run": ["git", "config", "--global", "retest.python", "{kit_python}"]},
+        {"run": ["git", "config", "--global", "retest.python"], "expect": {"stdout_equals": sys.executable}}]}
+    assert run_machine(machine)["result"] == "PASS"
+    retest = _finding(_catalog(), "KIT-GF-074")["external_retest"]
+    validate_machine("KIT-GF-074", {**retest, "machine": {
+        **retest["machine"], "steps": [*machine["steps"], *retest["machine"]["steps"]]}})
+    with pytest.raises(ValueError, match="capture name"):
+        validate_machine("KIT-GF-074", {**retest, "machine": {**retest["machine"], "steps": [
+            {**retest["machine"]["steps"][0], "capture": {"kit_python": "result_status"}}]}})
 
 
 def test_json_paths():

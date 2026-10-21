@@ -119,8 +119,37 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "the planning-doc slice gate passes in an external workspace without Kit self-hosting tests or registry; a tracked change outside docs still keeps the gate honest (not covered)",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "slice",
+                "gate",
+                "--kind",
+                "planning-doc",
+                "--root",
+                "."
+              ],
+              "expect": {
+                "returncode": 0,
+                "stdout_contains": "slice_result=PASS"
+              }
+            },
+            {
+              "assert": {
+                "absent": [
+                  "tests",
+                  "docs/DOCUMENTATION_REGISTRY.yaml"
+                ]
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.9",
       "id": "KIT-GF-002",
@@ -193,8 +222,35 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "governance check passes in an external workspace that has no Kit constitution or full-contract documents",
+          "steps": [
+            {
+              "assert": {
+                "absent": [
+                  "docs/CONSTITUTION.md",
+                  "docs/governance"
+                ]
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "governance",
+                "check",
+                "--root",
+                "."
+              ],
+              "expect": {
+                "returncode": 0,
+                "stdout_contains": "Governance check passed"
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.9",
       "id": "KIT-GF-004",
@@ -225,8 +281,72 @@
           "Clean main tracks origin/main; local bare origin contains the initial committed workspace; no previous merge or successor package."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "Candidate installed-wheel external fixture passed; consumer VERIFIED_FIXED remains independent. Also passed with a wheel built from immutable v1.0.24.",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "origin": true,
+          "covers": "the first work start in a fresh external workspace that tracks a local bare origin passes, its post-merge check reports not applicable, and a start over unreviewed work blocks and keeps the file",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "work",
+                "start",
+                "--branch",
+                "codex/gf005-retest",
+                "--from-ref",
+                "main",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                },
+                "stdout_contains": "not applicable"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "branch",
+                "--show-current"
+              ],
+              "expect": {
+                "stdout_equals": "codex/gf005-retest"
+              }
+            },
+            {
+              "write": {
+                "path": "dirty.txt",
+                "text": "Unreviewed work must be preserved\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "work",
+                "start",
+                "--branch",
+                "codex/gf005-negative",
+                "--from-ref",
+                "main",
+                "--json"
+              ],
+              "expect": {
+                "returncode_nonzero": true
+              }
+            },
+            {
+              "assert": {
+                "exists": [
+                  "dirty.txt"
+                ]
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.24",
       "id": "KIT-GF-005",
@@ -262,8 +382,53 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "transfer status on an empty transfer inbox returns one JSON document with a deterministic empty state and no file exception",
+          "steps": [
+            {
+              "assert": {
+                "absent": [
+                  ".agentic/transfer/inbox/current.yaml"
+                ]
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "status",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "last_result": null,
+                  "closeout.pending_transfer_order": false,
+                  "primary_state": "WAIT"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "status",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "last_result": null
+                }
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.9",
       "id": "KIT-GF-006",
@@ -295,8 +460,31 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "workspace adopt on an initialized workspace keeps it initialized and reports the generated Kit surfaces without blockers; the full surface classification is not asserted field by field",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "adopt",
+                "--root",
+                ".",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "agentic.status": "already_initialized",
+                  "dpa_repo_adoption_assessment.blocker_count": 0
+                }
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.13",
       "id": "KIT-GF-007",
@@ -329,8 +517,98 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "workspace init --inject-ci writes a workflow that installs the pinned Kit and runs the installed Kit's check, with no Kit self-hosting test step; check passes",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--root",
+                ".",
+                "--name",
+                "external",
+                "--inject-ci",
+                "--execute",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "assert": {
+                "exists": [
+                  ".github/workflows/agentic-gate.yaml",
+                  ".agentic/ci/agentic-gate.yaml"
+                ]
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-q",
+                "-e",
+                "agentic-kit check",
+                "--",
+                ".github/workflows/agentic-gate.yaml"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-q",
+                "-e",
+                "pip install agentic-project-kit==",
+                "--",
+                ".github/workflows/agentic-gate.yaml"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-q",
+                "-e",
+                "pytest",
+                "--",
+                ".github/workflows/agentic-gate.yaml"
+              ],
+              "expect": {
+                "returncode": 1
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "check",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "status": "PASS",
+                  "error_count": 0
+                }
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.9",
       "id": "KIT-GF-008",
@@ -401,8 +679,88 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "on an external work branch a rule acknowledgement survives the Kit-owned commit of one reviewed change: transfer commit passes and the acknowledgement stays confirmed",
+          "steps": [
+            {
+              "run": [
+                "git",
+                "switch",
+                "-c",
+                "codex/gf010-retest"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "write": {
+                "path": "notes/change.md",
+                "text": "One reviewed change.\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "rules",
+                "acknowledge",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "written": true
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "commit",
+                "--path",
+                "notes/change.md",
+                "--message",
+                "gf010-retest",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "log",
+                "-1",
+                "--format=%s"
+              ],
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": "gf010-retest"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "status",
+                "--json"
+              ],
+              "expect": {
+                "json": {
+                  "rule_acknowledgement.decision.is_confirmed": true
+                }
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.9",
       "id": "KIT-GF-010",
@@ -505,8 +863,76 @@
           "In workspace tmp_root, create slice1-a-20260101-000001.log containing block not found, then slice1-b-20260101-000002.log containing function not found; retain distinct observed mtime_ns order. After the blocked result add slice1-diagnose-20260101-000003.log containing RESULT=PATCH_FAILURE_DIAGNOSIS_DONE with later mtime_ns."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "Candidate installed-wheel external fixture passed; consumer VERIFIED_FIXED remains independent.",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "one recorded patch failure still allows the next mutation, a second one blocks it (FAIL, exit 1), and a later diagnosis log reopens it",
+          "steps": [
+            {
+              "write": {
+                "path": ".agentic/tmp/slice1-a-20260101-000001.log",
+                "text": "block not found\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "audit-patch-failure-discipline",
+                "--include-tmp",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "next_mutation_allowed": true
+                }
+              }
+            },
+            {
+              "write": {
+                "path": ".agentic/tmp/slice1-b-20260101-000002.log",
+                "text": "function not found\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "audit-patch-failure-discipline",
+                "--include-tmp",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 1,
+                "json": {
+                  "status": "FAIL",
+                  "next_mutation_allowed": false
+                }
+              }
+            },
+            {
+              "write": {
+                "path": ".agentic/tmp/slice1-diagnose-20260101-000003.log",
+                "text": "RESULT=PATCH_FAILURE_DIAGNOSIS_DONE\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "audit-patch-failure-discipline",
+                "--include-tmp",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "status": "PASS",
+                  "next_mutation_allowed": true
+                }
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.25",
       "id": "KIT-GF-013",
@@ -614,8 +1040,101 @@
           "Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "Candidate installed-wheel external fixture passed; consumer VERIFIED_FIXED remains independent.",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "an external executor intent plans with PASS, the dry run executes nothing, the signed run executes the manifest command, and an unknown command does not plan to PASS",
+          "steps": [
+            {
+              "write": {
+                "path": "intent.yaml",
+                "text": "schema_version: 1\nid: external-gf016\ntitle: External read-only contract\nexecutor_adapter: kit-local\nblock_dirty_worktree: false\nsteps:\n- id: check\n  kind: command\n  argv: [agentic-kit, check, --json]\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "executor",
+                "plan",
+                "intent.yaml",
+                "--root",
+                ".",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "executor",
+                "run",
+                "intent.yaml",
+                "--root",
+                ".",
+                "--json"
+              ],
+              "expect": {
+                "json": {
+                  "executed": false
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "executor",
+                "run",
+                "intent.yaml",
+                "--root",
+                ".",
+                "--execute",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "executed": true,
+                  "step_results[0].returncode": 0
+                }
+              }
+            },
+            {
+              "replace": {
+                "path": "intent.yaml",
+                "old": "argv: [agentic-kit, check, --json]",
+                "new": "argv: [agentic-kit, nonexistent]"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "executor",
+                "plan",
+                "intent.yaml",
+                "--root",
+                ".",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PENDING",
+                  "steps[0].allowed_in_plan": false
+                },
+                "json_contains": {
+                  "blockers": "check: command not found in generated command manifest"
+                }
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.13",
       "id": "KIT-GF-016",
@@ -755,8 +1274,47 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "command-reference-refresh rewrites a stale workspace command reference from the installed Kit's declarations and leaves it equal to the committed synchronized copy; the external check route itself is KIT-GF-083",
+          "steps": [
+            {
+              "append": {
+                "path": "docs/reference/AGENTIC_KIT_COMMANDS.md",
+                "text": "\nstale line\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "command-reference-refresh",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "diff",
+                "--quiet",
+                "--",
+                "docs/reference/AGENTIC_KIT_COMMANDS.md",
+                "docs/reference/agentic-kit-commands.json"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.20",
       "id": "KIT-GF-022",
@@ -789,8 +1347,72 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "repo-status and command-reference-check print exactly one JSON document on stdout, before and after workspace init (the legacy-profile path and an initialized workspace); their verdicts are not part of this contract",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "repo-status",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "action": "repo-status"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--root",
+                ".",
+                "--name",
+                "external",
+                "--execute",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "command-reference-check",
+                "--json"
+              ],
+              "expect": {
+                "json": {
+                  "kind": "transfer_command_reference_check_result"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "repo-status",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "action": "repo-status"
+                }
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.22",
       "id": "KIT-GF-023",
@@ -858,8 +1480,29 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "audit-command-manifest passes on the synchronized installed manifest: every command declares valid remote_effects",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "audit-command-manifest",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "status": "PASS",
+                  "blocker_count": 0,
+                  "finding_count": 0
+                }
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.19",
       "id": "KIT-GF-025",
@@ -959,8 +1602,30 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "artifact-gc --tmp-logs resolves candidates only under the workspace and the run's own OS temp root (TMPDIR is the retest's directory), never a fixed shared temp path",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "artifact-gc",
+                "--tmp-logs",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "candidate_count": 0,
+                  "dry_run": true
+                }
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.19",
       "id": "KIT-GF-028",
@@ -1135,8 +1800,114 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "origin": true,
+          "covers": "a signed work rescue keeps a local commit on main on a rescue branch and realigns main to origin/main; the plan alone changes nothing",
+          "steps": [
+            {
+              "write": {
+                "path": "work.md",
+                "text": "local work on main\n"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "add",
+                "work.md"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "commit",
+                "-m",
+                "gf033 local work on main"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "work",
+                "rescue",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "dry_run": true,
+                  "rescue_required": true
+                }
+              },
+              "capture": {
+                "signature": "signature",
+                "rescue_branch": "rescue_branch"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "rev-list",
+                "--count",
+                "origin/main..main"
+              ],
+              "expect": {
+                "stdout_equals": "1"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "work",
+                "rescue",
+                "--execute",
+                "--expected-signature",
+                "{signature}",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "rev-list",
+                "--count",
+                "origin/main..main"
+              ],
+              "expect": {
+                "stdout_equals": "0"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "log",
+                "-1",
+                "--format=%s",
+                "{rescue_branch}"
+              ],
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": "gf033 local work on main"
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.14",
       "id": "KIT-GF-033",
@@ -1203,8 +1974,53 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "docs-audit in an adopting workspace with doc_lifecycle warn, no Kit source, tests or document system checks only the workspace's own documents: ok, scope external, missing lifecycle labels are warnings",
+          "steps": [
+            {
+              "write": {
+                "path": ".agentic/config.yaml",
+                "text": "kit_schema_version: 2\nprofile: generic\npublication: none\nhygiene:\n  doc_lifecycle: warn\nmodules:\n  transfer: false\n"
+              }
+            },
+            {
+              "write": {
+                "path": "pyproject.toml",
+                "text": "[project]\nname = \"external-product\"\nversion = \"0.1.0\"\n"
+              }
+            },
+            {
+              "write": {
+                "path": ".agentic/registries/documentation.yaml",
+                "text": "schema_version: 1\ndocuments: []\n"
+              }
+            },
+            {
+              "write": {
+                "path": "docs/planning/PLAN.md",
+                "text": "# Plan\n\nStatus: active\n\n## Work\n\nProject text.\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "docs-audit",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "ok": true,
+                  "scope": "external"
+                },
+                "stdout_contains": "missing-review-policy"
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.22",
       "id": "KIT-GF-035",
@@ -1516,8 +2332,85 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "a lifecycle label that appears only after the first section is not accepted as header: warn reports missing-review-policy, strict blocks, and the same label in the head block passes strict",
+          "steps": [
+            {
+              "write": {
+                "path": ".agentic/config.yaml",
+                "text": "kit_schema_version: 2\nprofile: generic\npublication: none\nhygiene:\n  doc_lifecycle: warn\nmodules:\n  transfer: false\n"
+              }
+            },
+            {
+              "write": {
+                "path": ".agentic/registries/documentation.yaml",
+                "text": "schema_version: 1\ndocuments: []\n"
+              }
+            },
+            {
+              "write": {
+                "path": "docs/planning/PLAN.md",
+                "text": "# Plan\n\nStatus: active\nDecision status: accepted\n\n## Work\n\nReview policy: in body only\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "docs-audit",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "ok": true
+                },
+                "stdout_contains": "missing-review-policy"
+              }
+            },
+            {
+              "replace": {
+                "path": ".agentic/config.yaml",
+                "old": "doc_lifecycle: warn",
+                "new": "doc_lifecycle: strict"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "docs-audit",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 1,
+                "json": {
+                  "ok": false
+                }
+              }
+            },
+            {
+              "write": {
+                "path": "docs/planning/PLAN.md",
+                "text": "# Plan\n\nStatus: active\nDecision status: accepted\nReview policy: on material change\n\n## Work\n\nProject text.\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "docs-audit",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "ok": true
+                }
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.17",
       "id": "KIT-GF-044",
@@ -1838,8 +2731,74 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "work recover keeps a valid rule acknowledgement valid; a later change to a rule source still makes the acknowledgement stale",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "rules",
+                "acknowledge",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "written": true
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "work",
+                "recover",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "status",
+                "--json"
+              ],
+              "expect": {
+                "json": {
+                  "rule_acknowledgement.decision.is_confirmed": true
+                }
+              }
+            },
+            {
+              "append": {
+                "path": ".agentic/config.yaml",
+                "text": "# owner note after the acknowledgement\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "status",
+                "--json"
+              ],
+              "expect": {
+                "json": {
+                  "rule_acknowledgement.decision.is_confirmed": false
+                }
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.20",
       "id": "KIT-GF-053",
@@ -1872,8 +2831,73 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "audit-ns-legacy-references and audit-program-redundancy skip a git-ignored folder with legacy ./ns calls; an unignored active handoff document with the same call still blocks",
+          "steps": [
+            {
+              "write": {
+                "path": ".gitignore",
+                "text": "runtime/\n"
+              }
+            },
+            {
+              "write": {
+                "path": "runtime/handoff/START.md",
+                "text": "Run ./ns release-prep 0.4.9\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "audit-ns-legacy-references",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "status": "PASS",
+                  "blocker_count": 0
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "audit-program-redundancy",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "status": "PASS"
+                }
+              }
+            },
+            {
+              "write": {
+                "path": "docs/handoff/START.md",
+                "text": "Run ./ns release-prep 0.4.9\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "audit-ns-legacy-references",
+                "--json"
+              ],
+              "expect": {
+                "returncode_nonzero": true,
+                "json": {
+                  "status": "BLOCK"
+                },
+                "stdout_contains": "docs/handoff/START.md"
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.20",
       "id": "KIT-GF-054",
@@ -1991,8 +3015,58 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "audit-command-manifest passes and the manifest declares the network reads and merges of the routes that KIT-GF-057 named (pr merge-if-green, transfer pr-complete, transfer pull-current)",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "audit-command-manifest",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "status": "PASS",
+                  "blocker_count": 0
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-q",
+                "-e",
+                "\"merge\"",
+                "--",
+                "docs/reference/agentic-kit-commands.json"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-q",
+                "-e",
+                "\"network_read\"",
+                "--",
+                "docs/reference/agentic-kit-commands.json"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.20",
       "id": "KIT-GF-057",
@@ -2427,8 +3501,80 @@
           "Installed wheel and synchronized command reference; disposable clone; exact ledger path declared under audit.ns_legacy.evidence_paths; no Kit tests or documentation registry."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "Installed-wheel positive/negative and released-wheel comparison PASS; live consumer retest remains independent.",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "a ledger quoting ./ns calls blocks undeclared and passes as declared_evidence once its exact path is declared under audit.ns_legacy.evidence_paths; an active handoff call outside the declaration still blocks",
+          "steps": [
+            {
+              "write": {
+                "path": "docs/handoff/LEDGER.md",
+                "text": "Observed: the agent was told to run ./ns release-prep 0.4.9 first.\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "audit-ns-legacy-references",
+                "--root",
+                ".",
+                "--json"
+              ],
+              "expect": {
+                "returncode_nonzero": true,
+                "json": {
+                  "status": "BLOCK"
+                }
+              }
+            },
+            {
+              "append": {
+                "path": ".agentic/config.yaml",
+                "text": "audit:\n  ns_legacy:\n    evidence_paths:\n      - docs/handoff/LEDGER.md\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "audit-ns-legacy-references",
+                "--root",
+                ".",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "status": "PASS",
+                  "blocker_count": 0
+                },
+                "stdout_contains": "declared_evidence"
+              }
+            },
+            {
+              "write": {
+                "path": "docs/handoff/START.md",
+                "text": "Run ./ns release-prep 0.4.9\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "audit-ns-legacy-references",
+                "--root",
+                ".",
+                "--json"
+              ],
+              "expect": {
+                "returncode_nonzero": true,
+                "json": {
+                  "status": "BLOCK"
+                },
+                "stdout_contains": "docs/handoff/START.md"
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.25",
       "id": "KIT-GF-068",
@@ -2475,7 +3621,7 @@
         "bindings": {},
         "commands": [
           "agentic-kit greenfield retest --id KIT-GF-066 --json",
-          "agentic-kit greenfield retest --id KIT-GF-002 --id KIT-GF-073 --json"
+          "agentic-kit greenfield retest --id KIT-GF-014 --id KIT-GF-073 --json"
         ],
         "expected": [
           "A local retest with a machine contract returns PASS; a local retest without one returns NO_MACHINE_CONTRACT and a remote one NOT_RUN_LOCALLY, so the run is INCOMPLETE (exit 3), never PASS."
@@ -2519,7 +3665,7 @@
                 "greenfield",
                 "retest",
                 "--id",
-                "KIT-GF-002",
+                "KIT-GF-014",
                 "--id",
                 "KIT-GF-073",
                 "--json"
@@ -3382,6 +4528,178 @@
     },
     {
       "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit transfer command-reference-check --json",
+          "agentic-kit transfer command-reference-refresh --json"
+        ],
+        "expected": [
+          "Synchronized reference: PASS without running a Kit test file; stale reference: FAIL naming the stale file; after refresh: PASS."
+        ],
+        "expected_result_fields": {
+          "result_status": [
+            "PASS",
+            "FAIL"
+          ],
+          "result.stale_files": "names the stale reference file"
+        },
+        "preconditions": [
+          "Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "in an external workspace command-reference-check compares the workspace reference with the installed Kit's rendering instead of running a Kit test file: PASS when synchronized, FAIL naming the stale file, PASS again after command-reference-refresh",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "command-reference-check",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            },
+            {
+              "append": {
+                "path": "docs/reference/AGENTIC_KIT_COMMANDS.md",
+                "text": "\nstale line\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "command-reference-check",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 1,
+                "json": {
+                  "result_status": "FAIL"
+                },
+                "json_contains": {
+                  "result.stale_files": "docs/reference/AGENTIC_KIT_COMMANDS.md"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "command-reference-refresh",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "command-reference-check",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "fixed_in": "1.1.5",
+      "id": "KIT-GF-083",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-070-083-084-machine-contracts-c1a-2026-10-21.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit docs-audit --json"
+        ],
+        "expected": [
+          "A freshly initialized external workspace passes docs-audit although its successor package directory is empty; a package with only some files still fails as incomplete."
+        ],
+        "expected_result_fields": {
+          "ok": [
+            true,
+            false
+          ],
+          "stdout": "Incomplete successor package for a partial package"
+        },
+        "preconditions": [
+          "Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "docs-audit passes in a freshly initialized external workspace whose successor package directory is still empty; a package with only some of its files still fails as incomplete",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "docs-audit",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "ok": true,
+                  "scope": "external"
+                }
+              }
+            },
+            {
+              "write": {
+                "path": ".agentic/state/handoff/packages/latest/successor_prompt.md",
+                "text": "# partial\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "docs-audit",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 1,
+                "json": {
+                  "ok": false
+                },
+                "stdout_contains": "Incomplete successor package"
+              }
+            }
+          ]
+        }
+      },
+      "fixed_in": "1.1.5",
+      "id": "KIT-GF-084",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-070-083-084-machine-contracts-c1a-2026-10-21.md"
+    },
+    {
+      "external_retest": {
         "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
@@ -3409,8 +4727,100 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
-        "workspace_kind": "external_manifest"
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "without an inventory the rule registry is NOT_APPLICABLE; the bootstrap plans, the signed write passes check and report, and a repeated bootstrap writes nothing new",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "check",
+                "--json"
+              ],
+              "expect": {
+                "json": {
+                  "result_status": "NOT_APPLICABLE"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "bootstrap",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PLANNED"
+                }
+              },
+              "capture": {
+                "signature": "approval_signature"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "bootstrap",
+                "--execute",
+                "--expected-signature",
+                "{signature}",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "check",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "report",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "rule-registry",
+                "bootstrap",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            }
+          ]
+        }
       },
       "fixed_in": "1.0.25",
       "id": "KIT-GF-RULE-REGISTRY-BOOTSTRAP",

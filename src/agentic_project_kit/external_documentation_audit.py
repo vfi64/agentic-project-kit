@@ -151,11 +151,14 @@ def _handoff(ws: Workspace) -> tuple[list[str], list[str]]:
     if state.exists():
         errors.extend(f"{ws.path_text(state)}: {e}" for e in validate_handoff_state(_mapping(state)))
     package = ws.handoff_packages_latest()
-    if package.exists():
+    required = ("successor_context.yaml", "source_manifest.json", "execution_contract.json",
+                "successor_prompt.md", "validation_report.json")
+    # KIT-GF-084: workspace init creates the package directory empty; only a package that holds at
+    # least one of its files is a package (and then it must be complete).
+    package_present = package.is_dir() and any((package / name).exists() for name in required)
+    if package_present:
         from agentic_project_kit.successor_handoff_package import validate_successor_outputs
 
-        required = ("successor_context.yaml", "source_manifest.json", "execution_contract.json",
-                    "successor_prompt.md", "validation_report.json")
         missing = [name for name in required if not (package / name).is_file()]
         if missing:
             return [*errors, f"Incomplete successor package: missing {', '.join(missing)}"], []
@@ -172,7 +175,7 @@ def _handoff(ws: Workspace) -> tuple[list[str], list[str]]:
                 outputs[ws.path_text(path)] = path.read_text(encoding="utf-8")
         result = validate_successor_outputs(outputs, context, ws)
         errors.extend(f"handoff:{f['code']}: {f['message']}" for f in result["findings"])
-    return errors, [] if state.exists() or package.exists() else ["No previous handoff; fresh workspace."]
+    return errors, [] if state.exists() or package_present else ["No previous handoff; fresh workspace."]
 
 
 def build_external_documentation_audit(root: Path) -> DocumentationSystemAuditReport:

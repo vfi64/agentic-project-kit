@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Give 21 more local finding retests a machine contract (executable retests, next part): `greenfield retest` now proves 21 more already released fixes itself (listed in the slice report of 2026-10-21 under docs/reports/greenfield/); each run uses its own OS temp root and may name the running Kit's interpreter as `{kit_python}`. The contracts found two defects: `transfer command-reference-check` ran the Kit's own test file in external workspaces and always failed (now it compares the workspace reference with the installed Kit and names stale files, KIT-GF-083), and `docs-audit` failed in a freshly initialized workspace because the empty successor package directory counted as an incomplete package (KIT-GF-084).
 - Give up a stopped release run through the Kit: `release abandon --version <v>` plans, then with the plan's signature and an attributed consent deletes the release branch through `transfer branch-delete` (closing its unmerged PR), checks that the PR is closed, and archives the run state under `<tmp>/release-run-archive/`; it refuses while a tag, a GitHub Release, an approved publication gate or a merged release PR exists (KIT-GF-081). A failed wheel download in `kit update` is retried twice, every attempt is logged, and the blocker names the file and the error (KIT-GF-082).
 
 ## v1.1.4 - 2026-10-20
