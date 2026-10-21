@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `c8c910995f47cfd7d4e992a3d1f4b7eee28f7bef` (`c8c91099`), after `Archive release 1.1.4 evidence (#2589)`.
-Last substantive work state is `c8c910995f47cfd7d4e992a3d1f4b7eee28f7bef` (`c8c91099`), after `Archive release 1.1.4 evidence (#2589)`.
+Current verified main/admin HEAD is `cc4efdf1b5093b1cf8614f80ac329ed31de8b307` (`cc4efdf1`), after `Abandon a stopped release run through the Kit; name the cause of a failed wheel download (#2591)`.
+Last substantive work state is `cc4efdf1b5093b1cf8614f80ac329ed31de8b307` (`cc4efdf1`), after `Abandon a stopped release run through the Kit; name the cause of a failed wheel download (#2591)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
