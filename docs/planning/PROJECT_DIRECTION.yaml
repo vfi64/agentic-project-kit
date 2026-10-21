@@ -8,21 +8,25 @@ meta:
     maintainer-gated.
   owner: maintainers
   status: active
-  updated_after_pr: 2511
+  updated_after_pr: 2591
   updated_after_pr_semantics: strategic_direction_refresh
   updated_after_pr_current_main_claimed: false
   update_policy: update after successful slice, release, or strategic decision
   authority: docs/planning/PROJECT_DIRECTION.yaml
   migration_state: active-content-migrated
   migration_date: '2026-07-05'
-  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/2511
+  updated_after_pr_url: https://github.com/vfi64/agentic-project-kit/pull/2591
   planning_reconciliation:
-    date: '2026-10-11'
-    baseline_ref: e4029264ff7f3a598191f5952f62852d5ab36964
-    package_version: 1.0.23
-    verification_scope: Local checkout and source/test contracts plus fresh read-only GitHub
-      API verification of both main refs, all 89 published Kit releases and the external Cockpit
-      ledger; no target mutation or new operational retest.
+    date: '2026-10-21'
+    baseline_ref: ffbbd19445225ae22a6444f10c2c12523d09acec
+    package_version: 1.1.4
+    unreleased_on_main:
+    - KIT-GF-081 release abandon (PR #2591)
+    - KIT-GF-082 wheel download cause and retries (PR #2591)
+    verification_scope: Local checkout at the baseline, all six Direction sections, the 96 published
+      Kit releases through the GitHub API, the installed-wheel retest of Kit 1.1.4 in the external
+      Cockpit workspace and the Cockpit ledger at agp-Cockpit main 7157b8e9; read only, no target
+      mutation.
     reviewed_sections:
     - strategy
     - roadmap
@@ -33,6 +37,7 @@ meta:
     auxiliary_planning_sources:
     - .agentic/todo.yaml
     - .agentic/rule_direct_test_plan.yaml
+    - .agentic/operational_handoff_state.yaml
     - docs/architecture/P5C_PHYSICAL_MIGRATION_PLAN.md
     - docs/architecture/dpa/probes/DP1_PROBE_BACKLOG.md
     - docs/archive/
@@ -40,14 +45,40 @@ meta:
       including done items retained in roadmap/plans. Do not duplicate them in a manually maintained
       completion file. Historical specifications and bounded evidence remain linked references;
       Git preserves earlier states.
+    owner_order:
+      decided: '2026-10-21'
+      rule: Work in this order; a later item starts only after the earlier one is done or the owner
+        reorders it. Security-relevant authority findings still come first (kit-control-effectiveness-measurement
+        ordering_rule).
+      sequence:
+      - id: planning-reconciliation-20261021
+        status: done
+        scope: This reconciliation; the next substantive slice in .agentic/operational_handoff_state.yaml
+          names the next item below.
+      - id: external-retest-machine-contracts
+        status: next
+        scope: Machine contracts for the local findings that have none (KIT-GF-070), a resync of the
+          Cockpit ledger against the Kit catalog, then release 1.1.5 with KIT-GF-070, 081 and 082.
+      - id: kit-control-effectiveness-measurement
+        step: gate-and-context-benchmark
+        status: waiting_for_owner_decision
+        scope: Context benchmark part 2 after the owner chose the agent, the token budget and five or
+          eight tasks.
+      - id: website-evidence-and-command-navigation
+        status: planned
+        scope: Website improvement in the plan's own sequencing (W0 first, then W2; W1-P0 may run in
+          parallel).
     remaining_priorities:
+    - Follow owner_order above.
     - Reverify Comm-SCI Cycle 008 target state before continuing Brownfield; Cycle 007 with
       44 seams is the last committed completed-cycle baseline, not a current remote claim.
     - Keep B2 blocked until explicit Brownfield completion acceptance; keep B3 Stage 1 report-only
       and Stage 2 maintainer-gated.
-    - Numbered GF families are Kit-side closed by 1.0.23; synchronize/retest the external ledger
-      separately. Keep the unnumbered RULE-REGISTRY-BOOTSTRAP finding under explicit applicability/adoption
-      review.
+    - 'GF families: 80 numbered families (001-082 without 019 and 020) plus RULE-REGISTRY-BOOTSTRAP in the Kit catalog; KIT-GF-070
+      is PARTIAL (8 local families have machine contracts, 34 local ones have none, 39 need a remote
+      or release run); all others are CLOSED. In the Cockpit ledger 16 families (001-010, 012-016,
+      018) are still OPEN against a Kit closure, KIT-GF-081 awaits release and KIT-GF-082 is not
+      yet recorded. Cockpit owns VERIFIED_FIXED.'
     - Clear or explicitly defer lifecycle backlog and review remaining governance registrations
       before strict lifecycle adoption.
     - Reconcile partial implementations before starting registry, retention, onboarding or GUI
@@ -55,31 +86,33 @@ meta:
     - Keep P5c execution, AGF/ROS adoption beyond the already shipped DPA scope, destructive
       cleanup and the 2.0 migration behind their existing maintainer gates.
     evidence:
-    - docs/STATUS.md
-    - docs/reports/handoff-packages/latest/validation_report.json
-    - docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.json
-    - docs/reports/release/post-release-doi-closeout-1.0.23.json
-    - docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+    - docs/reports/PLANNING_RECONCILIATION_20261021.md
+    - docs/reports/greenfield/external-findings-status.json
+    - docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md
+    - docs/reports/greenfield/KIT-GF-081-082-release-abandon-and-download-cause-2026-10-20.md
+    - docs/reports/release/release-run-1.1.4.json
     - CHANGELOG.md
-    - docs/reports/greenfield/KIT-GF-011-successor-final-head-identity-2026-10-04.md
-    - docs/reports/greenfield/KIT-GF-017-released-external-merge-retest-2026-10-10.md
     known_evidence_debt: Some historical completed items retain generic PR evidence strings.
       They are not new completion proof; do not invent missing PR identities. Completed implementation
       can legitimately own an active maintained contract, so closed-item source-header audit
       findings require contextual review.
     release_review:
-      release_count: 89
+      release_count: 96
       oldest: v0.2.0
-      newest: v1.0.23
-      report: docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
+      newest: v1.1.4
+      report: docs/reports/PLANNING_RECONCILIATION_20261021.md
       source: https://api.github.com/repos/vfi64/agentic-project-kit/releases?per_page=100
       source_policy: Review published release notes together with later closeout evidence, current
         source and tests; a release containing a planning note is not proof that the planned
         feature shipped.
-      external_ledger_ref: c31eb2dc3dcea2cd9f8b86ae6a9fdc60adad2577
-      external_ledger_sync_version: 1.0.21
+      external_ledger_ref: 7157b8e90da9d01258c1e17e5105f20f9bd4c8a4
+      external_ledger_sync_version: 1.1.4
       external_ledger_status_authority: Cockpit owns VERIFIED_FIXED; Kit release closure does
         not mutate that external status.
+    previous:
+      date: '2026-10-11'
+      baseline_ref: e4029264ff7f3a598191f5952f62852d5ab36964
+      report: docs/reports/PLANNING_RELEASE_RECONCILIATION_20261011.md
 strategy:
 - id: governed-operating-model
   status: active
@@ -4592,6 +4625,45 @@ plans:
   - Dedicated Windows/Linux packaging, keyboard and visual checks.
   scope_boundary: Presentation and shared execution adapters only; no private controller source, browser
     transport, or autonomous task runtime adoption.
+- id: external-retest-machine-contracts
+  status: active
+  title: Give every local finding retest a machine contract and resync the external ledger
+  decision_status: accepted_by_owner
+  integrated_at: '2026-10-21'
+  related_items:
+  - kit-control-effectiveness-measurement
+  rationale: KIT-GF-070 is PARTIAL. `agentic-kit greenfield retest --all` under 1.1.4 in the external
+    Cockpit workspace returned PASS 8, FAIL 0, NO_MACHINE_CONTRACT 34, NOT_RUN_LOCALLY 37, so
+    VERIFIED_FIXED in a consumer ledger still needs hand-collected evidence for most families, and
+    16 Cockpit families stay OPEN against a Kit closure.
+  steps:
+  - id: c1-local-machine-contracts
+    status: next
+    acceptance:
+    - 'Each family with execution class local gets an installed-wheel machine contract (fixture, argv
+      steps, expected returncode and JSON fields) or an explicit reclassification with reason: KIT-GF-002,
+      004-008, 010, 013-016, 021-023, 025, 026, 028, 032, 033, 035-037, 042, 044, 045, 053, 054, 057, 060,
+      063, 064, 067, 068 and RULE-REGISTRY-BOOTSTRAP.'
+    - A contract states what it covers and what stays outside it; none weakens an existing assertion.
+    - '`greenfield retest --all` reports no NO_MACHINE_CONTRACT for a local family; KIT-GF-070 closes
+      only then.'
+  - id: c2-external-ledger-resync
+    status: planned
+    acceptance:
+    - The Cockpit retests the 16 OPEN-against-Kit-closure families with the released contracts and
+      records VERIFIED_FIXED only from committed evidence; families that still fail are reported as
+      reproduced_in, never closed by the Kit's claim.
+    - KIT-GF-081 and 082 are recorded in the Cockpit ledger with their release.
+  - id: c3-release-1-1-5
+    status: planned
+    acceptance:
+    - Release 1.1.5 carries KIT-GF-070 (completed), 081 and 082 after the owner's go.
+  source_files:
+  - .agentic/greenfield_findings.json
+  - docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md
+  evidence:
+  - docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md
+  - docs/reports/PLANNING_RECONCILIATION_20261021.md
 ideas:
 - id: project-direction-gui-panel
   status: accepted

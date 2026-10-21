@@ -1754,3 +1754,6 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-081-082-release-abandon-and-download-cause-2026-10-20.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/PLANNING_RECONCILIATION_20261021.md
+    class: evidence/log
+    owner: maintainers
