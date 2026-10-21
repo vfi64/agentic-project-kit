@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c8c910995f47cfd7d4e992a3d1f4b7eee28f7bef
-  short: c8c91099
-  subject: Archive release 1.1.4 evidence (#2589)
+  full: cc4efdf1b5093b1cf8614f80ac329ed31de8b307
+  short: cc4efdf1
+  subject: Abandon a stopped release run through the Kit; name the cause of a failed wheel download (#2591)
 last_substantive_work_state:
-  full: c8c910995f47cfd7d4e992a3d1f4b7eee28f7bef
-  short: c8c91099
-  subject: Archive release 1.1.4 evidence (#2589)
+  full: cc4efdf1b5093b1cf8614f80ac329ed31de8b307
+  short: cc4efdf1
+  subject: Abandon a stopped release run through the Kit; name the cause of a failed wheel download (#2591)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
