@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-21T13:25:47.840904+00:00",
+  "generated_at_utc": "2026-10-21T14:48:54.935414+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,14 +57,14 @@
     "package_version": "1.1.4"
   },
   "repo": {
-    "branch": "feat/gf070-machine-contracts-c1a",
+    "branch": "docs/post-pr2595-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "35a50d128e8b174fb8c45384b13586a5e7155d1f",
+    "head": "a0aef7e08021e2a093f8f7728ed6db2bcacf3468",
     "head_matches_origin_main": true,
-    "head_short": "35a50d12",
+    "head_short": "a0aef7e0",
     "local_path": "cd /path/to/",
-    "origin_main": "35a50d128e8b174fb8c45384b13586a5e7155d1f",
-    "origin_main_short": "35a50d12",
+    "origin_main": "a0aef7e08021e2a093f8f7728ed6db2bcacf3468",
+    "origin_main_short": "a0aef7e0",
     "worktree_clean": false
   },
   "schema_version": 1,

@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `a90c026d6c1e46cc10808e2cae3993839b70a7f0` (`a90c026d`), after `Reconcile the planning with Kit 1.1.4 and record the owner's order (#2593)`.
-Last substantive work state is `a90c026d6c1e46cc10808e2cae3993839b70a7f0` (`a90c026d`), after `Reconcile the planning with Kit 1.1.4 and record the owner's order (#2593)`.
+Current verified main/admin HEAD is `a0aef7e08021e2a093f8f7728ed6db2bcacf3468` (`a0aef7e0`), after `Give 21 more local retests machine contracts and fix the two defects they found (#2595)`.
+Last substantive work state is `a0aef7e08021e2a093f8f7728ed6db2bcacf3468` (`a0aef7e0`), after `Give 21 more local retests machine contracts and fix the two defects they found (#2595)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
