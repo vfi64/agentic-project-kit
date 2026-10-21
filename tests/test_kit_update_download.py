@@ -5,6 +5,8 @@ release_artifact_download_failed, the update log ended before the downloads, and
 of the same downloads passed with the Kit wheel taking 29.7 s against the 30 s socket timeout.
 """
 import hashlib
+import json
+import subprocess
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 
@@ -87,7 +89,6 @@ def test_prepare_target_passes_the_update_log_to_the_download(tmp_path, monkeypa
             self.events.append(event)
 
         def __call__(self, argv, *, timeout=120):
-            import json, subprocess
             report = Path(argv[argv.index("--report") + 1])
             report.write_text(json.dumps({"install": [{"metadata": {"name": "agentic-project-kit", "version": "1.0"},
                                                        "download_info": {"url": URL, "archive_info": {"hashes": {"sha256": "a" * 64}}},
