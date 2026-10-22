@@ -1,0 +1,206 @@
+{
+  "authorized_route": "agentic-kit release-prep",
+  "base_ref": "origin/main",
+  "changed_paths_against_base": [
+    ".agentic/dpa/acceptance/current_handoff_operational_state.json",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/site/claims/claims.json",
+    "docs/site/claims/index.html",
+    "docs/site/commands/commands.json",
+    "docs/site/commands/diagnostics.html",
+    "docs/site/commands/guided.html",
+    "docs/site/commands/index.html",
+    "docs/site/index.html",
+    "docs/site/quickstart/index.html",
+    "docs/site/quickstart/quickstart.json",
+    "docs/site/site.json",
+    "docs/site/understand/evidence.json",
+    "docs/site/understand/index.html",
+    "docs/site/workflows/index.html",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py",
+    "src/agentic_project_kit/reference/agentic-kit-commands.json"
+  ],
+  "date": "2026-10-22",
+  "explicit_summary_lines": [
+    "Run every repository-content check of the release-time `standard-gates-audit-suite` on each PR (a checkout test driven by the suite's own command list; only the state checks `release-publish --dry-run` and `audit-status-current-state` stay with the release run), and treat legacy shell-route calls quoted in the greenfield finding catalog as evidence, not as current instructions (KIT-GF-085, found when the first 1.1.5 release run stopped in `release ready`).",
+    "Give six more local retests a machine contract (release preparation, CI template refresh and protection, CI runtime plan); contracts may name the running Kit's version as `{kit_version}`; one retest of the Kit's own release path is reclassified as a release-run retest (slice report of 2026-10-21, c1b).",
+    "Give 21 more local finding retests a machine contract (executable retests, next part): `greenfield retest` now proves 21 more already released fixes itself (listed in the slice report of 2026-10-21 under docs/reports/greenfield/); each run uses its own OS temp root and may name the running Kit's interpreter as `{kit_python}`. The contracts found two defects: `transfer command-reference-check` ran the Kit's own test file in external workspaces and always failed (now it compares the workspace reference with the installed Kit and names stale files, KIT-GF-083), and `docs-audit` failed in a freshly initialized workspace because the empty successor package directory counted as an incomplete package (KIT-GF-084).",
+    "Give up a stopped release run through the Kit: `release abandon --version <v>` plans, then with the plan's signature and an attributed consent deletes the release branch through `transfer branch-delete` (closing its unmerged PR), checks that the PR is closed, and archives the run state under `<tmp>/release-run-archive/`; it refuses while a tag, a GitHub Release, an approved publication gate or a merged release PR exists (KIT-GF-081). A failed wheel download in `kit update` is retried twice, every attempt is logged, and the blocker names the file and the error (KIT-GF-082)."
+  ],
+  "from_tag": "v1.1.4",
+  "kind": "release_prepare_evidence",
+  "release_metadata_anchor_paths": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py"
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-notes-generate",
+        "--version",
+        "1.1.5",
+        "--from-tag",
+        "v1.1.4",
+        "--to-ref",
+        "main",
+        "--include-github-metadata",
+        "--summary-lines-json",
+        "tmp/release-115-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-notes-generate",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 22078,
+      "stdout_sha256": "1a8464e730d565a8d2d999b09404689c9e05944170273c6201384b52499a8ce6"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-prep",
+        "--version",
+        "1.1.5",
+        "--date",
+        "2026-10-22",
+        "--summary-line",
+        "Run every repository-content check of the release-time `standard-gates-audit-suite` on each PR (a checkout test driven by the suite's own command list; only the state checks `release-publish --dry-run` and `audit-status-current-state` stay with the release run), and treat legacy shell-route calls quoted in the greenfield finding catalog as evidence, not as current instructions (KIT-GF-085, found when the first 1.1.5 release run stopped in `release ready`).",
+        "--summary-line",
+        "Give six more local retests a machine contract (release preparation, CI template refresh and protection, CI runtime plan); contracts may name the running Kit's version as `{kit_version}`; one retest of the Kit's own release path is reclassified as a release-run retest (slice report of 2026-10-21, c1b).",
+        "--summary-line",
+        "Give 21 more local finding retests a machine contract (executable retests, next part): `greenfield retest` now proves 21 more already released fixes itself (listed in the slice report of 2026-10-21 under docs/reports/greenfield/); each run uses its own OS temp root and may name the running Kit's interpreter as `{kit_python}`. The contracts found two defects: `transfer command-reference-check` ran the Kit's own test file in external workspaces and always failed (now it compares the workspace reference with the installed Kit and names stale files, KIT-GF-083), and `docs-audit` failed in a freshly initialized workspace because the empty successor package directory counted as an incomplete package (KIT-GF-084).",
+        "--summary-line",
+        "Give up a stopped release run through the Kit: `release abandon --version <v>` plans, then with the plan's signature and an attributed consent deletes the release branch through `transfer branch-delete` (closing its unmerged PR), checks that the PR is closed, and archives the run state under `<tmp>/release-run-archive/`; it refuses while a tag, a GitHub Release, an approved publication gate or a merged release PR exists (KIT-GF-081). A failed wheel download in `kit update` is retried twice, every attempt is logged, and the blocker names the file and the error (KIT-GF-082).",
+        "--summary-lines-from",
+        "tmp/release-115-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-prep",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 291,
+      "stdout_sha256": "2c4832b2c7f9b95b3261f3da99e9dec3a4c1607981c21685b482b5260df4b503"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "commands",
+        "sync-entrypoints",
+        "--execute",
+        "--json"
+      ],
+      "name": "commands-sync-entrypoints",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 507,
+      "stdout_sha256": "145e3e3c6a1d2203d9c8f48f5bfeefe7eb27412f3a759d9a4eb8723e1b02d518"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "agentic-kit",
+        "release",
+        "prepare",
+        "--internal-dpa-readiness-ack-refresh"
+      ],
+      "name": "dpa-readiness-ack-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 260,
+      "stdout_sha256": "d3f12b610850458c011e6a77f0c4cca0de1d35e563d077d2df7250bdbe5bc265"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "chat-switch-complete",
+        "--json"
+      ],
+      "name": "successor-handoff-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 10636,
+      "stdout_sha256": "144c4d3223aed82424ffea164b5cd7e29b2cd3f1dc6321bf9fe5112cb0af0a1f"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "site/scripts/build.py",
+        "--docs-pages-fallback",
+        "--json"
+      ],
+      "name": "docs-pages-fallback-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 4344,
+      "stdout_sha256": "6deedf4ade5ce8663b1b996b4f85f8199b4ff7c4af435834a3ed79963264b65a"
+    }
+  ],
+  "summary_lines_path": "tmp/release-115-summary-lines.json",
+  "to_ref": "main",
+  "version": "1.1.5"
+}
