@@ -335,8 +335,8 @@
       "branch": "codex/kit-gf-085-finding-catalog-ns-audit",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "526efdaac68244c005f6add63ba37e42d10648fa",
-      "head_matches_origin_main": true,
+      "head": "9b0095e8104f3d1666161a01760a2aec71fb06ca",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "526efdaac68244c005f6add63ba37e42d10648fa",
       "worktree_clean": false
@@ -522,8 +522,8 @@
     "branch": "codex/kit-gf-085-finding-catalog-ns-audit",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "526efdaac68244c005f6add63ba37e42d10648fa",
-    "head_matches_origin_main": true,
+    "head": "9b0095e8104f3d1666161a01760a2aec71fb06ca",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "526efdaac68244c005f6add63ba37e42d10648fa",
     "worktree_clean": false

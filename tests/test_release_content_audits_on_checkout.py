@@ -4,7 +4,7 @@ Release 1.1.5 stopped in A2 (`release ready`): `standard-gates-audit-suite` foun
 greenfield finding catalog that a merged slice (machine contracts, c1a) had added. No PR check ran
 that suite, so the slice merged green and the defect surfaced only when the release started. The
 suite's own command list drives this test, so a check added to the suite is covered here as well;
-only checks that need the remote are left to the release run. The Unreleased bullets, which the
+only the named checks of main's or the remote's state are left to the release run. The Unreleased bullets, which the
 release run passes as summary lines, must also pass release preparation's summary-line check.
 """
 from __future__ import annotations
@@ -24,13 +24,18 @@ from agentic_project_kit.release_prepare import _normalize_changelog_summary_lin
 from agentic_project_kit.standard_gates_audit_suite import REQUIRED_STANDARD_GATE_COMMANDS
 
 ROOT = Path(__file__).resolve().parents[1]
-# Needs the GitHub release state and PyPI; the release run checks it in A2 and C1.
-REMOTE_CHECKS = {"release-publish"}
-CONTENT_CHECKS = [command for command in REQUIRED_STANDARD_GATE_COMMANDS if command[0] not in REMOTE_CHECKS]
+# Checks that test the state of main or of the remote, not the content of a PR checkout. The CI
+# test shards check out one commit (fetch-depth 1, no origin/main), and a PR branch is never the
+# refreshed main these checks describe. The release run checks them in A2.
+RELEASE_RUN_ONLY = {
+    "release-publish": "needs the GitHub release state and PyPI",
+    "audit-status-current-state": "compares docs/STATUS.md with origin/main and the handoff of the refreshed main",
+}
+CONTENT_CHECKS = [command for command in REQUIRED_STANDARD_GATE_COMMANDS if command[0] not in RELEASE_RUN_ONLY]
 
 
-def test_only_the_named_remote_checks_are_left_to_the_release_run():
-    assert {command[0] for command in REQUIRED_STANDARD_GATE_COMMANDS} - {c[0] for c in CONTENT_CHECKS} == REMOTE_CHECKS
+def test_only_the_named_state_checks_are_left_to_the_release_run():
+    assert {command[0] for command in REQUIRED_STANDARD_GATE_COMMANDS} - {c[0] for c in CONTENT_CHECKS} == set(RELEASE_RUN_ONLY)
 
 
 @pytest.mark.parametrize("command", CONTENT_CHECKS, ids=[" ".join(c) for c in CONTENT_CHECKS])

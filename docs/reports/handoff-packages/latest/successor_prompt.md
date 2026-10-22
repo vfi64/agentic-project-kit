@@ -40,7 +40,7 @@ Critical rule IDs:
 ## Current continuation state
 
 - branch: `codex/kit-gf-085-finding-catalog-ns-audit`
-- head_matches_origin_main: `True`
+- head_matches_origin_main: `False`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
@@ -468,9 +468,9 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/kit-gf-085-finding-catalog-ns-audit",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "526efdaac68244c005f6add63ba37e42d10648fa",
-    "head_matches_origin_main": true,
-    "head_short": "526efdaa",
+    "head": "9b0095e8104f3d1666161a01760a2aec71fb06ca",
+    "head_matches_origin_main": false,
+    "head_short": "9b0095e8",
     "local_path": "cd /path/to/",
     "origin_main": "526efdaac68244c005f6add63ba37e42d10648fa",
     "origin_main_short": "526efdaa",

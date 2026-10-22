@@ -34,8 +34,12 @@ KIT-GF-068 machine contracts, added on 2026-10-21 (c1a). At v1.1.4 the catalog h
   The same line in any other file still blocks (a handoff document, another `.agentic` JSON file).
 - `tests/test_release_content_audits_on_checkout.py` runs every check of the release-time
   `standard-gates-audit-suite` on the checkout in each PR, taken from the suite's own command
-  list, so a check added to the suite is covered as well. Only `release-publish --dry-run` stays
-  with the release run, because it needs the GitHub release state and PyPI; a test pins that set.
+  list, so a check added to the suite is covered as well. Two checks stay with the release run,
+  because they test the state of main or the remote rather than the checkout: `release-publish
+  --dry-run` (GitHub release state and PyPI) and `audit-status-current-state` (compares
+  docs/STATUS.md with origin/main and the refreshed handoff; the CI test shards check out a single
+  commit without origin/main). A test pins that set. The first PR run of this slice failed exactly
+  there, which is why the second check is named.
 - The same test checks the Unreleased bullets with release preparation's summary-line rule. The
   first draft of this slice's own bullet quoted the legacy route and would have stopped
   `release-prep` in the same way; the test now fails on such a bullet in the PR.
