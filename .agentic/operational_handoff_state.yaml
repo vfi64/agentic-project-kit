@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a0aef7e08021e2a093f8f7728ed6db2bcacf3468
-  short: a0aef7e0
-  subject: Give 21 more local retests machine contracts and fix the two defects they found (#2595)
+  full: b2c07c10260e11da6234a25da11d02d934022e80
+  short: b2c07c10
+  subject: 'Give six more local retests machine contracts: release preparation, CI templates, CI runtime plan (#2597)'
 last_substantive_work_state:
-  full: a0aef7e08021e2a093f8f7728ed6db2bcacf3468
-  short: a0aef7e0
-  subject: Give 21 more local retests machine contracts and fix the two defects they found (#2595)
+  full: b2c07c10260e11da6234a25da11d02d934022e80
+  short: b2c07c10
+  subject: 'Give six more local retests machine contracts: release preparation, CI templates, CI runtime plan (#2597)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
