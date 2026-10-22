@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `a0aef7e08021e2a093f8f7728ed6db2bcacf3468` (`a0aef7e0`), after `Give 21 more local retests machine contracts and fix the two defects they found (#2595)`.
-Last substantive work state is `a0aef7e08021e2a093f8f7728ed6db2bcacf3468` (`a0aef7e0`), after `Give 21 more local retests machine contracts and fix the two defects they found (#2595)`.
+Current verified main/admin HEAD is `b2c07c10260e11da6234a25da11d02d934022e80` (`b2c07c10`), after `Give six more local retests machine contracts: release preparation, CI templates, CI runtime plan (#2597)`.
+Last substantive work state is `b2c07c10260e11da6234a25da11d02d934022e80` (`b2c07c10`), after `Give six more local retests machine contracts: release preparation, CI templates, CI runtime plan (#2597)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
