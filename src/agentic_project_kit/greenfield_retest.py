@@ -40,9 +40,10 @@ EXPECT_KEYS = frozenset(
 RESULTS = ("PASS", "FAIL", "NO_MACHINE_CONTRACT", "NOT_RUN_LOCALLY")
 STEP_TIMEOUT_SECONDS = 600
 _PLACEHOLDER = re.compile(r"\{([a-z_][a-z0-9_]*)\}")
-# Built-in variables every contract may use: the interpreter of the installed Kit that runs the
-# retest (for kit.interpreter, KIT-GF-021/067) and, with ``origin: true``, the local bare origin.
-BUILTIN_VARIABLES = ("kit_python",)
+# Built-in variables every contract may use: the interpreter and the version of the installed Kit
+# that runs the retest (kit.interpreter, version pins in CI templates) and, with ``origin: true``,
+# the local bare origin.
+BUILTIN_VARIABLES = ("kit_python", "kit_version")
 _PATH_TOKEN = re.compile(r"([^.\[\]]+)|\[(\d+)\]")
 
 
@@ -285,7 +286,9 @@ def _check(expect: dict[str, Any], completed: subprocess.CompletedProcess) -> li
 def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str]) -> tuple[Path, dict[str, str], list[str]]:
     root = base / "workspace"
     root.mkdir()
-    variables: dict[str, str] = {"kit_python": sys.executable}
+    from agentic_project_kit import __version__
+
+    variables: dict[str, str] = {"kit_python": sys.executable, "kit_version": __version__}
     setup = [["git", "init", "-b", "main"]]
     if machine["fixture"] == "external_manifest":
         setup += [
