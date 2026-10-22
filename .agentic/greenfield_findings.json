@@ -5442,6 +5442,84 @@
     },
     {
       "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit audit-ns-legacy-references --json"
+        ],
+        "expected": [
+          "A greenfield finding catalog that quotes a legacy ./ns call passes the audit as finding-catalog evidence; the same line in any other file still blocks."
+        ],
+        "expected_result_fields": {
+          "status": [
+            "PASS",
+            "BLOCK"
+          ],
+          "stdout": ".agentic/notes.json"
+        },
+        "preconditions": [
+          "Disposable git repository; no Kit tests or documentation registry."
+        ],
+        "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "audit-ns-legacy-references classifies a quoted legacy ./ns call in the greenfield finding catalog as finding-catalog evidence; the same line in another JSON file still blocks. The PR-time run of the release-content audits is pinned by a Kit checkout test, not by this contract",
+          "steps": [
+            {
+              "write": {
+                "path": ".agentic/greenfield_findings.json",
+                "text": "{\"text\": \"Run ./ns release-prep 0.4.9\"}\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "audit-ns-legacy-references",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "status": "PASS",
+                  "blocker_count": 0
+                },
+                "stdout_contains": "finding_catalog_evidence"
+              }
+            },
+            {
+              "write": {
+                "path": ".agentic/notes.json",
+                "text": "{\"text\": \"Run ./ns release-prep 0.4.9\"}\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "audit-ns-legacy-references",
+                "--json"
+              ],
+              "expect": {
+                "returncode_nonzero": true,
+                "json": {
+                  "status": "BLOCK",
+                  "blocker_count": 1
+                },
+                "stdout_contains": ".agentic/notes.json"
+              }
+            }
+          ]
+        }
+      },
+      "fixed_in": "1.1.5",
+      "id": "KIT-GF-085",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-085-finding-catalog-release-audit-2026-10-22.md"
+    },
+    {
+      "external_retest": {
         "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },

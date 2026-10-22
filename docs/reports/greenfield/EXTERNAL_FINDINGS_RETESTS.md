@@ -1433,6 +1433,23 @@ Expected: A freshly initialized external workspace passes docs-audit although it
 
 Expected result fields: `{"ok": [true, false], "stdout": "Incomplete successor package for a partial package"}`.
 
+## KIT-GF-085
+
+Kit state: CLOSED; fixed_in: 1.1.5.
+Evidence: docs/reports/greenfield/KIT-GF-085-finding-catalog-release-audit-2026-10-22.md
+
+Execution class: local (effects: none); machine contract: audit-ns-legacy-references classifies a quoted legacy ./ns call in the greenfield finding catalog as finding-catalog evidence; the same line in another JSON file still blocks. The PR-time run of the release-content audits is pinned by a Kit checkout test, not by this contract
+
+Preconditions: Disposable git repository; no Kit tests or documentation registry.
+
+```text
+agentic-kit audit-ns-legacy-references --json
+```
+
+Expected: A greenfield finding catalog that quotes a legacy ./ns call passes the audit as finding-catalog evidence; the same line in any other file still blocks.
+
+Expected result fields: `{"status": ["PASS", "BLOCK"], "stdout": ".agentic/notes.json"}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

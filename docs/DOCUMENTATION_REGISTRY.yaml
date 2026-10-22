@@ -1763,3 +1763,6 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-070-machine-contracts-c1b-2026-10-21.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-085-finding-catalog-release-audit-2026-10-22.md
+    class: evidence/log
+    owner: maintainers

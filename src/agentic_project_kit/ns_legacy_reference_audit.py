@@ -59,6 +59,14 @@ HISTORICAL_MARKERS: tuple[re.Pattern[str], ...] = (
     re.compile(r"\b(before|formerly|previously|früher|ehemalig)\b", re.I),
 )
 
+# KIT-GF-085: the greenfield finding catalog and its packaged copy record observations and
+# machine-contract fixtures. Their ./ns lines quote what an external workspace showed or what a
+# contract writes into a disposable fixture; they are evidence, never a current instruction.
+FINDING_CATALOG_PATHS = frozenset({
+    ".agentic/greenfield_findings.json",
+    "src/agentic_project_kit/reference/external-findings-status.json",
+})
+
 SAFE_CONTEXT_PATH_PARTS = (
     "tests",
     "docs/reports",
@@ -209,6 +217,8 @@ def classify_legacy_reference(
         return "compatibility_implementation", "legacy tokens are implementation/classifier compatibility patterns"
     if relative_path.startswith("tests/"):
         return "test_fixture", "test fixture/reference"
+    if relative_path in FINDING_CATALOG_PATHS:
+        return "finding_catalog_evidence", "greenfield finding catalog: quoted observations and contract fixtures"
     if _legacy_documentation_context(relative_path):
         return "legacy_documentation_context", (
             "planning/workflow/governance documentation; use follow-up documentation cleanup "
