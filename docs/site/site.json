@@ -52,7 +52,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "project.version=1.1.4",
+            "detail": "project.version=1.1.5",
             "evidence_type": "pyproject-value",
             "status": "verified"
           }
@@ -4866,7 +4866,7 @@
             "required": false
           },
           {
-            "default": "1.1.4",
+            "default": "1.1.5",
             "help": "",
             "name": "version",
             "opts": [
@@ -6756,7 +6756,7 @@
         "lifecycle_rank": 73,
         "params": [
           {
-            "default": "1.1.4",
+            "default": "1.1.5",
             "help": "",
             "name": "version",
             "opts": [
@@ -7767,7 +7767,7 @@
             "required": false
           },
           {
-            "default": "1.1.4",
+            "default": "1.1.5",
             "help": "",
             "name": "version",
             "opts": [
@@ -12883,13 +12883,15 @@
     },
     "release": {
       "notes": [
-        "Wait for required checks that start late and let a blocked release finish its own release PR: gates.required_checks names checks pr wait-ci must see before readiness passes, so a required job that starts after other jobs is awaited instead of missed (the Kit declares test, KIT-GF-079); after a blocked B4 the release run completes its own open release PR when the branch holds exactly the release commits on an unchanged main (KIT-GF-080).",
-        "Run the Kit's own CI suite in three deterministic shards: a test runs in shard sha256(nodeid) % 3 with four xdist workers and work stealing, and the required test job passes only when the shards together ran exactly the full collection without failures (python -m agentic_project_kit.ci_test_shards check); the gate mode is classified once in a classify job, shards never report as skipped, and the extracted test wheel is built once per test process instead of once per module.",
-        "Wait long enough for CI in releases: work finish --ci-timeout-seconds (default 900 instead of a fixed 300) and the release run passes the wait to every work finish, a DOI step that stopped on a CI timeout resumes its unchanged DOI pull request instead of regenerating it, and the evidence archive step completes its own open archive pull request when the evidence is byte-identical (KIT-GF-078)."
+        "Zenodo DOI verification pending for v1.1.5.",
+        "Run every repository-content check of the release-time standard-gates-audit-suite on each PR (a checkout test driven by the suite's own command list; only the state checks release-publish --dry-run and audit-status-current-state stay with the release run), and treat legacy shell-route calls quoted in the greenfield finding catalog as evidence, not as current instructions (KIT-GF-085, found when the first 1.1.5 release run stopped in release ready).",
+        "Give six more local retests a machine contract (release preparation, CI template refresh and protection, CI runtime plan); contracts may name the running Kit's version as {kit_version}; one retest of the Kit's own release path is reclassified as a release-run retest (slice report of 2026-10-21, c1b).",
+        "Give 21 more local finding retests a machine contract (executable retests, next part): greenfield retest now proves 21 more already released fixes itself (listed in the slice report of 2026-10-21 under docs/reports/greenfield/); each run uses its own OS temp root and may name the running Kit's interpreter as {kit_python}. The contracts found two defects: transfer command-reference-check ran the Kit's own test file in external workspaces and always failed (now it compares the workspace reference with the installed Kit and names stale files, KIT-GF-083), and docs-audit failed in a freshly initialized workspace because the empty successor package directory counted as an incomplete package (KIT-GF-084).",
+        "Give up a stopped release run through the Kit: release abandon --version <v> plans, then with the plan's signature and an attributed consent deletes the release branch through transfer branch-delete (closing its unmerged PR), checks that the PR is closed, and archives the run state under <tmp>/release-run-archive/; it refuses while a tag, a GitHub Release, an approved publication gate or a merged release PR exists (KIT-GF-081). A failed wheel download in kit update is retried twice, every attempt is logged, and the blocker names the file and the error (KIT-GF-082)."
       ],
       "source": "CHANGELOG.md",
       "status": "recorded",
-      "version": "1.1.4"
+      "version": "1.1.5"
     },
     "schema_version": 1
   },
@@ -12902,13 +12904,13 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "Agentic Project Kit",
     "manifest_identity_verified": true,
-    "manifest_sha": "70ef024ffbc1",
+    "manifest_sha": "84540b010909",
     "package_name": "agentic-project-kit",
-    "package_version": "1.1.4",
+    "package_version": "1.1.5",
     "product_name": "Agentic Execution Runtime",
     "release_tag": "v1.1.4",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "70ef024ffbc1",
+    "reproduced_manifest_sha": "84540b010909",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 176,
@@ -12943,7 +12945,7 @@
     "current_release_tag": "v1.1.4",
     "current_verified_main": "See docs/STATUS.md",
     "current_verified_release": "1.1.4",
-    "current_version": "1.1.4",
+    "current_version": "1.1.5",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
     "version_doi": "10.5281/zenodo.23505873"
