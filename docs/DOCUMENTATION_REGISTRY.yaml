@@ -1766,3 +1766,6 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-085-finding-catalog-release-audit-2026-10-22.md
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/release/release-run-1.1.5.json
+    class: evidence/log
+    owner: maintainers
