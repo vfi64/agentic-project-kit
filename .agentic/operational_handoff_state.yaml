@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3708a4a1ec30f62ebbe7726b8dc52481e9e3cc63
-  short: 3708a4a1
-  subject: 'GF085: finding catalog namespace audit (#2599)'
+  full: 4e6701a0dab5ac8b71a3b19cf21fff7a3b49719c
+  short: 4e6701a0
+  subject: Release 1.1.5 (#2601)
 last_substantive_work_state:
-  full: 3708a4a1ec30f62ebbe7726b8dc52481e9e3cc63
-  short: 3708a4a1
-  subject: 'GF085: finding catalog namespace audit (#2599)'
+  full: 4e6701a0dab5ac8b71a3b19cf21fff7a3b49719c
+  short: 4e6701a0
+  subject: Release 1.1.5 (#2601)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

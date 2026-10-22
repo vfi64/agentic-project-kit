@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `3708a4a1ec30f62ebbe7726b8dc52481e9e3cc63` (`3708a4a1`), after `GF085: finding catalog namespace audit (#2599)`.
-Last substantive work state is `3708a4a1ec30f62ebbe7726b8dc52481e9e3cc63` (`3708a4a1`), after `GF085: finding catalog namespace audit (#2599)`.
+Current verified main/admin HEAD is `4e6701a0dab5ac8b71a3b19cf21fff7a3b49719c` (`4e6701a0`), after `Release 1.1.5 (#2601)`.
+Last substantive work state is `4e6701a0dab5ac8b71a3b19cf21fff7a3b49719c` (`4e6701a0`), after `Release 1.1.5 (#2601)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
