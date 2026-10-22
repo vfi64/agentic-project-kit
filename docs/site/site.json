@@ -12883,7 +12883,6 @@
     },
     "release": {
       "notes": [
-        "Zenodo DOI verification pending for v1.1.5.",
         "Run every repository-content check of the release-time standard-gates-audit-suite on each PR (a checkout test driven by the suite's own command list; only the state checks release-publish --dry-run and audit-status-current-state stay with the release run), and treat legacy shell-route calls quoted in the greenfield finding catalog as evidence, not as current instructions (KIT-GF-085, found when the first 1.1.5 release run stopped in release ready).",
         "Give six more local retests a machine contract (release preparation, CI template refresh and protection, CI runtime plan); contracts may name the running Kit's version as {kit_version}; one retest of the Kit's own release path is reclassified as a release-run retest (slice report of 2026-10-21, c1b).",
         "Give 21 more local finding retests a machine contract (executable retests, next part): greenfield retest now proves 21 more already released fixes itself (listed in the slice report of 2026-10-21 under docs/reports/greenfield/); each run uses its own OS temp root and may name the running Kit's interpreter as {kit_python}. The contracts found two defects: transfer command-reference-check ran the Kit's own test file in external workspaces and always failed (now it compares the workspace reference with the installed Kit and names stale files, KIT-GF-083), and docs-audit failed in a freshly initialized workspace because the empty successor package directory counted as an incomplete package (KIT-GF-084).",
@@ -12908,7 +12907,7 @@
     "package_name": "agentic-project-kit",
     "package_version": "1.1.5",
     "product_name": "Agentic Execution Runtime",
-    "release_tag": "v1.1.4",
+    "release_tag": "v1.1.5",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
     "reproduced_manifest_sha": "84540b010909",
     "requires_python": ">=3.10",
@@ -12922,7 +12921,7 @@
       "orchestrator": 35,
       "primitive": 106
     },
-    "version_doi": "10.5281/zenodo.23505873"
+    "version_doi": "10.5281/zenodo.23564978"
   },
   "roadmap_projection": {
     "roadmap_counts": {
@@ -12942,13 +12941,13 @@
   "schema_version": 1,
   "status_projection": {
     "concept_doi": "10.5281/zenodo.20101359",
-    "current_release_tag": "v1.1.4",
+    "current_release_tag": "v1.1.5",
     "current_verified_main": "See docs/STATUS.md",
-    "current_verified_release": "1.1.4",
+    "current_verified_release": "1.1.5",
     "current_version": "1.1.5",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
-    "version_doi": "10.5281/zenodo.23505873"
+    "version_doi": "10.5281/zenodo.23564978"
   },
   "workflow_projection": {
     "boundaries": [
