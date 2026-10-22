@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: c44f0feed67f09a792f002da88888e6f42cfe396f23fb50c0088d82d5ad03fe1
 - docs/reference/agentic-kit-commands.json: d59b09cfb941ebfabdeb709dd773b9ab0c3496ac88ebdad20db66b9ff0bcd840
-## Operational documentation refresh state after PR #2597
+## Operational documentation refresh state after PR #2599
 
-Current administrative handoff refresh state is `b2c07c10` (`Give six more local retests machine contracts: release preparation, CI templates, CI runtime plan (#2597)`). Continue next only after this post-PR2597 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `3708a4a1` (`GF085: finding catalog namespace audit (#2599)`). Continue next only after this post-PR2599 refresh is committed and merged; the next substantive slice must be created from fresh main.

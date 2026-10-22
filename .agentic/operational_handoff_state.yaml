@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b2c07c10260e11da6234a25da11d02d934022e80
-  short: b2c07c10
-  subject: 'Give six more local retests machine contracts: release preparation, CI templates, CI runtime plan (#2597)'
+  full: 3708a4a1ec30f62ebbe7726b8dc52481e9e3cc63
+  short: 3708a4a1
+  subject: 'GF085: finding catalog namespace audit (#2599)'
 last_substantive_work_state:
-  full: b2c07c10260e11da6234a25da11d02d934022e80
-  short: b2c07c10
-  subject: 'Give six more local retests machine contracts: release preparation, CI templates, CI runtime plan (#2597)'
+  full: 3708a4a1ec30f62ebbe7726b8dc52481e9e3cc63
+  short: 3708a4a1
+  subject: 'GF085: finding catalog namespace audit (#2599)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

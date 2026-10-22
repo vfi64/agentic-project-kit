@@ -39,8 +39,8 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `codex/kit-gf-085-finding-catalog-ns-audit`
-- head_matches_origin_main: `False`
+- branch: `docs/post-pr2599-handoff-refresh`
+- head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
@@ -466,14 +466,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "codex/kit-gf-085-finding-catalog-ns-audit",
+    "branch": "docs/post-pr2599-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "9b0095e8104f3d1666161a01760a2aec71fb06ca",
-    "head_matches_origin_main": false,
-    "head_short": "9b0095e8",
+    "head": "3708a4a1ec30f62ebbe7726b8dc52481e9e3cc63",
+    "head_matches_origin_main": true,
+    "head_short": "3708a4a1",
     "local_path": "cd /path/to/",
-    "origin_main": "526efdaac68244c005f6add63ba37e42d10648fa",
-    "origin_main_short": "526efdaa",
+    "origin_main": "3708a4a1ec30f62ebbe7726b8dc52481e9e3cc63",
+    "origin_main_short": "3708a4a1",
     "worktree_clean": false
   }
 }
