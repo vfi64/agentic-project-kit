@@ -4,6 +4,20 @@ from __future__ import annotations
 
 
 def render_report(r):
+    def names(values):
+        return ", ".join(f"`{value}`" for value in values) or "none"
+
+    historical = r["historical_inventory"]
+    elementary_orchestrators = sorted(
+        c["qualified_name"]
+        for c in r["commands"]
+        if c["surface"] == "orchestrator" and c["composition_level"] == "elementary"
+    )
+    composite_diagnostics = sorted(
+        c["qualified_name"]
+        for c in r["commands"]
+        if c["surface"] == "diagnostic" and c["composition_level"] == "composite"
+    )
     lines = [
         "# K0 — Current command composition and shared mechanisms",
         "",
@@ -21,7 +35,10 @@ def render_report(r):
         "a review hypothesis, not a newly established architecture or fourth command classifier.",
         "",
         "The existing analyzer is reused through runpy, with the live Typer/Click registry supplying callbacks. "
-        "No Kit callback is invoked by this audit. The old aggregate.py is deliberately not reused: "
+        "No Kit callback is invoked by this audit. The unchanged historical analyzer is deliberately a live "
+        "test dependency; its hash is recorded, and its old evidence is not regenerated. Tests run it twice "
+        "to compare different filesystem enumeration orders rather than claiming cross-platform coverage. "
+        "The old aggregate.py is deliberately not reused: "
         "its direct column includes already-transitive function reachability and inferred single-command "
         "core ownership. Reaching a helper owned by another CLI does not prove that CLI was invoked. "
         "The old runner also tolerates a nonzero pytest-traced result and can print OK; that is not a "
@@ -34,7 +51,8 @@ def render_report(r):
         "## Current inventory",
         "",
         f"All **{r['counts']['commands']} manifest entries** map to **{r['counts']['callbacks']} CLI callback mappings**; "
-        f"the reused analyzer indexes **{r['counts']['functions']} functions**. Inventory COMPLETE; call analysis PARTIAL_STATIC.",
+        f"the reused analyzer indexes **{r['counts']['functions']} functions**. "
+        f"Inventory {r['execution']['inventory_status']}; call analysis {r['execution']['analysis_status']}.",
         "",
         "| Manifest surface | composite | elementary | elementary/internal | Total |",
         "|---|---:|---:|---:|---:|",
@@ -49,8 +67,10 @@ def render_report(r):
         lines.append(f"| {surface} | {' | '.join(map(str, vals))} | {sum(vals)} |")
     lines += [
         "",
-        "The six additions since the 266-entry October audit are audit-drift-signals, context render, "
-        "context report, greenfield retest, ledger report and release abandon; none of its names disappeared. "
+        f"Compared with the {historical['command_count']}-entry historical inventory "
+        f"(`{historical['source_path']}`, manifest `{historical['manifest_sha']}`): "
+        f"{len(historical['added'])} added ({names(historical['added'])}); "
+        f"{len(historical['removed'])} removed ({names(historical['removed'])}). "
         "These are source-inventory differences, not usage or popularity measurements.",
         "",
         "## Three views and their authority",
@@ -62,8 +82,9 @@ def render_report(r):
         "| Website literal selections | site_generator.py _build_quickstart_projection/_build_workflow_projection pass literal tuples to _quickstart_commands | Selects which manifest-backed records appear. This is an independent editorial selection, not evidence that a command is elementary or a path mature |",
         "",
         "The appendix joins every command with all existing metadata. "
-        "25 manifest orchestrators are elementary in the taxonomy, including release run, kit update and workspace init. "
-        "The three composite diagnostics are standard-gates-audit-suite, work check and transfer patch-cycle-status. "
+        f"{len(elementary_orchestrators)} manifest orchestrators are elementary in the taxonomy "
+        f"(examples from the sorted inventory: {names(elementary_orchestrators[:3])}). "
+        f"{len(composite_diagnostics)} diagnostics are composite: {names(composite_diagnostics)}. "
         "A diagnostic can legitimately coordinate checks; an orchestrator can call internal code rather than other CLIs. "
         "Therefore blanket equality is the wrong repair. The taxonomy name elementary and its high-level-wrapper "
         "recommendations still need an owner decision before reuse as a structural explanation.",
@@ -80,8 +101,13 @@ def render_report(r):
             )
     lines += [
         "",
-        "The command closure crosses literal argv and internal callback candidates, plus the two explicitly resolved standard-gate tables; it does not use inferred single-owner core links. These counts include possible dry-run, recovery and branch paths. They are not executions, "
-        "success rates, irreducibility rankings or an instruction to delete apparently unused commands.",
+        "The command closure crosses literal argv and internal callback candidates, plus the explicitly resolved standard-gate tables; it does not use inferred single-owner core links. "
+        "It can also propagate recommendation text as if it were an invocation candidate: workspace adopt "
+        "reaches rule-registry bootstrap through workspace_adopt.bootstrap_route's reported next action, "
+        "not an executed bootstrap. These fields are unsuitable for G0 execution diagrams or permission claims "
+        "until runner-bound calls and recommendations are distinguished. The same caution applies to "
+        "direct argv candidates; being direct does not establish execution. Historical simulation evidence "
+        "must be checked against current paths before reuse. These counts are neither executions nor usage rankings.",
         "",
         "## Shared mechanism candidates",
         "",
@@ -113,8 +139,9 @@ def render_report(r):
         "A proposed functional foundation also needs mechanisms below the CLI layer: "
         "workspace_lock.workspace_mutation_lock, safe_push.safe_push, rule_ack.validate_rule_acknowledgement, "
         "evidence_guard and successor_handoff_package validation/rendering. They need separate contract review: "
-        "a direct-owner threshold misses deep sharing and the legacy static resolver misses some context-manager "
-        "and dynamically bound paths. This is a focused review list, not an exhaustive or isolated Microkernel. "
+        "a direct-owner threshold does not measure transitive reachability. Context managers can be "
+        "represented by this graph; no reverse-reachability or lock-coverage adjudication was performed here. "
+        "This is a list of shared helpers for review, not a measured safety core or isolated Microkernel. "
         "The current implementation does not gain process isolation, a syscall boundary or an unbypassable "
         "OS security boundary from this vocabulary.",
         "",
@@ -161,19 +188,21 @@ def render_report(r):
         )
     lines += [
         "",
-        "All six existing literal selections resolve to manifest names. That does not validate their "
-        "ordering, recommended scope or maturity. The existing-repository sequence still has eight entries "
-        "and includes workspace remove; no quickstart has been changed here. W0a may validate evidence "
+        f"The {len(r['website_selections'])} selection sites report "
+        f"{sum(len(g.get('missing', [])) for g in r['website_selections'])} missing names and "
+        f"{sum(bool(g.get('unresolved')) for g in r['website_selections'])} unresolved selections. "
+        "Name presence does not validate ordering, recommended scope or maturity. "
+        "No quickstart has been changed here. W0a may validate evidence "
         "independently; W0b must review the choice before presenting a short entry path.",
         "",
         "## Execution and limits",
         "",
         "| Audit step | rc / result |",
         "|---|---|",
-        "| Existing map_callbacks.py preflight | 0; 272 |",
-        "| Existing analyze.py preflight | 0; 4,230 functions, 272 callbacks |",
-        "| Supplement callback mapping / legacy reuse / reconciliation | 0 / 0 / 0 |",
-        "| Dynamic test trace / sandbox simulation / remote audit effects | NOT_RUN / NOT_RUN / NOT_RUN |",
+        f"| Live Typer registry mapping (in-process; not map_callbacks.py) | completion rc={r['execution']['callback_mapping_rc']}; {r['counts']['callbacks']} entries |",
+        f"| Historical analyze.py via runpy (in-process) | completion rc={r['execution']['legacy_static_rc']}; {r['counts']['functions']} functions, {r['counts']['callbacks']} callback mappings |",
+        f"| Metadata reconciliation | completion rc={r['execution']['reconciliation_rc']} |",
+        f"| Dynamic test trace / sandbox simulation / remote audit effects | {r['execution']['test_trace']} / {r['execution']['simulation']} / {r['execution']['remote_effects']} |",
         "",
         "Ordinary local regression evidence is recorded separately in validation.json; it does not upgrade "
         "static call candidates into runtime observations. No paid model calls, benchmark repetitions, "
@@ -189,8 +218,8 @@ def render_report(r):
         "## Review decision requested",
         "",
         "Use three neutral layers for the next discussion: **governed workflows**, **operations and diagnostics**, "
-        "and **shared mechanisms**. Treat the functional Shell/Microkernel interpretation as a design lens "
-        "over those layers, not a change to the accepted L0/GUI architecture. Decide separately whether "
+        "and **shared mechanisms**. Shell can be an internal analysis lens; this audit does not support "
+        "the designation Microkernel. Neither changes the accepted L0/GUI architecture. Decide separately whether "
         "composition_level should become evidence-derived, be renamed as a recommendation heuristic, "
         "or be retired after consumer analysis. Do not make this audit another runtime classifier.",
         "",

@@ -44,6 +44,20 @@ def compare_views(commands, classify):
     return rows
 
 
+def inventory_diff(current_commands, historical):
+    """Compare command names, not old dynamic tiers or observed usage."""
+    before = {row["command"] for row in historical["commands"]}
+    after = {row["qualified_name"] for row in current_commands}
+    return {
+        "source_path": "docs/reports/COMMAND_USAGE_AUDIT_20261015.json",
+        "source_commit": historical["base_commit"],
+        "manifest_sha": historical["manifest_sha"],
+        "command_count": len(before),
+        "added": sorted(after - before),
+        "removed": sorted(before - after),
+    }
+
+
 def website_selections(source, known):
     """Only literal argument tuples to the actual selection helper; no execution."""
     selections = []
@@ -201,6 +215,14 @@ def generate(root, source_commit):
                         "expression": ast.unparse(call)[:200],
                     }
                 )
+    dispatch_sites.sort(
+        key=lambda site: (
+            site["location"]["file"],
+            site["location"]["line"],
+            site["expression"],
+            site["function"],
+        )
+    )
     # Explicit table path, resolved without running the suite or its subprocess runner.
     table_file = root / "src/agentic_project_kit/standard_gates_audit_suite.py"
     tables = []
@@ -233,10 +255,13 @@ def generate(root, source_commit):
         row["potential_command_closure"] = sorted(
             closure(row["qualified_name"], command_edges) - {row["qualified_name"]}
         )
+    historical_path = root / "docs/reports/COMMAND_USAGE_AUDIT_20261015.json"
+    historical = inventory_diff(commands, json.loads(historical_path.read_text()))
     inputs = sorted(
         set(root.glob("src/agentic_project_kit/**/*.py"))
         | {
             manifest_path,
+            historical_path,
             root / "tools/next-step.py",
             legacy,
             root / "scripts/command_composition_audit.py",
@@ -279,6 +304,7 @@ def generate(root, source_commit):
             ),
             "shared_direct_candidates": len(shared),
         },
+        "historical_inventory": historical,
         "commands": records,
         "shared_core_candidates": shared,
         "same_callback_alias_groups": [sorted(v) for v in by_fid.values() if len(v) > 1],

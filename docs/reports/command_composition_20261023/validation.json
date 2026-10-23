@@ -3,12 +3,12 @@
   "call_analysis_status": "PARTIAL_STATIC",
   "final_targeted_audit_taxonomy_f4": {
     "returncode": 0,
-    "summary": "35 passed, 2 warnings in 8.14s"
+    "summary": "37 passed, 2 warnings in 17.85s"
   },
   "full_local_regression": {
     "returncode": 0,
-    "scope": "Full suite started with six audit tests; two additional boundary tests and final audit refinements were then checked in the final targeted run. CI checks the committed tree.",
-    "summary": "3994 passed, 542 warnings in 589.41s (0:09:49)"
+    "scope": "Final M1-M3 correction tree; full suite with four xdist workers and work stealing, without tracing.",
+    "summary": "3998 passed, 542 warnings in 528.25s (0:08:48)"
   },
   "gates": {
     "check_docs": {
@@ -53,6 +53,17 @@
     "paid_model_calls",
     "consumer_remote_retests"
   ],
+  "review_corrections": {
+    "K0c_started": false,
+    "M1": "Historical diff, taxonomy counts/names and actual in-process step results derived from data; renderer data-mutation test PASS.",
+    "M2": "Canonical dispatch sort; reversed rglob enumeration yields byte-identical serialized JSON in the integration test.",
+    "M3": "Assertions for direct sync-main argv, internal standard-gate call and table targets PASS.",
+    "call_data_comparison": "Unchanged after normalizing dispatch order and excluding new historical metadata/input hashes.",
+    "closure_use_limit": "Includes recommendation candidates; unsuitable for G0 execution diagrams or permission claims.",
+    "dispatch_sites": 119,
+    "linux_execution": "NOT_RUN",
+    "reviewed_head": "e802195cbf5eae334a0dff4e6dcbcb45bebac189"
+  },
   "review_state": "awaiting_owner_review",
   "schema_version": 1,
   "source_commit": "61dcecbaf03fca628260cbb2ec0d0df31bd57905",

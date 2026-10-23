@@ -41,7 +41,7 @@ Critical rule IDs:
 
 - branch: `codex/k0-command-composition-audit`
 - head_matches_origin_main: `False`
-- worktree_clean: `True`
+- worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -468,13 +468,13 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/k0-command-composition-audit",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "47ea400811c9337ad71b1e0d0ffbd9f2abf883a5",
+    "head": "e802195cbf5eae334a0dff4e6dcbcb45bebac189",
     "head_matches_origin_main": false,
-    "head_short": "47ea4008",
+    "head_short": "e802195c",
     "local_path": "cd /path/to/",
     "origin_main": "61dcecbaf03fca628260cbb2ec0d0df31bd57905",
     "origin_main_short": "61dcecba",
-    "worktree_clean": true
+    "worktree_clean": false
   }
 }
 ```

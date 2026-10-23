@@ -12360,235 +12360,203 @@
   ],
   "dynamic_dispatch_sites": [
     {
-      "expression": "getattr(event, 'width', 250)",
-      "function": "agentic_project_kit.gui_tkinter_shell:render_manual_launch_content",
+      "expression": "getattr(definition, 'description', str(definition))",
+      "function": "agentic_project_kit.cli_commands.profiles:profile_explain_command",
       "location": {
-        "file": "src/agentic_project_kit/gui_tkinter_shell.py",
-        "line": 1054
+        "file": "src/agentic_project_kit/cli_commands/profiles.py",
+        "line": 19
       }
     },
     {
-      "expression": "getattr(event, 'width', 250)",
-      "function": "agentic_project_kit.gui_tkinter_shell:render_manual_launch_content.<locals>.update_actions_width",
+      "expression": "getattr(definition, 'description', str(definition))",
+      "function": "agentic_project_kit.cli_commands.profiles:profile_explain_command",
       "location": {
-        "file": "src/agentic_project_kit/gui_tkinter_shell.py",
-        "line": 1054
+        "file": "src/agentic_project_kit/cli_commands/profiles.py",
+        "line": 25
       }
     },
     {
-      "expression": "getattr(result, 'result_status', 'UNKNOWN')",
-      "function": "agentic_project_kit.pr_closeout_complete:_lifecycle_step",
+      "expression": "getattr(report, 'items')",
+      "function": "agentic_project_kit.cli_commands.release:_release_summary_lines_from_report",
       "location": {
-        "file": "src/agentic_project_kit/pr_closeout_complete.py",
-        "line": 88
+        "file": "src/agentic_project_kit/cli_commands/release.py",
+        "line": 313
       }
     },
     {
-      "expression": "getattr(result, 'returncode', 2)",
-      "function": "agentic_project_kit.pr_closeout_complete:_lifecycle_step",
+      "expression": "getattr(report, 'version')",
+      "function": "agentic_project_kit.cli_commands.release:_write_release_summary_lines_artifact",
       "location": {
-        "file": "src/agentic_project_kit/pr_closeout_complete.py",
-        "line": 89
+        "file": "src/agentic_project_kit/cli_commands/release.py",
+        "line": 322
       }
     },
     {
-      "expression": "getattr(result, 'next_action', 'Inspect lifecycle result.')",
-      "function": "agentic_project_kit.pr_closeout_complete:_lifecycle_step",
+      "expression": "getattr(report, 'from_tag')",
+      "function": "agentic_project_kit.cli_commands.release:_write_release_summary_lines_artifact",
       "location": {
-        "file": "src/agentic_project_kit/pr_closeout_complete.py",
-        "line": 90
+        "file": "src/agentic_project_kit/cli_commands/release.py",
+        "line": 323
       }
     },
     {
-      "expression": "getattr(closeout, 'refresh_pr', None)",
-      "function": "agentic_project_kit.pr_closeout_complete:pr_closeout_complete",
+      "expression": "getattr(report, 'to_ref')",
+      "function": "agentic_project_kit.cli_commands.release:_write_release_summary_lines_artifact",
       "location": {
-        "file": "src/agentic_project_kit/pr_closeout_complete.py",
-        "line": 331
+        "file": "src/agentic_project_kit/cli_commands/release.py",
+        "line": 324
       }
     },
     {
-      "expression": "getattr(closeout, 'returncode', 2)",
-      "function": "agentic_project_kit.pr_closeout_complete:pr_closeout_complete",
+      "expression": "getattr(public_module, name)",
+      "function": "agentic_project_kit.cli_commands.transfer_shared:_public_transfer_attr",
       "location": {
-        "file": "src/agentic_project_kit/pr_closeout_complete.py",
-        "line": 332
+        "file": "src/agentic_project_kit/cli_commands/transfer_shared.py",
+        "line": 125
       }
     },
     {
-      "expression": "getattr(closeout, 'result_status', '')",
-      "function": "agentic_project_kit.pr_closeout_complete:pr_closeout_complete",
+      "expression": "getattr(result.local_run, 'state', None)",
+      "function": "agentic_project_kit.cli_commands.transfer_shared:_dirty_state_from_result",
       "location": {
-        "file": "src/agentic_project_kit/pr_closeout_complete.py",
-        "line": 332
+        "file": "src/agentic_project_kit/cli_commands/transfer_shared.py",
+        "line": 171
       }
     },
     {
-      "expression": "getattr(closeout, 'lifecycle_state', 'POST_MERGE_CLOSEOUT_BLOCKED')",
-      "function": "agentic_project_kit.pr_closeout_complete:pr_closeout_complete",
+      "expression": "getattr(param, 'required', False)",
+      "function": "agentic_project_kit.command_manifest:_param_record",
       "location": {
-        "file": "src/agentic_project_kit/pr_closeout_complete.py",
-        "line": 337
+        "file": "src/agentic_project_kit/command_manifest.py",
+        "line": 167
       }
     },
     {
-      "expression": "getattr(closeout, 'next_action', 'Inspect post-merge closeout result.')",
-      "function": "agentic_project_kit.pr_closeout_complete:pr_closeout_complete",
+      "expression": "getattr(param, 'default', None)",
+      "function": "agentic_project_kit.command_manifest:_param_record",
       "location": {
-        "file": "src/agentic_project_kit/pr_closeout_complete.py",
-        "line": 338
+        "file": "src/agentic_project_kit/command_manifest.py",
+        "line": 168
       }
     },
     {
-      "expression": "getattr(value, 'value', value)",
-      "function": "agentic_project_kit.gui_action_run_intent:_safety_name",
+      "expression": "getattr(param, 'metavar', None)",
+      "function": "agentic_project_kit.command_manifest:_param_record",
       "location": {
-        "file": "src/agentic_project_kit/gui_action_run_intent.py",
+        "file": "src/agentic_project_kit/command_manifest.py",
+        "line": 169
+      }
+    },
+    {
+      "expression": "getattr(param, 'opts', [])",
+      "function": "agentic_project_kit.command_manifest:_param_record",
+      "location": {
+        "file": "src/agentic_project_kit/command_manifest.py",
+        "line": 172
+      }
+    },
+    {
+      "expression": "getattr(param, 'secondary_opts', [])",
+      "function": "agentic_project_kit.command_manifest:_param_record",
+      "location": {
+        "file": "src/agentic_project_kit/command_manifest.py",
+        "line": 173
+      }
+    },
+    {
+      "expression": "getattr(param, 'help', None)",
+      "function": "agentic_project_kit.command_manifest:_param_record",
+      "location": {
+        "file": "src/agentic_project_kit/command_manifest.py",
+        "line": 174
+      }
+    },
+    {
+      "expression": "getattr(param, 'is_flag', False)",
+      "function": "agentic_project_kit.command_manifest:_param_record",
+      "location": {
+        "file": "src/agentic_project_kit/command_manifest.py",
+        "line": 175
+      }
+    },
+    {
+      "expression": "getattr(param, 'multiple', False)",
+      "function": "agentic_project_kit.command_manifest:_param_record",
+      "location": {
+        "file": "src/agentic_project_kit/command_manifest.py",
+        "line": 176
+      }
+    },
+    {
+      "expression": "getattr(command, 'commands', None)",
+      "function": "agentic_project_kit.command_manifest:_walk",
+      "location": {
+        "file": "src/agentic_project_kit/command_manifest.py",
+        "line": 196
+      }
+    },
+    {
+      "expression": "getattr(root, 'name', None)",
+      "function": "agentic_project_kit.command_manifest:build_reference_from_app",
+      "location": {
+        "file": "src/agentic_project_kit/command_manifest.py",
+        "line": 526
+      }
+    },
+    {
+      "expression": "getattr(command, 'commands', None)",
+      "function": "agentic_project_kit.command_manifest:build_reference_from_app",
+      "location": {
+        "file": "src/agentic_project_kit/command_manifest.py",
+        "line": 543
+      }
+    },
+    {
+      "expression": "getattr(result, 'result_status', '')",
+      "function": "agentic_project_kit.composed_wrapper_invariants:_status_of",
+      "location": {
+        "file": "src/agentic_project_kit/composed_wrapper_invariants.py",
+        "line": 23
+      }
+    },
+    {
+      "expression": "getattr(result, 'lifecycle_state', '')",
+      "function": "agentic_project_kit.composed_wrapper_invariants:_state_of",
+      "location": {
+        "file": "src/agentic_project_kit/composed_wrapper_invariants.py",
         "line": 28
       }
     },
     {
-      "expression": "getattr(run, '_append', None)",
-      "function": "agentic_project_kit.kit_update_artifacts:prepare_target",
+      "expression": "getattr(result, 'state', '')",
+      "function": "agentic_project_kit.composed_wrapper_invariants:_state_of",
       "location": {
-        "file": "src/agentic_project_kit/kit_update_artifacts.py",
-        "line": 180
+        "file": "src/agentic_project_kit/composed_wrapper_invariants.py",
+        "line": 30
       }
     },
     {
-      "expression": "getattr(command_catalog, 'entries', ())",
-      "function": "agentic_project_kit.site_claims:_evaluate_generated_artifact",
+      "expression": "getattr(step, 'result', None)",
+      "function": "agentic_project_kit.composed_wrapper_invariants:validate_no_failed_required_step_promoted_to_pass",
       "location": {
-        "file": "src/agentic_project_kit/site_claims.py",
-        "line": 354
+        "file": "src/agentic_project_kit/composed_wrapper_invariants.py",
+        "line": 59
       }
     },
     {
-      "expression": "getattr(entry, 'qualified_name', '')",
-      "function": "agentic_project_kit.site_claims:_evaluate_generated_artifact",
+      "expression": "getattr(step, 'name', '')",
+      "function": "agentic_project_kit.composed_wrapper_invariants:validate_no_failed_required_step_promoted_to_pass",
       "location": {
-        "file": "src/agentic_project_kit/site_claims.py",
-        "line": 355
+        "file": "src/agentic_project_kit/composed_wrapper_invariants.py",
+        "line": 69
       }
     },
     {
-      "expression": "getattr(result, 'base_result', result)",
-      "function": "agentic_project_kit.gui_dry_run:render_result",
+      "expression": "getattr(step, 'name', '')",
+      "function": "agentic_project_kit.composed_wrapper_invariants:validate_no_failed_required_step_promoted_to_pass",
       "location": {
-        "file": "src/agentic_project_kit/gui_dry_run.py",
-        "line": 158
-      }
-    },
-    {
-      "expression": "getattr(result, 'execution_result', None)",
-      "function": "agentic_project_kit.gui_dry_run:render_result",
-      "location": {
-        "file": "src/agentic_project_kit/gui_dry_run.py",
-        "line": 160
-      }
-    },
-    {
-      "expression": "getattr(execution.safety_class, 'value', execution.safety_class)",
-      "function": "agentic_project_kit.gui_dry_run:render_result",
-      "location": {
-        "file": "src/agentic_project_kit/gui_dry_run.py",
-        "line": 164
-      }
-    },
-    {
-      "expression": "getattr(args, field)",
-      "function": "agentic_project_kit.run_summary_renderer:main",
-      "location": {
-        "file": "src/agentic_project_kit/run_summary_renderer.py",
-        "line": 227
-      }
-    },
-    {
-      "expression": "getattr(args, field)",
-      "function": "agentic_project_kit.run_summary_renderer:main",
-      "location": {
-        "file": "src/agentic_project_kit/run_summary_renderer.py",
-        "line": 227
-      }
-    },
-    {
-      "expression": "getattr(event, 'num', None)",
-      "function": "agentic_project_kit.gui_cockpit_actions:CockpitActionsMixin._on_action_card_mousewheel",
-      "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_actions.py",
-        "line": 231
-      }
-    },
-    {
-      "expression": "getattr(event, 'delta', 0)",
-      "function": "agentic_project_kit.gui_cockpit_actions:CockpitActionsMixin._on_action_card_mousewheel",
-      "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_actions.py",
-        "line": 232
-      }
-    },
-    {
-      "expression": "getattr(self, 'gc_cutoff_var', None)",
-      "function": "agentic_project_kit.gui_cockpit_actions:CockpitActionsMixin._gc_cutoff_value",
-      "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_actions.py",
-        "line": 351
-      }
-    },
-    {
-      "expression": "getattr(self, 'gc_confirm_delete_button', None)",
-      "function": "agentic_project_kit.gui_cockpit_actions:CockpitActionsMixin._disable_confirm_delete",
-      "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_actions.py",
-        "line": 384
-      }
-    },
-    {
-      "expression": "getattr(self, 'release_confirm_button', None)",
-      "function": "agentic_project_kit.gui_cockpit_actions:CockpitActionsMixin._disable_confirm_release",
-      "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_actions.py",
-        "line": 390
-      }
-    },
-    {
-      "expression": "getattr(self, 'release_version_var', None)",
-      "function": "agentic_project_kit.gui_cockpit_actions:CockpitActionsMixin._current_release_version",
-      "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_actions.py",
-        "line": 437
-      }
-    },
-    {
-      "expression": "getattr(callback, '__name__', '')",
-      "function": "agentic_project_kit.invocation_ledger:_command_name",
-      "location": {
-        "file": "src/agentic_project_kit/invocation_ledger.py",
-        "line": 116
-      }
-    },
-    {
-      "expression": "getattr(current, 'registered_groups', [])",
-      "function": "agentic_project_kit.invocation_ledger:command_path",
-      "location": {
-        "file": "src/agentic_project_kit/invocation_ledger.py",
-        "line": 129
-      }
-    },
-    {
-      "expression": "getattr(current, 'registered_commands', [])",
-      "function": "agentic_project_kit.invocation_ledger:command_path",
-      "location": {
-        "file": "src/agentic_project_kit/invocation_ledger.py",
-        "line": 137
-      }
-    },
-    {
-      "expression": "getattr(self, 'sequence_steps', None)",
-      "function": "agentic_project_kit.transfer_uplink:TransferUplinkResult.as_json_data",
-      "location": {
-        "file": "src/agentic_project_kit/transfer_uplink.py",
-        "line": 98
+        "file": "src/agentic_project_kit/composed_wrapper_invariants.py",
+        "line": 75
       }
     },
     {
@@ -12664,11 +12632,147 @@
       }
     },
     {
-      "expression": "getattr(source, 'command_id', getattr(source, 'action_id', '<unknown>'))",
-      "function": "agentic_project_kit.gui_command_projection:gui_command_bindings",
+      "expression": "getattr(finding, 'severity', 'FAIL')",
+      "function": "agentic_project_kit.documentation_system_audit:_blocking_lifecycle_findings",
       "location": {
-        "file": "src/agentic_project_kit/gui_command_projection.py",
-        "line": 209
+        "file": "src/agentic_project_kit/documentation_system_audit.py",
+        "line": 279
+      }
+    },
+    {
+      "expression": "getattr(action, name)",
+      "function": "agentic_project_kit.gui_action_execution:_field",
+      "location": {
+        "file": "src/agentic_project_kit/gui_action_execution.py",
+        "line": 31
+      }
+    },
+    {
+      "expression": "getattr(value, 'value', value)",
+      "function": "agentic_project_kit.gui_action_run_intent:_safety_name",
+      "location": {
+        "file": "src/agentic_project_kit/gui_action_run_intent.py",
+        "line": 28
+      }
+    },
+    {
+      "expression": "getattr(event, 'num', None)",
+      "function": "agentic_project_kit.gui_cockpit_actions:CockpitActionsMixin._on_action_card_mousewheel",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_actions.py",
+        "line": 231
+      }
+    },
+    {
+      "expression": "getattr(event, 'delta', 0)",
+      "function": "agentic_project_kit.gui_cockpit_actions:CockpitActionsMixin._on_action_card_mousewheel",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_actions.py",
+        "line": 232
+      }
+    },
+    {
+      "expression": "getattr(self, 'gc_cutoff_var', None)",
+      "function": "agentic_project_kit.gui_cockpit_actions:CockpitActionsMixin._gc_cutoff_value",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_actions.py",
+        "line": 351
+      }
+    },
+    {
+      "expression": "getattr(self, 'gc_confirm_delete_button', None)",
+      "function": "agentic_project_kit.gui_cockpit_actions:CockpitActionsMixin._disable_confirm_delete",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_actions.py",
+        "line": 384
+      }
+    },
+    {
+      "expression": "getattr(self, 'release_confirm_button', None)",
+      "function": "agentic_project_kit.gui_cockpit_actions:CockpitActionsMixin._disable_confirm_release",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_actions.py",
+        "line": 390
+      }
+    },
+    {
+      "expression": "getattr(self, 'release_version_var', None)",
+      "function": "agentic_project_kit.gui_cockpit_actions:CockpitActionsMixin._current_release_version",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_actions.py",
+        "line": 437
+      }
+    },
+    {
+      "expression": "getattr(self, '_gatekeeper_status', None)",
+      "function": "agentic_project_kit.gui_cockpit_sidebar:CockpitSidebarMixin.update_mode_explanation",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_sidebar.py",
+        "line": 343
+      }
+    },
+    {
+      "expression": "getattr(self, '_gatekeeper_status', None)",
+      "function": "agentic_project_kit.gui_cockpit_sidebar:CockpitSidebarMixin.update_access_level",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_sidebar.py",
+        "line": 371
+      }
+    },
+    {
+      "expression": "getattr(self, 'task_editor_height', THEME.task_text_height)",
+      "function": "agentic_project_kit.gui_cockpit_task:CockpitTaskMixin._build_task_editor",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_task.py",
+        "line": 76
+      }
+    },
+    {
+      "expression": "getattr(event, 'width', 760)",
+      "function": "agentic_project_kit.gui_cockpit_task:CockpitTaskMixin._build_output_panel",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_task.py",
+        "line": 393
+      }
+    },
+    {
+      "expression": "getattr(event, 'num', None)",
+      "function": "agentic_project_kit.gui_cockpit_task:CockpitTaskMixin._on_activity_mousewheel",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_task.py",
+        "line": 406
+      }
+    },
+    {
+      "expression": "getattr(event, 'delta', 0)",
+      "function": "agentic_project_kit.gui_cockpit_task:CockpitTaskMixin._on_activity_mousewheel",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_task.py",
+        "line": 407
+      }
+    },
+    {
+      "expression": "getattr(self, 'output', None)",
+      "function": "agentic_project_kit.gui_cockpit_task:CockpitTaskMixin.write_output",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_task.py",
+        "line": 524
+      }
+    },
+    {
+      "expression": "getattr(self, 'busy_status_var', None)",
+      "function": "agentic_project_kit.gui_cockpit_task:CockpitTaskMixin._set_busy",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_task.py",
+        "line": 562
+      }
+    },
+    {
+      "expression": "getattr(self, 'busy_progress', None)",
+      "function": "agentic_project_kit.gui_cockpit_task:CockpitTaskMixin._set_busy",
+      "location": {
+        "file": "src/agentic_project_kit/gui_cockpit_task.py",
+        "line": 563
       }
     },
     {
@@ -12681,6 +12785,14 @@
     },
     {
       "expression": "getattr(source, 'command_id', getattr(source, 'action_id', '<unknown>'))",
+      "function": "agentic_project_kit.gui_command_projection:gui_command_bindings",
+      "location": {
+        "file": "src/agentic_project_kit/gui_command_projection.py",
+        "line": 209
+      }
+    },
+    {
+      "expression": "getattr(source, 'action_id', '<unknown>')",
       "function": "agentic_project_kit.gui_command_projection:validate_gui_command_bindings",
       "location": {
         "file": "src/agentic_project_kit/gui_command_projection.py",
@@ -12688,7 +12800,7 @@
       }
     },
     {
-      "expression": "getattr(source, 'action_id', '<unknown>')",
+      "expression": "getattr(source, 'command_id', getattr(source, 'action_id', '<unknown>'))",
       "function": "agentic_project_kit.gui_command_projection:validate_gui_command_bindings",
       "location": {
         "file": "src/agentic_project_kit/gui_command_projection.py",
@@ -12712,51 +12824,35 @@
       }
     },
     {
-      "expression": "getattr(result, 'result_status', '')",
-      "function": "agentic_project_kit.composed_wrapper_invariants:_status_of",
+      "expression": "getattr(result, 'base_result', result)",
+      "function": "agentic_project_kit.gui_dry_run:render_result",
       "location": {
-        "file": "src/agentic_project_kit/composed_wrapper_invariants.py",
-        "line": 23
+        "file": "src/agentic_project_kit/gui_dry_run.py",
+        "line": 158
       }
     },
     {
-      "expression": "getattr(result, 'lifecycle_state', '')",
-      "function": "agentic_project_kit.composed_wrapper_invariants:_state_of",
+      "expression": "getattr(result, 'execution_result', None)",
+      "function": "agentic_project_kit.gui_dry_run:render_result",
       "location": {
-        "file": "src/agentic_project_kit/composed_wrapper_invariants.py",
-        "line": 28
+        "file": "src/agentic_project_kit/gui_dry_run.py",
+        "line": 160
       }
     },
     {
-      "expression": "getattr(result, 'state', '')",
-      "function": "agentic_project_kit.composed_wrapper_invariants:_state_of",
+      "expression": "getattr(execution.safety_class, 'value', execution.safety_class)",
+      "function": "agentic_project_kit.gui_dry_run:render_result",
       "location": {
-        "file": "src/agentic_project_kit/composed_wrapper_invariants.py",
-        "line": 30
+        "file": "src/agentic_project_kit/gui_dry_run.py",
+        "line": 164
       }
     },
     {
-      "expression": "getattr(step, 'result', None)",
-      "function": "agentic_project_kit.composed_wrapper_invariants:validate_no_failed_required_step_promoted_to_pass",
+      "expression": "getattr(action, 'action_id', '<unknown>')",
+      "function": "agentic_project_kit.gui_gatekeeper_status:classify_gui_gatekeeper_action",
       "location": {
-        "file": "src/agentic_project_kit/composed_wrapper_invariants.py",
-        "line": 59
-      }
-    },
-    {
-      "expression": "getattr(step, 'name', '')",
-      "function": "agentic_project_kit.composed_wrapper_invariants:validate_no_failed_required_step_promoted_to_pass",
-      "location": {
-        "file": "src/agentic_project_kit/composed_wrapper_invariants.py",
-        "line": 69
-      }
-    },
-    {
-      "expression": "getattr(step, 'name', '')",
-      "function": "agentic_project_kit.composed_wrapper_invariants:validate_no_failed_required_step_promoted_to_pass",
-      "location": {
-        "file": "src/agentic_project_kit/composed_wrapper_invariants.py",
-        "line": 75
+        "file": "src/agentic_project_kit/gui_gatekeeper_status.py",
+        "line": 110
       }
     },
     {
@@ -12765,6 +12861,14 @@
       "location": {
         "file": "src/agentic_project_kit/gui_gatekeeper_status.py",
         "line": 110
+      }
+    },
+    {
+      "expression": "getattr(action, 'safety', 'unknown')",
+      "function": "agentic_project_kit.gui_gatekeeper_status:classify_gui_gatekeeper_action",
+      "location": {
+        "file": "src/agentic_project_kit/gui_gatekeeper_status.py",
+        "line": 111
       }
     },
     {
@@ -12784,27 +12888,75 @@
       }
     },
     {
-      "expression": "getattr(action, 'action_id', '<unknown>')",
-      "function": "agentic_project_kit.gui_gatekeeper_status:classify_gui_gatekeeper_action",
-      "location": {
-        "file": "src/agentic_project_kit/gui_gatekeeper_status.py",
-        "line": 110
-      }
-    },
-    {
-      "expression": "getattr(action, 'safety', 'unknown')",
-      "function": "agentic_project_kit.gui_gatekeeper_status:classify_gui_gatekeeper_action",
-      "location": {
-        "file": "src/agentic_project_kit/gui_gatekeeper_status.py",
-        "line": 111
-      }
-    },
-    {
       "expression": "getattr(value, 'value', value)",
       "function": "agentic_project_kit.gui_gatekeeper_status:_safety_value",
       "location": {
         "file": "src/agentic_project_kit/gui_gatekeeper_status.py",
         "line": 216
+      }
+    },
+    {
+      "expression": "getattr(event, 'num', None)",
+      "function": "agentic_project_kit.gui_guided:GuidedKitGui._scroll_tab",
+      "location": {
+        "file": "src/agentic_project_kit/gui_guided.py",
+        "line": 113
+      }
+    },
+    {
+      "expression": "getattr(event, 'delta', 0)",
+      "function": "agentic_project_kit.gui_guided:GuidedKitGui._scroll_tab",
+      "location": {
+        "file": "src/agentic_project_kit/gui_guided.py",
+        "line": 114
+      }
+    },
+    {
+      "expression": "getattr(self, 'task_text', None)",
+      "function": "agentic_project_kit.gui_guided:GuidedKitGui._remember_task",
+      "location": {
+        "file": "src/agentic_project_kit/gui_guided.py",
+        "line": 160
+      }
+    },
+    {
+      "expression": "getattr(self, 'task_text', None)",
+      "function": "agentic_project_kit.gui_guided:GuidedKitGui.switch_project_root",
+      "location": {
+        "file": "src/agentic_project_kit/gui_guided.py",
+        "line": 230
+      }
+    },
+    {
+      "expression": "getattr(owner, 'service_bridge', None)",
+      "function": "agentic_project_kit.gui_services:invoke_gui_service",
+      "location": {
+        "file": "src/agentic_project_kit/gui_services.py",
+        "line": 71
+      }
+    },
+    {
+      "expression": "getattr(widget, '_agentic_tooltip', None)",
+      "function": "agentic_project_kit.gui_tk_widgets:attach_tooltip",
+      "location": {
+        "file": "src/agentic_project_kit/gui_tk_widgets.py",
+        "line": 152
+      }
+    },
+    {
+      "expression": "getattr(event, 'width', 250)",
+      "function": "agentic_project_kit.gui_tkinter_shell:render_manual_launch_content",
+      "location": {
+        "file": "src/agentic_project_kit/gui_tkinter_shell.py",
+        "line": 1054
+      }
+    },
+    {
+      "expression": "getattr(event, 'width', 250)",
+      "function": "agentic_project_kit.gui_tkinter_shell:render_manual_launch_content.<locals>.update_actions_width",
+      "location": {
+        "file": "src/agentic_project_kit/gui_tkinter_shell.py",
+        "line": 1054
       }
     },
     {
@@ -12872,6 +13024,246 @@
       }
     },
     {
+      "expression": "getattr(callback, '__name__', '')",
+      "function": "agentic_project_kit.invocation_ledger:_command_name",
+      "location": {
+        "file": "src/agentic_project_kit/invocation_ledger.py",
+        "line": 116
+      }
+    },
+    {
+      "expression": "getattr(current, 'registered_groups', [])",
+      "function": "agentic_project_kit.invocation_ledger:command_path",
+      "location": {
+        "file": "src/agentic_project_kit/invocation_ledger.py",
+        "line": 129
+      }
+    },
+    {
+      "expression": "getattr(current, 'registered_commands', [])",
+      "function": "agentic_project_kit.invocation_ledger:command_path",
+      "location": {
+        "file": "src/agentic_project_kit/invocation_ledger.py",
+        "line": 137
+      }
+    },
+    {
+      "expression": "getattr(run, '_append', None)",
+      "function": "agentic_project_kit.kit_update_artifacts:prepare_target",
+      "location": {
+        "file": "src/agentic_project_kit/kit_update_artifacts.py",
+        "line": 180
+      }
+    },
+    {
+      "expression": "getattr(finding, key, '')",
+      "function": "agentic_project_kit.mutation_lock_audit:_finding_value",
+      "location": {
+        "file": "src/agentic_project_kit/mutation_lock_audit.py",
+        "line": 99
+      }
+    },
+    {
+      "expression": "getattr(response, 'status', 200)",
+      "function": "agentic_project_kit.post_release:urlopen_text",
+      "location": {
+        "file": "src/agentic_project_kit/post_release.py",
+        "line": 252
+      }
+    },
+    {
+      "expression": "getattr(result, 'result_status', 'UNKNOWN')",
+      "function": "agentic_project_kit.pr_closeout_complete:_lifecycle_step",
+      "location": {
+        "file": "src/agentic_project_kit/pr_closeout_complete.py",
+        "line": 88
+      }
+    },
+    {
+      "expression": "getattr(result, 'returncode', 2)",
+      "function": "agentic_project_kit.pr_closeout_complete:_lifecycle_step",
+      "location": {
+        "file": "src/agentic_project_kit/pr_closeout_complete.py",
+        "line": 89
+      }
+    },
+    {
+      "expression": "getattr(result, 'next_action', 'Inspect lifecycle result.')",
+      "function": "agentic_project_kit.pr_closeout_complete:_lifecycle_step",
+      "location": {
+        "file": "src/agentic_project_kit/pr_closeout_complete.py",
+        "line": 90
+      }
+    },
+    {
+      "expression": "getattr(closeout, 'refresh_pr', None)",
+      "function": "agentic_project_kit.pr_closeout_complete:pr_closeout_complete",
+      "location": {
+        "file": "src/agentic_project_kit/pr_closeout_complete.py",
+        "line": 331
+      }
+    },
+    {
+      "expression": "getattr(closeout, 'result_status', '')",
+      "function": "agentic_project_kit.pr_closeout_complete:pr_closeout_complete",
+      "location": {
+        "file": "src/agentic_project_kit/pr_closeout_complete.py",
+        "line": 332
+      }
+    },
+    {
+      "expression": "getattr(closeout, 'returncode', 2)",
+      "function": "agentic_project_kit.pr_closeout_complete:pr_closeout_complete",
+      "location": {
+        "file": "src/agentic_project_kit/pr_closeout_complete.py",
+        "line": 332
+      }
+    },
+    {
+      "expression": "getattr(closeout, 'lifecycle_state', 'POST_MERGE_CLOSEOUT_BLOCKED')",
+      "function": "agentic_project_kit.pr_closeout_complete:pr_closeout_complete",
+      "location": {
+        "file": "src/agentic_project_kit/pr_closeout_complete.py",
+        "line": 337
+      }
+    },
+    {
+      "expression": "getattr(closeout, 'next_action', 'Inspect post-merge closeout result.')",
+      "function": "agentic_project_kit.pr_closeout_complete:pr_closeout_complete",
+      "location": {
+        "file": "src/agentic_project_kit/pr_closeout_complete.py",
+        "line": 338
+      }
+    },
+    {
+      "expression": "getattr(self, f'_step_{step_id.lower()}')",
+      "function": "agentic_project_kit.release_run:ReleaseRun._run_or_gate",
+      "location": {
+        "file": "src/agentic_project_kit/release_run.py",
+        "line": 119
+      }
+    },
+    {
+      "expression": "getattr(args, field)",
+      "function": "agentic_project_kit.run_summary_renderer:main",
+      "location": {
+        "file": "src/agentic_project_kit/run_summary_renderer.py",
+        "line": 227
+      }
+    },
+    {
+      "expression": "getattr(args, field)",
+      "function": "agentic_project_kit.run_summary_renderer:main",
+      "location": {
+        "file": "src/agentic_project_kit/run_summary_renderer.py",
+        "line": 227
+      }
+    },
+    {
+      "expression": "getattr(result, 'stdout', '')",
+      "function": "agentic_project_kit.safe_push:_completed_stdout",
+      "location": {
+        "file": "src/agentic_project_kit/safe_push.py",
+        "line": 63
+      }
+    },
+    {
+      "expression": "getattr(result, 'stderr', '')",
+      "function": "agentic_project_kit.safe_push:_completed_stderr",
+      "location": {
+        "file": "src/agentic_project_kit/safe_push.py",
+        "line": 67
+      }
+    },
+    {
+      "expression": "getattr(command_catalog, 'entries', ())",
+      "function": "agentic_project_kit.site_claims:_evaluate_generated_artifact",
+      "location": {
+        "file": "src/agentic_project_kit/site_claims.py",
+        "line": 354
+      }
+    },
+    {
+      "expression": "getattr(entry, 'qualified_name', '')",
+      "function": "agentic_project_kit.site_claims:_evaluate_generated_artifact",
+      "location": {
+        "file": "src/agentic_project_kit/site_claims.py",
+        "line": 355
+      }
+    },
+    {
+      "expression": "getattr(item, 'id', '')",
+      "function": "agentic_project_kit.site_generator:_claim_summary_items",
+      "location": {
+        "file": "src/agentic_project_kit/site_generator.py",
+        "line": 788
+      }
+    },
+    {
+      "expression": "getattr(claim, 'id', '')",
+      "function": "agentic_project_kit.site_generator:_claim_summary_items",
+      "location": {
+        "file": "src/agentic_project_kit/site_generator.py",
+        "line": 791
+      }
+    },
+    {
+      "expression": "getattr(claim, 'text', '')",
+      "function": "agentic_project_kit.site_generator:_claim_summary_items",
+      "location": {
+        "file": "src/agentic_project_kit/site_generator.py",
+        "line": 792
+      }
+    },
+    {
+      "expression": "getattr(claim, 'id', '')",
+      "function": "agentic_project_kit.site_generator:_claim_table_row",
+      "location": {
+        "file": "src/agentic_project_kit/site_generator.py",
+        "line": 1259
+      }
+    },
+    {
+      "expression": "getattr(claim, 'text', '')",
+      "function": "agentic_project_kit.site_generator:_claim_table_row",
+      "location": {
+        "file": "src/agentic_project_kit/site_generator.py",
+        "line": 1260
+      }
+    },
+    {
+      "expression": "getattr(claim, 'status', '')",
+      "function": "agentic_project_kit.site_generator:_claim_table_row",
+      "location": {
+        "file": "src/agentic_project_kit/site_generator.py",
+        "line": 1261
+      }
+    },
+    {
+      "expression": "getattr(claim, 'required', False)",
+      "function": "agentic_project_kit.site_generator:_claim_table_row",
+      "location": {
+        "file": "src/agentic_project_kit/site_generator.py",
+        "line": 1262
+      }
+    },
+    {
+      "expression": "getattr(claim, 'evidence', ())",
+      "function": "agentic_project_kit.site_generator:_claim_table_row",
+      "location": {
+        "file": "src/agentic_project_kit/site_generator.py",
+        "line": 1263
+      }
+    },
+    {
+      "expression": "getattr(item, 'evidence_type', '')",
+      "function": "agentic_project_kit.site_generator:_claim_table_row",
+      "location": {
+        "file": "src/agentic_project_kit/site_generator.py",
+        "line": 1264
+      }
+    },
+    {
       "expression": "getattr(result, 'next_action', '')",
       "function": "agentic_project_kit.transfer_post_merge_state:post_merge_state",
       "location": {
@@ -12912,403 +13304,11 @@
       }
     },
     {
-      "expression": "getattr(self, '_gatekeeper_status', None)",
-      "function": "agentic_project_kit.gui_cockpit_sidebar:CockpitSidebarMixin.update_mode_explanation",
+      "expression": "getattr(self, 'sequence_steps', None)",
+      "function": "agentic_project_kit.transfer_uplink:TransferUplinkResult.as_json_data",
       "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_sidebar.py",
-        "line": 343
-      }
-    },
-    {
-      "expression": "getattr(self, '_gatekeeper_status', None)",
-      "function": "agentic_project_kit.gui_cockpit_sidebar:CockpitSidebarMixin.update_access_level",
-      "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_sidebar.py",
-        "line": 371
-      }
-    },
-    {
-      "expression": "getattr(response, 'status', 200)",
-      "function": "agentic_project_kit.post_release:urlopen_text",
-      "location": {
-        "file": "src/agentic_project_kit/post_release.py",
-        "line": 252
-      }
-    },
-    {
-      "expression": "getattr(event, 'num', None)",
-      "function": "agentic_project_kit.gui_guided:GuidedKitGui._scroll_tab",
-      "location": {
-        "file": "src/agentic_project_kit/gui_guided.py",
-        "line": 113
-      }
-    },
-    {
-      "expression": "getattr(event, 'delta', 0)",
-      "function": "agentic_project_kit.gui_guided:GuidedKitGui._scroll_tab",
-      "location": {
-        "file": "src/agentic_project_kit/gui_guided.py",
-        "line": 114
-      }
-    },
-    {
-      "expression": "getattr(self, 'task_text', None)",
-      "function": "agentic_project_kit.gui_guided:GuidedKitGui._remember_task",
-      "location": {
-        "file": "src/agentic_project_kit/gui_guided.py",
-        "line": 160
-      }
-    },
-    {
-      "expression": "getattr(self, 'task_text', None)",
-      "function": "agentic_project_kit.gui_guided:GuidedKitGui.switch_project_root",
-      "location": {
-        "file": "src/agentic_project_kit/gui_guided.py",
-        "line": 230
-      }
-    },
-    {
-      "expression": "getattr(param, 'metavar', None)",
-      "function": "agentic_project_kit.command_manifest:_param_record",
-      "location": {
-        "file": "src/agentic_project_kit/command_manifest.py",
-        "line": 169
-      }
-    },
-    {
-      "expression": "getattr(param, 'required', False)",
-      "function": "agentic_project_kit.command_manifest:_param_record",
-      "location": {
-        "file": "src/agentic_project_kit/command_manifest.py",
-        "line": 167
-      }
-    },
-    {
-      "expression": "getattr(param, 'default', None)",
-      "function": "agentic_project_kit.command_manifest:_param_record",
-      "location": {
-        "file": "src/agentic_project_kit/command_manifest.py",
-        "line": 168
-      }
-    },
-    {
-      "expression": "getattr(param, 'opts', [])",
-      "function": "agentic_project_kit.command_manifest:_param_record",
-      "location": {
-        "file": "src/agentic_project_kit/command_manifest.py",
-        "line": 172
-      }
-    },
-    {
-      "expression": "getattr(param, 'secondary_opts', [])",
-      "function": "agentic_project_kit.command_manifest:_param_record",
-      "location": {
-        "file": "src/agentic_project_kit/command_manifest.py",
-        "line": 173
-      }
-    },
-    {
-      "expression": "getattr(param, 'help', None)",
-      "function": "agentic_project_kit.command_manifest:_param_record",
-      "location": {
-        "file": "src/agentic_project_kit/command_manifest.py",
-        "line": 174
-      }
-    },
-    {
-      "expression": "getattr(param, 'is_flag', False)",
-      "function": "agentic_project_kit.command_manifest:_param_record",
-      "location": {
-        "file": "src/agentic_project_kit/command_manifest.py",
-        "line": 175
-      }
-    },
-    {
-      "expression": "getattr(param, 'multiple', False)",
-      "function": "agentic_project_kit.command_manifest:_param_record",
-      "location": {
-        "file": "src/agentic_project_kit/command_manifest.py",
-        "line": 176
-      }
-    },
-    {
-      "expression": "getattr(command, 'commands', None)",
-      "function": "agentic_project_kit.command_manifest:_walk",
-      "location": {
-        "file": "src/agentic_project_kit/command_manifest.py",
-        "line": 196
-      }
-    },
-    {
-      "expression": "getattr(command, 'commands', None)",
-      "function": "agentic_project_kit.command_manifest:build_reference_from_app",
-      "location": {
-        "file": "src/agentic_project_kit/command_manifest.py",
-        "line": 543
-      }
-    },
-    {
-      "expression": "getattr(root, 'name', None)",
-      "function": "agentic_project_kit.command_manifest:build_reference_from_app",
-      "location": {
-        "file": "src/agentic_project_kit/command_manifest.py",
-        "line": 526
-      }
-    },
-    {
-      "expression": "getattr(finding, key, '')",
-      "function": "agentic_project_kit.mutation_lock_audit:_finding_value",
-      "location": {
-        "file": "src/agentic_project_kit/mutation_lock_audit.py",
-        "line": 99
-      }
-    },
-    {
-      "expression": "getattr(self, 'task_editor_height', THEME.task_text_height)",
-      "function": "agentic_project_kit.gui_cockpit_task:CockpitTaskMixin._build_task_editor",
-      "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_task.py",
-        "line": 76
-      }
-    },
-    {
-      "expression": "getattr(event, 'width', 760)",
-      "function": "agentic_project_kit.gui_cockpit_task:CockpitTaskMixin._build_output_panel",
-      "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_task.py",
-        "line": 393
-      }
-    },
-    {
-      "expression": "getattr(event, 'num', None)",
-      "function": "agentic_project_kit.gui_cockpit_task:CockpitTaskMixin._on_activity_mousewheel",
-      "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_task.py",
-        "line": 406
-      }
-    },
-    {
-      "expression": "getattr(event, 'delta', 0)",
-      "function": "agentic_project_kit.gui_cockpit_task:CockpitTaskMixin._on_activity_mousewheel",
-      "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_task.py",
-        "line": 407
-      }
-    },
-    {
-      "expression": "getattr(self, 'output', None)",
-      "function": "agentic_project_kit.gui_cockpit_task:CockpitTaskMixin.write_output",
-      "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_task.py",
-        "line": 524
-      }
-    },
-    {
-      "expression": "getattr(self, 'busy_status_var', None)",
-      "function": "agentic_project_kit.gui_cockpit_task:CockpitTaskMixin._set_busy",
-      "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_task.py",
-        "line": 562
-      }
-    },
-    {
-      "expression": "getattr(self, 'busy_progress', None)",
-      "function": "agentic_project_kit.gui_cockpit_task:CockpitTaskMixin._set_busy",
-      "location": {
-        "file": "src/agentic_project_kit/gui_cockpit_task.py",
-        "line": 563
-      }
-    },
-    {
-      "expression": "getattr(owner, 'service_bridge', None)",
-      "function": "agentic_project_kit.gui_services:invoke_gui_service",
-      "location": {
-        "file": "src/agentic_project_kit/gui_services.py",
-        "line": 71
-      }
-    },
-    {
-      "expression": "getattr(item, 'id', '')",
-      "function": "agentic_project_kit.site_generator:_claim_summary_items",
-      "location": {
-        "file": "src/agentic_project_kit/site_generator.py",
-        "line": 788
-      }
-    },
-    {
-      "expression": "getattr(claim, 'id', '')",
-      "function": "agentic_project_kit.site_generator:_claim_summary_items",
-      "location": {
-        "file": "src/agentic_project_kit/site_generator.py",
-        "line": 791
-      }
-    },
-    {
-      "expression": "getattr(claim, 'text', '')",
-      "function": "agentic_project_kit.site_generator:_claim_summary_items",
-      "location": {
-        "file": "src/agentic_project_kit/site_generator.py",
-        "line": 792
-      }
-    },
-    {
-      "expression": "getattr(claim, 'evidence', ())",
-      "function": "agentic_project_kit.site_generator:_claim_table_row",
-      "location": {
-        "file": "src/agentic_project_kit/site_generator.py",
-        "line": 1263
-      }
-    },
-    {
-      "expression": "getattr(claim, 'id', '')",
-      "function": "agentic_project_kit.site_generator:_claim_table_row",
-      "location": {
-        "file": "src/agentic_project_kit/site_generator.py",
-        "line": 1259
-      }
-    },
-    {
-      "expression": "getattr(claim, 'text', '')",
-      "function": "agentic_project_kit.site_generator:_claim_table_row",
-      "location": {
-        "file": "src/agentic_project_kit/site_generator.py",
-        "line": 1260
-      }
-    },
-    {
-      "expression": "getattr(claim, 'status', '')",
-      "function": "agentic_project_kit.site_generator:_claim_table_row",
-      "location": {
-        "file": "src/agentic_project_kit/site_generator.py",
-        "line": 1261
-      }
-    },
-    {
-      "expression": "getattr(claim, 'required', False)",
-      "function": "agentic_project_kit.site_generator:_claim_table_row",
-      "location": {
-        "file": "src/agentic_project_kit/site_generator.py",
-        "line": 1262
-      }
-    },
-    {
-      "expression": "getattr(item, 'evidence_type', '')",
-      "function": "agentic_project_kit.site_generator:_claim_table_row",
-      "location": {
-        "file": "src/agentic_project_kit/site_generator.py",
-        "line": 1264
-      }
-    },
-    {
-      "expression": "getattr(self, f'_step_{step_id.lower()}')",
-      "function": "agentic_project_kit.release_run:ReleaseRun._run_or_gate",
-      "location": {
-        "file": "src/agentic_project_kit/release_run.py",
-        "line": 119
-      }
-    },
-    {
-      "expression": "getattr(widget, '_agentic_tooltip', None)",
-      "function": "agentic_project_kit.gui_tk_widgets:attach_tooltip",
-      "location": {
-        "file": "src/agentic_project_kit/gui_tk_widgets.py",
-        "line": 152
-      }
-    },
-    {
-      "expression": "getattr(result, 'stdout', '')",
-      "function": "agentic_project_kit.safe_push:_completed_stdout",
-      "location": {
-        "file": "src/agentic_project_kit/safe_push.py",
-        "line": 63
-      }
-    },
-    {
-      "expression": "getattr(result, 'stderr', '')",
-      "function": "agentic_project_kit.safe_push:_completed_stderr",
-      "location": {
-        "file": "src/agentic_project_kit/safe_push.py",
-        "line": 67
-      }
-    },
-    {
-      "expression": "getattr(action, name)",
-      "function": "agentic_project_kit.gui_action_execution:_field",
-      "location": {
-        "file": "src/agentic_project_kit/gui_action_execution.py",
-        "line": 31
-      }
-    },
-    {
-      "expression": "getattr(finding, 'severity', 'FAIL')",
-      "function": "agentic_project_kit.documentation_system_audit:_blocking_lifecycle_findings",
-      "location": {
-        "file": "src/agentic_project_kit/documentation_system_audit.py",
-        "line": 279
-      }
-    },
-    {
-      "expression": "getattr(report, 'items')",
-      "function": "agentic_project_kit.cli_commands.release:_release_summary_lines_from_report",
-      "location": {
-        "file": "src/agentic_project_kit/cli_commands/release.py",
-        "line": 313
-      }
-    },
-    {
-      "expression": "getattr(report, 'version')",
-      "function": "agentic_project_kit.cli_commands.release:_write_release_summary_lines_artifact",
-      "location": {
-        "file": "src/agentic_project_kit/cli_commands/release.py",
-        "line": 322
-      }
-    },
-    {
-      "expression": "getattr(report, 'from_tag')",
-      "function": "agentic_project_kit.cli_commands.release:_write_release_summary_lines_artifact",
-      "location": {
-        "file": "src/agentic_project_kit/cli_commands/release.py",
-        "line": 323
-      }
-    },
-    {
-      "expression": "getattr(report, 'to_ref')",
-      "function": "agentic_project_kit.cli_commands.release:_write_release_summary_lines_artifact",
-      "location": {
-        "file": "src/agentic_project_kit/cli_commands/release.py",
-        "line": 324
-      }
-    },
-    {
-      "expression": "getattr(public_module, name)",
-      "function": "agentic_project_kit.cli_commands.transfer_shared:_public_transfer_attr",
-      "location": {
-        "file": "src/agentic_project_kit/cli_commands/transfer_shared.py",
-        "line": 125
-      }
-    },
-    {
-      "expression": "getattr(result.local_run, 'state', None)",
-      "function": "agentic_project_kit.cli_commands.transfer_shared:_dirty_state_from_result",
-      "location": {
-        "file": "src/agentic_project_kit/cli_commands/transfer_shared.py",
-        "line": 171
-      }
-    },
-    {
-      "expression": "getattr(definition, 'description', str(definition))",
-      "function": "agentic_project_kit.cli_commands.profiles:profile_explain_command",
-      "location": {
-        "file": "src/agentic_project_kit/cli_commands/profiles.py",
-        "line": 19
-      }
-    },
-    {
-      "expression": "getattr(definition, 'description', str(definition))",
-      "function": "agentic_project_kit.cli_commands.profiles:profile_explain_command",
-      "location": {
-        "file": "src/agentic_project_kit/cli_commands/profiles.py",
-        "line": 25
+        "file": "src/agentic_project_kit/transfer_uplink.py",
+        "line": 98
       }
     }
   ],
@@ -13322,11 +13322,27 @@
     "simulation": "NOT_RUN",
     "test_trace": "NOT_RUN"
   },
+  "historical_inventory": {
+    "added": [
+      "agentic-kit audit-drift-signals",
+      "agentic-kit context render",
+      "agentic-kit context report",
+      "agentic-kit greenfield retest",
+      "agentic-kit ledger report",
+      "agentic-kit release abandon"
+    ],
+    "command_count": 266,
+    "manifest_sha": "d1604f13011e",
+    "removed": [],
+    "source_commit": "ef78a255b22346fd5a583b8978da605542f4dabd",
+    "source_path": "docs/reports/COMMAND_USAGE_AUDIT_20261015.json"
+  },
   "input_sha256": {
     "docs/reference/agentic-kit-commands.json": "2258b693da2367291e853a35d0e4ebb4f145f32eaccfd02ebefe369e07ebad8c",
+    "docs/reports/COMMAND_USAGE_AUDIT_20261015.json": "f115a4889bfb047ddbffa8cddeafa67dd34498b694efdcfbe087d57076b7c6f8",
     "docs/reports/command_usage_audit_20261015/scripts/analyze.py": "5dd57432d24e76385af654e480cd70b074de3c9735edb71685359435b044484b",
-    "scripts/command_composition_audit.py": "ab9af657940e675d1605962104f5fb38cbc12a3701e43ee17dd64de9a5f4a2fe",
-    "scripts/command_composition_render.py": "0a9dcd2bd39c14336f8d14289ff28abf0ae7a9bd41bb32abd03d6e3117679cfb",
+    "scripts/command_composition_audit.py": "b1c571335fa99be6d814cc09be3d8db5a1274b0d64fe9e053c65c0df6b6dd686",
+    "scripts/command_composition_render.py": "c48dd436e795ee4c00de7a4711a17d975cfd06f4f985b0790b98ed9f3fc005ab",
     "src/agentic_project_kit/__init__.py": "2a581a552275010c420c9660878c0593e8297a6fa4f4f7de6d6f14de188a243e",
     "src/agentic_project_kit/absolute_path_portability_audit.py": "c73c15d1e6a9c6c5cbbfd46448555900016f812667bafbe5a43665b29b7ed223",
     "src/agentic_project_kit/access_level_policy.py": "dde8110f7880e9c66207a6bca686fe2d56582b043ab952a0c3bb40b0b87157a4",
