@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 220ccce0eb0528d9488f36b5f4f5e7e205a90cfd
-  short: 220ccce0
-  subject: Archive release 1.1.5 evidence (#2605)
+  full: d3f43be169fd8fa19cd9bd10e46a11f36e3e4f55
+  short: d3f43be1
+  subject: Complete the remaining local finding retest contracts and reconcile released progress (#2607)
 last_substantive_work_state:
-  full: 220ccce0eb0528d9488f36b5f4f5e7e205a90cfd
-  short: 220ccce0
-  subject: Archive release 1.1.5 evidence (#2605)
+  full: d3f43be169fd8fa19cd9bd10e46a11f36e3e4f55
+  short: d3f43be1
+  subject: Complete the remaining local finding retest contracts and reconcile released progress (#2607)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
