@@ -335,11 +335,11 @@
       "branch": "codex/k0-command-composition-audit",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "e802195cbf5eae334a0dff4e6dcbcb45bebac189",
+      "head": "eb5929856c0a628a4250ad7a77d0494b35723833",
       "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "61dcecbaf03fca628260cbb2ec0d0df31bd57905",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -522,11 +522,11 @@
     "branch": "codex/k0-command-composition-audit",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "e802195cbf5eae334a0dff4e6dcbcb45bebac189",
+    "head": "eb5929856c0a628a4250ad7a77d0494b35723833",
     "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "61dcecbaf03fca628260cbb2ec0d0df31bd57905",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {
