@@ -58,7 +58,7 @@ retests remain NOT_RUN_LOCALLY, so an all-family run remains INCOMPLETE, never P
   pushes in the new temporary fixture. The fixture now seeds its local bare
   origin with local fetches; no guard or exception allowlist was weakened.
   The static guard and three affected wheel contracts then passed (5 tests).
-- Final serial full suite: 3981 passed, 542 legacy-profile warnings, 497.32 seconds.
+- Final serial full suite: 3981 passed, 542 warnings, 497.32 seconds.
   Final closeout continued on 2026-10-23; the recorded test run belongs to this slice.
 
 ## Cockpit reconciliation (read only)
@@ -68,11 +68,15 @@ Committed evidence: docs/validation/evidence/kit-1.1.5-adoption.json in vfi64/ag
 It records PASS 38, FAIL 0, NO_MACHINE_CONTRACT 6, NOT_RUN_LOCALLY 40, overall
 INCOMPLETE (exit 3), and the ledger sync to Kit main 52f469f1. GF-081 and 082 are
 FIXED in 1.1.5, not VERIFIED_FIXED; GF-070 remains OPEN. Other unrun families retain
-FIXED rather than an invented verification. The checkout is on release/0.3.2;
-this slice leaves it, Download and its release state untouched. The local
-Cockpit interpreter still reports Kit 1.1.4: the committed 1.1.5 adoption evidence
-was collected in Claude's cloud work clone, not this Mac runtime. Do not confuse
-the repository adoption with a local runtime upgrade during that active release.
+FIXED rather than an invented verification.
+
+At the initial 2026-10-22 inspection the Mac checkout was on release/0.3.2 with
+local Kit 1.1.4; the committed adoption evidence came from Claude's cloud clone.
+The read-only continuation check on 2026-10-23 now finds clean main at
+`eb705614e1f64f2bf0ef1691b01fb4b38a94624b` (refresh PR381) and local Kit 1.1.5.
+GF-014/015/067 remain FIXED; GF-021/032/045 retain their existing independent
+VERIFIED_FIXED evidence; GF-070 remains OPEN and GF-081/082 remain FIXED in 1.1.5.
+This Kit slice has changed no Cockpit file, runtime, Download or release state.
 
 The new six contracts are development-wheel evidence until a later released Kit
 is adopted and retested in the Cockpit. They must not be attributed to 1.1.5 or

@@ -30,6 +30,8 @@ next_safe_substantive_slice:
     contract missing); Kit 1.1.5 and the Cockpit adoption PR376/refresh377 are
     complete. Before c2's remaining consumer verification, obtain an owner
     decision for a release carrying c1c and any owner-remote retests. Do not
-    repeat the 1.1.5 release or change the active Cockpit release/0.3.2 checkout.
+    repeat the 1.1.5 release or the completed Cockpit adoption. A read-only
+    continuation check on 2026-10-23 found Cockpit on clean main at eb705614
+    with local Kit 1.1.5; no Cockpit mutation belongs to this slice.
     Continue only after the current slice's reviewed closeout and post-merge
     checks. Do not manually patch generated successor handoff projections.

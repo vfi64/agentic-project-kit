@@ -2,6 +2,15 @@
   "adjudication_update": "Final development wheel closes KIT-GF-070 locally; fixed_in remains empty until release.",
   "baseline": "52f469f112a1ec4d5fceb8aec0a2657f185eacb4",
   "catalog_sha256": "158e559b4a08e50b28dad099e1d653069e6582e7393d6bb4bce51fa52daa9709",
+  "cockpit_read_only_continuation": {
+    "branch": "main",
+    "date": "2026-10-23",
+    "head": "eb705614e1f64f2bf0ef1691b01fb4b38a94624b",
+    "installed_kit": "1.1.5",
+    "ledger_boundary": "GF-070 OPEN, GF-014/015/067 FIXED, GF-021/032/045 retain earlier VERIFIED_FIXED evidence; GF-081/082 FIXED in 1.1.5. New contracts still require a later released Kit.",
+    "mutated_by_this_slice": false,
+    "status_output": ""
+  },
   "consumer_unchanged": true,
   "counts": {
     "FAIL": 0,
