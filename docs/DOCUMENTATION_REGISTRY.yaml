@@ -1775,3 +1775,7 @@ documents:
   - path: docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.json
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/command_composition_20261023/README.md
+    class: evidence/log
+    owner: maintainers
+    summary: Bounded K0 static command composition and shared mechanism review

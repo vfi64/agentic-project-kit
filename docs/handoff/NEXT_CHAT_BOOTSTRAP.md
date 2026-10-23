@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `4363414240bebb15dea92f02c005d2fc77dc8664` (`43634142`)
-- Handoff freshness marker: `43634142`
-- Branch at generation: `docs/post-pr2611-handoff-refresh`
+- HEAD: `61dcecbaf03fca628260cbb2ec0d0df31bd57905` (`61dcecba`)
+- Handoff freshness marker: `61dcecba`
+- Branch at generation: `codex/k0-command-composition-audit`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -81,7 +81,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 - `governance-doc-backfill` (active): Backfill reviewed governance document registry entries
 - `planning-ideas-residual-cleanup` (planned): Resolve remaining planning and idea residual documents
 - `pre-gui-hardening-plan` (active): Execute the pre-GUI hardening backlog in small wrapper-first slices
-- `decomplexification-audit-roadmap` (planned): Reduce command-surface complexity through compatibility-preserving facades
+- `decomplexification-audit-roadmap` (active): Reduce command-surface complexity through compatibility-preserving facades
 - `context-budgeted-handoff-projections` (planned): Reduce agent token consumption through deterministic context projections
 - `kit-control-effectiveness-measurement` (planned): Measure the effectiveness and cost of the Kit's own control mechanisms
 - `website-evidence-and-command-navigation` (planned): Improve the public website with gated quickstart, evidence and governed command navigation

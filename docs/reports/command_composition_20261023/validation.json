@@ -1,0 +1,60 @@
+{
+  "analysis_inventory_status": "COMPLETE",
+  "call_analysis_status": "PARTIAL_STATIC",
+  "final_targeted_audit_taxonomy_f4": {
+    "returncode": 0,
+    "summary": "35 passed, 2 warnings in 8.14s"
+  },
+  "full_local_regression": {
+    "returncode": 0,
+    "scope": "Full suite started with six audit tests; two additional boundary tests and final audit refinements were then checked in the final targeted run. CI checks the committed tree.",
+    "summary": "3994 passed, 542 warnings in 589.41s (0:09:49)"
+  },
+  "gates": {
+    "check_docs": {
+      "returncode": 0,
+      "status": "PASS"
+    },
+    "diff_check": {
+      "returncode": 0,
+      "status": "PASS"
+    },
+    "direction_validate": {
+      "returncode": 0,
+      "status": "PASS"
+    },
+    "docs_audit": {
+      "returncode": 0,
+      "status": "PASS"
+    },
+    "doctor": {
+      "returncode": 0,
+      "status": "PASS"
+    },
+    "manifest_audit": {
+      "returncode": 0,
+      "status": "PASS"
+    },
+    "ruff": {
+      "returncode": 0,
+      "status": "PASS"
+    }
+  },
+  "handoff_projection": {
+    "dpa": "ACCEPTED",
+    "returncode": 0,
+    "successor": "PASS"
+  },
+  "kind": "k0_local_validation",
+  "not_run": [
+    "dynamic_test_trace",
+    "simulation",
+    "benchmark",
+    "paid_model_calls",
+    "consumer_remote_retests"
+  ],
+  "review_state": "awaiting_owner_review",
+  "schema_version": 1,
+  "source_commit": "61dcecbaf03fca628260cbb2ec0d0df31bd57905",
+  "website_implementation_started": false
+}

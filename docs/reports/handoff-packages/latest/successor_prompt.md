@@ -39,7 +39,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2611-handoff-refresh`
+- branch: `codex/k0-command-composition-audit`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -245,7 +245,7 @@ Wenn der Bootstrap grün ist:
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
       "id": "decomplexification-audit-roadmap",
-      "status": "planned",
+      "status": "active",
       "summary": "Reduce command-surface complexity through compatibility-preserving facades"
     },
     {
@@ -466,14 +466,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2611-handoff-refresh",
+    "branch": "codex/k0-command-composition-audit",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "4363414240bebb15dea92f02c005d2fc77dc8664",
+    "head": "61dcecbaf03fca628260cbb2ec0d0df31bd57905",
     "head_matches_origin_main": true,
-    "head_short": "43634142",
+    "head_short": "61dcecba",
     "local_path": "cd /path/to/",
-    "origin_main": "4363414240bebb15dea92f02c005d2fc77dc8664",
-    "origin_main_short": "43634142",
+    "origin_main": "61dcecbaf03fca628260cbb2ec0d0df31bd57905",
+    "origin_main_short": "61dcecba",
     "worktree_clean": false
   }
 }
