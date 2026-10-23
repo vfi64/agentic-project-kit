@@ -1152,3 +1152,16 @@ tests/test_ns_legacy_external_evidence.py covers installed-wheel declared ledger
 quotes, blocking active scripts, malformed configuration, exact undeclared output
 compatibility with released 1.0.24, and unchanged Kit checkout context lists.
 The audit applies explicit path globs without new content heuristics.
+
+
+### Context benchmark validity regression (2026-10-23)
+
+`tests/test_context_benchmark_harness.py` checks the evolved planning fixture with
+its real validator: clean control PASS, canonical status injection FAIL, repair
+PASS. A composite task failure caused only by a missing commit cannot establish
+that T1's target gate rejected the injected fault. Snapshot regression tests check
+that reference solutions and original Git objects are absent; a macOS child-process
+test checks evaluator-file read denial. Without that native backend, real-agent
+benchmark mode refuses to run; deterministic self-tests remain portable. Historical
+pilot measurements and the original self-test stay historical, with validity
+limitations recorded in the part-2 preregistration amendment.

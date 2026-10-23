@@ -2292,18 +2292,20 @@ plans:
       the clean control; Kit 1.0.25 detected 5 of 10 injectable ones, and in three
       the fault actually ran. The benchmark found that transfer remote-next could
       not complete any ACK-headed order (ScannerError), fixed in the same slice.
-    part2_status: prepared
+    part2_status: harness_repair
     part2_evidence:
     - docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_PART2_20261016.md
     - docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_PART2_BASELINE.json
     - docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_PART2_SELF_TEST.json
-    part2_result: Baseline measured (successor required reads about 210,000 estimated
-      tokens, the command manifest alone about 135,000; task packets about 3,600, about
-      1.7 percent). Harness with five tasks, deterministic success and ledger method
-      checks; self-test 5 of 5 valid, and raw-git and hand-edit shortcuts fail the
-      method check. Hypotheses, pilot, main run and stopping rules are preregistered.
-    part2_needs: an owner decision on the agent (headless API agent with usage report
-      recommended), the token budget and five or eight tasks; then pilot and main run.
+    part2_result: Pilot completed with validity limitations. T1 injection missed the
+      validator target after planning changes; reference solutions were visible in
+      the checkout and history (observed reads in T1/C and T5/B). No confirmatory
+      conclusion. T3 descriptive medians show fewer tokens with the packet, n=2
+      per arm. Preserve the original preregistration and historical self-test;
+      amend the harness before collecting further evidence.
+    part2_needs: Validate structural fault injection and evaluator isolation, then
+      decide on an amended pilot before the main experiment. No additional agent
+      runs are part of the harness repair.
   out_of_scope:
   - An automatic narrative history (see discarded automatic-narrative-history-maintenance);
     at most an on-demand, uncommitted technical timeline from Git, releases and existing
