@@ -53,21 +53,35 @@ meta:
       sequence:
       - id: planning-reconciliation-20261021
         status: done
-        scope: This reconciliation; the next substantive slice in .agentic/operational_handoff_state.yaml
-          names the next item below.
-      - id: external-retest-machine-contracts
+        scope: Historical reconciliation; completed, not the current next action.
+      - id: decomplexification-audit-roadmap
+        step: k0-command-composition-reaudit
         status: next
-        scope: Machine contracts for the local findings that have none (KIT-GF-070), a resync of the
-          Cockpit ledger against the Kit catalog, then release 1.1.5 with KIT-GF-070, 081 and 082.
-      - id: kit-control-effectiveness-measurement
-        step: gate-and-context-benchmark
-        status: waiting_for_owner_decision
-        scope: Context benchmark part 2 after the owner chose the agent, the token budget and five or
-          eight tasks.
+        scope: Proposed next analysis after P0 closeout and a separate owner go;
+          reuse the command audit and review composition and shared mechanisms
+          before selecting or illustrating the website's preferred commands.
       - id: website-evidence-and-command-navigation
         status: planned
-        scope: Website improvement in the plan's own sequencing (W0 first, then W2; W1-P0 may run in
-          parallel).
+        scope: Follow the K0 review for selection and presentation. Evidence-integrity
+          repair is technically independent of K0 but is not started by P0.
+      - id: external-retest-machine-contracts
+        status: blocked
+        scope: Main item remains active; c1 and c3 are done, c2 is blocked pending
+          a later released Kit and consumer/owner-remote verification. Execution
+          is explicitly deferred while the command/website planning line proceeds.
+      - id: kit-control-effectiveness-measurement
+        step: gate-and-context-benchmark
+        status: deferred
+        scope: No further paid context-pilot runs now. Preserve the invalid T1 and
+          contaminated-reference limitations and historical evidence; deferral is
+          not a successful benchmark completion.
+      reordered_20261023:
+        basis: Owner deferred pilot repetitions and requested command-structure
+          analysis before the website; P0 reconciles that discussed sequence.
+        authorization_boundary: P0 is planning only. Queue position is not permission
+          to start K0, website implementation, a release or owner-remote retests.
+        status_semantics: Queue status and an item's lifecycle status are distinct;
+          explicit deferral does not close an active item or satisfy blocked acceptance.
     progress_update_20261022:
       release: Kit 1.1.5 completed (release PR2601, DOI PR2603, evidence PR2605, refresh PR2606).
       kit_baseline: 52f469f112a1ec4d5fceb8aec0a2657f185eacb4
@@ -93,10 +107,11 @@ meta:
     - Keep B2 blocked until explicit Brownfield completion acceptance; keep B3 Stage 1 report-only
       and Stage 2 maintainer-gated.
     - 'GF current progress: the development catalog completes KIT-GF-070 local contracts after
-      1.1.5 (44 local PASS, no missing contract); publication and consumer verification are
-      separate. Cockpit PR376/377 already resynced the ledger with 1.1.5. Finish reviewed
-      closeout, then obtain owner decisions for the next release and owner-remote retests;
-      never infer VERIFIED_FIXED from a Kit closure.'
+      1.1.5 (44 local PASS, no missing contract); publication and consumer verification remain
+      separate. Cockpit PR376/377 resynced the ledger with 1.1.5. The remaining c2 verification
+      is deferred, not done, while owner_order prioritizes command/website planning. A later
+      release and owner-remote retests require their own owner decisions; never infer
+      VERIFIED_FIXED from a Kit closure.'
     - Clear or explicitly defer lifecycle backlog and review remaining governance registrations
       before strict lifecycle adoption.
     - Reconcile partial implementations before starting registry, retention, onboarding or GUI
@@ -2012,6 +2027,43 @@ plans:
   - The first implementation slice should prefer the DPA stable API facade unless
     newer evidence shows transfer-lifecycle consolidation is no longer competing
     with active next-turn workflow work.
+  steps:
+  - id: k0-command-composition-reaudit
+    status: planned
+    kind: bounded_static_reaudit
+    scope: Reuse the 2026-10-15 command audit at a pinned current revision; add shared
+      mechanism candidates rather than a new classifier, tool platform or benchmark.
+    acceptance:
+    - Cover every current manifest entry; derive callbacks from the CLI and report
+      direct, internal, transitive, data-driven and unresolved call relationships.
+    - Reconcile manifest surface/task metadata, command_taxonomy composition_level,
+      core/recommendation heuristics and the website's literal selections; document
+      each view's purpose, authority, derivation, consumers and unresolved cases.
+    - Keep orthogonal roles distinct; a composite diagnostic is not inherently
+      inconsistent, and a primitive is not automatically a kernel mechanism.
+    - Add shared_core_candidates with callers, modules, evidence and uncertainty;
+      shared use alone does not prove core membership. Do not delete classifications.
+    - Verify one direct, one internal and one table-driven path; record today's F4
+      routing and confirm alias/compatibility relationships from implementation.
+    - Report source commit, manifest identity, per-step return codes, analysis
+      completeness and test status separately; tolerated trace failures are not PASS.
+    - Start with a bounded static preflight. Full test traces, simulations and remote
+      effects are not automatically authorized; no paid model runs or CLI changes.
+    review_gate: Discuss composition, unknowns and the requested functional Shell/
+      Microkernel interpretation before publishing a command/core map. Existing L0
+      kernel and GUI-shell meanings remain unchanged until an explicit decision;
+      use neutral public terms in the meantime.
+    evidence:
+    - docs/reports/COMMAND_USAGE_AUDIT_20261015.md
+    - src/agentic_project_kit/command_taxonomy.py
+    - src/agentic_project_kit/command_manifest.py
+    - tests/test_workflow_git_mutation_authority.py
+  follow_up_candidates:
+  - id: direction-queue-lifecycle-consistency-review
+    scope: Consider a targeted check within existing Direction staleness work for
+      genuinely contradictory queue/lifecycle/dependency statements. Define allowed
+      relationships first; do not require queue status to equal lifecycle status.
+    implementation_authorized: false
   preserved_information:
     audit_report: docs/reports/DECOMPLEXIFICATION_AUDIT_20260815.md
     machine_readable_appendix: docs/reports/DECOMPLEXIFICATION_AUDIT_20260815.json
@@ -2292,20 +2344,22 @@ plans:
       the clean control; Kit 1.0.25 detected 5 of 10 injectable ones, and in three
       the fault actually ran. The benchmark found that transfer remote-next could
       not complete any ACK-headed order (ScannerError), fixed in the same slice.
-    part2_status: harness_repair
+    part2_status: deferred
     part2_evidence:
     - docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_PART2_20261016.md
     - docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_PART2_BASELINE.json
     - docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_PART2_SELF_TEST.json
+    - docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_REPAIR_SELF_TEST_20261023.json
     part2_result: Pilot completed with validity limitations. T1 injection missed the
       validator target after planning changes; reference solutions were visible in
       the checkout and history (observed reads in T1/C and T5/B). No confirmatory
       conclusion. T3 descriptive medians show fewer tokens with the packet, n=2
       per arm. Preserve the original preregistration and historical self-test;
       amend the harness before collecting further evidence.
-    part2_needs: Validate structural fault injection and evaluator isolation, then
-      decide on an amended pilot before the main experiment. No additional agent
-      runs are part of the harness repair.
+    part2_needs: Harness repair and deterministic validation are complete (PR2609,
+      handoff PR2610); preserve the separate repair self-test. The owner deferred
+      costly pilot repetitions. No amended pilot or main experiment is authorized;
+      any resumption needs a concrete decision and explicit budget.
   out_of_scope:
   - An automatic narrative history (see discarded automatic-narrative-history-maintenance);
     at most an on-demand, uncommitted technical timeline from Git, releases and existing
@@ -2361,25 +2415,69 @@ plans:
     this plan authorizes no CLI removal, renaming or weakening of governance.
   - Exclude private consumer internals, personal background and unredacted figures.
   sequencing:
-  - W0 first; W2 next; W1-P0 may run in parallel with both.
+  - P0 reconciles planning only. K0 under decomplexification precedes command selection
+    and the command/core map; discuss its findings and terminology before W0b.
+  - W0a evidence integrity is technically K0-independent; it may start after P0 only
+    with its own go. Keep existing selection literals unchanged in W0a. No automatic
+    parallel execution is authorized by this planning update.
+  - W0b entry/quickstart follows K0 review and W0a. W2 follows W0b; W1-P0 inventory
+    can be coordinated with K0 without creating another classification authority.
   - D1 belongs to decomplexification, not website-only metadata management.
   - Full W1 navigation and W3 broad detail pages wait for D1 in their scope.
   - W4 is independent but lower priority than quickstart and measured evidence.
   steps:
   - id: w0-home-and-quickstart
     status: planned
-    priority: first_website_slice
+    priority: phased_after_p0
+    scope: Retained W0 umbrella; W0a and W0b below separate integrity from new selection.
+    steps:
+    - id: w0a-evidence-integrity
+      status: planned
+      priority: after_p0_with_separate_go_independent_of_k0
+      acceptance:
+      - Separate technical claim evidence from presentation/documentation assertions;
+        a rendered template cannot verify its own technical claim. Correct the four
+        identified claims without inventing current installability from an old test.
+      - Derive direct evidence inputs and cover relevant transitive code/test changes
+        in Pages build policy; a build-commit label does not replace build triggering.
+      - Validate existing literal command names against the manifest and block on a
+        missing/renamed required command. Project current safety/surface; do not yet
+        change the chosen commands or create a second preferred-selection authority.
+      - Remove unsupported maturity rankings; historical B1 evidence alone does not
+        establish a current primary path. Preserve factual requirements and scoped
+        observations; any later maturity claim needs defined criteria and evidence.
+      - Keep the existing claim status model and strict generated Pages fallback;
+        add focused injection checks instead of new infrastructure.
+    - id: w0b-entry-and-quickstart
+      status: planned
+      depends_on_step: k0-command-composition-reaudit
+      acceptance:
+      - After W0a and K0 review, consolidate existing purpose, bounded workflow,
+        distinctive mechanisms and limits; do not add a second feature authority.
+      - Select three to five preferred command families through the reviewed shared
+        authority; keep generator and adoption entry paths separate, and exclude
+        removal from the first-adoption sequence.
+      - Exercise the actual preview/execute/check sequence in a local isolated
+        fixture and assert states and gate outcomes; no model or real remote effects.
+      - Derive released availability from evidence and the actual release-tag sources;
+        name exact tested development revisions. Missing mandatory release sources
+        block that build; no silent fallback to current main or stale version 1.0.25.
+      - Present one real prevented fault with bounded public evidence (GF-078 is a
+        candidate). Distinguish regression, observed publishing and archive-merge
+        evidence; do not infer recovery-path execution or consumer VERIFIED_FIXED.
+      - Keep the complete generated command reference discoverable.
+  - id: w0c-generated-workflow-and-core-figures
+    status: planned
+    priority: separate_slice_after_entry_review
     acceptance:
-    - Explain purpose, bounded workflow and three to five preferred Kit commands.
-    - Check selected quickstart commands against decomplexification candidates.
-    - Resolve each referenced command against the canonical manifest; a missing
-      or renamed command must fail website generation, not silently degrade.
-    - Exercise the actual quickstart sequence in an isolated fixture-repository
-      smoke test and assert state and gate outcomes, not mere command existence.
-    - Label published v1.0.25 behavior separately from unshipped main behavior;
-      a main-only example must name its exact tested commit and availability.
-    - Present one real prevented fault only with a bounded evidence reference,
-      and keep the full generated command reference discoverable.
+    - Generate G2 work-cycle and G3 handoff views from their checked source projections;
+      render G0 command/core composition only after K0 and a terminology decision.
+    - Reuse and review existing SVGs; provide legible mobile views and text alternatives.
+      Correct runtime-map claim-status labels from the existing derived status model.
+    - Use neutral workflow/operation/shared-mechanism labels until any public Shell/
+      Microkernel usage is explicitly reconciled with the architecture contract.
+    - No image-generation API, historical private figure copying or additional
+      self-hosting-cycle graphic by default; retain sources and evidence boundaries.
   - id: w2-evidence-page
     status: planned
     priority: after_w0

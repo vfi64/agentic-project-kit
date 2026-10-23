@@ -25,13 +25,10 @@ freshness_policy:
     markers before they are used as authoritative orientation.
 next_safe_substantive_slice:
   text: >-
-    Follow docs/planning/PROJECT_DIRECTION.yaml#external-retest-machine-contracts:
-    c1 is implemented and validated in the development wheel (44 PASS, no local
-    contract missing); Kit 1.1.5 and the Cockpit adoption PR376/refresh377 are
-    complete. Before c2's remaining consumer verification, obtain an owner
-    decision for a release carrying c1c and any owner-remote retests. Do not
-    repeat the 1.1.5 release or the completed Cockpit adoption. A read-only
-    continuation check on 2026-10-23 found Cockpit on clean main at eb705614
-    with local Kit 1.1.5; no Cockpit mutation belongs to this slice.
-    Continue only after the current slice's reviewed closeout and post-merge
-    checks. Do not manually patch generated successor handoff projections.
+    Follow docs/planning/PROJECT_DIRECTION.yaml#meta.planning_reconciliation.owner_order
+    as the canonical queue. P0 is planning only: finish its reviewed closeout before
+    any new work. K0 command-composition analysis and website implementation need
+    their own go; no paid benchmark repetitions, release or owner-remote retests
+    are authorized here. external-retest-machine-contracts remains active with c2
+    blocked and deferred, not complete. Regenerate handoff projections from this
+    source; do not patch generated successor documents manually.
