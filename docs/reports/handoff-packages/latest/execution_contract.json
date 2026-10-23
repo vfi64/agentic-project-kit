@@ -335,11 +335,11 @@
       "branch": "codex/k0c-protection-mechanism-reachability",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "99e5038b2d7b88488561fb14b19b96dcbc71da09",
-      "head_matches_origin_main": true,
+      "head": "164f364f09a154e55b2b6251043abc520dd51ede",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "99e5038b2d7b88488561fb14b19b96dcbc71da09",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -522,11 +522,11 @@
     "branch": "codex/k0c-protection-mechanism-reachability",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "99e5038b2d7b88488561fb14b19b96dcbc71da09",
-    "head_matches_origin_main": true,
+    "head": "164f364f09a154e55b2b6251043abc520dd51ede",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "99e5038b2d7b88488561fb14b19b96dcbc71da09",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {
