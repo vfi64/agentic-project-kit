@@ -1,10 +1,10 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 83,
+    "CLOSED": 84,
     "NOT_APPLICABLE": 0,
     "OPEN": 0,
-    "PARTIAL": 1
+    "PARTIAL": 0
   },
   "execution_classes": {
     "kit_release": 7,
@@ -1019,18 +1019,95 @@
       "external_retest": {
         "bindings": {},
         "commands": [
-          "agentic-kit governance check --root ."
+          "agentic-kit transfer continue --json"
         ],
         "execution_class": "local",
         "expected": [
-          "Deterministic authority-drift finding; clean control passes."
+          "Stale continuation authority blocks before any action (steps=[]); aligned authority reaches the independent missing-order guard, never runs a transfer order."
         ],
         "expected_result_fields": {
-          "assertions": [
-            "Deterministic authority-drift finding; clean control passes."
-          ],
-          "process.returncode": 0,
-          "stdout.json_document_count": "text/JSON according to command manifest"
+          "machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."
+        },
+        "machine": {
+          "covers": "Stale continuation authority blocks before any action (steps=[]); aligned authority reaches the independent missing-order guard, never runs a transfer order.",
+          "fixture": "external_manifest",
+          "origin": true,
+          "steps": [
+            {
+              "write": {
+                "path": ".agentic/handoff_state.yaml",
+                "text": "fixture compatibility path\n"
+              }
+            },
+            {
+              "write": {
+                "path": ".agentic/state/handoff/handoff_state.yaml",
+                "text": "safe_state:\n  commit: deadbeef\nhandoff_maintenance:\n  latest_successor_prompt: docs/reports/terminal/after.md\n"
+              }
+            },
+            {
+              "write": {
+                "path": "docs/STATUS.md",
+                "text": "{fixture_head}\n"
+              }
+            },
+            {
+              "write": {
+                "path": "docs/handoff/CURRENT_HANDOFF.md",
+                "text": "{fixture_head}\n"
+              }
+            },
+            {
+              "write": {
+                "path": "docs/reports/terminal/after.md",
+                "text": "{fixture_head}\n"
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "BLOCKED",
+                  "steps": []
+                },
+                "json_contains": {
+                  "reasons": "stale_or_ambiguous_continuation_authority"
+                },
+                "returncode": 2
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "continue",
+                "--json"
+              ]
+            },
+            {
+              "replace": {
+                "new": "commit: {fixture_head}",
+                "old": "commit: deadbeef",
+                "path": ".agentic/state/handoff/handoff_state.yaml"
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "reasons": [
+                    "missing_transfer_order",
+                    "remote_report_not_pushed"
+                  ],
+                  "steps[0].ok": true,
+                  "steps[1].ok": true
+                },
+                "returncode": 2
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "continue",
+                "--json"
+              ]
+            }
+          ]
         },
         "preconditions": [
           "External continuation authority with deliberate stale or contradictory state.",
@@ -1038,10 +1115,11 @@
           "Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization."
         ],
         "remote_effects": [
-          "none"
+          "fetch",
+          "push"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
+        "verification": "New machine contract; installed-wheel validation required in this slice. Consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest"
       },
       "fixed_in": "1.0.13",
@@ -1056,18 +1134,89 @@
       "external_retest": {
         "bindings": {},
         "commands": [
-          "agentic-kit check --json"
+          "agentic-kit docs-audit --json"
         ],
         "execution_class": "local",
         "expected": [
-          "Contradictions are reported; aligned registered facts pass."
+          "Registry-owned canonical fact: aligned managed projection passes, review-only drift stays advisory, managed drift blocks. No claim about arbitrary prose contradictions."
         ],
         "expected_result_fields": {
-          "assertions": [
-            "Contradictions are reported; aligned registered facts pass."
-          ],
-          "process.returncode": 0,
-          "stdout.json_document_count": 1
+          "machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."
+        },
+        "machine": {
+          "covers": "Registry-owned canonical fact: aligned managed projection passes, review-only drift stays advisory, managed drift blocks. No claim about arbitrary prose contradictions.",
+          "fixture": "external_manifest",
+          "origin": true,
+          "steps": [
+            {
+              "write": {
+                "path": ".agentic/registries/documentation.yaml",
+                "text": "version: 1\ndocuments: []\ncanonical_facts:\n- id: project.name\n  value: fixture-name\n  managed_paths: [managed.md]\n  review_paths: [review.md]\n"
+              }
+            },
+            {
+              "write": {
+                "path": "managed.md",
+                "text": "fixture-name\n"
+              }
+            },
+            {
+              "write": {
+                "path": "review.md",
+                "text": "Project-owned prose\n"
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS",
+                  "scope": "external"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "docs-audit",
+                "--json"
+              ]
+            },
+            {
+              "write": {
+                "path": "managed.md",
+                "text": "wrong-name\n"
+              }
+            },
+            {
+              "expect": {
+                "returncode": 1,
+                "stdout_contains": "canonical fact 'project.name' is missing from managed.md"
+              },
+              "run": [
+                "agentic-kit",
+                "docs-audit",
+                "--json"
+              ]
+            },
+            {
+              "write": {
+                "path": "managed.md",
+                "text": "fixture-name\n"
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "docs-audit",
+                "--json"
+              ]
+            }
+          ]
         },
         "preconditions": [
           "Registered project documents with deliberately contradictory canonical facts and intact control fixture.",
@@ -1078,7 +1227,7 @@
           "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
+        "verification": "New machine contract; installed-wheel validation required in this slice. Consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest"
       },
       "fixed_in": "1.0.13",
@@ -1315,14 +1464,40 @@
         ],
         "execution_class": "local",
         "expected": [
-          "Installed Kit is found; missing CLI is not falsely reported."
+          "An explicitly owned interpreter outside .venv contains the running Kit distribution and metadata; no Kit console script exists there or on PATH, and the isolated installation probe still returns FOUND."
         ],
         "expected_result_fields": {
-          "assertions": [
-            "Installed Kit is found; missing CLI is not falsely reported."
-          ],
-          "process.returncode": 0,
-          "stdout.json_document_count": 1
+          "machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."
+        },
+        "machine": {
+          "covers": "An explicitly owned interpreter outside .venv contains the running Kit distribution and metadata; no Kit console script exists there or on PATH, and the isolated installation probe still returns FOUND.",
+          "fixture": "external_owned_interpreter",
+          "steps": [
+            {
+              "append": {
+                "path": ".agentic/config.yaml",
+                "text": "\nkit:\n  interpreter: {kit_python}\n"
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "installation.candidate.source": "declared",
+                  "installation.reason": "installed",
+                  "installation.version": "{kit_version}",
+                  "result_status": "PASS",
+                  "status": "FOUND"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "kit",
+                "status",
+                "--json"
+              ]
+            }
+          ]
         },
         "preconditions": [
           "Installed wheel in workspace-owned interpreter; global PATH excludes agentic-kit.",
@@ -1333,7 +1508,7 @@
           "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
+        "verification": "New machine contract; installed-wheel validation required in this slice. Consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest"
       },
       "fixed_in": "1.0.23",
@@ -2020,14 +2195,63 @@
         ],
         "execution_class": "local",
         "expected": [
-          "No Kit repository package/document assumptions; explicit applicable blockers only."
+          "Real external release readiness with publication disabled, local origin, PR-number history and a generated committed successor package. All local gates run; no Kit checkout site or fixed document set is present. No live publication or GitHub acceptance claim."
         ],
         "expected_result_fields": {
-          "assertions": [
-            "No Kit repository package/document assumptions; explicit applicable blockers only."
-          ],
-          "process.returncode": 0,
-          "stdout.json_document_count": 1
+          "machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."
+        },
+        "machine": {
+          "covers": "Real external release readiness with publication disabled, local origin, PR-number history and a generated committed successor package. All local gates run; no Kit checkout site or fixed document set is present. No live publication or GitHub acceptance claim.",
+          "fixture": "external_release",
+          "origin": true,
+          "steps": [
+            {
+              "expect": {
+                "json": {
+                  "explicit_summary_lines": [
+                    "Add diagnostics with regression tests, verified release metadata and successor handoff evidence"
+                  ],
+                  "result_status": "PASS",
+                  "summary_lines_path": ".agentic/tmp/release-101-ready-summary-lines.json"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "release",
+                "ready",
+                "--version",
+                "1.0.1",
+                "--date",
+                "2026-10-22",
+                "--summary-line",
+                "Add diagnostics with regression tests, verified release metadata and successor handoff evidence",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": ""
+              },
+              "run": [
+                "git",
+                "status",
+                "--short",
+                "--untracked-files=no"
+              ]
+            },
+            {
+              "assert": {
+                "absent": [
+                  "tmp/release-101-summary-lines.json",
+                  "tmp/release-101-ready-summary-lines.json",
+                  "site/scripts/build.py",
+                  "docs/DOCUMENTATION_REGISTRY.yaml"
+                ]
+              }
+            }
+          ]
         },
         "preconditions": [
           "Prepared external release fixture; native package/version anchors and sufficient changelog categories.",
@@ -2038,7 +2262,7 @@
           "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
+        "verification": "New machine contract; installed-wheel validation required in this slice. Consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest"
       },
       "fixed_in": "1.0.15",
@@ -3085,14 +3309,82 @@
         ],
         "execution_class": "local",
         "expected": [
-          "Explicit summary reaches quality validation; unrelated diagnostics preserved."
+          "Derived one-category release notes block; an explicit three-category summary reaches both scan and preparation and passes. Independent gates run unchanged; no live publication claim."
         ],
         "expected_result_fields": {
-          "assertions": [
-            "Explicit summary reaches quality validation; unrelated diagnostics preserved."
-          ],
-          "process.returncode": 0,
-          "stdout.json_document_count": 1
+          "machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."
+        },
+        "machine": {
+          "covers": "Derived one-category release notes block; an explicit three-category summary reaches both scan and preparation and passes. Independent gates run unchanged; no live publication claim.",
+          "fixture": "external_release",
+          "origin": true,
+          "steps": [
+            {
+              "expect": {
+                "json": {
+                  "result_status": "BLOCKED"
+                },
+                "returncode": 2,
+                "stdout_contains": "lacks enough release-quality categories"
+              },
+              "run": [
+                "agentic-kit",
+                "release",
+                "ready",
+                "--version",
+                "1.0.1",
+                "--date",
+                "2026-10-22",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "explicit_summary_lines": [
+                    "Add diagnostics with regression tests, verified release metadata and successor handoff evidence"
+                  ],
+                  "result_status": "PASS",
+                  "summary_lines_path": ".agentic/tmp/release-101-ready-summary-lines.json"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "release",
+                "ready",
+                "--version",
+                "1.0.1",
+                "--date",
+                "2026-10-22",
+                "--summary-line",
+                "Add diagnostics with regression tests, verified release metadata and successor handoff evidence",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": ""
+              },
+              "run": [
+                "git",
+                "status",
+                "--short",
+                "--untracked-files=no"
+              ]
+            },
+            {
+              "assert": {
+                "absent": [
+                  "tmp/release-101-summary-lines.json",
+                  "tmp/release-101-ready-summary-lines.json",
+                  "site/scripts/build.py",
+                  "docs/DOCUMENTATION_REGISTRY.yaml"
+                ]
+              }
+            }
+          ]
         },
         "preconditions": [
           "External release fixture whose derived notes cover insufficient categories.",
@@ -3103,7 +3395,7 @@
           "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "required; this contract is not a successful external test result",
+        "verification": "New machine contract; installed-wheel validation required in this slice. Consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest"
       },
       "fixed_in": "1.0.17",
@@ -4508,11 +4800,114 @@
         ],
         "execution_class": "local",
         "expected": [
-          "PASS without missing literal executable; independent gates remain enforced."
+          "The real standard-error scan and release readiness spawn the workspace-owned Kit outside .venv with no Kit on PATH; all local gates pass. GitHub/PyPI/Zenodo publication is disabled, not simulated."
         ],
         "expected_result_fields": {
-          "result_status": "PASS",
-          "stderr": "no FileNotFoundError"
+          "machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."
+        },
+        "machine": {
+          "covers": "The real standard-error scan and release readiness spawn the workspace-owned Kit outside .venv with no Kit on PATH; all local gates pass. GitHub/PyPI/Zenodo publication is disabled, not simulated.",
+          "fixture": "external_release",
+          "origin": true,
+          "steps": [
+            {
+              "expect": {
+                "json": {
+                  "installation.candidate.source": "declared",
+                  "installation.version": "{kit_version}",
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "kit",
+                "status",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "refresh-llm-context-carriers",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "standard-error-scan",
+                "--before-release",
+                "--version",
+                "1.0.1",
+                "--date",
+                "2026-10-22",
+                "--summary-line",
+                "Add diagnostics with regression tests, verified release metadata and successor handoff evidence",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "explicit_summary_lines": [
+                    "Add diagnostics with regression tests, verified release metadata and successor handoff evidence"
+                  ],
+                  "result_status": "PASS",
+                  "summary_lines_path": ".agentic/tmp/release-101-ready-summary-lines.json"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "release",
+                "ready",
+                "--version",
+                "1.0.1",
+                "--date",
+                "2026-10-22",
+                "--summary-line",
+                "Add diagnostics with regression tests, verified release metadata and successor handoff evidence",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": ""
+              },
+              "run": [
+                "git",
+                "status",
+                "--short",
+                "--untracked-files=no"
+              ]
+            },
+            {
+              "assert": {
+                "absent": [
+                  "tmp/release-101-summary-lines.json",
+                  "tmp/release-101-ready-summary-lines.json",
+                  "site/scripts/build.py",
+                  "docs/DOCUMENTATION_REGISTRY.yaml"
+                ]
+              }
+            }
+          ]
         },
         "preconditions": [
           "Disposable installed-wheel external workspace, synchronized command reference, valid release metadata, tracking main, prior tag and current context; declare kit.interpreter outside .venv."
@@ -4521,7 +4916,7 @@
           "none"
         ],
         "report": "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
-        "verification": "Resolver boundary fixtures PASS; live consumer retest remains independent.",
+        "verification": "New machine contract; installed-wheel validation required in this slice. Consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest"
       },
       "fixed_in": "1.0.25",
@@ -4685,14 +5080,14 @@
         ],
         "execution_class": "local",
         "expected": [
-          "A local retest with a machine contract returns PASS; a local retest without one returns NO_MACHINE_CONTRACT and a remote one NOT_RUN_LOCALLY, so the run is INCOMPLETE (exit 3), never PASS."
+          "Every local family carries a machine contract. Local PASS and remote NOT_RUN_LOCALLY together yield INCOMPLETE (exit 3), never a false PASS. A synthetic missing-contract countercheck remains covered by tests."
         ],
         "expected_result_fields": {
           "result_status": "PASS",
           "results[0].result": "PASS"
         },
         "machine": {
-          "covers": "a local contract runs to PASS, a local retest without a contract and a remote retest are reported as not verified",
+          "covers": "A local contract runs to PASS; a mixed local/remote selection stays INCOMPLETE and a malformed selection blocks. The missing-contract countercheck uses a synthetic catalog in the unit suite, so no deliberately unproved local family remains in the shipped catalog.",
           "fixture": "git_repository",
           "steps": [
             {
@@ -4716,7 +5111,7 @@
               "expect": {
                 "json": {
                   "result_status": "INCOMPLETE",
-                  "results[0].result": "NO_MACHINE_CONTRACT",
+                  "results[0].result": "PASS",
                   "results[1].result": "NOT_RUN_LOCALLY"
                 },
                 "returncode": 3
@@ -4761,10 +5156,10 @@
       },
       "fixed_in": "",
       "id": "KIT-GF-070",
-      "kit_state": "PARTIAL",
-      "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
+      "kit_state": "CLOSED",
+      "pr_reference_note": "C1 implementation complete in this development slice; fixed_in stays empty until an owner-approved release carries it. Consumer VERIFIED_FIXED remains independent.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md"
+      "report": "docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.md"
     },
     {
       "external_retest": {
@@ -6048,7 +6443,7 @@
     }
   ],
   "kind": "external_findings_status",
-  "machine_contracts": 38,
+  "machine_contracts": 44,
   "schema_version": 1,
-  "source_sha256": "7698139b2dc66e96be16020110f1017e98a81e970b51f569fe1cd0c331b4bd09"
+  "source_sha256": "158e559b4a08e50b28dad099e1d653069e6582e7393d6bb4bce51fa52daa9709"
 }

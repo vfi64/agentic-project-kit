@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Complete the six remaining local finding machine contracts (KIT-GF-014, 015, 021, 032, 045 and 067): exercise the repaired continuation/fact checks, isolate the installed Kit in an owned interpreter, and run real release readiness with a local origin and committed successor package. Keep missing-contract and remote/release cases fail-closed; consumer VERIFIED_FIXED remains evidence-owned.
+
 ## v1.1.5 - 2026-10-22
 
 - Run every repository-content check of the release-time `standard-gates-audit-suite` on each PR (a checkout test driven by the suite's own command list; only the state checks `release-publish --dry-run` and `audit-status-current-state` stay with the release run), and treat legacy shell-route calls quoted in the greenfield finding catalog as evidence, not as current instructions (KIT-GF-085, found when the first 1.1.5 release run stopped in `release ready`).

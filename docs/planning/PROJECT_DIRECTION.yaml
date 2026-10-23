@@ -68,17 +68,35 @@ meta:
         status: planned
         scope: Website improvement in the plan's own sequencing (W0 first, then W2; W1-P0 may run in
           parallel).
+    progress_update_20261022:
+      release: Kit 1.1.5 completed (release PR2601, DOI PR2603, evidence PR2605, refresh PR2606).
+      kit_baseline: 52f469f112a1ec4d5fceb8aec0a2657f185eacb4
+      cockpit_adoption: Kit 1.1.5 adopted by Cockpit PR376, successor refresh PR377.
+      cockpit_evidence: vfi64/agp-cockpit docs/validation/evidence/kit-1.1.5-adoption.json
+      external_result: 'PASS 38; FAIL 0; NO_MACHINE_CONTRACT 6; NOT_RUN_LOCALLY 40; INCOMPLETE (rc 3).'
+      boundary: The earlier reconciliation and owner sequence above record the 2026-10-21 baseline;
+        they are not current release status. The remaining six contracts belong to a development
+        slice after 1.1.5 and require a later release before consumer verification. No release
+        is authorized by this planning update. Cockpit release/0.3.2 is left untouched.
+    progress_update_20261023:
+      cockpit_branch: main
+      cockpit_head: eb705614e1f64f2bf0ef1691b01fb4b38a94624b
+      cockpit_local_kit: 1.1.5
+      cockpit_worktree: clean
+      boundary: Read-only continuation observation; this Kit slice changed no Cockpit file or runtime.
+        The local adoption is now complete. Only the unreleased c1c contracts and owner-remote
+        observations still require later consumer verification.
     remaining_priorities:
     - Follow owner_order above.
     - Reverify Comm-SCI Cycle 008 target state before continuing Brownfield; Cycle 007 with
       44 seams is the last committed completed-cycle baseline, not a current remote claim.
     - Keep B2 blocked until explicit Brownfield completion acceptance; keep B3 Stage 1 report-only
       and Stage 2 maintainer-gated.
-    - 'GF families: 80 numbered families (001-082 without 019 and 020) plus RULE-REGISTRY-BOOTSTRAP in the Kit catalog; KIT-GF-070
-      is PARTIAL (8 local families have machine contracts, 34 local ones have none, 39 need a remote
-      or release run); all others are CLOSED. In the Cockpit ledger 16 families (001-010, 012-016,
-      018) are still OPEN against a Kit closure, KIT-GF-081 awaits release and KIT-GF-082 is not
-      yet recorded. Cockpit owns VERIFIED_FIXED.'
+    - 'GF current progress: the development catalog completes KIT-GF-070 local contracts after
+      1.1.5 (44 local PASS, no missing contract); publication and consumer verification are
+      separate. Cockpit PR376/377 already resynced the ledger with 1.1.5. Finish reviewed
+      closeout, then obtain owner decisions for the next release and owner-remote retests;
+      never infer VERIFIED_FIXED from a Kit closure.'
     - Clear or explicitly defer lifecycle backlog and review remaining governance registrations
       before strict lifecycle adoption.
     - Reconcile partial implementations before starting registry, retention, onboarding or GUI
@@ -4632,13 +4650,18 @@ plans:
   integrated_at: '2026-10-21'
   related_items:
   - kit-control-effectiveness-measurement
-  rationale: KIT-GF-070 is PARTIAL. `agentic-kit greenfield retest --all` under 1.1.4 in the external
-    Cockpit workspace returned PASS 8, FAIL 0, NO_MACHINE_CONTRACT 34, NOT_RUN_LOCALLY 37, so
-    VERIFIED_FIXED in a consumer ledger still needs hand-collected evidence for most families, and
-    16 Cockpit families stay OPEN against a Kit closure.
+  rationale: At the historical 1.1.4 baseline KIT-GF-070 was PARTIAL; the Cockpit retest returned
+    PASS 8, FAIL 0, NO_MACHINE_CONTRACT 34, NOT_RUN_LOCALLY 37, and 16 consumer families were
+    OPEN against a Kit closure. The step evidence below supersedes those baseline counts.
+    Kit closure and released-consumer VERIFIED_FIXED remain separate decisions.
   steps:
   - id: c1-local-machine-contracts
-    status: next
+    status: done
+    progress: c1a and c1b shipped in 1.1.5; c1c completes the remaining six contracts in a development
+      wheel. Installed-wheel all-family run has 44 PASS, 0 FAIL, 0 NO_MACHINE_CONTRACT and
+      40 NOT_RUN_LOCALLY; overall INCOMPLETE (rc 3). Consumer verification still awaits release.
+    evidence:
+    - docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.md
     acceptance:
     - 'Each family with execution class local gets an installed-wheel machine contract (fixture, argv
       steps, expected returncode and JSON fields) or an explicit reclassification with reason: KIT-GF-002,
@@ -4648,14 +4671,25 @@ plans:
     - '`greenfield retest --all` reports no NO_MACHINE_CONTRACT for a local family; KIT-GF-070 closes
       only then.'
   - id: c2-external-ledger-resync
-    status: planned
+    status: blocked
+    progress: The released-1.1.5 adoption and ledger resync already landed in Cockpit PR376 and
+      refresh PR377. Committed evidence records 38 PASS, no FAIL, six missing contracts and
+      40 non-local families; GF-081/082 are FIXED in 1.1.5, not VERIFIED_FIXED.
+    blocker: The six new contracts need a later released Kit and a consumer retest; owner-remote
+      families need their own authorized observations. Do not relabel unrun cases VERIFIED_FIXED.
+    external_evidence: vfi64/agp-cockpit docs/validation/evidence/kit-1.1.5-adoption.json
     acceptance:
     - The Cockpit retests the 16 OPEN-against-Kit-closure families with the released contracts and
       records VERIFIED_FIXED only from committed evidence; families that still fail are reported as
       reproduced_in, never closed by the Kit's claim.
     - KIT-GF-081 and 082 are recorded in the Cockpit ledger with their release.
   - id: c3-release-1-1-5
-    status: planned
+    status: done
+    result: Release 1.1.5 completed with GF-081/082 and the partial c1a/c1b contracts; GF-070 was
+      still PARTIAL (six local contracts missing). The original acceptance below was not fully
+      met by that release and must not be retroactively claimed as satisfied.
+    evidence:
+    - docs/reports/release/release-run-1.1.5.json
     acceptance:
     - Release 1.1.5 carries KIT-GF-070 (completed), 081 and 082 after the owner's go.
   source_files:

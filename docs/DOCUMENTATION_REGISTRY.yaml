@@ -1769,3 +1769,9 @@ documents:
   - path: docs/reports/release/release-run-1.1.5.json
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.md
+    class: evidence/log
+    owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.json
+    class: evidence/log
+    owner: maintainers

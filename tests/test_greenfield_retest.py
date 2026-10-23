@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PILOT = ["KIT-GF-001", "KIT-GF-066", "KIT-GF-070", "KIT-GF-072", "KIT-GF-074", "KIT-GF-075", "KIT-GF-076", "KIT-GF-077"]
 # external-retest-machine-contracts c1 (2026-10-21): local retests still without a machine contract.
 # The set may only shrink; a new local finding needs its contract in the same slice.
-LOCAL_WITHOUT_CONTRACT = {f"KIT-GF-{n}" for n in ("014", "015", "021", "032", "045", "067")}
+LOCAL_WITHOUT_CONTRACT = set()
 
 
 def _catalog():
@@ -64,6 +64,7 @@ def test_only_the_named_local_retests_lack_a_contract():
     records = {f["id"]: f["external_retest"] for f in build(ROOT)["findings"]}
     missing = {i for i, r in records.items() if r["execution_class"] == "local" and "machine" not in r}
     assert missing == LOCAL_WITHOUT_CONTRACT
+    assert _finding(_catalog(), "KIT-GF-070")["kit_state"] == "CLOSED"
 
 
 def test_every_pilot_contract_passes_with_the_installed_wheel_and_leaves_the_cwd_alone(installed_kit, tmp_path):
@@ -77,11 +78,24 @@ def test_every_pilot_contract_passes_with_the_installed_wheel_and_leaves_the_cwd
     assert list(cwd.iterdir()) == []
 
 
-def test_unproved_retests_are_incomplete_never_pass(installed_kit, tmp_path):
-    rc, result = _retest(installed_kit, tmp_path, "--id", "KIT-GF-014", "--id", "KIT-GF-073", "--id", "KIT-GF-055", "--json")
+def test_remote_retests_are_incomplete_never_pass(installed_kit, tmp_path):
+    rc, result = _retest(installed_kit, tmp_path, "--id", "KIT-GF-073", "--id", "KIT-GF-055", "--json")
     assert rc == 3 and result["result_status"] == "INCOMPLETE"
-    assert [r["result"] for r in result["results"]] == ["NO_MACHINE_CONTRACT", "NOT_RUN_LOCALLY", "NOT_RUN_LOCALLY"]
-    assert [r["execution_class"] for r in result["results"]] == ["local", "owner_remote", "kit_release"]
+    assert [r["result"] for r in result["results"]] == ["NOT_RUN_LOCALLY", "NOT_RUN_LOCALLY"]
+    assert [r["execution_class"] for r in result["results"]] == ["owner_remote", "kit_release"]
+    assert result["counts"]["PASS"] == 0
+
+
+def test_a_local_retest_without_a_contract_is_never_proven(monkeypatch):
+    from agentic_project_kit import greenfield_status, greenfield_retest
+
+    status = copy.deepcopy(build(ROOT))
+    finding = next(f for f in status["findings"] if f["id"] == "KIT-GF-014")
+    finding["external_retest"].pop("machine")
+    monkeypatch.setattr(greenfield_status, "read_status", lambda: status)
+    result = greenfield_retest.retest(["KIT-GF-014"])
+    assert result["result_status"] == "INCOMPLETE"
+    assert result["counts"]["NO_MACHINE_CONTRACT"] == 1
     assert result["counts"]["PASS"] == 0
 
 
@@ -200,3 +214,17 @@ def test_remote_next_and_remote_work_start_declare_their_push():
     assert check_route("agentic-kit transfer remote-work-start b")["remote_effects"] == ["fetch", "push"]
     entry = check_route("agentic-kit greenfield retest --id KIT-GF-001 --json")
     assert entry["remote_effects"] == ["none"] and entry["safety"] == "READ_ONLY"
+
+
+def test_release_fixture_requires_a_disposable_origin():
+    retest = copy.deepcopy(_finding(_catalog(), "KIT-GF-032")["external_retest"])
+    retest["machine"]["origin"] = False
+    with pytest.raises(ValueError, match="requires a local origin"):
+        validate_machine("KIT-GF-032", retest)
+
+
+def test_inherited_fixture_interpreter_cannot_redirect_the_runner(tmp_path, monkeypatch):
+    from agentic_project_kit.greenfield_retest import _environment
+
+    monkeypatch.setenv("AGENTIC_KIT_RETEST_PYTHON", "/untrusted/python")
+    assert "AGENTIC_KIT_RETEST_PYTHON" not in _environment(tmp_path)

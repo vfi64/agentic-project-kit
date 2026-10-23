@@ -247,34 +247,34 @@ Expected result fields: `{"assertions": ["one failure: next_mutation_allowed=tru
 Kit state: CLOSED; fixed_in: 1.0.13.
 Evidence: docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json
 
-Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+Execution class: local (effects: fetch, push); machine contract: Stale continuation authority blocks before any action (steps=[]); aligned authority reaches the independent missing-order guard, never runs a transfer order.
 
 Preconditions: External continuation authority with deliberate stale or contradictory state. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
-agentic-kit governance check --root .
+agentic-kit transfer continue --json
 ```
 
-Expected: Deterministic authority-drift finding; clean control passes.
+Expected: Stale continuation authority blocks before any action (steps=[]); aligned authority reaches the independent missing-order guard, never runs a transfer order.
 
-Expected result fields: `{"assertions": ["Deterministic authority-drift finding; clean control passes."], "process.returncode": 0, "stdout.json_document_count": "text/JSON according to command manifest"}`.
+Expected result fields: `{"machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."}`.
 
 ## KIT-GF-015
 
 Kit state: CLOSED; fixed_in: 1.0.13.
 Evidence: docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json
 
-Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+Execution class: local (effects: none); machine contract: Registry-owned canonical fact: aligned managed projection passes, review-only drift stays advisory, managed drift blocks. No claim about arbitrary prose contradictions.
 
 Preconditions: Registered project documents with deliberately contradictory canonical facts and intact control fixture. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
 ```text
-agentic-kit check --json
+agentic-kit docs-audit --json
 ```
 
-Expected: Contradictions are reported; aligned registered facts pass.
+Expected: Registry-owned canonical fact: aligned managed projection passes, review-only drift stays advisory, managed drift blocks. No claim about arbitrary prose contradictions.
 
-Expected result fields: `{"assertions": ["Contradictions are reported; aligned registered facts pass."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+Expected result fields: `{"machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."}`.
 
 ## KIT-GF-016
 
@@ -334,7 +334,7 @@ Expected result fields: `{"assertions": ["PASS/idempotent no-op; both requested 
 Kit state: CLOSED; fixed_in: 1.0.23.
 Evidence: docs/reports/greenfield/KIT-GF-021-workspace-kit-discovery-2026-10-10.md
 
-Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+Execution class: local (effects: none); machine contract: An explicitly owned interpreter outside .venv contains the running Kit distribution and metadata; no Kit console script exists there or on PATH, and the isolated installation probe still returns FOUND.
 
 Preconditions: Installed wheel in workspace-owned interpreter; global PATH excludes agentic-kit. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -342,9 +342,9 @@ Preconditions: Installed wheel in workspace-owned interpreter; global PATH exclu
 agentic-kit kit status --json
 ```
 
-Expected: Installed Kit is found; missing CLI is not falsely reported.
+Expected: An explicitly owned interpreter outside .venv contains the running Kit distribution and metadata; no Kit console script exists there or on PATH, and the isolated installation probe still returns FOUND.
 
-Expected result fields: `{"assertions": ["Installed Kit is found; missing CLI is not falsely reported."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+Expected result fields: `{"machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."}`.
 
 ## KIT-GF-022
 
@@ -523,7 +523,7 @@ Expected result fields: `{"assertions": ["Merge and post-merge closeout complete
 Kit state: CLOSED; fixed_in: 1.0.15.
 Evidence: docs/reports/greenfield/KIT-GF-032-external-release-ready-2026-10-03.md
 
-Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+Execution class: local (effects: none); machine contract: Real external release readiness with publication disabled, local origin, PR-number history and a generated committed successor package. All local gates run; no Kit checkout site or fixed document set is present. No live publication or GitHub acceptance claim.
 
 Preconditions: Prepared external release fixture; native package/version anchors and sufficient changelog categories. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -531,9 +531,9 @@ Preconditions: Prepared external release fixture; native package/version anchors
 agentic-kit release ready --version {version} --json
 ```
 
-Expected: No Kit repository package/document assumptions; explicit applicable blockers only.
+Expected: Real external release readiness with publication disabled, local origin, PR-number history and a generated committed successor package. All local gates run; no Kit checkout site or fixed document set is present. No live publication or GitHub acceptance claim.
 
-Expected result fields: `{"assertions": ["No Kit repository package/document assumptions; explicit applicable blockers only."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+Expected result fields: `{"machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."}`.
 
 ## KIT-GF-033
 
@@ -746,7 +746,7 @@ Expected result fields: `{"assertions": ["Header violation detected; valid lifec
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-045-release-summary-line-passthrough-2026-10-05.md
 
-Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+Execution class: local (effects: none); machine contract: Derived one-category release notes block; an explicit three-category summary reaches both scan and preparation and passes. Independent gates run unchanged; no live publication claim.
 
 Preconditions: External release fixture whose derived notes cover insufficient categories. Use the installed wheel and commands sync-entrypoints; no Kit source/tests or registry unless explicitly adopted. Commands containing bindings are argv templates; substitute declared workspace values. Remote/mutating execution requires owner authorization.
 
@@ -754,9 +754,9 @@ Preconditions: External release fixture whose derived notes cover insufficient c
 agentic-kit release ready --version {version} --summary-line "Regression tests and successor handoff preserve evidence" --json
 ```
 
-Expected: Explicit summary reaches quality validation; unrelated diagnostics preserved.
+Expected: Derived one-category release notes block; an explicit three-category summary reaches both scan and preparation and passes. Independent gates run unchanged; no live publication claim.
 
-Expected result fields: `{"assertions": ["Explicit summary reaches quality validation; unrelated diagnostics preserved."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+Expected result fields: `{"machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."}`.
 
 ## KIT-GF-046
 
@@ -1126,7 +1126,7 @@ Expected result fields: `{"assertions": ["schema_version=1; all families with re
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-067-owned-kit-subprocess-resolution-2026-10-13.md
 
-Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+Execution class: local (effects: none); machine contract: The real standard-error scan and release readiness spawn the workspace-owned Kit outside .venv with no Kit on PATH; all local gates pass. GitHub/PyPI/Zenodo publication is disabled, not simulated.
 
 Preconditions: Disposable installed-wheel external workspace, synchronized command reference, valid release metadata, tracking main, prior tag and current context; declare kit.interpreter outside .venv.
 
@@ -1136,9 +1136,9 @@ agentic-kit transfer standard-error-scan --before-release --version {version} --
 agentic-kit release ready --version {version} --json
 ```
 
-Expected: PASS without missing literal executable; independent gates remain enforced.
+Expected: The real standard-error scan and release readiness spawn the workspace-owned Kit outside .venv with no Kit on PATH; all local gates pass. GitHub/PyPI/Zenodo publication is disabled, not simulated.
 
-Expected result fields: `{"result_status": "PASS", "stderr": "no FileNotFoundError"}`.
+Expected result fields: `{"machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."}`.
 
 ## KIT-GF-068
 
@@ -1177,10 +1177,10 @@ Expected result fields: `{"blocker_count": 0, "status": "PASS"}`.
 
 ## KIT-GF-070
 
-Kit state: PARTIAL; fixed_in: not established.
-Evidence: docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md
+Kit state: CLOSED; fixed_in: not established.
+Evidence: docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.md
 
-Execution class: local (effects: none); machine contract: a local contract runs to PASS, a local retest without a contract and a remote retest are reported as not verified
+Execution class: local (effects: none); machine contract: A local contract runs to PASS; a mixed local/remote selection stays INCOMPLETE and a malformed selection blocks. The missing-contract countercheck uses a synthetic catalog in the unit suite, so no deliberately unproved local family remains in the shipped catalog.
 
 Preconditions: Installed wheel; no Kit source, tests or documentation registry. `agentic-kit greenfield retest` builds the fixture in a temporary directory; nothing is read from or written to the consumer workspace.
 
@@ -1189,7 +1189,7 @@ agentic-kit greenfield retest --id KIT-GF-066 --json
 agentic-kit greenfield retest --id KIT-GF-014 --id KIT-GF-073 --json
 ```
 
-Expected: A local retest with a machine contract returns PASS; a local retest without one returns NO_MACHINE_CONTRACT and a remote one NOT_RUN_LOCALLY, so the run is INCOMPLETE (exit 3), never PASS.
+Expected: Every local family carries a machine contract. Local PASS and remote NOT_RUN_LOCALLY together yield INCOMPLETE (exit 3), never a false PASS. A synthetic missing-contract countercheck remains covered by tests.
 
 Expected result fields: `{"result_status": "PASS", "results[0].result": "PASS"}`.
 

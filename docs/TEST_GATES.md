@@ -34,6 +34,20 @@ schema and report coverage, signed export and installed-wheel external reads.
 actual completed step projection, incomplete-state rejection and evidence preservation.
 Consumer VERIFIED_FIXED is never inferred from these Kit adjudications.
 
+`tests/test_greenfield_retest.py` requires a machine contract for every local family
+(KIT-GF-070), exercises each through an installed wheel and keeps a synthetic
+NO_MACHINE_CONTRACT countercheck. GF-014 exercises the continuation authority,
+not governance check; GF-015 exercises canonical facts through docs-audit, not
+check. GF-021 uses an owned interpreter without a Kit console script; GF-067
+runs real nested diagnostics with an owned Kit outside .venv and outside PATH.
+The `external_release` fixture runs real release readiness against a local bare
+origin and a generated committed successor package (GF-032/045). Publication is
+none; missing GitHub metadata stays a warning. Only expected runtime carriers
+may remain untracked; tracked state must stay clean and root tmp summary files
+must remain absent. These fixtures never operate on the consumer checkout.
+The owned-console fixture currently fails explicitly on Windows rather than
+claiming a verification without a supported console launcher.
+
 ## Workspace Kit adoption gate
 
 `tests/test_kit_installation.py` verifies workspace-owned discovery without global
