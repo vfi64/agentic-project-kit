@@ -1779,3 +1779,7 @@ documents:
     class: evidence/log
     owner: maintainers
     summary: Bounded K0 static command composition and shared mechanism review
+  - path: docs/reports/protection_mechanisms_20261023/README.md
+    class: evidence/log
+    owner: maintainers
+    summary: K0c bounded protection-mechanism reachability and consumer taxonomy scan

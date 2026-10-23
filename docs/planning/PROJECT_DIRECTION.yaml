@@ -55,11 +55,11 @@ meta:
         status: done
         scope: Historical reconciliation; completed, not the current next action.
       - id: decomplexification-audit-roadmap
-        step: k0-command-composition-reaudit
+        step: k0c-protection-mechanism-reachability
         status: active
-        scope: Bounded K0 static analysis authorized by the owner after P0 closeout;
-          review its composition and shared-mechanism evidence before selecting
-          or illustrating the website's preferred commands.
+        scope: K0 merged in PR 2613 with handoff 2614 after independent review;
+          owner authorized K0c protection reachability followed by W0a.
+          No execution diagram or architecture terminology change is authorized.
       - id: website-evidence-and-command-navigation
         status: planned
         scope: Follow the K0 review for selection and presentation. Evidence-integrity
@@ -2029,8 +2029,8 @@ plans:
     with active next-turn workflow work.
   steps:
   - id: k0-command-composition-reaudit
-    status: active
-    analysis_status: awaiting_owner_review
+    status: done
+    analysis_status: reviewed_and_merged
     kind: bounded_static_reaudit
     scope: Reuse the 2026-10-15 command audit at a pinned current revision; add shared
       mechanism candidates rather than a new classifier, tool platform or benchmark.
@@ -2061,6 +2061,25 @@ plans:
     - src/agentic_project_kit/command_taxonomy.py
     - src/agentic_project_kit/command_manifest.py
     - tests/test_workflow_git_mutation_authority.py
+  - id: k0c-protection-mechanism-reachability
+    status: done
+    kind: bounded_static_reaudit
+    scope: Reverse static reachability for five named protection mechanisms,
+      compare the unchanged mutation-lock audit and map regression references;
+      scan the pinned owner-local Cockpit for dedicated taxonomy consumers.
+    acceptance:
+    - Include shortest potential function witnesses and lock alias/base entry points.
+    - Never interpret non-READ_ONLY entries as mutators or static reach as mandatory execution.
+    - Preserve advisory versus blocking scope of the existing mutation-lock audit.
+    - Publish no private consumer source, local paths or runtime data.
+    - Keep orchestrators, primitives/diagnostics and protection mechanisms distinct;
+      Kernel remains L0 and Microkernel is unsupported. No contract rename.
+    evidence:
+    - docs/reports/protection_mechanisms_20261023/README.md
+    - docs/reports/protection_mechanisms_20261023/reachability.json
+    - tests/test_protection_mechanism_audit.py
+    remaining_boundary: Recommendations and executable calls in K0 closure must be
+      distinguished before G0; this audit does not prove a universal kernel.
   follow_up_candidates:
   - id: direction-queue-lifecycle-consistency-review
     scope: Consider a targeted check within existing Direction staleness work for

@@ -11,6 +11,15 @@ frozen counts, names and step results. The K0 supplement reuses
 the 2026-10-15 analyzer; static may-call candidates remain distinct from runtime
 observations. No traced suite, simulation or benchmark is required by this audit.
 
+## Bounded protection-mechanism reachability
+
+`tests/test_protection_mechanism_audit.py` checks deterministic shortest witnesses,
+cycles, alias/base lock reachability, class-qualified regression references, scoped
+consumer token scans and data-derived rendering. The report reuses the historical
+function graph without treating subprocess recommendations as execution. Existing
+mutation-lock contract and classifier tests remain separate: textual audit PASS
+is not proof that every mutating route acquires a lock.
+
 ## Shared Kit executable discovery
 
 `tests/test_external_kit_resolution.py` runs real installed-wheel environments
