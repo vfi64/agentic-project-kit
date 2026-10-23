@@ -468,9 +468,9 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/gf070-remaining-contracts",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "92e0e823f08012a44dc74c70091439489e8eb73f",
+    "head": "978b5c484e8fd440022d18e941ca3716a377f610",
     "head_matches_origin_main": false,
-    "head_short": "92e0e823",
+    "head_short": "978b5c48",
     "local_path": "cd /path/to/",
     "origin_main": "52f469f112a1ec4d5fceb8aec0a2657f185eacb4",
     "origin_main_short": "52f469f1",
