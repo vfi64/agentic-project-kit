@@ -335,11 +335,11 @@
       "branch": "codex/p0-command-website-planning",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "a7fe7f92de491f425f59e1133a1eb14dfb83085b",
-      "head_matches_origin_main": true,
+      "head": "aa3b4038a28d7b1c8786f94a25ee9ea5b888b3b2",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "a7fe7f92de491f425f59e1133a1eb14dfb83085b",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -522,11 +522,11 @@
     "branch": "codex/p0-command-website-planning",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "a7fe7f92de491f425f59e1133a1eb14dfb83085b",
-    "head_matches_origin_main": true,
+    "head": "aa3b4038a28d7b1c8786f94a25ee9ea5b888b3b2",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "a7fe7f92de491f425f59e1133a1eb14dfb83085b",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {
