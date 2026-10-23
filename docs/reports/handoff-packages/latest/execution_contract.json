@@ -110,7 +110,7 @@
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
         "id": "decomplexification-audit-roadmap",
-        "status": "planned",
+        "status": "active",
         "summary": "Reduce command-surface complexity through compatibility-preserving facades"
       },
       {
@@ -332,14 +332,14 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2611-handoff-refresh",
+      "branch": "codex/k0-command-composition-audit",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "4363414240bebb15dea92f02c005d2fc77dc8664",
-      "head_matches_origin_main": true,
+      "head": "eb5929856c0a628a4250ad7a77d0494b35723833",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
-      "origin_main": "4363414240bebb15dea92f02c005d2fc77dc8664",
-      "worktree_clean": false
+      "origin_main": "61dcecbaf03fca628260cbb2ec0d0df31bd57905",
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -519,14 +519,14 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2611-handoff-refresh",
+    "branch": "codex/k0-command-composition-audit",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "4363414240bebb15dea92f02c005d2fc77dc8664",
-    "head_matches_origin_main": true,
+    "head": "eb5929856c0a628a4250ad7a77d0494b35723833",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
-    "origin_main": "4363414240bebb15dea92f02c005d2fc77dc8664",
-    "worktree_clean": false
+    "origin_main": "61dcecbaf03fca628260cbb2ec0d0df31bd57905",
+    "worktree_clean": true
   },
   "rules": [
     {

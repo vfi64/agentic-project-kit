@@ -1,5 +1,16 @@
 # Test Gates
 
+## Bounded command composition audit
+
+`tests/test_command_composition_audit.py` checks cycle-safe reachability, direct shared
+CLI owners, orthogonal metadata, literal/missing/computed website selections, source
+drift refusal, historical-inventory diffs and current-registry coverage. Enumeration
+order is reversed for the byte-stability comparison. Three path assertions cover
+direct argv, internal calls and standard-gate tables; renderer mutation tests reject
+frozen counts, names and step results. The K0 supplement reuses
+the 2026-10-15 analyzer; static may-call candidates remain distinct from runtime
+observations. No traced suite, simulation or benchmark is required by this audit.
+
 ## Shared Kit executable discovery
 
 `tests/test_external_kit_resolution.py` runs real installed-wheel environments

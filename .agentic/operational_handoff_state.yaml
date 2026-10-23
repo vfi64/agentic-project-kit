@@ -26,9 +26,10 @@ freshness_policy:
 next_safe_substantive_slice:
   text: >-
     Follow docs/planning/PROJECT_DIRECTION.yaml#meta.planning_reconciliation.owner_order
-    as the canonical queue. P0 is planning only: finish its reviewed closeout before
-    any new work. K0 command-composition analysis and website implementation need
-    their own go; no paid benchmark repetitions, release or owner-remote retests
-    are authorized here. external-retest-machine-contracts remains active with c2
+    as the canonical queue. P0 is closed. The owner authorized bounded K0 static
+    analysis; review docs/reports/command_composition_20261023/README.md before any
+    taxonomy, website-selection or terminology decision. Website implementation
+    needs its own go; no paid benchmark repetitions, release or owner-remote
+    retests are authorized here. external-retest-machine-contracts remains active with c2
     blocked and deferred, not complete. Regenerate handoff projections from this
     source; do not patch generated successor documents manually.

@@ -56,10 +56,10 @@ meta:
         scope: Historical reconciliation; completed, not the current next action.
       - id: decomplexification-audit-roadmap
         step: k0-command-composition-reaudit
-        status: next
-        scope: Proposed next analysis after P0 closeout and a separate owner go;
-          reuse the command audit and review composition and shared mechanisms
-          before selecting or illustrating the website's preferred commands.
+        status: active
+        scope: Bounded K0 static analysis authorized by the owner after P0 closeout;
+          review its composition and shared-mechanism evidence before selecting
+          or illustrating the website's preferred commands.
       - id: website-evidence-and-command-navigation
         status: planned
         scope: Follow the K0 review for selection and presentation. Evidence-integrity
@@ -2008,7 +2008,7 @@ plans:
   - docs/archive/FAILURE_MODE_REVIEW_AUTOMATION_PLAN.md
   - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
 - id: decomplexification-audit-roadmap
-  status: planned
+  status: active
   title: Reduce command-surface complexity through compatibility-preserving facades
   depends_on:
   - pre-gui-hardening-plan
@@ -2029,7 +2029,8 @@ plans:
     with active next-turn workflow work.
   steps:
   - id: k0-command-composition-reaudit
-    status: planned
+    status: active
+    analysis_status: awaiting_owner_review
     kind: bounded_static_reaudit
     scope: Reuse the 2026-10-15 command audit at a pinned current revision; add shared
       mechanism candidates rather than a new classifier, tool platform or benchmark.
@@ -2055,6 +2056,8 @@ plans:
       use neutral public terms in the meantime.
     evidence:
     - docs/reports/COMMAND_USAGE_AUDIT_20261015.md
+    - docs/reports/command_composition_20261023/README.md
+    - docs/reports/command_composition_20261023/composition.json
     - src/agentic_project_kit/command_taxonomy.py
     - src/agentic_project_kit/command_manifest.py
     - tests/test_workflow_git_mutation_authority.py

@@ -15,7 +15,7 @@ PR #1246 refreshed operational handoff after PR #1245.
 PR #1245 is an administrative handoff/evidence refresh after PR #1244.
 
 A successor chat must treat operational documentation freshness as part of handoff freshness: STATUS, CURRENT_HANDOFF, START_NEW_CHAT_PROMPT, NEXT_CHAT_BOOTSTRAP, and the active roadmap must mention current safe/admin markers before they are used as authoritative orientation.
-Follow docs/planning/PROJECT_DIRECTION.yaml#meta.planning_reconciliation.owner_order as the canonical queue. P0 is planning only: finish its reviewed closeout before any new work. K0 command-composition analysis and website implementation need their own go; no paid benchmark repetitions, release or owner-remote retests are authorized here. external-retest-machine-contracts remains active with c2 blocked and deferred, not complete. Regenerate handoff projections from this source; do not patch generated successor documents manually.
+Follow docs/planning/PROJECT_DIRECTION.yaml#meta.planning_reconciliation.owner_order as the canonical queue. P0 is closed. The owner authorized bounded K0 static analysis; review docs/reports/command_composition_20261023/README.md before any taxonomy, website-selection or terminology decision. Website implementation needs its own go; no paid benchmark repetitions, release or owner-remote retests are authorized here. external-retest-machine-contracts remains active with c2 blocked and deferred, not complete. Regenerate handoff projections from this source; do not patch generated successor documents manually.
 
 <!-- agentic:generated operational-handoff-state end -->
 

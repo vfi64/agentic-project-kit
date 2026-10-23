@@ -1,0 +1,71 @@
+{
+  "analysis_inventory_status": "COMPLETE",
+  "call_analysis_status": "PARTIAL_STATIC",
+  "final_targeted_audit_taxonomy_f4": {
+    "returncode": 0,
+    "summary": "37 passed, 2 warnings in 17.85s"
+  },
+  "full_local_regression": {
+    "returncode": 0,
+    "scope": "Final M1-M3 correction tree; full suite with four xdist workers and work stealing, without tracing.",
+    "summary": "3998 passed, 542 warnings in 528.25s (0:08:48)"
+  },
+  "gates": {
+    "check_docs": {
+      "returncode": 0,
+      "status": "PASS"
+    },
+    "diff_check": {
+      "returncode": 0,
+      "status": "PASS"
+    },
+    "direction_validate": {
+      "returncode": 0,
+      "status": "PASS"
+    },
+    "docs_audit": {
+      "returncode": 0,
+      "status": "PASS"
+    },
+    "doctor": {
+      "returncode": 0,
+      "status": "PASS"
+    },
+    "manifest_audit": {
+      "returncode": 0,
+      "status": "PASS"
+    },
+    "ruff": {
+      "returncode": 0,
+      "status": "PASS"
+    }
+  },
+  "handoff_projection": {
+    "dpa": "ACCEPTED",
+    "returncode": 0,
+    "successor": "PASS"
+  },
+  "kind": "k0_local_validation",
+  "not_run": [
+    "dynamic_test_trace",
+    "simulation",
+    "benchmark",
+    "paid_model_calls",
+    "consumer_remote_retests"
+  ],
+  "review_corrections": {
+    "K0c_started": false,
+    "M1": "Historical diff, taxonomy counts/names and actual in-process step results derived from data; renderer data-mutation test PASS.",
+    "M2": "Canonical dispatch sort; reversed rglob enumeration yields byte-identical serialized JSON in the integration test.",
+    "M3": "Assertions for direct sync-main argv, internal standard-gate call and table targets PASS.",
+    "call_data_comparison": "Unchanged after normalizing dispatch order and excluding new historical metadata/input hashes.",
+    "closure_use_limit": "Includes recommendation candidates; unsuitable for G0 execution diagrams or permission claims.",
+    "dispatch_sites": 119,
+    "linux_execution": "NOT_RUN",
+    "reviewed_head": "e802195cbf5eae334a0dff4e6dcbcb45bebac189"
+  },
+  "review_state": "awaiting_owner_review",
+  "schema_version": 1,
+  "source_commit": "61dcecbaf03fca628260cbb2ec0d0df31bd57905",
+  "website_implementation_started": false
+}
