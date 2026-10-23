@@ -32,7 +32,11 @@ from typing import Any
 
 EXECUTION_CLASSES = ("local", "owner_remote", "kit_release")
 LOCAL_EFFECTS = frozenset({"none", "fetch", "push"})
-FIXTURES = ("git_repository", "external_manifest")
+MANIFEST_FIXTURES = frozenset({
+    "external_manifest", "external_owned_runtime", "external_owned_interpreter", "external_release",
+})
+OWNED_FIXTURES = MANIFEST_FIXTURES - {"external_manifest"}
+FIXTURES = ("git_repository", *sorted(MANIFEST_FIXTURES))
 STEP_KINDS = ("run", "write", "append", "replace", "assert")
 EXPECT_KEYS = frozenset(
     {"returncode", "returncode_nonzero", "json", "json_contains", "stdout_contains", "stdout_equals"}
@@ -42,8 +46,8 @@ STEP_TIMEOUT_SECONDS = 600
 _PLACEHOLDER = re.compile(r"\{([a-z_][a-z0-9_]*)\}")
 # Built-in variables every contract may use: the interpreter and the version of the installed Kit
 # that runs the retest (kit.interpreter, version pins in CI templates) and, with ``origin: true``,
-# the local bare origin.
-BUILTIN_VARIABLES = ("kit_python", "kit_version")
+# the local bare origin. fixture_head is the baseline commit (empty in an unborn Git fixture).
+BUILTIN_VARIABLES = ("kit_python", "kit_version", "fixture_head")
 _PATH_TOKEN = re.compile(r"([^.\[\]]+)|\[(\d+)\]")
 
 
@@ -124,6 +128,8 @@ def validate_machine(finding_id: str, retest: dict[str, Any], routes=None) -> No
         raise ValueError(f"{finding_id}: invalid machine contract keys")
     if machine.get("fixture") not in FIXTURES or not isinstance(machine.get("origin", False), bool):
         raise ValueError(f"{finding_id}: unknown fixture")
+    if machine["fixture"] == "external_release" and not machine.get("origin"):
+        raise ValueError(f"{finding_id}: external_release requires a local origin")
     if not isinstance(machine.get("covers"), str) or not machine["covers"].strip():
         raise ValueError(f"{finding_id}: a machine contract states what it covers")
     steps = machine.get("steps")
@@ -222,7 +228,7 @@ def _environment(home: Path) -> dict[str, str]:
         "[init]\n\tdefaultBranch = main\n[commit]\n\tgpgsign = false\n[tag]\n\tgpgsign = false\n",
         encoding="utf-8",
     )
-    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_") and k != "AGENTIC_KIT_RETEST_PYTHON"}
     env.update({"GIT_CONFIG_GLOBAL": str(config), "GIT_CONFIG_NOSYSTEM": "1", "GIT_TERMINAL_PROMPT": "0"})
     # The OS temp root is the run's own directory, so a contract never sees or touches other
     # programs' temporary files (KIT-GF-028).
@@ -232,16 +238,17 @@ def _environment(home: Path) -> dict[str, str]:
     return env
 
 
-def _argv(argv: list[str]) -> list[str]:
+def _argv(argv: list[str], interpreter: str = sys.executable) -> list[str]:
     if argv[0] == "agentic-kit":
-        return [sys.executable, "-m", "agentic_project_kit.cli", *argv[1:]]
+        return [interpreter, "-m", "agentic_project_kit.cli", *argv[1:]]
     return argv
 
 
 def _run(argv: list[str], cwd: Path, env: dict[str, str]) -> subprocess.CompletedProcess:
     try:
         return subprocess.run(
-            _argv(argv), cwd=cwd, env=env, capture_output=True, text=True, timeout=STEP_TIMEOUT_SECONDS
+            _argv(argv, env.get("AGENTIC_KIT_RETEST_PYTHON", sys.executable)),
+            cwd=cwd, env=env, capture_output=True, text=True, timeout=STEP_TIMEOUT_SECONDS
         )
     except subprocess.TimeoutExpired:
         return subprocess.CompletedProcess(argv, 124, "", f"timed out after {STEP_TIMEOUT_SECONDS}s")
@@ -290,7 +297,7 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str]) -> tuple[
 
     variables: dict[str, str] = {"kit_python": sys.executable, "kit_version": __version__}
     setup = [["git", "init", "-b", "main"]]
-    if machine["fixture"] == "external_manifest":
+    if machine["fixture"] in MANIFEST_FIXTURES:
         setup += [
             ["agentic-kit", "workspace", "init", "--root", ".", "--name", "external", "--execute", "--json"],
             ["agentic-kit", "commands", "sync-entrypoints", "--execute", "--json"],
@@ -298,11 +305,11 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str]) -> tuple[
             ["git", "commit", "-m", "baseline"],
         ]
     if machine.get("origin"):
-        # The bare origin is cloned from the baseline and its tracking ref set locally, so the
-        # runner itself never pushes or fetches.
+        # Generic setup clones the baseline and sets its tracking ref locally.
+        # The release fixture later seeds this local origin from its prepared commits.
         origin = base / "origin.git"
         variables["origin"] = str(origin)
-        if machine["fixture"] == "external_manifest":
+        if machine["fixture"] in MANIFEST_FIXTURES:
             setup += [
                 ["git", "clone", "--bare", "--quiet", ".", str(origin)],
                 ["git", "remote", "add", "origin", str(origin)],
@@ -315,12 +322,28 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str]) -> tuple[
         completed = _run(argv, root, env)
         if completed.returncode != 0:
             return root, variables, [f"fixture step {' '.join(argv)} failed: {(completed.stderr or completed.stdout)[-400:]}"]
+    head = _run(["git", "rev-parse", "HEAD"], root, env)
+    variables["fixture_head"] = head.stdout.strip() if head.returncode == 0 else ""
+    if machine["fixture"] in OWNED_FIXTURES:
+        from agentic_project_kit.greenfield_retest_runtime import prepare_owned_runtime
+
+        try:
+            python = prepare_owned_runtime(base, env, console=machine["fixture"] != "external_owned_interpreter")
+            variables["kit_python"] = str(python)
+        except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
+            return root, variables, [f"owned runtime fixture failed: {exc}"]
+    if machine["fixture"] == "external_release":
+        from agentic_project_kit.greenfield_retest_release import prepare_release_fixture
+
+        failures = prepare_release_fixture(root, variables, env, _run)
+        if failures:
+            return root, variables, failures
     return root, variables, []
 
 
 def run_machine(machine: dict[str, Any]) -> dict[str, Any]:
     with tempfile.TemporaryDirectory(prefix="agentic-kit-retest-") as directory:
-        base = Path(directory)
+        base = Path(directory).resolve()
         env = _environment(base)
         root, variables, failures = _fixture(machine, base, env)
         steps: list[dict[str, Any]] = []
@@ -344,6 +367,7 @@ def run_machine(machine: dict[str, Any]) -> dict[str, Any]:
                         failed.append(f"capture failed: {exc}")
                 if failed:
                     record["stderr_tail"] = completed.stderr[-400:]
+                    record["stdout_tail"] = completed.stdout[-1600:]
             elif "assert" in step:
                 record["assert"] = raw["assert"]
                 failed += [f"{p} missing" for p in step["assert"].get("exists", []) if not (root / p).exists()]

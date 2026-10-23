@@ -25,8 +25,11 @@ freshness_policy:
     markers before they are used as authoritative orientation.
 next_safe_substantive_slice:
   text: >-
-    Follow meta.planning_reconciliation.owner_order in
-    docs/planning/PROJECT_DIRECTION.yaml (owner 2026-10-21): next is
-    external-retest-machine-contracts step c1, machine contracts for the local
-    findings without one (KIT-GF-070), from fresh main after post-merge closeout
-    reports NOOP. Do not manually patch generated successor handoff projections.
+    Follow docs/planning/PROJECT_DIRECTION.yaml#external-retest-machine-contracts:
+    c1 is implemented and validated in the development wheel (44 PASS, no local
+    contract missing); Kit 1.1.5 and the Cockpit adoption PR376/refresh377 are
+    complete. Before c2's remaining consumer verification, obtain an owner
+    decision for a release carrying c1c and any owner-remote retests. Do not
+    repeat the 1.1.5 release or change the active Cockpit release/0.3.2 checkout.
+    Continue only after the current slice's reviewed closeout and post-merge
+    checks. Do not manually patch generated successor handoff projections.

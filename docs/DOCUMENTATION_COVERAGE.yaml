@@ -3,6 +3,24 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: complete-local-finding-machine-contracts
+  description: Local finding contracts, isolated owned runtimes and verification limits stay visible.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_greenfield_retest.py
+    - NO_MACHINE_CONTRACT
+    - external_release
+    - KIT-GF-070
+  - path: docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.md
+    terms:
+    - KIT-GF-014
+    - KIT-GF-015
+    - KIT-GF-021
+    - KIT-GF-032
+    - KIT-GF-045
+    - KIT-GF-067
+    - VERIFIED_FIXED
 - id: external-legacy-audit-evidence-contexts
   description: Explicit external evidence contexts preserve undeclared and Kit audit boundaries.
   documents:

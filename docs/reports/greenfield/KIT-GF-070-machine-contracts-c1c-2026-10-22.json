@@ -1,0 +1,84 @@
+{
+  "adjudication_update": "Final development wheel closes KIT-GF-070 locally; fixed_in remains empty until release.",
+  "baseline": "52f469f112a1ec4d5fceb8aec0a2657f185eacb4",
+  "catalog_sha256": "158e559b4a08e50b28dad099e1d653069e6582e7393d6bb4bce51fa52daa9709",
+  "consumer_unchanged": true,
+  "counts": {
+    "FAIL": 0,
+    "NOT_RUN_LOCALLY": 40,
+    "NO_MACHINE_CONTRACT": 0,
+    "PASS": 44
+  },
+  "date": "2026-10-22",
+  "development_wheel": true,
+  "executed_contracts_equal_final_catalog": true,
+  "final_catalog_sha256": "158e559b4a08e50b28dad099e1d653069e6582e7393d6bb4bce51fa52daa9709",
+  "implementation_files_sha256": {
+    ".agentic/greenfield_findings.json": "6809f60b776d457ceec1d73677ed0daafb533ce8cc6648ea7ba0c180fe5049d8",
+    "src/agentic_project_kit/greenfield_retest.py": "387e9f01bf31a78a397eaab7d111502589941bf3e10d6e41fb6d26b1dcf05de0",
+    "src/agentic_project_kit/greenfield_retest_release.py": "5ed5d79e9394120075de598c8a7f37597c2b96f8d1ef79e6279e08cf24445e49",
+    "src/agentic_project_kit/greenfield_retest_runtime.py": "335f97edcd3ee90effd76573706bdea960c324c05a5e6de1fcd942bb06717a05"
+  },
+  "kind": "local_machine_contract_completion",
+  "kit_version": "1.1.5",
+  "release_boundary": "This is a development wheel with unchanged project metadata version 1.1.5, not the published 1.1.5 artifact. Consumer VERIFIED_FIXED is not changed.",
+  "result_status": "INCOMPLETE",
+  "returncode": 3,
+  "schema_version": 1,
+  "selected_results": [
+    {
+      "covers": "Stale continuation authority blocks before any action (steps=[]); aligned authority reaches the independent missing-order guard, never runs a transfer order.",
+      "failures": [],
+      "id": "KIT-GF-014",
+      "result": "PASS",
+      "step_count": 8
+    },
+    {
+      "covers": "Registry-owned canonical fact: aligned managed projection passes, review-only drift stays advisory, managed drift blocks. No claim about arbitrary prose contradictions.",
+      "failures": [],
+      "id": "KIT-GF-015",
+      "result": "PASS",
+      "step_count": 8
+    },
+    {
+      "covers": "An explicitly owned interpreter outside .venv contains the running Kit distribution and metadata; no Kit console script exists there or on PATH, and the isolated installation probe still returns FOUND.",
+      "failures": [],
+      "id": "KIT-GF-021",
+      "result": "PASS",
+      "step_count": 2
+    },
+    {
+      "covers": "Real external release readiness with publication disabled, local origin, PR-number history and a generated committed successor package. All local gates run; no Kit checkout site or fixed document set is present. No live publication or GitHub acceptance claim.",
+      "failures": [],
+      "id": "KIT-GF-032",
+      "result": "PASS",
+      "step_count": 3
+    },
+    {
+      "covers": "Derived one-category release notes block; an explicit three-category summary reaches both scan and preparation and passes. Independent gates run unchanged; no live publication claim.",
+      "failures": [],
+      "id": "KIT-GF-045",
+      "result": "PASS",
+      "step_count": 4
+    },
+    {
+      "covers": "The real standard-error scan and release readiness spawn the workspace-owned Kit outside .venv with no Kit on PATH; all local gates pass. GitHub/PyPI/Zenodo publication is disabled, not simulated.",
+      "failures": [],
+      "id": "KIT-GF-067",
+      "result": "PASS",
+      "step_count": 6
+    }
+  ],
+  "validation": {
+    "check_docs": "PASS",
+    "doctor": "PASS (76 report-only lifecycle findings)",
+    "full_serial_suite": {
+      "duration_seconds": 497.32,
+      "passed": 3981,
+      "returncode": 0,
+      "warnings": 542
+    },
+    "ruff": "PASS"
+  },
+  "wheel_sha256": "5dae0aa6da38c4156ed9f58221974c17ab5c2550f2cb162321fc43da388734c6"
+}
