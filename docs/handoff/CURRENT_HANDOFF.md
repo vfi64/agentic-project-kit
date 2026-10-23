@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `bf0d9ac130b34d4e96cb079209f4cb0f697e0b64` (`bf0d9ac1`), after `Audit current command composition and shared mechanisms (#2613)`.
-Last substantive work state is `bf0d9ac130b34d4e96cb079209f4cb0f697e0b64` (`bf0d9ac1`), after `Audit current command composition and shared mechanisms (#2613)`.
+Current verified main/admin HEAD is `144706e19ca51b48b8158e87b287de1de69cab3b` (`144706e1`), after `Audit static reach of shared protection mechanisms (#2615)`.
+Last substantive work state is `144706e19ca51b48b8158e87b287de1de69cab3b` (`144706e1`), after `Audit static reach of shared protection mechanisms (#2615)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

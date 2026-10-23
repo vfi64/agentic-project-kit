@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: bf0d9ac130b34d4e96cb079209f4cb0f697e0b64
-  short: bf0d9ac1
-  subject: Audit current command composition and shared mechanisms (#2613)
+  full: 144706e19ca51b48b8158e87b287de1de69cab3b
+  short: 144706e1
+  subject: Audit static reach of shared protection mechanisms (#2615)
 last_substantive_work_state:
-  full: bf0d9ac130b34d4e96cb079209f4cb0f697e0b64
-  short: bf0d9ac1
-  subject: Audit current command composition and shared mechanisms (#2613)
+  full: 144706e19ca51b48b8158e87b287de1de69cab3b
+  short: 144706e1
+  subject: Audit static reach of shared protection mechanisms (#2615)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
