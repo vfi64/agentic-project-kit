@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "source_commit": "99e5038b2d7b88488561fb14b19b96dcbc71da09",
+  "full_suite": {
+    "rc": 0,
+    "summary": "4003 passed, 542 warnings in 249.54s (0:04:09)"
+  },
+  "targeted_protection": {
+    "rc": 0,
+    "passed": 52
+  },
+  "final_audit_direction": {
+    "rc": 0,
+    "passed": 28
+  },
+  "ruff": {
+    "rc": 0
+  },
+  "check_docs": {
+    "rc": 0
+  },
+  "doctor": {
+    "rc": 0,
+    "scope": "PASS; lifecycle findings advisory"
+  },
+  "reproduction": {
+    "rc": 0,
+    "artifacts": [
+      "README.md",
+      "reachability.json"
+    ],
+    "comparison": "byte-identical before execution-status field clarification; final artifact checked by regression renderer test"
+  },
+  "limits": [
+    "No traced suite, simulation, paid agents, remote consumer mutation or universal-lock proof."
+  ]
+}
