@@ -4,6 +4,40 @@ Status: evidence and preregistration; part 2 of plan step `gate-and-context-benc
 Harness: `run_context_benchmark.py` in this directory
 Results: `CONTEXT_BENCHMARK_PART2_BASELINE.json` (`agentic-kit context report --json`), `CONTEXT_BENCHMARK_PART2_SELF_TEST.json` (harness self-test, no LLM)
 
+## Amendment after the pilot (2026-10-23)
+
+The original preregistration and historical self-test below are preserved. Their
+five-valid-tasks result is not evidence that the evolved checkout still injects
+the intended faults. The pilot exposed two validity defects: T1's text replacement
+changed nested owner-order metadata instead of a canonical planning item, and
+agents could read the evaluator's reference solutions from the working tree and
+Git history. No confirmatory conclusion follows from this pilot.
+
+The repaired harness selects a root roadmap/plans status through YAML node marks,
+preserving unrelated bytes. T1 validity requires the actual validator to pass on
+the control, fail after injection, and pass after repair, independently of the
+missing-commit outcome. Snapshots contain fresh sanitized Git history, with
+assessor files replaced by tombstones, and an owned dependency runtime. Real-agent
+mode requires macOS sandbox-exec to deny evaluator-source and evidence access in
+child processes; other platforms fail closed for real agents. This protects the
+named evaluator paths, not the entire host or network. Provider network access
+is outside this evaluator isolation boundary. Use a dedicated output directory
+outside the fixture; raw outputs and failed workspaces are retained. No agent
+runs were repeated as part of this repair.
+
+The full pilot used 40,884,580 tokens including cache replay and diagnostics and
+about 68.6 minutes of active runtime. Eleven normal completions passed technical
+and method checks, but T1 is invalid and direct reference reads contaminated
+T1/C/rep1 and T5/B/rep1. Administrative budget/quota interruptions and the stopped
+invalid T1/C run remain in the raw record. Only T3 has two clean repetitions per
+arm: median tokens B 1,000,067.5, C 363,285.5 (63.7% fewer); median seconds B 50.3,
+C 48.35. These are descriptive observations with n=2, not hypothesis confirmation.
+Raw pilot data remain local; no broad streams or credentials are committed.
+
+Next: validate the amended harness, then separately authorize an amended pilot
+before any main experiment. The historical self-test JSON is not overwritten. The amended deterministic run is
+recorded separately in `CONTEXT_BENCHMARK_REPAIR_SELF_TEST_20261023.json` (5/5 valid).
+
 ## Question
 
 Does an agent that gets a small, task-specific context packet solve Kit tasks as well as an agent that gets the current instruction to read the successor's required files, and how much context does it need?
@@ -53,11 +87,11 @@ This is progress on `context-budgeted-handoff-projections`, not its completion:
 
 ## 3. Harness
 
-`run_context_benchmark.py` reuses the offline sandbox of part 1: a bare clone serves as `origin`, and a working clone sits in a temporary directory.
+Originally the harness reused part 1's history clone. After the 2026-10-23 amendment, `run_context_benchmark.py` exports a sanitized snapshot into fresh local Git history; its bare clone serves as `origin`, and a working clone sits in a temporary directory.
 
 - **Pinned commit.** The sandbox is pinned to the checked-out commit.
 - **Preflight.** It fails closed (exit 2) if the `agentic-kit` on `PATH` would regenerate the command manifest differently from the committed one. Otherwise every task would start with unrelated drift.
-- **No network.** Nothing reaches the real repository or GitHub.
+- **Local fixture operations.** The controller uses a disposable local origin. This is not a network sandbox for the agent; provider access and host security are outside evaluator isolation.
 - **Ledger.** The invocation ledger is switched on in the sandbox, so every Kit command the agent calls is recorded.
 
 ### Tasks

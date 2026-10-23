@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import hashlib
 import json
 import os
 import random
@@ -48,6 +49,12 @@ sys.path.insert(0, str(REPO / "src"))
 
 from agentic_project_kit.context_budget import SUCCESSOR_REQUIRED_READS, render_packet  # noqa: E402
 
+_support_spec = importlib.util.spec_from_file_location("context_benchmark_support", HERE / "benchmark_support.py")
+assert _support_spec and _support_spec.loader
+support = importlib.util.module_from_spec(_support_spec)
+sys.modules[_support_spec.name] = support
+_support_spec.loader.exec_module(support)
+
 _spec = importlib.util.spec_from_file_location("gate_benchmark", REPO / "docs/reports/gate_benchmark_20261016/run_gate_benchmark.py")
 assert _spec and _spec.loader
 gb = importlib.util.module_from_spec(_spec)
@@ -58,10 +65,15 @@ ENV = {**gb.GIT_ENV, "AGENTIC_KIT_INVOCATION_LEDGER": "1"}
 ORIGIN_MAIN: list[str] = [""]
 PRISTINE_MAIN: list[str] = [""]
 STARTING_STATE: list[str] = [""]
+RUNTIME: list[Path | None] = [None]
 
 
 def sh(root: Path, argv: list[str], *, check: bool = True, timeout: int = 900) -> subprocess.CompletedProcess[str]:
-    completed = subprocess.run(argv, cwd=root, text=True, capture_output=True, env={**os.environ, **ENV}, timeout=timeout)
+    env = {**os.environ, **ENV}
+    if RUNTIME[0] is not None:
+        env.update(PATH=str(RUNTIME[0] / "bin") + os.pathsep + os.environ.get("PATH", ""),
+                   PYTHONPATH=str(root / "src"))
+    completed = subprocess.run(argv, cwd=root, text=True, capture_output=True, env=env, timeout=timeout)
     if check and completed.returncode != 0:
         raise RuntimeError(f"{' '.join(argv)} rc={completed.returncode}: {(completed.stdout + completed.stderr)[-800:]}")
     return completed
@@ -103,6 +115,7 @@ class Task:
     method: Callable[[list[dict]], bool]
     method_rule: str
     shortcut: Callable[[Path], None] | None = None
+    gate_check: Callable[[Path], bool] | None = None
 
 
 WORK_BRANCH = "bench/work"
@@ -122,7 +135,7 @@ def _commit(root: Path, branch: str, message: str, paths: list[str]) -> None:
 
 def t1_reference(root: Path) -> None:
     path = root / "docs/planning/PROJECT_DIRECTION.yaml"
-    path.write_text(path.read_text(encoding="utf-8").replace("  status: doing\n", "  status: planned\n", 1), encoding="utf-8")
+    support.set_direction_fault(path, repair=True)
     _commit(root, WORK_BRANCH, "Fix invalid plan status", ["docs/planning/PROJECT_DIRECTION.yaml"])
 
 
@@ -184,7 +197,7 @@ def t3_shortcut(root: Path) -> None:
 
 def t1_shortcut(root: Path) -> None:
     path = root / "docs/planning/PROJECT_DIRECTION.yaml"
-    path.write_text(path.read_text(encoding="utf-8").replace("  status: doing\n", "  status: planned\n", 1), encoding="utf-8")
+    support.set_direction_fault(path, repair=True)
     sh(root, ["git", "commit", "-q", "-am", "Fix status with raw git"])
 
 
@@ -244,9 +257,10 @@ TASKS: tuple[Task, ...] = (
     Task("T1", "invalid planning status",
          "`agentic-kit direction validate` fails in this repository. Make it pass without removing any planning item. "
          + SLICE_RULE,
-         gb._invalid_direction_status, t1_reference, t1_success,
+         lambda root: support.set_direction_fault(root / "docs/planning/PROJECT_DIRECTION.yaml"), t1_reference, t1_success,
          lambda r: used(r, "agentic-kit transfer commit", ok=True),
-         "transfer commit", t1_shortcut),
+         "transfer commit", t1_shortcut,
+         lambda root: gate_passes(root, ["agentic-kit", "direction", "validate"])),
     Task("T2", "unregistered runbook",
          f"A new runbook `{RUNBOOK}` was added. Keep it and make the documentation gates pass. " + SLICE_RULE,
          t2_inject, t2_reference, t2_success,
@@ -275,7 +289,7 @@ def origin_main(sandbox: Path) -> str:
     return sh(sandbox, ["git", "--git-dir", str(sandbox.parent / "origin.git"), "rev-parse", "main"]).stdout.strip()
 
 
-def prepare(sandbox: Path, task: Task) -> None:
+def prepare(sandbox: Path, task: Task, *, inject: bool = True) -> None:
     """Reset origin and the working clone; commit the task's fault on the slice branch as the starting state.
 
     T1-T4 start on ``bench/work`` with the fault as its last commit (a slice in progress, so no
@@ -284,7 +298,9 @@ def prepare(sandbox: Path, task: Task) -> None:
     origin = ["git", "--git-dir", str(sandbox.parent / "origin.git")]
     sh(sandbox, [*origin, "update-ref", "refs/heads/main", PRISTINE_MAIN[0]])
     sh(sandbox, ["git", "fetch", "-q", "--prune", "origin"])
-    gb._reset(sandbox)
+    sh(sandbox, ["git", "switch", "-q", "-f", "main"])
+    sh(sandbox, ["git", "reset", "--hard", "-q", "origin/main"])
+    sh(sandbox, ["git", "clean", "-fdxq"])
     for ref in sh(sandbox, ["git", "for-each-ref", "--format=%(refname:short)", "refs/heads/bench/"]).stdout.split():
         sh(sandbox, ["git", "branch", "-q", "-D", ref])
     for ref in sh(sandbox, [*origin, "for-each-ref", "--format=%(refname)", "refs/heads/bench/"]).stdout.split():
@@ -292,7 +308,8 @@ def prepare(sandbox: Path, task: Task) -> None:
     sh(sandbox, ["git", "fetch", "-q", "--prune", "origin"])
     if task.task_id != "T5":
         sh(sandbox, ["git", "switch", "-q", "-c", WORK_BRANCH])
-    task.inject(sandbox)
+    if inject:
+        task.inject(sandbox)
     if sh(sandbox, ["git", "status", "--porcelain"]).stdout.strip():
         sh(sandbox, ["git", "add", "-A"])
         sh(sandbox, ["git", "commit", "-q", "-m", f"Benchmark starting state {task.task_id}"])
@@ -307,6 +324,7 @@ def prepare(sandbox: Path, task: Task) -> None:
 
 def prompt_for(sandbox: Path, task: Task, condition: str) -> str:
     header = f"You work in the git repository at the current directory. Task {task.task_id}:\n\n{task.prompt}\n"
+    header += "\nUse the disposable runtime at .venv/bin/agentic-kit; its source is this fixture.\n"
     if condition == "B":
         reads = "\n".join(f"- {path}" for path, _ in SUCCESSOR_REQUIRED_READS)
         return header + "\nBefore you start, read these files in the repository:\n" + reads + "\n"
@@ -333,14 +351,18 @@ def self_test(sandbox: Path, task_ids: list[str]) -> list[dict]:
     for task in TASKS:
         if task_ids and task.task_id not in task_ids:
             continue
+        prepare(sandbox, task, inject=False)
+        control_gate_passes = task.gate_check(sandbox) if task.gate_check else True
         prepare(sandbox, task)
         before, before_detail = task.success(sandbox)
+        gate_failed_before = not task.gate_check(sandbox) if task.gate_check else not before
         error = ""
         try:
             task.reference(sandbox)
         except RuntimeError as exc:
             error = str(exc)[-600:]
         verdict = judge(sandbox, task)
+        gate_passed_after = task.gate_check(sandbox) if task.gate_check else verdict["success"]
         shortcut = {}
         if task.shortcut is not None:
             prepare(sandbox, task)
@@ -351,35 +373,59 @@ def self_test(sandbox: Path, task_ids: list[str]) -> list[dict]:
             "task": task.task_id,
             "title": task.title,
             "fails_before_fix": not before,
+            "control_gate_passes": control_gate_passes,
+            "target_gate_failed_before_fix": gate_failed_before if task.gate_check else None,
+            "target_gate_passed_after_fix": gate_passed_after if task.gate_check else None,
             "before_detail": before_detail,
             "reference_error": error,
             **verdict,
             **shortcut,
-            "valid": (not before) and verdict["success"] and verdict["method_ok"] and not error
-            and (not shortcut or (shortcut["shortcut_success"] and not shortcut["shortcut_method_ok"])),
+            "valid": control_gate_passes and support.self_test_valid(
+                outcome_failed_before=not before, gate_failed_before=gate_failed_before,
+                gate_passed_after=gate_passed_after, success=verdict["success"],
+                method_ok=verdict["method_ok"], origin_main_moved=verdict["origin_main_moved"],
+                reference_error=error, shortcut=shortcut),
         })
     return results
 
 
-def run_agent(sandbox: Path, task: Task, condition: str, agent_cmd: str, timeout: int) -> dict:
+def run_agent(sandbox: Path, task: Task, condition: str, agent_cmd: str, timeout: int, evidence_dir: Path) -> dict:
     prepare(sandbox, task)
+    if task.gate_check is not None and task.gate_check(sandbox):
+        raise RuntimeError("Target gate passed after fault injection; refuse agent run")
+    assert RUNTIME[0] is not None
+    support.expose_fixture_runtime(sandbox, RUNTIME[0])
     prompt = prompt_for(sandbox, task, condition)
     prompt_file = sandbox.parent / f"prompt-{task.task_id}-{condition}.md"
     prompt_file.write_text(prompt, encoding="utf-8")
-    argv = shlex.split(agent_cmd.format(prompt_file=str(prompt_file), workdir=str(sandbox)))
+    argv = support.agent_isolation_prefix([REPO, evidence_dir]) + shlex.split(
+        agent_cmd.format(prompt_file=str(prompt_file), workdir=str(sandbox)))
     started = time.monotonic()
+    stdout = stderr = ""
     try:
-        completed = subprocess.run(argv, cwd=sandbox, text=True, capture_output=True, timeout=timeout,
-                                   env={**os.environ, **ENV})
+        completed = support.run_agent_process(argv, cwd=sandbox, timeout=timeout,
+                                   env={**os.environ, **ENV, "PYTHONPATH": str(sandbox / "src"),
+                                        "PATH": str(RUNTIME[0] / "bin") + os.pathsep + os.environ.get("PATH", "")})
         agent_rc, timed_out = completed.returncode, False
-    except subprocess.TimeoutExpired:
+        stdout, stderr = completed.stdout, completed.stderr
+    except subprocess.TimeoutExpired as exc:
         agent_rc, timed_out = None, True
+        stdout = exc.stdout or ""
+        stderr = exc.stderr or ""
+        if isinstance(stdout, bytes):
+            stdout = stdout.decode(errors="replace")
+        if isinstance(stderr, bytes):
+            stderr = stderr.decode(errors="replace")
     seconds = round(time.monotonic() - started, 1)
+    evidence_id = f"{task.task_id}-{condition}-{time.time_ns()}"
+    (evidence_dir / f"{evidence_id}.stdout").write_text(stdout, encoding="utf-8")
+    (evidence_dir / f"{evidence_id}.stderr").write_text(stderr, encoding="utf-8")
     usage_path = sandbox / ".agentic/tmp/agent-usage.json"
     usage = json.loads(usage_path.read_text(encoding="utf-8")) if usage_path.exists() else {}
     return {
         "task": task.task_id,
         "condition": condition,
+        "evidence_id": evidence_id,
         "prompt_characters": len(prompt),
         "agent_returncode": agent_rc,
         "timed_out": timed_out,
@@ -395,20 +441,32 @@ def main() -> int:
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--self-test", action="store_true")
     parser.add_argument("--agent-cmd", help="command template with {prompt_file} and {workdir}")
-    parser.add_argument("--tasks", nargs="*", default=[])
-    parser.add_argument("--conditions", nargs="*", default=["B", "C"])
+    parser.add_argument("--tasks", nargs="*", choices=[task.task_id for task in TASKS], default=[])
+    parser.add_argument("--conditions", nargs="*", choices=["B", "C"], default=["B", "C"])
     parser.add_argument("--repetitions", type=int, default=1)
     parser.add_argument("--seed", type=int, default=1)
     parser.add_argument("--timeout", type=int, default=1800)
     args = parser.parse_args()
+    if args.repetitions < 1 or args.timeout < 1 or not args.conditions:
+        parser.error("require positive repetitions and timeout, and at least one condition")
     if not args.self_test and not args.agent_cmd:
         parser.error("pass --self-test or --agent-cmd")
 
+    evidence_dir = args.out.resolve().parent
+    evidence_dir.mkdir(parents=True, exist_ok=True)
+    completed_ok = False
     base = Path(tempfile.mkdtemp(prefix="kit-context-benchmark-"))
     try:
         # build_sandbox treats the literal "HEAD" as the repository's main branch; pin the checked-out commit.
         commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=REPO, text=True, capture_output=True, check=True).stdout.strip()
-        sandbox = gb.build_sandbox(REPO, base, commit)
+        if not args.self_test and base.resolve().is_relative_to(evidence_dir):
+            raise ValueError("Use a dedicated evidence directory outside the fixture parent")
+        sandbox, provenance = support.build_agent_snapshot(REPO, base, commit)
+        provenance["controller_sha256"] = {
+            name: hashlib.sha256((HERE / name).read_bytes()).hexdigest()
+            for name in ("run_context_benchmark.py", "benchmark_support.py")
+        }
+        RUNTIME[0] = support.build_fixture_runtime(base, REPO / ".venv/bin/python")
         head = sh(sandbox, ["git", "rev-parse", "HEAD"]).stdout.strip()
         PRISTINE_MAIN[0] = origin_main(sandbox)
         # The agentic-kit on PATH must be the Kit of the sandbox commit; otherwise its manifest differs
@@ -422,21 +480,36 @@ def main() -> int:
         if args.self_test:
             results = self_test(sandbox, args.tasks)
             report = {"schema_version": 1, "kind": "context_benchmark_self_test", "sandbox_head": head,
-                      "task_count": len(results), "valid_count": sum(r["valid"] for r in results), "results": results}
+                      "task_count": len(results), "valid_count": sum(r["valid"] for r in results), "results": results,
+                      "provenance": provenance}
         else:
+            support.agent_isolation_prefix([REPO, evidence_dir])
             runs = [(t, c, rep) for t in TASKS if not args.tasks or t.task_id in args.tasks
                     for c in args.conditions for rep in range(args.repetitions)]
             random.Random(args.seed).shuffle(runs)
-            results = [{**run_agent(sandbox, t, c, args.agent_cmd, args.timeout), "repetition": rep} for t, c, rep in runs]
+            results = []
+            for task, condition, repetition in runs:
+                result = {**run_agent(sandbox, task, condition, args.agent_cmd, args.timeout, evidence_dir),
+                          "repetition": repetition}
+                results.append(result)
+                args.out.write_text(json.dumps({"kind": "context_benchmark_checkpoint", "results": results,
+                                                "provenance": provenance}, indent=2) + "\n")
+                if result["origin_main_moved"] or result["timed_out"] or result["agent_returncode"] != 0:
+                    raise RuntimeError(f"Agent run stopped; evidence preserved in {evidence_dir}")
             report = {"schema_version": 1, "kind": "context_benchmark_runs", "sandbox_head": head, "seed": args.seed,
-                      "agent_cmd": re.sub(r"(key|token)=\S+", r"\1=***", args.agent_cmd), "results": results}
+                      "agent_cmd": re.sub(r"(key|token)=\S+", r"\1=***", args.agent_cmd), "results": results,
+                      "provenance": provenance}
         args.out.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
         for item in report["results"]:
             print(json.dumps({k: item[k] for k in item if k in {"task", "condition", "valid", "success", "method_ok",
                                                                 "success_detail", "reference_error"}}))
-        return 0
+        completed_ok = all(r["valid"] for r in results) if args.self_test else False
+        return 0 if not args.self_test or completed_ok else 1
     finally:
-        shutil.rmtree(base, ignore_errors=True)
+        if completed_ok:
+            shutil.rmtree(base, ignore_errors=True)
+        else:
+            print(f"EVIDENCE_WORKSPACE={base}")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Repair the context benchmark's planning fault injection and isolate reference solutions from agent-visible Git history; require T1's actual target gate to fail before accepting its self-test, preserve failed-run evidence, and record the pilot's validity limitations.
+
 - Complete the six remaining local finding machine contracts (KIT-GF-014, 015, 021, 032, 045 and 067): exercise the repaired continuation/fact checks, isolate the installed Kit in an owned interpreter, and run real release readiness with a local origin and committed successor package. Keep missing-contract and remote/release cases fail-closed; consumer VERIFIED_FIXED remains evidence-owned.
 
 ## v1.1.5 - 2026-10-22
