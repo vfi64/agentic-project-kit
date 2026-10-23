@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 2d2ac7b7b440677dc67a38933f6ad254367f1579
-  short: 2d2ac7b7
-  subject: Repair context benchmark fault validity and reference isolation (#2609)
+  full: 4363414240bebb15dea92f02c005d2fc77dc8664
+  short: 43634142
+  subject: Plan command composition review before website implementation (#2611)
 last_substantive_work_state:
-  full: 2d2ac7b7b440677dc67a38933f6ad254367f1579
-  short: 2d2ac7b7
-  subject: Repair context benchmark fault validity and reference isolation (#2609)
+  full: 4363414240bebb15dea92f02c005d2fc77dc8664
+  short: 43634142
+  subject: Plan command composition review before website implementation (#2611)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

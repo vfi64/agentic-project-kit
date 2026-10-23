@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: b9fe1e74f4f6920285c77253b21d04deb43bc8d30255a4b231f244578204fc16
 - docs/reference/agentic-kit-commands.json: 2258b693da2367291e853a35d0e4ebb4f145f32eaccfd02ebefe369e07ebad8c
-## Operational documentation refresh state after PR #2609
+## Operational documentation refresh state after PR #2611
 
-Current administrative handoff refresh state is `2d2ac7b7` (`Repair context benchmark fault validity and reference isolation (#2609)`). Continue next only after this post-PR2609 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `43634142` (`Plan command composition review before website implementation (#2611)`). Continue next only after this post-PR2611 refresh is committed and merged; the next substantive slice must be created from fresh main.
