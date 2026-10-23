@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4363414240bebb15dea92f02c005d2fc77dc8664
-  short: 43634142
-  subject: Plan command composition review before website implementation (#2611)
+  full: bf0d9ac130b34d4e96cb079209f4cb0f697e0b64
+  short: bf0d9ac1
+  subject: Audit current command composition and shared mechanisms (#2613)
 last_substantive_work_state:
-  full: 4363414240bebb15dea92f02c005d2fc77dc8664
-  short: 43634142
-  subject: Plan command composition review before website implementation (#2611)
+  full: bf0d9ac130b34d4e96cb079209f4cb0f697e0b64
+  short: bf0d9ac1
+  subject: Audit current command composition and shared mechanisms (#2613)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
