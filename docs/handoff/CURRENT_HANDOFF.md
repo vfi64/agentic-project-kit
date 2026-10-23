@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `d3f43be169fd8fa19cd9bd10e46a11f36e3e4f55` (`d3f43be1`), after `Complete the remaining local finding retest contracts and reconcile released progress (#2607)`.
-Last substantive work state is `d3f43be169fd8fa19cd9bd10e46a11f36e3e4f55` (`d3f43be1`), after `Complete the remaining local finding retest contracts and reconcile released progress (#2607)`.
+Current verified main/admin HEAD is `2d2ac7b7b440677dc67a38933f6ad254367f1579` (`2d2ac7b7`), after `Repair context benchmark fault validity and reference isolation (#2609)`.
+Last substantive work state is `2d2ac7b7b440677dc67a38933f6ad254367f1579` (`2d2ac7b7`), after `Repair context benchmark fault validity and reference isolation (#2609)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

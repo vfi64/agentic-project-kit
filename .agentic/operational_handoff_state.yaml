@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d3f43be169fd8fa19cd9bd10e46a11f36e3e4f55
-  short: d3f43be1
-  subject: Complete the remaining local finding retest contracts and reconcile released progress (#2607)
+  full: 2d2ac7b7b440677dc67a38933f6ad254367f1579
+  short: 2d2ac7b7
+  subject: Repair context benchmark fault validity and reference isolation (#2609)
 last_substantive_work_state:
-  full: d3f43be169fd8fa19cd9bd10e46a11f36e3e4f55
-  short: d3f43be1
-  subject: Complete the remaining local finding retest contracts and reconcile released progress (#2607)
+  full: 2d2ac7b7b440677dc67a38933f6ad254367f1579
+  short: 2d2ac7b7
+  subject: Repair context benchmark fault validity and reference isolation (#2609)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
