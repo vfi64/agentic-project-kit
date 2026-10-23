@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `220ccce0eb0528d9488f36b5f4f5e7e205a90cfd` (`220ccce0`), after `Archive release 1.1.5 evidence (#2605)`.
-Last substantive work state is `220ccce0eb0528d9488f36b5f4f5e7e205a90cfd` (`220ccce0`), after `Archive release 1.1.5 evidence (#2605)`.
+Current verified main/admin HEAD is `d3f43be169fd8fa19cd9bd10e46a11f36e3e4f55` (`d3f43be1`), after `Complete the remaining local finding retest contracts and reconcile released progress (#2607)`.
+Last substantive work state is `d3f43be169fd8fa19cd9bd10e46a11f36e3e4f55` (`d3f43be1`), after `Complete the remaining local finding retest contracts and reconcile released progress (#2607)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
@@ -15,7 +15,7 @@ PR #1246 refreshed operational handoff after PR #1245.
 PR #1245 is an administrative handoff/evidence refresh after PR #1244.
 
 A successor chat must treat operational documentation freshness as part of handoff freshness: STATUS, CURRENT_HANDOFF, START_NEW_CHAT_PROMPT, NEXT_CHAT_BOOTSTRAP, and the active roadmap must mention current safe/admin markers before they are used as authoritative orientation.
-Follow meta.planning_reconciliation.owner_order in docs/planning/PROJECT_DIRECTION.yaml (owner 2026-10-21): next is external-retest-machine-contracts step c1, machine contracts for the local findings without one (KIT-GF-070), from fresh main after post-merge closeout reports NOOP. Do not manually patch generated successor handoff projections.
+Follow docs/planning/PROJECT_DIRECTION.yaml#external-retest-machine-contracts: c1 is implemented and validated in the development wheel (44 PASS, no local contract missing); Kit 1.1.5 and the Cockpit adoption PR376/refresh377 are complete. Before c2's remaining consumer verification, obtain an owner decision for a release carrying c1c and any owner-remote retests. Do not repeat the 1.1.5 release or the completed Cockpit adoption. A read-only continuation check on 2026-10-23 found Cockpit on clean main at eb705614 with local Kit 1.1.5; no Cockpit mutation belongs to this slice. Continue only after the current slice's reviewed closeout and post-merge checks. Do not manually patch generated successor handoff projections.
 
 <!-- agentic:generated operational-handoff-state end -->
 
