@@ -51,6 +51,8 @@ class SourceFlow:
         self.functions = {}
         self.imports = {}
         self.stars = {}
+        self.exports = {}
+        self.shadowed = {}
         self.sites = {}
         self.summaries = {}
         self.witnesses = {}
@@ -69,6 +71,20 @@ class SourceFlow:
                             self.stars[module].append(n.module)
                         else:
                             self.imports[module][a.asname or a.name] = f"{n.module}.{a.name}"
+            self.shadowed[module] = {t.id for n in tree.body if isinstance(n, (ast.Assign, ast.AnnAssign))
+                                     for t in (n.targets if isinstance(n, ast.Assign) else [n.target]) if isinstance(t, ast.Name)}
+            export = next((n.value for n in tree.body if isinstance(n, ast.Assign)
+                           and any(isinstance(t, ast.Name) and t.id == '__all__' for t in n.targets)), None)
+            if export is None:
+                self.exports[module] = None  # Python's default public-name export rule.
+            elif ast.unparse(export) == "[name for name in globals() if not name.startswith('__')]":
+                self.exports[module] = 'non_dunder'
+            else:
+                try:
+                    value = ast.literal_eval(export)
+                    self.exports[module] = set(value) if isinstance(value, (list, tuple)) and all(isinstance(x, str) for x in value) else set()
+                except (ValueError, TypeError):
+                    self.exports[module] = set()  # Unknown export computation is not guessed.
             self._index(module, '', tree.body)
         self.dotted_functions = {fid.replace(':', '.'): fid for fid in self.functions}
 
@@ -89,14 +105,23 @@ class SourceFlow:
         parts = scope.split('.')
         for size in range(len(parts), -1, -1):
             name = '.'.join([*parts[:size], node.id])
-            if f"{module}:{name}" in self.functions:
+            if f"{module}:{name}" in self.functions and (size > 0 or node.id not in self.shadowed[module]):
                 return f"{module}:{name}"
+        if node.id in self.shadowed[module]:
+            return ''
         imported = self.imports[module].get(node.id)
         if imported:
             return self.function_id(imported) or imported
         # Star imports are ambiguous unless exactly one supplying module resolves.
         candidates = set()
         for other in self.stars[module]:
+            if other not in self.exports:
+                continue
+            exports = self.exports[other]
+            allowed = (not node.id.startswith('_') if exports is None else
+                       not node.id.startswith('__') if exports == 'non_dunder' else node.id in exports)
+            if not allowed or node.id in self.shadowed[other]:
+                continue
             q = f"{other}:{node.id}"
             if q in self.functions and not node.id.startswith('__'):
                 candidates.add(q)
@@ -135,7 +160,21 @@ class SourceFlow:
         node = self.functions[fid]
         module, scope = fid.split(':', 1)
         params = [a.arg for a in (*node.args.posonlyargs, *node.args.args, *node.args.kwonlyargs)]
-        env = {p: Value(refs=frozenset({f'@{i}'})) for i, p in enumerate(params)}
+        local_names = set()
+        pending = list(node.body)
+        while pending:
+            item = pending.pop()
+            if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                continue
+            if isinstance(item, ast.Name) and isinstance(item.ctx, (ast.Store, ast.Del)):
+                local_names.add(item.id)
+            if isinstance(item, (ast.ExceptHandler, ast.MatchAs, ast.MatchStar)) and item.name:
+                local_names.add(item.name)
+            if isinstance(item, (ast.Import, ast.ImportFrom)):
+                local_names.update(a.asname or a.name.split('.')[0] for a in item.names)
+            pending.extend(ast.iter_child_nodes(item))
+        env = {name: Value() for name in local_names}
+        env.update({p: Value(refs=frozenset({f'@{i}'})) for i, p in enumerate(params)})
         execution, recommendation, returned = set(), set(), []
 
         def mark(refs, kind, location, via="guidance-field"):
@@ -292,10 +331,24 @@ class SourceFlow:
                     if left_returned and right_returned:
                         return True
                 elif isinstance(s, (ast.For, ast.AsyncFor, ast.While, ast.With, ast.AsyncWith)):
-                    if isinstance(s, ast.While) and isinstance(s.test, ast.Constant) and not s.test.value:
-                        continue
+                    if isinstance(s, ast.While):
+                        expr(s.test, local)
+                        if isinstance(s.test, ast.Constant) and not s.test.value:
+                            body(s.orelse, local)
+                            continue
+                    if isinstance(s, (ast.For, ast.AsyncFor)):
+                        expr(s.iter, local)
+                    if isinstance(s, (ast.With, ast.AsyncWith)):
+                        for item in s.items:
+                            expr(item.context_expr, local)
                     # Visit potential bodies once, merge with zero iterations. No path guarantee.
                     before, after = dict(local), dict(local)
+                    bindings = [s.target] if isinstance(s, (ast.For, ast.AsyncFor)) else [item.optional_vars for item in s.items] if isinstance(s, (ast.With, ast.AsyncWith)) else []
+                    for binding in bindings:
+                        if binding:
+                            for target in ast.walk(binding):
+                                if isinstance(target, ast.Name):
+                                    after[target.id] = Value()
                     body(s.body, after)
                     for key in before.keys() | after.keys():
                         local[key] = merge_value(before.get(key, Value()), after.get(key, Value()))

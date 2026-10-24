@@ -221,3 +221,35 @@ def start(options):
     subprocess.run(['agentic-kit', 'check'], **options)
 """)
     assert not any(x['classification'] in {'execution', 'mixed'} for x in r['sites'])
+
+
+def test_binding_and_star_exports_are_not_guessed():
+    source = """from hidden import *
+import subprocess
+def start():
+    _run(['agentic-kit', 'check'])
+def shadowed_later():
+    subprocess.run(['agentic-kit', 'doctor'])
+    subprocess = None
+"""
+    helper = "import subprocess\ndef _run(argv):\n    subprocess.run(argv)\n"
+    _, r = analyze(source, {'hidden': helper})
+    assert not any(x['classification'] in {'execution', 'mixed'} for x in r['sites'])
+    _, r = analyze(source, {'hidden': helper + "__all__ = ['_run']\n"})
+    assert 'execution' in kinds(r, COMMANDS[0])
+    assert kinds(r, COMMANDS[1]) == {'unknown'}
+
+
+def test_loop_and_exception_bindings_do_not_reuse_a_stale_argv_or_module():
+    _, r = analyze("""import subprocess
+def loop(items):
+    cmd = ['agentic-kit', 'check']
+    for cmd in items:
+        subprocess.run(cmd)
+def handler():
+    try:
+        fail()
+    except Exception as subprocess:
+        subprocess.run(['agentic-kit', 'doctor'])
+""")
+    assert not any(x['classification'] in {'execution', 'mixed'} for x in r['sites'])
