@@ -110,6 +110,8 @@ def observed_figure(observed: dict) -> dict:
                           'detail': '; '.join(children) if children else 'No nested CLI callback observed; internal Python operations are outside this view.'})
     return {'id': 'G0', 'title': 'Observed work and release entry', 'nodes': nodes,
             'direct_calls': True,
+            'subtitle': ['Offline callback entries · ' + observed['source_commit'][:12],
+                         'Local Git + fake GitHub · no publication'],
             'boundary': observed['boundary'] + ' Source: ' + observed['source_commit'] +
                         '. Run status: ' + observed['status'] + '. Complete publication is outside this observation.'}
 
@@ -119,7 +121,8 @@ def svg(figure: dict, *, compact: bool = False) -> str:
     width = 360 if compact else 640
     wrap = 34 if compact else 65
     title_lines = textwrap.wrap(figure['title'], 24 if compact else 45)
-    y = 36 + 30 * len(title_lines)
+    subtitles = figure.get('subtitle', ['Contract view · not a runtime trace'])
+    y = 48 + 30 * len(title_lines) + 20 * len(subtitles)
     rows = []
     for index, node in enumerate(figure['nodes']):
         label = ('Caller: ' if figure.get('direct_calls') else f'{index + 1}. ') + node['label']
@@ -136,6 +139,7 @@ def svg(figure: dict, *, compact: bool = False) -> str:
         if not figure.get('direct_calls') and index + 1 < len(figure['nodes']):
             rows.append(f'<path d="M{width // 2} {y - 30} v24 m-5 -6 l5 6 5 -6" stroke="#0f766e" fill="none" stroke-width="2"/>')
     titles = ''.join(f'<text x="20" y="{32 + i * 30}" font-size="23" font-weight="700">{escape(line)}</text>' for i, line in enumerate(title_lines))
+    titles += ''.join(f'<text x="20" y="{42 + len(title_lines) * 30 + i * 20}" font-size="13">{escape(line)}</text>' for i, line in enumerate(subtitles))
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{y}" viewBox="0 0 {width} {y}" role="img" aria-labelledby="title desc">'
             f'<title id="title">{escape(figure["title"])}</title><desc id="desc">{escape(figure["boundary"])}</desc>'
             f'<rect width="{width}" height="{y}" fill="#ecf5ef" rx="18"/>'

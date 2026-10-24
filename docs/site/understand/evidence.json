@@ -148,6 +148,10 @@
             "label": "release run"
           }
         ],
+        "subtitle": [
+          "Offline callback entries \u00b7 7a6173cab704",
+          "Local Git + fake GitHub \u00b7 no publication"
+        ],
         "title": "Observed work and release entry"
       }
     ],

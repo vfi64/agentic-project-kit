@@ -97,7 +97,11 @@ def test_observed_figure_is_bound_to_reconstructible_callback_receipts(tmp_path)
                 {'caller': 'agentic-kit work start', 'callee': 'agentic-kit rules acknowledge', 'entries': 1}]}
     path = directory / 'observation.json'
     path.write_text(json.dumps(data))
-    assert checked_observation(tmp_path)['direct_edges'] == data['direct_edges']
+    observation = checked_observation(tmp_path)
+    assert observation['direct_edges'] == data['direct_edges']
+    from agentic_project_kit.site_workflow_figures import observed_figure
+    picture = svg(observed_figure(observation))
+    assert 'aaaaaaaaaaaa' in picture and 'no publication' in picture
     data['direct_edges'][0]['entries'] = 2
     path.write_text(json.dumps(data))
     with pytest.raises(ValueError, match='disagree'):
