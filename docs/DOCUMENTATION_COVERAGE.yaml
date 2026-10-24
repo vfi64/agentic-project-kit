@@ -1764,7 +1764,7 @@ rules:
     - BUILD_REQUIRED
     - BUILD_SKIPPED
     - release/version projection state
-    - deterministically irrelevant main-push changes
+    - Pages builds on every push to main
   - path: site/pages_input_manifest.json
     terms:
     - site_input_paths

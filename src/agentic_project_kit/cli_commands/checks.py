@@ -95,6 +95,7 @@ def check_command(
         typer.Option("--context", help="Print check execution context before the text result."),
     ] = False,
 ) -> None:
+    """Validate the project contract and required repository files without changing them."""
     root = project_root.resolve()
     errors = check_all(root)
     _print_result(

@@ -2487,7 +2487,7 @@ plans:
       - docs/reports/website_entry_20261024/README.md
       - tests/test_site_public_contract.py
       - tests/test_site_quickstart_path.py
-      owner_scope_20261024: Approved A then separate N1 then W0b; keep Agentic Project Kit identity, add scoped counts and complete release entry counts. E, N4, D1, lock triage and graphics remain deferred.
+      owner_scope_20261024: Approved A then separate N1 then W0b; keep Agentic Project Kit identity, add scoped counts and complete release entry counts. N4 and F2 were subsequently approved, followed by F1 namespace compliance and invocation/recommendation analysis. E, D1, lock triage and graphics remain deferred.
       depends_on_step: k0-command-composition-reaudit
       acceptance:
       - After W0a and K0 review, consolidate existing purpose, bounded workflow,

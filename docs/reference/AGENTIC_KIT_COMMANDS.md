@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 84540b010909
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 03ed2061b3db
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -348,9 +348,11 @@ Render the session-start refresher and full inline command list.
 
 - Safety: `READ_ONLY`
 - Surface: `diagnostic`
-- When to use: Run agentic-kit check.
+- When to use: Validate the project contract and required repository files without changing them.
 - Dry-run available: `False`
 - Remote effects: `none`
+
+Validate the project contract and required repository files without changing them.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|

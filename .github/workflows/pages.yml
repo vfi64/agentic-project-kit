@@ -16,75 +16,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pages-gate:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    outputs:
-      build-required: ${{ steps.policy.outputs.build-required }}
-      gate-mode: ${{ steps.policy.outputs.gate-mode }}
-
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-
-      - name: Determine changed paths
-        shell: bash
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          BEFORE_SHA: ${{ github.event.before }}
-          CURRENT_SHA: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-          fetch_commit() {
-            local sha="$1"
-            if [ -z "$sha" ]; then
-              return 1
-            fi
-            if git cat-file -e "${sha}^{commit}" 2>/dev/null; then
-              return 0
-            fi
-            git fetch --no-tags --depth=1 origin "$sha" 2>/dev/null \
-              && git cat-file -e "${sha}^{commit}" 2>/dev/null
-          }
-          diff_ready=false
-          if [ "$EVENT_NAME" = "push" ] \
-            && [ -n "$BEFORE_SHA" ] \
-            && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ] \
-            && fetch_commit "$BEFORE_SHA"; then
-            git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" > "$RUNNER_TEMP/changed-paths.txt"
-            diff_ready=true
-          fi
-          if [ "$diff_ready" != "true" ]; then
-            echo "::notice title=pages-path-gate::changed paths unavailable; falling back to full-repository path set"
-            git ls-files > "$RUNNER_TEMP/changed-paths.txt"
-          fi
-          cat "$RUNNER_TEMP/changed-paths.txt"
-
-      - name: Evaluate Pages path gate
-        id: policy
-        shell: bash
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-        run: |
-          set -euo pipefail
-          PYTHONPATH=src python -m agentic_project_kit.ci_runtime_policy pages \
-            --changed-paths-file "$RUNNER_TEMP/changed-paths.txt" \
-            --event-name "$EVENT_NAME" \
-            --manifest site/pages_input_manifest.json \
-            --output "$RUNNER_TEMP/pages-policy.json"
-          python - <<'PY'
-          import json
-          import os
-          from pathlib import Path
-
-          policy = json.loads(Path(os.environ["RUNNER_TEMP"], "pages-policy.json").read_text(encoding="utf-8"))
-          build_required = policy["mode"] == "BUILD_REQUIRED"
-          with Path(os.environ["GITHUB_OUTPUT"]).open("a", encoding="utf-8") as output:
-              output.write(f"build-required={str(build_required).lower()}\n")
-              output.write(f"gate-mode={policy['mode']}\n")
-          PY
-
   pages-state:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -120,9 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs:
-      - pages-gate
       - pages-state
-    if: needs.pages-gate.outputs.build-required == 'true'
 
     steps:
       - uses: actions/checkout@v6
@@ -156,10 +85,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs:
-      - pages-gate
       - pages-state
       - build
-    if: needs.pages-gate.outputs.build-required == 'true' && needs.pages-state.outputs.deploy-ready == 'true'
+    if: needs.pages-state.outputs.deploy-ready == 'true'
 
     environment:
       name: github-pages

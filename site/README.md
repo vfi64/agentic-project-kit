@@ -70,11 +70,12 @@ Supported evidence types:
 
 S4c Pages deployment adds `.github/workflows/pages.yml`. The GitHub Pages
 workflow builds a fresh `site/dist/` artifact and runs the site tests on `main`.
-The Pages path gate reads `site/pages_input_manifest.json` and selects
-`BUILD_REQUIRED` for site inputs, release/version projection state, explicit
-dispatch, invalid paths, or manifest problems. It selects `BUILD_SKIPPED` only
-for deterministically irrelevant main-push changes. When a build is required,
-the workflow configures Pages, uploads with `actions/upload-pages-artifact`, and
+Pages builds on every push to main and explicit dispatch. The former Pages path gate
+is no longer part of the workflow. Its legacy diagnostic classifier and
+`site/pages_input_manifest.json` retain `BUILD_REQUIRED` / `BUILD_SKIPPED` for
+compatibility, including release/version projection state and deterministically
+irrelevant main-push changes; those results cannot skip builds.
+The workflow configures Pages, uploads with `actions/upload-pages-artifact`, and
 deploys with `actions/deploy-pages` only after the repository Pages API reports
 `build_type: workflow`. When Pages is not enabled or not set to GitHub Actions deployment,
 the workflow records that state and skips the Pages-specific steps

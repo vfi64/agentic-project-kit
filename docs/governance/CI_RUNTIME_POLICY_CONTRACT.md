@@ -132,19 +132,16 @@ The same light gate may run on a main push when the changed paths prove the
 source PR through the terminal handoff report; in that case protected-diff-plan
 uses the push `before..current` diff instead of pull-request base/head SHAs.
 
-## CI5 Pages Path Gate
+## CI5 Pages Builds
 
-The Pages workflow uses `site/pages_input_manifest.json` as the maintained path
-manifest. `pages_path_gate` selects `BUILD_REQUIRED` for explicit dispatch,
-unavailable changed paths, invalid paths, manifest problems, site inputs,
-release/version projection state, or Pages workflow files.
+Pages builds on every push to main and every explicit workflow_dispatch, with no
+changed-path filter or pages_path_gate job. Build and site tests remain required;
+deployment alone depends on Pages being configured for workflow deployment.
+PR CI classification and required checks are unchanged.
 
-Only a push whose changed paths are deterministically outside the manifest
-selects `BUILD_SKIPPED`. Deploy remains main-only and keeps least-privilege
-Pages permissions separate from normal PR CI.
-
-PRs still run the site tests in normal CI when site generator, site claims, or
-site fallback behavior changes.
+The legacy pages_path_gate classifier and site/pages_input_manifest.json remain
+available for compatible diagnostics (BUILD_REQUIRED / BUILD_SKIPPED). They do
+not authorize skipping the Pages build or weaken evidence validation.
 
 ## CI6 Failure Registry Diagnostic
 

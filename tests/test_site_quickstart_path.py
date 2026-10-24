@@ -55,3 +55,12 @@ def test_quickstart_projects_exactly_the_tested_existing_families():
     assert "workspace remove" not in section
     for line in ("workspace adopt --root PATH", "workspace init --root PATH", "workspace init --root PATH --execute", "check --root PATH", "doctor --root PATH"):
         assert "agentic-kit " + line in section
+
+
+def test_quickstart_check_has_actionable_help():
+    from agentic_project_kit.cli_commands.checks import check_command
+
+    assert "project contract" in check_command.__doc__
+    result = CliRunner().invoke(app, ["check", "--help"])
+    assert result.exit_code == 0
+    assert "required repository files" in result.output

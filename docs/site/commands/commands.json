@@ -754,7 +754,7 @@
       "diagnostic_priority": "advanced_diagnostic",
       "dry_run_available": false,
       "group": "root",
-      "help": "",
+      "help": "Validate the project contract and required repository files without changing them.",
       "lifecycle_rank": null,
       "params": [
         {
@@ -788,7 +788,7 @@
       "qualified_name": "agentic-kit check",
       "safety": "READ_ONLY",
       "surface": "diagnostic",
-      "when_to_use": "Run agentic-kit check."
+      "when_to_use": "Validate the project contract and required repository files without changing them."
     },
     {
       "diagnostic_priority": "common_blocker",

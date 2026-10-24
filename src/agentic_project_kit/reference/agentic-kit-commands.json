@@ -1229,7 +1229,7 @@
     {
       "dry_run_available": false,
       "group": "root",
-      "help": "",
+      "help": "Validate the project contract and required repository files without changing them.",
       "name": "check",
       "params": [
         {
@@ -1288,7 +1288,7 @@
       "task_tags": [
         "read-only"
       ],
-      "when_to_use": "Run agentic-kit check."
+      "when_to_use": "Validate the project contract and required repository files without changing them."
     },
     {
       "dry_run_available": false,
@@ -20538,7 +20538,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "84540b010909",
+    "manifest_sha": "03ed2061b3db",
     "schema_version": 1
   },
   "schema_version": 2,

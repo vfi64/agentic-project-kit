@@ -1049,7 +1049,7 @@
         "diagnostic_priority": "advanced_diagnostic",
         "dry_run_available": false,
         "group": "root",
-        "help": "",
+        "help": "Validate the project contract and required repository files without changing them.",
         "lifecycle_rank": null,
         "params": [
           {
@@ -1083,7 +1083,7 @@
         "qualified_name": "agentic-kit check",
         "safety": "READ_ONLY",
         "surface": "diagnostic",
-        "when_to_use": "Run agentic-kit check."
+        "when_to_use": "Validate the project contract and required repository files without changing them."
       },
       {
         "diagnostic_priority": "common_blocker",
@@ -12926,14 +12926,14 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "",
     "manifest_identity_verified": true,
-    "manifest_sha": "84540b010909",
+    "manifest_sha": "03ed2061b3db",
     "package_name": "agentic-project-kit",
     "package_version": "1.1.5",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
     "release_tag": "v1.1.5",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "84540b010909",
+    "reproduced_manifest_sha": "03ed2061b3db",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 176,
