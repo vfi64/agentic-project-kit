@@ -23,7 +23,10 @@
     "src/agentic_project_kit/",
     "tests/",
     "docs/reports/",
-    "tools/"
+    "tools/",
+    "src/agentic_project_kit/site_workflow_figures.py",
+    "src/agentic_project_kit/successor_handoff_package.py",
+    "docs/reference/HUMAN_WORKFLOW_COMMANDS.md"
   ],
   "release_state_paths": [
     "pyproject.toml",

@@ -1807,3 +1807,7 @@ documents:
     class: evidence/log
     owner: maintainers
     summary: Deterministic reference sites and possible static helper flows
+  - path: docs/reference/OFFLINE_PATH_OBSERVATION.md
+    class: user-facing description
+    owner: maintainers
+    summary: Bounded offline callback observation and generated workflow figure boundaries.

@@ -2524,11 +2524,18 @@ plans:
         evidence; do not infer recovery-path execution or consumer VERIFIED_FIXED.
       - Keep the complete generated command reference discoverable.
   - id: w0c-generated-workflow-and-core-figures
-    status: planned
-    priority: separate_slice_after_entry_review
+    status: active
+    priority: owner_authorized_combined_slice_20261024
+    decision: G2/G3 contract views and a bounded offline path observation share one
+      slice. G0 uses only observed direct callback edges, with explicit stop points;
+      no static closure, universal kernel claim or live release is authorized.
+    evidence:
+    - docs/reference/OFFLINE_PATH_OBSERVATION.md
+    - tests/test_offline_path_observation.py
+    - tests/test_site_workflow_figures.py
     acceptance:
     - Generate G2 work-cycle and G3 handoff views from their checked source projections;
-      render G0 command/core composition only after K0 and a terminology decision.
+      render G0 only from observed sandbox calls after review; keep neutral terminology.
     - Reuse and review existing SVGs; provide legible mobile views and text alternatives.
       Correct runtime-map claim-status labels from the existing derived status model.
     - Use neutral workflow/operation/shared-mechanism labels until any public Shell/

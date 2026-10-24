@@ -12914,7 +12914,73 @@
       "status": "recorded",
       "version": "1.1.5"
     },
-    "schema_version": 1
+    "schema_version": 1,
+    "workflow_figures": {
+      "boundary": "Editorial contract views; arrows show a reading/work sequence, not observed nested calls.",
+      "figures": [
+        {
+          "boundary": "Make the selected change between start and check. Review the finish plan before execution; blocked or failed results stop the cycle.",
+          "id": "G2",
+          "nodes": [
+            {
+              "detail": "Start a human patch/slice workflow with the safe standard startup sequence.",
+              "label": "work start",
+              "safety": "BOUNDED",
+              "surface": "orchestrator"
+            },
+            {
+              "detail": "Run common human workflow gates without committing or pushing.",
+              "label": "work check",
+              "safety": "READ_ONLY",
+              "surface": "diagnostic"
+            },
+            {
+              "detail": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.",
+              "label": "work finish",
+              "safety": "BOUNDED",
+              "surface": "orchestrator"
+            },
+            {
+              "detail": "Create a deterministic successor handoff package and prompt projections.",
+              "label": "transfer chat-switch-complete",
+              "safety": "BOUNDED",
+              "surface": "orchestrator"
+            }
+          ],
+          "title": "A bounded work cycle"
+        },
+        {
+          "boundary": "A generated package preserves inspectable context. It does not prove requirements or software correctness.",
+          "id": "G3",
+          "nodes": [
+            {
+              "detail": "source_manifest.json records the inputs.",
+              "label": "Repository sources"
+            },
+            {
+              "detail": "execution_contract.json, source_manifest.json, successor_context.yaml, successor_prompt.md, validation_report.json",
+              "label": "Successor package"
+            },
+            {
+              "detail": "Read validation_report.json and execution_contract.json. A failed handoff blocks continuation.",
+              "label": "Validate, then continue"
+            },
+            {
+              "detail": "Use successor_context.yaml and successor_prompt.md; inspect current repository state.",
+              "label": "Successor chat"
+            }
+          ],
+          "title": "Context survives the chat"
+        }
+      ],
+      "kind": "workflow_figure_projection",
+      "schema_version": 1,
+      "sources": {
+        "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "cb8b4aeb001c238c08d924e10f7c79ad901d456243423908e1fbdfb6e77cb13e",
+        "docs/reference/agentic-kit-commands.json": "80473602c348b6f4a34a21bfaa98cedfa7989e122582814f6cb0b484565ba179",
+        "src/agentic_project_kit/successor_handoff_package.py": "053a96a55182ff05d3e801c56dfc74535a4205de67ecd4db1ba837c2494f81f2"
+      }
+    }
   },
   "kind": "agentic_project_kit_generated_site",
   "metadata": {

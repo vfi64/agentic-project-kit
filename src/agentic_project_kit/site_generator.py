@@ -19,6 +19,7 @@ from agentic_project_kit.command_manifest import (
     load_manifest,
     manifest_sha,
 )
+from agentic_project_kit.site_workflow_figures import svg
 from agentic_project_kit.gui_command_projection import diagnostic_priority_for_command
 from agentic_project_kit.site_claims import ClaimEvaluationReport, evaluate_site_claims
 from agentic_project_kit.site_evidence_contract import (
@@ -483,6 +484,11 @@ def build_site(
                                repository_url=metadata.repository_url,
                                product_name=metadata.product_name,
                                version=metadata.package_version), encoding="utf-8")
+        figures = report.explanation_projection.get('workflow_figures', {'figures': []})
+        for figure in figures['figures']:
+            (explanation_output / (figure['id'] + '.svg')).write_text(svg(figure), encoding='utf-8')
+        (explanation_output / 'workflow-figures.json').write_text(
+            json.dumps(figures, indent=2, sort_keys=True) + '\n', encoding='utf-8')
         (explanation_output / "evidence.json").write_text(
             json.dumps(report.explanation_projection, indent=2, sort_keys=True) + "\n",
             encoding="utf-8")
