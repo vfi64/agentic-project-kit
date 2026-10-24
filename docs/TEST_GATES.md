@@ -13,6 +13,12 @@ observations. No traced suite, simulation or benchmark is required by this audit
 
 ## Bounded protection-mechanism reachability
 
+The K0c developer audit accepts an optional `--consumer-root`. Omitting it runs
+only the Kit analysis and records consumer evidence as `NOT_RUN`; it does not
+imply zero matches or no consumer use. An explicitly supplied invalid or dirty
+consumer checkout still fails. Historical audit artifacts retain their original
+consumer snapshot and are not rewritten.
+
 `tests/test_protection_mechanism_audit.py` checks deterministic shortest witnesses,
 cycles, alias/base lock reachability, class-qualified regression references, scoped
 consumer token scans and data-derived rendering. The report reuses the historical

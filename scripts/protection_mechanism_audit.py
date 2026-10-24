@@ -130,6 +130,11 @@ def regression_references(root, paths, targets):
 
 
 def consumer_check(root):
+    if root is None:
+        return {
+            "result_status": "NOT_RUN",
+            "reason": "No --consumer-root supplied; consumer taxonomy use was not assessed.",
+        }
     commit = git(root, "rev-parse", "HEAD")
     tracked = git(root, "ls-files").splitlines()
     paths = [
@@ -170,7 +175,7 @@ def consumer_check(root):
     }
 
 
-def build_report(root, source_commit, consumer_root):
+def build_report(root, source_commit, consumer_root=None):
     from agentic_project_kit.mutation_lock_audit import audit_mutation_lock_coverage
 
     source_commit = git(root, "rev-parse", source_commit)
@@ -330,7 +335,11 @@ def render_report(r):
         "",
         "## Consumer check",
         "",
-        f"Owner-local Cockpit source at `{r['consumer_check']['commit']}`: {r['consumer_check']['tracked_source_files_scanned']} tracked runtime/config/test files scanned; dedicated taxonomy-token occurrences: `{json.dumps(r['consumer_check']['dedicated_taxonomy_token_occurrences'], sort_keys=True)}`. Generic manifest references occur in {r['consumer_check']['generic_manifest_reference_files']} files. This is a bounded literal source search, not proof that generic dispatch or external callers never use taxonomy; private source content and local paths are omitted.",
+        (
+            "NOT_RUN: " + r["consumer_check"]["reason"]
+            if r["consumer_check"].get("result_status") == "NOT_RUN"
+            else f"Owner-local Cockpit source at `{r['consumer_check']['commit']}`: {r['consumer_check']['tracked_source_files_scanned']} tracked runtime/config/test files scanned; dedicated taxonomy-token occurrences: `{json.dumps(r['consumer_check']['dedicated_taxonomy_token_occurrences'], sort_keys=True)}`. Generic manifest references occur in {r['consumer_check']['generic_manifest_reference_files']} files. This is a bounded literal source search, not proof that generic dispatch or external callers never use taxonomy; private source content and local paths are omitted."
+        ),
         "",
         "## Remaining boundary",
         "",
@@ -338,7 +347,11 @@ def render_report(r):
         "",
         *["- " + limit for limit in r["limits"]],
         "",
-        "Reproduce with scripts/protection_mechanism_audit.py using the pinned product source and an owner-local --consumer-root; historical map_callbacks.py and analyze.py are reused unchanged. No Kit callbacks, simulations, paid agents or remote consumer actions are run.",
+        (
+            "Reproduce with scripts/protection_mechanism_audit.py using the pinned product source; --consumer-root is optional. Without it, the consumer check is NOT_RUN, not a zero-match result. Historical map_callbacks.py and analyze.py are reused unchanged. No Kit callbacks, simulations, paid agents or remote consumer actions are run."
+            if r["consumer_check"].get("result_status") == "NOT_RUN"
+            else "Reproduce with scripts/protection_mechanism_audit.py using the pinned product source and an owner-local --consumer-root; historical map_callbacks.py and analyze.py are reused unchanged. No Kit callbacks, simulations, paid agents or remote consumer actions are run."
+        ),
         "",
     ]
     return "\n".join(lines)
@@ -347,7 +360,7 @@ def render_report(r):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--source-commit", required=True)
-    p.add_argument("--consumer-root", type=Path, required=True)
+    p.add_argument("--consumer-root", type=Path, help="Optional owner-local consumer checkout")
     p.add_argument("--out", type=Path, required=True)
     args = p.parse_args()
     root = Path(__file__).resolve().parents[1]

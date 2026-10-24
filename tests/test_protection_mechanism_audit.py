@@ -92,3 +92,38 @@ def test_committed_report_witnesses_and_renderer_are_consistent():
     assert "Neither denominator nor complement is a count of mutators" in AUDIT.render_report(
         report
     )
+
+
+def test_omitted_consumer_is_not_run_not_zero_matches():
+    result = AUDIT.consumer_check(None)
+    assert result["result_status"] == "NOT_RUN"
+    assert "not assessed" in result["reason"]
+    assert "dedicated_taxonomy_token_occurrences" not in result
+    report = json.loads(
+        (ROOT / "docs/reports/protection_mechanisms_20261023/reachability.json").read_text()
+    )
+    report["consumer_check"] = result
+    rendered = AUDIT.render_report(report)
+    assert "NOT_RUN:" in rendered
+    assert "0 tracked" not in rendered
+    assert "--consumer-root is optional" in rendered
+
+
+def test_explicit_invalid_consumer_fails(tmp_path):
+    with pytest.raises(FileNotFoundError):
+        AUDIT.consumer_check(tmp_path / "missing")
+    with pytest.raises(RuntimeError, match="git rev-parse"):
+        AUDIT.consumer_check(tmp_path)
+
+
+def test_kit_analysis_is_independent_of_optional_consumer(monkeypatch):
+    source = AUDIT.git(ROOT, "rev-parse", "HEAD")
+    without = AUDIT.build_report(ROOT, source)
+    assert without["consumer_check"]["result_status"] == "NOT_RUN"
+    scan = {"commit": "b" * 40, "tracked_source_files_scanned": 1}
+    original = AUDIT.consumer_check
+    monkeypatch.setattr(AUDIT, "consumer_check", lambda root: scan if root else original(None))
+    with_consumer = AUDIT.build_report(ROOT, source, Path("owner-local-consumer"))
+    assert with_consumer.pop("consumer_check") == scan
+    without.pop("consumer_check")
+    assert with_consumer == without
