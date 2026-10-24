@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: ca35c9b40cd978ee7f2c5c865bc2e970f67be494
-  short: ca35c9b4
-  subject: Separate static Kit execution references from guidance and unknowns (#2627)
+  full: 2e36a5ab3ddea40b1f7e72d984873d8b4217ff9d
+  short: 2e36a5ab
+  subject: Generate workflow figures from contracts and isolated callback observations (#2629)
 last_substantive_work_state:
-  full: ca35c9b40cd978ee7f2c5c865bc2e970f67be494
-  short: ca35c9b4
-  subject: Separate static Kit execution references from guidance and unknowns (#2627)
+  full: 2e36a5ab3ddea40b1f7e72d984873d8b4217ff9d
+  short: 2e36a5ab
+  subject: Generate workflow figures from contracts and isolated callback observations (#2629)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
