@@ -1,13 +1,55 @@
 {
   "artifact_type": "evidence",
-  "boundary": "Full suite is not claimed until its process exits successfully. No network, installation or semantic-quality proof is inferred from a site build.",
-  "focused_tests": {
-    "passed": 78,
+  "boundary": "Local evidence only. Remote CI, merge and handoff are independently recorded by the PR closeout. No package installation, publication or model benchmark was run.",
+  "doctor_advisory_findings": 76,
+  "earlier_full_suite": {
+    "passed": 4031,
+    "returncode": 0,
+    "scope": "Before the explicit Unreleased and scope-ancestor regressions were added."
+  },
+  "final_contract_subset": {
+    "passed": 18,
     "returncode": 0
   },
+  "full_suite": {
+    "argv": [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "-n",
+      "4",
+      "--dist",
+      "worksteal"
+    ],
+    "duration_seconds": 154.26,
+    "passed": 4033,
+    "returncode": 0,
+    "warnings": 545
+  },
+  "gates": {
+    "check_docs": 0,
+    "doctor": 0,
+    "generated_pages_fallback": 0,
+    "ruff": 0
+  },
   "kind": "website_entry_validation",
-  "local_result": "PENDING_FULL_SUITE",
+  "local_links": {
+    "checked_local_references": 119,
+    "issues": [],
+    "result_status": "PASS"
+  },
+  "local_result": "PASS",
   "review_policy": "historical_evidence",
   "schema_version": 1,
-  "status": "active"
+  "status": "active",
+  "tested_product_revision": "f4ae588188a72024c0448894ee4c3f440bb75a85",
+  "visual_review": {
+    "outcome": "No layout issue observed; advisory, not a semantic-quality proof.",
+    "scope": "Desktop overview and existing-repository quickstart"
+  },
+  "website_subset": {
+    "passed": 78,
+    "returncode": 0
+  }
 }
