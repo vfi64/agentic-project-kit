@@ -31,11 +31,14 @@ next_safe_substantive_slice:
     CHANGELOG entry counts, a tested four-family adoption path and a bounded
     GF-078 case; read docs/reports/website_entry_20261024/README.md.
     The selection is editorial, not D1's future shared authority. Next work
-    now covers N4 (Pages on every main push) and F2 (real check help),
-    followed by F1 namespace compliance (init no longer scaffolds project archives)
-    and the separate invocation/recommendation analysis.
-    E, D1, lock triage and graphics/G0 remain deferred. G0 still needs execution versus recommendation separation;
-    no universal kernel proof or new architecture name is claimed. No release,
-    paid benchmark repetition or owner-remote retest is authorized by W0b.
+    now has N4/F2 closed by PR2623 and handoff PR2624, and F1 namespace
+    compliance closed by PR2625 and handoff PR2626. The separate command
+    source-flow report distinguishes possible execution, recommendations and
+    unknowns at a pinned revision; read
+    docs/reports/command_source_flow_20261024/README.md before deciding G0.
+    It is BOUNDED_STATIC_INCOMPLETE, not runtime coverage or a universal kernel
+    proof. E, D1, mutator classification and graphics/G0 remain deferred;
+    the source-flow report needs review before any drawing. No release or
+    paid benchmark repetition is authorized by these follow-ups.
     External retest c2 remains blocked and deferred. Regenerate projections
     from this source; do not patch generated successor files manually.

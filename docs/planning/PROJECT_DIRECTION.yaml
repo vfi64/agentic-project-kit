@@ -2088,6 +2088,23 @@ plans:
     - tests/test_protection_mechanism_audit.py
     remaining_boundary: Recommendations and executable calls in K0 closure must be
       distinguished before G0; this audit does not prove a universal kernel.
+  - id: k0-command-reference-source-flow
+    status: done
+    analysis_status: bounded_static_incomplete_review_required_before_g0
+    kind: bounded_static_followup
+    scope: Distinguish possible executable argv flow, recommendations and unknown
+      literal references without replacing K0 evidence or command taxonomy.
+    acceptance:
+    - Resolve local aliases and verified helper parameter/return flows conservatively.
+    - Unknown dispatch and mutable argv never become guessed execution edges.
+    - Check sync-main rules acknowledgement and adopt bootstrap guidance separately.
+    - Keep source pin, analysis completeness and runtime claims distinct.
+    - Review evidence before G0; no diagram or universal kernel claim in this slice.
+    evidence:
+    - scripts/command_flow_analysis.py
+    - scripts/command_flow_audit.py
+    - tests/test_command_flow_analysis.py
+    - docs/reports/command_source_flow_20261024/README.md
   follow_up_candidates:
   - id: direction-queue-lifecycle-consistency-review
     scope: Consider a targeted check within existing Direction staleness work for
