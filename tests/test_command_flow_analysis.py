@@ -54,6 +54,7 @@ def test_argv_in_diagnostic_payload_is_not_execution():
 def test_echo_program_argument_is_not_a_kit_call():
     _, r = analyze("import subprocess\ndef start():\n    subprocess.run(['echo', 'agentic-kit check'])\n")
     assert kinds(r, COMMANDS[0]) == {'unknown'}
+    assert len(r['sites']) == 1  # The echo argv must not duplicate its literal payload.
 
 
 def test_unresolved_call_named_run_is_not_a_sink():

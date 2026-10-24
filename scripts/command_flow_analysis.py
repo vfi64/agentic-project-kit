@@ -228,13 +228,17 @@ class SourceFlow:
                         break
                     prefix.append(v.text)
                 text = ' '.join(prefix) if prefix else None
-                refs = combined(vals).refs | self.candidate(fid, n, text)
                 is_argv = bool(vals and vals[0].text == 'agentic-kit' and not vals[0].argv)
+                refs = combined(vals).refs
+                if is_argv:
+                    refs |= self.candidate(fid, n, text)
                 return Value(text, refs, is_argv)
             if isinstance(n, ast.BinOp) and isinstance(n.op, ast.Add):
                 a, b = expr(n.left, local), expr(n.right, local)
                 text = a.text + b.text if a.text is not None and b.text is not None else None
-                return Value(text, a.refs | b.refs | self.candidate(fid, n, text))
+                refs = a.refs | b.refs
+                constructed = self.candidate(fid, n, text) if not refs else frozenset()
+                return Value(text, refs | constructed)
             if isinstance(n, ast.Dict):
                 vals = []
                 for key, val in zip(n.keys, n.values):
