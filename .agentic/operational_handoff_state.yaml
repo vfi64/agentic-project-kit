@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e2e8a105658c7578d7bea7bf908db9239e31b3d5
-  short: e2e8a105
-  subject: Build Pages on every main push and explain the check command (#2623)
+  full: 020f2e31bc52fd1d39f5876d816e6bc672ed19f9
+  short: 020f2e31
+  subject: Keep workspace initialization inside its operating-layer namespace (#2625)
 last_substantive_work_state:
-  full: e2e8a105658c7578d7bea7bf908db9239e31b3d5
-  short: e2e8a105
-  subject: Build Pages on every main push and explain the check command (#2623)
+  full: 020f2e31bc52fd1d39f5876d816e6bc672ed19f9
+  short: 020f2e31
+  subject: Keep workspace initialization inside its operating-layer namespace (#2625)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

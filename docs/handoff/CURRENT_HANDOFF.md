@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `e2e8a105658c7578d7bea7bf908db9239e31b3d5` (`e2e8a105`), after `Build Pages on every main push and explain the check command (#2623)`.
-Last substantive work state is `e2e8a105658c7578d7bea7bf908db9239e31b3d5` (`e2e8a105`), after `Build Pages on every main push and explain the check command (#2623)`.
+Current verified main/admin HEAD is `020f2e31bc52fd1d39f5876d816e6bc672ed19f9` (`020f2e31`), after `Keep workspace initialization inside its operating-layer namespace (#2625)`.
+Last substantive work state is `020f2e31bc52fd1d39f5876d816e6bc672ed19f9` (`020f2e31`), after `Keep workspace initialization inside its operating-layer namespace (#2625)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
