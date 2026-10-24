@@ -37,6 +37,8 @@ def product_title(root: Path, package_name: str) -> str:
 def release_section(root: Path, version: str) -> dict:
     result = {"version": version, "date": None, "entry_count": None, "notes": [],
               "source": "CHANGELOG.md", "status": "unverified"}
+    if version.casefold() == "unreleased":
+        return result
     try:
         text = (root / "CHANGELOG.md").read_text()
     except OSError:
@@ -143,7 +145,7 @@ def self_hosting_case(root: Path, version: str, repository_url: str) -> str:
     complete = (publication_evidence(root, version)["status"] == "verified"
                 and all(isinstance(steps.get(s), dict) and steps[s].get("result_status") == "PASS"
                         and steps[s].get("returncode") == 0 for s in ("B4", "D4", "D5")))
-    archive = "Archive merge: not recorded in the available Git history."
+    archive = "Archive merge: no matching retained Git/PR observation."
     archive_source = "docs/reports/website_entry_20261024/archive_observation.json"
     try:
         observation = json.loads((root / archive_source).read_text())

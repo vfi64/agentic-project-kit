@@ -117,3 +117,52 @@ def test_real_homepage_keeps_internal_status_out_of_entry():
     assert 'data-claim-scope="documentation"' in html
     assert 'data-claim-scope="historical-observation"' in html
     assert "workflow for version 1.1.5 completed successfully" in html
+
+
+def test_unreleased_is_never_a_release_even_when_requested(tmp_path):
+    (tmp_path / "CHANGELOG.md").write_text("## Unreleased\n- future\n## v1.1.5\n- shipped\n")
+    assert release_section(tmp_path, "Unreleased")["status"] == "unverified"
+    assert release_section(tmp_path, "Unreleased")["entry_count"] is None
+
+
+def test_rendered_status_counts_require_scope_ancestors():
+    from html.parser import HTMLParser
+    import re
+    from agentic_project_kit.site_generator import (
+        collect_site_foundation_metadata, render_index_html, render_claims_html,
+    )
+
+    class ScopeParser(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.stack = []
+            self.violations = []
+
+        def handle_starttag(self, tag, attrs):
+            if tag not in {"meta", "link", "img", "input", "br", "hr", "source", "area", "base", "embed", "param", "track", "wbr"}:
+                self.stack.append((tag, dict(attrs).get("data-claim-scope")))
+
+        def handle_endtag(self, tag):
+            for index in range(len(self.stack) - 1, -1, -1):
+                if self.stack[index][0] == tag:
+                    self.stack = self.stack[:index]
+                    break
+
+        def handle_data(self, data):
+            if re.search(r"\b\d+\s+(verified|unverified|planned)\b", data, re.I):
+                if not any(scope in {"technical", "documentation", "historical-observation"} for _, scope in self.stack):
+                    self.violations.append(data)
+
+    root = Path(__file__).resolve().parents[1]
+    report = collect_site_foundation_metadata(root, build_commit="docs-pages-fallback")
+    assert report.ok, report.blockers
+    for html in (render_index_html(root, report), render_claims_html(root, report.metadata, report.claim_report)):
+        parser = ScopeParser()
+        parser.feed(html)
+        assert parser.violations == []
+        parser = ScopeParser()
+        parser.feed(html.replace('data-claim-scope="technical"', 'data-no-scope="technical"'))
+        assert parser.violations
+        parser = ScopeParser()
+        parser.feed(html + "<p>42 verified</p>")
+        assert parser.violations
