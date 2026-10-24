@@ -1,0 +1,13 @@
+{
+  "artifact_type": "evidence",
+  "boundary": "Full suite is not claimed until its process exits successfully. No network, installation or semantic-quality proof is inferred from a site build.",
+  "focused_tests": {
+    "passed": 78,
+    "returncode": 0
+  },
+  "kind": "website_entry_validation",
+  "local_result": "PENDING_FULL_SUITE",
+  "review_policy": "historical_evidence",
+  "schema_version": 1,
+  "status": "active"
+}

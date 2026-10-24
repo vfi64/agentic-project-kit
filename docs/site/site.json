@@ -1,7 +1,7 @@
 {
   "claim_report": {
     "blockers": [],
-    "claim_count": 14,
+    "claim_count": 15,
     "claims": [
       {
         "blockers": [],
@@ -260,11 +260,28 @@
         "scope_note": "The historical B1 window in one familiar repository does not establish current general Brownfield portability.",
         "status": "verified",
         "text": "In the historical B1 threshold window, five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary."
+      },
+      {
+        "blockers": [],
+        "evidence": [
+          {
+            "detail": "The PyPI publication workflow for version 1.1.5 completed successfully in the release run (C3). Index visibility and installability are separate checks.",
+            "evidence_type": "release-pypi-workflow",
+            "status": "verified"
+          }
+        ],
+        "id": "current-release-pypi-workflow",
+        "planned": false,
+        "required": false,
+        "scope": "historical-observation",
+        "scope_note": "C3 proves successful workflow completion for the version in pyproject.toml; index visibility and installability need separate observations.",
+        "status": "verified",
+        "text": "The PyPI publication workflow for the current package version completed successfully in its release run (C3)."
       }
     ],
     "kind": "site_claim_evaluation_report",
     "required_counts": {
-      "optional": 6,
+      "optional": 7,
       "required": 8
     },
     "schema_blockers": [],
@@ -273,7 +290,7 @@
     "status_counts": {
       "planned": 0,
       "unverified": 0,
-      "verified": 14
+      "verified": 15
     }
   },
   "command_catalog": {
@@ -12885,6 +12902,8 @@
       "status": "planned"
     },
     "release": {
+      "date": "2026-10-22",
+      "entry_count": 4,
       "notes": [
         "Run every repository-content check of the release-time standard-gates-audit-suite on each PR (a checkout test driven by the suite's own command list; only the state checks release-publish --dry-run and audit-status-current-state stay with the release run), and treat legacy shell-route calls quoted in the greenfield finding catalog as evidence, not as current instructions (KIT-GF-085, found when the first 1.1.5 release run stopped in release ready).",
         "Give six more local retests a machine contract (release preparation, CI template refresh and protection, CI runtime plan); contracts may name the running Kit's version as {kit_version}; one retest of the Kit's own release path is reclassified as a release-run retest (slice report of 2026-10-21, c1b).",
@@ -12899,17 +12918,19 @@
   },
   "kind": "agentic_project_kit_generated_site",
   "metadata": {
-    "build_commit": "docs-pages-fallback",
+    "build_commit": null,
+    "build_label": "docs-pages-fallback",
     "command_count": 272,
     "command_group_count": 40,
     "concept_doi": "10.5281/zenodo.20101359",
     "current_verified_main": "See docs/STATUS.md",
-    "former_product_name": "Agentic Project Kit",
+    "former_product_name": "",
     "manifest_identity_verified": true,
     "manifest_sha": "84540b010909",
     "package_name": "agentic-project-kit",
     "package_version": "1.1.5",
-    "product_name": "Agentic Execution Runtime",
+    "product_name": "Agentic Project Kit",
+    "projection_type": "pages-fallback",
     "release_tag": "v1.1.5",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
     "reproduced_manifest_sha": "84540b010909",
@@ -12919,6 +12940,7 @@
       "DESTRUCTIVE": 10,
       "READ_ONLY": 86
     },
+    "source_commit": null,
     "surface_counts": {
       "diagnostic": 131,
       "orchestrator": 35,

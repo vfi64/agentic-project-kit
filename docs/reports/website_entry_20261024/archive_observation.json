@@ -1,0 +1,17 @@
+{
+  "artifact_type": "evidence",
+  "boundary": "Read-only GitHub PR metadata and byte match to Git archive commit; no claim that E1 is a finished step in the archived snapshot.",
+  "evidence_path": "docs/reports/release/release-run-1.1.5.json",
+  "evidence_sha256": "a2b225ca925ee18a331cc0e80cb691dfc4551c2f4d426acbe72ab50f42f5e8a1",
+  "kind": "release_archive_merge_observation",
+  "merge_commit": "220ccce0eb0528d9488f36b5f4f5e7e205a90cfd",
+  "merged": true,
+  "merged_at": "2026-10-22T13:14:04Z",
+  "pr_number": 2605,
+  "repository": "vfi64/agentic-project-kit",
+  "review_policy": "historical_evidence",
+  "schema_version": 1,
+  "source_url": "https://github.com/vfi64/agentic-project-kit/pull/2605",
+  "status": "active",
+  "version": "1.1.5"
+}

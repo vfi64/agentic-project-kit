@@ -583,7 +583,7 @@ against `docs/index.html`, `docs/.nojekyll`, and the committed `docs/site/`
 tree. A mismatch means the committed generated publication projection is stale;
 the repair is to run the fallback build locally and commit the updated docs
 output. No timestamp, current-commit, or post-merge-status fields are currently
-excluded from the comparison because the fallback uses the stable `docs-pages-fallback` build commit
+excluded from the comparison because the fallback uses the stable `docs-pages-fallback` internal projection label
 and pointer text for volatile repository state.
 The generated publication projection files `docs/index.html`, `docs/.nojekyll`
 and `docs/site/` must remain excluded from Python sdist and wheel artifacts
@@ -1200,3 +1200,16 @@ test checks evaluator-file read denial. Without that native backend, real-agent
 benchmark mode refuses to run; deterministic self-tests remain portable. Historical
 pilot measurements and the original self-test stay historical, with validity
 limitations recorded in the part-2 preregistration amendment.
+
+
+## Website entry contract (W0b)
+
+`tests/test_site_public_contract.py` checks the README/CITATION/package identity,
+complete exact CHANGELOG entry counts (including 92 and zero), absent dates,
+unsupported nested bullets, scope/status mutations, fallback provenance and C3
+publication evidence degradation. `tests/test_site_quickstart_path.py` exercises
+the four-family first-adoption path in an isolated local fixture: no model or
+remote actions, unchanged previews and project files, bounded execute writes,
+and actual check/doctor outcomes. The N3 boundary is successful PyPI workflow
+completion, not current installability. The GF-078 archive merge is separately
+recorded; it is not inferred from a missing E1 snapshot step.

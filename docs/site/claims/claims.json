@@ -1,6 +1,6 @@
 {
   "blockers": [],
-  "claim_count": 14,
+  "claim_count": 15,
   "claims": [
     {
       "blockers": [],
@@ -259,11 +259,28 @@
       "scope_note": "The historical B1 window in one familiar repository does not establish current general Brownfield portability.",
       "status": "verified",
       "text": "In the historical B1 threshold window, five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary."
+    },
+    {
+      "blockers": [],
+      "evidence": [
+        {
+          "detail": "The PyPI publication workflow for version 1.1.5 completed successfully in the release run (C3). Index visibility and installability are separate checks.",
+          "evidence_type": "release-pypi-workflow",
+          "status": "verified"
+        }
+      ],
+      "id": "current-release-pypi-workflow",
+      "planned": false,
+      "required": false,
+      "scope": "historical-observation",
+      "scope_note": "C3 proves successful workflow completion for the version in pyproject.toml; index visibility and installability need separate observations.",
+      "status": "verified",
+      "text": "The PyPI publication workflow for the current package version completed successfully in its release run (C3)."
     }
   ],
   "kind": "site_claim_evaluation_report",
   "required_counts": {
-    "optional": 6,
+    "optional": 7,
     "required": 8
   },
   "schema_blockers": [],
@@ -272,6 +289,6 @@
   "status_counts": {
     "planned": 0,
     "unverified": 0,
-    "verified": 14
+    "verified": 15
   }
 }

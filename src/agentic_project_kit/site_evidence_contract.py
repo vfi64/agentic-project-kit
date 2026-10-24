@@ -61,6 +61,9 @@ def direct_evidence_paths(records: list[dict[str, Any]]) -> tuple[str, ...]:
                 paths.add("pyproject.toml")
             if kind in {"command-manifest", "command-probe", "generated-artifact"}:
                 paths.add("docs/reference/agentic-kit-commands.json")
+            if kind == "release-pypi-workflow":
+                paths.add("pyproject.toml")
+                paths.add("docs/reports/release/")
             if kind == "file-contains" and isinstance(evidence.get("path"), str):
                 paths.add(evidence["path"])
             if kind == "pytest-node" and isinstance(evidence.get("node_id"), str):

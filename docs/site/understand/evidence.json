@@ -56,6 +56,8 @@
     "status": "planned"
   },
   "release": {
+    "date": "2026-10-22",
+    "entry_count": 4,
     "notes": [
       "Run every repository-content check of the release-time standard-gates-audit-suite on each PR (a checkout test driven by the suite's own command list; only the state checks release-publish --dry-run and audit-status-current-state stay with the release run), and treat legacy shell-route calls quoted in the greenfield finding catalog as evidence, not as current instructions (KIT-GF-085, found when the first 1.1.5 release run stopped in release ready).",
       "Give six more local retests a machine contract (release preparation, CI template refresh and protection, CI runtime plan); contracts may name the running Kit's version as {kit_version}; one retest of the Kit's own release path is reclassified as a release-run retest (slice report of 2026-10-21, c1b).",

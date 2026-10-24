@@ -44,6 +44,8 @@
     "tests/test_site_fallback_staleness.py",
     "tests/test_ci_runtime_policy.py",
     "tests/test_site_explanation.py",
-    "tests/test_site_evidence_contract.py"
+    "tests/test_site_evidence_contract.py",
+    "tests/test_site_public_contract.py",
+    "tests/test_site_quickstart_path.py"
   ]
 }

@@ -98,7 +98,7 @@ CI enforces the docs Pages fallback pytest staleness check through
 `docs/site/` projection into a temporary directory and performs a byte-for-byte comparison
 against `docs/index.html`, `docs/.nojekyll`, and committed
 `docs/site/` files. No comparison exceptions are currently needed: the fallback
-uses the stable `docs-pages-fallback` build commit and pointer text for volatile
+uses the stable `docs-pages-fallback` internal projection label and pointer text for volatile
 repository state, so a mismatch means the generated docs output needs to be
 rebuilt and committed.
 
@@ -166,3 +166,51 @@ build. Builds require no network access for those descriptions.
 `tests/test_site_explanation.py` checks derivation, evidence degradation, release
 isolation, escaping and publication boundaries. `static/kit-architecture.svg`
 shows Kit responsibilities; `static/runtime-map.svg` describes the site build.
+
+
+## W0b public entry contract
+
+The visible product name comes from the single README H1, checked against
+`project.name` and `CITATION.cff` title. Normalization trims leading/trailing
+whitespace, lowercases, and replaces each whitespace run with one hyphen;
+other characters are preserved. Missing or contradictory sources block the build.
+No website-only rename or Formerly claim is allowed.
+
+The overview keeps purpose, the everyday workflow, audience, limits and a short
+release card. Technical provenance is labelled separately: Pages fallback is a
+projection type, not a Git commit; a deterministic source SHA that is not supplied
+is shown as not provided. Claim counts are computed per scope and status; an
+unqualified total of verified claims is not shown. Aggregate JSON counts remain
+compatible. Neither scope nor optional status is a maturity ranking.
+
+The release card counts **entries in the CHANGELOG section**: every top-level
+`- ` bullet line in the exact version section, including zero and more than eight.
+Subheadings do not end a section; Unreleased and neighboring versions are excluded.
+A missing date is not recorded. Nested, numbered or alternate bullet syntax blocks
+rather than silently changing the meaning of the count. Fenced code is excluded.
+This is a line count, not a measure of change size.
+
+The first existing-repository path contains four editorial command families:
+workspace adopt, workspace init (preview and explicit execute), check, doctor.
+The manifest supplies safety and availability, not this editorial ordering.
+D1 remains deferred as the future shared task-to-preferred-command authority.
+The generator path remains separate; removal is not an onboarding step.
+The fixture runs the actual local sequence with no models or remote actions and
+checks read-only previews, preservation of project files, bounded writes and gates.
+The four communication paths do not claim equal maturity or test coverage; GUI/CLI
+parity and automatic recovery are not promised.
+
+`release-pypi-workflow` is a scoped optional evidence binding. For the version from
+pyproject.toml it reads `docs/reports/release/release-run-<version>.json`, requires
+matching version/tag, PyPI publication policy, release.yml PyPI target and C3 PASS
+with returncode zero and no blockers. This proves successful workflow completion,
+not index visibility or installability. Missing evidence is unverified and removes
+PyPI assurances from the quickstart. No network or installation test runs in the
+site build, and no historical archive is rewritten.
+
+The GF-078 case separates the finding/repair, regression coverage, recorded release
+steps and a bounded archive merge observation captured from GitHub and local Git.
+That observation is a build input, so shallow checkouts reproduce the same card.
+It does not claim every recovery path was executed or consumer VERIFIED_FIXED.
+E freshness policy, N4 Pages simplification, D1, lock triage and new graphics remain
+outside W0b.

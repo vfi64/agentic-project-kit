@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 430" role="img" aria-labelledby="title desc">
-  <title id="title">Agentic Execution Runtime Site Projection</title>
+  <title id="title">Repository Site Projection</title>
   <desc id="desc">Repository truth flows into a deterministic generator and then into public site projections.</desc>
   <rect width="720" height="430" rx="8" fill="#f9fbfa"/>
   <g fill="#ffffff" stroke="#c8d3dc" stroke-width="2">
@@ -43,6 +43,6 @@
     <text x="526" y="96">generated facts</text>
     <text x="526" y="170">orchestrators</text>
     <text x="526" y="244">common blockers</text>
-    <text x="526" y="318">verified / evolving</text>
+    <text x="526" y="318">scope / status</text>
   </g>
 </svg>

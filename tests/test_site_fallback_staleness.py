@@ -36,7 +36,7 @@ def test_docs_pages_fallback_projection_is_fresh(tmp_path: Path) -> None:
         ).read_bytes(), f"docs/site/{relative_path} is stale. {REBUILD_HINT}"
 
     assert (root / "docs" / "index.html").read_text(encoding="utf-8") == _render_docs_pages_index(
-        "site"
+        "site", result.report.metadata.product_name
     ), REBUILD_HINT
     assert (root / "docs" / ".nojekyll").read_text(encoding="utf-8") == (
         "Generated marker: serve docs/ as static GitHub Pages content.\n"
