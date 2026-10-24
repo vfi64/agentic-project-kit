@@ -117,8 +117,6 @@ def build_workspace_init_plan(
     manifest_yaml = yaml.safe_dump(manifest, sort_keys=False)
     files = _planned_files(root_path, project, manifest_yaml)
     directories = (
-        "docs",
-        "docs/archive",
         ".agentic",
         ".agentic/dpa",
         ".agentic/registries",
@@ -379,8 +377,6 @@ def _planned_files(root: Path, project: ProjectSuggestion, manifest_yaml: str) -
         ),
         emits_current_handoff_template=False,
     )
-    if not (root / "docs" / "archive" / "README.md").exists():
-        files["docs/archive/README.md"] = _archive_readme_seed()
     return files
 
 
@@ -399,14 +395,6 @@ Status header convention:
 Profile review budgets:
 
 {budgets}
-"""
-
-
-def _archive_readme_seed() -> str:
-    return """# Documentation Archive
-
-Historical, superseded, or review-only documentation belongs here when it must
-remain discoverable but should not drive active project state.
 """
 
 

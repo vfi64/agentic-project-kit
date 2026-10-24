@@ -67,7 +67,7 @@ def test_workspace_remove_execute_removes_exact_generated_workspace(tmp_path: Pa
     assert not (tmp_path / ".agentic").exists()
     assert not (tmp_path / ".github/workflows/agentic-gate.yaml").exists()
     assert not (tmp_path / ".pre-commit-config.yaml").exists()
-    assert (tmp_path / "docs/archive/README.md").exists()
+    assert not (tmp_path / "docs").exists()
     assert ".agentic/tmp/" in (tmp_path / ".gitignore").read_text(encoding="utf-8")
 
 
@@ -245,3 +245,13 @@ def _set_workspace_path_override(root: Path, key: str, value: str) -> None:
     manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
     manifest.setdefault("paths", {})[key] = value
     manifest_path.write_text(yaml.safe_dump(manifest, sort_keys=False), encoding="utf-8")
+
+
+def test_workspace_remove_preserves_existing_project_archive(tmp_path: Path) -> None:
+    archive = tmp_path / "docs/archive/README.md"
+    _write(archive, "# Project archive\n")
+    init = runner.invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
+    assert init.exit_code == 0, init.output
+    removed = runner.invoke(app, ["workspace", "remove", "--root", str(tmp_path), "--execute", "--json"])
+    assert removed.exit_code == 0, removed.output
+    assert archive.read_text() == "# Project archive\n"

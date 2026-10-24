@@ -32,7 +32,8 @@ next_safe_substantive_slice:
     GF-078 case; read docs/reports/website_entry_20261024/README.md.
     The selection is editorial, not D1's future shared authority. Next work
     now covers N4 (Pages on every main push) and F2 (real check help),
-    followed by F1 namespace compliance and invocation/recommendation analysis.
+    followed by F1 namespace compliance (init no longer scaffolds project archives)
+    and the separate invocation/recommendation analysis.
     E, D1, lock triage and graphics/G0 remain deferred. G0 still needs execution versus recommendation separation;
     no universal kernel proof or new architecture name is claimed. No release,
     paid benchmark repetition or owner-remote retest is authorized by W0b.

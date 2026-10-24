@@ -35,9 +35,6 @@ PRIVATE_PUBLIC_BOUNDARY = (
 )
 
 WORKSPACE_INIT_TREE = (
-    "docs/",
-    "docs/archive/",
-    "docs/archive/README.md",
     ".agentic/",
     ".agentic/config.yaml",
     ".agentic/DOC_LIFECYCLE.md",
