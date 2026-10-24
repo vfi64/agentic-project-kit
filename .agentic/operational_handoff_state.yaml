@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 0001eec959fc6e44015509b458afb171b9fc2110
-  short: 0001eec9
-  subject: Make the public entry concise and bind it to scoped release evidence (#2621)
+  full: e2e8a105658c7578d7bea7bf908db9239e31b3d5
+  short: e2e8a105
+  subject: Build Pages on every main push and explain the check command (#2623)
 last_substantive_work_state:
-  full: 0001eec959fc6e44015509b458afb171b9fc2110
-  short: 0001eec9
-  subject: Make the public entry concise and bind it to scoped release evidence (#2621)
+  full: e2e8a105658c7578d7bea7bf908db9239e31b3d5
+  short: e2e8a105
+  subject: Build Pages on every main push and explain the check command (#2623)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
