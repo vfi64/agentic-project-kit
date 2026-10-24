@@ -211,6 +211,11 @@ class SourceFlow:
                 if name.replace(':', '.') in EXECUTABLE_RESOLVERS:
                     return Value('agentic-kit')
                 if name in EXECUTION:
+                    # Shell/override kwargs may execute another program or argument shape.
+                    opaque = len(n.args) > 1 or any(k.arg in {None, 'executable'} for k in n.keywords)
+                    shell = next((k.value for k in n.keywords if k.arg == 'shell'), None)
+                    if opaque or (shell is not None and not (isinstance(shell, ast.Constant) and shell.value is False)):
+                        return Value()
                     value = args[0] if args else kwargs.get('args', Value())
                     mark(execution_refs(value), 'execution', n, name)
                     return Value()

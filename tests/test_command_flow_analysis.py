@@ -174,3 +174,50 @@ def test_current_source_controls_remain_distinct():
     assert "agentic-kit rules acknowledge" in targets(sync.execution)
     assert "agentic-kit rule-registry bootstrap" in targets(adopt.recommendation)
     assert "agentic-kit rule-registry bootstrap" not in targets(adopt.execution)
+
+
+def audit_driver():
+    root = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location('command_flow_audit', root / 'scripts/command_flow_audit.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_pinned_report_reproduces_and_rendering_uses_data():
+    import json
+    from copy import deepcopy
+    root = Path(__file__).resolve().parents[1]
+    folder = root / 'docs/reports/command_source_flow_20261024'
+    recorded = json.loads((folder / 'flow.json').read_text())
+    driver = audit_driver()
+    assert driver.generate(root, recorded['source_commit']) == recorded
+    assert driver.render(recorded) == (folder / 'README.md').read_text()
+    changed = deepcopy(recorded)
+    changed['counts']['unknown'] += 7
+    assert driver.render(changed) != driver.render(recorded)
+    changed['controls']['adopt_does_not_execute_bootstrap'] = False
+    assert '| adopt_does_not_execute_bootstrap | FAIL |' in driver.render(changed)
+
+
+def test_source_pin_refuses_dirty_or_untracked_inputs(monkeypatch, tmp_path):
+    import pytest
+    driver = audit_driver()
+    for offending in ('diff', 'ls-files'):
+        def fake_git(root, *args):
+            if args[0] == 'rev-parse':
+                return 'a' * 40
+            return 'src/unpinned.py' if args[0] == offending else ''
+        monkeypatch.setattr(driver, 'git', fake_git)
+        with pytest.raises(ValueError, match='pinned|differ'):
+            driver.generate(tmp_path, 'HEAD')
+
+
+def test_shell_executable_override_and_opaque_kwargs_stay_unknown():
+    _, r = analyze("""import subprocess
+def start(options):
+    subprocess.run(['agentic-kit', 'check'], executable='echo')
+    subprocess.run(['agentic-kit', 'doctor'], shell=True)
+    subprocess.run(['agentic-kit', 'check'], **options)
+""")
+    assert not any(x['classification'] in {'execution', 'mixed'} for x in r['sites'])

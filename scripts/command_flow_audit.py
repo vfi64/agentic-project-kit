@@ -15,7 +15,7 @@ from command_flow_analysis import SourceFlow, load_sources
 LIMITS = [
     'Possible source flow is not a runtime trace, an executed action or an authorization grant.',
     'Only literal argv prefixes, simple local aliases and resolved helper returns/parameters are followed.',
-    'Only subprocess argv terminals establish execution; command strings and Python module launches remain unknown.',
+    'Only subprocess argv terminals establish execution; shell/executable overrides, opaque kwargs, command strings and Python module launches remain unknown.',
     'Unknown calls and container mutation invalidate argv prefixes rather than being guessed.',
     'Dynamic dispatch, methods on instances, global values, relative imports and code inside subprocesses are not expanded.',
     'Branches over-approximate possible flow; arbitrary path feasibility and exceptions are not proven.',
