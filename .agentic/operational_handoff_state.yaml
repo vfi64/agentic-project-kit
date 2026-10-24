@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 144706e19ca51b48b8158e87b287de1de69cab3b
-  short: 144706e1
-  subject: Audit static reach of shared protection mechanisms (#2615)
+  full: 2b515370c735f636b7dca14752315895603f44ae
+  short: 2b515370
+  subject: Bind website claims to scoped evidence and complete Pages inputs (#2617)
 last_substantive_work_state:
-  full: 144706e19ca51b48b8158e87b287de1de69cab3b
-  short: 144706e1
-  subject: Audit static reach of shared protection mechanisms (#2615)
+  full: 2b515370c735f636b7dca14752315895603f44ae
+  short: 2b515370
+  subject: Bind website claims to scoped evidence and complete Pages inputs (#2617)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
