@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `ca35c9b40cd978ee7f2c5c865bc2e970f67be494` (`ca35c9b4`), after `Separate static Kit execution references from guidance and unknowns (#2627)`.
-Last substantive work state is `ca35c9b40cd978ee7f2c5c865bc2e970f67be494` (`ca35c9b4`), after `Separate static Kit execution references from guidance and unknowns (#2627)`.
+Current verified main/admin HEAD is `2e36a5ab3ddea40b1f7e72d984873d8b4217ff9d` (`2e36a5ab`), after `Generate workflow figures from contracts and isolated callback observations (#2629)`.
+Last substantive work state is `2e36a5ab3ddea40b1f7e72d984873d8b4217ff9d` (`2e36a5ab`), after `Generate workflow figures from contracts and isolated callback observations (#2629)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
