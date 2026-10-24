@@ -21,7 +21,7 @@
         <p>Current package: <strong>1.1.5</strong>. The facts below are generated from this checkout; dated observations retain their original scope.</p>
         <nav class="section-nav" aria-label="On this page">
           <a href="#audience">Who it serves</a><a href="#benefits">Benefits and costs</a><a href="#architecture">Architecture</a>
-          <a href="#controllers">Local controllers</a><a href="#evidence">Practice and evidence</a><a href="#comparison">Tool comparison</a>
+          <a href="#workflow-figures">Work and handoff</a><a href="#controllers">Local controllers</a><a href="#evidence">Practice and evidence</a><a href="#comparison">Tool comparison</a>
         </nav>
       </header>
 
@@ -75,6 +75,31 @@
           <article class="panel"><h3>Documentation and assurance</h3><p>Documentation governance and bounded DPA checks address document authority, freshness and evidence. They do not establish arbitrary foreign-repository conformance or formal correctness of the product. PAA appears below as planning status, not a shipped proof engine.</p></article>
         </div>
       </section>
+
+      <section id="workflow-figures"><p class="eyebrow">Generated from current sources</p><h2>Work and handoff</h2>
+<p>Editorial contract views; arrows show a reading/work sequence, not observed nested calls.</p>
+<article class="panel"><h3>G2: A bounded work cycle</h3><figure class="architecture-map workflow-map"><picture><source media="(max-width: 680px)" srcset="G2-mobile.svg"><img src="G2.svg" alt="A bounded work cycle — text sequence follows."></picture></figure><ol>
+<li><strong>work start</strong>: Start a human patch/slice workflow with the safe standard startup sequence.</li>
+<li><strong>work check</strong>: Run common human workflow gates without committing or pushing.</li>
+<li><strong>work finish</strong>: Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.</li>
+<li><strong>transfer chat-switch-complete</strong>: Create a deterministic successor handoff package and prompt projections.</li>
+</ol><p>Make the selected change between start and check. Review the finish plan before execution; blocked or failed results stop the cycle.</p></article>
+<article class="panel"><h3>G3: Context survives the chat</h3><figure class="architecture-map workflow-map"><picture><source media="(max-width: 680px)" srcset="G3-mobile.svg"><img src="G3.svg" alt="Context survives the chat — text sequence follows."></picture></figure><ol>
+<li><strong>Repository sources</strong>: source_manifest.json records the inputs.</li>
+<li><strong>Successor package</strong>: execution_contract.json, source_manifest.json, successor_context.yaml, successor_prompt.md, validation_report.json</li>
+<li><strong>Validate, then continue</strong>: Read validation_report.json and execution_contract.json. A failed handoff blocks continuation.</li>
+<li><strong>Successor chat</strong>: Use successor_context.yaml and successor_prompt.md; inspect current repository state.</li>
+</ol><p>A generated package preserves inspectable context. It does not prove requirements or software correctness.</p></article>
+<article class="panel"><h3>G0: Observed work and release entry</h3><figure class="architecture-map workflow-map"><picture><source media="(max-width: 680px)" srcset="G0-mobile.svg"><img src="G0.svg" alt="Observed work and release entry — text sequence follows."></picture></figure><ol>
+<li><strong>work start</strong>: rules acknowledge; transfer branch-create; transfer post-merge-check; transfer repo-status; transfer sync-main</li>
+<li><strong>work finish</strong>: rules acknowledge; transfer chat-switch-complete; transfer commit; transfer post-merge-check; transfer pr-create-complete; transfer protected-diff-plan; transfer push-current; transfer repo-status; transfer sync-main</li>
+<li><strong>transfer chat-switch-complete</strong>: No nested CLI callback observed; internal Python operations are outside this view.</li>
+<li><strong>release run</strong>: release prepare; release ready; release-publish; transfer sync-main; work finish; work start</li>
+</ol><p>CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entries include plans and dry runs. Entry does not imply successful completion; no live release or complete command coverage is claimed. Source: 7a6173cab704d57322e3ad22ddf4c02096314b1d. Run status: BOUNDED_COMPLETE. Complete publication is outside this observation.</p></article>
+<article class="panel"><h3>Observation boundary</h3><p>CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entries include plans and dry runs. Entry does not imply successful completion; no live release or complete command coverage is claimed.</p>
+<p>Source commit: <code>7a6173cab704d57322e3ad22ddf4c02096314b1d</code> · BOUNDED_COMPLETE</p>
+<p>The bounded observation and its stop point remain separate from the contract views above.</p><p><a href="workflow-figures.json">Read the source bindings and observed direct edges</a></p></article>
+<p><a href="workflow-figures.json">Figure sources and hashes</a></p></section>
 
       <section id="controllers" class="band" aria-labelledby="controller-title">
         <div><p class="eyebrow">Public interface, private implementation possible</p><h2 id="controller-title">Working with a local controller</h2>

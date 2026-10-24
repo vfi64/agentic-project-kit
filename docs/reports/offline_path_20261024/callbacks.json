@@ -1,0 +1,1412 @@
+[
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 0,
+    "parent": null,
+    "step": "acknowledge"
+  },
+  {
+    "command": "agentic-kit transfer post-merge-settle",
+    "id": 1,
+    "parent": null,
+    "step": "bootstrap handoff"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 2,
+    "parent": 1,
+    "step": "bootstrap handoff"
+  },
+  {
+    "command": "agentic-kit transfer prepare-successor-handoff",
+    "id": 3,
+    "parent": 1,
+    "step": "bootstrap handoff"
+  },
+  {
+    "command": "agentic-kit boot write",
+    "id": 4,
+    "parent": 1,
+    "step": "bootstrap handoff"
+  },
+  {
+    "command": "agentic-kit handoff prompt",
+    "id": 5,
+    "parent": 1,
+    "step": "bootstrap handoff"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 6,
+    "parent": 1,
+    "step": "bootstrap handoff"
+  },
+  {
+    "command": "agentic-kit handoff check",
+    "id": 7,
+    "parent": 1,
+    "step": "bootstrap handoff"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 8,
+    "parent": 1,
+    "step": "bootstrap handoff"
+  },
+  {
+    "command": "agentic-kit transfer protected-diff-plan",
+    "id": 9,
+    "parent": 1,
+    "step": "bootstrap handoff"
+  },
+  {
+    "command": "agentic-kit pr wait-ci",
+    "id": 10,
+    "parent": 1,
+    "step": "bootstrap handoff"
+  },
+  {
+    "command": "agentic-kit pr merge-if-green",
+    "id": 11,
+    "parent": 1,
+    "step": "bootstrap handoff"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 12,
+    "parent": 1,
+    "step": "bootstrap handoff"
+  },
+  {
+    "command": "agentic-kit transfer sync-main",
+    "id": 13,
+    "parent": null,
+    "step": "sync main"
+  },
+  {
+    "command": "agentic-kit transfer restore-known-volatile",
+    "id": 14,
+    "parent": 13,
+    "step": "sync main"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 15,
+    "parent": 13,
+    "step": "sync main"
+  },
+  {
+    "command": "agentic-kit transfer branch-switch",
+    "id": 16,
+    "parent": 13,
+    "step": "sync main"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 17,
+    "parent": 13,
+    "step": "sync main"
+  },
+  {
+    "command": "agentic-kit transfer normalize-session",
+    "id": 18,
+    "parent": 13,
+    "step": "sync main"
+  },
+  {
+    "command": "agentic-kit work start",
+    "id": 19,
+    "parent": null,
+    "step": "start work"
+  },
+  {
+    "command": "agentic-kit transfer sync-main",
+    "id": 20,
+    "parent": 19,
+    "step": "start work"
+  },
+  {
+    "command": "agentic-kit transfer restore-known-volatile",
+    "id": 21,
+    "parent": 20,
+    "step": "start work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 22,
+    "parent": 20,
+    "step": "start work"
+  },
+  {
+    "command": "agentic-kit transfer branch-switch",
+    "id": 23,
+    "parent": 20,
+    "step": "start work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 24,
+    "parent": 20,
+    "step": "start work"
+  },
+  {
+    "command": "agentic-kit transfer normalize-session",
+    "id": 25,
+    "parent": 20,
+    "step": "start work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 26,
+    "parent": 19,
+    "step": "start work"
+  },
+  {
+    "command": "agentic-kit transfer post-merge-check",
+    "id": 27,
+    "parent": 19,
+    "step": "start work"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 28,
+    "parent": 27,
+    "step": "start work"
+  },
+  {
+    "command": "agentic-kit transfer repo-status",
+    "id": 29,
+    "parent": 19,
+    "step": "start work"
+  },
+  {
+    "command": "agentic-kit transfer branch-create",
+    "id": 30,
+    "parent": 19,
+    "step": "start work"
+  },
+  {
+    "command": "agentic-kit work finish",
+    "id": 31,
+    "parent": null,
+    "step": "finish plan"
+  },
+  {
+    "command": "agentic-kit transfer repo-status",
+    "id": 32,
+    "parent": 31,
+    "step": "finish plan"
+  },
+  {
+    "command": "agentic-kit transfer protected-diff-plan",
+    "id": 33,
+    "parent": 31,
+    "step": "finish plan"
+  },
+  {
+    "command": "agentic-kit work finish",
+    "id": 34,
+    "parent": null,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer repo-status",
+    "id": 35,
+    "parent": 34,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer protected-diff-plan",
+    "id": 36,
+    "parent": 34,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 37,
+    "parent": 34,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer commit",
+    "id": 38,
+    "parent": 34,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 39,
+    "parent": 34,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer chat-switch-complete",
+    "id": 40,
+    "parent": 34,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 41,
+    "parent": 34,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer commit",
+    "id": 42,
+    "parent": 34,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 43,
+    "parent": 34,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer push-current",
+    "id": 44,
+    "parent": 34,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer pr-create-complete",
+    "id": 45,
+    "parent": 34,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer pr-create",
+    "id": 46,
+    "parent": 45,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer pr-complete",
+    "id": 47,
+    "parent": 45,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer pr-wait-ci",
+    "id": 48,
+    "parent": 47,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit pr wait-ci",
+    "id": 49,
+    "parent": 48,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 50,
+    "parent": 47,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer pr-merge-safe",
+    "id": 51,
+    "parent": 47,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit pr merge-if-green",
+    "id": 52,
+    "parent": 51,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 53,
+    "parent": 47,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer post-merge-complete",
+    "id": 54,
+    "parent": 47,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 55,
+    "parent": 54,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer prepare-successor-handoff",
+    "id": 56,
+    "parent": 54,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit boot write",
+    "id": 57,
+    "parent": 54,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit handoff prompt",
+    "id": 58,
+    "parent": 54,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 59,
+    "parent": 54,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit handoff check",
+    "id": 60,
+    "parent": 54,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 61,
+    "parent": 54,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer protected-diff-plan",
+    "id": 62,
+    "parent": 54,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit pr wait-ci",
+    "id": 63,
+    "parent": 54,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit pr merge-if-green",
+    "id": 64,
+    "parent": 54,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 65,
+    "parent": 54,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer restore-known-volatile",
+    "id": 66,
+    "parent": 45,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer sync-main",
+    "id": 67,
+    "parent": 45,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer restore-known-volatile",
+    "id": 68,
+    "parent": 67,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 69,
+    "parent": 67,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer branch-switch",
+    "id": 70,
+    "parent": 67,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 71,
+    "parent": 67,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer normalize-session",
+    "id": 72,
+    "parent": 67,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer post-merge-check",
+    "id": 73,
+    "parent": 45,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 74,
+    "parent": 73,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer repo-status",
+    "id": 75,
+    "parent": 45,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer restore-known-volatile",
+    "id": 76,
+    "parent": 45,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer sync-main",
+    "id": 77,
+    "parent": 34,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer restore-known-volatile",
+    "id": 78,
+    "parent": 77,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 79,
+    "parent": 77,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer branch-switch",
+    "id": 80,
+    "parent": 77,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 81,
+    "parent": 77,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer normalize-session",
+    "id": 82,
+    "parent": 77,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer post-merge-check",
+    "id": 83,
+    "parent": 34,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 84,
+    "parent": 83,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer repo-status",
+    "id": 85,
+    "parent": 34,
+    "step": "finish work"
+  },
+  {
+    "command": "agentic-kit transfer sync-main",
+    "id": 86,
+    "parent": null,
+    "step": "sync completed work"
+  },
+  {
+    "command": "agentic-kit transfer restore-known-volatile",
+    "id": 87,
+    "parent": 86,
+    "step": "sync completed work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 88,
+    "parent": 86,
+    "step": "sync completed work"
+  },
+  {
+    "command": "agentic-kit transfer branch-switch",
+    "id": 89,
+    "parent": 86,
+    "step": "sync completed work"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 90,
+    "parent": 86,
+    "step": "sync completed work"
+  },
+  {
+    "command": "agentic-kit transfer normalize-session",
+    "id": 91,
+    "parent": 86,
+    "step": "sync completed work"
+  },
+  {
+    "command": "agentic-kit transfer chat-switch-complete",
+    "id": 92,
+    "parent": null,
+    "step": "handoff"
+  },
+  {
+    "command": "agentic-kit release run",
+    "id": 93,
+    "parent": null,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer sync-main",
+    "id": 94,
+    "parent": 93,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer restore-known-volatile",
+    "id": 95,
+    "parent": 94,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 96,
+    "parent": 94,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer branch-switch",
+    "id": 97,
+    "parent": 94,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 98,
+    "parent": 94,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer normalize-session",
+    "id": 99,
+    "parent": 94,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release ready",
+    "id": 100,
+    "parent": 93,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer sync-main",
+    "id": 101,
+    "parent": 100,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer restore-known-volatile",
+    "id": 102,
+    "parent": 101,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 103,
+    "parent": 101,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer branch-switch",
+    "id": 104,
+    "parent": 101,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 105,
+    "parent": 101,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer normalize-session",
+    "id": 106,
+    "parent": 101,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer standard-error-scan",
+    "id": 107,
+    "parent": 100,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer post-merge-check",
+    "id": 108,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 109,
+    "parent": 108,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer repo-status",
+    "id": 110,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer command-composition-check",
+    "id": 111,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer command-reference-check",
+    "id": 112,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer patch-cycle-status",
+    "id": 113,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release-status",
+    "id": 114,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release-notes-generate",
+    "id": 115,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release-prep",
+    "id": 116,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer require-fresh-llm-context",
+    "id": 117,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer require-fresh-llm-context",
+    "id": 118,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 119,
+    "parent": 118,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit docs-audit",
+    "id": 120,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-doc-currency",
+    "id": 121,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-planning-docs-consolidation",
+    "id": 122,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-ns-legacy-references",
+    "id": 123,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-program-redundancy",
+    "id": 124,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit standard-gates-audit-suite",
+    "id": 125,
+    "parent": 107,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-patch-failure-discipline",
+    "id": 126,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-command-manifest",
+    "id": 127,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-command-authority",
+    "id": 128,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit command-taxonomy-check",
+    "id": 129,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-mutation-lock-coverage",
+    "id": 130,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-path-literals",
+    "id": 131,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit direction validate",
+    "id": 132,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit doc-registry check-unregistered",
+    "id": 133,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit doc-lifecycle-audit",
+    "id": 134,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit project-direction",
+    "id": 135,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-ns-legacy-references",
+    "id": 136,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-absolute-path-portability",
+    "id": 137,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-doc-currency",
+    "id": 138,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-status-current-state",
+    "id": 139,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-planning-docs-consolidation",
+    "id": 140,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-program-redundancy",
+    "id": 141,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release-publish",
+    "id": 142,
+    "parent": 125,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release-metadata-authority-gate",
+    "id": 143,
+    "parent": 142,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit docs-audit",
+    "id": 144,
+    "parent": 142,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer command-reference-check",
+    "id": 145,
+    "parent": 142,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release-notes-generate",
+    "id": 146,
+    "parent": 100,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release-prep",
+    "id": 147,
+    "parent": 100,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release-status",
+    "id": 148,
+    "parent": 100,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release prepare",
+    "id": 149,
+    "parent": 93,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release-notes-generate",
+    "id": 150,
+    "parent": 149,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release-prep",
+    "id": 151,
+    "parent": 149,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit work start",
+    "id": 152,
+    "parent": 93,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer sync-main",
+    "id": 153,
+    "parent": 152,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer restore-known-volatile",
+    "id": 154,
+    "parent": 153,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 155,
+    "parent": 153,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer branch-switch",
+    "id": 156,
+    "parent": 153,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 157,
+    "parent": 153,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer normalize-session",
+    "id": 158,
+    "parent": 153,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 159,
+    "parent": 152,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer post-merge-check",
+    "id": 160,
+    "parent": 152,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 161,
+    "parent": 160,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer repo-status",
+    "id": 162,
+    "parent": 152,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer branch-create",
+    "id": 163,
+    "parent": 152,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release prepare",
+    "id": 164,
+    "parent": 93,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release-notes-generate",
+    "id": 165,
+    "parent": 164,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release-prep",
+    "id": 166,
+    "parent": 164,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit commands sync-entrypoints",
+    "id": 167,
+    "parent": 164,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer chat-switch-complete",
+    "id": 168,
+    "parent": 164,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit audit-command-manifest",
+    "id": 169,
+    "parent": 164,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit workspace adopt",
+    "id": 170,
+    "parent": 164,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit workspace init",
+    "id": 171,
+    "parent": 164,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit workspace init",
+    "id": 172,
+    "parent": 164,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit workspace init",
+    "id": 173,
+    "parent": 164,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit work finish",
+    "id": 174,
+    "parent": 93,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer repo-status",
+    "id": 175,
+    "parent": 174,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit transfer protected-diff-plan",
+    "id": 176,
+    "parent": 174,
+    "step": "release plan"
+  },
+  {
+    "command": "agentic-kit release run",
+    "id": 177,
+    "parent": null,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit work finish",
+    "id": 178,
+    "parent": 177,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer repo-status",
+    "id": 179,
+    "parent": 178,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer protected-diff-plan",
+    "id": 180,
+    "parent": 178,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 181,
+    "parent": 178,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer commit",
+    "id": 182,
+    "parent": 178,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 183,
+    "parent": 178,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer chat-switch-complete",
+    "id": 184,
+    "parent": 178,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 185,
+    "parent": 178,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer commit",
+    "id": 186,
+    "parent": 178,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 187,
+    "parent": 178,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer push-current",
+    "id": 188,
+    "parent": 178,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer pr-create-complete",
+    "id": 189,
+    "parent": 178,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer pr-create",
+    "id": 190,
+    "parent": 189,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer pr-complete",
+    "id": 191,
+    "parent": 189,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer pr-wait-ci",
+    "id": 192,
+    "parent": 191,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit pr wait-ci",
+    "id": 193,
+    "parent": 192,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 194,
+    "parent": 191,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer pr-merge-safe",
+    "id": 195,
+    "parent": 191,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit pr merge-if-green",
+    "id": 196,
+    "parent": 195,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 197,
+    "parent": 191,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer post-merge-complete",
+    "id": 198,
+    "parent": 191,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 199,
+    "parent": 198,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer prepare-successor-handoff",
+    "id": 200,
+    "parent": 198,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit boot write",
+    "id": 201,
+    "parent": 198,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit handoff prompt",
+    "id": 202,
+    "parent": 198,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 203,
+    "parent": 198,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit handoff check",
+    "id": 204,
+    "parent": 198,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 205,
+    "parent": 198,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer protected-diff-plan",
+    "id": 206,
+    "parent": 198,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit pr wait-ci",
+    "id": 207,
+    "parent": 198,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit pr merge-if-green",
+    "id": 208,
+    "parent": 198,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 209,
+    "parent": 198,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer restore-known-volatile",
+    "id": 210,
+    "parent": 189,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer sync-main",
+    "id": 211,
+    "parent": 189,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer restore-known-volatile",
+    "id": 212,
+    "parent": 211,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 213,
+    "parent": 211,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer branch-switch",
+    "id": 214,
+    "parent": 211,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 215,
+    "parent": 211,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer normalize-session",
+    "id": 216,
+    "parent": 211,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer post-merge-check",
+    "id": 217,
+    "parent": 189,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 218,
+    "parent": 217,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer repo-status",
+    "id": 219,
+    "parent": 189,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer restore-known-volatile",
+    "id": 220,
+    "parent": 189,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer sync-main",
+    "id": 221,
+    "parent": 178,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer restore-known-volatile",
+    "id": 222,
+    "parent": 221,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 223,
+    "parent": 221,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer branch-switch",
+    "id": 224,
+    "parent": 221,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit rules acknowledge",
+    "id": 225,
+    "parent": 221,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer normalize-session",
+    "id": 226,
+    "parent": 221,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer post-merge-check",
+    "id": 227,
+    "parent": 178,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit handoff post-merge-refresh-status",
+    "id": 228,
+    "parent": 227,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer repo-status",
+    "id": 229,
+    "parent": 178,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit release-publish",
+    "id": 230,
+    "parent": 177,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit release-prep",
+    "id": 231,
+    "parent": 230,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit release-metadata-authority-gate",
+    "id": 232,
+    "parent": 230,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit docs-audit",
+    "id": 233,
+    "parent": 230,
+    "step": "release B4"
+  },
+  {
+    "command": "agentic-kit transfer command-reference-check",
+    "id": 234,
+    "parent": 230,
+    "step": "release B4"
+  }
+]

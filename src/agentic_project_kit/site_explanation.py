@@ -16,6 +16,7 @@ from urllib.parse import urlparse
 import yaml
 
 from agentic_project_kit.site_public_contract import release_section
+from agentic_project_kit.site_workflow_figures import collect_figures, render_figures
 
 DIRECTION = "docs/planning/PROJECT_DIRECTION.yaml"
 GREENFIELD = "docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.json"
@@ -74,7 +75,7 @@ def collect_explanation(root: Path, *, version: str) -> dict[str, object]:
     phases = phases if isinstance(phases, list) else []
     p0 = next((p for p in phases if isinstance(p, dict) and p.get("id") == "P0"), {})
     release = release_section(root, version)
-    return {
+    result = {
         "schema_version": 1,
         "kind": "site_explanation_projection",
         "greenfield": greenfield,
@@ -85,6 +86,10 @@ def collect_explanation(root: Path, *, version: str) -> dict[str, object]:
                 "p0": str(p0.get("decision_status", "not recorded")), "source": DIRECTION},
         "comparisons": _comparison_rows(root),
     }
+    template = root / 'site/templates/understand.html'
+    if template.is_file() and '${workflow_figures}' in template.read_text():
+        result['workflow_figures'] = collect_figures(root)
+    return result
 
 
 def render_explanation(root: Path, projection: dict[str, object], *, repository_url: str,
@@ -95,6 +100,7 @@ def render_explanation(root: Path, projection: dict[str, object], *, repository_
         repository_url=escape(repository_url, quote=True),
         evidence_cards=render_evidence_cards(projection, repository_url=repository_url),
         comparison_rows=_render_comparisons(projection),
+        workflow_figures=render_figures(projection['workflow_figures']) if 'workflow_figures' in projection else '',
     ).rstrip() + "\n"
 
 

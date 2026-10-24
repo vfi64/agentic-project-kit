@@ -1,5 +1,16 @@
 # Test Gates
 
+## Offline path observation and generated workflow figures
+
+`tests/test_offline_path_observation.py` checks callback-only direct edges, shared
+aliases, subprocess wrappers and actual Python `-I` tracing. The developer runner
+requires an inherited OS network/write deny and preserves INCOMPLETE with rc 3;
+unit PASS is not a successful scenario or a live release. No paid model runs.
+`tests/test_site_workflow_figures.py` checks G2/G3 contract source bindings, public
+G0 observed edges, XML/text alternatives and refusal on changed package shape.
+See `docs/reference/OFFLINE_PATH_OBSERVATION.md`. Static analysis expansion stays
+with D1; historical K0/K0c and the 2026-10-15 simulation are preserved.
+
 ## Bounded command composition audit
 
 `tests/test_command_composition_audit.py` checks cycle-safe reachability, direct shared

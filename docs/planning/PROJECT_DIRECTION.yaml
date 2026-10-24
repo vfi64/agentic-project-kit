@@ -72,6 +72,13 @@ meta:
           with handoff PR2620. Keep Agentic Project Kit identity and implement
           bounded entry, scoped counts and exact release records. No new graphics,
           release, model runs, D1, Pages-policy simplification or lock triage.
+      - id: website-evidence-and-command-navigation
+        step: w0c-generated-workflow-and-core-figures
+        status: done
+        scope: Owner authorized one combined slice on 2026-10-24 after the static
+          flow review. G2/G3 are current contract views; G0 is callback evidence
+          from one isolated work/B4 fixture, intentionally stopped before C2.
+          No live release, full publication graph, D1 expansion or kernel rename.
       - id: external-retest-machine-contracts
         status: blocked
         scope: Main item remains active; c1 and c3 are done, c2 is blocked pending
@@ -2086,11 +2093,12 @@ plans:
     - docs/reports/protection_mechanisms_20261023/README.md
     - docs/reports/protection_mechanisms_20261023/reachability.json
     - tests/test_protection_mechanism_audit.py
-    remaining_boundary: Recommendations and executable calls in K0 closure must be
-      distinguished before G0; this audit does not prove a universal kernel.
+    remaining_boundary: Static closure remains unsuitable for G0. W0c uses observed
+      callback receipts instead; D1 may later expand helper analysis. No universal
+      kernel or protection coverage is proven.
   - id: k0-command-reference-source-flow
     status: done
-    analysis_status: bounded_static_incomplete_review_required_before_g0
+    analysis_status: bounded_static_incomplete_reviewed_observed_g0_selected
     kind: bounded_static_followup
     scope: Distinguish possible executable argv flow, recommendations and unknown
       literal references without replacing K0 evidence or command taxonomy.
@@ -2524,11 +2532,22 @@ plans:
         evidence; do not infer recovery-path execution or consumer VERIFIED_FIXED.
       - Keep the complete generated command reference discoverable.
   - id: w0c-generated-workflow-and-core-figures
-    status: planned
-    priority: separate_slice_after_entry_review
+    status: done
+    priority: owner_authorized_combined_slice_20261024
+    completion_boundary: Bounded work and B4 closeout observed at an exact development
+      revision; C2 publication remains intentionally unapproved and unobserved.
+    decision: G2/G3 contract views and a bounded offline path observation share one
+      slice. G0 uses only observed direct callback edges, with explicit stop points;
+      no static closure, universal kernel claim or live release is authorized.
+    evidence:
+    - docs/reference/OFFLINE_PATH_OBSERVATION.md
+    - docs/reports/offline_path_20261024/README.md
+    - docs/reports/offline_path_20261024/observation.json
+    - tests/test_offline_path_observation.py
+    - tests/test_site_workflow_figures.py
     acceptance:
     - Generate G2 work-cycle and G3 handoff views from their checked source projections;
-      render G0 command/core composition only after K0 and a terminology decision.
+      render G0 only from observed sandbox calls after review; keep neutral terminology.
     - Reuse and review existing SVGs; provide legible mobile views and text alternatives.
       Correct runtime-map claim-status labels from the existing derived status model.
     - Use neutral workflow/operation/shared-mechanism labels until any public Shell/

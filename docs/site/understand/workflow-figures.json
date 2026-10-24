@@ -1,0 +1,614 @@
+{
+  "boundary": "Editorial contract views; arrows show a reading/work sequence, not observed nested calls.",
+  "figures": [
+    {
+      "boundary": "Make the selected change between start and check. Review the finish plan before execution; blocked or failed results stop the cycle.",
+      "id": "G2",
+      "nodes": [
+        {
+          "detail": "Start a human patch/slice workflow with the safe standard startup sequence.",
+          "label": "work start",
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        {
+          "detail": "Run common human workflow gates without committing or pushing.",
+          "label": "work check",
+          "safety": "READ_ONLY",
+          "surface": "diagnostic"
+        },
+        {
+          "detail": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.",
+          "label": "work finish",
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        {
+          "detail": "Create a deterministic successor handoff package and prompt projections.",
+          "label": "transfer chat-switch-complete",
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        }
+      ],
+      "title": "A bounded work cycle"
+    },
+    {
+      "boundary": "A generated package preserves inspectable context. It does not prove requirements or software correctness.",
+      "id": "G3",
+      "nodes": [
+        {
+          "detail": "source_manifest.json records the inputs.",
+          "label": "Repository sources"
+        },
+        {
+          "detail": "execution_contract.json, source_manifest.json, successor_context.yaml, successor_prompt.md, validation_report.json",
+          "label": "Successor package"
+        },
+        {
+          "detail": "Read validation_report.json and execution_contract.json. A failed handoff blocks continuation.",
+          "label": "Validate, then continue"
+        },
+        {
+          "detail": "Use successor_context.yaml and successor_prompt.md; inspect current repository state.",
+          "label": "Successor chat"
+        }
+      ],
+      "title": "Context survives the chat"
+    },
+    {
+      "boundary": "CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entries include plans and dry runs. Entry does not imply successful completion; no live release or complete command coverage is claimed. Source: 7a6173cab704d57322e3ad22ddf4c02096314b1d. Run status: BOUNDED_COMPLETE. Complete publication is outside this observation.",
+      "direct_calls": true,
+      "id": "G0",
+      "nodes": [
+        {
+          "detail": "rules acknowledge; transfer branch-create; transfer post-merge-check; transfer repo-status; transfer sync-main",
+          "label": "work start"
+        },
+        {
+          "detail": "rules acknowledge; transfer chat-switch-complete; transfer commit; transfer post-merge-check; transfer pr-create-complete; transfer protected-diff-plan; transfer push-current; transfer repo-status; transfer sync-main",
+          "label": "work finish"
+        },
+        {
+          "detail": "No nested CLI callback observed; internal Python operations are outside this view.",
+          "label": "transfer chat-switch-complete"
+        },
+        {
+          "detail": "release prepare; release ready; release-publish; transfer sync-main; work finish; work start",
+          "label": "release run"
+        }
+      ],
+      "subtitle": [
+        "Offline callback entries \u00b7 7a6173cab704",
+        "Local Git + fake GitHub \u00b7 no publication"
+      ],
+      "title": "Observed work and release entry"
+    }
+  ],
+  "kind": "workflow_figure_projection",
+  "observation": {
+    "boundary": "CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entries include plans and dry runs. Entry does not imply successful completion; no live release or complete command coverage is claimed.",
+    "direct_edges": [
+      {
+        "callee": "agentic-kit audit-command-manifest",
+        "caller": "agentic-kit release prepare",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit commands sync-entrypoints",
+        "caller": "agentic-kit release prepare",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit release-notes-generate",
+        "caller": "agentic-kit release prepare",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit release-prep",
+        "caller": "agentic-kit release prepare",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer chat-switch-complete",
+        "caller": "agentic-kit release prepare",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit workspace adopt",
+        "caller": "agentic-kit release prepare",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit workspace init",
+        "caller": "agentic-kit release prepare",
+        "entries": 3
+      },
+      {
+        "callee": "agentic-kit release-notes-generate",
+        "caller": "agentic-kit release ready",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit release-prep",
+        "caller": "agentic-kit release ready",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit release-status",
+        "caller": "agentic-kit release ready",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit transfer standard-error-scan",
+        "caller": "agentic-kit release ready",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit transfer sync-main",
+        "caller": "agentic-kit release ready",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit release prepare",
+        "caller": "agentic-kit release run",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit release ready",
+        "caller": "agentic-kit release run",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit release-publish",
+        "caller": "agentic-kit release run",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit transfer sync-main",
+        "caller": "agentic-kit release run",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit work finish",
+        "caller": "agentic-kit release run",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit work start",
+        "caller": "agentic-kit release run",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit docs-audit",
+        "caller": "agentic-kit release-publish",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit release-metadata-authority-gate",
+        "caller": "agentic-kit release-publish",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit release-prep",
+        "caller": "agentic-kit release-publish",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit transfer command-reference-check",
+        "caller": "agentic-kit release-publish",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit audit-absolute-path-portability",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit audit-command-authority",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit audit-command-manifest",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit audit-doc-currency",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit audit-mutation-lock-coverage",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit audit-ns-legacy-references",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit audit-patch-failure-discipline",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit audit-path-literals",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit audit-planning-docs-consolidation",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit audit-program-redundancy",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit audit-status-current-state",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit command-taxonomy-check",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit direction validate",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit doc-lifecycle-audit",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit doc-registry check-unregistered",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit project-direction",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit release-publish",
+        "caller": "agentic-kit standard-gates-audit-suite",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit handoff post-merge-refresh-status",
+        "caller": "agentic-kit transfer post-merge-check",
+        "entries": 7
+      },
+      {
+        "callee": "agentic-kit boot write",
+        "caller": "agentic-kit transfer post-merge-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit handoff check",
+        "caller": "agentic-kit transfer post-merge-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit handoff post-merge-refresh-status",
+        "caller": "agentic-kit transfer post-merge-complete",
+        "entries": 8
+      },
+      {
+        "callee": "agentic-kit handoff prompt",
+        "caller": "agentic-kit transfer post-merge-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit pr merge-if-green",
+        "caller": "agentic-kit transfer post-merge-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit pr wait-ci",
+        "caller": "agentic-kit transfer post-merge-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer prepare-successor-handoff",
+        "caller": "agentic-kit transfer post-merge-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer protected-diff-plan",
+        "caller": "agentic-kit transfer post-merge-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit boot write",
+        "caller": "agentic-kit transfer post-merge-settle",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit handoff check",
+        "caller": "agentic-kit transfer post-merge-settle",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit handoff post-merge-refresh-status",
+        "caller": "agentic-kit transfer post-merge-settle",
+        "entries": 4
+      },
+      {
+        "callee": "agentic-kit handoff prompt",
+        "caller": "agentic-kit transfer post-merge-settle",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit pr merge-if-green",
+        "caller": "agentic-kit transfer post-merge-settle",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit pr wait-ci",
+        "caller": "agentic-kit transfer post-merge-settle",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit transfer prepare-successor-handoff",
+        "caller": "agentic-kit transfer post-merge-settle",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit transfer protected-diff-plan",
+        "caller": "agentic-kit transfer post-merge-settle",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit rules acknowledge",
+        "caller": "agentic-kit transfer pr-complete",
+        "entries": 4
+      },
+      {
+        "callee": "agentic-kit transfer post-merge-complete",
+        "caller": "agentic-kit transfer pr-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer pr-merge-safe",
+        "caller": "agentic-kit transfer pr-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer pr-wait-ci",
+        "caller": "agentic-kit transfer pr-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer post-merge-check",
+        "caller": "agentic-kit transfer pr-create-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer pr-complete",
+        "caller": "agentic-kit transfer pr-create-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer pr-create",
+        "caller": "agentic-kit transfer pr-create-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer repo-status",
+        "caller": "agentic-kit transfer pr-create-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer restore-known-volatile",
+        "caller": "agentic-kit transfer pr-create-complete",
+        "entries": 4
+      },
+      {
+        "callee": "agentic-kit transfer sync-main",
+        "caller": "agentic-kit transfer pr-create-complete",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit pr merge-if-green",
+        "caller": "agentic-kit transfer pr-merge-safe",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit pr wait-ci",
+        "caller": "agentic-kit transfer pr-wait-ci",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit handoff post-merge-refresh-status",
+        "caller": "agentic-kit transfer require-fresh-llm-context",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit audit-doc-currency",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit audit-ns-legacy-references",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit audit-planning-docs-consolidation",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit audit-program-redundancy",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit docs-audit",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit release-notes-generate",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit release-prep",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit release-status",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit standard-gates-audit-suite",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit transfer command-composition-check",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit transfer command-reference-check",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit transfer patch-cycle-status",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit transfer post-merge-check",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit transfer repo-status",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 1
+      },
+      {
+        "callee": "agentic-kit transfer require-fresh-llm-context",
+        "caller": "agentic-kit transfer standard-error-scan",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit rules acknowledge",
+        "caller": "agentic-kit transfer sync-main",
+        "entries": 20
+      },
+      {
+        "callee": "agentic-kit transfer branch-switch",
+        "caller": "agentic-kit transfer sync-main",
+        "entries": 10
+      },
+      {
+        "callee": "agentic-kit transfer normalize-session",
+        "caller": "agentic-kit transfer sync-main",
+        "entries": 10
+      },
+      {
+        "callee": "agentic-kit transfer restore-known-volatile",
+        "caller": "agentic-kit transfer sync-main",
+        "entries": 10
+      },
+      {
+        "callee": "agentic-kit rules acknowledge",
+        "caller": "agentic-kit work finish",
+        "entries": 8
+      },
+      {
+        "callee": "agentic-kit transfer chat-switch-complete",
+        "caller": "agentic-kit work finish",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer commit",
+        "caller": "agentic-kit work finish",
+        "entries": 4
+      },
+      {
+        "callee": "agentic-kit transfer post-merge-check",
+        "caller": "agentic-kit work finish",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer pr-create-complete",
+        "caller": "agentic-kit work finish",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer protected-diff-plan",
+        "caller": "agentic-kit work finish",
+        "entries": 4
+      },
+      {
+        "callee": "agentic-kit transfer push-current",
+        "caller": "agentic-kit work finish",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer repo-status",
+        "caller": "agentic-kit work finish",
+        "entries": 6
+      },
+      {
+        "callee": "agentic-kit transfer sync-main",
+        "caller": "agentic-kit work finish",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit rules acknowledge",
+        "caller": "agentic-kit work start",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer branch-create",
+        "caller": "agentic-kit work start",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer post-merge-check",
+        "caller": "agentic-kit work start",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer repo-status",
+        "caller": "agentic-kit work start",
+        "entries": 2
+      },
+      {
+        "callee": "agentic-kit transfer sync-main",
+        "caller": "agentic-kit work start",
+        "entries": 2
+      }
+    ],
+    "failed_steps": [],
+    "source_commit": "7a6173cab704d57322e3ad22ddf4c02096314b1d",
+    "status": "BOUNDED_COMPLETE"
+  },
+  "schema_version": 1,
+  "sources": {
+    "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "cb8b4aeb001c238c08d924e10f7c79ad901d456243423908e1fbdfb6e77cb13e",
+    "docs/reference/agentic-kit-commands.json": "80473602c348b6f4a34a21bfaa98cedfa7989e122582814f6cb0b484565ba179",
+    "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
+    "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
+    "src/agentic_project_kit/successor_handoff_package.py": "053a96a55182ff05d3e801c56dfc74535a4205de67ecd4db1ba837c2494f81f2"
+  }
+}

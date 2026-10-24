@@ -1807,3 +1807,19 @@ documents:
     class: evidence/log
     owner: maintainers
     summary: Deterministic reference sites and possible static helper flows
+  - path: docs/reference/OFFLINE_PATH_OBSERVATION.md
+    class: user-facing description
+    owner: maintainers
+    summary: Bounded offline callback observation and generated workflow figure boundaries.
+  - path: docs/reports/offline_path_20261024/README.md
+    class: evidence/log
+    owner: maintainers
+    summary: Bounded offline work and B4 observation, exact revision and limits.
+  - path: docs/reports/offline_path_20261024/observation.json
+    class: evidence/log
+    owner: maintainers
+    summary: Reviewed callback-only observation with OS probe and C2 stop receipts.
+  - path: docs/reports/offline_path_20261024/callbacks.json
+    class: evidence/log
+    owner: maintainers
+    summary: Normalized direct callback parent receipts without local runtime paths.

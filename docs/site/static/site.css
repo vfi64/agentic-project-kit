@@ -398,3 +398,7 @@ th {
     font-size: 2.45rem;
   }
 }
+
+.workflow-map { max-width: 640px; margin-inline: auto; }
+.workflow-map img { min-width: 0; width: 100%; }
+@media (max-width: 680px) { .workflow-map { max-width: 360px; } .workflow-map img { min-width: 0; } }

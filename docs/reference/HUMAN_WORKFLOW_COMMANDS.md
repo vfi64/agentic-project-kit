@@ -163,6 +163,16 @@ body options return `BLOCKED` before any subprocess or write.
 Use --no-merge only when the intended result is an open review PR with pending
 post-merge handoff markers.
 
+## agentic-kit transfer chat-switch-complete
+
+Generate and validate the deterministic successor package before changing chats:
+
+    agentic-kit transfer chat-switch-complete --json
+
+Read `validation_report.json` and `execution_contract.json` before continuing.
+The context and prompt are generated projections of repository sources, not a
+replacement for checking current Git state. Stop when validation fails.
+
 ## agentic-kit work recover
 
 Run safe recovery and status commands after interrupted work.
