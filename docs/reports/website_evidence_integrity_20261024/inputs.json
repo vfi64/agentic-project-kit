@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "base_commit": "fc6ae924557b68a056dab4a65618581a9d957c56",
+  "claim_scopes": {
+    "documentation": 1,
+    "historical-observation": 2,
+    "technical": 11
+  },
+  "direct_evidence_paths": [
+    ".github/workflows/release.yml",
+    "README.md",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.json",
+    "docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md",
+    "docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md",
+    "pyproject.toml",
+    "site/scripts/build.py",
+    "tests/test_successor_handoff_package.py",
+    "tests/test_workspace_adopt.py",
+    "tests/test_workspace_init.py"
+  ],
+  "input_sha256": {
+    "site/content/claims.yaml": "34806168f1030842b8f0200d9c1344a33cf7a486593283cfd5e92511c17d5b35",
+    "site/pages_input_manifest.json": "da30aa8e71e5cb8bb77f4bef323af1af6f24003a01ecc121807fab151e520a84",
+    "src/agentic_project_kit/site_evidence_contract.py": "e468ab9b8156a1cfe82ebc3e4e091bd52fdf0db1f65b435088f4e98d3b08bc42",
+    "src/agentic_project_kit/site_claims.py": "7daf0c3b8e233145e4f56d1ea6c3680eec3882108a395d42dc7c014ff61dfce8",
+    "src/agentic_project_kit/site_generator.py": "df98be3161aacb7beb45125bd5b016a8671a48f9ace41d37b2834c9c7e5e160f"
+  }
+}

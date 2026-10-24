@@ -26,7 +26,9 @@ def test_site_foundation_metadata_uses_meta_manifest_sha(tmp_path: Path) -> None
     assert report.metadata.package_version == "1.2.3"
     assert report.metadata.requires_python == ">=3.11"
     assert report.metadata.repository_url == "https://example.invalid/repo"
-    assert report.metadata.command_count == 3
+    assert report.metadata.command_count == len(
+        json.loads((root / "docs/reference/agentic-kit-commands.json").read_text())["commands"]
+    )
     assert report.metadata.manifest_sha == report.metadata.reproduced_manifest_sha
     assert report.metadata.manifest_identity_verified is True
 
@@ -63,7 +65,7 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     assert "Agentic Execution Runtime" in html
     assert "Repository Memory" in html
     assert "Choose How You Want To Work" in html
-    assert "Verified now" in html
+    assert "Evidence checks within stated scope" in html
     assert "1.2.3" in html
     assert "abc123" in html
     assert "v1.2.3" in html
@@ -76,13 +78,18 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     assert data["metadata"]["surface_counts"] == {
         "diagnostic": 1,
         "orchestrator": 1,
-        "primitive": 1,
+        "primitive": data["metadata"]["command_count"] - 2,
     }
     assert data["status_projection"]["current_release_tag"] == "v1.2.3"
     assert data["roadmap_projection"]["status"] == "active"
     assert commands["guided_count"] == 1
     assert commands["diagnostic_count"] == 1
-    assert commands["entries"][0]["diagnostic_priority"] == "common_blocker"
+    assert (
+        next(e for e in commands["entries"] if e["qualified_name"] == "agentic-kit check-docs")[
+            "diagnostic_priority"
+        ]
+        == "common_blocker"
+    )
     assert claims["claim_count"] == 0
     assert quickstart["kind"] == "site_quickstart_projection"
     assert quickstart["docs"][0]["path"] == "docs/ONBOARDING.md"
@@ -95,17 +102,19 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
         "gui",
     ]
     assert workflows["brownfield"]["status"] == "not_recorded"
-    assert "First-chat onboarding" in (output / "quickstart" / "index.html").read_text(encoding="utf-8")
+    assert "First-chat onboarding" in (output / "quickstart" / "index.html").read_text(
+        encoding="utf-8"
+    )
     assert "Executor Is Replaceable; Repository Governance Persists" in (
         output / "workflows" / "index.html"
     ).read_text(encoding="utf-8")
     assert "Docker" in (output / "quickstart" / "index.html").read_text(encoding="utf-8")
-    assert "agentic-kit workspace init" in (
-        output / "commands" / "guided.html"
-    ).read_text(encoding="utf-8")
-    assert "agentic-kit check-docs" in (
-        output / "commands" / "diagnostics.html"
-    ).read_text(encoding="utf-8")
+    assert "agentic-kit workspace init" in (output / "commands" / "guided.html").read_text(
+        encoding="utf-8"
+    )
+    assert "agentic-kit check-docs" in (output / "commands" / "diagnostics.html").read_text(
+        encoding="utf-8"
+    )
     command_html = (output / "commands" / "index.html").read_text(encoding="utf-8")
     assert 'id="command-search"' in command_html
     assert 'data-safety="BOUNDED"' in command_html
@@ -378,6 +387,7 @@ def _write_site_fixture(
         }
         for (qualified_name, group, safety), surface in zip(command_names, surfaces, strict=False)
     ]
+    commands = _complete_selected_commands(root, commands)
     identity = manifest_identity or manifest_sha(commands)
     (root / "docs" / "reference" / "agentic-kit-commands.json").write_text(
         json.dumps(
@@ -400,7 +410,7 @@ def _write_site_fixture(
     (root / "site" / "templates" / "index.html").write_text(
         (
             "<html>${product_name} ${package_version} ${build_commit} "
-            "${orchestrator_count} ${release_tag} Repository Memory Verified now "
+            "${orchestrator_count} ${release_tag} Repository Memory Evidence checks within stated scope "
             "Choose How You Want To Work ${workflow_mode_count} ${brownfield_status} "
             "pip install ${package_name} ${repository_url} "
             "${guided_command_items} ${common_diagnostic_items}</html>\n"
@@ -428,7 +438,7 @@ def _write_site_fixture(
     )
     (root / "site" / "static" / "site.css").write_text("body { color: black; }\n", encoding="utf-8")
     (root / "site" / "static" / "runtime-map.svg").write_text(
-        "<svg xmlns=\"http://www.w3.org/2000/svg\"></svg>\n",
+        '<svg xmlns="http://www.w3.org/2000/svg"></svg>\n',
         encoding="utf-8",
     )
     (root / "docs" / "STATUS.md").write_text(
@@ -485,3 +495,44 @@ def _entry(qualified_name: str, *, rank: int | None) -> SiteCommandEntry:
         lifecycle_rank=rank,
         params=(),
     )
+
+
+def _complete_selected_commands(root, commands):
+    """Minimal catalogs must include every currently rendered literal selection."""
+    from types import SimpleNamespace
+    from agentic_project_kit.site_generator import (
+        SiteCommandCatalog,
+        _build_workflow_projection,
+        _build_quickstart_projection,
+    )
+
+    empty = SiteCommandCatalog(entries=())
+    metadata = SimpleNamespace(
+        package_name="kit", package_version="1", requires_python=">=3.11", repository_url=""
+    )
+    projections = [
+        _build_workflow_projection(root, empty),
+        _build_quickstart_projection(metadata, empty),
+    ]
+    names = {
+        row["qualified_name"]
+        for projection in projections
+        for key in ("flows", "modes")
+        for group in projection.get(key, [])
+        for row in group["commands"]
+    }
+    existing = {c["qualified_name"] for c in commands}
+    for name in sorted(names - existing):
+        commands.append(
+            {
+                "qualified_name": name,
+                "group": "root",
+                "surface": "primitive",
+                "safety": "BOUNDED",
+                "dry_run_available": False,
+                "when_to_use": f"Fixture entry for {name}.",
+                "help": "",
+                "params": [],
+            }
+        )
+    return commands

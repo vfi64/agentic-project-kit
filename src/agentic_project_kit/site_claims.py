@@ -12,6 +12,7 @@ from typing import Any
 import yaml
 
 from agentic_project_kit.command_manifest import load_manifest
+from agentic_project_kit.site_evidence_contract import evidence_policy_blockers
 
 
 CLAIM_STATUSES = {"verified", "unverified", "planned"}
@@ -49,6 +50,8 @@ class ClaimEvaluation:
     status: str
     evidence: tuple[EvidenceEvaluation, ...]
     blockers: tuple[str, ...]
+    scope: str = "technical"
+    scope_note: str = ""
 
     @property
     def ok(self) -> bool:
@@ -58,6 +61,8 @@ class ClaimEvaluation:
         return {
             "id": self.id,
             "text": self.text,
+            "scope": self.scope,
+            "scope_note": self.scope_note,
             "required": self.required,
             "planned": self.planned,
             "status": self.status,
@@ -147,7 +152,9 @@ def evaluate_site_claims(
         claim_id = _string(record.get("id")) or f"claim-{index}"
         forbidden = sorted(FORBIDDEN_STORED_STATUS_FIELDS.intersection(record))
         if forbidden:
-            schema_blockers.append(f"{claim_id}: stored derived status fields are forbidden: {', '.join(forbidden)}")
+            schema_blockers.append(
+                f"{claim_id}: stored derived status fields are forbidden: {', '.join(forbidden)}"
+            )
         text = _string(record.get("text"))
         if not text:
             schema_blockers.append(f"{claim_id}: text is missing")
@@ -167,6 +174,11 @@ def evaluate_site_claims(
             )
             for evidence_record in evidence_records
         )
+        policy = evidence_policy_blockers(root, record)
+        evidence += tuple(
+            EvidenceEvaluation("claim-scope", "unverified", issue) for issue in policy
+        )
+        schema_blockers.extend(f"{claim_id}: {issue}" for issue in policy)
         if planned:
             status = "planned"
         elif evidence and all(item.ok for item in evidence):
@@ -183,6 +195,8 @@ def evaluate_site_claims(
                 status=status,
                 evidence=evidence,
                 blockers=blockers,
+                scope=_string(record.get("scope")) or "technical",
+                scope_note=_string(record.get("scope_note")),
             )
         )
     return ClaimEvaluationReport(claims=tuple(claims), schema_blockers=tuple(schema_blockers))

@@ -34,26 +34,26 @@
       </section>
 
       <section class="section-grid" aria-label="Workflow modes">
-        <article class="panel workflow-card" id="mode-file-transfer"><p class="eyebrow">primary web-LLM path</p><h2>File Transfer</h2><p>The human and the LLM exchange bounded Kit transfer files while the repository remains the source of truth.</p><p><strong>Best for:</strong> Web or hosted LLMs without direct terminal or repository access.</p><ul class="summary-list command-flow">
+        <article class="panel workflow-card" id="mode-file-transfer"><h2>File Transfer</h2><p>The human and the LLM exchange bounded Kit transfer files while the repository remains the source of truth.</p><p><strong>Best for:</strong> Web or hosted LLMs without direct terminal or repository access.</p><ul class="summary-list command-flow">
           <li><a href="../commands/index.html"><code>agentic-kit transfer read-user-task</code></a><span>Run agentic-kit transfer read-user-task.</span><small>primitive · BOUNDED</small></li>
           <li><a href="../commands/index.html"><code>agentic-kit transfer submit-user-task</code></a><span>Run agentic-kit transfer submit-user-task.</span><small>primitive · BOUNDED</small></li>
           <li><a href="../commands/index.html"><code>agentic-kit transfer remote-next</code></a><span>Run the next repo-backed transfer order for local or remote work handoff.</span><small>orchestrator · BOUNDED</small></li>
           <li><a href="../commands/index.html"><code>agentic-kit transfer chat-switch-complete</code></a><span>Create a deterministic successor handoff package and prompt projections.</span><small>orchestrator · BOUNDED</small></li>
 </ul></article>
-        <article class="panel workflow-card" id="mode-copy-paste"><p class="eyebrow">manual fallback</p><h2>Copy and Paste</h2><p>The LLM proposes a bounded terminal block, the human runs it, and the important output is returned to the conversation.</p><p><strong>Best for:</strong> Small manual web-LLM sessions where a file-transfer carrier is not needed.</p><ul class="summary-list command-flow">
+        <article class="panel workflow-card" id="mode-copy-paste"><h2>Copy and Paste</h2><p>The LLM proposes a bounded terminal block, the human runs it, and the important output is returned to the conversation.</p><p><strong>Best for:</strong> Small manual web-LLM sessions where a file-transfer carrier is not needed.</p><ul class="summary-list command-flow">
           <li><a href="../commands/index.html"><code>agentic-kit workflow request</code></a><span>Request the configured declarative workflow without running it.</span><small>primitive · BOUNDED</small></li>
           <li><a href="../commands/index.html"><code>agentic-kit workflow run</code></a><span>Run the current workflow, or set a stored workflow item and run it.</span><small>primitive · BOUNDED</small></li>
           <li><a href="../commands/index.html"><code>agentic-kit transfer log-header</code></a><span>Render the dynamic local-to-LLM copy/paste log header from rule files.</span><small>primitive · BOUNDED</small></li>
           <li><a href="../commands/index.html"><code>agentic-kit transfer chat-switch-complete</code></a><span>Create a deterministic successor handoff package and prompt projections.</span><small>orchestrator · BOUNDED</small></li>
 </ul></article>
-        <article class="panel workflow-card" id="mode-agent-direct"><p class="eyebrow">executor-controlled workspace path</p><h2>Agent Direct</h2><p>The executor can run Kit commands directly, but repository governance, evidence, safety classes and handoff state remain separate from the agent.</p><p><strong>Best for:</strong> Executors with controlled repository and terminal access.</p><ul class="summary-list command-flow">
+        <article class="panel workflow-card" id="mode-agent-direct"><h2>Agent Direct</h2><p>The executor can run Kit commands directly, but repository governance, evidence, safety classes and handoff state remain separate from the agent.</p><p><strong>Best for:</strong> Executors with controlled repository and terminal access.</p><ul class="summary-list command-flow">
           <li><a href="../commands/index.html"><code>agentic-kit command-for</code></a><span>Select the deterministic wrapper command for a raw command or task tag.</span><small>diagnostic · READ_ONLY</small></li>
           <li><a href="../commands/index.html"><code>agentic-kit transfer remote-work-start</code></a><span>Prepare a remote work branch with freshness, status, and transfer safety checks.</span><small>orchestrator · BOUNDED</small></li>
           <li><a href="../commands/index.html"><code>agentic-kit transfer pr-create-complete</code></a><span>Create, validate, merge, and optionally close out a PR without manual PR/SHA copying.</span><small>orchestrator · BOUNDED</small></li>
           <li><a href="../commands/index.html"><code>agentic-kit transfer protected-diff-plan</code></a><span>Write the current diff to the OS temp directory and run the Python protected change planner on it.</span><small>diagnostic · READ_ONLY</small></li>
           <li><a href="../commands/index.html"><code>agentic-kit transfer chat-switch-complete</code></a><span>Create a deterministic successor handoff package and prompt projections.</span><small>orchestrator · BOUNDED</small></li>
 </ul></article>
-        <article class="panel workflow-card" id="mode-gui"><p class="eyebrow">experimental early surface</p><h2>GUI</h2><p>The GUI entry point is available, but full parity with every CLI command is not claimed. The manifest remains the command authority.</p><p><strong>Best for:</strong> Local operator visibility over manifest-backed actions and readiness checks.</p><ul class="summary-list command-flow">
+        <article class="panel workflow-card" id="mode-gui"><h2>GUI</h2><p>The GUI entry point is available, but full parity with every CLI command is not claimed. The manifest remains the command authority.</p><p><strong>Best for:</strong> Local operator visibility over manifest-backed actions and readiness checks.</p><ul class="summary-list command-flow">
           <li><a href="../commands/index.html"><code>agentic-kit gui-readiness-gate</code></a><span>Run the pre-GUI readiness gate.</span><small>diagnostic · BOUNDED</small></li>
           <li><a href="../commands/index.html"><code>agentic-kit cockpit run</code></a><span>Run agentic-kit cockpit run.</span><small>primitive · BOUNDED</small></li>
           <li><a href="../commands/index.html"><code>agentic-kit cockpit select</code></a><span>Run agentic-kit cockpit select.</span><small>primitive · BOUNDED</small></li>
@@ -65,7 +65,7 @@
           <p class="eyebrow">Minimal cycle</p>
           <h2 id="minimal-cycle-title">Task To Handoff</h2>
           <ul class="summary-list">
-          <li><strong>Select the interaction mode</strong><span>Choose File Transfer, Copy and Paste, Agent Direct, or the experimental GUI surface.</span></li>
+          <li><strong>Select the interaction mode</strong><span>Choose File Transfer, Copy and Paste, Agent Direct, or the GUI surface.</span></li>
           <li><strong>Inspect before mutation</strong><span>Use read-only or dry-run commands where available and keep target-owned decisions explicit.</span></li>
           <li><strong>Run a bounded slice</strong><span>Make one coherent change on a branch, record gates and evidence, and keep PR review visible.</span></li>
           <li><strong>Close the handoff</strong><span>Generate the successor package so another session or executor can continue from repository state.</span></li>

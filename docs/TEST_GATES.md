@@ -20,6 +20,15 @@ function graph without treating subprocess recommendations as execution. Existin
 mutation-lock contract and classifier tests remain separate: textual audit PASS
 is not proof that every mutating route acquires a lock.
 
+## Website evidence integrity
+
+`tests/test_site_evidence_contract.py` injects circular template evidence, missing
+historical scope, uncovered new evidence paths and removed selected commands.
+It checks all current direct claim inputs and conservative transitive code/test
+inputs trigger Pages builds. Website tests still check required unverified claims
+block publication and the generated docs fallback is byte-current. Historical
+PyPI/B1 observations remain scoped; no current installation test is invented.
+
 ## Shared Kit executable discovery
 
 `tests/test_external_kit_resolution.py` runs real installed-wheel environments

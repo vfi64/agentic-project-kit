@@ -29,7 +29,7 @@
   },
   "core_workflow": [
     {
-      "detail": "Choose File Transfer, Copy and Paste, Agent Direct, or the experimental GUI surface.",
+      "detail": "Choose File Transfer, Copy and Paste, Agent Direct, or the GUI surface.",
       "title": "Select the interaction mode"
     },
     {
@@ -84,7 +84,6 @@
         }
       ],
       "id": "file-transfer",
-      "maturity": "primary web-LLM path",
       "summary": "The human and the LLM exchange bounded Kit transfer files while the repository remains the source of truth.",
       "title": "File Transfer"
     },
@@ -125,7 +124,6 @@
         }
       ],
       "id": "copy-paste",
-      "maturity": "manual fallback",
       "summary": "The LLM proposes a bounded terminal block, the human runs it, and the important output is returned to the conversation.",
       "title": "Copy and Paste"
     },
@@ -174,7 +172,6 @@
         }
       ],
       "id": "agent-direct",
-      "maturity": "executor-controlled workspace path",
       "summary": "The executor can run Kit commands directly, but repository governance, evidence, safety classes and handoff state remain separate from the agent.",
       "title": "Agent Direct"
     },
@@ -207,7 +204,6 @@
         }
       ],
       "id": "gui",
-      "maturity": "experimental early surface",
       "summary": "The GUI entry point is available, but full parity with every CLI command is not claimed. The manifest remains the command authority.",
       "title": "GUI"
     }

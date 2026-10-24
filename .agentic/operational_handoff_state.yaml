@@ -26,12 +26,12 @@ freshness_policy:
 next_safe_substantive_slice:
   text: >-
     Follow docs/planning/PROJECT_DIRECTION.yaml#meta.planning_reconciliation.owner_order
-    as the canonical queue. P0 and K0 are closed (PR 2613, handoff 2614).
-    Owner authorized K0c protection-mechanism reachability followed by W0a evidence
-    integrity. Read docs/reports/protection_mechanisms_20261023/README.md for the
-    bounded static conclusions. No universal kernel proof, architecture rename,
-    G0 execution diagram or W0b command reselection follows from this audit.
-    No paid benchmark repetitions, release or owner-remote retests are authorized.
-    external-retest-machine-contracts remains active with c2 blocked and deferred.
-    Regenerate handoff projections from this source; do not patch generated
-    successor documents manually.
+    as the canonical queue. P0, K0 and K0c are closed (K0c PR 2615, handoff 2616).
+    W0a implements scoped evidence, Pages input coverage and selected-command
+    validation without command reselection. Read its report under
+    docs/reports/website_evidence_integrity_20261024/ before deciding W0b or G0.
+    No universal kernel proof, architecture rename, execution diagram or W0b
+    implementation is authorized by these completed slices. No paid benchmark
+    repetitions, release or owner-remote retests. external-retest-machine-contracts
+    remains active with c2 blocked and deferred. Regenerate projections from
+    this source; do not patch generated successor documents manually.

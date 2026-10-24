@@ -52,25 +52,26 @@
               <th>Claim</th>
               <th>Text</th>
               <th>Status</th>
+              <th>Evidence scope</th>
               <th>Required</th>
               <th>Evidence</th>
             </tr>
           </thead>
           <tbody>
-          <tr><td><code>cli-entry-point</code></td><td>The package provides the agentic-kit command-line interface.</td><td>verified</td><td>yes</td><td>pyproject-entrypoint</td></tr>
-          <tr><td><code>gui-entry-point</code></td><td>The package provides the agentic-kit-gui graphical entry point.</td><td>verified</td><td>no</td><td>pyproject-entrypoint</td></tr>
-          <tr><td><code>python-requirement</code></td><td>The website Python requirement is projected from pyproject.toml.</td><td>verified</td><td>yes</td><td>pyproject-value</td></tr>
-          <tr><td><code>package-version</code></td><td>The website package version is projected from pyproject.toml.</td><td>verified</td><td>yes</td><td>pyproject-value</td></tr>
-          <tr><td><code>public-source-install-documented</code></td><td>The GitHub source projection remains documented for unreleased fixes and Kit development.</td><td>verified</td><td>yes</td><td>file-contains, file-contains</td></tr>
-          <tr><td><code>pypi-trusted-publishing-ready</code></td><td>PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths.</td><td>verified</td><td>no</td><td>file-contains, file-contains</td></tr>
-          <tr><td><code>pypi-package-installable</code></td><td>Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users.</td><td>verified</td><td>yes</td><td>file-contains, file-contains, file-contains</td></tr>
-          <tr><td><code>command-manifest-synchronization</code></td><td>The public command catalog is generated from the current command manifest and checked for synchronization.</td><td>verified</td><td>yes</td><td>command-probe</td></tr>
-          <tr><td><code>artifact-gc-dry-run</code></td><td>agentic-kit artifact-gc supports dry-run behavior.</td><td>verified</td><td>no</td><td>command-manifest</td></tr>
-          <tr><td><code>workspace-adopt-read-only</code></td><td>agentic-kit workspace adopt inspects without writing.</td><td>verified</td><td>no</td><td>command-manifest, pytest-node</td></tr>
-          <tr><td><code>workspace-init-preview-execute</code></td><td>agentic-kit workspace init previews changes before explicit execution.</td><td>verified</td><td>no</td><td>command-manifest, pytest-node, pytest-node</td></tr>
-          <tr><td><code>successor-handoff-package</code></td><td>The Kit can produce a structured successor handoff package for continuing work in another session or model.</td><td>verified</td><td>no</td><td>pytest-node</td></tr>
-          <tr><td><code>generated-command-catalog</code></td><td>The website command catalog is generated from the Kit&#x27;s current command manifest.</td><td>verified</td><td>yes</td><td>generated-artifact</td></tr>
-          <tr><td><code>b1-brownfield-evaluable</code></td><td>In the historical B1 threshold window, five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary.</td><td>verified</td><td>yes</td><td>file-contains, file-contains, file-contains</td></tr>
+          <tr><td><code>cli-entry-point</code></td><td>The package provides the agentic-kit command-line interface.</td><td>verified</td><td>technical: </td><td>yes</td><td>pyproject-entrypoint</td></tr>
+          <tr><td><code>gui-entry-point</code></td><td>The package provides the agentic-kit-gui graphical entry point.</td><td>verified</td><td>technical: </td><td>no</td><td>pyproject-entrypoint</td></tr>
+          <tr><td><code>python-requirement</code></td><td>The website Python requirement is projected from pyproject.toml.</td><td>verified</td><td>technical: </td><td>yes</td><td>pyproject-value</td></tr>
+          <tr><td><code>package-version</code></td><td>The website package version is projected from pyproject.toml.</td><td>verified</td><td>technical: </td><td>yes</td><td>pyproject-value</td></tr>
+          <tr><td><code>public-source-install-documented</code></td><td>The GitHub source projection remains documented for unreleased fixes and Kit development.</td><td>verified</td><td>documentation: </td><td>yes</td><td>file-contains</td></tr>
+          <tr><td><code>pypi-trusted-publishing-ready</code></td><td>The release workflow configures the PyPI publishing action; this is configuration evidence, not a publication or installation test.</td><td>verified</td><td>technical: </td><td>no</td><td>file-contains</td></tr>
+          <tr><td><code>pypi-package-installable</code></td><td>The recorded 1.0.6 retest installed agentic-project-kit from PyPI.</td><td>verified</td><td>historical-observation: The recorded retest installed 1.0.6 from PyPI; it does not establish current release installability or arbitrary-user compatibility.</td><td>yes</td><td>file-contains</td></tr>
+          <tr><td><code>command-manifest-synchronization</code></td><td>The public command catalog is generated from the current command manifest and checked for synchronization.</td><td>verified</td><td>technical: </td><td>yes</td><td>command-probe</td></tr>
+          <tr><td><code>artifact-gc-dry-run</code></td><td>agentic-kit artifact-gc supports dry-run behavior.</td><td>verified</td><td>technical: </td><td>no</td><td>command-manifest</td></tr>
+          <tr><td><code>workspace-adopt-read-only</code></td><td>agentic-kit workspace adopt inspects without writing.</td><td>verified</td><td>technical: </td><td>no</td><td>command-manifest, pytest-node</td></tr>
+          <tr><td><code>workspace-init-preview-execute</code></td><td>agentic-kit workspace init previews changes before explicit execution.</td><td>verified</td><td>technical: </td><td>no</td><td>command-manifest, pytest-node, pytest-node</td></tr>
+          <tr><td><code>successor-handoff-package</code></td><td>The Kit can produce a structured successor handoff package for continuing work in another session or model.</td><td>verified</td><td>technical: </td><td>no</td><td>pytest-node</td></tr>
+          <tr><td><code>generated-command-catalog</code></td><td>The website command catalog is generated from the Kit&#x27;s current command manifest.</td><td>verified</td><td>technical: </td><td>yes</td><td>generated-artifact</td></tr>
+          <tr><td><code>b1-brownfield-evaluable</code></td><td>In the historical B1 threshold window, five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary.</td><td>verified</td><td>historical-observation: The historical B1 window in one familiar repository does not establish current general Brownfield portability.</td><td>yes</td><td>file-contains, file-contains</td></tr>
           </tbody>
         </table>
       </section>
