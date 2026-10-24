@@ -160,7 +160,7 @@ def test_adopt_json_shape(tmp_path: Path) -> None:
         "external_repo_conformance_claimed"
     ] is False
     assert payload["dpa_repo_adoption_assessment"]["claims"]["automatic_migration_performed"] is False
-    assert "docs/archive/README.md" in payload["init_tree"]
+    assert not any(p.startswith("docs/") for p in payload["init_tree"])
     assert ".agentic/" in payload["init_tree"]
     assert payload["proposed_manifest"]["hygiene"]["doc_lifecycle"] == "warn"
     docs_counts = {

@@ -52,6 +52,11 @@ explicitly invokes a guarded scaffolding or migration command. Explicit,
 user-invoked commit/push of the user's own work through the guarded wrappers
 is unaffected; *governance artifacts* stay inside the namespace.
 
+`workspace init` does not seed `docs/` or `docs/archive/README.md`. Existing
+project archives remain untouched. An explicitly approved document archive
+operation creates its target directory when needed; initialization is not that
+operation.
+
 ## 3. The core decision: kernel, precisely framed
 
 The engine is a **kernel**: project-agnostic at the center, everything

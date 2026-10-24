@@ -81,8 +81,6 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
 
     assert result.exit_code == 0, result.output
     expected_dirs = {
-        "docs",
-        "docs/archive",
         ".agentic",
         ".agentic/ci",
         ".agentic/dpa",
@@ -106,9 +104,8 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
         for path in tmp_path.rglob("*")
         if path.is_dir()
     }
-    assert expected_dirs <= actual_dirs
+    assert expected_dirs == actual_dirs
     expected_files = {
-        "docs/archive/README.md",
         ".agentic/config.yaml",
         ".agentic/DOC_LIFECYCLE.md",
         ".agentic/registries/documentation.yaml",
@@ -143,8 +140,7 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
     lifecycle_seed = (tmp_path / ".agentic/DOC_LIFECYCLE.md").read_text(encoding="utf-8")
     assert "Status header convention:" in lifecycle_seed
     assert "- governance: 180 days" in lifecycle_seed
-    archive_seed = (tmp_path / "docs/archive/README.md").read_text(encoding="utf-8")
-    assert "Documentation Archive" in archive_seed
+    assert not (tmp_path / "docs").exists()
     assert "agentic-kit standard-gates-audit-suite" in (
         tmp_path / ".agentic/ci/agentic-gate.yaml"
     ).read_text(encoding="utf-8")
@@ -323,7 +319,6 @@ def test_init_without_inject_touches_only_namespace_and_gitignore(tmp_path: Path
     assert all(
         path.startswith(".agentic/")
         or path == ".gitignore"
-        or path == "docs/archive/README.md"
         for path in changed
     )
     assert before_files["README.md"] == after_files["README.md"]

@@ -1209,3 +1209,13 @@ remote actions, unchanged previews and project files, bounded execute writes,
 and actual check/doctor outcomes. The N3 boundary is successful PyPI workflow
 completion, not current installability. The GF-078 archive merge is separately
 recorded; it is not inferred from a missing E1 snapshot step.
+
+
+### Operating-layer initialization namespace regression
+
+`tests/test_workspace_init.py` checks the exact fresh directory/file tree:
+`workspace init` creates no `docs/` or `docs/archive/README.md`. Adoption preview
+agrees with that boundary. Existing archive contents are preserved, including
+through workspace removal. `tests/test_site_quickstart_path.py` permits only
+`.agentic/` and `.gitignore` for default initialization; opt-in integration
+coverage remains separate. The generator-mode project skeleton is unchanged.

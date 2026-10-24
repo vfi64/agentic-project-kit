@@ -33,9 +33,11 @@ def test_four_family_adoption_path_preserves_project_files(tmp_path, monkeypatch
     assert result.exit_code == 0, result.output
     after = snapshot(tmp_path)
     assert all(after[p] == contents for p, contents in original.items())
+    assert not (tmp_path / "docs").exists()
+    assert all(p.relative_to(tmp_path).parts[0] == ".agentic" for p in tmp_path.rglob("*") if p.is_dir())
     assert ".agentic/config.yaml" in after
     added = after.keys() - original.keys()
-    assert all(p.startswith((".agentic/", "docs/archive/")) or p == ".gitignore" for p in added)
+    assert all(p.startswith(".agentic/") or p == ".gitignore" for p in added)
     for argv in (["check"], ["doctor"]):
         result = runner.invoke(app, [*argv, "--root", str(tmp_path)])
         assert result.exit_code == 0, result.output
