@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "tested_product_commit": "a4df3bae812c11b7175d1de4ecb251e6823baa1a",
+  "local_result": "RESOLVED_AFTER_TARGETED_RECHECK",
+  "full_suite_attempts": [
+    {
+      "rc": 1,
+      "passed": 4011,
+      "failed": 1,
+      "reason": "Pinned-source audit correctly refused uncommitted product changes before the Kit code commit."
+    },
+    {
+      "rc": 1,
+      "passed": 4011,
+      "failed": 1,
+      "failed_nodes": [
+        "tests/test_documentation_registry.py::test_docs_audit_cli_runs_with_documentation_registry"
+      ],
+      "reason": "The remaining obsolete coverage terms were corrected during the run; the exact failed node was rechecked successfully."
+    }
+  ],
+  "failed_node_recheck": {
+    "rc": 0,
+    "nodes": [
+      "tests/test_documentation_registry.py::test_docs_audit_cli_runs_with_documentation_registry"
+    ]
+  },
+  "targeted_website_policy_fallback": {
+    "rc": 0,
+    "passed": 67
+  },
+  "k0_audit_after_clean_commit": {
+    "rc": 0,
+    "passed": 10
+  },
+  "documentation_and_fallback_after_correction": {
+    "rc": 0,
+    "passed": 10
+  },
+  "ruff": {
+    "rc": 0
+  },
+  "check_docs": {
+    "rc": 0
+  },
+  "doctor": {
+    "rc": 0,
+    "advisory_lifecycle_findings": 76
+  },
+  "selection_comparison": {
+    "quickstart": {
+      "selection_unchanged": true,
+      "groups": 2
+    },
+    "workflows": {
+      "selection_unchanged": true,
+      "groups": 4,
+      "unsupported_maturity_labels_removed": true
+    }
+  },
+  "fresh_site_build": {
+    "rc": 0,
+    "status": "PASS"
+  },
+  "docs_fallback_build": {
+    "rc": 0,
+    "status": "PASS"
+  },
+  "ci_boundary": "Full CI and merge are proven by the PR checks and Kit closeout, outside this pre-PR validation artifact. Local failed full runs remain recorded as failures."
+}

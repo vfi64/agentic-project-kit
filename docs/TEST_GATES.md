@@ -588,7 +588,7 @@ than copied into prose. Homepage content may explain Repository Memory, Runtime 
 CLI, GUI, Communication, and Claims, but command examples must come
 from `surface: orchestrator` or common blocker diagnostics projected from the
 existing GUI command projection. Claim sections must render computed statuses:
-verified now, available but evolving, planned, and not claimed. Static visuals
+required evidence, optional evidence, planned, and not claimed. Static visuals
 such as `static/runtime-map.svg` must be copied by the site build and covered by
 site tests.
 

@@ -1140,8 +1140,8 @@ rules:
     - Repository Memory
     - Runtime Structure
     - common blocker diagnostics
-    - verified now
-    - available but evolving
+    - required evidence
+    - optional evidence
     - not claimed
     - --docs-pages-fallback
     - docs/index.html
@@ -1196,8 +1196,8 @@ rules:
     - Repository Memory
     - Runtime Structure
     - common blocker diagnostics
-    - verified now
-    - available but evolving
+    - required evidence
+    - optional evidence
     - not claimed
     - static/runtime-map.svg
     - --docs-pages-fallback

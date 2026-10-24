@@ -40,7 +40,7 @@ Critical rule IDs:
 ## Current continuation state
 
 - branch: `codex/w0a-site-evidence-integrity`
-- head_matches_origin_main: `True`
+- head_matches_origin_main: `False`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
@@ -468,9 +468,9 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/w0a-site-evidence-integrity",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "fc6ae924557b68a056dab4a65618581a9d957c56",
-    "head_matches_origin_main": true,
-    "head_short": "fc6ae924",
+    "head": "a4df3bae812c11b7175d1de4ecb251e6823baa1a",
+    "head_matches_origin_main": false,
+    "head_short": "a4df3bae",
     "local_path": "cd /path/to/",
     "origin_main": "fc6ae924557b68a056dab4a65618581a9d957c56",
     "origin_main_short": "fc6ae924",
