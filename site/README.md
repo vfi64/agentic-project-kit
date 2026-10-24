@@ -43,6 +43,22 @@ must not store derived `status` or `verified` fields. The build computes
 `claims/index.html`. Required claims block the build when they are not verified;
 optional claims degrade visibly to unverified.
 
+W0a evidence integrity keeps the same three computed statuses. Claims additionally
+carry an evidence scope: `technical` (default), `documentation`, or
+`historical-observation` with a mandatory `scope_note`. A presentation template
+cannot verify its own technical or historical claim. Documentation assertions
+verify documentation only; historical observations do not establish current release
+installability. These scopes classify the assertion's boundary, not its maturity.
+
+Direct evidence inputs are derived from claim bindings and checked against the
+Pages input manifest. Conservative `src/agentic_project_kit/`, `tools/`, `tests/`
+and report prefixes cover transitive source changes; this can cause extra builds.
+A new evidence path outside those inputs blocks the build until the manifest is
+updated. This does not add a YAML dependency to the pre-install Pages classifier.
+The existing literal selections are unchanged, but a missing selected command now
+blocks the build instead of rendering an empty metadata row. Unsupported workflow
+maturity rankings are omitted; preferred-command reselection belongs to W0b.
+
 Supported evidence types:
 
 - `pyproject-entrypoint`
@@ -98,8 +114,9 @@ adding clearer explanatory sections:
   deterministic grouping as fallback.
 - common blocker diagnostics come from the existing GUI command projection, not
   a separate website taxonomy.
-- Status categories use computed claim status: verified now, available but evolving,
-  planned, and not claimed.
+- Status categories use computed claim status and declared scope: required evidence
+  checks, optional evidence checks, planned, and not claimed. Optional is not a
+  maturity ranking.
 
 S4e quickstart projection adds `quickstart/index.html` and
 `quickstart/quickstart.json`:

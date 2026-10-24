@@ -14,6 +14,8 @@
       "id": "cli-entry-point",
       "planned": false,
       "required": true,
+      "scope": "technical",
+      "scope_note": "",
       "status": "verified",
       "text": "The package provides the agentic-kit command-line interface."
     },
@@ -29,6 +31,8 @@
       "id": "gui-entry-point",
       "planned": false,
       "required": false,
+      "scope": "technical",
+      "scope_note": "",
       "status": "verified",
       "text": "The package provides the agentic-kit-gui graphical entry point."
     },
@@ -44,6 +48,8 @@
       "id": "python-requirement",
       "planned": false,
       "required": true,
+      "scope": "technical",
+      "scope_note": "",
       "status": "verified",
       "text": "The website Python requirement is projected from pyproject.toml."
     },
@@ -59,6 +65,8 @@
       "id": "package-version",
       "planned": false,
       "required": true,
+      "scope": "technical",
+      "scope_note": "",
       "status": "verified",
       "text": "The website package version is projected from pyproject.toml."
     },
@@ -69,16 +77,13 @@
           "detail": "README.md contains required text",
           "evidence_type": "file-contains",
           "status": "verified"
-        },
-        {
-          "detail": "site/templates/quickstart.html contains required text",
-          "evidence_type": "file-contains",
-          "status": "verified"
         }
       ],
       "id": "public-source-install-documented",
       "planned": false,
       "required": true,
+      "scope": "documentation",
+      "scope_note": "",
       "status": "verified",
       "text": "The GitHub source projection remains documented for unreleased fixes and Kit development."
     },
@@ -89,32 +94,19 @@
           "detail": ".github/workflows/release.yml contains required text",
           "evidence_type": "file-contains",
           "status": "verified"
-        },
-        {
-          "detail": "site/templates/claims.html contains required text",
-          "evidence_type": "file-contains",
-          "status": "verified"
         }
       ],
       "id": "pypi-trusted-publishing-ready",
       "planned": false,
       "required": false,
+      "scope": "technical",
+      "scope_note": "",
       "status": "verified",
-      "text": "PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths."
+      "text": "The release workflow configures the PyPI publishing action; this is configuration evidence, not a publication or installation test."
     },
     {
       "blockers": [],
       "evidence": [
-        {
-          "detail": "README.md contains required text",
-          "evidence_type": "file-contains",
-          "status": "verified"
-        },
-        {
-          "detail": "site/templates/quickstart.html contains required text",
-          "evidence_type": "file-contains",
-          "status": "verified"
-        },
         {
           "detail": "docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md contains required text",
           "evidence_type": "file-contains",
@@ -124,8 +116,10 @@
       "id": "pypi-package-installable",
       "planned": false,
       "required": true,
+      "scope": "historical-observation",
+      "scope_note": "The recorded retest installed 1.0.6 from PyPI; it does not establish current release installability or arbitrary-user compatibility.",
       "status": "verified",
-      "text": "Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users."
+      "text": "The recorded 1.0.6 retest installed agentic-project-kit from PyPI."
     },
     {
       "blockers": [],
@@ -139,6 +133,8 @@
       "id": "command-manifest-synchronization",
       "planned": false,
       "required": true,
+      "scope": "technical",
+      "scope_note": "",
       "status": "verified",
       "text": "The public command catalog is generated from the current command manifest and checked for synchronization."
     },
@@ -154,6 +150,8 @@
       "id": "artifact-gc-dry-run",
       "planned": false,
       "required": false,
+      "scope": "technical",
+      "scope_note": "",
       "status": "verified",
       "text": "agentic-kit artifact-gc supports dry-run behavior."
     },
@@ -174,6 +172,8 @@
       "id": "workspace-adopt-read-only",
       "planned": false,
       "required": false,
+      "scope": "technical",
+      "scope_note": "",
       "status": "verified",
       "text": "agentic-kit workspace adopt inspects without writing."
     },
@@ -199,6 +199,8 @@
       "id": "workspace-init-preview-execute",
       "planned": false,
       "required": false,
+      "scope": "technical",
+      "scope_note": "",
       "status": "verified",
       "text": "agentic-kit workspace init previews changes before explicit execution."
     },
@@ -214,6 +216,8 @@
       "id": "successor-handoff-package",
       "planned": false,
       "required": false,
+      "scope": "technical",
+      "scope_note": "",
       "status": "verified",
       "text": "The Kit can produce a structured successor handoff package for continuing work in another session or model."
     },
@@ -229,6 +233,8 @@
       "id": "generated-command-catalog",
       "planned": false,
       "required": true,
+      "scope": "technical",
+      "scope_note": "",
       "status": "verified",
       "text": "The website command catalog is generated from the Kit's current command manifest."
     },
@@ -244,16 +250,13 @@
           "detail": "docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md contains required text",
           "evidence_type": "file-contains",
           "status": "verified"
-        },
-        {
-          "detail": "site/templates/workflows.html contains required text",
-          "evidence_type": "file-contains",
-          "status": "verified"
         }
       ],
       "id": "b1-brownfield-evaluable",
       "planned": false,
       "required": true,
+      "scope": "historical-observation",
+      "scope_note": "The historical B1 window in one familiar repository does not establish current general Brownfield portability.",
       "status": "verified",
       "text": "In the historical B1 threshold window, five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary."
     }

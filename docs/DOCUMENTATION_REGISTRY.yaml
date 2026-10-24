@@ -1783,3 +1783,7 @@ documents:
     class: evidence/log
     owner: maintainers
     summary: K0c bounded protection-mechanism reachability and consumer taxonomy scan
+  - path: docs/reports/website_evidence_integrity_20261024/README.md
+    class: evidence/log
+    owner: maintainers
+    summary: W0a scoped website evidence and Pages dependency integrity

@@ -13,10 +13,23 @@ from typing import Any
 
 import yaml
 
-from agentic_project_kit.command_manifest import SAFETY_VALUES, SURFACE_VALUES, load_manifest, manifest_sha
+from agentic_project_kit.command_manifest import (
+    SAFETY_VALUES,
+    SURFACE_VALUES,
+    load_manifest,
+    manifest_sha,
+)
 from agentic_project_kit.gui_command_projection import diagnostic_priority_for_command
 from agentic_project_kit.site_claims import ClaimEvaluationReport, evaluate_site_claims
-from agentic_project_kit.site_explanation import collect_explanation, render_evidence_cards, render_explanation
+from agentic_project_kit.site_evidence_contract import (
+    pages_evidence_blockers,
+    selected_command_blockers,
+)
+from agentic_project_kit.site_explanation import (
+    collect_explanation,
+    render_evidence_cards,
+    render_explanation,
+)
 
 
 PRODUCT_NAME = "Agentic Execution Runtime"
@@ -357,6 +370,21 @@ def collect_site_foundation_metadata(
             safety_counts=command_catalog.safety_counts(),
             command_group_count=len(command_catalog.group_counts()),
         )
+
+    claims_path = root / "site/content/claims.yaml"
+    if claims_path.exists():
+        claim_data = yaml.safe_load(claims_path.read_text(encoding="utf-8")) or {}
+        records = claim_data.get("claims", []) if isinstance(claim_data, dict) else []
+        records = records if isinstance(records, list) else []
+        blockers.extend(pages_evidence_blockers(root, [r for r in records if isinstance(r, dict)]))
+    if metadata is not None and command_catalog is not None:
+        blockers.extend(
+            selected_command_blockers(
+                workflow_projection, _build_quickstart_projection(metadata, command_catalog)
+            )
+        )
+    if blockers:
+        metadata = None
 
     return SiteFoundationReport(
         root=root.as_posix(),
@@ -789,7 +817,7 @@ def _claim_summary_items(claims: list[object], *, empty: str) -> str:
         rows.append(
             "          <li>"
             f"<code>{escape(str(getattr(claim, 'id', '')))}</code>"
-            f"<span>{escape(str(getattr(claim, 'text', '')))}</span>"
+            f"<span>{escape(str(getattr(claim, 'text', '')))} ({escape(str(getattr(claim, 'scope', 'technical')))})</span>"
             "</li>"
         )
     return "\n".join(rows)
@@ -891,7 +919,6 @@ def _build_workflow_projection(
             {
                 "id": "file-transfer",
                 "title": "File Transfer",
-                "maturity": "primary web-LLM path",
                 "best_for": "Web or hosted LLMs without direct terminal or repository access.",
                 "summary": (
                     "The human and the LLM exchange bounded Kit transfer files while the "
@@ -910,7 +937,6 @@ def _build_workflow_projection(
             {
                 "id": "copy-paste",
                 "title": "Copy and Paste",
-                "maturity": "manual fallback",
                 "best_for": "Small manual web-LLM sessions where a file-transfer carrier is not needed.",
                 "summary": (
                     "The LLM proposes a bounded terminal block, the human runs it, and the "
@@ -929,7 +955,6 @@ def _build_workflow_projection(
             {
                 "id": "agent-direct",
                 "title": "Agent Direct",
-                "maturity": "executor-controlled workspace path",
                 "best_for": "Executors with controlled repository and terminal access.",
                 "summary": (
                     "The executor can run Kit commands directly, but repository governance, "
@@ -949,7 +974,6 @@ def _build_workflow_projection(
             {
                 "id": "gui",
                 "title": "GUI",
-                "maturity": "experimental early surface",
                 "best_for": "Local operator visibility over manifest-backed actions and readiness checks.",
                 "summary": (
                     "The GUI entry point is available, but full parity with every CLI command "
@@ -968,7 +992,7 @@ def _build_workflow_projection(
         "core_workflow": [
             {
                 "title": "Select the interaction mode",
-                "detail": "Choose File Transfer, Copy and Paste, Agent Direct, or the experimental GUI surface.",
+                "detail": "Choose File Transfer, Copy and Paste, Agent Direct, or the GUI surface.",
             },
             {
                 "title": "Inspect before mutation",
@@ -1045,19 +1069,18 @@ def _read_b1_evidence(root: Path) -> dict[str, object]:
 def _workflow_mode_cards(projection: dict[str, object]) -> str:
     modes = projection.get("modes")
     if not isinstance(modes, list) or not modes:
-        return "        <article class=\"panel\"><p>No workflow modes are currently projected.</p></article>"
+        return '        <article class="panel"><p>No workflow modes are currently projected.</p></article>'
     cards = []
     for mode in modes:
         if not isinstance(mode, dict):
             continue
         cards.append(
-            "        <article class=\"panel workflow-card\" id=\"mode-"
-            f"{escape(_string(mode.get('id')))}\">"
-            f"<p class=\"eyebrow\">{escape(_string(mode.get('maturity')))}</p>"
+            '        <article class="panel workflow-card" id="mode-'
+            f'{escape(_string(mode.get("id")))}">'
             f"<h2>{escape(_string(mode.get('title')))}</h2>"
             f"<p>{escape(_string(mode.get('summary')))}</p>"
             f"<p><strong>Best for:</strong> {escape(_string(mode.get('best_for')))}</p>"
-            "<ul class=\"summary-list command-flow\">"
+            '<ul class="summary-list command-flow">'
             f"\n{_mode_command_items(mode)}\n"
             "</ul>"
             "</article>"
@@ -1261,12 +1284,15 @@ def _claim_table_row(claim: object) -> str:
     status = escape(str(getattr(claim, "status", "")))
     required = "yes" if bool(getattr(claim, "required", False)) else "no"
     evidence = getattr(claim, "evidence", ())
-    evidence_text = ", ".join(str(getattr(item, "evidence_type", "")) for item in evidence) or "none"
+    evidence_text = (
+        ", ".join(str(getattr(item, "evidence_type", "")) for item in evidence) or "none"
+    )
     return (
         "          <tr>"
         f"<td><code>{claim_id}</code></td>"
         f"<td>{text}</td>"
         f"<td>{status}</td>"
+        f"<td>{escape(str(getattr(claim, 'scope', 'technical')))}: {escape(str(getattr(claim, 'scope_note', '')))}</td>"
         f"<td>{required}</td>"
         f"<td>{escape(evidence_text)}</td>"
         "</tr>"

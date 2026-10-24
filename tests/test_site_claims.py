@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Sequence
 
 from agentic_project_kit.command_manifest import manifest_sha
+from test_site_generator import _complete_selected_commands
 from agentic_project_kit.site_claims import CommandExecution, evaluate_site_claims
 from agentic_project_kit.site_generator import SiteCommandCatalog, SiteCommandEntry, build_site
 
@@ -271,6 +272,9 @@ def _write_site_fixture(root: Path) -> Path:
     (root / "site" / "content").mkdir(parents=True)
     (root / "site" / "templates").mkdir(parents=True)
     (root / "site" / "static").mkdir(parents=True)
+    (root / "site/pages_input_manifest.json").write_text(
+        Path("site/pages_input_manifest.json").read_text()
+    )
     (root / "pyproject.toml").write_text(
         "\n".join(
             [
@@ -288,6 +292,7 @@ def _write_site_fixture(root: Path) -> Path:
         _command("agentic-kit workspace init", "workspace", "orchestrator", "BOUNDED"),
         _command("agentic-kit transfer commit", "transfer", "primitive", "BOUNDED"),
     ]
+    commands = _complete_selected_commands(root, commands)
     (root / "docs" / "reference" / "agentic-kit-commands.json").write_text(
         json.dumps(
             {

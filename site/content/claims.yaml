@@ -31,37 +31,28 @@ claims:
       key: project.version
 
   - id: public-source-install-documented
+    scope: documentation
     text: The GitHub source projection remains documented for unreleased fixes and Kit development.
     required: true
     evidence:
       - type: file-contains
         path: README.md
         contains: "agentic-project-kit @ git+https://github.com/vfi64/agentic-project-kit.git@main"
-      - type: file-contains
-        path: site/templates/quickstart.html
-        contains: '${package_name} @ git+${repository_url}.git@main'
 
   - id: pypi-trusted-publishing-ready
-    text: PyPI and TestPyPI publication are prepared through separate gated Trusted Publishing automation paths.
+    text: The release workflow configures the PyPI publishing action; this is configuration evidence, not a publication or installation test.
     required: false
     evidence:
       - type: file-contains
         path: .github/workflows/release.yml
         contains: "pypa/gh-action-pypi-publish@release/v1"
-      - type: file-contains
-        path: site/templates/claims.html
-        contains: "Post-fix PyPI validation is not claimed until a later package is published"
 
   - id: pypi-package-installable
-    text: Direct PyPI installation with python -m pip install agentic-project-kit is available for arbitrary users.
+    scope: historical-observation
+    scope_note: The recorded retest installed 1.0.6 from PyPI; it does not establish current release installability or arbitrary-user compatibility.
+    text: The recorded 1.0.6 retest installed agentic-project-kit from PyPI.
     required: true
     evidence:
-      - type: file-contains
-        path: README.md
-        contains: "python -m pip install agentic-project-kit"
-      - type: file-contains
-        path: site/templates/quickstart.html
-        contains: "python -m pip install ${package_name}"
       - type: file-contains
         path: docs/reports/POST_V1_0_6_B1_RULE_ACK_RELEASED_PACKAGE_RETEST_20260826.md
         contains: "Installed package: `agentic-project-kit==1.0.6` from PyPI"
@@ -129,6 +120,8 @@ claims:
       assertion: manifest-command-coverage
 
   - id: b1-brownfield-evaluable
+    scope: historical-observation
+    scope_note: The historical B1 window in one familiar repository does not establish current general Brownfield portability.
     text: In the historical B1 threshold window, five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary.
     required: true
     evidence:
@@ -138,6 +131,3 @@ claims:
       - type: file-contains
         path: docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
         contains: "B1 is not a proof of general Brownfield portability."
-      - type: file-contains
-        path: site/templates/workflows.html
-        contains: "The historical B1 threshold window provides evidence beyond self-hosting"

@@ -17,7 +17,13 @@
     "docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_004_RESULTS_20260826.md",
     "docs/reports/POST_V1_0_5_B1_COMM_SCI_CYCLE_005_CI_RESULTS_20260826.md",
     "docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_006_MERGE_WRAPPER_RETEST_20260829.md",
-    "docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md"
+    "docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md",
+    "README.md",
+    ".github/workflows/release.yml",
+    "src/agentic_project_kit/",
+    "tests/",
+    "docs/reports/",
+    "tools/"
   ],
   "release_state_paths": [
     "pyproject.toml",
@@ -37,6 +43,7 @@
     "tests/test_site_claims.py",
     "tests/test_site_fallback_staleness.py",
     "tests/test_ci_runtime_policy.py",
-    "tests/test_site_explanation.py"
+    "tests/test_site_explanation.py",
+    "tests/test_site_evidence_contract.py"
   ]
 }

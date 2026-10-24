@@ -56,14 +56,15 @@ meta:
         scope: Historical reconciliation; completed, not the current next action.
       - id: decomplexification-audit-roadmap
         step: k0c-protection-mechanism-reachability
-        status: active
+        status: done
         scope: K0 merged in PR 2613 with handoff 2614 after independent review;
           owner authorized K0c protection reachability followed by W0a.
           No execution diagram or architecture terminology change is authorized.
       - id: website-evidence-and-command-navigation
-        status: planned
-        scope: Follow the K0 review for selection and presentation. Evidence-integrity
-          repair is technically independent of K0 but is not started by P0.
+        step: w0a-evidence-integrity
+        status: done
+        scope: Owner authorized W0a after K0c; repair evidence integrity without
+          changing selected commands. W0b and diagrams remain separate decisions.
       - id: external-retest-machine-contracts
         status: blocked
         scope: Main item remains active; c1 and c3 are done, c2 is blocked pending
@@ -2454,7 +2455,10 @@ plans:
     scope: Retained W0 umbrella; W0a and W0b below separate integrity from new selection.
     steps:
     - id: w0a-evidence-integrity
-      status: planned
+      status: done
+      evidence:
+      - docs/reports/website_evidence_integrity_20261024/README.md
+      - tests/test_site_evidence_contract.py
       priority: after_p0_with_separate_go_independent_of_k0
       acceptance:
       - Separate technical claim evidence from presentation/documentation assertions;
