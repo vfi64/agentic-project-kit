@@ -1,0 +1,176 @@
+from pathlib import Path
+import importlib.util
+import sys
+
+
+SPEC = importlib.util.spec_from_file_location('command_flow_analysis', Path(__file__).resolve().parents[1] / 'scripts/command_flow_analysis.py')
+FLOW = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = FLOW
+SPEC.loader.exec_module(FLOW)
+
+COMMANDS = ['agentic-kit check', 'agentic-kit doctor', 'agentic-kit rules acknowledge', 'agentic-kit rule-registry bootstrap']
+
+
+def analyze(source, extra=None):
+    analyzer = FLOW.SourceFlow({'demo': source, **(extra or {})}, COMMANDS)
+    report = analyzer.run()
+    assert report['converged']
+    return analyzer, report
+
+
+def kinds(report, command):
+    return {r['classification'] for r in report['sites'] if r['command'] == command}
+
+
+def test_direct_argv_and_guidance_are_separate():
+    _, r = analyze('''import subprocess as sp
+import typer
+spare = 'not a reference'
+def start():
+    sp.run(['agentic-kit', 'check'])
+    typer.echo('Next: agentic-kit doctor')
+''')
+    assert kinds(r, COMMANDS[0]) == {'execution'}
+    assert kinds(r, COMMANDS[1]) == {'recommendation'}
+
+
+def test_nested_wrappers_and_keyword_arguments():
+    _, r = analyze('''from runner import invoke
+from agentic_project_kit.cli_executable import default_agentic_kit
+def start():
+    def step(label, argv):
+        invoke(argv)
+    kit = default_agentic_kit()
+    step(argv=[kit, 'rules', 'acknowledge'], label='ack')
+''', {'runner': 'import subprocess\ndef invoke(argv):\n    subprocess.run(args=argv)\n'})
+    assert kinds(r, COMMANDS[2]) == {'execution'}
+
+
+def test_argv_in_diagnostic_payload_is_not_execution():
+    _, r = analyze("def payload():\n    return {'argv': ['agentic-kit', 'check']}\n")
+    assert kinds(r, COMMANDS[0]) == {'unknown'}
+
+
+def test_echo_program_argument_is_not_a_kit_call():
+    _, r = analyze("import subprocess\ndef start():\n    subprocess.run(['echo', 'agentic-kit check'])\n")
+    assert kinds(r, COMMANDS[0]) == {'unknown'}
+
+
+def test_unresolved_call_named_run_is_not_a_sink():
+    _, r = analyze("def run(argv):\n    pass\ndef start():\n    run(['agentic-kit', 'check'])\n")
+    assert kinds(r, COMMANDS[0]) == {'unknown'}
+
+
+def test_shadowed_subprocess_and_reassigned_values_are_not_promoted():
+    _, r = analyze('''import subprocess
+def start(subprocess):
+    subprocess.run(['agentic-kit', 'check'])
+def other():
+    cmd = ['agentic-kit', 'doctor']
+    cmd = ['echo', 'hello']
+    subprocess.run(cmd)
+''')
+    assert kinds(r, COMMANDS[0]) == {'unknown'}
+    assert kinds(r, COMMANDS[1]) == {'unknown'}
+
+
+def test_known_helper_return_flows_to_display_not_execution():
+    _, r = analyze('''import shlex
+import typer
+def bootstrap():
+    return shlex.join(['agentic-kit', 'rule-registry', 'bootstrap'])
+def report():
+    lines = ['Rule registry next: ' + bootstrap()]
+    return '\\n'.join(lines)
+def adopt():
+    typer.echo(report())
+''')
+    assert kinds(r, COMMANDS[3]) <= {'recommendation', 'unknown'}
+    assert 'recommendation' in kinds(r, COMMANDS[3])
+    assert not FLOW.SourceFlow({'demo': ''}, COMMANDS).functions
+
+
+def test_guidance_field_and_mixed_use():
+    _, r = analyze('''import subprocess
+import typer
+def start():
+    cmd = ['agentic-kit', 'check']
+    typer.echo(cmd)
+    subprocess.run(cmd)
+    return {'next_action': 'agentic-kit doctor'}
+''')
+    assert kinds(r, COMMANDS[0]) == {'mixed'}
+    assert kinds(r, COMMANDS[1]) == {'recommendation'}
+
+
+def test_computed_prefix_and_shell_strings_stay_unknown():
+    _, r = analyze('''import subprocess
+def start(binary):
+    subprocess.run([binary, 'agentic-kit check'])
+    subprocess.run('agentic-kit doctor', shell=True)
+''')
+    assert kinds(r, COMMANDS[0]) == {'unknown'}
+    assert kinds(r, COMMANDS[1]) == {'unknown'}
+
+
+def test_source_order_does_not_change_report_and_budget_is_explicit():
+    sources={'a': "import subprocess\ndef call(argv):\n    subprocess.run(argv)\n", 'b': "from a import call\ndef run():\n    call(['agentic-kit', 'check'])\n"}
+    one = FLOW.SourceFlow(sources, COMMANDS).run()
+    two = FLOW.SourceFlow(dict(reversed(list(sources.items()))), list(reversed(COMMANDS))).run()
+    assert one == two
+    assert FLOW.SourceFlow(sources, COMMANDS).run(max_rounds=1)['converged'] is False
+
+
+def test_longest_manifest_command_and_identifier_boundary():
+    _, r = analyze("import typer\ndef hint():\n    typer.echo('agentic-kit check-unknown')\n    typer.echo('agentic-kit rule-registry bootstrap --json')\n")
+    assert not kinds(r, COMMANDS[0])
+    assert kinds(r, COMMANDS[3]) == {'recommendation'}
+
+
+def test_unreachable_calls_and_invalid_program_shapes_are_not_execution():
+    _, r = analyze("""import subprocess
+def unreachable():
+    return
+    subprocess.run(['agentic-kit', 'check'])
+def disabled():
+    if False:
+        subprocess.run(['agentic-kit', 'doctor'])
+def invalid():
+    subprocess.run(['agentic-kit check'])
+    subprocess.run([['agentic-kit', 'check']])
+""")
+    assert not any(x['classification'] in {'execution', 'mixed'} for x in r['sites'])
+
+
+def test_container_mutation_and_unknown_helpers_invalidate_aliases():
+    _, r = analyze("""import subprocess
+def mutate():
+    cmd = ['agentic-kit', 'check']
+    alias = cmd
+    alias[0] = 'echo'
+    subprocess.run(cmd)
+def unknown():
+    cmd = ['agentic-kit', 'doctor']
+    touch(cmd)
+    subprocess.run(cmd)
+def method():
+    cmd = ['agentic-kit', 'check']
+    cmd.reverse()
+    subprocess.run(cmd)
+""")
+    assert not any(x['classification'] in {'execution', 'mixed'} for x in r['sites'])
+
+
+def test_current_source_controls_remain_distinct():
+    import json
+    root = Path(__file__).resolve().parents[1]
+    commands = [c["qualified_name"] for c in json.loads((root / "docs/reference/agentic-kit-commands.json").read_text())["commands"]]
+    analyzer = FLOW.SourceFlow(FLOW.load_sources(root), commands)
+    assert analyzer.run()["converged"]
+    def targets(refs):
+        return {analyzer.sites[r]["command"] for r in refs if r in analyzer.sites}
+    sync = analyzer.summaries["agentic_project_kit.cli_commands.transfer_context_flow:sync_main"]
+    adopt = analyzer.summaries["agentic_project_kit.cli_commands.workspace:workspace_adopt_command"]
+    assert "agentic-kit rules acknowledge" in targets(sync.execution)
+    assert "agentic-kit rule-registry bootstrap" in targets(adopt.recommendation)
+    assert "agentic-kit rule-registry bootstrap" not in targets(adopt.execution)
