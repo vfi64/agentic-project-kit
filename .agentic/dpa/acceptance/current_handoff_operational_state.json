@@ -1,5 +1,5 @@
 {
-  "accepted_at": "2026-10-24T13:55:22.028785+00:00",
+  "accepted_at": "2026-10-24T14:04:57.847619+00:00",
   "accepted_gate_result": "pass",
   "accepted_gate_set_id": "dpa-current-handoff-minimal-gate-set-v1",
   "accepted_lifecycle_outcome": "accepted",
@@ -28,6 +28,6 @@
     "pre_write_fingerprint": "8bd7f1a36f0f88f935d7bcbc3e9fab859923ac1a602ad57406ce8338b7ae07c7"
   },
   "target_scope": "CURRENT_HANDOFF_OPERATIONAL_STATE_BLOCK",
-  "validation_ref": "095dfe46028b379acc41102375fe6f49f6bd583d",
+  "validation_ref": "7b2ed8a28ccadfb054949f2663eb343d4976927e",
   "writer_id": "WRT-CH-001"
 }

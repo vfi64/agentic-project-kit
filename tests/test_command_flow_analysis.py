@@ -185,14 +185,13 @@ def audit_driver():
     return module
 
 
-def test_pinned_report_reproduces_and_rendering_uses_data():
+def test_historical_rendering_uses_data():
     import json
     from copy import deepcopy
     root = Path(__file__).resolve().parents[1]
     folder = root / 'docs/reports/command_source_flow_20261024'
     recorded = json.loads((folder / 'flow.json').read_text())
     driver = audit_driver()
-    assert driver.generate(root, recorded['source_commit']) == recorded
     assert driver.render(recorded) == (folder / 'README.md').read_text()
     changed = deepcopy(recorded)
     changed['counts']['unknown'] += 7
@@ -254,3 +253,24 @@ def handler():
         subprocess.run(['agentic-kit', 'doctor'])
 """)
     assert not any(x['classification'] in {'execution', 'mixed'} for x in r['sites'])
+
+
+def test_current_source_reproduces_without_historical_commits(monkeypatch):
+    root = Path(__file__).resolve().parents[1]
+    driver = audit_driver()
+    real_git = driver.git
+    head = real_git(root, 'rev-parse', 'HEAD')
+    def shallow_only(root, *args):
+        if args[0] == 'rev-parse':
+            assert args[1] == 'HEAD'
+        elif args[0] == 'cat-file':
+            assert args[2].startswith(head + ':')
+        elif args[0] == 'diff':
+            assert args[2] == head
+        return real_git(root, *args)
+    monkeypatch.setattr(driver, 'git', shallow_only)
+    one = driver.generate(root, 'HEAD')
+    two = driver.generate(root, 'HEAD')
+    assert one == two
+    assert one['source_commit'] == head
+    assert all(one['controls'].values())

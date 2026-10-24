@@ -1235,3 +1235,9 @@ The report remains `BOUNDED_STATIC_INCOMPLETE`: possible source flow is neither
 a runtime trace nor a complete call graph. Unresolved references and computed
 dispatch are not proof of absence. Historical K0/K0c evidence is preserved; G0
 requires review of this evidence, and no universal kernel or lock claim follows.
+
+The audit tests also run in shallow checkouts: historical report rendering is
+checked against the retained data, while two independent current-HEAD
+reproductions require only that checkout's objects. Explicit historical
+reproduction still requires the recorded revision and fails rather than silently
+falling back to current main when history is missing.
