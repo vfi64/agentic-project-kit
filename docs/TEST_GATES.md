@@ -237,11 +237,10 @@ When the same admin-light lane runs on a main push, its protected-diff-plan
 evidence must use the deterministic push `before..current` diff because PR
 base/head SHAs are unavailable.
 
-`pages_path_gate` is driven by `site/pages_input_manifest.json`. It may select
-`BUILD_SKIPPED` only for deterministically irrelevant main-push changes. Explicit
-dispatch, unavailable paths, invalid paths, manifest problems, site inputs,
-release/version projection state, or `.github/workflows/pages.yml` select
-`BUILD_REQUIRED`.
+Pages builds on every push to main and explicit dispatch, without path-based
+skipping. The legacy `pages_path_gate` classifier and
+`site/pages_input_manifest.json` remain diagnostic-only compatibility inputs
+(`BUILD_REQUIRED` / `BUILD_SKIPPED`), not workflow build authority.
 
 Dependency caching is a runtime optimization only. The CI and Pages workflows may
 use `actions/setup-python` pip caching keyed by `pyproject.toml`, but a cache hit
@@ -548,12 +547,9 @@ general Brownfield portability. The website must not collapse `kit_main`,
 `released_package`, and `external_retest` evidence types into one release claim.
 
 GitHub Pages workflow changes must parse as YAML and keep `.github/workflows/pages.yml`
-build-gated by the generated site build and site tests. The Pages path gate must
-read `site/pages_input_manifest.json` and select `BUILD_REQUIRED` for site
-inputs, release/version projection state, explicit dispatch, invalid paths, or
-manifest problems. It may select `BUILD_SKIPPED` only for deterministically
-irrelevant main-push changes. When a build is required, the workflow must run
-`python site/scripts/build.py --output site/dist --json`, run
+build-gated by the generated site build and site tests on every push to main
+and explicit dispatch. No changed-path gate may skip the build. The workflow
+must run `python site/scripts/build.py --output site/dist --json`, run
 `python -m pytest tests/test_site_generator.py tests/test_site_claims.py -q`,
 configure Pages, upload `site/dist` with `actions/upload-pages-artifact`, and
 deploy with `actions/deploy-pages` only when the repository Pages API reports

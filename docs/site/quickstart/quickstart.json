@@ -34,7 +34,7 @@
           "qualified_name": "agentic-kit check",
           "safety": "READ_ONLY",
           "surface": "diagnostic",
-          "when_to_use": "Run agentic-kit check."
+          "when_to_use": "Validate the project contract and required repository files without changing them."
         },
         {
           "dry_run_available": false,
@@ -72,7 +72,7 @@
           "qualified_name": "agentic-kit check",
           "safety": "READ_ONLY",
           "surface": "diagnostic",
-          "when_to_use": "Run agentic-kit check."
+          "when_to_use": "Validate the project contract and required repository files without changing them."
         },
         {
           "dry_run_available": false,
