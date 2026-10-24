@@ -51,14 +51,6 @@
     {
       "commands": [
         {
-          "dry_run_available": true,
-          "manifest_present": true,
-          "qualified_name": "agentic-kit workspace dpa-intake",
-          "safety": "BOUNDED",
-          "surface": "orchestrator",
-          "when_to_use": "Run the deterministic DPA repository-intake orchestration."
-        },
-        {
           "dry_run_available": false,
           "manifest_present": true,
           "qualified_name": "agentic-kit workspace adopt",
@@ -77,14 +69,6 @@
         {
           "dry_run_available": false,
           "manifest_present": true,
-          "qualified_name": "agentic-kit check-docs",
-          "safety": "READ_ONLY",
-          "surface": "diagnostic",
-          "when_to_use": "Run agentic-kit check-docs."
-        },
-        {
-          "dry_run_available": false,
-          "manifest_present": true,
           "qualified_name": "agentic-kit check",
           "safety": "READ_ONLY",
           "surface": "diagnostic",
@@ -97,22 +81,6 @@
           "safety": "READ_ONLY",
           "surface": "diagnostic",
           "when_to_use": "Run a compact project health check."
-        },
-        {
-          "dry_run_available": false,
-          "manifest_present": true,
-          "qualified_name": "agentic-kit transfer chat-switch-complete",
-          "safety": "BOUNDED",
-          "surface": "orchestrator",
-          "when_to_use": "Create a deterministic successor handoff package and prompt projections."
-        },
-        {
-          "dry_run_available": true,
-          "manifest_present": true,
-          "qualified_name": "agentic-kit workspace remove",
-          "safety": "BOUNDED",
-          "surface": "orchestrator",
-          "when_to_use": "Plan or remove exact Kit-generated operating-layer workspace files."
         }
       ],
       "id": "existing-repository",

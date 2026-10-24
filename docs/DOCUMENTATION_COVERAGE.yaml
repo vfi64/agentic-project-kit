@@ -1089,7 +1089,7 @@ rules:
     - docs Pages fallback pytest staleness check
     - tests/test_site_fallback_staleness.py
     - byte-for-byte comparison
-    - stable `docs-pages-fallback` build commit
+    - stable `docs-pages-fallback` internal projection label
     - excluded from Python sdist and wheel artifacts
     - live GitHub Actions Pages site
     - README links to the live GitHub Actions Pages site
@@ -1153,7 +1153,7 @@ rules:
     - docs Pages fallback pytest staleness check
     - tests/test_site_fallback_staleness.py
     - byte-for-byte comparison
-    - stable `docs-pages-fallback` build commit
+    - stable `docs-pages-fallback` internal projection label
     - excluded from Python sdist and wheel artifacts
     - workflows/index.html
     - workflows/workflows.json
@@ -2297,3 +2297,19 @@ rules:
     - BLOCKED
     - signature
     - External VERIFIED_FIXED
+
+- id: website-entry-source-and-scope-contract
+  description: W0b entry remains generated from product identity, exact release records and scoped evidence.
+  documents:
+  - path: site/README.md
+    terms:
+    - W0b public entry contract
+    - README H1
+    - release-pypi-workflow
+    - entries in the CHANGELOG section
+    - D1 remains deferred
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_site_public_contract.py
+    - tests/test_site_quickstart_path.py
+    - not current installability

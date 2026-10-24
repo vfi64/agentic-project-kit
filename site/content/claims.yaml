@@ -131,3 +131,11 @@ claims:
       - type: file-contains
         path: docs/reports/POST_V1_0_5_B1_EVIDENCE_CLOSEOUT_20260826.md
         contains: "B1 is not a proof of general Brownfield portability."
+
+  - id: current-release-pypi-workflow
+    scope: historical-observation
+    scope_note: C3 proves successful workflow completion for the version in pyproject.toml; index visibility and installability need separate observations.
+    text: The PyPI publication workflow for the current package version completed successfully in its release run (C3).
+    required: false
+    evidence:
+      type: release-pypi-workflow

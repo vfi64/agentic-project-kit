@@ -267,6 +267,8 @@ def _add_pyproject_scripts(root: Path) -> None:
 
 
 def _write_site_fixture(root: Path) -> Path:
+    (root / "README.md").write_text("# Agentic Project Kit\n")
+    (root / "CITATION.cff").write_text("title: agentic-project-kit\n")
     (root / "docs" / "reference").mkdir(parents=True)
     (root / "docs" / "planning").mkdir(parents=True)
     (root / "site" / "content").mkdir(parents=True)

@@ -25,13 +25,15 @@ freshness_policy:
     markers before they are used as authoritative orientation.
 next_safe_substantive_slice:
   text: >-
-    Follow docs/planning/PROJECT_DIRECTION.yaml#meta.planning_reconciliation.owner_order
-    as the canonical queue. P0, K0 and K0c are closed (K0c PR 2615, handoff 2616).
-    W0a implements scoped evidence, Pages input coverage and selected-command
-    validation without command reselection. Read its report under
-    docs/reports/website_evidence_integrity_20261024/ before deciding W0b or G0.
-    No universal kernel proof, architecture rename, execution diagram or W0b
-    implementation is authorized by these completed slices. No paid benchmark
-    repetitions, release or owner-remote retests. external-retest-machine-contracts
-    remains active with c2 blocked and deferred. Regenerate projections from
-    this source; do not patch generated successor documents manually.
+    Follow docs/planning/PROJECT_DIRECTION.yaml as the canonical queue.
+    P0, K0, K0c and W0a are closed. N1 was completed in PR2619 with handoff
+    PR2620. W0b keeps the Agentic Project Kit identity, scoped claims, exact
+    CHANGELOG entry counts, a tested four-family adoption path and a bounded
+    GF-078 case; read docs/reports/website_entry_20261024/README.md.
+    The selection is editorial, not D1's future shared authority. Next work
+    needs its separate scope decision: E, N4, D1, lock triage and graphics/G0
+    are deferred. G0 still needs execution versus recommendation separation;
+    no universal kernel proof or new architecture name is claimed. No release,
+    paid benchmark repetition or owner-remote retest is authorized by W0b.
+    External retest c2 remains blocked and deferred. Regenerate projections
+    from this source; do not patch generated successor files manually.

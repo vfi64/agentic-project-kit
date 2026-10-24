@@ -1787,3 +1787,15 @@ documents:
     class: evidence/log
     owner: maintainers
     summary: W0a scoped website evidence and Pages dependency integrity
+  - path: docs/reports/website_entry_20261024/README.md
+    class: evidence/log
+    owner: maintainers
+    summary: W0b entry contracts and bounded evidence report
+  - path: docs/reports/website_entry_20261024/archive_observation.json
+    class: evidence/log
+    owner: maintainers
+    summary: Read-only release 1.1.5 archive merge observation
+  - path: docs/reports/website_entry_20261024/validation.json
+    class: evidence/log
+    owner: maintainers
+    summary: W0b bounded local validation evidence

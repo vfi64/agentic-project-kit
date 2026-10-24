@@ -62,7 +62,7 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     claims = json.loads((output / "claims" / "claims.json").read_text(encoding="utf-8"))
     quickstart = json.loads((output / "quickstart" / "quickstart.json").read_text(encoding="utf-8"))
     workflows = json.loads((output / "workflows" / "workflows.json").read_text(encoding="utf-8"))
-    assert "Agentic Execution Runtime" in html
+    assert "Agentic Project Kit" in html
     assert "Repository Memory" in html
     assert "Choose How You Want To Work" in html
     assert "Evidence checks within stated scope" in html
@@ -242,7 +242,8 @@ def test_public_site_templates_name_remote_target_ci_limitation() -> None:
 def test_public_quickstart_uses_current_package_version_token() -> None:
     template = Path("site/templates/quickstart.html").read_text(encoding="utf-8")
 
-    assert "The public <code>${package_version}</code> package is available on PyPI" in template
+    assert "${publication_text}" in template
+    assert "package is available on PyPI" not in template
     assert "1.0.1" not in template
 
 
@@ -342,6 +343,8 @@ def _write_site_fixture(
     manifest_identity: str | None = None,
     surfaces: tuple[str, ...] = ("diagnostic", "orchestrator", "primitive"),
 ) -> Path:
+    (root / "README.md").write_text("# Agentic Project Kit\n")
+    (root / "CITATION.cff").write_text("title: agentic-project-kit\n")
     (root / "docs" / "reference").mkdir(parents=True)
     (root / "site" / "templates").mkdir(parents=True)
     (root / "site" / "static").mkdir(parents=True)

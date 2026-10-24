@@ -60,7 +60,9 @@ def test_release_section_is_exact_and_missing_evidence_is_visible(tmp_path):
     assert result["brownfield"]["status"] == "unverified"
     result = collect_explanation(tmp_path, version="1.0.23")
     html = render_evidence_cards(result, repository_url="https://example.org/repo")
-    assert "&lt;script&gt;" in html and "<script>" not in html
+    assert "1 entries in the CHANGELOG section" in html
+    assert "<script>" not in html
+    assert result["release"]["notes"] == ["current <script>"]
     assert collect_explanation(tmp_path, version="1.0.24")["release"]["status"] == "unverified"
 
 

@@ -65,6 +65,13 @@ meta:
         status: done
         scope: Owner authorized W0a after K0c; repair evidence integrity without
           changing selected commands. W0b and diagrams remain separate decisions.
+      - id: website-evidence-and-command-navigation
+        step: w0b-entry-and-quickstart
+        status: done
+        scope: Owner approved on 2026-10-24 after reviews; N1 is done in PR2619
+          with handoff PR2620. Keep Agentic Project Kit identity and implement
+          bounded entry, scoped counts and exact release records. No new graphics,
+          release, model runs, D1, Pages-policy simplification or lock triage.
       - id: external-retest-machine-contracts
         status: blocked
         scope: Main item remains active; c1 and c3 are done, c2 is blocked pending
@@ -2475,14 +2482,21 @@ plans:
       - Keep the existing claim status model and strict generated Pages fallback;
         add focused injection checks instead of new infrastructure.
     - id: w0b-entry-and-quickstart
-      status: planned
+      status: done
+      evidence:
+      - docs/reports/website_entry_20261024/README.md
+      - tests/test_site_public_contract.py
+      - tests/test_site_quickstart_path.py
+      owner_scope_20261024: Approved A then separate N1 then W0b; keep Agentic Project Kit identity, add scoped counts and complete release entry counts. E, N4, D1, lock triage and graphics remain deferred.
       depends_on_step: k0-command-composition-reaudit
       acceptance:
       - After W0a and K0 review, consolidate existing purpose, bounded workflow,
         distinctive mechanisms and limits; do not add a second feature authority.
-      - Select three to five preferred command families through the reviewed shared
-        authority; keep generator and adoption entry paths separate, and exclude
-        removal from the first-adoption sequence.
+      - W0b uses four explicitly editorial manifest-validated adoption families
+        (workspace adopt, workspace init, check, doctor) with a local fixture;
+        keep generator and adoption entry paths separate and exclude removal.
+        This interim selection is not a shared preferred-command authority; D1
+        remains deferred and owns the later canonical task mapping.
       - Exercise the actual preview/execute/check sequence in a local isolated
         fixture and assert states and gate outcomes; no model or real remote effects.
       - Derive released availability from evidence and the actual release-tag sources;

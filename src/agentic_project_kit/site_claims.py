@@ -212,6 +212,12 @@ def _evaluate_evidence(
     command_runner: CommandRunner,
 ) -> EvidenceEvaluation:
     evidence_type = _string(evidence.get("type"))
+    if evidence_type == "release-pypi-workflow":
+        from agentic_project_kit.site_public_contract import publication_evidence, publication_text
+
+        version = str((pyproject.get("project") or {}).get("version", ""))
+        observation = publication_evidence(root, version)
+        return EvidenceEvaluation(evidence_type, observation["status"], publication_text(observation))
     if evidence_type == "pyproject-entrypoint":
         return _evaluate_pyproject_entrypoint(evidence, pyproject)
     if evidence_type == "pyproject-value":

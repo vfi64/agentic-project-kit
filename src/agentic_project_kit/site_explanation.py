@@ -15,6 +15,8 @@ from urllib.parse import urlparse
 
 import yaml
 
+from agentic_project_kit.site_public_contract import release_section
+
 DIRECTION = "docs/planning/PROJECT_DIRECTION.yaml"
 GREENFIELD = "docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.json"
 COMPARISON = "site/content/tool_comparison.yaml"
@@ -71,14 +73,13 @@ def collect_explanation(root: Path, *, version: str) -> dict[str, object]:
     phases = paa.get("phases", [])
     phases = phases if isinstance(phases, list) else []
     p0 = next((p for p in phases if isinstance(p, dict) and p.get("id") == "P0"), {})
-    release = _release_notes(root, version)
+    release = release_section(root, version)
     return {
         "schema_version": 1,
         "kind": "site_explanation_projection",
         "greenfield": greenfield,
         "brownfield": brownfield,
-        "release": {"version": version, "notes": release, "source": "CHANGELOG.md",
-                    "status": "recorded" if release else "unverified"},
+        "release": release,
         "paa": {"status": str(paa.get("status", "not recorded")),
                 "review": str(paa.get("decision_status", "not recorded")),
                 "p0": str(p0.get("decision_status", "not recorded")), "source": DIRECTION},
@@ -111,12 +112,7 @@ def render_evidence_cards(projection: dict[str, object], *, repository_url: str)
          f"{bf['completed_observations']} merged observations · latest: {bf['latest_cycle']} · legacy seam count: {bf['seam_delta']}"),
     ):
         cards.append(_card(title, summary, str(data["boundary"]), _source_link(repository_url, str(data["source"]))))
-    notes = release["notes"]
-    items = "".join(f"<li>{escape(str(note))}</li>" for note in notes) if isinstance(notes, list) else ""
-    cards.append('<article class="panel"><p class="eyebrow">Release notes, not a new retest</p>'
-                 f'<h3>What changed in {escape(str(release["version"]))}</h3>'
-                 f'<p>Source status: {escape(str(release["status"]))}. Shipped changes recorded in the current release section.</p>'
-                 f'<ul>{items}</ul><p>{_source_link(repository_url, "CHANGELOG.md")}</p></article>')
+    cards.append(render_release_card(release, repository_url=repository_url))
     cards.append(_card("Formal assurance: planning boundary",
                        f"PAA: {paa['status']} · review: {paa['review']} · P0: {paa['p0']}",
                        "PAA is shown from the canonical plan. A planning status is not an implemented verification capability or a proof of software correctness.",
@@ -154,17 +150,23 @@ def _safe_source(root: Path, source: object) -> Path | None:
 
 
 def _release_notes(root: Path, version: str) -> list[str]:
-    source = root / "CHANGELOG.md"
-    if not source.is_file():
-        return []
-    text = source.read_text()
-    section = re.search(r"^## v?\[?" + re.escape(version) + r"\]?(?=\s|$)(?:[^\n]*)\n(.*?)(?=^## |\Z)",
-                        text, re.MULTILINE | re.DOTALL)
-    if section is None:
-        return []
-    # Only the release's own bullets; no adjacent Unreleased or historic release text.
-    return [line[2:].strip().replace("`", "") for line in section.group(1).splitlines()
-            if line.startswith("- ")][:8]
+    return release_section(root, version)["notes"]
+
+
+def render_release_card(release: dict, *, repository_url: str) -> str:
+    version = str(release["version"])
+    count = release["entry_count"]
+    dated = release["date"] or "not recorded"
+    entries = str(count) if count is not None else "not recorded"
+    anchor = "v" + version.replace(".", "")
+    if release["date"]:
+        anchor += "---" + str(release["date"])
+    link = repository_url.rstrip("/") + "/blob/main/CHANGELOG.md#" + anchor
+    return ('<article class="panel"><p class="eyebrow">Release record</p>'
+            f'<h3>Version {escape(version)}</h3><p>Date: {escape(dated)} · '
+            f'{entries} entries in the CHANGELOG section.</p>'
+            '<p>This counts top-level bullet lines, not the size of the changes.</p>'
+            f'<p><a href="{escape(link, quote=True)}">Full release notes</a></p></article>')
 
 
 def _comparison_rows(root: Path) -> list[dict[str, str]]:

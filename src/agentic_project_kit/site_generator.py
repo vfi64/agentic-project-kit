@@ -28,12 +28,16 @@ from agentic_project_kit.site_evidence_contract import (
 from agentic_project_kit.site_explanation import (
     collect_explanation,
     render_evidence_cards,
+    render_release_card,
     render_explanation,
 )
 
 
-PRODUCT_NAME = "Agentic Execution Runtime"
-FORMER_PRODUCT_NAME = "Agentic Project Kit"
+from agentic_project_kit.site_public_contract import (
+    product_title, publication_evidence, publication_text, projection_provenance,
+    scoped_claim_counts, self_hosting_case,
+)
+
 SITE_KIND = "agentic_project_kit_generated_site"
 DOCS_PAGES_FALLBACK_KIND = "agentic_project_kit_docs_pages_fallback"
 DOCS_PAGES_FALLBACK_BUILD_COMMIT = "docs-pages-fallback"
@@ -78,6 +82,15 @@ class SiteFoundationMetadata:
     def as_dict(self) -> dict[str, object]:
         data = asdict(self)
         data["manifest_identity_verified"] = self.manifest_identity_verified
+        data["projection_type"] = (
+            "pages-fallback" if self.build_commit == DOCS_PAGES_FALLBACK_BUILD_COMMIT else "site-build"
+        )
+        data["source_commit"] = (
+            self.build_commit if re.fullmatch(r"[0-9a-f]{7,40}", self.build_commit) else None
+        )
+        if data["projection_type"] == "pages-fallback":
+            data["build_label"] = self.build_commit
+            data["build_commit"] = None
         return data
 
 
@@ -314,6 +327,12 @@ def collect_site_foundation_metadata(
     if not requires_python:
         blockers.append("pyproject.toml project.requires-python is missing")
 
+    visible_name = ""
+    try:
+        visible_name = product_title(root, package_name)
+    except ValueError as exc:
+        blockers.append(str(exc))
+
     commands = committed_manifest.get("commands") if isinstance(committed_manifest, dict) else None
     if not isinstance(commands, list) or not commands:
         blockers.append("command manifest commands must be a non-empty list")
@@ -352,8 +371,8 @@ def collect_site_foundation_metadata(
     metadata = None
     if not blockers and command_catalog is not None:
         metadata = SiteFoundationMetadata(
-            product_name=PRODUCT_NAME,
-            former_product_name=FORMER_PRODUCT_NAME,
+            product_name=visible_name,
+            former_product_name="",
             package_name=package_name,
             package_version=package_version,
             requires_python=requires_python,
@@ -563,7 +582,7 @@ def build_docs_pages_fallback(
         )
         if site_build.ok:
             (docs_root / "index.html").write_text(
-                _render_docs_pages_index(site_subdir),
+                _render_docs_pages_index(site_subdir, site_build.report.metadata.product_name),
                 encoding="utf-8",
             )
             (docs_root / ".nojekyll").write_text(
@@ -596,7 +615,7 @@ def _docs_pages_fallback_blockers(site_subdir: str) -> list[str]:
     return []
 
 
-def _render_docs_pages_index(site_subdir: str) -> str:
+def _render_docs_pages_index(site_subdir: str, product_name: str) -> str:
     target = f"{site_subdir}/index.html"
     return f"""<!doctype html>
 <html lang="en">
@@ -605,7 +624,7 @@ def _render_docs_pages_index(site_subdir: str) -> str:
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="refresh" content="0; url={target}">
     <link rel="canonical" href="{target}">
-    <title>{PRODUCT_NAME}</title>
+    <title>{escape(product_name)}</title>
   </head>
   <body>
     <main>
@@ -658,6 +677,9 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
         "primitive_count": str(metadata.surface_counts.get("primitive", 0)),
         "command_group_count": str(metadata.command_group_count),
         "project_direction_status": escape(report.roadmap_projection.status or "not recorded"),
+        "scoped_claim_counts": scoped_claim_counts(report.claim_report),
+        "projection_provenance": escape(projection_provenance(metadata.build_commit)),
+        "publication_text": escape(publication_text(publication_evidence(root, metadata.package_version))),
         "claim_verified_count": str(report.claim_report.status_counts().get("verified", 0)),
         "claim_unverified_count": str(report.claim_report.status_counts().get("unverified", 0)),
         "claim_planned_count": str(report.claim_report.status_counts().get("planned", 0)),
@@ -701,6 +723,11 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
         ),
         "brownfield_status": escape(
             _projection_value(report.workflow_projection, "brownfield.status", "not recorded")
+        ),
+        "homepage_evidence_cards": (
+            render_release_card(report.explanation_projection["release"], repository_url=metadata.repository_url)
+            + self_hosting_case(root, metadata.package_version, metadata.repository_url)
+            if report.explanation_projection is not None else ""
         ),
         "practice_evidence_cards": (
             render_evidence_cards(report.explanation_projection, repository_url=metadata.repository_url)
@@ -869,14 +896,10 @@ def _build_quickstart_projection(
                 "commands": _quickstart_commands(
                     command_catalog,
                     (
-                        "agentic-kit workspace dpa-intake",
                         "agentic-kit workspace adopt",
                         "agentic-kit workspace init",
-                        "agentic-kit check-docs",
                         "agentic-kit check",
                         "agentic-kit doctor",
-                        "agentic-kit transfer chat-switch-complete",
-                        "agentic-kit workspace remove",
                     ),
                 ),
             },
@@ -1194,6 +1217,7 @@ def render_quickstart_html(
         "package_version": escape(metadata.package_version),
         "requires_python": escape(metadata.requires_python),
         "repository_url": escape(metadata.repository_url or "#"),
+        "publication_text": escape(publication_text(publication_evidence(root, metadata.package_version))),
         "new_repo_command_items": _quickstart_flow_command_items(projection, "new-repository"),
         "existing_repo_command_items": _quickstart_flow_command_items(projection, "existing-repository"),
         "docs_link_items": _quickstart_docs_link_items(metadata, projection),
@@ -1268,6 +1292,7 @@ def render_claims_html(
         "manifest_sha": escape(metadata.manifest_sha),
         "package_version": escape(metadata.package_version),
         "claim_count": str(len(claim_report.claims)),
+        "scoped_claim_counts": scoped_claim_counts(claim_report),
         "verified_count": str(claim_report.status_counts().get("verified", 0)),
         "unverified_count": str(claim_report.status_counts().get("unverified", 0)),
         "planned_count": str(claim_report.status_counts().get("planned", 0)),
