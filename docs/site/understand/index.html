@@ -21,7 +21,7 @@
         <p>Current package: <strong>1.1.5</strong>. The facts below are generated from this checkout; dated observations retain their original scope.</p>
         <nav class="section-nav" aria-label="On this page">
           <a href="#audience">Who it serves</a><a href="#benefits">Benefits and costs</a><a href="#architecture">Architecture</a>
-          <a href="#controllers">Local controllers</a><a href="#evidence">Practice and evidence</a><a href="#comparison">Tool comparison</a>
+          <a href="#workflow-figures">Work and handoff</a><a href="#controllers">Local controllers</a><a href="#evidence">Practice and evidence</a><a href="#comparison">Tool comparison</a>
         </nav>
       </header>
 
@@ -78,13 +78,13 @@
 
       <section id="workflow-figures"><p class="eyebrow">Generated from current sources</p><h2>Work and handoff</h2>
 <p>Editorial contract views; arrows show a reading/work sequence, not observed nested calls.</p>
-<article class="panel"><h3>G2: A bounded work cycle</h3><figure class="architecture-map"><img src="G2.svg" alt="A bounded work cycle — text sequence follows."></figure><ol>
+<article class="panel"><h3>G2: A bounded work cycle</h3><figure class="architecture-map workflow-map"><picture><source media="(max-width: 680px)" srcset="G2-mobile.svg"><img src="G2.svg" alt="A bounded work cycle — text sequence follows."></picture></figure><ol>
 <li><strong>work start</strong>: Start a human patch/slice workflow with the safe standard startup sequence.</li>
 <li><strong>work check</strong>: Run common human workflow gates without committing or pushing.</li>
 <li><strong>work finish</strong>: Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.</li>
 <li><strong>transfer chat-switch-complete</strong>: Create a deterministic successor handoff package and prompt projections.</li>
 </ol><p>Make the selected change between start and check. Review the finish plan before execution; blocked or failed results stop the cycle.</p></article>
-<article class="panel"><h3>G3: Context survives the chat</h3><figure class="architecture-map"><img src="G3.svg" alt="Context survives the chat — text sequence follows."></figure><ol>
+<article class="panel"><h3>G3: Context survives the chat</h3><figure class="architecture-map workflow-map"><picture><source media="(max-width: 680px)" srcset="G3-mobile.svg"><img src="G3.svg" alt="Context survives the chat — text sequence follows."></picture></figure><ol>
 <li><strong>Repository sources</strong>: source_manifest.json records the inputs.</li>
 <li><strong>Successor package</strong>: execution_contract.json, source_manifest.json, successor_context.yaml, successor_prompt.md, validation_report.json</li>
 <li><strong>Validate, then continue</strong>: Read validation_report.json and execution_contract.json. A failed handoff blocks continuation.</li>

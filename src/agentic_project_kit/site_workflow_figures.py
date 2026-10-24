@@ -82,36 +82,42 @@ def observed_figure(observed: dict) -> dict:
     for caller in selected:
         children = sorted({e['callee'].removeprefix('agentic-kit ') for e in observed['direct_edges']
                            if e['caller'] == caller})
-        if children:
+        if children or caller == 'agentic-kit transfer chat-switch-complete':
             nodes.append({'label': caller.removeprefix('agentic-kit '),
-                          'detail': '; '.join(children)})
+                          'detail': '; '.join(children) if children else 'No nested CLI callback observed; internal Python operations are outside this view.'})
     return {'id': 'G0', 'title': 'Observed work and release entry', 'nodes': nodes,
             'direct_calls': True,
             'boundary': observed['boundary'] + ' Source: ' + observed['source_commit'] +
                         '. Run status: ' + observed['status'] + '. Release may stop before publication.'}
 
 
-def svg(figure: dict) -> str:
-    """Vertical deterministic cards remain readable with a plain-text alternative beside them."""
+def svg(figure: dict, *, compact: bool = False) -> str:
+    """Render two layouts from the same cells, including a genuinely narrow SVG."""
+    width = 360 if compact else 640
+    wrap = 34 if compact else 65
+    title_lines = textwrap.wrap(figure['title'], 24 if compact else 45)
+    y = 36 + 30 * len(title_lines)
     rows = []
-    y = 70
     for index, node in enumerate(figure['nodes']):
-        detail = ('Direct callees: ' if figure.get('direct_calls') else '') + node['detail']
-        lines = textwrap.wrap(detail, 65)
-        height = 62 + 22 * len(lines)
-        rows.append(f'<rect x="20" y="{y}" width="600" height="{height}" rx="14" fill="white" stroke="#0f766e"/>')
         label = ('Caller: ' if figure.get('direct_calls') else f'{index + 1}. ') + node['label']
-        rows.append(f'<text x="40" y="{y + 30}" font-weight="700">{escape(label)}</text>')
-        for line_no, line in enumerate(lines):
-            rows.append(f'<text x="40" y="{y + 58 + line_no * 22}" font-size="15">{escape(line)}</text>')
+        labels = textwrap.wrap(label, 27 if compact else 48)
+        detail = ('Direct callees: ' if figure.get('direct_calls') else '') + node['detail']
+        lines = textwrap.wrap(detail, wrap)
+        height = 36 + 24 * len(labels) + 22 * len(lines)
+        rows.append(f'<rect x="16" y="{y}" width="{width - 32}" height="{height}" rx="14" fill="white" stroke="#0f766e"/>')
+        for i, line in enumerate(labels):
+            rows.append(f'<text x="30" y="{y + 28 + i * 24}" font-size="17" font-weight="700">{escape(line)}</text>')
+        for i, line in enumerate(lines):
+            rows.append(f'<text x="30" y="{y + 36 + len(labels) * 24 + i * 22}" font-size="15">{escape(line)}</text>')
         y += height + 32
         if not figure.get('direct_calls') and index + 1 < len(figure['nodes']):
-            rows.append(f'<path d="M320 {y - 30} v24 m-5 -6 l5 6 5 -6" stroke="#0f766e" fill="none" stroke-width="2"/>')
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="640" height="{y}" viewBox="0 0 640 {y}" role="img" aria-labelledby="title desc">'
+            rows.append(f'<path d="M{width // 2} {y - 30} v24 m-5 -6 l5 6 5 -6" stroke="#0f766e" fill="none" stroke-width="2"/>')
+    titles = ''.join(f'<text x="20" y="{32 + i * 30}" font-size="23" font-weight="700">{escape(line)}</text>' for i, line in enumerate(title_lines))
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{y}" viewBox="0 0 {width} {y}" role="img" aria-labelledby="title desc">'
             f'<title id="title">{escape(figure["title"])}</title><desc id="desc">{escape(figure["boundary"])}</desc>'
-            f'<rect width="640" height="{y}" fill="#ecf5ef" rx="18"/>'
-            f'<g font-family="system-ui,sans-serif" font-size="18" fill="#16302b"><text x="24" y="40" font-size="23" font-weight="700">{escape(figure["title"])}</text>'
-            + ''.join(rows) + '</g></svg>\n')
+            f'<rect width="{width}" height="{y}" fill="#ecf5ef" rx="18"/>'
+            '<g font-family="system-ui,sans-serif" font-size="18" fill="#16302b">'
+            + titles + ''.join(rows) + '</g></svg>\n')
 
 
 def render_figures(projection: dict) -> str:
@@ -119,7 +125,7 @@ def render_figures(projection: dict) -> str:
              '<p>' + escape(projection['boundary']) + '</p>']
     for figure in projection['figures']:
         parts.append(f'<article class="panel"><h3>{escape(figure["id"] + ": " + figure["title"])}</h3>'
-                     f'<figure class="architecture-map"><img src="{figure["id"]}.svg" alt="{escape(figure["title"], quote=True)} — text sequence follows."></figure><ol>')
+                     f'<figure class="architecture-map workflow-map"><picture><source media="(max-width: 680px)" srcset="{figure["id"]}-mobile.svg"><img src="{figure["id"]}.svg" alt="{escape(figure["title"], quote=True)} — text sequence follows."></picture></figure><ol>')
         parts.extend(f'<li><strong>{escape(n["label"])}</strong>: {escape(n["detail"])}</li>' for n in figure['nodes'])
         parts.append('</ol><p>' + escape(figure['boundary']) + '</p></article>')
     observed = projection.get('observation')

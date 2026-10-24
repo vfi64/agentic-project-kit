@@ -28,6 +28,9 @@ def test_contract_figures_are_deterministic_and_have_text_alternatives(tmp_path)
     html = render_figures(data)
     for figure in data['figures']:
         parsed = ET.fromstring(svg(figure))
+        mobile = ET.fromstring(svg(figure, compact=True))
+        assert mobile.attrib['width'] == '360'
+        assert svg(figure, compact=True) != svg(figure)
         assert parsed.attrib['role'] == 'img'
         assert parsed.find('{http://www.w3.org/2000/svg}desc') is not None
         for node in figure['nodes']:

@@ -121,3 +121,40 @@ def test_shared_callback_aliases_are_preserved():
     assert 'agentic-kit workflow upload-output' in mapped
     manifest = json.loads((TOOLS.parents[1] / 'docs/reference/agentic-kit-commands.json').read_text())
     assert set(mapped) == {c['qualified_name'] for c in manifest['commands']}
+
+
+def test_missing_trace_or_dangling_parent_is_not_complete():
+    evidence = load('evidence')
+    assert evidence.trace_findings([], [{'name': 'finish'}]) == ['untraced steps: finish']
+    events = [{'id': '1', 'command': 'child', 'step': 'finish',
+               'parent': {'id': 'unknown', 'command': 'parent'}}]
+    assert evidence.trace_findings(events, [{'name': 'finish'}]) == ['missing or inconsistent callback parent']
+    events.insert(0, {'id': 'unknown', 'command': 'parent', 'step': 'finish', 'parent': None})
+    assert evidence.trace_findings(events, [{'name': 'finish'}]) == []
+    assert evidence.normalize_events(events) == [
+        {'id': 0, 'command': 'parent', 'step': 'finish', 'parent': None},
+        {'id': 1, 'command': 'child', 'step': 'finish', 'parent': 0}]
+
+
+def test_timeout_kills_the_owned_process_group_and_retains_output(monkeypatch, tmp_path):
+    isolation = load('isolation')
+    calls = []
+
+    class Process:
+        pid = 12345
+        returncode = -9
+        attempts = 0
+
+        def communicate(self, timeout=None):
+            self.attempts += 1
+            if self.attempts == 1:
+                raise subprocess.TimeoutExpired(['demo'], timeout)
+            return 'partial stdout', 'partial stderr'
+
+    monkeypatch.setattr(isolation.subprocess, 'Popen', lambda *a, **kw: Process())
+    monkeypatch.setattr(isolation.os, 'killpg', lambda *args: calls.append(args))
+    with pytest.raises(subprocess.TimeoutExpired) as caught:
+        isolation.isolated(['demo'], root=tmp_path, cwd=tmp_path, env={}, timeout=1)
+    assert calls == [(12345, isolation.signal.SIGKILL)]
+    assert caught.value.stdout == 'partial stdout'
+    assert caught.value.stderr == 'partial stderr'

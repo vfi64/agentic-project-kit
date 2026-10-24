@@ -362,7 +362,7 @@ def collect_site_foundation_metadata(
     if (root / "site/templates/understand.html").is_file():
         try:
             explanation = collect_explanation(root, version=package_version)
-        except ValueError as exc:
+        except (ValueError, OSError, SyntaxError, StopIteration, KeyError, TypeError) as exc:
             blockers.append(f"explanation content invalid: {exc}")
     concept_doi = status_projection.concept_doi or _citation_value(root, "doi")
     version_doi = status_projection.version_doi
@@ -487,6 +487,7 @@ def build_site(
         figures = report.explanation_projection.get('workflow_figures', {'figures': []})
         for figure in figures['figures']:
             (explanation_output / (figure['id'] + '.svg')).write_text(svg(figure), encoding='utf-8')
+            (explanation_output / (figure['id'] + '-mobile.svg')).write_text(svg(figure, compact=True), encoding='utf-8')
         (explanation_output / 'workflow-figures.json').write_text(
             json.dumps(figures, indent=2, sort_keys=True) + '\n', encoding='utf-8')
         (explanation_output / "evidence.json").write_text(

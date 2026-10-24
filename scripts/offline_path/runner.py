@@ -16,7 +16,7 @@ import sys
 import sysconfig
 import time
 
-from evidence import edges, payload
+from evidence import edges, payload, trace_findings
 from isolation import isolated, policy, probe
 
 HERE = Path(__file__).resolve().parent
@@ -71,11 +71,8 @@ class Experiment:
         remaining = 2700 - (time.monotonic() - self.start)
         if remaining <= 0:
             raise Stop('overall 45-minute limit reached')
-        try:
-            return isolated(argv, root=self.out, cwd=cwd or self.out, env=self.env,
-                            timeout=min(timeout, max(1, int(remaining))))
-        except subprocess.TimeoutExpired as exc:
-            raise Stop(f'timeout: {argv[:5]}') from exc
+        return isolated(argv, root=self.out, cwd=cwd or self.out, env=self.env,
+                        timeout=min(timeout, max(1, int(remaining))))
 
     def setup(self):
         self.result['isolation_probe'] = probe(self.out, sys.executable, self.env)
@@ -131,7 +128,10 @@ class Experiment:
         self.env['OFFLINE_STEP'] = name
         argv = [str(self.work / '.venv/bin/agentic-kit'), *args]
         started = time.monotonic()
-        done = self.raw(argv, self.work)
+        try:
+            done = self.raw(argv, self.work)
+        except subprocess.TimeoutExpired as exc:
+            done = subprocess.CompletedProcess(argv, 124, exc.stdout or '', exc.stderr or 'TIMEOUT')
         data = payload(done.stdout)
         status = data.get('result_status', data.get('status'))
         rec = {'name': name, 'argv': ['agentic-kit', *args], 'rc': done.returncode,
@@ -174,9 +174,13 @@ class Experiment:
             if (gate.get('gate_id') != 'B4' or gate.get('version') != version
                     or gate.get('tag') != 'v' + version or not gate.get('approval_signature')):
                 raise Stop('release B4 does not match the bounded synthetic release')
-            self.step('release B4', *base, '--execute', '--expected-signature', gate['approval_signature'],
+            boundary = self.step('release B4', *base, '--execute', '--expected-signature', gate['approval_signature'],
                       '--approved-by', 'offline-fixture', '--consent-source', 'isolated synthetic experiment',
                       allowed=('AWAITING_APPROVAL',))
+            next_gate = boundary.get('gate') or {}
+            if (next_gate.get('gate_id'), next_gate.get('version'), next_gate.get('tag')) != ('C2', version, 'v' + version):
+                raise Stop('unexpected gate after B4; expected the C2 publication boundary')
+            self.result['publication_boundary'] = {'gate': 'C2', 'approved': False}
             self.result['status'] = 'BOUNDED_COMPLETE'
             self.result['stop_reason'] = 'intentional boundary before C2 publication approval; B4-only release observation'
         except (Stop, OSError, ValueError, subprocess.SubprocessError) as exc:
@@ -184,6 +188,11 @@ class Experiment:
         finally:
             events_file = self.out / 'callbacks.jsonl'
             events = [json.loads(line) for line in events_file.read_text().splitlines()] if events_file.exists() else []
+            findings = trace_findings(events, self.steps)
+            if findings:
+                self.result['status'] = 'INCOMPLETE'
+                self.result['stop_reason'] = 'instrumentation incomplete: ' + '; '.join(findings)
+            self.result['instrumentation_findings'] = findings
             self.result.update(steps=self.steps, callback_entries=len(events), direct_edges=edges(events),
                                ambiguous_entries=sum(e['command'] == '<ambiguous>' for e in events),
                                duration_seconds=round(time.monotonic() - self.start, 3))
