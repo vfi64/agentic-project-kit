@@ -72,6 +72,13 @@ meta:
           with handoff PR2620. Keep Agentic Project Kit identity and implement
           bounded entry, scoped counts and exact release records. No new graphics,
           release, model runs, D1, Pages-policy simplification or lock triage.
+      - id: website-evidence-and-command-navigation
+        step: w0c-generated-workflow-and-core-figures
+        status: done
+        scope: Owner authorized one combined slice on 2026-10-24 after the static
+          flow review. G2/G3 are current contract views; G0 is callback evidence
+          from one isolated work/B4 fixture, intentionally stopped before C2.
+          No live release, full publication graph, D1 expansion or kernel rename.
       - id: external-retest-machine-contracts
         status: blocked
         scope: Main item remains active; c1 and c3 are done, c2 is blocked pending
@@ -2086,11 +2093,12 @@ plans:
     - docs/reports/protection_mechanisms_20261023/README.md
     - docs/reports/protection_mechanisms_20261023/reachability.json
     - tests/test_protection_mechanism_audit.py
-    remaining_boundary: Recommendations and executable calls in K0 closure must be
-      distinguished before G0; this audit does not prove a universal kernel.
+    remaining_boundary: Static closure remains unsuitable for G0. W0c uses observed
+      callback receipts instead; D1 may later expand helper analysis. No universal
+      kernel or protection coverage is proven.
   - id: k0-command-reference-source-flow
     status: done
-    analysis_status: bounded_static_incomplete_review_required_before_g0
+    analysis_status: bounded_static_incomplete_reviewed_observed_g0_selected
     kind: bounded_static_followup
     scope: Distinguish possible executable argv flow, recommendations and unknown
       literal references without replacing K0 evidence or command taxonomy.
