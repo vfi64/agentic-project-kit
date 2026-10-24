@@ -41,7 +41,7 @@ Critical rule IDs:
 
 - branch: `codex/w0a-site-evidence-integrity`
 - head_matches_origin_main: `False`
-- worktree_clean: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -468,13 +468,13 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/w0a-site-evidence-integrity",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "a4df3bae812c11b7175d1de4ecb251e6823baa1a",
+    "head": "cef38da02c7a6a8a4b2eef02b85076e4a27c39cb",
     "head_matches_origin_main": false,
-    "head_short": "a4df3bae",
+    "head_short": "cef38da0",
     "local_path": "cd /path/to/",
     "origin_main": "fc6ae924557b68a056dab4a65618581a9d957c56",
     "origin_main_short": "fc6ae924",
-    "worktree_clean": false
+    "worktree_clean": true
   }
 }
 ```
