@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `020f2e31bc52fd1d39f5876d816e6bc672ed19f9` (`020f2e31`), after `Keep workspace initialization inside its operating-layer namespace (#2625)`.
-Last substantive work state is `020f2e31bc52fd1d39f5876d816e6bc672ed19f9` (`020f2e31`), after `Keep workspace initialization inside its operating-layer namespace (#2625)`.
+Current verified main/admin HEAD is `ca35c9b40cd978ee7f2c5c865bc2e970f67be494` (`ca35c9b4`), after `Separate static Kit execution references from guidance and unknowns (#2627)`.
+Last substantive work state is `ca35c9b40cd978ee7f2c5c865bc2e970f67be494` (`ca35c9b4`), after `Separate static Kit execution references from guidance and unknowns (#2627)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
