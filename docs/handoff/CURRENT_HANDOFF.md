@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `0001eec959fc6e44015509b458afb171b9fc2110` (`0001eec9`), after `Make the public entry concise and bind it to scoped release evidence (#2621)`.
-Last substantive work state is `0001eec959fc6e44015509b458afb171b9fc2110` (`0001eec9`), after `Make the public entry concise and bind it to scoped release evidence (#2621)`.
+Current verified main/admin HEAD is `e2e8a105658c7578d7bea7bf908db9239e31b3d5` (`e2e8a105`), after `Build Pages on every main push and explain the check command (#2623)`.
+Last substantive work state is `e2e8a105658c7578d7bea7bf908db9239e31b3d5` (`e2e8a105`), after `Build Pages on every main push and explain the check command (#2623)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 08a218ef6cdd8f11f1d48dfd2af4651b4c2e21c14dec64a2fdeee3104c87d3e3
 - docs/reference/agentic-kit-commands.json: 80473602c348b6f4a34a21bfaa98cedfa7989e122582814f6cb0b484565ba179
-## Operational documentation refresh state after PR #2621
+## Operational documentation refresh state after PR #2623
 
-Current administrative handoff refresh state is `0001eec9` (`Make the public entry concise and bind it to scoped release evidence (#2621)`). Continue next only after this post-PR2621 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `e2e8a105` (`Build Pages on every main push and explain the check command (#2623)`). Continue next only after this post-PR2623 refresh is committed and merged; the next substantive slice must be created from fresh main.
