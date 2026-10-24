@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import ast
+from collections import Counter
 from hashlib import sha256
 from html import escape
 import json
@@ -51,11 +52,33 @@ def collect_figures(root: Path) -> dict:
                       {'label': 'Successor chat', 'detail': 'Use successor_context.yaml and successor_prompt.md; inspect current repository state.'}],
                    'boundary': 'A generated package preserves inspectable context. It does not prove requirements or software correctness.'}]}
     if (root / OBSERVATION).exists():
-        observation = json.loads((root / OBSERVATION).read_text())
-        result['observation'] = public_observation(observation)
+        result['observation'] = checked_observation(root)
         result['figures'].append(observed_figure(result['observation']))
-        result['sources'][OBSERVATION] = sha256((root / OBSERVATION).read_bytes()).hexdigest()
+        for name in ('observation.json', 'callbacks.json'):
+            path = str(Path(OBSERVATION).parent / name)
+            result['sources'][path] = sha256((root / path).read_bytes()).hexdigest()
     return result
+
+
+def checked_observation(root: Path) -> dict:
+    data = json.loads((root / OBSERVATION).read_text())
+    raw = (root / Path(OBSERVATION).parent / 'callbacks.json').read_bytes()
+    if sha256(raw).hexdigest() != data.get('normalized_trace_sha256'):
+        raise ValueError('offline callback receipt digest mismatch')
+    events = json.loads(raw)
+    counts = Counter()
+    for i, event in enumerate(events):
+        parent = event['parent']
+        if event['id'] != i or (parent is not None and (not isinstance(parent, int) or not 0 <= parent < i)):
+            raise ValueError('offline callback receipt parent mismatch')
+        if parent is not None:
+            counts[(events[parent]['command'], event['command'])] += 1
+    expected = [{'caller': a, 'callee': b, 'entries': n} for (a, b), n in sorted(counts.items())]
+    if expected != data.get('direct_edges') or len(events) != data.get('callback_entries'):
+        raise ValueError('offline direct edges disagree with callback receipts')
+    if data.get('status') == 'BOUNDED_COMPLETE' and data.get('publication_boundary') != {'gate': 'C2', 'approved': False}:
+        raise ValueError('offline completion lacks its unapproved publication boundary')
+    return public_observation(data)
 
 
 def public_observation(data: dict) -> dict:
@@ -72,7 +95,7 @@ def public_observation(data: dict) -> dict:
                 for s in data.get('steps', []) if s['rc'] != 0 or s.get('result_status') in ('BLOCKED', 'FAIL')]
     return {'failed_steps': failures, 'source_commit': data['source_commit'], 'status': str(data['status']),
             'direct_edges': edges,
-            'boundary': 'CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entry does not imply successful completion; no live release or complete command coverage is claimed.'}
+            'boundary': 'CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entries include plans and dry runs. Entry does not imply successful completion; no live release or complete command coverage is claimed.'}
 
 
 def observed_figure(observed: dict) -> dict:
@@ -88,7 +111,7 @@ def observed_figure(observed: dict) -> dict:
     return {'id': 'G0', 'title': 'Observed work and release entry', 'nodes': nodes,
             'direct_calls': True,
             'boundary': observed['boundary'] + ' Source: ' + observed['source_commit'] +
-                        '. Run status: ' + observed['status'] + '. Release may stop before publication.'}
+                        '. Run status: ' + observed['status'] + '. Complete publication is outside this observation.'}
 
 
 def svg(figure: dict, *, compact: bool = False) -> str:

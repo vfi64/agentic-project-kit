@@ -80,3 +80,28 @@ def test_invalid_or_executable_edge_rejected():
     with pytest.raises(ValueError, match='edge'):
         public_observation({'source_commit': 'a' * 40, 'status': 'INCOMPLETE', 'direct_edges': [
             {'caller': '<script>', 'callee': 'agentic-kit check', 'entries': 1}]})
+
+
+def test_observed_figure_is_bound_to_reconstructible_callback_receipts(tmp_path):
+    from hashlib import sha256
+    from agentic_project_kit.site_workflow_figures import OBSERVATION, checked_observation
+    directory = tmp_path / Path(OBSERVATION).parent
+    directory.mkdir(parents=True)
+    events = [{'id': 0, 'parent': None, 'command': 'agentic-kit work start', 'step': 'start'},
+              {'id': 1, 'parent': 0, 'command': 'agentic-kit rules acknowledge', 'step': 'start'}]
+    raw = json.dumps(events).encode()
+    (directory / 'callbacks.json').write_bytes(raw)
+    data = {'source_commit': 'a' * 40, 'status': 'BOUNDED_COMPLETE', 'callback_entries': 2,
+            'publication_boundary': {'gate': 'C2', 'approved': False},
+            'normalized_trace_sha256': sha256(raw).hexdigest(), 'direct_edges': [
+                {'caller': 'agentic-kit work start', 'callee': 'agentic-kit rules acknowledge', 'entries': 1}]}
+    path = directory / 'observation.json'
+    path.write_text(json.dumps(data))
+    assert checked_observation(tmp_path)['direct_edges'] == data['direct_edges']
+    data['direct_edges'][0]['entries'] = 2
+    path.write_text(json.dumps(data))
+    with pytest.raises(ValueError, match='disagree'):
+        checked_observation(tmp_path)
+    (directory / 'callbacks.json').write_text('[]')
+    with pytest.raises(ValueError, match='digest mismatch'):
+        checked_observation(tmp_path)

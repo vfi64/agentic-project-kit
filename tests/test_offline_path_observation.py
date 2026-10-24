@@ -158,3 +158,29 @@ def test_timeout_kills_the_owned_process_group_and_retains_output(monkeypatch, t
     assert calls == [(12345, isolation.signal.SIGKILL)]
     assert caught.value.stdout == 'partial stdout'
     assert caught.value.stderr == 'partial stderr'
+
+
+def test_public_export_requires_receipts_and_omits_private_runtime(monkeypatch, tmp_path):
+    monkeypatch.syspath_prepend(str(TOOLS))
+    exporter = load('export')
+    evidence = load('evidence')
+    events = [{'id': '123:1', 'command': 'agentic-kit work start', 'step': 'start',
+               'parent': None, 'pid': 123, 'argv': '/Users/private/token'}]
+    source = tmp_path / 'raw'
+    source.mkdir()
+    (source / 'callbacks.jsonl').write_text(json.dumps(events[0]) + '\n')
+    summary = {'source_commit': 'a' * 40, 'status': 'BOUNDED_COMPLETE', 'callback_entries': 1,
+               'direct_edges': evidence.edges(events), 'steps': [{'name': 'start', 'rc': 0,
+                  'result_status': 'PASS', 'seconds': 1, 'argv': ['/Users/private/token']}],
+               'isolation_probe': {'network': 1, 'outside_write': 1},
+               'publication_boundary': {'gate': 'C2', 'approved': False}}
+    (source / 'observation.json').write_text(json.dumps(summary))
+    output = tmp_path / 'public'
+    result = exporter.export(source, output)
+    assert result['unique_commands_entered'] == 1
+    assert 'private' not in (output / 'observation.json').read_text()
+    assert '123:1' not in (output / 'callbacks.json').read_text()
+    summary['isolation_probe'] = {}
+    (source / 'observation.json').write_text(json.dumps(summary))
+    with pytest.raises(ValueError, match='isolation receipts'):
+        exporter.export(source, output)

@@ -2524,13 +2524,17 @@ plans:
         evidence; do not infer recovery-path execution or consumer VERIFIED_FIXED.
       - Keep the complete generated command reference discoverable.
   - id: w0c-generated-workflow-and-core-figures
-    status: active
+    status: done
     priority: owner_authorized_combined_slice_20261024
+    completion_boundary: Bounded work and B4 closeout observed at an exact development
+      revision; C2 publication remains intentionally unapproved and unobserved.
     decision: G2/G3 contract views and a bounded offline path observation share one
       slice. G0 uses only observed direct callback edges, with explicit stop points;
       no static closure, universal kernel claim or live release is authorized.
     evidence:
     - docs/reference/OFFLINE_PATH_OBSERVATION.md
+    - docs/reports/offline_path_20261024/README.md
+    - docs/reports/offline_path_20261024/observation.json
     - tests/test_offline_path_observation.py
     - tests/test_site_workflow_figures.py
     acceptance:

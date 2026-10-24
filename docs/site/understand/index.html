@@ -90,6 +90,15 @@
 <li><strong>Validate, then continue</strong>: Read validation_report.json and execution_contract.json. A failed handoff blocks continuation.</li>
 <li><strong>Successor chat</strong>: Use successor_context.yaml and successor_prompt.md; inspect current repository state.</li>
 </ol><p>A generated package preserves inspectable context. It does not prove requirements or software correctness.</p></article>
+<article class="panel"><h3>G0: Observed work and release entry</h3><figure class="architecture-map workflow-map"><picture><source media="(max-width: 680px)" srcset="G0-mobile.svg"><img src="G0.svg" alt="Observed work and release entry — text sequence follows."></picture></figure><ol>
+<li><strong>work start</strong>: rules acknowledge; transfer branch-create; transfer post-merge-check; transfer repo-status; transfer sync-main</li>
+<li><strong>work finish</strong>: rules acknowledge; transfer chat-switch-complete; transfer commit; transfer post-merge-check; transfer pr-create-complete; transfer protected-diff-plan; transfer push-current; transfer repo-status; transfer sync-main</li>
+<li><strong>transfer chat-switch-complete</strong>: No nested CLI callback observed; internal Python operations are outside this view.</li>
+<li><strong>release run</strong>: release prepare; release ready; release-publish; transfer sync-main; work finish; work start</li>
+</ol><p>CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entries include plans and dry runs. Entry does not imply successful completion; no live release or complete command coverage is claimed. Source: 7a6173cab704d57322e3ad22ddf4c02096314b1d. Run status: BOUNDED_COMPLETE. Complete publication is outside this observation.</p></article>
+<article class="panel"><h3>Observation boundary</h3><p>CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entries include plans and dry runs. Entry does not imply successful completion; no live release or complete command coverage is claimed.</p>
+<p>Source commit: <code>7a6173cab704d57322e3ad22ddf4c02096314b1d</code> · BOUNDED_COMPLETE</p>
+<p>The bounded observation and its stop point remain separate from the contract views above.</p><p><a href="workflow-figures.json">Read the source bindings and observed direct edges</a></p></article>
 <p><a href="workflow-figures.json">Figure sources and hashes</a></p></section>
 
       <section id="controllers" class="band" aria-labelledby="controller-title">
