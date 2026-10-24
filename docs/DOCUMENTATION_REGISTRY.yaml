@@ -1799,3 +1799,11 @@ documents:
     class: evidence/log
     owner: maintainers
     summary: W0b bounded local validation evidence
+  - path: docs/reports/command_source_flow_20261024/README.md
+    class: evidence/log
+    owner: maintainers
+    summary: Bounded command-reference flow, source pin and unknowns
+  - path: docs/reports/command_source_flow_20261024/flow.json
+    class: evidence/log
+    owner: maintainers
+    summary: Deterministic reference sites and possible static helper flows

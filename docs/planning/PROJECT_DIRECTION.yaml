@@ -2089,7 +2089,8 @@ plans:
     remaining_boundary: Recommendations and executable calls in K0 closure must be
       distinguished before G0; this audit does not prove a universal kernel.
   - id: k0-command-reference-source-flow
-    status: active
+    status: done
+    analysis_status: bounded_static_incomplete_review_required_before_g0
     kind: bounded_static_followup
     scope: Distinguish possible executable argv flow, recommendations and unknown
       literal references without replacing K0 evidence or command taxonomy.
