@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f9754a876e72dcc92f390a31092600642ca8eedd
-  short: f9754a87
-  subject: Make the protection audit consumer checkout optional (#2619)
+  full: 0001eec959fc6e44015509b458afb171b9fc2110
+  short: 0001eec9
+  subject: Make the public entry concise and bind it to scoped release evidence (#2621)
 last_substantive_work_state:
-  full: f9754a876e72dcc92f390a31092600642ca8eedd
-  short: f9754a87
-  subject: Make the protection audit consumer checkout optional (#2619)
+  full: 0001eec959fc6e44015509b458afb171b9fc2110
+  short: 0001eec9
+  subject: Make the public entry concise and bind it to scoped release evidence (#2621)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
