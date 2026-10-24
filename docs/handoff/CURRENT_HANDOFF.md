@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `2b515370c735f636b7dca14752315895603f44ae` (`2b515370`), after `Bind website claims to scoped evidence and complete Pages inputs (#2617)`.
-Last substantive work state is `2b515370c735f636b7dca14752315895603f44ae` (`2b515370`), after `Bind website claims to scoped evidence and complete Pages inputs (#2617)`.
+Current verified main/admin HEAD is `f9754a876e72dcc92f390a31092600642ca8eedd` (`f9754a87`), after `Make the protection audit consumer checkout optional (#2619)`.
+Last substantive work state is `f9754a876e72dcc92f390a31092600642ca8eedd` (`f9754a87`), after `Make the protection audit consumer checkout optional (#2619)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
