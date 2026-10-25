@@ -76,3 +76,32 @@ experiment, not silently skipped in a cross-platform unit test.
 source-drift propagation, command/package refusal and public-field whitelisting.
 The full experiment is an explicit developer action, never a side effect of the
 unit suite or the site build. The evidence report records its actual stop point.
+
+
+## Reviewed responsive figure templates
+
+The G0/G2/G3 desktop and mobile layouts in `site/templates/figures/` are reviewed
+presentation templates, not additional workflow authorities. A small set of named
+cells feeds both SVG layouts and the accessible expandable text descriptions.
+This is the bounded DCO use: validate the source cells and render deterministically;
+there is no repair loop or new public state registry.
+
+G0 selects exactly one root callback by command `work finish` and step `finish work`,
+not by a numeric callback ID. Its entire ordered direct-command sequence must match
+the reviewed phase layout, including duplicate acknowledgements and commit roles;
+a same-count replacement or reordering blocks the build. Descendant entry counts,
+numbers and provenance come from the digest-checked receipts. The K0c validator
+note is historical static **may-reachability**, separately bound to its witnesses;
+it is not internal-function execution measured by the CLI callback trace.
+
+G2 reads the result states, failure return code and default plan/merge flags from
+the implementation. PLANNED requires successful prechecks. Failed prerequisites
+block subsequent closeout stages, but diagnostics may still run. G3 binds the five
+package filenames to plain-language labels and requires diagnosis and revalidation
+on failure; handoff does not rely on chat memory. No release publication is claimed.
+
+Templates, current contract sources and historical receipts are hashed in the
+public figure projection. Tests in `tests/test_site_workflow_figures.py` guard
+shape changes, state/flag/return-code changes, template slots, sequence and counts.
+The browser QA boundary is recorded in
+`docs/reports/workflow_templates_20261025/README.md`.

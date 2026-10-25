@@ -2554,6 +2554,12 @@ plans:
       Microkernel usage is explicitly reconciled with the architecture contract.
     - No image-generation API, historical private figure copying or additional
       self-hosting-cycle graphic by default; retain sources and evidence boundaries.
+    template_followup_20261025:
+      decision: Owner-approved desktop/mobile redesign with source-bound cells and expandable text.
+      boundary: Reuse the pinned offline receipts; no new simulation, release or kernel claim.
+      evidence:
+      - docs/reports/workflow_templates_20261025/README.md
+      - tests/test_site_workflow_figures.py
   - id: w2-evidence-page
     status: planned
     priority: after_w0

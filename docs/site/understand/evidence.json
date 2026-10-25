@@ -70,41 +70,62 @@
   },
   "schema_version": 1,
   "workflow_figures": {
-    "boundary": "Editorial contract views; arrows show a reading/work sequence, not observed nested calls.",
+    "boundary": "G2/G3 are contract views, not observed nested calls. G0 shows one observed work-finish execution.",
     "figures": [
       {
-        "boundary": "Make the selected change between start and check. Review the finish plan before execution; blocked or failed results stop the cycle.",
+        "boundary": "Contract view of the default merge path of work finish. A successful dry run is PLANNED; any phase can block (BLOCKED, rc 2). Failed prerequisites block subsequent closeout stages; diagnostics may still run. PASS records successful completion, not semantic correctness.",
+        "cells": {
+          "blocked": "STATE=BLOCKED \u00b7 rc 2",
+          "blocked_name": "BLOCKED",
+          "blocked_rc": "rc 2",
+          "passed": "STATE=PASS",
+          "planned": "STATE=PLANNED"
+        },
         "id": "G2",
         "nodes": [
           {
-            "detail": "Start a human patch/slice workflow with the safe standard startup sequence.",
-            "label": "work start",
-            "safety": "BOUNDED",
-            "surface": "orchestrator"
+            "detail": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks. Dry run by default; successful prechecks yield PLANNED.",
+            "label": "Plan"
           },
           {
-            "detail": "Run common human workflow gates without committing or pushing.",
-            "label": "work check",
-            "safety": "READ_ONLY",
-            "surface": "diagnostic"
+            "detail": "Review the plan, then rerun with --execute.",
+            "label": "Approve"
           },
           {
-            "detail": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.",
-            "label": "work finish",
-            "safety": "BOUNDED",
-            "surface": "orchestrator"
+            "detail": "Default merge path: commit, handoff refresh, push and PR closeout. Failed prerequisites block subsequent closeout stages; diagnostics may still run.",
+            "label": "Execute"
           },
           {
-            "detail": "Create a deterministic successor handoff package and prompt projections.",
-            "label": "transfer chat-switch-complete",
-            "safety": "BOUNDED",
-            "surface": "orchestrator"
+            "detail": "All steps successful: PASS. Otherwise BLOCKED, rc 2; inspect and fix the cause before planning again. Continue from the repository successor package.",
+            "label": "Record and continue"
           }
         ],
+        "template_slots": {
+          "desktop": [
+            "blocked",
+            "description",
+            "passed",
+            "planned"
+          ],
+          "mobile": [
+            "blocked_name",
+            "blocked_rc",
+            "description",
+            "passed",
+            "planned"
+          ]
+        },
         "title": "A bounded work cycle"
       },
       {
-        "boundary": "A generated package preserves inspectable context. It does not prove requirements or software correctness.",
+        "boundary": "A generated package preserves inspectable context. It does not prove requirements or software correctness. Handoff does not rely on chat memory. On validation failure, inspect the failure, fix its cause, and revalidate before continuing.",
+        "cells": {
+          "file-execution_contract.json": "rules and commands",
+          "file-source_manifest.json": "source identities",
+          "file-successor_context.yaml": "project context",
+          "file-successor_prompt.md": "next-chat prompt",
+          "file-validation_report.json": "validation report"
+        },
         "id": "G3",
         "nodes": [
           {
@@ -124,35 +145,190 @@
             "label": "Successor chat"
           }
         ],
+        "template_slots": {
+          "desktop": [
+            "description",
+            "file-execution_contract.json",
+            "file-source_manifest.json",
+            "file-successor_context.yaml",
+            "file-successor_prompt.md",
+            "file-validation_report.json"
+          ],
+          "mobile": [
+            "description",
+            "file-execution_contract.json",
+            "file-source_manifest.json",
+            "file-successor_context.yaml",
+            "file-successor_prompt.md",
+            "file-validation_report.json"
+          ]
+        },
         "title": "Context survives the chat"
       },
       {
-        "boundary": "CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entries include plans and dry runs. Entry does not imply successful completion; no live release or complete command coverage is claimed. Source: 7a6173cab704d57322e3ad22ddf4c02096314b1d. Run status: BOUNDED_COMPLETE. Complete publication is outside this observation.",
-        "direct_calls": true,
+        "boundary": "CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entries include plans and dry runs. Entry does not imply successful completion; no live release or complete command coverage is claimed. Source: 7a6173cab704d57322e3ad22ddf4c02096314b1d. Run status: BOUNDED_COMPLETE. No release publication. K0c historical static may-reachability (source 99e5038b2d7b88488561fb14b19b96dcbc71da09) supplies the validator note, not the callback trace.",
+        "cells": {
+          "call-1": "repo-status",
+          "call-10": "push-current",
+          "call-11": "pr-create-complete",
+          "call-12": "sync-main",
+          "call-13": "post-merge-check",
+          "call-14": "repo-status",
+          "call-2": "protected-diff-plan",
+          "call-3": "rules acknowledge",
+          "call-4": "commit (work)",
+          "call-5": "rules acknowledge",
+          "call-6": "chat-switch-complete",
+          "call-7": "rules acknowledge",
+          "call-8": "commit (handoff)",
+          "call-9": "rules acknowledge",
+          "nested": "\u21b3 31 nested entries:",
+          "number-1": "1",
+          "number-10": "10",
+          "number-11": "11",
+          "number-12": "12",
+          "number-13": "13",
+          "number-14": "14",
+          "number-2": "2",
+          "number-3": "3",
+          "number-4": "4",
+          "number-5": "5",
+          "number-6": "6",
+          "number-7": "7",
+          "number-8": "8",
+          "number-9": "9",
+          "protection": "Rules acknowledged 4 times. K0c: commit and push may reach the rule validator; not observed inside CLI callbacks.",
+          "provenance": "Offline sandbox \u00b7 7a6173cab704 \u00b7 local Git + fake GitHub \u00b7 no release publication"
+        },
         "id": "G0",
         "nodes": [
           {
-            "detail": "rules acknowledge; transfer branch-create; transfer post-merge-check; transfer repo-status; transfer sync-main",
-            "label": "work start"
+            "detail": "Observed direct callback entry.",
+            "label": "1. repo-status"
           },
           {
-            "detail": "rules acknowledge; transfer chat-switch-complete; transfer commit; transfer post-merge-check; transfer pr-create-complete; transfer protected-diff-plan; transfer push-current; transfer repo-status; transfer sync-main",
-            "label": "work finish"
+            "detail": "Observed direct callback entry.",
+            "label": "2. protected-diff-plan"
           },
           {
-            "detail": "No nested CLI callback observed; internal Python operations are outside this view.",
-            "label": "transfer chat-switch-complete"
+            "detail": "Observed direct callback entry.",
+            "label": "3. rules acknowledge"
           },
           {
-            "detail": "release prepare; release ready; release-publish; transfer sync-main; work finish; work start",
-            "label": "release run"
+            "detail": "Observed direct callback entry.",
+            "label": "4. commit (work)"
+          },
+          {
+            "detail": "Observed direct callback entry.",
+            "label": "5. rules acknowledge"
+          },
+          {
+            "detail": "Observed direct callback entry.",
+            "label": "6. chat-switch-complete"
+          },
+          {
+            "detail": "Observed direct callback entry.",
+            "label": "7. rules acknowledge"
+          },
+          {
+            "detail": "Observed direct callback entry.",
+            "label": "8. commit (handoff)"
+          },
+          {
+            "detail": "Observed direct callback entry.",
+            "label": "9. rules acknowledge"
+          },
+          {
+            "detail": "Observed direct callback entry.",
+            "label": "10. push-current"
+          },
+          {
+            "detail": "Observed direct callback entry.",
+            "label": "11. pr-create-complete"
+          },
+          {
+            "detail": "Observed direct callback entry.",
+            "label": "12. sync-main"
+          },
+          {
+            "detail": "Observed direct callback entry.",
+            "label": "13. post-merge-check"
+          },
+          {
+            "detail": "Observed direct callback entry.",
+            "label": "14. repo-status"
           }
         ],
-        "subtitle": [
-          "Offline callback entries \u00b7 7a6173cab704",
-          "Local Git + fake GitHub \u00b7 no publication"
-        ],
-        "title": "Observed work and release entry"
+        "template_slots": {
+          "desktop": [
+            "call-1",
+            "call-10",
+            "call-11",
+            "call-12",
+            "call-13",
+            "call-14",
+            "call-2",
+            "call-3",
+            "call-4",
+            "call-5",
+            "call-6",
+            "call-7",
+            "call-8",
+            "call-9",
+            "description",
+            "nested",
+            "number-1",
+            "number-10",
+            "number-11",
+            "number-12",
+            "number-13",
+            "number-14",
+            "number-2",
+            "number-3",
+            "number-4",
+            "number-5",
+            "number-6",
+            "number-7",
+            "number-8",
+            "number-9",
+            "protection",
+            "provenance"
+          ],
+          "mobile": [
+            "call-1",
+            "call-10",
+            "call-11",
+            "call-12",
+            "call-13",
+            "call-14",
+            "call-2",
+            "call-3",
+            "call-4",
+            "call-5",
+            "call-6",
+            "call-7",
+            "call-8",
+            "call-9",
+            "description",
+            "nested",
+            "number-1",
+            "number-10",
+            "number-11",
+            "number-12",
+            "number-13",
+            "number-14",
+            "number-2",
+            "number-3",
+            "number-4",
+            "number-5",
+            "number-6",
+            "number-7",
+            "number-8",
+            "number-9",
+            "provenance"
+          ]
+        },
+        "title": "What work finish actually ran"
       }
     ],
     "kind": "workflow_figure_projection",
@@ -674,12 +850,48 @@
       "source_commit": "7a6173cab704d57322e3ad22ddf4c02096314b1d",
       "status": "BOUNDED_COMPLETE"
     },
+    "protection": {
+      "kind": "historical_static_may_reachability",
+      "source_commit": "99e5038b2d7b88488561fb14b19b96dcbc71da09",
+      "witnesses": [
+        {
+          "command": "agentic-kit transfer commit",
+          "safety": "BOUNDED",
+          "surface": "primitive",
+          "witness": [
+            "agentic_project_kit.cli_commands.transfer_repo_after_pr:commit_command",
+            "agentic_project_kit.cli_commands.transfer_shared:_require_transfer_capability",
+            "agentic_project_kit.transfer_state:build_transfer_state",
+            "agentic_project_kit.rule_ack:validate_rule_acknowledgement"
+          ]
+        },
+        {
+          "command": "agentic-kit transfer push-current",
+          "safety": "BOUNDED",
+          "surface": "primitive",
+          "witness": [
+            "agentic_project_kit.cli_commands.transfer_repo_after_pr:push_current_command",
+            "agentic_project_kit.cli_commands.transfer_shared:_require_transfer_capability",
+            "agentic_project_kit.transfer_state:build_transfer_state",
+            "agentic_project_kit.rule_ack:validate_rule_acknowledgement"
+          ]
+        }
+      ]
+    },
     "schema_version": 1,
     "sources": {
       "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "cb8b4aeb001c238c08d924e10f7c79ad901d456243423908e1fbdfb6e77cb13e",
       "docs/reference/agentic-kit-commands.json": "80473602c348b6f4a34a21bfaa98cedfa7989e122582814f6cb0b484565ba179",
       "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
       "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
+      "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
+      "site/templates/figures/G0-mobile.svg": "cecc5c2e36c1a91fc18911e5872e8bdff2d110a19b3c682a42230f405f56c87d",
+      "site/templates/figures/G0.svg": "43d5078ee104b0d08c1ac76fd74727a5cd64bf85213accb9a35465261d65102e",
+      "site/templates/figures/G2-mobile.svg": "344caee5ad36cd489f532de3bbf23b5a71a99d69de39059ab0466b5916f52698",
+      "site/templates/figures/G2.svg": "8765be0ba0e6d94c6c9448905e816211583ff3fdb1fb457fbde766c3dba1ec60",
+      "site/templates/figures/G3-mobile.svg": "6d9cccea1ddf7b43fb34bec25c215175c40becb2497b9cd71ebc9de8293a5e72",
+      "site/templates/figures/G3.svg": "52ba78e99e8496b7c3de1ccb04889f860afdcea8566c448a40d5a555b8c82152",
+      "src/agentic_project_kit/cli_commands/human_workflows.py": "4e9d15c8d8d23c2c4b901d29736ad5b329183005085c0109afa065650586698f",
       "src/agentic_project_kit/successor_handoff_package.py": "053a96a55182ff05d3e801c56dfc74535a4205de67ecd4db1ba837c2494f81f2"
     }
   }

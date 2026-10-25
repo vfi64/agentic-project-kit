@@ -486,8 +486,8 @@ def build_site(
                                version=metadata.package_version), encoding="utf-8")
         figures = report.explanation_projection.get('workflow_figures', {'figures': []})
         for figure in figures['figures']:
-            (explanation_output / (figure['id'] + '.svg')).write_text(svg(figure), encoding='utf-8')
-            (explanation_output / (figure['id'] + '-mobile.svg')).write_text(svg(figure, compact=True), encoding='utf-8')
+            (explanation_output / (figure['id'] + '.svg')).write_text(svg(figure, root=root), encoding='utf-8')
+            (explanation_output / (figure['id'] + '-mobile.svg')).write_text(svg(figure, compact=True, root=root), encoding='utf-8')
         (explanation_output / 'workflow-figures.json').write_text(
             json.dumps(figures, indent=2, sort_keys=True) + '\n', encoding='utf-8')
         (explanation_output / "evidence.json").write_text(

@@ -1,1 +1,70 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="728" viewBox="0 0 640 728" role="img" aria-labelledby="title desc"><title id="title">Observed work and release entry</title><desc id="desc">CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entries include plans and dry runs. Entry does not imply successful completion; no live release or complete command coverage is claimed. Source: 7a6173cab704d57322e3ad22ddf4c02096314b1d. Run status: BOUNDED_COMPLETE. Complete publication is outside this observation.</desc><rect width="640" height="728" fill="#ecf5ef" rx="18"/><g font-family="system-ui,sans-serif" font-size="18" fill="#16302b"><text x="20" y="32" font-size="23" font-weight="700">Observed work and release entry</text><text x="20" y="72" font-size="13">Offline callback entries · 7a6173cab704</text><text x="20" y="92" font-size="13">Local Git + fake GitHub · no publication</text><rect x="16" y="118" width="608" height="126" rx="14" fill="white" stroke="#0f766e"/><text x="30" y="146" font-size="17" font-weight="700">Caller: work start</text><text x="30" y="178" font-size="15">Direct callees: rules acknowledge; transfer branch-create;</text><text x="30" y="200" font-size="15">transfer post-merge-check; transfer repo-status; transfer sync-</text><text x="30" y="222" font-size="15">main</text><rect x="16" y="276" width="608" height="148" rx="14" fill="white" stroke="#0f766e"/><text x="30" y="304" font-size="17" font-weight="700">Caller: work finish</text><text x="30" y="336" font-size="15">Direct callees: rules acknowledge; transfer chat-switch-complete;</text><text x="30" y="358" font-size="15">transfer commit; transfer post-merge-check; transfer pr-create-</text><text x="30" y="380" font-size="15">complete; transfer protected-diff-plan; transfer push-current;</text><text x="30" y="402" font-size="15">transfer repo-status; transfer sync-main</text><rect x="16" y="456" width="608" height="104" rx="14" fill="white" stroke="#0f766e"/><text x="30" y="484" font-size="17" font-weight="700">Caller: transfer chat-switch-complete</text><text x="30" y="516" font-size="15">Direct callees: No nested CLI callback observed; internal Python</text><text x="30" y="538" font-size="15">operations are outside this view.</text><rect x="16" y="592" width="608" height="104" rx="14" fill="white" stroke="#0f766e"/><text x="30" y="620" font-size="17" font-weight="700">Caller: release run</text><text x="30" y="652" font-size="15">Direct callees: release prepare; release ready; release-publish;</text><text x="30" y="674" font-size="15">transfer sync-main; work finish; work start</text></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 384" role="img" aria-labelledby="g0t g0d" font-family="Inter, 'Segoe UI', system-ui, -apple-system, sans-serif" width="1000" height="384">
+<title id="g0t">What work finish actually ran</title>
+<desc id="g0d">CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entries include plans and dry runs. Entry does not imply successful completion; no live release or complete command coverage is claimed. Source: 7a6173cab704d57322e3ad22ddf4c02096314b1d. Run status: BOUNDED_COMPLETE. No release publication. K0c historical static may-reachability (source 99e5038b2d7b88488561fb14b19b96dcbc71da09) supplies the validator note, not the callback trace. 1. repo-status: Observed direct callback entry. 2. protected-diff-plan: Observed direct callback entry. 3. rules acknowledge: Observed direct callback entry. 4. commit (work): Observed direct callback entry. 5. rules acknowledge: Observed direct callback entry. 6. chat-switch-complete: Observed direct callback entry. 7. rules acknowledge: Observed direct callback entry. 8. commit (handoff): Observed direct callback entry. 9. rules acknowledge: Observed direct callback entry. 10. push-current: Observed direct callback entry. 11. pr-create-complete: Observed direct callback entry. 12. sync-main: Observed direct callback entry. 13. post-merge-check: Observed direct callback entry. 14. repo-status: Observed direct callback entry.</desc>
+<defs><marker id="g0a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#0f766e" /></marker></defs>
+<rect width="1000" height="384" rx="16" fill="#edf3f1" />
+<text x="24" y="36" font-size="20" font-weight="700" fill="#17202a">What <tspan font-family="ui-monospace, Menlo, monospace" font-size="18">work finish</tspan> actually ran</text>
+<text x="24" y="58" font-size="13" fill="#586674">Offline sandbox · 7a6173cab704 · local Git + fake GitHub · no release publication</text>
+<rect x="24" y="76" width="176" height="222" rx="10" fill="#fff" stroke="#c8d3dc" />
+<text x="36" y="98" font-size="14" font-weight="700" fill="#17202a">Check</text>
+<rect x="34" y="110" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="50" cy="127" r="10" fill="#0f766e" /><text x="50" y="131" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">1</text>
+<text x="66" y="132" font-size="13" fill="#17202a">repo-status</text>
+<rect x="34" y="154" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="50" cy="171" r="10" fill="#0f766e" /><text x="50" y="175" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">2</text>
+<text x="66" y="176" font-size="13" fill="#17202a">protected-diff-plan</text>
+<line x1="201" y1="93" x2="217" y2="93" stroke="#0f766e" stroke-width="2" marker-end="url(#g0a)" />
+<rect x="219" y="76" width="176" height="222" rx="10" fill="#fff" stroke="#c8d3dc" />
+<text x="231" y="98" font-size="14" font-weight="700" fill="#17202a">Commit work</text>
+<rect x="229" y="110" width="156" height="34" rx="6" fill="#fdf6e7" stroke="#a16207" stroke-width="1.5" />
+<circle cx="245" cy="127" r="10" fill="#a16207" /><text x="245" y="131" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">3</text>
+<text x="261" y="132" font-size="13" fill="#17202a">rules acknowledge</text>
+<rect x="229" y="154" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="245" cy="171" r="10" fill="#0f766e" /><text x="245" y="175" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4</text>
+<text x="261" y="176" font-size="13" fill="#17202a">commit (work)</text>
+<line x1="396" y1="93" x2="412" y2="93" stroke="#0f766e" stroke-width="2" marker-end="url(#g0a)" />
+<rect x="414" y="76" width="176" height="222" rx="10" fill="#fff" stroke="#c8d3dc" />
+<text x="426" y="98" font-size="14" font-weight="700" fill="#17202a">Refresh handoff</text>
+<rect x="424" y="110" width="156" height="34" rx="6" fill="#fdf6e7" stroke="#a16207" stroke-width="1.5" />
+<circle cx="440" cy="127" r="10" fill="#a16207" /><text x="440" y="131" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">5</text>
+<text x="456" y="132" font-size="13" fill="#17202a">rules acknowledge</text>
+<rect x="424" y="154" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="440" cy="171" r="10" fill="#0f766e" /><text x="440" y="175" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">6</text>
+<text x="456" y="176" font-size="12.5" fill="#17202a">chat-switch-complete</text>
+<rect x="424" y="198" width="156" height="34" rx="6" fill="#fdf6e7" stroke="#a16207" stroke-width="1.5" />
+<circle cx="440" cy="215" r="10" fill="#a16207" /><text x="440" y="219" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">7</text>
+<text x="456" y="220" font-size="13" fill="#17202a">rules acknowledge</text>
+<rect x="424" y="242" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="440" cy="259" r="10" fill="#0f766e" /><text x="440" y="263" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">8</text>
+<text x="456" y="264" font-size="13" fill="#17202a">commit (handoff)</text>
+<line x1="591" y1="93" x2="607" y2="93" stroke="#0f766e" stroke-width="2" marker-end="url(#g0a)" />
+<rect x="609" y="76" width="176" height="222" rx="10" fill="#fff" stroke="#c8d3dc" />
+<text x="621" y="98" font-size="14" font-weight="700" fill="#17202a">Push &amp; PR</text>
+<rect x="619" y="110" width="156" height="34" rx="6" fill="#fdf6e7" stroke="#a16207" stroke-width="1.5" />
+<circle cx="635" cy="127" r="10" fill="#a16207" /><text x="635" y="131" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">9</text>
+<text x="651" y="132" font-size="13" fill="#17202a">rules acknowledge</text>
+<rect x="619" y="154" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="635" cy="171" r="10" fill="#0f766e" /><text x="635" y="175" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">10</text>
+<text x="651" y="176" font-size="13" fill="#17202a">push-current</text>
+<rect x="619" y="198" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="635" cy="215" r="10" fill="#0f766e" /><text x="635" y="219" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">11</text>
+<text x="651" y="220" font-size="13" fill="#17202a">pr-create-complete</text>
+<text x="621" y="244" font-size="12" fill="#586674">↳ 31 nested entries:</text>
+<text x="621" y="261" font-size="12" fill="#586674">PR, CI wait, merge,</text>
+<text x="621" y="278" font-size="12" fill="#586674">post-merge closeout</text>
+<line x1="786" y1="93" x2="802" y2="93" stroke="#0f766e" stroke-width="2" marker-end="url(#g0a)" />
+<rect x="804" y="76" width="176" height="222" rx="10" fill="#fff" stroke="#c8d3dc" />
+<text x="816" y="98" font-size="14" font-weight="700" fill="#17202a">Settle</text>
+<rect x="814" y="110" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="830" cy="127" r="10" fill="#0f766e" /><text x="830" y="131" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">12</text>
+<text x="846" y="132" font-size="13" fill="#17202a">sync-main</text>
+<rect x="814" y="154" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="830" cy="171" r="10" fill="#0f766e" /><text x="830" y="175" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">13</text>
+<text x="846" y="176" font-size="13" fill="#17202a">post-merge-check</text>
+<rect x="814" y="198" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="830" cy="215" r="10" fill="#0f766e" /><text x="830" y="219" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">14</text>
+<text x="846" y="220" font-size="13" fill="#17202a">repo-status</text>
+<rect x="24" y="323" width="16" height="16" rx="4" fill="#fdf6e7" stroke="#a16207" stroke-width="1.5" />
+<text x="48" y="336" font-size="13" fill="#17202a">Rules acknowledged 4 times. K0c: commit and push may reach the rule validator; not observed inside CLI callbacks.</text>
+<text x="24" y="362" font-size="12" fill="#586674">One self-hosting execution, not a coverage or common-kernel claim. Release publication was not observed.</text>
+</svg>

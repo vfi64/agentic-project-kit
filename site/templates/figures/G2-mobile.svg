@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 770" role="img" aria-labelledby="g2mt g2md" font-family="Inter, 'Segoe UI', system-ui, -apple-system, sans-serif" width="380" height="770">
+<title id="g2mt">A bounded work cycle</title>
+<desc id="g2md" data-bind="description" />
+<defs><marker id="m2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f766e" /></marker><marker id="m2r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b42318" /></marker></defs>
+<rect width="380" height="770" rx="14" fill="#edf3f1" />
+<text x="16" y="32" font-size="19" font-weight="700" fill="#17202a">A bounded work cycle</text>
+<text x="16" y="52" font-size="12" fill="#586674">agentic-kit work finish · implemented result states</text>
+<rect x="40" y="70" width="224" height="88" rx="10" fill="#fff" stroke="#0f766e" stroke-width="1.5" />
+<circle cx="64" cy="92" r="11" fill="#0f766e" /><text x="64" y="97" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">1</text>
+<text x="82" y="97" font-size="15" font-weight="700" fill="#17202a">Plan</text>
+<text x="54" y="120" font-size="13" fill="#17202a">Dry run; prechecks passed</text>
+<text x="54" y="139" font-size="12" font-family="ui-monospace, Menlo, monospace" fill="#0f766e" data-bind="planned" />
+<rect x="40" y="178" width="224" height="88" rx="10" fill="#fff" stroke="#0f766e" stroke-width="1.5" />
+<circle cx="64" cy="200" r="11" fill="#0f766e" /><text x="64" y="205" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">2</text>
+<text x="82" y="205" font-size="15" font-weight="700" fill="#17202a">Approve</text>
+<text x="54" y="228" font-size="13" fill="#17202a">Review, then rerun with</text>
+<text x="54" y="247" font-size="12" font-family="ui-monospace, Menlo, monospace" fill="#0f766e">--execute</text>
+<rect x="40" y="286" width="224" height="106" rx="10" fill="#fff" stroke="#0f766e" stroke-width="1.5" />
+<circle cx="64" cy="308" r="11" fill="#0f766e" /><text x="64" y="313" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">3</text>
+<text x="82" y="313" font-size="15" font-weight="700" fill="#17202a">Execute</text>
+<text x="54" y="336" font-size="13" fill="#17202a">commit · push · PR ·</text>
+<text x="54" y="355" font-size="13" fill="#17202a">merge · handoff refresh</text>
+<text x="54" y="374" font-size="13" fill="#586674">requires passed checks</text>
+<line x1="152.0" y1="158" x2="152.0" y2="174" stroke="#0f766e" stroke-width="2" marker-end="url(#m2a)" />
+<line x1="152.0" y1="266" x2="152.0" y2="282" stroke="#0f766e" stroke-width="2" marker-end="url(#m2a)" />
+<line x1="152.0" y1="392" x2="152.0" y2="412" stroke="#0f766e" stroke-width="2" marker-end="url(#m2a)" />
+<path d="M152.0 414 L208.0 446 L152.0 478 L96.0 446 Z" fill="#fff" stroke="#17202a" stroke-width="1.5" />
+<text x="152.0" y="443" font-size="12" font-weight="700" fill="#17202a" text-anchor="middle">all steps</text><text x="152.0" y="458" font-size="12" font-weight="700" fill="#17202a" text-anchor="middle">passed?</text>
+<line x1="152.0" y1="478" x2="152.0" y2="504" stroke="#0f766e" stroke-width="2" marker-end="url(#m2a)" /><text x="160.0" y="496" font-size="12" font-weight="700" fill="#0f766e">yes</text>
+<rect x="40" y="508" width="224" height="88" rx="10" fill="#fff" stroke="#0f766e" stroke-width="1.5" />
+<circle cx="64" cy="530" r="11" fill="#0f766e" /><text x="64" y="535" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">4</text>
+<text x="82" y="535" font-size="15" font-weight="700" fill="#17202a">Record</text>
+<text x="54" y="558" font-size="13" fill="#17202a">Steps and return codes</text>
+<text x="54" y="577" font-size="12" font-family="ui-monospace, Menlo, monospace" fill="#0f766e" data-bind="passed" />
+<line x1="152.0" y1="596" x2="152.0" y2="612" stroke="#0f766e" stroke-width="2" marker-end="url(#m2a)" />
+<rect x="40" y="616" width="224" height="88" rx="10" fill="#fff" stroke="#0f766e" stroke-width="1.5" />
+<circle cx="64" cy="638" r="11" fill="#0f766e" /><text x="64" y="643" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">5</text>
+<text x="82" y="643" font-size="15" font-weight="700" fill="#17202a">Continue</text>
+<text x="54" y="666" font-size="13" fill="#17202a">Package in the repo</text>
+<text x="54" y="685" font-size="13" fill="#586674">a new chat can resume</text>
+<line x1="208.0" y1="446" x2="270" y2="446" stroke="#b42318" stroke-width="2" marker-end="url(#m2r)" /><text x="212.0" y="440" font-size="12" font-weight="700" fill="#b42318">no</text>
+<rect x="274" y="400" width="96" height="92" rx="10" fill="#fff" stroke="#b42318" stroke-width="1.5" />
+<text x="284" y="424" font-size="14" font-weight="700" fill="#b42318" data-bind="blocked_name" /><text x="284" y="443" font-size="11.5" font-family="ui-monospace, Menlo, monospace" fill="#b42318" data-bind="blocked_rc" /><text x="284" y="462" font-size="12" fill="#17202a">fix the cause,</text><text x="284" y="479" font-size="12" fill="#17202a">plan again</text>
+<path d="M322.0 400 V114 H268" fill="none" stroke="#b42318" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#m2r)" />
+<path d="M40 660 H20 V114 H36" fill="none" stroke="#0f766e" stroke-width="2" marker-end="url(#m2a)" />
+<text transform="translate(14 446) rotate(-90)" font-size="12" fill="#0f766e" text-anchor="middle">next slice</text>
+<text x="16" y="756" font-size="11.5" fill="#586674">Any phase can block; diagnostics may still run.</text></svg>
