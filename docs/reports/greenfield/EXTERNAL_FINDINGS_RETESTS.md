@@ -1450,6 +1450,23 @@ Expected: A greenfield finding catalog that quotes a legacy ./ns call passes the
 
 Expected result fields: `{"status": ["PASS", "BLOCK"], "stdout": ".agentic/notes.json"}`.
 
+## KIT-GF-086
+
+Kit state: CLOSED; fixed_in: 1.1.6.
+Evidence: docs/reports/greenfield/KIT-GF-086-ci-pin-guard-2026-10-25.md
+
+Execution class: local (effects: none); machine contract: Reject old installed runtime before entrypoint writes, allow newer runtime.
+
+Preconditions: Disposable git repository with an installed editable Kit runtime. The fixture contains only a CI workflow pin; no production files are changed.
+
+```text
+agentic-kit commands sync-entrypoints --execute --json
+```
+
+Expected: Pin 99.0.0 returns BLOCKED with installed_kit_older_than_ci_pin; pin 0.0.1 returns PASS.
+
+Expected result fields: `{"assertions": ["High CI pin blocks before any entrypoint write; lower pin passes."], "process.returncode": 0, "stdout.json_document_count": 1}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

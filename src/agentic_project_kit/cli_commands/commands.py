@@ -70,6 +70,16 @@ def commands_sync_entrypoints_command(
 ) -> None:
     """Synchronize command reference files and command-manifest entrypoint headers."""
     root = root.resolve()
+    if execute:
+        from .. import __version__ as installed_kit_version
+        from ..kit_ci_pin_guard import check_kit_ci_pin
+        guard = check_kit_ci_pin(root, installed_kit_version)
+        if guard["result_status"] == "BLOCKED":
+            if json_output:
+                typer.echo(json.dumps(guard, indent=2, sort_keys=True))
+            else:
+                typer.echo("COMMANDS_SYNC_ENTRYPOINTS\nSTATUS=BLOCKED\n" + json.dumps(guard, sort_keys=True))
+            raise typer.Exit(code=2)
     data = build_current_reference()
     rendered = render_markdown(data)
     payload = sync_entrypoint_files(root, manifest=data, markdown=rendered, execute=execute)

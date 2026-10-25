@@ -1264,3 +1264,16 @@ alone do not authorize a phase mapping. Historical K0c may-reachability remains
 separate from observed CLI entry evidence. Text alternatives remain expandable.
 Browser QA at 390 px checks Overview, Understand, Quickstart and Workflows without
 document-level horizontal overflow; wide tables and command blocks scroll locally.
+
+
+### Installed Kit versus CI pin (KIT-GF-086)
+
+`tests/test_kit_ci_pin_guard.py`, `tests/test_kit_ci_pin_guard_cli.py`,
+`tests/test_kit_ci_pin_guard_release.py` and
+`tests/test_kit_ci_pin_guard_orchestration.py` verify numeric exact-pin comparison,
+no-pin source checkouts, read/decode failures, unchanged entrypoint bytes on a
+block, equal text/JSON payloads and nonblocking previews. The release-run test
+executes the real prepare guard at A3 and proves B2 is never reached.
+`tests/test_kit_update.py` observes target-runtime preview and checks installed
+version plus both written CI pins at the entrypoint execute boundary. These are
+behavior tests, not assertions about source-code strings.

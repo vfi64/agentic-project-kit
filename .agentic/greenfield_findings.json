@@ -5913,6 +5913,78 @@
       "report": "docs/reports/greenfield/KIT-GF-085-finding-catalog-release-audit-2026-10-22.md"
     },
     {
+      "id": "KIT-GF-086",
+      "kit_state": "CLOSED",
+      "fixed_in": "1.1.6",
+      "report": "docs/reports/greenfield/KIT-GF-086-ci-pin-guard-2026-10-25.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "Reject old installed runtime before entrypoint writes, allow newer runtime.",
+          "steps": [
+            {
+              "write": {
+                "path": ".github/workflows/gate.yaml",
+                "text": "name: pin-check\nsteps:\n  - run: python -m pip install agentic-project-kit==99.0.0\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "commands",
+                "sync-entrypoints",
+                "--execute",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 2,
+                "stdout_contains": "installed_kit_older_than_ci_pin"
+              }
+            },
+            {
+              "write": {
+                "path": ".github/workflows/gate.yaml",
+                "text": "name: pin-check\nsteps:\n  - run: python -m pip install agentic-project-kit==0.0.1\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "commands",
+                "sync-entrypoints",
+                "--execute",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            }
+          ]
+        },
+        "expected_result_fields": {
+          "process.returncode": 0,
+          "stdout.json_document_count": 1,
+          "assertions": [
+            "High CI pin blocks before any entrypoint write; lower pin passes."
+          ]
+        },
+        "bindings": {},
+        "preconditions": [
+          "Disposable git repository with an installed editable Kit runtime.",
+          "The fixture contains only a CI workflow pin; no production files are changed."
+        ],
+        "commands": [
+          "agentic-kit commands sync-entrypoints --execute --json"
+        ],
+        "expected": [
+          "Pin 99.0.0 returns BLOCKED with installed_kit_older_than_ci_pin; pin 0.0.1 returns PASS."
+        ],
+        "verification": "Run the git_repository machine contract against the candidate Kit."
+      },
+      "prs": []
+    },
+    {
       "external_retest": {
         "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
