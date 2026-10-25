@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f7b956b3e7d22cb37d727fb92071fc7dda46d1b3
-  short: f7b956b3
-  subject: Test homepage publication evidence across release versions (#2636)
+  full: 5079201348425be4c21ff6e2ff71ab63d2140e05
+  short: 50792013
+  subject: Release 1.1.6 (#2638)
 last_substantive_work_state:
-  full: f7b956b3e7d22cb37d727fb92071fc7dda46d1b3
-  short: f7b956b3
-  subject: Test homepage publication evidence across release versions (#2636)
+  full: 5079201348425be4c21ff6e2ff71ab63d2140e05
+  short: 50792013
+  subject: Release 1.1.6 (#2638)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
