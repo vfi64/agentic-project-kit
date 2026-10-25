@@ -104,6 +104,29 @@ A control run against an independently installed **released** 1.1.5 was not run:
 no verified released 1.1.5 environment is available in this working environment.
 The candidate identifies as 1.1.5 because 1.1.6 is only a planned release; it is
 not used to claim that the historical released package passes this regression.
-The final full-suite result is added after testing the committed corrections.
+The final full suite on correction commit `6d3fb0ab` passes **4114 tests**,
+rc 0, 148.08 seconds (545 existing warnings). All 26 named tests pass there too.
+The previous failed-gate statements above are retained historical observations,
+superseded by this isolated comparison and reviewed-candidate validation.
+
+| Check | Command | Result |
+| --- | --- | --- |
+| Focused helper, CLI, release and update tests | `python -m pytest -q tests/test_kit_ci_pin_guard.py tests/test_kit_ci_pin_guard_cli.py tests/test_kit_ci_pin_guard_release.py tests/test_kit_ci_pin_guard_orchestration.py tests/test_kit_update.py` | 86 passed, rc 0 |
+| Release-content audits | `python -m pytest -q tests/test_release_content_audits_on_checkout.py` | 20 passed, rc 0 |
+| Full candidate suite | `python -m pytest -q -n 4 --dist worksteal` | 4114 passed, rc 0 |
+| Baseline comparison | The 26 exact node IDs in the table, on origin/main | 26 passed, rc 0 |
+| Machine contract | `agentic-kit greenfield retest --id KIT-GF-086 --json` | PASS, rc 0 |
+| Catalog projections | `agentic-kit greenfield export --json` | PASS, changed_paths empty |
+| Canonical site projection | `python site/scripts/build.py --docs-pages-fallback --json` | PASS, no blockers |
+| Lint | `ruff check --no-cache .` | PASS, rc 0 |
+| Documentation | `agentic-kit check-docs` | PASS, rc 0 |
+| Repository health | `agentic-kit doctor` | PASS, rc 0; existing lifecycle advisories |
+
+Only validation prose and generated successor projections follow the tested code
+commit. The final PR head is additionally checked by remote CI before merging.
+The initial PR body's stop/validation notes describe the earlier operator run;
+the owner's 2026-10-25 takeover decision authorizes completion. They were not
+rewritten through a raw GitHub mutation: the installed manifest has no PR-edit
+route. This report contains the current comparison and validation evidence.
 The Kit finding remains CLOSED for planned 1.1.6; independent consumer verification
 and a release are not implied by these candidate tests.
