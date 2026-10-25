@@ -7,16 +7,16 @@ Current verified release: 1.1.5.
 Current release tag: v1.1.5.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.23564978`.
-Current verified main: `12731617` (`fix: refuse Kit entrypoint downgrade below CI pin (KIT-GF-086) (#2633)`).
-Latest substantive work: PR #2633 (`fix: refuse Kit entrypoint downgrade below CI pin (KIT-GF-086) (#2633)`).
-Latest administrative refresh-only descendant: post-PR2633 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
+Current verified main: `f7b956b3` (`Test homepage publication evidence across release versions (#2636)`).
+Latest substantive work: PR #2636 (`Test homepage publication evidence across release versions (#2636)`).
+Latest administrative refresh-only descendant: post-PR2636 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
 Latest Brownfield external evidence: Cycle 007 report
 `docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md`
 records Comm-SCI App2 provider-settings seam reduction from `55` to `44`,
 target PR #16, target successor refresh PR #17, final target head
 `ea21b3a3`, and post-merge-settle `READY`.
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2633 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2636 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -422,6 +422,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2633
+## Operational documentation refresh state after PR #2636
 
-Current administrative handoff refresh state is `12731617` (`fix: refuse Kit entrypoint downgrade below CI pin (KIT-GF-086) (#2633)`). Continue next only after this post-PR2633 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `f7b956b3` (`Test homepage publication evidence across release versions (#2636)`). Continue next only after this post-PR2636 refresh is committed and merged; the next substantive slice must be created from fresh main.

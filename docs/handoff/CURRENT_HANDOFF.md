@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `127316174ca4fc45e7035b55710bd54ea106bf86` (`12731617`), after `fix: refuse Kit entrypoint downgrade below CI pin (KIT-GF-086) (#2633)`.
-Last substantive work state is `127316174ca4fc45e7035b55710bd54ea106bf86` (`12731617`), after `fix: refuse Kit entrypoint downgrade below CI pin (KIT-GF-086) (#2633)`.
+Current verified main/admin HEAD is `f7b956b3e7d22cb37d727fb92071fc7dda46d1b3` (`f7b956b3`), after `Test homepage publication evidence across release versions (#2636)`.
+Last substantive work state is `f7b956b3e7d22cb37d727fb92071fc7dda46d1b3` (`f7b956b3`), after `Test homepage publication evidence across release versions (#2636)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
