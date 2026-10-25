@@ -1828,3 +1828,7 @@ documents:
     owner: maintainers
     summary: Reviewed responsive workflow templates, source bindings and bounded browser
       QA
+  - path: docs/reports/greenfield/KIT-GF-086-ci-pin-guard-2026-10-25.md
+    class: evidence/log
+    owner: maintainers
+    summary: KIT-GF-086 CI pin guard evidence and machine retest.

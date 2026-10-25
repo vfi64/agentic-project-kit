@@ -1008,13 +1008,20 @@ def release_prepare_command(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     """Generate release summary evidence and run release-prep safely."""
+    from .. import __version__ as installed_kit_version
+    from ..kit_ci_pin_guard import check_kit_ci_pin
+    kit_pin_guard = check_kit_ci_pin(Path(".").resolve(), installed_kit_version)
     summary_line_args = _summary_line_args(summary_lines)
     release_date = date or date_cls.today().isoformat()
     effective_from_tag = from_tag or _latest_release_tag()
     summary_lines_path = load_workspace(Path(".")).tmp_file(f"release-{version.replace('.', '')}-summary-lines.json")
-    steps = [
-        _run_step("release-notes-generate", _agentic("release-notes-generate", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--include-github-metadata", "--summary-lines-json", str(summary_lines_path), "--json"))
-    ]
+    steps = [{"name": "kit-ci-pin-guard",
+              "ok": kit_pin_guard["result_status"] != "BLOCKED",
+              "returncode": 2 if kit_pin_guard["result_status"] == "BLOCKED" else 0,
+              "stdout": json.dumps(kit_pin_guard, sort_keys=True),
+              "stderr": "", "argv": ["kit-ci-pin-guard"]}]
+    if all(step["ok"] for step in steps):
+        steps.append(_run_step("release-notes-generate", _agentic("release-notes-generate", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--include-github-metadata", "--summary-lines-json", str(summary_lines_path), "--json")))
     if all(step["ok"] for step in steps):
         release_prep_argv = _agentic(
             "release-prep",

@@ -1,14 +1,14 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 84,
+    "CLOSED": 85,
     "NOT_APPLICABLE": 0,
     "OPEN": 0,
     "PARTIAL": 0
   },
   "execution_classes": {
     "kit_release": 7,
-    "local": 44,
+    "local": 45,
     "owner_remote": 33
   },
   "findings": [
@@ -6307,6 +6307,82 @@
     },
     {
       "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit commands sync-entrypoints --execute --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Pin 99.0.0 returns BLOCKED with installed_kit_older_than_ci_pin; pin 0.0.1 returns PASS."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "High CI pin blocks before any entrypoint write; lower pin passes."
+          ],
+          "process.returncode": 0,
+          "stdout.json_document_count": 1
+        },
+        "machine": {
+          "covers": "Reject old installed runtime before entrypoint writes, allow newer runtime.",
+          "fixture": "git_repository",
+          "steps": [
+            {
+              "write": {
+                "path": ".github/workflows/gate.yaml",
+                "text": "name: pin-check\nsteps:\n  - run: python -m pip install agentic-project-kit==99.0.0\n"
+              }
+            },
+            {
+              "expect": {
+                "returncode": 2,
+                "stdout_contains": "installed_kit_older_than_ci_pin"
+              },
+              "run": [
+                "agentic-kit",
+                "commands",
+                "sync-entrypoints",
+                "--execute",
+                "--json"
+              ]
+            },
+            {
+              "write": {
+                "path": ".github/workflows/gate.yaml",
+                "text": "name: pin-check\nsteps:\n  - run: python -m pip install agentic-project-kit==0.0.1\n"
+              }
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "commands",
+                "sync-entrypoints",
+                "--execute",
+                "--json"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Disposable git repository with an installed editable Kit runtime.",
+          "The fixture contains only a CI workflow pin; no production files are changed."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Run the git_repository machine contract against the candidate Kit.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "1.1.6",
+      "id": "KIT-GF-086",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-086-ci-pin-guard-2026-10-25.md"
+    },
+    {
+      "external_retest": {
         "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
@@ -6443,7 +6519,7 @@
     }
   ],
   "kind": "external_findings_status",
-  "machine_contracts": 44,
+  "machine_contracts": 45,
   "schema_version": 1,
-  "source_sha256": "158e559b4a08e50b28dad099e1d653069e6582e7393d6bb4bce51fa52daa9709"
+  "source_sha256": "4cb55570578467a446d08a62a4cd62c76b8aa6ff210326a70b59f19f5b7066d1"
 }
