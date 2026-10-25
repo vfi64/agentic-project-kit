@@ -1,9 +1,10 @@
 ## Unreleased
 
+## v1.1.6 - 2026-10-25
+
+- Zenodo DOI verification pending for v1.1.6.
 - Fixed: Prevent entrypoint synchronization and release preparation with an installed Kit older than workspace CI pins (KIT-GF-086).
-
 - Repair the context benchmark's planning fault injection and isolate reference solutions from agent-visible Git history; require T1's actual target gate to fail before accepting its self-test, preserve failed-run evidence, and record the pilot's validity limitations.
-
 - Complete the six remaining local finding machine contracts (KIT-GF-014, 015, 021, 032, 045 and 067): exercise the repaired continuation/fact checks, isolate the installed Kit in an owned interpreter, and run real release readiness with a local origin and committed successor package. Keep missing-contract and remote/release cases fail-closed; consumer VERIFIED_FIXED remains evidence-owned.
 
 ## v1.1.5 - 2026-10-22
