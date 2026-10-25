@@ -73,3 +73,13 @@ def test_sync_entrypoints_preserves_existing_entrypoints(tmp_path):
     assert "installed_kit_older_than_ci_pin" in proc.stdout
     assert all((tmp_path / name).read_bytes() == content
                for name, content in preserved.items())
+
+
+def test_blocked_text_and_json_have_the_same_payload(tmp_path):
+    pin = tmp_path / '.github/workflows/gate.yaml'
+    pin.parent.mkdir(parents=True)
+    pin.write_text('run: python -m pip install agentic-project-kit==99.0.0\n')
+    structured = run_kit(tmp_path, 'commands', 'sync-entrypoints', '--execute', '--json')
+    text = run_kit(tmp_path, 'commands', 'sync-entrypoints', '--execute')
+    assert text.returncode == structured.returncode == 2
+    assert json.loads(text.stdout.split('\n', 2)[2]) == json.loads(structured.stdout)

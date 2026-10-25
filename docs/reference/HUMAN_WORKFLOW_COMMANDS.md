@@ -216,6 +216,20 @@ generated release-notes lines; it reaches the release-prep dry-run of the scan
 
 Generate release-notes summary evidence and run release-prep. It is dry-run by default.
 
+KIT-GF-086: `kit-ci-pin-guard` is the first step, in dry-run and write modes.
+It compares the installed Kit numerically with every stable exact CI pin in
+`.github/workflows/` and `.agentic/ci/`. An older runtime blocks with
+`installed_kit_older_than_ci_pin` before release notes or metadata preparation;
+the next action names `agentic-kit kit update --root . --version` and the highest
+pin. A release run consequently stops in A3, before B2 can write.
+
+The same guard precedes writes by `commands sync-entrypoints --execute`.
+Its preview remains nonblocking. Unreadable or non-UTF-8 workflow files block
+writes with `ci_pin_workflow_unreadable`; restore readable files before continuing.
+No pins means PASS, including the Kit's source-installed checkout. Kit update's
+target-runtime preview remains read-only; execute installs the runtime and writes
+its new CI pins before entrypoint synchronization.
+
 Typical use:
 
     agentic-kit release prepare --version <version> --from-tag <from-tag> --date <date> --dry-run --json

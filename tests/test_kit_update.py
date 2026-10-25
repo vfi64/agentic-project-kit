@@ -667,3 +667,29 @@ def test_a_blocked_inventory_refresh_blocks_the_update_result(workspace, field, 
     assert result["blocker"].startswith("rule_inventory_refresh_blocked")
     assert "rule-registry bootstrap" in result["blocker"]
     assert "doctor" in result["completed_steps"]
+
+
+def test_gf086_preview_target_runtime_and_execute_pins_before_sync(workspace):
+    from agentic_project_kit.kit_ci_pin_guard import check_kit_ci_pin
+    original = workspace.run
+    observations = []
+    def run(argv, **kwargs):
+        if 'sync-entrypoints' in argv:
+            if '--execute' in argv:
+                assert workspace.version == '1.0.19'
+                assert argv[0] == str(workspace.root / '.venv/bin/python')
+                assert check_kit_ci_pin(workspace.root, workspace.version)['result_status'] == 'PASS'
+                for path in (CI_TEMPLATE_PATH, CI_INJECTION_TARGET):
+                    assert b'agentic-project-kit==1.0.19' in (workspace.root / path).read_bytes()
+                observations.append('execute_after_install_and_pins')
+            else:
+                assert argv[0] == str(workspace.target.python)
+                observations.append('target_preview_without_execute')
+        return original(argv, **kwargs)
+    workspace.run = run
+    plan = workspace.update()
+    assert plan['result_status'] == 'AWAITING_APPROVAL'
+    result = workspace.update(execute=True, expected_signature=plan['approval_signature'])
+    assert result['result_status'] == 'PASS', result
+    assert observations[0] == 'target_preview_without_execute'
+    assert observations[-1] == 'execute_after_install_and_pins'

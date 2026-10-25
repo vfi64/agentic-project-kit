@@ -6,9 +6,9 @@ import re
 import shlex
 
 from agentic_project_kit.workspace_init import MANAGED_CI_HEADER
+from agentic_project_kit.kit_ci_pin_patterns import EXACT_KIT_PIN_BYTES as _EXACT_PIN
 
 
-_EXACT_PIN = re.compile(rb"agentic-project-kit==([0-9]+\.[0-9]+\.[0-9]+)(?![\w.+!*-])")
 
 
 def plan_ci_pins(

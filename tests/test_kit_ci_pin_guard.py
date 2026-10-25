@@ -52,3 +52,50 @@ def test_gf086_ci_directory_and_nonexact_pins(tmp_path):
     assert result['next_action'].endswith('--version 99.0.0')
     (ci / 'a.yml').write_text('run: pip install agentic-project-kit>=99.0.0\n')
     assert check_kit_ci_pin(tmp_path, '1.1.5')['result_status'] == 'PASS'
+
+
+def test_numeric_comparison_blocks_19_below_110(tmp_path):
+    pin(tmp_path, '1.1.10')
+    assert check_kit_ci_pin(tmp_path, '1.1.9')['result_status'] == 'BLOCKED'
+
+
+def test_nonstable_requirements_are_not_exact_pins(tmp_path):
+    for version in ['1.1.5.*', '1.1.5rc1', '1.1.5+local', '1.1.5-rc1']:
+        pin(tmp_path, version)
+        assert check_kit_ci_pin(tmp_path, '1.1.4')['versions']['pins'] == []
+
+
+def test_unreadable_workflow_blocks_instead_of_skipping(tmp_path, monkeypatch):
+    from pathlib import Path
+    pin(tmp_path, '1.1.5')
+    original = Path.read_text
+    def read(path, *args, **kwargs):
+        if path.name == 'gate.yaml':
+            raise PermissionError('denied')
+        return original(path, *args, **kwargs)
+    monkeypatch.setattr(Path, 'read_text', read)
+    result = check_kit_ci_pin(tmp_path, '1.1.5')
+    assert result['result_status'] == 'BLOCKED'
+    assert result['reasons'] == ['ci_pin_workflow_unreadable']
+    assert result['unreadable_files'] == [{'path': '.github/workflows/gate.yaml', 'error': 'PermissionError'}]
+
+
+def test_undecodable_workflow_blocks(tmp_path):
+    pin(tmp_path, '1.1.5')
+    (tmp_path / '.github/workflows/gate.yaml').write_bytes(b'\xff')
+    result = check_kit_ci_pin(tmp_path, '1.1.5')
+    assert result['reasons'] == ['ci_pin_workflow_unreadable']
+    assert result['unreadable_files'][0]['error'] == 'UnicodeDecodeError'
+
+
+def test_kit_repository_without_exact_ci_pins_passes():
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    result = check_kit_ci_pin(root)
+    assert result['result_status'] == 'PASS'
+    assert result['versions']['pins'] == []
+
+
+def test_invalid_installed_version_blocks_when_pinned(tmp_path):
+    pin(tmp_path, '1.1.5')
+    assert check_kit_ci_pin(tmp_path, 'unknown')['reasons'] == ['installed_kit_version_invalid']
