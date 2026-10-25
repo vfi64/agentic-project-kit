@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 08a218ef6cdd8f11f1d48dfd2af4651b4c2e21c14dec64a2fdeee3104c87d3e3
 - docs/reference/agentic-kit-commands.json: 80473602c348b6f4a34a21bfaa98cedfa7989e122582814f6cb0b484565ba179
-## Operational documentation refresh state after PR #2633
+## Operational documentation refresh state after PR #2636
 
-Current administrative handoff refresh state is `12731617` (`fix: refuse Kit entrypoint downgrade below CI pin (KIT-GF-086) (#2633)`). Continue next only after this post-PR2633 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `f7b956b3` (`Test homepage publication evidence across release versions (#2636)`). Continue next only after this post-PR2636 refresh is committed and merged; the next substantive slice must be created from fresh main.

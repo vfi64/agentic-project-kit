@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 127316174ca4fc45e7035b55710bd54ea106bf86
-  short: 12731617
-  subject: 'fix: refuse Kit entrypoint downgrade below CI pin (KIT-GF-086) (#2633)'
+  full: f7b956b3e7d22cb37d727fb92071fc7dda46d1b3
+  short: f7b956b3
+  subject: Test homepage publication evidence across release versions (#2636)
 last_substantive_work_state:
-  full: 127316174ca4fc45e7035b55710bd54ea106bf86
-  short: 12731617
-  subject: 'fix: refuse Kit entrypoint downgrade below CI pin (KIT-GF-086) (#2633)'
+  full: f7b956b3e7d22cb37d727fb92071fc7dda46d1b3
+  short: f7b956b3
+  subject: Test homepage publication evidence across release versions (#2636)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
