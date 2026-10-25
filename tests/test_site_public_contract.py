@@ -116,7 +116,41 @@ def test_real_homepage_keeps_internal_status_out_of_entry():
     assert 'data-claim-scope="technical"' in html
     assert 'data-claim-scope="documentation"' in html
     assert 'data-claim-scope="historical-observation"' in html
-    assert "workflow for version 1.1.5 completed successfully" in html
+    current = publication_evidence(root, report.metadata.package_version)
+    assert publication_text(current) in html
+
+
+@pytest.mark.parametrize("current_status", [None, "WAITING", "PASS"])
+def test_homepage_publication_follows_current_version_evidence(tmp_path, current_status):
+    from agentic_project_kit.site_generator import collect_site_foundation_metadata, render_index_html
+
+    root = Path(__file__).resolve().parents[1]
+    report = collect_site_foundation_metadata(root, build_commit="docs-pages-fallback")
+    assert report.ok, report.blockers
+    templates = tmp_path / "site/templates"
+    templates.mkdir(parents=True)
+    (templates / "index.html").write_text((root / "site/templates/index.html").read_text())
+    evidence_dir = tmp_path / "docs/reports/release"
+    evidence_dir.mkdir(parents=True)
+    previous = {"version": "1.1.5", "tag": "v1.1.5", "publication_policy": "github+pypi+zenodo",
+                "package_index_workflow": {"file": "release.yml", "publish_target_pypi": True},
+                "steps": {"C3": {"result_status": "PASS", "returncode": 0, "blockers": []}}}
+    (evidence_dir / "release-run-1.1.5.json").write_text(json.dumps(previous))
+    if current_status is not None:
+        current = {**previous, "version": "1.1.6", "tag": "v1.1.6",
+                   "steps": {"C3": {"result_status": current_status, "returncode": 0, "blockers": []}}}
+        (evidence_dir / "release-run-1.1.6.json").write_text(json.dumps(current))
+    report = replace(report, metadata=replace(report.metadata, package_version="1.1.6"),
+                     explanation_projection=None)
+    html = render_index_html(tmp_path, report)
+    if current_status == "PASS":
+        assert "workflow for version 1.1.6 completed successfully" in html
+        assert "Index visibility and installability are separate checks." in html
+        assert "workflow evidence for this version is unverified" not in html
+    else:
+        assert "PyPI publication workflow evidence for this version is unverified." in html
+        assert "workflow for version 1.1.6 completed successfully" not in html
+    assert "workflow for version 1.1.5 completed successfully" not in html
 
 
 def test_unreleased_is_never_a_release_even_when_requested(tmp_path):
