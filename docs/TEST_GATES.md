@@ -45,6 +45,10 @@ It checks all current direct claim inputs and conservative transitive code/test
 inputs trigger Pages builds. Website tests still check required unverified claims
 block publication and the generated docs fallback is byte-current. Historical
 PyPI/B1 observations remain scoped; no current installation test is invented.
+`tests/test_site_public_contract.py` binds homepage publication wording to the
+current package version. A prior successful release cannot verify a new version:
+missing or waiting C3 evidence remains unverified; current PASS permits only the
+workflow-completion claim, not index visibility or installability.
 
 ## Shared Kit executable discovery
 
