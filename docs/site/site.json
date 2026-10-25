@@ -58,7 +58,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "project.version=1.1.5",
+            "detail": "project.version=1.1.6",
             "evidence_type": "pyproject-value",
             "status": "verified"
           }
@@ -262,12 +262,14 @@
         "text": "In the historical B1 threshold window, five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary."
       },
       {
-        "blockers": [],
+        "blockers": [
+          "PyPI publication workflow evidence for this version is unverified."
+        ],
         "evidence": [
           {
-            "detail": "The PyPI publication workflow for version 1.1.5 completed successfully in the release run (C3). Index visibility and installability are separate checks.",
+            "detail": "PyPI publication workflow evidence for this version is unverified.",
             "evidence_type": "release-pypi-workflow",
-            "status": "verified"
+            "status": "unverified"
           }
         ],
         "id": "current-release-pypi-workflow",
@@ -275,7 +277,7 @@
         "required": false,
         "scope": "historical-observation",
         "scope_note": "C3 proves successful workflow completion for the version in pyproject.toml; index visibility and installability need separate observations.",
-        "status": "verified",
+        "status": "unverified",
         "text": "The PyPI publication workflow for the current package version completed successfully in its release run (C3)."
       }
     ],
@@ -289,8 +291,8 @@
     "status": "PASS",
     "status_counts": {
       "planned": 0,
-      "unverified": 0,
-      "verified": 15
+      "unverified": 1,
+      "verified": 14
     }
   },
   "command_catalog": {
@@ -4886,7 +4888,7 @@
             "required": false
           },
           {
-            "default": "1.1.5",
+            "default": "1.1.6",
             "help": "",
             "name": "version",
             "opts": [
@@ -6776,7 +6778,7 @@
         "lifecycle_rank": 73,
         "params": [
           {
-            "default": "1.1.5",
+            "default": "1.1.6",
             "help": "",
             "name": "version",
             "opts": [
@@ -7787,7 +7789,7 @@
             "required": false
           },
           {
-            "default": "1.1.5",
+            "default": "1.1.6",
             "help": "",
             "name": "version",
             "opts": [
@@ -12902,17 +12904,17 @@
       "status": "planned"
     },
     "release": {
-      "date": "2026-10-22",
+      "date": "2026-10-25",
       "entry_count": 4,
       "notes": [
-        "Run every repository-content check of the release-time standard-gates-audit-suite on each PR (a checkout test driven by the suite's own command list; only the state checks release-publish --dry-run and audit-status-current-state stay with the release run), and treat legacy shell-route calls quoted in the greenfield finding catalog as evidence, not as current instructions (KIT-GF-085, found when the first 1.1.5 release run stopped in release ready).",
-        "Give six more local retests a machine contract (release preparation, CI template refresh and protection, CI runtime plan); contracts may name the running Kit's version as {kit_version}; one retest of the Kit's own release path is reclassified as a release-run retest (slice report of 2026-10-21, c1b).",
-        "Give 21 more local finding retests a machine contract (executable retests, next part): greenfield retest now proves 21 more already released fixes itself (listed in the slice report of 2026-10-21 under docs/reports/greenfield/); each run uses its own OS temp root and may name the running Kit's interpreter as {kit_python}. The contracts found two defects: transfer command-reference-check ran the Kit's own test file in external workspaces and always failed (now it compares the workspace reference with the installed Kit and names stale files, KIT-GF-083), and docs-audit failed in a freshly initialized workspace because the empty successor package directory counted as an incomplete package (KIT-GF-084).",
-        "Give up a stopped release run through the Kit: release abandon --version <v> plans, then with the plan's signature and an attributed consent deletes the release branch through transfer branch-delete (closing its unmerged PR), checks that the PR is closed, and archives the run state under <tmp>/release-run-archive/; it refuses while a tag, a GitHub Release, an approved publication gate or a merged release PR exists (KIT-GF-081). A failed wheel download in kit update is retried twice, every attempt is logged, and the blocker names the file and the error (KIT-GF-082)."
+        "Zenodo DOI verification pending for v1.1.6.",
+        "Fixed: Prevent entrypoint synchronization and release preparation with an installed Kit older than workspace CI pins (KIT-GF-086).",
+        "Repair the context benchmark's planning fault injection and isolate reference solutions from agent-visible Git history; require T1's actual target gate to fail before accepting its self-test, preserve failed-run evidence, and record the pilot's validity limitations.",
+        "Complete the six remaining local finding machine contracts (KIT-GF-014, 015, 021, 032, 045 and 067): exercise the repaired continuation/fact checks, isolate the installed Kit in an owned interpreter, and run real release readiness with a local origin and committed successor package. Keep missing-contract and remote/release cases fail-closed; consumer VERIFIED_FIXED remains evidence-owned."
       ],
       "source": "CHANGELOG.md",
       "status": "recorded",
-      "version": "1.1.5"
+      "version": "1.1.6"
     },
     "schema_version": 1,
     "workflow_figures": {
@@ -13727,7 +13729,7 @@
       "schema_version": 1,
       "sources": {
         "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "b2cf971eebd1e0a6e57255fb359fd0c91c4006eb70c2d855de0bbb0b2b1241cc",
-        "docs/reference/agentic-kit-commands.json": "80473602c348b6f4a34a21bfaa98cedfa7989e122582814f6cb0b484565ba179",
+        "docs/reference/agentic-kit-commands.json": "e64fef3048cde197c8963358792bb0edde04c15a3fdfe085b068ff60d652073c",
         "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
         "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
         "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
@@ -13752,14 +13754,14 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "",
     "manifest_identity_verified": true,
-    "manifest_sha": "03ed2061b3db",
+    "manifest_sha": "f2cdb65463e0",
     "package_name": "agentic-project-kit",
-    "package_version": "1.1.5",
+    "package_version": "1.1.6",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
     "release_tag": "v1.1.5",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "03ed2061b3db",
+    "reproduced_manifest_sha": "f2cdb65463e0",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 176,
@@ -13795,7 +13797,7 @@
     "current_release_tag": "v1.1.5",
     "current_verified_main": "See docs/STATUS.md",
     "current_verified_release": "1.1.5",
-    "current_version": "1.1.5",
+    "current_version": "1.1.6",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
     "version_doi": "10.5281/zenodo.23564978"
