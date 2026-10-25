@@ -22,8 +22,12 @@ simulation, model call, live release or publication was performed.
 
 Targeted mutation tests cover state/default/return-code drift, exact sequence
 changes, computed descendant counts, package shape and SVG slot drift. The
-regenerated fallback is checked for staleness. Full-suite and gate results will
-be recorded before closeout.
+regenerated fallback is checked for staleness. At product commit `37351603`,
+all **4087 tests passed** (545 existing warnings, 162.05 seconds, rc 0).
+The targeted website set passed 36 tests (rc 0). Ruff, check-docs and doctor
+passed (rc 0); doctor retains 76 report-only lifecycle advisories. The site
+build passed with no blockers. No full-suite rerun is needed for the subsequent
+report and generated handoff-only commits; remote CI validates the final PR head.
 
 Browser QA used the generated page in a 1280-pixel desktop window and 390-pixel
 iframe viewports, not standalone SVG previews alone. Desktop G0/G2/G3 and mobile

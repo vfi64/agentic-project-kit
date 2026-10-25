@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-25",
+  "gates": {
+    "check_docs": 0,
+    "doctor": 0,
+    "ruff": 0,
+    "site_build": 0
+  },
+  "historical_receipts_unchanged": true,
+  "limitations": "One browser; iframe viewport, not a physical-phone or universal-device test",
+  "method": "Generated site in 390px iframe viewports; visual review in 1280px desktop browser",
+  "pages": [
+    {
+      "clientWidth": 390,
+      "images": [],
+      "page": "overview",
+      "scrollWidth": 390
+    },
+    {
+      "clientWidth": 390,
+      "images": [
+        {
+          "src": "G2-mobile.svg",
+          "width": 356
+        },
+        {
+          "src": "G3-mobile.svg",
+          "width": 356
+        },
+        {
+          "src": "G0-mobile.svg",
+          "width": 356
+        }
+      ],
+      "page": "understand",
+      "scrollWidth": 390
+    },
+    {
+      "clientWidth": 390,
+      "images": [],
+      "page": "quickstart",
+      "scrollWidth": 390
+    },
+    {
+      "clientWidth": 390,
+      "images": [],
+      "page": "workflows",
+      "scrollWidth": 390
+    }
+  ],
+  "product_commit": "37351603",
+  "tests": {
+    "full_suite": {
+      "passed": 4087,
+      "rc": 0,
+      "seconds": 162.05
+    },
+    "targeted": {
+      "passed": 36,
+      "rc": 0
+    }
+  }
+}
