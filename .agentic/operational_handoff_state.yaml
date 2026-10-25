@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 2e36a5ab3ddea40b1f7e72d984873d8b4217ff9d
-  short: 2e36a5ab
-  subject: Generate workflow figures from contracts and isolated callback observations (#2629)
+  full: ab9b5a0960fa34704f2a642fc5cd87413d80df53
+  short: ab9b5a09
+  subject: Render reviewed workflow figures from validated source cells (#2631)
 last_substantive_work_state:
-  full: 2e36a5ab3ddea40b1f7e72d984873d8b4217ff9d
-  short: 2e36a5ab
-  subject: Generate workflow figures from contracts and isolated callback observations (#2629)
+  full: ab9b5a0960fa34704f2a642fc5cd87413d80df53
+  short: ab9b5a09
+  subject: Render reviewed workflow figures from validated source cells (#2631)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
