@@ -77,25 +77,35 @@
       </section>
 
       <section id="workflow-figures"><p class="eyebrow">Generated from current sources</p><h2>Work and handoff</h2>
-<p>Editorial contract views; arrows show a reading/work sequence, not observed nested calls.</p>
-<article class="panel"><h3>G2: A bounded work cycle</h3><figure class="architecture-map workflow-map"><picture><source media="(max-width: 680px)" srcset="G2-mobile.svg"><img src="G2.svg" alt="A bounded work cycle — text sequence follows."></picture></figure><ol>
-<li><strong>work start</strong>: Start a human patch/slice workflow with the safe standard startup sequence.</li>
-<li><strong>work check</strong>: Run common human workflow gates without committing or pushing.</li>
-<li><strong>work finish</strong>: Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.</li>
-<li><strong>transfer chat-switch-complete</strong>: Create a deterministic successor handoff package and prompt projections.</li>
-</ol><p>Make the selected change between start and check. Review the finish plan before execution; blocked or failed results stop the cycle.</p></article>
-<article class="panel"><h3>G3: Context survives the chat</h3><figure class="architecture-map workflow-map"><picture><source media="(max-width: 680px)" srcset="G3-mobile.svg"><img src="G3.svg" alt="Context survives the chat — text sequence follows."></picture></figure><ol>
+<p>G2/G3 are contract views, not observed nested calls. G0 shows one observed work-finish execution.</p>
+<article class="panel" id="figure-G2"><h3>G2: A bounded work cycle</h3><figure class="architecture-map workflow-map"><picture><source media="(max-width: 1050px)" srcset="G2-mobile.svg"><img src="G2.svg" alt="A bounded work cycle — text sequence follows."></picture></figure><details><summary>Text description and source boundaries</summary><ol>
+<li><strong>Plan</strong>: Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks. Dry run by default; successful prechecks yield PLANNED.</li>
+<li><strong>Approve</strong>: Review the plan, then rerun with --execute.</li>
+<li><strong>Execute</strong>: Default merge path: commit, handoff refresh, push and PR closeout. Failed prerequisites block subsequent closeout stages; diagnostics may still run.</li>
+<li><strong>Record and continue</strong>: All steps successful: PASS. Otherwise BLOCKED, rc 2; inspect and fix the cause before planning again. Continue from the repository successor package.</li>
+</ol><p>Contract view of the default merge path of work finish. A successful dry run is PLANNED; any phase can block (BLOCKED, rc 2). Failed prerequisites block subsequent closeout stages; diagnostics may still run. PASS records successful completion, not semantic correctness.</p></details></article>
+<article class="panel" id="figure-G3"><h3>G3: Context survives the chat</h3><figure class="architecture-map workflow-map"><picture><source media="(max-width: 1050px)" srcset="G3-mobile.svg"><img src="G3.svg" alt="Context survives the chat — text sequence follows."></picture></figure><details><summary>Text description and source boundaries</summary><ol>
 <li><strong>Repository sources</strong>: source_manifest.json records the inputs.</li>
 <li><strong>Successor package</strong>: execution_contract.json, source_manifest.json, successor_context.yaml, successor_prompt.md, validation_report.json</li>
 <li><strong>Validate, then continue</strong>: Read validation_report.json and execution_contract.json. A failed handoff blocks continuation.</li>
 <li><strong>Successor chat</strong>: Use successor_context.yaml and successor_prompt.md; inspect current repository state.</li>
-</ol><p>A generated package preserves inspectable context. It does not prove requirements or software correctness.</p></article>
-<article class="panel"><h3>G0: Observed work and release entry</h3><figure class="architecture-map workflow-map"><picture><source media="(max-width: 680px)" srcset="G0-mobile.svg"><img src="G0.svg" alt="Observed work and release entry — text sequence follows."></picture></figure><ol>
-<li><strong>work start</strong>: rules acknowledge; transfer branch-create; transfer post-merge-check; transfer repo-status; transfer sync-main</li>
-<li><strong>work finish</strong>: rules acknowledge; transfer chat-switch-complete; transfer commit; transfer post-merge-check; transfer pr-create-complete; transfer protected-diff-plan; transfer push-current; transfer repo-status; transfer sync-main</li>
-<li><strong>transfer chat-switch-complete</strong>: No nested CLI callback observed; internal Python operations are outside this view.</li>
-<li><strong>release run</strong>: release prepare; release ready; release-publish; transfer sync-main; work finish; work start</li>
-</ol><p>CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entries include plans and dry runs. Entry does not imply successful completion; no live release or complete command coverage is claimed. Source: 7a6173cab704d57322e3ad22ddf4c02096314b1d. Run status: BOUNDED_COMPLETE. Complete publication is outside this observation.</p></article>
+</ol><p>A generated package preserves inspectable context. It does not prove requirements or software correctness. Handoff does not rely on chat memory. On validation failure, inspect the failure, fix its cause, and revalidate before continuing.</p></details></article>
+<article class="panel" id="figure-G0"><h3>G0: What work finish actually ran</h3><figure class="architecture-map workflow-map"><picture><source media="(max-width: 1050px)" srcset="G0-mobile.svg"><img src="G0.svg" alt="What work finish actually ran — text sequence follows."></picture></figure><details><summary>Text description and source boundaries</summary><ol>
+<li><strong>1. repo-status</strong>: Observed direct callback entry.</li>
+<li><strong>2. protected-diff-plan</strong>: Observed direct callback entry.</li>
+<li><strong>3. rules acknowledge</strong>: Observed direct callback entry.</li>
+<li><strong>4. commit (work)</strong>: Observed direct callback entry.</li>
+<li><strong>5. rules acknowledge</strong>: Observed direct callback entry.</li>
+<li><strong>6. chat-switch-complete</strong>: Observed direct callback entry.</li>
+<li><strong>7. rules acknowledge</strong>: Observed direct callback entry.</li>
+<li><strong>8. commit (handoff)</strong>: Observed direct callback entry.</li>
+<li><strong>9. rules acknowledge</strong>: Observed direct callback entry.</li>
+<li><strong>10. push-current</strong>: Observed direct callback entry.</li>
+<li><strong>11. pr-create-complete</strong>: Observed direct callback entry.</li>
+<li><strong>12. sync-main</strong>: Observed direct callback entry.</li>
+<li><strong>13. post-merge-check</strong>: Observed direct callback entry.</li>
+<li><strong>14. repo-status</strong>: Observed direct callback entry.</li>
+</ol><p>CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entries include plans and dry runs. Entry does not imply successful completion; no live release or complete command coverage is claimed. Source: 7a6173cab704d57322e3ad22ddf4c02096314b1d. Run status: BOUNDED_COMPLETE. No release publication. K0c historical static may-reachability (source 99e5038b2d7b88488561fb14b19b96dcbc71da09) supplies the validator note, not the callback trace.</p></details></article>
 <article class="panel"><h3>Observation boundary</h3><p>CLI callback entries observed in a network-denied local sandbox. Fake GitHub and always-green test CI are model assumptions. Entries include plans and dry runs. Entry does not imply successful completion; no live release or complete command coverage is claimed.</p>
 <p>Source commit: <code>7a6173cab704d57322e3ad22ddf4c02096314b1d</code> · BOUNDED_COMPLETE</p>
 <p>The bounded observation and its stop point remain separate from the contract views above.</p><p><a href="workflow-figures.json">Read the source bindings and observed direct edges</a></p></article>

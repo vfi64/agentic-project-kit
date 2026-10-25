@@ -1252,3 +1252,15 @@ checked against the retained data, while two independent current-HEAD
 reproductions require only that checkout's objects. Explicit historical
 reproduction still requires the recorded revision and fails rather than silently
 falling back to current main when history is missing.
+
+
+### Responsive workflow template bindings
+
+`tests/test_site_workflow_figures.py` checks the reviewed G0/G2/G3 desktop/mobile
+SVG templates, named data cells, exact ordered observed execution, derived nested
+entry counts, package filename labels and work-finish result-state conditions.
+A changed shape must update the projection or block the build; unchanged counts
+alone do not authorize a phase mapping. Historical K0c may-reachability remains
+separate from observed CLI entry evidence. Text alternatives remain expandable.
+Browser QA at 390 px checks Overview, Understand, Quickstart and Workflows without
+document-level horizontal overflow; wide tables and command blocks scroll locally.

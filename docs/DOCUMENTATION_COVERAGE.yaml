@@ -14,6 +14,8 @@ rules:
     - G3
     - G0
     - sandbox-exec
+    - Reviewed responsive figure templates
+    - may-reachability
   - path: docs/TEST_GATES.md
     terms:
     - tests/test_offline_path_observation.py

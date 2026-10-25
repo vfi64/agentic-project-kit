@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 384" role="img" aria-labelledby="g0t g0d" font-family="Inter, 'Segoe UI', system-ui, -apple-system, sans-serif" width="1000" height="384">
+<title id="g0t">What work finish actually ran</title>
+<desc id="g0d" data-bind="description" />
+<defs><marker id="g0a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#0f766e" /></marker></defs>
+<rect width="1000" height="384" rx="16" fill="#edf3f1" />
+<text x="24" y="36" font-size="20" font-weight="700" fill="#17202a">What <tspan font-family="ui-monospace, Menlo, monospace" font-size="18">work finish</tspan> actually ran</text>
+<text x="24" y="58" font-size="13" fill="#586674" data-bind="provenance" />
+<rect x="24" y="76" width="176" height="222" rx="10" fill="#fff" stroke="#c8d3dc" />
+<text x="36" y="98" font-size="14" font-weight="700" fill="#17202a">Check</text>
+<rect x="34" y="110" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="50" cy="127" r="10" fill="#0f766e" /><text x="50" y="131" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" data-bind="number-1" />
+<text x="66" y="132" font-size="13" fill="#17202a" data-bind="call-1" />
+<rect x="34" y="154" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="50" cy="171" r="10" fill="#0f766e" /><text x="50" y="175" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" data-bind="number-2" />
+<text x="66" y="176" font-size="13" fill="#17202a" data-bind="call-2" />
+<line x1="201" y1="93" x2="217" y2="93" stroke="#0f766e" stroke-width="2" marker-end="url(#g0a)" />
+<rect x="219" y="76" width="176" height="222" rx="10" fill="#fff" stroke="#c8d3dc" />
+<text x="231" y="98" font-size="14" font-weight="700" fill="#17202a">Commit work</text>
+<rect x="229" y="110" width="156" height="34" rx="6" fill="#fdf6e7" stroke="#a16207" stroke-width="1.5" />
+<circle cx="245" cy="127" r="10" fill="#a16207" /><text x="245" y="131" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" data-bind="number-3" />
+<text x="261" y="132" font-size="13" fill="#17202a" data-bind="call-3" />
+<rect x="229" y="154" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="245" cy="171" r="10" fill="#0f766e" /><text x="245" y="175" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" data-bind="number-4" />
+<text x="261" y="176" font-size="13" fill="#17202a" data-bind="call-4" />
+<line x1="396" y1="93" x2="412" y2="93" stroke="#0f766e" stroke-width="2" marker-end="url(#g0a)" />
+<rect x="414" y="76" width="176" height="222" rx="10" fill="#fff" stroke="#c8d3dc" />
+<text x="426" y="98" font-size="14" font-weight="700" fill="#17202a">Refresh handoff</text>
+<rect x="424" y="110" width="156" height="34" rx="6" fill="#fdf6e7" stroke="#a16207" stroke-width="1.5" />
+<circle cx="440" cy="127" r="10" fill="#a16207" /><text x="440" y="131" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" data-bind="number-5" />
+<text x="456" y="132" font-size="13" fill="#17202a" data-bind="call-5" />
+<rect x="424" y="154" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="440" cy="171" r="10" fill="#0f766e" /><text x="440" y="175" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" data-bind="number-6" />
+<text x="456" y="176" font-size="12.5" fill="#17202a" data-bind="call-6" />
+<rect x="424" y="198" width="156" height="34" rx="6" fill="#fdf6e7" stroke="#a16207" stroke-width="1.5" />
+<circle cx="440" cy="215" r="10" fill="#a16207" /><text x="440" y="219" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" data-bind="number-7" />
+<text x="456" y="220" font-size="13" fill="#17202a" data-bind="call-7" />
+<rect x="424" y="242" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="440" cy="259" r="10" fill="#0f766e" /><text x="440" y="263" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" data-bind="number-8" />
+<text x="456" y="264" font-size="13" fill="#17202a" data-bind="call-8" />
+<line x1="591" y1="93" x2="607" y2="93" stroke="#0f766e" stroke-width="2" marker-end="url(#g0a)" />
+<rect x="609" y="76" width="176" height="222" rx="10" fill="#fff" stroke="#c8d3dc" />
+<text x="621" y="98" font-size="14" font-weight="700" fill="#17202a">Push &amp; PR</text>
+<rect x="619" y="110" width="156" height="34" rx="6" fill="#fdf6e7" stroke="#a16207" stroke-width="1.5" />
+<circle cx="635" cy="127" r="10" fill="#a16207" /><text x="635" y="131" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" data-bind="number-9" />
+<text x="651" y="132" font-size="13" fill="#17202a" data-bind="call-9" />
+<rect x="619" y="154" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="635" cy="171" r="10" fill="#0f766e" /><text x="635" y="175" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" data-bind="number-10" />
+<text x="651" y="176" font-size="13" fill="#17202a" data-bind="call-10" />
+<rect x="619" y="198" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="635" cy="215" r="10" fill="#0f766e" /><text x="635" y="219" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" data-bind="number-11" />
+<text x="651" y="220" font-size="13" fill="#17202a" data-bind="call-11" />
+<text x="621" y="244" font-size="12" fill="#586674" data-bind="nested" />
+<text x="621" y="261" font-size="12" fill="#586674">PR, CI wait, merge,</text>
+<text x="621" y="278" font-size="12" fill="#586674">post-merge closeout</text>
+<line x1="786" y1="93" x2="802" y2="93" stroke="#0f766e" stroke-width="2" marker-end="url(#g0a)" />
+<rect x="804" y="76" width="176" height="222" rx="10" fill="#fff" stroke="#c8d3dc" />
+<text x="816" y="98" font-size="14" font-weight="700" fill="#17202a">Settle</text>
+<rect x="814" y="110" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="830" cy="127" r="10" fill="#0f766e" /><text x="830" y="131" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" data-bind="number-12" />
+<text x="846" y="132" font-size="13" fill="#17202a" data-bind="call-12" />
+<rect x="814" y="154" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="830" cy="171" r="10" fill="#0f766e" /><text x="830" y="175" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" data-bind="number-13" />
+<text x="846" y="176" font-size="13" fill="#17202a" data-bind="call-13" />
+<rect x="814" y="198" width="156" height="34" rx="6" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1" />
+<circle cx="830" cy="215" r="10" fill="#0f766e" /><text x="830" y="219" font-size="11" font-weight="700" fill="#fff" text-anchor="middle" data-bind="number-14" />
+<text x="846" y="220" font-size="13" fill="#17202a" data-bind="call-14" />
+<rect x="24" y="323" width="16" height="16" rx="4" fill="#fdf6e7" stroke="#a16207" stroke-width="1.5" />
+<text x="48" y="336" font-size="13" fill="#17202a" data-bind="protection" />
+<text x="24" y="362" font-size="12" fill="#586674">One self-hosting execution, not a coverage or common-kernel claim. Release publication was not observed.</text>
+</svg>

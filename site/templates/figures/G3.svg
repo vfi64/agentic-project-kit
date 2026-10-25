@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" role="img" aria-labelledby="g3t g3d" font-family="Inter, 'Segoe UI', system-ui, -apple-system, sans-serif" width="1000" height="420">
+  <title id="g3t">Context survives the chat</title>
+  <desc id="g3d" data-bind="description" />
+  <defs>
+    <marker id="g3a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f766e" /></marker>
+    <marker id="g3r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b42318" /></marker>
+  </defs>
+  <rect width="1000" height="420" rx="16" fill="#edf3f1" />
+  <text x="24" y="36" font-size="20" font-weight="700" fill="#17202a">Context survives the chat</text>
+  <text x="24" y="58" font-size="13" fill="#586674">The repository carries the project state from one session to the next</text>
+
+  
+  <path d="M150 112 C 330 70, 670 70, 850 112" fill="none" stroke="#586674" stroke-width="1.5" stroke-dasharray="5 6" />
+  <g transform="translate(500 82)"><circle r="13" fill="#fff" stroke="#b42318" stroke-width="1.5" /><path d="M-6 -6L6 6M6 -6L-6 6" stroke="#b42318" stroke-width="2" /></g>
+  <text x="500" y="112" font-size="12" fill="#586674" text-anchor="middle">handoff does not rely on chat memory</text>
+
+  
+  <rect x="24" y="130" width="200" height="140" rx="12" fill="#fff" stroke="#c8d3dc" stroke-width="1.5" />
+  <path d="M60 270 l-10 18 l26 -18 z" fill="#fff" stroke="#c8d3dc" stroke-width="1.5" stroke-linejoin="round" />
+  <rect x="52" y="262" width="28" height="10" fill="#fff" />
+  <text x="44" y="162" font-size="16" font-weight="700" fill="#17202a">Chat A</text>
+  <text x="44" y="190" font-size="13" fill="#17202a">work is finished</text>
+  <text x="44" y="210" font-size="13" fill="#17202a">and handed off</text>
+  <text x="44" y="242" font-size="13" fill="#586674">then the session ends</text>
+
+  
+  <rect x="290" y="130" width="380" height="250" rx="12" fill="#fff" stroke="#0f766e" stroke-width="2" />
+  <text x="310" y="160" font-size="16" font-weight="700" fill="#0f766e">Repository</text>
+  <text x="310" y="180" font-size="12" fill="#586674">versioned with the project, not with the chat</text>
+  <rect x="310" y="196" width="340" height="168" rx="8" fill="#edf3f1" />
+  <text x="326" y="220" font-size="14" font-weight="700" fill="#17202a">Successor package</text>
+  <g font-size="13" fill="#17202a">
+    <rect x="326" y="234" width="150" height="26" rx="5" fill="#fff" stroke="#c8d3dc" /><text x="338" y="252" data-bind="file-successor_context.yaml" />
+    <rect x="486" y="234" width="150" height="26" rx="5" fill="#fff" stroke="#c8d3dc" /><text x="498" y="252" data-bind="file-successor_prompt.md" />
+    <rect x="326" y="268" width="150" height="26" rx="5" fill="#fff" stroke="#c8d3dc" /><text x="338" y="286" data-bind="file-execution_contract.json" />
+    <rect x="486" y="268" width="150" height="26" rx="5" fill="#fff" stroke="#c8d3dc" /><text x="498" y="286" data-bind="file-source_manifest.json" />
+    <rect x="326" y="302" width="310" height="26" rx="5" fill="#fff" stroke="#0f766e" /><text x="338" y="320" font-weight="700" fill="#0f766e" data-bind="file-validation_report.json" />
+  </g>
+  <text x="326" y="350" font-size="12" fill="#586674">generated and checked, not written by hand</text>
+
+  
+  <line x1="224" y1="200" x2="286" y2="200" stroke="#0f766e" stroke-width="2" marker-end="url(#g3a)" />
+  <text x="255" y="190" font-size="12" fill="#0f766e" text-anchor="middle">writes</text>
+
+  
+  <path d="M740 160 L782 200 L740 240 L698 200 Z" fill="#fff" stroke="#17202a" stroke-width="1.5" />
+  <text x="740" y="197" font-size="12" font-weight="700" fill="#17202a" text-anchor="middle">package</text>
+  <text x="740" y="212" font-size="12" font-weight="700" fill="#17202a" text-anchor="middle">valid?</text>
+  <line x1="670" y1="200" x2="694" y2="200" stroke="#0f766e" stroke-width="2" marker-end="url(#g3a)" />
+  <line x1="782" y1="200" x2="802" y2="200" stroke="#0f766e" stroke-width="2" marker-end="url(#g3a)" />
+  <text x="792" y="190" font-size="12" font-weight="700" fill="#0f766e" text-anchor="middle">yes</text>
+
+  
+  <rect x="806" y="130" width="170" height="140" rx="12" fill="#fff" stroke="#c8d3dc" stroke-width="1.5" />
+  <path d="M940 270 l10 18 l-26 -18 z" fill="#fff" stroke="#c8d3dc" stroke-width="1.5" stroke-linejoin="round" />
+  <rect x="920" y="262" width="28" height="10" fill="#fff" />
+  <text x="824" y="162" font-size="16" font-weight="700" fill="#17202a">Chat B</text>
+  <text x="824" y="190" font-size="13" fill="#17202a">reads the package</text>
+  <text x="824" y="210" font-size="13" fill="#17202a">re-checks current</text>
+  <text x="824" y="230" font-size="13" fill="#17202a">repository state</text>
+  <text x="824" y="256" font-size="13" fill="#586674">then continues</text>
+
+  
+  <line x1="740" y1="240" x2="740" y2="306" stroke="#b42318" stroke-width="2" marker-end="url(#g3r)" />
+  <text x="748" y="276" font-size="12" font-weight="700" fill="#b42318">no</text>
+  <rect x="690" y="310" width="286" height="70" rx="10" fill="#fff" stroke="#b42318" stroke-width="1.5" />
+  <text x="706" y="336" font-size="14" font-weight="700" fill="#b42318">Stop</text>
+  <text x="706" y="358" font-size="13" fill="#17202a">inspect failure, fix its cause, then revalidate</text>
+
+  <text x="24" y="406" font-size="12" fill="#586674">Contract view of the successor handoff package, not a runtime trace.</text>
+</svg>

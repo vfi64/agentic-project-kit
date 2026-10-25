@@ -323,6 +323,7 @@ dd {
 }
 
 code {
+  overflow-wrap: anywhere;
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--soft);
@@ -341,6 +342,7 @@ pre {
 }
 
 pre code {
+  overflow-wrap: anywhere;
   border: 0;
   background: transparent;
   color: inherit;
@@ -391,7 +393,7 @@ th {
   .status-board,
   .compact-details,
   dl {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   h1 {
@@ -399,6 +401,10 @@ th {
   }
 }
 
-.workflow-map { max-width: 640px; margin-inline: auto; }
+.workflow-map { max-width: 1000px; margin-inline: auto; }
 .workflow-map img { min-width: 0; width: 100%; }
-@media (max-width: 680px) { .workflow-map { max-width: 360px; } .workflow-map img { min-width: 0; } }
+@media (max-width: 1050px) { .workflow-map { max-width: 380px; } .workflow-map img { min-width: 0; } }
+
+.workflow-map { margin: 1rem auto; }
+@media (max-width: 480px) { #workflow-figures > .panel { padding: 10px; } .workflow-map { margin-inline: -6px; } }
+
